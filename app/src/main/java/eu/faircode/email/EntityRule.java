@@ -676,6 +676,8 @@ public class EntityRule {
 
         long iid = jargs.getLong("identity");
         long aid = jargs.getLong("answer");
+        boolean answer_subject = jargs.optBoolean("answer_subject", false);
+        boolean original_text = jargs.optBoolean("original_text", true);
         String to = jargs.optString("to");
         boolean cc = jargs.optBoolean("cc");
         boolean attachments = jargs.optBoolean("attachments");
@@ -698,6 +700,7 @@ public class EntityRule {
                 throw new IllegalArgumentException("Rule template missing name=" + rule.name);
 
             answer = new EntityAnswer();
+            answer.name = message.subject;
             answer.text = "";
         } else {
             answer = db.answer().getAnswer(aid);
@@ -748,7 +751,10 @@ public class EntityRule {
             reply.cc = message.cc;
         reply.unsubscribe = "mailto:" + identity.email;
         reply.auto_submitted = true;
-        reply.subject = EntityMessage.getSubject(context, message.language, message.subject, !isReply);
+        reply.subject = EntityMessage.getSubject(context,
+                message.language,
+                answer_subject ? answer.name : message.subject,
+                !isReply);
         reply.received = new Date().getTime();
         reply.sender = MessageHelper.getSortKey(reply.from);
 
@@ -758,26 +764,29 @@ public class EntityRule {
         reply.id = db.message().insertMessage(reply);
 
         String body = answer.getHtml(message.from);
-        Document msg = JsoupEx.parse(body);
 
-        Element div = msg.createElement("div");
+        if (original_text) {
+            Document msg = JsoupEx.parse(body);
 
-        Element p = message.getReplyHeader(context, msg, separate_reply, extended_reply);
-        div.appendChild(p);
+            Element div = msg.createElement("div");
 
-        Document answering = JsoupEx.parse(message.getFile(context));
-        Element e = answering.body();
-        if (quote) {
-            String style = e.attr("style");
-            style = HtmlHelper.mergeStyles(style, HtmlHelper.getQuoteStyle(e));
-            e.tagName("blockquote").attr("style", style);
-        } else
-            e.tagName("p");
-        div.appendChild(e);
+            Element p = message.getReplyHeader(context, msg, separate_reply, extended_reply);
+            div.appendChild(p);
 
-        msg.body().appendChild(div);
+            Document answering = JsoupEx.parse(message.getFile(context));
+            Element e = answering.body();
+            if (quote) {
+                String style = e.attr("style");
+                style = HtmlHelper.mergeStyles(style, HtmlHelper.getQuoteStyle(e));
+                e.tagName("blockquote").attr("style", style);
+            } else
+                e.tagName("p");
+            div.appendChild(e);
 
-        body = msg.outerHtml();
+            msg.body().appendChild(div);
+
+            body = msg.outerHtml();
+        }
 
         File file = reply.getFile(context);
         Helper.writeText(file, body);
@@ -787,7 +796,7 @@ public class EntityRule {
         db.message().setMessageContent(reply.id,
                 true,
                 reply.language,
-                false,
+                0,
                 reply.preview,
                 null);
 

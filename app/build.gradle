@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1833 }
+def getVersionCode = { -> return 1841 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Fulgurotherium" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -12,7 +12,8 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(rootProject.file("keystore.properties")))
 
 Properties localProperties = new Properties()
-localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+if (rootProject.file("local.properties").exists())
+    localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
     compileSdkVersion 31
@@ -364,7 +365,7 @@ dependencies {
     def appauth_version = "0.8.1"
     def jcharset_version = "2.1"
     def apache_poi = "3.17" // Do not update
-    def outlook_parser_version = "1.8.1"
+    def outlook_parser_version = "1.7.13" // Do not update
     def reactivestreams_version = "1.0.3"
     def rxjava2_version = "2.2.21"
     def svg_version = "1.4"

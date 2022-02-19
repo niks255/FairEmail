@@ -200,6 +200,7 @@
     <string name="title_setup_error">Fehler</string>
     <string name="title_setup_configuring">Konto wird konfiguriert &#8230;</string>
     <string name="title_setup_app_password">Möglicherweise müssen Sie ein App-Passwort verwenden</string>
+    <string name="title_setup_extra">Extra</string>
     <string name="title_setup_close">Einstellungen schließen</string>
     <string name="title_setup_export">Einstellungen exportieren</string>
     <string name="title_setup_import">Einstellungen importieren</string>
@@ -312,7 +313,7 @@
     <string name="title_advanced_send_reminders">Erinnerungen anzeigen</string>
     <string name="title_advanced_send_delayed">Senden von Nachrichten verzögern</string>
     <string name="title_advanced_attach_new">Freigegebene Dateien zu einem neuen Entwurf hinzufügen</string>
-    <string name="title_advanced_reply_all">Schaltfläche „Antworten” länger gedrückt halten, um allen zu antworten</string>
+    <string name="title_advanced_answer_action">Lange drücken auf die Antwort-Schaltfläche wird:</string>
     <string name="title_advanced_send_pending">Nicht aufdringliches Symbol für verzögertes Senden anzeigen</string>
     <string name="title_advanced_compose_font">Standardschriftart</string>
     <string name="title_advanced_prefix_once">Re: und Fwd: nur einmal beim Antworten oder Weiterleiten voranstellen</string>
@@ -343,6 +344,7 @@
     <string name="title_advanced_rlah">Roaming wie zu Hause</string>
     <string name="title_advanced_download_headers">Alle Kopfzeilen der Nachricht herunterladen</string>
     <string name="title_advanced_download_eml">Rohnachrichtendateien herunterladen</string>
+    <string name="title_advanced_download_plain">Standardmäßig nur Textteile herunterladen (falls verfügbar)</string>
     <string name="title_advanced_validated">Erfordert eine validierte (geprüfte) Verbindung</string>
     <string name="title_advanced_vpn_only">Nur über ein VPN verbinden</string>
     <string name="title_advanced_timeout">Zeitüberschreitung der Verbindung (Sekunden)</string>
@@ -376,6 +378,7 @@
     <string name="title_advanced_tabular_background">Kartenfarbe als Hintergrundfarbe verwenden, wenn Tabellenstil genutzt wird</string>
     <string name="title_advanced_cards_shadow">Schatten für ungelesene Nachrichten verwenden, wenn Kartenstil verwendet wird</string>
     <string name="title_advanced_cards_shadow_highlight">Hervorhebungsfarbe statt Akzentfarbe verwenden</string>
+    <string name="title_advanced_tabular_dividers">Trennlinien bei Verwendung der Tabellenform verwenden</string>
     <string name="title_advanced_category_header">Nach Kontenkategorie gruppieren</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
     <string name="title_advanced_date_fixed">Feste Datumskopfzeile oben anzeigen</string>
@@ -391,6 +394,7 @@
     <string name="title_advanced_bimi_unverified">Nicht verifizierter Absender</string>
     <string name="title_advanced_bimi_verified">Bestätigter Absender</string>
     <string name="title_advanced_favicons">Favicons anzeigen</string>
+    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Nur die ersten %1$s der Webseite scannen</string>
     <string name="title_advanced_generated_icons">Generierte Symbole anzeigen (Anfangsbuchstaben)</string>
     <string name="title_advanced_identicons">Identicons anzeigen</string>
     <string name="title_advanced_circular">Runde Symbole anzeigen</string>
@@ -441,6 +445,7 @@
     <string name="title_advanced_actionbar">Aktionsleiste in Unterhaltung anzeigen</string>
     <string name="title_advanced_actionbar_color">Farbe des Kontos als Hintergrundfarbe der Aktionsleiste verwenden</string>
     <string name="title_advanced_navbar_colorize">Android-Navigationsleiste farbig darstellen</string>
+    <string name="title_advanced_bundled_fonts">Gebündelte Schriften verwenden</string>
     <string name="title_advanced_parse_classes">Stylesheets analysieren</string>
     <string name="title_advanced_authentication">Authentifizierungswarnhinweise anzeigen</string>
     <string name="title_advanced_authentication_hint">Die zugrunde liegenden Prüfungen können in den Empfangseinstellungen konfiguriert werden</string>
@@ -605,7 +610,6 @@
     <string name="title_advanced_suggest_names_hint">Wenn deaktiviert, werden nur E-Mail-Adressen bei der Auswahl von Kontakten verwendet</string>
     <string name="title_advanced_suggest_local_hint">Zusätzlich zu den von Android bereitgestellten Kontakten werden weitere Kontaktdaten für neue gesendete oder erhaltene Nachrichten nur dann gespeichert, wenn dies aktiviert ist.</string>
     <string name="title_advanced_send_reminders_hint">Eine Warnung anzeigen, wenn der Nachrichtentext oder der Betreff leer ist oder wenn ein Anhang zu fehlen scheint</string>
-    <string name="title_advanced_reply_all_hint">Wenn deaktiviert, wird durch langes Drücken der Schaltfläche „Antworten” nur dem Absender geantwortet</string>
     <string name="title_advanced_reply_move_hint">Der E-Mail-Server könnte die Nachrichten trotzdem noch in den Ordner für gesendete Nachrichten hinzufügen</string>
     <string name="title_advanced_usenet_hint">Signaturtrenner »-- « zwischen Text und Signatur einfügen</string>
     <string name="title_advanced_remove_signature_hint">Das kann dazu führen, dass zu wenig oder zu viel Text entfernt wird</string>
@@ -613,6 +617,7 @@
     <string name="title_advanced_metered_warning">Das Deaktivieren dieser Option deaktiviert das Empfangen und Senden von Nachrichten über mobile Internetverbindungen</string>
     <string name="title_advanced_rlah_hint">Unter der Annahme, dass kein Roaming innerhalb der EU stattfindet</string>
     <string name="title_advanced_usage_hint">Das erhöht die Akku-, Daten- und Speicherplatzauslastung</string>
+    <string name="title_advanced_plain_hint">Wenn Sie diese Option aktivieren, wird der Datenverbrauch reduziert, aber Nachrichten werden ohne Formatierung angezeigt.</string>
     <string name="title_advanced_tcp_keep_alive_hint">Das Aktivieren dieser Funktion kann bei einigen Geräten zu Verbindungsproblemen führen</string>
     <string name="title_advanced_validate_hint">Dies kann dazu führen, dass Nachrichten nicht synchronisiert werden, zum Beispiel bei der Verwendung eines VPN, aber auch in anderen Situationen</string>
     <string name="title_advanced_timeout_hint">Die Zeitüberschreitung beim Lesen oder Schreiben wird auf das Doppelte der Verbindungszeitüberschreitung festgelegt. Höhere Werte führen zu einem höheren Akkuverbrauch.</string>
@@ -773,6 +778,7 @@
     <string name="title_drafts_select">Das Senden von E-Mails erfordert die Auswahl eines Entwürfe-Ordners in den Kontoeinstellungen</string>
     <string name="title_account_auth_update">OAuth-Autorisierung aktualisieren</string>
     <string name="title_account_auth_password">Stattdessen Passwort-Authentifizierung verwenden</string>
+    <string name="title_delete_account">Konto löschen</string>
     <string name="title_account_delete">Möchten Sie dieses Konto dauerhaft löschen?</string>
     <string name="title_identity_delete">Möchten Sie diese Identität dauerhaft löschen?</string>
     <string name="title_edit_html">Als HTML bearbeiten</string>
@@ -839,6 +845,7 @@
     <string name="title_delete_operation_deleted">%1$d Vorgänge gelöscht</string>
     <string name="title_delete_contacts">Alle lokale Kontakte löschen?</string>
     <string name="title_no_operations">Keine weiteren Vorgänge</string>
+    <string name="title_check_operations">Auf Vorgänge wird geprüft</string>
     <string name="title_hint_operations">Das Löschen von Vorgängen kann zum Verschwinden von Meldungen und zu Synchronisationsproblemen führen</string>
     <string name="title_op_title_headers">Kopfzeilen werden heruntergeladen</string>
     <string name="title_op_title_raw">Rohdaten der Nachricht werden heruntergeladen</string>
@@ -1026,6 +1033,8 @@
     <string name="title_ask_show_html_images">Bilder immer anzeigen, wenn Originalnachrichten angezeigt werden</string>
     <string name="title_ask_show_image">Das Anzeigen von Bildern kann vertrauliche Daten preisgeben</string>
     <string name="title_ask_show_image_hint">Erkannte Verfolgungsbilder werden nicht angezeigt</string>
+    <string name="title_ask_show_amp">AMP-Variante der Nachricht anzeigen?</string>
+    <string name="title_ask_show_amp_hint">AMP-Nachrichten sind so ausgelegt, dass sie dynamisch sind, mit dem Internet interagieren und daher per Definition dazu verwendet werden können, um Sie zu verfolgen.</string>
     <string name="title_ask_delete_local">Lokale Nachrichten löschen? Die Nachrichten bleiben auf dem entfernten Server.</string>
     <string name="title_ask_help">Helfen Sie mit, FairEmail zu verbessern</string>
     <string name="title_ask_reporting">Fehlerberichte senden?</string>
@@ -1166,6 +1175,8 @@
     <string name="title_encrypt">Verschlüsseln</string>
     <string name="title_decrypt">Entschlüsseln</string>
     <string name="title_resync">Neu synchronisieren</string>
+    <string name="title_alternative_text">Reintext anzeigen</string>
+    <string name="title_alternative_html">HTML anzeigen</string>
     <string name="title_no_openpgp">OpenKeychain wurde nicht gefunden</string>
     <string name="title_user_interaction">Übertragung zu OpenKeychain</string>
     <string name="title_signed_data">Überprüfen Sie die Signatur, um den Nachrichtentext anzuzeigen</string>
@@ -1265,7 +1276,9 @@
     <string name="title_edit_signature_remark">Obwohl Android nicht den gesamten HTML-Code anzeigen kann, wird er unverändert gesendet</string>
     <string name="title_edit_signature_text">Signaturtext</string>
     <string name="title_edit_signature_image">Bild einfügen</string>
-    <string name="title_edit_signature_image_hint">Erst beim Versenden einer Nachricht wird die Bilddatei vom gewählten Speicherort in die Nachricht kopiert. Löschen Sie deshalb nicht die Bilddatei, bevor die Nachricht gesendet wurde!    </string>
+    <string name="title_edit_signature_image_hint">        Erst beim Versenden einer Nachricht wird die Bilddatei vom gewählten Speicherort in die Nachricht kopiert.
+        Löschen Sie deshalb nicht die Bilddatei, bevor die Nachricht gesendet wurde!
+    </string>
     <string name="title_answer_caption">Vorlage bearbeiten</string>
     <string name="title_answer_reply">Antwortvorlage</string>
     <string name="title_answer_name">Vorlagenname</string>
@@ -1325,6 +1338,8 @@
     <string name="title_rule_thread">Alle Nachrichten zur selben Unterhaltung und Ordner</string>
     <string name="title_rule_identity">Identität</string>
     <string name="title_rule_template">Antwortvorlage</string>
+    <string name="title_rule_answer_subject">Namen der Vorlage als Betreff verwenden</string>
+    <string name="title_rule_original_text">Ursprünglichen Nachrichtentext einschließen</string>
     <string name="title_rule_forward_to">Weiterleiten an</string>
     <string name="title_rule_cc">Den CC-Adressen antworten</string>
     <string name="title_rule_with_attachments">Mit Anhängen</string>
@@ -1451,6 +1466,7 @@
     <string name="title_legend_show_unsubscribe">Aus Liste abmelden</string>
     <string name="title_legend_show_images">Bilder anzeigen</string>
     <string name="title_legend_hide_images">Bilder ausblenden</string>
+    <string name="title_legend_show_amp">AMP-Variante anzeigen</string>
     <string name="title_legend_show_full">Originalnachricht anzeigen</string>
     <string name="title_legend_show_reformatted">Umformatierte Nachricht anzeigen</string>
     <string name="title_legend_edit">Bearbeiten</string>
@@ -1772,6 +1788,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>5 s</item>
         <item>7,5 s</item>
         <item>10 s</item>
+        <item>15 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Kursiv</item>
@@ -1779,7 +1796,6 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>Serifenlos</item>
         <item>Festbreitenschrift</item>
         <item>Fantasie</item>
-        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">

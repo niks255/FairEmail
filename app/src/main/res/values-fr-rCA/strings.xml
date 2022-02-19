@@ -201,6 +201,7 @@
     <string name="title_setup_error">Erreur</string>
     <string name="title_setup_configuring">Configuration du compte&#8230;</string>
     <string name="title_setup_app_password">Vous devrez éventuellement utiliser un mot de passe d\'application</string>
+    <string name="title_setup_extra">Options supplémentaires</string>
     <string name="title_setup_close">Fermer les paramètres</string>
     <string name="title_setup_export">Exporter les paramètres</string>
     <string name="title_setup_import">Importer les paramètres</string>
@@ -314,7 +315,7 @@
     <string name="title_advanced_send_reminders">Afficher les rappels</string>
     <string name="title_advanced_send_delayed">Retarder l’envoi des messages</string>
     <string name="title_advanced_attach_new">Ajouter des fichiers partagés à un nouveau brouillon</string>
-    <string name="title_advanced_reply_all">Appuyer longuement sur le bouton « Répondre » pour répondre à tous</string>
+    <string name="title_advanced_answer_action">Un appui long sur le bouton de réponse va:</string>
     <string name="title_advanced_send_pending">Afficher l\'icône discrète d\'envoi différé</string>
     <string name="title_advanced_compose_font">Police de caractères par défaut</string>
     <string name="title_advanced_prefix_once">Ne préfixer l’objet qu’une seule fois lors de la réponse ou du transfert</string>
@@ -345,6 +346,7 @@
     <string name="title_advanced_rlah">Ignorer l’itinérance chez soi</string>
     <string name="title_advanced_download_headers">Télécharger tous les en-têtes de message</string>
     <string name="title_advanced_download_eml">Télécharger les fichiers de messages bruts</string>
+    <string name="title_advanced_download_plain">Télécharger uniquement les parties en texte brut par défaut (si disponible)</string>
     <string name="title_advanced_validated">Nécessite une connexion validée (vérifiée)</string>
     <string name="title_advanced_vpn_only">Se connecter uniquement via un RPV</string>
     <string name="title_advanced_timeout">Délai d’expiration de la connexion (secondes)</string>
@@ -394,6 +396,7 @@
     <string name="title_advanced_bimi_unverified">Expéditeur non vérifié</string>
     <string name="title_advanced_bimi_verified">Expéditeur vérifié</string>
     <string name="title_advanced_favicons">Afficher l\'icône des sites web</string>
+    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Inspecter uniquement les premiers %1$s de la page web</string>
     <string name="title_advanced_generated_icons">Afficher les icônes générées</string>
     <string name="title_advanced_identicons">Afficher les identicônes</string>
     <string name="title_advanced_circular">Afficher des icônes rondes</string>
@@ -444,6 +447,7 @@
     <string name="title_advanced_actionbar">Afficher la barre d\'action de conversation</string>
     <string name="title_advanced_actionbar_color">Utiliser la couleur du compte comme couleur d\'arrière-plan de la barre d’action de conversation</string>
     <string name="title_advanced_navbar_colorize">Coloriser la barre de navigation d’Android</string>
+    <string name="title_advanced_bundled_fonts">Utiliser des polices groupées</string>
     <string name="title_advanced_parse_classes">Utiliser les feuilles de style</string>
     <string name="title_advanced_authentication">Afficher les avertissements d\'authentification</string>
     <string name="title_advanced_authentication_hint">Les contrôles sous-jacents peuvent être configurés dans les paramètres de réception</string>
@@ -609,7 +613,6 @@
     <string name="title_advanced_suggest_names_hint">Si désactivé, seules les adresses courriel seront utilisées lors de la sélection des contacts</string>
     <string name="title_advanced_suggest_local_hint">En plus des contacts fournis par Android. Les données de contact seront stockées pour les messages récemment envoyés ou reçus uniquement lorsque ceci est activé.</string>
     <string name="title_advanced_send_reminders_hint">Afficher un avertissement quand le texte du message ou l’objet sont vides ou quand une pièce jointe semble avoir été oubliée</string>
-    <string name="title_advanced_reply_all_hint">Si ceci est désactivé, un appui long sur le bouton « Répondre » répondra à l\'expéditeur</string>
     <string name="title_advanced_reply_move_hint">Le serveur de messagerie pourrait tout de même ajouter les messages au dossier des messages envoyés</string>
     <string name="title_advanced_usenet_hint">Insérer -- entre le texte et la signature</string>
     <string name="title_advanced_remove_signature_hint">Ceci peut entraîner la suppression de trop peu ou de beaucoup trop de texte</string>
@@ -617,6 +620,7 @@
     <string name="title_advanced_metered_warning">La désactivation de cette option empêchera la réception et l’envoi de messages sur les connexions de données mobiles</string>
     <string name="title_advanced_rlah_hint">Considérer qu’il n’y a pas d’itinérance au sein de l’UE</string>
     <string name="title_advanced_usage_hint">Ceci augmentera l\'utilisation de la pile, des données et de l\'espace de stockage</string>
+    <string name="title_advanced_plain_hint">Activer ceci limitera l\'utilisation des données mais les messages seront affichés sans style</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activer ceci peut provoquer des problèmes de connexion sur certains appareils</string>
     <string name="title_advanced_validate_hint">Ceci peut entraîner la non-synchronisation des messages, par exemple lors de l\'utilisation d\'un RPV mais aussi dans d\'autres situations</string>
     <string name="title_advanced_timeout_hint">Le délai d’expiration de la connexion sera doublé s’il reste encore des opérations de lecture/écriture. Des valeurs plus élevées entraîneront une utilisation acrue de la pile.</string>
@@ -777,6 +781,7 @@
     <string name="title_drafts_select">L\'envoi de courriels nécessite la sélection d\'un dossier « Brouillons » dans les paramètres du compte</string>
     <string name="title_account_auth_update">Mettre à jour l\'autorisation</string>
     <string name="title_account_auth_password">Passer à l\'authentification par mot de passe</string>
+    <string name="title_delete_account">Supprimer le compte</string>
     <string name="title_account_delete">Supprimer définitivement ce compte?</string>
     <string name="title_identity_delete">Supprimer définitivement cette identité?</string>
     <string name="title_edit_html">Modifier en HTML</string>
@@ -843,6 +848,7 @@
     <string name="title_delete_operation_deleted">%1$d opérations supprimées</string>
     <string name="title_delete_contacts">Supprimer tous les contacts locaux?</string>
     <string name="title_no_operations">Aucune opération en attente</string>
+    <string name="title_check_operations">Vérification des opérations en cours</string>
     <string name="title_hint_operations">La suppression d’opérations en attente peut entraîner la perte de messages ainsi que des problèmes de synchronisation</string>
     <string name="title_op_title_headers">Téléchargement des en-têtes</string>
     <string name="title_op_title_raw">Téléchargement du message brut</string>
@@ -1032,6 +1038,8 @@
     <string name="title_ask_show_html_images">Toujours afficher les images lors de l’affichage des messages originaux</string>
     <string name="title_ask_show_image">L’affichage des images peut entraîner la divulgation d’informations confidentielles</string>
     <string name="title_ask_show_image_hint">Les images identifiées comme étant des images de pistage ne seront pas affichées</string>
+    <string name="title_ask_show_amp">Afficher la variante AMP du message?</string>
+    <string name="title_ask_show_amp_hint">Les messages AMP sont conçus pour être dynamiques, interagir avec Internet et peuvent donc par définition être utilisés pour vous pister</string>
     <string name="title_ask_delete_local">Supprimer les messages locaux? Les messages resteront sur le serveur distant.</string>
     <string name="title_ask_help">Aider à l’amélioration de FairEmail</string>
     <string name="title_ask_reporting">Envoyer des rapports d’erreur?</string>
@@ -1174,6 +1182,8 @@
     <string name="title_encrypt">Chiffrer</string>
     <string name="title_decrypt">Déchiffrer</string>
     <string name="title_resync">Resynchroniser</string>
+    <string name="title_alternative_text">Afficher le texte brut</string>
+    <string name="title_alternative_html">Afficher en HTML</string>
     <string name="title_no_openpgp">OpenKeychain introuvable</string>
     <string name="title_user_interaction">Transfert vers OpenKeychain</string>
     <string name="title_signed_data">Vérifier la signature pour afficher le texte du message</string>
@@ -1334,6 +1344,8 @@
     <string name="title_rule_thread">Tous les messages dans la même conversation et le même dossier</string>
     <string name="title_rule_identity">Identité</string>
     <string name="title_rule_template">Répondre avec un modèle</string>
+    <string name="title_rule_answer_subject">Utiliser le nom du modèle comme objet</string>
+    <string name="title_rule_original_text">Inclure le texte du message original</string>
     <string name="title_rule_forward_to">Transférer à</string>
     <string name="title_rule_cc">Répondre aux adresses Cc</string>
     <string name="title_rule_with_attachments">Avec pièces jointes</string>
@@ -1460,6 +1472,7 @@
     <string name="title_legend_show_unsubscribe">Se désabonner de la liste</string>
     <string name="title_legend_show_images">Afficher les images</string>
     <string name="title_legend_hide_images">Masquer les images</string>
+    <string name="title_legend_show_amp">Afficher la variante AMP</string>
     <string name="title_legend_show_full">Afficher le message original</string>
     <string name="title_legend_show_reformatted">Afficher le message reformaté</string>
     <string name="title_legend_edit">Modifier</string>
@@ -1782,6 +1795,7 @@
         <item>5 s</item>
         <item>7,5 s</item>
         <item>10 s</item>
+        <item>15 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Cursive</item>
@@ -1789,7 +1803,6 @@
         <item>Sans empattement</item>
         <item>À espacement fixe</item>
         <item>Fantaisie</item>
-        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">

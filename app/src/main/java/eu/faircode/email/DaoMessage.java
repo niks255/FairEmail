@@ -330,7 +330,7 @@ public interface DaoMessage {
             " AND NOT fts" +
             " AND folder.type <> '" + EntityFolder.OUTBOX + "'" +
             " ORDER BY message.received")
-    List<Long> getMessageFts();
+    Cursor getMessageFts();
 
     @Query("SELECT message.id, account, thread, (:find IS NULL" +
             " OR (:senders AND `from` LIKE :find COLLATE NOCASE)" + // no index
@@ -788,7 +788,7 @@ public interface DaoMessage {
             "  OR NOT (plain_only IS :plain_only)" +
             "  OR NOT (preview IS :preview)" +
             "  OR NOT (warning IS :warning))")
-    int setMessageContent(long id, boolean content, String language, Boolean plain_only, String preview, String warning);
+    int setMessageContent(long id, boolean content, String language, Integer plain_only, String preview, String warning);
 
     @Query("UPDATE message" +
             " SET notes = :notes, notes_color = :color" +
@@ -812,7 +812,7 @@ public interface DaoMessage {
     int setMessageStored(long id, long stored);
 
     @Query("UPDATE message SET plain_only = :plain_only WHERE id = :id AND NOT (plain_only IS :plain_only)")
-    int setMessagePlainOnly(long id, boolean plain_only);
+    int setMessagePlainOnly(long id, Integer plain_only);
 
     @Query("UPDATE message SET encrypt = :encrypt WHERE id = :id AND NOT (encrypt IS :encrypt)")
     int setMessageEncrypt(long id, Integer encrypt);
@@ -928,13 +928,13 @@ public interface DaoMessage {
 
     @Query("SELECT id FROM message" +
             " WHERE folder = :folder" +
-            " AND received < :before" +
+            " AND received < :keep_time" +
             " AND NOT uid IS NULL" +
             " AND (ui_seen OR :unseen)" +
             " AND NOT ui_flagged" +
-            " AND NOT ui_browsed" +
+            " AND stored < :sync_time" + // moved, browsed
             " AND ui_snoozed IS NULL")
-    List<Long> getMessagesBefore(long folder, long before, boolean unseen);
+    List<Long> getMessagesBefore(long folder, long sync_time, long keep_time, boolean unseen);
 
     @Query("DELETE FROM message" +
             " WHERE folder = :folder" +

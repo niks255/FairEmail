@@ -50,7 +50,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -599,8 +598,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
             MessageHelper.MessageParts parts = helper.getMessageParts();
             String body = parts.getHtml(this);
-            Boolean plain = parts.isPlainOnly();
-            if (plain != null && plain)
+            Integer plain = parts.isPlainOnly();
+            if (plain != null && (plain & 1) != 0)
                 body = body.replace("<div x-plain=\"true\">", "<div>");
 
             String text = HtmlHelper.getFullText(body);

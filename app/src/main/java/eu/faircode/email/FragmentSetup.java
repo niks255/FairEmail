@@ -19,6 +19,8 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Dialog;
@@ -110,10 +112,14 @@ public class FragmentSetup extends FragmentBase {
     private TextView tvSyncStopped;
 
     private Button btnApp;
+    private Button btnDelete;
+    private Button btnMore;
+    private Button btnSupport;
 
     private Group grpInexactAlarms;
     private Group grpBackgroundRestricted;
     private Group grpDataSaver;
+    private Group grpSupport;
 
     private int textColorPrimary;
     private int colorWarning;
@@ -178,10 +184,14 @@ public class FragmentSetup extends FragmentBase {
         tvSyncStopped = view.findViewById(R.id.tvSyncStopped);
 
         btnApp = view.findViewById(R.id.btnApp);
+        btnDelete = view.findViewById(R.id.btnDelete);
+        btnMore = view.findViewById(R.id.btnMore);
+        btnSupport = view.findViewById(R.id.btnSupport);
 
         grpInexactAlarms = view.findViewById(R.id.grpInexactAlarms);
         grpBackgroundRestricted = view.findViewById(R.id.grpBackgroundRestricted);
         grpDataSaver = view.findViewById(R.id.grpDataSaver);
+        grpSupport = view.findViewById(R.id.grpSupport);
 
         // Wire controls
 
@@ -579,6 +589,39 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = new Bundle();
+                args.putBoolean("all", true);
+
+                FragmentDialogSelectAccount fragment = new FragmentDialogSelectAccount();
+                fragment.setArguments(args);
+                fragment.setTargetFragment(FragmentSetup.this, ActivitySetup.REQUEST_DELETE_ACCOUNT);
+                fragment.show(getParentFragmentManager(), "setup:delete");
+            }
+        });
+
+        btnMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
+                lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_SETUP_MORE));
+            }
+        });
+
+        grpSupport.setVisibility(
+                Helper.hasValidFingerprint(getContext()) || BuildConfig.DEBUG
+                        ? View.VISIBLE : View.GONE);
+        btnSupport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent view = new Intent(Intent.ACTION_VIEW)
+                        .setData(Helper.getSupportUri(v.getContext()));
+                v.getContext().startActivity(view);
+            }
+        });
+
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
 
@@ -773,6 +816,22 @@ public class FragmentSetup extends FragmentBase {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try {
+            switch (requestCode) {
+                case ActivitySetup.REQUEST_DELETE_ACCOUNT:
+                    if (resultCode == RESULT_OK && data != null)
+                        onDeleteAccount(data.getBundleExtra("args"));
+                    break;
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         for (int i = 0; i < permissions.length; i++)
             if (Manifest.permission.READ_CONTACTS.equals(permissions[i]))
@@ -788,6 +847,53 @@ public class FragmentSetup extends FragmentBase {
         tvPermissionsDone.setTypeface(null, granted ? Typeface.NORMAL : Typeface.BOLD);
         tvPermissionsDone.setCompoundDrawablesWithIntrinsicBounds(granted ? check : null, null, null, null);
         btnPermissions.setEnabled(!granted);
+    }
+
+    private void onDeleteAccount(Bundle args) {
+        long account = args.getLong("account");
+        String name = args.getString("name");
+
+        final Context context = getContext();
+
+        Drawable d = context.getDrawable(R.drawable.twotone_warning_24);
+        d.mutate();
+        d.setTint(Helper.resolveColor(context, R.attr.colorWarning));
+
+        new AlertDialog.Builder(context)
+                .setIcon(d)
+                .setTitle(name)
+                .setMessage(R.string.title_account_delete)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Bundle args = new Bundle();
+                        args.putLong("id", account);
+
+                        new SimpleTask<Void>() {
+                            @Override
+                            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                                long id = args.getLong("id");
+
+                                DB db = DB.getInstance(context);
+                                db.account().deleteAccount(id);
+
+                                return null;
+                            }
+
+                            @Override
+                            protected void onException(Bundle args, Throwable ex) {
+                                Log.unexpectedError(getParentFragmentManager(), ex);
+                            }
+                        }.execute(FragmentSetup.this, args, "setup:delete");
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                    }
+                })
+                .show();
     }
 
     private ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {

@@ -23,7 +23,6 @@ import static android.app.ActionBar.DISPLAY_SHOW_CUSTOM;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.RecoverableSecurityException;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -220,7 +219,7 @@ public class FragmentBase extends Fragment {
 
         if (savedInstanceState == null) {
             Bundle args = getArguments();
-            if (args == null)
+            if (args == null && !isStateSaved())
                 setArguments(new Bundle());
         } else {
             title = savedInstanceState.getCharSequence("fair:title");

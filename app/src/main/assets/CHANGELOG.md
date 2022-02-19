@@ -4,6 +4,57 @@
 
 ### [Fulgurotherium](https://en.wikipedia.org/wiki/Fulgurotherium)
 
+### 1.1841 - 2022-02-19
+
+* Improved plain text only check
+* Updated [Public Suffix List](https://publicsuffix.org/)
+* Preliminary Android 13 support
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1840 - 2022-02-17
+
+* Fixed auto linking of email addresses
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1839 - 2022-02-16
+
+* Added an option to select the long press answer button action
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1838 - 2022-02-15
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1837 - 2022-02-14
+
+* Added menu item to show plain text part
+* Added [AMP](https://amp.dev/about/email/) support
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1836 - 2022-02-12
+
+* Added option to disable using bundled fonts
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1835 - 2022-02-11
+
+* Added default display font setting
+* Replaced Cambo by Caladea font
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1834 - 2022-02-10
+
+* Added Croscore and Crosextra fonts
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1833 - 2022-02-07
 
 * Added view original signature

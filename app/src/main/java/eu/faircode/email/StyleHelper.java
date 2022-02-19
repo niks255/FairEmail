@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -34,13 +35,11 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.BulletSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.ImageSpan;
 import android.text.style.ParagraphStyle;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
-import android.text.style.SuggestionSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
@@ -50,6 +49,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.LifecycleOwner;
@@ -79,7 +79,7 @@ public class StyleHelper {
             QuoteSpan.class, IndentSpan.class,
             StrikethroughSpan.class,
             URLSpan.class,
-            TypefaceSpan.class
+            TypefaceSpan.class, CustomTypefaceSpan.class
     ));
 
     static boolean apply(int action, LifecycleOwner owner, View anchor, EditText etBody, Object... args) {
@@ -169,15 +169,16 @@ public class StyleHelper {
                     }
                 }
 
-                String[] fontNameNames = anchor.getResources().getStringArray(R.array.fontNameNames);
-                String[] fontNameValues = anchor.getResources().getStringArray(R.array.fontNameValues);
+                List<FontDescriptor> fonts = getFonts(anchor.getContext(), false);
                 SubMenu smenu = popupMenu.getMenu().findItem(R.id.menu_style_font).getSubMenu();
-                for (int i = 0; i < fontNameNames.length; i++) {
-                    SpannableStringBuilder ssb = new SpannableStringBuilderEx(fontNameNames[i]);
-                    ssb.setSpan(getTypefaceSpan(fontNameValues[i], context), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    smenu.add(R.id.group_style_font, i, 0, ssb);
+                for (int i = 0; i < fonts.size(); i++) {
+                    FontDescriptor font = fonts.get(i);
+                    SpannableStringBuilder ssb = new SpannableStringBuilderEx(font.toString());
+                    ssb.setSpan(getTypefaceSpan(font.type, context), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    smenu.add(font.custom ? R.id.group_style_font_custom : R.id.group_style_font_standard, i, 0, ssb)
+                            .setIntent(new Intent().putExtra("face", font.type));
                 }
-                smenu.add(R.id.group_style_font, fontNameNames.length, 0, R.string.title_style_font_default);
+                smenu.add(R.id.group_style_font_standard, fonts.size(), 0, R.string.title_style_font_default);
 
                 int level = -1;
                 BulletSpan[] spans = edit.getSpans(start, end, BulletSpan.class);
@@ -209,7 +210,8 @@ public class StyleHelper {
                                 return setBackground(item);
                             } else if (itemId == R.id.menu_style_color) {
                                 return setColor(item);
-                            } else if (groupId == R.id.group_style_font) {
+                            } else if (groupId == R.id.group_style_font_standard ||
+                                    groupId == R.id.group_style_font_custom) {
                                 return setFont(item);
                             } else if (groupId == R.id.group_style_align) {
                                 return setAlignment(item);
@@ -503,12 +505,7 @@ public class StyleHelper {
 
                     private boolean setFont(MenuItem item) {
                         Log.breadcrumb("style", "action", "font");
-
-                        int id = item.getItemId();
-                        String[] names = anchor.getResources().getStringArray(R.array.fontNameValues);
-                        String face = (id < names.length ? names[id] : null);
-
-                        return _setFont(face);
+                        return _setFont(item.getIntent().getStringExtra("face"));
                     }
 
                     private boolean _setFont(String face) {
@@ -928,29 +925,141 @@ public class StyleHelper {
         }
     }
 
-    static TypefaceSpan getTypefaceSpan(String family, Context context) {
+    static String getFamily(String family) {
+        // https://web.mit.edu/jmorzins/www/fonts.html
+        // https://en.wikipedia.org/wiki/Croscore_fonts
+        // https://developer.mozilla.org/en-US/docs/Web/CSS/font-family
+        // TODO: Microsoft: Georgia (Serif), Tahoma (Sans-serif), Trebuchet MS (Sans-serif)
         String faces = family.toLowerCase(Locale.ROOT);
+        if (faces.contains("arimo"))
+            return "Arimo, Arial, Verdana, Helvetica, sans-serif";
+        if (faces.contains("tinos"))
+            return "Tinos, \"Times New Roman\", Times, serif";
+        if (faces.contains("cousine"))
+            return "Cousine, \"Courier New\", Courier, monospace";
+        if (faces.contains("lato"))
+            return "Lato, Carlito, Calibri, sans-serif";
+        if (faces.contains("caladea"))
+            return "Caladea, Cambo, Cambria, serif";
         if (faces.contains("comic sans"))
-            family = "comic sans ms, sans-serif";
+            return "OpenDyslexic, \"Comic Sans\", \"Comic Sans MS\", sans-serif";
+        return family;
+    }
+
+    static TypefaceSpan getTypefaceSpan(String family, Context context) {
+        family = getFamily(family);
         return new CustomTypefaceSpan(family, getTypeface(family, context));
     }
 
     static Typeface getTypeface(String family, Context context) {
-        String faces = family.toLowerCase(Locale.ROOT);
+        if (TextUtils.isEmpty(family))
+            return Typeface.DEFAULT;
 
-        if (faces.equals("fairemail"))
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean bundled_fonts = prefs.getBoolean("bundled_fonts", true);
+
+        List<String> faces = new ArrayList<>();
+        for (String face : family.split(","))
+            faces.add(face
+                    .trim()
+                    .toLowerCase(Locale.ROOT)
+                    .replace("'", "")
+                    .replace("\"", ""));
+
+        if (faces.contains("fairemail"))
             return ResourcesCompat.getFont(context, R.font.fantasy);
 
-        if (faces.contains("comic sans"))
-            return ResourcesCompat.getFont(context, R.font.opendyslexic);
+        if (bundled_fonts) {
+            if (faces.contains("arimo") ||
+                    faces.contains("arial") ||
+                    faces.contains("verdana") ||
+                    faces.contains("helvetica"))
+                return ResourcesCompat.getFont(context, R.font.arimo);
 
-        for (String face : faces.split(",")) {
-            face = face.trim().replace("\"", "");
+            if (faces.contains("tinos") ||
+                    faces.contains("times") ||
+                    faces.contains("times new roman"))
+                return ResourcesCompat.getFont(context, R.font.tinos);
+
+            if (faces.contains("cousine") ||
+                    faces.contains("courier") ||
+                    faces.contains("courier new"))
+                return ResourcesCompat.getFont(context, R.font.cousine);
+
+            if (faces.contains("lato") ||
+                    faces.contains("carlito") ||
+                    faces.contains("calibri"))
+                return ResourcesCompat.getFont(context, R.font.lato);
+
+            if (faces.contains("caladea") ||
+                    faces.contains("cambo") ||
+                    faces.contains("cambria"))
+                return ResourcesCompat.getFont(context, R.font.caladea);
+
+            if (faces.contains("opendyslexic") ||
+                    faces.contains("comic sans") ||
+                    faces.contains("comic sans ms"))
+                return ResourcesCompat.getFont(context, R.font.opendyslexic);
+        }
+
+        for (String face : faces) {
             Typeface tf = Typeface.create(face, Typeface.NORMAL);
             if (!tf.equals(Typeface.DEFAULT))
                 return tf;
         }
+
         return Typeface.DEFAULT;
+    }
+
+    public static List<FontDescriptor> getFonts(Context context) {
+        return getFonts(context, true);
+    }
+
+    public static List<FontDescriptor> getFonts(Context context, boolean all) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean bundled_fonts = prefs.getBoolean("bundled_fonts", true);
+
+        List<FontDescriptor> result = new ArrayList<>();
+        String[] fontNameNames = context.getResources().getStringArray(R.array.fontNameNames);
+        String[] fontNameValues = context.getResources().getStringArray(R.array.fontNameValues);
+        for (int i = 0; i < fontNameNames.length; i++)
+            result.add(new FontDescriptor(fontNameValues[i], fontNameNames[i]));
+
+        // https://en.wikipedia.org/wiki/Croscore_fonts
+        if (all || bundled_fonts) {
+            result.add(new FontDescriptor("arimo", "Arimo (Arial, Verdana)", true));
+            result.add(new FontDescriptor("tinos", "Tinos (Times New Roman)", true));
+            result.add(new FontDescriptor("cousine", "Cousine (Courier New)", true));
+            result.add(new FontDescriptor("lato", "Lato (Calibri)", true));
+            result.add(new FontDescriptor("caladea", "Caladea (Cambria)", true));
+
+            result.add(new FontDescriptor("comic sans", "OpenDyslexic", true));
+        }
+
+        return result;
+    }
+
+    public static class FontDescriptor {
+        @NonNull
+        public String type;
+        @NonNull
+        public String name;
+        public boolean custom;
+
+        FontDescriptor(String type, String name) {
+            this(type, name, false);
+        }
+
+        FontDescriptor(String type, String name, boolean custom) {
+            this.type = type;
+            this.name = name;
+            this.custom = custom;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 
     //TextUtils.dumpSpans(text, new LogPrinter(android.util.Log.INFO, "FairEmail"), "afterTextChanged ");

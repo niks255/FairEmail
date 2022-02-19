@@ -191,6 +191,7 @@
     <string name="title_setup_error">Lỗi</string>
     <string name="title_setup_configuring">Đang thiết lập tài khoản &#8230;</string>
     <string name="title_setup_app_password">Bạn có thể cần phải sử dụng mật khẩu ứng dụng</string>
+    <string name="title_setup_extra">Thêm</string>
     <string name="title_setup_close">Đóng cài đặt</string>
     <string name="title_setup_export">Xuất cài đặt</string>
     <string name="title_setup_import">Nhập cài đặt</string>
@@ -303,7 +304,6 @@
     <string name="title_advanced_send_reminders">Hiện lời nhắc</string>
     <string name="title_advanced_send_delayed">Trì hoãn việc gửi thư</string>
     <string name="title_advanced_attach_new">Thêm các tệp được chia sẻ vào bản nháp mới</string>
-    <string name="title_advanced_reply_all">Nhấn giữ nút trả lời để trả lời tất cả</string>
     <string name="title_advanced_send_pending">Hiện biểu tượng gửi được trì hoãn không gây phiền</string>
     <string name="title_advanced_compose_font">Phông chữ mặc định</string>
     <string name="title_advanced_prefix_once">Chỉ đặt tiền tố cho chủ đề một lần khi trả lời hoặc chuyển tiếp</string>
@@ -334,6 +334,7 @@
     <string name="title_advanced_rlah">Chuyển vùng như ở nhà</string>
     <string name="title_advanced_download_headers">Tải xuống tất cả tiêu đề thư</string>
     <string name="title_advanced_download_eml">Tải xuống các tệp thư thô</string>
+    <string name="title_advanced_download_plain">Tải xuống các phần chỉ gồm văn bản thuần theo mặc định (nếu có)</string>
     <string name="title_advanced_validated">Yêu cầu kết nối đã xác minh (đã kiểm tra)</string>
     <string name="title_advanced_vpn_only">Kết nối chỉ qua VPN</string>
     <string name="title_advanced_timeout">Thời gian chờ kết nối (giây)</string>
@@ -367,6 +368,7 @@
     <string name="title_advanced_tabular_background">Sử dụng màu thẻ làm màu nền khi dùng kiểu tab</string>
     <string name="title_advanced_cards_shadow">Sử dụng cái bóng cho thư chưa đọc khi dùng kiểu thẻ</string>
     <string name="title_advanced_cards_shadow_highlight">Sử dụng màu đánh dấu thay vì màu nổi bật</string>
+    <string name="title_advanced_tabular_dividers">Sử dụng đường chia tách khi dùng kiểu tab</string>
     <string name="title_advanced_category_header">Nhóm theo thể loại tài khoản</string>
     <string name="title_advanced_date_header">Nhóm theo ngày</string>
     <string name="title_advanced_date_fixed">Hiện tiêu đề ngày cố định ở đầu</string>
@@ -432,6 +434,7 @@
     <string name="title_advanced_actionbar">Hiện thanh hành đông ở cuộc hội thoại</string>
     <string name="title_advanced_actionbar_color">Sử dụng màu tài khoản làm màu nền cho thanh hành động trong cuộc hội thoại</string>
     <string name="title_advanced_navbar_colorize">Tô màu thanh điều hướng Android</string>
+    <string name="title_advanced_bundled_fonts">Sử dụng phông chữ tích hợp</string>
     <string name="title_advanced_parse_classes">Xử lý các trang phong cách</string>
     <string name="title_advanced_authentication">Hiện cảnh báo xác thực</string>
     <string name="title_advanced_authentication_hint">Các lần kiểm tra đằng sau đó có thể được thiết lập trong cài đặt nhận</string>
@@ -595,7 +598,6 @@
     <string name="title_advanced_suggest_names_hint">Nếu bị tắt, chỉ có các địa chỉ email sẽ được sử dụng khi chọn các liên hệ</string>
     <string name="title_advanced_suggest_local_hint">Bên cạnh các liên hệ được Android cung cấp. Dữ liệu liên hệ sẽ được lưu trữ cho các thư mới được gửi hoặc nhận chỉ khi được bật.</string>
     <string name="title_advanced_send_reminders_hint">Hiện một lời cảnh báo khi văn bản thư hoặc chủ đề trống hoặc khi một tệp đính kèm có thể đang thiếu</string>
-    <string name="title_advanced_reply_all_hint">Nếu bị tắt, việc nhấn giữ nút trả lời sẽ trả lời người gửi</string>
     <string name="title_advanced_reply_move_hint">Máy chủ email vẫn có thể thêm thư vào thư mục thư đã gửi</string>
     <string name="title_advanced_usenet_hint">Chèn \'-- \' giữa văn bản và chữ ký</string>
     <string name="title_advanced_remove_signature_hint">Việc này có thể dẫn đến văn bản bị xoá quá nhiều hoặc ít</string>
@@ -603,6 +605,7 @@
     <string name="title_advanced_metered_warning">Việc tắt tuỳ chọn này sẽ tắt việc nhận và gửi thư khi dùng kết nối internet di động</string>
     <string name="title_advanced_rlah_hint">Giả sử là không chuyển vùng trong EU (Liên minh châu Âu)</string>
     <string name="title_advanced_usage_hint">Cái này sẽ làm tăng sử dụng pin, dữ liệu và không gian bộ nhớ</string>
+    <string name="title_advanced_plain_hint">Việc bật cái này sẽ giới hạn sử dụng dữ liệu, nhưng thư sẽ được hiện mà không được tạo kiểu</string>
     <string name="title_advanced_tcp_keep_alive_hint">Việc bật cái này có thể gây ra các vấn đề kết nối ở một số thiết bị</string>
     <string name="title_advanced_validate_hint">Cái này có thể dẫn đến không đồng bộ hoá thư, ví dụ khi sử dụng VPN, nhưng cũng trong các trường hợp khác</string>
     <string name="title_advanced_timeout_hint">Thời gian chờ đọc/ghi sẽ được đặt thành gấp đôi thời gian chờ kết nối. Các giá trị cao hơn sẽ dẫn đến hao pin nhiều hơn.</string>
@@ -763,6 +766,7 @@
     <string name="title_drafts_select">Việc gửi email yêu cầu một thư mục nháp được chọn trong cài đặt tài khoản</string>
     <string name="title_account_auth_update">Cập nhật uỷ quyền</string>
     <string name="title_account_auth_password">Chuyển sang xác thực mật khẩu</string>
+    <string name="title_delete_account">Xoá tài khoản</string>
     <string name="title_account_delete">Xóa tài khoản này vĩnh viễn?</string>
     <string name="title_identity_delete">Xóa danh tính này vĩnh viễn?</string>
     <string name="title_edit_html">Chỉnh sửa dưới dạng HTML</string>
@@ -829,6 +833,7 @@
     <string name="title_delete_operation_deleted">%1$d hoạt động đã xoá</string>
     <string name="title_delete_contacts">Xoá tất cả liên hệ cục bộ?</string>
     <string name="title_no_operations">Không có hoạt động đang chờ</string>
+    <string name="title_check_operations">Đang kiểm tra hoạt động</string>
     <string name="title_hint_operations">Việc xoá các hoạt động có thể dẫn đến biến mất thư và các vấn đề đồng bộ hoá</string>
     <string name="title_op_title_headers">Đang tải xuống tiêu đề</string>
     <string name="title_op_title_raw">Đang tải xuống thư thô</string>
@@ -1017,6 +1022,8 @@
     <string name="title_ask_show_html_images">Luôn hiện các hình ảnh khi hiện các thư gốc</string>
     <string name="title_ask_show_image">Việc hiện các hình ảnh có thể gây rò rỉ thông tin riêng tư nhạy cảm</string>
     <string name="title_ask_show_image_hint">Các hình ảnh được nhận ra là hình ảnh theo dõi sẽ không được hiện</string>
+    <string name="title_ask_show_amp">Hiện bản AMP của thư?</string>
+    <string name="title_ask_show_amp_hint">Thư AMP được thiết kế để tương tác với internet và do đó, theo định nghĩa, có thể được sử dụng để theo dõi bạn</string>
     <string name="title_ask_delete_local">Xoá các thư cục bộ? Thư vẫn sẽ còn trên máy chủ trên mạng.</string>
     <string name="title_ask_help">Giúp cải thiện FairEmail</string>
     <string name="title_ask_reporting">Gửi báo cáo lỗi?</string>
@@ -1157,6 +1164,8 @@
     <string name="title_encrypt">Mã hóa</string>
     <string name="title_decrypt">Giải mã</string>
     <string name="title_resync">Đồng bộ lại</string>
+    <string name="title_alternative_text">Hiện văn bản thuần</string>
+    <string name="title_alternative_html">Hiện HTML</string>
     <string name="title_no_openpgp">Không tìm thấy OpenKeychain</string>
     <string name="title_user_interaction">Đang chuyển sang OpenKeychain</string>
     <string name="title_signed_data">Xác minh chữ ký để hiện văn bản thư</string>
@@ -1255,6 +1264,9 @@
     <string name="title_edit_signature_remark">Dù Android không thể hiển thị tất cả HTML, nó sẽ được gửi đi mà không thay đổi</string>
     <string name="title_edit_signature_text">Văn bản chữ ký</string>
     <string name="title_edit_signature_image">Chèn hình ảnh</string>
+    <string name="title_edit_signature_image_hint">        Khi gửi thư, hình ảnh được sao chép vào thư từ vị trí được chọn.
+        Vậy nên đừng xoá tệp hình ảnh!
+    </string>
     <string name="title_answer_caption">Chỉnh sửa mẫu</string>
     <string name="title_answer_reply">Mẫu trả lời</string>
     <string name="title_answer_name">Tên mẫu</string>
@@ -1314,6 +1326,8 @@
     <string name="title_rule_thread">Tất cả thư trong cùng cuộc hội thoại và thư mục</string>
     <string name="title_rule_identity">Danh tính</string>
     <string name="title_rule_template">Mẫu trả lời</string>
+    <string name="title_rule_answer_subject">Sử dụng tên mẫu làm chủ đề</string>
+    <string name="title_rule_original_text">Bao gồm văn bản thư gốc</string>
     <string name="title_rule_forward_to">Chuyển tiếp đến</string>
     <string name="title_rule_cc">Trả lời đến các địa chỉ CC</string>
     <string name="title_rule_with_attachments">Có tệp đính kèm</string>
@@ -1440,6 +1454,7 @@
     <string name="title_legend_show_unsubscribe">Hủy đăng ký khỏi danh sách</string>
     <string name="title_legend_show_images">Hiện hình ảnh</string>
     <string name="title_legend_hide_images">Ẩn hình ảnh</string>
+    <string name="title_legend_show_amp">Hiện bản AMP</string>
     <string name="title_legend_show_full">Hiện thư gốc</string>
     <string name="title_legend_show_reformatted">Hiện thư đã định dạng lại</string>
     <string name="title_legend_edit">Chỉnh sửa</string>
@@ -1753,6 +1768,7 @@
         <item>5 giây</item>
         <item>7.5 giây</item>
         <item>10 giây</item>
+        <item>15 giây</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Chữ viết tay</item>
@@ -1760,7 +1776,6 @@
         <item>Sans-serif</item>
         <item>Đơn cách</item>
         <item>Fantasy</item>
-        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">

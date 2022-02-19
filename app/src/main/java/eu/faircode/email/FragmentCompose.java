@@ -48,7 +48,6 @@ import android.graphics.Color;
 import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
@@ -272,8 +271,8 @@ public class FragmentCompose extends FragmentBase {
     private ContentResolver resolver;
     private AdapterAttachment adapter;
 
-    private boolean monospaced = false;
     private String compose_font;
+    private String display_font;
     private boolean dsn = true;
     private Integer encrypt = null;
     private boolean media = true;
@@ -283,7 +282,7 @@ public class FragmentCompose extends FragmentBase {
     private long working = -1;
     private State state = State.NONE;
     private boolean show_images = false;
-    private Boolean last_plain_only = null;
+    private Integer last_plain_only = null;
     private List<EntityAttachment> last_attachments = null;
     private boolean saved = false;
     private String subject = null;
@@ -331,8 +330,8 @@ public class FragmentCompose extends FragmentBase {
         super.onCreate(savedInstanceState);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        monospaced = prefs.getBoolean("monospaced", false);
-        compose_font = prefs.getString("compose_font", monospaced ? "monospace" : "sans-serif");
+        compose_font = prefs.getString("compose_font", "");
+        display_font = prefs.getString("display_font", "");
         media = prefs.getBoolean("compose_media", true);
         compact = prefs.getBoolean("compose_compact", false);
         zoom = prefs.getInt("compose_zoom", compact ? 0 : 1);
@@ -555,14 +554,6 @@ public class FragmentCompose extends FragmentBase {
 
         setZoom();
 
-        SpannableStringBuilder hint = new SpannableStringBuilderEx();
-        hint.append(getString(R.string.title_body_hint));
-        hint.append("\n");
-        int pos = hint.length();
-        hint.append(getString(R.string.title_body_hint_style));
-        hint.setSpan(new RelativeSizeSpan(0.7f), pos, hint.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        etBody.setHint(hint);
-
         etBody.setInputContentListener(new EditTextCompose.IInputContentListener() {
             @Override
             public void onInputContent(Uri uri) {
@@ -751,7 +742,7 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
-        tvSignature.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
+        tvSignature.setTypeface(StyleHelper.getTypeface(compose_font, getContext()));
 
         cbSignature.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -828,7 +819,7 @@ public class FragmentCompose extends FragmentBase {
         });
 
         etBody.setTypeface(StyleHelper.getTypeface(compose_font, getContext()));
-        tvReference.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
+        tvReference.setTypeface(StyleHelper.getTypeface(display_font, getContext()));
 
         tvReference.setMovementMethod(new ArrowKeyMovementMethod() {
             @Override
@@ -941,6 +932,7 @@ public class FragmentCompose extends FragmentBase {
         tvResend.setVisibility(View.GONE);
         tvPlainTextOnly.setVisibility(View.GONE);
         etBody.setText(null);
+        etBody.setHint(null);
 
         grpHeader.setVisibility(View.GONE);
         grpExtra.setVisibility(View.GONE);
@@ -1641,6 +1633,10 @@ public class FragmentCompose extends FragmentBase {
             bottom_navigation.getMenu().findItem(R.id.action_send).setTitle(R.string.title_encrypt);
         else
             bottom_navigation.getMenu().findItem(R.id.action_send).setTitle(R.string.title_send);
+
+        Menu m = bottom_navigation.getMenu();
+        for (int i = 0; i < m.size(); i++)
+            bottom_navigation.findViewById(m.getItem(i).getItemId()).setOnLongClickListener(null);
 
         bottom_navigation.findViewById(R.id.action_send).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -2747,7 +2743,7 @@ public class FragmentCompose extends FragmentBase {
                     return null;
 
                 DB db = DB.getInstance(context);
-                db.message().setMessagePlainOnly(id, false);
+                db.message().setMessagePlainOnly(id, 0);
 
                 args.putInt("start", start);
 
@@ -3821,12 +3817,6 @@ public class FragmentCompose extends FragmentBase {
 
         Editable e = etBody.getText();
         boolean notext = e.toString().trim().isEmpty();
-        boolean formatted = false;
-        for (Object span : e.getSpans(0, e.length(), Object.class))
-            if (span instanceof CharacterStyle || span instanceof ParagraphStyle) {
-                formatted = true;
-                break;
-            }
 
         Bundle args = new Bundle();
         args.putLong("id", working);
@@ -3843,7 +3833,6 @@ public class FragmentCompose extends FragmentBase {
         args.putBoolean("signature", cbSignature.isChecked());
         args.putBoolean("empty", isEmpty());
         args.putBoolean("notext", notext);
-        args.putBoolean("formatted", formatted);
         args.putBoolean("interactive", getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED));
         args.putInt("focus", focus == null ? -1 : focus.getId());
         if (focus instanceof EditText) {
@@ -3932,7 +3921,8 @@ public class FragmentCompose extends FragmentBase {
 
                 if (image) {
                     attachment.cid = "<" + BuildConfig.APPLICATION_ID + "." + attachment.id + ">";
-                    db.attachment().setCid(attachment.id, attachment.cid);
+                    attachment.related = true;
+                    db.attachment().setCid(attachment.id, attachment.cid, attachment.related);
                 }
             } finally {
                 try {
@@ -4272,7 +4262,7 @@ public class FragmentCompose extends FragmentBase {
                         if (plain_only &&
                                 !"resend".equals(action) &&
                                 !"editasnew".equals(action))
-                            data.draft.plain_only = true;
+                            data.draft.plain_only = 1;
 
                         if (encrypt_default || selected.encrypt_default)
                             if (selected.encrypt == 0)
@@ -4329,9 +4319,12 @@ public class FragmentCompose extends FragmentBase {
                                 : db.answer().getAnswer(answer));
                         if (a != null) {
                             db.answer().applyAnswer(a.id, new Date().getTime());
-                            data.draft.subject = a.name;
-                            Document d = JsoupEx.parse(a.getHtml(null));
-                            document.body().append(d.body().html());
+                            if (answer > 0)
+                                data.draft.subject = a.name;
+                            if (TextUtils.isEmpty(external_body)) {
+                                Document d = JsoupEx.parse(a.getHtml(null));
+                                document.body().append(d.body().html());
+                            }
                         }
 
                         data.draft.signature = prefs.getBoolean("signature_new", true);
@@ -4527,8 +4520,8 @@ public class FragmentCompose extends FragmentBase {
                             data.draft.sensitivity = ref.sensitivity;
 
                             // Plain-only
-                            if (ref.plain_only != null && ref.plain_only)
-                                data.draft.plain_only = true;
+                            if (ref.isPlainOnly())
+                                data.draft.plain_only = 1;
 
                             // Encryption
                             List<Address> recipients = new ArrayList<>();
@@ -4826,6 +4819,7 @@ public class FragmentCompose extends FragmentBase {
                                         attachment.disposition = Part.INLINE;
                                     else {
                                         attachment.cid = null;
+                                        attachment.related = false;
                                         attachment.disposition = Part.ATTACHMENT;
                                     }
 
@@ -5179,7 +5173,7 @@ public class FragmentCompose extends FragmentBase {
                                         ? View.VISIBLE : View.GONE);
 
                         tvPlainTextOnly.setVisibility(
-                                draft.plain_only != null && draft.plain_only && !plain_only
+                                draft.isPlainOnly() && !plain_only
                                         ? View.VISIBLE : View.GONE);
 
                         tvNoInternet.setTag(draft.content);
@@ -5581,7 +5575,7 @@ public class FragmentCompose extends FragmentBase {
 
                         dirty = true;
                     } else if (action == R.id.action_send) {
-                        if (draft.plain_only == null || !draft.plain_only) {
+                        if (!draft.isPlainOnly()) {
                             // Remove unused inline images
                             List<String> cids = new ArrayList<>();
                             Document d = JsoupEx.parse(body);
@@ -5656,8 +5650,9 @@ public class FragmentCompose extends FragmentBase {
                             action == R.id.action_undo ||
                             action == R.id.action_redo ||
                             action == R.id.action_check) {
-                        boolean unencrypted = (draft.ui_encrypt == null ||
-                                EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt));
+                        boolean unencrypted =
+                                (!EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt) &&
+                                        !EntityMessage.SMIME_SIGNENCRYPT.equals(draft.ui_encrypt));
                         if ((dirty && unencrypted) || encrypted) {
                             if (save_drafts) {
                                 Map<String, String> c = new HashMap<>();
@@ -5789,6 +5784,9 @@ public class FragmentCompose extends FragmentBase {
                             if (notext &&
                                     d.select("div[fairemail=reference]").isEmpty())
                                 args.putBoolean("remind_text", true);
+
+                            boolean styled = HtmlHelper.isStyled(d);
+                            args.putBoolean("styled", styled);
 
                             int attached = 0;
                             for (EntityAttachment attachment : attachments)
@@ -6027,7 +6025,7 @@ public class FragmentCompose extends FragmentBase {
                 boolean remind_subject = args.getBoolean("remind_subject", false);
                 boolean remind_text = args.getBoolean("remind_text", false);
                 boolean remind_attachment = args.getBoolean("remind_attachment", false);
-                boolean formatted = args.getBoolean("formatted", false);
+                boolean styled = args.getBoolean("styled", false);
 
                 int recipients = (draft.to == null ? 0 : draft.to.length) +
                         (draft.cc == null ? 0 : draft.cc.length) +
@@ -6037,7 +6035,7 @@ public class FragmentCompose extends FragmentBase {
                         remind_dsn || remind_size || remind_pgp || remind_smime ||
                         remind_to || remind_noreply || remind_external ||
                         recipients > RECIPIENTS_WARNING ||
-                        (formatted && (draft.plain_only != null && draft.plain_only)) ||
+                        (styled && draft.isPlainOnly()) ||
                         (send_reminders &&
                                 (remind_extra || remind_subject || remind_text || remind_attachment))) {
                     setBusy(false);
@@ -6140,6 +6138,7 @@ public class FragmentCompose extends FragmentBase {
             // https://datatracker.ietf.org/doc/html/rfc3676#section-4.3
             Element span = document.createElement("span");
             span.text("-- ");
+            span.prependElement("br");
             span.appendElement("br");
             div.appendChild(span);
         }
@@ -6263,6 +6262,14 @@ public class FragmentCompose extends FragmentBase {
             protected void onExecuted(Bundle args, Spanned[] text) {
                 etBody.setText(text[0]);
                 etBody.setTag(text[0]);
+
+                SpannableStringBuilder hint = new SpannableStringBuilderEx();
+                hint.append(getString(R.string.title_body_hint));
+                hint.append("\n");
+                int start = hint.length();
+                hint.append(getString(R.string.title_body_hint_style));
+                hint.setSpan(new RelativeSizeSpan(0.7f), start, hint.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                etBody.setHint(hint);
 
                 if (state != State.LOADED) {
                     int pos = getAutoPos(0, etBody.length());
@@ -6830,7 +6837,7 @@ public class FragmentCompose extends FragmentBase {
             final boolean remind_subject = args.getBoolean("remind_subject", false);
             final boolean remind_text = args.getBoolean("remind_text", false);
             final boolean remind_attachment = args.getBoolean("remind_attachment", false);
-            final boolean formatted = args.getBoolean("formatted", false);
+            final boolean styled = args.getBoolean("styled", false);
             final long size = args.getLong("size", -1);
             final long max_size = args.getLong("max_size", -1);
 
@@ -6961,7 +6968,7 @@ public class FragmentCompose extends FragmentBase {
             cbPlainOnly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                    tvPlainHint.setVisibility(checked && formatted ? View.VISIBLE : View.GONE);
+                    tvPlainHint.setVisibility(checked && styled ? View.VISIBLE : View.GONE);
 
                     Bundle args = new Bundle();
                     args.putLong("id", id);
@@ -6974,7 +6981,7 @@ public class FragmentCompose extends FragmentBase {
                             boolean plain_only = args.getBoolean("plain_only");
 
                             DB db = DB.getInstance(context);
-                            db.message().setMessagePlainOnly(id, plain_only);
+                            db.message().setMessagePlainOnly(id, plain_only ? 1 : 0);
 
                             return null;
                         }
@@ -7244,7 +7251,7 @@ public class FragmentCompose extends FragmentBase {
                         tvViaTitle.setTextColor(draft.identityColor);
                     tvVia.setText(draft.identityEmail);
 
-                    cbPlainOnly.setChecked(draft.plain_only != null && draft.plain_only && !dsn);
+                    cbPlainOnly.setChecked(draft.isPlainOnly() && !dsn);
                     cbReceipt.setChecked(draft.receipt_request != null && draft.receipt_request && !dsn);
 
                     int encrypt = (draft.ui_encrypt == null || dsn ? EntityMessage.ENCRYPT_NONE : draft.ui_encrypt);

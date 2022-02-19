@@ -20,7 +20,6 @@ package eu.faircode.email;
 */
 
 import static android.app.Activity.RESULT_OK;
-
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
 import android.app.Dialog;
@@ -146,7 +145,7 @@ public class FragmentFolders extends FragmentBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         cards = prefs.getBoolean("cards", true);
         dividers = prefs.getBoolean("dividers", true);
-        compact = prefs.getBoolean("compact_folders", false);
+        compact = prefs.getBoolean("compact_folders", true);
         show_hidden = false; // prefs.getBoolean("hidden_folders", false);
         show_flagged = prefs.getBoolean("flagged_folders", false);
 

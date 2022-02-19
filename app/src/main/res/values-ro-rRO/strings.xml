@@ -211,6 +211,7 @@
     <string name="title_setup_error">Eroare</string>
     <string name="title_setup_configuring">Configurare cont &#8230;</string>
     <string name="title_setup_app_password">Este posibil să fie nevoie să folosiți o parolă de aplicație</string>
+    <string name="title_setup_extra">Suplimentar</string>
     <string name="title_setup_close">Închideți setările</string>
     <string name="title_setup_export">Exportă setări</string>
     <string name="title_setup_import">Importă setări</string>
@@ -323,7 +324,7 @@
     <string name="title_advanced_send_reminders">Arată mementouri</string>
     <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
     <string name="title_advanced_attach_new">Adăugați fișierele partajate la o nouă ciornă</string>
-    <string name="title_advanced_reply_all">Apăsați lung butonul de răspuns pentru a răspunde la toate</string>
+    <string name="title_advanced_answer_action">Apăsarea îndelungată a butonului de răspuns va:</string>
     <string name="title_advanced_send_pending">Arată pictograma neobstructivă de trimitere întârziată</string>
     <string name="title_advanced_compose_font">Font prestabilit</string>
     <string name="title_advanced_prefix_once">Adaugă prefix la subiect o singură dată pentru răspuns sau redirecționare</string>
@@ -354,6 +355,7 @@
     <string name="title_advanced_rlah">Consideră roamingul ca național</string>
     <string name="title_advanced_download_headers">Descărcați toate anteturile mesajelor</string>
     <string name="title_advanced_download_eml">Descărcați fișiere cu mesaje brute</string>
+    <string name="title_advanced_download_plain">Descărcați în mod implicit numai părți de text simplu (dacă sunt disponibile)</string>
     <string name="title_advanced_validated">Necesită o conexiune validată (verificată)</string>
     <string name="title_advanced_vpn_only">Conectați-vă numai prin intermediul unui VPN</string>
     <string name="title_advanced_timeout">Expirarea conexiunii (secunde)</string>
@@ -403,6 +405,7 @@
     <string name="title_advanced_bimi_unverified">Expeditor neverificat</string>
     <string name="title_advanced_bimi_verified">Expeditor verificat</string>
     <string name="title_advanced_favicons">Arată iconițe siteuri</string>
+    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Scanează numai primele %1$s din pagina web</string>
     <string name="title_advanced_generated_icons">Arată pictograme cu literă</string>
     <string name="title_advanced_identicons">Arată pictograme generate pe baza identității</string>
     <string name="title_advanced_circular">Arată pictograme rotunde</string>
@@ -453,6 +456,7 @@
     <string name="title_advanced_actionbar">Arată bara de acțiuni pentru conversație</string>
     <string name="title_advanced_actionbar_color">Folosește culoarea contului pentru culoarea de fundal a barei de acțiuni a conversației</string>
     <string name="title_advanced_navbar_colorize">Colorează bara de navigație Android</string>
+    <string name="title_advanced_bundled_fonts">Utilizați fonturi incluse în pachet</string>
     <string name="title_advanced_parse_classes">Utilizează foile de stil</string>
     <string name="title_advanced_authentication">Afișați avertismentele de autentificare</string>
     <string name="title_advanced_authentication_hint">Verificările subiacente pot fi configurate în setările de recepție</string>
@@ -617,7 +621,6 @@
     <string name="title_advanced_suggest_names_hint">Dacă este dezactivată, numai adresele de e-mail vor fi folosite la selectarea contactelor</string>
     <string name="title_advanced_suggest_local_hint">Pe lângă contactele furnizate de Android. Datele contactelor vor fi memorate pentru mesajele nou trimise sau primite doar când este activată.</string>
     <string name="title_advanced_send_reminders_hint">Arată o avertizare atunci când textul mesajului sau subiectul e gol sau când atașamentul s-ar putea să lipsească</string>
-    <string name="title_advanced_reply_all_hint">Dacă este dezactivată, apăsarea lungă a butonului de răspuns va răspunde expeditorului</string>
     <string name="title_advanced_reply_move_hint">Serverul de e-mail ar putea adăuga mesajele la folderul de mesaje trimise</string>
     <string name="title_advanced_usenet_hint">Inserează \'-- \' între text și semnătură</string>
     <string name="title_advanced_remove_signature_hint">Acest lucru poate duce la eliminarea unui text prea scurt sau prea mare</string>
@@ -625,6 +628,7 @@
     <string name="title_advanced_metered_warning">Dezactivarea acestei opțiuni va opri primirea și trimiterea mesajelor pe conexiunile mobile de internet</string>
     <string name="title_advanced_rlah_hint">În zona UE nu se tratează ca roaming</string>
     <string name="title_advanced_usage_hint">Acest lucru va crește utilizarea bateriei, a datelor și a spațiului de stocare</string>
+    <string name="title_advanced_plain_hint">Activarea acestei opțiuni va limita utilizarea datelor, dar mesajele vor fi afișate fără stilizare</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activarea acesteia poate cauza probleme de conexiune pe unele dispozitive</string>
     <string name="title_advanced_validate_hint">Acest lucru poate duce la nesincronizarea mesajelor, de exemplu atunci când se utilizează un VPN, dar și în alte situații</string>
     <string name="title_advanced_timeout_hint">Timpul de expirare a citirii/scrierii va fi setat la dublul intervalului de expirare a conexiunii. Valori mai mari au ca rezultat o utilizare mai mare a bateriei.</string>
@@ -785,6 +789,7 @@
     <string name="title_drafts_select">Trimiterea de e-mailuri necesită un dosar ciorne selectat în setările contului</string>
     <string name="title_account_auth_update">Actualizarea autorizației</string>
     <string name="title_account_auth_password">Treceți la autentificarea prin parolă</string>
+    <string name="title_delete_account">Ștergere cont</string>
     <string name="title_account_delete">Ștergeți definitiv acest cont?</string>
     <string name="title_identity_delete">Ștergeți definitiv această identitate?</string>
     <string name="title_edit_html">Editează ca HTML</string>
@@ -851,6 +856,7 @@
     <string name="title_delete_operation_deleted">%1$d operațiuni șterse</string>
     <string name="title_delete_contacts">Ștergeți toate contactele locale?</string>
     <string name="title_no_operations">Nici o operațiune în așteptare</string>
+    <string name="title_check_operations">Verificarea operațiunilor</string>
     <string name="title_hint_operations">Ștergerea de operațiuni poate duce la dispariția mesajelor și la probleme de sincronizare</string>
     <string name="title_op_title_headers">Descărcarea antetelor</string>
     <string name="title_op_title_raw">Descărcarea mesajului original</string>
@@ -1039,6 +1045,8 @@
     <string name="title_ask_show_html_images">Arată mereu imaginile când se arată mesajele originale</string>
     <string name="title_ask_show_image">Vizualizarea imaginilor poate duce la divulgarea de informații confidențiale</string>
     <string name="title_ask_show_image_hint">Imaginile recunoscute drept imagini folosite la urmărire nu vor fi afișate</string>
+    <string name="title_ask_show_amp">Afișați varianta AMP a mesajului?</string>
+    <string name="title_ask_show_amp_hint">Mesajele AMP sunt concepute pentru a fi dinamice și pentru a interacționa cu internetul și, prin urmare, pot fi folosite, prin definiție, pentru a vă urmări</string>
     <string name="title_ask_delete_local">Ștergeți mesajele locale? Mesajele vor rămâne pe serverul gazdă.</string>
     <string name="title_ask_help">Ajută la îmbunătățirea FairEmail</string>
     <string name="title_ask_reporting">Trimite rapoarte de eroare?</string>
@@ -1179,6 +1187,8 @@
     <string name="title_encrypt">Criptare</string>
     <string name="title_decrypt">Decriptare</string>
     <string name="title_resync">Resincronizare</string>
+    <string name="title_alternative_text">Afișare text simplu</string>
+    <string name="title_alternative_html">Afișați HTML</string>
     <string name="title_no_openpgp">OpenKeychain nu a fost găsit</string>
     <string name="title_user_interaction">Transfer la OpenKeychain</string>
     <string name="title_signed_data">Verificați semnătura pentru a afișa textul mesajului</string>
@@ -1339,6 +1349,8 @@
     <string name="title_rule_thread">Toate mesajele în aceeași conversație și dosar</string>
     <string name="title_rule_identity">Identitate</string>
     <string name="title_rule_template">Șablon răspuns</string>
+    <string name="title_rule_answer_subject">Utilizați numele șablonului ca subiect</string>
+    <string name="title_rule_original_text">Includeți textul original al mesajului</string>
     <string name="title_rule_forward_to">Redirecţionează către</string>
     <string name="title_rule_cc">Răspuns la adresa CC</string>
     <string name="title_rule_with_attachments">Cu atașamente</string>
@@ -1465,6 +1477,7 @@
     <string name="title_legend_show_unsubscribe">Dezabonare de la listă</string>
     <string name="title_legend_show_images">Afișare imagini</string>
     <string name="title_legend_hide_images">Ascundeți imaginile</string>
+    <string name="title_legend_show_amp">Afișați varianta AMP</string>
     <string name="title_legend_show_full">Arată mesajul original</string>
     <string name="title_legend_show_reformatted">Afișați mesajul reformatat</string>
     <string name="title_legend_edit">Editează</string>
@@ -1787,6 +1800,7 @@
         <item>5 s</item>
         <item>7,5 s</item>
         <item>10 s</item>
+        <item>15 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Cursiv</item>
@@ -1794,7 +1808,6 @@
         <item>Sans-serif</item>
         <item>Proporțional</item>
         <item>Fantezie</item>
-        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">

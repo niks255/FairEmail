@@ -28,9 +28,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.fonts.Font;
+import android.graphics.fonts.SystemFonts;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
@@ -124,7 +127,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swCleanupAttachments;
     private Button btnCleanup;
     private TextView tvLastCleanup;
-    private Button btnMore;
     private SwitchCompat swProtocol;
     private SwitchCompat swLogInfo;
     private SwitchCompat swDebug;
@@ -136,6 +138,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
     private Button btnRepair;
     private SwitchCompat swAutostart;
+    private SwitchCompat swWorkManager;
     private SwitchCompat swExternalStorage;
     private TextView tvExternalStorageFolder;
     private TextView tvRoomQueryThreads;
@@ -196,7 +199,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "updates", "weekly", "show_changelog",
             "experiments", "crash_reports", "cleanup_attachments",
             "protocol", "debug", "log_level", "test1", "test2", "test3", "test4", "test5",
-            // "external_storage",
+            "work_manager", // "external_storage",
             "query_threads", "wal", "checkpoints", "sqlite_cache",
             "chunk_size", "undo_manager", "webview_legacy",
             "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
@@ -208,7 +211,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private final static String[] RESET_QUESTIONS = new String[]{
             "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
             "crash_reports_asked", "review_asked", "review_later", "why",
-            "reply_hint", "html_always_images", "open_full_confirmed",
+            "reply_hint", "html_always_images", "open_full_confirmed", "open_amp_confirmed",
             "ask_images", "ask_html",
             "print_html_confirmed", "print_html_header", "print_html_images",
             "reformatted_hint",
@@ -276,7 +279,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swCleanupAttachments = view.findViewById(R.id.swCleanupAttachments);
         btnCleanup = view.findViewById(R.id.btnCleanup);
         tvLastCleanup = view.findViewById(R.id.tvLastCleanup);
-        btnMore = view.findViewById(R.id.btnMore);
         swProtocol = view.findViewById(R.id.swProtocol);
         swLogInfo = view.findViewById(R.id.swLogInfo);
         swDebug = view.findViewById(R.id.swDebug);
@@ -288,6 +290,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         btnRepair = view.findViewById(R.id.btnRepair);
         swAutostart = view.findViewById(R.id.swAutostart);
+        swWorkManager = view.findViewById(R.id.swWorkManager);
         swExternalStorage = view.findViewById(R.id.swExternalStorage);
         tvExternalStorageFolder = view.findViewById(R.id.tvExternalStorageFolder);
         tvRoomQueryThreads = view.findViewById(R.id.tvRoomQueryThreads);
@@ -514,10 +517,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         ibResetLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(view.getContext())
+                Locale system = Resources.getSystem().getConfiguration().locale;
+                new AlertDialog.Builder(v.getContext())
                         .setIcon(R.drawable.twotone_help_24)
-                        .setTitle(R.string.title_advanced_language_system)
-                        .setMessage(R.string.title_advanced_english_hint)
+                        .setTitle(system.getDisplayName(system))
+                        .setMessage(Helper.getString(v.getContext(), system, R.string.title_advanced_english_hint))
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -641,14 +645,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onClick(View view) {
                 onCleanup();
-            }
-        });
-
-        btnMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
-                lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_SETUP_MORE));
             }
         });
 
@@ -789,6 +785,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swWorkManager.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                prefs.edit().putBoolean("work_manager", isChecked).apply();
+            }
+        });
+
         swExternalStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -812,6 +815,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
                         source = new File(source, "attachments");
                         target = new File(target, "attachments");
+
+                        source.mkdirs();
+                        target.mkdirs();
 
                         File[] attachments = source.listFiles();
                         if (attachments != null)
@@ -1136,6 +1142,12 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     ssb.append(ex.toString());
                 }
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    ssb.append("\n");
+                    for (Font font : SystemFonts.getAvailableFonts())
+                        ssb.append(font.getFile().getName()).append("\n");
+                }
+
                 new AlertDialog.Builder(getContext())
                         .setIcon(R.drawable.twotone_info_24)
                         .setTitle(R.string.title_advanced_font_map)
@@ -1345,7 +1357,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvExternalStorageFolder.setText(external.getAbsolutePath() + (emulated ? " emulated" : ""));
 
         swExactAlarms.setEnabled(AlarmManagerCompatEx.canScheduleExactAlarms(getContext()));
-        swTestIab.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+        swTestIab.setVisibility(BuildConfig.TEST_RELEASE ? View.VISIBLE : View.GONE);
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
 
@@ -1541,6 +1553,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swTest5.setChecked(prefs.getBoolean("test5", false));
 
         swAutostart.setChecked(Helper.isComponentEnabled(getContext(), ReceiverAutoStart.class));
+        swWorkManager.setChecked(prefs.getBoolean("work_manager", true));
         swExternalStorage.setChecked(prefs.getBoolean("external_storage", false));
 
         int query_threads = prefs.getInt("query_threads", DB.DEFAULT_QUERY_THREADS);

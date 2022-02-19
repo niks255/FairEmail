@@ -330,6 +330,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(175) Why should battery optimizations be disabled?](#user-content-faq175)
 * [(176) When will a message be considered safely transported?](#user-content-faq176)
 * [(177) What does 'Sensitivity' mean?](#user-content-faq177)
+* [(178) Why are widgets not updating?](#user-content-faq178)
 
 [I have another question.](#user-content-get-support)
 
@@ -338,24 +339,31 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq1)
 
-The following Android permissions are needed:
+The following Android permissions are **required**:
 
-* *have full network access* (INTERNET): to send and receive email
-* *view network connections* (ACCESS_NETWORK_STATE): to monitor internet connectivity changes
-* *run at startup* (RECEIVE_BOOT_COMPLETED): to start monitoring on device start
+* *have full network access* (INTERNET): to send and receive via the internet
+* *view network connections* (ACCESS_NETWORK_STATE): to monitor connectivity changes (mobile data, WiFi)
+* *run at startup* (RECEIVE_BOOT_COMPLETED): to start sending and receiving on device start
 * *foreground service* (FOREGROUND_SERVICE): to run a foreground service on Android 9 Pie and later, see also the next question
-* *prevent device from sleeping* (WAKE_LOCK): to keep the device awake while synchronizing messages
-* *in-app billing* (BILLING): to allow in-app purchases
-* *schedule exact alarm* (SCHEDULE_EXACT_ALARM): to use exact alarm scheduling (Android 12 and later)
-* Optional: *read your contacts* (READ_CONTACTS): to auto complete addresses, to show contact photos and [to pick contacts](https://developer.android.com/guide/components/intents-common#PickContactDat)
-* Optional: *read the contents of your SD card* (READ_EXTERNAL_STORAGE): to accept files from other, outdated apps, see also [this FAQ](#user-content-faq49)
-* Optional: *use fingerprint hardware* (USE_FINGERPRINT) and use *biometric hardware* (USE_BIOMETRIC): to use biometric authentication
-* Optional: *find accounts on the device* (GET_ACCOUNTS): to select an account when using the Gmail quick setup
+* *prevent device from sleeping* (WAKE_LOCK): to keep the device awake while performing actions, like synchronization of messages
+* *schedule exact alarm* (SCHEDULE_EXACT_ALARM): to use exact alarm scheduling (Android 12 and later), for example to snooze messages
+* *use fingerprint hardware* (USE_FINGERPRINT) and use *biometric hardware* (USE_BIOMETRIC): to use biometric authentication (fingerprint, face unlock, etc)
+* *in-app billing* (BILLING): for in-app purchases
+
+<br />
+
+The following Android permissions are **optional**:
+
+* *read your contacts* (READ_CONTACTS): to auto complete addresses, to show contact photos and [to pick contacts](https://developer.android.com/guide/components/intents-common#PickContactDat)
+* *read the contents of your SD card* (READ_EXTERNAL_STORAGE): to accept files from other, outdated apps, see also [this FAQ](#user-content-faq49)
+* *find accounts on the device* (GET_ACCOUNTS): to select an account when using the Gmail quick setup
 * Android 5.1 Lollipop and before: *use accounts on the device* (USE_CREDENTIALS): to select an account when using the Gmail quick setup (not requested on later Android versions)
 * Android 5.1 Lollipop and before: *Read profile* (READ_PROFILE): to read your name when using the Gmail quick setup (not requested on later Android versions)
 
 [Optional permissions](https://developer.android.com/training/permissions/requesting) are supported on Android 6 Marshmallow and later only.
-On earlier Android versions you will be asked to grant the optional permissions on installing FairEmail.
+On earlier Android versions you will be asked to grant the permissions on installing FairEmail.
+
+<br />
 
 The following permissions are needed to show the count of unread messages as a badge (see also [this FAQ](#user-content-faq106)):
 
@@ -376,6 +384,8 @@ The following permissions are needed to show the count of unread messages as a b
 * *me.everything.badger.permission.BADGE_COUNT_READ*
 * *me.everything.badger.permission.BADGE_COUNT_WRITE*
 * *com.vivo.notification.permission.BADGE_ICON*
+
+<br />
 
 FairEmail will keep a list of addresses you receive messages from and send messages to
 and will use this list for contact suggestions when no contacts permissions is granted to FairEmail.
@@ -2132,7 +2142,7 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can long press the trash icons (both in the message and the bottom action bar) to permanently delete a message or conversation? (version 1.1368+)
 * Did you know that you can long press the send action to show the send dialog, even if it was disabled?
 * Did you know that you can long press the full screen icon to show the original message text only?
-* Did you know that you can long press the answer button to reply to the sender? (since version 1.1562)
+* Did you know that you can long press the answer button to reply to the sender? (since version 1.1562; since version 1.1839 you can configure the action in the send settings)
 * Did you know that you can long press the message move button to move across accounts? (since version 1.1702)
 * Did you know that you can long press the folder name in the message header when viewing a conversation to navigate to the folder? (since version 1.1720)
 * Did you know that you can long press the add contact button in the message composer to insert a contact group? (since version 1.1721)
@@ -2695,6 +2705,8 @@ You'll likely want to disabled [browse on server](#user-content-faq24) too.
 Please see [here](https://en.wikipedia.org/wiki/Web_beacon) about what a tracking image exactly is.
 In short tracking images keep track if you opened a message.
 
+The BBC article '[Spy pixels in emails have become endemic](https://www.bbc.com/news/technology-56071437)' is worth reading.
+
 FairEmail will in most cases automatically recognize tracking images and replace them by this icon:
 
 ![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png)
@@ -2756,7 +2768,7 @@ FairEmail will try to select the best identity based on the *to* address of the 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq87)
 
 The error message *invalid credentials* means either that the user name and/or password is incorrect,
-for example because the password was changed or expired, or that the account authorization has expired.
+for example because the password was changed or expired, or that the account authorization has expired, for example due to logging out.
 
 If the password is incorrect/expired, you will have to update the password in the account and/or identity settings.
 
@@ -4243,6 +4255,8 @@ it is not feasible to add for each color combination (literally millions) a pred
 Moreover, a theme is more than just a few colors.
 For example themes with a yellow accent color use a darker link color for enough contrast.
 
+Most people like the beige background for the light themes, but if you don't like it, it can be disabled in the display settings.
+
 The [Material You](https://material.io/blog/announcing-material-you) theme,
 a more dynamic theme based on the selected background image ("Monet"),
 which was introduced in Android 12 on Google Pixel devices,
@@ -4538,6 +4552,16 @@ The sensitivity of a message indicates the confidentiality of a message.
 Please see [this article](https://support.microsoft.com/en-us/office/mark-your-email-as-normal-personal-private-or-confidential-4a76d05b-6c29-4a0d-9096-71784a6b12c1) for more information.
 
 The sensitivity indication is sent as [a message header](https://datatracker.ietf.org/doc/html/rfc4021#section-2.1.55).
+
+<br />
+
+<a name="faq178"></a>
+**(178) Why are widgets not updating?**
+
+Apps provide the layout and data for widgets on demand, but the homescreen app/launcher manages all widgets, with a little help from Android.
+
+If widgets are not being updated, this is often caused by missing permission.
+Please see [this video](https://www.youtube.com/watch?v=ywQrYJ6rtnM) about how to fix this.
 
 <br />
 

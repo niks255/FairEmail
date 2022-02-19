@@ -858,6 +858,19 @@
                     app:layout_constraintTop_toBottomOf="@id/swFavicons" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swFaviconsPartial"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:checked="true"
+                    android:text="@string/title_advanced_favicons_partial"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvFaviconsHint"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swGeneratedIcons"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -866,7 +879,7 @@
                     android:text="@string/title_advanced_generated_icons"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvFaviconsHint"
+                    app:layout_constraintTop_toBottomOf="@id/swFaviconsPartial"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -1518,16 +1531,27 @@
                     app:layout_constraintTop_toBottomOf="@id/tvOverrideWidthHint"
                     app:switchPadding="12dp" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/swMonospaced"
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvDisplayFont"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="@string/title_advanced_monospaced"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_compose_font"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swContrast"
-                    app:switchPadding="12dp" />
+                    app:layout_constraintTop_toBottomOf="@id/swContrast" />
+
+                <Spinner
+                    android:id="@+id/spDisplayFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:entries="@array/fontNameNames"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDisplayFont" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swMonospacedPre"
@@ -1537,7 +1561,7 @@
                     android:text="@string/title_advanced_monospaced_pre"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swMonospaced"
+                    app:layout_constraintTop_toBottomOf="@id/spDisplayFont"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView
@@ -1749,6 +1773,18 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swBundledFonts"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:checked="true"
+                    android:text="@string/title_advanced_bundled_fonts"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvAdvanced"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swParseClasses"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -1756,7 +1792,7 @@
                     android:text="@string/title_advanced_parse_classes"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvAdvanced"
+                    app:layout_constraintTop_toBottomOf="@id/swBundledFonts"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView

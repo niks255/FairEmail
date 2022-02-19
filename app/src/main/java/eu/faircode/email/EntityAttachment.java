@@ -76,17 +76,20 @@ public class EntityAttachment {
     public String type;
     public String disposition;
     public String cid; // Content-ID
+    public Boolean related; // inline
     public Integer encryption;
     public Long size;
     public Integer progress;
     @NonNull
     public Boolean available = false;
+    public String media_uri;
     public String error;
 
     // Gmail sends inline images as attachments with a name and cid
 
     boolean isInline() {
-        return (Part.INLINE.equals(disposition) || cid != null);
+        return (Part.INLINE.equals(disposition) ||
+                (!Boolean.FALSE.equals(related) && cid != null));
     }
 
     boolean isAttachment() {
@@ -239,7 +242,7 @@ public class EntityAttachment {
             return "audio/midi";
 
         // https://www.rfc-editor.org/rfc/rfc3555.txt
-        if ("video/jpeg".equals(type))
+        if ("image/jpg".equals(type) || "video/jpeg".equals(type))
             return "image/jpeg";
 
         if (!TextUtils.isEmpty(type) &&

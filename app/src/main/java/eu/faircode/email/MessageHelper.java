@@ -51,6 +51,7 @@ import com.sun.mail.util.MessageRemovedIOException;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.simplejavamail.outlookmessageparser.OutlookMessageParser;
 import org.simplejavamail.outlookmessageparser.model.OutlookAttachment;
@@ -441,7 +442,8 @@ public class MessageHelper {
 
         // Send message
         if (identity != null) {
-            if (message.headers == null || !Boolean.TRUE.equals(message.resend)) {
+            if ((message.headers == null || !Boolean.TRUE.equals(message.resend)) &&
+                    (message.dsn == null || EntityMessage.DSN_NONE.equals(message.dsn))) {
                 // Add reply to
                 if (identity.replyto != null)
                     imessage.setReplyTo(convertAddress(InternetAddress.parse(identity.replyto), identity));
@@ -888,8 +890,7 @@ public class MessageHelper {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean format_flowed = prefs.getBoolean("format_flowed", false);
-        boolean monospaced = prefs.getBoolean("monospaced", false);
-        String compose_font = prefs.getString("compose_font", monospaced ? "monospace" : "sans-serif");
+        String compose_font = prefs.getString("compose_font", "");
         boolean auto_link = prefs.getBoolean("auto_link", false);
 
         // Build html body
@@ -913,22 +914,27 @@ public class MessageHelper {
             if (auto_link)
                 HtmlHelper.autoLink(document);
 
-            if (!TextUtils.isEmpty(compose_font))
-                for (Element child : document.body().children())
-                    if (!TextUtils.isEmpty(child.text()) &&
-                            TextUtils.isEmpty(child.attr("fairemail"))) {
-                        String old = child.attr("style");
-                        String style = HtmlHelper.mergeStyles(
-                                "font-family:" + compose_font, old);
-                        if (!old.equals(style))
-                            child.attr("style", style);
-                    }
+            if (!TextUtils.isEmpty(compose_font)) {
+                List<Node> childs = new ArrayList<>();
+                for (Node child : document.body().childNodes())
+                    if (TextUtils.isEmpty(child.attr("fairemail"))) {
+                        childs.add(child);
+                        child.remove();
+                    } else
+                        break;
+
+                Element div = document.createElement("div").attr("style",
+                        "font-family:" + StyleHelper.getFamily(compose_font));
+                for (Node child : childs)
+                    div.appendChild(child);
+                document.body().prependChild(div);
+            }
 
             document.select("div[fairemail=signature]").removeAttr("fairemail");
             document.select("div[fairemail=reference]").removeAttr("fairemail");
 
             Elements reply = document.select("div[fairemail=reply]");
-            if (message.plain_only != null && message.plain_only)
+            if (message.isPlainOnly())
                 reply.select("strong").tagName("span");
             reply.removeAttr("fairemail");
 
@@ -965,6 +971,7 @@ public class MessageHelper {
                         attachment.type = type;
                         attachment.disposition = Part.INLINE;
                         attachment.cid = acid;
+                        attachment.related = true;
                         attachment.size = null;
                         attachment.progress = 0;
                         attachment.id = db.attachment().insertAttachment(attachment);
@@ -1057,7 +1064,7 @@ public class MessageHelper {
             }
 
         if (availableAttachments == 0)
-            if (message.plain_only != null && message.plain_only)
+            if (message.isPlainOnly())
                 imessage.setContent(plainContent, plainContentType);
             else
                 imessage.setContent(altMultiPart);
@@ -1066,7 +1073,7 @@ public class MessageHelper {
             Multipart relatedMultiPart = new MimeMultipart("related");
 
             BodyPart bodyPart;
-            if (message.plain_only != null && message.plain_only)
+            if (message.isPlainOnly())
                 bodyPart = plainPart;
             else {
                 bodyPart = new MimeBodyPart();
@@ -1305,7 +1312,7 @@ public class MessageHelper {
                 if ("delivery-status".equalsIgnoreCase(reportType) ||
                         "disposition-notification".equalsIgnoreCase(reportType)) {
                     MessageParts parts = new MessageParts();
-                    getMessageParts(imessage, parts, null);
+                    getMessageParts(null, imessage, parts, null);
                     for (AttachmentPart apart : parts.attachments)
                         if ("text/rfc822-headers".equalsIgnoreCase(apart.attachment.type)) {
                             reportHeaders = new InternetHeaders(apart.part.getInputStream());
@@ -1840,7 +1847,7 @@ public class MessageHelper {
         if (header.trim().startsWith("=?"))
             return header;
 
-        Charset detected = CharsetHelper.detect(header);
+        Charset detected = CharsetHelper.detect(header, StandardCharsets.ISO_8859_1);
         if (detected == null && CharsetHelper.isUTF8(header))
             detected = StandardCharsets.UTF_8;
         if (detected == null ||
@@ -2652,7 +2659,9 @@ public class MessageHelper {
         while (p + 1 < parts.size()) {
             MimeTextPart p1 = parts.get(p);
             MimeTextPart p2 = parts.get(p + 1);
-            if (p1.charset != null && p1.charset.equalsIgnoreCase(p2.charset) &&
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=1374149
+            if (!"ISO-2022-JP".equalsIgnoreCase(p1.charset) &&
+                    p1.charset != null && p1.charset.equalsIgnoreCase(p2.charset) &&
                     p1.encoding != null && p1.encoding.equalsIgnoreCase(p2.encoding)) {
                 try {
                     byte[] b1 = decodeWord(p1.text, p1.encoding, p1.charset);
@@ -2774,13 +2783,30 @@ public class MessageHelper {
             return protected_subject;
         }
 
-        Boolean isPlainOnly() {
-            if (text.size() + extra.size() == 0)
+        Integer isPlainOnly(boolean download_plain) {
+            Integer plain = isPlainOnly();
+            if (plain == null)
                 return null;
-            for (PartHolder h : text)
-                if (!h.isPlainText())
-                    return false;
-            return true;
+            if (download_plain && plain == 0x80)
+                plain |= 1;
+            return plain;
+        }
+
+        Integer isPlainOnly() {
+            int html = 0;
+            int plain = 0;
+            for (PartHolder h : text) {
+                if (h.isHtml())
+                    html++;
+                if (h.isPlainText())
+                    plain++;
+            }
+
+            if (html + plain == 0)
+                return null;
+            if (html == 0)
+                return 1;
+            return (plain > 0 ? 0x80 : 0);
         }
 
         boolean hasBody() throws MessagingException {
@@ -2796,13 +2822,14 @@ public class MessageHelper {
         }
 
         void normalize() {
-            Boolean plain = isPlainOnly();
-            if (plain == null || plain)
+            Integer plain = isPlainOnly();
+            if (plain != null && (plain & 1) != 0)
                 for (AttachmentPart apart : attachments)
                     if (!TextUtils.isEmpty(apart.attachment.cid) ||
                             !Part.ATTACHMENT.equals(apart.attachment.disposition)) {
                         Log.i("Normalizing " + apart.attachment);
                         apart.attachment.cid = null;
+                        apart.attachment.related = false;
                         apart.attachment.disposition = Part.ATTACHMENT;
                     }
         }
@@ -2812,7 +2839,6 @@ public class MessageHelper {
 
             List<PartHolder> all = new ArrayList<>();
             all.addAll(text);
-            all.addAll(extra);
             for (PartHolder h : all) {
                 int s = h.part.getSize();
                 if (s >= 0)
@@ -2836,6 +2862,10 @@ public class MessageHelper {
         }
 
         String getHtml(Context context) throws MessagingException, IOException {
+            return getHtml(context, false);
+        }
+
+        String getHtml(Context context, boolean plain_text) throws MessagingException, IOException {
             if (text.size() == 0) {
                 Log.i("No body part");
                 return null;
@@ -2844,8 +2874,22 @@ public class MessageHelper {
             StringBuilder sb = new StringBuilder();
 
             List<PartHolder> parts = new ArrayList<>();
-            parts.addAll(text);
+
+            Integer plain = isPlainOnly();
+            if (plain != null && (plain & 1) != 0)
+                parts.addAll(text);
+            else
+                for (PartHolder h : text)
+                    if (plain_text) {
+                        if (h.isPlainText())
+                            parts.add(h);
+                    } else {
+                        if (h.isHtml())
+                            parts.add(h);
+                    }
+
             parts.addAll(extra);
+
             for (PartHolder h : parts) {
                 int size = h.part.getSize();
                 if (size > 100 * 1024 * 1024)
@@ -2902,7 +2946,7 @@ public class MessageHelper {
                             Log.i("Charset upgrade=UTF8");
                             result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                         } else {
-                            Charset detected = CharsetHelper.detect(result);
+                            Charset detected = CharsetHelper.detect(result, StandardCharsets.ISO_8859_1);
                             if (detected == null) {
                                 if (CharsetHelper.isUTF8(result)) {
                                     Log.i("Charset plain=UTF8");
@@ -2916,8 +2960,10 @@ public class MessageHelper {
                     } else if (StandardCharsets.UTF_8.equals(cs))
                         result = CharsetHelper.utf8toW1252(result);
 
+                    // https://datatracker.ietf.org/doc/html/rfc3676
                     if ("flowed".equalsIgnoreCase(h.contentType.getParameter("format")))
-                        result = HtmlHelper.flow(result);
+                        result = HtmlHelper.flow(result,
+                                "yes".equalsIgnoreCase(h.contentType.getParameter("delsp")));
 
                     // https://www.w3.org/QA/2002/04/valid-dtd-list.html
                     if (result.length() > DOCTYPE.length()) {
@@ -2956,7 +3002,7 @@ public class MessageHelper {
                     // Fix incorrect UTF16
                     try {
                         if (CHARSET16.contains(cs)) {
-                            Charset detected = CharsetHelper.detect(result);
+                            Charset detected = CharsetHelper.detect(result, cs);
                             if (!CHARSET16.contains(detected))
                                 Log.w(new Throwable("Charset=" + cs + " detected=" + detected));
                             if (StandardCharsets.US_ASCII.equals(detected) ||
@@ -3006,7 +3052,7 @@ public class MessageHelper {
                                         break;
                                     }
 
-                                    Charset detected = CharsetHelper.detect(result);
+                                    Charset detected = CharsetHelper.detect(result, c);
                                     if (c.equals(detected))
                                         break;
 
@@ -3580,8 +3626,8 @@ public class MessageHelper {
                         if (content instanceof Multipart) {
                             Multipart multipart = (Multipart) content;
                             if (multipart.getCount() == 2) {
-                                getMessageParts(multipart.getBodyPart(0), parts, null);
-                                getMessageParts(multipart.getBodyPart(1), parts,
+                                getMessageParts(part, multipart.getBodyPart(0), parts, null);
+                                getMessageParts(part, multipart.getBodyPart(1), parts,
                                         "application/pgp-signature".equals(protocol)
                                                 ? EntityAttachment.PGP_SIGNATURE
                                                 : EntityAttachment.SMIME_SIGNATURE);
@@ -3624,7 +3670,7 @@ public class MessageHelper {
                             Multipart multipart = (Multipart) content;
                             if (multipart.getCount() == 2) {
                                 // Ignore header
-                                getMessageParts(multipart.getBodyPart(1), parts, EntityAttachment.PGP_MESSAGE);
+                                getMessageParts(part, multipart.getBodyPart(1), parts, EntityAttachment.PGP_MESSAGE);
                                 return parts;
                             } else {
                                 StringBuilder sb = new StringBuilder();
@@ -3642,10 +3688,10 @@ public class MessageHelper {
                     ContentType ct = new ContentType(part.getContentType());
                     String smimeType = ct.getParameter("smime-type");
                     if ("enveloped-data".equalsIgnoreCase(smimeType)) {
-                        getMessageParts(part, parts, EntityAttachment.SMIME_MESSAGE);
+                        getMessageParts(null, part, parts, EntityAttachment.SMIME_MESSAGE);
                         return parts;
                     } else if ("signed-data".equalsIgnoreCase(smimeType)) {
-                        getMessageParts(part, parts, EntityAttachment.SMIME_SIGNED_DATA);
+                        getMessageParts(null, part, parts, EntityAttachment.SMIME_SIGNED_DATA);
                         return parts;
                     } else if ("signed-receipt".equalsIgnoreCase(smimeType)) {
                         // https://datatracker.ietf.org/doc/html/rfc2634#section-2
@@ -3653,10 +3699,10 @@ public class MessageHelper {
                         if (TextUtils.isEmpty(smimeType)) {
                             String name = ct.getParameter("name");
                             if ("smime.p7m".equalsIgnoreCase(name)) {
-                                getMessageParts(part, parts, EntityAttachment.SMIME_MESSAGE);
+                                getMessageParts(null, part, parts, EntityAttachment.SMIME_MESSAGE);
                                 return parts;
                             } else if ("smime.p7s".equalsIgnoreCase(name)) {
-                                getMessageParts(part, parts, EntityAttachment.SMIME_SIGNED_DATA);
+                                getMessageParts(null, part, parts, EntityAttachment.SMIME_SIGNED_DATA);
                                 return parts;
                             }
                         }
@@ -3669,7 +3715,7 @@ public class MessageHelper {
                 Log.w(ex);
             }
 
-            getMessageParts(imessage, parts, null);
+            getMessageParts(null, imessage, parts, null);
         } catch (OutOfMemoryError ex) {
             Log.e(ex);
             parts.warnings.add(Log.formatThrowable(ex, false));
@@ -3693,7 +3739,7 @@ public class MessageHelper {
         return parts;
     }
 
-    private void getMessageParts(Part part, MessageParts parts, Integer encrypt) throws IOException, MessagingException {
+    private void getMessageParts(Part parent, Part part, MessageParts parts, Integer encrypt) throws IOException, MessagingException {
         try {
             Log.d("Part class=" + part.getClass() + " type=" + part.getContentType());
 
@@ -3719,36 +3765,17 @@ public class MessageHelper {
                 else
                     throw new MessagingStructureException(content);
 
-                boolean other = false;
-                List<Part> plain = new ArrayList<>();
                 int count = multipart.getCount();
-                boolean alternative = part.isMimeType("multipart/alternative");
                 for (int i = 0; i < count; i++)
                     try {
                         BodyPart child = multipart.getBodyPart(i);
-                        if (alternative && count > 1 && child.isMimeType("text/plain"))
-                            plain.add(child);
-                        else {
-                            getMessageParts(child, parts, encrypt);
-                            other = true;
-                        }
+                        getMessageParts(part, child, parts, encrypt);
                     } catch (ParseException ex) {
                         // Nested body: try to continue
                         // ParseException: In parameter list boundary="...">, expected parameter name, got ";"
                         Log.w(ex);
                         parts.warnings.add(Log.formatThrowable(ex, false));
                     }
-
-                if (alternative && count > 1 && !other)
-                    for (Part child : plain)
-                        try {
-                            getMessageParts(child, parts, encrypt);
-                        } catch (ParseException ex) {
-                            // Nested body: try to continue
-                            // ParseException: In parameter list boundary="...">, expected parameter name, got ";"
-                            Log.w(ex);
-                            parts.warnings.add(Log.formatThrowable(ex, false));
-                        }
             } else {
                 // https://www.iana.org/assignments/cont-disp/cont-disp.xhtml
                 String disposition;
@@ -3838,12 +3865,21 @@ public class MessageHelper {
                             parts.warnings.add(Log.formatThrowable(ex, false));
                     }
 
+                    Boolean related = null;
+                    if (parent != null)
+                        try {
+                            related = parent.isMimeType("multipart/related");
+                        } catch (MessagingException ex) {
+                            Log.w(ex);
+                        }
+
                     apart.attachment = new EntityAttachment();
                     apart.attachment.disposition = apart.disposition;
                     apart.attachment.name = apart.filename;
                     apart.attachment.type = contentType.getBaseType().toLowerCase(Locale.ROOT);
                     apart.attachment.size = (long) apart.part.getSize();
                     apart.attachment.cid = cid;
+                    apart.attachment.related = related;
                     apart.attachment.encryption = apart.encrypt;
 
                     if ("text/calendar".equalsIgnoreCase(apart.attachment.type) &&

@@ -97,6 +97,8 @@ public class ContactInfo {
     private boolean known;
     private long time;
 
+    static final int FAVICON_READ_BYTES = 5000;
+
     private static Map<String, Lookup> emailLookup = new ConcurrentHashMap<>();
     private static final Map<String, ContactInfo> emailContactInfo = new HashMap<>();
 
@@ -111,9 +113,9 @@ public class ContactInfo {
     private static final int GRAVATAR_TIMEOUT = 5 * 1000; // milliseconds
     private static final int FAVICON_CONNECT_TIMEOUT = 5 * 1000; // milliseconds
     private static final int FAVICON_READ_TIMEOUT = 10 * 1000; // milliseconds
-    private static final int FAVICON_READ_BYTES = 4096;
     private static final long CACHE_CONTACT_DURATION = 2 * 60 * 1000L; // milliseconds
     private static final long CACHE_FAVICON_DURATION = 2 * 7 * 24 * 60 * 60 * 1000L; // milliseconds
+    private static final float MIN_FAVICON_LUMINANCE = 0.2f;
 
     // https://css-tricks.com/prefetching-preloading-prebrowsing/
     // https://developer.mozilla.org/en-US/docs/Web/Performance/dns-prefetch
@@ -446,6 +448,19 @@ public class ContactInfo {
                             try {
                                 Favicon favicon = future.get();
                                 if (favicon != null) {
+                                    float lum = 0; // ImageHelper.getLuminance(favicon.bitmap);
+                                    if (lum < MIN_FAVICON_LUMINANCE) {
+                                        Bitmap bitmap = Bitmap.createBitmap(
+                                                favicon.bitmap.getWidth(),
+                                                favicon.bitmap.getHeight(),
+                                                favicon.bitmap.getConfig());
+                                        bitmap.eraseColor(Color.WHITE);
+                                        Canvas canvas = new Canvas(bitmap);
+                                        canvas.drawBitmap(favicon.bitmap, 0, 0, null);
+                                        favicon.bitmap.recycle();
+                                        favicon.bitmap = bitmap;
+                                    }
+
                                     info.bitmap = favicon.bitmap;
                                     info.type = favicon.type;
                                     info.verified = favicon.verified;
@@ -539,6 +554,9 @@ public class ContactInfo {
     }
 
     private static Favicon parseFavicon(URL base, int scaleToPixels, Context context) throws IOException {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean favicons_partial = prefs.getBoolean("favicons_partial", true);
+
         Log.i("PARSE favicon " + base);
         HttpsURLConnection connection = (HttpsURLConnection) base.openConnection();
         connection.setRequestMethod("GET");
@@ -554,25 +572,27 @@ public class ContactInfo {
         connection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
         connection.connect();
 
-        String response;
+        Document doc;
         try {
-            byte[] buffer = new byte[FAVICON_READ_BYTES];
-            int len = 0;
-            while (len < buffer.length) {
-                int read = connection.getInputStream().read(buffer, len, buffer.length - len);
-                if (read < 0)
-                    break;
-                else
-                    len += read;
-            }
-            if (len < 0)
-                throw new IOException("length");
-            response = new String(buffer, 0, len, StandardCharsets.UTF_8.name());
+            Log.i("Favicon partial=" + favicons_partial);
+            if (favicons_partial) {
+                byte[] buffer = new byte[FAVICON_READ_BYTES];
+                int len = 0;
+                while (len < buffer.length) {
+                    int read = connection.getInputStream().read(buffer, len, buffer.length - len);
+                    if (read < 0)
+                        break;
+                    else
+                        len += read;
+                }
+                if (len < 0)
+                    throw new IOException("length");
+                doc = JsoupEx.parse(new String(buffer, 0, len, StandardCharsets.UTF_8.name()));
+            } else
+                doc = JsoupEx.parse(connection.getInputStream(), StandardCharsets.UTF_8.name(), base.toString());
         } finally {
             connection.disconnect();
         }
-
-        Document doc = JsoupEx.parse(response);
 
         // Use canonical address
         Element canonical = doc.head().select("link[rel=canonical]").first();
@@ -641,6 +661,7 @@ public class ContactInfo {
                 if (l != 0)
                     return -l;
 
+                // https://en.wikipedia.org/wiki/Favicon#How_to_use
                 boolean i1 = "icon".equalsIgnoreCase(img1.attr("rel")
                         .replace("shortcut", "").trim());
                 boolean i2 = "icon".equalsIgnoreCase(img2.attr("rel")
@@ -649,8 +670,8 @@ public class ContactInfo {
                 if (i != 0)
                     return -i;
 
-                int t1 = getOrder(img1.attr("href"), img1.attr("type"));
-                int t2 = getOrder(img2.attr("href"), img2.attr("type"));
+                int t1 = getOrder(img1);
+                int t2 = getOrder(img2);
                 int t = Integer.compare(t1, t2);
                 if (t != 0)
                     return t;
@@ -663,10 +684,11 @@ public class ContactInfo {
             }
         });
 
+        Log.i("Favicons " + base + "=" + imgs.size());
         for (int i = 0; i < imgs.size(); i++)
             Log.i("Favicon " + i + "=" + imgs.get(i) + " @" + base);
 
-        List<Future<Favicon>> futures = new ArrayList<>();
+        List<Future<Pair<Favicon, URL>>> futures = new ArrayList<>();
         for (Element img : imgs) {
             String rel = img.attr("rel").trim().toLowerCase(Locale.ROOT);
             if (REL_EXCLUDE.contains(rel)) // dns-prefetch: gmx.net
@@ -679,17 +701,19 @@ public class ContactInfo {
                 continue;
 
             final URL url = new URL(base, favicon);
-            futures.add(executorFavicon.submit(new Callable<Favicon>() {
+            futures.add(executorFavicon.submit(new Callable<Pair<Favicon, URL>>() {
                 @Override
-                public Favicon call() throws Exception {
-                    return getFavicon(url, img.attr("type"), scaleToPixels, context);
+                public Pair<Favicon, URL> call() throws Exception {
+                    return new Pair(getFavicon(url, img.attr("type"), scaleToPixels, context), url);
                 }
             }));
         }
 
-        for (Future<Favicon> future : futures)
+        for (Future<Pair<Favicon, URL>> future : futures)
             try {
-                return future.get();
+                Pair<Favicon, URL> result = future.get();
+                Log.i("Using favicon=" + result.second);
+                return result.first;
             } catch (Throwable ex) {
                 if (ex.getCause() instanceof FileNotFoundException ||
                         ex.getCause() instanceof CertPathValidatorException)
@@ -701,7 +725,10 @@ public class ContactInfo {
         return null;
     }
 
-    private static int getOrder(String href, String type) {
+    private static int getOrder(Element img) {
+        String href = img.attr("href");
+        String type = img.attr("type");
+
         int order = -1;
         String h = (href == null ? "" : href.toLowerCase(Locale.ROOT));
         if (h.endsWith(".ico"))
@@ -716,7 +743,7 @@ public class ContactInfo {
         int max = 0;
         for (String size : sizes.split(" ")) {
             int min = Integer.MAX_VALUE;
-            for (String p : size.trim().split("[x|X]")) {
+            for (String p : size.trim().split("[×|x|X]")) {
                 if (TextUtils.isEmpty(p) || "any".equalsIgnoreCase(p))
                     continue;
 
@@ -764,14 +791,7 @@ public class ContactInfo {
             Bitmap bitmap = ImageHelper.getScaledBitmap(connection.getInputStream(), url.toString(), mimeType, scaleToPixels);
             if (bitmap == null)
                 throw new FileNotFoundException("decodeStream");
-            else {
-                Bitmap favicon = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-                favicon.eraseColor(Color.WHITE);
-                Canvas canvas = new Canvas(favicon);
-                canvas.drawBitmap(bitmap, 0, 0, null);
-                bitmap.recycle();
-                return new Favicon(favicon);
-            }
+            return new Favicon(bitmap);
         } finally {
             connection.disconnect();
         }

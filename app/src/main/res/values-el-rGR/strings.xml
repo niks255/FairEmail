@@ -201,6 +201,7 @@
     <string name="title_setup_error">Σφάλμα</string>
     <string name="title_setup_configuring">Ρύθμιση λογαριασμού &#8230;</string>
     <string name="title_setup_app_password">Ίσως χρειαστεί να χρησιμοποιήσετε έναν κωδικό πρόσβασης εφαρμογής</string>
+    <string name="title_setup_extra">Επιπλέον επιλογές</string>
     <string name="title_setup_close">Κλείσιμο ρυθμίσεων</string>
     <string name="title_setup_export">Εξαγωγή ρυθμίσεων</string>
     <string name="title_setup_import">Εισαγωγή ρυθμίσεων</string>
@@ -313,7 +314,7 @@
     <string name="title_advanced_send_reminders">Εμφάνιση υπενθυμίσεων</string>
     <string name="title_advanced_send_delayed">Καθυστέρηση στην αποστολή μηνυμάτων</string>
     <string name="title_advanced_attach_new">Προσθήκη κοινόχρηστων αρχείων σε ένα νέο προσχέδιο</string>
-    <string name="title_advanced_reply_all">Πατήστε παρατεταμένα το κουμπί απάντησης για να απαντήσετε σε όλους</string>
+    <string name="title_advanced_answer_action">Το παρατεταμένο πάτημα στο κουμπί απάντησης θα:</string>
     <string name="title_advanced_send_pending">Προβολή διακριτικού εικονιδίου για απεσταλμένα με χρονοκαθυστέρηση</string>
     <string name="title_advanced_compose_font">Προεπιλεγμένη γραμματοσειρά</string>
     <string name="title_advanced_prefix_once">Μόνο ένα πρόθεμα κατά την απάντηση ή προώθηση μηνύματος</string>
@@ -344,6 +345,7 @@
     <string name="title_advanced_rlah">Περιήγηση όπως στο σπίτι</string>
     <string name="title_advanced_download_headers">Λήψη όλων των κεφαλίδων μηνυμάτων</string>
     <string name="title_advanced_download_eml">Λήψη αρχείων αρχικών μηνυμάτων</string>
+    <string name="title_advanced_download_plain">Να κατεβαίνουν, από προεπιλογή, μόνον τα τμήματα απλού κειμένου (εφόσον είναι διαθέσιμα)</string>
     <string name="title_advanced_validated">Απαιτείται επικυρωμένη (επαληθευμένη) σύνδεση</string>
     <string name="title_advanced_vpn_only">Σύνδεση μόνο μέσω VPN</string>
     <string name="title_advanced_timeout">Χρονικό όριο σύνδεσης (δευτερόλεπτα)</string>
@@ -393,6 +395,7 @@
     <string name="title_advanced_bimi_unverified">Μη επαληθευμένος αποστολέας</string>
     <string name="title_advanced_bimi_verified">Επαληθευμένος αποστολέας</string>
     <string name="title_advanced_favicons">Προβολή favicon</string>
+    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Να σαρωθεί μόνο το πρώτο %1$s της ιστοσελίδας</string>
     <string name="title_advanced_generated_icons">Να προβάλλονται εικονίδια που δημιουργούνται αυτόματα</string>
     <string name="title_advanced_identicons">Προβολή identicon</string>
     <string name="title_advanced_circular">Στρογγυλεμένα εικονίδια</string>
@@ -443,6 +446,7 @@
     <string name="title_advanced_actionbar">Προβολή της γραμμής ενεργειών της συζήτησης</string>
     <string name="title_advanced_actionbar_color">Χρήση του χρώματος του λογαριασμού ως χρωματικό υπόβαθρο για τη γραμμή ενεργειών της συζήτησης</string>
     <string name="title_advanced_navbar_colorize">Να χρωματίζεται η γραμμή πλοήγησης του Android</string>
+    <string name="title_advanced_bundled_fonts">Χρήση γραμματοσειρών σε πακέτο</string>
     <string name="title_advanced_parse_classes">Χρήση φύλλων στιλ</string>
     <string name="title_advanced_authentication">Να προβάλλονται προειδοποιήσεις ταυτοποίησης</string>
     <string name="title_advanced_authentication_hint">Οι υποκείμενοι έλεγχοι μπορούν να ρυθμιστούν στις ρυθμίσεις λήψης</string>
@@ -605,7 +609,6 @@
     <string name="title_advanced_suggest_names_hint">Εάν απενεργοποιηθεί, θα χρησιμοποιούνται μόνο διευθύνσεις ηλ. ταχυδρομείου κατά την επιλογή επαφών</string>
     <string name="title_advanced_suggest_local_hint">Επιπρόσθετα στις παρεχόμενες από το Android επαφές, θα αποθηκεύονται πληροφορίες επαφών για πρόσφατα απεσταλμένα ή ειλημμένα μηνύματα, μόνον εφόσον οι σχετικές δυνατότητες έχουν ενεργοποιηθεί.</string>
     <string name="title_advanced_send_reminders_hint">Να προβάλλεται μια προειδοποίηση όταν το κείμενο του μηνύματος ή το θέμα είναι κενό ή όταν φαίνεται πως ένα συνημμένο λείπει</string>
-    <string name="title_advanced_reply_all_hint">Εάν απενεργοποιηθεί, το παρατεταμένο πάτημα στο κουμπί απάντησης θα στείλει απάντηση μόνον στον αποστολέα</string>
     <string name="title_advanced_reply_move_hint">Ο διακομιστής ηλ. ταχυδρομείου ενδέχεται να προσθέτει ακόμα τα μηνύματα στον φάκελο απεσταλμένων</string>
     <string name="title_advanced_usenet_hint">Να παρεμβάλλεται ένα \'-- \' ανάμεσα στο κείμενο και την υπογραφή</string>
     <string name="title_advanced_remove_signature_hint">Αυτό μπορεί να επιφέρει την απαλοιφή είτε υπερβολικά λίγου είτε υπερβολικά πολύ κειμένου</string>
@@ -613,6 +616,7 @@
     <string name="title_advanced_metered_warning">Αν απενεργοποιηθεί, θα απενεργοποιηθούν η λήψη και η αποστολή μηνυμάτων σε κινητές συνδέσεις διαδικτύου</string>
     <string name="title_advanced_rlah_hint">Υπό την προϋπόθεση ότι δεν λαμβάνει χώρα περιαγωγή εντός της ΕΕ</string>
     <string name="title_advanced_usage_hint">Θα αυξήσει τη χρήση μπαταρίας, δεδομένων και χώρου αποθήκευσης</string>
+    <string name="title_advanced_plain_hint">Εάν ενεργοποιηθεί, θα περιοριστεί η χρήση δεδομένων, αλλά τα μηνύματα θα προβάλλονται χωρίς μορφοποίηση</string>
     <string name="title_advanced_tcp_keep_alive_hint">Αν ενεργοποιηθεί, μπορεί να προκαλέσει προβλήματα σύνδεσης σε ορισμένες συσκευές</string>
     <string name="title_advanced_validate_hint">Μπορεί να οδηγήσει σε μη συγχρονισμό μηνυμάτων, για παράδειγμα όταν χρησιμοποιείτε VPN, αλλά και σε άλλες περιπτώσεις</string>
     <string name="title_advanced_timeout_hint">Το χρονικό όριο για τις διαδικασίες ανάγνωσης/εγγραφής θα τεθεί στο διπλάσιο από εκείνο για τη λήξη της σύνδεσης. Υψηλότερες τιμές συνεπάγονται μεγαλύτερη χρήση μπαταρίας.</string>
@@ -773,6 +777,7 @@
     <string name="title_drafts_select">Για την αποστολή μηνυμάτων απαιτείται να επιλεγεί ένας φάκελος για πρόχειρα από τις ρυθμίσεις λογαριασμού</string>
     <string name="title_account_auth_update">Ενημέρωση εξουσιοδότησης</string>
     <string name="title_account_auth_password">Αλλαγή σε ταυτοποίηση μέσω κωδικού πρόσβασης</string>
+    <string name="title_delete_account">Διαγραφή λογαριασμού</string>
     <string name="title_account_delete">Να διαγραφεί οριστικά αυτός ο λογαριασμός;</string>
     <string name="title_identity_delete">Να διαγραφεί οριστικά αυτή η ταυτότητα;</string>
     <string name="title_edit_html">Επεξεργασία ως HTML</string>
@@ -839,6 +844,7 @@
     <string name="title_delete_operation_deleted">%1$d δραστηριότητες διεγράφησαν</string>
     <string name="title_delete_contacts">Διαγραφή όλων των τοπικών επαφών;</string>
     <string name="title_no_operations">Καμία εκκρεμής δραστηριότητα</string>
+    <string name="title_check_operations">Έλεγχος για δραστηριότητες</string>
     <string name="title_hint_operations">Η διαγραφή των δραστηριοτήτων μπορεί να οδηγήσει σε εξαφανισμένα μηνύματα και προβλήματα συγχρονισμού</string>
     <string name="title_op_title_headers">Λήψη κεφαλίδων</string>
     <string name="title_op_title_raw">Λήψη αρχικού μηνύματος</string>
@@ -1027,6 +1033,8 @@
     <string name="title_ask_show_html_images">Να προβάλλονται πάντοτε οι εικόνες κατά την προβολή των αρχικών μηνυμάτων</string>
     <string name="title_ask_show_image">Η προβολή των εικόνων ίσως προκαλέσει διαρροή ευαίσθητων προσωπικών δεδομένων</string>
     <string name="title_ask_show_image_hint">Όσες εικόνες αναγνωρίζονται ως εικόνες ιχνηλάτησης δεν θα προβληθούν</string>
+    <string name="title_ask_show_amp">Προβολή παραλλαγής AMP του μηνύματος;</string>
+    <string name="title_ask_show_amp_hint">Τα μηνύματα AMP έχουν σχεδιαστεί έτσι ώστε να είναι δυναμικά και να αλληλεπιδρούν με το διαδίκτυο, και, ως εκ τούτου, εξ ορισμού μπορούν να χρησιμοποιηθούν για την παρακολούθησή σας</string>
     <string name="title_ask_delete_local">Διαγραφή τοπικών μηνυμάτων; Τα μηνύματα θα παραμείνουν στο διακομιστή.</string>
     <string name="title_ask_help">Βοηθήστε το FairEmail να βελτιωθεί</string>
     <string name="title_ask_reporting">Να αποστέλλονται αναφορές σφαλμάτων;</string>
@@ -1167,6 +1175,8 @@
     <string name="title_encrypt">Κρυπτογράφηση</string>
     <string name="title_decrypt">Αποκρυπτογράφηση</string>
     <string name="title_resync">Επανασυγχρονισμός</string>
+    <string name="title_alternative_text">Προβολή απλού κειμένου</string>
+    <string name="title_alternative_html">Προβολή HTML</string>
     <string name="title_no_openpgp">Δεν βρέθηκε OpenKeychain</string>
     <string name="title_user_interaction">Μεταφορά προς OpenKeychain</string>
     <string name="title_signed_data">Επαλήθευση της υπογραφής για προβολή του κειμένου του μηνύματος</string>
@@ -1327,6 +1337,8 @@
     <string name="title_rule_thread">Όλα τα μηνύματα στην ίδια συζήτηση και τον ίδιο φάκελο</string>
     <string name="title_rule_identity">Ταυτότητα</string>
     <string name="title_rule_template">Πρότυπο απάντησης</string>
+    <string name="title_rule_answer_subject">Να χρησιμοποιηθεί το όνομα του προτύπου ως θέμα</string>
+    <string name="title_rule_original_text">Να συμπεριληφθεί το κείμενο του αρχικού μηνύματος</string>
     <string name="title_rule_forward_to">Προώθηση σε</string>
     <string name="title_rule_cc">Απάντηση στις διευθύνσεις Κοιν.</string>
     <string name="title_rule_with_attachments">Με συνημμένα</string>
@@ -1453,6 +1465,7 @@
     <string name="title_legend_show_unsubscribe">Κατάργηση συνδρομής από τη λίστα</string>
     <string name="title_legend_show_images">Προβολή εικόνων</string>
     <string name="title_legend_hide_images">Απόκρυψη εικόνων</string>
+    <string name="title_legend_show_amp">Προβολή παραλλαγής AMP</string>
     <string name="title_legend_show_full">Προβολή αρχικού μηνύματος</string>
     <string name="title_legend_show_reformatted">Προβολή αναμορφοποιήμενου μηνύματος</string>
     <string name="title_legend_edit">Επεξεργασία</string>
@@ -1774,6 +1787,7 @@
         <item>5 s</item>
         <item>7,5 s</item>
         <item>10 s</item>
+        <item>15 δευτ.</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Επισεσυρμένη</item>
@@ -1781,7 +1795,6 @@
         <item>Sans-serif</item>
         <item>Σταθερού πλάτους</item>
         <item>Fantasy</item>
-        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">

@@ -42,7 +42,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Pair;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -709,7 +708,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 if (BuildConfig.DEBUG)
                     try {
                         DnsBlockList.clearCache();
-                        ContactInfo.clearCache(ActivityView.this, true);
+                        ContactInfo.clearCache(ActivityView.this);
                         ToastEx.makeText(ActivityView.this, R.string.title_completed, Toast.LENGTH_LONG).show();
                     } catch (Throwable ex) {
                         Log.unexpectedError(getSupportFragmentManager(), ex);

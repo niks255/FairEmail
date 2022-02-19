@@ -157,6 +157,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
 public class Helper {
+    private static Boolean hasWebView = null;
     private static Boolean hasPlayStore = null;
     private static Boolean hasValidFingerprint = null;
 
@@ -191,14 +192,13 @@ public class Helper {
     private static final String[] ROMAN_10 = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
     private static final String[] ROMAN_1 = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
 
-    static final Pattern EMAIL_ADDRESS
-            = Pattern.compile(
+    static final Pattern EMAIL_ADDRESS = Pattern.compile(
             "[\\S]{1,256}" +
                     "\\@" +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "[\\p{L}][\\p{L}0-9\\-\\_]{0,64}" +
                     "(" +
                     "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    "[\\p{L}0-9][\\p{L}0-9\\-\\_]{0,25}" +
                     ")+"
     );
 
@@ -410,6 +410,12 @@ public class Helper {
     }
 
     static boolean hasWebView(Context context) {
+        if (hasWebView == null)
+            hasWebView = _hasWebView(context);
+        return hasWebView;
+    }
+
+    private static boolean _hasWebView(Context context) {
         try {
             PackageManager pm = context.getPackageManager();
             if (pm.hasSystemFeature(PackageManager.FEATURE_WEBVIEW)) {
@@ -664,17 +670,21 @@ public class Helper {
     }
 
     static void share(Context context, File file, String type, String name) {
+        // https://developer.android.com/reference/androidx/core/content/FileProvider
+        Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
+        share(context, uri, type, name);
+    }
+
+    static void share(Context context, Uri uri, String type, String name) {
         try {
-            _share(context, file, type, name);
+            _share(context, uri, type, name);
         } catch (Throwable ex) {
             // java.lang.IllegalArgumentException: Failed to resolve canonical path for ...
             Log.e(ex);
         }
     }
 
-    static void _share(Context context, File file, String type, String name) {
-        // https://developer.android.com/reference/androidx/core/content/FileProvider
-        Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
+    private static void _share(Context context, Uri uri, String type, String name) {
         Log.i("uri=" + uri + " type=" + type);
 
         // Build intent
@@ -685,7 +695,8 @@ public class Helper {
         if (!("message/rfc822".equals(type) ||
                 "message/delivery-status".equals(type) ||
                 "message/disposition-notification".equals(type) ||
-                "text/rfc822-headers".equals(type)))
+                "text/rfc822-headers".equals(type) ||
+                "text/x-amp-html".equals(type)))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         if (!TextUtils.isEmpty(name))
@@ -1526,9 +1537,12 @@ public class Helper {
     static String getString(Context context, String language, int resid, Object... formatArgs) {
         if (language == null)
             return context.getString(resid, formatArgs);
+        return getString(context, new Locale(language), resid, formatArgs);
+    }
 
+    static String getString(Context context, Locale locale, int resid, Object... formatArgs) {
         Configuration configuration = new Configuration(context.getResources().getConfiguration());
-        configuration.setLocale(new Locale(language));
+        configuration.setLocale(locale);
         Resources res = context.createConfigurationContext(configuration).getResources();
         return res.getString(resid, formatArgs);
     }

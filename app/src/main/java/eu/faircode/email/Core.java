@@ -543,7 +543,7 @@ class Core {
                         EntityLog.log(context, folder.name +
                                 " op=" + op.name +
                                 " try=" + op.tries +
-                                " " + Log.formatThrowable(ex, false));
+                                " " + ex + "\n" + android.util.Log.getStackTraceString(ex));
 
                         try {
                             db.beginTransaction();
@@ -596,7 +596,8 @@ class Core {
                                         EntityFolder.DRAFTS.equals(folder.type)) ||
                                 (op.tries >= LOCAL_RETRY_MAX &&
                                         EntityOperation.SYNC.equals(op.name) &&
-                                        account.protocol == EntityAccount.TYPE_POP)) {
+                                        (account.protocol == EntityAccount.TYPE_POP ||
+                                                !ConnectionHelper.isIoError(ex)))) {
                             // com.sun.mail.iap.BadCommandException: BAD [TOOBIG] Message too large
                             // com.sun.mail.iap.CommandFailedException: NO [CANNOT] Cannot APPEND to a SPAM folder
                             // com.sun.mail.iap.CommandFailedException: NO [ALERT] Cannot MOVE messages out of the Drafts folder
@@ -615,9 +616,11 @@ class Core {
                             // Fetch: NO [SERVERBUG] SELECT Server error - Please try again later
                             // Fetch: NO [SERVERBUG] UID FETCH Server error - Please try again later
                             // Fetch: NO Invalid message number (took nnn ms)
+                            // Fetch: NO Invalid message sequence ID: nnn
                             // Fetch: BAD Internal Server Error
                             // Fetch: BAD Error in IMAP command FETCH: Invalid messageset (n.nnn + n .nnn secs).
                             // Fetch: NO FETCH sequence parse error in: nnn
+                            // Fetch: NO [NONEXISTENT] No matching messages
                             // Fetch UID: NO Some messages could not be FETCHed (Failure)
                             // Fetch UID: NO [LIMIT] UID FETCH Rate limit hit.
                             // Fetch UID: NO Server Unavailable. 15
@@ -642,6 +645,7 @@ class Core {
                             // Move: NO [CANNOT] Operation is not supported on mailbox
                             // Move: NO [ALREADYEXISTS] Mailbox already exists
                             // Copy: NO Client tried to access nonexistent namespace. (Mailbox name should probably be prefixed with: INBOX.) (n.nnn + n.nnn secs).
+                            // Copy: NO Message not found
                             // Add: BAD Data length exceeds limit
                             // Add: NO [LIMIT] APPEND Command exceeds the maximum allowed size
                             // Add: NO APPEND failed: Unknown flag: SEEN
@@ -650,6 +654,7 @@ class Core {
                             // Add: NO [OVERQUOTA] Quota exceeded (mailbox for user is full) (n.nnn + n.nnn secs).
                             // Add: NO APPEND failed
                             // Add: BAD [TOOBIG] Message too large.
+                            // Add: NO Permission denied
                             // Delete: NO [CANNOT] STORE It's not possible to perform specified operation
                             // Delete: NO [UNAVAILABLE] EXPUNGE Backend error
                             // Delete: NO mailbox selected READ-ONLY
@@ -745,8 +750,12 @@ class Core {
                 }
             }
 
-            if (ops.size() != 0 && state.getSerial() == serial)
-                state.error(new OperationCanceledException("Processing"));
+            if (ops.size() != 0 && state.getSerial() == serial) {
+                List<String> names = new ArrayList<>();
+                for (EntityOperation op : ops)
+                    names.add(op.name);
+                state.error(new OperationCanceledException("Processing " + TextUtils.join(",", names)));
+            }
         } finally {
             Log.i(folder.name + " end process state=" + state + " pending=" + ops.size());
         }
@@ -1929,10 +1938,12 @@ class Core {
     }
 
     private static void onBody(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, IOException {
+        boolean plain_text = jargs.optBoolean(0);
+
         // Download message body
         DB db = DB.getInstance(context);
 
-        if (message.content)
+        if (message.content && message.isPlainOnly() == plain_text)
             return;
 
         // Get message
@@ -1942,16 +1953,19 @@ class Core {
 
         MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
         MessageHelper.MessageParts parts = helper.getMessageParts();
-        String body = parts.getHtml(context);
+        String body = parts.getHtml(context, plain_text);
         File file = message.getFile(context);
         Helper.writeText(file, body);
         String text = HtmlHelper.getFullText(body);
         message.preview = HtmlHelper.getPreview(text);
         message.language = HtmlHelper.getLanguage(context, message.subject, text);
+        Integer plain_only = parts.isPlainOnly();
+        if (plain_text)
+            plain_only = 1 | (plain_only == null ? 0 : plain_only & 0x80);
         db.message().setMessageContent(message.id,
                 true,
                 message.language,
-                parts.isPlainOnly(),
+                plain_only,
                 message.preview,
                 parts.getWarnings(message.warning));
         MessageClassifier.classify(message, folder, null, context);
@@ -2666,6 +2680,7 @@ class Core {
         boolean sync_quick_pop = prefs.getBoolean("sync_quick_pop", true);
         boolean notify_known = prefs.getBoolean("notify_known", false);
         boolean download_eml = prefs.getBoolean("download_eml", false);
+        boolean download_plain = prefs.getBoolean("download_plain", false);
         boolean pro = ActivityBilling.isPro(context);
 
         boolean force = jargs.optBoolean(5, false);
@@ -2955,7 +2970,7 @@ class Core {
 
                         boolean needsHeaders = EntityRule.needsHeaders(message, rules);
                         List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
-                        String body = parts.getHtml(context);
+                        String body = parts.getHtml(context, download_plain);
 
                         try {
                             db.beginTransaction();
@@ -2991,7 +3006,7 @@ class Core {
                         db.message().setMessageContent(message.id,
                                 true,
                                 message.language,
-                                parts.isPlainOnly(),
+                                parts.isPlainOnly(download_plain),
                                 message.preview,
                                 parts.getWarnings(message.warning));
 
@@ -3133,9 +3148,12 @@ class Core {
                 try {
                     if (MessageHelper.hasCapability(ifolder, "CONDSTORE")) {
                         modseq = ifolder.getHighestModSeq();
-                        modified = (force || initialize != 0 || modseq < 0 ||
+                        if (modseq < 0)
+                            modseq = null;
+                        modified = (force || initialize != 0 ||
                                 folder.modseq == null || !folder.modseq.equals(modseq));
-                        EntityLog.log(context, folder.name + " modseq=" + modseq + "/" + folder.modseq + " modified=" + modified);
+                        EntityLog.log(context, folder.name + " modseq=" + modseq + "/" + folder.modseq +
+                                " force=" + force + " init=" + (initialize != 0) + " modified=" + modified);
                     }
                 } catch (MessagingException ex) {
                     Log.w(folder.name, ex);
@@ -3168,7 +3186,7 @@ class Core {
 
             // Delete old local messages
             if (auto_delete) {
-                List<Long> tbds = db.message().getMessagesBefore(folder.id, keep_time, delete_unseen);
+                List<Long> tbds = db.message().getMessagesBefore(folder.id, sync_time, keep_time, delete_unseen);
                 Log.i(folder.name + " local tbd=" + tbds.size());
                 EntityFolder trash = db.folder().getFolderByType(folder.account, EntityFolder.TRASH);
                 for (Long tbd : tbds) {
@@ -3242,10 +3260,10 @@ class Core {
                     stats.flags_ms = (SystemClock.elapsedRealtime() - fetch);
                     Log.i(folder.name + " remote fetched=" + stats.flags_ms + " ms");
 
-                    try {
-                        for (int i = 0; i < imessages.length; i++) {
-                            state.ensureRunning("Sync/IMAP/check");
+                    for (int i = 0; i < imessages.length; i++) {
+                        state.ensureRunning("Sync/IMAP/check");
 
+                        try {
                             long uid = ifolder.getUID(imessages[i]);
                             EntityMessage message = db.message().getMessageByUid(folder.id, uid);
                             ids[i] = (message == null ? null : message.id);
@@ -3255,14 +3273,11 @@ class Core {
                                 break;
                             } else
                                 uids.remove(uid);
-                        }
-                    } catch (Throwable ex) {
-                        if (ex instanceof OperationCanceledException)
-                            Log.i(ex);
-                        else
+                        } catch (Throwable ex) {
                             Log.w(ex);
-                        modified = true;
-                        db.folder().setFolderModSeq(folder.id, null);
+                            modified = true;
+                            modseq = null;
+                        }
                     }
 
                     if (uids.size() > 0) {
@@ -3315,6 +3330,7 @@ class Core {
                             throw ex;
                         } catch (Throwable ex) {
                             Log.e(folder.name, ex);
+                            modseq = null;
                             EntityLog.log(context, folder.name + " expunge " + Log.formatThrowable(ex, false));
                             db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                         }
@@ -3551,11 +3567,13 @@ class Core {
                             } catch (IOException ex) {
                                 if (ex.getCause() instanceof MessagingException) {
                                     Log.w(folder.name, ex);
+                                    modseq = null;
                                     db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                                 } else
                                     throw ex;
                             } catch (Throwable ex) {
                                 Log.e(folder.name, ex);
+                                modseq = null;
                                 db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                             } finally {
                                 // Free memory
@@ -3596,6 +3614,7 @@ class Core {
 
             // Update modseq
             folder.modseq = modseq;
+            Log.i(folder.name + " set modseq=" + modseq);
             db.folder().setFolderModSeq(folder.id, folder.modseq);
 
             // Update stats
@@ -3712,6 +3731,7 @@ class Core {
         DB db = DB.getInstance(context);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean download_headers = prefs.getBoolean("download_headers", false);
+        boolean download_plain = prefs.getBoolean("download_plain", false);
         boolean notify_known = prefs.getBoolean("notify_known", false);
         boolean experiments = prefs.getBoolean("experiments", false);
         boolean pro = ActivityBilling.isPro(context);
@@ -4022,7 +4042,7 @@ class Core {
             if (needsHeaders || needsBody)
                 Log.i(folder.name + " needs headers=" + needsHeaders + " body=" + needsBody);
             List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
-            String body = (needsBody ? parts.getHtml(context) : null);
+            String body = (needsBody ? parts.getHtml(context, download_plain) : null);
 
             if (experiments && helper.isReport())
                 try {
@@ -4116,7 +4136,7 @@ class Core {
                 EntityContact.received(context, account, folder, message);
 
                 if (body == null && helper.isReport())
-                    body = parts.getHtml(context);
+                    body = parts.getHtml(context, download_plain);
 
                 // Download small messages inline
                 if (body != null || (download && !message.ui_hide)) {
@@ -4134,7 +4154,7 @@ class Core {
                             (MessageClassifier.isEnabled(context)) && folder.auto_classify_source)
                         try {
                             if (body == null)
-                                body = parts.getHtml(context);
+                                body = parts.getHtml(context, download_plain);
                             File file = message.getFile(context);
                             Helper.writeText(file, body);
                             String text = HtmlHelper.getFullText(body);
@@ -4143,7 +4163,7 @@ class Core {
                             db.message().setMessageContent(message.id,
                                     true,
                                     message.language,
-                                    parts.isPlainOnly(),
+                                    parts.isPlainOnly(download_plain),
                                     message.preview,
                                     parts.getWarnings(message.warning));
                             MessageClassifier.classify(message, folder, null, context);
@@ -4289,7 +4309,7 @@ class Core {
                 if (needsHeaders || needsBody)
                     Log.i(folder.name + " needs headers=" + needsHeaders + " body=" + needsBody);
                 List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
-                String body = (needsBody ? helper.getMessageParts().getHtml(context) : null);
+                String body = (needsBody ? helper.getMessageParts().getHtml(context, download_plain) : null);
 
                 try {
                     db.beginTransaction();
@@ -5744,7 +5764,7 @@ class Core {
             join(thread);
         }
 
-        void ensureRunning(String reason) {
+        void ensureRunning(String reason) throws OperationCanceledException {
             if (!recoverable && unrecoverable != null)
                 throw new OperationCanceledExceptionEx(reason, unrecoverable);
             if (!running)

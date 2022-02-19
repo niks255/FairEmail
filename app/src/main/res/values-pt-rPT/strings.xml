@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_search">Busca do FairEmail</string>
+    <string name="app_search">Pesquisa do FairEmail</string>
     <string name="app_changelog">Registo de alterações</string>
     <string name="app_welcome">O FairEmail é uma aplicação de email de código aberto focada na privacidade e na segurança. Por esta razão, algumas funções podem funcionar de forma diferente do que estás acostumado.</string>
     <string name="app_limitations">Por exemplo, as mensagens são reformatadas por defeito para remover elementos inseguros e melhorar a legibilidade, e a abertura de links precisa de ser confirmada para segurança. Ambos podem ser desativados caso pretendam.</string>
+    <string name="app_unsupported">Bugs na versão Android deste dispositivo em específico causam encerramentos inesperados</string>
     <string name="app_continue">Continuar mesmo assim</string>
     <string name="app_exit">Vá \'voltar\' novamente para sair</string>
     <string name="app_cake">Espaço insuficiente</string>
@@ -118,12 +119,13 @@
     <string name="title_edit_account">Editar conta</string>
     <string name="title_edit_identity">Editar identidade</string>
     <string name="title_edit_folder">Editar pasta</string>
+    <string name="title_disable_gmail">Desactivar a aplicação Gmail</string>
     <string name="title_setup">Definições</string>
     <string name="title_setup_help">Ajuda</string>
     <string name="title_setup_quick">Configuração rápida</string>
-    <string name="title_setup_intro">Configurar uma conta são apenas três passos e, depois disso, você pode enviar e receber e-mails</string>
+    <string name="title_setup_intro">A configuração de uma conta consiste em três passos podendo, logo após isso, enviar e receber e-mails</string>
     <string name="title_setup_simple">Não há necessidade de alterar outras opções</string>
-    <string name="title_setup_issue">O FairEmail foi desenvolvido para ajudar a proteger a sua privacidade e representa, literalmente, milhares de horas de trabalho. Se tiver algum problema, por favor, entre em contato para suporte antes de deixar um feedback negativo. Tenho todo o gosto em ajudar!</string>
+    <string name="title_setup_issue">O FairEmail foi desenvolvido para ajudar a proteger a sua privacidade e representa, literalmente, milhares de horas de trabalho. Se tiver algum problema, por favor contacte-me primeiro para assistência antes de deixar uma avaliação negativa. Tenho todo o gosto em ajudar!</string>
     <string name="title_setup_analytics">O FairEmail não exibe anúncios e não rastreia ou analisa o seu comportamento. O Bugsnag é usado para reportar erros e está desativado por defeito.</string>
     <string name="title_setup_quick_accounts">Adicionar ou alterar contas</string>
     <string name="title_setup_quick_support">Alguns provedores tornam difícil adicionar uma conta. Por favor, não culpe o FairEmail por isso, peça-lhes suporte.</string>
@@ -143,7 +145,7 @@
     <string name="title_setup_account_identity_hint">Pode configurar o nome, cor e deslizar acções na configuração de conta, e configurar a assinatura na configuração de identidade</string>
     <string name="title_setup_accounts">Contas</string>
     <string name="title_setup_identities">Identidades</string>
-    <string name="title_setup_other">Outro provedor</string>
+    <string name="title_setup_other">Outro fornecedor</string>
     <string name="title_setup_pop3">Conta POP3</string>
     <string name="title_setup_oauth_permission">O fornecedor de e-mail aprovou OAuth apenas para a versão da Play Store e do GitHub</string>
     <string name="title_setup_gmail_support">Autorizar contas do Google funcionará na Play Store e na versão GitHub apenas porque o Android verifica a assinatura da aplicação digital</string>
@@ -159,7 +161,7 @@
     <string name="title_setup_select_account">Selecionar Conta</string>
     <string name="title_setup_instructions">Instruções de configuração</string>
     <string name="title_setup_no_settings">Nenhuma configuração encontrada para o domínio \'%1$s\'</string>
-    <string name="title_setup_no_settings_hint">Tente configurar uma conta manualmente usando as configurações fornecidas pelo seu provedor de e-mail</string>
+    <string name="title_setup_no_settings_hint">Tente configurar manualmente a conta, utilizando as configurações fornecidas pelo seu provedor de e-mail</string>
     <string name="title_setup_no_auth_hint">Por favor, verifique o seu endereço de e-mail e senha e certifique-se que o acesso externo (IMAP/SMTP) está ativado para a sua conta</string>
     <string name="title_setup_app_password_hint">Este provedor requer uma senha de aplicação em vez da senha da conta, por favor verifique as instruções do seu provedor</string>
     <string name="title_setup_no_inbox">Caixa de entrada não encontrada</string>
@@ -172,16 +174,16 @@
     <string name="title_setup_grant_again">Conceder as permissões necessárias</string>
     <string name="title_setup_exchange_support">O Microsoft Exchange é suportado?</string>
     <string name="title_setup_identity_what">O que é uma identidade?</string>
-    <string name="title_setup_free">Este gratuito usar este aplicativo?</string>
+    <string name="title_setup_free">Esta aplicação é gratuita?</string>
     <string name="title_setup_permissions">Conceder permissões</string>
-    <string name="title_setup_permissions_remark">Para aceder a informações de contato (opcional)</string>
-    <string name="title_setup_permissions_explanation">As permissões de contato são necessárias para procurar informações de contato e sugerir contatos</string>
+    <string name="title_setup_permissions_remark">Para aceder a informações de contacto (opcional)</string>
+    <string name="title_setup_permissions_explanation">As permissões de contacto são necessárias para procurar informações de contacto e sugerir contactos</string>
     <string name="title_setup_permission_import_contacts">Como posso importar contactos?</string>
     <string name="title_setup_doze">Desactivar optimização de bateria</string>
     <string name="title_setup_doze_remark">Para enviar e receber e-mail corretamente</string>
     <string name="title_setup_doze_explanation">As otimizações da bateria devem ser desativadas para assegurar o envio e a recepção de mensagens confiáveis em segundo plano</string>
     <string name="title_setup_doze_hint">Embora isto possa parecer contraditório, desligar as otimizações de bateria para esta aplicação resultará em menos utilização de bateria</string>
-    <string name="title_setup_doze_instructions">Na próxima caixa de diálogo do Android altere \"Não otimizado\" para \"Todos os aplicativos\", selecione esta app e selecione \"Não otimizar\"</string>
+    <string name="title_setup_doze_instructions">No próximo dialogo do sistema Android: Altere de \"Não optimizado\" para \"Todas as aplicações\" » Seleccione esta aplicação e escolha \"Não optimizar\"</string>
     <string name="title_setup_doze_battery">Utilização elevada de bateria?</string>
     <string name="title_setup_doze_stopped">A sincronização parou?</string>
     <string name="title_setup_doze_device">Isto é provavelmente necessário para este dispositivo</string>
@@ -199,6 +201,7 @@
     <string name="title_setup_error">Erro</string>
     <string name="title_setup_configuring">A configurar conta &#8230;</string>
     <string name="title_setup_app_password">Talvez seja necessário usar uma senha da app</string>
+    <string name="title_setup_extra">Extra</string>
     <string name="title_setup_close">Fechar configurações</string>
     <string name="title_setup_export">Exportar definições</string>
     <string name="title_setup_import">Importar definições</string>
@@ -232,7 +235,7 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_setup_biometrics_enable">Activar</string>
     <string name="title_setup_biometrics_disable">Desactivar</string>
     <string name="title_setup_biometrics_unlock">Desbloquear</string>
-    <string name="title_setup_theme">Selecionar tema</string>
+    <string name="title_setup_theme">Seleccionar tema</string>
     <string name="title_setup_theme_blue_orange">Azul/laranja</string>
     <string name="title_setup_theme_yellow_purple">Amarelo/Roxo</string>
     <string name="title_setup_theme_red_green">Vermelho/verde</string>
@@ -272,7 +275,7 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_section_encryption">Encriptação</string>
     <string name="title_advanced_section_notifications">Notificações</string>
     <string name="title_advanced_section_misc">Diversos</string>
-    <string name="title_advanced_default">Todas as opções têm valores padrão, que não precisam ser alterados para usar o aplicativo</string>
+    <string name="title_advanced_default">Todas as opções têm os valores padrão, que não precisam ser alterados para utilizar a aplicação</string>
     <string name="title_advanced_receive">Receber mensagens de todas as contas</string>
     <string name="title_advanced_when">Quando</string>
     <string name="title_advanced_optimize">Otimizar automaticamente</string>
@@ -297,14 +300,14 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_keyboard">Mostrar teclado por padrão</string>
     <string name="title_advanced_keyboard_no_fullscreen">Prevenir teclado em tela cheia</string>
     <string name="title_advanced_suggest_names">Usar nomes e endereços de e-mail</string>
-    <string name="title_advanced_suggest_local">Sugerir contatos armazenados localmente</string>
+    <string name="title_advanced_suggest_local">Sugerir contactos armazenados localmente</string>
     <string name="title_advanced_suggest_sent">Sugerir endereços encontrados nas mensagens enviadas</string>
     <string name="title_advanced_suggest_received">Sugerir endereços encontrados nas mensagens enviadas</string>
     <string name="title_advanced_suggest_frequently">Ordenar endereços sugeridos por frequência de uso</string>
     <string name="title_advanced_send_reminders">Mostrar lembretes</string>
     <string name="title_advanced_send_delayed">Atrasar envio de mensagens</string>
     <string name="title_advanced_attach_new">Adicionar arquivos partilhados a um novo rascunho</string>
-    <string name="title_advanced_reply_all">Pressione e segure o botão de resposta para responder a todos</string>
+    <string name="title_advanced_answer_action">Pressionar e segurar o botão de resposta irá:</string>
     <string name="title_advanced_send_pending">Mostrar ícone não-intrusivo de envio atrasado</string>
     <string name="title_advanced_compose_font">Letra predefinida</string>
     <string name="title_advanced_prefix_once">Prefixo do assunto único ao responder ou encaminhar</string>
@@ -330,7 +333,7 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_download">Descarregar automaticamente mensagens e anexos numa conexão limitada</string>
     <string name="title_advanced_roaming">Descarregar mensagens e anexos em roaming</string>
     <string name="title_advanced_rlah">Faça roaming como no país de origem</string>
-    <string name="title_advanced_download_headers">Baixar todos os cabeçalhos das mensagens</string>
+    <string name="title_advanced_download_headers">Transferir todos os cabeçalhos das mensagens</string>
     <string name="title_advanced_validated">Exigir uma conexão validada (verificada)</string>
     <string name="title_advanced_vpn_only">Conecte-se apenas através de uma VPN</string>
     <string name="title_advanced_timeout">Conexão expira em (segundos)</string>
@@ -370,6 +373,7 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_bimi_unverified">Remetente não verificado</string>
     <string name="title_advanced_bimi_verified">Remetente verificado</string>
     <string name="title_advanced_favicons">Mostrar \"favicons\"</string>
+    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Digitalize apenas a primeira %1$s da página web</string>
     <string name="title_advanced_generated_icons">Mostrar ícones gerados</string>
     <string name="title_advanced_identicons">Mostrar Identicons</string>
     <string name="title_advanced_circular">Mostrar ícones redondos</string>
@@ -377,9 +381,9 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_color_value">Brilho: %1$s %%</string>
     <string name="title_advanced_color_threshold">Cor da letra máxima: %1$s %%</string>
     <string name="title_advanced_name_email">Mostrar nomes e endereços de e-mail</string>
-    <string name="title_advanced_replace_name">Preferir um nome de contato sobre um nome enviado</string>
-    <string name="title_advanced_only_name">Exibir apenas o nome do contato</string>
-    <string name="title_advanced_distinguish_contacts">Sublinhar o remetente quando o remetente é conhecido como contato local \'para\'</string>
+    <string name="title_advanced_replace_name">Preferir um nome de contacto em vez do nome de remetente</string>
+    <string name="title_advanced_only_name">Mostrar apenas nomes da lista de contactos</string>
+    <string name="title_advanced_distinguish_contacts">Sublinhar o remetente quando o remetente é conhecido como contacto local \'para\'</string>
     <string name="title_advanced_show_recipients">Mostrar destinatários no cabeçalho da mensagem</string>
     <string name="title_advanced_font_size_sender">Tamanho da fonte do remetente</string>
     <string name="title_advanced_sender_ellipsize">Quando necessário, encurte o remetente</string>
@@ -413,9 +417,9 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_image_placeholders">Mostrar espaços reservados da imagem</string>
     <string name="title_advanced_images_inline">Mostrar automaticamente imagens embutidas</string>
     <string name="title_advanced_button_extra">Mostrar botões extras na parte inferior de uma mensagem</string>
-    <string name="title_advanced_seekbar">Exibir posição relativa de conversa com um ponto</string>
-    <string name="title_advanced_actionbar">Mostrar barra de ação de conversa</string>
-    <string name="title_advanced_actionbar_color">Usar cor da conta como cor de fundo para barra de ação de conversa</string>
+    <string name="title_advanced_seekbar">Mostrar a posição relativa da conversa com um ponto</string>
+    <string name="title_advanced_actionbar">Mostrar barra de acção de conversa</string>
+    <string name="title_advanced_actionbar_color">Usar cor da conta como cor de fundo para a barra de acção de conversa</string>
     <string name="title_advanced_navbar_colorize">Colorir a barra de navegação do Android</string>
     <string name="title_advanced_parse_classes">Usar folhas de estilo</string>
     <string name="title_advanced_authentication_none">Sem autenticação</string>
@@ -453,7 +457,7 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_notifications_background_hint">Um serviço em segundo plano pode ser interrompido pelo Android a qualquer momento, mas não requer uma notificação na barra de status</string>
     <string name="title_advanced_badge">Mostrar ícone do launcher com o número de mensagens novas</string>
     <string name="title_advanced_unseen_ignored">Permitir que o número de novas mensagens corresponda ao número de notificações</string>
-    <string name="title_advanced_notify_known">Mostrar notificações apenas para contatos</string>
+    <string name="title_advanced_notify_known">Mostrar notificações apenas para contactos</string>
     <string name="title_advanced_notify_summary">Mostrar apenas resumo na notificação</string>
     <string name="title_advanced_notify_preview">Mostrar pré-visualização de mensagem nas notificações</string>
     <string name="title_advanced_notify_preview_all">Pré-visualizar todo o texto</string>
@@ -485,6 +489,7 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_pin">PIN</string>
     <string name="title_advanced_biometrics_timeout">Tempo limite para autenticação biométrica</string>
     <string name="title_advanced_autolock">Bloquear quando o ecrã se desligar</string>
+    <string name="title_advanced_generic_user_agent">Utilizar \'user agent\' de navegador genérico</string>
     <string name="title_advanced_load_emoji">Carregar emoji atualizado do Google Play Services</string>
     <string name="title_advanced_sign_default">Assinar por padrão</string>
     <string name="title_advanced_encrypt_default">Encriptar por padrão</string>
@@ -503,7 +508,7 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_manage_keys">Gerir chaves privadas</string>
     <string name="title_advanced_ca">Certificados CA instalados</string>
     <string name="title_advanced_external_search">Permitir procura de mensagens por outras aplicações</string>
-    <string name="title_advanced_shortcuts">Mostrar contatos usados com frequência no menu de partilha do Android</string>
+    <string name="title_advanced_shortcuts">Mostrar contactos usados com frequência no menu de partilha do Android</string>
     <string name="title_advanced_fts">Construir índice de pesquisa</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d mensagens indexadas (%3$s)</string>
     <string name="title_advanced_language">Idioma</string>
@@ -527,39 +532,61 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_advanced_poll_folders_hint">Sincronizar periodicamente a lista de pastas, além de se conectar a uma conta</string>
     <string name="title_advanced_override_width_hint">Isto pode tornar as mensagens mais estreitas, mas também pode parecer estranho</string>
     <string name="title_advanced_monospaced_pre_hint">Mensagens de texto simples serão consideradas como pré-formatadas</string>
-    <string name="title_advanced_never_favorite">Nunca favoritar</string>
+    <string name="title_advanced_display_harmful_hint">A desactivação desta opção pode ser lesiva para a sua privacidade</string>
+    <string name="title_advanced_safe_browsing_hint">O servidor do Google reconhece quais endereços estão a ser visitados</string>
+    <string name="title_advanced_notify_action_hint">No máximo três acções serão mostradas</string>
+    <string name="title_advanced_english_hint">Isto irá reiniciar a aplicação</string>
+    <string name="title_advanced_never_favorite">Nunca colocar como favorito</string>
+    <string name="title_select">Seleccionar &#8230;</string>
     <string name="title_identity_name">Seu Nome</string>
     <string name="title_identity_email">Seu endereço de e-mail</string>
     <string name="title_identity_tenant_hint">Este campo deve estar vazio na maioria dos casos</string>
     <string name="title_encryption">Encriptação</string>
+    <string name="title_encryption_none">Nenhum</string>
     <string name="title_password">Palavra-passe</string>
+    <string name="title_check">Verificar</string>
     <string name="title_no_email">Endereço de correio eletrónico ausente</string>
     <string name="title_email_invalid">Endereço de correio eletrónico inválido: \'%1$s\'</string>
     <string name="title_no_password">Palavra-passe ausente</string>
     <string name="title_no_inbox">Caixa de entrada não encontrada</string>
     <string name="title_account_auth_update">Atualizar autorização</string>
     <string name="title_account_auth_password">Mudar para autenticação de palavra-passe</string>
+    <string name="title_delete_account">Eliminar conta</string>
     <string name="title_hint_accounts">Pressione e mantenha numa conta para ver as opções, por exemplo, para desativar ou excluir uma conta</string>
+    <string name="title_synchronize_more">Obter mais mensagens</string>
     <string name="title_synchronize_enabled">Sincronizar</string>
     <string name="title_expunge">Esponja</string>
     <string name="title_expunge_remark">Isto irá apagar permanentemente todas as mensagens marcadas para exclusão</string>
     <string name="title_import_contacts">Importar vCards</string>
+    <string name="title_show_flagged">Mostrar n⁰ de msg. favoritas</string>
     <string name="title_sort_unread_atop">Ordenar as não lidas no topo</string>
     <string name="title_search_folder">Pesquisar pasta</string>
     <string name="title_apply_to_all">Aplicar a tudo</string>
     <string name="title_edit_account_name">Editar nome da conta</string>
+    <string name="title_download_folder">Transferir automaticamente todos os textos e anexos das mensagens</string>
+    <string name="title_poll_user">Definir a periodicidade com a qual são verificadas novas mensagens nas pastas de utilizador</string>
+    <string name="title_auto_trash">Mover automaticamente as mensagens antigas para o lixo</string>
+    <string name="title_auto_delete_hint">Mensagens antigas são as mensagens que deixam de estar guardadas no dispositivo</string>
     <string name="title_inbox_root_hint">        Some providers require new folders to be created below the inbox.        In this case, you can long press the inbox in the folder list and select \'Create sub folder\'.
     </string>
     <string name="title_months_all">Todos</string>
+    <string name="title_folder_unified">Caixa de entrada unificada</string>
+    <string name="title_folder_inbox">Caixa de entrada</string>
     <string name="title_folder_outbox">Caixa de saída</string>
     <string name="title_folder_all">Arquivar</string>
+    <string name="title_folder_drafts">Rascunhos</string>
     <string name="title_folder_trash">Lixo</string>
     <string name="title_folder_junk">Spam</string>
+    <string name="title_folder_sent">Enviados</string>
     <string name="title_folder_system">Sistema</string>
+    <string name="title_folder_user_only">Apenas para pastas do utilizador</string>
+    <string name="title_folders_unified">Pastas da caixa de entrada unificadas</string>
     <string name="title_duplicate_in">Mensagem duplicada em %1$s</string>
     <string name="title_hide">Esconder</string>
     <string name="title_unhide">Mostrar</string>
+    <string name="title_importance_low">Baixa</string>
     <string name="title_importance_normal">Normal</string>
+    <string name="title_importance_high">Alta</string>
     <string name="title_resend">Reenviar</string>
     <string name="title_fetching_headers">A transferir cabeçalhos de mensagem &#8230;</string>
     <string name="title_raw_send_message">Mensagem</string>
@@ -567,6 +594,7 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_eml_remark">Para encaminhar mensagens, as mensagens (originais) precisam de ser descarregadas do servidor de e-mail. Requer uma ligação à internet e as mensagens devem ser armazenadas no servidor de e-mail.</string>
     <string name="title_eml_option">Isto pode ser impedido se ativar a opção nas configurações de ligação para fazer sempre download das mensagens originais</string>
     <string name="title_eml_downloaded">Download de mensagens originais: %1$s</string>
+    <string name="title_buttons_hint">As acções actualmente disponíveis dependem do tipo de conta e da configuração</string>
     <string name="title_trash">Lixo</string>
     <string name="title_delete">Eliminar</string>
     <string name="title_delete_all">Apagar tudo</string>
@@ -576,6 +604,7 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_delete_permanently">Eliminar permanentemente</string>
     <string name="title_archive">Arquivar</string>
     <string name="title_reply">Responder</string>
+    <string name="title_open_with">Abrir com</string>
     <string name="title_no_viewer_name">Nome do conteúdo</string>
     <string name="title_no_viewer_type">Tipo de conteúdo</string>
     <string name="title_insufficient_memory">Mensagem muito grande para a memória disponível (%1$d)</string>
@@ -583,23 +612,39 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_fit_width">Ajustar à largura</string>
     <string name="title_disable_widths">Desativar larguras</string>
     <string name="title_monospaced_pre">Monosespaçado &lt;pre&gt;</string>
+    <string name="title_ask_show_amp">Mostrar a variante AMP da mensagem?</string>
+    <string name="title_ask_show_amp_hint">As mensagens AMP são concebidas para serem dinâmicas e para interagirem com a internet e, portanto, podem ser usadas por definição para o acompanhar</string>
     <string name="title_ask_reporting">Enviar relatórios de erro?</string>
-    <string name="title_ask_review_rationale">        Você está a utilizar o FairEmail há algum tempo.
+    <string name="title_ask_review_rationale">        Está a utilizar o FairEmail há algum tempo.
         Gostaríamos que avaliasse o FairEmail na Play Store.
     </string>
     <string name="title_compose">Compor</string>
+    <string name="title_submitter">Enviado por:</string>
+    <string name="title_to">Para:</string>
+    <string name="title_sent">Enviados:</string>
+    <string name="title_date">Data:</string>
     <string name="title_language">Idioma:</string>
+    <string name="title_subject">Assunto:</string>
+    <string name="title_attachment">Anexo:</string>
+    <string name="title_save">Guardar</string>
     <string name="title_send">Enviar</string>
     <string name="title_send_encryption">Encriptação</string>
     <string name="title_send_sensitivity">Sensibilidade</string>
+    <string name="title_style_size_small">Pequeno</string>
+    <string name="title_style_size_medium">Médio</string>
+    <string name="title_style_size_large">Grande</string>
     <string name="title_style_align_start">Iniciar</string>
     <string name="title_style_list">Lista</string>
+    <string name="title_style_font_default">Predefinido</string>
     <string name="title_attachment_audio">Gravar áudio</string>
     <string name="title_manage_local_contacts">Gerir contactos locais</string>
     <string name="title_translate_formal">Utilizar o formulário formal</string>
     <string name="title_noreply_reminder">A enviar para um endereço \'no-reply\'</string>
+    <string name="title_alternative_text">Mostrar texto simples</string>
+    <string name="title_alternative_html">Mostrar HTML</string>
     <string name="title_signature_mismatch">O endereço de correio eletrónico do remetente e assinatura não corresponde</string>
     <string name="title_signature_algorithm">Algoritmo</string>
+    <string name="title_signature_subject">Assunto</string>
     <string name="title_search">Pesquisar</string>
     <string name="title_search_hint">        Inicialmente, a procura é efetuada no dispositivo.
         Para procurar também no servidor, clique no botão \'procurar novamente\'.
@@ -607,70 +652,338 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
     <string name="title_search_index_hint">A procura é rápida através do índice de pesquisa, mas só encontra palavras inteiras.</string>
     <string name="title_search_text_unsupported">\'%s\' significa que o servidor de email não suporta pesquisa através de textos de mensagens</string>
     <string name="title_search_more">Mais opções</string>
+    <string name="title_search_with_unseen">Não lida</string>
+    <string name="title_search_with_flagged">Com estrela</string>
+    <string name="title_search_flag_unseen">não lida</string>
+    <string name="title_search_flag_flagged">com estrela</string>
+    <string name="title_sort_on_unread">Não lida</string>
+    <string name="title_sort_on_starred">Com estrela</string>
+    <string name="title_sort_on_sender">Remetente</string>
+    <string name="title_sort_on_subject">Assunto</string>
     <string name="title_filter_seen">Lida</string>
+    <string name="title_filter_unflagged">Sem estrela</string>
     <string name="title_filter_duplicates">Duplicados</string>
+    <string name="title_zoom">Tamanho do texto</string>
+    <string name="title_padding">Tamanho do espaçamento</string>
+    <string name="title_select_found">Seleccionar encontradas</string>
     <string name="title_language_all">Todos</string>
+    <string name="title_previous">Anterior</string>
+    <string name="title_next">Seguinte</string>
+    <string name="title_answer_standard">Predefinido</string>
+    <string name="title_rule_noop">Nenhuma acção</string>
     <string name="title_rule_hide">Esconder</string>
     <string name="title_rule_snooze">Adiar</string>
     <string name="title_rule_move">Mover</string>
+    <string name="title_rule_automation">Automatização</string>
     <string name="title_rule_delete">Eliminar permanentemente</string>
     <string name="title_rule_sound">Reproduzir som</string>
+    <string name="title_rule_caption">Editar regra</string>
+    <string name="title_rule_title">Regra aplica-se a</string>
+    <string name="title_rule_name">Nome</string>
+    <string name="title_rule_order">Ordenar</string>
     <string name="title_rule_enabled">Ativado</string>
+    <string name="title_rule_stop">Parar o processamento de regras após a execução desta regra</string>
+    <string name="title_rule_sender">Remetente contém</string>
+    <string name="title_rule_sender_known">Remetente é um contacto</string>
+    <string name="title_rule_recipient">Destinatário contém</string>
+    <string name="title_rule_subject">Assunto contém</string>
+    <string name="title_rule_attachments">Contém anexos</string>
+    <string name="title_rule_hours">Horas</string>
+    <string name="title_rule_folder">Pasta</string>
+    <string name="title_rule_answer_subject">Utilizar o nome do modelo como assunto</string>
+    <string name="title_rule_original_text">Inserir o texto original da mensagem</string>
     <string name="title_rule_delete_hint">A eliminação permanente é irreversível, por isso certifique-se de que as condições da regra estão corretas!</string>
+    <string name="title_rule_check">Verificar</string>
     <string name="title_rule_no_body">Texto da mensagem não disponível</string>
+    <string name="title_rule_tts_from">De</string>
+    <string name="title_rule_tts_subject">Assunto</string>
+    <string name="title_rule_tts_content">Texto</string>
     <string name="title_rule_select_sound">Selecionar som</string>
     <string name="title_rule_use_as_alarm">Utilizar como alarme</string>
     <string name="title_rule_alarm_hint">Isto irá ignorar as regras do \"não perturbe\"</string>
+    <string name="title_rule_alarm_duration">Duração máxima do alarme (em segundos)</string>
     <string name="title_legend_section_synchronize">Sincronizar</string>
     <string name="title_legend_section_folders">Pastas</string>
     <string name="title_legend_section_messages">Mensagens</string>
     <string name="title_legend_section_compose">Compor</string>
+    <string name="title_legend_section_keyboard">Teclado</string>
+    <string name="title_legend_oauth">Autorização OAuth</string>
+    <string name="title_legend_folder_connected">Pasta conectada</string>
+    <string name="title_legend_folder_disconnected">Pasta desconectada</string>
+    <string name="title_legend_download_on">Transferir conteúdo da mensagem automaticamente</string>
+    <string name="title_legend_download_off">Transferir conteúdo da mensagem manualmente</string>
+    <string name="title_legend_synchronize_on">Sincronização ligada</string>
+    <string name="title_legend_synchronize_off">Sincronização desligada</string>
+    <string name="title_legend_synchronize_poll">Sincronizar periodicamente</string>
+    <string name="title_legend_disconnected">Desligado</string>
+    <string name="title_legend_connecting">A ligar</string>
+    <string name="title_legend_connected">Ligado</string>
+    <string name="title_legend_backoff">Aguardar após uma falha</string>
+    <string name="title_legend_quota">Caixa de correio quase cheia</string>
+    <string name="title_legend_executing">A executar operações</string>
+    <string name="title_legend_synchronizing">A sincronizar</string>
+    <string name="title_legend_downloading">A descarregar</string>
+    <string name="title_legend_closing">A desligar</string>
+    <string name="title_legend_unified">Caixa de entrada unificada / conta principal</string>
+    <string name="title_legend_inbox">Caixa de entrada</string>
     <string name="title_legend_outbox">Caixa de saída</string>
+    <string name="title_legend_drafts">Rascunhos</string>
+    <string name="title_legend_sent">Enviados</string>
     <string name="title_legend_archive">Arquivar</string>
     <string name="title_legend_trash">Lixo</string>
     <string name="title_legend_junk">Spam</string>
+    <string name="title_legend_primary">Principal</string>
+    <string name="title_legend_subscribed">Inscrito em</string>
+    <string name="title_legend_rule">Possui regras</string>
+    <string name="title_legend_similar">Pesquisar mensagens semelhantes</string>
+    <string name="title_legend_notify">Notificação de novas mensagens</string>
+    <string name="title_legend_sync_keep">Número de dias para sincronizar / manter mensagens</string>
+    <string name="title_legend_download_fetch">Número de mensagens transferidas / cabeçalhos obtidos</string>
+    <string name="title_legend_stop">Parar o processamento de regras</string>
     <string name="title_legend_thread">Conversa</string>
+    <string name="title_legend_bookmark">Última conversa aberta</string>
+    <string name="title_legend_zoom">Mudar o tamanho do texto</string>
+    <string name="title_legend_draft">Tem um rascunho</string>
+    <string name="title_legend_priority">Tem uma prioridade alta</string>
+    <string name="title_legend_priority_low">Tem uma prioridade baixa</string>
     <string name="title_legend_sensitivity_personal">É pessoal</string>
     <string name="title_legend_sensitivity_private">É privado</string>
     <string name="title_legend_sensitivity_confidential">É confidencial</string>
+    <string name="title_legend_importance">É importante</string>
+    <string name="title_legend_importance_low">Não é importante</string>
+    <string name="title_legend_signed">Está assinado</string>
+    <string name="title_legend_encrypted">Está cifrado</string>
+    <string name="title_legend_auth">A autenticação falhou</string>
+    <string name="title_legend_found">Foi encontrado</string>
+    <string name="title_legend_classified">Foi classificado automaticamente</string>
+    <string name="title_legend_snoozed">Está adiado</string>
+    <string name="title_legend_browsed">Já foi descarregada ou pesquisada</string>
+    <string name="title_legend_answered">Foi respondida</string>
+    <string name="title_legend_forwarded">Foi encaminhada</string>
+    <string name="title_legend_plain_only">Apenas texto simples</string>
+    <string name="title_legend_receipt">Recibo solicitado</string>
+    <string name="title_legend_auto_submitted">Foi enviado automaticamente</string>
+    <string name="title_legend_attachment">Contém anexo(s)</string>
+    <string name="title_legend_flagged">É favorito</string>
+    <string name="title_legend_contacts">Gerir contactos</string>
+    <string name="title_legend_search">Pesquisar por remetente</string>
+    <string name="title_legend_view">Ver conteúdo</string>
+    <string name="title_legend_hide">Ocultar conteúdo</string>
+    <string name="title_legend_download">Transferir conteúdo</string>
+    <string name="title_legend_original">Ver mensagem original</string>
+    <string name="title_legend_reformatted">Ver mensagem reformatada</string>
+    <string name="title_legend_external_image">Espaço reservado para imagem externa</string>
+    <string name="title_legend_embedded_image">Espaço reservado para inserção de imagem</string>
+    <string name="title_legend_tracking_pixel">Imagem de rastreamento</string>
+    <string name="title_legend_broken_image">Imagem quebrada</string>
+    <string name="title_legend_pick">Escolher contacto</string>
+    <string name="title_legend_cc">Mostrar CC/BCC</string>
+    <string name="title_legend_link">Inserir hiperligação</string>
+    <string name="title_legend_file">Anexar ficheiro</string>
+    <string name="title_legend_picture">Inserir uma imagem</string>
+    <string name="title_legend_photo">Tirar foto</string>
     <string name="title_legend_audio">Gravar áudio</string>
+    <string name="title_legend_bold">Colocar texto em negrito</string>
+    <string name="title_legend_italic">Colocar texto em itálico</string>
+    <string name="title_legend_underline">Sublinhar texto</string>
+    <string name="title_legend_text_style">Definir estilo do texto</string>
+    <string name="title_legend_metered">A conexão é limitada</string>
+    <string name="title_legend_unmetered">A conexão é ilimitada</string>
+    <string name="title_legend_roaming">Roaming</string>
+    <string name="title_legend_expander">Expandir</string>
+    <string name="title_legend_avatar">Imagem de Perfil</string>
+    <string name="title_legend_show_quotes">Mostrar citações</string>
+    <string name="title_legend_show_junk">Tratar como spam</string>
+    <string name="title_legend_create_rule">Criar regra</string>
+    <string name="title_legend_show_unsubscribe">Cancelar subscrição desta lista</string>
     <string name="title_legend_show_images">Mostrar imagens</string>
     <string name="title_legend_hide_images">Ocultar imagens</string>
+    <string name="title_legend_show_amp">Mostrar variante AMP</string>
+    <string name="title_legend_show_full">Mostrar mensagem original</string>
     <string name="title_legend_show_reformatted">Mostrar mensagem reformatada</string>
+    <string name="title_legend_edit">Editar</string>
+    <string name="title_legend_default_color">Cor predefinida</string>
+    <string name="title_legend_close_hint">Fechar dica</string>
+    <string name="title_legend_connection_state">Estado da ligação</string>
+    <string name="title_legend_sync_state">Estado de sincronização</string>
+    <string name="title_legend_download_state">Estado da transferência</string>
+    <string name="title_legend_save">Guardar</string>
     <string name="title_legend_delete">Eliminar</string>
+    <string name="title_legend_count">Quantidade</string>
+    <string name="title_legend_folder_type">Tipo de pasta</string>
+    <string name="title_legend_enter">Abrir</string>
     <string name="title_legend_a">Arquivar</string>
     <string name="title_legend_c">Compor</string>
+    <string name="title_legend_d">Mover para o Lixo (eliminar)</string>
+    <string name="title_legend_m">Menu (ecrã de selecção múltipla)</string>
+    <string name="title_legend_n">Seguinte</string>
+    <string name="title_legend_p">Anterior</string>
     <string name="title_legend_r">Responder</string>
+    <string name="title_legend_s">Marcar/desmarcar</string>
+    <string name="title_legend_t">Texto em destaque</string>
+    <string name="title_hint_folder_actions">Toque e mantenha premida uma pasta para opções como adicionar uma pasta ao menu de navegação para um acesso rápido</string>
+    <string name="title_hint_folder_sync">Para limitar o uso de bateria e rede, por predefinição, nem todas as pastas e mensagens serão sincronizadas</string>
+    <string name="title_hint_support">Se tiver alguma questão ou um problema, por favor utilize o menu de suporte para obter ajuda</string>
+    <string name="title_hint_message_selection">Pressione e segure uma mensagem para começar a seleccionar múltiplas mensagens; Segure e deslize para cima ou para baixo para seleccionar mais mensagens</string>
+    <string name="title_hint_important">Importante</string>
+    <string name="title_hint_contact_actions">Pressione longo para opções</string>
+    <string name="title_hint_eml">Este é um resumo do conteúdo de um ficheiro de mensagem em bruto. Guarde a mensagem em bruto com o ícone \'guardar\' na barra de acção para visualizar todo o conteúdo.</string>
+    <string name="title_open_link">Abrir ligação</string>
+    <string name="title_image_link">Hiperligação da imagem</string>
+    <string name="title_different_link">O título e o endereço da hiperligação são diferentes</string>
+    <string name="title_tracking_link">Este sítio web pode rastreá-lo</string>
+    <string name="title_suspicious_link">Esta é uma hiperligação suspeita</string>
+    <string name="title_link_http">O tráfego não será cifrado</string>
+    <string name="title_link_https">O tráfego será cifrado</string>
+    <string name="title_sanitize_link">Remover parâmetros de rastreamento</string>
+    <string name="title_insecure_link">Esta hiperligação é insegura</string>
+    <string name="title_check_owner">Verificar proprietário</string>
+    <string name="title_remark_owner">A informação será recuperada a partir de <a href="https://ipinfo.io/">ipinfo.io</a></string>
+    <string name="title_ip_owner">Endereço IP do proprietário</string>
+    <string name="title_default_apps">Aplicações predefinidas</string>
+    <string name="title_reset_open">Definir ou limpar as aplicações predefinidas</string>
+    <string name="title_select_app">Seleccionar aplicação</string>
     <string name="title_updated">Atualização para a versão %1$s disponível</string>
+    <string name="title_issue">Tem alguma questão ou um problema?</string>
+    <string name="title_yes">Sim</string>
+    <string name="title_no">Não</string>
+    <string name="title_later">Mais tarde</string>
+    <string name="title_undo">Anular</string>
+    <string name="title_redo">Refazer</string>
     <string name="title_insert_line">Inserir linha</string>
     <string name="title_add">Adicionar</string>
+    <string name="title_browse">Abrir com</string>
+    <string name="title_info">Informação</string>
+    <string name="title_download">Transferir</string>
+    <string name="title_report">Reportar</string>
     <string name="title_fix">Corrigir</string>
     <string name="title_show">Mostrar</string>
     <string name="title_enable">Activar</string>
     <string name="title_enabled">Ativado</string>
     <string name="title_disable">Desactivar</string>
+    <string name="title_keep_current">Manter parâmetro</string>
+    <string name="title_executing">Em execução</string>
+    <string name="title_completed">Concluído</string>
+    <string name="title_default_changed">Predefinição alterada</string>
+    <string name="title_clipboard_copy">Copiar para área de transferência</string>
+    <string name="title_clipboard_copied">Copiado para a área de transferência</string>
+    <string name="title_ask_what">Perguntar o que fazer</string>
+    <string name="title_no_ask_again">Não voltar a perguntar</string>
+    <string name="title_no_ask_for_again">Não voltar a perguntar por %1$s</string>
+    <string name="title_no_body">Não foi encontrado corpo da mensagem</string>
+    <string name="title_no_charset">Codificação não suportada: %1$s</string>
+    <string name="title_via">Através: %1$s</string>
+    <string name="title_1hour">1 hora</string>
+    <string name="title_1day">1 dia</string>
+    <string name="title_1week">1 semana</string>
+    <string name="title_now">Agora</string>
+    <string name="title_after">Após %1$s</string>
     <string name="title_reset">Repor</string>
+    <string name="title_hours">Horas</string>
+    <string name="title_minutes">Minutos</string>
+    <string name="title_dismiss">Dispensar</string>
     <string name="title_snooze_now">Adiar</string>
+    <string name="title_loading">A carregar &#8230;</string>
+    <string name="title_fetching_again">A procurar novamente a mensagem do servidor</string>
+    <string name="title_go_back">Retroceder</string>
+    <string name="title_conversation_actions">Acções</string>
+    <string name="title_conversation_action_reply">Resposta com: \'%1$s\'</string>
+    <string name="title_conversation_action_copy">Copiar: \'%1$s\'</string>
+    <string name="title_icalendar_accept">Aceitar</string>
+    <string name="title_icalendar_decline">Recusar</string>
+    <string name="title_icalendar_maybe">Talvez</string>
+    <string name="title_icalendar_calendar">Calendário</string>
     <string name="title_pro_feature">Esta é uma funcionalidade da versão pro</string>
+    <string name="title_pro_list">Lista das funcionalidades do pacote pro</string>
     <string name="title_pro_purchase">Comprar</string>
+    <string name="title_pro_one_time">%1$s (compra única)</string>
+    <string name="title_pro_no_play">A aplicação Play Store não foi encontrada</string>
     <string name="title_pro_info">        Developing FairEmail took literally thousands of hours and, despite that, most of the features are free to use.        FairEmail takes your privacy seriously and doesn\'t show ads and doesn\'t use tracking or analytics to earn money.
         To maintain and support FairEmail in the long run, some convenience and advanced features are not free to use.
         FairEmail shows a small message to remind you of this, which will be removed if you purchase the pro features.
     </string>
     <string name="title_pro_whichever">Quaisquer que sejam os recursos escolhidos como recursos profissionais, há sempre alguém que reclama que um recurso deve ser gratuito. Por favor, não seja essa pessoa.</string>
-    <string name="title_pro_restore">Como posso restaurar uma compra (em outro dispositivo) ?</string>
+    <string name="title_pro_hide">Ocultar mensagem pequena por %1$d semana(s)</string>
+    <string name="title_pro_hint">Comprar o pacote pro permitirá que utilize todas as funcionalidades pro actuais e futuras, como contribui para a manutenção e suporte desta aplicação.</string>
+    <string name="title_pro_price">Porque razão o pacote pro é tão caro?</string>
+    <string name="title_pro_family">Posso usar a Biblioteca da Família do Google Play?</string>
+    <string name="title_pro_restore">Como posso restaurar uma compra (noutro dispositivo)?</string>
+    <string name="title_pro_pending">Compra pendente</string>
+    <string name="title_pro_activated">Todas as funcionalidades pro estão activadas</string>
+    <string name="title_pro_valid">Activadas todas as funcionalidades pro</string>
+    <string name="title_pro_invalid">Resposta inválida</string>
+    <string name="title_pro_support">O FairEmail precisa da sua ajuda. Toque para comprar o pacote pro para a manutenção do projecto ou desactivar esta mensagem.</string>
+    <string name="title_boundary_error">Erro ao transferir mensagens do servidor de correio electrónico</string>
+    <string name="title_boundary_retry">Tente novamente</string>
+    <string name="title_unexpected_error">Erro inesperado</string>
+    <string name="title_log">Registo</string>
+    <string name="title_auto_scroll">Deslocar automaticamente</string>
     <string name="title_log_clear">Limpar</string>
+    <string name="title_rules_search_hint">Pesquisar nome ou condição</string>
+    <string name="title_rules_export">Exportar regras</string>
+    <string name="title_rules_import">Importar regras</string>
+    <string name="title_rules_delete_all">Eliminar todas as regras</string>
+    <string name="title_rules_delete_all_confirm">Eliminar todas as regras?</string>
+    <string name="title_debug_info">Informação de depuração</string>
     <string name="title_debug_info_remark">Por favor descreva o problema e indique quando ocorreu:</string>
+    <string name="title_crash_info_remark">Por favor, descreva o que fazia quando a aplicação foi abaixo:</string>
+    <string name="title_unexpected_info_remark">Por favor, descreva o que fazia quando obteve o erro:</string>
+    <string name="title_widget_title_count">Novo contador de mensagens</string>
+    <string name="title_widget_title_list">Lista de mensagens</string>
+    <string name="title_widget_title_sync">Sinc. on/off</string>
+    <string name="title_power_menu_sync">Sincronização</string>
+    <string name="title_power_menu_on">Ligado</string>
     <string name="title_power_menu_off">Desligado</string>
+    <string name="title_power_menu_on_off">Ligar/Desligar</string>
+    <string name="title_widget_account">Conta</string>
     <string name="title_widget_account_all">Todos</string>
+    <string name="title_widget_folder">Pasta</string>
+    <string name="title_widget_folder_unified">Pastas da caixa de entrada unificadas</string>
+    <string name="title_widget_unseen">Apenas mensagens não lidas</string>
+    <string name="title_widget_flagged">Apenas mensagens com estrela</string>
+    <string name="title_widget_font_size">Tamanho do texto</string>
+    <string name="title_widget_padding">Tamanho do espaçamento</string>
+    <string name="title_widget_semi_transparent">Fundo semi-transparente</string>
     <string name="title_widget_refresh">Mostrar botão para atualizar mensagens</string>
     <string name="title_widget_compose">Mostrar botão para compor nova mensagem</string>
+    <string name="title_widget_background">Cor do fundo</string>
+    <string name="title_accessibility_collapsed">Ocultado</string>
+    <string name="title_accessibility_expanded">Expandido</string>
     <string name="title_accessibility_seen">Lida</string>
+    <string name="title_accessibility_unseen">Não lida</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="one">%1$d mensagem</item>
+        <item quantity="other">%1$d mensagens</item>
+    </plurals>
     <!-- Thunderbird -->
+    <string name="title_keyword_label1">Importante</string>
+    <string name="title_keyword_label2">Trabalho</string>
     <string name="title_keyword_label3">Pessoal</string>
     <string name="title_keyword_label4">Pendente</string>
+    <string name="title_keyword_label5">Mais tarde</string>
+    <string name="title_accessibility_flagged">Com estrela</string>
+    <string name="title_accessibility_unflagged">Sem estrela</string>
+    <string name="title_accessibility_collapse">Ocultar</string>
+    <string name="title_accessibility_expand">Expandir</string>
+    <string name="title_accessibility_view_contact">Ver contacto</string>
+    <string name="title_accessibility_show_authentication_result">Mostrar resultado de autenticação</string>
+    <string name="title_accessibility_show_snooze_time">Mostrar o tempo do alarme</string>
+    <string name="title_accessibility_view_help">Ver ajuda</string>
+    <string name="title_accessibility_selected">Seleccionado</string>
+    <string name="title_accessibility_answered">Respondido</string>
+    <string name="title_accessibility_scroll_down">Deslizar para baixo</string>
+    <string name="title_accessibility_scroll_up">Deslizar para cima</string>
+    <string name="title_accessibility_filter_out_seen">Alternar filtro de mensagens lidas</string>
+    <string name="title_accessibility_filter_out_unflagged">Alternar filtro de mensagens com estrela</string>
+    <string name="title_accessibility_filter_out_snoozed">Alternar filtro de mensagens adiadas</string>
+    <string name="title_accessibility_edit">Editar</string>
+    <string name="title_accessibility_show_addresses">Mostrar endereços</string>
+    <string name="title_accessibility_hide_addresses">Ocultar endereços</string>
+    <string name="title_accessibility_attachment">Anexo</string>
+    <string name="title_accessibility_from">Remetente</string>
+    <string name="title_accessibility_to">Destinatário</string>
     <string-array name="pollIntervalNames">
-        <item>Always</item>
+        <item>Sempre</item>
         <item>A cada 5 minutos</item>
         <item>A cada 15 minutos</item>
         <item>A cada 30 minutos</item>
@@ -680,10 +993,19 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
         <item>A cada 8 horas</item>
         <item>Todos os dias</item>
     </string-array>
+    <string-array name="sendDelayedNames">
+        <item>Não</item>
+        <item>15 segundos</item>
+        <item>30 segundos</item>
+        <item>1 minuto</item>
+        <item>2 minutos</item>
+        <item>5 minutos</item>
+        <item>10 minutos</item>
+    </string-array>
     <string-array name="startupNames">
-        <item>Unified inbox</item>
-        <item>Unified folders</item>
-        <item>Primary account folders</item>
+        <item>Caixa de entrada unificada</item>
+        <item>Pastas unificadas</item>
+        <item>Pastas da conta principal</item>
         <item>Contas</item>
     </string-array>
     <string-array name="downloadNames">
@@ -700,12 +1022,41 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
         <item>16 MB</item>
         <item>∞</item>
     </string-array>
+    <string-array name="onCloseNames">
+        <item>Não fazer nada</item>
+        <item>Ir para a conversa anterior</item>
+        <item>Ir para a próxima conversa</item>
+    </string-array>
+    <string-array name="resizeNames">
+        <item>Pequeno</item>
+        <item>Médio</item>
+        <item>Grande</item>
+        <item>Muito grande</item>
+    </string-array>
     <!-- https://en.wikipedia.org/wiki/Display_resolution -->
     <!-- https://en.wikipedia.org/wiki/Comparison_of_high-definition_smartphone_displays -->
+    <string-array name="targetNames">
+        <item>Para</item>
+        <item>Cc</item>
+        <item>Bcc</item>
+    </string-array>
+    <string-array name="biometricsTimeoutNames">
+        <item>Um minuto</item>
+        <item>2 minutos</item>
+        <item>5 minutos</item>
+        <item>10 minutos</item>
+        <item>20 minutos</item>
+    </string-array>
+    <string-array name="ellipsizeNames">
+        <item>No início</item>
+        <item>No meio</item>
+        <item>No final</item>
+        <item>Mostrar inteiro</item>
+    </string-array>
     <string-array name="priorityNames">
-        <item>Low</item>
+        <item>Baixa</item>
         <item>Normal</item>
-        <item>High</item>
+        <item>Alta</item>
     </string-array>
     <string-array name="sensitivityNames">
         <item>Normal</item>
@@ -713,7 +1064,30 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
         <item>Privado</item>
         <item>Confidencial</item>
     </string-array>
+    <string-array name="fontSizeNames">
+        <item>Predefinido</item>
+        <item>Pequeno</item>
+        <item>Médio</item>
+        <item>Grande</item>
+    </string-array>
     <string name="title_size_tiny">Muito pequeno</string>
+    <string-array name="receiptNames">
+        <item>Somente confirmação de leitura</item>
+        <item>Somente confirmação de envio</item>
+        <item>Confirmação de leitura+envio</item>
+    </string-array>
+    <string-array name="signatureNames">
+        <item>Acima do texto</item>
+        <item>Abaixo do texto</item>
+        <item>Na parte inferior</item>
+    </string-array>
+    <string-array name="encryptNames">
+        <item>Nenhum</item>
+        <item>Apenas assinaturas PGP</item>
+        <item>Assinaturas+encriptação PGP</item>
+        <item>Apenas assinaturas S/MIME</item>
+        <item>Assinaturas+encriptação S/MIME</item>
+    </string-array>
     <string-array name="sizeNames">
         <item>0 B</item>
         <item>256 KB</item>
@@ -731,17 +1105,28 @@ Esta palavra-passe é necessária para importar novamente as definições, por i
         <item>5 s</item>
         <item>7,5 s</item>
         <item>10 s</item>
+        <item>15 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Cursivo</item>
         <item>Serif</item>
         <item>Sans Serif</item>
         <item>Monospace</item>
-        <item>Fantasy</item>
-        <item>OpenDyslexic</item>
+        <item>Fantasia</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
+    <string-array name="addressFormatNames">
+        <item>Apenas o nome</item>
+        <item>Apenas o e-mail</item>
+        <item>Nome e e-mail</item>
+    </string-array>
     <!-- https://www.bouncycastle.org/specifications.html -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#page-29 -->
     <!-- https://datatracker.ietf.org/doc/html/rfc5751#section-2.7 -->
+    <string-array name="minScreenSizes">
+        <item>Pequeno</item>
+        <item>Médio</item>
+        <item>Grande</item>
+        <item>Muito grande</item>
+    </string-array>
 </resources>

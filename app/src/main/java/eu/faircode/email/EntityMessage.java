@@ -19,6 +19,9 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
+import static androidx.room.ForeignKey.CASCADE;
+import static androidx.room.ForeignKey.SET_NULL;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -41,7 +44,6 @@ import org.jsoup.nodes.Element;
 import java.io.File;
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -54,9 +56,6 @@ import java.util.regex.Pattern;
 
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
-
-import static androidx.room.ForeignKey.CASCADE;
-import static androidx.room.ForeignKey.SET_NULL;
 
 // https://developer.android.com/training/data-storage/room/defining-data
 
@@ -182,7 +181,7 @@ public class EntityMessage implements Serializable {
     @NonNull
     public Boolean content = false;
     public String language = null; // classified
-    public Boolean plain_only = null;
+    public Integer plain_only = null; // 1=true; 0x80=alt
     public Boolean resend = null;
     public Integer encrypt = null;
     public Integer ui_encrypt = null;
@@ -256,6 +255,14 @@ public class EntityMessage implements Serializable {
         // https://www.jwz.org/doc/mid.html
         // https://tools.ietf.org/html/rfc2822.html#section-3.6.4
         return "<" + UUID.randomUUID() + "@" + domain + '>';
+    }
+
+    boolean isPlainOnly() {
+        return (this.plain_only != null && (this.plain_only & 1) != 0);
+    }
+
+    boolean hasAlt() {
+        return (this.plain_only != null && (this.plain_only & 0x80) != 0);
     }
 
     boolean replySelf(List<TupleIdentityEx> identities, long account) {

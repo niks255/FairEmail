@@ -20,9 +20,6 @@ package eu.faircode.email;
 */
 
 import static android.app.Activity.RESULT_OK;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF;
-import static androidx.webkit.WebSettingsCompat.FORCE_DARK_ON;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -37,6 +34,7 @@ import android.app.RemoteAction;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,10 +50,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.LocaleList;
 import android.os.Parcelable;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Html;
 import android.text.Spannable;
@@ -96,7 +96,6 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.textclassifier.ConversationAction;
 import android.view.textclassifier.ConversationActions;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -123,7 +122,6 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.MenuCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -145,7 +143,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -161,6 +158,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -284,7 +282,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean attachments_alt;
     private boolean thumbnails;
     private boolean contrast;
-    private boolean monospaced;
+    private String display_font;
     private boolean inline;
     private boolean collapse_quotes;
     private boolean authentication;
@@ -427,6 +425,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private View vSeparator;
         private ImageButton ibFull;
         private ImageButton ibImages;
+        private ImageButton ibAmp;
         private ImageButton ibDecrypt;
         private ImageButton ibVerify;
         private ImageButton ibUndo;
@@ -485,6 +484,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private Button btnCalendarMaybe;
         private ContentLoadingProgressBar pbCalendarWait;
 
+        private ImageButton ibStoreMedia;
         private ImageButton ibShareImages;
         private RecyclerView rvImage;
 
@@ -820,6 +820,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             vSeparator = vsBody.findViewById(R.id.vSeparator);
             ibFull = vsBody.findViewById(R.id.ibFull);
             ibImages = vsBody.findViewById(R.id.ibImages);
+            ibAmp = vsBody.findViewById(R.id.ibAmp);
             ibDecrypt = vsBody.findViewById(R.id.ibDecrypt);
             ibVerify = vsBody.findViewById(R.id.ibVerify);
             ibUndo = vsBody.findViewById(R.id.ibUndo);
@@ -866,6 +867,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSeenBottom = vsBody.findViewById(R.id.ibSeenBottom);
             flow = vsBody.findViewById(R.id.flow);
 
+            ibStoreMedia = vsBody.findViewById(R.id.ibStoreMedia);
             ibShareImages = vsBody.findViewById(R.id.ibShareImages);
             rvImage = vsBody.findViewById(R.id.rvImage);
             rvImage.setHasFixedSize(false);
@@ -944,6 +946,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibFull.setOnClickListener(this);
                 ibFull.setOnLongClickListener(this);
                 ibImages.setOnClickListener(this);
+                ibAmp.setOnClickListener(this);
                 ibDecrypt.setOnClickListener(this);
                 ibVerify.setOnClickListener(this);
                 ibUndo.setOnClickListener(this);
@@ -1004,6 +1007,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 btnCalendarDecline.setOnLongClickListener(this);
                 btnCalendarMaybe.setOnLongClickListener(this);
 
+                ibStoreMedia.setOnClickListener(this);
                 ibShareImages.setOnClickListener(this);
             }
 
@@ -1050,6 +1054,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibFull.setOnClickListener(null);
                 ibFull.setOnLongClickListener(null);
                 ibImages.setOnClickListener(null);
+                ibAmp.setOnClickListener(null);
                 ibDecrypt.setOnClickListener(null);
                 ibVerify.setOnClickListener(null);
                 ibUndo.setOnClickListener(null);
@@ -1108,6 +1113,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 btnCalendarDecline.setOnLongClickListener(null);
                 btnCalendarMaybe.setOnLongClickListener(null);
 
+                ibStoreMedia.setOnClickListener(null);
                 ibShareImages.setOnClickListener(null);
             }
 
@@ -1118,7 +1124,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         @SuppressLint("WrongConstant")
         private void bindTo(final TupleMessageEx message, boolean scroll) {
             boolean inbox = EntityFolder.INBOX.equals(message.folderType);
-            boolean junk = EntityFolder.JUNK.equals(message.folderType);
             boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
             boolean outgoing = isOutgoing(message);
             boolean reverse = (outgoing && viewType != ViewType.THREAD &&
@@ -1399,7 +1404,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvPreview.setMaxLines(preview_lines);
             }
             tvPreview.setTypeface(
-                    monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT,
+                    StyleHelper.getTypeface(display_font, context),
                     preview_italic ? Typeface.ITALIC : Typeface.NORMAL);
             tvPreview.setText(message.preview);
             tvPreview.setVisibility(preview && !TextUtils.isEmpty(message.preview) ? View.VISIBLE : View.GONE);
@@ -1450,8 +1455,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ContactInfo[] info = ContactInfo.getCached(context,
                     message.account, message.folderType, selector, addresses);
             if (info == null) {
-                if (taskContactInfo != null)
+                if (taskContactInfo != null) {
                     taskContactInfo.cancel(context);
+                    taskContactInfo = null;
+                }
 
                 Bundle aargs = new Bundle();
                 aargs.putLong("id", message.id);
@@ -1597,6 +1604,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             vSeparator.setVisibility(View.GONE);
             ibFull.setVisibility(View.GONE);
             ibImages.setVisibility(View.GONE);
+            ibAmp.setVisibility(View.GONE);
             ibDecrypt.setVisibility(View.GONE);
             ibVerify.setVisibility(View.GONE);
             ibUndo.setVisibility(View.GONE);
@@ -1644,6 +1652,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibArchiveBottom.setVisibility(View.GONE);
             ibMoveBottom.setVisibility(View.GONE);
             ibSeenBottom.setVisibility(View.GONE);
+
+            ibStoreMedia.setVisibility(View.GONE);
         }
 
         private void clearActions() {
@@ -1835,6 +1845,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibFull.setEnabled(false);
             ibFull.setVisibility(View.VISIBLE);
             ibImages.setVisibility(View.INVISIBLE);
+            ibAmp.setVisibility(View.GONE);
             ibDecrypt.setVisibility(View.GONE);
             ibVerify.setVisibility(View.GONE);
             ibUndo.setVisibility(View.GONE);
@@ -1911,8 +1922,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             if (attachment.available)
                                 if (attachment.isInline() && attachment.isImage())
                                     inlineImages++;
-                                else if ("message/rfc822".equals(attachment.getMimeType()))
-                                    embeddedMessages++;
+                                else {
+                                    String mimeType = attachment.getMimeType();
+                                    if ("text/x-amp-html".equals(mimeType) ||
+                                            "message/rfc822".equals(mimeType))
+                                        embeddedMessages++;
+                                }
 
                     int lastInlineImages = 0;
                     int lastEmbeddedMessages = 0;
@@ -1922,8 +1937,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             if (attachment.available)
                                 if (attachment.isInline() && attachment.isImage())
                                     lastInlineImages++;
-                                else if ("message/rfc822".equals(attachment.getMimeType()))
-                                    lastEmbeddedMessages++;
+                                else {
+                                    String mimeType = attachment.getMimeType();
+                                    if ("text/x-amp-html".equals(mimeType) ||
+                                            "message/rfc822".equals(mimeType))
+                                        lastEmbeddedMessages++;
+                                }
 
                     boolean show_images = properties.getValue("images", message.id);
                     boolean inline = prefs.getBoolean("inline_images", false);
@@ -2174,7 +2193,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibExpanderAddress.setImageLevel(show_addresses ? 0 /* less */ : 1 /* more */);
             ibExpanderAddress.setContentDescription(context.getString(show_addresses ? R.string.title_accessibility_hide_addresses : R.string.title_accessibility_show_addresses));
 
-            ivPlain.setVisibility(show_addresses && message.plain_only != null && message.plain_only ? View.VISIBLE : View.GONE);
+            ivPlain.setVisibility(show_addresses && message.isPlainOnly() ? View.VISIBLE : View.GONE);
             ibReceipt.setVisibility(message.receipt_request != null && message.receipt_request ? View.VISIBLE : View.GONE);
             ibReceipt.setImageTintList(ColorStateList.valueOf(message.ui_answered ? colorControlNormal : colorError));
             ivAutoSubmitted.setVisibility(show_addresses && message.auto_submitted != null && message.auto_submitted ? View.VISIBLE : View.GONE);
@@ -2183,7 +2202,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean button_search = prefs.getBoolean("button_search", false);
             ibSearchContact.setVisibility(show_addresses && (froms > 0 || tos > 0) && !button_search ? View.VISIBLE : View.GONE);
             ibNotifyContact.setVisibility(show_addresses && hasChannel && froms > 0 ? View.VISIBLE : View.GONE);
-            ibPinContact.setVisibility(show_addresses && pin && froms > 0 ? View.VISIBLE : View.GONE);
+            ibPinContact.setVisibility(show_addresses && pin && contacts && froms > 0 ? View.VISIBLE : View.GONE);
             ibAddContact.setVisibility(show_addresses && contacts && froms > 0 ? View.VISIBLE : View.GONE);
 
             tvSubmitterTitle.setVisibility(!TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
@@ -2524,7 +2543,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
 
                 tvBody.setTextColor(contrast ? textColorPrimary : colorRead);
-                tvBody.setTypeface(monospaced ? Typeface.MONOSPACE : Typeface.DEFAULT);
+                tvBody.setTypeface(StyleHelper.getTypeface(display_font, context));
 
                 tvBody.setVisibility(View.VISIBLE);
                 wvBody.setVisibility(View.GONE);
@@ -2559,6 +2578,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     final boolean show_quotes = args.getBoolean("show_quotes");
                     final int zoom = args.getInt("zoom");
                     final float scale = args.getFloat("scale");
+                    final boolean download_plain = prefs.getBoolean("download_plain", false);
 
                     if (message == null || !message.content)
                         return null;
@@ -2604,7 +2624,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     embedded.received = helper.getSent();
                                 embedded.subject = helper.getSubject();
 
-                                String html = parts.getHtml(context);
+                                String html = parts.getHtml(context, download_plain);
                                 Document d = (html == null ? Document.createShell("") : JsoupEx.parse(html));
 
                                 Element div = document.createElement("div");
@@ -2670,6 +2690,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             db.endTransaction();
                         }
 
+                    // Check for AMP
+                    boolean has_amp = false;
+                    for (EntityAttachment attachment : attachments)
+                        if ("text/x-amp-html".equals(attachment.type)) {
+                            has_amp = attachment.available;
+                            break;
+                        }
+                    args.putBoolean("has_amp", has_amp);
+
                     // Format message
                     if (show_full) {
                         if (HtmlHelper.truncate(document, HtmlHelper.MAX_FULL_TEXT_SIZE))
@@ -2679,7 +2708,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     .appendElement("em")
                                     .text(context.getString(R.string.title_truncated));
 
-                        if (Boolean.TRUE.equals(message.plain_only)) {
+                        if (message.isPlainOnly()) {
                             document.select("body")
                                     .attr("style", "margin:0; padding:0;");
                             boolean monospaced_pre = prefs.getBoolean("monospaced_pre", false);
@@ -2800,6 +2829,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt)) ||
                             (EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt) &&
                                     !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt));
+
+                    // Show AMP
+                    boolean has_amp = args.getBoolean("has_amp");
+                    ibAmp.setVisibility(has_amp && Helper.hasWebView(context)
+                            ? View.VISIBLE : View.GONE);
 
                     // Show encrypt actions
                     ibVerify.setVisibility(verifyable ? View.VISIBLE : View.GONE);
@@ -3029,6 +3063,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             List<EntityAttachment> a = new ArrayList<>();
             for (EntityAttachment attachment : attachments) {
                 boolean inline = (attachment.isEncryption() ||
+                        "text/x-amp-html".equals(attachment.type) ||
                         (attachment.isInline() && attachment.isImage()));
                 if (inline && attachment.available)
                     has_inline = true;
@@ -3085,6 +3120,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         images.add(attachment);
             adapterImage.set(images);
             grpImages.setVisibility(images.size() > 0 ? View.VISIBLE : View.GONE);
+            ibStoreMedia.setVisibility(
+                    images.size() > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                            ? View.VISIBLE : View.GONE);
         }
 
         private void bindCalendar(final TupleMessageEx message, EntityAttachment attachment) {
@@ -3434,6 +3472,118 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }.execute(context, owner, args, "message:participation");
         }
 
+        private void onStoreMedia(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+
+            new SimpleTask<Uri>() {
+                @Override
+                protected Uri onExecute(Context context, Bundle args) throws IOException {
+                    long id = args.getLong("id");
+
+                    ContentResolver resolver = context.getContentResolver();
+
+                    String folder = context.getString(R.string.app_name);
+                    Uri collection = (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+                            ? MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                            : MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY));
+                    File pictures = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                    // Android < 10 requires:
+                    // <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+                    // https://developer.android.com/training/data-storage/shared/media#request-permissions
+
+                    DB db = DB.getInstance(context);
+                    List<EntityAttachment> attachments = db.attachment().getAttachments(id);
+                    if (attachments == null || attachments.size() == 0)
+                        return null;
+
+                    for (EntityAttachment attachment : attachments)
+                        if (attachment.available &&
+                                attachment.isAttachment() && attachment.isImage()) {
+
+                            // Check if exists
+                            if (attachment.media_uri != null) {
+                                Uri uri = Uri.parse(attachment.media_uri);
+                                try (Cursor cursor = resolver.query(uri, null, null, null, null)) {
+                                    if (cursor.moveToFirst())
+                                        continue;
+                                }
+                            }
+
+                            File file = attachment.getFile(context);
+                            String type = attachment.getMimeType();
+                            String title = (attachment.name == null ? file.getName() : attachment.name);
+
+                            ContentValues values = new ContentValues();
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                                File image = new File(pictures, file.getName());
+                                values.put(MediaStore.Images.Media.DATA, image.getPath());
+                            } else {
+                                File target = new File(Environment.DIRECTORY_PICTURES, folder);
+                                values.put(MediaStore.Images.Media.RELATIVE_PATH, target.getPath());
+                            }
+                            values.put(MediaStore.Images.Media.TITLE, title);
+                            values.put(MediaStore.Images.Media.DISPLAY_NAME, title);
+                            values.put(MediaStore.Images.Media.MIME_TYPE, type);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                                values.put(MediaStore.Images.Media.IS_PENDING, 1);
+
+                            Uri uri = resolver.insert(collection, values);
+                            if (uri == null)
+                                return null;
+
+                            InputStream is = null;
+                            OutputStream os = null;
+                            try {
+                                is = new FileInputStream(file);
+                                os = resolver.openOutputStream(uri);
+                                Helper.copy(is, os);
+                            } finally {
+                                try {
+                                    if (is != null)
+                                        is.close();
+                                } finally {
+                                    if (os != null)
+                                        os.close();
+                                }
+                            }
+
+                            values.clear();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                                values.put(MediaStore.Images.Media.IS_PENDING, 0);
+                            values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000);
+                            resolver.update(uri, values, null, null);
+
+                            attachment.media_uri = uri.toString();
+                            db.attachment().setMediaUri(attachment.id, attachment.media_uri);
+                        }
+
+                    // Viewing the containing folder is not possible
+                    for (EntityAttachment attachment : attachments)
+                        if (attachment.media_uri != null)
+                            return Uri.parse(attachment.media_uri);
+
+                    return null;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Uri uri) {
+                    if (uri == null)
+                        return;
+                    Intent view = new Intent(Intent.ACTION_VIEW)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .setDataAndType(uri, "image/*");
+                    context.startActivity(
+                            Intent.createChooser(view, context.getString(R.string.title_select)));
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "images:store");
+        }
+
         private void onShareImages(TupleMessageEx message) {
             Bundle args = new Bundle();
             args.putLong("id", message.id);
@@ -3450,7 +3600,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     ArrayList<Uri> result = new ArrayList<>();
                     for (EntityAttachment attachment : attachments)
-                        if (attachment.isAttachment() && attachment.isImage()) {
+                        if (attachment.available &&
+                                attachment.isAttachment() && attachment.isImage()) {
                             File file = attachment.getFile(context);
                             Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
                             result.add(uri);
@@ -3476,7 +3627,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 protected void onException(Bundle args, Throwable ex) {
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
-            }.execute(context, owner, args, "attachments:share");
+            }.execute(context, owner, args, "images:share");
         }
 
         private boolean isOutgoing(TupleMessageEx message) {
@@ -3574,6 +3725,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     onShow(message, true);
                 } else if (id == R.id.ibImages) {
                     onShow(message, false);
+                } else if (id == R.id.ibAmp) {
+                    onShowAmp(message);
                 } else if (id == R.id.ibDecrypt) {
                     boolean lock =
                             (EntityMessage.PGP_SIGNENCRYPT.equals(message.ui_encrypt) &&
@@ -3657,6 +3810,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     onMenuSetImportance(message, importance);
                 } else if (id == R.id.btnCalendarAccept || id == R.id.btnCalendarDecline || id == R.id.btnCalendarMaybe || id == R.id.ibCalendar) {
                     onActionCalendar(message, view.getId(), false);
+                } else if (id == R.id.ibStoreMedia) {
+                    onStoreMedia(message);
                 } else if (id == R.id.ibShareImages) {
                     onShareImages(message);
                 } else {
@@ -4370,9 +4525,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onPinContact(TupleMessageEx message) {
-            ShortcutInfoCompat.Builder builder =
-                    Shortcuts.getShortcut(context, (InternetAddress) message.from[0]);
-            ShortcutManagerCompat.requestPinShortcut(context, builder.build(), null);
+            try {
+                ShortcutInfoCompat.Builder builder =
+                        Shortcuts.getShortcut(context, (InternetAddress) message.from[0]);
+                ShortcutManagerCompat.requestPinShortcut(context, builder.build(), null);
+            } catch (Throwable ex) {
+                Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+            }
         }
 
         private void onAddContact(TupleMessageEx message) {
@@ -4635,12 +4794,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             } else {
                 boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
 
-                ImageView ivInfo = dview.findViewById(R.id.ivInfo);
+                TextView tvTracking = dview.findViewById(R.id.tvTracking);
                 Group grpTracking = dview.findViewById(R.id.grpTracking);
 
                 grpTracking.setVisibility(disable_tracking ? View.VISIBLE : View.GONE);
 
-                ivInfo.setOnClickListener(new View.OnClickListener() {
+                tvTracking.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Helper.viewFAQ(v.getContext(), 82);
@@ -4752,6 +4911,78 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }.execute(context, owner, args, "message:full");
         }
 
+        private void onShowAmp(final TupleMessageEx message) {
+            boolean open_amp_confirmed = prefs.getBoolean("open_amp_confirmed", false);
+            if (open_amp_confirmed)
+                onShowAmpConfirmed(message);
+            else {
+                LayoutInflater inflater = LayoutInflater.from(context);
+                View dview = inflater.inflate(R.layout.dialog_ask_amp, null, false);
+                final TextView tvRemark = dview.findViewById(R.id.tvRemark);
+                final CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
+
+                tvRemark.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Helper.view(v.getContext(), Uri.parse("https://amp.dev/about/email/"), true);
+                    }
+                });
+
+                new AlertDialog.Builder(context)
+                        .setView(dview)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (cbNotAgain.isChecked())
+                                    prefs.edit().putBoolean("open_amp_confirmed", true).apply();
+                                onShowAmpConfirmed(message);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+            }
+        }
+
+        private void onShowAmpConfirmed(final TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+
+            new SimpleTask<EntityAttachment>() {
+                @Override
+                protected EntityAttachment onExecute(Context context, Bundle args) throws Throwable {
+                    long id = args.getLong("id");
+
+                    DB db = DB.getInstance(context);
+                    List<EntityAttachment> attachments = db.attachment().getAttachments(id);
+                    if (attachments == null)
+                        return null;
+
+                    for (EntityAttachment attachment : attachments)
+                        if ("text/x-amp-html".equals(attachment.type))
+                            return attachment;
+
+                    return null;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, EntityAttachment attachment) {
+                    if (attachment == null)
+                        return;
+
+                    File file = attachment.getFile(context);
+                    Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
+                    context.startActivity(new Intent(context, ActivityAMP.class)
+                            .setData(uri)
+                            .putExtra("subject", message.subject));
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "message:amp");
+        }
+
         private void onActionOpenFull(final TupleMessageEx message) {
             boolean open_full_confirmed = prefs.getBoolean("open_full_confirmed", false);
             if (open_full_confirmed)
@@ -4796,7 +5027,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Document document = JsoupEx.parse(file);
                     HtmlHelper.cleanup(document);
 
-                    if (Boolean.TRUE.equals(message.plain_only) && monospaced_pre)
+                    if (message.isPlainOnly() && monospaced_pre)
                         HtmlHelper.restorePre(document);
                     HtmlHelper.guessSchemes(document);
                     HtmlHelper.autoLink(document);
@@ -5112,6 +5343,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP ||
                             EntityFolder.INBOX.equals(message.folderType));
 
+            popupMenu.getMenu().findItem(R.id.menu_alternative)
+                    .setTitle(message.isPlainOnly()
+                            ? R.string.title_alternative_html : R.string.title_alternative_text)
+                    .setEnabled(message.uid != null && message.hasAlt())
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+
             popupMenu.insertIcons(context);
 
             MenuCompat.setGroupDividerEnabled(popupMenu.getMenu(), true);
@@ -5205,6 +5442,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return true;
                     } else if (itemId == R.id.menu_resync) {
                         onMenuResync(message);
+                        return true;
+                    } else if (itemId == R.id.menu_alternative) {
+                        onMenuAlt(message);
                         return true;
                     } else if (itemId == R.id.menu_log) {
                         onMenuLog(message);
@@ -5596,6 +5836,51 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.execute(context, owner, args, "message:resync");
+        }
+
+        private void onMenuAlt(TupleMessageEx message) {
+            properties.setSize(message.id, null);
+            properties.setHeight(message.id, null);
+            properties.setPosition(message.id, null);
+
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+            args.putBoolean("plain", message.isPlainOnly());
+
+            new SimpleTask<Void>() {
+                @Override
+                protected Void onExecute(Context context, Bundle args) {
+                    long id = args.getLong("id");
+                    boolean plain = args.getBoolean("plain");
+
+                    DB db = DB.getInstance(context);
+                    try {
+                        db.beginTransaction();
+
+                        EntityMessage message = db.message().getMessage(id);
+                        if (message == null)
+                            return null;
+
+                        EntityOperation.queue(context, message, EntityOperation.BODY, !plain);
+
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
+
+                    return null;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Void data) {
+                    ToastEx.makeText(context, R.string.title_fetching_again, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "message:alt");
         }
 
         private void onMenuNotes(TupleMessageEx message) {
@@ -6286,7 +6571,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (expanded) {
                     if (message.receipt_request != null && message.receipt_request)
                         result.add(context.getString(R.string.title_legend_receipt));
-                    if (message.plain_only != null && message.plain_only)
+                    if (message.isPlainOnly())
                         result.add(context.getString(R.string.title_legend_plain_only));
                     if (message.ui_browsed)
                         result.add(context.getString(R.string.title_legend_browsed));
@@ -6429,7 +6714,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.attachments_alt = prefs.getBoolean("attachments_alt", false);
         this.thumbnails = prefs.getBoolean("thumbnails", true);
         this.contrast = prefs.getBoolean("contrast", false);
-        this.monospaced = prefs.getBoolean("monospaced", false);
+        this.display_font = prefs.getString("display_font", "");
         this.inline = prefs.getBoolean("inline_images", false);
         this.collapse_quotes = prefs.getBoolean("collapse_quotes", false);
         this.authentication = prefs.getBoolean("authentication", true);
@@ -7561,12 +7846,24 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 protected String onExecute(Context context, Bundle args) throws Throwable {
                     long id = args.getLong("id");
 
+                    DB db = DB.getInstance(context);
+                    EntityMessage message = db.message().getMessage(id);
+
                     File file = EntityMessage.getFile(context, id);
                     String html = Helper.readText(file);
                     Document d = HtmlHelper.sanitizeCompose(context, html, false);
+
                     d.select("blockquote").remove();
+
                     HtmlHelper.truncate(d, HtmlHelper.MAX_TRANSLATABLE_TEXT_SIZE);
+
                     SpannableStringBuilder ssb = HtmlHelper.fromDocument(context, d, null, null);
+
+                    if (message != null && message.subject != null) {
+                        ssb.insert(0, "\n\n");
+                        ssb.insert(0, message.subject);
+                    }
+
                     return ssb.toString()
                             .replace("\uFFFC", "") // Object replacement character
                             .replaceAll("\n\\s+\n", "\n")

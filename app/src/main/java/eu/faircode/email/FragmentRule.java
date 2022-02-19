@@ -19,6 +19,8 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -74,8 +76,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
 
 public class FragmentRule extends FragmentBase {
     private ViewGroup view;
@@ -140,6 +140,8 @@ public class FragmentRule extends FragmentBase {
     private Spinner spIdent;
 
     private Spinner spAnswer;
+    private CheckBox cbAnswerSubject;
+    private CheckBox cbOriginalText;
     private EditText etTo;
     private ImageButton ibTo;
     private CheckBox cbCc;
@@ -290,6 +292,8 @@ public class FragmentRule extends FragmentBase {
         spIdent = view.findViewById(R.id.spIdent);
 
         spAnswer = view.findViewById(R.id.spAnswer);
+        cbAnswerSubject = view.findViewById(R.id.cbAnswerSubject);
+        cbOriginalText = view.findViewById(R.id.cbOriginalText);
         etTo = view.findViewById(R.id.etTo);
         ibTo = view.findViewById(R.id.ibTo);
         cbCc = view.findViewById(R.id.cbCc);
@@ -1137,6 +1141,9 @@ public class FragmentRule extends FragmentBase {
                                             break;
                                         }
 
+                                    cbAnswerSubject.setChecked(jaction.optBoolean("answer_subject", false));
+                                    cbOriginalText.setChecked(jaction.optBoolean("original_text", true));
+
                                     etTo.setText(jaction.optString("to"));
                                     cbCc.setChecked(jaction.optBoolean("cc"));
                                     cbWithAttachments.setChecked(jaction.optBoolean("attachments"));
@@ -1477,6 +1484,8 @@ public class FragmentRule extends FragmentBase {
                     EntityAnswer answer = (EntityAnswer) spAnswer.getSelectedItem();
                     jaction.put("identity", identity == null ? -1 : identity.id);
                     jaction.put("answer", answer == null || answer.id == null ? -1 : answer.id);
+                    jaction.put("answer_subject", cbAnswerSubject.isChecked());
+                    jaction.put("original_text", cbOriginalText.isChecked());
                     jaction.put("to", etTo.getText().toString().trim());
                     jaction.put("cc", cbCc.isChecked());
                     jaction.put("attachments", cbWithAttachments.isChecked());

@@ -221,6 +221,7 @@
     <string name="title_setup_error">שגיאה</string>
     <string name="title_setup_configuring">חשבון מוגדר &#8230;</string>
     <string name="title_setup_app_password">יתכן שיהיה עליך להשתמש בסיסמה ליישומון</string>
+    <string name="title_setup_extra">בנוסף</string>
     <string name="title_setup_close">סגירת ההגדרות</string>
     <string name="title_setup_export">ייצוא ההגדרות</string>
     <string name="title_setup_import">ייבוא הגדרות</string>
@@ -334,7 +335,6 @@
     <string name="title_advanced_send_reminders">הצגת תזכורות</string>
     <string name="title_advanced_send_delayed">השהיית שליחת הודעות</string>
     <string name="title_advanced_attach_new">הוספת קבצים משותפים לטיוטה חדשה</string>
-    <string name="title_advanced_reply_all">לחיצה ארוכה על כפתור התשובה תענה לכולם</string>
     <string name="title_advanced_send_pending">הצגת סמלי שליחה מושהית שאינם בולטים</string>
     <string name="title_advanced_compose_font">גופן ברירת המחדל</string>
     <string name="title_advanced_prefix_once">ליצור קידומת לנושא רק פעם אחת במענה או העברה</string>
@@ -414,6 +414,7 @@
     <string name="title_advanced_bimi_unverified">מוען בלתי מאומת</string>
     <string name="title_advanced_bimi_verified">מוען מאומת</string>
     <string name="title_advanced_favicons">הצגת סמלי אתרים</string>
+    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">לסרוק רק את %1$s הראשונים של עמוד האינטרנט</string>
     <string name="title_advanced_generated_icons">הצגת סמלים שנוצרו אוטומטית</string>
     <string name="title_advanced_identicons">הצגת סמלי זיהוי</string>
     <string name="title_advanced_circular">הצגת סמלים מעוגלים</string>
@@ -464,6 +465,7 @@
     <string name="title_advanced_actionbar">הצגת סרגל פעולות דיון</string>
     <string name="title_advanced_actionbar_color">להשתמש בצבע החשבון כצבע הרקע לסרגל הפעולות של הדיון</string>
     <string name="title_advanced_navbar_colorize">לצבוע את סרגל הניווט של Android</string>
+    <string name="title_advanced_bundled_fonts">להשתמש בגופנים מאוגדים</string>
     <string name="title_advanced_parse_classes">פענוח גיליונות עיצוב</string>
     <string name="title_advanced_authentication">הצגת אזהרות אימות</string>
     <string name="title_advanced_authentication_hint">את הבדיקות שמאחורי הקלעים אפשר להגדיר בהגדרות הקבלה</string>
@@ -628,7 +630,6 @@
     <string name="title_advanced_suggest_names_hint">אם מושבת, אפשר יהיה להשתמש רק בכתובות דוא״ל בעת בחירת אנשי קשר</string>
     <string name="title_advanced_suggest_local_hint">בנוסף לאנשי הקשר שמסופקים על ידי Android. פרטי הקשר יאוחסנו להודעות חדשות שנשלחו או התקבלו כשהאפשרות פעילה.</string>
     <string name="title_advanced_send_reminders_hint">להציג אזהרה כאשר טקסט ההודעה או הנושא ריקים או כאשר קובץ לא צורף לכאורה</string>
-    <string name="title_advanced_reply_all_hint">אם מושבת, לחיצה על כפתור המענה יענה למוען</string>
     <string name="title_advanced_reply_move_hint">שרת הדוא״ל עדיין יכול להוסיף את ההודעות לתיקיית ההודעות שנשלחו</string>
     <string name="title_advanced_usenet_hint">להוסיף ‚--’ בין הטקסט והחתימה</string>
     <string name="title_advanced_remove_signature_hint">יכול להוביל למעט מדי או יותר מדי טקסט שיוסר</string>
@@ -796,6 +797,7 @@
     <string name="title_drafts_select">שליחת הודעות דוא״ל דורש בחירת תיקיית טיוטות בהגדרות החשבון</string>
     <string name="title_account_auth_update">עדכון אימות</string>
     <string name="title_account_auth_password">מעבר לאימות עם סיסמה</string>
+    <string name="title_delete_account">מחיקת חשבון</string>
     <string name="title_account_delete">למחוק את החשבון הזה לצמיתות?</string>
     <string name="title_identity_delete">למחוק את הזהות הזאת לצמיתות?</string>
     <string name="title_edit_html">עריכה כ־HTML</string>
@@ -1051,6 +1053,8 @@
     <string name="title_ask_show_html_images">תמיד להציג תמונות בהצגת ההודעות המקוריות</string>
     <string name="title_ask_show_image">הצגת תמונות עשויה להדליף פרטים אישיים רגישים</string>
     <string name="title_ask_show_image_hint">תמונות שמזוהות כתמונות מעקב לא תוצגנה</string>
+    <string name="title_ask_show_amp">להציג תצורת AMP של ההודעה?</string>
+    <string name="title_ask_show_amp_hint">הודעות AMP תוכננו להיות דינמיות ולתקשר מול האינטרנט ולכן בהתאם לתכנון במקור עשויות לעקוב אחריך</string>
     <string name="title_ask_delete_local">למחוק הודעות מקומיות? ההודעות תישארנה על השרת המרוחק.</string>
     <string name="title_ask_help">סיוע בשיפור FairEmail</string>
     <string name="title_ask_reporting">לשלוח דוחות שגיאה?</string>
@@ -1193,6 +1197,8 @@
     <string name="title_encrypt">הצפנה</string>
     <string name="title_decrypt">פענוח</string>
     <string name="title_resync">סנכרון מחדש</string>
+    <string name="title_alternative_text">הצגת טקסט פשוט</string>
+    <string name="title_alternative_html">הצגת HTML</string>
     <string name="title_no_openpgp">OpenKeychain לא נמצא</string>
     <string name="title_user_interaction">מועבר ל־OpenKeychain</string>
     <string name="title_signed_data">אימות החתימה כדי להציג את טקסט ההודעה</string>
@@ -1353,6 +1359,8 @@
     <string name="title_rule_thread">כל ההודעות באותו הדיון והתיקייה</string>
     <string name="title_rule_identity">זהות</string>
     <string name="title_rule_template">תבנית תגובה</string>
+    <string name="title_rule_answer_subject">להשתמש בשם התבנית כנושא</string>
+    <string name="title_rule_original_text">לכלול את תוכן ההודעה המקורית</string>
     <string name="title_rule_forward_to">העברה אל</string>
     <string name="title_rule_cc">להגיב לכתובות של עותק</string>
     <string name="title_rule_with_attachments">עם קבצים מצורפים</string>
@@ -1479,6 +1487,7 @@
     <string name="title_legend_show_unsubscribe">ביטול מינוי לרשימה</string>
     <string name="title_legend_show_images">הצגת תמונות</string>
     <string name="title_legend_hide_images">הסתרת תמונות</string>
+    <string name="title_legend_show_amp">הצגת גירסת AMP</string>
     <string name="title_legend_show_full">הצגת ההודעה המקורית</string>
     <string name="title_legend_show_reformatted">הצגת הודעה מעוצבת מחדש</string>
     <string name="title_legend_edit">עריכה</string>
@@ -1796,6 +1805,7 @@
         <item>5 שנ׳</item>
         <item>7.5 שנ׳</item>
         <item>10 שנ׳</item>
+        <item>15 שנ׳</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>מחובר</item>
@@ -1803,7 +1813,6 @@
         <item>נטול עיטורים</item>
         <item>ברוחב מהיר</item>
         <item>פנטזיה</item>
-        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">

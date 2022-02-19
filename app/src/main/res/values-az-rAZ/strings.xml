@@ -201,6 +201,7 @@
     <string name="title_setup_error">Xəta</string>
     <string name="title_setup_configuring">Konfiqurasiya edilir &#8230;</string>
     <string name="title_setup_app_password">Bir tətbiq şifrəsi istifadə etməyiniz lazım gələ bilər</string>
+    <string name="title_setup_extra">Ekstra</string>
     <string name="title_setup_close">Tənzimləmələri bağla</string>
     <string name="title_setup_export">Tənzimləmələri ixrac et</string>
     <string name="title_setup_import">Tənzimləmələri idxal et</string>
@@ -314,7 +315,6 @@
     <string name="title_advanced_send_reminders">Xatırladıcıları göstər</string>
     <string name="title_advanced_send_delayed">Göndərilən mesajların gecikməsi</string>
     <string name="title_advanced_attach_new">Yeni bir qaralamaya paylaşılan faylları əlavə edin</string>
-    <string name="title_advanced_reply_all">Hamısını cavablandırmaq üçün cavabla düyməsinə uzun basın</string>
     <string name="title_advanced_send_pending">Narahat edici olmayan gecikməli göndərmə nişanını göstər</string>
     <string name="title_advanced_compose_font">İlkin şrift</string>
     <string name="title_advanced_prefix_once">Mövzunu yalnız bir dəfə cavablayarkən və ya yönləndirərkən prefiks</string>
@@ -345,6 +345,7 @@
     <string name="title_advanced_rlah">Evdə olduğu kimi gəz</string>
     <string name="title_advanced_download_headers">Bütün mesaj başlıqlarını endir</string>
     <string name="title_advanced_download_eml">Xam mesaj fayllarını endir</string>
+    <string name="title_advanced_download_plain">Ilkin olaraq yalnız düz mətn hissələrini endir (əgər varsa)</string>
     <string name="title_advanced_validated">Təsdiqlənmiş (yoxlanılmış) bir bağlantı tələb et</string>
     <string name="title_advanced_vpn_only">Yalnız VPN vasitəsilə bağlantı qurun</string>
     <string name="title_advanced_timeout">Bağlantı bitmə vaxtı (saniyə)</string>
@@ -378,6 +379,7 @@
     <string name="title_advanced_tabular_background">Cədvəl stili istifadə edəndə kart rəngini arxaplan rəngi kimi istifadə et</string>
     <string name="title_advanced_cards_shadow">Kart stilini istifadə edəndə oxunmamış mesajlar üçün kölgə istifadə et</string>
     <string name="title_advanced_cards_shadow_highlight">Rəngi vurğulamaq əvəzinə vurğu rəngini istifadə et</string>
+    <string name="title_advanced_tabular_dividers">Cədvəl stilini istifadə edərkən ayırıcı xətləri də istifadə et</string>
     <string name="title_advanced_category_header">Hesab kateqoriyasına görə qruplaşdır</string>
     <string name="title_advanced_date_header">Tarixə görə qruplaşdır</string>
     <string name="title_advanced_date_fixed">Sabit tarix başlığını üstdə göstər</string>
@@ -443,6 +445,7 @@
     <string name="title_advanced_actionbar">Danışıq əməliyyat sətrini göstər</string>
     <string name="title_advanced_actionbar_color">Hesab rəngini danışıq əməliyyat sətri üçün arxaplan rəngi kimi istifadə et</string>
     <string name="title_advanced_navbar_colorize">Android naviqasiya sətrini rəngləndir</string>
+    <string name="title_advanced_bundled_fonts">Paketlənmiş yazı növlərini istifadə et</string>
     <string name="title_advanced_parse_classes">CSS-i təhlil et</string>
     <string name="title_advanced_authentication">Kimlik təsdiqləmə xəbərdarlıqlarını göstər</string>
     <string name="title_advanced_authentication_hint">Təməl yoxlanışlar, alma tənzimləmələrində konfiqurasiya edilə bilər</string>
@@ -607,7 +610,6 @@
     <string name="title_advanced_suggest_names_hint">Əgər sıradan çıxarılsa, əlaqələr seçiləndə yalnız e-poçt ünvanları istifadə ediləcək</string>
     <string name="title_advanced_suggest_local_hint">Android tərəfindən təmin edilən əlaqələrə əlavə olaraq. Əlaqə verilənləri, yeni göndərilən və alınan mesajlar üçün yalnız fəal olanda saxlanılacaq.</string>
     <string name="title_advanced_send_reminders_hint">Mesaj mətni və ya mövzu boş olanda və ya bir qoşma əskik olanda bir xəbərdarlıq göstər</string>
-    <string name="title_advanced_reply_all_hint">Sıradan çıxarılsa, cavabla düyməsinə uzun basmaq, göndərə cavab verəcək</string>
     <string name="title_advanced_reply_move_hint">E-poçt serveri, mesajları yenə də göndərilən mesaj qovluğuna əlavə edə bilər</string>
     <string name="title_advanced_usenet_hint">Mətn və imza arasına \'-- \' əlavə et</string>
     <string name="title_advanced_remove_signature_hint">Bu, həddindən az və ya çox mətnin silinməsinə səbəb ola bilər</string>
@@ -615,6 +617,7 @@
     <string name="title_advanced_metered_warning">Bu seçimin sıradan çıxarılması, mobil internet bağlantılarında mesajların göndərilməsini və alınmasını dayandıracaq</string>
     <string name="title_advanced_rlah_hint">AB daxilində roaminqdə olmadığını hesab et</string>
     <string name="title_advanced_usage_hint">Bu, batareya, verilənlər və anbar sahəsi istifadəsini artıracaq</string>
+    <string name="title_advanced_plain_hint">Bunu fəallaşdırmaq verilənlər istifadəsini məhdudlaşdıracaq, ancaq mesajlar stil olmadan görünəcək</string>
     <string name="title_advanced_tcp_keep_alive_hint">Bunun fəallaşdırılması, bəzi cihazlarda bağlantı problemlərinə səbəb ola bilər</string>
     <string name="title_advanced_validate_hint">Bu, məsələn bir VPN istifadə edəndə və digər hallarda mesajların eyniləşdirilməməsi ilə nəticələnə bilər</string>
     <string name="title_advanced_timeout_hint">Oxuma/yazma üçün bitmə vaxtı, bağlantı üçün bitmə vaxtının iki qatına tənzimlənəcək. Yüksək dəyərlər, daha çox batareya istifadəsi ilə nəticələnəcək.</string>
@@ -775,6 +778,7 @@
     <string name="title_drafts_select">E-poçtları göndərmək, hesab tənzimləmələrdə bir qaralamalar qovluğunun seçilməsini tələb edir</string>
     <string name="title_account_auth_update">Səlahiyyətləndirməni yenilə</string>
     <string name="title_account_auth_password">Parol təsdiqləməsinə keç</string>
+    <string name="title_delete_account">Hesabı sil</string>
     <string name="title_account_delete">Bu hesab birdəfəlik silinsin?</string>
     <string name="title_identity_delete">Bu kimlik birdəfəlik silinsin?</string>
     <string name="title_edit_html">HTML kimi düzəliş et</string>
@@ -841,6 +845,7 @@
     <string name="title_delete_operation_deleted">%1$d əməliyyatlar silindi</string>
     <string name="title_delete_contacts">Bütün yerli əlaqələr silinsin?</string>
     <string name="title_no_operations">Gözləyən heç bir əməliyyat yoxdur</string>
+    <string name="title_check_operations">Əməliyyatların yoxlanılması</string>
     <string name="title_hint_operations">Əməliyyatların silinməsi, mesajların görünməməsi və eyniləşdirmə problemlərinin yaranması ilə nəticələnə bilər</string>
     <string name="title_op_title_headers">Başlıqlar endirilir</string>
     <string name="title_op_title_raw">Xam mesaj endirilir</string>
@@ -1030,6 +1035,8 @@
     <string name="title_ask_show_html_images">Orijinal mesajları göstərəndə təsvirləri həmişə göstər</string>
     <string name="title_ask_show_image">Təsvirlərin göstərilməsi, gizlilik həssaslı məlumatların sızdıra bilər</string>
     <string name="title_ask_show_image_hint">İzləmə təsvirləri kimi bilinən təsvirlər göstərilməyəcək</string>
+    <string name="title_ask_show_amp">Mesajın AMP variantı göstərilsin?</string>
+    <string name="title_ask_show_amp_hint">AMP mesajları dinamik olacaq və internet ilə qarşılıqlı əlaqədə olacaq formada dizayn edilib və buna görə də tərifə görə sizi izləmək üçün istifadə edilə bilər</string>
     <string name="title_ask_delete_local">Yerli mesajlar silinsin? Mesajlar uzaq serverdə qalacaq.</string>
     <string name="title_ask_help">\"FairEmail\"in təkmilləşdirilməsinə kömək edin</string>
     <string name="title_ask_reporting">Xəta hesabatları göndərilsin?</string>
@@ -1172,6 +1179,8 @@
     <string name="title_encrypt">Şifrələ</string>
     <string name="title_decrypt">Şifrəni aç</string>
     <string name="title_resync">Yenidən eyniləşdirmə</string>
+    <string name="title_alternative_text">Düz mətni göstər</string>
+    <string name="title_alternative_html">HTML göstər</string>
     <string name="title_no_openpgp">OpenKeychain tapılmadı</string>
     <string name="title_user_interaction">\"OpenKeychain\"ə köçürülür</string>
     <string name="title_signed_data">Mesaj mətnini göstərmək üçün imzanı təsdiqlə</string>
@@ -1270,6 +1279,9 @@
     <string name="title_edit_signature_remark">Android, bütün HTML-i görüntüləyə bilməsə də, olduğu kimi göndərəcək</string>
     <string name="title_edit_signature_text">İmza mətni</string>
     <string name="title_edit_signature_image">Təsvir daxil et</string>
+    <string name="title_edit_signature_image_hint">        Bir mesaj göndəriləndə, təsvir, seçilən bölmədən mesaja kopyalanır.
+        Ona görə də, təsvir faylını silməyin!
+    </string>
     <string name="title_answer_caption">Şablona düzəliş et</string>
     <string name="title_answer_reply">Cavab şablonu</string>
     <string name="title_answer_name">Şablon adı</string>
@@ -1329,6 +1341,8 @@
     <string name="title_rule_thread">Eyni danışıq və qovluqdakı bütün mesajlar</string>
     <string name="title_rule_identity">Kimlik</string>
     <string name="title_rule_template">Cavab şablonu</string>
+    <string name="title_rule_answer_subject">Şablon adını mövzu olaraq istifadə et</string>
+    <string name="title_rule_original_text">Orijinal mesaj mətnini daxil et</string>
     <string name="title_rule_forward_to">Yönləndir</string>
     <string name="title_rule_cc">CC ünvanlarını cavabla</string>
     <string name="title_rule_with_attachments">Qoşmalar ilə</string>
@@ -1455,6 +1469,7 @@
     <string name="title_legend_show_unsubscribe">Siyahıdan çıx</string>
     <string name="title_legend_show_images">Təsvirləri göstər</string>
     <string name="title_legend_hide_images">Təsvirləri gizlət</string>
+    <string name="title_legend_show_amp">AMP variantını göstər</string>
     <string name="title_legend_show_full">Orijinal mesajı göstər</string>
     <string name="title_legend_show_reformatted">Yenidən format edilən mesajı göstər</string>
     <string name="title_legend_edit">Düzəliş et</string>
@@ -1770,6 +1785,7 @@
         <item>5 s</item>
         <item>7.5 s</item>
         <item>10 s</item>
+        <item>15 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Əl yazısı</item>
@@ -1777,7 +1793,6 @@
         <item>Sans-serif</item>
         <item>Monospace</item>
         <item>Fantasy</item>
-        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">

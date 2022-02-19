@@ -201,6 +201,7 @@
     <string name="title_setup_error">Fel</string>
     <string name="title_setup_configuring">Konfigurerar konto &#8230;</string>
     <string name="title_setup_app_password">Du kan behöva använda ett applösenord</string>
+    <string name="title_setup_extra">Extra</string>
     <string name="title_setup_close">Stäng inställningar</string>
     <string name="title_setup_export">Exportera inställningar</string>
     <string name="title_setup_import">Importera inställningar</string>
@@ -310,7 +311,6 @@
     <string name="title_advanced_send_reminders">Visa påminnelser</string>
     <string name="title_advanced_send_delayed">Fördröj sändning av meddelanden</string>
     <string name="title_advanced_attach_new">Lägg till delade filer till ett nytt utkast</string>
-    <string name="title_advanced_reply_all">Långtryck på svarsknappen för att svara till alla</string>
     <string name="title_advanced_send_pending">Visa icke-påträngande försenad leveransikon</string>
     <string name="title_advanced_compose_font">Standardtypsnitt</string>
     <string name="title_advanced_prefix_once">Prefix i ämnet endast när du svarar eller vidarebefordrar</string>
@@ -341,6 +341,7 @@
     <string name="title_advanced_rlah">Roaming som hemma</string>
     <string name="title_advanced_download_headers">Ladda ner meddelande-huvuden</string>
     <string name="title_advanced_download_eml">Ladda ner råa meddelande-filer</string>
+    <string name="title_advanced_download_plain">Ladda ner delar med ren text som standard (om tillgängligt)</string>
     <string name="title_advanced_validated">Kräv en validerad (kontrollerad) anslutning</string>
     <string name="title_advanced_vpn_only">Anslut endast via VPN</string>
     <string name="title_advanced_timeout">Timeout för anslutning (sekunder)</string>
@@ -374,6 +375,7 @@
     <string name="title_advanced_tabular_background">Använd kortfärg som bakgrundsfärg när du använder tabulär stil</string>
     <string name="title_advanced_cards_shadow">Använd skugga för olästa meddelanden när du använder kort-stil</string>
     <string name="title_advanced_cards_shadow_highlight">Använd markeringsfärg istället för accentfärg</string>
+    <string name="title_advanced_tabular_dividers">Använd avdelare när du använder tabulär stil</string>
     <string name="title_advanced_category_header">Gruppera efter kontokategori</string>
     <string name="title_advanced_date_header">Gruppera efter datum</string>
     <string name="title_advanced_date_fixed">Visa fast datumrubrik högst upp</string>
@@ -439,6 +441,7 @@
     <string name="title_advanced_actionbar">Visa konversationsåtgärdsfältet</string>
     <string name="title_advanced_actionbar_color">Använd kontofärg som bakgrundsfärg för konversationsfältet</string>
     <string name="title_advanced_navbar_colorize">Färglägg navigeringsfältet för Android</string>
+    <string name="title_advanced_bundled_fonts">Använd medföljande typsnitt</string>
     <string name="title_advanced_parse_classes">Tolka stilmallar</string>
     <string name="title_advanced_authentication">Visa autentiseringsvarningar</string>
     <string name="title_advanced_authentication_hint">De underliggande kontrollerna kan konfigureras i mottagningsinställningarna</string>
@@ -603,7 +606,6 @@
     <string name="title_advanced_suggest_names_hint">Om inaktiverad, kommer endast e-postadresser att användas vid val av kontakter</string>
     <string name="title_advanced_suggest_local_hint">Förutom kontakter som tillhandahålls av Android. Kontaktdata lagras endast för nyligen skickade eller mottagna meddelanden när det aktiverat.</string>
     <string name="title_advanced_send_reminders_hint">Visa en varning när meddelandetexten eller ämnet är tomt eller när en bilaga kanske saknas</string>
-    <string name="title_advanced_reply_all_hint">Om inaktiverad, långtryck på svarsknappen kommer att svara avsändaren</string>
     <string name="title_advanced_reply_move_hint">E-postservern kan fortfarande lägga till meddelanden till skickade mail mappen</string>
     <string name="title_advanced_usenet_hint">Infoga \'-- \' mellan texten och signaturen</string>
     <string name="title_advanced_remove_signature_hint">Detta kan leda till att för lite eller för mycket text tas bort</string>
@@ -611,6 +613,7 @@
     <string name="title_advanced_metered_warning">Inaktivering av det här alternativet inaktiverar mottagning och sändning av meddelanden på mobila internetanslutningar</string>
     <string name="title_advanced_rlah_hint">Förutsatt ingen roaming inom EU</string>
     <string name="title_advanced_usage_hint">Det här kommer att öka användningen av batteri, data och lagringsutrymme</string>
+    <string name="title_advanced_plain_hint">Aktivering av detta kommer att begränsa dataanvändningen, men meddelanden kommer att visas utan formatering</string>
     <string name="title_advanced_tcp_keep_alive_hint">Aktivering av detta kan orsaka anslutningsproblem på vissa enheter</string>
     <string name="title_advanced_validate_hint">Detta kan resultera i att meddelanden inte synkroniseras, till exempel vid användning av VPN, men även i andra situationer</string>
     <string name="title_advanced_timeout_hint">Tidsgräns för läs/skriva kommer att ställas in på den dubbla av anslutningens tidsgräns. Högre värden kommer att resultera i mer batterianvändning.</string>
@@ -771,6 +774,7 @@
     <string name="title_drafts_select">Att skicka e-post kräver att en utkastmapp väljs i kontoinställningarna</string>
     <string name="title_account_auth_update">Uppdatera auktorisering</string>
     <string name="title_account_auth_password">Byt till lösenordsautentisering</string>
+    <string name="title_delete_account">Radera konto</string>
     <string name="title_account_delete">Ta bort detta konto permanent?</string>
     <string name="title_identity_delete">Ta bort denna identitet permanent?</string>
     <string name="title_edit_html">Redigera som HTML</string>
@@ -837,6 +841,7 @@
     <string name="title_delete_operation_deleted">%1$d åtgärder raderade</string>
     <string name="title_delete_contacts">Ta bort alla lokala kontakter?</string>
     <string name="title_no_operations">Inga pågående åtgärder</string>
+    <string name="title_check_operations">Söker efter aktiviteter</string>
     <string name="title_hint_operations">Att ta bort pågående åtgärder kan resultera i försvinnande meddelanden och synkroniseringsproblem</string>
     <string name="title_op_title_headers">Laddar ner rubriker</string>
     <string name="title_op_title_raw">Hämtar rådata för meddelande</string>
@@ -1025,6 +1030,8 @@
     <string name="title_ask_show_html_images">Visa alltid bilder när originalmeddelanden visas</string>
     <string name="title_ask_show_image">Att visa bilder kan läcka sekretesskänslig information</string>
     <string name="title_ask_show_image_hint">Bilder som känns igen som spårningsbilder kommer inte att visas</string>
+    <string name="title_ask_show_amp">Visa AMP-variant av meddelandet?</string>
+    <string name="title_ask_show_amp_hint">AMP-meddelanden är utformade för att vara dynamiska och interagera med internet och kan därför per definition användas för att spåra dig</string>
     <string name="title_ask_delete_local">Ta bort lokala meddelanden? Meddelanden kommer att finnas kvar på fjärrservern.</string>
     <string name="title_ask_help">Hjälp till att förbättra FairEmail</string>
     <string name="title_ask_reporting">Skicka felrapporter?</string>
@@ -1165,6 +1172,8 @@
     <string name="title_encrypt">Kryptera</string>
     <string name="title_decrypt">Dekryptera</string>
     <string name="title_resync">Synkronisera om</string>
+    <string name="title_alternative_text">Visa oformaterad text</string>
+    <string name="title_alternative_html">Visa HTML</string>
     <string name="title_no_openpgp">OpenKeychain hittades inte</string>
     <string name="title_user_interaction">Överför till OpenKeychain</string>
     <string name="title_signed_data">Verifiera signaturen för att visa meddelandetexten</string>
@@ -1263,6 +1272,9 @@
     <string name="title_edit_signature_remark">Även om Android inte kan visa all HTML, kommer det att skickas som det är</string>
     <string name="title_edit_signature_text">Signatur</string>
     <string name="title_edit_signature_image">Infoga bild</string>
+    <string name="title_edit_signature_image_hint">        När du skickar ett meddelande kopieras bilden till meddelandet från den valda platsen.
+        Ta alltså inte bort bildfilen!
+    </string>
     <string name="title_answer_caption">Redigera mall</string>
     <string name="title_answer_reply">Svarsmall</string>
     <string name="title_answer_name">Mallnamn</string>
@@ -1322,6 +1334,8 @@
     <string name="title_rule_thread">Alla meddelanden i samma konversation och mapp</string>
     <string name="title_rule_identity">Identitet</string>
     <string name="title_rule_template">Svarsmall</string>
+    <string name="title_rule_answer_subject">Använd mallens namn som ämne</string>
+    <string name="title_rule_original_text">Inkludera ursprunglig meddelandetext</string>
     <string name="title_rule_forward_to">Vidarebefordra till</string>
     <string name="title_rule_cc">Svar till CC-adresser</string>
     <string name="title_rule_with_attachments">Med bilagor</string>
@@ -1448,6 +1462,7 @@
     <string name="title_legend_show_unsubscribe">Avregistrera dig från listan</string>
     <string name="title_legend_show_images">Visa bilder</string>
     <string name="title_legend_hide_images">Dölj bilder</string>
+    <string name="title_legend_show_amp">Visa AMP variant</string>
     <string name="title_legend_show_full">Visa originalmeddelande</string>
     <string name="title_legend_show_reformatted">Visa omformaterat meddelande</string>
     <string name="title_legend_edit">Redigera</string>
@@ -1769,6 +1784,7 @@
         <item>5 s</item>
         <item>7,5 s</item>
         <item>10 s</item>
+        <item>15 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Kursivt</item>
@@ -1776,7 +1792,6 @@
         <item>Sans-serif</item>
         <item>Monospace</item>
         <item>Fantasy</item>
-        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">

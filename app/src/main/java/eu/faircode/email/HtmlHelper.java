@@ -1354,12 +1354,16 @@ public class HtmlHelper {
         // geo:<lat>,<lon>[,<alt>][;u=<uncertainty>]
         // tel:<phonenumber>
         final Pattern GPA_PATTERN = Pattern.compile("GPA\\.\\d{4}-\\d{4}-\\d{4}-\\d{5}");
+        final String BOUNDARY = "(?:\\b|$|^)";
         final Pattern pattern = Pattern.compile(
-                "(((?i:mailto):)?" + PatternsCompat.AUTOLINK_EMAIL_ADDRESS.pattern() + ")|" +
+                "(" + BOUNDARY + "((?i:mailto):)?" + Helper.EMAIL_ADDRESS + "(\\?[^\\s]*)?" + BOUNDARY + ")" +
+                        "|" +
                         PatternsCompat.AUTOLINK_WEB_URL.pattern()
                                 .replace("(?i:http|https|rtsp)://",
-                                        "(((?i:http|https)://)|((?i:xmpp):))") + "|" +
-                        "(?i:geo:\\d+,\\d+(,\\d+)?(;u=\\d+)?)|" +
+                                        "(((?i:http|https)://)|((?i:xmpp):))") +
+                        "|" +
+                        "(?i:geo:\\d+,\\d+(,\\d+)?(;u=\\d+)?)" +
+                        "|" +
                         "(?i:tel:" + Patterns.PHONE.pattern() + ")" +
                         (BuildConfig.DEBUG ? "|(" + GPA_PATTERN + ")" : ""));
 
@@ -1891,13 +1895,16 @@ public class HtmlHelper {
     }
 
     // https://tools.ietf.org/html/rfc3676
-    static String flow(String text) {
+    static String flow(String text, boolean delsp) {
         boolean continuation = false;
         StringBuilder flowed = new StringBuilder();
         String[] lines = text.split("\\r?\\n");
         for (int l = 0; l < lines.length; l++) {
             String line = lines[l];
             lines[l] = null;
+
+            if (delsp && line.endsWith(" "))
+                line = line.substring(0, line.length() - 1);
 
             if (continuation)
                 while (line.startsWith(">")) {
@@ -2284,6 +2291,49 @@ public class HtmlHelper {
         return false;
     }
 
+    static boolean isStyled(Document d) {
+        ObjectHolder<Boolean> result = new ObjectHolder<>(false);
+
+        d.body().filter(new NodeFilter() {
+            private final List<String> STRUCTURE = Collections.unmodifiableList(Arrays.asList(
+                    "body", "div", "p", "span", "br",
+                    "strong", "b", "em", "i", "blockquote", "hr"
+            ));
+
+            @Override
+            public FilterResult head(Node node, int depth) {
+                if (node instanceof Element) {
+                    Element e = (Element) node;
+
+                    if (STRUCTURE.contains(e.tagName()))
+                        return FilterResult.CONTINUE;
+
+                    if (!TextUtils.isEmpty(e.attr("fairemail")))
+                        return FilterResult.CONTINUE;
+
+                    //Element p = e.parent();
+                    //if ("blockquote".equals(e.tagName()) &&
+                    //        p != null &&
+                    //        !TextUtils.isEmpty(p.attr("fairemail")))
+                    //    return FilterResult.CONTINUE;
+
+                    Log.i("Style element=" + node);
+                    result.value = true;
+                    return FilterResult.STOP;
+
+                } else
+                    return FilterResult.CONTINUE;
+            }
+
+            @Override
+            public FilterResult tail(Node node, int depth) {
+                return FilterResult.CONTINUE;
+            }
+        });
+
+        return result.value;
+    }
+
     static void collapseQuotes(Document document) {
         document.body().filter(new NodeFilter() {
             private int level = 0;
@@ -2362,8 +2412,10 @@ public class HtmlHelper {
             String url = span.getURL();
             if (TextUtils.isEmpty(url))
                 continue;
+
             if (url.toLowerCase(Locale.ROOT).startsWith("mailto:"))
                 url = url.substring("mailto:".length());
+
             int start = ssb.getSpanStart(span);
             int end = ssb.getSpanEnd(span);
             String text = ssb.subSequence(start, end).toString();
@@ -2375,12 +2427,18 @@ public class HtmlHelper {
             String source = span.getSource();
             if (TextUtils.isEmpty(source))
                 continue;
+
             int start = ssb.getSpanStart(span);
             int end = ssb.getSpanEnd(span);
+
+            if (!source.toLowerCase(Locale.ROOT).startsWith("data:"))
+                ssb.insert(end, "[" + source + "]");
+
             for (int i = start; i < end; i++)
-                if (ssb.charAt(i) == '\uFFFC')
-                    ssb.replace(i, i + 1, " ");
-            ssb.insert(end, "[" + source + "]");
+                if (ssb.charAt(i) == '\uFFFC') {
+                    ssb.delete(i, i + 1);
+                    end--;
+                }
         }
 
         // https://tools.ietf.org/html/rfc3676#section-4.5
@@ -2760,6 +2818,10 @@ public class HtmlHelper {
                             (i == 0 || endsWithSpace(block.get(i - 1).text())))
                         text = text.substring(1);
 
+                    // Soft hyphen
+                    if (text.trim().equals("\u00ad"))
+                        text = "";
+
                     tnode.text(text);
 
                     if (TextUtils.isEmpty(text))
@@ -3031,7 +3093,7 @@ public class HtmlHelper {
                             case "font":
                                 String face = element.attr("face");
                                 if (!TextUtils.isEmpty(face))
-                                    setSpan(ssb, new TypefaceSpan(face), start, ssb.length());
+                                    setSpan(ssb, StyleHelper.getTypefaceSpan(face, context), start, ssb.length());
                                 break;
                             case "h1":
                             case "h2":
@@ -3092,13 +3154,17 @@ public class HtmlHelper {
 
                                 int level = 0;
                                 Element list = null;
-                                String ltype = element.attr("x-list-style");
+                                String ltype = element.attr("type");
+                                if (TextUtils.isEmpty(ltype))
+                                    ltype = element.attr("x-list-style");
                                 Element parent = element.parent();
                                 while (parent != null) {
                                     if ("ol".equals(parent.tagName()) || "ul".equals(parent.tagName())) {
                                         level++;
                                         if (list == null)
                                             list = parent;
+                                        if (TextUtils.isEmpty(ltype))
+                                            ltype = parent.attr("type");
                                         if (TextUtils.isEmpty(ltype))
                                             ltype = parent.attr("x-list-style");
                                     }
@@ -3137,8 +3203,9 @@ public class HtmlHelper {
 
                                 break;
                             case "pre":
+                            case "tt":
                                 // Signature
-                                setSpan(ssb, new TypefaceSpan("monospace"), start, ssb.length());
+                                setSpan(ssb, StyleHelper.getTypefaceSpan("Cousine", context), start, ssb.length());
                                 break;
                             case "style":
                                 // signatures
@@ -3188,9 +3255,6 @@ public class HtmlHelper {
                             case "title":
                                 // Signature, etc
                                 break;
-                            case "tt":
-                                setSpan(ssb, new TypefaceSpan("monospace"), start, ssb.length());
-                                break;
                             case "u":
                                 setSpan(ssb, new UnderlineSpan(), start, ssb.length());
                                 break;
@@ -3200,9 +3264,18 @@ public class HtmlHelper {
 
                         if (monospaced_pre &&
                                 "true".equals(element.attr("x-plain")))
-                            setSpan(ssb, new TypefaceSpan("monospace"), start, ssb.length());
+                            setSpan(ssb, StyleHelper.getTypefaceSpan("Cousine", context), start, ssb.length());
                     } catch (Throwable ex) {
                         Log.e(ex);
+                        if (BuildConfig.DEBUG || debug) {
+                            int s = ssb.length();
+                            ssb.append(ex.toString()).append('\n')
+                                    .append(android.util.Log.getStackTraceString(ex)).append('\n');
+                            setSpan(ssb, StyleHelper.getTypefaceSpan("Cousine", context), s, ssb.length());
+                            setSpan(ssb, new RelativeSizeSpan(HtmlHelper.FONT_SMALL), s, ssb.length());
+                            int colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
+                            setSpan(ssb, new ForegroundColorSpan(colorWarning), s, ssb.length());
+                        }
                     }
 
                     if ("true".equals(element.attr("x-block")))

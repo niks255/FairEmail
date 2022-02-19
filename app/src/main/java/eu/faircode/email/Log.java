@@ -85,6 +85,7 @@ import com.sun.mail.iap.BadCommandException;
 import com.sun.mail.iap.ConnectionException;
 import com.sun.mail.iap.ProtocolException;
 import com.sun.mail.util.FolderClosedIOException;
+import com.sun.mail.util.MailConnectException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -104,6 +105,8 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.Provider;
 import java.security.Security;
@@ -1572,6 +1575,16 @@ public class Log {
             if (ex instanceof ConnectionException)
                 return null;
 
+            if (BuildConfig.PLAY_STORE_RELEASE &&
+                    ex instanceof MailConnectException &&
+                    ex.getCause() instanceof SocketTimeoutException)
+                return null;
+
+            if (BuildConfig.PLAY_STORE_RELEASE &&
+                    ex instanceof MessagingException &&
+                    ex.getCause() instanceof UnknownHostException)
+                return null;
+
             if (ex instanceof StoreClosedException ||
                     ex instanceof FolderClosedException ||
                     ex instanceof FolderClosedIOException ||
@@ -1656,7 +1669,7 @@ public class Log {
 
             File file = draft.getFile(context);
             Helper.writeText(file, body);
-            db.message().setMessageContent(draft.id, true, null, false, null, null);
+            db.message().setMessageContent(draft.id, true, null, 0, null, null);
 
             attachSettings(context, draft.id, 1);
             attachAccounts(context, draft.id, 2);
@@ -2045,6 +2058,7 @@ public class Log {
                         " folders=" + db.folder().countTotal() +
                         " messages=" + db.message().countTotal() +
                         " rules=" + db.rule().countTotal() +
+                        " operations=" + db.operation().getOperationCount() +
                         "\r\n\r\n");
 
                 if (schedule) {
@@ -2074,16 +2088,18 @@ public class Log {
                             messages += folder.messages;
                         }
 
-                        size += write(os, account.name +
+                        size += write(os, account.name + (account.primary ? "*" : "") +
                                 " " + (account.protocol == EntityAccount.TYPE_IMAP ? "IMAP" : "POP") + "/" + account.auth_type +
                                 " " + account.host + ":" + account.port + "/" + account.encryption +
                                 " sync=" + account.synchronize +
                                 " exempted=" + account.poll_exempted +
                                 " poll=" + account.poll_interval +
                                 " ondemand=" + account.ondemand +
-                                " messages=" + content + "/" + messages +
+                                " msgs=" + content + "/" + messages +
+                                " ops=" + db.operation().getOperationCount(account.id) +
                                 " " + account.state +
                                 (account.last_connected == null ? "" : " " + dtf.format(account.last_connected)) +
+                                (account.error == null ? "" : "\r\n" + account.error) +
                                 "\r\n");
 
                         if (folders.size() > 0)
@@ -2098,6 +2114,7 @@ public class Log {
                                         " poll=" + folder.poll + "/" + folder.poll_factor +
                                         " days=" + folder.sync_days + "/" + folder.keep_days +
                                         " msgs=" + folder.content + "/" + folder.messages + "/" + folder.total +
+                                        " ops=" + db.operation().getOperationCount(folder.id, null) +
                                         " unseen=" + unseen + " notifying=" + notifying +
                                         " " + folder.state +
                                         (folder.last_sync == null ? "" : " " + dtf.format(folder.last_sync)) +
@@ -2109,11 +2126,31 @@ public class Log {
                 }
 
                 for (EntityAccount account : accounts)
-                    if (account.synchronize)
+                    if (account.synchronize) {
+                        List<EntityIdentity> identities = db.identity().getIdentities(account.id);
+                        for (EntityIdentity identity : identities)
+                            if (identity.synchronize) {
+                                size += write(os, account.name + "/" + identity.name + (identity.primary ? "*" : "") + " " +
+                                        identity.display + " " + identity.email + " " +
+                                        " " + identity.host + ":" + identity.port + "/" + identity.encryption +
+                                        " ops=" + db.operation().getOperationCount(EntityOperation.SEND) +
+                                        " " + identity.state +
+                                        (identity.last_connected == null ? "" : " " + dtf.format(identity.last_connected)) +
+                                        (identity.error == null ? "" : "\r\n" + identity.error) +
+                                        "\r\n");
+                            }
+                    }
+
+                size += write(os, "\r\n");
+
+                for (EntityAccount account : accounts) {
+                    int ops = db.operation().getOperationCount(account.id);
+                    if (account.synchronize || ops > 0)
                         try {
                             JSONObject jaccount = account.toJSON();
                             jaccount.put("state", account.state == null ? "null" : account.state);
                             jaccount.put("warning", account.warning);
+                            jaccount.put("operations", ops);
                             jaccount.put("error", account.error);
                             jaccount.put("capabilities", account.capabilities);
 
@@ -2145,6 +2182,7 @@ public class Log {
                                 jfolder.put("selectable", folder.selectable);
                                 jfolder.put("inferiors", folder.inferiors);
                                 jfolder.put("auto_add", folder.auto_add);
+                                jfolder.put("operations", db.operation().getOperationCount(folder.id, null));
                                 jfolder.put("error", folder.error);
                                 if (folder.last_sync != null)
                                     jfolder.put("last_sync", new Date(folder.last_sync).toString());
@@ -2167,6 +2205,7 @@ public class Log {
                         } catch (JSONException ex) {
                             size += write(os, ex.toString() + "\r\n");
                         }
+                }
             }
 
             db.attachment().setDownloaded(attachment.id, size);

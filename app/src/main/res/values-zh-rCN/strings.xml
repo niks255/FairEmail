@@ -191,6 +191,7 @@
     <string name="title_setup_error">出错</string>
     <string name="title_setup_configuring">正在配置账户 &#8230;</string>
     <string name="title_setup_app_password">您可能需要使用 app 密码</string>
+    <string name="title_setup_extra">更多</string>
     <string name="title_setup_close">关闭设置</string>
     <string name="title_setup_export">导出设置</string>
     <string name="title_setup_import">导入设置</string>
@@ -303,7 +304,7 @@
     <string name="title_advanced_send_reminders">显示提醒</string>
     <string name="title_advanced_send_delayed">延迟发送消息</string>
     <string name="title_advanced_attach_new">将共享文件添加到新草稿</string>
-    <string name="title_advanced_reply_all">长按答复按钮回复所有</string>
+    <string name="title_advanced_answer_action">长按回复按钮动作：</string>
     <string name="title_advanced_send_pending">显示不显眼的 \"延迟发送\" 图标 (页面左下角)</string>
     <string name="title_advanced_compose_font">默认字体</string>
     <string name="title_advanced_prefix_once">答复或抄送邮件时, 主题前的Re或CC只出现一次</string>
@@ -334,6 +335,7 @@
     <string name="title_advanced_rlah">欧盟 Roam like at home</string>
     <string name="title_advanced_download_headers">下载所有消息标题</string>
     <string name="title_advanced_download_eml">下载原始消息文件</string>
+    <string name="title_advanced_download_plain">默认只下载纯文本部分（如果可用）</string>
     <string name="title_advanced_validated">仅限通过检查的已验证连接</string>
     <string name="title_advanced_vpn_only">仅通过 VPN 连接</string>
     <string name="title_advanced_timeout">连接超时 (秒)</string>
@@ -383,6 +385,7 @@
     <string name="title_advanced_bimi_unverified">未验证的发送者</string>
     <string name="title_advanced_bimi_verified">已验证的发送者</string>
     <string name="title_advanced_favicons">显示网页图标</string>
+    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">只扫描网页的前 %1$s</string>
     <string name="title_advanced_generated_icons">显示生成的图标</string>
     <string name="title_advanced_identicons">显示哈希头像</string>
     <string name="title_advanced_circular">使用圆形图标</string>
@@ -433,6 +436,7 @@
     <string name="title_advanced_actionbar">显示对话操作栏</string>
     <string name="title_advanced_actionbar_color">使用账户颜色作为对话操作栏的背景色</string>
     <string name="title_advanced_navbar_colorize">导航栏着色</string>
+    <string name="title_advanced_bundled_fonts">使用捆绑的字体</string>
     <string name="title_advanced_parse_classes">解析样式表</string>
     <string name="title_advanced_authentication">显示身份验证警告</string>
     <string name="title_advanced_authentication_hint">可以在接收设置中配置底层检查</string>
@@ -597,7 +601,6 @@
     <string name="title_advanced_suggest_names_hint">如果禁用，选择联系人时将只使用电子邮件地址</string>
     <string name="title_advanced_suggest_local_hint">除了Android提供的联系人，只有在设置中允许，应用才会储存新接收或发送消息的联系人数据。</string>
     <string name="title_advanced_send_reminders_hint">当消息文本或主题为空或缺失某个附件时显示警告</string>
-    <string name="title_advanced_reply_all_hint">如禁用，长按答复按钮将答复发送者</string>
     <string name="title_advanced_reply_move_hint">邮件服务器仍然可以将消息添加到“已发送消息”文件夹</string>
     <string name="title_advanced_usenet_hint">在文本和签名之间插入 \'-- \'</string>
     <string name="title_advanced_remove_signature_hint">这可能会导致删除太少或太多文本</string>
@@ -605,6 +608,7 @@
     <string name="title_advanced_metered_warning">禁用此选项将禁止在使用移动互联网连接时接收和发送消息</string>
     <string name="title_advanced_rlah_hint">假设欧盟境内不存在漫游</string>
     <string name="title_advanced_usage_hint">这将增加电池、数据和存储空间的使用</string>
+    <string name="title_advanced_plain_hint">启用此选项将限制数据使用量，但邮件将不会显示样式</string>
     <string name="title_advanced_tcp_keep_alive_hint">启用此选项可能会在某些设备上造成连接问题</string>
     <string name="title_advanced_validate_hint">这可能导致消息停止同步，例如使用 VPN 或其他某些情况下</string>
     <string name="title_advanced_timeout_hint">读/写超时时间将翻倍，值越高将越耗电</string>
@@ -765,6 +769,7 @@
     <string name="title_drafts_select">需在账户设置中选定草稿文件夹才能发送邮件</string>
     <string name="title_account_auth_update">重新授权</string>
     <string name="title_account_auth_password">改用密码认证</string>
+    <string name="title_delete_account">删除帐户</string>
     <string name="title_account_delete">确定永久删除这个账户吗？</string>
     <string name="title_identity_delete">确定永久删除这个身份吗？</string>
     <string name="title_edit_html">以HTML格式编辑</string>
@@ -830,6 +835,7 @@
     <string name="title_delete_operation_deleted">%1$d 个操作已删除</string>
     <string name="title_delete_contacts">删除所有本地联系人？</string>
     <string name="title_no_operations">没有待执行操作</string>
+    <string name="title_check_operations">正在检查操作</string>
     <string name="title_hint_operations">删除这些操作可能弄丢相应消息和导致同步问题</string>
     <string name="title_op_title_headers">正在下载信头</string>
     <string name="title_op_title_raw">正在下载原始消息</string>
@@ -1017,6 +1023,8 @@
     <string name="title_ask_show_html_images">在显示原始消息时总是显示图像</string>
     <string name="title_ask_show_image">显示图像可能会泄露隐私敏感信息</string>
     <string name="title_ask_show_image_hint">不会显示被识别为跟踪图像的图片</string>
+    <string name="title_ask_show_amp">显示 AMP 样式的消息？</string>
+    <string name="title_ask_show_amp_hint">AMP 消息被设计为动态的，与互联网交互，因此根据定义可以用于跟踪你</string>
     <string name="title_ask_delete_local">删除本地消息？消息将保留在远程服务器上</string>
     <string name="title_ask_help">帮助改进 FairEmail</string>
     <string name="title_ask_reporting">发送错误报告?</string>
@@ -1157,6 +1165,8 @@
     <string name="title_encrypt">加密</string>
     <string name="title_decrypt">解密</string>
     <string name="title_resync">重新同步</string>
+    <string name="title_alternative_text">显示纯文本</string>
+    <string name="title_alternative_html">显示 HTML</string>
     <string name="title_no_openpgp">OpenKeychain 未找到</string>
     <string name="title_user_interaction">正传输到 OpenKeychain</string>
     <string name="title_signed_data">验证签名以显示消息文本</string>
@@ -1230,7 +1240,7 @@
     <string name="title_sort_on_attachments">附件</string>
     <string name="title_sort_on_hidden">隐藏</string>
     <string name="title_sort_ascending">旧消息在前</string>
-    <string name="title_filter">筛选</string>
+    <string name="title_filter">滤除</string>
     <string name="title_filter_seen">已读</string>
     <string name="title_filter_unflagged">未标星</string>
     <string name="title_filter_unknown">未知发件人</string>
@@ -1255,6 +1265,9 @@
     <string name="title_edit_signature_remark">虽然 Android 不能显示所有的 HTML，但它将按原样发送</string>
     <string name="title_edit_signature_text">签名文本</string>
     <string name="title_edit_signature_image">插入图片</string>
+    <string name="title_edit_signature_image_hint">        发送消息时，图像从所选位置被复制到消息中。
+        因此，不要删除图像文件！
+    </string>
     <string name="title_answer_caption">编辑模板</string>
     <string name="title_answer_reply">回复模板</string>
     <string name="title_answer_name">模板名称</string>
@@ -1314,6 +1327,8 @@
     <string name="title_rule_thread">在同一会话和文件夹中的所有消息</string>
     <string name="title_rule_identity">身份</string>
     <string name="title_rule_template">回复模板</string>
+    <string name="title_rule_answer_subject">使用模板名称作为主题</string>
+    <string name="title_rule_original_text">包含原始消息文本</string>
     <string name="title_rule_forward_to">转发给</string>
     <string name="title_rule_cc">回信给邮件抄送地址</string>
     <string name="title_rule_with_attachments">含附件</string>
@@ -1440,6 +1455,7 @@
     <string name="title_legend_show_unsubscribe">取消订阅</string>
     <string name="title_legend_show_images">显示图片</string>
     <string name="title_legend_hide_images">隐藏图片</string>
+    <string name="title_legend_show_amp">显示 AMP 变体</string>
     <string name="title_legend_show_full">显示原始消息</string>
     <string name="title_legend_show_reformatted">显示已格式化的消息</string>
     <string name="title_legend_edit">编辑</string>
@@ -1759,6 +1775,7 @@
         <item>5 秒</item>
         <item>7.5 秒</item>
         <item>10 秒</item>
+        <item>15 秒</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>草写体</item>
@@ -1766,7 +1783,6 @@
         <item>Sans-serif</item>
         <item>等宽字体</item>
         <item>Fantasy</item>
-        <item>OpenDyslexic</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->
     <string-array name="addressFormatNames">

@@ -25,7 +25,6 @@ import static androidx.webkit.WebSettingsCompat.FORCE_DARK_ON;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,7 +35,6 @@ import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.preference.PreferenceManager;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
@@ -84,8 +82,8 @@ public class FragmentDialogOpenFull extends FragmentDialogBase {
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            settings.setSafeBrowsingEnabled(safe_browsing);
+        if (WebViewEx.isFeatureSupported(WebViewFeature.SAFE_BROWSING_ENABLE))
+            WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
 
         boolean dark = (Helper.isDarkTheme(context) && !force_light);
         if (WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK))
