@@ -1194,6 +1194,7 @@ Ambdues opcions es poden desactivar si es desitja.</string>
         <item>Següent conversa</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Extra small</item>
         <item>Petit</item>
         <item>Mitjà</item>
         <item>Gran</item>

@@ -195,7 +195,7 @@ public class Helper {
     static final Pattern EMAIL_ADDRESS = Pattern.compile(
             "[\\S]{1,256}" +
                     "\\@" +
-                    "[\\p{L}][\\p{L}0-9\\-\\_]{0,64}" +
+                    "[\\p{L}0-9][\\p{L}0-9\\-\\_]{0,64}" +
                     "(" +
                     "\\." +
                     "[\\p{L}0-9][\\p{L}0-9\\-\\_]{0,25}" +
@@ -1315,9 +1315,11 @@ public class Helper {
                     child instanceof CheckBox ||
                     child instanceof ImageView /* =ImageButton */ ||
                     child instanceof RadioButton ||
-                    (child instanceof Button && "disable".equals(child.getTag())))
+                    (child instanceof Button && "disable".equals(child.getTag()))) {
+                if (child instanceof ImageView && ((ImageView) child).getImageTintList() != null)
+                    child.setAlpha(enabled ? 1.0f : LOW_LIGHT);
                 child.setEnabled(enabled);
-            else if (child instanceof BottomNavigationView) {
+            } else if (child instanceof BottomNavigationView) {
                 Menu menu = ((BottomNavigationView) child).getMenu();
                 menu.setGroupEnabled(0, enabled);
             } else if (child instanceof RecyclerView)

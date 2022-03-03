@@ -291,9 +291,10 @@
     </provider>
     <provider
         name="gmx.com"
+        documentation="Is &lt;a href=&quot;https://support.gmx.com/pop-imap/toggle.html&quot;&gt;IMAP enabled&lt;/a&gt;? Two factor authentication requires &lt;a href=&quot;https://support.gmx.com/security/2fa/application-specific-passwords.html&quot;&gt;an app password&lt;/a&gt;!"
         domain="gmx\\.com,gmx\\.us"
         keepalive="12"
-        link="https://support.gmx.com/pop-imap/toggle.html">
+        link="https://support.gmx.com/pop-imap/imap/server.html#indexlink_help_pop-imap_imap">
         <imap
             host="imap.gmx.com"
             port="993"
@@ -323,9 +324,10 @@
     </select-->
     <provider
         name="gmx.de"
+        documentation="Ist &lt;a href=&quot;https://hilfe.gmx.net/pop-imap/einschalten.html&quot;&gt;IMAP aktiviert&lt;/a&gt;? Die Zwei-Faktor-Authentifizierung erfordert &lt;a href=&quot;https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html&quot;&gt;ein App-Passwort&lt;/a&gt;!"
         domain="gmx\\.de,gmx\\.net,mein\\.gmx,gmx\\.at,gmx\\.ch,mail\\.gmx,email\\.gmx,gmx\\.eu,gmx\\.org,gmx\\.info,gmx\\.biz"
         keepalive="12"
-        link="https://hilfe.gmx.net/pop-imap/einschalten.html">
+        link="https://hilfe.gmx.net/pop-imap/imap/imap-serverdaten.html#indexlink_help_pop-imap_imap">
         <imap
             host="imap.gmx.net"
             port="993"
@@ -362,9 +364,10 @@
     </provider>
     <provider
         name="Yandex"
+        documentation="Please check if &lt;a href=&quot;https://yandex.com/support/mail/mail-clients/others.html&quot;&gt;IMAP is enabled&lt;/a&gt;"
         domain="yandex\\.com"
         id="yandex"
-        link="https://yandex.com/support/mail/mail-clients.html#imap">
+        link="https://yandex.com/support/mail/mail-clients/others.html">
         <imap
             host="imap.yandex.com"
             port="993"
@@ -1486,5 +1489,18 @@
             host="smtp.centurylink.net"
             port="587"
             starttls="true" />
+    </provider>
+    <provider
+        name="Purelymail"
+        domain="purelymail\\.com,cheapermail\\.com,placeq\\.com,rethinkmail\\.com,worldofmail\\.com"
+        link="https://purelymail.com/docs/setup/technical">
+        <imap
+            host="imap.purelymail.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.purelymail.com"
+            port="465"
+            starttls="false" />
     </provider>
 </providers>

@@ -262,6 +262,8 @@
     <string name="title_setup_theme_red_green">Czerwony/zielony</string>
     <string name="title_setup_theme_grey">Szary</string>
     <string name="title_setup_theme_black">Czarny</string>
+    <string name="title_setup_theme_white">Biały</string>
+    <string name="title_setup_theme_black_or_white">Czarny lub biały</string>
     <string name="title_setup_theme_black_and_white">Czarno-biały</string>
     <string name="title_setup_theme_reverse">Odwróć kolory</string>
     <string name="title_setup_theme_light">Jasny</string>
@@ -331,6 +333,7 @@
     <string name="title_advanced_suggest_received">Proponuj adresy znalezione w otrzymanych wiadomościach</string>
     <string name="title_advanced_suggest_frequently">Sortuj sugerowane adresy według częstotliwości używania</string>
     <string name="title_advanced_alt_re_fwd">Alternatywny prefiks odpowiedzi/przekazywania</string>
+    <string name="title_advanced_send_chips">Pokaż dymki adresowe</string>
     <string name="title_advanced_send_reminders">Pokaż przypomnienia</string>
     <string name="title_advanced_send_delayed">Opóźnienie wysyłania wiadomości</string>
     <string name="title_advanced_attach_new">Dodaj udostępnione pliki do nowego szkicu</string>
@@ -351,7 +354,7 @@
     <string name="title_advanced_signature_reply">Użyj podpisu podczas odpowiadania</string>
     <string name="title_advanced_signature_forward">Użyj podpisu podczas przesyłania dalej</string>
     <string name="title_advanced_discard_delete">Po odrzuceniu wersji roboczej usuń ją trwale</string>
-    <string name="title_advanced_reply_move">Przy odpowiadaniu na wiadomość w folderze użytkownika zapisz odpowiedź w tym samym folderze</string>
+    <string name="title_advanced_reply_move">Przy odpowiadaniu na wiadomość, zapisz odpowiedź w tym samym folderze</string>
     <string name="title_advanced_auto_link">Automatycznie utwórz linki</string>
     <string name="title_advanced_plain_only">Domyślnie wysyłaj czystym tekstem</string>
     <string name="title_advanced_flow">\'format flowed\' dla zwykłego tekstu</string>
@@ -415,7 +418,7 @@
     <string name="title_advanced_bimi_unverified">Niezweryfikowany nadawca</string>
     <string name="title_advanced_bimi_verified">Zweryfikowany nadawca</string>
     <string name="title_advanced_favicons">Pokaż favikony</string>
-    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Skanuj tylko pierwsze %1$s strony internetowej</string>
+    <string name="title_advanced_favicons_partial">Skanuj tylko pierwsze %1$s strony internetowej</string>
     <string name="title_advanced_generated_icons">Pokaż wygenerowane ikony</string>
     <string name="title_advanced_identicons">Pokaż ikony kontaktów</string>
     <string name="title_advanced_circular">Pokaż okrągłe ikony</string>
@@ -499,6 +502,7 @@
     <string name="title_advanced_undo">Ustaw limit czasu dla \"Cofnij\"</string>
     <string name="title_advanced_quick_filter">Pokaż nienatarczywe ikony szybkiego filtrowania</string>
     <string name="title_advanced_quick_scroll">Pokaż nienatarczywe ikony szybkiego przewijania w górę/w dół</string>
+    <string name="title_advanced_folder_nav">Zawsze wracaj do listy folderów z listy wiadomości</string>
     <string name="title_advanced_autoread">Automatycznie oznacz wiadomość jako przeczytaną przy przenoszeniu</string>
     <string name="title_advanced_star_snoozed">Automatycznie dodawaj gwiazdkę przy usypianiu wiadomości</string>
     <string name="title_advanced_autounstar">Automatycznie usuwaj gwiazdki z wiadomości przy ich przenoszeniu</string>
@@ -1727,6 +1731,7 @@
         <item>Idź do następnej wiadomości</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Bardzo mały</item>
         <item>Małe</item>
         <item>Średnie</item>
         <item>Duże</item>

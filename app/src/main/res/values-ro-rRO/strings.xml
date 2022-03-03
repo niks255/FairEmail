@@ -252,6 +252,8 @@
     <string name="title_setup_theme_red_green">Roșu/verde</string>
     <string name="title_setup_theme_grey">Gri</string>
     <string name="title_setup_theme_black">Negru</string>
+    <string name="title_setup_theme_white">Alb</string>
+    <string name="title_setup_theme_black_or_white">Negru sau alb</string>
     <string name="title_setup_theme_black_and_white">Alb și negru</string>
     <string name="title_setup_theme_reverse">Inversează culorile</string>
     <string name="title_setup_theme_light">Luminoasă</string>
@@ -321,6 +323,7 @@
     <string name="title_advanced_suggest_received">Sugerează adrese găsite în mesajele primite</string>
     <string name="title_advanced_suggest_frequently">Sortați adresele sugerate în funcție de frecvența de utilizare</string>
     <string name="title_advanced_alt_re_fwd">Prefix alternativ de răspuns/întârziere</string>
+    <string name="title_advanced_send_chips">Afișați bule de adrese</string>
     <string name="title_advanced_send_reminders">Arată mementouri</string>
     <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
     <string name="title_advanced_attach_new">Adăugați fișierele partajate la o nouă ciornă</string>
@@ -341,7 +344,7 @@
     <string name="title_advanced_signature_reply">Utilizați semnătura la răspuns</string>
     <string name="title_advanced_signature_forward">Utilizați semnătura la redirecționare</string>
     <string name="title_advanced_discard_delete">Ciorna se șterge când renunțați la ea</string>
-    <string name="title_advanced_reply_move">Când răspundeți la un mesaj într-un dosar de utilizator, salvați răspunsul în același dosar</string>
+    <string name="title_advanced_reply_move">Când răspundeți la un mesaj, salvați răspunsul în același dosar</string>
     <string name="title_advanced_auto_link">Creează automat adrese</string>
     <string name="title_advanced_plain_only">Trimite implicit ca text simplu</string>
     <string name="title_advanced_flow">\'format fluent\' pentru text simplu</string>
@@ -405,7 +408,7 @@
     <string name="title_advanced_bimi_unverified">Expeditor neverificat</string>
     <string name="title_advanced_bimi_verified">Expeditor verificat</string>
     <string name="title_advanced_favicons">Arată iconițe siteuri</string>
-    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Scanează numai primele %1$s din pagina web</string>
+    <string name="title_advanced_favicons_partial">Scanează numai primele %1$s din pagina web</string>
     <string name="title_advanced_generated_icons">Arată pictograme cu literă</string>
     <string name="title_advanced_identicons">Arată pictograme generate pe baza identității</string>
     <string name="title_advanced_circular">Arată pictograme rotunde</string>
@@ -489,6 +492,7 @@
     <string name="title_advanced_undo">Expirare anulare</string>
     <string name="title_advanced_quick_filter">Arată iconițele de filtrare rapidă</string>
     <string name="title_advanced_quick_scroll">Arată iconițele de derulare sus/jos rapidă</string>
+    <string name="title_advanced_folder_nav">Reveniți întotdeauna la lista de dosare dintr-o listă de mesaje</string>
     <string name="title_advanced_autoread">Marchează automat mesajele mutate ca citite</string>
     <string name="title_advanced_star_snoozed">Adaugă automat stea la mesajele amânate</string>
     <string name="title_advanced_autounstar">Elimină automat steaua mesajelor mutate</string>
@@ -1716,6 +1720,7 @@
         <item>Mergi la conversația următoare</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Extra mic</item>
         <item>Mic</item>
         <item>Mediu</item>
         <item>Mare</item>

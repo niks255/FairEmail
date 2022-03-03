@@ -108,6 +108,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SwitchCompat;
@@ -323,7 +324,7 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_SEND = 14;
     private static final int REQUEST_PERMISSION = 15;
 
-    private static ExecutorService executor = Helper.getBackgroundExecutor(1, "encrypt");
+    private static ExecutorService executor = Helper.getBackgroundExecutor(1, "compose");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1185,9 +1186,6 @@ public class FragmentCompose extends FragmentBase {
         etCc.setAdapter(cadapter);
         etBcc.setAdapter(cadapter);
 
-        etTo.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        etCc.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        etBcc.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         grpAddresses.setVisibility(cc_bcc ? View.VISIBLE : View.GONE);
 
         rvAttachment.setHasFixedSize(false);
@@ -1349,6 +1347,9 @@ public class FragmentCompose extends FragmentBase {
         outState.putInt("fair:pickRequest", pickRequest);
         outState.putParcelable("fair:pickUri", pickUri);
 
+        // Focus was lost at this point
+        outState.putInt("fair:selection", etBody.getSelectionStart());
+
         super.onSaveInstanceState(outState);
     }
 
@@ -1400,6 +1401,7 @@ public class FragmentCompose extends FragmentBase {
                     Bundle args = new Bundle();
                     args.putString("action", "edit");
                     args.putLong("id", working);
+
                     draftLoader.execute(FragmentCompose.this, args, "compose:edit");
                 }
             } else {
@@ -1413,6 +1415,9 @@ public class FragmentCompose extends FragmentBase {
                 Bundle args = new Bundle();
                 args.putString("action", working < 0 ? "new" : "edit");
                 args.putLong("id", working);
+
+                args.putInt("selection", savedInstanceState.getInt("fair:selection"));
+
                 draftLoader.execute(FragmentCompose.this, args, "compose:instance");
             }
         } catch (Throwable ex) {
@@ -1572,8 +1577,10 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_zoom).setTitle(ssbZoom);
         PopupMenuLifecycle.insertIcon(context, menu.findItem(R.id.menu_zoom), false);
 
+        ActionBar actionBar = getSupportActionBar();
+        Context actionBarContext = (actionBar == null ? context : actionBar.getThemedContext());
         int colorEncrypt = Helper.resolveColor(context, R.attr.colorEncrypt);
-        int colorActionForeground = Helper.resolveColor(context, R.attr.colorActionForeground);
+        int colorActionForeground = Helper.resolveColor(actionBarContext, android.R.attr.textColorPrimary);
 
         View v = menu.findItem(R.id.menu_encrypt).getActionView();
         ImageButton ib = v.findViewById(R.id.button);
@@ -1606,10 +1613,12 @@ public class FragmentCompose extends FragmentBase {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean save_drafts = prefs.getBoolean("save_drafts", true);
+        boolean send_chips = prefs.getBoolean("send_chips", true);
         boolean send_dialog = prefs.getBoolean("send_dialog", true);
         boolean image_dialog = prefs.getBoolean("image_dialog", true);
 
         menu.findItem(R.id.menu_save_drafts).setChecked(save_drafts);
+        menu.findItem(R.id.menu_send_chips).setChecked(send_chips);
         menu.findItem(R.id.menu_send_dialog).setChecked(send_dialog);
         menu.findItem(R.id.menu_image_dialog).setChecked(image_dialog);
         menu.findItem(R.id.menu_media).setChecked(media);
@@ -1663,6 +1672,9 @@ public class FragmentCompose extends FragmentBase {
             return true;
         } else if (itemId == R.id.menu_save_drafts) {
             onMenuSaveDrafts();
+            return true;
+        } else if (itemId == R.id.menu_send_chips) {
+            onMenuSendChips();
             return true;
         } else if (itemId == R.id.menu_send_dialog) {
             onMenuSendDialog();
@@ -1794,6 +1806,18 @@ public class FragmentCompose extends FragmentBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean save_drafts = prefs.getBoolean("save_drafts", true);
         prefs.edit().putBoolean("save_drafts", !save_drafts).apply();
+    }
+
+    private void onMenuSendChips() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean send_chips = prefs.getBoolean("send_chips", true);
+        prefs.edit().putBoolean("send_chips", !send_chips).apply();
+
+        etTo.setText(etTo.getText());
+        etCc.setText(etCc.getText());
+        etBcc.setText(etBcc.getText());
+
+        etSubject.requestFocus();
     }
 
     private void onMenuSendDialog() {
@@ -2036,10 +2060,21 @@ public class FragmentCompose extends FragmentBase {
 
         popupMenu.getMenu().add(Menu.NONE, 1, 1, R.string.title_translate_configure);
 
+        NumberFormat NF = NumberFormat.getNumberInstance();
         for (int i = 0; i < languages.size(); i++) {
             DeepL.Language lang = languages.get(i);
+
+            SpannableStringBuilder ssb = new SpannableStringBuilderEx(lang.name);
+            if (grouped && lang.frequency > 0) {
+                int start = ssb.length();
+                ssb.append(" (").append(NF.format(lang.frequency)).append(")");
+                ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
+                        start, ssb.length(), 0);
+
+            }
+
             MenuItem item = popupMenu.getMenu()
-                    .add(lang.favorite ? Menu.FIRST : Menu.NONE, i + 2, i + 2, lang.name)
+                    .add(lang.favorite ? Menu.FIRST : Menu.NONE, i + 2, i + 2, ssb)
                     .setIntent(new Intent().putExtra("target", lang.target));
             if (lang.icon != null)
                 item.setIcon(lang.icon);
@@ -2119,8 +2154,9 @@ public class FragmentCompose extends FragmentBase {
                              at android.text.SpannableStringBuilder.insert(SpannableStringBuilder.java:226)
                              at android.text.SpannableStringBuilder.insert(SpannableStringBuilder.java:38)
                          */
+                        int len = 2 + translation.translated_text.length();
                         edit.insert(paragraph.second, "\n\n" + translation.translated_text);
-                        etBody.setSelection(paragraph.second + 2 + translation.translated_text.length());
+                        etBody.setSelection(paragraph.second + len);
 
                         boolean small = prefs.getBoolean("deepl_small", false);
                         if (small) {
@@ -2594,6 +2630,23 @@ public class FragmentCompose extends FragmentBase {
                     etCc.setText(MessageHelper.formatAddressesCompose(draft.cc));
                     etBcc.setText(MessageHelper.formatAddressesCompose(draft.bcc));
                 }
+
+                // After showDraft/setFocus
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (requestCode == REQUEST_CONTACT_TO)
+                                etTo.setSelection(etTo.length());
+                            else if (requestCode == REQUEST_CONTACT_CC)
+                                etCc.setSelection(etCc.length());
+                            else if (requestCode == REQUEST_CONTACT_BCC)
+                                etBcc.setSelection(etBcc.length());
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
+                });
             }
 
             @Override
@@ -2742,13 +2795,36 @@ public class FragmentCompose extends FragmentBase {
                 if (!image)
                     return null;
 
+                args.putInt("start", start);
+
                 DB db = DB.getInstance(context);
                 db.message().setMessagePlainOnly(id, 0);
 
-                args.putInt("start", start);
+                String html = HtmlHelper.toHtml(s, context);
 
-                // TODO: double conversion
-                return HtmlHelper.fromHtml(HtmlHelper.toHtml(s, context), new Html.ImageGetter() {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean write_below = prefs.getBoolean("write_below", false);
+
+                EntityMessage draft = db.message().getMessage(id);
+                if (draft != null) {
+                    File file = draft.getFile(context);
+                    Elements ref = JsoupEx.parse(file).select("div[fairemail=reference]");
+
+                    Document doc = JsoupEx.parse(html);
+
+                    for (Element e : ref)
+                        if (write_below && draft.wasforwardedfrom == null)
+                            doc.body().prependChild(e);
+                        else
+                            doc.body().appendChild(e);
+
+                    EntityIdentity identity = db.identity().getIdentity(draft.identity);
+                    addSignature(context, doc, draft, identity);
+
+                    Helper.writeText(file, doc.html());
+                }
+
+                return HtmlHelper.fromHtml(html, new Html.ImageGetter() {
                     @Override
                     public Drawable getDrawable(String source) {
                         return ImageHelper.decodeImage(context, id, source, true, zoom, 1.0f, etBody);
@@ -2758,16 +2834,14 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, final Spanned body) {
-                if (body != null) {
-                    int start = args.getInt("start");
+                if (body == null)
+                    return;
 
-                    etBody.setText(body);
-                    if (start < body.length())
-                        etBody.setSelection(start);
+                etBody.setText(body);
 
-                    // Save text with image
-                    onAction(R.id.action_save, "image");
-                }
+                int start = args.getInt("start");
+                if (start < body.length())
+                    etBody.setSelection(start);
             }
 
             @Override
@@ -5161,7 +5235,7 @@ public class FragmentCompose extends FragmentBase {
                                 };
                             }
 
-                            showDraft(draft, false, postShow);
+                            showDraft(draft, false, postShow, args.getInt("selection"));
                         }
 
                         tvDsn.setVisibility(
@@ -5974,7 +6048,7 @@ public class FragmentCompose extends FragmentBase {
             boolean show = extras.getBoolean("show");
             boolean refedit = extras.getBoolean("refedit");
             if (show)
-                showDraft(draft, refedit, null);
+                showDraft(draft, refedit, null, -1);
 
             bottom_navigation.getMenu().findItem(R.id.action_undo).setVisible(draft.revision > 1);
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(draft.revision < draft.revisions);
@@ -5995,7 +6069,7 @@ public class FragmentCompose extends FragmentBase {
                 finish();
 
             } else if (action == R.id.action_undo || action == R.id.action_redo) {
-                showDraft(draft, false, null);
+                showDraft(draft, false, null, -1);
 
             } else if (action == R.id.action_save) {
                 boolean autosave = extras.getBoolean("autosave");
@@ -6157,7 +6231,7 @@ public class FragmentCompose extends FragmentBase {
                 ref.first().before(div);
     }
 
-    private void showDraft(final EntityMessage draft, boolean refedit, Runnable postShow) {
+    private void showDraft(final EntityMessage draft, boolean refedit, Runnable postShow, int selection) {
         Bundle args = new Bundle();
         args.putLong("id", draft.id);
         args.putBoolean("show_images", show_images);
@@ -6271,12 +6345,6 @@ public class FragmentCompose extends FragmentBase {
                 hint.setSpan(new RelativeSizeSpan(0.7f), start, hint.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 etBody.setHint(hint);
 
-                if (state != State.LOADED) {
-                    int pos = getAutoPos(0, etBody.length());
-                    if (pos < 0)
-                        pos = 0;
-                    etBody.setSelection(pos);
-                }
                 grpBody.setVisibility(View.VISIBLE);
 
                 cbSignature.setChecked(draft.signature);
@@ -6328,7 +6396,16 @@ public class FragmentCompose extends FragmentBase {
                     return;
                 state = State.LOADED;
 
-                setFocus(null, -1, -1, postShow == null);
+                int selStart = (selection == 0 ? -1 : selection);
+
+                if (selStart < 0) {
+                    int pos = getAutoPos(0, etBody.length());
+                    if (pos < 0)
+                        pos = 0;
+                    etBody.setSelection(pos);
+                }
+
+                setFocus(selStart < 0 ? null : R.id.etBody, selStart, selStart, postShow == null);
                 if (postShow != null)
                     getMainHandler().post(postShow);
             }
@@ -6621,7 +6698,6 @@ public class FragmentCompose extends FragmentBase {
             int focussed = args.getInt("focussed");
 
             final Context context = getContext();
-            final PackageManager pm = context.getPackageManager();
             final ContentResolver resolver = context.getContentResolver();
 
             View dview = LayoutInflater.from(context).inflate(R.layout.dialog_contact_group, null);

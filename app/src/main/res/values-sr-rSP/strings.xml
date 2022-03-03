@@ -976,6 +976,7 @@
         <item>Иди на следећи разговор</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Extra small</item>
         <item>Мала</item>
         <item>Средња</item>
         <item>Велика</item>

@@ -948,6 +948,7 @@ public class EmailService implements AutoCloseable {
 
     private static class SSLSocketFactoryService extends SSLSocketFactory {
         // openssl s_client -connect host:port < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin
+        // nmap --script ssl-enum-ciphers -Pn -p port host
         private String server;
         private boolean secure;
         private boolean ssl_harden;
@@ -963,17 +964,24 @@ public class EmailService implements AutoCloseable {
             this.cert_strict = cert_strict;
             this.trustedFingerprint = fingerprint;
 
-            SSLContext sslContext = SSLContext.getInstance("TLS");
+            // https://developer.android.com/about/versions/oreo/android-8.0-changes.html#security-all
+            SSLContext sslContext = SSLContext.getInstance(insecure ? "SSL" : "TLS");
 
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             tmf.init((KeyStore) null);
 
             TrustManager[] tms = tmf.getTrustManagers();
+            Log.i("Trust managers=" + (tms == null ? null : tms.length));
+
             if (tms == null || tms.length == 0 || !(tms[0] instanceof X509TrustManager)) {
                 Log.e("Missing root trust manager");
                 sslContext.init(null, tms, null);
             } else {
                 final X509TrustManager rtm = (X509TrustManager) tms[0];
+
+                if (tms.length > 1)
+                    for (TrustManager tm : tms)
+                        Log.e("Trust manager " + tm.getClass());
 
                 X509TrustManager tm = new X509TrustManager() {
                     // openssl s_client -connect <host>
@@ -1142,14 +1150,16 @@ public class EmailService implements AutoCloseable {
                 SSLSocket sslSocket = (SSLSocket) socket;
 
                 if (!secure) {
+                    // Protocols
                     sslSocket.setEnabledProtocols(sslSocket.getSupportedProtocols());
 
+                    // Ciphers
                     List<String> ciphers = new ArrayList<>();
-                    for (String cipher : sslSocket.getSupportedCipherSuites())
-                        if (!cipher.endsWith("_SCSV"))
-                            ciphers.add(cipher);
+                    ciphers.addAll(Arrays.asList(sslSocket.getSupportedCipherSuites()));
+                    ciphers.remove("TLS_FALLBACK_SCSV");
                     sslSocket.setEnabledCipherSuites(ciphers.toArray(new String[0]));
                 } else if (ssl_harden) {
+                    // Protocols
                     List<String> protocols = new ArrayList<>();
                     for (String protocol : sslSocket.getEnabledProtocols())
                         if (SSL_PROTOCOL_BLACKLIST.contains(protocol))
@@ -1158,6 +1168,7 @@ public class EmailService implements AutoCloseable {
                             protocols.add(protocol);
                     sslSocket.setEnabledProtocols(protocols.toArray(new String[0]));
 
+                    // Ciphers
                     List<String> ciphers = new ArrayList<>();
                     for (String cipher : sslSocket.getEnabledCipherSuites()) {
                         if (SSL_CIPHER_BLACKLIST.matcher(cipher).matches())
@@ -1167,10 +1178,11 @@ public class EmailService implements AutoCloseable {
                     }
                     sslSocket.setEnabledCipherSuites(ciphers.toArray(new String[0]));
                 } else {
+                    // Ciphers
                     List<String> ciphers = new ArrayList<>();
                     ciphers.addAll(Arrays.asList(sslSocket.getEnabledCipherSuites()));
                     for (String cipher : sslSocket.getSupportedCipherSuites())
-                        if (cipher.contains("3DES")) {
+                        if (!ciphers.contains(cipher) && cipher.contains("3DES")) {
                             // Some servers support 3DES and RC4 only
                             Log.i("SSL enabling cipher=" + cipher);
                             ciphers.add(cipher);

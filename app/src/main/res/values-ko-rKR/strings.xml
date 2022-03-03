@@ -186,6 +186,8 @@
     <string name="title_setup_theme_red_green">빨강/초록</string>
     <string name="title_setup_theme_grey">회색</string>
     <string name="title_setup_theme_black">검정</string>
+    <string name="title_setup_theme_white">하양</string>
+    <string name="title_setup_theme_black_or_white">검정 혹은 하양</string>
     <string name="title_setup_theme_black_and_white">흑백</string>
     <string name="title_setup_theme_reverse">색상 뒤바꾸기</string>
     <string name="title_setup_theme_light">밝게</string>
@@ -225,6 +227,7 @@
     <string name="title_advanced_sync_folders">동기화 폴더 목록</string>
     <string name="title_advanced_sync_shared_folders">동기화 공유 폴더 목록</string>
     <string name="title_advanced_check_authentication">메시지 인증 확인하기</string>
+    <string name="title_advanced_send_chips">주소 풍선 표시</string>
     <string name="title_advanced_send_reminders">리마인더 표시</string>
     <string name="title_advanced_send_delayed">메일 전송 지연</string>
     <string name="title_advanced_compose_font">기본 글꼴</string>
@@ -232,6 +235,7 @@
     <string name="title_advanced_signature_reply">답장 시 서명 사용</string>
     <string name="title_advanced_signature_forward">전달 시 서명 사용</string>
     <string name="title_advanced_discard_delete">초안이 영구적으로 삭제됩니다</string>
+    <string name="title_advanced_reply_move">답장 시 응답을 같은 폴더에 저장합니다</string>
     <string name="title_advanced_metered">과금 연결 사용</string>
     <string name="title_advanced_rlah">EU 내 무제한 로밍</string>
     <string name="title_advanced_download_headers">모든 메시지 제목 다운로드</string>
@@ -257,7 +261,7 @@
     <string name="title_advanced_bimi_unverified">확인되지 않은 발신자</string>
     <string name="title_advanced_bimi_verified">확인된 발신자</string>
     <string name="title_advanced_favicons">파비콘 표시</string>
-    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">웹 페이지의 첫 %1$s만 스캔</string>
+    <string name="title_advanced_favicons_partial">웹 페이지의 첫 %1$s만 스캔</string>
     <string name="title_advanced_identicons">아이덴티콘 표시</string>
     <string name="title_advanced_circular">둥근 아이콘 표시</string>
     <string name="title_advanced_color_value">밝기: %1$s %%</string>
@@ -285,6 +289,7 @@
     <string name="title_advanced_volumenav">음량 상하 버튼을 눌러 전후 대화로 이동</string>
     <string name="title_advanced_swipe_close">아래로 밀어 대화 닫기</string>
     <string name="title_advanced_undo">되돌리기 제한 시간</string>
+    <string name="title_advanced_folder_nav">항상 메시지 목록에서 폴더 목록으로 돌아가기</string>
     <string name="title_advanced_notifications">알림 관리</string>
     <string name="title_advanced_notifications_default">기본 채널</string>
     <string name="title_advanced_notifications_service">수신 채널</string>
@@ -905,6 +910,7 @@
         <item>Go to next conversation</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>매우 작게</item>
         <item>작게</item>
         <item>보통</item>
         <item>크게</item>

@@ -242,6 +242,8 @@
     <string name="title_setup_theme_red_green">Κόκκινο/πράσινο</string>
     <string name="title_setup_theme_grey">Γκρι</string>
     <string name="title_setup_theme_black">Μαύρο</string>
+    <string name="title_setup_theme_white">Λευκό</string>
+    <string name="title_setup_theme_black_or_white">Μαύρο ή λευκό</string>
     <string name="title_setup_theme_black_and_white">Ασπρόμαυρο</string>
     <string name="title_setup_theme_reverse">Αντιστροφή χρωμάτων</string>
     <string name="title_setup_theme_light">Φωτεινό</string>
@@ -311,6 +313,7 @@
     <string name="title_advanced_suggest_received">Προτείνονται διευθύνσεις που βρέθηκαν σε μηνύματα που έχουν ληφθεί</string>
     <string name="title_advanced_suggest_frequently">Ταξινόμηση των προτεινόμενων διευθύνσεων με βάση τη συχνότητα που χρησιμοποιούνται</string>
     <string name="title_advanced_alt_re_fwd">Εναλλακτικό πρόθεμα απάντησης/προώθησης</string>
+    <string name="title_advanced_send_chips">Προβολή διευθύνσεων μέσα σε φυσαλίδες</string>
     <string name="title_advanced_send_reminders">Εμφάνιση υπενθυμίσεων</string>
     <string name="title_advanced_send_delayed">Καθυστέρηση στην αποστολή μηνυμάτων</string>
     <string name="title_advanced_attach_new">Προσθήκη κοινόχρηστων αρχείων σε ένα νέο προσχέδιο</string>
@@ -331,7 +334,7 @@
     <string name="title_advanced_signature_reply">Χρήση υπογραφής κατά την απάντηση</string>
     <string name="title_advanced_signature_forward">Χρήση υπογραφής κατά την προώθηση</string>
     <string name="title_advanced_discard_delete">Οριστική διαγραφή ενός προσχεδίου όταν αυτό απορρίπτεται</string>
-    <string name="title_advanced_reply_move">Κατά την απάντηση ενός μηνύματος εντός ενός φακέλου χρήστη, να αποθηκεύεται η απάντηση μέσα στον ίδιο φάκελο</string>
+    <string name="title_advanced_reply_move">Κατά την απάντηση ενός μηνύματος, να αποθηκεύεται η απάντηση μέσα στον ίδιο φάκελο</string>
     <string name="title_advanced_auto_link">Αυτόματη δημιουργία συνδέσμων</string>
     <string name="title_advanced_plain_only">Αποστολή απλού κειμένου από προεπιλογή</string>
     <string name="title_advanced_flow">Αναπροσαρμοσμένη μορφοποίηση για απλό κείμενο</string>
@@ -395,7 +398,7 @@
     <string name="title_advanced_bimi_unverified">Μη επαληθευμένος αποστολέας</string>
     <string name="title_advanced_bimi_verified">Επαληθευμένος αποστολέας</string>
     <string name="title_advanced_favicons">Προβολή favicon</string>
-    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Να σαρωθεί μόνο το πρώτο %1$s της ιστοσελίδας</string>
+    <string name="title_advanced_favicons_partial">Να σαρωθεί μόνο το πρώτο %1$s της ιστοσελίδας</string>
     <string name="title_advanced_generated_icons">Να προβάλλονται εικονίδια που δημιουργούνται αυτόματα</string>
     <string name="title_advanced_identicons">Προβολή identicon</string>
     <string name="title_advanced_circular">Στρογγυλεμένα εικονίδια</string>
@@ -479,6 +482,7 @@
     <string name="title_advanced_undo">Χρονικό περιθώριο για αναίρεση</string>
     <string name="title_advanced_quick_filter">Διακριτικά εικονίδια για γρήγορο φιλτράρισμα</string>
     <string name="title_advanced_quick_scroll">Διακριτικά εικονίδια για ταχεία κύλιση προς τα πάνω/κάτω</string>
+    <string name="title_advanced_folder_nav">Πάντα επιστροφή στη λίστα φακέλων από μια λίστα μηνυμάτων</string>
     <string name="title_advanced_autoread">Αυτόματη σήμανση των μηνυμάτων ως αναγνωσμένων κατά τη μετακίνησή τους</string>
     <string name="title_advanced_star_snoozed">Αυτόματη προσθήκη αστεριού στα υπό αναβολή μηνύματα</string>
     <string name="title_advanced_autounstar">Αυτόματη αφαίρεση των αστεριών από τα μηνύματα κατά τη μετακίνησή τους</string>
@@ -1703,6 +1707,7 @@
         <item>Μετάβαση στην επόμενη συζήτηση</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Πολύ μικρό</item>
         <item>Μικρό</item>
         <item>Μεσαίο</item>
         <item>Μεγάλο</item>

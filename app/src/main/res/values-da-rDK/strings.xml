@@ -242,6 +242,8 @@
     <string name="title_setup_theme_red_green">Rødt/grønt</string>
     <string name="title_setup_theme_grey">Gråt</string>
     <string name="title_setup_theme_black">Sort</string>
+    <string name="title_setup_theme_white">Hvidt</string>
+    <string name="title_setup_theme_black_or_white">Sort eller hvidt</string>
     <string name="title_setup_theme_black_and_white">Sort og hvid</string>
     <string name="title_setup_theme_reverse">Omvendte farver</string>
     <string name="title_setup_theme_light">Lyst</string>
@@ -312,6 +314,7 @@
     <string name="title_advanced_suggest_received">Foreslå adresser fra modtagne beskeder</string>
     <string name="title_advanced_suggest_frequently">Sortér foreslåede adresser efter brugsfrekvens</string>
     <string name="title_advanced_alt_re_fwd">Alternativt besvarelses-/videresendelsespræfiks</string>
+    <string name="title_advanced_send_chips">Vis adressebobler</string>
     <string name="title_advanced_send_reminders">Vis påmindelser</string>
     <string name="title_advanced_send_delayed">Udsæt afsendelsen af beskeder</string>
     <string name="title_advanced_attach_new">Føj delte filer til et nyt udkast</string>
@@ -332,7 +335,7 @@
     <string name="title_advanced_signature_reply">Benyt signatur i svar</string>
     <string name="title_advanced_signature_forward">Benyt signatur ved videresendelse</string>
     <string name="title_advanced_discard_delete">Ved kassering af udkast, slet dette permanent</string>
-    <string name="title_advanced_reply_move">Når en besked i en brugermappe besvares, gem svaret i pågældende mappe</string>
+    <string name="title_advanced_reply_move">Ved beskedbesvarelse, gem svaret i pågældende mappe</string>
     <string name="title_advanced_auto_link">Opret links automatisk</string>
     <string name="title_advanced_plain_only">Send kun simpel tekst som standard</string>
     <string name="title_advanced_flow">\'format flowed\' til simpel tekst</string>
@@ -396,7 +399,7 @@
     <string name="title_advanced_bimi_unverified">Ubekræftet afsender</string>
     <string name="title_advanced_bimi_verified">Bekræftet afsender</string>
     <string name="title_advanced_favicons">Vis favoritkoner</string>
-    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Skan kun de første %1$s af websiden</string>
+    <string name="title_advanced_favicons_partial">Skan kun de første %1$s af websiden</string>
     <string name="title_advanced_generated_icons">Vis genererede ikoner</string>
     <string name="title_advanced_identicons">Vis identikoner</string>
     <string name="title_advanced_circular">Vis runde ikoner</string>
@@ -480,6 +483,7 @@
     <string name="title_advanced_undo">Fortryd timeout</string>
     <string name="title_advanced_quick_filter">Vis ikke-påtrængende hurtige filterikoner</string>
     <string name="title_advanced_quick_scroll">Vis ikke-påtrængende hurtige rul op/ned ikoner</string>
+    <string name="title_advanced_folder_nav">Returnér altid til mappelisten fra en beskedliste</string>
     <string name="title_advanced_autoread">Auto-markér beskeder som læst, når de flyttes</string>
     <string name="title_advanced_star_snoozed">Auto-tilføj stjerne på udsatte beskeder</string>
     <string name="title_advanced_autounstar">Fjern automatisk stjerner fra beskeder, når de flyttes</string>
@@ -808,6 +812,9 @@
     <string name="title_synchronize_subfolders">Undermapper</string>
     <string name="title_synchronize_more">Hent flere beskeder</string>
     <string name="title_synchronize_more_hint">Dette vil resultere i en enkelt download af ældre beskeder uden større strømforbrug end alm. hverdagsbrug</string>
+    <string name="title_synchronize_more_hint2">        Beskeder vil blive hentet så hurtigt som e-mail-serveren kan levere dem og gemt så hurtigt som enheden kan gemme og indeksere dem.
+        Den begrænsende faktor er normalt hastigheden af enhedens interne lagerplads.
+    </string>
     <string name="title_synchronize_enabled">Synkroniserer</string>
     <string name="title_synchronize_batch_enable">Aktivér synkronisering</string>
     <string name="title_synchronize_batch_disable">Deaktivér synkronisering</string>
@@ -1707,6 +1714,7 @@
         <item>Gå til næste samtale</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Ekstra lille</item>
         <item>Lille</item>
         <item>Mellem</item>
         <item>Stor</item>

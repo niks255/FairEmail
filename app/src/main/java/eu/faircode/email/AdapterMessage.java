@@ -150,6 +150,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.w3c.dom.Entity;
 import org.w3c.dom.css.CSSStyleSheet;
 
 import java.io.BufferedOutputStream;
@@ -1351,7 +1352,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSnoozed.setVisibility(message.ui_snoozed == null && !message.ui_unsnoozed ? View.GONE : View.VISIBLE);
             ivAnswered.setVisibility(message.ui_answered ? View.VISIBLE : View.GONE);
             ivForwarded.setVisibility(message.isForwarded() ? View.VISIBLE : View.GONE);
-            ivAttachments.setVisibility(message.attachments > 0 ? View.VISIBLE : View.GONE);
+            ivAttachments.setVisibility(message.totalAttachments > 0 ? View.VISIBLE : View.GONE);
 
             if (viewType == ViewType.FOLDER)
                 tvFolder.setText(outbox ? message.identityEmail : message.accountName);
@@ -2010,6 +2011,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 else if (EntityFolder.TRASH.equals(folder.type))
                                     hasTrash = true;
 
+                    boolean pop = (message.accountProtocol == EntityAccount.TYPE_POP);
+                    boolean imap = (message.accountProtocol == EntityAccount.TYPE_IMAP);
+
                     boolean inArchive = EntityFolder.ARCHIVE.equals(message.folderType);
                     boolean inSent = EntityFolder.SENT.equals(message.folderType);
                     boolean inTrash = EntityFolder.TRASH.equals(message.folderType);
@@ -2017,27 +2021,22 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
 
                     boolean move = !(message.folderReadOnly || message.uid == null) ||
-                            (message.accountProtocol == EntityAccount.TYPE_POP &&
-                                    EntityFolder.TRASH.equals(message.folderType));
+                            (pop && EntityFolder.TRASH.equals(message.folderType));
                     boolean archive = (move && (hasArchive && !inArchive && !inSent && !inTrash && !inJunk));
-                    boolean trash = (move || outbox || debug ||
-                            message.accountProtocol == EntityAccount.TYPE_POP);
-                    boolean inbox = (move && hasInbox && (inArchive || inTrash || inJunk)) ||
-                            (message.accountProtocol == EntityAccount.TYPE_POP && message.accountLeaveDeleted && inTrash);
-                    boolean keywords = (message.uid != null &&
-                            message.accountProtocol == EntityAccount.TYPE_IMAP);
+                    boolean trash = (move || outbox || debug || pop);
+                    boolean inbox = (move && hasInbox && (inArchive || inTrash || inJunk) && imap) ||
+                            (pop && message.accountLeaveDeleted && inTrash);
+                    boolean keywords = (message.uid != null && imap);
                     boolean labels = (data.isGmail && move && !inTrash && !inJunk && !outbox);
-                    boolean seen = (message.uid != null ||
-                            message.accountProtocol == EntityAccount.TYPE_POP);
+                    boolean seen = (message.uid != null || pop);
 
                     int froms = (message.from == null ? 0 : message.from.length);
                     int tos = (message.to == null ? 0 : message.to.length);
 
                     boolean delete = (inTrash || !hasTrash || inJunk || outbox ||
-                            message.uid == null || message.accountProtocol == EntityAccount.TYPE_POP);
+                            message.uid == null || pop);
 
-                    boolean headers = (message.uid != null ||
-                            (message.accountProtocol == EntityAccount.TYPE_POP && message.headers != null));
+                    boolean headers = (message.uid != null || (pop && message.headers != null));
 
                     evalProperties(message); // TODO: done again in bindBody
 
@@ -5129,7 +5128,33 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionMove(TupleMessageEx message, final boolean copy) {
-            onActionMove(message, copy, message.account, new long[]{message.folder});
+            if (message.accountProtocol == EntityAccount.TYPE_POP &&
+                    EntityFolder.TRASH.equals(message.folderType) && !message.accountLeaveDeleted) {
+                Bundle args = new Bundle();
+                args.putLong("id", message.account);
+
+                new SimpleTask<EntityFolder>() {
+                    @Override
+                    protected EntityFolder onExecute(Context context, Bundle args) {
+                        long id = args.getLong("id");
+
+                        DB db = DB.getInstance(context);
+                        return db.folder().getFolderByType(id, EntityFolder.INBOX);
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, EntityFolder inbox) {
+                        onActionMove(message, copy, message.account,
+                                new long[]{message.folder, inbox == null ? -1L : inbox.id});
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                    }
+                }.execute(context, owner, args, "move:pop");
+            } else
+                onActionMove(message, copy, message.account, new long[]{message.folder});
         }
 
         private void onActionMove(TupleMessageEx message, final boolean copy, long account, long[] disabled) {
@@ -5337,6 +5362,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_raw_send_message).setEnabled(canRaw);
             popupMenu.getMenu().findItem(R.id.menu_raw_send_thread).setEnabled(canRaw);
 
+            popupMenu.getMenu().findItem(R.id.menu_thread_info)
+                    .setVisible(BuildConfig.TEST_RELEASE || BuildConfig.DEBUG || debug);
+
             popupMenu.getMenu().findItem(R.id.menu_resync)
                     .setEnabled(message.uid != null ||
                             message.accountProtocol == EntityAccount.TYPE_POP)
@@ -5439,6 +5467,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return true;
                     } else if (itemId == R.id.menu_raw_send_thread) {
                         onMenuRawSend(message, true);
+                        return true;
+                    } else if (itemId == R.id.menu_thread_info) {
+                        onMenuThreadInfo(message);
                         return true;
                     } else if (itemId == R.id.menu_resync) {
                         onMenuResync(message);
@@ -5773,6 +5804,95 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.execute(context, owner, args, "importance:set");
+        }
+
+        private void onMenuThreadInfo(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+
+            new SimpleTask<List<EntityMessage>>() {
+                @Override
+                protected List<EntityMessage> onExecute(Context context, Bundle args) {
+                    long id = args.getLong("id");
+
+                    Map<String, EntityMessage> map = new HashMap<>();
+
+                    DB db = DB.getInstance(context);
+                    EntityMessage message = db.message().getMessage(id);
+                    if (message == null)
+                        return null;
+
+                    if (!TextUtils.isEmpty(message.inreplyto))
+                        for (EntityMessage m : db.message().getMessagesByMsgId(message.account, message.inreplyto))
+                            map.put(m.msgid, m);
+
+                    if (!TextUtils.isEmpty(message.references))
+                        for (String ref : message.references.split(" "))
+                            for (EntityMessage m : db.message().getMessagesByMsgId(message.account, ref))
+                                map.put(m.msgid, m);
+
+                    return new ArrayList(map.values());
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, List<EntityMessage> referenced) {
+                    DateFormat DTF = Helper.getDateTimeInstance(context);
+
+                    SpannableStringBuilder ssb = new SpannableStringBuilderEx();
+
+                    int start = 0;
+                    ssb.append("Message-ID: ");
+                    ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
+                    ssb.append(message.msgid).append("\n");
+
+                    if (!TextUtils.isEmpty(message.inreplyto)) {
+                        start = ssb.length();
+                        ssb.append("In-reply-to: ");
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
+                        ssb.append(message.inreplyto).append("\n");
+                    }
+
+                    if (!TextUtils.isEmpty(message.references)) {
+                        start = ssb.length();
+                        ssb.append("References: ");
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
+                        ssb.append("\n");
+                        for (String ref : message.references.split(" "))
+                            ssb.append(ref).append("\n");
+                    }
+
+                    start = ssb.length();
+                    ssb.append("Thread: ");
+                    ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
+                    ssb.append(message.thread).append("\n");
+
+                    ssb.append("\n");
+
+                    if (referenced != null)
+                        for (EntityMessage ref : referenced) {
+                            start = ssb.length();
+                            ssb.append(ref.msgid).append(": ");
+                            ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
+                            ssb.append(DTF.format(ref.received)).append(' ')
+                                    .append(ref.subject == null ? "" : ref.subject)
+                                    .append("\n\n");
+                        }
+
+                    ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ssb.length(), 0);
+
+                    new AlertDialog.Builder(context)
+                            .setTitle(context.getString(R.string.title_thread_info))
+                            .setMessage(ssb)
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "message:resync");
+
         }
 
         private void onMenuResync(TupleMessageEx message) {
@@ -7108,6 +7228,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (prev.visible_unseen != next.visible_unseen) {
                     same = false;
                     log("visible_unseen changed " + prev.visible_unseen + "/" + next.visible_unseen, next.id);
+                }
+                if (prev.totalAttachments != next.totalAttachments) {
+                    same = false;
+                    log("totalAttachments changed " + prev.totalAttachments + "/" + next.totalAttachments, next.id);
                 }
                 if (!Objects.equals(prev.totalSize, next.totalSize)) {
                     same = false;

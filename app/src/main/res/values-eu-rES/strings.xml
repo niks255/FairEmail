@@ -1238,6 +1238,7 @@
         <item>Joan hurrengo elkarrizketara</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Extra small</item>
         <item>Txikia</item>
         <item>Ertaina</item>
         <item>Handia</item>

@@ -4,6 +4,68 @@
 
 ### [Fulgurotherium](https://en.wikipedia.org/wiki/Fulgurotherium)
 
+### 1.1851 - 2022-03-02
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1850 - 2022-02-28
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1849 - 2022-02-26
+
+* Fixed inserting photos after device rotation
+* Showing if there are attachments in conversations
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1848 - 2022-02-25
+
+* Fixed POP3 delete
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1847 - 2022-02-24
+
+* Address bubbles: generated icons
+* Address bubbles: RTL support
+* Address bubbles: accessibility improvements
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1846 - 2022-02-24
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1845 - 2022-02-23
+
+* Address bubble fixes and improvements
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1844 - 2022-02-23
+
+* Improved address bubble handling
+* Added "extra small" image resize option
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1843 - 2022-02-22
+
+* Added address bubbles (enable via overflow menu / message editor)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1842 - 2022-02-20
+
+* Added (black or) white theme
+* Added option to always navigation from message list to folder list
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1841 - 2022-02-19
 
 * Improved plain text only check

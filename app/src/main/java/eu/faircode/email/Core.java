@@ -579,6 +579,7 @@ class Core {
                                 ex instanceof FolderNotFoundException ||
                                 ex instanceof IllegalArgumentException ||
                                 ex instanceof SQLiteConstraintException ||
+                                ex instanceof OperationCanceledException ||
                                 (!ConnectionHelper.isIoError(ex) &&
                                         (ex.getCause() instanceof BadCommandException ||
                                                 ex.getCause() instanceof CommandFailedException /* NO */) &&
@@ -658,6 +659,7 @@ class Core {
                             // Delete: NO [CANNOT] STORE It's not possible to perform specified operation
                             // Delete: NO [UNAVAILABLE] EXPUNGE Backend error
                             // Delete: NO mailbox selected READ-ONLY
+                            // Delete: NO Mails not exist!
                             // Flags: NO mailbox selected READ-ONLY
                             // Keyword: NO STORE completed
                             // Keyword: NO [CANNOT] Keyword length too long (n.nnn + n.nnn secs).
@@ -1161,6 +1163,21 @@ class Core {
             imessage.addHeader(MessageHelper.HEADER_CORRELATION_ID, message.msgid);
 
             imessage.saveChanges();
+            /*
+                javax.mail.internet.ParseException: Unbalanced quoted string
+                    at javax.mail.internet.HeaderTokenizer.collectString(SourceFile:15)
+                    at javax.mail.internet.HeaderTokenizer.getNext(SourceFile:20)
+                    at javax.mail.internet.HeaderTokenizer.next(SourceFile:4)
+                    at javax.mail.internet.HeaderTokenizer.next(SourceFile:1)
+                    at javax.mail.internet.ParameterList.<init>(SourceFile:23)
+                    at javax.mail.internet.ContentType.<init>(SourceFile:17)
+                    at javax.mail.internet.MimeBodyPart.updateHeaders(SourceFile:12)
+                    at javax.mail.internet.MimeBodyPart.updateHeaders(SourceFile:1)
+                    at javax.mail.internet.MimeMultipart.updateHeaders(SourceFile:3)
+                    at javax.mail.internet.MimeBodyPart.updateHeaders(SourceFile:24)
+                    at javax.mail.internet.MimeMessage.updateHeaders(SourceFile:1)
+                    at javax.mail.internet.MimeMessage.saveChanges(SourceFile:3)
+             */
 
             if (flags.contains(Flags.Flag.SEEN))
                 imessage.setFlag(Flags.Flag.SEEN, message.ui_seen);
@@ -3192,7 +3209,8 @@ class Core {
                 for (Long tbd : tbds) {
                     EntityMessage message = db.message().getMessage(tbd);
                     if (message != null && trash != null)
-                        if (EntityFolder.TRASH.equals(folder.type))
+                        if (EntityFolder.TRASH.equals(folder.type) ||
+                                EntityFolder.JUNK.equals(folder.type))
                             EntityOperation.queue(context, message, EntityOperation.DELETE);
                         else
                             EntityOperation.queue(context, message, EntityOperation.MOVE, trash.id);
@@ -4052,7 +4070,7 @@ class Core {
                         if (r.isDeliveryStatus())
                             label = (r.isDelivered() ? MessageHelper.FLAG_DELIVERED : MessageHelper.FLAG_NOT_DELIVERED);
                         else if (r.isDispositionNotification())
-                            label = (r.isDisplayed() ? MessageHelper.FLAG_DISPLAYED : MessageHelper.FLAG_NOT_DISPLAYED);
+                            label = (r.isMdnDisplayed() ? MessageHelper.FLAG_DISPLAYED : MessageHelper.FLAG_NOT_DISPLAYED);
 
                         if (label != null) {
                             Map<Long, EntityFolder> map = new HashMap<>();

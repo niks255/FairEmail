@@ -1129,6 +1129,7 @@
         <item>Pojdi na naslednji pogovor</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Extra small</item>
         <item>Majhna</item>
         <item>Srednja</item>
         <item>Velika</item>

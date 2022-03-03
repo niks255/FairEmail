@@ -1317,6 +1317,7 @@
         <item>Gå til neste samtale</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Extra small</item>
         <item>Liten</item>
         <item>Medium</item>
         <item>Stor</item>

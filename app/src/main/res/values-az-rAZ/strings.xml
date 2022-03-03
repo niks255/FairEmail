@@ -242,6 +242,8 @@
     <string name="title_setup_theme_red_green">Qırmızı/yaşıl</string>
     <string name="title_setup_theme_grey">Boz</string>
     <string name="title_setup_theme_black">Qara</string>
+    <string name="title_setup_theme_white">Ağ</string>
+    <string name="title_setup_theme_black_or_white">Qara və ya ağ</string>
     <string name="title_setup_theme_black_and_white">Qara və ağ</string>
     <string name="title_setup_theme_reverse">Rəngləri tərsinə çevir</string>
     <string name="title_setup_theme_light">Açıq</string>
@@ -312,9 +314,11 @@
     <string name="title_advanced_suggest_received">Alınan mesajlarda tapılan ünvanları təklif et</string>
     <string name="title_advanced_suggest_frequently">Təklif edilən ünvanları istifadə tezliyinə görə sırala</string>
     <string name="title_advanced_alt_re_fwd">Alternativ cavab/yönləndirmə prefiksi</string>
+    <string name="title_advanced_send_chips">Ünvan şarlarını göstər</string>
     <string name="title_advanced_send_reminders">Xatırladıcıları göstər</string>
     <string name="title_advanced_send_delayed">Göndərilən mesajların gecikməsi</string>
     <string name="title_advanced_attach_new">Yeni bir qaralamaya paylaşılan faylları əlavə edin</string>
+    <string name="title_advanced_answer_action">Cavab düyməsinə uzun basanda:</string>
     <string name="title_advanced_send_pending">Narahat edici olmayan gecikməli göndərmə nişanını göstər</string>
     <string name="title_advanced_compose_font">İlkin şrift</string>
     <string name="title_advanced_prefix_once">Mövzunu yalnız bir dəfə cavablayarkən və ya yönləndirərkən prefiks</string>
@@ -331,7 +335,6 @@
     <string name="title_advanced_signature_reply">Cavablayanda imza istifadə et</string>
     <string name="title_advanced_signature_forward">Yönləndirəndə imza istifadə et</string>
     <string name="title_advanced_discard_delete">Qaralamanı ləğv edəndə, onu birdəfəlik sil</string>
-    <string name="title_advanced_reply_move">İstifadəçi qovluğunda bir mesaja cavab verəndə, cavabı eyni qovluqda saxla</string>
     <string name="title_advanced_auto_link">Bağlantıları avtomatik yarat</string>
     <string name="title_advanced_plain_only">İlkin olaraq yalnız düz mətn göndər</string>
     <string name="title_advanced_flow">Düz mətn üçün \"format axını\"</string>
@@ -395,6 +398,7 @@
     <string name="title_advanced_bimi_unverified">Təsdiqlənməmiş göndərən</string>
     <string name="title_advanced_bimi_verified">Təsdiqlənmiş göndərən</string>
     <string name="title_advanced_favicons">\"Favicon\"ları göstər</string>
+    <string name="title_advanced_favicons_partial">Veb səhifədəki yalnız ilk %1$s skan edilsin</string>
     <string name="title_advanced_generated_icons">Yaradılmış nişanları göstər</string>
     <string name="title_advanced_identicons">Kimlikləri göstər</string>
     <string name="title_advanced_circular">Dairəvi nişanları göstər</string>
@@ -478,6 +482,7 @@
     <string name="title_advanced_undo">Bitmə vaxtını geri al</string>
     <string name="title_advanced_quick_filter">Narahat edici olmayan cəld filtr nişanlarını göstər</string>
     <string name="title_advanced_quick_scroll">Narahat edici olmayan cəld yuxarı/aşağı sürüşdürmə nişanlarını göstər</string>
+    <string name="title_advanced_folder_nav">Həmişə bir mesaj siyahısından qovluq siyahısına geri qayıdın</string>
     <string name="title_advanced_autoread">Mesajları köçürəndə mesajları avtomatik oxundu kimi işarələ</string>
     <string name="title_advanced_star_snoozed">Mesajları ertələyəndə avtomatik ulduz əlavə et</string>
     <string name="title_advanced_autounstar">Mesajları köçürəndə ulduzları mesajlardan avtomatik çıxart</string>
@@ -1708,6 +1713,7 @@
         <item>Sonrakı danışığa get</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Ekstra kiçik</item>
         <item>Kiçik</item>
         <item>Orta</item>
         <item>Böyük</item>

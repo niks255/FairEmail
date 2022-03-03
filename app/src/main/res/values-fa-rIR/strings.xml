@@ -1132,6 +1132,7 @@
         <item>رفتن به گفتگو بعدی</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Extra small</item>
         <item>کوچک</item>
         <item>متوسط</item>
         <item>بزرگ</item>

@@ -241,6 +241,8 @@
     <string name="title_setup_theme_red_green">Rot/Grün</string>
     <string name="title_setup_theme_grey">Grau</string>
     <string name="title_setup_theme_black">Schwarz</string>
+    <string name="title_setup_theme_white">Weiß</string>
+    <string name="title_setup_theme_black_or_white">Schwarz oder Weiß</string>
     <string name="title_setup_theme_black_and_white">Schwarzweiß</string>
     <string name="title_setup_theme_reverse">Farben invertieren</string>
     <string name="title_setup_theme_light">Hell</string>
@@ -310,6 +312,7 @@
     <string name="title_advanced_suggest_received">Adressen aus empfangenen Nachrichten vorschlagen</string>
     <string name="title_advanced_suggest_frequently">Vorgeschlagene Adressen nach Nutzungshäufigkeit sortieren</string>
     <string name="title_advanced_alt_re_fwd">Alternative Präfixe für „Antworten” bzw. „Weiterleiten”</string>
+    <string name="title_advanced_send_chips">Adressblasen anzeigen</string>
     <string name="title_advanced_send_reminders">Erinnerungen anzeigen</string>
     <string name="title_advanced_send_delayed">Senden von Nachrichten verzögern</string>
     <string name="title_advanced_attach_new">Freigegebene Dateien zu einem neuen Entwurf hinzufügen</string>
@@ -330,7 +333,7 @@
     <string name="title_advanced_signature_reply">Signatur beim Antworten verwenden</string>
     <string name="title_advanced_signature_forward">Signatur beim Weiterleiten hinzufügen</string>
     <string name="title_advanced_discard_delete">Entwürfe beim Verwerfen dauerhaft löschen</string>
-    <string name="title_advanced_reply_move">Beim Antworten auf eine Nachricht in einem Benutzerordner die Antwort im selben Ordner speichern</string>
+    <string name="title_advanced_reply_move">Beim Antworten auf eine Nachricht die Antwort im selben Ordner speichern</string>
     <string name="title_advanced_auto_link">Links automatisch erstellen</string>
     <string name="title_advanced_plain_only">Standardmäßig nur als unformatierten Text senden</string>
     <string name="title_advanced_flow">Format fließend für unformatierten Text</string>
@@ -394,7 +397,7 @@
     <string name="title_advanced_bimi_unverified">Nicht verifizierter Absender</string>
     <string name="title_advanced_bimi_verified">Bestätigter Absender</string>
     <string name="title_advanced_favicons">Favicons anzeigen</string>
-    <string name="title_advanced_favicons_partial" comment="title_advanced_favicons_partial&#10;Scan only the first &lt;xxx KB&gt; of the web page (for favicons)&#10;https://en.wikipedia.org/wiki/Favicon&#10;">Nur die ersten %1$s der Webseite scannen</string>
+    <string name="title_advanced_favicons_partial">Nur die ersten %1$s der Webseite scannen</string>
     <string name="title_advanced_generated_icons">Generierte Symbole anzeigen (Anfangsbuchstaben)</string>
     <string name="title_advanced_identicons">Identicons anzeigen</string>
     <string name="title_advanced_circular">Runde Symbole anzeigen</string>
@@ -478,6 +481,7 @@
     <string name="title_advanced_undo">Anzeigedauer von »Rückgängig«</string>
     <string name="title_advanced_quick_filter">Unaufdringliche Schnellfiltersymbole anzeigen</string>
     <string name="title_advanced_quick_scroll">Nicht aufdringliche Symbole für schnellen Bildlauf nach oben oder unten anzeigen</string>
+    <string name="title_advanced_folder_nav">Von einer Nachrichtenliste immer zur Ordnerliste zurückkehren</string>
     <string name="title_advanced_autoread">Nachrichten beim Verschieben automatisch als gelesen kennzeichnen</string>
     <string name="title_advanced_star_snoozed">Zurückgestellte Nachrichten automatisch kennzeichnen</string>
     <string name="title_advanced_autounstar">Markierungen automatisch von Nachrichten entfernen, wenn sie verschoben werden</string>
@@ -1704,6 +1708,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>Zur nächsten Unterhaltung wechseln</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Sehr klein</item>
         <item>Klein</item>
         <item>Mittel</item>
         <item>Groß</item>

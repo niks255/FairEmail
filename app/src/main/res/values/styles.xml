@@ -410,6 +410,34 @@
         <item name="colorDrawerBackground">@color/black</item>
     </style>
 
+    <style name="AppThemeWhite" parent="AppThemeBlueOrangeLight">
+        <item name="colorPrimary">@color/blackPrimary</item>
+        <item name="colorPrimaryDark">@color/blackPrimaryDark</item>
+        <item name="colorAccent">@color/blackAccent</item>
+
+        <item name="colorInfoForeground">@color/white</item>
+        <item name="colorInfoBackground">@color/blackPrimary</item>
+
+        <item name="actionBarTheme">@style/WhiteActionBar</item>
+        <item name="snackbarStyle">@style/WhiteSnackBar</item>
+    </style>
+
+    <style name="WhiteActionBar" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/blackPrimary</item>
+        <item name="colorPrimaryDark">@color/blackPrimaryDark</item>
+        <item name="colorAccent">@color/blackAccent</item>
+
+        <item name="android:background">@color/white</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitle</item>
+        <!-- snackbar text color -->
+        <item name="android:textColor">@color/blackPrimaryDark</item>
+    </style>
+
+    <style name="WhiteSnackBar" parent="Widget.Design.Snackbar">
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
+
     <style name="AppThemeBlackAndWhite" parent="AppThemeBaseDark">
         <item name="themeName">black</item>
         <item name="colorPrimary">@color/blackAndWhitePrimary</item>
@@ -459,6 +487,10 @@
 
         <item name="colorInfoForeground">@color/white</item>
         <item name="colorInfoBackground">@color/greyPrimary</item>
+    </style>
+
+    <style name="ActionBarTitle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="AppThemeGreySteelBlueDark" parent="AppThemeBaseDark">
@@ -586,5 +618,13 @@
     <style name="fullScreenDialog" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="ChipLight" parent="Base.Theme.Material3.Light">
+        <item name="chipCornerRadius">6dp</item>
+    </style>
+
+    <style name="ChipDark" parent="Base.Theme.Material3.Dark">
+        <item name="chipCornerRadius">6dp</item>
     </style>
 </resources>

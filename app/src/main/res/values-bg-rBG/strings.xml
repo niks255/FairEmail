@@ -1340,6 +1340,7 @@
         <item>Към следващия разговор</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Extra small</item>
         <item>Малък</item>
         <item>Среден</item>
         <item>Голяма</item>

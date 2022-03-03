@@ -44,8 +44,10 @@ For authorizing:
 * Posteo: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) ([German](https://posteo.de/hilfe/zusaetzlichen-postfachschutz-deaktivieren)) isn't enabled
 * Web.de: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html))
 * GMX: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html))
+* GMX: with two factor authentication you'll need to use [an app password](https://support.gmx.com/security/2fa/application-specific-passwords.html) ([German](https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html))
 * T-online.de: please make sure you use [an email password](https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-adresse-passwoerter-und-sicherheit/passwort-fuer-e-mail-programme-einrichten) (German) and not your account password
 * Ionos (1und1): please make sure you use [an email password](https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-11-ionos-aendern/) (German) and not your account password
+* Yandex: please check if [IMAP is enabled](https://yandex.com/support/mail/mail-clients/others.html)
 
 Please see [here](#user-content-faq22) for common error messages and solutions.
 
@@ -603,7 +605,9 @@ After enabling two factor authentication there will be this error message:
 
 *[ALERT] Application-specific password required: https://support.google.com/mail/accounts/answer/185833 (Failure)*
 
-The error message "*Authentication failed - Invalid credentials*" or *Token refresh required* means that the Android account manager was not able to refresh the access token.
+The error message "*Authentication failed - Invalid credentials*" or *Token refresh required* means that the Android account manager was not able to refresh the access token,
+or that getting an access token was not allowed,
+for example when the account is a [Family Link](https://support.google.com/families/answer/7101025) account, in which case you can use the Gmail app only.
 A common cause for this problem is using a VPN, a firewall app or an ad blocker which blocks internet access for the Android account manager.
 You can workaround this issue by using an app password.
 Please [see here](#user-content-howto) about how you can delete the account configured with the quick setup wizard.
@@ -621,6 +625,8 @@ See [here](https://support.google.com/accounts/answer/185833) about how to gener
 **Important**: using this method is not recommended because it is less reliable.
 
 **Important**: Gsuite accounts authorized with a username/password will stop working [in the near future](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html).
+
+**Important**: using your account password [won't be possible anymore from May 30, 2022](https://support.google.com/accounts/answer/6010255).
 
 See [here](https://support.google.com/accounts/answer/6010255) about how to enable "less secure apps"
 or go [directy to the setting](https://www.google.com/settings/security/lesssecureapps).
@@ -714,7 +720,10 @@ and setting the user name field to your main email address.
 Note that you can copy an identity by long pressing it.
 
 Alternatively, you can enable *Allow editing sender address* in the advanced settings of an existing identity to edit the username when composing a new message,
-if your provider allows this.
+if your provider allows this. Considering the email address test@example.org you can use these special username formats:
+
+* Username *+extra* will result in the email address *test+extra@example.org*
+* Username *@extra* will result in the email address *test@extra.example.org*
 
 FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.
 
@@ -1262,8 +1271,8 @@ This can for example happen when connectivity was abruptly lost. A typical examp
 The errors *... BYE Logging out ...*, *... Connection reset ...* mean that the email server
 or something between the email server and the app, for example a router or a firewall (app), actively terminated an existing connection.
 
-The error *... Connection closed by peer ...* might be caused by a not updated Exchange server,
-see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
+The error *... Connection closed by peer ...* means that the email server actively closed the connection.
+This might be caused by a not updated Exchange server, see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
 
 The errors *... Read error ...*, *... Write error ...*, *... Read timed out ...*, *... Broken pipe ...* mean that the email server is not responding anymore or that the internet connection is bad.
 
@@ -1283,6 +1292,9 @@ FairEmail will assume ISO-8859-1 (Latin1), which will in most cases result in sh
 The error *... Login Rate Limit Hit ...* means that there were too many login attempts with an incorrect password. Please double check your password or authenticate the account again with the quick setup wizard (OAuth only).
 
 The error *... NO mailbox selected READ-ONLY ...* indicates [this Zimbra problem](https://sebastian.marsching.com/wiki/Network/Zimbra#Mailbox_Selected_READ-ONLY_Error_in_Thunderbird).
+
+The Outlook specific error *... Command Error. 10 ...* probably means that the OAuth token expired or was invalidated.
+Authenticating the account again with the quick setup wizard will probably resolve this condition.
 
 Please [see here](#user-content-faq4) for the errors *... Untrusted ... not in certificate ...*, *... Invalid security certificate (Can't verify identity of server) ...* or *... Trust anchor for certification path not found ...*
 
@@ -1700,6 +1712,8 @@ The real battery usage can be seen by navigating to this screen:
 
 *Android settings*, *Battery*, three-dots menu *Battery usage*, three-dots menu *Show full device usage*
 
+Alternatively: tap on the *App settings* button in the main settings screen of the app and tap on *Battery*.
+
 As a rule of thumb the battery usage should be below or in any case not be much higher than *Mobile network standby*.
 If this isn't the case, please turn on *Auto optimize* in the receive settings.
 If this doesn't help, please [ask for support](https://contact.faircode.eu/?product=fairemailsupport).
@@ -1822,6 +1836,9 @@ or by a too short DH key on the email server and can unfortunately not be fixed 
 
 The error '*Handshake failed ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO ...*' might be caused by the provider still using RC4,
 which isn't supported since [Android 7](https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl) anymore.
+
+The error '*Handshake failed SSL handshake terminated ... SSLV3_ALERT_HANDSHAKE_FAILURE ... HANDSHAKE_FAILURE_ON_CLIENT_HELLO*'
+can be caused by [this Android 7.0 bug](https://issuetracker.google.com/issues/37122132). This can unfortunately not be fixed by FairEmail.
 
 The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION or SSLV3_ALERT_HANDSHAKE_FAILURE ...*'
 might be caused by enabling hardening connections in the connection settings
@@ -3063,12 +3080,14 @@ Note that only [JPEG](https://en.wikipedia.org/wiki/JPEG) and [PNG](https://en.w
 
 * Error reports will help improve FairEmail
 * Error reporting is optional and opt-in
-* Error reporting can be enabled/disabled in the settings, section miscellaneous
+* Error reporting can be enabled/disabled via the *miscellaneous* settings tab page
 * Error reports will automatically be sent anonymously to [Bugsnag](https://www.bugsnag.com/)
 * Bugsnag for Android is [open source](https://github.com/bugsnag/bugsnag-android)
 * See [here](https://docs.bugsnag.com/platforms/android/automatically-captured-data/) about what data will be sent in case of errors
 * See [here](https://docs.bugsnag.com/legal/privacy-policy/) for the privacy policy of Bugsnag
 * Error reports will be sent to *sessions.bugsnag.com:443* and *notify.bugsnag.com:443*
+
+Error reports have helped to find otherwise hard to find bugs and therefore improve the overall stability of the app.
 
 <br />
 
@@ -3334,6 +3353,7 @@ Note that:
 * An app like FairEmail cannot select which Google account to use
 * It may take a while until the Play store app has synchronized a purchase to another device
 * Play Store purchases cannot be used without the Play Store, which is also not allowed by Play Store rules
+* You can't restore purchases with [microG](https://microg.org/)
 
 If you cannot solve the problem with the purchase, you will have to contact Google about it.
 
@@ -3449,6 +3469,8 @@ Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=har
 
 Hard bounces will mostly be processed automatically because they affect the reputation of the email provider.
 The bounce address (=*Return-Path* header) is mostly very specific, so the email server can determine the sending account.
+
+Some email servers, reportedly the Outlook.com email server, respond with a hard bounce to a hard bounce. In other words, hard bounces are being rejected.
 
 For some background, see for [this Wikipedia article](https://en.wikipedia.org/wiki/Bounce_message).
 

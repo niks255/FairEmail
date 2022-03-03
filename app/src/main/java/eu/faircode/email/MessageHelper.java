@@ -238,6 +238,7 @@ public class MessageHelper {
         System.setProperty("mail.mime.multipart.ignoremissingendboundary", "true"); // default true
         System.setProperty("mail.mime.multipart.allowempty", "true"); // default false
         System.setProperty("mail.mime.contentdisposition.strict", "false"); // default true
+        //System.setProperty("mail.mime.contenttypehandler", "eu.faircode.email.ContentTypeHandler");
 
         //System.setProperty("mail.imap.parse.debug", "true");
 
@@ -2877,16 +2878,20 @@ public class MessageHelper {
 
             Integer plain = isPlainOnly();
             if (plain != null && (plain & 1) != 0)
+                // Plain only
                 parts.addAll(text);
-            else
+            else {
+                // Either plain and HTML or HTML only
+                boolean hasPlain = (plain != null && (plain & 0x80) != 0);
                 for (PartHolder h : text)
-                    if (plain_text) {
+                    if (plain_text && hasPlain) {
                         if (h.isPlainText())
                             parts.add(h);
                     } else {
                         if (h.isHtml())
                             parts.add(h);
                     }
+            }
 
             parts.addAll(extra);
 
@@ -2912,16 +2917,32 @@ public class MessageHelper {
 
                     if (content instanceof String)
                         result = (String) content;
-                    else if (content instanceof InputStream)
+                    else if (content instanceof InputStream) {
+                        // java.io.ByteArrayInputStream
                         // Typically com.sun.mail.util.QPDecoderStream
-                        result = Helper.readStream((InputStream) content);
-                    else
+                        if (BuildConfig.DEBUG && false)
+                            warnings.add(content.getClass().getName());
+                        Charset charset;
+                        try {
+                            String cs = h.contentType.getParameter("charset");
+                            charset = (cs == null ? StandardCharsets.ISO_8859_1 : Charset.forName(cs));
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                            charset = StandardCharsets.ISO_8859_1;
+                        }
+                        result = Helper.readStream((InputStream) content, charset);
+                    } else {
+                        Log.e(content.getClass().getName());
                         result = content.toString();
+                    }
                 } catch (IOException | FolderClosedException | MessageRemovedException ex) {
                     throw ex;
                 } catch (Throwable ex) {
-                    Log.w(ex);
-                    warnings.add(Log.formatThrowable(ex, false));
+                    Log.e(ex);
+                    if (BuildConfig.TEST_RELEASE)
+                        warnings.add(ex + "\n" + android.util.Log.getStackTraceString(ex));
+                    else
+                        warnings.add(Log.formatThrowable(ex, false));
                     return null;
                 }
 
@@ -3099,7 +3120,7 @@ public class MessageHelper {
                         }
                     }
 
-                    if (report.isDispositionNotification() && !report.isDisplayed()) {
+                    if (report.isDispositionNotification() && !report.isMdnDisplayed()) {
                         if (report.disposition != null)
                             w.append(report.disposition);
                     }
@@ -4342,23 +4363,48 @@ public class MessageHelper {
             return ("delivered".equals(action) || "relayed".equals(action) || "expanded".equals(action));
         }
 
-        boolean isDisplayed() {
-            return isType("displayed");
+        boolean isMdnManual() {
+            return "manual-action".equals(getAction(0));
         }
 
-        boolean isDeleted() {
-            return isType("deleted");
+        boolean isMdnAutomatic() {
+            return "automatic-action".equals(getAction(0));
         }
 
-        private boolean isType(String t) {
-            // manual-action/MDN-sent-manually; displayed
+        boolean isMdnManualSent() {
+            return "MDN-sent-manually".equals(getAction(1));
+        }
+
+        boolean isMdnAutomaticSent() {
+            return "MDN-sent-automatically".equals(getAction(1));
+        }
+
+        boolean isMdnDisplayed() {
+            return "displayed".equalsIgnoreCase(getType());
+        }
+
+        boolean isMdnDeleted() {
+            return "deleted".equalsIgnoreCase(getType());
+        }
+
+        private String getAction(int index) {
             if (disposition == null)
-                return false;
+                return null;
             int semi = disposition.lastIndexOf(';');
             if (semi < 0)
-                return false;
-            String type = disposition.substring(semi + 1).trim();
-            return t.equals(type);
+                return null;
+            String[] action = disposition.substring(0, semi).trim().split("/");
+            return (index < action.length ? action[index] : null);
+        }
+
+        private String getType() {
+            // manual-action/MDN-sent-manually; displayed
+            if (disposition == null)
+                return null;
+            int semi = disposition.lastIndexOf(';');
+            if (semi < 0)
+                return null;
+            return disposition.substring(semi + 1).trim();
         }
 
         static boolean isDeliveryStatus(String type) {
