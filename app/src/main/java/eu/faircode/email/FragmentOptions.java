@@ -135,7 +135,7 @@ public class FragmentOptions extends FragmentBase {
             "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_highlight", "dividers",
             "portrait2", "portrait2c", "portrait_min_size", "landscape", "landscape_min_size",
             "column_width",
-            "nav_count", "nav_unseen_drafts", "navbar_colorize",
+            "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
             "indentation", "group_category", "date", "date_fixed", "date_bold", "threading", "threading_unread",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
             "avatars", "bimi", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
@@ -417,7 +417,7 @@ public class FragmentOptions extends FragmentBase {
             }
 
             private int getSuggestions(String query, int id, int tab, String title, View view, MatrixCursor cursor) {
-                if (view == null || "debug".equals(view.getTag()))
+                if (view == null || "nosuggest".equals(view.getTag()))
                     return id;
                 else if (view instanceof ViewGroup) {
                     ViewGroup group = (ViewGroup) view;

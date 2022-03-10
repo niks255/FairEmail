@@ -74,7 +74,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swDate;
     private SwitchCompat swDateFixed;
     private SwitchCompat swDateBold;
-    private SwitchCompat swNavBarColorize;
     private SwitchCompat swPortrait2;
     private SwitchCompat swPortrait2c;
     private Spinner spPortraitMinSize;
@@ -86,6 +85,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swNavOptions;
     private SwitchCompat swNavMessageCount;
     private SwitchCompat swNavUnseenDrafts;
+    private SwitchCompat swNavPinnedCount;
+    private SwitchCompat swNavBarColorize;
 
     private SwitchCompat swThreading;
     private SwitchCompat swThreadingUnread;
@@ -105,6 +106,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swBimi;
     private SwitchCompat swGravatars;
     private TextView tvGravatarsHint;
+    private SwitchCompat swLibravatars;
+    private ImageButton ibLibravatars;
     private SwitchCompat swFavicons;
     private SwitchCompat swFaviconsPartial;
     private TextView tvFaviconsHint;
@@ -180,10 +183,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_highlight", "dividers",
             "group_category", "date", "date_fixed", "date_bold",
             "portrait2", "portrait2c", "landscape", "close_pane", "column_width",
-            "nav_options", "nav_count", "nav_unseen_drafts", "navbar_colorize",
+            "nav_options", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
             "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_color",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
-            "avatars", "bimi", "gravatars", "favicons", "favicons_partial", "generated_icons", "identicons",
+            "avatars", "bimi", "gravatars", "libravatars", "favicons", "favicons_partial", "generated_icons", "identicons",
             "circular", "saturation", "brightness", "threshold",
             "email_format", "prefer_contact", "only_contact", "distinguish_contacts", "show_recipients",
             "font_size_sender", "sender_ellipsize",
@@ -232,6 +235,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swNavOptions = view.findViewById(R.id.swNavOptions);
         swNavMessageCount = view.findViewById(R.id.swNavMessageCount);
         swNavUnseenDrafts = view.findViewById(R.id.swNavUnseenDrafts);
+        swNavPinnedCount = view.findViewById(R.id.swNavPinnedCount);
         swNavBarColorize = view.findViewById(R.id.swNavBarColorize);
 
         swThreading = view.findViewById(R.id.swThreading);
@@ -252,6 +256,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         ibBimi = view.findViewById(R.id.ibBimi);
         swGravatars = view.findViewById(R.id.swGravatars);
         tvGravatarsHint = view.findViewById(R.id.tvGravatarsHint);
+        swLibravatars = view.findViewById(R.id.swLibravatars);
+        ibLibravatars = view.findViewById(R.id.ibLibravatars);
         swFavicons = view.findViewById(R.id.swFavicons);
         swFaviconsPartial = view.findViewById(R.id.swFaviconsPartial);
         tvFaviconsHint = view.findViewById(R.id.tvFaviconsHint);
@@ -543,6 +549,13 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
+        swNavPinnedCount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("nav_count_pinned", checked).apply();
+            }
+        });
+
         swNavBarColorize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -700,6 +713,21 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onClick(View v) {
                 Helper.view(v.getContext(), Uri.parse(Helper.GRAVATAR_PRIVACY_URI), true);
+            }
+        });
+
+        swLibravatars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("libravatars", checked).apply();
+                ContactInfo.clearCache(compoundButton.getContext());
+            }
+        });
+
+        ibLibravatars.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(BuildConfig.LIBRAVATAR_INFO), true);
             }
         });
 
@@ -1269,6 +1297,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swNavOptions.setChecked(prefs.getBoolean("nav_options", true));
         swNavMessageCount.setChecked(prefs.getBoolean("nav_count", false));
         swNavUnseenDrafts.setChecked(prefs.getBoolean("nav_unseen_drafts", false));
+        swNavPinnedCount.setChecked(prefs.getBoolean("nav_count_pinned", false));
         swNavBarColorize.setChecked(prefs.getBoolean("navbar_colorize", false));
 
         swThreading.setChecked(prefs.getBoolean("threading", true));
@@ -1292,6 +1321,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swAvatars.setChecked(prefs.getBoolean("avatars", true));
         swBimi.setChecked(prefs.getBoolean("bimi", false));
         swGravatars.setChecked(prefs.getBoolean("gravatars", false));
+        swLibravatars.setChecked(prefs.getBoolean("libravatars", false));
         swFavicons.setChecked(prefs.getBoolean("favicons", false));
         swFaviconsPartial.setChecked(prefs.getBoolean("favicons_partial", true));
         swFaviconsPartial.setEnabled(swFavicons.isChecked());

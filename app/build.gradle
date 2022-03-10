@@ -3,9 +3,9 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1851 }
+def getVersionCode = { -> return 1854 }
 def getRevision = { -> return "a" }
-def getReleaseName = { -> return "Fulgurotherium" }
+def getReleaseName = { -> return "Gobivenator" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
 
 def keystoreProperties = new Properties()
@@ -16,12 +16,12 @@ if (rootProject.file("local.properties").exists())
     localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "eu.faircode.email"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode getVersionCode()
         versionName "1." + getVersionCode()
         archivesBaseName = "FairEmail-v$versionName" + getRevision()
@@ -163,6 +163,9 @@ android {
             buildConfigField "String", "GITHUB_LATEST_API", "\"https://api.github.com/repos/niks255/fairemail/releases/latest\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"https://github.com/niks255/FairEmail/releases\""
             buildConfigField "String", "GRAVATAR_URI", "\"https://www.gravatar.com/avatar/\""
+            buildConfigField "String", "LIBRAVATAR_DNS", "\"_avatars-sec._tcp,_avatars._tcp\""
+            buildConfigField "String", "LIBRAVATAR_URI", "\"https://seccdn.libravatar.org/avatar/\""
+            buildConfigField "String", "LIBRAVATAR_INFO", "\"https://libravatar.org/\""
             buildConfigField "String", "GPA_URI", localProperties.getProperty("gpa.uri", "\"\"")
             buildConfigField "String", "PAYPAL_URI", localProperties.getProperty("paypal.uri", "\"\"")
         }
@@ -177,6 +180,9 @@ android {
             buildConfigField "String", "GITHUB_LATEST_API", "\"https://api.github.com/repos/M66B/FairEmail/releases/latest\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"https://github.com/M66B/FairEmail/releases\""
             buildConfigField "String", "GRAVATAR_URI", "\"https://www.gravatar.com/avatar/\""
+            buildConfigField "String", "LIBRAVATAR_DNS", "\"_avatars-sec._tcp,_avatars._tcp\""
+            buildConfigField "String", "LIBRAVATAR_URI", "\"https://seccdn.libravatar.org/avatar/\""
+            buildConfigField "String", "LIBRAVATAR_INFO", "\"https://libravatar.org/\""
             buildConfigField "String", "PAYPAL_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
         }
@@ -192,6 +198,9 @@ android {
             buildConfigField "String", "GITHUB_LATEST_API", "\"\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"\""
             buildConfigField "String", "GRAVATAR_URI", "\"\""
+            buildConfigField "String", "LIBRAVATAR_DNS", "\"\""
+            buildConfigField "String", "LIBRAVATAR_URI", "\"\""
+            buildConfigField "String", "LIBRAVATAR_INFO", "\"\""
             buildConfigField "String", "PAYPAL_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
         }
@@ -207,6 +216,9 @@ android {
             buildConfigField "String", "GITHUB_LATEST_API", "\"\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"\""
             buildConfigField "String", "GRAVATAR_URI", "\"\""
+            buildConfigField "String", "LIBRAVATAR_DNS", "\"\""
+            buildConfigField "String", "LIBRAVATAR_URI", "\"\""
+            buildConfigField "String", "LIBRAVATAR_INFO", "\"\""
             buildConfigField "String", "PAYPAL_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
         }

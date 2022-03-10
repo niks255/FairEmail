@@ -217,6 +217,7 @@
     <string name="title_setup_password_different">Les mots de passe ne correspondent pas</string>
     <string name="title_setup_password_invalid">Mot de passe non valide</string>
     <string name="title_setup_import_accounts">Importer les comptes et identités</string>
+    <string name="title_setup_import_delete">Supprimer d\'abord les comptes existants</string>
     <string name="title_setup_import_rules">Importer les règles de filtrage</string>
     <string name="title_setup_import_contacts">Importer les contacts locaux</string>
     <string name="title_setup_import_answers">Importer les modèles de réponse</string>
@@ -377,6 +378,7 @@
     <string name="title_advanced_nav_hide_message">Vous pouvez réactiver les options dans les paramètres d\'affichage</string>
     <string name="title_advanced_nav_message_count">Afficher le nombre de messages stockés localement dans le menu de navigation</string>
     <string name="title_advanced_nav_unseen_drafts">Afficher le nombre de brouillons non lus dans le menu de navigation</string>
+    <string name="title_advanced_nav_pinned_count">Afficher le nombre de messages non lus dans le menu de navigation épinglé</string>
     <string name="title_advanced_startup">Afficher sur l\'écran de démarrage</string>
     <string name="title_advanced_cards">Utiliser le style carte au lieu du style tableau</string>
     <string name="title_advanced_cards_beige">Afficher un arrière-plan beige lors de l\'utilisation du style carte (thèmes clairs seulement)</string>
@@ -396,6 +398,7 @@
     <string name="title_advanced_color_stripe_wide">Utiliser une bande de couleur large</string>
     <string name="title_advanced_avatars">Afficher la photo des contacts</string>
     <string name="title_advanced_gravatars">Afficher les Gravatars</string>
+    <string name="title_advanced_libravatars">Afficher les Libravatars</string>
     <string name="title_advanced_bimi_unverified">Expéditeur non vérifié</string>
     <string name="title_advanced_bimi_verified">Expéditeur vérifié</string>
     <string name="title_advanced_favicons">Afficher l\'icône des sites web</string>
@@ -548,6 +551,10 @@
     <string name="title_advanced_disconnect_auto_update">Mettre à jour automatiquement les listes chaque semaine</string>
     <string name="title_advanced_disconnect_links">Utiliser des listes pour vous avertir des liens de pistage</string>
     <string name="title_advanced_disconnect_images">Utiliser des listes pour identifier les images de pistage</string>
+    <string name="title_advanced_mnemonic">Supprimer les données à distance</string>
+    <string name="title_advanced_mnemonic_hint">Tout e-mail reçu contenant les mots ci-dessous dans l\'objet supprimera automatiquement et immédiatement toutes les données de l\'application sur cet appareil</string>
+    <string name="title_advanced_clear_all">Supprimer les données de l\'application</string>
+    <string name="title_advanced_clear_all_remark">Les données de l\'application seront définitivement supprimées !</string>
     <string name="title_advanced_sign_default">Signer par défaut</string>
     <string name="title_advanced_encrypt_default">Chiffrer par défaut</string>
     <string name="title_advanced_auto_decrypt">Déchiffrer automatiquement les messages</string>
@@ -793,7 +800,7 @@
     <string name="title_last_connected">Dernière connexion : %1$s</string>
     <string name="title_backoff_until">Attente après l\'échec jusqu\'à : %1$s</string>
     <string name="title_storage_quota">Utilisation du stockage sur le serveur : %1$s/%2$s</string>
-    <string name="title_pop_support">Le protocole POP3 prend en charge le téléchargement et la suppression des messages depuis la boîte de réception uniquement. POP3 ne permet pas de marquer les messages comme lus, de les déplacer, etc. POP3 utilisera davantage de batterie et de données qu’IMAP. Par conséquent, envisagez d’utiliser le protocole IMAP lorsque cela est possible.</string>
+    <string name="title_pop_support">Le protocole POP3 ne peut que télécharger et supprimer des messages de la boîte de réception. Il n\'est pas possible de marquer les messages comme lus, de signaler le spam, de déplacer les messages, etc. Pensez à utiliser le protocole IMAP chaque fois que cela est possible.</string>
     <string name="title_pop_sent">Si votre appareil est perdu ou volé, les messages envoyés pourraient être perdus.</string>
     <string name="title_pop_warning">Si un serveur POP3 ne prend pas en charge la commande UIDL, l\'utilisation des données peut être élevée. Ajustez donc la fréquence de synchronisation ci-dessous en conséquence.</string>
     <string name="title_pop_folders">Le protocole POP3 ne permet pas la création de dossiers</string>

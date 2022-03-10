@@ -297,8 +297,6 @@ public class FragmentCompose extends FragmentBase {
     private long[] pgpKeyIds;
     private long pgpSignKeyId;
 
-    private static final long MAX_PGP_BIND_DELAY = 250; // milliseconds
-
     private static final int REDUCED_IMAGE_SIZE = 1440; // pixels
     private static final int REDUCED_IMAGE_QUALITY = 90; // percent
     // http://regex.info/blog/lightroom-goodies/jpeg-quality
@@ -2840,7 +2838,7 @@ public class FragmentCompose extends FragmentBase {
                 etBody.setText(body);
 
                 int start = args.getInt("start");
-                if (start < body.length())
+                if (start <= body.length())
                     etBody.setSelection(start);
             }
 
@@ -4610,13 +4608,13 @@ public class FragmentCompose extends FragmentBase {
                                     EntityMessage.PGP_SIGNENCRYPT.equals(ref.ui_encrypt)) {
                                 if (Helper.isOpenKeychainInstalled(context) &&
                                         selected.sign_key != null &&
-                                        hasPgpKey(context, recipients))
+                                        PgpHelper.hasPgpKey(context, recipients))
                                     data.draft.ui_encrypt = ref.ui_encrypt;
                             } else if (EntityMessage.SMIME_SIGNONLY.equals(ref.ui_encrypt) ||
                                     EntityMessage.SMIME_SIGNENCRYPT.equals(ref.ui_encrypt)) {
                                 if (ActivityBilling.isPro(context) &&
                                         selected.sign_key_alias != null &&
-                                        hasSmimeKey(context, recipients))
+                                        SmimeHelper.hasSmimeKey(context, recipients))
                                     data.draft.ui_encrypt = ref.ui_encrypt;
                             }
                         }
@@ -5846,8 +5844,8 @@ public class FragmentCompose extends FragmentBase {
                                     EntityMessage.DSN_NONE.equals(draft.dsn)) &&
                                     (draft.ui_encrypt == null ||
                                             EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt))) {
-                                args.putBoolean("remind_pgp", hasPgpKey(context, recipients));
-                                args.putBoolean("remind_smime", hasSmimeKey(context, recipients));
+                                args.putBoolean("remind_pgp", PgpHelper.hasPgpKey(context, recipients));
+                                args.putBoolean("remind_smime", SmimeHelper.hasSmimeKey(context, recipients));
                             }
 
                             if (TextUtils.isEmpty(draft.subject))
@@ -6502,50 +6500,6 @@ public class FragmentCompose extends FragmentBase {
         return -1;
     }
 
-    private boolean hasPgpKey(Context context, List<Address> recipients) {
-        if (recipients == null || recipients.size() == 0)
-            return false;
-
-        String[] userIds = new String[recipients.size()];
-        for (int i = 0; i < recipients.size(); i++) {
-            InternetAddress recipient = (InternetAddress) recipients.get(i);
-            userIds[i] = recipient.getAddress();
-        }
-
-        Intent intent = new Intent(OpenPgpApi.ACTION_GET_KEY_IDS);
-        intent.putExtra(OpenPgpApi.EXTRA_USER_IDS, userIds);
-
-        try {
-            Intent result = PgpHelper.execute(context, intent, null, null, MAX_PGP_BIND_DELAY);
-            int resultCode = result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR);
-            if (resultCode == OpenPgpApi.RESULT_CODE_SUCCESS) {
-                long[] keyIds = result.getLongArrayExtra(OpenPgpApi.EXTRA_KEY_IDS);
-                return (keyIds.length > 0);
-            }
-        } catch (OperationCanceledException ignored) {
-            // Do nothing
-        } catch (Throwable ex) {
-            Log.w(ex);
-        }
-
-        return false;
-    }
-
-    private boolean hasSmimeKey(Context context, List<Address> recipients) {
-        if (recipients == null || recipients.size() == 0)
-            return false;
-
-        DB db = DB.getInstance(context);
-        for (Address address : recipients) {
-            String email = ((InternetAddress) address).getAddress();
-            List<EntityCertificate> certs = db.certificate().getCertificateByEmail(email);
-            if (certs != null && certs.size() > 0)
-                return true;
-        }
-
-        return false;
-    }
-
     private AdapterView.OnItemSelectedListener identitySelected = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -6812,6 +6766,7 @@ public class FragmentCompose extends FragmentBase {
             final ImageView ivType = dview.findViewById(R.id.ivType);
             final RadioGroup rgAction = dview.findViewById(R.id.rgAction);
             final CheckBox cbResize = dview.findViewById(R.id.cbResize);
+            final ImageButton ibResize = dview.findViewById(R.id.ibResize);
             final Spinner spResize = dview.findViewById(R.id.spResize);
             final TextView tvResize = dview.findViewById(R.id.tvResize);
             final CheckBox cbPrivacy = dview.findViewById(R.id.cbPrivacy);
@@ -6845,6 +6800,13 @@ public class FragmentCompose extends FragmentBase {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     prefs.edit().putBoolean("resize_images", isChecked).apply();
                     spResize.setEnabled(isChecked);
+                }
+            });
+
+            ibResize.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewFAQ(v.getContext(), 63);
                 }
             });
 

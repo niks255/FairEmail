@@ -47,6 +47,9 @@ public class AdapterNavMenu extends RecyclerView.Adapter<AdapterNavMenu.ViewHold
     private LifecycleOwner owner;
     private LayoutInflater inflater;
 
+    private boolean nav_count;
+    private boolean nav_count_pinned;
+
     private int colorUnread;
     private int colorControlNormal;
     private int textColorSecondary;
@@ -61,6 +64,7 @@ public class AdapterNavMenu extends RecyclerView.Adapter<AdapterNavMenu.ViewHold
         private View view;
         private ImageView ivItem;
         private ImageView ivBadge;
+        private TextView tvCount;
         private TextView tvItem;
         private TextView tvItemExtra;
         private ImageView ivExtra;
@@ -72,6 +76,7 @@ public class AdapterNavMenu extends RecyclerView.Adapter<AdapterNavMenu.ViewHold
             view = itemView.findViewById(R.id.clItem);
             ivItem = itemView.findViewById(R.id.ivItem);
             ivBadge = itemView.findViewById(R.id.ivBadge);
+            tvCount = itemView.findViewById(R.id.tvCount);
             tvItem = itemView.findViewById(R.id.tvItem);
             tvItemExtra = itemView.findViewById(R.id.tvItemExtra);
             ivExtra = itemView.findViewById(R.id.ivExtra);
@@ -92,10 +97,16 @@ public class AdapterNavMenu extends RecyclerView.Adapter<AdapterNavMenu.ViewHold
             ivItem.setImageResource(menu.getIcon());
 
             Integer color = menu.getColor();
-            ivItem.setImageTintList(ColorStateList.valueOf(color == null ? colorControlNormal : color));
+            ivItem.setImageTintList(ColorStateList.valueOf(color == null
+                    ? colorControlNormal : color));
 
             Integer count = menu.getCount();
-            ivBadge.setVisibility(count == null || count == 0 || expanded ? View.GONE : View.VISIBLE);
+            ivBadge.setVisibility(count == null || count == 0 || expanded
+                    ? View.GONE : View.VISIBLE);
+
+            tvCount.setText(Helper.formatNumber(count, 99, NF));
+            tvCount.setVisibility(count == null || count == 0 || expanded || !nav_count_pinned
+                    ? View.GONE : View.VISIBLE);
 
             if (count == null)
                 tvItem.setText(menu.getTitle());
@@ -143,6 +154,8 @@ public class AdapterNavMenu extends RecyclerView.Adapter<AdapterNavMenu.ViewHold
         this.inflater = LayoutInflater.from(context);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        this.nav_count = prefs.getBoolean("nav_count", false);
+        this.nav_count_pinned = prefs.getBoolean("nav_count_pinned", false);
         boolean highlight_unread = prefs.getBoolean("highlight_unread", true);
         int colorHighlight = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorUnreadHighlight));
         this.colorUnread = (highlight_unread ? colorHighlight : Helper.resolveColor(context, R.attr.colorUnread));
@@ -192,6 +205,10 @@ public class AdapterNavMenu extends RecyclerView.Adapter<AdapterNavMenu.ViewHold
 
     NavMenuItem get(int pos) {
         return items.get(pos);
+    }
+
+    int getPosition(NavMenuItem item) {
+        return items.indexOf(item);
     }
 
     private static class DiffCallback extends DiffUtil.Callback {

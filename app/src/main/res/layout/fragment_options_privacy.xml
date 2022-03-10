@@ -391,6 +391,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swClientId" />
 
+                <eu.faircode.email.FixedImageButton
+                    android:id="@+id/ibClientId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:contentDescription="@string/title_info"
+                    android:tooltipText="@string/title_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvClientId"
+                    app:srcCompat="@drawable/twotone_info_24" />
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swDisplayHidden"
                     android:layout_width="0dp"
@@ -399,7 +410,7 @@
                     android:text="@string/title_advanced_display_hidden"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvClientId"
+                    app:layout_constraintTop_toBottomOf="@id/ibClientId"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView
@@ -622,6 +633,56 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/swDisconnectLinks"
                     app:switchPadding="12dp" />
+
+                <Button
+                    android:id="@+id/btnClearAll"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_warning_24"
+                    android:drawablePadding="6dp"
+                    android:text="@string/title_advanced_clear_all"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swDisconnectImages" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swMnemonic"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_mnemonic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnClearAll"
+                    app:switchPadding="12dp" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvMnemonicHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_advanced_mnemonic_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?attr/colorWarning"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swMnemonic" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvMnemonic"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:selectAllOnFocus="true"
+                    android:text="aunt charge east crater lab sheriff what place borrow uniform breeze chronic"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textIsSelectable="true"
+                    app:fontFamily="monospace"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvMnemonicHint" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/grpSafeBrowsing"

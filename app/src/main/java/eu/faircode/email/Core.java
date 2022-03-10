@@ -3966,11 +3966,11 @@ class Core {
             // Borrow reply name from sender name
             if (message.from != null && message.from.length == 1 &&
                     message.reply != null && message.reply.length == 1) {
+                InternetAddress from = (InternetAddress) message.from[0];
                 InternetAddress reply = (InternetAddress) message.reply[0];
-                if (TextUtils.isEmpty(reply.getPersonal())) {
-                    InternetAddress from = (InternetAddress) message.from[0];
+                if (TextUtils.isEmpty(reply.getPersonal()) &&
+                        Objects.equals(from.getAddress(), reply.getAddress()))
                     reply.setPersonal(from.getPersonal());
-                }
             }
 
             EntityIdentity identity = matchIdentity(context, folder, message);
@@ -4504,6 +4504,14 @@ class Core {
             Context context, List<Header> headers, String html,
             EntityAccount account, EntityFolder folder, EntityMessage message,
             List<EntityRule> rules) {
+
+        if (EntityFolder.INBOX.equals(folder.type)) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            String mnemonic = prefs.getString("wipe_mnemonic", null);
+            if (mnemonic != null && message.subject != null &&
+                    message.subject.toLowerCase(Locale.ROOT).contains(mnemonic))
+                Helper.clearAll(context);
+        }
 
         if (account.protocol == EntityAccount.TYPE_IMAP && folder.read_only)
             return;

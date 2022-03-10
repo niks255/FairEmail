@@ -262,6 +262,7 @@
     <string name="title_setup_password_different">Passwords don\'t match</string>
     <string name="title_setup_password_invalid">Password invalid</string>
     <string name="title_setup_import_accounts">Import accounts and identities</string>
+    <string name="title_setup_import_delete">Delete existing accounts first</string>
     <string name="title_setup_import_rules">Import filter rules</string>
     <string name="title_setup_import_contacts">Import local contacts</string>
     <string name="title_setup_import_answers">Import reply templates</string>
@@ -449,6 +450,7 @@
     <string name="title_advanced_nav_hide_message">You can enable the options again in the display settings</string>
     <string name="title_advanced_nav_message_count">Show number of locally stored messages in the navigation menu</string>
     <string name="title_advanced_nav_unseen_drafts">Show number of unread drafts in the navigation menu</string>
+    <string name="title_advanced_nav_pinned_count">Show the number of unread messages in the pinned navigation menu</string>
     <string name="title_advanced_startup">Show on start screen</string>
     <string name="title_advanced_cards">Use card style instead of tabular style</string>
     <string name="title_advanced_cards_beige">Use beige background when using card style (light themes only)</string>
@@ -468,6 +470,7 @@
     <string name="title_advanced_color_stripe_wide">Use wide color stripe</string>
     <string name="title_advanced_avatars">Show contact photos</string>
     <string name="title_advanced_gravatars">Show Gravatars</string>
+    <string name="title_advanced_libravatars">Show Libravatars</string>
     <string name="title_advanced_bimi" translatable="false">Show Brand Indicators for Message Identification (BIMI)</string>
     <string name="title_advanced_bimi_unverified">Unverified sender</string>
     <string name="title_advanced_bimi_verified">Verified sender</string>
@@ -636,6 +639,10 @@
     <string name="title_advanced_disconnect_auto_update">Automatically update lists weekly</string>
     <string name="title_advanced_disconnect_links">Use lists to warn about tracking links</string>
     <string name="title_advanced_disconnect_images">Use lists to recognize tracking images</string>
+    <string name="title_advanced_mnemonic">Delete data remotely</string>
+    <string name="title_advanced_mnemonic_hint">Any email received with the below words in the subject line will automatically and immediately delete the app data</string>
+    <string name="title_advanced_clear_all">Delete the app data</string>
+    <string name="title_advanced_clear_all_remark">The app data will be irreversibly deleted!</string>
 
     <string name="title_advanced_sign_default">Sign by default</string>
     <string name="title_advanced_encrypt_default">Encrypt by default</string>
@@ -716,6 +723,8 @@
     <string name="title_advanced_auth_sasl" translatable="false">SASL</string>
     <string name="title_advanced_auth_apop" translatable="false">APOP</string>
     <string name="title_advanced_idle_done" translatable="false">IDLE/DONE</string>
+    <string name="title_advanced_logarithmic_backoff" translatable="false">Logarithmic back-off</string>
+    <string name="title_advanced_logarithmic_backoff_hint" translatable="false">Turning this off can result in a significant increase in battery usage!</string>
     <string name="title_advanced_keep_alive_poll" translatable="false">Poll on keep-alive</string>
     <string name="title_advanced_empty_pool" translatable="false">Empty connection pool</string>
     <string name="title_advanced_exact_alarms" translatable="false">Use exact timers</string>
@@ -734,6 +743,7 @@
     <string name="title_advanced_font_map" translatable="false">Font map</string>
     <string name="title_advanced_ciphers" translatable="false">Ciphers</string>
     <string name="title_advanced_files" translatable="false">Files &gt;%1$s</string>
+    <string name="title_advanced_all_permissions" translatable="false">All permissions</string>
 
     <string name="title_advanced_manual_hint">If receiving messages is disabled, it is still possible to manually receive messages by pulling down the message list</string>
     <string name="title_advanced_poll_battery">This can cause high battery usage!</string>
@@ -953,7 +963,7 @@
     <string name="title_last_connected">Last connected: %1$s</string>
     <string name="title_backoff_until">Waiting after failure until: %1$s</string>
     <string name="title_storage_quota">Server storage usage: %1$s/%2$s</string>
-    <string name="title_pop_support">The POP3 protocol supports downloading and deleting messages from the inbox only. POP3 cannot mark messages as read, move messages, etc. POP3 will use more battery power and data than IMAP. So, consider using the IMAP protocol whenever possible.</string>
+    <string name="title_pop_support">The POP3 protocol can only download and delete messages from the inbox. It is not possible to mark messages as read, report spam, move messages, etc. Consider using the IMAP protocol whenever possible.</string>
     <string name="title_pop_sent">If your device is lost or stolen, sent messages might be lost.</string>
     <string name="title_pop_warning">If a POP3 server does not support the UIDL command, the data usage might be high. So, adjust the poll frequency below accordingly.</string>
     <string name="title_pop_folders">The POP3 protocol does not support creating folders</string>
@@ -1763,6 +1773,7 @@
     <string name="title_undo">Undo</string>
     <string name="title_redo">Redo</string>
     <string name="title_insert_line">Insert line</string>
+    <string name="title_insert_arrow" translatable="false">Insert arrow</string>
     <string name="title_add">Add</string>
     <string name="title_browse">Open with</string>
     <string name="title_info">Info</string>

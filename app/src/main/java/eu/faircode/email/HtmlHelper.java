@@ -54,7 +54,6 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
-import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
@@ -151,6 +150,43 @@ public class HtmlHelper {
     private static final String LINE = "----------------------------------------";
 
     private static final HashMap<String, Integer> x11ColorMap = new HashMap<>();
+
+    // https://www.w3.org/TR/CSS21/propidx.html
+    private static final List<String> STYLE_NO_INHERIT = Collections.unmodifiableList(Arrays.asList(
+            "background-attachment", "background-color", "background-image", "background-position", "background-repeat", "background",
+            "border-color", "border-style", "border-top", "border-right", "border-bottom", "border-left",
+            "border-top-color", "border-right-color", "border-bottom-color", "border-left-color",
+            "border-top-style", "border-right-style", "border-bottom-style", "border-left-style",
+            "border-top-width", "border-right-width", "border-bottom-width", "border-left-width",
+            "border-width", "border",
+            "bottom",
+            "clear",
+            "clip",
+            "content",
+            "counter-increment", "counter-reset",
+            "cue-after", "cue-before", "cue",
+            "display",
+            "float",
+            "height",
+            "left",
+            "margin-right", "margin-left", "margin-top", "margin-bottom", "margin",
+            "max-height", "max-width", "min-height", "min-width",
+            "outline-color", "outline-style", "outline-width", "outline",
+            "overflow",
+            "padding-top", "padding-right", "padding-bottom", "padding-left",
+            "padding", "page-break-after", "page-break-before", "page-break-inside",
+            "pause-after", "pause-before", "pause",
+            "play-during",
+            "position",
+            "right",
+            "table-layout",
+            "text-decoration",
+            "top",
+            "unicode-bidi",
+            "vertical-align",
+            "width",
+            "z-index"
+    ));
 
     static {
         // https://www.w3.org/TR/css-color-3/
@@ -565,7 +601,7 @@ public class HtmlHelper {
             String style = processStyles(tag, clazz, null, sheets);
 
             // Element style
-            style = mergeStyles(style, element.attr("style"));
+            style = mergeElementStyles(style, element.attr("style"));
 
             if ("fairemail_debug_info".equals(clazz))
                 style = mergeStyles(style, "font-size: smaller");
@@ -632,6 +668,18 @@ public class HtmlHelper {
                             }
 
                             Integer color = parseColor(value);
+
+                            if (color != null && color == Color.TRANSPARENT) {
+                                if ("color".equals(key) && BuildConfig.DEBUG)
+                                    if (display_hidden)
+                                        sb.append("text-decoration:line-through;");
+                                    else if (false) {
+                                        Log.i("Removing color transparent " + element.tagName());
+                                        element.remove();
+                                        continue;
+                                    }
+                                color = null;
+                            }
 
                             if ("color".equals(key)) {
                                 Integer bg = null;
@@ -734,16 +782,25 @@ public class HtmlHelper {
                             }
 
                             Float fsize = getFontSize(value, current);
-                            if (fsize != null && fsize != 0) {
-                                if (!view) {
-                                    if (fsize < 1)
-                                        fsize = FONT_SMALL;
-                                    else if (fsize > 1)
-                                        fsize = FONT_LARGE;
+                            if (fsize != null)
+                                if (fsize == 0) {
+                                    if (BuildConfig.DEBUG)
+                                        if (display_hidden && false)
+                                            sb.append("text-decoration:line-through;");
+                                        else if (false) {
+                                            Log.i("Removing font size zero " + element.tagName());
+                                            element.remove();
+                                        }
+                                } else {
+                                    if (!view) {
+                                        if (fsize < 1)
+                                            fsize = FONT_SMALL;
+                                        else if (fsize > 1)
+                                            fsize = FONT_LARGE;
+                                    }
+                                    element.attr("x-font-size", Float.toString(fsize));
+                                    element.attr("x-font-size-rel", Float.toString(fsize / current));
                                 }
-                                element.attr("x-font-size", Float.toString(fsize));
-                                element.attr("x-font-size-rel", Float.toString(fsize / current));
-                            }
                             break;
 
                         case "font-weight":
@@ -769,9 +826,13 @@ public class HtmlHelper {
                             break;
 
                         case "text-decoration":
+                        case "text-decoration-line":
                             // https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration
+                            // https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-line
                             if (value.contains("line-through"))
                                 sb.append("text-decoration:line-through;");
+                            else if (value.contains("underline"))
+                                sb.append("text-decoration:underline;");
                             break;
 
                         case "text-transform":
@@ -805,10 +866,13 @@ public class HtmlHelper {
 
                         case "display":
                             // https://developer.mozilla.org/en-US/docs/Web/CSS/display
-                            if (element.parent() != null &&
-                                    !display_hidden && "none".equals(value)) {
-                                Log.i("Removing display none " + element.tagName());
-                                element.remove();
+                            if (element.parent() != null && "none".equals(value)) {
+                                if (display_hidden)
+                                    sb.append("text-decoration:line-through;");
+                                else {
+                                    Log.i("Removing display none " + element.tagName());
+                                    element.remove();
+                                }
                             }
 
                             if ("block".equals(value) || "inline-block".equals(value))
@@ -1499,12 +1563,16 @@ public class HtmlHelper {
         for (Element e : parsed.select("*")) {
             String tag = e.tagName();
             if (tag.contains(":")) {
-                if (display_hidden ||
-                        "body".equals(tag) ||
-                        ns == null || tag.startsWith(ns)) {
+                boolean show = ("body".equals(tag) || ns == null || tag.startsWith(ns));
+                if (display_hidden || show) {
                     String[] nstag = tag.split(":");
                     e.tagName(nstag[nstag.length > 1 ? 1 : 0]);
                     Log.i("Updated tag=" + tag + " to=" + e.tagName());
+
+                    if (!show) {
+                        String style = e.attr("style");
+                        e.attr("style", mergeStyles(style, "text-decoration:line-through;"));
+                    }
                 } else {
                     e.remove();
                     Log.i("Removed tag=" + tag);
@@ -1620,27 +1688,75 @@ public class HtmlHelper {
     }
 
     static String mergeStyles(String base, String style) {
-        return mergeStyles(base, style, null);
+        return mergeStyles(base, style, false);
     }
 
-    private static String mergeStyles(String base, String style, String selector) {
+    static String mergeElementStyles(String base, String style) {
+        return mergeStyles(base, style, true);
+    }
+
+    private static String mergeStyles(String base, String style, boolean element) {
         Map<String, String> result = new HashMap<>();
 
-        List<String> params = new ArrayList<>();
+        // Base style
+        Map<String, String> baseParams = new HashMap<>();
         if (!TextUtils.isEmpty(base))
-            params.addAll(Arrays.asList(base.split(";")));
-        if (!TextUtils.isEmpty(style))
-            params.addAll(Arrays.asList(style.split(";")));
+            for (String param : base.split(";")) {
+                int colon = param.indexOf(':');
+                if (colon < 0) {
+                    Log.w("CSS invalid=" + param);
+                    continue;
+                }
 
-        for (String param : params) {
-            int colon = param.indexOf(':');
-            if (colon > 0) {
                 String key = param.substring(0, colon).trim().toLowerCase(Locale.ROOT);
-                if (selector == null || selector.equals(key))
+                baseParams.put(key, param);
+            }
+
+        // Element style
+        if (!TextUtils.isEmpty(style))
+            for (String param : style.split(";")) {
+                int colon = param.indexOf(':');
+                if (colon < 0) {
+                    Log.w("CSS invalid=" + param);
+                    continue;
+                }
+
+                String key = param.substring(0, colon).trim().toLowerCase(Locale.ROOT);
+                String value = param.substring(colon + 1).trim().toUpperCase(Locale.ROOT);
+
+                //https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance#controlling_inheritance
+                boolean initial = false; // no value
+                boolean inherit = false; // parent value
+                if (element)
+                    switch (value) {
+                        case "inherit":
+                            inherit = true;
+                            break;
+                        case "initial":
+                            initial = true;
+                            break;
+                        case "unset":
+                        case "revert":
+                            inherit = !STYLE_NO_INHERIT.contains(key);
+                            break;
+                    }
+
+                if (initial || inherit)
+                    Log.i("CSS " + value + "=" + key);
+
+                if (inherit) {
+                    param = baseParams.get(key);
+                    if (param != null)
+                        result.put(key, param);
+                } else if (!initial)
                     result.put(key, param);
-            } else
-                Log.w("Invalid style param=" + param);
-        }
+
+                baseParams.remove(key);
+            }
+
+        for (String key : baseParams.keySet())
+            if (!STYLE_NO_INHERIT.contains(key))
+                result.put(key, baseParams.get(key));
 
         return TextUtils.join(";", result.values());
     }
@@ -1754,6 +1870,9 @@ public class HtmlHelper {
     private static Integer parseColor(String value) {
         if (TextUtils.isEmpty(value))
             return null;
+
+        if ("transparent".equals(value))
+            return Color.TRANSPARENT;
 
         // https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
         String c = value
@@ -2980,6 +3099,8 @@ public class HtmlHelper {
                                 case "text-decoration":
                                     if ("line-through".equals(value))
                                         setSpan(ssb, new StrikethroughSpan(), start, ssb.length());
+                                    else if ("underline".equals(value))
+                                        setSpan(ssb, new UnderlineSpan(), start, ssb.length());
                                     break;
                                 case "text-align":
                                     // https://developer.mozilla.org/en-US/docs/Web/CSS/text-align

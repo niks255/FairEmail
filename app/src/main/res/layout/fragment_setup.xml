@@ -34,7 +34,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="6dp"
-                android:paddingTop="12dp">
+                android:paddingTop="12dp"
+                android:tag="nosuggest">
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/welcome"
@@ -161,14 +162,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="6dp"
-                android:paddingVertical="12dp">
+                android:paddingVertical="12dp"
+                android:tag="nosuggest">
 
                 <eu.faircode.email.FixedImageView
                     android:id="@+id/one"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:contentDescription="1"
-                    android:scaleType="fitCenter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/twotone_looks_one_24" />
@@ -179,6 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:minHeight="30dp"
+                    android:paddingTop="3dp"
                     android:text="@string/title_setup_quick_accounts"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"
@@ -549,7 +551,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="6dp"
-                android:paddingVertical="12dp">
+                android:paddingVertical="12dp"
+                android:tag="nosuggest">
 
                 <eu.faircode.email.FixedImageView
                     android:id="@+id/two"
@@ -567,6 +570,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:minHeight="30dp"
+                    android:paddingTop="3dp"
                     android:text="@string/title_setup_permissions"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"
@@ -641,7 +645,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="6dp"
-                android:paddingVertical="12dp">
+                android:paddingVertical="12dp"
+                android:tag="nosuggest">
 
                 <eu.faircode.email.FixedImageView
                     android:id="@+id/three"
@@ -659,6 +664,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:minHeight="30dp"
+                    android:paddingTop="3dp"
                     android:text="@string/title_setup_doze"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"

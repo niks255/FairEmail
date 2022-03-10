@@ -2,6 +2,33 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Gobivenator](https://en.wikipedia.org/wiki/Gobivenator)
+
+### 1.1854 - 2022-03-09
+
+* Added [Libravatar](https://www.libravatar.org/) support
+* Added some more [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) word lists
+* Added [CSS inherit](https://developer.mozilla.org/en-US/docs/Web/CSS/inherit) support
+* Targeting [Android 12L](https://developer.android.com/about/versions/12/12L) (SDK 32)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1853 - 2022-03-07
+
+* Added BIP39 word lists in various languages
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1852 - 2022-03-07
+
+* Added image dimensions to mini gallery
+* Added PGP and S/MIME key indicators to address bubbles
+* Added delete existing accounts option to import dialog
+* Added clear all data settings tile
+* Added remote clear all data via mnemonic
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### [Fulgurotherium](https://en.wikipedia.org/wiki/Fulgurotherium)
 
 ### 1.1851 - 2022-03-02

@@ -237,6 +237,7 @@
     <string name="title_setup_password_different">Hesla se neshodují</string>
     <string name="title_setup_password_invalid">Nesprávné heslo</string>
     <string name="title_setup_import_accounts">Import účtů a identit</string>
+    <string name="title_setup_import_delete">Nejprve odstranit existující účty</string>
     <string name="title_setup_import_rules">Import pravidel filtrů</string>
     <string name="title_setup_import_contacts">Import místních kontaktů</string>
     <string name="title_setup_import_answers">Import šablon pro odpovědi</string>
@@ -354,6 +355,7 @@
     <string name="title_advanced_signature_reply">Použít podpis při odpovědi</string>
     <string name="title_advanced_signature_forward">Použít podpis při přeposlání</string>
     <string name="title_advanced_discard_delete">Při zahození konceptu jej natrvalo smazat</string>
+    <string name="title_advanced_reply_move">Při odpovědi na zprávu uložit odpověď do stejné složky</string>
     <string name="title_advanced_auto_link">Automaticky vytvářet odkazy</string>
     <string name="title_advanced_plain_only">Automaticky odeslat pouze prostý text</string>
     <string name="title_advanced_flow">„Format flowed“ pro prostý text</string>
@@ -395,6 +397,7 @@
     <string name="title_advanced_nav_hide_message">Možnosti můžete znovu povolit v nastavení displeje</string>
     <string name="title_advanced_nav_message_count">Zobrazit počet místně uložených zpráv v navigačním menu</string>
     <string name="title_advanced_nav_unseen_drafts">Zobrazit počet nepřečtených konceptů v navigačním menu</string>
+    <string name="title_advanced_nav_pinned_count">Zobrazit počet nepřečtených zpráv v připnutém navigačním menu</string>
     <string name="title_advanced_startup">Na úvodní obrazovce zobrazit</string>
     <string name="title_advanced_cards">Použít styl karet namísto tabulkového zobrazení</string>
     <string name="title_advanced_cards_beige">Použít béžové pozadí při zobrazení stylem karet (pouze světlé motivy)</string>
@@ -414,6 +417,7 @@
     <string name="title_advanced_color_stripe_wide">Použít široký barevný pruh</string>
     <string name="title_advanced_avatars">Zobrazit fotografie kontaktů</string>
     <string name="title_advanced_gravatars">Zobrazit Gravatary</string>
+    <string name="title_advanced_libravatars">Zobrazit Libravatary</string>
     <string name="title_advanced_bimi_unverified">Neověřený odesílatel</string>
     <string name="title_advanced_bimi_verified">Ověřený odesílatel</string>
     <string name="title_advanced_favicons">Zobrazit ikony stránek</string>
@@ -566,6 +570,10 @@
     <string name="title_advanced_disconnect_auto_update">Automaticky týdně aktualizovat seznamy</string>
     <string name="title_advanced_disconnect_links">Použít seznamy k upozornění na sledovací odkazy</string>
     <string name="title_advanced_disconnect_images">Použít seznamy k rozpoznání sledovacích obrázků</string>
+    <string name="title_advanced_mnemonic">Odstranit data vzdáleně</string>
+    <string name="title_advanced_mnemonic_hint">Jakýkoli přijatý e-mail s níže uvedenými slovy v předmětu automaticky a okamžitě odstraní data aplikace</string>
+    <string name="title_advanced_clear_all">Odstranit data aplikace</string>
+    <string name="title_advanced_clear_all_remark">Data aplikace budou nevratně smazána!</string>
     <string name="title_advanced_sign_default">Automaticky podepisovat</string>
     <string name="title_advanced_encrypt_default">Automaticky šifrovat</string>
     <string name="title_advanced_auto_decrypt">Automaticky dešifrovat zprávy</string>
@@ -810,7 +818,7 @@
     <string name="title_last_connected">Poslední připojení: %1$s</string>
     <string name="title_backoff_until">Čekání po selhání do: %1$s</string>
     <string name="title_storage_quota">Využití úložiště serveru: %1$s/%2$s</string>
-    <string name="title_pop_support">Protokol POP3 podporuje stahování a odstraňování zpráv pouze ze složky doručené. POP3 neumí zprávu označit jako oblíbenou, přesouvat zprávy, atd. Oproti IMAP bude POP3 také více zatěžovat baterii. Zvažte tak použití protokolu IMAP, kdykoli to bude možné.</string>
+    <string name="title_pop_support">Protokol POP3 může pouze stahovat a mazat zprávy z doručené pošty. Není možné označit zprávy jako přečtené, nahlašovat spam, přesouvat zprávy atd. Zvažte použití protokolu IMAP, kdykoli je to možné.</string>
     <string name="title_pop_sent">Při ztrátě či odcizení zařízení mohou být odeslané zprávy ztraceny.</string>
     <string name="title_pop_warning">Nepodporuje-li server POP3 příkaz UIDL, využití dat může být vysoké. Dle potřeby proto prosím níže upravte interval dotazování.</string>
     <string name="title_pop_folders">Protokol POP3 nepodporuje vytváření složek</string>
@@ -1730,7 +1738,7 @@
         <item>Přejít na další konverzaci</item>
     </string-array>
     <string-array name="resizeNames">
-        <item>Extra small</item>
+        <item>Velmi malé</item>
         <item>Malé</item>
         <item>Střední</item>
         <item>Velké</item>

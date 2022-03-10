@@ -22,7 +22,10 @@ package eu.faircode.email;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ColorSpace;
 import android.graphics.drawable.AnimatedImageDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,6 +47,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -61,6 +65,7 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ViewHolder> 
         private View view;
         private ImageView ivImage;
         private TextView tvCaption;
+        private TextView tvProperties;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -68,6 +73,7 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ViewHolder> 
             view = itemView.findViewById(R.id.clItem);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvCaption = itemView.findViewById(R.id.tvCaption);
+            tvProperties = itemView.findViewById(R.id.tvProperties);
         }
 
         private void wire() {
@@ -83,28 +89,113 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ViewHolder> 
         private void bindTo(EntityAttachment attachment) {
             tvCaption.setText(attachment.name);
             tvCaption.setVisibility(TextUtils.isEmpty(attachment.name) ? View.GONE : View.VISIBLE);
+            tvProperties.setVisibility(View.GONE);
 
             if (attachment.available) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                    try {
-                        Drawable d = ImageHelper.getScaledDrawable(context,
-                                attachment.getFile(context), attachment.getMimeType(),
-                                context.getResources().getDisplayMetrics().widthPixels);
-                        ivImage.setImageDrawable(d);
-                        if (d instanceof AnimatedImageDrawable)
-                            ((AnimatedImageDrawable) d).start();
-                        return;
-                    } catch (Throwable ex) {
-                        Log.w(ex);
+                Bundle args = new Bundle();
+                args.putSerializable("file", attachment.getFile(context));
+                args.putString("type", attachment.getMimeType());
+                args.putInt("max", context.getResources().getDisplayMetrics().widthPixels);
+
+                new SimpleTask<Drawable>() {
+                    @Override
+                    protected void onPreExecute(Bundle args) {
+                        ivImage.setImageResource(R.drawable.twotone_hourglass_top_24);
                     }
 
-                Bitmap bm = ImageHelper.decodeImage(
-                        attachment.getFile(context), attachment.getMimeType(),
-                        context.getResources().getDisplayMetrics().widthPixels);
-                if (bm == null)
-                    ivImage.setImageResource(R.drawable.twotone_broken_image_24);
-                else
-                    ivImage.setImageBitmap(bm);
+                    @Override
+                    protected Drawable onExecute(Context context, Bundle args) throws Throwable {
+                        File file = (File) args.getSerializable("file");
+                        String type = args.getString("type");
+                        int max = args.getInt("max");
+
+                        args.putLong("size", file.length());
+
+                        try {
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inJustDecodeBounds = true;
+                            BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                            args.putInt("width", options.outWidth);
+                            args.putInt("height", options.outHeight);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if (options.outColorSpace != null)
+                                    args.putString("color", options.outColorSpace.getModel().name());
+                                if (options.outConfig != null)
+                                    args.putString("config", options.outConfig.name());
+                            }
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                        }
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                            try {
+                                return ImageHelper.getScaledDrawable(context, file, type, max);
+                            } catch (Throwable ex) {
+                                Log.w(ex);
+                            }
+
+                        Bitmap bm = ImageHelper.decodeImage(file, type, max);
+                        if (bm == null)
+                            return null;
+                        return new BitmapDrawable(context.getResources(), bm);
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, Drawable image) {
+                        if (image == null)
+                            ivImage.setImageResource(R.drawable.twotone_broken_image_24);
+                        else
+                            ivImage.setImageDrawable(image);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
+                                image instanceof AnimatedImageDrawable)
+                            ((AnimatedImageDrawable) image).start();
+
+                        StringBuilder sb = new StringBuilder();
+
+                        int width = args.getInt("width");
+                        int height = args.getInt("height");
+                        if (width > 0 && height > 0)
+                            sb.append(width)
+                                    .append("\u00d7") // ×
+                                    .append(height);
+
+                        if (BuildConfig.DEBUG) {
+                            String color = args.getString("color");
+                            if (color != null) {
+                                if (sb.length() > 0)
+                                    sb.append(' ');
+                                sb.append(color);
+                            }
+
+                            String config = args.getString("config");
+                            if (config != null) {
+                                if (sb.length() > 0)
+                                    sb.append(' ');
+                                sb.append(config);
+                            }
+                        }
+
+                        long size = args.getLong("size");
+                        if (size > 0) {
+                            if (sb.length() > 0)
+                                sb.append(" \u2013 "); // –
+                            sb.append(Helper.humanReadableByteCount(size));
+                        }
+
+                        if (sb.length() > 0) {
+                            tvProperties.setText(sb);
+                            tvProperties.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        tvCaption.setText(Log.formatThrowable(ex));
+                        tvCaption.setVisibility(View.VISIBLE);
+                        ivImage.setImageResource(R.drawable.twotone_broken_image_24);
+                    }
+                }.execute(context, owner, args, "image:load");
             } else
                 ivImage.setImageResource(attachment.progress == null
                         ? R.drawable.twotone_image_24 : R.drawable.twotone_hourglass_top_24);
@@ -310,5 +401,10 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ViewHolder> 
         holder.bindTo(attachment);
 
         holder.wire();
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull AdapterImage.ViewHolder holder) {
+        holder.ivImage.setImageDrawable(null);
     }
 }

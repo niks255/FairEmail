@@ -1,6 +1,6 @@
 # ସେଟଅପ୍ ସହାୟତା
 
-Setting up FairEmail is fairly simple. ଯଦି ଆପଣ ଇମେଲ୍ ପ୍ରେରଣ କରିବାକୁ ଚାହାଁନ୍ତି ତେବେ ଆପଣଙ୍କୁ ଅତି କମରେ ଗୋଟିଏ ଆକାଉଣ୍ଟ୍ ଏବଂ ଇମେଲ୍ ପ୍ରାପ୍ତ କରିବାକୁ ଅତିକମରେ ଗୋଟିଏ ପରିଚୟ ଯୋଡ଼ିବାକୁ ପଡ଼ିବ। The quick setup will add an account and an identity in one go for most major providers.
+Setting up FairEmail is fairly simple. ଯଦି ଆପଣ ଇମେଲ୍ ପ୍ରେରଣ କରିବାକୁ ଚାହାଁନ୍ତି ତେବେ ଆପଣଙ୍କୁ ଅତି କମରେ ଗୋଟିଏ ଆକାଉଣ୍ଟ୍ ଏବଂ ଇମେଲ୍ ପ୍ରାପ୍ତ କରିବାକୁ ଅତିକମରେ ଗୋଟିଏ ପରିଚୟ ଯୋଡ଼ିବାକୁ ପଡ଼ିବ। The quick setup will add an account and an identity in one go for most major providers.
 
 ## Requirements
 
@@ -34,7 +34,7 @@ If you want to lookup email addresses, have contact photos shown, etc, you'll ne
 
 ## Setup battery optimizations - to continuously receive emails
 
-On recent Android versions, Android will put apps to sleep when the screen is off for some time to reduce battery usage. ଯଦି ଆପଣ ବିଳମ୍ବ ନକରି ନୂଆ ଇମେଲ୍ ପ୍ରାପ୍ତ କରିବାକୁ ଚାହାଁନ୍ତି, ତେବେ ଆପଣ FairEmail ପାଇଁ ବ୍ୟାଟେରୀ ଅପ୍ଟିମାଇଜେସନ୍ ଅକ୍ଷମ କରିବା ଉଚିତ୍। Tap *Manage* and follow the instructions.
+On recent Android versions, Android will put apps to sleep when the screen is off for some time to reduce battery usage. ଯଦି ଆପଣ ବିଳମ୍ବ ନକରି ନୂଆ ଇମେଲ୍ ପ୍ରାପ୍ତ କରିବାକୁ ଚାହାଁନ୍ତି, ତେବେ ଆପଣ FairEmail ପାଇଁ ବ୍ୟାଟେରୀ ଅପ୍ଟିମାଇଜେସନ୍ ଅକ୍ଷମ କରିଦେବା ଉଚିତ୍। Tap *Manage* and follow the instructions.
 
 ## Questions or problems
 

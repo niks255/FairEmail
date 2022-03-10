@@ -578,6 +578,22 @@ Some people ask:
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq6)
 
+<hr />
+
+**Important**: using your account password [won't be possible anymore from May 30, 2022](https://support.google.com/accounts/answer/6010255).
+
+How to fix:
+
+* Go to the *Settings* via the navigation menu (left side menu)
+* Tap on the *Wizard* button and select *Gmail (OAuth)*
+* Tick the checkbox to authenticate an existing account (else you'll create a new account!)
+* Fill in the fields and follow the steps
+* Repeat for each Gmail account
+
+Alternatively, you can use an app password, please see below.
+
+<hr />
+
 If you use the Play store or GitHub version of FairEmail,
 you can use the quick setup wizard to easily setup a Gmail account and identity.
 The Gmail quick setup wizard is not available for third party builds, like the F-Droid build
@@ -587,7 +603,7 @@ The Gmail quick setup wizard won't work if the Android account manager doesn't w
 which is typically the case if the account selection is being *canceled* right away.
 
 If you don't want to use or can't use an on-device Google account, for example on recent Huawei devices,
-you can either enable access for "less secure apps" and use your account password (not advised)
+you can ~~either enable access for "less secure apps" and use your account password (not advised)~~
 or enable two factor authentication and use an app specific password.
 To use a password you can use the quick setup wizard and select *Other provider*.
 
@@ -620,13 +636,11 @@ See [here](https://support.google.com/accounts/answer/185833) about how to gener
 
 <br />
 
-*Enable "Less secure apps"*
+~~*Enable "Less secure apps"*~~
 
 **Important**: using this method is not recommended because it is less reliable.
 
 **Important**: Gsuite accounts authorized with a username/password will stop working [in the near future](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html).
-
-**Important**: using your account password [won't be possible anymore from May 30, 2022](https://support.google.com/accounts/answer/6010255).
 
 See [here](https://support.google.com/accounts/answer/6010255) about how to enable "less secure apps"
 or go [directy to the setting](https://www.google.com/settings/security/lesssecureapps).
@@ -4478,7 +4492,7 @@ Related questions:
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq173)
 
 * The Play store version does not support Android Auto, see [this FAQ](#user-content-faq165) for more information
-* The Play store version does not support [Gravatars](https://gravatar.com/), see [here](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-85226179) for the reason
+* The Play store version does not support [Gravatars](https://gravatar.com/) and [Libravatars](https://www.libravatar.org/), see [here](https://forum.xda-developers.com/t/app-5-0-fairemail-fully-featured-open-source-privacy-oriented-email-app.3824168/post-85226179) for the reason
 * The Play store version does not support Amazon devices with Android 5 Lollipop because there are critical bugs in this Android version of Amazon
 * The GitHub version will check for [updates on GitHub](https://github.com/M66B/FairEmail/releases) and is updated more frequently
 * The GitHub version has some different links, some more options (like sharing the HTML of a message) and some different default values (more geared to advanced users)

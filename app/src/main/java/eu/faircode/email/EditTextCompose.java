@@ -62,7 +62,6 @@ public class EditTextCompose extends FixedEditText {
 
     private Boolean canUndo = null;
     private Boolean canRedo = null;
-    private boolean checkKeyEvent = false;
 
     private static final ExecutorService executor =
             Helper.getBackgroundExecutor(1, "paste");
@@ -98,6 +97,8 @@ public class EditTextCompose extends FixedEditText {
                         if (undo_manager && can(android.R.id.redo))
                             menu.add(Menu.CATEGORY_SECONDARY, R.string.title_redo, 1002, getTitle(R.string.title_redo));
                         menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_line, 1003, R.string.title_insert_line);
+                        if (BuildConfig.DEBUG)
+                            menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_arrow, 1004, R.string.title_insert_arrow);
                     } catch (Throwable ex) {
                         Log.e(ex);
                     }
@@ -125,6 +126,8 @@ public class EditTextCompose extends FixedEditText {
                             return EditTextCompose.super.onTextContextMenuItem(android.R.id.redo);
                         else if (id == R.string.title_insert_line)
                             return insertLine();
+                        else if (id == R.string.title_insert_arrow)
+                            return insertArrow();
                     }
                     return false;
                 }
@@ -167,6 +170,19 @@ public class EditTextCompose extends FixedEditText {
                         return false;
                     }
                 }
+
+                private boolean insertArrow() {
+                    int start = getSelectionStart();
+                    if (start < 0)
+                        return false;
+
+                    Editable edit = getText();
+                    if (edit == null)
+                        return false;
+
+                    edit.insert(start, " \u27f6 ");
+                    return true;
+                }
             });
         }
     }
@@ -176,7 +192,6 @@ public class EditTextCompose extends FixedEditText {
         canRedo = null;
 
         try {
-            checkKeyEvent = true;
             int meta = KeyEvent.META_CTRL_ON;
             if (what == android.R.id.redo)
                 meta = meta | KeyEvent.META_SHIFT_ON;
@@ -184,8 +199,6 @@ public class EditTextCompose extends FixedEditText {
             onKeyShortcut(KeyEvent.KEYCODE_Z, ke);
         } catch (Throwable ex) {
             Log.e(ex);
-        } finally {
-            checkKeyEvent = false;
         }
 
         return Boolean.TRUE.equals(what == android.R.id.redo ? canRedo : canUndo);

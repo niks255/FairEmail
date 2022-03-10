@@ -20,6 +20,8 @@ package eu.faircode.email;
 */
 
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,6 +46,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,6 +60,7 @@ import androidx.webkit.WebViewFeature;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class FragmentOptionsPrivacy extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private SwitchCompat swConfirmLinks;
@@ -77,6 +81,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
     private TextView tvAutoLockNavHint;
     private SwitchCompat swClientId;
     private TextView tvClientId;
+    private ImageButton ibClientId;
     private SwitchCompat swDisplayHidden;
     private SwitchCompat swIncognitoKeyboard;
     private ImageButton ibIncognitoKeyboard;
@@ -92,8 +97,13 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
     private SwitchCompat swDisconnectAutoUpdate;
     private SwitchCompat swDisconnectLinks;
     private SwitchCompat swDisconnectImages;
+    private SwitchCompat swMnemonic;
+    private Button btnClearAll;
+    private TextView tvMnemonic;
 
     private Group grpSafeBrowsing;
+
+    private final static int BIP39_WORDS = 6;
 
     private final static String[] RESET_OPTIONS = new String[]{
             "confirm_links", "check_links_dbl", "browse_links",
@@ -102,7 +112,8 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             "pin", "biometrics", "biometrics_timeout", "autolock", "autolock_nav",
             "client_id", "display_hidden", "incognito_keyboard", "secure",
             "generic_ua", "safe_browsing", "load_emoji",
-            "disconnect_auto_update", "disconnect_links", "disconnect_images"
+            "disconnect_auto_update", "disconnect_links", "disconnect_images",
+            "wipe_mnemonic"
     };
 
     @Override
@@ -133,6 +144,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         tvAutoLockNavHint = view.findViewById(R.id.tvAutoLockNavHint);
         swClientId = view.findViewById(R.id.swClientId);
         tvClientId = view.findViewById(R.id.tvClientId);
+        ibClientId = view.findViewById(R.id.ibClientId);
         swDisplayHidden = view.findViewById(R.id.swDisplayHidden);
         swIncognitoKeyboard = view.findViewById(R.id.swIncognitoKeyboard);
         ibIncognitoKeyboard = view.findViewById(R.id.ibIncognitoKeyboard);
@@ -148,6 +160,9 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         swDisconnectAutoUpdate = view.findViewById(R.id.swDisconnectAutoUpdate);
         swDisconnectLinks = view.findViewById(R.id.swDisconnectLinks);
         swDisconnectImages = view.findViewById(R.id.swDisconnectImages);
+        swMnemonic = view.findViewById(R.id.swMnemonic);
+        btnClearAll = view.findViewById(R.id.btnClearAll);
+        tvMnemonic = view.findViewById(R.id.tvMnemonic);
 
         grpSafeBrowsing = view.findViewById(R.id.grpSafeBrowsing);
 
@@ -307,6 +322,13 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             }
         });
 
+        ibClientId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(Helper.ID_COMMAND_URI), true);
+            }
+        });
+
         swDisplayHidden.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -428,9 +450,48 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             }
         });
 
+        btnClearAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ActivityClear.getIntent(v.getContext()));
+            }
+        });
+
+        swMnemonic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    Context context = compoundButton.getContext();
+                    String mnemonic = BIP39.getMnemonic(Locale.getDefault(), BIP39_WORDS, context);
+
+                    prefs.edit().putString("wipe_mnemonic", mnemonic).apply();
+                    tvMnemonic.setText(mnemonic);
+
+                    ClipboardManager cbm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (cbm == null)
+                        return;
+
+                    ClipData clip = ClipData.newPlainText(getString(R.string.app_name), mnemonic);
+                    cbm.setPrimaryClip(clip);
+                    ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+
+                } else {
+                    prefs.edit().remove("wipe_mnemonic").apply();
+                    tvMnemonic.setText(null);
+                }
+            }
+        });
+
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
-        tvClientId.setText(getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME);
+
+        StringBuilder sb = new StringBuilder();
+        for (String value : EmailService.getId(getContext()).values()) {
+            if (sb.length() > 0)
+                sb.append(' ');
+            sb.append(value);
+        }
+        tvClientId.setText(sb);
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
 
@@ -521,6 +582,10 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         swDisconnectAutoUpdate.setChecked(prefs.getBoolean("disconnect_auto_update", false));
         swDisconnectLinks.setChecked(prefs.getBoolean("disconnect_links", true));
         swDisconnectImages.setChecked(prefs.getBoolean("disconnect_images", false));
+
+        String mnemonic = prefs.getString("wipe_mnemonic", null);
+        swMnemonic.setChecked(mnemonic != null);
+        tvMnemonic.setText(mnemonic);
     }
 
     public static class FragmentDialogPin extends FragmentDialogBase {

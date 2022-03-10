@@ -58,6 +58,8 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
     private LayoutInflater inflater;
 
     private boolean nav_count;
+    private boolean nav_count_pinned;
+
     private int dp6;
     private int dp12;
     private int colorUnread;
@@ -78,6 +80,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
         private View view;
         private ImageView ivItem;
         private ImageView ivBadge;
+        private TextView tvCount;
         private TextView tvItem;
         private TextView tvItemExtra;
         private ImageView ivExtra;
@@ -89,6 +92,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
             view = itemView.findViewById(R.id.clItem);
             ivItem = itemView.findViewById(R.id.ivItem);
             ivBadge = itemView.findViewById(R.id.ivBadge);
+            tvCount = itemView.findViewById(R.id.tvCount);
             tvItem = itemView.findViewById(R.id.tvItem);
             tvItemExtra = itemView.findViewById(R.id.tvItemExtra);
             ivExtra = itemView.findViewById(R.id.ivExtra);
@@ -139,12 +143,16 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
             else
                 count = account.unseen;
 
+            ivBadge.setVisibility(count == 0 || expanded ? View.GONE : View.VISIBLE);
+
+            tvCount.setText(Helper.formatNumber(count, 99, NF));
+            tvCount.setVisibility(count == 0 || expanded || !nav_count_pinned ? View.GONE : View.VISIBLE);
+
             Integer color = (account.folderName == null ? account.color : account.folderColor);
             if (color == null || !ActivityBilling.isPro(context))
                 ivItem.clearColorFilter();
             else
                 ivItem.setColorFilter(color);
-            ivBadge.setVisibility(count == 0 || expanded ? View.GONE : View.VISIBLE);
 
             String name = account.getName(context);
             if (count == 0)
@@ -264,6 +272,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.nav_count = prefs.getBoolean("nav_count", false);
+        this.nav_count_pinned = prefs.getBoolean("nav_count_pinned", false);
         boolean highlight_unread = prefs.getBoolean("highlight_unread", true);
         int colorHighlight = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorUnreadHighlight));
 

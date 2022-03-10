@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
@@ -158,6 +159,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swKeepAlivePoll;
     private SwitchCompat swEmptyPool;
     private SwitchCompat swIdleDone;
+    private SwitchCompat swLogarithmicBackoff;
     private SwitchCompat swExactAlarms;
     private SwitchCompat swInfra;
     private SwitchCompat swDupMsgId;
@@ -175,6 +177,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private Button btnFontMap;
     private Button btnCiphers;
     private Button btnFiles;
+    private Button btnAllPermissions;
     private TextView tvPermissions;
 
     private Group grpUpdates;
@@ -197,7 +200,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "chunk_size", "undo_manager", "webview_legacy",
             "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop",
-            "keep_alive_poll", "empty_pool", "idle_done",
+            "keep_alive_poll", "empty_pool", "idle_done", "logarithmic_backoff",
             "exact_alarms", "infra", "dup_msgids", "test_iab"
     };
 
@@ -310,6 +313,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swKeepAlivePoll = view.findViewById(R.id.swKeepAlivePoll);
         swEmptyPool = view.findViewById(R.id.swEmptyPool);
         swIdleDone = view.findViewById(R.id.swIdleDone);
+        swLogarithmicBackoff = view.findViewById(R.id.swLogarithmicBackoff);
         swExactAlarms = view.findViewById(R.id.swExactAlarms);
         swInfra = view.findViewById(R.id.swInfra);
         swDupMsgId = view.findViewById(R.id.swDupMsgId);
@@ -327,6 +331,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         btnFontMap = view.findViewById(R.id.btnFontMap);
         btnCiphers = view.findViewById(R.id.btnCiphers);
         btnFiles = view.findViewById(R.id.btnFiles);
+        btnAllPermissions = view.findViewById(R.id.btnAllPermissions);
         tvPermissions = view.findViewById(R.id.tvPermissions);
 
         grpUpdates = view.findViewById(R.id.grpUpdates);
@@ -1039,6 +1044,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swLogarithmicBackoff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("logarithmic_backoff", checked).apply();
+            }
+        });
+
         swExactAlarms.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1272,6 +1284,66 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         Log.unexpectedError(getParentFragmentManager(), ex);
                     }
                 }.execute(FragmentOptionsMisc.this, new Bundle(), "setup:files");
+            }
+        });
+
+        btnAllPermissions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SimpleTask<Spanned>() {
+                    @Override
+                    protected Spanned onExecute(Context context, Bundle args) throws Throwable {
+                        SpannableStringBuilder ssb = new SpannableStringBuilderEx();
+
+                        PackageManager pm = context.getPackageManager();
+                        List<PermissionGroupInfo> groups = pm.getAllPermissionGroups(0);
+                        groups.add(0, null); // Ungrouped
+
+                        for (PermissionGroupInfo group : groups) {
+                            String name = (group == null ? null : group.name);
+                            int start = ssb.length();
+                            ssb.append(name == null ? "Ungrouped" : name);
+                            ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
+                            ssb.append("\n\n");
+
+                            try {
+                                for (PermissionInfo permission : pm.queryPermissionsByGroup(name, 0)) {
+                                    start = ssb.length();
+                                    ssb.append(permission.name);
+                                    ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), start, ssb.length(), 0);
+                                    ssb.append("\n");
+                                }
+                            } catch (PackageManager.NameNotFoundException ex) {
+                                ssb.append(ex.toString()).append("\n")
+                                        .append(android.util.Log.getStackTraceString(ex)).append("\n");
+                            }
+
+                            ssb.append("\n");
+                        }
+
+                        return ssb;
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, Spanned ssb) {
+                        new AlertDialog.Builder(v.getContext())
+                                .setIcon(R.drawable.twotone_info_24)
+                                .setTitle(R.string.title_advanced_all_permissions)
+                                .setMessage(ssb)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Do nothing
+                                    }
+                                })
+                                .show();
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(getParentFragmentManager(), ex);
+                    }
+                }.execute(FragmentOptionsMisc.this, new Bundle(), "misc:permissions");
             }
         });
 
@@ -1551,6 +1623,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swKeepAlivePoll.setChecked(prefs.getBoolean("keep_alive_poll", false));
         swEmptyPool.setChecked(prefs.getBoolean("empty_pool", true));
         swIdleDone.setChecked(prefs.getBoolean("idle_done", true));
+        swLogarithmicBackoff.setChecked(prefs.getBoolean("logarithmic_backoff", true));
         swExactAlarms.setChecked(prefs.getBoolean("exact_alarms", true));
         swInfra.setChecked(prefs.getBoolean("infra", false));
         swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
