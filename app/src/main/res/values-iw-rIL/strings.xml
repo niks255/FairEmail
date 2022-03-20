@@ -451,6 +451,7 @@
     <string name="title_advanced_preview_italic">תצוגה מקדימה של ההודעה בכתב נטוי</string>
     <string name="title_advanced_preview_lines">מספר השורות בתצוגה המקדימה</string>
     <string name="title_advanced_addresses">הרחבת פרטי הכתובת כברירת מחדל</string>
+    <string name="title_advanced_unzip">הצגת תוכן הקבצים המצורפים הדחוסים</string>
     <string name="title_advanced_attachments_alt">הצגת הקבצים המצורפים אחרי טקסט ההודעה</string>
     <string name="title_advanced_thumbnails">הצגת תמונות ממוזערות אחרי טקסט ההודעה</string>
     <string name="title_advanced_message_text_zoom2">תקריב טקסט ההודעות כבררת מחדל: %1$s %%</string>
@@ -572,6 +573,7 @@
     <string name="title_advanced_disconnect_links">להשתמש ברשימות כדי להזהיר על קישורי מעקב</string>
     <string name="title_advanced_disconnect_images">להשתמש ברשימות כדי לזהות תמונות מעקב</string>
     <string name="title_advanced_mnemonic">מחיקת הנתונים בצד המרוחק</string>
+    <string name="title_advanced_mnemonic_hint">כל הודעה שהתקבלה עם המילים שלהלן כחלק מהנושא ימחקו את נתוני היישומון אוטומטית ומיידית</string>
     <string name="title_advanced_clear_all">מחיקת נתוני היישומון</string>
     <string name="title_advanced_clear_all_remark">נתוני היישומון יימחקו ללא אפשרות לשחזור!</string>
     <string name="title_advanced_sign_default">חתימה כבררת מחדל</string>
@@ -597,6 +599,7 @@
     </string>
     <string name="title_advanced_power_menu">הוספת פעולות לתפריט הכיבוי של Android</string>
     <string name="title_advanced_external_search">לאפשר ליישומונים אחרים לחפש בהודעות</string>
+    <string name="title_advanced_sort_answers">סידור תבניות המענה לפי תדירות השימוש</string>
     <string name="title_advanced_shortcuts">הצגת אנשי קשר בשימוש תדיר בתפריט השיתוף של Android</string>
     <string name="title_advanced_fts">בניית אינדקס חיפוש</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d תועדו באינדקס (%3$s)</string>
@@ -675,6 +678,7 @@
     <string name="title_advanced_monospaced_pre_hint">הודעות בטקסט פשוט בלבד תיחשבנה שעוצבו מראש</string>
     <string name="title_advanced_placeholders_hint">חל על הודעות שעוצבו מחדש בלבד</string>
     <string name="title_advanced_inline_hint">תמונות מובנות הן תמונות שכלולות בהודעה</string>
+    <string name="compressed">תוכן קבצים דחוסים (%1$s) עם למעלה מ־%2$s קבצים או עם קבצים שגודלם עולה על %3$s לא יוצגו</string>
     <string name="title_advanced_parse_classes_hint">זה יציג הודעות בצורה יותר מדויקת אך כנראה עם עיכוב מסוים</string>
     <string name="title_advanced_language_detection_hint">תמיכה בזיהוי שפות תלויה ביצרן המכשיר</string>
     <string name="title_advanced_autoexpand_hint">לפתוח הודעות אוטומטית כשיש רק הודעה אחת או רק הודעה אחת שלא נקראה בדיון</string>
@@ -1035,7 +1039,6 @@
     <string name="title_no_recorder">אין יישומון הקלטת שמע מתאים</string>
     <string name="title_no_camera">אין יישומון מצלמה מתאים</string>
     <string name="title_no_saf">תשתית גישה לאחסון אינה זמינה</string>
-    <string name="title_no_stream">יישומון מיושן שלח נתיב לקובץ במקום תזרים קובץ</string>
     <string name="title_no_internet">לא או שחיבור האינטרנט אינו מתאים</string>
     <string name="title_no_connection">מתבצע חיבור לחשבון אחד או יותר&#8230;</string>
     <string name="title_no_folder">התיקייה אינה קיימת</string>
@@ -1264,6 +1267,7 @@
     <string name="title_search_in_junk">בספאם</string>
     <string name="title_search_with_before">לפני</string>
     <string name="title_search_with_after">אחרי</string>
+    <string name="title_search_device_first">חיפוש במכשיר תחילה</string>
     <string name="title_search_flag_unseen">לא נקרא</string>
     <string name="title_search_flag_flagged">עם כוכב</string>
     <string name="title_search_flag_hidden">מוסתר</string>
@@ -1320,6 +1324,7 @@
     <string name="title_answer_group">קבוצת תבניות (רשות)</string>
     <string name="title_answer_standard">ברירת מחדל</string>
     <string name="title_answer_favorite">מועדפת</string>
+    <string name="title_answer_snippet">מקטע</string>
     <string name="title_answer_receipt">להשתמש כאישור קריאה</string>
     <string name="title_answer_hide">הסתרה מהתפריטים</string>
     <string name="title_answer_text">טקסט תבנית</string>

@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -37,6 +38,7 @@ import android.view.SubMenu;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuCompat;
+import androidx.preference.PreferenceManager;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -82,6 +84,8 @@ public class EntityAnswer implements Serializable {
     @NonNull
     public Boolean favorite;
     @NonNull
+    public Boolean snippet;
+    @NonNull
     public Boolean hide;
     @NonNull
     public Boolean external;
@@ -124,6 +128,12 @@ public class EntityAnswer implements Serializable {
                 if (c > 0) {
                     first = fullName.substring(0, c).trim();
                     last = fullName.substring(c + 1).trim();
+                } else {
+                    c = fullName.indexOf('@');
+                    if (c > 0) {
+                        first = fullName.substring(0, c).trim();
+                        last = null;
+                    }
                 }
             }
         }
@@ -164,26 +174,44 @@ public class EntityAnswer implements Serializable {
     }
 
     static void fillMenu(Menu main, boolean compose, List<EntityAnswer> answers, Context context) {
-        boolean grouped = BuildConfig.DEBUG;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean sort_answers = prefs.getBoolean("sort_answers", false);
 
         int iconSize = context.getResources().getDimensionPixelSize(R.dimen.menu_item_icon_size);
+        NumberFormat NF = NumberFormat.getNumberInstance();
 
         List<EntityAnswer> favorites = new ArrayList<>();
-        List<String> groups = new ArrayList<>();
+        Map<String, Integer> groupApplied = new HashMap<>();
         for (EntityAnswer answer : answers)
             if (compose && answer.favorite)
                 favorites.add(answer);
-            else if (answer.group != null && !groups.contains(answer.group))
-                groups.add(answer.group);
+            else if (answer.group != null) {
+                Integer total = groupApplied.get(answer.group);
+                if (total == null)
+                    total = 0;
+                groupApplied.put(answer.group, total + answer.applied);
+            }
 
         Collator collator = Collator.getInstance(Locale.getDefault());
         collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
-        Collections.sort(groups, collator);
+
+        List<String> groups = new ArrayList<>(groupApplied.keySet());
+        Collections.sort(groups, new Comparator<String>() {
+            @Override
+            public int compare(String g1, String g2) {
+                Integer a1 = groupApplied.get(g1);
+                Integer a2 = groupApplied.get(g2);
+                if (!sort_answers || a1.equals(a2))
+                    return collator.compare(g1, g2);
+                else
+                    return -a1.compareTo(a2);
+            }
+        });
 
         Collections.sort(answers, new Comparator<EntityAnswer>() {
             @Override
             public int compare(EntityAnswer a1, EntityAnswer a2) {
-                if (!grouped || a1.applied.equals(a2.applied))
+                if (!sort_answers || a1.applied.equals(a2.applied))
                     return collator.compare(a1.name, a2.name);
                 else
                     return -a1.applied.compareTo(a2.applied);
@@ -200,10 +228,20 @@ public class EntityAnswer implements Serializable {
         int order = 0;
 
         Map<String, SubMenu> map = new HashMap<>();
-        for (String group : groups)
-            map.put(group, main.addSubMenu(Menu.NONE, order, order++, group));
+        for (String group : groups) {
+            SpannableStringBuilder ssb = new SpannableStringBuilderEx(group);
 
-        NumberFormat NF = NumberFormat.getNumberInstance();
+            int total = groupApplied.get(group);
+            if (sort_answers && total > 0) {
+                int start = ssb.length();
+                ssb.append(" (").append(NF.format(total)).append(")");
+                ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
+                        start, ssb.length(), 0);
+            }
+
+            map.put(group, main.addSubMenu(Menu.NONE, order, order++, ssb));
+        }
+
         for (EntityAnswer answer : answers) {
             if (compose && answer.favorite)
                 continue;
@@ -220,7 +258,7 @@ public class EntityAnswer implements Serializable {
                 ssb.setSpan(imageSpan, 0, 1, 0);
             }
 
-            if (grouped && answer.applied > 0) {
+            if (sort_answers && answer.applied > 0) {
                 int start = ssb.length();
                 ssb.append(" (").append(NF.format(answer.applied)).append(")");
                 ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
@@ -287,6 +325,13 @@ public class EntityAnswer implements Serializable {
 
                 ssb.append("\n\n");
 
+                if (p.appPassword)
+                    ssb.append("App password\n\n");
+
+                if (p.documentation !=
+                        null)
+                    ssb.append(HtmlHelper.fromHtml(p.documentation.toString(), context)).append("\n\n");
+
                 if (!TextUtils.isEmpty(p.link))
                     ssb.append(p.link).append("\n\n");
 
@@ -322,7 +367,7 @@ public class EntityAnswer implements Serializable {
                     .setIntent(new Intent().putExtra("id", answer.id));
         }
 
-        if (grouped)
+        if (sort_answers)
             MenuCompat.setGroupDividerEnabled(main, true);
     }
 
@@ -334,6 +379,7 @@ public class EntityAnswer implements Serializable {
         json.put("standard", standard);
         json.put("receipt", receipt);
         json.put("favorite", favorite);
+        json.put("snippet", snippet);
         json.put("hide", hide);
         json.put("external", external);
         json.put("color", color);
@@ -353,6 +399,7 @@ public class EntityAnswer implements Serializable {
         answer.standard = json.optBoolean("standard");
         answer.receipt = json.optBoolean("receipt");
         answer.favorite = json.optBoolean("favorite");
+        answer.snippet = json.optBoolean("snippet");
         answer.hide = json.optBoolean("hide");
         answer.external = json.optBoolean("external");
         if (json.has("color") && !json.isNull("color"))
@@ -373,6 +420,7 @@ public class EntityAnswer implements Serializable {
                     this.standard.equals(other.standard) &&
                     this.receipt.equals(other.receipt) &&
                     this.favorite.equals(other.favorite) &&
+                    this.snippet.equals(other.snippet) &&
                     this.hide.equals(other.hide) &&
                     this.external.equals(other.external) &&
                     this.text.equals(other.text) &&

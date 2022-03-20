@@ -431,6 +431,7 @@
     <string name="title_advanced_preview_italic">Vis beskedforhåndsvisning med kursiv</string>
     <string name="title_advanced_preview_lines">Antal forhåndsvisningslinier</string>
     <string name="title_advanced_addresses">Vis adresseoplysninger som standard</string>
+    <string name="title_advanced_unzip">Vis indhold af komprimerede vedhæftninger</string>
     <string name="title_advanced_attachments_alt">Vis vedhæftninger efter beskedteksten</string>
     <string name="title_advanced_thumbnails">Vis billedminiaturer efter beskedteksten</string>
     <string name="title_advanced_message_text_zoom2">Standard beskedtekstzoom %1$s%%</string>
@@ -578,6 +579,7 @@
     </string>
     <string name="title_advanced_power_menu">Føj handlinger til Androids Tænd/Sluk menu</string>
     <string name="title_advanced_external_search">Tillad andre apps at søge i beskeder</string>
+    <string name="title_advanced_sort_answers">Sortér svarskabeloner efter anvendelsesfrekvens</string>
     <string name="title_advanced_shortcuts">Vis ofte anvendte kontakter i Android-delingsmenuen</string>
     <string name="title_advanced_fts">Opbyg søgeindeks</string>
     <string name="title_advanced_fts_indexed">%1$d/%2$d beskeder indekseret (%3$s)</string>
@@ -657,6 +659,7 @@
     <string name="title_advanced_monospaced_pre_hint">Rene tekstbeskeder betragtes som præformaterede</string>
     <string name="title_advanced_placeholders_hint">Dette gælder kun omformaterede beskeder</string>
     <string name="title_advanced_inline_hint">Inline-billeder er billeder, som er inkluderet i beskeden</string>
+    <string name="compressed">Komprimerede filer (%1$s) indeholdende flere end %2$s filer, eller med filer større end %3$s, vises ikke</string>
     <string name="title_advanced_parse_classes_hint">Dette viser beskeder mere korrekt, men muligvis med en forsinkelse</string>
     <string name="title_advanced_language_detection_hint">Sprogdetekteringsunderstøttelse afhænger af enhedsproducenten</string>
     <string name="title_advanced_autoexpand_hint">Åbn automatisk besked, når der kun er én besked eller kun én ulæst besked i en samtale</string>
@@ -1016,7 +1019,6 @@
     <string name="title_no_recorder">Ingen passende lydoptager-app tilgængelig</string>
     <string name="title_no_camera">Ingen passende kamera-app tilgængelig</string>
     <string name="title_no_saf">Storage access framework ikke tilgængelig</string>
-    <string name="title_no_stream">En forældet app har sendt en filsti i stedet for en fil-stream</string>
     <string name="title_no_internet">Ingen (passende) dataforbindelse</string>
     <string name="title_no_connection">Opretter forbindelse til én eller flere konti &#8230;</string>
     <string name="title_no_folder">Mappe findes ikke</string>
@@ -1245,6 +1247,7 @@
     <string name="title_search_in_junk">I Spam</string>
     <string name="title_search_with_before">Før</string>
     <string name="title_search_with_after">Efter</string>
+    <string name="title_search_device_first">Søg på enhed først</string>
     <string name="title_search_flag_unseen">ulæst</string>
     <string name="title_search_flag_flagged">stjernemarkeret</string>
     <string name="title_search_flag_hidden">skjult</string>
@@ -1301,6 +1304,7 @@
     <string name="title_answer_group">Skabelongruppe (valgfrit)</string>
     <string name="title_answer_standard">Standard</string>
     <string name="title_answer_favorite">Favorit</string>
+    <string name="title_answer_snippet">Uddrag</string>
     <string name="title_answer_receipt">Brug som læst-kvittering</string>
     <string name="title_answer_hide">Skjul fra menuer</string>
     <string name="title_answer_text">Skabelontekst</string>

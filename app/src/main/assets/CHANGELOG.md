@@ -4,6 +4,30 @@
 
 ### [Gobivenator](https://en.wikipedia.org/wiki/Gobivenator)
 
+### 1.1857 - 2022-03-19
+
+* Added inserting templates as text snippets
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1856 - 2022-03-14
+
+* Added click link feedback
+* Added option for direct server search
+* Improved favicon selection
+* Improved DMARC report viewer
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1855 - 2022-03-12
+
+* Added option to show contents of zipped attachments (enabled by default)
+* Added option to sort reply templates by frequency of use
+* Added basic [DMARC](https://en.wikipedia.org/wiki/DMARC) report viewer
+* Enabled [sqlite analyze](https://sqlite.org/lang_analyze.html)
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1854 - 2022-03-09
 
 * Added [Libravatar](https://www.libravatar.org/) support

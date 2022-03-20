@@ -417,7 +417,8 @@ public class FragmentOptions extends FragmentBase {
             }
 
             private int getSuggestions(String query, int id, int tab, String title, View view, MatrixCursor cursor) {
-                if (view == null || "nosuggest".equals(view.getTag()))
+                if (view == null ||
+                        ("nosuggest".equals(view.getTag()) && !BuildConfig.DEBUG))
                     return id;
                 else if (view instanceof ViewGroup) {
                     ViewGroup group = (ViewGroup) view;
@@ -426,6 +427,9 @@ public class FragmentOptions extends FragmentBase {
                 } else if (view instanceof TextView) {
                     String description = ((TextView) view).getText().toString();
                     if (description.toLowerCase().contains(query)) {
+                        description = description
+                                .replace("%%", "%")
+                                .replaceAll("%([0-9]\\$)?[sd]", "#");
                         String text = view.getContext().getString(R.string.title_title_description, title, description);
                         cursor.newRow()
                                 .add(id++)

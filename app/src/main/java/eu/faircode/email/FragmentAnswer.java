@@ -28,6 +28,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -63,6 +64,7 @@ public class FragmentAnswer extends FragmentBase {
     private CheckBox cbStandard;
     private CheckBox cbReceipt;
     private CheckBox cbFavorite;
+    private CheckBox cbSnippet;
     private CheckBox cbHide;
     private CheckBox cbExternal;
     private ViewButtonColor btnColor;
@@ -114,6 +116,7 @@ public class FragmentAnswer extends FragmentBase {
         cbStandard = view.findViewById(R.id.cbStandard);
         cbReceipt = view.findViewById(R.id.cbReceipt);
         cbFavorite = view.findViewById(R.id.cbFavorite);
+        cbSnippet = view.findViewById(R.id.cbSnippet);
         cbHide = view.findViewById(R.id.cbHide);
         cbExternal = view.findViewById(R.id.cbExternal);
         btnColor = view.findViewById(R.id.btnColor);
@@ -182,6 +185,7 @@ public class FragmentAnswer extends FragmentBase {
         FragmentDialogTheme.setBackground(context, view, true);
 
         cbExternal.setVisibility(View.GONE);
+        cbSnippet.setVisibility(View.GONE);
         grpReady.setVisibility(View.GONE);
         style_bar.setVisibility(View.GONE);
         bottom_navigation.setVisibility(View.GONE);
@@ -234,6 +238,7 @@ public class FragmentAnswer extends FragmentBase {
                     cbStandard.setChecked(answer == null ? false : answer.standard);
                     cbReceipt.setChecked(answer == null ? false : answer.receipt);
                     cbFavorite.setChecked(answer == null ? false : answer.favorite);
+                    cbSnippet.setChecked(answer == null ? false : answer.snippet);
                     cbHide.setChecked(answer == null ? false : answer.hide);
                     cbExternal.setChecked(answer == null ? false : answer.external);
                     btnColor.setColor(answer == null ? null : answer.color);
@@ -257,6 +262,8 @@ public class FragmentAnswer extends FragmentBase {
 
                 if (ActivityAnswer.canAnswer(context))
                     cbExternal.setVisibility(View.VISIBLE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    cbSnippet.setVisibility(View.VISIBLE);
                 grpReady.setVisibility(View.VISIBLE);
                 bottom_navigation.setVisibility(View.VISIBLE);
             }
@@ -284,7 +291,10 @@ public class FragmentAnswer extends FragmentBase {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_placeholder_name) {
+        if (itemId == R.id.menu_help) {
+            onMenuHelp();
+            return true;
+        } else if (itemId == R.id.menu_placeholder_name) {
             onMenuPlaceholder("$name$");
             return true;
         } else if (itemId == R.id.menu_placeholder_email) {
@@ -298,6 +308,10 @@ public class FragmentAnswer extends FragmentBase {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onMenuHelp() {
+        Helper.viewFAQ(getContext(), 179);
     }
 
     private void onMenuPlaceholder(String name) {
@@ -359,6 +373,7 @@ public class FragmentAnswer extends FragmentBase {
         args.putBoolean("standard", cbStandard.isChecked());
         args.putBoolean("receipt", cbReceipt.isChecked());
         args.putBoolean("favorite", cbFavorite.isChecked());
+        args.putBoolean("snippet", cbSnippet.isChecked());
         args.putBoolean("hide", cbHide.isChecked());
         args.putBoolean("external", cbExternal.isChecked());
         args.putInt("color", btnColor.getColor());
@@ -383,6 +398,7 @@ public class FragmentAnswer extends FragmentBase {
                 boolean standard = args.getBoolean("standard");
                 boolean receipt = args.getBoolean("receipt");
                 boolean favorite = args.getBoolean("favorite");
+                boolean snippet = args.getBoolean("snippet");
                 boolean hide = args.getBoolean("hide");
                 boolean external = args.getBoolean("external");
                 Integer color = args.getInt("color");
@@ -417,6 +433,7 @@ public class FragmentAnswer extends FragmentBase {
                     answer.standard = standard;
                     answer.receipt = receipt;
                     answer.favorite = favorite;
+                    answer.snippet = snippet;
                     answer.hide = hide;
                     answer.external = external;
                     answer.color = color;
@@ -483,6 +500,8 @@ public class FragmentAnswer extends FragmentBase {
 
     private void onImageSelected(Uri uri) {
         try {
+            NoStreamException.check(uri, getContext());
+
             getContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
             int start = etText.getSelectionStart();
@@ -494,16 +513,8 @@ public class FragmentAnswer extends FragmentBase {
             ssb.setSpan(is, start + 1, start + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             etText.setText(ssb);
             etText.setSelection(start + 2);
-        } catch (SecurityException ex) {
-            Snackbar sb = Snackbar.make(view, R.string.title_no_stream, Snackbar.LENGTH_INDEFINITE)
-                    .setGestureInsetBottomIgnored(true);
-            sb.setAction(R.string.title_info, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Helper.viewFAQ(v.getContext(), 49);
-                }
-            });
-            sb.show();
+        } catch (NoStreamException ex) {
+            ex.report(getActivity());
         } catch (Throwable ex) {
             Log.unexpectedError(getParentFragmentManager(), ex);
         }

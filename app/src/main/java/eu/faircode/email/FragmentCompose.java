@@ -320,7 +320,6 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_LINK = 12;
     private static final int REQUEST_DISCARD = 13;
     private static final int REQUEST_SEND = 14;
-    private static final int REQUEST_PERMISSION = 15;
 
     private static ExecutorService executor = Helper.getBackgroundExecutor(1, "compose");
 
@@ -591,12 +590,17 @@ public class FragmentCompose extends FragmentBase {
         etBody.addTextChangedListener(new TextWatcher() {
             private Integer added = null;
             private Integer removed = null;
+            private Integer replaced = null;
 
             @Override
             public void beforeTextChanged(CharSequence text, int start, int count, int after) {
                 if (count == 1 && after == 0 && (start == 0 || text.charAt(start) == '\n')) {
                     Log.i("Removed=" + start);
                     removed = start;
+                }
+                if (BuildConfig.DEBUG && count - after == 1) {
+                    replaced = start + after;
+                    Log.i("Replaced=" + replaced);
                 }
             }
 
@@ -734,6 +738,22 @@ public class FragmentCompose extends FragmentBase {
                     StyleHelper.renumber(text, true, etBody.getContext());
 
                     removed = null;
+                }
+
+                if (replaced != null && replaced > 0) {
+                    StyleHelper.TranslatedSpan[] nc =
+                            text.getSpans(replaced - 1, replaced, StyleHelper.TranslatedSpan.class);
+                    if (nc != null)
+                        for (StyleHelper.TranslatedSpan p : nc) {
+                            int start = text.getSpanStart(p);
+                            int end = text.getSpanEnd(p);
+                            if (end == replaced) {
+                                text.delete(start, end);
+                                text.removeSpan(p);
+                            }
+                        }
+
+                    replaced = null;
                 }
 
                 if (lp != null)
@@ -1346,7 +1366,7 @@ public class FragmentCompose extends FragmentBase {
         outState.putParcelable("fair:pickUri", pickUri);
 
         // Focus was lost at this point
-        outState.putInt("fair:selection", etBody.getSelectionStart());
+        outState.putInt("fair:selection", etBody == null ? 0 : etBody.getSelectionStart());
 
         super.onSaveInstanceState(outState);
     }
@@ -2110,6 +2130,7 @@ public class FragmentCompose extends FragmentBase {
                 new SimpleTask<DeepL.Translation>() {
                     @Override
                     protected void onPreExecute(Bundle args) {
+                        etBody.setSelection(paragraph.first, paragraph.second);
                         ToastEx.makeText(context, R.string.title_translating, Toast.LENGTH_SHORT).show();
                     }
 
@@ -2154,6 +2175,8 @@ public class FragmentCompose extends FragmentBase {
                          */
                         int len = 2 + translation.translated_text.length();
                         edit.insert(paragraph.second, "\n\n" + translation.translated_text);
+                        StyleHelper.markAsTranslated(edit, paragraph.second, paragraph.second + len);
+
                         etBody.setSelection(paragraph.second + len);
 
                         boolean small = prefs.getBoolean("deepl_small", false);
@@ -2177,6 +2200,7 @@ public class FragmentCompose extends FragmentBase {
 
                     @Override
                     protected void onException(Bundle args, Throwable ex) {
+                        etBody.setSelection(paragraph.second);
                         Throwable exex = new Throwable("DeepL", ex);
                         Log.unexpectedError(getParentFragmentManager(), exex, false);
                     }
@@ -2654,7 +2678,7 @@ public class FragmentCompose extends FragmentBase {
                         pickRequest = requestCode;
                         pickUri = uri;
                         String permission = Manifest.permission.READ_CONTACTS;
-                        requestPermissions(new String[]{permission}, REQUEST_PERMISSION);
+                        requestPermissions(new String[]{permission}, REQUEST_PERMISSIONS);
                     } catch (Throwable ex1) {
                         Log.unexpectedError(getParentFragmentManager(), ex1);
                     }
@@ -2666,10 +2690,11 @@ public class FragmentCompose extends FragmentBase {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (pickUri == null)
+            return;
         for (int i = 0; i < permissions.length; i++)
             if (Manifest.permission.READ_CONTACTS.equals(permissions[i]))
-                if (pickUri != null &&
-                        grantResults[i] == PackageManager.PERMISSION_GRANTED)
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED)
                     onPickContact(pickRequest, new Intent().setData(pickUri));
     }
 
@@ -2845,8 +2870,8 @@ public class FragmentCompose extends FragmentBase {
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 // External app sending absolute file
-                if (ex instanceof SecurityException)
-                    handleFileShare();
+                if (ex instanceof NoStreamException)
+                    ((NoStreamException) ex).report(getActivity());
                 else if (ex instanceof FileNotFoundException ||
                         ex instanceof IllegalArgumentException ||
                         ex instanceof IllegalStateException) {
@@ -2940,7 +2965,10 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
+                if (ex instanceof NoStreamException)
+                    ((NoStreamException) ex).report(getActivity());
+                else
+                    Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "compose:shared");
     }
@@ -3923,11 +3951,7 @@ public class FragmentCompose extends FragmentBase {
             Context context, long id, Uri uri, boolean image, int resize, boolean privacy) throws IOException {
         Log.w("Add attachment uri=" + uri + " image=" + image + " resize=" + resize + " privacy=" + privacy);
 
-        if (!"content".equals(uri.getScheme()) &&
-                !Helper.hasPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            Log.w("Add attachment uri=" + uri);
-            throw new SecurityException("Add attachment with file scheme");
-        }
+        NoStreamException.check(uri, context);
 
         EntityAttachment attachment = new EntityAttachment();
         UriInfo info = getInfo(uri, context);
@@ -5310,8 +5334,8 @@ public class FragmentCompose extends FragmentBase {
             // External app sending absolute file
             if (ex instanceof MessageRemovedException)
                 finish();
-            else if (ex instanceof SecurityException)
-                handleFileShare();
+            if (ex instanceof NoStreamException)
+                ((NoStreamException) ex).report(getActivity());
             else if (ex instanceof FileNotFoundException ||
                     ex instanceof IllegalArgumentException ||
                     ex instanceof IllegalStateException)
@@ -5334,18 +5358,6 @@ public class FragmentCompose extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
         }
     }.setExecutor(executor);
-
-    private void handleFileShare() {
-        Snackbar sb = Snackbar.make(view, R.string.title_no_stream, Snackbar.LENGTH_INDEFINITE)
-                .setGestureInsetBottomIgnored(true);
-        sb.setAction(R.string.title_info, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.viewFAQ(v.getContext(), 49);
-            }
-        });
-        sb.show();
-    }
 
     private SimpleTask<EntityMessage> actionLoader = new SimpleTask<EntityMessage>() {
         @Override
@@ -5941,6 +5953,17 @@ public class FragmentCompose extends FragmentBase {
                             outbox.id = db.folder().insertFolder(outbox);
                         }
 
+                        // Delay sending message
+                        if (draft.ui_snoozed == null && send_delayed != 0) {
+                            if (extras.getBoolean("now"))
+                                draft.ui_snoozed = null;
+                            else
+                                draft.ui_snoozed = new Date().getTime() + send_delayed * 1000L;
+                        }
+
+                        if (draft.ui_snoozed != null)
+                            draft.received = draft.ui_snoozed;
+
                         // Copy message to outbox
                         draft.id = null;
                         draft.folder = outbox.id;
@@ -5953,15 +5976,6 @@ public class FragmentCompose extends FragmentBase {
                         // Move attachments
                         for (EntityAttachment attachment : attachments)
                             db.attachment().setMessage(attachment.id, draft.id);
-
-                        // Delay sending message
-                        if (draft.ui_snoozed == null && send_delayed != 0) {
-                            if (extras.getBoolean("now"))
-                                draft.ui_snoozed = null;
-                            else
-                                draft.ui_snoozed = new Date().getTime() + send_delayed * 1000L;
-                            db.message().setMessageSnoozed(draft.id, draft.ui_snoozed);
-                        }
 
                         // Send message
                         if (draft.ui_snoozed == null)

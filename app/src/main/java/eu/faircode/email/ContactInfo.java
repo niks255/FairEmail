@@ -322,10 +322,12 @@ public class ContactInfo {
                         "googlemail.com".equals(d))
                     d = "support.google.com";
 
-                // https://yahoo.fr redirects unsafely to http://fr.yahoo.com/favicon.ico
-                String[] dparts = d.split("\\.");
-                if (dparts.length > 1 && "yahoo".equals(dparts[dparts.length - 2]))
-                    d = "yahoo.com";
+                // https://yahoo.fr/co.uk redirects unsafely to http://fr.yahoo.com/favicon.ico
+                for (String yahoo : d.split("\\."))
+                    if ("yahoo".equals(yahoo)) {
+                        d = "yahoo.com";
+                        break;
+                    }
 
                 final String domain = d.toLowerCase(Locale.ROOT);
                 final String email = info.email.toLowerCase(Locale.ROOT);
@@ -398,7 +400,7 @@ public class ContactInfo {
                                         int status = urlConnection.getResponseCode();
                                         if (status == HttpURLConnection.HTTP_OK) {
                                             // Positive reply
-                                            Bitmap bitmap = BitmapFactory.decodeStream(urlConnection.getInputStream());
+                                            Bitmap bitmap = ImageHelper.getScaledBitmap(urlConnection.getInputStream(), url.toString(), null, scaleToPixels);
                                             return (bitmap == null ? null : new Favicon(bitmap, "gravatar", false));
                                         } else if (status == HttpURLConnection.HTTP_NOT_FOUND) {
                                             // Negative reply
@@ -441,7 +443,7 @@ public class ContactInfo {
                                         int status = urlConnection.getResponseCode();
                                         if (status == HttpURLConnection.HTTP_OK) {
                                             // Positive reply
-                                            Bitmap bitmap = BitmapFactory.decodeStream(urlConnection.getInputStream());
+                                            Bitmap bitmap = ImageHelper.getScaledBitmap(urlConnection.getInputStream(), url.toString(), null, scaleToPixels);
                                             return (bitmap == null ? null : new Favicon(bitmap, "libravatar", false));
                                         } else if (status == HttpURLConnection.HTTP_NOT_FOUND) {
                                             // Negative reply
@@ -690,6 +692,7 @@ public class ContactInfo {
                                 String type = jicon.optString("type", "");
                                 if (!TextUtils.isEmpty(src)) {
                                     Element img = doc.createElement("link")
+                                            .attr("rel", "manifest")
                                             .attr("href", src)
                                             .attr("sizes", sizes)
                                             .attr("type", type);
@@ -704,29 +707,16 @@ public class ContactInfo {
                     Log.w(ex);
                 }
 
+        String host = base.getHost();
+
         Collections.sort(imgs, new Comparator<Element>() {
             @Override
             public int compare(Element img1, Element img2) {
-                boolean l1 = "link".equals(img1.tagName());
-                boolean l2 = "link".equals(img2.tagName());
-                int l = Boolean.compare(l1, l2);
-                if (l != 0)
-                    return -l;
-
-                // https://en.wikipedia.org/wiki/Favicon#How_to_use
-                boolean i1 = "icon".equalsIgnoreCase(img1.attr("rel")
-                        .replace("shortcut", "").trim());
-                boolean i2 = "icon".equalsIgnoreCase(img2.attr("rel")
-                        .replace("shortcut", "").trim());
-                int i = Boolean.compare(i1, i2);
-                if (i != 0)
-                    return -i;
-
-                int t1 = getOrder(img1);
-                int t2 = getOrder(img2);
+                int t1 = getOrder(host, img1);
+                int t2 = getOrder(host, img2);
                 int t = Integer.compare(t1, t2);
                 if (t != 0)
-                    return t;
+                    return -t;
 
                 int s1 = getSize(img1.attr("sizes"));
                 int s2 = getSize(img2.attr("sizes"));
@@ -738,7 +728,7 @@ public class ContactInfo {
 
         Log.i("Favicons " + base + "=" + imgs.size());
         for (int i = 0; i < imgs.size(); i++)
-            Log.i("Favicon " + i + "=" + imgs.get(i) + " @" + base);
+            Log.i("Favicon #" + getOrder(host, imgs.get(i)) + " " + i + "=" + imgs.get(i) + " @" + base);
 
         List<Future<Pair<Favicon, URL>>> futures = new ArrayList<>();
         for (Element img : imgs) {
@@ -777,16 +767,45 @@ public class ContactInfo {
         return null;
     }
 
-    private static int getOrder(Element img) {
-        String href = img.attr("href");
-        String type = img.attr("type");
+    private static int getOrder(String host, Element img) {
+        // https://en.wikipedia.org/wiki/Favicon#How_to_use
+        String href = img.attr("href")
+                .toLowerCase(Locale.ROOT)
+                .trim();
+        String rel = img.attr("rel")
+                .toLowerCase(Locale.ROOT)
+                .replace("shortcut", "") // "shortcut icon"
+                .trim();
+        String type = img.attr("type")
+                .trim();
 
-        int order = -1;
-        String h = (href == null ? "" : href.toLowerCase(Locale.ROOT));
-        if (h.endsWith(".ico"))
-            order = 2;
-        else if (h.endsWith(".svg") || "image/svg+xml".equals(type))
-            order = 1;
+        int order = 0;
+        if ("link".equals(img.tagName()))
+            order += 100;
+
+        boolean isIco = (href.endsWith(".ico") || "image/x-icon".equals(type));
+        boolean isSvg = (href.endsWith(".svg") || "image/svg+xml".equals(type));
+        boolean isMask = ("mask-icon".equals(rel) || img.hasAttr("mask"));
+
+        if (isMask)
+            order = -10; // Safari: "mask-icon"
+        else if ("icon".equals(rel) && !isIco)
+            order += 20;
+        else if ("apple-touch-icon".equals(rel) ||
+                "apple-touch-icon-precomposed".equals(rel)) {
+            // "apple-touch-startup-image"
+            if ("mailbox.org".equals(host))
+                order += 30;
+            else
+                order += 10;
+        }
+
+        if (isIco)
+            order += 1;
+        else if (isSvg)
+            order += 2;
+        else
+            order += 5;
 
         return order;
     }

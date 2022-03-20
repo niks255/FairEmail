@@ -74,7 +74,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -118,6 +117,7 @@ import org.openintents.openpgp.util.OpenPgpApi;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -179,6 +179,7 @@ public class Helper {
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
     static final String BIMI_PRIVACY_URI = "https://datatracker.ietf.org/doc/html/draft-brotman-ietf-bimi-guidance-03#section-7.4";
     static final String ID_COMMAND_URI = "https://datatracker.ietf.org/doc/html/rfc2971#section-3.1";
+    static final String AUTH_RESULTS_URI = "https://datatracker.ietf.org/doc/html/rfc7601";
     static final String FAVICON_PRIVACY_URI = "https://en.wikipedia.org/wiki/Favicon";
     static final String GRAVATAR_PRIVACY_URI = "https://en.wikipedia.org/wiki/Gravatar";
     static final String LICENSE_URI = "https://www.gnu.org/licenses/gpl-3.0.html";
@@ -698,7 +699,8 @@ public class Helper {
                 "message/delivery-status".equals(type) ||
                 "message/disposition-notification".equals(type) ||
                 "text/rfc822-headers".equals(type) ||
-                "text/x-amp-html".equals(type)))
+                "text/x-amp-html".equals(type) ||
+                "text/xml".equals(type) /* DMARC */))
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         if (!TextUtils.isEmpty(name))
@@ -1375,8 +1377,12 @@ public class Helper {
         view.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.i("showKeyboard view=" + view);
-                imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+                try {
+                    Log.i("showKeyboard view=" + view);
+                    imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
             }
         }, 250);
     }
@@ -1388,8 +1394,12 @@ public class Helper {
         if (imm == null)
             return;
 
-        Log.i("hideKeyboard view=" + view);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        try {
+            Log.i("hideKeyboard view=" + view);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     static String getViewName(View view) {
@@ -2311,39 +2321,6 @@ public class Helper {
                 }
             });
 
-            etPin.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus)
-                        try {
-                            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                        } catch (Throwable ex) {
-                            Log.e(ex);
-                            /*
-                                java.lang.IllegalArgumentException: View=DecorView@f197613[ActivityMain] not attached to window manager
-                                        at android.view.WindowManagerGlobal.findViewLocked(WindowManagerGlobal.java:604)
-                                        at android.view.WindowManagerGlobal.updateViewLayout(WindowManagerGlobal.java:493)
-                                        at android.view.WindowManagerImpl.updateViewLayout(WindowManagerImpl.java:121)
-                                        at android.app.Dialog.onWindowAttributesChanged(Dialog.java:1072)
-                                        at androidx.appcompat.view.WindowCallbackWrapper.onWindowAttributesChanged(WindowCallbackWrapper:114)
-                                        at android.view.Window.dispatchWindowAttributesChanged(Window.java:1236)
-                                        at com.android.internal.policy.PhoneWindow.dispatchWindowAttributesChanged(PhoneWindow.java:3229)
-                                        at android.view.Window.setSoftInputMode(Window.java:1123)
-                                        at eu.faircode.email.Helper$15.onFocusChange(Helper:2169)
-                                        at android.view.View.onFocusChanged(View.java:8828)
-                                        at android.widget.TextView.onFocusChanged(TextView.java:12091)
-                                        at android.widget.EditText.onFocusChanged(EditText.java:248)
-                                        at android.view.View.handleFocusGainInternal(View.java:8498)
-                                        at android.view.View.requestFocusNoSearch(View.java:14103)
-                                        at android.view.View.requestFocus(View.java:14077)
-                                        at android.view.View.requestFocus(View.java:14044)
-                                        at android.view.View.requestFocus(View.java:13986)
-                                        at eu.faircode.email.Helper$16.run(Helper:2187)
-                             */
-                        }
-                }
-            });
-
             try {
                 dialog.show();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
@@ -2353,13 +2330,18 @@ public class Helper {
                 long wait = (long) Math.pow(PIN_FAILURE_DELAY, pin_failure_count) * 1000L;
                 long delay = pin_failure_at + wait - new Date().getTime();
                 Log.i("PIN wait=" + wait + " delay=" + delay);
-                ApplicationEx.getMainHandler().postDelayed(new Runnable() {
+                dview.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        etPin.setCompoundDrawables(null, null, null, null);
-                        etPin.setEnabled(true);
-                        etPin.requestFocus();
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                        try {
+                            etPin.setCompoundDrawables(null, null, null, null);
+                            etPin.setEnabled(true);
+                            etPin.requestFocus();
+                            showKeyboard(etPin);
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
                     }
                 }, delay < 0 ? 0 : delay);
 

@@ -24,6 +24,7 @@ import static android.system.OsConstants.ENOSPC;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.system.ErrnoException;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -49,6 +50,11 @@ import com.sun.mail.util.BASE64DecoderStream;
 import com.sun.mail.util.FolderClosedIOException;
 import com.sun.mail.util.MessageRemovedIOException;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.ArchiveStreamFactory;
+import org.apache.commons.compress.archivers.zip.UnsupportedZipFeatureException;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -141,6 +147,13 @@ public class MessageHelper {
     static final int DEFAULT_DOWNLOAD_SIZE = 4 * 1024 * 1024; // bytes
     static final String HEADER_CORRELATION_ID = "X-Correlation-ID";
     static final int MAX_SUBJECT_AGE = 48; // hours
+    static final int DEFAULT_THREAD_RANGE = 7; // 2^7 = 128 days
+    static final int MAX_UNZIP_COUNT = 20;
+    static final long MAX_UNZIP_SIZE = 1000 * 1000 * 1000L;
+
+    static final List<String> UNZIP_FORMATS = BuildConfig.PLAY_STORE_RELEASE
+            ? Collections.unmodifiableList(Arrays.asList("zip"))
+            : Collections.unmodifiableList(Arrays.asList("zip, gz, tar.gz"));
 
     static final List<String> RECEIVED_WORDS = Collections.unmodifiableList(Arrays.asList(
             "from", "by", "via", "with", "id", "for"
@@ -1334,10 +1347,10 @@ public class MessageHelper {
         return reportHeaders;
     }
 
-    String getThreadId(Context context, long account, long folder, long uid) throws MessagingException {
+    String getThreadId(Context context, long account, long folder, long uid, long received) throws MessagingException {
         if (threadId == null)
             if (true)
-                threadId = _getThreadIdAlt(context, account, folder, uid);
+                threadId = _getThreadIdAlt(context, account, folder, uid, received);
             else
                 threadId = _getThreadId(context, account, folder, uid);
         return threadId;
@@ -1429,7 +1442,7 @@ public class MessageHelper {
         return thread;
     }
 
-    private String _getThreadIdAlt(Context context, long account, long folder, long uid) throws MessagingException {
+    private String _getThreadIdAlt(Context context, long account, long folder, long uid, long received) throws MessagingException {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (imessage instanceof GmailMessage) {
@@ -1483,9 +1496,15 @@ public class MessageHelper {
 
         List<String> all = new ArrayList<>(refs);
         all.add(msgid);
+
+        int thread_range = prefs.getInt("thread_range", MessageHelper.DEFAULT_THREAD_RANGE);
+        int range = (int) Math.pow(2, thread_range);
+        Long start = (received == 0 ? null : received - range * 24 * 3600 * 1000L);
+        Long end = (received == 0 ? null : received + range * 24 * 3600 * 1000L);
+
         List<TupleThreadInfo> infos = (all.size() == 0
                 ? new ArrayList<>()
-                : db.message().getThreadInfo(account, all));
+                : db.message().getThreadInfo(account, all, start, end));
 
         // References, In-Reply-To (sent before)
         for (TupleThreadInfo info : infos)
@@ -3364,7 +3383,161 @@ public class MessageHelper {
                             }
                     } catch (Throwable ex) {
                         Log.e(ex);
+                        db.attachment().setWarning(local.id, Log.formatThrowable(ex));
                     }
+
+                else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && local.isCompressed()) {
+                    // https://commons.apache.org/proper/commons-compress/examples.html
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    boolean unzip = prefs.getBoolean("unzip", true);
+
+                    if (unzip)
+                        if (local.isGzip() && !local.isTarGzip())
+                            try (GzipCompressorInputStream gzip = new GzipCompressorInputStream(
+                                    new BufferedInputStream(new FileInputStream(local.getFile(context))))) {
+                                String name = gzip.getMetaData().getFilename();
+                                long total = gzip.getUncompressedCount();
+
+                                Log.i("Gzipped attachment seq=" + local.sequence + " " + name + ":" + total);
+
+                                if (total <= MAX_UNZIP_SIZE) {
+                                    if (name == null &&
+                                            local.name != null && local.name.endsWith(".gz"))
+                                        name = local.name.substring(0, local.name.length() - 3);
+
+                                    EntityAttachment attachment = new EntityAttachment();
+                                    attachment.message = local.message;
+                                    attachment.sequence = local.sequence;
+                                    attachment.subsequence = 1;
+                                    attachment.name = name;
+                                    attachment.type = Helper.guessMimeType(name);
+                                    if (total >= 0)
+                                        attachment.size = total;
+                                    attachment.id = db.attachment().insertAttachment(attachment);
+
+                                    File efile = attachment.getFile(context);
+                                    Log.i("Gunzipping to " + efile);
+
+                                    int last = 0;
+                                    long size = 0;
+                                    try (OutputStream os = new FileOutputStream(efile)) {
+                                        byte[] buffer = new byte[Helper.BUFFER_SIZE];
+                                        for (int len = gzip.read(buffer); len != -1; len = gzip.read(buffer)) {
+                                            size += len;
+                                            if (size > MAX_UNZIP_SIZE)
+                                                throw new IOException("File too large");
+                                            os.write(buffer, 0, len);
+
+                                            if (total > 0) {
+                                                int progress = (int) (size * 100 / total);
+                                                if (progress / 20 > last / 20) {
+                                                    last = progress;
+                                                    db.attachment().setProgress(attachment.id, progress);
+                                                }
+                                            }
+                                        }
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                        db.attachment().setError(attachment.id, Log.formatThrowable(ex));
+                                        db.attachment().setAvailable(attachment.id, true); // unrecoverable
+                                    }
+
+                                    db.attachment().setDownloaded(attachment.id, efile.length());
+                                }
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                                db.attachment().setWarning(local.id, Log.formatThrowable(ex));
+                            }
+                        else
+                            try (FileInputStream fis = new FileInputStream(local.getFile(context))) {
+                                ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(
+                                        new BufferedInputStream(local.isTarGzip() ? new GzipCompressorInputStream(fis) : fis));
+
+                                int count = 0;
+                                ArchiveEntry entry;
+                                while ((entry = ais.getNextEntry()) != null)
+                                    if (ais.canReadEntryData(entry) && !entry.isDirectory()) {
+                                        if (entry.getSize() > MAX_UNZIP_SIZE)
+                                            count = MAX_UNZIP_COUNT;
+                                        if (++count > MAX_UNZIP_COUNT)
+                                            break;
+                                    }
+
+                                Log.i("Zip entries=" + count);
+                                if (count <= MAX_UNZIP_COUNT) {
+                                    fis.getChannel().position(0);
+
+                                    ais = new ArchiveStreamFactory().createArchiveInputStream(
+                                            new BufferedInputStream(local.isTarGzip() ? new GzipCompressorInputStream(fis) : fis));
+
+                                    int subsequence = 1;
+                                    while ((entry = ais.getNextEntry()) != null) {
+                                        if (!ais.canReadEntryData(entry)) {
+                                            Log.w("Zip invalid=" + entry);
+                                            continue;
+                                        }
+
+                                        String name = entry.getName();
+                                        long total = entry.getSize();
+
+                                        if (entry.isDirectory() ||
+                                                (name != null && name.endsWith("\\"))) {
+                                            Log.i("Zipped folder=" + name);
+                                            continue;
+                                        }
+
+                                        Log.i("Zipped attachment seq=" + local.sequence + ":" + subsequence +
+                                                " " + name + ":" + total);
+
+                                        EntityAttachment attachment = new EntityAttachment();
+                                        attachment.message = local.message;
+                                        attachment.sequence = local.sequence;
+                                        attachment.subsequence = subsequence++;
+                                        attachment.name = name;
+                                        attachment.type = Helper.guessMimeType(name);
+                                        if (total >= 0)
+                                            attachment.size = total;
+                                        attachment.id = db.attachment().insertAttachment(attachment);
+
+                                        File efile = attachment.getFile(context);
+                                        Log.i("Unzipping to " + efile);
+
+                                        int last = 0;
+                                        long size = 0;
+                                        try (OutputStream os = new FileOutputStream(efile)) {
+                                            byte[] buffer = new byte[Helper.BUFFER_SIZE];
+                                            for (int len = ais.read(buffer); len != -1; len = ais.read(buffer)) {
+                                                size += len;
+                                                if (size > MAX_UNZIP_SIZE)
+                                                    throw new IOException("File too large");
+                                                os.write(buffer, 0, len);
+
+                                                if (total > 0) {
+                                                    int progress = (int) (size * 100 / total);
+                                                    if (progress / 20 > last / 20) {
+                                                        last = progress;
+                                                        db.attachment().setProgress(attachment.id, progress);
+                                                    }
+                                                }
+                                            }
+                                        } catch (Throwable ex) {
+                                            Log.e(ex);
+                                            db.attachment().setError(attachment.id, Log.formatThrowable(ex));
+                                            db.attachment().setAvailable(attachment.id, true); // unrecoverable
+                                        }
+
+                                        db.attachment().setDownloaded(attachment.id, efile.length());
+                                    }
+                                }
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                                // Unsupported feature encryption used in entry ...
+                                if (ex instanceof UnsupportedZipFeatureException)
+                                    db.attachment().setWarning(local.id, ex.getMessage());
+                                else
+                                    db.attachment().setWarning(local.id, Log.formatThrowable(ex));
+                            }
+                }
             }
         }
 
@@ -3633,8 +3806,11 @@ public class MessageHelper {
                                 break;
                             }
                         }
-                    } else
-                        throw new MessagingStructureException(content);
+                    } else {
+                        String msg = "Expected multipart/mixed got " + content.getClass().getName();
+                        Log.e(msg);
+                        parts.warnings.add(msg);
+                    }
                 }
 
                 if (part.isMimeType("multipart/signed")) {
@@ -3678,8 +3854,11 @@ public class MessageHelper {
                                     sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
                                 Log.e(sb.toString());
                             }
-                        } else
-                            throw new MessagingStructureException(content);
+                        } else {
+                            String msg = "Expected multipart/signed got " + content.getClass().getName();
+                            Log.e(msg);
+                            parts.warnings.add(msg);
+                        }
                     } else
                         Log.e(ct.toString());
                 } else if (part.isMimeType("multipart/encrypted")) {
@@ -3700,8 +3879,12 @@ public class MessageHelper {
                                     sb.append(' ').append(i).append('=').append(multipart.getBodyPart(i).getContentType());
                                 Log.e(sb.toString());
                             }
-                        } else
-                            throw new MessagingStructureException(content);
+                        } else {
+                            String msg = "Expected multipart/encrypted got " + content.getClass().getName();
+                            Log.e(msg);
+                            parts.warnings.add(msg);
+
+                        }
                     } else
                         Log.e(ct.toString());
                 } else if (part.isMimeType("application/pkcs7-mime") ||
@@ -3781,145 +3964,148 @@ public class MessageHelper {
             if (part.isMimeType("multipart/*")) {
                 Multipart multipart;
                 Object content = part.getContent(); // Should always be Multipart
-                if (content instanceof Multipart)
+                if (content instanceof Multipart) {
                     multipart = (Multipart) part.getContent();
-                else
-                    throw new MessagingStructureException(content);
-
-                int count = multipart.getCount();
-                for (int i = 0; i < count; i++)
-                    try {
-                        BodyPart child = multipart.getBodyPart(i);
-                        getMessageParts(part, child, parts, encrypt);
-                    } catch (ParseException ex) {
-                        // Nested body: try to continue
-                        // ParseException: In parameter list boundary="...">, expected parameter name, got ";"
-                        Log.w(ex);
-                        parts.warnings.add(Log.formatThrowable(ex, false));
-                    }
-            } else {
-                // https://www.iana.org/assignments/cont-disp/cont-disp.xhtml
-                String disposition;
-                try {
-                    // From the body structure
-                    disposition = part.getDisposition();
-                    if (disposition != null)
-                        disposition = disposition.toLowerCase(Locale.ROOT);
-                } catch (MessagingException ex) {
-                    Log.w(ex);
-                    parts.warnings.add(Log.formatThrowable(ex, false));
-                    disposition = null;
-                }
-
-                String filename;
-                try {
-                    // From the body structure:
-                    // 1. disposition filename
-                    // 2. content type name
-                    filename = part.getFileName(); // IMAPBodyPart/BODYSTRUCTURE
-                    if (filename != null) {
-                        // https://tools.ietf.org/html/rfc2231
-                        // http://kb.mozillazine.org/Attachments_renamed
-                        // https://blog.nodemailer.com/2017/01/27/the-mess-that-is-attachment-filenames/
-                        int q1 = filename.indexOf('\'');
-                        int q2 = filename.indexOf('\'', q1 + 1);
-                        if (q1 >= 0 && q2 > 0) {
-                            try {
-                                String charset = filename.substring(0, q1);
-                                String language = filename.substring(q1 + 1, q2);
-                                String name = filename.substring(q2 + 1)
-                                        .replace("+", "%2B");
-
-                                if (!TextUtils.isEmpty(charset))
-                                    filename = URLDecoder.decode(name, charset);
-                            } catch (Throwable ex) {
-                                Log.e(ex);
-                            }
+                    int count = multipart.getCount();
+                    for (int i = 0; i < count; i++)
+                        try {
+                            BodyPart child = multipart.getBodyPart(i);
+                            getMessageParts(part, child, parts, encrypt);
+                        } catch (ParseException ex) {
+                            // Nested body: try to continue
+                            // ParseException: In parameter list boundary="...">, expected parameter name, got ";"
+                            Log.w(ex);
+                            parts.warnings.add(Log.formatThrowable(ex, false));
                         }
-
-                        filename = decodeMime(filename);
-                    }
-                } catch (MessagingException ex) {
-                    Log.w(ex);
-                    parts.warnings.add(Log.formatThrowable(ex, false));
-                    filename = null;
-                }
-
-                ContentType contentType;
-                try {
-                    // From the body structure
-                    contentType = new ContentType(part.getContentType());
-                } catch (ParseException ex) {
-                    if (part instanceof MimeMessage)
-                        Log.w("MimeMessage content type=" + ex.getMessage());
-                    else
-                        Log.w(ex);
-                    contentType = new ContentType(Helper.guessMimeType(filename));
-                }
-
-                String ct = contentType.getBaseType();
-                if (("text/plain".equalsIgnoreCase(ct) || "text/html".equalsIgnoreCase(ct)) &&
-                        !Part.ATTACHMENT.equalsIgnoreCase(disposition) && TextUtils.isEmpty(filename)) {
-                    parts.text.add(new PartHolder(part, contentType));
+                    return;
                 } else {
-                    if (Report.isDeliveryStatus(ct) || Report.isDispositionNotification(ct))
-                        parts.extra.add(new PartHolder(part, contentType));
+                    String msg = "Expected multipart/* got " + content.getClass().getName();
+                    Log.e(msg);
+                    parts.warnings.add(msg);
+                }
+            }
 
-                    AttachmentPart apart = new AttachmentPart();
-                    apart.disposition = disposition;
-                    apart.filename = filename;
-                    apart.encrypt = encrypt;
-                    apart.part = part;
+            // https://www.iana.org/assignments/cont-disp/cont-disp.xhtml
+            String disposition;
+            try {
+                // From the body structure
+                disposition = part.getDisposition();
+                if (disposition != null)
+                    disposition = disposition.toLowerCase(Locale.ROOT);
+            } catch (MessagingException ex) {
+                Log.w(ex);
+                parts.warnings.add(Log.formatThrowable(ex, false));
+                disposition = null;
+            }
 
-                    String cid = null;
-                    try {
-                        if (apart.part instanceof IMAPBodyPart)
-                            cid = ((IMAPBodyPart) apart.part).getContentID();
-                        if (TextUtils.isEmpty(cid)) {
-                            String[] cids = apart.part.getHeader("Content-ID");
-                            if (cids != null && cids.length > 0)
-                                cid = MimeUtility.unfold(cids[0]);
+            String filename;
+            try {
+                // From the body structure:
+                // 1. disposition filename
+                // 2. content type name
+                filename = part.getFileName(); // IMAPBodyPart/BODYSTRUCTURE
+                if (filename != null) {
+                    // https://tools.ietf.org/html/rfc2231
+                    // http://kb.mozillazine.org/Attachments_renamed
+                    // https://blog.nodemailer.com/2017/01/27/the-mess-that-is-attachment-filenames/
+                    int q1 = filename.indexOf('\'');
+                    int q2 = filename.indexOf('\'', q1 + 1);
+                    if (q1 >= 0 && q2 > 0) {
+                        try {
+                            String charset = filename.substring(0, q1);
+                            String language = filename.substring(q1 + 1, q2);
+                            String name = filename.substring(q2 + 1)
+                                    .replace("+", "%2B");
+
+                            if (!TextUtils.isEmpty(charset))
+                                filename = URLDecoder.decode(name, charset);
+                        } catch (Throwable ex) {
+                            Log.e(ex);
                         }
+                    }
+
+                    filename = decodeMime(filename);
+                }
+            } catch (MessagingException ex) {
+                Log.w(ex);
+                parts.warnings.add(Log.formatThrowable(ex, false));
+                filename = null;
+            }
+
+            ContentType contentType;
+            try {
+                // From the body structure
+                contentType = new ContentType(part.getContentType());
+            } catch (ParseException ex) {
+                if (part instanceof MimeMessage)
+                    Log.w("MimeMessage content type=" + ex.getMessage());
+                else
+                    Log.w(ex);
+                contentType = new ContentType(Helper.guessMimeType(filename));
+            }
+
+            String ct = contentType.getBaseType();
+            if (("text/plain".equalsIgnoreCase(ct) || "text/html".equalsIgnoreCase(ct)) &&
+                    !Part.ATTACHMENT.equalsIgnoreCase(disposition) && TextUtils.isEmpty(filename)) {
+                parts.text.add(new PartHolder(part, contentType));
+            } else {
+                if (Report.isDeliveryStatus(ct) || Report.isDispositionNotification(ct))
+                    parts.extra.add(new PartHolder(part, contentType));
+
+                AttachmentPart apart = new AttachmentPart();
+                apart.disposition = disposition;
+                apart.filename = filename;
+                apart.encrypt = encrypt;
+                apart.part = part;
+
+                String cid = null;
+                try {
+                    if (apart.part instanceof IMAPBodyPart)
+                        cid = ((IMAPBodyPart) apart.part).getContentID();
+                    if (TextUtils.isEmpty(cid)) {
+                        String[] cids = apart.part.getHeader("Content-ID");
+                        if (cids != null && cids.length > 0)
+                            cid = MimeUtility.unfold(cids[0]);
+                    }
+                } catch (MessagingException ex) {
+                    Log.w(ex);
+                    if (!"Failed to fetch headers".equals(ex.getMessage()))
+                        parts.warnings.add(Log.formatThrowable(ex, false));
+                }
+
+                Boolean related = null;
+                if (parent != null)
+                    try {
+                        related = parent.isMimeType("multipart/related");
                     } catch (MessagingException ex) {
                         Log.w(ex);
-                        if (!"Failed to fetch headers".equals(ex.getMessage()))
-                            parts.warnings.add(Log.formatThrowable(ex, false));
                     }
 
-                    Boolean related = null;
-                    if (parent != null)
-                        try {
-                            related = parent.isMimeType("multipart/related");
-                        } catch (MessagingException ex) {
-                            Log.w(ex);
-                        }
+                apart.attachment = new EntityAttachment();
+                apart.attachment.disposition = apart.disposition;
+                apart.attachment.name = apart.filename;
+                apart.attachment.type = contentType.getBaseType().toLowerCase(Locale.ROOT);
+                apart.attachment.size = (long) apart.part.getSize();
+                apart.attachment.cid = cid;
+                apart.attachment.related = related;
+                apart.attachment.encryption = apart.encrypt;
 
-                    apart.attachment = new EntityAttachment();
-                    apart.attachment.disposition = apart.disposition;
-                    apart.attachment.name = apart.filename;
-                    apart.attachment.type = contentType.getBaseType().toLowerCase(Locale.ROOT);
-                    apart.attachment.size = (long) apart.part.getSize();
-                    apart.attachment.cid = cid;
-                    apart.attachment.related = related;
-                    apart.attachment.encryption = apart.encrypt;
+                if ("text/calendar".equalsIgnoreCase(apart.attachment.type) &&
+                        TextUtils.isEmpty(apart.attachment.name))
+                    apart.attachment.name = "invite.ics";
 
-                    if ("text/calendar".equalsIgnoreCase(apart.attachment.type) &&
-                            TextUtils.isEmpty(apart.attachment.name))
-                        apart.attachment.name = "invite.ics";
+                if (apart.attachment.size <= 0)
+                    apart.attachment.size = null;
 
-                    if (apart.attachment.size <= 0)
-                        apart.attachment.size = null;
-
-                    // https://tools.ietf.org/html/rfc2392
-                    if (apart.attachment.cid != null) {
-                        if (!apart.attachment.cid.startsWith("<"))
-                            apart.attachment.cid = "<" + apart.attachment.cid;
-                        if (!apart.attachment.cid.endsWith(">"))
-                            apart.attachment.cid += ">";
-                    }
-
-                    parts.attachments.add(apart);
+                // https://tools.ietf.org/html/rfc2392
+                if (apart.attachment.cid != null) {
+                    if (!apart.attachment.cid.startsWith("<"))
+                        apart.attachment.cid = "<" + apart.attachment.cid;
+                    if (!apart.attachment.cid.endsWith(">"))
+                        apart.attachment.cid += ">";
                 }
+
+                parts.attachments.add(apart);
             }
         } catch (FolderClosedException ex) {
             throw ex;
@@ -4260,22 +4446,6 @@ public class MessageHelper {
         }
 
         return values;
-    }
-
-    static class MessagingStructureException extends MessagingException {
-        private String className;
-
-        MessagingStructureException(Object content) {
-            super();
-            if (content != null)
-                this.className = content.getClass().getName();
-        }
-
-        @Nullable
-        @Override
-        public String getMessage() {
-            return className;
-        }
     }
 
     static class Report {

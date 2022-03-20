@@ -355,6 +355,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private int autoCloseCount = 0;
     private boolean autoExpanded = true;
 
+    private Integer lastUnseen;
+    private Boolean lastRefreshing;
+    private Boolean lastFolderErrors;
+    private Boolean lastAccountErrors;
+
     final private Map<String, String> kv = new HashMap<>();
     final private Map<String, List<Long>> values = new HashMap<>();
     final private LongSparseArray<Float> sizes = new LongSparseArray<>();
@@ -394,6 +399,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     static final int REQUEST_BUTTONS = 24;
     private static final int REQUEST_ALL_READ = 25;
     private static final int REQUEST_SAVE_SEARCH = 26;
+    private static final int REQUEST_DELETE_SEARCH = 27;
 
     static final String ACTION_STORE_RAW = BuildConfig.APPLICATION_ID + ".STORE_RAW";
     static final String ACTION_DECRYPT = BuildConfig.APPLICATION_ID + ".DECRYPT";
@@ -701,12 +707,17 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                         List<Long> expanded = values.get("expanded");
                         Log.i("Capture expanded=" + (expanded == null ? null : expanded.size()));
                         if (expanded != null && expanded.size() == 1) {
-                            int pos = adapter.getPositionForKey(expanded.get(0));
+                            long id = expanded.get(0);
+                            int pos = adapter.getPositionForKey(id);
                             Log.i("Capture pos=" + pos);
                             child = llm.findViewByPosition(pos);
                             Log.i("Capture child=" + child);
-                            if (child != null)
-                                rect.set(0, 0, child.getWidth(), child.getHeight());
+                            if (child != null) {
+                                int w = child.getWidth();
+                                int h = child.getHeight();
+                                Log.i("Capture " + w + "x" + h);
+                                rect.set(0, 0, w, h);
+                            }
                         }
                     } catch (Throwable ex) {
                         Log.e(ex);
@@ -934,7 +945,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         boolean compact = prefs.getBoolean("compact", false);
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
-        boolean ascending = prefs.getBoolean(getSortOrder(getContext(), viewType, type), false);
+        boolean outbox = EntityFolder.OUTBOX.equals(type);
+        boolean ascending = prefs.getBoolean(getSortOrder(getContext(), viewType, type), outbox);
         boolean filter_duplicates = prefs.getBoolean("filter_duplicates", true);
         boolean filter_trash = prefs.getBoolean("filter_trash", false);
 
@@ -4345,7 +4357,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         if (!checkDoze())
             if (!checkReporting())
                 if (!checkReview())
-                    checkFingerprint();
+                    if (!checkFingerprint())
+                        checkGmail();
 
         prefs.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(prefs, "pro");
@@ -4576,6 +4589,83 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         return true;
     }
 
+    private boolean checkGmail() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if (prefs.getBoolean("gmail_checked", false))
+            return false;
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.DAY_OF_MONTH, 30);
+        cal.set(Calendar.MONTH, Calendar.MAY);
+        cal.set(Calendar.YEAR, 2022);
+
+        cal.add(Calendar.MONTH, 2);
+
+        long now = new Date().getTime();
+        if (now > cal.getTimeInMillis()) {
+            prefs.edit().putBoolean("gmail_checked", true).apply();
+            return false;
+        }
+
+        new SimpleTask<List<EntityAccount>>() {
+            @Override
+            protected List<EntityAccount> onExecute(Context context, Bundle args) throws Throwable {
+                DB db = DB.getInstance(context);
+                return db.account().getAccounts();
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, List<EntityAccount> accounts) {
+                int oauth = 0;
+                int passwd = 0;
+                if (accounts != null)
+                    for (EntityAccount account : accounts)
+                        if (account.isGmail())
+                            if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_OAUTH)
+                                oauth++;
+                            else if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD)
+                                passwd++;
+
+                if (oauth + passwd == 0) {
+                    prefs.edit().putBoolean("gmail_checked", true).apply();
+                    return;
+                }
+
+                final int resid = (passwd > 0
+                        ? R.string.title_check_gmail_password
+                        : R.string.title_check_gmail_oauth);
+                final Snackbar snackbar = Snackbar.make(view, resid, Snackbar.LENGTH_INDEFINITE)
+                        .setGestureInsetBottomIgnored(true);
+                snackbar.setAction(R.string.title_info, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                        Helper.viewFAQ(v.getContext(), 6);
+                        prefs.edit().putBoolean("gmail_checked", true).apply();
+                    }
+                });
+                snackbar.addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        prefs.edit().putBoolean("gmail_checked", true).apply();
+                    }
+                });
+                snackbar.show();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.e(ex);
+            }
+        }.execute(this, new Bundle(), "gmail:check");
+
+        return true;
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_messages, menu);
@@ -4613,10 +4703,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        boolean drafts = EntityFolder.DRAFTS.equals(type);
+        boolean outbox = EntityFolder.OUTBOX.equals(type);
+        boolean sent = EntityFolder.SENT.equals(type);
+
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String sort = prefs.getString(getSort(context, viewType, type), "time");
-        boolean ascending = prefs.getBoolean(getSortOrder(context, viewType, type), false);
+        boolean ascending = prefs.getBoolean(getSortOrder(context, viewType, type), outbox);
         boolean filter_seen = prefs.getBoolean(getFilter(context, "seen", viewType, type), false);
         boolean filter_unflagged = prefs.getBoolean(getFilter(context, "unflagged", viewType, type), false);
         boolean filter_unknown = prefs.getBoolean(getFilter(context, "unknown", viewType, type), false);
@@ -4631,10 +4725,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
         int padding = prefs.getInt("view_padding", compact ? 0 : 1);
         boolean quick_filter = prefs.getBoolean("quick_filter", false);
-
-        boolean drafts = EntityFolder.DRAFTS.equals(type);
-        boolean outbox = EntityFolder.OUTBOX.equals(type);
-        boolean sent = EntityFolder.SENT.equals(type);
 
         boolean folder =
                 (viewType == AdapterMessage.ViewType.UNIFIED ||
@@ -4921,30 +5011,19 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private void onMenuDeleteSearch() {
+        if (criteria == null)
+            return;
+
         Bundle args = new Bundle();
-        args.putLong("id", criteria == null ? -1 : criteria.id);
+        args.putString("question", getString(R.string.title_search_delete));
+        args.putString("remark", criteria.getTitle(getContext()));
+        args.putLong("id", criteria.id);
+        args.putBoolean("warning", true);
 
-        new SimpleTask<Void>() {
-            @Override
-            protected Void onExecute(Context context, Bundle args) throws Throwable {
-                long id = args.getLong("id");
-
-                DB db = DB.getInstance(context);
-                db.search().deleteSearch(id);
-
-                return null;
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, Void data) {
-                finish();
-            }
-
-            @Override
-            protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
-            }
-        }.execute(this, args, "search:delete");
+        FragmentDialogAsk ask = new FragmentDialogAsk();
+        ask.setArguments(args);
+        ask.setTargetFragment(FragmentMessages.this, REQUEST_DELETE_SEARCH);
+        ask.show(getParentFragmentManager(), "swipe:delete");
     }
 
     private void onMenuFolders(long account) {
@@ -5343,6 +5422,30 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }.execute(this, args, "search:save");
     }
 
+    private void onDeleteSearch(Bundle args) {
+        new SimpleTask<Void>() {
+            @Override
+            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                long id = args.getLong("id");
+
+                DB db = DB.getInstance(context);
+                db.search().deleteSearch(id);
+
+                return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                finish();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "search:delete");
+    }
+
     private void onMenuSyncMore() {
         Bundle args = new Bundle();
         args.putLong("folder", folder);
@@ -5450,17 +5553,31 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         }
 
+        if (Objects.equals(lastUnseen, unseen) &&
+                Objects.equals(lastRefreshing, refreshing) &&
+                Objects.equals(lastFolderErrors, folderErrors) &&
+                Objects.equals(lastAccountErrors, accountErrors)) {
+            Log.i("Folder state unchanged");
+            return;
+        }
+
+        lastUnseen = unseen;
+        lastRefreshing = refreshing;
+        lastFolderErrors = folderErrors;
+        lastAccountErrors = accountErrors;
+
         // Get name
         String name;
+        Context context = getContext();
         if (viewType == AdapterMessage.ViewType.UNIFIED)
             if (type == null) {
                 name = (folders.size() == 1 ? folders.get(0).accountName : null);
                 if (name == null)
                     name = getString(R.string.title_folder_unified);
             } else
-                name = EntityFolder.localizeType(getContext(), type);
+                name = "»" + EntityFolder.localizeType(context, type);
         else {
-            name = (folders.size() > 0 ? folders.get(0).getDisplayName(getContext()) : "");
+            name = (folders.size() > 0 ? folders.get(0).getDisplayName(context) : "");
             if (folders.size() == 1) {
                 String accountName = folders.get(0).accountName;
                 if (accountName != null)
@@ -5469,10 +5586,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }
 
         // Show name/unread
-        if (unseen == 0)
-            setSubtitle(name);
-        else
-            setSubtitle(getString(R.string.title_name_count, name, NF.format(unseen)));
+        if (unseen > 0)
+            name = getString(R.string.title_name_count, name, NF.format(unseen));
+        setSubtitle(name);
 
         fabError.setTag(accountErrors);
         if (folderErrors || accountErrors)
@@ -6498,7 +6614,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     static String getSortOrder(Context context, AdapterMessage.ViewType viewType, String type) {
-        if (viewType == AdapterMessage.ViewType.THREAD)
+        if (EntityFolder.OUTBOX.equals(type))
+            return "ascending_outbox";
+        else if (viewType == AdapterMessage.ViewType.THREAD)
             return "ascending_thread";
         else if (viewType == AdapterMessage.ViewType.UNIFIED)
             return "ascending_unified";
@@ -7133,6 +7251,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 case REQUEST_SAVE_SEARCH:
                     if (resultCode == RESULT_OK && data != null)
                         onSaveSearch(data.getBundleExtra("args"));
+                    break;
+                case REQUEST_DELETE_SEARCH:
+                    if (resultCode == RESULT_OK && data != null)
+                        onDeleteSearch(data.getBundleExtra("args"));
                     break;
             }
         } catch (Throwable ex) {

@@ -2015,6 +2015,7 @@ public class HtmlHelper {
 
     // https://tools.ietf.org/html/rfc3676
     static String flow(String text, boolean delsp) {
+        boolean inquote = false;
         boolean continuation = false;
         StringBuilder flowed = new StringBuilder();
         String[] lines = text.split("\\r?\\n");
@@ -2024,6 +2025,15 @@ public class HtmlHelper {
 
             if (delsp && line.endsWith(" "))
                 line = line.substring(0, line.length() - 1);
+
+            boolean q = line.startsWith(">");
+            if (q != inquote) {
+                int len = flowed.length();
+                if (len > 0 && flowed.charAt(len - 1) != '\n')
+                    flowed.append("\n");
+                continuation = false;
+            }
+            inquote = q;
 
             if (continuation)
                 while (line.startsWith(">")) {
@@ -2035,9 +2045,11 @@ public class HtmlHelper {
             continuation = (line.endsWith(" ") && !"-- ".equals(line));
 
             flowed.append(line);
+
             if (!continuation)
-                flowed.append("\r\n");
+                flowed.append("\n");
         }
+
         return flowed.toString();
     }
 

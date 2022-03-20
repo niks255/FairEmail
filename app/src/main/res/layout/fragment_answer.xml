@@ -83,6 +83,16 @@
                     app:layout_constraintTop_toBottomOf="@+id/cbReceipt" />
 
                 <CheckBox
+                    android:id="@+id/cbSnippet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/title_answer_snippet"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cbFavorite" />
+
+                <CheckBox
                     android:id="@+id/cbHide"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -90,7 +100,7 @@
                     android:layout_marginTop="6dp"
                     android:text="@string/title_answer_hide"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cbFavorite" />
+                    app:layout_constraintTop_toBottomOf="@+id/cbSnippet" />
 
                 <CheckBox
                     android:id="@+id/cbExternal"

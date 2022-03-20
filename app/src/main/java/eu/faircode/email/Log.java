@@ -111,7 +111,6 @@ import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
-import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -1588,14 +1587,6 @@ public class Log {
             if (ex instanceof ConnectionException)
                 return null;
 
-            if (ex instanceof MailConnectException &&
-                    ex.getCause() instanceof SocketTimeoutException)
-                ex = new Throwable("No response received from email server", ex);
-
-            if (ex instanceof MessagingException &&
-                    ex.getCause() instanceof UnknownHostException)
-                ex = new Throwable("Email server address lookup failed", ex);
-
             if (ex instanceof StoreClosedException ||
                     ex instanceof FolderClosedException ||
                     ex instanceof FolderClosedIOException ||
@@ -1608,6 +1599,14 @@ public class Log {
                             "This operation is not allowed on a closed folder".equals(ex.getMessage())))
                 return null;
         }
+
+        if (ex instanceof MailConnectException &&
+                ex.getCause() instanceof SocketTimeoutException)
+            ex = new Throwable("No response received from email server", ex);
+
+        if (ex instanceof MessagingException &&
+                ex.getCause() instanceof UnknownHostException)
+            ex = new Throwable("Email server address lookup failed", ex);
 
         StringBuilder sb = new StringBuilder();
         if (BuildConfig.DEBUG)
@@ -1894,7 +1893,7 @@ public class Log {
         Point dim = new Point();
         display.getSize(dim);
         float density = context.getResources().getDisplayMetrics().density;
-        sb.append(String.format("Density %f\r\n", density));
+        sb.append(String.format("Density 1dp=%f\r\n", density));
         sb.append(String.format("Resolution: %.2f x %.2f dp\r\n", dim.x / density, dim.y / density));
 
         Configuration config = context.getResources().getConfiguration();
@@ -2717,7 +2716,7 @@ public class Log {
         attachment.id = db.attachment().insertAttachment(attachment);
 
         MessageClassifier.save(context);
-        File source = MessageClassifier.getFile(context);
+        File source = MessageClassifier.getFile(context, false);
         File target = attachment.getFile(context);
         Helper.copy(source, target);
 

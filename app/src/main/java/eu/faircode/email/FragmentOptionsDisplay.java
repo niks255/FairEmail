@@ -25,9 +25,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -166,6 +168,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swImagesPlaceholders;
     private SwitchCompat swImagesInline;
     private SwitchCompat swButtonExtra;
+    private SwitchCompat swUnzip;
+    private TextView tvUnzipHint;
     private SwitchCompat swAttachmentsAlt;
     private SwitchCompat swThumbnails;
 
@@ -175,6 +179,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swAuthenticationIndicator;
 
     private Group grpGravatars;
+    private Group grpUnzip;
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
 
@@ -197,7 +202,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             "message_zoom", "overview_mode", "override_width",
             "display_font", "contrast", "monospaced_pre",
             "background_color", "text_color", "text_size", "text_font", "text_align", "text_separators",
-            "collapse_quotes", "image_placeholders", "inline_images", "button_extra", "attachments_alt", "thumbnails",
+            "collapse_quotes", "image_placeholders", "inline_images", "button_extra",
+            "unzip", "attachments_alt", "thumbnails",
             "bundled_fonts", "parse_classes",
             "authentication", "authentication_indicator"
     };
@@ -314,6 +320,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swImagesPlaceholders = view.findViewById(R.id.swImagesPlaceholders);
         swImagesInline = view.findViewById(R.id.swImagesInline);
         swButtonExtra = view.findViewById(R.id.swButtonExtra);
+        swUnzip = view.findViewById(R.id.swUnzip);
+        tvUnzipHint = view.findViewById(R.id.tvUnzipHint);
         swAttachmentsAlt = view.findViewById(R.id.swAttachmentsAlt);
         swThumbnails = view.findViewById(R.id.swThumbnails);
         swBundledFonts = view.findViewById(R.id.swBundledFonts);
@@ -322,6 +330,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swAuthenticationIndicator = view.findViewById(R.id.swAuthenticationIndicator);
 
         grpGravatars = view.findViewById(R.id.grpGravatars);
+        grpUnzip = view.findViewById(R.id.grpUnzip);
 
         List<StyleHelper.FontDescriptor> fonts = StyleHelper.getFonts(getContext());
 
@@ -1165,6 +1174,18 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
+        swUnzip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("unzip", checked).apply();
+            }
+        });
+
+        tvUnzipHint.setText(getString(R.string.compressed,
+                TextUtils.join(",", MessageHelper.UNZIP_FORMATS),
+                Integer.toString(MessageHelper.MAX_UNZIP_COUNT),
+                Helper.humanReadableByteCount(MessageHelper.MAX_UNZIP_SIZE)));
+
         swAttachmentsAlt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1213,6 +1234,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swFaviconsPartial.setText(getString(R.string.title_advanced_favicons_partial,
                 Helper.humanReadableByteCount(ContactInfo.FAVICON_READ_BYTES)));
         grpGravatars.setVisibility(ContactInfo.canGravatars() ? View.VISIBLE : View.GONE);
+        grpUnzip.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? View.GONE : View.VISIBLE);
         tvBimiUnverified.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
@@ -1394,7 +1416,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swPreview.setChecked(prefs.getBoolean("preview", false));
         swPreviewItalic.setChecked(prefs.getBoolean("preview_italic", true));
         swPreviewItalic.setEnabled(swPreview.isChecked());
-        spPreviewLines.setSelection(prefs.getInt("preview_lines", 2) - 1);
+        spPreviewLines.setSelection(prefs.getInt("preview_lines", 1) - 1);
         spPreviewLines.setEnabled(swPreview.isChecked());
 
         swAddresses.setChecked(prefs.getBoolean("addresses", false));
@@ -1430,6 +1452,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swImagesPlaceholders.setChecked(prefs.getBoolean("image_placeholders", true));
         swImagesInline.setChecked(prefs.getBoolean("inline_images", false));
         swButtonExtra.setChecked(prefs.getBoolean("button_extra", false));
+        swUnzip.setChecked(prefs.getBoolean("unzip", true));
         swAttachmentsAlt.setChecked(prefs.getBoolean("attachments_alt", false));
         swThumbnails.setChecked(prefs.getBoolean("thumbnails", true));
 

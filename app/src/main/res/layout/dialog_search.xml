@@ -541,6 +541,17 @@
             app:layout_constraintStart_toStartOf="@id/btnBefore"
             app:layout_constraintTop_toBottomOf="@id/btnBefore" />
 
+        <CheckBox
+            android:id="@+id/cbSearchDevice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_search_device_first"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBefore" />
+
         <androidx.constraintlayout.widget.Group
             android:id="@+id/grpMore"
             android:layout_width="0dp"
@@ -548,6 +559,6 @@
             app:constraint_referenced_ids="
             cbSearchIndex,tvSearchIndexHint,cbSenders,cbRecipients,cbSubject,cbKeywords,cbMessage,tvSearchTextHint,tvSearchTextUnsupported,cbNotes,
             tvAnd,cbUnseen,cbFlagged,cbHidden,cbEncrypted,cbAttachments,
-            btnAfter,btnBefore,tvBefore,tvAfter" />
+            btnAfter,btnBefore,tvBefore,tvAfter,cbSearchDevice" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </eu.faircode.email.ScrollViewEx>

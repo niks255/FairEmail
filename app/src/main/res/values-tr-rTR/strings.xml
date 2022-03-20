@@ -263,6 +263,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_reset_full">Orijinal mesajları göster</string>
     <string name="title_setup_reset_images">Resimleri göster</string>
     <string name="title_setup_reset_links">Bağlantıları onaylayın</string>
+    <string name="title_check_gmail_oauth">Gmail hesaplarınız 30 Mayıs 2022\'den sonra çalışmaya devam edecek</string>
+    <string name="title_check_gmail_password">Bazı Gmail hesaplarınız 30 Mayıs 2022\'den sonra çalışmayı durdurabilir</string>
     <string name="title_advanced_hint_title">Daha gelişmiş seçenekler</string>
     <string name="title_advanced_hint_message">        Daha gelişmiş seçeneklere gidiyorsunuz.        Tüm seçenekler, farklı bir tercihiniz olmadığı sürece değiştirmenizin gerekmediği yaygın kullanılan varsayılan değerlere sahiptir.
     </string>
@@ -429,6 +431,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_preview_italic">İleti önizlemesini italik olarak göster</string>
     <string name="title_advanced_preview_lines">Önizleme satırı sayısı</string>
     <string name="title_advanced_addresses">Öntanımlı olarak adres ayrıntılarını göster</string>
+    <string name="title_advanced_unzip">Sıkıştırılmış eklerin içeriğini göster</string>
     <string name="title_advanced_attachments_alt">İleti metninden sonra ekleri göster</string>
     <string name="title_advanced_thumbnails">İleti metninden sonra görsellerin önizlemelerini göster</string>
     <string name="title_advanced_message_text_zoom2">Varsayılan mesaj metni yakınlaştırma: %1$s %%</string>
@@ -575,6 +578,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     </string>
     <string name="title_advanced_power_menu">Android güç menüsüne eylemler ekle</string>
     <string name="title_advanced_external_search">Diğer uygulamaların mesajlarda arama yapmasına izin ver</string>
+    <string name="title_advanced_sort_answers">Yanıt şablonlarını kullanım sıklığına göre sırala</string>
     <string name="title_advanced_shortcuts">Sık kullanılan kişileri Android\'in paylaşma menüsünde göster</string>
     <string name="title_advanced_fts">Arama indeksini oluştur</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d mesaj indekslendi (%3$s)</string>
@@ -654,6 +658,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_monospaced_pre_hint">Yalnızca düz metin iletiler önceden biçimlendirilmiş olarak kabul edilecektir</string>
     <string name="title_advanced_placeholders_hint">Bu yalnızca yeniden biçimlendirilmiş mesajlar için geçerlidir</string>
     <string name="title_advanced_inline_hint">Satıriçi resimler mesajın içine eklenen resimlerdir</string>
+    <string name="compressed">%2$s\'den fazla dosya içeren veya %3$s\'den büyük dosyalar içeren sıkıştırılmış dosyaların (%1$s) içerikleri gösterilmeyecek</string>
     <string name="title_advanced_parse_classes_hint">Bu, mesajları daha doğru bir şekilde gösterecektir, ancak muhtemelen bir gecikme ile</string>
     <string name="title_advanced_language_detection_hint">Dil algılama desteği, cihaz üreticisine bağlıdır</string>
     <string name="title_advanced_autoexpand_hint">Bir sohbette yalnızca bir ileti veya yalnızca bir okunmamış ileti olduğunda iletiyi otomatik olarak aç</string>
@@ -1012,7 +1017,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_no_recorder">Uygun bir ses kaydedici uygulaması yok</string>
     <string name="title_no_camera">Uygun bir kamera uygulaması yok</string>
     <string name="title_no_saf">Depolama erişim çerçevesi mevcut değil</string>
-    <string name="title_no_stream">Eski bir uygulama bir dosya akışı yerine dosya yolu gönderdi</string>
+    <string name="title_no_stream">FairEmail\'in bu dosyayı doğrudan okuma izni yok</string>
+    <string name="title_no_stream_help">Bu, dosyayı daha modern bir dosya yöneticisi uygulamasıyla seçerek veya dosyaları okuma izni vererek çözülebilir</string>
     <string name="title_no_internet">Uygun internet bağlantısı veya internet yok</string>
     <string name="title_no_connection">Bir veya daha fazla hesaba bağlanılıyor &#8230;</string>
     <string name="title_no_folder">Klasör yok</string>
@@ -1239,6 +1245,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_search_in_junk">Spam içinde</string>
     <string name="title_search_with_before">Önce</string>
     <string name="title_search_with_after">Sonra</string>
+    <string name="title_search_device_first">Önce cihazda ara</string>
     <string name="title_search_flag_unseen">okunmamış</string>
     <string name="title_search_flag_flagged">yıldızlı</string>
     <string name="title_search_flag_hidden">gizli</string>
@@ -1250,6 +1257,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_search_device">Cihazda ara</string>
     <string name="title_search_server">Sunucuda ara</string>
     <string name="title_search_in">İçinde ara</string>
+    <string name="title_search_delete">Kayıtlı arama silinsin mi?</string>
     <string name="title_sort_on">Sırala</string>
     <string name="title_sort_on_time">Zaman</string>
     <string name="title_sort_on_unread">Okunmadı</string>
@@ -1295,6 +1303,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_answer_group">Şablon grubu (isteğe bağlı)</string>
     <string name="title_answer_standard">Varsayılan</string>
     <string name="title_answer_favorite">Favori</string>
+    <string name="title_answer_snippet">Kısaca</string>
     <string name="title_answer_receipt">Okuma makbuzu olarak kullan</string>
     <string name="title_answer_hide">Menülerden gizle</string>
     <string name="title_answer_text">Kalıp metni</string>
