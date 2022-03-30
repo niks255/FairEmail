@@ -93,6 +93,7 @@ class ImageHelper {
 
     // https://developer.android.com/guide/topics/media/media-formats#image-formats
     static final List<String> IMAGE_TYPES = Collections.unmodifiableList(Arrays.asList(
+            "image/svg+xml", // native
             "image/bmp",
             "image/gif",
             "image/jpeg",
@@ -406,6 +407,8 @@ class ImageHelper {
                     Bitmap bm;
                     int scaleToPixels = res.getDisplayMetrics().widthPixels;
                     try (InputStream is = context.getContentResolver().openInputStream(uri)) {
+                        if (is == null)
+                            throw new FileNotFoundException(uri.toString());
                         bm = getScaledBitmap(is, a.source, null, scaleToPixels);
                         if (bm == null)
                             throw new FileNotFoundException(a.source);

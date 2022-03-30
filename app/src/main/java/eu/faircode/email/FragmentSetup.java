@@ -22,6 +22,7 @@ package eu.faircode.email;
 import static android.app.Activity.RESULT_OK;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
@@ -41,10 +42,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -54,6 +57,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
@@ -72,7 +76,6 @@ public class FragmentSetup extends FragmentBase {
 
     private TextView tvPrivacy;
     private TextView tvSupport;
-
     private ImageButton ibWelcome;
     private Group grpWelcome;
 
@@ -81,9 +84,9 @@ public class FragmentSetup extends FragmentBase {
     private Button btnQuick;
     private TextView tvQuickNew;
 
+    private CardView cardManual;
     private ImageButton ibManual;
     private TextView tvManual;
-    private CardView cardManual;
 
     private Button btnAccount;
     private Button btnIdentity;
@@ -103,7 +106,6 @@ public class FragmentSetup extends FragmentBase {
     private TextView tvDoze12;
     private ImageButton ibDoze;
 
-    private Button btnInexactAlarms;
     private Button btnBackgroundRestricted;
     private Button btnDataSaver;
     private TextView tvStamina;
@@ -111,15 +113,17 @@ public class FragmentSetup extends FragmentBase {
     private TextView tvBatteryUsage;
     private TextView tvSyncStopped;
 
+    private CardView cardExtra;
     private Button btnApp;
     private Button btnDelete;
     private Button btnMore;
     private Button btnSupport;
+    private ImageButton ibExtra;
 
-    private Group grpInexactAlarms;
     private Group grpBackgroundRestricted;
     private Group grpDataSaver;
     private Group grpSupport;
+    private Group grpExtra;
 
     private int textColorPrimary;
     private int colorWarning;
@@ -153,9 +157,9 @@ public class FragmentSetup extends FragmentBase {
         btnQuick = view.findViewById(R.id.btnQuick);
         tvQuickNew = view.findViewById(R.id.tvQuickNew);
 
+        cardManual = view.findViewById(R.id.cardManual);
         ibManual = view.findViewById(R.id.ibManual);
         tvManual = view.findViewById(R.id.tvManual);
-        cardManual = view.findViewById(R.id.cardManual);
 
         btnAccount = view.findViewById(R.id.btnAccount);
         btnIdentity = view.findViewById(R.id.btnIdentity);
@@ -175,7 +179,6 @@ public class FragmentSetup extends FragmentBase {
         tvDoze12 = view.findViewById(R.id.tvDoze12);
         ibDoze = view.findViewById(R.id.ibDoze);
 
-        btnInexactAlarms = view.findViewById(R.id.btnInexactAlarms);
         btnBackgroundRestricted = view.findViewById(R.id.btnBackgroundRestricted);
         btnDataSaver = view.findViewById(R.id.btnDataSaver);
         tvStamina = view.findViewById(R.id.tvStamina);
@@ -183,15 +186,17 @@ public class FragmentSetup extends FragmentBase {
         tvBatteryUsage = view.findViewById(R.id.tvBatteryUsage);
         tvSyncStopped = view.findViewById(R.id.tvSyncStopped);
 
+        cardExtra = view.findViewById(R.id.cardExtra);
         btnApp = view.findViewById(R.id.btnApp);
         btnDelete = view.findViewById(R.id.btnDelete);
         btnMore = view.findViewById(R.id.btnMore);
         btnSupport = view.findViewById(R.id.btnSupport);
+        ibExtra = view.findViewById(R.id.ibExtra);
 
-        grpInexactAlarms = view.findViewById(R.id.grpInexactAlarms);
         grpBackgroundRestricted = view.findViewById(R.id.grpBackgroundRestricted);
         grpDataSaver = view.findViewById(R.id.grpDataSaver);
         grpSupport = view.findViewById(R.id.grpSupport);
+        grpExtra = view.findViewById(R.id.grpExtra);
 
         // Wire controls
 
@@ -255,14 +260,16 @@ public class FragmentSetup extends FragmentBase {
 
                 for (EmailProvider provider : EmailProvider.loadProfiles(context))
                     if (provider.oauth != null &&
-                            (provider.oauth.enabled || BuildConfig.DEBUG)) {
+                            (provider.oauth.enabled || BuildConfig.DEBUG) &&
+                            !TextUtils.isEmpty(provider.oauth.clientId)) {
                         item = menu
                                 .add(Menu.FIRST, -1, order++, getString(R.string.title_setup_oauth, provider.description))
                                 .setIntent(new Intent(ActivitySetup.ACTION_QUICK_OAUTH)
                                         .putExtra("id", provider.id)
                                         .putExtra("name", provider.description)
                                         .putExtra("privacy", provider.oauth.privacy)
-                                        .putExtra("askAccount", provider.oauth.askAccount));
+                                        .putExtra("askAccount", provider.oauth.askAccount)
+                                        .putExtra("askTenant", provider.oauth.askTenant()));
                         resid = res.getIdentifier("provider_" + provider.id, "drawable", pkg);
                         if (resid != 0)
                             item.setIcon(resid);
@@ -378,26 +385,7 @@ public class FragmentSetup extends FragmentBase {
                 manual = !manual;
                 updateManual();
                 if (manual)
-                    view.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Rect rect = new Rect();
-                                cardManual.getDrawingRect(rect);
-                                view.offsetDescendantRectToMyCoords(cardManual, rect);
-
-                                int vh = view.getHeight();
-                                int ch = rect.height();
-                                if (vh > 0 && ch > 0) {
-                                    int y = rect.top - (vh - ch);
-                                    if (y > 0 && view instanceof ScrollView)
-                                        ((ScrollView) view).scrollTo(0, y);
-                                }
-                            } catch (Throwable ex) {
-                                Log.e(ex);
-                            }
-                        }
-                    });
+                    ensureVisible(cardManual);
             }
         });
 
@@ -496,8 +484,19 @@ public class FragmentSetup extends FragmentBase {
 
         btnDoze.setOnClickListener(new View.OnClickListener() {
             @Override
+            @SuppressLint("BatteryLife")
+            @RequiresApi(api = Build.VERSION_CODES.M)
             public void onClick(View v) {
-                new FragmentDialogDoze().show(getParentFragmentManager(), "setup:doze");
+                if (hasPermission(Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)) {
+                    Intent intent = new Intent();
+                    if (Boolean.FALSE.equals(Helper.isIgnoringOptimizations(v.getContext())))
+                        intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                                .setData(Uri.parse("package:" + v.getContext().getPackageName()));
+                    else
+                        intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                    v.getContext().startActivity(intent);
+                } else
+                    new FragmentDialogDoze().show(getParentFragmentManager(), "setup:doze");
             }
         });
 
@@ -532,21 +531,21 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
+        updateExtra();
+
+        ibExtra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(v.getContext());
+                boolean setup_extra = !prefs.getBoolean("setup_extra", false);
+                prefs.edit().putBoolean("setup_extra", setup_extra).apply();
+                updateExtra();
+                if (setup_extra)
+                    ensureVisible(cardExtra);
+            }
+        });
+
         PackageManager pm = getContext().getPackageManager();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            final Intent settings = new Intent(
-                    Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
-                    Uri.parse("package:" + BuildConfig.APPLICATION_ID));
-
-            btnInexactAlarms.setEnabled(settings.resolveActivity(pm) != null); // system whitelisted
-            btnInexactAlarms.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(settings);
-                }
-            });
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             final Intent settings = new Intent(
@@ -610,9 +609,6 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
-        grpSupport.setVisibility(
-                Helper.hasValidFingerprint(getContext()) || BuildConfig.DEBUG
-                        ? View.VISIBLE : View.GONE);
         btnSupport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -639,7 +635,6 @@ public class FragmentSetup extends FragmentBase {
 
         btnInbox.setEnabled(false);
 
-        grpInexactAlarms.setVisibility(View.GONE);
         grpBackgroundRestricted.setVisibility(View.GONE);
         grpDataSaver.setVisibility(View.GONE);
         tvStamina.setVisibility(View.GONE);
@@ -745,7 +740,8 @@ public class FragmentSetup extends FragmentBase {
         }
 
         // Doze
-        Boolean ignoring = Helper.isIgnoringOptimizations(getContext());
+        boolean isIgnoring = !Boolean.FALSE.equals(Helper.isIgnoringOptimizations(getContext()));
+        boolean canScheduleExact = AlarmManagerCompatEx.canScheduleExactAlarms(getContext());
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
             btnDoze.setEnabled(false);
@@ -755,19 +751,15 @@ public class FragmentSetup extends FragmentBase {
             if (intent.resolveActivity(pm) == null)
                 btnDoze.setEnabled(false);
             else
-                btnDoze.setEnabled((ignoring != null && !ignoring) || BuildConfig.DEBUG);
+                btnDoze.setEnabled(!isIgnoring || BuildConfig.DEBUG);
         }
 
-        boolean done = (ignoring == null || ignoring || Helper.isArc());
-        tvDozeDone.setText(done ? R.string.title_setup_done : R.string.title_setup_to_do);
-        tvDozeDone.setTextColor(done ? textColorPrimary : colorWarning);
-        tvDozeDone.setTypeface(null, done ? Typeface.NORMAL : Typeface.BOLD);
-        tvDozeDone.setCompoundDrawablesWithIntrinsicBounds(done ? check : null, null, null, null);
-        tvDoze12.setVisibility(Helper.isOptimizing12(getContext()) ? View.VISIBLE : View.GONE);
+        tvDozeDone.setText(isIgnoring ? R.string.title_setup_done : R.string.title_setup_to_do);
+        tvDozeDone.setTextColor(isIgnoring ? textColorPrimary : colorWarning);
+        tvDozeDone.setTypeface(null, isIgnoring ? Typeface.NORMAL : Typeface.BOLD);
+        tvDozeDone.setCompoundDrawablesWithIntrinsicBounds(isIgnoring ? check : null, null, null, null);
 
-        grpInexactAlarms.setVisibility(
-                !AlarmManagerCompatEx.canScheduleExactAlarms(getContext())
-                        ? View.VISIBLE : View.GONE);
+        tvDoze12.setVisibility(!canScheduleExact && !isIgnoring ? View.VISIBLE : View.GONE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             ActivityManager am =
@@ -798,6 +790,26 @@ public class FragmentSetup extends FragmentBase {
         boolean setup_welcome = prefs.getBoolean("setup_welcome", true);
         ibWelcome.setImageLevel(setup_welcome ? 0 /* less */ : 1 /* more */);
         grpWelcome.setVisibility(setup_welcome ? View.VISIBLE : View.GONE);
+
+        ViewGroup vwWelcome = (ViewGroup) ibWelcome.getParent();
+        if (vwWelcome == null)
+            return;
+
+        vwWelcome.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Rect rect = new Rect(
+                            vwWelcome.getLeft(),
+                            ibWelcome.getTop(),
+                            vwWelcome.getRight(),
+                            ibWelcome.getBottom());
+                    vwWelcome.setTouchDelegate(new TouchDelegate(rect, ibWelcome));
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
     }
 
     private void updateManual() {
@@ -813,6 +825,61 @@ public class FragmentSetup extends FragmentBase {
 
         ibManual.setImageLevel(manual ? 0 /* less */ : 1 /* more */);
         cardManual.setVisibility(manual ? View.VISIBLE : View.GONE);
+    }
+
+    private void updateExtra() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean setup_extra = prefs.getBoolean("setup_extra", false);
+        ibExtra.setImageLevel(setup_extra ? 0 /* less */ : 1 /* more */);
+
+        grpSupport.setVisibility(setup_extra &&
+                (Helper.hasValidFingerprint(getContext()) || BuildConfig.DEBUG)
+                ? View.VISIBLE : View.GONE);
+
+        grpExtra.setVisibility(setup_extra ? View.VISIBLE : View.GONE);
+
+        ViewGroup vwExtra = (ViewGroup) ibExtra.getParent();
+        if (vwExtra == null)
+            return;
+
+        vwExtra.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Rect rect = new Rect(
+                            vwExtra.getLeft(),
+                            ibExtra.getTop(),
+                            vwExtra.getRight(),
+                            ibExtra.getBottom());
+                    vwExtra.setTouchDelegate(new TouchDelegate(rect, ibExtra));
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
+    }
+
+    private void ensureVisible(View child) {
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Rect rect = new Rect();
+                    child.getDrawingRect(rect);
+                    view.offsetDescendantRectToMyCoords(child, rect);
+
+                    int vh = view.getHeight();
+                    int ch = rect.height();
+                    if (vh > 0 && ch > 0) {
+                        int y = rect.top - (vh - ch);
+                        if (y > 0 && view instanceof ScrollView)
+                            view.scrollTo(0, y);
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
     }
 
     @Override

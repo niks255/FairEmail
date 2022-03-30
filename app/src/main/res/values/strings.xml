@@ -91,6 +91,10 @@
     </plurals>
     <string name="title_ask_spam_who">Treat message from %1$s as spam?</string>
     <string name="title_junk_hint">Your email provider is responsible for filtering spam. An email app does not have all the data needed to do this reliably.</string>
+    <string name="title_junk_pop_hint">
+        Messages from blocked senders will not be downloaded.
+        If "Leave messages on server" is not enabled, these messages will be lost permanently!
+    </string>
 
     <string name="title_block">Block %1$s</string>
     <string name="title_block_sender">Block sender</string>
@@ -99,6 +103,7 @@
         Blocking a sender is a free feature.
         Blocking a sender domain uses filter rules, which is a pro feature.
     </string>
+    <string name="title_blocked_senders">Blocked senders</string>
 
     <string name="title_junk_filter">Use local spam filter</string>
     <string name="title_junk_filter_hint">This can increase battery usage and incorrectly mark messages as spam</string>
@@ -222,14 +227,13 @@
     <string name="title_setup_permissions_explanation">Contact permissions are required to look up contact info and to suggest contacts</string>
     <string name="title_setup_permission_import_contacts">How can I import contacts?</string>
     <string name="title_setup_doze">Disable battery optimizations</string>
-    <string name="title_setup_doze_remark">To reliably send and receive email</string>
+    <string name="title_setup_doze_remark">To send and receive email reliably in the background</string>
     <string name="title_setup_doze_explanation">Battery optimizations should be disabled for the app to ensure reliable sending and receiving of messages in the background</string>
     <string name="title_setup_doze_hint">Although this may sound contradictory, turning off battery optimizations for this app will result in less battery usage</string>
     <string name="title_setup_doze_instructions">In the next Android dialog change "Not optimized" to "All apps", select this app and select "Don\'t optimize"</string>
     <string name="title_setup_doze_battery">High battery usage?</string>
     <string name="title_setup_doze_stopped">Sync stopped?</string>
     <string name="title_setup_doze_device">This is probably required for this device</string>
-    <string name="title_setup_doze_12">Push messages are disabled</string>
     <string name="title_setup_alarm_12">The app won\'t work</string>
     <string name="title_setup_inexact">Alarms &amp; reminders are disabled</string>
     <string name="title_setup_background">Background restrictions are enabled</string>
@@ -448,6 +452,7 @@
     <string name="title_advanced_close_pane">Collapse row or column when closing a conversation</string>
     <string name="title_advanced_column_width">Message column width: %1$s %%</string>
     <string name="title_advanced_nav_options">Show navigation menu options</string>
+    <string name="title_advanced_nav_categories">Show account categories in the navigation menu</string>
     <string name="title_advanced_nav_pin">Pin navigation menu</string>
     <string name="title_advanced_nav_hide_title">Hide navigation menu options?</string>
     <string name="title_advanced_nav_hide_message">You can enable the options again in the display settings</string>
@@ -739,6 +744,7 @@
     <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
     <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
     <string name="title_advanced_test_iab" translatable="false">Test IAB</string>
+    <string name="title_advanced_import_providers" translatable="false">Import providers</string>
     <string name="title_advanced_processors" translatable="false">Processors: %1$d</string>
     <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s/%2$s Total: %3$s</string>
     <string name="title_advanced_memory_usage" translatable="false">Memory usage: %1$s/%2$s Native: %3$s</string>
@@ -1017,6 +1023,9 @@
     <string name="title_delete_channel">Delete notification channel</string>
     <string name="title_insert_contact">Add contact</string>
     <string name="title_edit_contact">Edit contact</string>
+    <string name="title_contact_email">Email</string>
+    <string name="title_contact_name">Name</string>
+    <string name="title_contact_group">Group</string>
     <string name="title_import_contacts">Import vCards</string>
     <string name="title_export_contacts">Export vCards</string>
     <string name="title_create_sub_folder">Create sub folder</string>
@@ -1033,7 +1042,7 @@
     <string name="title_delete_operation_flag">Flag operations</string>
     <string name="title_delete_operation_delete">Delete operations</string>
     <string name="title_delete_operation_deleted">%1$d operations deleted</string>
-    <string name="title_delete_contacts">Delete all local contacts?</string>
+    <string name="title_delete_contacts">Delete visible local contacts?</string>
     <string name="title_no_operations">No pending operations</string>
     <string name="title_check_operations">Checking for operations</string>
     <string name="title_hint_operations">Deleting operations can result in disappearing messages and synchronization problems</string>
@@ -1234,6 +1243,7 @@
     <string name="title_ask_delete_accept">I understand that permanently deleting messages is irreversible</string>
     <string name="title_ask_delete_answer">Delete reply template permanently?</string>
     <string name="title_ask_delete_rule">Delete rule permanently?</string>
+    <string name="title_ask_delete_attachments">Remove all attachments?</string>
     <string name="title_ask_discard">Discard draft?</string>
     <string name="title_ask_show_html">Showing the original message can leak privacy sensitive information</string>
     <string name="title_ask_show_html_remark">Displaying the original message on a dark background is not possible as it may make dark texts and images invisible</string>
@@ -2284,6 +2294,13 @@
         <item>@string/title_forward</item>
         <item>@string/title_resend</item>
         <item>@string/title_editasnew</item>
+    </string-array>
+
+    <string-array name="contactTypes">
+        <item>Recipient</item>
+        <item>Sender</item>
+        <item>Blocked</item>
+        <item>Not blocked</item>
     </string-array>
 
     <string name="fingerprint" translatable="false">17BA15C1AF55D925F98B99CEA4375D4CDF4C174B</string>

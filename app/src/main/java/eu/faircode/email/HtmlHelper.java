@@ -653,6 +653,22 @@ public class HtmlHelper {
                 for (String key : keys) {
                     String value = kv.get(key);
                     switch (key) {
+                        case "background-image":
+                            // https://developer.mozilla.org/en-US/docs/Web/CSS/background-image
+                            String url = value.replace(" ", "");
+                            int us = url.indexOf("url(");
+                            int ue = url.indexOf(')', us + 4);
+                            if (us >= 0 && ue > us) {
+                                url = url.substring(us + 4, ue);
+                                if ((url.startsWith("'") && url.endsWith("'")) ||
+                                        (url.startsWith("\"") && url.endsWith("\"")))
+                                    url = url.substring(1, url.length() - 1);
+                                Element img = document.createElement("img")
+                                        .attr("src", url);
+                                element.prependElement("br");
+                                element.prependChild(img);
+                            }
+                            break;
                         case "color":
                         case "background":
                         case "background-color":
@@ -2396,8 +2412,7 @@ public class HtmlHelper {
         } catch (Throwable ex) {
             Log.e(new Throwable("getQuoteStyle " + start + "..." + end, ex));
         }
-
-        return "border-" + dir + ":3px solid #ccc; padding-" + dir + ":3px;margin-top:0; margin-bottom:0;";
+        return "border-" + dir + ":3px solid #ccc; padding-" + dir + ":10px;margin:0;";
     }
 
     static String getIndentStyle(CharSequence quoted, int start, int end) {
@@ -3456,6 +3471,12 @@ public class HtmlHelper {
                     Log.e("Invalid span " + start + "..." + end + " len=" + len + " type=" + span.getClass().getName());
             }
         }, document.body());
+
+        for (LineSpan line : ssb.getSpans(0, ssb.length(), LineSpan.class)) {
+            int end = ssb.getSpanEnd(line);
+            if (end < ssb.length() && ssb.charAt(end) != '\n')
+                ssb.insert(end, "\n");
+        }
 
         if (debug)
             for (int i = ssb.length() - 1; i >= 0; i--) {

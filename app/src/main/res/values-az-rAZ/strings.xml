@@ -78,6 +78,7 @@
     <string name="title_block_sender_hint">        Göndərəni əngəlləmə ödənişsiz bir özəllikdir.
         Göndərən domenini əngəlləmə pro özəllik olan filtr qaydalarını istifadə edir.
     </string>
+    <string name="title_blocked_senders">Əngəllənən göndərənlər</string>
     <string name="title_junk_filter">Yerli spam filtrini istifadə et</string>
     <string name="title_junk_filter_hint">Bu, batareya istifadəsini artıra və mesajları səhvən spam olaraq işarələ bilər</string>
     <string name="title_junk_blocklist">Spam əngəlləmə siyahılarını istifadə et</string>
@@ -180,14 +181,13 @@
     <string name="title_setup_permissions_explanation">Əlaqə icazələri, əlaqə məlumatlarının axtarışı və əlaqə təklifi üçün tələb olunur</string>
     <string name="title_setup_permission_import_contacts">Əlaqələri necə idxal edə bilərəm?</string>
     <string name="title_setup_doze">Batareya optimallaşdırmasını sıradan çıxart</string>
-    <string name="title_setup_doze_remark">E-poçtların güvənlə göndərilməsi və alınması üçün</string>
+    <string name="title_setup_doze_remark">Arxaplanda güvənli şəkildə e-poçt göndərmək və almaq üçün</string>
     <string name="title_setup_doze_explanation">Arxaplanda mesajların güvənlə göndərilməsi və alınmasını təmin etmək üçün tətbiqin batareya optimallaşdırması sıradan çıxarılmalıdır</string>
     <string name="title_setup_doze_hint">Bu bir az ziddiyyətli görünsə də, bu tətbiq üçün batareya optimallaşdırmasını bağlamaq daha az batareya istifadəsinə səbəb olacaq</string>
     <string name="title_setup_doze_instructions">Növbəti Android dialoq pəncərəsində \"Optimallaşdırılmamış\"ı (və ya Enerjiyə qənaət etmir) \"Bütün tətbiqlər\" olaraq dəyişdirin, bu tətbiqi seçin və \"Optimallaşdırmayın\"ı seçin</string>
     <string name="title_setup_doze_battery">Yüksək batareya istifadəsi?</string>
     <string name="title_setup_doze_stopped">Eyniləşdirmə dayandırılsın?</string>
     <string name="title_setup_doze_device">Bu, çox güman ki, bu cihaz üçün tələb olunur</string>
-    <string name="title_setup_doze_12">Ani mesajlar sıradan çıxarıldı</string>
     <string name="title_setup_alarm_12">Tətbiq işləmir</string>
     <string name="title_setup_inexact">Zəngli saatlar və xatırladıcılar sıradan çıxarıldı</string>
     <string name="title_setup_background">Arxaplan məhdudiyyətləri fəaldır</string>
@@ -264,6 +264,8 @@
     <string name="title_setup_reset_full">Orijinal mesajları göstər</string>
     <string name="title_setup_reset_images">Təsvirləri göstər</string>
     <string name="title_setup_reset_links">Bağlantıları təsdiqlə</string>
+    <string name="title_check_gmail_oauth">Gmail hesablarınız 30 May 2022-ci il tarixindən sonra işləməyə davam edəcək</string>
+    <string name="title_check_gmail_password">Bəzi Gmail hesablarınız 30 May 2022-ci il tarixindən işləməyi dayandıra bilər</string>
     <string name="title_advanced_hint_title">Daha çox qabaqcıl seçimlər</string>
     <string name="title_advanced_hint_message">        Daha qabaqcıl seçimlərə gedirsiniz.
         Bütün seçimlər, fərqli bir tərcihiniz olmadığı müddətcə dəyişdirməyinizə ehtiyac olmayan və geniş istifadə olunan standart dəyərlərə sahibdir.
@@ -373,6 +375,7 @@
     <string name="title_advanced_close_pane">Bir danışığı bağlayarkən sətri və ya sütunu yığcamlaşdır</string>
     <string name="title_advanced_column_width">Mesaj sütunu eni: %1$s %%</string>
     <string name="title_advanced_nav_options">Naviqasiya menyu seçimlərini göstər</string>
+    <string name="title_advanced_nav_categories">Naviqasiya menyusunda hesab kateqoriyalarını göstər</string>
     <string name="title_advanced_nav_pin">Naviqasiya menyusunu sancaqla</string>
     <string name="title_advanced_nav_hide_title">Naviqasiya menyu seçimləri gizlədilsin?</string>
     <string name="title_advanced_nav_hide_message">Görüntü tənzimləmələrində bu seçimi təkrar fəallaşdıra bilərsiniz</string>
@@ -844,6 +847,8 @@
     <string name="title_delete_channel">Bildiriş kanalını sil</string>
     <string name="title_insert_contact">Əlaqə əlavə et</string>
     <string name="title_edit_contact">Əlaqəyə düzəliş et</string>
+    <string name="title_contact_email">E-poçt</string>
+    <string name="title_contact_name">Ad</string>
     <string name="title_import_contacts"> vCard-ları idxal et</string>
     <string name="title_export_contacts">vCard-ları ixrac et</string>
     <string name="title_create_sub_folder">Alt qovluq yarat</string>
@@ -859,7 +864,7 @@
     <string name="title_delete_operation_flag">Əməliyyatları bayraqla</string>
     <string name="title_delete_operation_delete">Əməliyyatları sil</string>
     <string name="title_delete_operation_deleted">%1$d əməliyyatlar silindi</string>
-    <string name="title_delete_contacts">Bütün yerli əlaqələr silinsin?</string>
+    <string name="title_delete_contacts">Görünən yerli əlaqələr silinsin?</string>
     <string name="title_no_operations">Gözləyən heç bir əməliyyat yoxdur</string>
     <string name="title_check_operations">Əməliyyatların yoxlanılması</string>
     <string name="title_hint_operations">Əməliyyatların silinməsi, mesajların görünməməsi və eyniləşdirmə problemlərinin yaranması ilə nəticələnə bilər</string>
@@ -1019,6 +1024,8 @@
     <string name="title_no_recorder">Uyğun bir səsyazan tətbiq yoxdur</string>
     <string name="title_no_camera">Uyğun bir kamera tətbiqi yoxdur</string>
     <string name="title_no_saf">Anbar müraciət çərçivəsi mövcud deyil</string>
+    <string name="title_no_stream">FairEmail-in bu faylı birbaşa oxumaq icazəsi yoxdur</string>
+    <string name="title_no_stream_help">Bu, bir çox müasir fayl menecer tətbiqi ilə faylı seçərək və ya faylları oxuma icazəsi verərək həll edilə bilər</string>
     <string name="title_no_internet">Uyğun bir internet bağlantısı yoxdur</string>
     <string name="title_no_connection">Bir və ya bir neçə hesabla bağlantı qurulur &#8230;</string>
     <string name="title_no_folder">Qovluq mövcud deyil</string>
@@ -1044,6 +1051,7 @@
     <string name="title_ask_delete_accept">Mesajların birdəfəlik silənərək geri qaytarıla bilməyəcəyini anlayıram</string>
     <string name="title_ask_delete_answer">Cavab şablonu birdəfəlik silinsin?</string>
     <string name="title_ask_delete_rule">Qayda birdəfəlik silinsin?</string>
+    <string name="title_ask_delete_attachments">Bütün qoşmalar silinsin?</string>
     <string name="title_ask_discard">Qaralama silinsin?</string>
     <string name="title_ask_show_html">Orijinal mesajın göstərilməsi, gizlilik həssaslı məlumatları sızdıra bilər</string>
     <string name="title_ask_show_html_remark">Orijinal mesajın tünd arxaplanda görüntülənməsi mümkün deyildir, çünki tünd tema mətn və təsvirlərin görünməz olmasına səbəb ola bilər</string>
@@ -1259,6 +1267,7 @@
     <string name="title_search_device">Cihazda axtar</string>
     <string name="title_search_server">Serverdə axtar</string>
     <string name="title_search_in">Axtar</string>
+    <string name="title_search_delete">Saxlanılmış axtarış silinsin?</string>
     <string name="title_sort_on">Sırala</string>
     <string name="title_sort_on_time">Vaxt</string>
     <string name="title_sort_on_unread">Oxunmadı</string>
@@ -1304,6 +1313,7 @@
     <string name="title_answer_group">Şablon qrupu (ixtiyari)</string>
     <string name="title_answer_standard">İlkin</string>
     <string name="title_answer_favorite">Sevimli</string>
+    <string name="title_answer_snippet">Fraqment</string>
     <string name="title_answer_receipt">Oxundu bildirişi kimi istifadə et</string>
     <string name="title_answer_hide">Menyulardan gizlət</string>
     <string name="title_answer_text">Şablon mətni</string>
@@ -1825,5 +1835,11 @@
         <item>Orta</item>
         <item>Böyük</item>
         <item>Çox böyük</item>
+    </string-array>
+    <string-array name="contactTypes">
+        <item>Alan</item>
+        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Göndərən</item>
+        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Əngəlləndi</item>
+        <item>Not blocked</item>
     </string-array>
 </resources>

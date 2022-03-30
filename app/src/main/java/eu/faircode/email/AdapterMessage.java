@@ -157,6 +157,7 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -2047,6 +2048,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean pop = (message.accountProtocol == EntityAccount.TYPE_POP);
                     boolean imap = (message.accountProtocol == EntityAccount.TYPE_IMAP);
 
+                    boolean inInbox = EntityFolder.INBOX.equals(message.folderType);
                     boolean inArchive = EntityFolder.ARCHIVE.equals(message.folderType);
                     boolean inSent = EntityFolder.SENT.equals(message.folderType);
                     boolean inTrash = EntityFolder.TRASH.equals(message.folderType);
@@ -2066,9 +2068,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     int froms = (message.from == null ? 0 : message.from.length);
                     int tos = (message.to == null ? 0 : message.to.length);
 
-                    boolean delete = (inTrash || !hasTrash || inJunk || outbox ||
-                            message.uid == null || pop);
-
+                    boolean delete = (inTrash || !hasTrash || inJunk || outbox || message.uid == null || pop);
+                    boolean forever = (delete && (!pop || !message.accountLeaveDeleted));
+                    boolean report = (pop ? inInbox : !inJunk && move);
                     boolean headers = (message.uid != null || (pop && message.headers != null));
 
                     evalProperties(message); // TODO: done again in bindBody
@@ -2110,9 +2112,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibHide.setImageResource(message.ui_snoozed == null ? R.drawable.twotone_visibility_off_24 : R.drawable.twotone_visibility_24);
                     ibSeen.setImageResource(message.ui_seen ? R.drawable.twotone_mail_24 : R.drawable.twotone_drafts_24);
                     ibTrash.setTag(delete);
-                    ibTrash.setImageResource(delete ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
+                    ibTrash.setImageResource(forever ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
                     ibTrash.setImageTintList(ColorStateList.valueOf(outbox ? colorWarning : colorControlNormal));
-                    ibTrashBottom.setImageResource(delete ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
+                    ibTrashBottom.setImageResource(forever ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
                     ibInbox.setImageResource(inJunk ? R.drawable.twotone_report_off_24 : R.drawable.twotone_inbox_24);
 
                     ibUndo.setVisibility(outbox ? View.VISIBLE : View.GONE);
@@ -2139,7 +2141,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibMove.setVisibility(tools && button_move && move ? View.VISIBLE : View.GONE);
                     ibArchive.setVisibility(tools && button_archive && archive ? View.VISIBLE : View.GONE);
                     ibTrash.setVisibility(outbox || (tools && button_trash && trash) ? View.VISIBLE : View.GONE);
-                    ibJunk.setVisibility(tools && button_junk && !inJunk && move ? View.VISIBLE : View.GONE);
+                    ibJunk.setVisibility(tools && button_junk && report ? View.VISIBLE : View.GONE);
                     ibInbox.setVisibility(tools && inbox ? View.VISIBLE : View.GONE);
                     ibMore.setVisibility(tools && !outbox ? View.VISIBLE : View.GONE);
                     ibTools.setImageLevel(tools ? 0 : 1);
@@ -3173,8 +3175,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             List<EntityAttachment> images = new ArrayList<>();
             if (thumbnails && bind_extras)
                 for (EntityAttachment attachment : attachments)
-                    if (attachment.isAttachment() &&
-                            (attachment.isImage() || "image/svg+xml".equals(attachment.getMimeType())))
+                    if (attachment.isAttachment() && attachment.isImage())
                         images.add(attachment);
             adapterImage.set(images);
             grpImages.setVisibility(images.size() > 0 ? View.VISIBLE : View.GONE);
@@ -3595,6 +3596,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             try {
                                 is = new FileInputStream(file);
                                 os = resolver.openOutputStream(uri);
+                                if (os == null)
+                                    throw new FileNotFoundException(uri.toString());
                                 Helper.copy(is, os);
                             } finally {
                                 try {
@@ -5243,6 +5246,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             args.putLongArray("disabled", disabled);
             args.putLong("message", message.id);
             args.putBoolean("copy", copy);
+            args.putBoolean("cancopy", true);
             args.putBoolean("similar", false);
 
             FragmentDialogFolder fragment = new FragmentDialogFolder();
@@ -5348,7 +5352,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             aargs.putLong("folder", message.folder);
             aargs.putString("type", message.folderType);
             aargs.putString("from", DB.Converters.encodeAddresses(message.from));
-            aargs.putBoolean("inJunk", EntityFolder.JUNK.equals(message.folderType));
 
             FragmentDialogJunk ask = new FragmentDialogJunk();
             ask.setArguments(aargs);
@@ -5589,6 +5592,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 Uri sanitized = UriHelper.sanitize(uri);
                 if (sanitized != null && isActivate(sanitized))
                     uri = sanitized;
+                else if (title != null) {
+                    Uri alt = Uri.parse(title);
+                    if (isActivate(alt))
+                        uri = alt;
+                }
             } catch (Throwable ignored) {
             }
 
@@ -8169,6 +8177,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                                 @Override
                                 protected void onException(Bundle args, Throwable ex) {
+                                    SpannableStringBuilder ssb = new SpannableStringBuilderEx(tvText.getText());
+                                    ssb.removeSpan(mark);
+                                    tvText.setText(ssb);
+
                                     Throwable exex = new Throwable("DeepL", ex);
                                     ToastEx.makeText(context, Log.formatThrowable(exex), Toast.LENGTH_LONG).show();
                                 }

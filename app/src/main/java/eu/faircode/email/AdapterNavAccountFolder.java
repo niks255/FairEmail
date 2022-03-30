@@ -59,6 +59,8 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
 
     private boolean nav_count;
     private boolean nav_count_pinned;
+    private boolean nav_categories;
+
 
     private int dp6;
     private int dp12;
@@ -273,6 +275,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.nav_count = prefs.getBoolean("nav_count", false);
         this.nav_count_pinned = prefs.getBoolean("nav_count_pinned", false);
+        this.nav_categories = prefs.getBoolean("nav_categories", false);
         boolean highlight_unread = prefs.getBoolean("highlight_unread", true);
         int colorHighlight = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorUnreadHighlight));
 
@@ -297,6 +300,16 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
             Collections.sort(accounts, new Comparator<TupleAccountFolder>() {
                 @Override
                 public int compare(TupleAccountFolder a1, TupleAccountFolder a2) {
+                    // Account
+
+                    if (nav_categories) {
+                        int c = collator.compare(
+                                a1.category == null ? "" : a1.category,
+                                a2.category == null ? "" : a2.category);
+                        if (c != 0)
+                            return c;
+                    }
+
                     int a = Integer.compare(
                             a1.order == null ? -1 : a1.order,
                             a2.order == null ? -1 : a2.order);
@@ -311,12 +324,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
                     if (n != 0)
                         return n;
 
-                    if (a1.folderName == null && a2.folderName == null)
-                        return 0;
-                    else if (a1.folderName == null)
-                        return -1;
-                    else if (a2.folderName == null)
-                        return 1;
+                    // Folder
 
                     int o = Integer.compare(
                             a1.folderOrder == null ? -1 : a1.folderOrder,
@@ -333,6 +341,13 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
                     int s = -Boolean.compare(a1.folderSync, a2.folderSync);
                     if (s != 0)
                         return s;
+
+                    if (a1.folderName == null && a2.folderName == null)
+                        return 0;
+                    else if (a1.folderName == null)
+                        return -1;
+                    else if (a2.folderName == null)
+                        return 1;
 
                     return collator.compare(a1.getName(context), a2.getName(context));
                 }
@@ -373,7 +388,12 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
                 Log.d("Changed @" + position + " #" + count);
             }
         });
-        diff.dispatchUpdatesTo(this);
+
+        try {
+            diff.dispatchUpdatesTo(this);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     public void setExpanded(boolean expanded) {
@@ -427,33 +447,28 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
             TupleAccountFolder a1 = prev.get(oldItemPosition);
             TupleAccountFolder a2 = next.get(newItemPosition);
             return Objects.equals(a1.order, a2.order) &&
+                    // Account
                     a1.primary == a2.primary &&
                     Objects.equals(a1.name, a2.name) &&
                     Objects.equals(a1.color, a2.color) &&
-
-                    Objects.equals(a1.folderId == null ? a1.state : null, a2.folderId == null ? a2.state : null) &&
-                    Objects.equals(a1.folderId == null ? a1.last_connected : null, a2.folderId == null ? a2.last_connected : null) &&
-                    Objects.equals(a1.folderId == null ? a1.error : null, a2.folderId == null ? a2.error : null) &&
-
-                    Objects.equals(a1.folderId, a2.folderId) &&
-                    Objects.equals(a1.folderType, a2.folderType) &&
-                    Objects.equals(a1.folderOrder, a2.folderOrder) &&
-                    Objects.equals(a1.folderName, a2.folderName) &&
-                    Objects.equals(a1.folderDisplay, a2.folderDisplay) &&
-                    Objects.equals(a1.folderColor, a2.folderColor) &&
-                    Objects.equals(a1.folderSync, a2.folderSync) &&
-                    Objects.equals(a1.folderState, a2.folderState) &&
-                    Objects.equals(a1.folderSyncState, a2.folderSyncState) &&
-
-                    a1.executing == a2.executing &&
-                    a1.messages == a2.messages &&
-                    a1.unseen == a2.unseen;
+                    Objects.equals(a1.state, a2.state) &&
+                    Objects.equals(a1.last_connected, a2.last_connected) &&
+                    Objects.equals(a1.error, a2.error) &&
+                    // Folder
+                    a1.equals(a2);
         }
     }
 
     @Override
     public long getItemId(int position) {
         return items.get(position).id;
+    }
+
+    TupleAccountFolder getItemAtPosition(int pos) {
+        if (pos >= 0 && pos < items.size())
+            return items.get(pos);
+        else
+            return null;
     }
 
     @Override

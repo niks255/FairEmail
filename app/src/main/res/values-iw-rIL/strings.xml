@@ -92,12 +92,16 @@
     </plurals>
     <string name="title_ask_spam_who">להתייחס להודעה מאת %1$s כספאם?</string>
     <string name="title_junk_hint">ספק הדוא״ל שלך אמון על סינון הספאם. ליישומון דוא״ל אין את כל הנתונים הנחוצים לעשות זאת בצורה מהימנה.</string>
+    <string name="title_junk_pop_hint">        הודעות ממוענים חסומים לא תימשכנה.
+        אם האפשרות „להשאיר הודעות על השרת” אינה פעילה, ההודעות הללו תאבדנה לנצח!
+    </string>
     <string name="title_block">חסימת %1$s</string>
     <string name="title_block_sender">חסימת השולח</string>
     <string name="title_block_sender_domain">חסימת שם התחום ‚%1$s’</string>
     <string name="title_block_sender_hint">        חסימת מען היא תכונה חינמית.
         חסימת שם תחום כמען משתמשת בכללי סינון, שזאת יכולת למנויי פרו.
     </string>
+    <string name="title_blocked_senders">שולחים חסומים</string>
     <string name="title_junk_filter">להשתמש במסנן ספאם מקומי</string>
     <string name="title_junk_filter_hint">עשוי להגדיל את צריכת הסלוללה ולסמן הודעות כספאם בשוגג</string>
     <string name="title_junk_blocklist">להשתמש ברשימות חסימת ספאם</string>
@@ -200,14 +204,13 @@
     <string name="title_setup_permissions_explanation">נדרשות הרשאות לאנשי הקשר כדי לחפש פרטי אנשי קשר ולהציע אנשי קשר</string>
     <string name="title_setup_permission_import_contacts">איך אפשר לייבא אנשי קשר?</string>
     <string name="title_setup_doze">השבתת מיטובי סוללה</string>
-    <string name="title_setup_doze_remark">כדי לשלוח ולקבל הודעות בצורה מהימנה</string>
+    <string name="title_setup_doze_remark">כדי לשלוח ולקבל הודעות בצורה מהימנה ברקע</string>
     <string name="title_setup_doze_explanation">יש להשבית את מיטובי הסוללה עבור היישומון כדי לוודא ששליחת וקבלת הדוא״ל ברקע מהימנות</string>
     <string name="title_setup_doze_hint">למרות שזה נשמע סותר, כיבוי מיטובי הסוללה ליישומון הזה מצמצם את השימוש בסוללה</string>
     <string name="title_setup_doze_instructions">בחלונית הבאה ב־Android יש לשנות את „לא ממוטב” ל־„כל היישומונים”, יש לבחור ביישומון הזה ולבחור ב־„לא למטב”</string>
     <string name="title_setup_doze_battery">שימוש גבוה בסוללה?</string>
     <string name="title_setup_doze_stopped">הסנכרון נפסק?</string>
     <string name="title_setup_doze_device">זה כנראה אילוץ של המכשיר הזה</string>
-    <string name="title_setup_doze_12">הודעות בדחיפה מושבתות</string>
     <string name="title_setup_alarm_12">היישומון לא יעבוד</string>
     <string name="title_setup_inexact">התראות ותזכורות מושבתות</string>
     <string name="title_setup_background">הגבלות רקע פעילות</string>
@@ -284,6 +287,8 @@
     <string name="title_setup_reset_full">הצגת ההודעה המקורית</string>
     <string name="title_setup_reset_images">הצגת תמונות</string>
     <string name="title_setup_reset_links">אישור קישורים</string>
+    <string name="title_check_gmail_oauth">חשבונות ה־Gmail שלך ימשיכו לעבוד גם אחרי 30 במאי 2022</string>
+    <string name="title_check_gmail_password">חלק מחשבונות ה־Gmail שלך כנראה יפסיקו לעבוד אחרי 30 במאי 2022</string>
     <string name="title_advanced_hint_title">אפשרויות יותר מתקדמות</string>
     <string name="title_advanced_hint_message">        בחרת לנווט אל האפשרויות המתקדמות יותר.
         כל האפשרויות מוגדרות לפי ערכים מקובלים, שאין צורך לשנות אותם אלא אם כן יש לך העדפות שונות.
@@ -393,6 +398,7 @@
     <string name="title_advanced_close_pane">לצמצם שורה או עמודה בעת סגירת דיון</string>
     <string name="title_advanced_column_width">רוחב עמודת הודעה: %1$s %%</string>
     <string name="title_advanced_nav_options">הצגת אפשרויות תפריט הניווט</string>
+    <string name="title_advanced_nav_categories">להציג את קטגוריות החשבונות בתפריט הניווט</string>
     <string name="title_advanced_nav_pin">נעיצת תפריט הניווט</string>
     <string name="title_advanced_nav_hide_title">להסתיר את אפשרויות תפריט הניווט?</string>
     <string name="title_advanced_nav_hide_message">אפשר להפעיל את האפשרויות שוב בהגדרות התצוגה</string>
@@ -864,6 +870,9 @@
     <string name="title_delete_channel">מחיקת ערוץ התראות</string>
     <string name="title_insert_contact">הוספת איש קשר</string>
     <string name="title_edit_contact">עריכת איש קשר</string>
+    <string name="title_contact_email">דוא״ל</string>
+    <string name="title_contact_name">שם</string>
+    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">קבוצה</string>
     <string name="title_import_contacts">ייבוא כרטיסי ביקור (vCard)</string>
     <string name="title_export_contacts">ייצוא כרטיסי ביקור (vCard)</string>
     <string name="title_create_sub_folder">יצירת תת־תיקייה</string>
@@ -879,7 +888,7 @@
     <string name="title_delete_operation_flag">פעילויות סימון בדגל</string>
     <string name="title_delete_operation_delete">פעילויות מחיקה</string>
     <string name="title_delete_operation_deleted">%1$d פעילויות נמחקו</string>
-    <string name="title_delete_contacts">למחוק את כל אנשי הקשר המקומיים?</string>
+    <string name="title_delete_contacts">למחוק אנשי קשר מקומיים גלויים?</string>
     <string name="title_no_operations">אין פעילויות ממתינות</string>
     <string name="title_check_operations">הפעולות נבדקות</string>
     <string name="title_hint_operations">פעולות מחיקה יכולות לגרום להודעות שנעלמות ולתקלות סנכרון</string>
@@ -1039,6 +1048,8 @@
     <string name="title_no_recorder">אין יישומון הקלטת שמע מתאים</string>
     <string name="title_no_camera">אין יישומון מצלמה מתאים</string>
     <string name="title_no_saf">תשתית גישה לאחסון אינה זמינה</string>
+    <string name="title_no_stream">ל־FairEmail אין הרשאה לקרוא את הקובץ הזה ישירות</string>
+    <string name="title_no_stream_help">אפשר לפתור את זה על ידי בחירת הקובץ עם מנהל קבצים עדכני יותר או על ידי הענקת הרשאה לקריאת קבצים</string>
     <string name="title_no_internet">לא או שחיבור האינטרנט אינו מתאים</string>
     <string name="title_no_connection">מתבצע חיבור לחשבון אחד או יותר&#8230;</string>
     <string name="title_no_folder">התיקייה אינה קיימת</string>
@@ -1064,6 +1075,7 @@
     <string name="title_ask_delete_accept">ברור לי שמחיקת הודעות לצמיתות היא בלתי הפיכה</string>
     <string name="title_ask_delete_answer">למחוק את תבנית התגובה לצמיתות?</string>
     <string name="title_ask_delete_rule">למחוק את הכלל לצמיתות?</string>
+    <string name="title_ask_delete_attachments">להסיר את כל הקבצים המצורפים?</string>
     <string name="title_ask_discard">להשליך את הטיוטה?</string>
     <string name="title_ask_show_html">הצגת ההודעה המקורית עשויה להדליף פרטים אישיים רגישים</string>
     <string name="title_ask_show_html_remark">הצגת ההודעה המקורית על רקע כהה אינה אפשרית כיוון שהיא עשויה להפוך טקסטים ותמונות כהים לבלתי נראים</string>
@@ -1279,6 +1291,7 @@
     <string name="title_search_device">חיפוש במכשיר</string>
     <string name="title_search_server">חיפוש בשרת</string>
     <string name="title_search_in">חיפוש בתוך</string>
+    <string name="title_search_delete">למחוק את החיפוש השמור?</string>
     <string name="title_sort_on">מיון לפי</string>
     <string name="title_sort_on_time">שעה</string>
     <string name="title_sort_on_unread">לא נקרא</string>
@@ -1848,5 +1861,11 @@
         <item>בינוני</item>
         <item>גודל</item>
         <item>גדול במיוחד</item>
+    </string-array>
+    <string-array name="contactTypes">
+        <item>נמען</item>
+        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">מוען</item>
+        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">חסום</item>
+        <item>לא חסום</item>
     </string-array>
 </resources>

@@ -62,12 +62,16 @@
     </plurals>
     <string name="title_ask_spam_who">将来自 %1$s 的邮件标为垃圾邮件？</string>
     <string name="title_junk_hint">您的电子邮件提供商负责过滤垃圾邮件。电子邮件应用程序没有可靠地执行此操作所需的所有数据。</string>
+    <string name="title_junk_pop_hint">        程序不会下载来自被屏蔽发送者的消息。
+        如果未启用“将消息留在服务器上”选项，这些消息将永久丢失！
+    </string>
     <string name="title_block">屏蔽 %1$s</string>
     <string name="title_block_sender">屏蔽发件人</string>
     <string name="title_block_sender_domain">屏蔽域名 \'%1$s\'</string>
     <string name="title_block_sender_hint">        屏蔽发件人是一个免费功能。
         屏蔽发件人域使用过滤规则，这是一个高级功能。
     </string>
+    <string name="title_blocked_senders">屏蔽的发件人</string>
     <string name="title_junk_filter">使用本地垃圾邮件过滤器</string>
     <string name="title_junk_filter_hint">这可能会增加耗电量和将邮件误标为垃圾邮件</string>
     <string name="title_junk_blocklist">使用垃圾邮件拦截列表</string>
@@ -170,14 +174,13 @@
     <string name="title_setup_permissions_explanation">需要联系人权限来查找联系人信息和推荐联系人</string>
     <string name="title_setup_permission_import_contacts">如何导入联系人？</string>
     <string name="title_setup_doze">禁用电池优化</string>
-    <string name="title_setup_doze_remark">可靠地发送和接收电子邮件</string>
+    <string name="title_setup_doze_remark">更可靠地后台收发电子邮件</string>
     <string name="title_setup_doze_explanation">应禁用针对本应用的电池优化，以确保后台消息的可靠发送和接收。</string>
     <string name="title_setup_doze_hint">虽然这听起来自相矛盾，但对本应用而言关闭电池优化将减少电池用量</string>
     <string name="title_setup_doze_instructions">请在下一页面中，将 \"未优化\" 切换为 \"所有应用\"，然后下拉找到本应用，并选择\"不优化\"</string>
     <string name="title_setup_doze_battery">太耗电？</string>
     <string name="title_setup_doze_stopped">同步已停止？</string>
     <string name="title_setup_doze_device">对此设备来说，这可能是必需的</string>
-    <string name="title_setup_doze_12">推送消息已禁用</string>
     <string name="title_setup_alarm_12">应用将无法工作</string>
     <string name="title_setup_inexact">闹钟 &amp; 提醒已禁用</string>
     <string name="title_setup_background">已启用后台限制</string>
@@ -364,6 +367,7 @@
     <string name="title_advanced_close_pane">关闭会话时收起行或列</string>
     <string name="title_advanced_column_width">消息列宽：%1$s %%</string>
     <string name="title_advanced_nav_options">显示导航菜单选项</string>
+    <string name="title_advanced_nav_categories">在导航菜单中显示账户类别</string>
     <string name="title_advanced_nav_pin">固定导航菜单</string>
     <string name="title_advanced_nav_hide_title">隐藏导航菜单选项？</string>
     <string name="title_advanced_nav_hide_message">您可以在显示设置中再次启用选项</string>
@@ -377,7 +381,7 @@
     <string name="title_advanced_cards_shadow">使用卡片样式时对未读消息显示阴影</string>
     <string name="title_advanced_cards_shadow_highlight">使用高亮色而不是强调色</string>
     <string name="title_advanced_tabular_dividers">使用表格样式时使用分隔线</string>
-    <string name="title_advanced_category_header">按帐号类别分组</string>
+    <string name="title_advanced_category_header">按账户类别分组</string>
     <string name="title_advanced_date_header">按日期分组</string>
     <string name="title_advanced_date_fixed">在顶部显示固定日期标题</string>
     <string name="title_advanced_date_bold">以粗体显示日期</string>
@@ -528,7 +532,7 @@
     <string name="title_advanced_ask_images">确认显示图片</string>
     <string name="title_advanced_confirm_html">默认显示重新格式化的消息</string>
     <string name="title_advanced_ask_html">确认显示原始邮件</string>
-    <string name="title_advanced_tracking">尝试识别和禁止追踪用图像</string>
+    <string name="title_advanced_tracking">尝试识别和禁止追踪用途的图像</string>
     <string name="title_advanced_hide_timezone">发送没有时区数据的消息</string>
     <string name="title_advanced_client_id">将应用名称和版本发送到电子邮件服务器</string>
     <string name="title_advanced_display_hidden">显示隐藏消息文本</string>
@@ -541,10 +545,10 @@
     <string name="title_advanced_generic_user_agent">使用通用浏览器用户代理</string>
     <string name="title_advanced_load_emoji">从 Google Play 服务加载更新的 Emoji</string>
     <string name="title_advanced_disconnect_auto_update">每周自动更新列表</string>
-    <string name="title_advanced_disconnect_links">使用列表警告跟踪链接</string>
-    <string name="title_advanced_disconnect_images">使用列表来识别追踪用图像</string>
+    <string name="title_advanced_disconnect_links">使用该列表来警告跟踪链接</string>
+    <string name="title_advanced_disconnect_images">使用该列表来识别追踪用途的图像</string>
     <string name="title_advanced_mnemonic">远程删除数据</string>
-    <string name="title_advanced_mnemonic_hint">如果收到任何标题栏有以下文字的邮件，应用程序数据将立即被自动删除</string>
+    <string name="title_advanced_mnemonic_hint">如果收到任何标题行含有以下文字的电子邮件，应用程序数据将立即被自动删除</string>
     <string name="title_advanced_clear_all">删除应用数据</string>
     <string name="title_advanced_clear_all_remark">应用数据将不可逆转地删除！</string>
     <string name="title_advanced_sign_default">使用默认签名</string>
@@ -680,7 +684,7 @@
     <string name="title_advanced_notify_no_grouping">此Android版本不支持通知分组</string>
     <string name="title_advanced_notify_no_channels">此Android版本不支持通知通道</string>
     <string name="title_advanced_fts_hint">启用此功能将提高搜索性能，但也会增加电池和存储空间用量</string>
-    <string name="title_advanced_english_hint">这将重新启动应用程序</string>
+    <string name="title_advanced_english_hint">应用将重新启动</string>
     <string name="title_advanced_experiments_hint">当前实验性功能列表</string>
     <string name="title_advanced_protocol_hint">这将大幅增加电池和存储空间用量！</string>
     <string name="title_advanced_debug_hint">这将会在多处显示冗杂的调试信息</string>
@@ -834,6 +838,9 @@
     <string name="title_delete_channel">删除通知通道</string>
     <string name="title_insert_contact">添加联系人</string>
     <string name="title_edit_contact">编辑联系人</string>
+    <string name="title_contact_email">电子邮件</string>
+    <string name="title_contact_name">名称</string>
+    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">组</string>
     <string name="title_import_contacts">从 vCard 文件导入</string>
     <string name="title_export_contacts">导出为 vCard 文件</string>
     <string name="title_create_sub_folder">创建子文件夹</string>
@@ -849,7 +856,7 @@
     <string name="title_delete_operation_flag">标记操作</string>
     <string name="title_delete_operation_delete">删除操作</string>
     <string name="title_delete_operation_deleted">%1$d 个操作已删除</string>
-    <string name="title_delete_contacts">删除所有本地联系人？</string>
+    <string name="title_delete_contacts">删除可见的本地联系人？</string>
     <string name="title_no_operations">没有待执行操作</string>
     <string name="title_check_operations">正在检查操作</string>
     <string name="title_hint_operations">删除这些操作可能弄丢相应消息和导致同步问题</string>
@@ -1034,6 +1041,7 @@
     <string name="title_ask_delete_accept">我明白永久删除消息是不可逆的</string>
     <string name="title_ask_delete_answer">是否永久性删除回复模板？</string>
     <string name="title_ask_delete_rule">是否永久删除规则？</string>
+    <string name="title_ask_delete_attachments">删除所有附件？</string>
     <string name="title_ask_discard">舍弃草稿？</string>
     <string name="title_ask_show_html">显示原件可能会泄露隐私敏感信息</string>
     <string name="title_ask_show_html_remark">无法在暗色背景下显示原始消息，因为会导致看不见的黑色文本和图像</string>
@@ -1451,7 +1459,7 @@
     <string name="title_legend_reformatted">查看格式重制后的消息</string>
     <string name="title_legend_external_image">外部图像的占位符</string>
     <string name="title_legend_embedded_image">嵌入图像的占位符</string>
-    <string name="title_legend_tracking_pixel">追踪用图像</string>
+    <string name="title_legend_tracking_pixel">追踪用途的图像</string>
     <string name="title_legend_broken_image">损坏的图像</string>
     <string name="title_legend_pick">选择联系人</string>
     <string name="title_legend_cc">显示抄送和密送</string>
@@ -1819,5 +1827,11 @@
         <item>中等</item>
         <item>大</item>
         <item>特大</item>
+    </string-array>
+    <string-array name="contactTypes">
+        <item>收件人</item>
+        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">发件人</item>
+        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">已拦截</item>
+        <item>未屏蔽</item>
     </string-array>
 </resources>

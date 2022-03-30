@@ -72,12 +72,16 @@
     </plurals>
     <string name="title_ask_spam_who">Tratar mensagem de %1$s como spam?</string>
     <string name="title_junk_hint">Seu provedor de e-mail é responsável por filtrar spam. Um aplicativo de e-mail não possui todos os dados necessários para fazer isso de forma confiável.</string>
+    <string name="title_junk_pop_hint">        Mensagens de remetentes bloqueados não irão ser baixadas.
+        Se \"Deixar mensagens no servidor\" não estiver habilitado, essas mensagens irão ser perdidas permanentemente!
+    </string>
     <string name="title_block">Bloquear %1$s</string>
     <string name="title_block_sender">Bloquear remetente</string>
     <string name="title_block_sender_domain">Bloquear domínio \'%1$s\'</string>
     <string name="title_block_sender_hint">        Bloquear o remetente é um recurso grátis.
         Bloquear o domínio do remetente usa regras de filtro, que trata-se de uma opção Pro.
     </string>
+    <string name="title_blocked_senders">Remetentes bloqueados</string>
     <string name="title_junk_filter">Usar filtro de spam local</string>
     <string name="title_junk_filter_hint">Isso pode aumentar o uso de bateria e incorretamente marcar mensagens como spam</string>
     <string name="title_junk_blocklist">Usar listas de bloqueio por spam</string>
@@ -180,14 +184,13 @@
     <string name="title_setup_permissions_explanation">Permissões de contato são exigidas para procurar por informações de contato e para sugerir contatos</string>
     <string name="title_setup_permission_import_contacts">Como posso importar os contatos?</string>
     <string name="title_setup_doze">Desativar otimizações de bateria</string>
-    <string name="title_setup_doze_remark">Para enviar e receber e-mails corretamente</string>
+    <string name="title_setup_doze_remark">Para enviar e receber email de forma confiável em segundo plano</string>
     <string name="title_setup_doze_explanation">As otimizações de bateria devem estar desativadas para que seja garantido o envio e recebimento de mensagens em segundo plano</string>
     <string name="title_setup_doze_hint">Embora isto possa parecer contraditório, a desativação das otimizações de bateria para este aplicativo resultará em menos uso de bateria</string>
     <string name="title_setup_doze_instructions">Na próxima caixa de diálogo do Android altere \"Não otimizado\" para \"Todos os aplicativos\", selecione este app e confirme \"Não otimizar\"</string>
     <string name="title_setup_doze_battery">Alto uso de bateria?</string>
     <string name="title_setup_doze_stopped">A sincronização parou?</string>
     <string name="title_setup_doze_device">Isto é provavelmente exigido para este dispositivo</string>
-    <string name="title_setup_doze_12">Mensagens PUSH estão desabilitadas</string>
     <string name="title_setup_alarm_12">O app não funcionará</string>
     <string name="title_setup_inexact">Alarmes &amp; os lembretes estão desativados</string>
     <string name="title_setup_background">Restrições de fundo estão habilitadas</string>
@@ -374,6 +377,7 @@
     <string name="title_advanced_close_pane">Recolher linha ou coluna ao fechar uma conversa</string>
     <string name="title_advanced_column_width">Largura da coluna da mensagem: %1$s %%</string>
     <string name="title_advanced_nav_options">Mostrar opções de menu de navegação</string>
+    <string name="title_advanced_nav_categories">Mostrar categorias de conta no menu de navegação</string>
     <string name="title_advanced_nav_pin">Fixar menu de navegação</string>
     <string name="title_advanced_nav_hide_title">Ocultar opções do menu de navegação?</string>
     <string name="title_advanced_nav_hide_message">Você pode reativar as opções nas configurações de exibição</string>
@@ -845,6 +849,9 @@
     <string name="title_delete_channel">Excluir canal de notificação</string>
     <string name="title_insert_contact">Adicionar contato</string>
     <string name="title_edit_contact">Editar contato</string>
+    <string name="title_contact_email">E-mail</string>
+    <string name="title_contact_name">Nome</string>
+    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">Grupo</string>
     <string name="title_import_contacts">Importar vCards</string>
     <string name="title_export_contacts">Exportar vCards</string>
     <string name="title_create_sub_folder">Criar subpasta</string>
@@ -860,7 +867,7 @@
     <string name="title_delete_operation_flag">Marcar operações</string>
     <string name="title_delete_operation_delete">Excluir operações</string>
     <string name="title_delete_operation_deleted">%1$d operações excluídas</string>
-    <string name="title_delete_contacts">Excluir todos os contatos locais?</string>
+    <string name="title_delete_contacts">Excluir contatos locais visíveis?</string>
     <string name="title_no_operations">Nenhuma operação pendente</string>
     <string name="title_check_operations">Checando operações</string>
     <string name="title_hint_operations">Excluir operações pode resultar no desaparecimento de mensagens e problemas de sincronização</string>
@@ -1046,6 +1053,7 @@
     <string name="title_ask_delete_accept">Entendo que deletar mensagens permanentemente é irreversível</string>
     <string name="title_ask_delete_answer">Excluir modelo de resposta permanentemente?</string>
     <string name="title_ask_delete_rule">Excluir regra permanentemente?</string>
+    <string name="title_ask_delete_attachments">Remover todos os anexos?</string>
     <string name="title_ask_discard">Descartar rascunho?</string>
     <string name="title_ask_show_html">Mostrar a mensagem original pode vazar informações confidenciais de privacidade</string>
     <string name="title_ask_show_html_remark">Não é possível exibir a mensagem original com um fundo escuro porque textos e imagens escuros podem ficar invisíveis</string>
@@ -1834,5 +1842,11 @@
         <item>Médio</item>
         <item>Grande</item>
         <item>Muito grande</item>
+    </string-array>
+    <string-array name="contactTypes">
+        <item>Destinatário</item>
+        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Remetente</item>
+        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Bloqueado</item>
+        <item>Não bloqueado</item>
     </string-array>
 </resources>

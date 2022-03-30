@@ -51,6 +51,7 @@ import com.sun.mail.util.FolderClosedIOException;
 import com.sun.mail.util.MessageRemovedIOException;
 
 import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.UnsupportedZipFeatureException;
@@ -1690,6 +1691,7 @@ public class MessageHelper {
 
     Boolean getAutoSubmitted() throws MessagingException {
         // https://tools.ietf.org/html/rfc3834
+        // auto-generated, auto-replied
         String header = imessage.getHeader("Auto-Submitted", null);
         if (header == null) {
             // https://www.arp242.net/autoreply.html
@@ -1755,6 +1757,7 @@ public class MessageHelper {
         if (header == null)
             return null;
 
+        header = MimeUtility.unfold(header);
         header = header.toLowerCase(Locale.ROOT);
 
         int s = header.indexOf("s=");
@@ -1765,7 +1768,7 @@ public class MessageHelper {
         if (e < 0)
             e = header.length();
 
-        String selector = header.substring(s + 2, e);
+        String selector = header.substring(s + 2, e).trim();
         if (TextUtils.isEmpty(selector))
             return null;
 
@@ -1829,6 +1832,43 @@ public class MessageHelper {
 
         String spf = MimeUtility.unfold(headers[0]);
         return (spf.trim().toLowerCase(Locale.ROOT).startsWith("pass"));
+    }
+
+    boolean checkDKIMRequirements() throws MessagingException {
+        ensureHeaders();
+
+        String[] headers = imessage.getHeader("DKIM-Signature");
+        if (headers == null || headers.length < 1)
+            return false;
+
+        for (String header : headers) {
+            Map<String, String> kv = getKeyValues(MimeUtility.unfold(header));
+
+            // Hashed body length
+            Integer l = Helper.parseInt(kv.get("l"));
+            if (l != null && l == 0) {
+                Log.w("DKIM body length=" + l);
+                return false;
+            }
+
+            // Hashed header fields
+            String h = kv.get("h");
+            if (h == null) {
+                Log.w("DKIM header fields missing");
+                return false;
+            }
+
+            String[] hs = h
+                    .toLowerCase(Locale.ROOT)
+                    .replaceAll("\\s+", "")
+                    .split(":");
+            if (!Arrays.asList(hs).contains("from")) {
+                Log.i("DKIM headers fields missing 'from' fields=" + h);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     Address[] getMailFrom(String[] headers) {
@@ -2047,6 +2087,7 @@ public class MessageHelper {
                 else if (unsubscribe.toLowerCase(Locale.ROOT).startsWith("mailto:")) {
                     if (mailto == null) {
                         try {
+                            unsubscribe = "mailto:" + unsubscribe.substring("mailto:".length());
                             MailTo.parse(unsubscribe);
                             mailto = unsubscribe;
                         } catch (Throwable ex) {
@@ -3383,13 +3424,16 @@ public class MessageHelper {
                             }
                     } catch (Throwable ex) {
                         Log.e(ex);
-                        db.attachment().setWarning(local.id, Log.formatThrowable(ex));
+                        if (ex instanceof ArchiveException)
+                            db.attachment().setWarning(local.id, ex.getMessage());
+                        else
+                            db.attachment().setWarning(local.id, Log.formatThrowable(ex));
                     }
 
                 else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && local.isCompressed()) {
                     // https://commons.apache.org/proper/commons-compress/examples.html
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean unzip = prefs.getBoolean("unzip", true);
+                    boolean unzip = prefs.getBoolean("unzip", !BuildConfig.PLAY_STORE_RELEASE);
 
                     if (unzip)
                         if (local.isGzip() && !local.isTarGzip())
@@ -3445,7 +3489,7 @@ public class MessageHelper {
                                     db.attachment().setDownloaded(attachment.id, efile.length());
                                 }
                             } catch (Throwable ex) {
-                                Log.e(ex);
+                                Log.e(new Throwable(local.name, ex));
                                 db.attachment().setWarning(local.id, Log.formatThrowable(ex));
                             }
                         else
@@ -3530,9 +3574,11 @@ public class MessageHelper {
                                     }
                                 }
                             } catch (Throwable ex) {
-                                Log.e(ex);
-                                // Unsupported feature encryption used in entry ...
-                                if (ex instanceof UnsupportedZipFeatureException)
+                                Log.e(new Throwable(local.name, ex));
+                                // ArchiveException: Unsupported feature encryption used in entry ...
+                                // UnsupportedZipFeatureException: No Archiver found for the stream signature
+                                if (ex instanceof ArchiveException ||
+                                        ex instanceof UnsupportedZipFeatureException)
                                     db.attachment().setWarning(local.id, ex.getMessage());
                                 else
                                     db.attachment().setWarning(local.id, Log.formatThrowable(ex));
@@ -4492,6 +4538,7 @@ public class MessageHelper {
                                 this.recipient = value;
                                 break;
                             case "Status":
+                                // https://www.iana.org/assignments/smtp-enhanced-status-codes/smtp-enhanced-status-codes.xhtml
                                 this.status = value;
                                 break;
                             case "Diagnostic-Code":
@@ -4499,7 +4546,7 @@ public class MessageHelper {
                                 break;
                         }
                     } else if (isDispositionNotification(type)) {
-                        //https://datatracker.ietf.org/doc/html/rfc3798#section-3.2.6
+                        // https://datatracker.ietf.org/doc/html/rfc3798#section-3.2.6
                         switch (name) {
                             case "Reporting-UA":
                                 this.reporter = value;
@@ -4531,6 +4578,10 @@ public class MessageHelper {
 
         boolean isDelivered() {
             return ("delivered".equals(action) || "relayed".equals(action) || "expanded".equals(action));
+        }
+
+        boolean isDelayed() {
+            return "delayed".equals(action);
         }
 
         boolean isMdnManual() {

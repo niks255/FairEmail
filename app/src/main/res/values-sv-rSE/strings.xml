@@ -72,12 +72,16 @@
     </plurals>
     <string name="title_ask_spam_who">Behandla meddelande från %1$s som skräppost?</string>
     <string name="title_junk_hint">Din e-postleverantör ansvarar för att filtrera skräppost. En e-postapp har inte all data som behövs för att göra detta på ett tillförlitligt sätt.</string>
+    <string name="title_junk_pop_hint">        Meddelanden från blockerade avsändare kommer inte att laddas ner.
+        Om \"Lämna meddelanden på servern\" inte är aktiverade, kommer dessa meddelanden att försvinna permanent!
+    </string>
     <string name="title_block">Blockera %1$s</string>
     <string name="title_block_sender">Blockera avsändare</string>
     <string name="title_block_sender_domain">Blockera domän \'%1$s\'</string>
     <string name="title_block_sender_hint">        Att blockera en avsändare är en gratisfunktion.
         Att blockera en avsändardomän använder filterregler, vilket är en pro-funktion.
     </string>
+    <string name="title_blocked_senders">Blockerade avsändare</string>
     <string name="title_junk_filter">Använd lokalt skräppostfilter</string>
     <string name="title_junk_filter_hint">Detta kan öka batterianvändningen och felaktigt markera meddelanden som skräppost</string>
     <string name="title_junk_blocklist">Använd skräppostblockeringslistor</string>
@@ -180,14 +184,13 @@
     <string name="title_setup_permissions_explanation">Kontaktbehörigheter krävs för att söka kontaktinfo och föreslå kontakter</string>
     <string name="title_setup_permission_import_contacts">Hur kan jag importera kontakter?</string>
     <string name="title_setup_doze">Inaktivera batterioptimeringar</string>
-    <string name="title_setup_doze_remark">Att på ett tillförlitligt sätt skicka och ta emot e-post</string>
+    <string name="title_setup_doze_remark">Att skicka och ta emot e-post tillförlitligt i bakgrunden</string>
     <string name="title_setup_doze_explanation">Batterioptimeringar bör inaktiveras för appen för att säkerställa tillförlitlig sändning och mottagning av meddelanden i bakgrunden</string>
     <string name="title_setup_doze_hint">Även om detta kan låta motsägelsefullt, så resulterar avstängd batterioptimering för denna app i mindre batterianvändning</string>
     <string name="title_setup_doze_instructions">I nästa Android-dialogruta byt ut \"Inte optimerad\" till \"Alla appar\", välj sedan denna app och välj \"Optimera inte\"</string>
     <string name="title_setup_doze_battery">Hög batterianvändning?</string>
     <string name="title_setup_doze_stopped">Slutade synkroniseringen?</string>
     <string name="title_setup_doze_device">Detta krävs förmodligen för denna enhet</string>
-    <string name="title_setup_doze_12">Push-meddelanden är inaktiverade</string>
     <string name="title_setup_alarm_12">Appen fungerar inte</string>
     <string name="title_setup_inexact">Larm &amp; påminnelser är inaktiverade</string>
     <string name="title_setup_background">Balgrundsrestriktioner är aktiverat</string>
@@ -371,6 +374,7 @@
     <string name="title_advanced_close_pane">Kollapsa rad eller kolumn när en konversation stängs</string>
     <string name="title_advanced_column_width">Kolumnbredd för meddelande: %1$s %%</string>
     <string name="title_advanced_nav_options">Visa alternativ för navigeringsmeny</string>
+    <string name="title_advanced_nav_categories">Visa kontokategorier i navigeringsmenyn</string>
     <string name="title_advanced_nav_pin">Fäst navigeringsmenyn</string>
     <string name="title_advanced_nav_hide_title">Dölj alternativ för navigeringsmenyn?</string>
     <string name="title_advanced_nav_hide_message">Du kan aktivera alternativen igen i visningsinställningarna</string>
@@ -842,6 +846,9 @@
     <string name="title_delete_channel">Ta bort aviseringskanal</string>
     <string name="title_insert_contact">Lägg till kontakt</string>
     <string name="title_edit_contact">Redigera kontakt</string>
+    <string name="title_contact_email">E-post</string>
+    <string name="title_contact_name">Namn</string>
+    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">Grupp</string>
     <string name="title_import_contacts">Importera vCards</string>
     <string name="title_export_contacts">Exportera vCard</string>
     <string name="title_create_sub_folder">Skapa undermapp</string>
@@ -857,7 +864,7 @@
     <string name="title_delete_operation_flag">Flagga åtgärder</string>
     <string name="title_delete_operation_delete">Ta bort åtgärder</string>
     <string name="title_delete_operation_deleted">%1$d åtgärder raderade</string>
-    <string name="title_delete_contacts">Ta bort alla lokala kontakter?</string>
+    <string name="title_delete_contacts">Radera synliga lokala kontakter?</string>
     <string name="title_no_operations">Inga pågående åtgärder</string>
     <string name="title_check_operations">Söker efter aktiviteter</string>
     <string name="title_hint_operations">Att ta bort pågående åtgärder kan resultera i försvinnande meddelanden och synkroniseringsproblem</string>
@@ -1043,6 +1050,7 @@
     <string name="title_ask_delete_accept">Jag förstår att permanent ta bort meddelanden är oåterkalleligt</string>
     <string name="title_ask_delete_answer">Ta bort svarsmall permanent?</string>
     <string name="title_ask_delete_rule">Ta bort regel permanent?</string>
+    <string name="title_ask_delete_attachments">Ta bort alla bilagor?</string>
     <string name="title_ask_discard">Släng utkastet?</string>
     <string name="title_ask_show_html">Att visa det ursprungliga meddelandet kan läcka sekretesskänslig information</string>
     <string name="title_ask_show_html_remark">Att visa originalmeddelandet med en mörk bakgrund är inte möjligt eftersom det kan orsaka osynliga mörka texter och bilder</string>
@@ -1830,5 +1838,11 @@
         <item>Mellan</item>
         <item>Stor</item>
         <item>Extra stor</item>
+    </string-array>
+    <string-array name="contactTypes">
+        <item>Mottagare</item>
+        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Avsändaren</item>
+        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Blockerade</item>
+        <item>Inte blockerad</item>
     </string-array>
 </resources>

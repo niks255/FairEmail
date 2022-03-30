@@ -74,10 +74,14 @@
     </plurals>
     <string name="title_ask_spam_who">برخورد با پیام از طرف %1$s به‌عنوان هرزنامه؟</string>
     <string name="title_junk_hint">فراهم‌کننده شما مسئول پالایش هرزنامه است. برنامه ایمیل داده لازم برای قابل اطمینان بودن این کار را ندارد.</string>
+    <string name="title_junk_pop_hint">        پیام‌های ارسالی از سوی فرستندگان مسدود شده دانلود نخواهد شد.
+        اگر \"پیام‌ها را روی سرور نگه دار\" فعال نباشد، این پیام‌ها برای همیشه از دست خواهند رفت!
+    </string>
     <string name="title_block">%s مسدود شود</string>
     <string name="title_block_sender">مسدود کردن فرستنده</string>
     <string name="title_block_sender_domain">دامنه %1$s را مسدود کن</string>
     <string name="title_block_sender_hint">مسدود کردن فرستنده یک ویژگی رایگان است.        مسدود کردن دامنه فرستنده از قوانین فیلتر استفاده می کند ، که یک ویژگی حرفه ای است.</string>
+    <string name="title_blocked_senders">فرستندگان مسدود شده</string>
     <string name="title_junk_filter">از فیلتر هرزنامه محلی استفاده کنید</string>
     <string name="title_junk_filter_hint">این می تواند استفاده از باتری را افزایش دهد و پیام ها را به صورت نادرست به عنوان اسپم علامت گذاری کند</string>
     <string name="title_junk_blocklist">از فهرست‌های انسداد هرزنامه استفاده کن</string>
@@ -171,7 +175,7 @@
     <string name="title_setup_permissions_explanation">اجازه دسترسی به لیست مخاطبین برای جستجوی اطلاعات آنها و پیشنهاد دادن‌شان لازم است</string>
     <string name="title_setup_permission_import_contacts">چگونه می‌توانم مخاطبین را وارد کنم؟</string>
     <string name="title_setup_doze">غیرفعال کردن بهینه سازی باتری</string>
-    <string name="title_setup_doze_remark">برای فرستادن و دریافت مطمئن ایمیل</string>
+    <string name="title_setup_doze_remark">برای فرستادن و دریافت ایمیل به طرز مطمئن در پس‌زمینه</string>
     <string name="title_setup_doze_battery">آیا مصرف باتری زیاد است؟</string>
     <string name="title_setup_doze_stopped">همگام‌سازی متوقف شده؟</string>
     <string name="title_setup_doze_device">این مورد احتمالا برای این دستگاه اجباریست</string>
@@ -246,6 +250,8 @@
     <string name="title_setup_reset_full">مشاهده پیام‌های اصلی</string>
     <string name="title_setup_reset_images">نمایش تصاویر</string>
     <string name="title_setup_reset_links">لینک‌ها را تایید کنید</string>
+    <string name="title_check_gmail_oauth">حساب‌های جیمیل شما پس از ۳۰ می ۲۰۲۲، همچنان کار خواهند کرد</string>
+    <string name="title_check_gmail_password">تعدادی از حساب‌های جیمیل شما پس از ۳۰ می ۲۰۲۲، ممکن است از کار بیافتند</string>
     <string name="title_advanced_hint_title">گزینه‌های پیشرفته بیشتر</string>
     <string name="title_advanced_hint_message">        You are navigating to the more advanced options.        All options have commonly used standard values, which you do not need to change unless you have a different preference.
     </string>
@@ -326,6 +332,7 @@
     <string name="title_advanced_min_screen_size">کمترین اندازه صفحه برای تقسیم کردن صفحه</string>
     <string name="title_advanced_column_width">پهنای ستون پیام: %1$s %%</string>
     <string name="title_advanced_nav_options">نشان دادن گزینه‌های منوی ناوبری</string>
+    <string name="title_advanced_nav_categories">دسته‌بندی‌های حساب را در منوی ناوبری نمایش بده</string>
     <string name="title_advanced_nav_pin">سنجاق کردن منوی ناوبری</string>
     <string name="title_advanced_nav_hide_title">پنهان کردن گزینه‌های منوی ناوبری؟</string>
     <string name="title_advanced_nav_hide_message">شما می‌توانید مجددا گزینه‌ها را در تنظیمات نمایش فعال کنید</string>
@@ -578,11 +585,14 @@
     <string name="title_delete_channel">حذف کانال اعلان</string>
     <string name="title_insert_contact">افزودن مخاطب</string>
     <string name="title_edit_contact">ویرایش مخاطب</string>
+    <string name="title_contact_email">ایمیل</string>
+    <string name="title_contact_name">نام</string>
+    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">گروه</string>
     <string name="title_create_sub_folder">ساخت زیرپوشه</string>
     <string name="title_empty_trash_ask">پیام‌های سطل آشغال برای همیشه پاک شوند?</string>
     <string name="title_empty_spam_ask">پیام‌های هرزنامه برای همیشه پاک شوند؟</string>
     <string name="title_empty_spam_all_ask">همه پیام‌های هرزنامه از همه حساب‌ها برای همیشه حذف شود؟</string>
-    <string name="title_delete_contacts">حذف همه مخاطبین محلی؟</string>
+    <string name="title_delete_contacts">حذف مخاطبین محلی مرئی؟</string>
     <string name="title_no_operations">عملیاتی در انتظار وجود ندارد </string>
     <string name="title_hint_operations">عملیات‌های حذف می‌تواند موجب ناپدید شدن پیام‌ها و مشکلات همگام‌سازی شود</string>
     <string name="title_folder_name">نام پوشه</string>
@@ -699,6 +709,8 @@
     <string name="title_no_recorder">برنامه ضبط صدا سازگاری در دسترس نیست</string>
     <string name="title_no_camera">برنامه دوربین سازگاری در دسترس نیست</string>
     <string name="title_no_saf">چارچوب دسترسی ذخیره سازی موجود نیست</string>
+    <string name="title_no_stream">FairEmail اجازه خواندن این فایل را به طور مستقیم ندارد</string>
+    <string name="title_no_stream_help">با انتخاب فایل به وسیله یک برنامه مدیریت فایل به‌روزتر یا با دادن اجازه دسترسی برای خوانش فایل‌ها، این مشکل می‌تواند حل شود</string>
     <string name="title_no_internet">اینترنت یا اتصال سازگاری در دسترس نیست</string>
     <string name="title_no_connection">در حال اتصال به یک یا چند حساب &#8230;</string>
     <string name="title_no_folder">پوشه وجود ندارد</string>
@@ -713,6 +725,7 @@
     <string name="title_ask_delete">پیام به صورت همیشگی حذف شود؟</string>
     <string name="title_ask_delete_answer">الگوی پاسخ به صورت همیشگی حذف شود؟</string>
     <string name="title_ask_delete_rule">دستور به صورت همیشگی حذف شود؟</string>
+    <string name="title_ask_delete_attachments">حذف همه پیوست‌ها؟</string>
     <string name="title_ask_discard">پیش‌نویس‌ کنار گذاشته شود؟</string>
     <string name="title_ask_show_html">نمایش پیام اصلی می تواند موجب نشت اطلاعات حساس شود</string>
     <string name="title_ask_show_image">نمایش تصاویر می تواند موجب نشت اطلاعات حساس شود</string>
@@ -861,6 +874,7 @@
     <string name="title_search_device">جستجو بر روی دستگاه‌</string>
     <string name="title_search_server">جستجو بر روی سرور</string>
     <string name="title_search_in">جستجو در</string>
+    <string name="title_search_delete">جستجوی ذخیره شده پاک شود؟</string>
     <string name="title_sort_on">مرتب‌سازی براساس</string>
     <string name="title_sort_on_time">زمان</string>
     <string name="title_sort_on_unread">خوانده نشده</string>
@@ -1326,5 +1340,11 @@
         <item>متوسط</item>
         <item>بزرگ</item>
         <item>خیلی بزرگ</item>
+    </string-array>
+    <string-array name="contactTypes">
+        <item>گیرنده</item>
+        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">فرستنده</item>
+        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">مسدود شده</item>
+        <item>مسدود نشده</item>
     </string-array>
 </resources>

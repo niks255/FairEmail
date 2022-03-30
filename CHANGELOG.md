@@ -4,6 +4,52 @@
 
 ### [Gobivenator](https://en.wikipedia.org/wiki/Gobivenator)
 
+### 1.1864 - 2022-03-30
+
+* Fixed starting disabled accounts
+
+### 1.1863 - 2022-03-30
+
+* Converting background images into images (reformatted message view)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1862 - 2022-03-28
+
+* Added local contact editor
+* Added local contact groups
+* Added block sender for POP3 accounts
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1861 - 2022-03-25
+
+* Added option to show account categories in the navigation menu
+* Added managing filter rules to the navigation menu
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated [Public Suffix List](https://publicsuffix.org/)
+* Updated translations
+
+### 1.1860 - 2022-03-23
+
+* Added sent sound selection
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1859 - 2022-03-22
+
+* Showing common filter rule action values in rule lists
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1858 - 2022-03-21
+
+* Added remove all attachments button to message editor
+* Showing filter rule condition values in rule lists
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1857 - 2022-03-19
 
 * Added inserting templates as text snippets

@@ -135,8 +135,8 @@ public class FragmentOptions extends FragmentBase {
             "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_highlight", "dividers",
             "portrait2", "portrait2c", "portrait_min_size", "landscape", "landscape_min_size",
             "column_width",
-            "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
-            "indentation", "group_category", "date", "date_fixed", "date_bold", "threading", "threading_unread",
+            "nav_categories", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
+            "indentation", "date", "date_fixed", "date_bold", "threading", "threading_unread",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
             "avatars", "bimi", "gravatars", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
             "authentication", "authentication_indicator",
@@ -342,6 +342,8 @@ public class FragmentOptions extends FragmentBase {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText != null)
+                    newText = newText.trim();
                 searching = newText;
                 suggest(newText);
                 return false;
@@ -482,10 +484,9 @@ public class FragmentOptions extends FragmentBase {
         boolean setup_reminder = prefs.getBoolean("setup_reminder", true);
 
         boolean hasPermissions = hasPermission(Manifest.permission.READ_CONTACTS);
-        Boolean isIgnoring = Helper.isIgnoringOptimizations(getContext());
+        boolean isIgnoring = !Boolean.FALSE.equals(Helper.isIgnoringOptimizations(getContext()));
 
-        if (!setup_reminder ||
-                (hasPermissions && (isIgnoring == null || isIgnoring)))
+        if (!setup_reminder || (hasPermissions && isIgnoring))
             super.finish();
         else {
             FragmentDialogStill fragment = new FragmentDialogStill();

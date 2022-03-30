@@ -58,6 +58,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -72,6 +73,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
     private int textColorSecondary;
 
     private String search = null;
+    private Long account;
     private List<Integer> types = new ArrayList<>();
 
     private List<TupleContactEx> all = new ArrayList<>();
@@ -153,8 +155,8 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                 }
             }
 
-            tvName.setText(contact.name == null ? "-" : contact.name);
-            tvEmail.setText(contact.accountName + "/" + contact.email);
+            tvName.setText(contact.name == null ? "-" : contact.name + (contact.group == null ? "" : "/" + contact.group));
+            tvEmail.setText(contact.email + "/" + contact.accountName);
             tvTimes.setText(NF.format(contact.times_contacted));
             tvLast.setText(contact.last_contacted == null ? null
                     : Helper.getRelativeTimeSpanString(context, contact.last_contacted));
@@ -239,7 +241,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
             popupMenu.getMenu().add(Menu.NONE, R.string.title_share, order++, R.string.title_share); // should be system whitelisted
             if (Shortcuts.can(context))
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_pin, order++, R.string.title_pin);
-            popupMenu.getMenu().add(Menu.NONE, R.string.title_advanced_edit_name, order++, R.string.title_advanced_edit_name);
+            popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_contact, order++, R.string.title_edit_contact);
             popupMenu.getMenu().add(Menu.NONE, R.string.title_search, order++, R.string.title_search);
             popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, order++, R.string.title_delete);
 
@@ -256,7 +258,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                     } else if (itemId == R.string.title_pin) {
                         onActionPin();
                         return true;
-                    } else if (itemId == R.string.title_advanced_edit_name) {
+                    } else if (itemId == R.string.title_edit_contact) {
                         onActionEdit();
                         return true;
                     } else if (itemId == R.string.title_search) {
@@ -312,12 +314,16 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                 private void onActionEdit() {
                     Bundle args = new Bundle();
                     args.putLong("id", contact.id);
+                    args.putLong("account", contact.account);
+                    args.putInt("type", contact.type);
+                    args.putString("email", contact.email);
                     args.putString("name", contact.name);
+                    args.putString("group", contact.group);
 
-                    FragmentDialogEditName fragment = new FragmentDialogEditName();
+                    FragmentContacts.FragmentDialogEditContact fragment = new FragmentContacts.FragmentDialogEditContact();
                     fragment.setArguments(args);
-                    fragment.setTargetFragment(parentFragment, FragmentContacts.REQUEST_EDIT_NAME);
-                    fragment.show(parentFragment.getParentFragmentManager(), "contact:name");
+                    fragment.setTargetFragment(parentFragment, FragmentContacts.REQUEST_EDIT_CONTACT);
+                    fragment.show(parentFragment.getParentFragmentManager(), "contact:edit");
                 }
 
                 private void onActionSearch() {
@@ -385,20 +391,23 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
 
     public void set(@NonNull List<TupleContactEx> contacts) {
         Log.i("Set contacts=" + contacts.size() +
-                " search=" + search + " types=" + types.size());
+                " search=" + search +
+                " account=" + account +
+                " types=" + types.size());
 
         all = contacts;
 
         new SimpleTask<List<TupleContactEx>>() {
             @Override
-            protected List<TupleContactEx> onExecute(Context context, Bundle args) throws Throwable {
+            protected List<TupleContactEx> onExecute(Context context, Bundle args) {
                 List<TupleContactEx> filtered;
-                if (types.size() == 0)
+                if (account == null && types.size() == 0)
                     filtered = contacts;
                 else {
                     filtered = new ArrayList<>();
                     for (TupleContactEx contact : contacts)
-                        if (types.contains(contact.type))
+                        if ((account == null || contact.account.equals(account)) &&
+                                (types.size() == 0 || types.contains(contact.type)))
                             filtered.add(contact);
                 }
 
@@ -444,7 +453,12 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                         Log.d("Changed @" + position + " #" + count);
                     }
                 });
-                diff.dispatchUpdatesTo(AdapterContact.this);
+
+                try {
+                    diff.dispatchUpdatesTo(AdapterContact.this);
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
             }
 
             @Override
@@ -460,8 +474,11 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
         set(all);
     }
 
-    public void filter(List<Integer> types) {
-        this.types = types;
+    public void filter(Long account, boolean junk) {
+        this.account = account;
+        this.types = junk
+                ? Arrays.asList(EntityContact.TYPE_JUNK, EntityContact.TYPE_NO_JUNK)
+                : Arrays.asList(EntityContact.TYPE_TO, EntityContact.TYPE_FROM);
         set(all);
     }
 

@@ -72,11 +72,15 @@
     </plurals>
     <string name="title_ask_spam_who">Nachricht von %1$s als Spam behandeln?</string>
     <string name="title_junk_hint">Ihr E-Mail-Anbieter ist für das Filtern von Spam zuständig. Eine E-Mail-Anwendung verfügt nicht über alle benötigten Informationen, um das zuverlässig zu gewährleisten.</string>
+    <string name="title_junk_pop_hint">        Nachrichten von gesperrten Absendern werden nicht heruntergeladen.
+        Wenn „Nachrichten auf dem Server belassen” deaktiviert ist, gehen diese Nachrichten dauerhaft verloren!
+    </string>
     <string name="title_block">%1$s sperren</string>
     <string name="title_block_sender">Absender sperren</string>
     <string name="title_block_sender_domain">Domain „%1$s” sperren</string>
     <string name="title_block_sender_hint">        Das Sperren eines Absenders ist eine kostenlose Funktion.        Das Sperren der Domain eines Absenders verwendet Filterregeln, welche nur in der Pro-Version verfügbar sind.
     </string>
+    <string name="title_blocked_senders">Gesperrte Absender</string>
     <string name="title_junk_filter">Lokalen Spam-Filter verwenden</string>
     <string name="title_junk_filter_hint">Das kann den Akkuverbrauch erhöhen und Nachrichten fälschlicherweise als Spam kennzeichnen</string>
     <string name="title_junk_blocklist">Spam-Sperrlisten verwenden</string>
@@ -179,14 +183,13 @@
     <string name="title_setup_permissions_explanation">Der Zugriff auf Kontakte ist erforderlich, um Kontaktinformationen nachzuschlagen und Kontakte vorzuschlagen</string>
     <string name="title_setup_permission_import_contacts">Wie kann ich Kontakte importieren?</string>
     <string name="title_setup_doze">Akkuoptimierung deaktivieren</string>
-    <string name="title_setup_doze_remark">Um Nachrichten zuverlässig zu senden und zu empfangen</string>
-    <string name="title_setup_doze_explanation">Batterieoptimierungen sollten für die App deaktiviert werden, um ein zuverlässiges Senden und Empfangen von Nachrichten im Hintergrund zu gewährleisten</string>
+    <string name="title_setup_doze_remark">Um E-Mail verlässlich im Hintergrund zu senden und zu empfangen</string>
+    <string name="title_setup_doze_explanation">Akkuoptimierungen sollten für die App deaktiviert werden, um ein zuverlässiges Senden und Empfangen von Nachrichten im Hintergrund zu gewährleisten</string>
     <string name="title_setup_doze_hint">Obwohl dies widersprüchlich klingen mag, führt das Deaktivieren der Akku-Optimierungen für diese App zu einem geringeren Akkuverbrauch</string>
     <string name="title_setup_doze_instructions">Im nächsten Android-Dialog bitte »Nicht optimiert« in »Alle Apps« ändern und bei FairEmail »Nicht optimieren« auswählen</string>
     <string name="title_setup_doze_battery">Hoher Akkuverbrauch?</string>
     <string name="title_setup_doze_stopped">Synchronisation angehalten?</string>
     <string name="title_setup_doze_device">Dies ist möglicherweise für dieses Gerät erforderlich</string>
-    <string name="title_setup_doze_12">Push-Nachrichten sind deaktiviert</string>
     <string name="title_setup_alarm_12">Die App funktioniert nicht</string>
     <string name="title_setup_inexact">Benachrichtigungen und Erinnerungen sind deaktiviert</string>
     <string name="title_setup_background">Hintergrundbeschränkungen sind aktiviert</string>
@@ -373,6 +376,7 @@
     <string name="title_advanced_close_pane">Zeile oder Spalte beim Schließen einer Unterhaltung einklappen</string>
     <string name="title_advanced_column_width">Breite der Nachrichtenspalte: %1$s %%</string>
     <string name="title_advanced_nav_options">Navigationsmenü-Optionen anzeigen</string>
+    <string name="title_advanced_nav_categories">Kontokategorien im Navigationsmenü anzeigen</string>
     <string name="title_advanced_nav_pin">Navigationsmenü anheften</string>
     <string name="title_advanced_nav_hide_title">Navigationsmenü-Optionen ausblenden?</string>
     <string name="title_advanced_nav_hide_message">Sie können die Optionen in den Darstellungseinstellungen wieder aktivieren</string>
@@ -844,6 +848,9 @@
     <string name="title_delete_channel">Benachrichtigungskanal löschen</string>
     <string name="title_insert_contact">Kontakt hinzufügen</string>
     <string name="title_edit_contact">Kontakt bearbeiten</string>
+    <string name="title_contact_email">Neue E-Mail</string>
+    <string name="title_contact_name">Name</string>
+    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">Gruppe</string>
     <string name="title_import_contacts">vCards importieren</string>
     <string name="title_export_contacts">vCards exportieren</string>
     <string name="title_create_sub_folder">Unterordner erstellen</string>
@@ -859,7 +866,7 @@
     <string name="title_delete_operation_flag">Kennzeichnungs-Vorgänge</string>
     <string name="title_delete_operation_delete">Lösch-Vorgänge</string>
     <string name="title_delete_operation_deleted">%1$d Vorgänge gelöscht</string>
-    <string name="title_delete_contacts">Alle lokale Kontakte löschen?</string>
+    <string name="title_delete_contacts">Sichtbare lokale Kontakte löschen?</string>
     <string name="title_no_operations">Keine weiteren Vorgänge</string>
     <string name="title_check_operations">Auf Vorgänge wird geprüft</string>
     <string name="title_hint_operations">Das Löschen von Vorgängen kann zum Verschwinden von Meldungen und zu Synchronisationsproblemen führen</string>
@@ -1018,7 +1025,7 @@
     <string name="title_no_camera">Keine passende Kamera-App verfügbar</string>
     <string name="title_no_saf">Storage Access Framework nicht verfügbar</string>
     <string name="title_no_stream">FairEmail hat keine Berechtigung diese Datei direkt zu lesen</string>
-    <string name="title_no_stream_help">Dies kann durch die Auswahl der Datei mit einer moderneren Dateimanager-App oder durch die Erteilung der Berechtigung für FairEmail zum Lesen von Dateien gelöst werden</string>
+    <string name="title_no_stream_help">Das kann gelöst werden, indem man die Datei mit einer moderneren Dateiverwaltungs-App auswählt oder FairEmail die Berechtigung zum Lesen von Dateien erteilt.</string>
     <string name="title_no_internet">Keine oder keine passende Internetverbindung</string>
     <string name="title_no_connection">Zu einem oder mehreren Konten wird verbunden &#8230;</string>
     <string name="title_no_folder">Ordner nicht vorhanden</string>
@@ -1044,6 +1051,7 @@
     <string name="title_ask_delete_accept">Ich verstehe, dass das Löschen von Nachrichten unwiderruflich ist</string>
     <string name="title_ask_delete_answer">Antwortvorlage dauerhaft löschen?</string>
     <string name="title_ask_delete_rule">Regel dauerhaft löschen?</string>
+    <string name="title_ask_delete_attachments">Alle Anhänge entfernen?</string>
     <string name="title_ask_discard">Entwurf löschen?</string>
     <string name="title_ask_show_html">Das Anzeigen der originalen Nachricht kann vertrauliche Daten preisgeben</string>
     <string name="title_ask_show_html_remark">Das Anzeigen der Originalnachricht mit dunklem Hintergrund ist nicht möglich, da dadurch dunkle Texte und Bilder nicht sichtbar wären</string>
@@ -1832,5 +1840,11 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>Mittel</item>
         <item>Groß</item>
         <item>Sehr groß</item>
+    </string-array>
+    <string-array name="contactTypes">
+        <item>Empfänger</item>
+        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Absender</item>
+        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Blockiert</item>
+        <item>Nicht blockiert</item>
     </string-array>
 </resources>

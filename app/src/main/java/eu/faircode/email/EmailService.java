@@ -47,6 +47,7 @@ import com.sun.mail.util.SocketConnectException;
 import com.sun.mail.util.TraceOutputStream;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -278,6 +279,9 @@ public class EmailService implements AutoCloseable {
             properties.put("mail." + protocol + ".peek", "true");
             properties.put("mail." + protocol + ".appendbuffersize", Integer.toString(APPEND_BUFFER_SIZE));
 
+            if (!"gimaps".equals(protocol) && BuildConfig.DEBUG)
+                properties.put("mail." + protocol + ".folder.class", IMAPFolderEx.class.getName());
+
         } else if ("smtp".equals(protocol) || "smtps".equals(protocol)) {
             // https://javaee.github.io/javamail/docs/api/com/sun/mail/smtp/package-summary.html#properties
             properties.put("mail.smtps.starttls.enable", "false");
@@ -450,6 +454,8 @@ public class EmailService implements AutoCloseable {
                 try {
                     authenticator.refreshToken(true);
                     connect(host, port, auth, user, factory);
+                } catch (FileNotFoundException ex1) {
+                    throw new AuthenticationFailedException(ex1.getMessage(), ex1);
                 } catch (Exception ex1) {
                     Log.e(ex1);
                     String msg = ex.getMessage();
@@ -879,11 +885,11 @@ public class EmailService implements AutoCloseable {
         }
     }
 
-    public void dump() {
-        EntityLog.log(context, EntityLog.Type.Protocol, "Dump start");
+    public void dump(String tag) {
+        EntityLog.log(context, EntityLog.Type.Protocol, "Dump start " + tag);
         while (breadcrumbs != null && !breadcrumbs.isEmpty())
             EntityLog.log(context, EntityLog.Type.Protocol, "Dump " + breadcrumbs.pop());
-        EntityLog.log(context, EntityLog.Type.Protocol, "Dump end");
+        EntityLog.log(context, EntityLog.Type.Protocol, "Dump end" + tag);
     }
 
     private static class SocketFactoryService extends SocketFactory {

@@ -579,35 +579,33 @@ Some people ask:
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq6)
 
-<hr />
-
-**Important**: using your account password [won't be possible anymore from May 30, 2022](https://support.google.com/accounts/answer/6010255).
-
-If you authorized your Gmail account with the quick setup wizard or manually with an app password,
-your Gmail account will keep being synchronized after May 30, 2022.
-
-If you enabled *Less secure apps* in the Google account settings and authorized your Gmail account manually with your normal account password,
-your Gmail account can't be synchronized from May 30, 2022 anymore.
-
-How to check:
-
-* Go to the *Settings* via the navigation menu (left side menu)
-* Tap on *Manual setup and account options*
-* Tap on *Accounts*
-* Find the account in the list
-* If there is a shield icon before the account name (=OAuth), the account will keep working
-
-How to fix:
-
-* Go to the *Settings* via the navigation menu (left side menu)
-* Tap on the *Wizard* button and select *Gmail (OAuth)*
-* Tick the checkbox to authenticate an existing account (else you'll create a new account!)
-* Fill in the fields and follow the steps
-* Repeat for each Gmail account
-
-Alternatively, you can use an app password, please see below.
-
-<hr />
+>
+> **Important**: using your account password [won't be possible anymore from May 30, 2022](https://support.google.com/accounts/answer/6010255).
+>
+> "*To help keep your account secure, starting May 30, 2022, ​​Google will no longer support the use of third-party apps or devices which ask you to sign in to your Google Account using only your username and password.*"
+>
+> &#x2714; If you authorized your Gmail account with the quick setup wizard or manually with an app password, your Gmail account will keep being synchronized after May 30, 2022.
+>
+> &#x274C; If you enabled *Less secure apps* in the Google account settings and authorized your Gmail account manually with your normal account password, your Gmail account can't be synchronized from May 30, 2022 anymore.
+>
+> How to check:
+>
+> * Go to the *Settings* via the navigation menu (left side menu)
+> * Tap on *Manual setup and account options*
+> * Tap on *Accounts*
+> * Find the account in the list
+> * If there is a shield icon before the account name (=OAuth), the account will keep working
+>
+> How to fix:
+>
+> * Go to the *Settings* via the navigation menu (left side menu)
+> * Tap on the *Wizard* button and select *Gmail (OAuth)*
+> * Tick the checkbox to authenticate an existing account (else you'll create a new account!)
+> * Fill in the fields and follow the steps
+> * Repeat for each Gmail account
+>
+> Alternatively, you can use an app password, please see below.
+>
 
 If you use the Play store or GitHub version of FairEmail,
 you can use the quick setup wizard to easily setup a Gmail account and identity.
@@ -645,9 +643,17 @@ Please [see here](#user-content-howto) about how you can delete the account conf
 
 <br />
 
+<a name="faq6-app"></a>
+
 *App specific password*
 
 See [here](https://support.google.com/accounts/answer/185833) about how to generate an app specific password.
+
+To configure a new Gmail account with an app password, please tap on the wizard button in the main settings screen
+and select *Other provider* (not Gmail!) and follow the steps (paste the app password in the password field).
+
+To configure an existing Gmail account with an app password, please tap on *Manual setup and account options* in the main settings screen,
+tap on *Accounts*, tap on the account and tap on the pencil icon after the password and select *Switch to password authentication* and paste the app password.
 
 <br />
 
@@ -2474,6 +2480,7 @@ You can enable downloading message headers in the connection settings and check 
 Some common header conditions (regex):
 
 * *.&ast;Auto-Submitted:.&ast;* [RFC3834](https://tools.ietf.org/html/rfc3834)
+* *.&ast;List-Unsubscribe:.&ast;* [RFC3834](https://datatracker.ietf.org/doc/html/rfc2369)
 * *.&ast;Content-Type: multipart/report.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
 
 To match *set* IMAP flags (keywords) via a header condition (since version 1.1777):
@@ -2503,6 +2510,7 @@ $$blocklist$
 $$replydomain$
 $$nofrom$ (since version 1.1791)
 $$multifrom$ (since version 1.1791)
+$$automatic$ (since version 1.1862)
 ```
 
 Note that *regex* should be disable and that there should be no white space.
@@ -3265,6 +3273,13 @@ for when [Android App Links](https://developer.android.com/training/app-links/ve
 are not available, for example when using a non Play store version of the app, or do not work for some reason.
 
 OAuth is not supported for third party builds like the F-Droid build, please [see here](#user-content-faq147) about why not.
+
+Since version 1.1859 there is support for custom OAuth.
+To use custom OAuth, an XML file containing the server and OAuth data, like the client secret, should be created and imported.
+Please [see here](https://github.com/M66B/FairEmail/blob/master/app/src/main/res/xml/providers.xml) about how the XML file should look like.
+The XML file can be imported via a button in the debug panel of the miscellaneous settings of the app.
+To show the debug panel, debug mode mode should temporarily be enabled.
+After importing, you can use the quick setup wizard to configure an account.
 
 <br />
 
@@ -4378,10 +4393,12 @@ Deleting messages from the server and restoring them later could result in losin
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq167)
 
+DeepL offers free translation of 500,000 characters (~100,000 words; ~250 pages) every month.
+
 1. Make sure you have the latest version of the app installed
 1. Check if [DeepL](https://www.deepl.com/) supports your language
 1. Enable DeepL support in the miscellaneous settings
-1. [Subscribe to](https://www.deepl.com/pro#developer) the DeepL API Free or Pro plan (credit card required)
+1. [Subscribe to](https://www.deepl.com/pro#developer) the DeepL API Free or Pro plan (credit card required; won't be charged)
 1. [Copy](https://www.deepl.com/pro-account/plan) the authentication key
 1. In the message composer tap on the translate button (文A) in the top action bar, select *Configure* and paste the key
 

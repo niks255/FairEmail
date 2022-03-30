@@ -38,8 +38,9 @@ public interface DaoContact {
     @Query("SELECT contact.*, account.name AS accountName" +
             " FROM contact" +
             " JOIN account ON account.id = contact.account" +
+            " WHERE (:account IS NULL OR contact.account = :account)" +
             " ORDER BY times_contacted DESC, last_contacted DESC")
-    LiveData<List<TupleContactEx>> liveContacts();
+    LiveData<List<TupleContactEx>> liveContacts(Long account);
 
     @Query("SELECT email, name, avatar FROM contact" +
             " WHERE state <> " + EntityContact.STATE_IGNORE +
@@ -52,12 +53,30 @@ public interface DaoContact {
             ", last_contacted DESC")
     Cursor getFrequentlyContacted();
 
+    @Query("SELECT * FROM contact WHERE id = :id")
+    EntityContact getContact(long id);
+
     @Query("SELECT *" +
             " FROM contact" +
             " WHERE account = :account" +
             " AND type = :type" +
             " AND email = :email COLLATE NOCASE")
     EntityContact getContact(long account, int type, String email);
+
+    @Query("SELECT -1 AS _id, `group` AS title" +
+            ", COUNT(*) AS summ_count" +
+            ", :name AS account_name, :type AS account_type" +
+            " FROM contact" +
+            " WHERE (:account IS NULL OR account = :account)" +
+            " AND `group` IS NOT NULL" +
+            " GROUP BY `group`" +
+            " ORDER BY `group` COLLATE NOCASE")
+    Cursor getGroups(Long account, String name, String type);
+
+    @Query("SELECT * FROM contact" +
+            " WHERE `group` = :group" +
+            " AND type <> " + EntityContact.TYPE_JUNK)
+    List<EntityContact> getContacts(String group);
 
     @Query("SELECT *" +
             " FROM contact" +
@@ -88,9 +107,6 @@ public interface DaoContact {
             " AND email = :email")
     int deleteContact(long account, int type, String email);
 
-    @Query("UPDATE contact SET name = :name WHERE id = :id AND NOT (name IS :name)")
-    int setContactName(long id, String name);
-
     @Query("UPDATE contact SET state = :state WHERE id = :id AND NOT (state IS :state)")
     int setContactState(long id, int state);
 
@@ -103,7 +119,7 @@ public interface DaoContact {
     int deleteContacts(long before);
 
     @Query("DELETE FROM contact" +
-            " WHERE (type = " + EntityContact.TYPE_TO +
-            " OR type = " + EntityContact.TYPE_FROM + ")")
-    int clearContacts();
+            " WHERE (:account IS NULL OR account = :account)" +
+            " AND type IN (:types)")
+    int clearContacts(Long account, int[] types);
 }

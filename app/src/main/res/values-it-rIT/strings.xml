@@ -72,12 +72,16 @@
     </plurals>
     <string name="title_ask_spam_who">Trattare il messaggio da %1$s come spam?</string>
     <string name="title_junk_hint">Il provider della tua email è responsabile del filtraggio dello spam. Un\'app email non ha tutti i dati necessari per farlo in modo affidabile.</string>
+    <string name="title_junk_pop_hint">        I messaggi dei mittenti bloccati non saranno scaricati.
+        Se \"Lascia i messaggi sul server\" non è abilitato, questi messaggi saranno persi permanentemente!
+    </string>
     <string name="title_block">Blocca %1$s</string>
     <string name="title_block_sender">Blocca mittente</string>
     <string name="title_block_sender_domain">Blocca il dominio \'%1$s\'</string>
     <string name="title_block_sender_hint">        Il blocco di un mittente è una funzionalità gratuita.
         Il blocco del dominio di un mittente usa le regole del filtro, una funzionalità pro.
     </string>
+    <string name="title_blocked_senders">Mittenti bloccati</string>
     <string name="title_junk_filter">Usa filtro spam locale</string>
     <string name="title_junk_filter_hint">Questo può aumentare l\'uso della batteria e contrassegnare erroneamente i messaggi come spam</string>
     <string name="title_junk_blocklist">Usa le blacklist per lo spam</string>
@@ -180,14 +184,13 @@
     <string name="title_setup_permissions_explanation">Le autorizzazioni di contatto sono necessarie per cercare informazioni di contatto e suggerire contatti</string>
     <string name="title_setup_permission_import_contacts">Come posso importare i contatti?</string>
     <string name="title_setup_doze">Disabilita le ottimizzazioni della batteria</string>
-    <string name="title_setup_doze_remark">Per inviare e ricevere email in modo affidabile</string>
+    <string name="title_setup_doze_remark">Per inviare e ricevere email affidabilmente in background</string>
     <string name="title_setup_doze_explanation">Le ottimizzazioni della batteria dovrebbero esser disabilitate per l\'app, per assicurare un\'affidabile invio e ricezione dei messaggi in background</string>
     <string name="title_setup_doze_hint">Sebbene questo possa sembrare contraddittorio, disattivare le ottimizzazioni della batteria per quest\'app risulterà in un minore uso della batteria</string>
     <string name="title_setup_doze_instructions">Nella prossima finestra di Android cambia \"Non ottimizzata\" a \"Tutte le app\", seleziona quest\'app e seleziona \"Non ottimizzare\"</string>
     <string name="title_setup_doze_battery">Alto consumo della batteria?</string>
     <string name="title_setup_doze_stopped">Sincronizzazione interrotta?</string>
     <string name="title_setup_doze_device">Questo è probabilmente necessario per questo dispositivo</string>
-    <string name="title_setup_doze_12">I messaggi push sono disabilitati</string>
     <string name="title_setup_alarm_12">L\'app non funzionerà</string>
     <string name="title_setup_inexact">Sveglie e promemoria sono disabilitati</string>
     <string name="title_setup_background">Restrizioni di background abilitate</string>
@@ -264,6 +267,8 @@
     <string name="title_setup_reset_full">Mostra i messaggi originali</string>
     <string name="title_setup_reset_images">Mostra le immagini</string>
     <string name="title_setup_reset_links">Confermare i link</string>
+    <string name="title_check_gmail_oauth">I tuoi profili Gmail continueranno a funzionare dopo il 30 Maggio 2022</string>
+    <string name="title_check_gmail_password">Alcuni dei profili Gmail potrebbero smettere di funzionare dopo il 30 Maggio 2022</string>
     <string name="title_advanced_hint_title">Opzioni più avanzate</string>
     <string name="title_advanced_hint_message">        Stai navigando alle opzioni più avanzate.
         Tutte le opzioni hanno comunemente usato valori standard, che non devi modificare a meno che tu non abbia una preferenza differente.
@@ -373,6 +378,7 @@
     <string name="title_advanced_close_pane">Comprimi riga o colonna chiudendo una conversazione</string>
     <string name="title_advanced_column_width">Larghezza della colonna del messaggio: %1$s %%</string>
     <string name="title_advanced_nav_options">Mostra le opzioni del menu di navigazione</string>
+    <string name="title_advanced_nav_categories">Mostra le categorie di profili nel menu di navigazione</string>
     <string name="title_advanced_nav_pin">Fissa il menu di navigazione</string>
     <string name="title_advanced_nav_hide_title">Nascondere le opzioni del menu di navigazione?</string>
     <string name="title_advanced_nav_hide_message">Puoi abilitare nuovamente le opzioni nelle impostazioni di visualizzazione</string>
@@ -845,6 +851,9 @@
     <string name="title_delete_channel">Elimina il canale di notifica</string>
     <string name="title_insert_contact">Aggiungi contatto</string>
     <string name="title_edit_contact">Modifica contatto</string>
+    <string name="title_contact_email">Email</string>
+    <string name="title_contact_name">Nome</string>
+    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">Gruppo</string>
     <string name="title_import_contacts">Importa vCard</string>
     <string name="title_export_contacts">Esporta vCard</string>
     <string name="title_create_sub_folder">Crea sottocartella</string>
@@ -860,7 +869,7 @@
     <string name="title_delete_operation_flag">Contrassegna operazioni</string>
     <string name="title_delete_operation_delete">Elimina operazioni</string>
     <string name="title_delete_operation_deleted">%1$d operazioni eliminate</string>
-    <string name="title_delete_contacts">Eliminare tutti i contatti locali?</string>
+    <string name="title_delete_contacts">Eliminare i contatti locali visibili?</string>
     <string name="title_no_operations">Nessun\'operazione in sospeso</string>
     <string name="title_check_operations">Controllando le operazioni</string>
     <string name="title_hint_operations">Le operazioni di eliminazione possono risultare nella scomparsa di messaggi e problemi di sincronizzazione</string>
@@ -1020,6 +1029,8 @@
     <string name="title_no_recorder">Nessun\'app di registrazione audio adatta disponibile</string>
     <string name="title_no_camera">Nessun\'app fotocamera adatta</string>
     <string name="title_no_saf">Framework di accesso all\'archiviazione non disponibile</string>
+    <string name="title_no_stream">FairEmail non è autorizzato a leggere direttamente questo file</string>
+    <string name="title_no_stream_help">Ciò è risolvibile selezionando il file con un\'app di gestione dei file più moderna o concedendo l\'autorizzazione a leggere i file</string>
     <string name="title_no_internet">Nessuna o inadeguata connessione a Internet</string>
     <string name="title_no_connection">Connessione a uno o più profili&#8230;</string>
     <string name="title_no_folder">La cartella non esiste</string>
@@ -1045,6 +1056,7 @@
     <string name="title_ask_delete_accept">Comprendo che l\'eliminazione permanente dei messaggi è irriversibile</string>
     <string name="title_ask_delete_answer">Eliminare permanentemente il modello di risposta?</string>
     <string name="title_ask_delete_rule">Eliminare permanentemente la regola?</string>
+    <string name="title_ask_delete_attachments">Rimuovere tutti gli allegati?</string>
     <string name="title_ask_discard">Scartare la bozza?</string>
     <string name="title_ask_show_html">Mostrare il messaggio originale potrebbe causare una fuga di informazioni sensibili sulla privacy</string>
     <string name="title_ask_show_html_remark">Mostrare il messaggio originale su uno sfondo scuro è impossibile poiché potrebbe rendere i testi e le immagini scuri invisibili</string>
@@ -1260,6 +1272,7 @@
     <string name="title_search_device">Cerca sul dispositivo</string>
     <string name="title_search_server">Cerca sul server</string>
     <string name="title_search_in">Cerca in</string>
+    <string name="title_search_delete">Eliminare la ricerca salvata?</string>
     <string name="title_sort_on">Ordina per</string>
     <string name="title_sort_on_time">Ora</string>
     <string name="title_sort_on_unread">Non letti</string>
@@ -1834,5 +1847,11 @@
         <item>Medio</item>
         <item>Grande</item>
         <item>Molto grande</item>
+    </string-array>
+    <string-array name="contactTypes">
+        <item>Destinatario</item>
+        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Mittente</item>
+        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Bloccato</item>
+        <item>Non bloccato</item>
     </string-array>
 </resources>

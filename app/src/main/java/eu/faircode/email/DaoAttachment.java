@@ -115,10 +115,10 @@ public interface DaoAttachment {
     void setType(long id, String type);
 
     @Query("UPDATE attachment" +
-            " SET disposition = :disposition" +
+            " SET disposition = :disposition, cid = :cid" +
             " WHERE id = :id" +
-            " AND NOT (disposition IS :disposition)")
-    void setDisposition(long id, String disposition);
+            " AND NOT (disposition IS :disposition AND cid IS :cid)")
+    void setDisposition(long id, String disposition, String cid);
 
     @Query("UPDATE attachment" +
             " SET cid = :cid" +
@@ -156,6 +156,10 @@ public interface DaoAttachment {
     @Query("DELETE FROM attachment" +
             " WHERE id = :id")
     int deleteAttachment(long id);
+
+    @Query("DELETE FROM attachment" +
+            " WHERE message = :message")
+    int deleteAttachments(long message);
 
     @Query("DELETE FROM attachment" +
             " WHERE message = :message" +

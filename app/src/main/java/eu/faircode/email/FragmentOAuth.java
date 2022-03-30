@@ -84,8 +84,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,6 +97,7 @@ public class FragmentOAuth extends FragmentBase {
     private String name;
     private String privacy;
     private boolean askAccount;
+    private boolean askTenant;
 
     private String personal;
     private String address;
@@ -136,6 +137,7 @@ public class FragmentOAuth extends FragmentBase {
         name = args.getString("name");
         privacy = args.getString("privacy");
         askAccount = args.getBoolean("askAccount", false);
+        askTenant = args.getBoolean("askTenant", false);
 
         personal = args.getString("personal");
         address = args.getString("address");
@@ -213,7 +215,7 @@ public class FragmentOAuth extends FragmentBase {
         tvTitle.setText(getString(R.string.title_setup_oauth_rationale, name));
         etName.setVisibility(askAccount ? View.VISIBLE : View.GONE);
         etEmail.setVisibility(askAccount ? View.VISIBLE : View.GONE);
-        grpTenant.setVisibility(isOutlook(id) ? View.VISIBLE : View.GONE);
+        grpTenant.setVisibility(askTenant ? View.VISIBLE : View.GONE);
         pbOAuth.setVisibility(View.GONE);
         tvConfiguring.setVisibility(View.GONE);
         tvGmailHint.setVisibility("gmail".equals(id) ? View.VISIBLE : View.GONE);
@@ -363,18 +365,9 @@ public class FragmentOAuth extends FragmentBase {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             prefs.edit().putString("oauth." + provider.id, authState.jsonSerializeString()).apply();
 
-            Map<String, String> params = new HashMap<>();
-
-            if ("gmail".equals(provider.id))
-                params.put("access_type", "offline");
-
-            if ("yandex".equals(provider.id)) {
-                params.put("device_name", "Android/FairEmail");
-                params.put("force_confirm", "true");
-            }
-
-            if ("mailru".equals(provider.id))
-                params.put("prompt_force", "1");
+            Map<String, String> params = (provider.oauth.parameters == null
+                    ? new LinkedHashMap<>()
+                    : provider.oauth.parameters);
 
             AuthorizationRequest.Builder authRequestBuilder =
                     new AuthorizationRequest.Builder(
@@ -398,13 +391,8 @@ public class FragmentOAuth extends FragmentBase {
             if (provider.oauth.pcke)
                 authRequestBuilder.setCodeVerifier(CodeVerifierUtil.generateRandomCodeVerifier());
 
-            // For offline access
-            if ("gmail".equals(provider.id))
-                authRequestBuilder.setPrompt("consent");
-
-            // https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow
-            if (isOutlook(provider.id))
-                authRequestBuilder.setPrompt("select_account");
+            if (!TextUtils.isEmpty(provider.oauth.prompt))
+                authRequestBuilder.setPrompt(provider.oauth.prompt);
 
             AuthorizationRequest authRequest = authRequestBuilder.build();
 
@@ -468,7 +456,7 @@ public class FragmentOAuth extends FragmentBase {
                     .setAdditionalParameters(Collections.<String, String>emptyMap())
                     .setNonce(auth.request.nonce);
 
-            if (isOutlook(provider.id))
+            if (provider.oauth.tokenScopes)
                 builder.setScope(TextUtils.join(" ", provider.oauth.scopes));
 
             TokenRequest request = builder.build();
@@ -961,7 +949,7 @@ public class FragmentOAuth extends FragmentBase {
         if ("gmail".equals(id))
             tvGmailDraftsHint.setVisibility(View.VISIBLE);
 
-        if (isOutlook(id)) {
+        if ("office365".equals(id) || "outlook".equals(id)) {
             if (ex instanceof AuthenticationFailedException)
                 tvOfficeAuthHint.setVisibility(View.VISIBLE);
         }
@@ -998,9 +986,5 @@ public class FragmentOAuth extends FragmentBase {
         grpError.setVisibility(View.GONE);
         tvGmailDraftsHint.setVisibility(View.GONE);
         tvOfficeAuthHint.setVisibility(View.GONE);
-    }
-
-    private static boolean isOutlook(String id) {
-        return ("office365".equals(id) || "outlook".equals(id));
     }
 }

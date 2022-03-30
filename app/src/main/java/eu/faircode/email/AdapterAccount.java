@@ -157,26 +157,28 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
         }
 
         private void wire() {
-            view.post(new Runnable() {
-                @Override
-                public void run() {
-                    int left;
-                    int right;
-                    if (view.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR) {
-                        left = view.getWidth() - view.getWidth() / 3;
-                        right = view.getWidth();
-                    } else {
-                        left = 0;
-                        right = view.getWidth() / 3;
+            if (!settings)
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int left;
+                        int right;
+                        if (view.getLayoutDirection() == View.LAYOUT_DIRECTION_LTR) {
+                            left = view.getWidth() - view.getWidth() / 3;
+                            right = view.getWidth();
+                        } else {
+                            left = 0;
+                            right = view.getWidth() / 3;
+                        }
+                        Rect rect = new Rect(
+                                left,
+                                view.getTop(),
+                                right,
+                                view.getBottom());
+                        view.setTouchDelegate(new TouchDelegate(rect, ibInbox));
                     }
-                    Rect rect = new Rect(
-                            left,
-                            view.getTop(),
-                            right,
-                            view.getBottom());
-                    view.setTouchDelegate(new TouchDelegate(rect, ibInbox));
-                }
-            });
+                });
+
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
             ibInbox.setOnClickListener(this);
@@ -218,7 +220,10 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                 tvName.setTextColor(account.unseen > 0 ? colorUnread : textColorSecondary);
             }
 
-            tvUser.setText(account.user);
+            StringBuilder user = new StringBuilder(account.user);
+            if (account.provider != null && (BuildConfig.DEBUG || debug))
+                user.append(" (").append(account.provider).append(')');
+            tvUser.setText(user);
 
             if ("connected".equals(account.state)) {
                 ivState.setImageResource(R.drawable.twotone_cloud_done_24);
@@ -671,7 +676,12 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                 Log.d("Changed @" + position + " #" + count);
             }
         });
-        diff.dispatchUpdatesTo(this);
+
+        try {
+            diff.dispatchUpdatesTo(this);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     void setCompact(boolean compact) {

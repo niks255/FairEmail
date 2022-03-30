@@ -534,7 +534,7 @@ class Core {
                         for (TupleOperationEx s : similar.keySet())
                             ops.remove(s);
                     } catch (Throwable ex) {
-                        iservice.dump();
+                        iservice.dump(account.name + "/" + folder.name);
                         if (ex instanceof OperationCanceledException)
                             Log.i(folder.name, ex);
                         else
@@ -629,6 +629,8 @@ class Core {
                             // Fetch UID: NO [TEMPFAIL] SELECT completed
                             // Fetch UID: NO Internal error. Try again later... (MARKER:xxx)
                             // Fetch UID: BAD Serious error while processing UID FETCH (NioRecvFail (nn/nn))
+                            // Fetch UID: NO SELECT: libmapper: Internal error: No servers available or value handling error!
+                            // Fetch UID: BAD Serious error while processing UID FETCH (CassdbDatabaseError (nnn/n))
                             // Move: NO Over quota
                             // Move: NO No matching messages
                             // Move: NO [EXPUNGEISSUED] Some of the requested messages no longer exist (n.nnn + n.nnn + n.nnn secs)
@@ -661,6 +663,7 @@ class Core {
                             // Delete: NO mailbox selected READ-ONLY
                             // Delete: NO Mails not exist!
                             // Flags: NO mailbox selected READ-ONLY
+                            // Flags: BAD Server error: 'NoneType' object has no attribute 'message_id'
                             // Keyword: NO STORE completed
                             // Keyword: NO [CANNOT] Keyword length too long (n.nnn + n.nnn secs).
                             // Search: BAD command syntax error
@@ -2177,12 +2180,47 @@ class Core {
         for (EntityFolder folder : folders) {
             if (folder.tbc != null) {
                 try {
+                    // Prefix folder with namespace
+                    try {
+                        Folder[] ns = istore.getPersonalNamespaces();
+                        if (ns != null && ns.length == 1) {
+                            String n = ns[0].getFullName();
+                            // Typically "" or "INBOX"
+                            if (!TextUtils.isEmpty(n)) {
+                                n += ns[0].getSeparator();
+                                if (!folder.name.startsWith(n)) {
+                                    folder.name = n + folder.name;
+                                    db.folder().updateFolder(folder);
+                                }
+                            }
+                        }
+                    } catch (MessagingException ex) {
+                        Log.w(ex);
+                    }
+
                     EntityLog.log(context, folder.name + " creating");
                     Folder ifolder = istore.getFolder(folder.name);
-                    if (!ifolder.exists()) {
-                        ifolder.create(Folder.HOLDS_MESSAGES);
-                        ifolder.setSubscribed(true);
-                    }
+                    if (!ifolder.exists())
+                        try {
+                            ((IMAPFolder) ifolder).doCommand(new IMAPFolder.ProtocolCommand() {
+                                @Override
+                                public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                                    protocol.create(folder.name);
+                                    return null;
+                                }
+                            });
+                            ifolder.setSubscribed(true);
+                        } catch (MessagingException ex) {
+                            // com.sun.mail.iap.CommandFailedException:
+                            //  K5 NO Client tried to access nonexistent namespace.
+                            //  (Mailbox name should probably be prefixed with: INBOX.) (n.nnn + n.nnn secs).
+                            // com.sun.mail.iap.CommandFailedException:
+                            //  AN5 NO [OVERQUOTA] Quota exceeded (number of mailboxes exceeded) (n.nnn + n.nnn + n.nnn secs).
+                            Log.w(ex);
+                            EntityLog.log(context, folder.name + " creation " +
+                                    ex + "\n" + android.util.Log.getStackTraceString(ex));
+                            db.account().setAccountError(account.id, Log.formatThrowable(ex));
+                        }
                     local.put(folder.name, folder);
                 } finally {
                     db.folder().resetFolderTbc(folder.id);
@@ -2655,7 +2693,25 @@ class Core {
 
     private static void onExpungeFolder(Context context, JSONArray jargs, EntityFolder folder, IMAPFolder ifolder) throws MessagingException {
         Log.i(folder.name + " expunge");
-        ifolder.expunge();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean uid_expunge = prefs.getBoolean("uid_expunge", false);
+
+        if (uid_expunge)
+            uid_expunge = MessageHelper.hasCapability(ifolder, "UIDPLUS");
+
+        if (uid_expunge) {
+            DB db = DB.getInstance(context);
+
+            List<Long> uids = db.message().getDeletedUids(folder.id);
+            if (uids == null || uids.size() == 0)
+                return;
+
+            Log.i(ifolder.getName() + " expunging " + TextUtils.join(",", uids));
+            uidExpunge(context, ifolder, uids);
+            Log.i(ifolder.getName() + " expunged " + TextUtils.join(",", uids));
+        } else
+            ifolder.expunge();
     }
 
     private static void onPurgeFolder(Context context, EntityFolder folder) {
@@ -2918,6 +2974,8 @@ class Core {
                         message.bimi_selector = helper.getBimiSelector();
                         message.tls = helper.getTLS();
                         message.dkim = MessageHelper.getAuthentication("dkim", authentication);
+                        if (Boolean.TRUE.equals(message.dkim))
+                            message.dkim = helper.checkDKIMRequirements();
                         message.spf = MessageHelper.getAuthentication("spf", authentication);
                         if (message.spf == null && helper.getSPF())
                             message.spf = true;
@@ -2984,6 +3042,30 @@ class Core {
                         // No reply_domain
                         // No MX check
                         // No blocklist
+
+                        if (message.from != null) {
+                            EntityContact badboy = null;
+                            for (Address from : message.from) {
+                                String email = ((InternetAddress) from).getAddress();
+                                if (TextUtils.isEmpty(email))
+                                    continue;
+
+                                badboy = db.contact().getContact(message.account, EntityContact.TYPE_JUNK, email);
+                                if (badboy != null)
+                                    break;
+                            }
+
+                            if (badboy != null) {
+                                badboy.times_contacted++;
+                                badboy.last_contacted = new Date().getTime();
+                                db.contact().updateContact(badboy);
+
+                                EntityLog.log(context, account.name + " POP blocked=" +
+                                        MessageHelper.formatAddresses(message.from));
+
+                                continue;
+                            }
+                        }
 
                         boolean needsHeaders = EntityRule.needsHeaders(message, rules);
                         List<Header> headers = (needsHeaders ? helper.getAllHeaders() : null);
@@ -3886,6 +3968,8 @@ class Core {
             message.bimi_selector = helper.getBimiSelector();
             message.tls = helper.getTLS();
             message.dkim = MessageHelper.getAuthentication("dkim", authentication);
+            if (Boolean.TRUE.equals(message.dkim))
+                message.dkim = helper.checkDKIMRequirements();
             message.spf = MessageHelper.getAuthentication("spf", authentication);
             if (message.spf == null && helper.getSPF())
                 message.spf = true;
@@ -4379,7 +4463,6 @@ class Core {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
         boolean uid_expunge = prefs.getBoolean("uid_expunge", false);
-        int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNK_SIZE);
 
         if (!perform_expunge)
             return false;
@@ -4407,15 +4490,7 @@ class Core {
                     }
 
                 Log.i(ifolder.getName() + " expunging " + TextUtils.join(",", uids));
-                ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
-                    @Override
-                    public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
-                        // https://datatracker.ietf.org/doc/html/rfc4315#section-2.1
-                        for (List<Long> list : Helper.chunkList(uids, chunk_size))
-                            protocol.uidexpunge(UIDSet.createUIDSets(Helper.toLongArray(list)));
-                        return null;
-                    }
-                });
+                uidExpunge(context, ifolder, uids);
                 Log.i(ifolder.getName() + " expunged " + TextUtils.join(",", uids));
             } else {
                 Log.i(ifolder.getName() + " expunging all");
@@ -4429,6 +4504,21 @@ class Core {
             Log.w(ex);
             return false;
         }
+    }
+
+    private static void uidExpunge(Context context, IMAPFolder ifolder, List<Long> uids) throws MessagingException {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNK_SIZE);
+
+        ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
+            @Override
+            public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                // https://datatracker.ietf.org/doc/html/rfc4315#section-2.1
+                for (List<Long> list : Helper.chunkList(uids, chunk_size))
+                    protocol.uidexpunge(UIDSet.createUIDSets(Helper.toLongArray(list)));
+                return null;
+            }
+        });
     }
 
     private static EntityIdentity matchIdentity(Context context, EntityFolder folder, EntityMessage message) {
@@ -4512,23 +4602,31 @@ class Core {
                 }
 
             if (EntityFolder.INBOX.equals(folder.type))
-                if (message.from != null)
+                if (message.from != null) {
+                    EntityContact badboy = null;
                     for (Address from : message.from) {
                         String email = ((InternetAddress) from).getAddress();
                         if (TextUtils.isEmpty(email))
                             continue;
 
-                        EntityContact badboy = db.contact().getContact(message.account, EntityContact.TYPE_JUNK, email);
-                        if (badboy != null) {
-                            EntityFolder junk = db.folder().getFolderByType(message.account, EntityFolder.JUNK);
-                            if (junk != null) {
-                                EntityOperation.queue(context, message, EntityOperation.MOVE, junk.id);
-                                message.ui_hide = true;
-                                executed = true;
-                            }
+                        badboy = db.contact().getContact(message.account, EntityContact.TYPE_JUNK, email);
+                        if (badboy != null)
                             break;
+                    }
+
+                    if (badboy != null) {
+                        badboy.times_contacted++;
+                        badboy.last_contacted = new Date().getTime();
+                        db.contact().updateContact(badboy);
+
+                        EntityFolder junk = db.folder().getFolderByType(message.account, EntityFolder.JUNK);
+                        if (junk != null) {
+                            EntityOperation.queue(context, message, EntityOperation.MOVE, junk.id);
+                            message.ui_hide = true;
+                            executed = true;
                         }
                     }
+                }
 
             if (executed &&
                     !message.hasKeyword(MessageHelper.FLAG_FILTERED))
@@ -5653,6 +5751,7 @@ class Core {
         private ConnectionHelper.NetworkState networkState;
         private Thread thread = new Thread();
         private Semaphore semaphore = new Semaphore(0);
+        private boolean started = false;
         private boolean running = true;
         private boolean foreground = false;
         private boolean recoverable = true;
@@ -5761,11 +5860,20 @@ class Core {
 
         void start() {
             thread.start();
+            started = true;
         }
 
         void stop() {
             running = false;
             semaphore.release();
+        }
+
+        boolean isAlive() {
+            if (!started)
+                return true;
+            if (!running)
+                return false;
+            return thread.isAlive();
         }
 
         void join() {

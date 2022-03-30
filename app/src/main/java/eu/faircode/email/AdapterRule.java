@@ -24,9 +24,11 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -116,23 +118,48 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
             ivStop.setVisibility(rule.stop ? View.VISIBLE : View.INVISIBLE);
 
             try {
-                List<String> condition = new ArrayList<>();
+                List<Pair<String, String>> conditions = new ArrayList<>();
                 JSONObject jcondition = new JSONObject(rule.condition);
                 if (jcondition.has("sender"))
-                    condition.add(context.getString(R.string.title_rule_sender));
+                    conditions.add(new Pair<>(context.getString(R.string.title_rule_sender),
+                            jcondition.getJSONObject("sender").optString("value")));
                 if (jcondition.has("recipient"))
-                    condition.add(context.getString(R.string.title_rule_recipient));
+                    conditions.add(new Pair<>(context.getString(R.string.title_rule_recipient),
+                            jcondition.getJSONObject("recipient").optString("value")));
                 if (jcondition.has("subject"))
-                    condition.add(context.getString(R.string.title_rule_subject));
+                    conditions.add(new Pair<>(context.getString(R.string.title_rule_subject),
+                            jcondition.getJSONObject("subject").optString("value")));
+                if (jcondition.optBoolean("attachments"))
+                    conditions.add(new Pair<>(context.getString(R.string.title_rule_attachments),
+                            null));
                 if (jcondition.has("header"))
-                    condition.add(context.getString(R.string.title_rule_header));
+                    conditions.add(new Pair<>(context.getString(R.string.title_rule_header),
+                            jcondition.getJSONObject("header").optString("value")));
                 if (jcondition.has("body"))
-                    condition.add(context.getString(R.string.title_rule_body));
+                    conditions.add(new Pair<>(context.getString(R.string.title_rule_body),
+                            jcondition.getJSONObject("body").optString("value")));
                 if (jcondition.has("date"))
-                    condition.add(context.getString(R.string.title_rule_time_abs));
+                    conditions.add(new Pair<>(context.getString(R.string.title_rule_time_abs),
+                            null));
                 if (jcondition.has("schedule"))
-                    condition.add(context.getString(R.string.title_rule_time_rel));
-                tvCondition.setText(TextUtils.join(" & ", condition));
+                    conditions.add(new Pair<>(context.getString(R.string.title_rule_time_rel),
+                            null));
+
+                SpannableStringBuilder ssb = new SpannableStringBuilderEx();
+                for (Pair<String, String> condition : conditions) {
+                    if (ssb.length() > 0)
+                        ssb.append("\n");
+                    ssb.append(condition.first);
+                    if (!TextUtils.isEmpty(condition.second)) {
+                        ssb.append(" \"");
+                        int start = ssb.length();
+                        ssb.append(condition.second);
+                        ssb.setSpan(new StyleSpan(Typeface.ITALIC), start, ssb.length(), 0);
+                        ssb.append("\"");
+                    }
+                }
+
+                tvCondition.setText(ssb);
             } catch (Throwable ex) {
                 tvCondition.setText(ex.getMessage());
             }
@@ -140,63 +167,76 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
             try {
                 JSONObject jaction = new JSONObject(rule.action);
                 int type = jaction.getInt("type");
-                switch (type) {
-                    case EntityRule.TYPE_NOOP:
-                        tvAction.setText(R.string.title_rule_noop);
-                        break;
-                    case EntityRule.TYPE_SEEN:
-                        tvAction.setText(R.string.title_rule_seen);
-                        break;
-                    case EntityRule.TYPE_UNSEEN:
-                        tvAction.setText(R.string.title_rule_unseen);
-                        break;
-                    case EntityRule.TYPE_HIDE:
-                        tvAction.setText(R.string.title_rule_hide);
-                        break;
-                    case EntityRule.TYPE_IGNORE:
-                        tvAction.setText(R.string.title_rule_ignore);
-                        break;
-                    case EntityRule.TYPE_SNOOZE:
-                        tvAction.setText(R.string.title_rule_snooze);
-                        break;
-                    case EntityRule.TYPE_FLAG:
-                        tvAction.setText(R.string.title_rule_flag);
-                        break;
-                    case EntityRule.TYPE_IMPORTANCE:
-                        tvAction.setText(R.string.title_rule_importance);
-                        break;
-                    case EntityRule.TYPE_KEYWORD:
-                        tvAction.setText(R.string.title_rule_keyword);
-                        break;
-                    case EntityRule.TYPE_MOVE:
-                        tvAction.setText(R.string.title_rule_move);
-                        break;
-                    case EntityRule.TYPE_COPY:
-                        tvAction.setText(R.string.title_rule_copy);
-                        break;
-                    case EntityRule.TYPE_ANSWER:
-                        tvAction.setText(R.string.title_rule_answer);
-                        break;
-                    case EntityRule.TYPE_TTS:
-                        tvAction.setText(R.string.title_rule_tts);
-                        break;
-                    case EntityRule.TYPE_AUTOMATION:
-                        tvAction.setText(R.string.title_rule_automation);
-                        break;
-                    case EntityRule.TYPE_DELETE:
-                        tvAction.setText(R.string.title_rule_delete);
-                        break;
-                    case EntityRule.TYPE_SOUND:
-                        tvAction.setText(R.string.title_rule_sound);
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Unknown action type=" + type);
+                if (type == EntityRule.TYPE_SNOOZE) {
+                    int duration = jaction.optInt("duration", 0);
+                    setAction(type, Integer.toString(duration));
+                } else if (type == EntityRule.TYPE_IMPORTANCE) {
+                    int importance = jaction.optInt("value");
+
+                    String value = null;
+                    if (importance == EntityMessage.PRIORITIY_LOW)
+                        value = context.getString(R.string.title_importance_low);
+                    else if (importance == EntityMessage.PRIORITIY_NORMAL)
+                        value = context.getString(R.string.title_importance_normal);
+                    else if (importance == EntityMessage.PRIORITIY_HIGH)
+                        value = context.getString(R.string.title_importance_high);
+
+                    setAction(type, value);
+                } else if (type == EntityRule.TYPE_KEYWORD) {
+                    setAction(type, jaction.optString("keyword"));
+                } else
+                    setAction(type, null);
+
+                if (type == EntityRule.TYPE_ANSWER ||
+                        type == EntityRule.TYPE_MOVE ||
+                        type == EntityRule.TYPE_COPY) {
+                    Bundle args = new Bundle();
+                    args.putLong("id", rule.id);
+                    args.putInt("type", type);
+                    args.putLong("target", jaction.optLong("target", -1));
+                    args.putLong("answer", jaction.optLong("answer", -1));
+
+                    new SimpleTask<String>() {
+                        @Override
+                        protected String onExecute(Context context, Bundle args) throws Throwable {
+                            DB db = DB.getInstance(context);
+                            int type = args.getInt("type");
+                            if (type == EntityRule.TYPE_MOVE || type == EntityRule.TYPE_COPY) {
+                                long id = args.getLong("target");
+                                EntityFolder folder = db.folder().getFolder(id);
+                                return (folder == null ? null : folder.name);
+                            } else if (type == EntityRule.TYPE_ANSWER) {
+                                long id = args.getLong("answer");
+                                EntityAnswer answer = db.answer().getAnswer(id);
+                                return (answer == null ? null : answer.name);
+                            } else
+                                return null;
+                        }
+
+                        @Override
+                        protected void onExecuted(Bundle args, String value) {
+                            int pos = getAdapterPosition();
+                            if (pos == RecyclerView.NO_POSITION)
+                                return;
+
+                            long id = args.getLong("id");
+                            if (id != AdapterRule.this.getItemId(pos))
+                                return;
+
+                            setAction(args.getInt("type"), value);
+                        }
+
+                        @Override
+                        protected void onException(Bundle args, Throwable ex) {
+                            // Ignored
+                        }
+                    }.execute(context, owner, args, "rule:folder");
                 }
             } catch (Throwable ex) {
                 tvAction.setText(ex.getMessage());
             }
 
-            tvLastApplied.setText(rule.last_applied == null ? null : DF.format(rule.last_applied));
+            tvLastApplied.setText(rule.last_applied == null ? "-" : DF.format(rule.last_applied));
             tvApplied.setText(NF.format(rule.applied));
         }
 
@@ -407,6 +447,76 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
 
             return true;
         }
+
+        private void setAction(int type, String value) {
+            int resid;
+            switch (type) {
+                case EntityRule.TYPE_NOOP:
+                    resid = R.string.title_rule_noop;
+                    break;
+                case EntityRule.TYPE_SEEN:
+                    resid = R.string.title_rule_seen;
+                    break;
+                case EntityRule.TYPE_UNSEEN:
+                    resid = R.string.title_rule_unseen;
+                    break;
+                case EntityRule.TYPE_HIDE:
+                    resid = R.string.title_rule_hide;
+                    break;
+                case EntityRule.TYPE_IGNORE:
+                    resid = R.string.title_rule_ignore;
+                    break;
+                case EntityRule.TYPE_SNOOZE:
+                    resid = R.string.title_rule_snooze;
+                    break;
+                case EntityRule.TYPE_FLAG:
+                    resid = R.string.title_rule_flag;
+                    break;
+                case EntityRule.TYPE_IMPORTANCE:
+                    resid = R.string.title_rule_importance;
+                    break;
+                case EntityRule.TYPE_KEYWORD:
+                    resid = R.string.title_rule_keyword;
+                    break;
+                case EntityRule.TYPE_MOVE:
+                    resid = R.string.title_rule_move;
+                    break;
+                case EntityRule.TYPE_COPY:
+                    resid = R.string.title_rule_copy;
+                    break;
+                case EntityRule.TYPE_ANSWER:
+                    resid = R.string.title_rule_answer;
+                    break;
+                case EntityRule.TYPE_TTS:
+                    resid = R.string.title_rule_tts;
+                    break;
+                case EntityRule.TYPE_AUTOMATION:
+                    resid = R.string.title_rule_automation;
+                    break;
+                case EntityRule.TYPE_DELETE:
+                    resid = R.string.title_rule_delete;
+                    break;
+                case EntityRule.TYPE_SOUND:
+                    resid = R.string.title_rule_sound;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown action type=" + type);
+            }
+
+
+            if (TextUtils.isEmpty(value))
+                tvAction.setText(resid);
+            else {
+                SpannableStringBuilder ssb = new SpannableStringBuilderEx();
+                ssb.append(context.getString(resid));
+                ssb.append(" \"");
+                int start = ssb.length();
+                ssb.append(value);
+                ssb.setSpan(new StyleSpan(Typeface.ITALIC), start, ssb.length(), 0);
+                ssb.append("\"");
+                tvAction.setText(ssb);
+            }
+        }
     }
 
     AdapterRule(Fragment parentFragment) {
@@ -486,7 +596,12 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                 Log.d("Changed @" + position + " #" + count);
             }
         });
-        diff.dispatchUpdatesTo(this);
+
+        try {
+            diff.dispatchUpdatesTo(this);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     public void search(String query) {
