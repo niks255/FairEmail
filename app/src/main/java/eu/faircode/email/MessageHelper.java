@@ -30,7 +30,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.net.MailTo;
 import androidx.core.util.PatternsCompat;
 import androidx.documentfile.provider.DocumentFile;
@@ -926,8 +925,10 @@ public class MessageHelper {
 
         // When sending message
         if (identity != null && send) {
-            if (auto_link)
-                HtmlHelper.autoLink(document);
+            if (auto_link) {
+                HtmlHelper.guessSchemes(document);
+                HtmlHelper.autoLink(document, true);
+            }
 
             if (!TextUtils.isEmpty(compose_font)) {
                 List<Node> childs = new ArrayList<>();
@@ -1524,18 +1525,18 @@ public class MessageHelper {
                 }
         }
 
-        if (thread == null && BuildConfig.DEBUG) {
+        if (thread == null && !TextUtils.isEmpty(BuildConfig.DEV_DOMAIN)) {
             String awsses = imessage.getHeader("X-SES-Outgoing", null);
             if (!TextUtils.isEmpty(awsses)) {
                 Address[] froms = getFrom();
                 if (froms != null && froms.length > 0) {
                     String from = ((InternetAddress) froms[0]).getAddress();
-                    if (!TextUtils.isEmpty(from) && from.endsWith("@faircode.eu")) {
+                    if (!TextUtils.isEmpty(from) && from.endsWith("@" + BuildConfig.DEV_DOMAIN)) {
                         Address[] rr = getReply();
                         Address[] tos = (rr != null && rr.length > 0 ? rr : getTo());
                         if (tos != null && tos.length > 0) {
                             String email = ((InternetAddress) tos[0]).getAddress();
-                            if (!TextUtils.isEmpty(email))
+                            if (!TextUtils.isEmpty(email) && !email.endsWith("@" + BuildConfig.DEV_DOMAIN))
                                 thread = "ses:" + email;
                         }
                     }
@@ -1837,12 +1838,19 @@ public class MessageHelper {
     boolean checkDKIMRequirements() throws MessagingException {
         ensureHeaders();
 
+        // https://datatracker.ietf.org/doc/html/rfc6376/
         String[] headers = imessage.getHeader("DKIM-Signature");
         if (headers == null || headers.length < 1)
             return false;
 
         for (String header : headers) {
             Map<String, String> kv = getKeyValues(MimeUtility.unfold(header));
+
+            // Algorithm
+            // https://tools.ietf.org/id/draft-ietf-dcrup-dkim-usage-03.html#rfc.section.4.3
+            String a = kv.get("a");
+            if ("rsa-sha1".equals(a))
+                return false;
 
             // Hashed body length
             Integer l = Helper.parseInt(kv.get("l"));
@@ -1855,15 +1863,6 @@ public class MessageHelper {
             String h = kv.get("h");
             if (h == null) {
                 Log.w("DKIM header fields missing");
-                return false;
-            }
-
-            String[] hs = h
-                    .toLowerCase(Locale.ROOT)
-                    .replaceAll("\\s+", "")
-                    .split(":");
-            if (!Arrays.asList(hs).contains("from")) {
-                Log.i("DKIM headers fields missing 'from' fields=" + h);
                 return false;
             }
         }
@@ -3607,8 +3606,13 @@ public class MessageHelper {
                     attachment.disposition = Part.ATTACHMENT;
                     attachment.id = db.attachment().insertAttachment(attachment);
 
-                    Helper.writeText(attachment.getFile(context), subject);
-                    db.attachment().setDownloaded(attachment.id, (long) subject.length());
+                    try {
+                        Helper.writeText(attachment.getFile(context), subject);
+                        db.attachment().setDownloaded(attachment.id, (long) subject.length());
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                        db.attachment().setError(attachment.id, Log.formatThrowable(ex));
+                    }
                 }
 
                 String body = msg.getBody();
@@ -3632,9 +3636,14 @@ public class MessageHelper {
                         attachment.disposition = Part.ATTACHMENT;
                         attachment.id = db.attachment().insertAttachment(attachment);
 
-                        byte[] data = attr.getData();
-                        Helper.writeText(attachment.getFile(context), new String(data));
-                        db.attachment().setDownloaded(attachment.id, (long) data.length);
+                        try {
+                            byte[] data = attr.getData();
+                            Helper.writeText(attachment.getFile(context), new String(data));
+                            db.attachment().setDownloaded(attachment.id, (long) data.length);
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                            db.attachment().setError(attachment.id, Log.formatThrowable(ex));
+                        }
                     }
                 } else {
                     EntityAttachment attachment = new EntityAttachment();
@@ -3646,30 +3655,35 @@ public class MessageHelper {
                     attachment.disposition = Part.ATTACHMENT;
                     attachment.id = db.attachment().insertAttachment(attachment);
 
-                    Helper.writeText(attachment.getFile(context), body);
-                    db.attachment().setDownloaded(attachment.id, (long) body.length());
+                    try {
+                        Helper.writeText(attachment.getFile(context), body);
+                        db.attachment().setDownloaded(attachment.id, (long) body.length());
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                        db.attachment().setError(attachment.id, Log.formatThrowable(ex));
+                    }
                 }
 
-                for (org.apache.poi.hmef.Attachment at : msg.getAttachments())
+                for (org.apache.poi.hmef.Attachment at : msg.getAttachments()) {
+                    String filename = at.getLongFilename();
+                    if (filename == null)
+                        filename = at.getFilename();
+                    if (filename == null) {
+                        String ext = at.getExtension();
+                        if (ext != null)
+                            filename = "document." + ext;
+                    }
+
+                    EntityAttachment attachment = new EntityAttachment();
+                    attachment.message = local.message;
+                    attachment.sequence = local.sequence;
+                    attachment.subsequence = ++subsequence;
+                    attachment.name = filename;
+                    attachment.type = Helper.guessMimeType(attachment.name);
+                    attachment.disposition = Part.ATTACHMENT;
+                    attachment.id = db.attachment().insertAttachment(attachment);
+
                     try {
-                        String filename = at.getLongFilename();
-                        if (filename == null)
-                            filename = at.getFilename();
-                        if (filename == null) {
-                            String ext = at.getExtension();
-                            if (ext != null)
-                                filename = "document." + ext;
-                        }
-
-                        EntityAttachment attachment = new EntityAttachment();
-                        attachment.message = local.message;
-                        attachment.sequence = local.sequence;
-                        attachment.subsequence = ++subsequence;
-                        attachment.name = filename;
-                        attachment.type = Helper.guessMimeType(attachment.name);
-                        attachment.disposition = Part.ATTACHMENT;
-                        attachment.id = db.attachment().insertAttachment(attachment);
-
                         byte[] data = at.getContents();
                         try (OutputStream os = new FileOutputStream(attachment.getFile(context))) {
                             os.write(data);
@@ -3679,7 +3693,9 @@ public class MessageHelper {
                     } catch (Throwable ex) {
                         // java.lang.IllegalArgumentException: Attachment corrupt - no Data section
                         Log.e(ex);
+                        db.attachment().setError(attachment.id, Log.formatThrowable(ex));
                     }
+                }
 
                 StringBuilder sb = new StringBuilder();
                 for (org.apache.poi.hmef.attribute.TNEFAttribute attr : msg.getMessageAttributes())
@@ -3698,8 +3714,13 @@ public class MessageHelper {
                     attachment.disposition = Part.ATTACHMENT;
                     attachment.id = db.attachment().insertAttachment(attachment);
 
-                    Helper.writeText(attachment.getFile(context), sb.toString());
-                    db.attachment().setDownloaded(attachment.id, (long) sb.length());
+                    try {
+                        Helper.writeText(attachment.getFile(context), sb.toString());
+                        db.attachment().setDownloaded(attachment.id, (long) sb.length());
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                        db.attachment().setError(attachment.id, Log.formatThrowable(ex));
+                    }
                 }
             } catch (Throwable ex) {
                 Log.w(ex);

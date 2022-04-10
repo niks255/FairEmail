@@ -288,7 +288,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(131) Can you change the direction for swiping to previous/next message?](#user-content-faq131)
 * [(132) Why are new message notifications silent?](#user-content-faq132)
 * [(133) Why is ActiveSync not supported?](#user-content-faq133)
-* [(134) Can you add deleting local messages?](#user-content-faq134)
+* [(134) Can you add leave messages on the server?](#user-content-faq134)
 * [(135) Why are trashed messages and drafts shown in conversations?](#user-content-faq135)
 * [(136) How can I delete an account/identity/folder?](#user-content-faq136)
 * [(137) How can I reset 'Don't ask again'?](#user-content-faq137)
@@ -3296,7 +3296,7 @@ Which email provider is best for you depends on your wishes/requirements.
 Please see these websites for lists of privacy oriented email providers with advantages and disadvantages:
 
 * [Restore privacy](https://restoreprivacy.com/secure-email/)
-* [Privacy Guides](https://privacyguides.org/providers/email/)
+* [Privacy Guides](https://www.privacyguides.org/email/)
 * [Privacy Tools](https://www.privacytools.io/providers/email/)
 
 **Important**: Some providers, like ProtonMail, Tutanota and CTemplar, use proprietary email protocols, which make it impossible to use third party email apps.
@@ -3712,26 +3712,29 @@ that non-standard protocols, like Microsoft Exchange Web Services and Microsoft 
 <br />
 
 <a name="faq134"></a>
-**(134) Can you add deleting local messages?**
+**(134) Can you add leave messages on the server?**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq134)
 
 *POP3*
 
-In the account settings (Settings, tap Manual setup, tap Accounts, tap account) you can enable *Leave deleted messages on server*.
+In the account settings (Settings, tap Manual setup, tap Accounts, tap account) you can enable *Leave messages on server* and *Leave deleted messages on server*.
 
 *IMAP*
 
 Since the IMAP protocol is meant to synchronize two ways,
-deleting a message from the device would result in fetching the message again when synchronizing again.
+trashing (=move to trash) and (permanently) deleting messages will be performed on the email server too,
+so that the message list is the same for all connected clients.
+Deleting a messages from the device only won't work because it would be synchronized again later.
 
 However, FairEmail supports hiding messages,
-either via the three-dots menu in the action bar just above the message text
+either via the three-dots menu in the action bar just above the message text (you can configure a button for this via the same menu)
 or by multiple selecting messages in the message list.
 Basically this is the same as "leave on server" of the POP3 protocol
 with the advantage that you can show the messages again when needed.
 
 Note that it is possible to set the swipe left or right action to hide a message.
+There is a button in the behavior settings to quickly configure the swipe left and right actions for all IMAP account.
 
 <br />
 
@@ -3990,7 +3993,7 @@ The responsible for a release, for the F-Droid build this is the F-Droid organiz
 which mostly involves signing a contract with binding terms and conditions.
 
 Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release
-because Android refuses to install the same app with a different signature for security reasons.
+because Android refuses to install ("*App was not installed*") the same app with a different signature for security reasons.
 
 Note that the GitHub version will automatically check for updates.
 When desired, this can be turned off in the miscellaneous settings.
@@ -4403,6 +4406,9 @@ DeepL offers free translation of 500,000 characters (~100,000 words; ~250 pages)
 1. In the message composer tap on the translate button (文A) in the top action bar, select *Configure* and paste the key
 
 This feature requires an internet connection.
+
+Note that you can't use [the regular pro plans](https://www.deepl.com/pro).
+The error *403 forbidden* means that the key and/or plan in invalid.
 
 Note that when reading a message, you can use the horizontal three-dots menu to translate too.
 If you use this frequently, you can configure a button for this.

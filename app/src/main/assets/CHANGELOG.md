@@ -4,6 +4,59 @@
 
 ### [Gobivenator](https://en.wikipedia.org/wiki/Gobivenator)
 
+### 1.1873 - 2022-04-09
+
+* Fix scroll stuttering in some case
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1872 - 2022-04-09
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1871 - 2022-04-09
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1870 - 2022-04-08
+
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated translations
+
+### 1.1869 - 2022-04-07
+
+* Added [DeepL HTML support](https://www.deepl.com/docs-api/handling-html-(beta)/)
+* Fixed inline image handling for external drafts
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1868 - 2022-04-06
+
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://publicsuffix.org/)
+* Updated build tools
+* Updated translations
+
+### 1.1867 - 2022-04-04
+
+* Added highlighting (marking) of text
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1866 - 2022-04-02
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1865 - 2022-04-01
+
+* Added searching in rule actions
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1864 - 2022-03-30
 
 * Fixed starting disabled accounts

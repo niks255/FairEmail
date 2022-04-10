@@ -46,6 +46,7 @@
     <string name="title_notification_failed">\'%1$s\' ବିଫଳ ହେଲା</string>
     <string name="title_notification_sending_failed">%1$sକୁ ପଠାଇବା ବିଫଳ ହେଲା</string>
     <string name="title_factor_minutes">%1$d ମିନିଟ୍</string>
+    <string name="menu_rules" comment="menu_rules&#10;Preferably one word to keep this consistent with the other navigation menu items.&#10;">ନିୟମ</string>
     <string name="menu_setup">ସେଟିଂସମୂହ</string>
     <string name="menu_faq">ସମର୍ଥନ</string>
     <string name="menu_translate">ଅନୁବାଦ କରିବାରେ ସାହାଯ୍ୟ କରନ୍ତୁ</string>
@@ -87,7 +88,6 @@
     <string name="title_setup_pop3">POP3 ଆକାଉଣ୍ଟ୍</string>
     <string name="title_setup_oauth_permission">ଇମେଲ୍ ପ୍ରଦାନକାରୀ କେବଳ Play Store ଏବଂ GitHub ସଂସ୍କରଣ ପାଇଁ OAuth ଅନୁମୋଦନ କରିଛନ୍ତି</string>
     <string name="title_setup_gmail_support">Google ଆକାଉଣ୍ଟଗୁଡ଼ିକର ପ୍ରାଧିକରଣ କେବଳ Play Store ଏବଂ GitHub ସଂସ୍କରଣରେ କାମ କରିବ କାରଣ ଆଣ୍ଡ୍ରଏଡ୍ ଡିଜିଟାଲ୍ ଆପ୍ ସ୍ବାକ୍ଷର ଯାଞ୍ଚ କରେ</string>
-    <string name="title_setup_oauth_update">ବିଦ୍ୟମାନ ଆକାଉଣ୍ଟକୁ ପୁନଃ ପ୍ରାଧିକୃତ କରନ୍ତୁ</string>
     <string name="title_setup_oauth_updated">ଆକାଉଣ୍ଟ୍ ପ୍ରାଧିକରଣ ଅଦ୍ୟତନ କରାଯାଇଥିଲା</string>
     <string name="title_setup_oauth_authorize">ପ୍ରାଧିକୃତ କରନ୍ତୁ</string>
     <string name="title_setup_select_account">ଆକାଉଣ୍ଟ୍ ବାଛନ୍ତୁ</string>
@@ -277,6 +277,7 @@
     <string name="title_advanced_override_width_hint">ଏହା ବାର୍ତ୍ତାଗୁଡ଼ିକୁ ସଂକୀର୍ଣ୍ଣ କରିପାରେ, କିନ୍ତୁ ଅଦ୍ଭୁତ ଦେଖାଯାଏ</string>
     <string name="title_advanced_expandall_hint">ଏକାଧିକ ବାର୍ତ୍ତା ସମ୍ପ୍ରସାରଣ ହୋଇଥିବା ବେଳେ ଉତ୍ତର ବଟନ୍ ଦେଖାଯିବ ନାହିଁ କାରଣ ବଟନ୍ କେଉଁ ବାର୍ତ୍ତା ପାଇଁ ପ୍ରଯୁଜ୍ୟ ତାହା ଅସ୍ପଷ୍ଟ ଅଟେ</string>
     <string name="title_advanced_display_autolock_nav_hint">%1$d ସେକେଣ୍ଡର ଅନୁଗ୍ରହ ସମୟ ରହିବ</string>
+    <string name="title_advanced_move_hint">ଆକାଉଣ୍ଟ୍ ସେଟିଂସରେ ଲକ୍ଷ୍ୟସ୍ଥଳ ଫୋଲ୍ଡର୍ ବିନ୍ୟାସ କରାଯାଇପାରିବ</string>
     <string name="title_advanced_notify_no_grouping">ଏହି ଆଣ୍ଡ୍ରଏଡ୍ ସଂସ୍କରଣ ବିଜ୍ଞପ୍ତି ଗୋଷ୍ଠୀକରଣକୁ ସମର୍ଥନ କରେନାହିଁ</string>
     <string name="title_advanced_english_hint">ଏହା ଆପ୍ କୁ ପୁନଃଆରମ୍ଭ କରିବ</string>
     <string name="title_advanced_edit_name">ନାମ ସମ୍ପାଦନା</string>
@@ -344,7 +345,7 @@
     <string name="title_edit_properties">ଗୁଣଧର୍ମ ସମ୍ପାଦନା</string>
     <string name="title_contact_email">ଇମେଲ୍</string>
     <string name="title_contact_name">ନାମ</string>
-    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">ଗୋଷ୍ଠୀ</string>
+    <string name="title_contact_group">ଗୋଷ୍ଠୀ</string>
     <string name="title_import_contacts">vCards ଆମଦାନୀ କରନ୍ତୁ</string>
     <string name="title_export_contacts">vCards ରପ୍ତାନି କରନ୍ତୁ</string>
     <string name="title_empty_trash_ask">ଆବର୍ଜନା ପାତ୍ରରେ ଥିବା ସମସ୍ତ ବାର୍ତ୍ତା ସବୁଦିନ ପାଇଁ ବିଲୋପ କରିବେ କି?</string>
@@ -356,6 +357,7 @@
     <string name="title_search_folder">ଫୋଲ୍ଡର୍ ସନ୍ଧାନ କରନ୍ତୁ</string>
     <string name="title_edit_account_name">ଆକାଉଣ୍ଟ୍ ନାମ ସମ୍ପାଦନ କରନ୍ତୁ</string>
     <string name="title_hide_folder">ଫୋଲ୍ଡର୍ ଲୁଚାନ୍ତୁ</string>
+    <string name="title_auto_classify_target">ସ୍ୱତଃସ୍ପୃତ ଭାବେ ବର୍ଗୀକୃତ ବାର୍ତ୍ତାଗୁଡ଼ିକ ଏହି ଫୋଲ୍ଡରକୁ ଘୁଞ୍ଚାନ୍ତୁ</string>
     <string name="title_folder_name_missing">ଫୋଲ୍ଡର୍ ନାମ ନିଖୋଜ</string>
     <string name="title_months">ମାସ</string>
     <string name="title_months_all">ସମସ୍ତ</string>
@@ -379,6 +381,7 @@
     <string name="title_pin">ସର୍ଟକଟ୍ ଯୋଡ଼ନ୍ତୁ</string>
     <string name="title_raw_send_message">ବାର୍ତ୍ତା</string>
     <string name="title_raw_send_thread">ବାର୍ତ୍ତାଳାପ</string>
+    <string name="title_auto_confirm">କିଛି ସେକେଣ୍ଡ ପରେ ସ୍ୱତଃସ୍ପୃତ ଭାବେ ନିଶ୍ଚିତ କରିବା</string>
     <string name="title_trash">ଆବର୍ଜନା ପାତ୍ର</string>
     <string name="title_delete">ବିଲୋପ</string>
     <string name="title_delete_all">ସବୁ ବିଲୋପ କରନ୍ତୁ</string>
@@ -433,6 +436,7 @@
     <string name="title_style_font">ଫଣ୍ଟ</string>
     <string name="title_style_font_default">ଡିଫଲ୍ଟ</string>
     <string name="title_style_indentation">ଇଣ୍ଡେଣ୍ଟେସନ୍</string>
+    <string name="title_style_mark">ହାଇଲାଇଟ୍ କର</string>
     <string name="title_style_link">ଲିଙ୍କ୍ ସନ୍ନିବେଶ କର</string>
     <string name="title_add_image">ପ୍ରତିଛବି ଯୋଡ଼ନ୍ତୁ</string>
     <string name="title_add_image_inline">ସନ୍ନିବେଶ କର</string>
@@ -447,6 +451,8 @@
     <string name="title_manage_local_contacts">ସ୍ଥାନୀୟ ସମ୍ପର୍କଗୁଡ଼ିକୁ ପରିଚାଳନା କରନ୍ତୁ</string>
     <string name="title_translate">ଅନୁବାଦ କର</string>
     <string name="title_translate_formal">ଆନୁଷ୍ଠାନିକ ଶବ୍ଦରୂପ ବ୍ୟବହାର କରିବା</string>
+    <string name="title_translate_html">ଫର୍ମାଟିଂ ବଜାୟ ରଖିବା</string>
+    <string name="title_translate_html_hint">ଏହା ଅଧିକ ବର୍ଣ୍ଣ ବ୍ୟବହାର କରିବ</string>
     <string name="title_send_dsn">ସ୍ଥିତି ରିପୋର୍ଟ୍</string>
     <string name="title_send_receipt">ରସିଦ ଅନୁରୋଧ କରିବା</string>
     <string name="title_send_receipt_remark">ଅଧିକାଂଶ ପ୍ରଦାନକାରୀ ଏବଂ ଇମେଲ୍ ଗ୍ରାହକମାନେ ରସିଦ ଅନୁରୋଧକୁ ଅଣଦେଖା କରନ୍ତି</string>
@@ -527,6 +533,7 @@
     <string name="title_rule_template">ପ୍ରତ୍ୟୁତ୍ତର ଟେମ୍ପଲେଟ୍</string>
     <string name="title_rule_answer_subject">ଟେମ୍ପଲେଟ୍ ନା‍ଁକୁ ବିଷୟ ଭାବେ ବ୍ୟବହାର କରିବା</string>
     <string name="title_rule_original_text">ମୂଳ ବାର୍ତ୍ତାର ପାଠ୍ୟ ଅନ୍ତର୍ଭୂକ୍ତ କରିବା</string>
+    <string name="title_rule_resend">ପୁନଃପ୍ରେରଣ</string>
     <string name="title_rule_name_missing">ନିୟମର ନାମ ନିଖୋଜ</string>
     <string name="title_rule_identity_missing">ପରିଚୟ ନିଖୋଜ</string>
     <string name="title_rule_delete_hint">ସବୁଦିନ ପାଇଁ ବିଲୋପ କରିବା ଅପରିବର୍ତ୍ତନୀୟ ଅଟେ, ତେଣୁ ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ନିୟମ ସର୍ତ୍ତ ସବୁ ଠିକ୍ ଅଛି!</string>
@@ -562,6 +569,7 @@
     <string name="title_legend_n">ପରବର୍ତ୍ତୀ</string>
     <string name="title_legend_p">ପୂର୍ବବର୍ତ୍ତୀ</string>
     <string name="title_legend_r">ପ୍ରତ୍ୟୁତ୍ତର</string>
+    <string name="title_hint_message_junk">ଏଇ ବାର୍ତ୍ତାଗୁଡ଼ିକ ଇମେଲ୍ ସର୍ଭରର ସ୍ପାମ୍ ଫୋଲ୍ଡରରେ ଅଛି। ଅବଶ୍ୟ, ଆପ୍ ସ୍ପାମ୍ ବାର୍ତ୍ତାଗୁଡ଼ିକୁ ଆପଣଙ୍କ ପାଖକୁ ପଠାଯିବାରୁ ତ ରୋକିପାରିବ ନାହିଁ।</string>
     <string name="title_remark_owner"><a href="https://ipinfo.io/">ipinfo.io</a>ରୁ ସୂଚନା ଆଦୟ କରାଯିବ</string>
     <string name="title_updated">ସଂସ୍କରଣ %1$s କୁ ଅପଡେଟ୍ ଉପଲବ୍ଧ ଅଛି</string>
     <string name="title_undo">ପୂର୍ବବତ୍</string>
@@ -748,8 +756,8 @@
     </string-array>
     <string-array name="contactTypes">
         <item>ପ୍ରାପ୍ତେସୁ</item>
-        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">ପ୍ରେରକ</item>
-        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">ବ୍ଲକ୍ ହୋଇଅଛି</item>
+        <item>ପ୍ରେରକ</item>
+        <item>ବ୍ଲକ୍ ହୋଇଅଛି</item>
         <item>ବ୍ଲକ୍ ହୋଇନାହିଁ</item>
     </string-array>
 </resources>

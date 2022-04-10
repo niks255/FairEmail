@@ -98,6 +98,7 @@
     <string name="title_notification_redacted">Redigeret: Biometrisk eller PIN-godkendelse aktiveret</string>
     <string name="title_factor_minutes">%1$d minutter</string>
     <string name="menu_answers">Skabeloner</string>
+    <string name="menu_rules" comment="menu_rules&#10;Preferably one word to keep this consistent with the other navigation menu items.&#10;">Regler</string>
     <string name="menu_operations">Operationer</string>
     <string name="menu_contacts">Lokale kontakter</string>
     <string name="menu_setup">Indstillinger</string>
@@ -159,7 +160,7 @@
     <string name="title_setup_gmail_password">Jeg ønsker at godkende en konto med en adgangskode</string>
     <string name="title_setup_office_auth">Fejlen \'GODKENDELSE mislykkedes\' kan skyldes, at IMAP/SMTP er deaktiveret af systemadministratoren</string>
     <string name="title_setup_oauth_rationale">Godkend adgang til din %1$s-konto</string>
-    <string name="title_setup_oauth_update">Godkend eksisterende konto igen</string>
+    <string name="title_setup_oauth_update">Godkend en eksisterende konto igen (ellers opret en ny konto)</string>
     <string name="title_setup_oauth_updated">Kontogodkendelsen blev opdateret</string>
     <string name="title_setup_oauth_authorize">Godkend</string>
     <string name="title_setup_select_account">Vælg konto</string>
@@ -853,7 +854,7 @@
     <string name="title_edit_contact">Redigér Kontakt</string>
     <string name="title_contact_email">E-mail</string>
     <string name="title_contact_name">Navn</string>
-    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">Gruppe</string>
+    <string name="title_contact_group">Gruppe</string>
     <string name="title_import_contacts">Importere vCard</string>
     <string name="title_export_contacts">Eksportere vCard</string>
     <string name="title_create_sub_folder">Opret undermappe</string>
@@ -980,6 +981,7 @@
     <string name="title_eml_remark">Beskedvideresendelse kræver download af de rå (originale) beskeder fra e-mailserveren. Dette kræver Internetforbindelse, og beskederne skal stadig lagres på e-mailserveren.</string>
     <string name="title_eml_option">Dette kan forhindres ved i forbindelsesindstillingerne at aktivere Download altid rå beskedfiler</string>
     <string name="title_eml_downloaded">Rå beskeder downloadet: %1$s</string>
+    <string name="title_auto_confirm">Auto-bekræft efter et par sekunder</string>
     <string name="title_buttons">Vælg knapper</string>
     <string name="title_buttons_hint">De faktisk tilgængelige handlinger afhænger af kontotype og opsætning</string>
     <string name="title_button_search">Søg i beskeder</string>
@@ -1134,6 +1136,7 @@
     <string name="title_style_font_default">Standard</string>
     <string name="title_style_blockquote">Blokcitat</string>
     <string name="title_style_indentation">Indrykning</string>
+    <string name="title_style_mark">Særlige punkter</string>
     <string name="title_style_strikethrough">Gennemstreget</string>
     <string name="title_style_clear">Ryd formatering</string>
     <string name="title_style_link">Indsæt link</string>
@@ -1164,6 +1167,8 @@
     <string name="title_translating">Oversætter&#8230;</string>
     <string name="title_translate_formal">Brug formel form</string>
     <string name="title_translate_small">Benyt lille kildetekstskrifttype</string>
+    <string name="title_translate_html">Bevar formatering</string>
+    <string name="title_translate_html_hint">Dette vil betyde et forøget antal tegn</string>
     <string name="title_translate_usage">Forbrug: %1$s/%2$s (%3$d %%)</string>
     <string name="title_translate_tap">Tryk på teksten, der skal oversættes</string>
     <string name="title_edit_plain_text">Redigér som almindelig tekst</string>
@@ -1374,6 +1379,7 @@
     <string name="title_rule_answer_subject">Brug skabelonnavn som emne</string>
     <string name="title_rule_original_text">Medtag oprindelig beskedtekst</string>
     <string name="title_rule_forward_to">Videresend til</string>
+    <string name="title_rule_resend">Send igen</string>
     <string name="title_rule_cc">Svar til Cc-adresser</string>
     <string name="title_rule_with_attachments">Med vedhæftninger</string>
     <string name="title_rule_answer_remark">For at undgå svarsløjfer, sendes kun ét svar til en given samtale</string>
@@ -1527,6 +1533,7 @@
     <string name="title_hint_support">Har du et spørgsmål eller problem, så benyt venligst supportmenuen for at få hjælp</string>
     <string name="title_hint_message_actions">Stryg til venstre for Papirkurv; Stryg til højre for at arkivere (hvis tilgængeligt); Strygehandlingerne kan opsættes i kontoindstillingerne</string>
     <string name="title_hint_message_selection">Langt tryk på en besked for at tilgå valg af flere beskeder; Hold og stryg op/ned for at vælge flere beskeder</string>
+    <string name="title_hint_message_junk">Disse beskeder befinder i e-mailserverens Spam-mappen. Appen ikke selvfølgelig ikke forhindre, at nogen sender dig spambeskeder.</string>
     <string name="title_hint_important">Vigtigt</string>
     <string name="title_hint_sync">Download af beskeder kan tage noget tid afhængigt af hastigheden hos udbyderen, dataforbindelsen, enheden samt beskedantallet. Under besked-download kan app\'en muligvis reagerer langsommere.</string>
     <string name="title_hint_sync_note">For at begrænse lagerplads- samt batteri- og dataforbrug, downloades ikke alle beskeder som standard. Dette kan ændres med at langt tryk på en mappe i mappelisten, vælg dernæst \'Synkronisér flere\'.</string>
@@ -1849,8 +1856,8 @@
     </string-array>
     <string-array name="contactTypes">
         <item>Modtager</item>
-        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Afsender</item>
-        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Blokeret</item>
+        <item>Afsender</item>
+        <item>Blokeret</item>
         <item>Ublokeret</item>
     </string-array>
 </resources>

@@ -2,6 +2,7 @@
 <providers>
     <provider
         name="Gmail"
+        appPassword="true"
         domain="gmail\\.com"
         id="gmail"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq6"
@@ -1536,5 +1537,30 @@
             host="smtp.purelymail.com"
             port="465"
             starttls="false" />
+    </provider>
+    <provider
+        name="USFamily.net"
+        domain="usfamily\\.net"
+        link="http://help.usfamily.net/usfhelp/vfaq.jsp?faq=284">
+        <imap
+            host="mail.usgo.net"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.usgo.net"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Vodafone Hungary"
+        domain="vodafone\\.hu">
+        <imap
+            host="mail.vodamail.hu"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.vodamail.hu"
+            port="587"
+            starttls="true" />
     </provider>
 </providers>

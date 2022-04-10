@@ -180,7 +180,6 @@
     <string name="title_setup_gmail_password">Я хочу авторизувати обліковий запис за допомогою пароля</string>
     <string name="title_setup_office_auth">Помилка \'Автентифікація не вдалася\' викликана помилкою IMAP/SMTP можливо вимкненою системним адміністратором</string>
     <string name="title_setup_oauth_rationale">Авторизувати доступ до вашого облікового запису %1$s</string>
-    <string name="title_setup_oauth_update">Авторизувати обліковий запис що існує знову</string>
     <string name="title_setup_oauth_updated">Авторизація облікового запису була оновлена</string>
     <string name="title_setup_oauth_authorize">Авторизація</string>
     <string name="title_setup_select_account">Обрати обліковий запис</string>
@@ -1389,6 +1388,7 @@
     <string name="title_rule_answer_subject">Використати назву шаблона як тему</string>
     <string name="title_rule_original_text">Включати текст оригінального повідомлення</string>
     <string name="title_rule_forward_to">Переслати</string>
+    <string name="title_rule_resend">Перевідправити</string>
     <string name="title_rule_cc">Відповісти на адреси CC</string>
     <string name="title_rule_with_attachments">З вкладеннями</string>
     <string name="title_rule_answer_remark">Для будь-якої розмови буде надіслано тільки одна відповідь, щоб уникнути циклів відповіді</string>
@@ -1865,8 +1865,8 @@
     </string-array>
     <string-array name="contactTypes">
         <item>Одержувач</item>
-        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Відправником</item>
-        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Заблоковано</item>
+        <item>Відправником</item>
+        <item>Заблоковано</item>
         <item>Not blocked</item>
     </string-array>
 </resources>

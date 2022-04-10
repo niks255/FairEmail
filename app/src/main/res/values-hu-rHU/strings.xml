@@ -155,7 +155,6 @@
     <string name="title_setup_gmail_password">Szeretnék egy fiókot hitelesíteni jelszóval</string>
     <string name="title_setup_office_auth">Az \'AUTHENTICATE failed\' hibának oka lehet hogy a rendszeradminisztrátor kikapcsolta az IMAP/SMTP-t</string>
     <string name="title_setup_oauth_rationale">Engedélyezze a hozzáférést a %1$s fiókjához</string>
-    <string name="title_setup_oauth_update">Ismételt autorizáció meglévő fiókhoz</string>
     <string name="title_setup_oauth_updated">A fiókhitelesítés frissült</string>
     <string name="title_setup_oauth_authorize">Engedélyezés</string>
     <string name="title_setup_select_account">Válasszon fiókot</string>
@@ -1322,6 +1321,7 @@
     <string name="title_rule_identity">Identitás</string>
     <string name="title_rule_template">Válaszsablon</string>
     <string name="title_rule_forward_to">Továbbítás neki...</string>
+    <string name="title_rule_resend">Újraküldés</string>
     <string name="title_rule_cc">Válasz a másolatok címzetteinek</string>
     <string name="title_rule_with_attachments">Mellékletekkel</string>
     <string name="title_rule_answer_remark">A válaszhurkok elkerülése érdekében minden beszélgetéshez csak egy válasz lesz elküldve</string>
@@ -1795,8 +1795,8 @@
     </string-array>
     <string-array name="contactTypes">
         <item>Címzett</item>
-        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Feladó</item>
-        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Letiltva</item>
+        <item>Feladó</item>
+        <item>Letiltva</item>
         <item>Not blocked</item>
     </string-array>
 </resources>

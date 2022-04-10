@@ -595,7 +595,7 @@ public class FragmentCompose extends FragmentBase {
         etBody.addTextChangedListener(new TextWatcher() {
             private Integer added = null;
             private Integer removed = null;
-            private Integer replaced = null;
+            private Integer translated = null;
 
             @Override
             public void beforeTextChanged(CharSequence text, int start, int count, int after) {
@@ -603,9 +603,20 @@ public class FragmentCompose extends FragmentBase {
                     Log.i("Removed=" + start);
                     removed = start;
                 }
-                if (BuildConfig.DEBUG && count - after == 1) {
-                    replaced = start + after;
-                    Log.i("Replaced=" + replaced);
+
+                if (BuildConfig.DEBUG && count - after == 1 && start + after > 0) {
+                    int replaced = start + after;
+                    Spanned spanned = ((Spanned) text);
+                    StyleHelper.TranslatedSpan[] spans =
+                            spanned.getSpans(replaced, replaced, StyleHelper.TranslatedSpan.class);
+                    for (StyleHelper.TranslatedSpan span : spans) {
+                        int end = spanned.getSpanEnd(span);
+                        Log.i("Replaced=" + replaced);
+                        if (end - 1 == replaced) {
+                            translated = end - 1;
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -745,20 +756,19 @@ public class FragmentCompose extends FragmentBase {
                     removed = null;
                 }
 
-                if (replaced != null && replaced > 0) {
-                    StyleHelper.TranslatedSpan[] nc =
-                            text.getSpans(replaced - 1, replaced, StyleHelper.TranslatedSpan.class);
-                    if (nc != null)
-                        for (StyleHelper.TranslatedSpan p : nc) {
-                            int start = text.getSpanStart(p);
-                            int end = text.getSpanEnd(p);
-                            if (end == replaced) {
-                                text.delete(start, end);
-                                text.removeSpan(p);
-                            }
+                if (translated != null) {
+                    StyleHelper.TranslatedSpan[] spans =
+                            text.getSpans(translated, translated, StyleHelper.TranslatedSpan.class);
+                    for (StyleHelper.TranslatedSpan span : spans) {
+                        int start = text.getSpanStart(span);
+                        int end = text.getSpanEnd(span);
+                        if (end == translated) {
+                            text.delete(start, end);
+                            text.removeSpan(span);
                         }
+                    }
 
-                    replaced = null;
+                    translated = null;
                 }
 
                 if (lp != null)
@@ -2018,12 +2028,14 @@ public class FragmentCompose extends FragmentBase {
 
                                 String html = EntityAnswer.replacePlaceholders(answer.text, to);
 
-                                Spanned spanned = HtmlHelper.fromHtml(html, new Html.ImageGetter() {
+                                Spanned spanned = HtmlHelper.fromHtml(html, new HtmlHelper.ImageGetterEx() {
                                     @Override
-                                    public Drawable getDrawable(String source) {
-                                        if (source != null && source.startsWith("cid:"))
-                                            source = null;
-                                        return ImageHelper.decodeImage(getContext(), working, source, true, zoom, 1.0f, etBody);
+                                    public Drawable getDrawable(Element element) {
+                                        String source = element.attr("src");
+                                        if (source.startsWith("cid:"))
+                                            element.attr("src", "cid:");
+                                        return ImageHelper.decodeImage(getContext(),
+                                                working, element, true, zoom, 1.0f, etBody);
                                     }
                                 }, null, getContext());
 
@@ -2141,12 +2153,14 @@ public class FragmentCompose extends FragmentBase {
                 if (paragraph == null)
                     return;
 
+                etBody.clearComposingText();
+
                 Editable edit = etBody.getText();
-                String text = edit.subSequence(paragraph.first, paragraph.second).toString();
+                CharSequence text = edit.subSequence(paragraph.first, paragraph.second);
 
                 Bundle args = new Bundle();
                 args.putString("target", target);
-                args.putString("text", text);
+                args.putCharSequence("text", text);
 
                 new SimpleTask<DeepL.Translation>() {
                     private Object highlightSpan;
@@ -2169,8 +2183,8 @@ public class FragmentCompose extends FragmentBase {
                     @Override
                     protected DeepL.Translation onExecute(Context context, Bundle args) throws Throwable {
                         String target = args.getString("target");
-                        String text = args.getString("text");
-                        return DeepL.translate(text, target, context);
+                        CharSequence text = args.getCharSequence("text");
+                        return DeepL.translate(text, true, target, context);
                     }
 
                     @Override
@@ -2206,7 +2220,8 @@ public class FragmentCompose extends FragmentBase {
                              at android.text.SpannableStringBuilder.insert(SpannableStringBuilder.java:38)
                          */
                         int len = 2 + translation.translated_text.length();
-                        edit.insert(paragraph.second, "\n\n" + translation.translated_text);
+                        edit.insert(paragraph.second, translation.translated_text);
+                        edit.insert(paragraph.second, "\n\n");
                         StyleHelper.markAsTranslated(edit, paragraph.second, paragraph.second + len);
 
                         etBody.setSelection(paragraph.second + len);
@@ -2735,9 +2750,9 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onAddImage(boolean photo) {
+        PackageManager pm = getContext().getPackageManager();
         if (photo) {
             // https://developer.android.com/training/camera/photobasics
-            PackageManager pm = getContext().getPackageManager();
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(pm) == null) { // action whitelisted
                 Snackbar snackbar = Snackbar.make(view, getString(R.string.title_no_camera), Snackbar.LENGTH_LONG)
@@ -2764,15 +2779,24 @@ public class FragmentCompose extends FragmentBase {
                 }
             }
         } else {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            PackageManager pm = getContext().getPackageManager();
-            if (intent.resolveActivity(pm) == null) // GET_CONTENT whitelisted
-                noStorageAccessFramework();
-            else
-                startActivityForResult(Helper.getChooser(getContext(), intent), REQUEST_IMAGE_FILE);
+            // https://developer.android.com/reference/android/provider/MediaStore#ACTION_PICK_IMAGES
+            // Android 12: cmd device_config put storage_native_boot picker_intent_enabled true
+            Intent picker = new Intent("android.provider.action.PICK_IMAGES");
+            picker.putExtra("android.provider.extra.PICK_IMAGES_MAX", 10);
+            picker.setType("image/*");
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2 &&
+                    picker.resolveActivity(pm) != null)
+                startActivityForResult(picker, REQUEST_IMAGE_FILE);
+            else {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                if (intent.resolveActivity(pm) == null) // GET_CONTENT whitelisted
+                    noStorageAccessFramework();
+                else
+                    startActivityForResult(Helper.getChooser(getContext(), intent), REQUEST_IMAGE_FILE);
+            }
         }
     }
 
@@ -2883,10 +2907,11 @@ public class FragmentCompose extends FragmentBase {
                     Helper.writeText(file, doc.html());
                 }
 
-                return HtmlHelper.fromHtml(html, new Html.ImageGetter() {
+                return HtmlHelper.fromHtml(html, new HtmlHelper.ImageGetterEx() {
                     @Override
-                    public Drawable getDrawable(String source) {
-                        return ImageHelper.decodeImage(context, id, source, true, zoom, 1.0f, etBody);
+                    public Drawable getDrawable(Element element) {
+                        return ImageHelper.decodeImage(context,
+                                id, element, true, zoom, 1.0f, etBody);
                     }
                 }, null, getContext());
             }
@@ -6379,10 +6404,11 @@ public class FragmentCompose extends FragmentBase {
 
                 doc = HtmlHelper.sanitizeCompose(context, doc.html(), true);
 
-                Spanned spannedBody = HtmlHelper.fromDocument(context, doc, new Html.ImageGetter() {
+                Spanned spannedBody = HtmlHelper.fromDocument(context, doc, new HtmlHelper.ImageGetterEx() {
                     @Override
-                    public Drawable getDrawable(String source) {
-                        return ImageHelper.decodeImage(context, id, source, true, zoom, 1.0f, etBody);
+                    public Drawable getDrawable(Element element) {
+                        return ImageHelper.decodeImage(context,
+                                id, element, true, zoom, 1.0f, etBody);
                     }
                 }, null);
 
@@ -6409,10 +6435,11 @@ public class FragmentCompose extends FragmentBase {
                     HtmlHelper.autoLink(dref);
                     Document quote = HtmlHelper.sanitizeView(context, dref, show_images);
                     spannedRef = HtmlHelper.fromDocument(context, quote,
-                            new Html.ImageGetter() {
+                            new HtmlHelper.ImageGetterEx() {
                                 @Override
-                                public Drawable getDrawable(String source) {
-                                    return ImageHelper.decodeImage(context, id, source, show_images, zoom, 1.0f, tvReference);
+                                public Drawable getDrawable(Element element) {
+                                    return ImageHelper.decodeImage(context,
+                                            id, element, show_images, zoom, 1.0f, tvReference);
                                 }
                             },
                             null);
@@ -6613,10 +6640,11 @@ public class FragmentCompose extends FragmentBase {
 
             Spanned signature = null;
             if (identity != null && !TextUtils.isEmpty(identity.signature))
-                signature = HtmlHelper.fromHtml(identity.signature, new Html.ImageGetter() {
+                signature = HtmlHelper.fromHtml(identity.signature, new HtmlHelper.ImageGetterEx() {
                     @Override
-                    public Drawable getDrawable(String source) {
-                        return ImageHelper.decodeImage(getContext(), working, source, true, 0, 1.0f, tvSignature);
+                    public Drawable getDrawable(Element element) {
+                        return ImageHelper.decodeImage(getContext(),
+                                working, element, true, 0, 1.0f, tvSignature);
                     }
                 }, null, getContext());
             tvSignature.setText(signature);
@@ -7605,6 +7633,7 @@ public class FragmentCompose extends FragmentBase {
 
         if (TextUtils.isEmpty(result.type) ||
                 "*/*".equals(result.type) ||
+                "application/*".equals(result.type) ||
                 "application/octet-stream".equals(result.type))
             result.type = Helper.guessMimeType(result.name);
 

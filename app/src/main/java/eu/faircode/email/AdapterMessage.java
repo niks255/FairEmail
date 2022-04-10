@@ -528,8 +528,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         Spanned spanned = (Spanned) tvBody.getText();
                         for (ImageSpan img : spanned.getSpans(0, spanned.length(), ImageSpan.class)) {
                             Drawable d = img.getDrawable();
-                            ImageHelper.AnnotatedSource a = new ImageHelper.AnnotatedSource(img.getSource());
-                            ImageHelper.fitDrawable(d, a, scale, tvBody);
+                            int w = 0;
+                            int h = 0;
+                            if (img instanceof ImageSpanEx) {
+                                w = ((ImageSpanEx) img).getWidth();
+                                h = ((ImageSpanEx) img).getHeight();
+                            }
+                            ImageHelper.fitDrawable(d, w, h, scale, tvBody);
                         }
 
                         // Feedback
@@ -584,8 +589,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             if (!show_images) {
                                 ImageSpan[] image = buffer.getSpans(off, off, ImageSpan.class);
                                 if (image.length > 0 && image[0].getSource() != null) {
-                                    ImageHelper.AnnotatedSource a = new ImageHelper.AnnotatedSource(image[0].getSource());
-                                    Uri uri = Uri.parse(a.getSource());
+                                    Uri uri = Uri.parse(image[0].getSource());
                                     if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())) {
                                         ripple(event);
                                         if (onOpenLink(uri, null, false))
@@ -613,15 +617,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             ImageSpan[] image = buffer.getSpans(off, off, ImageSpan.class);
                             if (image.length > 0) {
-                                ImageHelper.AnnotatedSource a = new ImageHelper.AnnotatedSource(image[0].getSource());
-                                String source = a.getSource();
-                                if (!TextUtils.isEmpty(source)) {
-                                    if (!a.isTracking()) {
-                                        ripple(event);
-                                        onOpenImage(message.id, source);
-                                    }
+                                if (image[0] instanceof ImageSpanEx &&
+                                        ((ImageSpanEx) image[0]).getTracking())
                                     return true;
-                                }
+
+                                ripple(event);
+                                onOpenImage(message.id, image[0].getSource());
+                                return true;
                             }
 
                             DynamicDrawableSpan[] ddss = buffer.getSpans(off, off, DynamicDrawableSpan.class);
@@ -957,8 +959,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibNotifyContact.setOnClickListener(this);
                 ibPinContact.setOnClickListener(this);
                 ibAddContact.setOnClickListener(this);
-                if (BuildConfig.DEBUG)
+
+                if (BuildConfig.DEBUG) {
+                    ibPinContact.setOnLongClickListener(this);
                     ibAddContact.setOnLongClickListener(this);
+                }
 
                 ibCopyHeaders.setOnClickListener(this);
                 ibCloseHeaders.setOnClickListener(this);
@@ -1066,9 +1071,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibSearchContact.setOnClickListener(null);
                 ibNotifyContact.setOnClickListener(null);
                 ibPinContact.setOnClickListener(null);
-                ibAddContact.setOnLongClickListener(null);
-                if (BuildConfig.DEBUG)
-                    ibAddContact.setOnClickListener(null);
+                ibAddContact.setOnClickListener(null);
+
+                if (BuildConfig.DEBUG) {
+                    ibPinContact.setOnLongClickListener(null);
+                    ibAddContact.setOnLongClickListener(null);
+                }
 
                 ibCopyHeaders.setOnClickListener(null);
                 ibCloseHeaders.setOnClickListener(null);
@@ -2780,6 +2788,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (inline || show_images)
                             HtmlHelper.embedInlineImages(context, message.id, document, show_images);
 
+                        HtmlHelper.markText(document);
+
                         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
                         if (disable_tracking)
                             HtmlHelper.removeTrackingPixels(context, document);
@@ -2813,10 +2823,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             HtmlHelper.collapseQuotes(document);
 
                         // Draw images
-                        SpannableStringBuilder ssb = HtmlHelper.fromDocument(context, document, new Html.ImageGetter() {
+                        SpannableStringBuilder ssb = HtmlHelper.fromDocument(context, document, new HtmlHelper.ImageGetterEx() {
                             @Override
-                            public Drawable getDrawable(String source) {
-                                Drawable drawable = ImageHelper.decodeImage(context, message.id, source, show_images, zoom, scale, tvBody);
+                            public Drawable getDrawable(Element element) {
+                                Drawable drawable = ImageHelper.decodeImage(context,
+                                        message.id, element, show_images, zoom, scale, tvBody);
 
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                                     if (drawable instanceof AnimatedImageDrawable)
@@ -4001,7 +4012,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 onMenuColoredStar(message);
                 return true;
             } else if (id == R.id.ibAddContact) {
-                onGpa(message);
+                onInfo(message, true);
+                return true;
+            } else if (id == R.id.ibPinContact) {
+                onInfo(message, false);
                 return true;
             } else if (id == R.id.tvFolder) {
                 onGotoFolder(message);
@@ -4355,7 +4369,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }.execute(context, owner, args, "message:flag");
         }
 
-        private void onGpa(TupleMessageEx message) {
+        private void onInfo(TupleMessageEx message, boolean gpa) {
             Address[] from;
             if (message.reply == null || message.reply.length == 0)
                 from = (isOutgoing(message) ? message.to : message.from);
@@ -4366,9 +4380,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             String email = ((InternetAddress) from[0]).getAddress();
             if (TextUtils.isEmpty(email))
                 return;
-            Uri uri = Uri.parse(BuildConfig.GPA_URI).buildUpon()
-                    .appendQueryParameter("search", email)
-                    .build();
+            Uri uri;
+            if (gpa)
+                uri = Uri.parse(BuildConfig.GPA_URI).buildUpon()
+                        .appendQueryParameter("search", email)
+                        .build();
+            else
+                uri = Uri.parse(BuildConfig.INFO_URI).buildUpon()
+                        .appendQueryParameter("email", email)
+                        .build();
             Helper.view(context, uri, true);
         }
 
@@ -5114,6 +5134,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     HtmlHelper.autoLink(document);
                     HtmlHelper.setViewport(document, overview_mode);
                     HtmlHelper.embedInlineImages(context, message.id, document, true);
+                    HtmlHelper.markText(document);
                     if (disable_tracking)
                         HtmlHelper.removeTrackingPixels(context, document);
 
@@ -5318,20 +5339,27 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionDelete(TupleMessageEx message) {
+            boolean leaveDeleted =
+                    (message.accountProtocol == EntityAccount.TYPE_POP &&
+                            message.accountLeaveDeleted);
+
             Bundle aargs = new Bundle();
-            aargs.putString("question", context.getString(R.string.title_ask_delete));
+            if (leaveDeleted)
+                aargs.putString("question", context.getResources()
+                        .getQuantityString(R.plurals.title_moving_messages, 1, 1));
+            else
+                aargs.putString("question", context.getString(R.string.title_ask_delete));
             aargs.putString("remark", message.getRemark());
             aargs.putLong("id", message.id);
             aargs.putInt("faq", 160);
             aargs.putString("notagain", "delete_asked");
-            aargs.putString("accept", context.getString(R.string.title_ask_delete_accept));
+            if (!leaveDeleted)
+                aargs.putString("accept", context.getString(R.string.title_ask_delete_accept));
             aargs.putBoolean("warning", true);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean delete_asked = prefs.getBoolean("delete_asked", false);
-            if (delete_asked ||
-                    (message.accountProtocol == EntityAccount.TYPE_POP &&
-                            message.accountLeaveDeleted)) {
+            if (delete_asked) {
                 Intent data = new Intent();
                 data.putExtra("args", aargs);
                 parentFragment.onActivityResult(FragmentMessages.REQUEST_MESSAGE_DELETE, RESULT_OK, data);
@@ -5654,13 +5682,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void onOpenImage(long id, @NonNull String source) {
             Log.i("Viewing image source=" + source);
 
-            ImageHelper.AnnotatedSource annotated = new ImageHelper.AnnotatedSource(source);
-            Uri uri = Uri.parse(annotated.getSource());
+            Uri uri = Uri.parse(source);
             String scheme = uri.getScheme();
 
             Bundle args = new Bundle();
             args.putLong("id", id);
-            args.putString("source", annotated.getSource());
+            args.putString("source", source);
             args.putInt("zoom", zoom);
 
             if ("cid".equals(scheme))
@@ -8145,7 +8172,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 protected DeepL.Translation onExecute(Context context, Bundle args) throws Throwable {
                                     String text = args.getString("text");
                                     String target = args.getString("target");
-                                    return DeepL.translate(text, target, context);
+                                    return DeepL.translate(text, false, target, context);
                                 }
 
                                 @Override

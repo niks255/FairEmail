@@ -108,6 +108,7 @@
     <string name="title_notification_redacted">Cenzurat: autentificare biometrică sau PIN activată</string>
     <string name="title_factor_minutes">%1$d minute</string>
     <string name="menu_answers">Șabloane</string>
+    <string name="menu_rules" comment="menu_rules&#10;Preferably one word to keep this consistent with the other navigation menu items.&#10;">Reguli</string>
     <string name="menu_operations">Operaţii</string>
     <string name="menu_contacts">Contacte locale</string>
     <string name="menu_setup">Setări</string>
@@ -169,7 +170,7 @@
     <string name="title_setup_gmail_password">Vreau să autorizez un cont cu o parolă</string>
     <string name="title_setup_office_auth">Eroarea \'Autentificare eșuată\' poate fi cauzată de dezactivarea administrativă a IMAP/SMTP</string>
     <string name="title_setup_oauth_rationale">Autorizare acces la contul %1$s</string>
-    <string name="title_setup_oauth_update">Autorizațî din nou contul existent</string>
+    <string name="title_setup_oauth_update">Autorizați din nou un cont existent (în caz contrar, creați un cont nou)</string>
     <string name="title_setup_oauth_updated">Autorizarea contului a fost actualizată</string>
     <string name="title_setup_oauth_authorize">Autorizare</string>
     <string name="title_setup_select_account">Selectare cont</string>
@@ -861,7 +862,7 @@
     <string name="title_edit_contact">Editare contact</string>
     <string name="title_contact_email">E-mail</string>
     <string name="title_contact_name">Nume</string>
-    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">Grup</string>
+    <string name="title_contact_group">Grup</string>
     <string name="title_import_contacts">Importă vCards</string>
     <string name="title_export_contacts">Exportați vCards</string>
     <string name="title_create_sub_folder">Creează sub-dosar</string>
@@ -988,6 +989,7 @@
     <string name="title_eml_remark">Pentru a redirecționa mesajele, mesajele brute (originale) trebuie să fie descărcate de pe serverul de e-mail. Acest lucru necesită o conexiune la internet, iar mesajele trebuie să fie stocate în continuare pe serverul de e-mail.</string>
     <string name="title_eml_option">Acest lucru poate fi prevenit prin activarea funcției de descărcare permanentă a fișierelor de mesaje brute în setările de conectare</string>
     <string name="title_eml_downloaded">Mesaje brute descărcate: %1$s</string>
+    <string name="title_auto_confirm">Confirmare automată după câteva secunde</string>
     <string name="title_buttons">Selectare butoane</string>
     <string name="title_buttons_hint">Acțiunile reale disponibile depind de tipul contului și de configurație</string>
     <string name="title_button_search">Căutați în mesaje</string>
@@ -1140,6 +1142,7 @@
     <string name="title_style_font_default">Implicit</string>
     <string name="title_style_blockquote">Bloc citat</string>
     <string name="title_style_indentation">Indentare</string>
+    <string name="title_style_mark">Evidențiere</string>
     <string name="title_style_strikethrough">Tăiat</string>
     <string name="title_style_clear">Elimină toate formatările</string>
     <string name="title_style_link">Inserare legătură</string>
@@ -1170,6 +1173,8 @@
     <string name="title_translating">Traducere &#8230;</string>
     <string name="title_translate_formal">Folosiți forma oficială</string>
     <string name="title_translate_small">Utilizați un font mic pentru textul sursă</string>
+    <string name="title_translate_html">Păstrați formatarea</string>
+    <string name="title_translate_html_hint">Acest lucru va consuma mai multe caractere</string>
     <string name="title_translate_usage">Utilizare: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Atingeți ușor textul care urmează să fie tradus</string>
     <string name="title_edit_plain_text">Editați ca text simplu</string>
@@ -1380,6 +1385,7 @@
     <string name="title_rule_answer_subject">Utilizați numele șablonului ca subiect</string>
     <string name="title_rule_original_text">Includeți textul original al mesajului</string>
     <string name="title_rule_forward_to">Redirecţionează către</string>
+    <string name="title_rule_resend">Retrimite</string>
     <string name="title_rule_cc">Răspuns la adresa CC</string>
     <string name="title_rule_with_attachments">Cu atașamente</string>
     <string name="title_rule_answer_remark">Doar un singur răspuns va fi trimis pentru orice conversație, pentru a evita bucle de răspuns</string>
@@ -1533,6 +1539,7 @@
     <string name="title_hint_support">Dacă aveți o întrebare sau o problemă, vă rugăm să utilizați meniul de suport tehnic pentru a obține ajutor</string>
     <string name="title_hint_message_actions">Glisați stânga pentru Gunoi sau dreapta pentru Arhivă (dacă este disponibilă). Acțiunile de glisare se pot configura în setările contului</string>
     <string name="title_hint_message_selection">Atingeți lung un mesaj pentru a începe selecția multiplă. Țineți și glisați sus sau jos pentru a selecta mai multe mesaje</string>
+    <string name="title_hint_message_junk">Aceste mesaje se află în dosarul de spam al serverului de e-mail. Evident, aplicația nu poate împiedica trimiterea de mesaje spam.</string>
     <string name="title_hint_important">Important</string>
     <string name="title_hint_sync">Descărcarea mesajelor poate dura ceva timp, în funcție de viteza furnizorului, conexiunea la internet, de dispozitiv precum și de numărul de mesaje. În timpul descărcării mesajelor aplicația ar putea răspunde mai lent.</string>
     <string name="title_hint_sync_note">În mod implicit, nu vor fi descărcate toate mesajele pentru a limita spațiul de stocare și bateria și consumul de date. Puteți schimba acest lucru apăsând lung un folder din lista de dosare și selectând \'Sincronizează mai mult\'.</string>
@@ -1855,8 +1862,8 @@
     </string-array>
     <string-array name="contactTypes">
         <item>Destinatar</item>
-        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Expeditor</item>
-        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Blocat</item>
+        <item>Expeditor</item>
+        <item>Blocat</item>
         <item>Nu este blocat</item>
     </string-array>
 </resources>

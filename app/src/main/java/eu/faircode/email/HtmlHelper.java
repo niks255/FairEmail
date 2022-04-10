@@ -40,6 +40,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextDirectionHeuristics;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
 import android.text.style.BackgroundColorSpan;
@@ -107,6 +108,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -494,7 +496,7 @@ public class HtmlHelper {
             sheets = parseStyles(parsed.head().select("style"));
 
         Safelist safelist = Safelist.relaxed()
-                .addTags("hr", "abbr", "big", "font", "dfn", "del", "s", "tt")
+                .addTags("hr", "abbr", "big", "font", "dfn", "del", "s", "tt", "mark")
                 .addAttributes(":all", "class")
                 .addAttributes(":all", "style")
                 .addAttributes("span", "dir")
@@ -528,7 +530,7 @@ public class HtmlHelper {
         if (disable_tracking)
             removeTrackingPixels(context, document);
 
-        // Font
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/font
         for (Element font : document.select("font")) {
             // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/font
             String style = font.attr("style");
@@ -841,6 +843,12 @@ public class HtmlHelper {
                             sb.append(key).append(":").append(value).append(";");
                             break;
 
+                        case "font-style":
+                            // https://developer.mozilla.org/en-US/docs/Web/CSS/font-style
+                            if (value.contains("italic") || value.contains("oblique"))
+                                sb.append(key).append(":").append("italic").append(";");
+                            break;
+
                         case "text-decoration":
                         case "text-decoration-line":
                             // https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration
@@ -987,6 +995,16 @@ public class HtmlHelper {
                             element.attr("x-list-style", value);
                             if (!view)
                                 sb.append(key).append(':').append(value).append(';');
+                            break;
+
+                        case "visibility":
+                            // https://developer.mozilla.org/en-US/docs/Web/CSS/visibility
+                            if (element.parent() != null &&
+                                    ("hidden".equals(value) || "collapse".equals(value)))
+                                if (display_hidden)
+                                    sb.append("text-decoration:line-through;");
+                                else
+                                    sb.append(key).append(':').append("hidden").append(';');
                             break;
                     }
                 }
@@ -1352,38 +1370,6 @@ public class HtmlHelper {
                             .attr("x-font-size-abs", Integer.toString(textSizeSmall));
                     img.appendChild(a);
                 }
-
-            // Annotate source with width and height
-            if (!TextUtils.isEmpty(src)) {
-                int width = 0;
-                int height = 0;
-
-                // Relative sizes (%) = use image size
-
-                String awidth = img.attr("width").replace(" ", "");
-                for (int i = 0; i < awidth.length(); i++)
-                    if (Character.isDigit(awidth.charAt(i)))
-                        width = width * 10 + (byte) awidth.charAt(i) - (byte) '0';
-                    else {
-                        width = 0;
-                        break;
-                    }
-
-                String aheight = img.attr("height").replace(" ", "");
-                for (int i = 0; i < aheight.length(); i++)
-                    if (Character.isDigit(aheight.charAt(i)))
-                        height = height * 10 + (byte) aheight.charAt(i) - (byte) '0';
-                    else {
-                        height = 0;
-                        break;
-                    }
-
-                if (width != 0 || height != 0) {
-                    ImageHelper.AnnotatedSource a = new ImageHelper.AnnotatedSource(
-                            src, width, height, !TextUtils.isEmpty(tracking));
-                    img.attr("src", a.getAnnotated());
-                }
-            }
         }
 
         // Selective new lines
@@ -1429,6 +1415,10 @@ public class HtmlHelper {
     }
 
     static void autoLink(Document document) {
+        autoLink(document, false);
+    }
+
+    static void autoLink(Document document, boolean outbound) {
         // https://en.wikipedia.org/wiki/List_of_URI_schemes
         // xmpp:[<user>]@<host>[:<port>]/[<resource>][?<query>]
         // geo:<lat>,<lon>[,<alt>][;u=<uncertainty>]
@@ -1460,7 +1450,7 @@ public class HtmlHelper {
                         Element parent = (Element) node.parentNode();
                         if ("faircode_txn_id".equals(parent.className())) {
                             Element a = document.createElement("a");
-                            a.attr("href", BuildConfig.PAYPAL_URI + text.trim());
+                            a.attr("href", BuildConfig.TX_URI + text.trim());
                             a.text(text);
                             tnode.before(a);
                             tnode.text("");
@@ -1514,8 +1504,19 @@ public class HtmlHelper {
                                 Element a = document.createElement("a");
                                 if (BuildConfig.DEBUG && GPA_PATTERN.matcher(group).matches())
                                     a.attr("href", BuildConfig.GPA_URI + group);
-                                else
-                                    a.attr("href", (email ? "mailto:" : "") + group);
+                                else {
+                                    String url = (email ? "mailto:" : "") + group;
+                                    if (outbound)
+                                        try {
+                                            Uri uri = UriHelper.guessScheme(Uri.parse(url));
+                                            a.attr("href", uri.toString());
+                                        } catch (Throwable ex) {
+                                            Log.e(ex);
+                                            a.attr("href", url);
+                                        }
+                                    else
+                                        a.attr("href", url);
+                                }
                                 a.text(group);
                                 span.appendChild(a);
 
@@ -2659,25 +2660,41 @@ public class HtmlHelper {
             // https://datatracker.ietf.org/doc/html/rfc2821#section-4.4
             final DateFormat DTF = Helper.getDateTimeInstance(context, DateFormat.SHORT, DateFormat.MEDIUM);
 
+            MailDateFormat mdf = new MailDateFormat();
             ByteArrayInputStream bis = new ByteArrayInputStream(headers.getBytes());
-            String[] received = new InternetHeaders(bis).getHeader("Received");
+            InternetHeaders iheaders = new InternetHeaders(bis);
+
+            String dh = iheaders.getHeader("Date", null);
+            Date tx = null;
+            try {
+                if (dh != null)
+                    tx = mdf.parse(dh);
+            } catch (ParseException ex) {
+                Log.w(ex);
+            }
+
+            String[] received = iheaders.getHeader("Received");
             if (received != null && received.length > 0) {
                 for (int i = received.length - 1; i >= 0; i--) {
                     ssb.append('\n');
                     String h = MimeUtility.unfold(received[i]);
 
                     int semi = h.lastIndexOf(';');
-                    Date date = null;
+                    Date rx = null;
                     if (semi > 0) {
-                        MailDateFormat mdf = new MailDateFormat();
-                        date = mdf.parse(h, new ParsePosition(semi + 1));
+                        rx = mdf.parse(h, new ParsePosition(semi + 1));
                         h = h.substring(0, semi);
                     }
 
                     int s = ssb.length();
                     ssb.append('#').append(Integer.toString(received.length - i));
-                    if (date != null)
-                        ssb.append(' ').append(DTF.format(date));
+                    if (rx != null) {
+                        ssb.append(' ').append(DTF.format(rx));
+                        if (tx != null) {
+                            long ms = rx.getTime() - tx.getTime();
+                            ssb.append(" \u0394").append(DateUtils.formatElapsedTime(ms / 1000));
+                        }
+                    }
                     ssb.setSpan(new StyleSpan(Typeface.BOLD), s, ssb.length(), 0);
 
                     if (blocklist && i == received.length - 1) {
@@ -2792,6 +2809,15 @@ public class HtmlHelper {
         return document;
     }
 
+    static Document markText(Document document) {
+        for (Element mark : document.select("mark")) {
+            String style = mark.attr("style");
+            mark.attr("style", mergeStyles(style, "font-style: italic;"));
+        }
+
+        return document;
+    }
+
     static void cleanup(Document d) {
         // https://www.chromestatus.com/feature/5756335865987072
         // Some messages contain 100 thousands of Apple spaces
@@ -2884,7 +2910,7 @@ public class HtmlHelper {
 
     static SpannableStringBuilder fromDocument(
             Context context, @NonNull Document document,
-            @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler) {
+            @Nullable ImageGetterEx imageGetter, @Nullable Html.TagHandler tagHandler) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean debug = prefs.getBoolean("debug", false);
         boolean monospaced_pre = prefs.getBoolean("monospaced_pre", false);
@@ -3123,6 +3149,10 @@ public class HtmlHelper {
                                     } else
                                         setSpan(ssb, StyleHelper.getTypefaceSpan(value, context), start, ssb.length());
                                     break;
+                                case "font-style":
+                                    if ("italic".equals(value))
+                                        setSpan(ssb, new StyleSpan(Typeface.ITALIC), start, ssb.length());
+                                    break;
                                 case "text-decoration":
                                     if ("line-through".equals(value))
                                         setSpan(ssb, new StrikethroughSpan(), start, ssb.length());
@@ -3158,6 +3188,15 @@ public class HtmlHelper {
                                     }
                                     if (alignment != null)
                                         setSpan(ssb, new AlignmentSpan.Standard(alignment), start, ssb.length());
+                                    break;
+                                case "visibility":
+                                    if ("hidden".equals(value)) {
+                                        for (ForegroundColorSpan span : ssb.getSpans(start, ssb.length(), ForegroundColorSpan.class))
+                                            ssb.removeSpan(span);
+                                        for (BackgroundColorSpan span : ssb.getSpans(start, ssb.length(), BackgroundColorSpan.class))
+                                            ssb.removeSpan(span);
+                                        setSpan(ssb, new ForegroundColorSpan(Color.TRANSPARENT), start, ssb.length());
+                                    }
                                     break;
                             }
                         }
@@ -3293,9 +3332,9 @@ public class HtmlHelper {
                                 if (!TextUtils.isEmpty(src)) {
                                     Drawable d = (imageGetter == null
                                             ? context.getDrawable(R.drawable.twotone_broken_image_24)
-                                            : imageGetter.getDrawable(src));
+                                            : imageGetter.getDrawable(element));
                                     ssb.insert(start, "\uFFFC"); // Object replacement character
-                                    setSpan(ssb, new ImageSpan(d, src), start, start + 1);
+                                    setSpan(ssb, new ImageSpanEx(d, element), start, start + 1);
                                 }
                                 break;
                             case "li":
@@ -3353,6 +3392,9 @@ public class HtmlHelper {
                                     setSpan(ssb, new NumberSpan(bulletIndent, bulletGap, colorAccent, textSize, level, index, ltype), start, ssb.length());
                                 }
 
+                                break;
+                            case "mark":
+                                setSpan(ssb, new MarkSpan(), start, ssb.length());
                                 break;
                             case "pre":
                             case "tt":
@@ -3548,7 +3590,7 @@ public class HtmlHelper {
         return fromHtml(html, null, null, context);
     }
 
-    static Spanned fromHtml(@NonNull String html, @Nullable Html.ImageGetter imageGetter, @Nullable Html.TagHandler tagHandler, Context context) {
+    static Spanned fromHtml(@NonNull String html, @Nullable ImageGetterEx imageGetter, @Nullable Html.TagHandler tagHandler, Context context) {
         Document document = JsoupEx.parse(html);
         return fromDocument(context, document, imageGetter, tagHandler);
     }
@@ -3655,5 +3697,9 @@ public class HtmlHelper {
                         spanned.getSpanEnd(spans[i]),
                         spanned.getSpanFlags(spans[i]));
         return reverse;
+    }
+
+    interface ImageGetterEx {
+        Drawable getDrawable(Element element);
     }
 }

@@ -71,7 +71,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 228,
+        version = 229,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -459,43 +459,33 @@ public abstract class DB extends RoomDatabase {
     }
 
     private static void createTriggers(@NonNull SupportSQLiteDatabase db) {
-        createTriggers(db, false);
-    }
-
-    private static void createTriggers(@NonNull SupportSQLiteDatabase db, boolean fail) {
-        try {
-            List<String> image = new ArrayList<>();
-            for (String img : ImageHelper.IMAGE_TYPES)
+        List<String> image = new ArrayList<>();
+        for (String img : ImageHelper.IMAGE_TYPES)
+            image.add("'" + img + "'");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            for (String img : ImageHelper.IMAGE_TYPES8)
                 image.add("'" + img + "'");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                for (String img : ImageHelper.IMAGE_TYPES8)
-                    image.add("'" + img + "'");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                for (String img : ImageHelper.IMAGE_TYPES12)
-                    image.add("'" + img + "'");
-            String images = TextUtils.join(",", image);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            for (String img : ImageHelper.IMAGE_TYPES12)
+                image.add("'" + img + "'");
+        String images = TextUtils.join(",", image);
 
-            db.execSQL("CREATE TRIGGER IF NOT EXISTS attachment_insert" +
-                    " AFTER INSERT ON attachment" +
-                    " BEGIN" +
-                    "  UPDATE message SET attachments = attachments + 1" +
-                    "  WHERE message.id = NEW.message" +
-                    "  AND NEW.encryption IS NULL" +
-                    "  AND NOT ((NEW.disposition = 'inline' OR (NEW.related IS NOT 0 AND NEW.cid IS NOT NULL)) AND NEW.type IN (" + images + "));" +
-                    " END");
-            db.execSQL("CREATE TRIGGER IF NOT EXISTS attachment_delete" +
-                    " AFTER DELETE ON attachment" +
-                    " BEGIN" +
-                    "  UPDATE message SET attachments = attachments - 1" +
-                    "  WHERE message.id = OLD.message" +
-                    "  AND OLD.encryption IS NULL" +
-                    "  AND NOT ((OLD.disposition = 'inline' OR (OLD.related IS NOT 0 AND OLD.cid IS NOT NULL)) AND OLD.type IN (" + images + "));" +
-                    " END");
-        } catch (Throwable ex) {
-            Log.w(ex);
-            if (fail)
-                throw ex;
-        }
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS attachment_insert" +
+                " AFTER INSERT ON attachment" +
+                " BEGIN" +
+                "  UPDATE message SET attachments = attachments + 1" +
+                "  WHERE message.id = NEW.message" +
+                "  AND NEW.encryption IS NULL" +
+                "  AND NOT ((NEW.disposition = 'inline' OR (NEW.related IS NOT 0 AND NEW.cid IS NOT NULL)) AND NEW.type IN (" + images + "));" +
+                " END");
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS attachment_delete" +
+                " AFTER DELETE ON attachment" +
+                " BEGIN" +
+                "  UPDATE message SET attachments = attachments - 1" +
+                "  WHERE message.id = OLD.message" +
+                "  AND OLD.encryption IS NULL" +
+                "  AND NOT ((OLD.disposition = 'inline' OR (OLD.related IS NOT 0 AND OLD.cid IS NOT NULL)) AND OLD.type IN (" + images + "));" +
+                " END");
     }
 
     private static void logMigration(int startVersion, int endVersion) {
@@ -1608,16 +1598,15 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
-                        createTriggers(db);
+                        //createTriggers(db);
                     }
                 })
                 .addMigrations(new Migration(134, 135) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
-                        db.execSQL("CREATE VIEW IF NOT EXISTS `account_view` AS " +
-                                TupleAccountView.query.replace(", category", ""));
-                        db.execSQL("CREATE VIEW IF NOT EXISTS `identity_view` AS " + TupleIdentityView.query);
+                        //db.execSQL("CREATE VIEW IF NOT EXISTS `account_view` AS " + TupleAccountView.query);
+                        //db.execSQL("CREATE VIEW IF NOT EXISTS `identity_view` AS " + TupleIdentityView.query);
                         db.execSQL("CREATE VIEW IF NOT EXISTS `folder_view` AS " + TupleFolderView.query);
                     }
                 })
@@ -1797,9 +1786,9 @@ public abstract class DB extends RoomDatabase {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
-                        db.execSQL("DROP TRIGGER attachment_insert");
-                        db.execSQL("DROP TRIGGER attachment_delete");
-                        createTriggers(db);
+                        db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
+                        db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
+                        //createTriggers(db);
                     }
                 })
                 .addMigrations(new Migration(160, 161) {
@@ -1823,18 +1812,18 @@ public abstract class DB extends RoomDatabase {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
-                        db.execSQL("DROP TRIGGER attachment_insert");
-                        db.execSQL("DROP TRIGGER attachment_delete");
-                        createTriggers(db);
+                        db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
+                        db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
+                        //createTriggers(db);
                     }
                 })
                 .addMigrations(new Migration(163, 164) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
-                        db.execSQL("DROP TRIGGER attachment_insert");
-                        db.execSQL("DROP TRIGGER attachment_delete");
-                        createTriggers(db);
+                        db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
+                        db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
+                        //createTriggers(db);
                     }
                 })
                 .addMigrations(new Migration(164, 165) {
@@ -1884,7 +1873,7 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
-                        createTriggers(db);
+                        //createTriggers(db);
                     }
                 })
                 .addMigrations(new Migration(171, 172) {
@@ -2156,9 +2145,8 @@ public abstract class DB extends RoomDatabase {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
-                        db.execSQL("DROP VIEW IF EXISTS `account_view`");
-                        db.execSQL("CREATE VIEW IF NOT EXISTS `account_view` AS " +
-                                TupleAccountView.query.replace(", category", ""));
+                        //db.execSQL("DROP VIEW IF EXISTS `account_view`");
+                        //db.execSQL("CREATE VIEW IF NOT EXISTS `account_view` AS " + TupleAccountView.query);
                     }
                 }).addMigrations(new Migration(207, 208) {
                     @Override
@@ -2269,7 +2257,7 @@ public abstract class DB extends RoomDatabase {
                         db.execSQL("ALTER TABLE `attachment` ADD COLUMN `related` INTEGER");
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
-                        createTriggers(db);
+                        //createTriggers(db);
                     }
                 }).addMigrations(new Migration(223, 224) {
                     @Override
@@ -2297,13 +2285,20 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
-                        createTriggers(db, true);
+                        createTriggers(db);
                     }
                 }).addMigrations(new Migration(227, 228) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `contact` ADD COLUMN `group` TEXT");
+                    }
+                }).addMigrations(new Migration(228, 229) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("DROP VIEW IF EXISTS `identity_view`");
+                        db.execSQL("CREATE VIEW IF NOT EXISTS `identity_view` AS " + TupleIdentityView.query);
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

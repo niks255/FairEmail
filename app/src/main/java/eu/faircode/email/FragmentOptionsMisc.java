@@ -211,11 +211,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop",
             "keep_alive_poll", "empty_pool", "idle_done", "logarithmic_backoff",
-            "exact_alarms", "infra", "dup_msgids", "test_iab"
+            "exact_alarms", "infra", "dkim_verify", "dup_msgids", "test_iab"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
-            "first", "app_support", "notify_archive", "message_swipe", "message_select", "folder_actions", "folder_sync",
+            "first", "app_support", "notify_archive",
+            "message_swipe", "message_select", "message_junk",
+            "folder_actions", "folder_sync",
             "crash_reports_asked", "review_asked", "review_later", "why",
             "reply_hint", "html_always_images", "open_full_confirmed", "open_amp_confirmed",
             "ask_images", "ask_html",
@@ -228,7 +230,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "cc_bcc", "inline_image_hint", "compose_reference", "send_dialog",
             "setup_reminder", "setup_advanced",
             "signature_images_hint",
-            "gmail_checked"
+            "gmail_checked",
+            "eml_auto_confirm"
     };
 
     @Override
@@ -1015,6 +1018,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swBrowserZoom.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
         swBrowserZoom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1565,7 +1569,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                 editor.remove(option);
 
                         for (String key : prefs.getAll().keySet())
-                            if ((key.startsWith("translated_") && cbGeneral.isChecked()) ||
+                            if ((!BuildConfig.DEBUG &&
+                                    key.startsWith("translated_") && cbGeneral.isChecked()) ||
                                     (key.endsWith(".show_full") && cbFull.isChecked()) ||
                                     (key.endsWith(".show_images") && cbImages.isChecked()) ||
                                     (key.endsWith(".confirm_link") && cbLinks.isChecked())) {

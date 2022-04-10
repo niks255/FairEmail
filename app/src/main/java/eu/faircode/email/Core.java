@@ -2914,9 +2914,11 @@ class Core {
                             continue;
                         }
 
-                        if (msgIdTuple.containsKey(msgid)) {
+                        if (hasUidl ? uidlMsgId.containsKey(uidl) : msgIdTuple.containsKey(msgid)) {
                             _new = false;
-                            Log.i(account.name + " POP having " + msgid + "/" + uidl);
+                            Log.i(account.name + " POP having " +
+                                    msgid + "=" + msgIdTuple.containsKey(msgid) + "/" +
+                                    uidl + "=" + uidlMsgId.containsKey(uidl));
 
                             if (download_eml)
                                 try {
@@ -3816,6 +3818,7 @@ class Core {
         boolean download_plain = prefs.getBoolean("download_plain", false);
         boolean notify_known = prefs.getBoolean("notify_known", false);
         boolean experiments = prefs.getBoolean("experiments", false);
+        boolean dkim_verify = prefs.getBoolean("dkim_verify", false);
         boolean pro = ActivityBilling.isPro(context);
 
         long uid = ifolder.getUID(imessage);
@@ -4742,7 +4745,9 @@ class Core {
             }
 
             for (EntityAttachment attachment : attachments)
-                if (!attachment.available && TextUtils.isEmpty(attachment.error))
+                if (!attachment.available &&
+                        attachment.subsequence == null &&
+                        TextUtils.isEmpty(attachment.error))
                     if (state.getNetworkState().isUnmetered() ||
                             (attachment.size != null && attachment.size < maxSize))
                         try {

@@ -98,6 +98,7 @@
     <string name="title_notification_redacted">Redatto: autenticazione biometrica o PIN abilitata</string>
     <string name="title_factor_minutes">%1$d minuti</string>
     <string name="menu_answers">Modelli</string>
+    <string name="menu_rules" comment="menu_rules&#10;Preferably one word to keep this consistent with the other navigation menu items.&#10;">Regole</string>
     <string name="menu_operations">Operazioni</string>
     <string name="menu_contacts">Contatti locali</string>
     <string name="menu_setup">Impostazioni</string>
@@ -159,7 +160,7 @@
     <string name="title_setup_gmail_password">Voglio autorizzare un profilo con una password</string>
     <string name="title_setup_office_auth">L\'errore \'AUTHENTICATE fallita\' può esser causato dalla disabilitazione di IMAP/SMTP dall\'amministratore di sistema</string>
     <string name="title_setup_oauth_rationale">Autorizza l\'accesso al tuo profilo di %1$s</string>
-    <string name="title_setup_oauth_update">Autorizza di nuovo il profilo esistente</string>
+    <string name="title_setup_oauth_update">Autorizza nuovamente un profilo esistente (altrimenti creane uno nuovo)</string>
     <string name="title_setup_oauth_updated">Autorizzazione del profilo aggiornata</string>
     <string name="title_setup_oauth_authorize">Autorizza</string>
     <string name="title_setup_select_account">Seleziona profilo</string>
@@ -853,7 +854,7 @@
     <string name="title_edit_contact">Modifica contatto</string>
     <string name="title_contact_email">Email</string>
     <string name="title_contact_name">Nome</string>
-    <string name="title_contact_group" comment="title_contact_group&#10;Local contact group name">Gruppo</string>
+    <string name="title_contact_group">Gruppo</string>
     <string name="title_import_contacts">Importa vCard</string>
     <string name="title_export_contacts">Esporta vCard</string>
     <string name="title_create_sub_folder">Crea sottocartella</string>
@@ -981,6 +982,7 @@
     <string name="title_eml_remark">Per inoltrare i messaggi, quelli non elaborati (originali) devono esser scaricati dal server email. Questo richiede una connessione a Internet e i messaggi devono ancora esser memorizzati sul server email.</string>
     <string name="title_eml_option">Questo può esser impedito abilitando sempre il download dei file dei messaggi non elaborati nelle impostazioni di connessione</string>
     <string name="title_eml_downloaded">Messaggi non elaborati scaricati: %1$s</string>
+    <string name="title_auto_confirm">Conferma automaticamente dopo alcuni secondi</string>
     <string name="title_buttons">Seleziona i pulsanti</string>
     <string name="title_buttons_hint">Le azioni effettive disponibili dipendono dal tipo di profilo e dalla configurazione</string>
     <string name="title_button_search">Cerca nei messaggi</string>
@@ -1135,6 +1137,7 @@
     <string name="title_style_font_default">Predefinito</string>
     <string name="title_style_blockquote">Citazione in blocco</string>
     <string name="title_style_indentation">Rientro</string>
+    <string name="title_style_mark">Evidenzia</string>
     <string name="title_style_strikethrough">Barrato</string>
     <string name="title_style_clear">Cancella formattazione</string>
     <string name="title_style_link">Inserisci link</string>
@@ -1165,6 +1168,8 @@
     <string name="title_translating">Traducendo&#8230;</string>
     <string name="title_translate_formal">Usa il modulo formale</string>
     <string name="title_translate_small">Usa caratteri piccoli per il testo sorgente</string>
+    <string name="title_translate_html">Preserva formattazione</string>
+    <string name="title_translate_html_hint">Questo consumerà più caratteri</string>
     <string name="title_translate_usage">Uso: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Tocca il testo da tradurre</string>
     <string name="title_edit_plain_text">Modifica come testo semplice</string>
@@ -1375,6 +1380,7 @@
     <string name="title_rule_answer_subject">Usa il nome del modello come oggetto</string>
     <string name="title_rule_original_text">Includi il testo del messaggio originale</string>
     <string name="title_rule_forward_to">Inoltra a</string>
+    <string name="title_rule_resend">Reinvia</string>
     <string name="title_rule_cc">Rispondi agli indirizzi CC</string>
     <string name="title_rule_with_attachments">Con allegati</string>
     <string name="title_rule_answer_remark">Sarà inviata solo una risposta per ogni conversazione, per evitarne ripetizioni</string>
@@ -1528,6 +1534,7 @@
     <string name="title_hint_support">Se hai una domanda o un problema, sei pregato di usare il menu di supporto per ricevere aiuto</string>
     <string name="title_hint_message_actions">Scorri a sinistra per cestinare; Scorri a destra per archiviare (se disponibile); Le azioni di scorrimento sono configurabili nelle impostazioni del profilo</string>
     <string name="title_hint_message_selection">Tieni premuto un messaggio per iniziare a selezionare più messaggi: Tieni premuto e scorri in su o in giù per selezionare più messaggi</string>
+    <string name="title_hint_message_junk">Questi messaggi sono nella cartella di spam del server email. Ovviamente, l\'app non può prevenire che ti siano inviati i messaggi spam.</string>
     <string name="title_hint_important">Importante</string>
     <string name="title_hint_sync">Scaricare i messaggi può richiedere un po\' di tempo, in base alla velocità del provider, la connessione internet, il dispositivo e il numero di messaggi. Durante il download dei messaggi l\'app potrebbe rispondere più lentamente.</string>
     <string name="title_hint_sync_note">Di default, non tutti i messaggi saranno scaricati per limitare l\'uso dello spazio d\'archiviazione, della batteria e dei dati. Puoi modificare ciò tenendo premuta una cartella nell\'elenco delle cartelle e selezionando \'Sincronizza altri\'.</string>
@@ -1850,8 +1857,8 @@
     </string-array>
     <string-array name="contactTypes">
         <item>Destinatario</item>
-        <item comment="contact types: sender&#10;As in &quot;this is a sender&quot;">Mittente</item>
-        <item comment="contact types: blocked sender&#10;As in &quot;This sender is blocked&quot;">Bloccato</item>
+        <item>Mittente</item>
+        <item>Bloccato</item>
         <item>Non bloccato</item>
     </string-array>
 </resources>

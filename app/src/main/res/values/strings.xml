@@ -131,6 +131,7 @@
     <string name="title_factor_minutes">%1$d minutes</string>
 
     <string name="menu_answers">Templates</string>
+    <string name="menu_rules">Rules</string>
     <string name="menu_operations">Operations</string>
     <string name="menu_contacts">Local contacts</string>
     <string name="menu_setup">Settings</string>
@@ -202,7 +203,7 @@
     <string name="title_setup_gmail_password">I want to authorize an account with a password</string>
     <string name="title_setup_office_auth">The error \'AUTHENTICATE failed\' can be caused by IMAP/SMTP being disabled by the system administrator</string>
     <string name="title_setup_oauth_rationale">Authorize access to your %1$s account</string>
-    <string name="title_setup_oauth_update">Authorize existing account again</string>
+    <string name="title_setup_oauth_update">Authorize an existing account again (otherwise create a new account)</string>
     <string name="title_setup_oauth_updated">Account authorization was updated</string>
     <string name="title_setup_oauth_authorize">Authorize</string>
     <string name="title_setup_select_account">Select account</string>
@@ -1161,6 +1162,7 @@
     <string name="title_eml_remark">To forward messages, the raw (original) messages need to be downloaded from the email server. This requires an internet connection and the messages must still be stored on the email server.</string>
     <string name="title_eml_option">This can be prevented by enabling always downloading raw message files in the connection settings</string>
     <string name="title_eml_downloaded">Raw messages downloaded: %1$s</string>
+    <string name="title_auto_confirm">Automatically confirm after a few seconds</string>
 
     <string name="title_buttons">Select buttons</string>
     <string name="title_buttons_hint">The actual actions available depend on the account type and configuration</string>
@@ -1332,6 +1334,7 @@
     <string name="title_style_font_default">Default</string>
     <string name="title_style_blockquote">Block quote</string>
     <string name="title_style_indentation">Indentation</string>
+    <string name="title_style_mark">Highlight</string>
     <string name="title_style_strikethrough">Strikethrough</string>
     <string name="title_style_code" translatable="false">Code</string>
     <string name="title_style_clear">Clear formatting</string>
@@ -1365,6 +1368,8 @@
     <string name="title_translating">Translating &#8230;</string>
     <string name="title_translate_formal">Use formal form</string>
     <string name="title_translate_small">Use a small font for the source text</string>
+    <string name="title_translate_html">Preserve formatting</string>
+    <string name="title_translate_html_hint">This will consume more characters</string>
     <string name="title_translate_usage">Usage: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Tap the text to be translated</string>
     <string name="title_edit_plain_text">Edit as plain text</string>
@@ -1597,6 +1602,7 @@
     <string name="title_rule_answer_subject">Use template name as subject</string>
     <string name="title_rule_original_text">Include original message text</string>
     <string name="title_rule_forward_to">Forward to</string>
+    <string name="title_rule_resend">Resend</string>
     <string name="title_rule_cc">Reply to CC addresses</string>
     <string name="title_rule_with_attachments">With attachments</string>
     <string name="title_rule_answer_remark">Only one reply will be sent for any conversation, to avoid reply loops</string>
@@ -1763,6 +1769,7 @@
     <string name="title_hint_support">If you have a question or a problem, please use the support menu to get help</string>
     <string name="title_hint_message_actions">Swipe left to trash; Swipe right to archive (if available); The swipe actions can be configured in the account settings</string>
     <string name="title_hint_message_selection">Long press a message to start selecting multiple messages; Hold and swipe up or down to select more messages</string>
+    <string name="title_hint_message_junk">These messages are in the spam folder of the email server. Obviously, the app cannot prevent spam messages from being sent to you.</string>
     <string name="title_hint_important">Important</string>
     <string name="title_hint_sync">Downloading messages can take some time, depending on the speed of the provider, internet connection, the device and on the number of messages. While downloading messages the app might respond slower.</string>
     <string name="title_hint_sync_note">By default, not all messages will be downloaded to limit storage space and battery and data usage. You can change this by long pressing a folder in the folder list and selecting \'Synchronize more\'.</string>
