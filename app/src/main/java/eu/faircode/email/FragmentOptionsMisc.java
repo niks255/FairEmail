@@ -19,7 +19,6 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -178,6 +177,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvMemoryClass;
     private TextView tvMemoryUsage;
     private TextView tvStorageUsage;
+    private TextView tvContactInfo;
     private TextView tvSuffixes;
     private TextView tvAndroidId;
     private TextView tvFingerprint;
@@ -343,6 +343,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvMemoryClass = view.findViewById(R.id.tvMemoryClass);
         tvMemoryUsage = view.findViewById(R.id.tvMemoryUsage);
         tvStorageUsage = view.findViewById(R.id.tvStorageUsage);
+        tvContactInfo = view.findViewById(R.id.tvContactInfo);
         tvSuffixes = view.findViewById(R.id.tvSuffixes);
         tvAndroidId = view.findViewById(R.id.tvAndroidId);
         tvFingerprint = view.findViewById(R.id.tvFingerprint);
@@ -657,11 +658,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit()
-                        .remove("crash_reports_asked")
                         .remove("crash_report_count")
                         .putBoolean("crash_reports", checked)
                         .apply();
                 Log.setCrashReporting(checked);
+                CoalMine.setup(checked);
             }
         });
 
@@ -1481,6 +1482,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setContactInfo();
         setSuffixes();
         setPermissionInfo();
     }
@@ -1824,6 +1826,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvLastCleanup.setText(
                 getString(R.string.title_advanced_last_cleanup,
                         time < 0 ? "-" : DTF.format(time)));
+    }
+
+    private void setContactInfo() {
+        int[] stats = ContactInfo.getStats();
+        tvContactInfo.setText(getString(R.string.title_advanced_contact_info, stats[0], stats[1]));
     }
 
     private void setSuffixes() {

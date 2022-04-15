@@ -20,6 +20,7 @@ package eu.faircode.email;
 */
 
 import android.Manifest;
+import android.animation.Animator;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -805,26 +806,29 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         @Override
         public void onFragmentViewDestroyed(@NonNull FragmentManager fm, @NonNull Fragment f) {
             log(fm, f, "onFragmentViewDestroyed");
-        }
-
-        @Override
-        public void onFragmentDestroyed(@NonNull FragmentManager fm, @NonNull Fragment f) {
-            log(fm, f, "onFragmentDestroyed");
-            if (BuildConfig.PLAY_STORE_RELEASE)
-                return;
             try {
                 for (Field field : f.getClass().getDeclaredFields()) {
                     Class<?> type = field.getType();
                     if (View.class.isAssignableFrom(type) ||
+                            Animator.class.isAssignableFrom(type) ||
                             RecyclerView.Adapter.class.isAssignableFrom(type)) {
                         Log.i("Clearing " + f.getClass().getSimpleName() + ":" + field.getName());
                         field.setAccessible(true);
+
+                        if (Animator.class.isAssignableFrom(type))
+                            ((Animator) field.get(f)).setTarget(null);
+
                         field.set(f, null);
                     }
                 }
             } catch (Throwable ex) {
                 Log.w(ex);
             }
+        }
+
+        @Override
+        public void onFragmentDestroyed(@NonNull FragmentManager fm, @NonNull Fragment f) {
+            log(fm, f, "onFragmentDestroyed");
         }
 
         @Override

@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.RemoteInput;
@@ -58,6 +59,7 @@ public class ServiceUI extends IntentService {
     static final int PI_SNOOZE = 10;
     static final int PI_IGNORED = 11;
     static final int PI_DELETE = 12;
+    static final int PI_DUMP = 13;
 
     public ServiceUI() {
         this(ServiceUI.class.getName());
@@ -173,6 +175,10 @@ public class ServiceUI extends IntentService {
 
                 case "exists":
                     // ignore
+                    break;
+
+                case "dump":
+                    CoalMine.check();
                     break;
 
                 default:

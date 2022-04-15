@@ -4,6 +4,20 @@
 
 ### [Gobivenator](https://en.wikipedia.org/wiki/Gobivenator)
 
+### 1.1875 - 2022-04-13
+
+* Fixed crash on some Android versions
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1874 - 2022-04-13
+
+* Added padding option for tabular view in overflow menu
+* Added selection of contact type (home, work, etc) when inserting contact group
+* Fixed some memory leaks
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1873 - 2022-04-09
 
 * Fix scroll stuttering in some case
