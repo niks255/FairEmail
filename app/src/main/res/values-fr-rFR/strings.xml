@@ -203,6 +203,7 @@
     <string name="title_setup_done">Effectué</string>
     <string name="title_setup_still">Encore à faire</string>
     <string name="title_setup_error">Erreur</string>
+    <string name="title_setup_pop">Utiliser POP3 (non recommandé)</string>
     <string name="title_setup_configuring">Configuration du compte&#8230;</string>
     <string name="title_setup_app_password">Vous devrez éventuellement utiliser un mot de passe d\'application</string>
     <string name="title_setup_extra">Options supplémentaires</string>
@@ -328,6 +329,7 @@
     <string name="title_advanced_answer_action">Un appui long sur le bouton de réponse va :</string>
     <string name="title_advanced_send_pending">Afficher l\'icône discrète d\'envoi différé</string>
     <string name="title_advanced_compose_font">Police de caractères par défaut</string>
+    <string name="title_advanced_auto_identity">Sélectionner automatiquement les identités pour les nouveaux messages</string>
     <string name="title_advanced_prefix_once">Ne préfixer l\'objet qu\'une seule fois lors de la réponse ou du transfert</string>
     <string name="title_advanced_prefix_count">Ajouter le nombre de réponses au préfixe de réponse</string>
     <string name="title_advanced_separate_reply">Insérer une ligne horizontale avant l\'en-tête de réponse/transfert</string>
@@ -340,6 +342,7 @@
     <string name="title_advanced_signature_location">Emplacement de la signature</string>
     <string name="title_advanced_signature_new">Utiliser la signature pour les nouveaux messages</string>
     <string name="title_advanced_signature_reply">Utiliser la signature lors de la réponse</string>
+    <string name="title_advanced_signature_reply_once">Seulement pour la première réponse</string>
     <string name="title_advanced_signature_forward">Utiliser la signature lors du transfert</string>
     <string name="title_advanced_discard_delete">Lors de l’abandon d’un brouillon, le supprimer définitivement</string>
     <string name="title_advanced_reply_move">Lors de la réponse à un message, enregistrer la réponse dans le même dossier</string>
@@ -393,7 +396,6 @@
     <string name="title_advanced_cards_shadow">Utiliser une ombre autour des messages non lus pour le style carte</string>
     <string name="title_advanced_cards_shadow_highlight">Utiliser la couleur de surbrillance au lieu de la couleur d\'accentuation</string>
     <string name="title_advanced_tabular_dividers">Afficher des lignes de séparation lors de l\'utilisation du style tableau</string>
-    <string name="title_advanced_category_header">Regrouper par catégorie de compte</string>
     <string name="title_advanced_date_header">Regrouper par date</string>
     <string name="title_advanced_date_fixed">Afficher l\'en-tête de la date fixe en haut</string>
     <string name="title_advanced_date_bold">Afficher la date en gras</string>
@@ -460,6 +462,7 @@
     <string name="title_advanced_seekbar">Indiquer la position relative de la conversation avec un point</string>
     <string name="title_advanced_actionbar">Afficher la barre d\'action de conversation</string>
     <string name="title_advanced_actionbar_color">Utiliser la couleur du compte comme couleur d\'arrière-plan de la barre d’action de conversation</string>
+    <string name="title_advanced_category_header">Regrouper par catégorie de compte</string>
     <string name="title_advanced_navbar_colorize">Coloriser la barre de navigation d’Android</string>
     <string name="title_advanced_bundled_fonts">Utiliser des polices groupées</string>
     <string name="title_advanced_parse_classes">Utiliser les feuilles de style</string>
@@ -630,8 +633,10 @@
     <string name="title_advanced_check_reply_hint">Ceci vérifiera si le nom de domaine de l\'expéditeur et celui de l\'adresse de réponse sont les mêmes</string>
     <string name="title_advanced_lookup_mx_hint">Ceci vérifiera l’existence d’enregistrements DNS mail exchanger (MX)</string>
     <string name="title_advanced_sync_delay_hint">Ceci ralentira la synchronisation des messages</string>
+    <string name="title_advanced_folder_nav_hint">Ceci retournera toujours à la liste des dossiers du compte associé à partir d\'une liste de messages</string>
     <string name="title_advanced_suggest_names_hint">Si désactivé, seules les adresses e-mail seront utilisées lors de la sélection des contacts</string>
     <string name="title_advanced_suggest_local_hint">En plus des contacts fournis par Android. Les informations des contacts seront stockées pour les messages récemment envoyés ou reçus seulement si ceci est activé.</string>
+    <string name="title_advanced_auto_identity_hint">Ceci sélectionnera la dernière identité utilisée pour le premier destinataire de nouveaux messages</string>
     <string name="title_advanced_send_reminders_hint">Afficher un avertissement quand le texte du message ou l’objet sont vides ou quand une pièce jointe semble avoir été oubliée</string>
     <string name="title_advanced_reply_move_hint">Le serveur de messagerie pourrait tout de même ajouter les messages au dossier des messages envoyés</string>
     <string name="title_advanced_usenet_hint">Insérer \'-- \' entre le texte et la signature</string>
@@ -832,6 +837,7 @@
     <string name="title_synchronize_more_hint2">        Les messages seront récupérés aussi vite que le serveur de messagerie peut les délivrer et stockés aussi rapidement que l\'appareil peut les stocker.
         Le facteur limitant est généralement la vitesse d\'accès à l\'espace de stockage interne de l\'appareil.
     </string>
+    <string name="title_synchronize_more_hint3">Veuillez garder à l\'esprit que le stockage de nombreux messages (dix mille ou plus) sur votre appareil peut provoquer des ralentissements parce que l\'espace de stockage interne n\'est pas infiniment rapide.</string>
     <string name="title_synchronize_enabled">Synchroniser</string>
     <string name="title_synchronize_batch_enable">Activer la synchronisation</string>
     <string name="title_synchronize_batch_disable">Désactiver la synchronisation</string>
@@ -886,6 +892,8 @@
     <string name="title_apply_to_all">Appliquer à tous</string>
     <string name="title_edit_account_name">Modifier le nom du compte</string>
     <string name="title_hide_folder">Masquer le dossier</string>
+    <string name="title_hide_seen_folder">Masquer le dossier si tous les messages sont lus</string>
+    <string name="title_hide_seen_folder_hint">Seulement dans la liste des dossiers affichée sur l\'écran de démarrage</string>
     <string name="title_unified_folder">Afficher dans la boîte de réception unifiée</string>
     <string name="title_navigation_folder">Afficher dans le menu de navigation</string>
     <string name="title_synchronize_folder">Synchroniser (recevoir des messages)</string>
@@ -1033,6 +1041,7 @@
     <string name="title_no_saf">Programme d’accès au stockage non disponible</string>
     <string name="title_no_stream">FairEmail n\'a pas la permission de lire ce fichier directement</string>
     <string name="title_no_stream_help">Ceci peut être résolu en sélectionnant le fichier avec une application plus moderne de gestion de fichiers ou en accordant la permission de lire les fichiers</string>
+    <string name="title_no_permissions">L\'application utilisée pour sélectionner le fichier n\'a pas l\'autorisation de le lire</string>
     <string name="title_no_internet">Aucune connexion Internet ou connexion non appropriée</string>
     <string name="title_no_connection">Connexion à un ou plusieurs comptes&#8230;</string>
     <string name="title_no_folder">Le dossier n\'existe pas</string>
@@ -1381,6 +1390,7 @@
     <string name="title_rule_original_text">Inclure le texte du message original</string>
     <string name="title_rule_forward_to">Transférer à</string>
     <string name="title_rule_resend">Envoyer à nouveau</string>
+    <string name="title_rule_attached">Joindre un fichier de message brut</string>
     <string name="title_rule_cc">Répondre aux adresses Cc</string>
     <string name="title_rule_with_attachments">Avec pièces jointes</string>
     <string name="title_rule_answer_remark">Une seule réponse par conversation sera envoyée afin d\'éviter les réponses en boucle</string>
@@ -1862,10 +1872,10 @@
         <item>Non bloqué</item>
     </string-array>
     <string-array name="contactGroupTypes">
-        <item comment="contactGroupTypes&#10;Any contact type for inserting contact groups">Quelconque</item>
-        <item comment="contactGroupTypes&#10;&quot;Home&quot; contact type for inserting contact groups">Personnel</item>
-        <item comment="contactGroupTypes&#10;&quot;Work&quot; contact type for inserting contact groups&#10;">Travail</item>
-        <item comment="contactGroupTypes&#10;&quot;Other&quot; contact type for inserting contact groups&#10;">Autre</item>
-        <item comment="contactGroupTypes&#10;&quot;Mobile&quot; contact type for inserting contact groups&#10;">Mobile</item>
+        <item>Quelconque</item>
+        <item>Personnel</item>
+        <item>Travail</item>
+        <item>Autre</item>
+        <item>Mobile</item>
     </string-array>
 </resources>

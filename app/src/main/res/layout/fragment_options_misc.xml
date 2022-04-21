@@ -345,18 +345,6 @@
                     app:layout_constraintTop_toBottomOf="@id/ibDeepL" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/swWatchdog"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:checked="true"
-                    android:text="@string/title_advanced_watchdog"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvSdcard"
-                    app:switchPadding="12dp" />
-
-                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swUpdates"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -365,7 +353,7 @@
                     android:text="@string/title_advanced_updates"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swWatchdog"
+                    app:layout_constraintTop_toBottomOf="@id/tvSdcard"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedImageButton
@@ -403,31 +391,6 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/swExperiments"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/title_advanced_experiments"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swChangelog"
-                    app:switchPadding="12dp" />
-
-                <eu.faircode.email.FixedTextView
-                    android:id="@+id/tvExperimentsHint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:drawableEnd="@drawable/twotone_open_in_new_12"
-                    android:drawablePadding="6dp"
-                    android:drawableTint="?android:attr/textColorLink"
-                    android:text="@string/title_advanced_experiments_hint"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="?android:attr/textColorLink"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swExperiments" />
-
-                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swCrashReports"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -435,7 +398,7 @@
                     android:text="@string/title_advanced_crash_reports"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvExperimentsHint"
+                    app:layout_constraintTop_toBottomOf="@id/swChangelog"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView
@@ -522,15 +485,96 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvCleanupHint" />
 
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/grpUpdates"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="swUpdates,swWeekly" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardAdvanced"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="?attr/colorCardBackground"
+            app:cardCornerRadius="6dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardGeneral">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="12dp">
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvCaptionAdvanced"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/title_setup_advanced"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swWatchdog"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:checked="true"
+                    android:drawableStart="@drawable/twotone_check_24"
+                    android:drawablePadding="6dp"
+                    android:text="@string/title_advanced_watchdog"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCaptionAdvanced"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swExperiments"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/twotone_science_24"
+                    android:drawablePadding="6dp"
+                    android:text="@string/title_advanced_experiments"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swWatchdog"
+                    app:switchPadding="12dp" />
+
+                <eu.faircode.email.FixedTextView
+                    android:id="@+id/tvExperimentsHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:drawableEnd="@drawable/twotone_open_in_new_12"
+                    android:drawablePadding="6dp"
+                    android:drawableTint="?android:attr/textColorLink"
+                    android:text="@string/title_advanced_experiments_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorLink"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swExperiments" />
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swProtocol"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/twotone_list_alt_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_advanced_protocol"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvLastCleanup"
+                    app:layout_constraintTop_toBottomOf="@id/tvExperimentsHint"
                     app:switchPadding="12dp" />
 
                 <eu.faircode.email.FixedTextView
@@ -551,6 +595,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/twotone_bug_report_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_advanced_log_info"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -562,6 +608,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/twotone_logo_dev_24"
+                    android:drawablePadding="6dp"
                     android:text="@string/title_advanced_debug"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -582,6 +630,19 @@
                     app:layout_constraintTop_toBottomOf="@id/swDebug" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swCanary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/leakcanary"
+                    android:drawablePadding="6dp"
+                    android:text="@string/title_advanced_canary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDebugHint"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swTest1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -590,7 +651,7 @@
                     android:text="@string/title_advanced_test1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDebugHint"
+                    app:layout_constraintTop_toBottomOf="@id/swCanary"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -642,12 +703,6 @@
                     app:switchPadding="12dp" />
 
                 <androidx.constraintlayout.widget.Group
-                    android:id="@+id/grpUpdates"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:constraint_referenced_ids="swUpdates,swWeekly" />
-
-                <androidx.constraintlayout.widget.Group
                     android:id="@+id/grpTest"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -667,7 +722,7 @@
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardGeneral">
+            app:layout_constraintTop_toBottomOf="@id/cardAdvanced">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

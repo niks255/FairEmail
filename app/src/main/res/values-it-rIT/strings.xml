@@ -203,6 +203,7 @@
     <string name="title_setup_done">Fatto</string>
     <string name="title_setup_still">Ancora da fare</string>
     <string name="title_setup_error">Errore</string>
+    <string name="title_setup_pop">Usa POP3 (sconsigliato)</string>
     <string name="title_setup_configuring">Configurazione del profilo &#8230;</string>
     <string name="title_setup_app_password">Potresti dover usare la password di un\'app</string>
     <string name="title_setup_extra">Extra</string>
@@ -328,6 +329,7 @@
     <string name="title_advanced_answer_action">La pressione prolungata sul pulsante di risposta:</string>
     <string name="title_advanced_send_pending">Mostra icona ritardata di invio non vistosa</string>
     <string name="title_advanced_compose_font">Font predefinito</string>
+    <string name="title_advanced_auto_identity">Seleziona automaticamente le identità per i nuovi messaggi</string>
     <string name="title_advanced_prefix_once">Prefissa l\'oggetto solo una volta alla risposta o l\'inoltro</string>
     <string name="title_advanced_prefix_count">Aggiungi conteggio al prefisso di risposta</string>
     <string name="title_advanced_separate_reply">Inserisci una riga orizzontale prima di un\'intestazione di risposta/inoltro</string>
@@ -340,6 +342,7 @@
     <string name="title_advanced_signature_location">Posizione della firma</string>
     <string name="title_advanced_signature_new">Utilizza la firma per i nuovi messaggi</string>
     <string name="title_advanced_signature_reply">Usa la firma quando rispondi</string>
+    <string name="title_advanced_signature_reply_once">Solo per la prima risposta</string>
     <string name="title_advanced_signature_forward">Usa la firma quando inoltri</string>
     <string name="title_advanced_discard_delete">Scartando la bozza, eliminala permanentemente</string>
     <string name="title_advanced_reply_move">Alla risposta a un messaggio, salvala nella stessa cartella</string>
@@ -393,7 +396,6 @@
     <string name="title_advanced_cards_shadow">Usa l\'ombreggiatura per i messaggi non letti usando lo stile della carta</string>
     <string name="title_advanced_cards_shadow_highlight">Usa il colore d\'evidenziazione invece del colore secondario</string>
     <string name="title_advanced_tabular_dividers">Usa le linee divisorie usando lo stile tabulare</string>
-    <string name="title_advanced_category_header">Raggruppa per categoria del profilo</string>
     <string name="title_advanced_date_header">Raggruppa per data</string>
     <string name="title_advanced_date_fixed">Mostra l\'intestazione a data fissa in cima</string>
     <string name="title_advanced_date_bold">Mostra la data in grassetto</string>
@@ -460,6 +462,7 @@
     <string name="title_advanced_seekbar">Mostra la posizione relativa della conversazione con un puntino</string>
     <string name="title_advanced_actionbar">Mostra barra d\'azione della conversazione</string>
     <string name="title_advanced_actionbar_color">Usa il colore del profilo come colore di sfondo per la barra d\'azione della conversazione</string>
+    <string name="title_advanced_category_header">Raggruppa per categoria del profilo</string>
     <string name="title_advanced_navbar_colorize">Colora la barra di navigazione di Android</string>
     <string name="title_advanced_bundled_fonts">Usa font impacchettati</string>
     <string name="title_advanced_parse_classes">Analizza fogli di stile</string>
@@ -630,8 +633,10 @@
     <string name="title_advanced_check_reply_hint">Questo verificherà se il nome del dominio del mittente e l\'indirizzo di risposta sono uguali</string>
     <string name="title_advanced_lookup_mx_hint">Questo verificherà se esistano i registri DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Questo rallenterà la sincronizzazione dei messaggi</string>
+    <string name="title_advanced_folder_nav_hint">Questo tornerà sempre all\'elenco delle cartelle del profilo correlato da un elenco di messaggi</string>
     <string name="title_advanced_suggest_names_hint">Se disabilitato, solo gli indirizzi email saranno usati selezionando i contatti</string>
     <string name="title_advanced_suggest_local_hint">In aggiunta ai contatti forniti da Android. I dati di contatto saranno memorizzati per i messaggi appena inviati o ricevuti solo quando abilitato.</string>
+    <string name="title_advanced_auto_identity_hint">Questo selezionerà l\'ultima identità usata per il primo destinatario dei nuovi messaggi</string>
     <string name="title_advanced_send_reminders_hint">Mostra un avviso quando il testo o l\'oggetto del messaggio sono vuoti o quando un allegato potrebbe mancare</string>
     <string name="title_advanced_reply_move_hint">Il server email potrebbe ancora aggiungere i messaggi alla cartella dei messaggi inviati</string>
     <string name="title_advanced_usenet_hint">Inserisci \'--\' tra il testo e la firma</string>
@@ -832,6 +837,7 @@
     <string name="title_synchronize_more_hint2">        I messaggi saranno recuperati non appena il server email potrà consegnarlo e memorizzati appena il dispositivo potrà memorizzarli e indicizzarli.
         Il fattore limitante è di solito la velocità dello spazio d\'archiviazione interno del dispositivo.
     </string>
+    <string name="title_synchronize_more_hint3">Sei pregato di tenere a mente che memorizzare molti messaggi (diecimila o più) sul tuo dispositivo, può causare ritardi, poiché lo spazio d\'archiviazione interno non è infinitamente veloce.</string>
     <string name="title_synchronize_enabled">Sincronizza</string>
     <string name="title_synchronize_batch_enable">Abilita la sincronizzazione</string>
     <string name="title_synchronize_batch_disable">Disabilita la sincronizzazione</string>
@@ -886,6 +892,8 @@
     <string name="title_apply_to_all">Applica a tutti</string>
     <string name="title_edit_account_name">Modifica nome del profilo</string>
     <string name="title_hide_folder">Nascondi cartella</string>
+    <string name="title_hide_seen_folder">Nascondi la cartella se tutti i messaggi sono letti</string>
+    <string name="title_hide_seen_folder_hint">Solo nell\'elenco delle cartelle mostrato nella schermata iniziale</string>
     <string name="title_unified_folder">Mostra nella posta in arrivo unificata</string>
     <string name="title_navigation_folder">Mostra nel menu di navigazione</string>
     <string name="title_synchronize_folder">Sincronizza (ricevi messaggi)</string>
@@ -1033,6 +1041,7 @@
     <string name="title_no_saf">Framework di accesso all\'archiviazione non disponibile</string>
     <string name="title_no_stream">FairEmail non è autorizzato a leggere direttamente questo file</string>
     <string name="title_no_stream_help">Ciò è risolvibile selezionando il file con un\'app di gestione dei file più moderna o concedendo l\'autorizzazione a leggere i file</string>
+    <string name="title_no_permissions">L\'app utilizzata per selezionare il file non ha l\'autorizzazione di leggerlo</string>
     <string name="title_no_internet">Nessuna o inadeguata connessione a Internet</string>
     <string name="title_no_connection">Connessione a uno o più profili&#8230;</string>
     <string name="title_no_folder">La cartella non esiste</string>
@@ -1381,6 +1390,7 @@
     <string name="title_rule_original_text">Includi il testo del messaggio originale</string>
     <string name="title_rule_forward_to">Inoltra a</string>
     <string name="title_rule_resend">Reinvia</string>
+    <string name="title_rule_attached">Allega il file del messaggio non elaborato</string>
     <string name="title_rule_cc">Rispondi agli indirizzi CC</string>
     <string name="title_rule_with_attachments">Con allegati</string>
     <string name="title_rule_answer_remark">Sarà inviata solo una risposta per ogni conversazione, per evitarne ripetizioni</string>
@@ -1862,10 +1872,10 @@
         <item>Non bloccato</item>
     </string-array>
     <string-array name="contactGroupTypes">
-        <item comment="contactGroupTypes&#10;Any contact type for inserting contact groups">Qualsiasi</item>
-        <item comment="contactGroupTypes&#10;&quot;Home&quot; contact type for inserting contact groups">Home</item>
-        <item comment="contactGroupTypes&#10;&quot;Work&quot; contact type for inserting contact groups&#10;">Lavoro</item>
-        <item comment="contactGroupTypes&#10;&quot;Other&quot; contact type for inserting contact groups&#10;">Altro</item>
-        <item comment="contactGroupTypes&#10;&quot;Mobile&quot; contact type for inserting contact groups&#10;">Mobile</item>
+        <item>Qualsiasi</item>
+        <item>Home</item>
+        <item>Lavoro</item>
+        <item>Altro</item>
+        <item>Mobile</item>
     </string-array>
 </resources>

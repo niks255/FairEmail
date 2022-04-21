@@ -103,6 +103,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -269,11 +270,12 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 drawerLayout.closeDrawer(drawerContainer);
                 onMenuFAQ();
             }
-        }, new Runnable() {
+        }, new Callable<Boolean>() {
             @Override
-            public void run() {
+            public Boolean call() {
                 drawerLayout.closeDrawer(drawerContainer);
                 onDebugInfo();
+                return true;
             }
         }).setExternal(true));
 
@@ -299,10 +301,11 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 drawerLayout.closeDrawer(drawerContainer);
                 onMenuAbout();
             }
-        }, new Runnable() {
+        }, new Callable<Boolean>() {
             @Override
-            public void run() {
+            public Boolean call() {
                 startActivity(new Intent(ActivitySetup.this, ActivityBilling.class));
+                return true;
             }
         }).setSubtitle(BuildConfig.VERSION_NAME));
 
@@ -609,7 +612,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
                 Log.i("Collecting data");
                 DB db = DB.getInstance(context);
-                NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager nm = Helper.getSystemService(context, NotificationManager.class);
 
                 // Accounts
                 JSONArray jaccounts = new JSONArray();
@@ -898,7 +901,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                 JSONObject jimport = new JSONObject(json);
 
                 DB db = DB.getInstance(context);
-                NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager nm = Helper.getSystemService(context, NotificationManager.class);
                 try {
                     db.beginTransaction();
 
@@ -1077,6 +1080,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                                         JSONObject jcontact = (JSONObject) jcontacts.get(c);
                                         EntityContact contact = EntityContact.fromJSON(jcontact);
                                         contact.account = account.id;
+                                        contact.identity = xIdentity.get(contact.identity);
                                         if (db.contact().getContact(contact.account, contact.type, contact.email) == null)
                                             contact.id = db.contact().insertContact(contact);
                                     }

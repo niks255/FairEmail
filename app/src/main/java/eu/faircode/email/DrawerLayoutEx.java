@@ -30,6 +30,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import java.util.ArrayList;
+
 public class DrawerLayoutEx extends DrawerLayout {
     public DrawerLayoutEx(@NonNull Context context) {
         super(context);
@@ -88,5 +90,21 @@ public class DrawerLayoutEx extends DrawerLayout {
         }
 
         return super.dispatchGenericMotionEvent(ev);
+    }
+
+    @Override
+    public void addFocusables(ArrayList<View> views, int direction, int focusableMode) {
+        if (getDrawerLockMode(Gravity.LEFT) == LOCK_MODE_LOCKED_OPEN) {
+            for (int i = 0; i < getChildCount(); i++) {
+                View child = getChildAt(i);
+                if (child.getVisibility() == View.VISIBLE && isContentView(child))
+                    child.addFocusables(views, direction, focusableMode);
+            }
+        } else
+            super.addFocusables(views, direction, focusableMode);
+    }
+
+    boolean isContentView(View child) {
+        return ((LayoutParams) child.getLayoutParams()).gravity == Gravity.NO_GRAVITY;
     }
 }

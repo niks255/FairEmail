@@ -20,7 +20,6 @@ package eu.faircode.email;
 */
 
 import android.Manifest;
-import android.animation.Animator;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -60,13 +59,11 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.preference.PreferenceManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -323,6 +320,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
         try {
             super.onDestroy();
+            originalContext = null;
         } catch (Throwable ex) {
             Log.w(ex);
             /*
@@ -806,24 +804,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         @Override
         public void onFragmentViewDestroyed(@NonNull FragmentManager fm, @NonNull Fragment f) {
             log(fm, f, "onFragmentViewDestroyed");
-            try {
-                for (Field field : f.getClass().getDeclaredFields()) {
-                    Class<?> type = field.getType();
-                    if (View.class.isAssignableFrom(type) ||
-                            Animator.class.isAssignableFrom(type) ||
-                            RecyclerView.Adapter.class.isAssignableFrom(type)) {
-                        Log.i("Clearing " + f.getClass().getSimpleName() + ":" + field.getName());
-                        field.setAccessible(true);
-
-                        if (Animator.class.isAssignableFrom(type))
-                            ((Animator) field.get(f)).setTarget(null);
-
-                        field.set(f, null);
-                    }
-                }
-            } catch (Throwable ex) {
-                Log.w(ex);
-            }
+            Helper.clearViews(f);
         }
 
         @Override

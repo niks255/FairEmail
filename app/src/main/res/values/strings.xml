@@ -247,6 +247,7 @@
     <string name="title_setup_done">Done</string>
     <string name="title_setup_still">Still to do</string>
     <string name="title_setup_error">Error</string>
+    <string name="title_setup_pop">Use POP3 (not recommended)</string>
     <string name="title_setup_configuring">Configuring account &#8230;</string>
     <string name="title_setup_app_password">You might need to use an app password</string>
     <string name="title_setup_extra">Extra</string>
@@ -394,6 +395,7 @@
     <string name="title_advanced_send_pending">Show non-obtrusive send delayed icon</string>
 
     <string name="title_advanced_compose_font">Default font</string>
+    <string name="title_advanced_auto_identity">Automatically select identities for new messages</string>
     <string name="title_advanced_prefix_once">Prefix subject only once on replying or forwarding</string>
     <string name="title_advanced_prefix_count">Add count to reply prefix</string>
     <string name="title_advanced_separate_reply">Insert a horizontal line before a reply/forward header</string>
@@ -406,6 +408,7 @@
     <string name="title_advanced_signature_location">Signature position</string>
     <string name="title_advanced_signature_new">Use signature for new messages</string>
     <string name="title_advanced_signature_reply">Use signature when replying</string>
+    <string name="title_advanced_signature_reply_once">Only for the first reply</string>
     <string name="title_advanced_signature_forward">Use signature when forwarding</string>
     <string name="title_advanced_discard_delete">On discard draft permanently delete draft</string>
     <string name="title_advanced_reply_move">On replying to a message, save the reply in the same folder</string>
@@ -467,7 +470,6 @@
     <string name="title_advanced_cards_shadow">Use shadow for unread messages when using card style</string>
     <string name="title_advanced_cards_shadow_highlight">Use highlight color instead of accent color</string>
     <string name="title_advanced_tabular_dividers">Use divider lines when using tabular style</string>
-    <string name="title_advanced_category_header">Group by account category</string>
     <string name="title_advanced_date_header">Group by date</string>
     <string name="title_advanced_date_fixed">Show fixed date header at the top</string>
     <string name="title_advanced_date_bold">Show date in bold</string>
@@ -539,6 +541,7 @@
     <string name="title_advanced_seekbar">Show relative conversation position with a dot</string>
     <string name="title_advanced_actionbar">Show conversation action bar</string>
     <string name="title_advanced_actionbar_color">Use account color as background color for conversation action bar</string>
+    <string name="title_advanced_category_header">Group by account category</string>
     <string name="title_advanced_navbar_colorize">Colorize the Android navigation bar</string>
     <string name="title_advanced_bundled_fonts">Use bundled fonts</string>
     <string name="title_advanced_parse_classes">Parse style sheets</string>
@@ -699,6 +702,7 @@
     <string name="title_advanced_changelog">Show changelog after update</string>
     <string name="title_advanced_experiments">Try experimental features</string>
     <string name="title_advanced_crash_reports">Send error reports</string>
+    <string name="title_advanced_canary" translatable="false">Leak canary</string>
     <string name="title_advanced_cleanup_attachments">Delete attachments of old messages</string>
     <string name="title_advanced_cleanup">Cleanup</string>
     <string name="title_advanced_last_cleanup">Last cleanup: %1$s</string>
@@ -780,9 +784,11 @@
     <string name="title_advanced_check_reply_hint">This will check if the domain name of the sender and the reply address are the same</string>
     <string name="title_advanced_lookup_mx_hint">This will check if DNS MX records exist</string>
     <string name="title_advanced_sync_delay_hint">This will slow down synchronizing messages</string>
+    <string name="title_advanced_folder_nav_hint">This will always return to the folder list of the related account from a message list</string>
 
     <string name="title_advanced_suggest_names_hint">If disabled, only email addresses will be used when selecting contacts</string>
     <string name="title_advanced_suggest_local_hint">In addition to contacts provided by Android. Contact data will be stored for newly sent or received messages only when enabled.</string>
+    <string name="title_advanced_auto_identity_hint">This will select the last identity used for the first recipient of new messages</string>
     <string name="title_advanced_send_reminders_hint">Show a warning when the message text or the subject is empty or when an attachment might be missing</string>
     <string name="title_advanced_reply_move_hint">The email server could still add the messages to the sent message folder</string>
     <string name="title_advanced_usenet_hint">Insert \'-- \' between the text and the signature</string>
@@ -1005,6 +1011,7 @@
         Messages will be fetched as fast as the email server can deliver them and stored as fast as the device can store and index them.
         The limiting factor is usually the speed of the device\'s internal storage space.
     </string>
+    <string name="title_synchronize_more_hint3">Please keep in mind that storing a lot of messages (ten thousand or more) on your device can cause delays because the internal storage space is not infinitely fast.</string>
     <string name="title_synchronize_enabled">Synchronize</string>
     <string name="title_synchronize_batch_enable">Enable synchronization</string>
     <string name="title_synchronize_batch_disable">Disable synchronization</string>
@@ -1061,6 +1068,8 @@
     <string name="title_apply_to_all">Apply to all</string>
     <string name="title_edit_account_name">Edit account name</string>
     <string name="title_hide_folder">Hide folder</string>
+    <string name="title_hide_seen_folder">Hide folder if all messages are read</string>
+    <string name="title_hide_seen_folder_hint">Only in the folder list shown on the start screen</string>
     <string name="title_unified_folder">Show in unified inbox</string>
     <string name="title_navigation_folder">Show in navigation menu</string>
     <string name="title_synchronize_folder">Synchronize (receive messages)</string>
@@ -1221,6 +1230,7 @@
     <string name="title_no_saf">Storage access framework not available</string>
     <string name="title_no_stream">FairEmail does not have permission to read this file directly</string>
     <string name="title_no_stream_help">This can be solved by selecting the file with a more modern file manager app or by granting permission to read files</string>
+    <string name="title_no_permissions">The app used to select the file didn\'t grant permission to read it</string>
     <string name="title_no_internet">No or no suitable internet connection</string>
     <string name="title_no_connection">Connecting to one or more accounts &#8230;</string>
     <string name="title_no_folder">Folder does not exist</string>
@@ -1604,6 +1614,7 @@
     <string name="title_rule_original_text">Include original message text</string>
     <string name="title_rule_forward_to">Forward to</string>
     <string name="title_rule_resend">Resend</string>
+    <string name="title_rule_attached">Attach raw message file</string>
     <string name="title_rule_cc">Reply to CC addresses</string>
     <string name="title_rule_with_attachments">With attachments</string>
     <string name="title_rule_answer_remark">Only one reply will be sent for any conversation, to avoid reply loops</string>
@@ -2318,7 +2329,6 @@
         <item>Other</item>
         <item>Mobile</item>
     </string-array>
-
 
     <string name="fingerprint" translatable="false">17BA15C1AF55D925F98B99CEA4375D4CDF4C174B</string>
     <string name="fingerprint_fdroid" translatable="false">77CD40058858DC3A38523E01C227A39AA019F88B</string>

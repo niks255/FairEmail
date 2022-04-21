@@ -54,7 +54,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.pm.ShortcutInfoCompat;
-import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
@@ -227,11 +226,13 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
         private void bindTo(final TupleFolderEx folder) {
             boolean disabled = isDisabled(folder);
+            boolean hide_seen = (account < 0 && !primary &&
+                    folder.hide_seen && folder.unseen + folder.childs_unseen == 0);
 
             int p = (show_compact && all.size() < DENSE_ITEMS_THRESHOLD ? dp3 : 0);
             view.setPadding(p, p, p, p);
             view.setActivated(folder.tbc != null || folder.rename != null || folder.tbd != null);
-            view.setAlpha(folder.hide || disabled ? Helper.LOW_LIGHT : 1.0f);
+            view.setAlpha(folder.hide || hide_seen || disabled ? Helper.LOW_LIGHT : 1.0f);
 
             if (listener == null && selectedModel != null)
                 itemView.setBackgroundColor(
@@ -602,7 +603,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                 if (folder.account != null && folder.accountProtocol == EntityAccount.TYPE_IMAP) {
                     if (folder.notify && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         String channelId = EntityFolder.getNotificationChannelId(folder.id);
-                        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                        NotificationManager nm = Helper.getSystemService(context, NotificationManager.class);
                         NotificationChannel channel = nm.getNotificationChannel(channelId);
                         if (channel == null)
                             popupMenu.getMenu().add(Menu.NONE, R.string.title_create_channel, order++, R.string.title_create_channel);
@@ -1142,7 +1143,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
                 private void onActionPinFolder() {
                     ShortcutInfoCompat.Builder builder = Shortcuts.getShortcut(context, folder);
-                    ShortcutManagerCompat.requestPinShortcut(context, builder.build(), null);
+                    Shortcuts.requestPinShortcut(context, builder.build());
                 }
 
                 private void onActionDeleteFolder() {
@@ -1263,17 +1264,23 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
 
         List<TupleFolderEx> hierarchical;
         if (account < 0 && !primary) {
-            if (folders.size() > 0)
-                Collections.sort(folders, folders.get(0).getComparator(context));
-            hierarchical = folders;
+            List<TupleFolderEx> filtered = new ArrayList<>();
+            for (TupleFolderEx folder : folders)
+                if (show_hidden || !folder.hide_seen || folder.unseen + folder.childs_unseen > 0)
+                    filtered.add(folder);
+
+            if (filtered.size() > 0)
+                Collections.sort(filtered, filtered.get(0).getComparator(context));
 
             if (sort_unread_atop)
-                Collections.sort(hierarchical, new Comparator<TupleFolderEx>() {
+                Collections.sort(filtered, new Comparator<TupleFolderEx>() {
                     @Override
                     public int compare(TupleFolderEx f1, TupleFolderEx f2) {
                         return -Boolean.compare(f1.unseen > 0, f2.unseen > 0);
                     }
                 });
+
+            hierarchical = filtered;
         } else {
             List<TupleFolderEx> parents = new ArrayList<>();
             Map<Long, TupleFolderEx> idFolder = new HashMap<>();

@@ -105,6 +105,7 @@ import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -285,6 +286,7 @@ public class FragmentCompose extends FragmentBase {
 
     private long working = -1;
     private State state = State.NONE;
+    private boolean identity_selectable = false;
     private boolean show_images = false;
     private Integer last_plain_only = null;
     private List<EntityAttachment> last_attachments = null;
@@ -798,8 +800,7 @@ public class FragmentCompose extends FragmentBase {
                 if (identity == null || TextUtils.isEmpty(identity.signature))
                     return;
 
-                ClipboardManager clipboard =
-                        (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager clipboard = Helper.getSystemService(v.getContext(), ClipboardManager.class);
                 if (clipboard == null)
                     return;
 
@@ -1220,6 +1221,33 @@ public class FragmentCompose extends FragmentBase {
         etCc.setAdapter(cadapter);
         etBcc.setAdapter(cadapter);
 
+        etTo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Cursor cursor = (Cursor) adapterView.getAdapter().getItem(position);
+                int colEmail = cursor.getColumnIndex("email");
+                selectIdentityForEmail(colEmail < 0 ? null : cursor.getString(colEmail));
+            }
+        });
+
+        etTo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
+                // Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable text) {
+                if (TextUtils.isEmpty(text.toString().trim()))
+                    identity_selectable = true;
+            }
+        });
+
         grpAddresses.setVisibility(cc_bcc ? View.VISIBLE : View.GONE);
 
         ibRemoveAttachments.setVisibility(View.GONE);
@@ -1247,6 +1275,69 @@ public class FragmentCompose extends FragmentBase {
         tvNoInternetAttachments.setVisibility(View.GONE);
 
         return view;
+    }
+
+    private void selectIdentityForEmail(String email) {
+        if (TextUtils.isEmpty(email))
+            return;
+
+        if (!identity_selectable)
+            return;
+        identity_selectable = false;
+
+        Bundle args = new Bundle();
+        args.putString("email", email);
+
+        new SimpleTask<Long>() {
+            @Override
+            protected Long onExecute(Context context, Bundle args) throws Throwable {
+                String email = args.getString("email");
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                boolean auto_identity = prefs.getBoolean("auto_identity", true);
+                boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
+                boolean suggest_received = prefs.getBoolean("suggest_received", false);
+
+                if (!auto_identity)
+                    return null;
+
+                List<Integer> types = new ArrayList<>();
+                if (suggest_sent)
+                    types.add(EntityContact.TYPE_TO);
+                if (suggest_received)
+                    types.add(EntityContact.TYPE_FROM);
+
+                if (types.size() == 0)
+                    return null;
+
+                DB db = DB.getInstance(context);
+                List<Long> identities = db.contact().getIdentities(email, types);
+                if (identities != null && identities.size() == 1)
+                    return identities.get(0);
+
+                return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Long identity) {
+                if (identity == null)
+                    return;
+
+                SpinnerAdapter adapter = spIdentity.getAdapter();
+                for (int pos = 0; pos < adapter.getCount(); pos++) {
+                    EntityIdentity item = (EntityIdentity) adapter.getItem(pos);
+                    if (item.id.equals(identity)) {
+                        spIdentity.setSelection(pos);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(FragmentCompose.this, args, "compose:contact");
     }
 
     private void onReferenceEdit() {
@@ -1345,8 +1436,7 @@ public class FragmentCompose extends FragmentBase {
                 if (context == null)
                     return;
 
-                ClipboardManager clipboard =
-                        (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager clipboard = Helper.getSystemService(context, ClipboardManager.class);
                 if (clipboard == null)
                     return;
 
@@ -1477,7 +1567,7 @@ public class FragmentCompose extends FragmentBase {
     public void onResume() {
         super.onResume();
 
-        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = Helper.getSystemService(getContext(), ConnectivityManager.class);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
         cm.registerNetworkCallback(builder.build(), networkCallback);
@@ -1493,7 +1583,7 @@ public class FragmentCompose extends FragmentBase {
             onAction(R.id.action_save, extras, "pause");
         }
 
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
         cm.unregisterNetworkCallback(networkCallback);
 
         super.onPause();
@@ -2347,7 +2437,7 @@ public class FragmentCompose extends FragmentBase {
 
         if (uri == null)
             try {
-                ClipboardManager cbm = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager cbm = Helper.getSystemService(getContext(), ClipboardManager.class);
                 if (cbm != null && cbm.hasPrimaryClip()) {
                     String link = cbm.getPrimaryClip().getItemAt(0).coerceToText(getContext()).toString();
                     uri = Uri.parse(link);
@@ -2652,6 +2742,8 @@ public class FragmentCompose extends FragmentBase {
                             String email = MessageHelper.sanitizeEmail(cursor.getString(colEmail));
                             String name = cursor.getString(colName);
 
+                            args.putString("email", email);
+
                             try {
                                 db.beginTransaction();
 
@@ -2699,6 +2791,9 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, EntityMessage draft) {
+                if (requestCode == REQUEST_CONTACT_TO)
+                    selectIdentityForEmail(args.getString("email"));
+
                 if (draft != null) {
                     etTo.setText(MessageHelper.formatAddressesCompose(draft.to));
                     etCc.setText(MessageHelper.formatAddressesCompose(draft.cc));
@@ -2931,47 +3026,7 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                // External app sending absolute file
-                if (ex instanceof NoStreamException)
-                    ((NoStreamException) ex).report(getActivity());
-                else if (ex instanceof FileNotFoundException ||
-                        ex instanceof IllegalArgumentException ||
-                        ex instanceof IllegalStateException) {
-                    /*
-                        java.lang.IllegalStateException: Failed to mount
-                          at android.os.Parcel.createException(Parcel.java:2079)
-                          at android.os.Parcel.readException(Parcel.java:2039)
-                          at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:188)
-                          at android.database.DatabaseUtils.readExceptionWithFileNotFoundExceptionFromParcel(DatabaseUtils.java:151)
-                          at android.content.ContentProviderProxy.openTypedAssetFile(ContentProviderNative.java:705)
-                          at android.content.ContentResolver.openTypedAssetFileDescriptor(ContentResolver.java:1687)
-                          at android.content.ContentResolver.openAssetFileDescriptor(ContentResolver.java:1503)
-                          at android.content.ContentResolver.openInputStream(ContentResolver.java:1187)
-                          at eu.faircode.email.FragmentCompose.addAttachment(SourceFile:27)
-                     */
-                    Snackbar.make(view, ex.toString(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
-                } else {
-                    if (ex instanceof IOException &&
-                            ex.getCause() instanceof ErrnoException &&
-                            ((ErrnoException) ex.getCause()).errno == ENOSPC)
-                        ex = new IOException(getContext().getString(R.string.app_cake), ex);
-                    Log.unexpectedError(getParentFragmentManager(), ex,
-                            !(ex instanceof IOException || ex.getCause() instanceof IOException));
-                    /*
-                        java.lang.IllegalStateException: java.io.IOException: Failed to redact /storage/emulated/0/Download/97203830-piston-vecteur-icône-simple-symbole-plat-sur-fond-blanc.jpg
-                          at android.os.Parcel.createExceptionOrNull(Parcel.java:2381)
-                          at android.os.Parcel.createException(Parcel.java:2357)
-                          at android.os.Parcel.readException(Parcel.java:2340)
-                          at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:190)
-                          at android.database.DatabaseUtils.readExceptionWithFileNotFoundExceptionFromParcel(DatabaseUtils.java:153)
-                          at android.content.ContentProviderProxy.openTypedAssetFile(ContentProviderNative.java:804)
-                          at android.content.ContentResolver.openTypedAssetFileDescriptor(ContentResolver.java:2002)
-                          at android.content.ContentResolver.openAssetFileDescriptor(ContentResolver.java:1817)
-                          at android.content.ContentResolver.openInputStream(ContentResolver.java:1494)
-                          at eu.faircode.email.FragmentCompose.addAttachment(SourceFile:27)
-                     */
-                }
+                handleException(ex);
             }
         }.setExecutor(executor).execute(this, args, "compose:attachment:add");
     }
@@ -3027,10 +3082,7 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof NoStreamException)
-                    ((NoStreamException) ex).report(getActivity());
-                else
-                    Log.unexpectedError(getParentFragmentManager(), ex);
+                handleException(ex);
             }
         }.execute(this, args, "compose:shared");
     }
@@ -4928,6 +4980,26 @@ public class FragmentCompose extends FragmentBase {
                     if (drafts == null)
                         throw new IllegalArgumentException(context.getString(R.string.title_no_drafts));
 
+                    boolean signature_once = prefs.getBoolean("signature_reply_once", false);
+                    if (signature_once && data.draft.signature &&
+                            ref != null && ref.thread != null &&
+                            ("reply".equals(action) || "reply_all".equals(action))) {
+                        List<EntityMessage> outbound = new ArrayList<>();
+
+                        EntityFolder sent = db.folder().getFolderByType(drafts.account, EntityFolder.SENT);
+                        if (sent != null)
+                            outbound.addAll(db.message().getMessagesByThread(drafts.account, ref.thread, null, sent.id));
+
+                        EntityFolder outbox = db.folder().getOutbox();
+                        if (outbox != null)
+                            outbound.addAll(db.message().getMessagesByThread(drafts.account, ref.thread, null, outbox.id));
+
+                        if (outbound.size() > 0) {
+                            Log.i("Signature suppressed");
+                            data.draft.signature = false;
+                        }
+                    }
+
                     data.draft.account = drafts.account;
                     data.draft.folder = drafts.id;
                     data.draft.identity = selected.id;
@@ -5202,6 +5274,8 @@ public class FragmentCompose extends FragmentBase {
                     }
                 }
 
+            identity_selectable = (data.draft.to == null || data.draft.to.length == 0);
+
             etExtra.setText(data.draft.extra);
             etTo.setText(MessageHelper.formatAddressesCompose(data.draft.to));
             etCc.setText(MessageHelper.formatAddressesCompose(data.draft.cc));
@@ -5448,16 +5522,8 @@ public class FragmentCompose extends FragmentBase {
         protected void onException(Bundle args, Throwable ex) {
             pbWait.setVisibility(View.GONE);
 
-            // External app sending absolute file
             if (ex instanceof MessageRemovedException)
                 finish();
-            if (ex instanceof NoStreamException)
-                ((NoStreamException) ex).report(getActivity());
-            else if (ex instanceof FileNotFoundException ||
-                    ex instanceof IllegalArgumentException ||
-                    ex instanceof IllegalStateException)
-                Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
-                        .setGestureInsetBottomIgnored(true).show();
             else if (ex instanceof OperationCanceledException) {
                 Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE)
                         .setGestureInsetBottomIgnored(true);
@@ -5472,9 +5538,58 @@ public class FragmentCompose extends FragmentBase {
                 });
                 snackbar.show();
             } else
-                Log.unexpectedError(getParentFragmentManager(), ex);
+                handleException(ex);
         }
     }.setExecutor(executor);
+
+    private void handleException(Throwable ex) {
+        // External app sending absolute file
+        if (ex instanceof NoStreamException)
+            ((NoStreamException) ex).report(getActivity());
+        else if (ex instanceof FileNotFoundException ||
+                ex instanceof IllegalArgumentException ||
+                ex instanceof IllegalStateException) {
+                    /*
+                        java.lang.IllegalStateException: Failed to mount
+                          at android.os.Parcel.createException(Parcel.java:2079)
+                          at android.os.Parcel.readException(Parcel.java:2039)
+                          at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:188)
+                          at android.database.DatabaseUtils.readExceptionWithFileNotFoundExceptionFromParcel(DatabaseUtils.java:151)
+                          at android.content.ContentProviderProxy.openTypedAssetFile(ContentProviderNative.java:705)
+                          at android.content.ContentResolver.openTypedAssetFileDescriptor(ContentResolver.java:1687)
+                          at android.content.ContentResolver.openAssetFileDescriptor(ContentResolver.java:1503)
+                          at android.content.ContentResolver.openInputStream(ContentResolver.java:1187)
+                          at eu.faircode.email.FragmentCompose.addAttachment(SourceFile:27)
+                     */
+            Snackbar.make(view, ex.toString(), Snackbar.LENGTH_LONG)
+                    .setGestureInsetBottomIgnored(true).show();
+        } else {
+            if (ex instanceof IOException &&
+                    ex.getCause() instanceof ErrnoException &&
+                    ((ErrnoException) ex.getCause()).errno == ENOSPC)
+                ex = new IOException(getContext().getString(R.string.app_cake), ex);
+
+            // External app didn't grant URI permissions
+            if (ex instanceof SecurityException)
+                ex = new Throwable(getString(R.string.title_no_permissions), ex);
+
+            Log.unexpectedError(getParentFragmentManager(), ex,
+                    !(ex instanceof IOException || ex.getCause() instanceof IOException));
+                    /*
+                        java.lang.IllegalStateException: java.io.IOException: Failed to redact /storage/emulated/0/Download/97203830-piston-vecteur-icône-simple-symbole-plat-sur-fond-blanc.jpg
+                          at android.os.Parcel.createExceptionOrNull(Parcel.java:2381)
+                          at android.os.Parcel.createException(Parcel.java:2357)
+                          at android.os.Parcel.readException(Parcel.java:2340)
+                          at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:190)
+                          at android.database.DatabaseUtils.readExceptionWithFileNotFoundExceptionFromParcel(DatabaseUtils.java:153)
+                          at android.content.ContentProviderProxy.openTypedAssetFile(ContentProviderNative.java:804)
+                          at android.content.ContentResolver.openTypedAssetFileDescriptor(ContentResolver.java:2002)
+                          at android.content.ContentResolver.openAssetFileDescriptor(ContentResolver.java:1817)
+                          at android.content.ContentResolver.openInputStream(ContentResolver.java:1494)
+                          at eu.faircode.email.FragmentCompose.addAttachment(SourceFile:27)
+                     */
+        }
+    }
 
     private SimpleTask<EntityMessage> actionLoader = new SimpleTask<EntityMessage>() {
         @Override
@@ -6295,7 +6410,7 @@ public class FragmentCompose extends FragmentBase {
             if (addresses == null)
                 return;
 
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
             NetworkInfo ani = (cm == null ? null : cm.getActiveNetworkInfo());
             if (ani != null && ani.isConnected())
                 DnsHelper.checkMx(context, addresses);
@@ -6649,6 +6764,9 @@ public class FragmentCompose extends FragmentBase {
                 signature = HtmlHelper.fromHtml(identity.signature, new HtmlHelper.ImageGetterEx() {
                     @Override
                     public Drawable getDrawable(Element element) {
+                        String source = element.attr("src");
+                        if (source.startsWith("cid:"))
+                            element.attr("src", "cid:");
                         return ImageHelper.decodeImage(getContext(),
                                 working, element, true, 0, 1.0f, tvSignature);
                     }
@@ -6691,6 +6809,10 @@ public class FragmentCompose extends FragmentBase {
                     long id = args.getLong("id");
                     long iid = args.getLong("identity");
 
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    boolean sign_default = prefs.getBoolean("sign_default", false);
+                    boolean encrypt_default = prefs.getBoolean("encrypt_default", false);
+
                     DB db = DB.getInstance(context);
 
                     EntityMessage draft = db.message().getMessage(id);
@@ -6701,9 +6823,9 @@ public class FragmentCompose extends FragmentBase {
                     if (identity == null)
                         return draft.ui_encrypt;
 
-                    if (identity.encrypt_default)
+                    if (encrypt_default || identity.encrypt_default)
                         draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
-                    else if (identity.sign_default)
+                    else if (sign_default || identity.sign_default)
                         draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
                     else
                         draft.ui_encrypt = null;

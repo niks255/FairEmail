@@ -45,7 +45,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.pm.ShortcutInfoCompat;
-import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -236,6 +235,11 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
             ss.setSpan(new RelativeSizeSpan(0.9f), 0, ss.length(), 0);
             popupMenu.getMenu().add(Menu.NONE, 0, order++, ss).setEnabled(false);
 
+            if (!TextUtils.isEmpty(contact.identityEmail)) {
+                String via = context.getString(R.string.title_via, contact.identityEmail);
+                popupMenu.getMenu().add(Menu.NONE, 0, order++, via).setEnabled(false);
+            }
+
             if (contact.state != EntityContact.STATE_IGNORE)
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_advanced_never_favorite, order++, R.string.title_advanced_never_favorite);
             popupMenu.getMenu().add(Menu.NONE, R.string.title_share, order++, R.string.title_share); // should be system whitelisted
@@ -308,7 +312,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
 
                 private void onActionPin() {
                     ShortcutInfoCompat.Builder builder = Shortcuts.getShortcut(context, contact);
-                    ShortcutManagerCompat.requestPinShortcut(context, builder.build(), null);
+                    Shortcuts.requestPinShortcut(context, builder.build());
                 }
 
                 private void onActionEdit() {

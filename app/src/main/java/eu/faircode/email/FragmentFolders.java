@@ -669,8 +669,9 @@ public class FragmentFolders extends FragmentBase {
         menu.findItem(R.id.menu_theme).setVisible(account < 0 || primary);
         menu.findItem(R.id.menu_show_hidden).setChecked(show_hidden);
         menu.findItem(R.id.menu_show_flagged).setChecked(show_flagged);
-        menu.findItem(R.id.menu_subscribed_only).setChecked(subscribed_only);
-        menu.findItem(R.id.menu_subscribed_only).setVisible(subscriptions);
+        menu.findItem(R.id.menu_subscribed_only)
+                .setChecked(subscribed_only)
+                .setVisible(subscriptions);
         menu.findItem(R.id.menu_sort_unread_atop).setChecked(sort_unread_atop);
         menu.findItem(R.id.menu_apply_all).setVisible(account >= 0 && imap);
         menu.findItem(R.id.menu_edit_account_name).setVisible(account >= 0);
@@ -1163,8 +1164,7 @@ public class FragmentFolders extends FragmentBase {
                     throw new IllegalArgumentException(context.getString(R.string.title_no_stream));
                 }
 
-                NotificationManager nm =
-                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager nm = Helper.getSystemService(context, NotificationManager.class);
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(context, "progress")
                                 .setSmallIcon(R.drawable.baseline_get_app_white_24)

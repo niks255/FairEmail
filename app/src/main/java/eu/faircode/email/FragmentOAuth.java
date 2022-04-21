@@ -101,6 +101,7 @@ public class FragmentOAuth extends FragmentBase {
 
     private String personal;
     private String address;
+    private boolean pop;
     private boolean update;
 
     private ViewGroup view;
@@ -111,6 +112,7 @@ public class FragmentOAuth extends FragmentBase {
     private EditText etName;
     private EditText etEmail;
     private EditText etTenant;
+    private CheckBox cbPop;
     private CheckBox cbUpdate;
     private Button btnOAuth;
     private ContentLoadingProgressBar pbOAuth;
@@ -141,6 +143,7 @@ public class FragmentOAuth extends FragmentBase {
 
         personal = args.getString("personal");
         address = args.getString("address");
+        pop = args.getBoolean("pop", false);
         update = args.getBoolean("update", true);
     }
 
@@ -159,6 +162,7 @@ public class FragmentOAuth extends FragmentBase {
         etName = view.findViewById(R.id.etName);
         etEmail = view.findViewById(R.id.etEmail);
         etTenant = view.findViewById(R.id.etTenant);
+        cbPop = view.findViewById(R.id.cbPop);
         cbUpdate = view.findViewById(R.id.cbUpdate);
         btnOAuth = view.findViewById(R.id.btnOAuth);
         pbOAuth = view.findViewById(R.id.pbOAuth);
@@ -216,6 +220,7 @@ public class FragmentOAuth extends FragmentBase {
         etName.setVisibility(askAccount ? View.VISIBLE : View.GONE);
         etEmail.setVisibility(askAccount ? View.VISIBLE : View.GONE);
         grpTenant.setVisibility(askTenant ? View.VISIBLE : View.GONE);
+        cbPop.setVisibility(pop ? View.VISIBLE : View.GONE);
         pbOAuth.setVisibility(View.GONE);
         tvConfiguring.setVisibility(View.GONE);
         tvGmailHint.setVisibility("gmail".equals(id) ? View.VISIBLE : View.GONE);
@@ -224,6 +229,7 @@ public class FragmentOAuth extends FragmentBase {
         etName.setText(personal);
         etEmail.setText(address);
         etTenant.setText(null);
+        cbPop.setChecked(false);
         cbUpdate.setChecked(update);
 
         return view;
@@ -278,6 +284,7 @@ public class FragmentOAuth extends FragmentBase {
             etName.setEnabled(false);
             etEmail.setEnabled(false);
             etTenant.setEnabled(false);
+            cbPop.setEnabled(false);
             cbUpdate.setEnabled(false);
             btnOAuth.setEnabled(false);
             pbOAuth.setVisibility(View.VISIBLE);
@@ -419,6 +426,7 @@ public class FragmentOAuth extends FragmentBase {
             etName.setEnabled(true);
             etEmail.setEnabled(true);
             etTenant.setEnabled(true);
+            cbPop.setEnabled(true);
             cbUpdate.setEnabled(true);
 
             AuthorizationResponse auth = AuthorizationResponse.fromIntent(data);
@@ -505,6 +513,7 @@ public class FragmentOAuth extends FragmentBase {
         args.putBoolean("askAccount", askAccount);
         args.putString("personal", etName.getText().toString().trim());
         args.putString("address", etEmail.getText().toString().trim());
+        args.putBoolean("pop", cbPop.isChecked());
         args.putBoolean("update", cbUpdate.isChecked());
 
         new SimpleTask<Void>() {
@@ -528,58 +537,16 @@ public class FragmentOAuth extends FragmentBase {
                 boolean askAccount = args.getBoolean("askAccount", false);
                 String personal = args.getString("personal");
                 String address = args.getString("address");
+                boolean pop = args.getBoolean("pop");
 
                 EmailProvider provider = EmailProvider.getProvider(context, id);
-                String aprotocol = (provider.imap.starttls ? "imap" : "imaps");
-                int aencryption = (provider.imap.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
+                if (provider.pop == null)
+                    pop = false;
+                EmailProvider.Server inbound = (pop ? provider.pop : provider.imap);
+                String aprotocol = (pop ? (inbound.starttls ? "pop3" : "pop3s") : (inbound.starttls ? "imap" : "imaps"));
+                int aencryption = (inbound.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
                 String iprotocol = (provider.smtp.starttls ? "smtp" : "smtps");
                 int iencryption = (provider.smtp.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
-
-                if ("outlook".equals(id) && BuildConfig.DEBUG) {
-                    DB db = DB.getInstance(context);
-
-                    // Create account
-                    EntityAccount account = new EntityAccount();
-
-                    account.host = provider.imap.host;
-                    account.encryption = aencryption;
-                    account.port = provider.imap.port;
-                    account.auth_type = AUTH_TYPE_OAUTH;
-                    account.provider = provider.id;
-                    account.user = address;
-                    account.password = state;
-
-                    int at = account.user.indexOf('@');
-                    String user = account.user.substring(0, at);
-
-                    account.name = provider.name + "/" + user;
-
-                    account.synchronize = true;
-                    account.primary = false;
-
-                    if (provider.keepalive > 0)
-                        account.poll_interval = provider.keepalive;
-
-                    account.partial_fetch = provider.partial;
-
-                    account.created = new Date().getTime();
-                    account.last_connected = account.created;
-
-                    account.id = db.account().insertAccount(account);
-                    args.putLong("account", account.id);
-                    EntityLog.log(context, "OAuth account=" + account.name);
-
-                    EntityFolder folder = new EntityFolder("INBOX", EntityFolder.INBOX);
-                    folder.account = account.id;
-                    folder.setProperties();
-                    folder.setSpecials(account);
-                    folder.id = db.folder().insertFolder(folder);
-                    EntityLog.log(context, "OAuth folder=" + folder.name + " type=" + folder.type);
-                    if (folder.synchronize)
-                        EntityOperation.sync(context, folder.id, true);
-
-                    return null;
-                }
 
                 /*
                  * Outlook shared mailbox
@@ -694,7 +661,7 @@ public class FragmentOAuth extends FragmentBase {
                                     context, aprotocol, null, aencryption, false,
                                     EmailService.PURPOSE_CHECK, true)) {
                                 aservice.connect(
-                                        provider.imap.host, provider.imap.port,
+                                        inbound.host, inbound.port,
                                         AUTH_TYPE_OAUTH, provider.id,
                                         alt, state,
                                         null, null);
@@ -748,7 +715,7 @@ public class FragmentOAuth extends FragmentBase {
                 } else
                     throw new IllegalArgumentException("Unknown provider=" + id);
 
-                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
                 NetworkInfo ani = (cm == null ? null : cm.getActiveNetworkInfo());
                 if (ani == null || !ani.isConnected())
                     throw new IllegalArgumentException(context.getString(R.string.title_no_internet));
@@ -759,17 +726,20 @@ public class FragmentOAuth extends FragmentBase {
 
                 List<EntityFolder> folders;
 
-                Log.i("OAuth checking IMAP provider=" + provider.id);
+                Log.i("OAuth checking IMAP/POP3 provider=" + provider.id);
                 try (EmailService aservice = new EmailService(
                         context, aprotocol, null, aencryption, false,
                         EmailService.PURPOSE_CHECK, true)) {
                     aservice.connect(
-                            provider.imap.host, provider.imap.port,
+                            inbound.host, inbound.port,
                             AUTH_TYPE_OAUTH, provider.id,
                             sharedname == null ? username : sharedname, state,
                             null, null);
 
-                    folders = aservice.getFolders();
+                    if (pop)
+                        folders = EntityFolder.getPopFolders(context);
+                    else
+                        folders = aservice.getFolders();
                 }
 
                 Log.i("OAuth checking SMTP provider=" + provider.id);
@@ -795,7 +765,9 @@ public class FragmentOAuth extends FragmentBase {
 
                     if (args.getBoolean("update")) {
                         List<EntityAccount> accounts =
-                                db.account().getAccounts(username, new int[]{AUTH_TYPE_OAUTH, AUTH_TYPE_PASSWORD});
+                                db.account().getAccounts(username,
+                                        pop ? EntityAccount.TYPE_POP : EntityAccount.TYPE_IMAP,
+                                        new int[]{AUTH_TYPE_OAUTH, AUTH_TYPE_PASSWORD});
                         if (accounts != null && accounts.size() == 1)
                             update = accounts.get(0);
                     }
@@ -806,9 +778,10 @@ public class FragmentOAuth extends FragmentBase {
                         // Create account
                         EntityAccount account = new EntityAccount();
 
-                        account.host = provider.imap.host;
+                        account.protocol = (pop ? EntityAccount.TYPE_POP : EntityAccount.TYPE_IMAP);
+                        account.host = inbound.host;
                         account.encryption = aencryption;
-                        account.port = provider.imap.port;
+                        account.port = inbound.port;
                         account.auth_type = AUTH_TYPE_OAUTH;
                         account.provider = provider.id;
                         account.user = (sharedname == null ? username : sharedname);
@@ -848,11 +821,16 @@ public class FragmentOAuth extends FragmentBase {
                         }
 
                         // Set swipe left/right folder
-                        for (EntityFolder folder : folders)
-                            if (EntityFolder.TRASH.equals(folder.type))
-                                account.swipe_left = folder.id;
-                            else if (EntityFolder.ARCHIVE.equals(folder.type))
-                                account.swipe_right = folder.id;
+                        if (pop) {
+                            account.swipe_left = EntityMessage.SWIPE_ACTION_DELETE;
+                            account.swipe_right = EntityMessage.SWIPE_ACTION_SEEN;
+                        } else {
+                            for (EntityFolder folder : folders)
+                                if (EntityFolder.TRASH.equals(folder.type))
+                                    account.swipe_left = folder.id;
+                                else if (EntityFolder.ARCHIVE.equals(folder.type))
+                                    account.swipe_right = folder.id;
+                        }
 
                         db.account().updateAccount(account);
 
@@ -878,6 +856,8 @@ public class FragmentOAuth extends FragmentBase {
                             ident.id = db.identity().insertIdentity(ident);
                             EntityLog.log(context, "OAuth identity=" + ident.name + " email=" + ident.email);
                         }
+
+                        args.putBoolean("pop", pop);
                     } else {
                         args.putLong("account", update.id);
                         EntityLog.log(context, "OAuth update account=" + update.name);
@@ -928,6 +908,7 @@ public class FragmentOAuth extends FragmentBase {
         etName.setEnabled(true);
         etEmail.setEnabled(true);
         etTenant.setEnabled(true);
+        cbPop.setEnabled(true);
         cbUpdate.setEnabled(true);
         btnOAuth.setEnabled(true);
         pbOAuth.setVisibility(View.GONE);
@@ -967,6 +948,7 @@ public class FragmentOAuth extends FragmentBase {
         etName.setEnabled(true);
         etEmail.setEnabled(true);
         etTenant.setEnabled(true);
+        cbPop.setEnabled(true);
         cbUpdate.setEnabled(true);
         btnOAuth.setEnabled(true);
         pbOAuth.setVisibility(View.GONE);

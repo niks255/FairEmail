@@ -320,7 +320,7 @@ public class FragmentQuickSetup extends FragmentBase {
                 int at = email.indexOf('@');
                 String username = email.substring(0, at);
 
-                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
                 NetworkInfo ani = (cm == null ? null : cm.getActiveNetworkInfo());
                 if (ani == null || !ani.isConnected())
                     throw new IllegalArgumentException(context.getString(R.string.title_no_internet));
@@ -399,20 +399,71 @@ public class FragmentQuickSetup extends FragmentBase {
 
                             folders = iservice.getFolders();
 
-                            if (folders.size() == 1 &&
-                                    EntityFolder.INBOX.equals(folders.get(0).type))
-                                try {
-                                    Log.i("Creating system folders");
-                                    Store istore = iservice.getStore();
-                                    istore.getFolder(EntityFolder.DRAFTS).create(Folder.HOLDS_FOLDERS);
-                                    istore.getFolder(EntityFolder.SENT).create(Folder.HOLDS_FOLDERS);
-                                    istore.getFolder(EntityFolder.ARCHIVE).create(Folder.HOLDS_FOLDERS);
-                                    istore.getFolder(EntityFolder.TRASH).create(Folder.HOLDS_FOLDERS);
-                                    istore.getFolder(EntityFolder.JUNK).create(Folder.HOLDS_FOLDERS);
-                                    folders = iservice.getFolders();
-                                } catch (Throwable ex) {
-                                    Log.e(ex);
-                                }
+                            if (!check) {
+                                boolean drafts = false;
+                                boolean sent = false;
+                                boolean archive = false;
+                                boolean trash = false;
+                                boolean junk = false;
+                                boolean other = false;
+                                for (EntityFolder folder : folders)
+                                    switch (folder.type) {
+                                        case EntityFolder.DRAFTS:
+                                            drafts = true;
+                                            break;
+                                        case EntityFolder.SENT:
+                                            sent = true;
+                                            break;
+                                        case EntityFolder.ARCHIVE:
+                                            archive = true;
+                                            break;
+                                        case EntityFolder.TRASH:
+                                            trash = true;
+                                            break;
+                                        case EntityFolder.JUNK:
+                                            junk = true;
+                                            break;
+                                        default:
+                                            other = true;
+                                            break;
+                                    }
+
+                                if (!other && !(drafts && sent && archive && trash && junk))
+                                    try {
+                                        Store istore = iservice.getStore();
+
+                                        String n = "";
+                                        Folder[] ns = istore.getPersonalNamespaces();
+                                        if (ns != null && ns.length == 1) {
+                                            n = ns[0].getFullName();
+                                            if (!TextUtils.isEmpty(n))
+                                                n += ns[0].getSeparator();
+                                        }
+
+                                        Log.i("Creating system folders" +
+                                                " namespace=" + n +
+                                                " drafts=" + drafts +
+                                                " sent=" + sent +
+                                                " archive=" + archive +
+                                                " trash=" + trash +
+                                                " junk=" + junk);
+
+                                        if (!drafts)
+                                            istore.getFolder(n + EntityFolder.DRAFTS).create(Folder.HOLDS_MESSAGES);
+                                        if (!sent)
+                                            istore.getFolder(n + EntityFolder.SENT).create(Folder.HOLDS_MESSAGES);
+                                        if (!archive)
+                                            istore.getFolder(n + EntityFolder.ARCHIVE).create(Folder.HOLDS_MESSAGES);
+                                        if (!trash)
+                                            istore.getFolder(n + EntityFolder.TRASH).create(Folder.HOLDS_MESSAGES);
+                                        if (!junk)
+                                            istore.getFolder(n + EntityFolder.JUNK).create(Folder.HOLDS_MESSAGES);
+
+                                        folders = iservice.getFolders();
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                    }
+                            }
                         }
 
                         Long max_size;
@@ -457,16 +508,11 @@ public class FragmentQuickSetup extends FragmentBase {
 
                             if (args.getBoolean("update")) {
                                 List<EntityAccount> accounts =
-                                        db.account().getAccounts(user, new int[]{AUTH_TYPE_PASSWORD});
-                                if (accounts != null)
-                                    for (EntityAccount existing : accounts)
-                                        if (existing.protocol == EntityAccount.TYPE_IMAP)
-                                            if (update == null)
-                                                update = existing;
-                                            else {
-                                                update = null;
-                                                break;
-                                            }
+                                        db.account().getAccounts(user,
+                                                EntityAccount.TYPE_IMAP,
+                                                new int[]{AUTH_TYPE_PASSWORD});
+                                if (accounts != null && accounts.size() == 1)
+                                    update = accounts.get(0);
                             }
 
                             if (update == null) {

@@ -74,8 +74,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Folder;
@@ -182,7 +184,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     getNotificationService(null, null).build());
 
         // Listen for network changes
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = Helper.getSystemService(this, ConnectivityManager.class);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
         // Removed because of Android VPN service
@@ -240,7 +242,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             private int lastQuitId = -1;
             private List<Long> initialized = new ArrayList<>();
             private List<TupleAccountNetworkState> accountStates = new ArrayList<>();
-            private PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            private PowerManager pm = Helper.getSystemService(ServiceSynchronize.this, PowerManager.class);
             private PowerManager.WakeLock wl = pm.newWakeLock(
                     PowerManager.PARTIAL_WAKE_LOCK, BuildConfig.APPLICATION_ID + ":service");
             private ExecutorService queue = Helper.getBackgroundExecutor(1, "service");
@@ -399,8 +401,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                         if (!isBackgroundService(ServiceSynchronize.this))
                             try {
-                                NotificationManager nm =
-                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                NotificationManager nm = Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
                                 nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
                                         getNotificationService(lastAccounts, lastOperations).build());
                             } catch (Throwable ex) {
@@ -431,9 +432,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
 
             private void init(final TupleAccountNetworkState accountNetworkState) {
-                queue.submit(new Runnable() {
+                queue.submit(new RunnableEx("state#init") {
                     @Override
-                    public void run() {
+                    public void delegate() {
                         try {
                             wl.acquire();
 
@@ -474,9 +475,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         "Service start=" + accountNetworkState + " sync=" + sync + " force=" + force);
 
                 final Core.State astate = new Core.State(accountNetworkState.networkState);
-                astate.runnable(new Runnable() {
+                astate.runnable(new RunnableEx("state#monitor") {
                     @Override
-                    public void run() {
+                    public void delegate() {
                         try {
                             monitorAccount(accountNetworkState.accountState, astate, sync, force);
                         } catch (Throwable ex) {
@@ -486,9 +487,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 }, "sync.account." + accountNetworkState.accountState.id);
                 coreStates.put(accountNetworkState.accountState.id, astate);
 
-                queue.submit(new Runnable() {
+                queue.submit(new RunnableEx("state#start") {
                     @Override
-                    public void run() {
+                    public void delegate() {
                         try {
                             wl.acquire();
 
@@ -523,9 +524,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Scheduling,
                         "Service stop=" + accountNetworkState);
 
-                queue.submit(new Runnable() {
+                queue.submit(new RunnableEx("state#stop") {
                     @Override
-                    public void run() {
+                    public void delegate() {
                         try {
                             wl.acquire();
 
@@ -557,9 +558,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Scheduling,
                         "Service delete=" + accountNetworkState);
 
-                queue.submit(new Runnable() {
+                queue.submit(new RunnableEx("state#delete") {
                     @Override
-                    public void run() {
+                    public void delegate() {
                         try {
                             wl.acquire();
 
@@ -567,7 +568,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             db.account().deleteAccount(accountNetworkState.accountState.id);
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                NotificationManager nm = Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
                                 nm.deleteNotificationChannel(EntityAccount.getNotificationChannelId(accountNetworkState.accountState.id));
                             }
                         } catch (Throwable ex) {
@@ -580,9 +581,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
 
             private void quit(final Integer eventId) {
-                queue.submit(new Runnable() {
+                queue.submit(new RunnableEx("state#quit") {
                     @Override
-                    public void run() {
+                    public void delegate() {
                         try {
                             wl.acquire();
 
@@ -632,12 +633,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 });
             }
 
-            private final Runnable backup = new Runnable() {
+            private final Runnable backup = new RunnableEx("state#backup") {
                 @Override
-                public void run() {
-                    queue.submit(new Runnable() {
+                public void delegate() {
+                    queue.submit(new RunnableEx("state#backup#exec") {
                         @Override
-                        public void run() {
+                        public void delegate() {
                             try {
                                 wl.acquire();
 
@@ -735,9 +736,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
             @Override
             public void onChanged(final List<TupleMessageEx> messages) {
-                executor.submit(new Runnable() {
+                executor.submit(new RunnableEx("liveUnseenNotify") {
                     @Override
-                    public void run() {
+                    public void delegate() {
                         try {
                             Core.notifyMessages(ServiceSynchronize.this, messages, notificationData, foreground);
                         } catch (SecurityException ex) {
@@ -882,7 +883,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         unregisterReceiver(connectionChangedReceiver);
 
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = Helper.getSystemService(this, ConnectivityManager.class);
         cm.unregisterNetworkCallback(networkCallback);
 
         liveAccountNetworkState.postDestroy();
@@ -916,11 +917,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 */
         }
 
-        NotificationManager nm =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
         nm.cancel(NotificationHelper.NOTIFICATION_SYNCHRONIZE);
 
         super.onDestroy();
+        CoalMine.watch(this, getClass().getSimpleName() + "#onDestroy()");
     }
 
     @Override
@@ -1061,9 +1062,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         String action = intent.getAction();
         long id = Long.parseLong(action.split(":")[1]);
 
-        executor.submit(new Runnable() {
+        executor.submit(new RunnableEx("unsnooze") {
             @Override
-            public void run() {
+            public void delegate() {
                 try {
                     EntityFolder folder;
 
@@ -1180,9 +1181,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         String action = intent.getAction();
         long id = Long.parseLong(action.split(":")[1]);
 
-        executor.submit(new Runnable() {
+        executor.submit(new RunnableEx("exists") {
             @Override
-            public void run() {
+            public void delegate() {
                 try {
                     DB db = DB.getInstance(ServiceSynchronize.this);
 
@@ -1216,9 +1217,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     private void onPoll(Intent intent) {
-        executor.submit(new Runnable() {
+        executor.submit(new RunnableEx("poll") {
             @Override
-            public void run() {
+            public void delegate() {
                 try {
                     DB db = DB.getInstance(ServiceSynchronize.this);
                     try {
@@ -1361,7 +1362,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private void monitorAccount(
             final EntityAccount account, final Core.State state,
             final boolean sync, final boolean force) throws NoSuchProviderException {
-        final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        final PowerManager pm = Helper.getSystemService(this, PowerManager.class);
         final PowerManager.WakeLock wlAccount = pm.newWakeLock(
                 PowerManager.PARTIAL_WAKE_LOCK, BuildConfig.APPLICATION_ID + ":account." + account.id);
         final PowerManager.WakeLock wlFolder = pm.newWakeLock(
@@ -1447,7 +1448,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 if (!ConnectionHelper.isMaxConnections(message))
                                     try {
-                                        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                        NotificationManager nm = Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
                                         nm.notify("alert:" + account.id,
                                                 NotificationHelper.NOTIFICATION_TAGGED,
                                                 getNotificationAlert(account, message).build());
@@ -1459,6 +1460,28 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             }
                     }
                 });
+
+                final Runnable purge = new RunnableEx("purge") {
+                    @Override
+                    public void delegate() {
+                        executor.submit(new RunnableEx("purge#exec") {
+                            @Override
+                            public void delegate() {
+                                try {
+                                    wlAccount.acquire();
+
+                                    // Close cached connections
+                                    Log.i(account.name + " Empty connection pool");
+                                    ((IMAPStore) iservice.getStore()).emptyConnectionPool(false);
+                                } catch (Throwable ex) {
+                                    Log.e(ex);
+                                } finally {
+                                    wlAccount.release();
+                                }
+                            }
+                        });
+                    }
+                };
 
                 final Map<EntityFolder, IMAPFolder> mapFolders = new LinkedHashMap<>();
                 List<Thread> idlers = new ArrayList<>();
@@ -1488,7 +1511,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 try {
                                     state.setBackoff(2 * CONNECT_BACKOFF_ALARM_MAX * 60);
-                                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                    NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
                                     nm.notify("receive:" + account.id,
                                             NotificationHelper.NOTIFICATION_TAGGED,
                                             Core.getNotificationError(this, "error", account, 0, ex)
@@ -1760,9 +1783,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             });
 
                             // Idle folder
-                            Thread idler = new Thread(new Runnable() {
+                            Thread idler = new Thread(new RunnableEx("idle") {
                                 @Override
-                                public void run() {
+                                public void delegate() {
                                     try {
                                         Log.i(folder.name + " start idle");
                                         while (ifolder.isOpen() && state.isRunning() && state.isRecoverable()) {
@@ -1835,34 +1858,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     forced = true;
 
-                    final Runnable purge = new Runnable() {
-                        @Override
-                        public void run() {
-                            executor.submit(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        wlAccount.acquire();
-
-                                        // Close cached connections
-                                        Log.i(account.name + " Empty connection pool");
-                                        ((IMAPStore) istore).emptyConnectionPool(false);
-                                    } catch (Throwable ex) {
-                                        Log.e(ex);
-                                    } finally {
-                                        wlAccount.release();
-                                    }
-                                }
-                            });
-                        }
-                    };
-
                     final long serial = state.getSerial();
 
                     Log.i(account.name + " observing operations");
-                    getMainHandler().post(new Runnable() {
+                    getMainHandler().post(new RunnableEx("observe#start") {
                         @Override
-                        public void run() {
+                        public void delegate() {
                             cowner.value = new TwoStateOwner(ServiceSynchronize.this, account.name);
                             cowner.value.start();
 
@@ -2237,8 +2238,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         db.account().setAccountConnected(account.id, account.last_connected);
                         db.account().setAccountWarning(account.id, capIdle ? null : getString(R.string.title_no_idle));
 
-                        NotificationManager nm =
-                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
                         nm.cancel("receive:" + account.id, NotificationHelper.NOTIFICATION_TAGGED);
                         nm.cancel("alert:" + account.id, NotificationHelper.NOTIFICATION_TAGGED);
 
@@ -2248,7 +2248,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         PendingIntent pi = PendingIntentCompat.getForegroundService(
                                 this, PI_KEEPALIVE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        AlarmManager am = Helper.getSystemService(this, AlarmManager.class);
                         try {
                             long duration = account.poll_interval * 60 * 1000L;
                             long trigger = System.currentTimeMillis() + duration;
@@ -2301,7 +2301,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             Helper.getDateTimeInstance(this, DateFormat.SHORT, DateFormat.SHORT)
                                                     .format(account.last_connected)), ex);
                             try {
-                                NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
                                 nm.notify("receive:" + account.id,
                                         NotificationHelper.NOTIFICATION_TAGGED,
                                         Core.getNotificationError(this, "warning", account, 0, warning)
@@ -2316,20 +2316,32 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     EntityLog.log(this, EntityLog.Type.Account, account,
                             account.name + " closing");
 
+                    // Cancel purge
+                    getMainHandler().removeCallbacks(purge);
+
                     // Stop watching operations
                     Log.i(account.name + " stop watching operations");
-                    final TwoStateOwner _owner = cowner.value;
-                    if (_owner != null)
-                        getMainHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    _owner.destroy();
-                                } catch (Throwable ex) {
-                                    Log.e(ex);
-                                }
+                    final CountDownLatch latch = new CountDownLatch(1);
+
+                    getMainHandler().post(new RunnableEx("observe#stop") {
+                        @Override
+                        public void delegate() {
+                            try {
+                                if (cowner.value != null)
+                                    cowner.value.destroy();
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            } finally {
+                                latch.countDown();
                             }
-                        });
+                        }
+                    });
+
+                    try {
+                        latch.await(5000L, TimeUnit.MILLISECONDS);
+                    } catch (InterruptedException ex) {
+                        Log.w(ex);
+                    }
 
                     // Stop executing operations
                     Log.i(account.name + " stop executing operations");
@@ -2477,7 +2489,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         PendingIntent pi = PendingIntentCompat.getForegroundService(
                                 this, PI_BACKOFF, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                        AlarmManager am = Helper.getSystemService(this, AlarmManager.class);
                         try {
                             long trigger = System.currentTimeMillis() + backoff * 1000L;
                             EntityLog.log(this, EntityLog.Type.Account, account,
@@ -2505,7 +2517,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
 
             if (!currentThread.equals(accountThread) && accountThread != null)
-                Log.e(account.name + " orphan thread id=" + currentThread + "/" + accountThread);
+                Log.i(account.name + " orphan thread id=" + currentThread + "/" + accountThread);
         } finally {
             EntityLog.log(this, EntityLog.Type.Account, account,
                     account.name + " stopped running=" + state.isRunning());
@@ -2653,7 +2665,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         @Override
         @RequiresApi(api = Build.VERSION_CODES.M)
         public void onReceive(Context context, Intent intent) {
-            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            PowerManager pm = Helper.getSystemService(context, PowerManager.class);
             EntityLog.log(context, "Doze mode=" + pm.isDeviceIdleMode() +
                     " ignoring=" + pm.isIgnoringBatteryOptimizations(context.getPackageName()));
         }
@@ -2666,7 +2678,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             Log.i("Received intent=" + intent +
                     " " + TextUtils.join(" ", Log.getExtras(intent.getExtras())));
 
-            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
             Integer status = (cm == null ? null : cm.getRestrictBackgroundStatus());
             EntityLog.log(context, "Data saver=" + status);
 
@@ -2697,9 +2709,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     };
 
     private void updateNetworkState(final Network network, final String reason) {
-        getMainHandler().post(new Runnable() {
+        getMainHandler().post(new RunnableEx("network") {
             @Override
-            public void run() {
+            public void delegate() {
                 try {
                     Network active = ConnectionHelper.getActiveNetwork(ServiceSynchronize.this);
 
@@ -2737,8 +2749,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                         if (!isBackgroundService(ServiceSynchronize.this))
                             try {
-                                NotificationManager nm =
-                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                NotificationManager nm = Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
                                 nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
                                         getNotificationService(lastAccounts, lastOperations).build());
                             } catch (Throwable ex) {
@@ -2849,9 +2860,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     static void boot(final Context context) {
-        executor.submit(new Runnable() {
+        executor.submit(new RunnableEx("boot") {
             @Override
-            public void run() {
+            public void delegate() {
                 try {
                     EntityLog.log(context, "Boot sync service");
 

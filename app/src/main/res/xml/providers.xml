@@ -16,6 +16,10 @@
             host="smtp.gmail.com"
             port="465"
             starttls="false" />
+        <!--pop
+            host="pop.gmail.com"
+            port="995"
+            starttls="false" /-->
         <oauth
             askAccount="true"
             authorizationEndpoint="https://accounts.google.com/o/oauth2/auth"
@@ -112,6 +116,11 @@
             host="smtp.office365.com"
             port="587"
             starttls="true" />
+        <!--pop
+            host="outlook.office365.com"
+            port="995"
+            starttls="false" /-->
+        <!-- https://outlook.office.com/POP.AccessAsUser.All -->
         <oauth
             askAccount="true"
             authorizationEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize"
@@ -143,6 +152,11 @@
             host="smtp.office365.com"
             port="587"
             starttls="true" />
+        <!--pop
+            host="outlook.office365.com"
+            port="995"
+            starttls="false" /-->
+        <!-- https://outlook.office.com/POP.AccessAsUser.All -->
         <oauth
             askAccount="true"
             authorizationEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize"
@@ -188,8 +202,9 @@
     </provider>
     <!-- no IMAP IDLE -->
     <provider
-        name="Yahoo/AT&amp;T"
+        name="Yahoo"
         appPassword="true"
+        description="Yahoo/AT&amp;T"
         domain="yahoo\\..*"
         id="yahoo"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88"
@@ -202,6 +217,10 @@
             host="smtp.mail.yahoo.com"
             port="465"
             starttls="false" />
+        <pop
+            host="pop.mail.yahoo.com"
+            port="995"
+            starttls="false" />
         <oauth
             askAccount="true"
             authorizationEndpoint="https://api.login.yahoo.com/oauth2/request_auth"
@@ -213,6 +232,7 @@
             redirectUri="https://oauth.faircode.eu/"
             scopes="mail-w"
             tokenEndpoint="https://api.login.yahoo.com/oauth2/get_token" />
+        <!-- https://developer.yahoo.com/oauth2/guide/ -->
     </provider>
     <provider
         name="Sky.com"
@@ -400,6 +420,11 @@
             host="smtp.yandex.com"
             port="465"
             starttls="false" />
+        <!--pop
+            host="pop.yandex.ru"
+            port="995"
+            starttls="false" /-->
+        <!-- No OAuth/POP3 support -->
         <oauth
             askAccount="true"
             authorizationEndpoint="https://oauth.yandex.com/authorize"
@@ -417,10 +442,11 @@
                 key="force_confirm"
                 value="true" />
         </oauth>
+        <!-- https://yandex.com/dev/id/doc/dg/imap/index.html -->
     </provider>
     <provider
         name="web.de"
-        documentation="Please check if &lt;a href=&quot;https://hilfe.web.de/email/einstellungen/pop3-imap-einschalten.html&quot;&gt;IMAP is enabled&lt;/a&gt;"
+        documentation="Ist &lt;a href=&quot;https://hilfe.web.de/email/einstellungen/pop3-imap-einschalten.html&quot;&gt;IMAP aktiviert&lt;/a&gt;? Die Zwei-Faktor-Authentifizierung erfordert &lt;a href=&quot;https://web.de/email/sicherheit/zwei-faktor-authentifizierung/&quot;&gt;ein Anwendungsspezifische Passwort&lt;/a&gt;!"
         domain="web\\.de"
         keepalive="12"
         link="https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html"
@@ -599,6 +625,11 @@
             host="smtp.mail.ru"
             port="465"
             starttls="false" />
+        <!--pop
+            host="pop.mail.ru"
+            port="995"
+            starttls="false" /-->
+        <!-- No OAuth/POP3 support -->
         <oauth
             askAccount="false"
             authorizationEndpoint="https://oauth.mail.ru/login"

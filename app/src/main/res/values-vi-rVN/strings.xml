@@ -381,7 +381,6 @@
     <string name="title_advanced_cards_shadow">Sử dụng cái bóng cho thư chưa đọc khi dùng kiểu thẻ</string>
     <string name="title_advanced_cards_shadow_highlight">Sử dụng màu đánh dấu thay vì màu nổi bật</string>
     <string name="title_advanced_tabular_dividers">Sử dụng đường chia tách khi dùng kiểu tab</string>
-    <string name="title_advanced_category_header">Nhóm theo thể loại tài khoản</string>
     <string name="title_advanced_date_header">Nhóm theo ngày</string>
     <string name="title_advanced_date_fixed">Hiện tiêu đề ngày cố định ở đầu</string>
     <string name="title_advanced_date_bold">Hiện ngày bằng chữ đậm</string>
@@ -448,6 +447,7 @@
     <string name="title_advanced_seekbar">Hiện vị trí tương đối của cuộc hội thoại bằng một dấu chầm</string>
     <string name="title_advanced_actionbar">Hiện thanh hành đông ở cuộc hội thoại</string>
     <string name="title_advanced_actionbar_color">Sử dụng màu tài khoản làm màu nền cho thanh hành động trong cuộc hội thoại</string>
+    <string name="title_advanced_category_header">Nhóm theo thể loại tài khoản</string>
     <string name="title_advanced_navbar_colorize">Tô màu thanh điều hướng Android</string>
     <string name="title_advanced_bundled_fonts">Sử dụng phông chữ tích hợp</string>
     <string name="title_advanced_parse_classes">Xử lý các trang phong cách</string>
@@ -1834,10 +1834,10 @@
         <item>Không bị chặn</item>
     </string-array>
     <string-array name="contactGroupTypes">
-        <item comment="contactGroupTypes&#10;Any contact type for inserting contact groups">Any</item>
-        <item comment="contactGroupTypes&#10;&quot;Home&quot; contact type for inserting contact groups">Home</item>
-        <item comment="contactGroupTypes&#10;&quot;Work&quot; contact type for inserting contact groups&#10;">Công việc</item>
-        <item comment="contactGroupTypes&#10;&quot;Other&quot; contact type for inserting contact groups&#10;">Khác</item>
-        <item comment="contactGroupTypes&#10;&quot;Mobile&quot; contact type for inserting contact groups&#10;">Mobile</item>
+        <item>Any</item>
+        <item>Home</item>
+        <item>Công việc</item>
+        <item>Khác</item>
+        <item>Mobile</item>
     </string-array>
 </resources>

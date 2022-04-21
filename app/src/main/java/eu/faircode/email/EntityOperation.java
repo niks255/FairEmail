@@ -187,6 +187,7 @@ public class EntityOperation {
                 // 1: mark seen
                 // 2: temporary message
                 // 3: remove flag
+                // 4: permanently delete
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean autoread = prefs.getBoolean("autoread", false);
@@ -273,8 +274,10 @@ public class EntityOperation {
                         if (rule.isBlockingSender(message, source))
                             db.rule().deleteRule(rule.id);
 
-                    EntityContact.delete(context, message.account, message.from, EntityContact.TYPE_JUNK);
-                    EntityContact.update(context, message.account, message.from, EntityContact.TYPE_NO_JUNK, message.received);
+                    EntityContact.delete(context, message.account, message.from,
+                            EntityContact.TYPE_JUNK);
+                    EntityContact.update(context, message.account, message.identity, message.from,
+                            EntityContact.TYPE_NO_JUNK, message.received);
                 }
 
                 if (EntityFolder.JUNK.equals(target.type))
@@ -418,6 +421,19 @@ public class EntityOperation {
                         account.protocol != EntityAccount.TYPE_IMAP) {
                     message.ui_hide = true;
                     db.message().setMessageUiHide(message.id, message.ui_hide);
+
+                    if (perform_expunge && account != null && account.isGmail()) {
+                        EntityFolder source = db.folder().getFolder(message.folder);
+                        if (source != null && EntityFolder.ARCHIVE.equals(source.type)) {
+                            EntityFolder trash = db.folder().getFolderByType(message.account, EntityFolder.TRASH);
+                            if (trash != null && !trash.id.equals(message.folder)) {
+                                jargs.put(0, trash.id); // target
+                                jargs.put(4, true); // delete
+                                queue(context, message.account, message.folder, message.id, EntityOperation.MOVE, jargs);
+                                return;
+                            }
+                        }
+                    }
                 } else {
                     message.ui_deleted = !message.ui_deleted;
                     db.message().setMessageUiDeleted(message.id, message.ui_deleted);

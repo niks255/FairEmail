@@ -71,7 +71,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 229,
+        version = 232,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -447,7 +447,7 @@ public abstract class DB extends RoomDatabase {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             int sqlite_cache = prefs.getInt("sqlite_cache", DEFAULT_CACHE_SIZE);
 
-            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager am = Helper.getSystemService(context, ActivityManager.class);
             int class_mb = am.getMemoryClass();
             int cache_size = sqlite_cache * class_mb * 1024 / 100;
 
@@ -2299,6 +2299,24 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("DROP VIEW IF EXISTS `identity_view`");
                         db.execSQL("CREATE VIEW IF NOT EXISTS `identity_view` AS " + TupleIdentityView.query);
+                    }
+                }).addMigrations(new Migration(229, 230) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `folder` ADD COLUMN `hide_seen` INTEGER NOT NULL DEFAULT 0");
+                    }
+                }).addMigrations(new Migration(230, 231) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("UPDATE `message` SET thread = account || ':' || thread");
+                    }
+                }).addMigrations(new Migration(231, 232) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `contact` ADD COLUMN 'identity' INTEGER");
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

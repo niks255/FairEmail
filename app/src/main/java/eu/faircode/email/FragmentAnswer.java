@@ -31,7 +31,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -571,7 +570,7 @@ public class FragmentAnswer extends FragmentBase {
         if (action == R.id.menu_link) {
             Uri uri = null;
 
-            ClipboardManager cbm = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipboardManager cbm = Helper.getSystemService(getContext(), ClipboardManager.class);
             if (cbm != null && cbm.hasPrimaryClip()) {
                 String link = cbm.getPrimaryClip().getItemAt(0).coerceToText(getContext()).toString();
                 uri = Uri.parse(link);

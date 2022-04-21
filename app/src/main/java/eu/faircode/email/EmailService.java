@@ -388,7 +388,7 @@ public class EmailService implements AutoCloseable {
         if (bind_socket &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             try {
-                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
                 Network active = cm.getActiveNetwork();
                 if (active != null) {
                     EntityLog.log(context, EntityLog.Type.Network, "Binding to" +
@@ -440,6 +440,9 @@ public class EmailService implements AutoCloseable {
 
             if (auth == AUTH_TYPE_OAUTH && "imap.mail.yahoo.com".equals(host))
                 properties.put("mail." + protocol + ".yahoo.guid", "FAIRMAIL_V1");
+
+            if (auth == AUTH_TYPE_OAUTH && "pop3s".equals(protocol) && "outlook.office365.com".equals(host))
+                properties.put("mail." + protocol + ".auth.xoauth2.two.line.authentication.format", "true");
 
             connect(host, port, auth, user, factory);
         } catch (AuthenticationFailedException ex) {

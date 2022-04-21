@@ -25,7 +25,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.RemoteInput;
@@ -79,6 +78,7 @@ public class ServiceUI extends IntentService {
     public void onDestroy() {
         Log.i("Service UI destroy");
         super.onDestroy();
+        CoalMine.watch(this, "ServiceUI#onDestroy()");
     }
 
     @Override
@@ -214,8 +214,7 @@ public class ServiceUI extends IntentService {
         // https://issuetracker.google.com/issues/159152393
         String tag = "unseen." + group + ":" + id;
 
-        NotificationManager nm =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
         nm.cancel(tag, NotificationHelper.NOTIFICATION_TAGGED);
     }
 
@@ -298,7 +297,7 @@ public class ServiceUI extends IntentService {
 
             if (block_sender)
                 EntityContact.update(this,
-                        message.account, message.from,
+                        message.account, message.identity, message.from,
                         EntityContact.TYPE_JUNK, message.received);
 
             db.setTransactionSuccessful();

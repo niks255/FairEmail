@@ -57,7 +57,6 @@ import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -119,7 +118,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.FileProvider;
 import androidx.core.content.pm.ShortcutInfoCompat;
-import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.MenuCompat;
 import androidx.fragment.app.Fragment;
@@ -150,7 +148,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.w3c.dom.Entity;
 import org.w3c.dom.css.CSSStyleSheet;
 
 import java.io.BufferedOutputStream;
@@ -3061,8 +3058,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
 
                         private void onCopy() {
-                            ClipboardManager clipboard =
-                                    (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipboardManager clipboard = Helper.getSystemService(context, ClipboardManager.class);
                             if (clipboard == null)
                                 return;
 
@@ -4457,8 +4453,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
 
                 private void onCopy() {
-                    ClipboardManager clipboard =
-                            (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipboardManager clipboard = Helper.getSystemService(context, ClipboardManager.class);
                     if (clipboard == null)
                         return;
 
@@ -4556,7 +4551,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         @TargetApi(Build.VERSION_CODES.O)
         private void onNotifyContact(final TupleMessageEx message) {
-            final NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            final NotificationManager nm = Helper.getSystemService(context, NotificationManager.class);
             final String channelId = message.getNotificationChannelId();
 
             PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibNotifyContact);
@@ -4617,7 +4612,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
 
                 private void onActionDeleteChannel() {
-                    NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    NotificationManager nm = Helper.getSystemService(context, NotificationManager.class);
                     nm.deleteNotificationChannel(channelId);
                 }
             });
@@ -4629,7 +4624,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             try {
                 ShortcutInfoCompat.Builder builder =
                         Shortcuts.getShortcut(context, (InternetAddress) message.from[0]);
-                ShortcutManagerCompat.requestPinShortcut(context, builder.build(), null);
+                Shortcuts.requestPinShortcut(context, builder.build());
             } catch (Throwable ex) {
                 Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
             }
@@ -4795,8 +4790,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (TextUtils.isEmpty(message.notes))
                 return;
 
-            ClipboardManager clipboard =
-                    (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipboardManager clipboard = Helper.getSystemService(context, ClipboardManager.class);
             if (clipboard == null)
                 return;
 
@@ -6310,7 +6304,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 protected void onExecuted(Bundle args, ContactInfo[] contactInfo) {
                     ShortcutInfoCompat.Builder builder =
                             Shortcuts.getShortcut(context, message, contactInfo);
-                    ShortcutManagerCompat.requestPinShortcut(context, builder.build(), null);
+                    Shortcuts.requestPinShortcut(context, builder.build());
                 }
 
                 @Override
@@ -6339,8 +6333,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onCopyHeaders(TupleMessageEx message) {
-            ClipboardManager clipboard =
-                    (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipboardManager clipboard = Helper.getSystemService(context, ClipboardManager.class);
             if (clipboard == null)
                 return;
 
@@ -6893,7 +6886,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.colorControlNormal = Helper.resolveColor(context, R.attr.colorControlNormal);
 
         this.hasWebView = Helper.hasWebView(context);
-        this.pin = ShortcutManagerCompat.isRequestPinShortcutSupported(context);
+        this.pin = Shortcuts.can(context);
         this.contacts = Helper.hasPermission(context, Manifest.permission.READ_CONTACTS);
         this.textSize = Helper.getTextSize(context, zoom);
 
@@ -8232,7 +8225,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         public void onClick(DialogInterface dialog, int which) {
                             String html = HtmlHelper.toHtml((Spanned) tvText.getText(), context);
                             String text = HtmlHelper.getText(context, html);
-                            ClipboardManager cbm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipboardManager cbm = Helper.getSystemService(context, ClipboardManager.class);
                             cbm.setPrimaryClip(ClipData.newHtmlText(getString(R.string.app_name), text, html));
                             ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
                         }

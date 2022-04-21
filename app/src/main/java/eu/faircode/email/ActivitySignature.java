@@ -20,7 +20,6 @@ package eu.faircode.email;
 */
 
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -343,7 +342,7 @@ public class ActivitySignature extends ActivityBase {
             final int start = etText.getSelectionStart();
             final int end = etText.getSelectionEnd();
 
-            ClipboardManager cbm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipboardManager cbm = Helper.getSystemService(this, ClipboardManager.class);
             if (cbm != null && cbm.hasPrimaryClip()) {
                 String link = cbm.getPrimaryClip().getItemAt(0).coerceToText(this).toString();
                 uri = Uri.parse(link);

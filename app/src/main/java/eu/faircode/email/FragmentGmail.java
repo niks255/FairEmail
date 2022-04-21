@@ -276,7 +276,7 @@ public class FragmentGmail extends FragmentBase {
     }
 
     private void onNoAccountSelected(int resultCode, Intent data) {
-        AccountManager am = AccountManager.get(getContext());
+        AccountManager am = AccountManager.get(getContext().getApplicationContext());
         Account[] accounts = am.getAccountsByType(TYPE_GOOGLE);
         if (accounts.length == 0)
             Log.e("newChooseAccountIntent without result=" + resultCode + " data=" + data);
@@ -296,7 +296,7 @@ public class FragmentGmail extends FragmentBase {
         final String disabled = getString(R.string.title_setup_advanced_protection);
 
         boolean found = false;
-        AccountManager am = AccountManager.get(getContext());
+        AccountManager am = AccountManager.get(getContext().getApplicationContext());
         Account[] accounts = am.getAccountsByType(type);
         for (final Account account : accounts)
             if (name.equalsIgnoreCase(account.name)) {
@@ -407,7 +407,7 @@ public class FragmentGmail extends FragmentBase {
                 if (TextUtils.isEmpty(password))
                     throw new IllegalArgumentException(context.getString(R.string.title_no_password));
 
-                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
                 NetworkInfo ani = (cm == null ? null : cm.getActiveNetworkInfo());
                 if (ani == null || !ani.isConnected())
                     throw new IllegalArgumentException(context.getString(R.string.title_no_internet));
@@ -456,7 +456,9 @@ public class FragmentGmail extends FragmentBase {
 
                     if (args.getBoolean("update")) {
                         List<EntityAccount> accounts =
-                                db.account().getAccounts(user, new int[]{AUTH_TYPE_GMAIL, AUTH_TYPE_PASSWORD});
+                                db.account().getAccounts(user,
+                                        EntityAccount.TYPE_IMAP,
+                                        new int[]{AUTH_TYPE_GMAIL, AUTH_TYPE_PASSWORD});
                         if (accounts != null && accounts.size() == 1)
                             update = accounts.get(0);
                     }

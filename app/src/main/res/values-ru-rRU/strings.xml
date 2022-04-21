@@ -223,6 +223,7 @@
     <string name="title_setup_done">Готово</string>
     <string name="title_setup_still">Осталось сделать</string>
     <string name="title_setup_error">Ошибка</string>
+    <string name="title_setup_pop">Использовать POP3 (не рекомендуется)</string>
     <string name="title_setup_configuring">Настройка учётной записи&#8230;</string>
     <string name="title_setup_app_password">Возможно, потребуется использовать пароль приложения</string>
     <string name="title_setup_extra">Дополнительно</string>
@@ -347,6 +348,7 @@
     <string name="title_advanced_answer_action">Долгое нажатие на кнопку ответа:</string>
     <string name="title_advanced_send_pending">Показывать ненавязчивый значок задержки отправки</string>
     <string name="title_advanced_compose_font">Шрифт по умолчанию</string>
+    <string name="title_advanced_auto_identity">Автоматически выбирать идентификаторы для новых сообщений</string>
     <string name="title_advanced_prefix_once">Добавлять только один префикс перед темой при ответе или пересылке</string>
     <string name="title_advanced_prefix_count">Добавлять счётчик в префикс ответа</string>
     <string name="title_advanced_separate_reply">Вставлять горизонтальную линию перед заголовком ответа/пересылки</string>
@@ -359,6 +361,7 @@
     <string name="title_advanced_signature_location">Расположение подписи</string>
     <string name="title_advanced_signature_new">Использовать подпись для новых сообщений</string>
     <string name="title_advanced_signature_reply">Использовать подпись при ответе</string>
+    <string name="title_advanced_signature_reply_once">Только для первого ответа</string>
     <string name="title_advanced_signature_forward">Использовать подпись при пересылке</string>
     <string name="title_advanced_discard_delete">При отказе от черновика удалять его безвозвратно</string>
     <string name="title_advanced_reply_move">При ответе на сообщение сохранять ответ в той же папке</string>
@@ -412,7 +415,6 @@
     <string name="title_advanced_cards_shadow">Использовать тень для непрочитанных сообщений для карточного стиля</string>
     <string name="title_advanced_cards_shadow_highlight">Использовать цвет подсветки вместо цвета акцента</string>
     <string name="title_advanced_tabular_dividers">Разделительные линии при использовании стиля с табуляцией</string>
-    <string name="title_advanced_category_header">Группировать по категориям учётных записей</string>
     <string name="title_advanced_date_header">Группировать по дате</string>
     <string name="title_advanced_date_fixed">Показывать постоянный заголовок с датой вверху</string>
     <string name="title_advanced_date_bold">Показывать дату жирным шрифтом</string>
@@ -479,6 +481,7 @@
     <string name="title_advanced_seekbar">Показывать относительное положение диалога точкой</string>
     <string name="title_advanced_actionbar">Показывать панель управления диалогами</string>
     <string name="title_advanced_actionbar_color">Использовать цвет учётной записи в качестве фонового для панели действий в диалоге</string>
+    <string name="title_advanced_category_header">Группировать по категориям учётных записей</string>
     <string name="title_advanced_navbar_colorize">Раскрашивать панель навигации Android</string>
     <string name="title_advanced_bundled_fonts">Использовать встроенные шрифты</string>
     <string name="title_advanced_parse_classes">Анализировать таблицы стилей</string>
@@ -649,8 +652,10 @@
     <string name="title_advanced_check_reply_hint">Проверка совпадения доменного имени отправителя и адреса для ответа</string>
     <string name="title_advanced_lookup_mx_hint">Проверка наличия записей DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Замедлится синхронизация сообщений</string>
+    <string name="title_advanced_folder_nav_hint">Всегда возвращаться к списку папок связанной учётной записи из списка сообщений</string>
     <string name="title_advanced_suggest_names_hint">Если отключено, при выборе контактов будут использоваться только адреса электронной почты</string>
     <string name="title_advanced_suggest_local_hint">В дополнение к контактам, предоставляемым Android. Контактные данные будут сохранены только для вновь отправленных или полученных сообщений при включении этой функции.</string>
+    <string name="title_advanced_auto_identity_hint">Будет выбран последний идентификатор, используемый для первого получателя новых сообщений</string>
     <string name="title_advanced_send_reminders_hint">Показывать предупреждение, если отсутствует текст сообщения, тема или, возможно, отсутствует вложение</string>
     <string name="title_advanced_reply_move_hint">Сервер электронной почты всё ещё может добавлять сообщения в папку отправленных</string>
     <string name="title_advanced_usenet_hint">Вставлять \"-- \" между текстом и подписью</string>
@@ -851,6 +856,7 @@
     <string name="title_synchronize_more_hint2">        Сообщения будут загружены настолько быстро, насколько сервер электронной почты сможет отдать их и сохраняться настолько быстро, насколько устройство сможет сохранить и индексировать их.
         Ограничивающим фактором обычно является скорость внутреннего хранилища устройства.
     </string>
+    <string name="title_synchronize_more_hint3">Помните, что хранение большого количества сообщений (десять тысяч и более) на своём устройстве может привести к задержкам, поскольку внутреннее хранилище не является бесконечно быстрым.</string>
     <string name="title_synchronize_enabled">Синхронизировать</string>
     <string name="title_synchronize_batch_enable">Включить синхронизацию</string>
     <string name="title_synchronize_batch_disable">Отключить синхронизацию</string>
@@ -905,6 +911,8 @@
     <string name="title_apply_to_all">Применить ко всем</string>
     <string name="title_edit_account_name">Изменить название учётной записи</string>
     <string name="title_hide_folder">Скрыть папку</string>
+    <string name="title_hide_seen_folder">Скрывать папку, если все сообщения прочитаны</string>
+    <string name="title_hide_seen_folder_hint">Только в списке папок, отображаемом на начальном экране</string>
     <string name="title_unified_folder">Показывать в единой папке \"Входящие\"</string>
     <string name="title_navigation_folder">Показывать в меню навигации</string>
     <string name="title_synchronize_folder">Синхронизировать (получать сообщения)</string>
@@ -1052,6 +1060,7 @@
     <string name="title_no_saf">Нет метода доступа к хранилищу</string>
     <string name="title_no_stream">У FairEmail нет разрешения на чтение этого файла</string>
     <string name="title_no_stream_help">Это можно решить, выбрав файл с помощью современного приложения файлового менеджера или предоставив разрешение на чтение файлов</string>
+    <string name="title_no_permissions">Приложение для выбора файлов не выдало разрешение на чтение файла</string>
     <string name="title_no_internet">Нет подходящего интернет-подключения</string>
     <string name="title_no_connection">Подключение к одной или нескольким учётным записям&#8230;</string>
     <string name="title_no_folder">Папка не существует</string>
@@ -1399,6 +1408,7 @@
     <string name="title_rule_original_text">Включить текст исходного сообщения</string>
     <string name="title_rule_forward_to">Переслать</string>
     <string name="title_rule_resend">Перенаправить</string>
+    <string name="title_rule_attached">Прикрепить оригинальный файл сообщения</string>
     <string name="title_rule_cc">Ответить на адреса копий (CC)</string>
     <string name="title_rule_with_attachments">С вложениями</string>
     <string name="title_rule_answer_remark">Только один ответ будет отправлен в каждый диалог, чтобы избежать петель ответов</string>
@@ -1882,10 +1892,10 @@
         <item>Не заблокировано</item>
     </string-array>
     <string-array name="contactGroupTypes">
-        <item comment="contactGroupTypes&#10;Any contact type for inserting contact groups">Любые</item>
-        <item comment="contactGroupTypes&#10;&quot;Home&quot; contact type for inserting contact groups">Домашние</item>
-        <item comment="contactGroupTypes&#10;&quot;Work&quot; contact type for inserting contact groups&#10;">Работа</item>
-        <item comment="contactGroupTypes&#10;&quot;Other&quot; contact type for inserting contact groups&#10;">Другие</item>
-        <item comment="contactGroupTypes&#10;&quot;Mobile&quot; contact type for inserting contact groups&#10;">Мобильные</item>
+        <item>Любые</item>
+        <item>Домашние</item>
+        <item>Работа</item>
+        <item>Другие</item>
+        <item>Мобильные</item>
     </string-array>
 </resources>

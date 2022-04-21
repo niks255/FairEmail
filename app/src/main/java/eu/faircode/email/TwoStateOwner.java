@@ -42,6 +42,7 @@ public class TwoStateOwner implements LifecycleOwner {
     private LifecycleRegistry registry;
     private long created;
     private long changed;
+    private String state;
 
     private static DateFormat DTF = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
@@ -72,7 +73,6 @@ public class TwoStateOwner implements LifecycleOwner {
                 owned = false;
                 destroy();
                 owner.getLifecycle().removeObserver(this);
-                CoalMine.watch(TwoStateOwner.this, "State done=" + aname);
             }
         });
     }
@@ -86,6 +86,7 @@ public class TwoStateOwner implements LifecycleOwner {
                 public void onAny() {
                     Log.i(TwoStateOwner.this + " " + registry);
                     changed = new Date().getTime();
+                    state = registry.getCurrentState().name();
                 }
             });
 

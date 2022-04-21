@@ -202,6 +202,7 @@
     <string name="title_setup_done">Fertig</string>
     <string name="title_setup_still">Noch zu tun</string>
     <string name="title_setup_error">Fehler</string>
+    <string name="title_setup_pop">POP3 verwenden (nicht empfohlen)</string>
     <string name="title_setup_configuring">Konto wird konfiguriert &#8230;</string>
     <string name="title_setup_app_password">Möglicherweise müssen Sie ein App-Passwort verwenden</string>
     <string name="title_setup_extra">Extra</string>
@@ -326,6 +327,7 @@
     <string name="title_advanced_answer_action">Lange drücken auf die Antwort-Schaltfläche wird:</string>
     <string name="title_advanced_send_pending">Nicht aufdringliches Symbol für verzögertes Senden anzeigen</string>
     <string name="title_advanced_compose_font">Standardschriftart</string>
+    <string name="title_advanced_auto_identity">Identitäten für neue Nachrichten automatisch auswählen</string>
     <string name="title_advanced_prefix_once">Re: und Fwd: nur einmal beim Antworten oder Weiterleiten voranstellen</string>
     <string name="title_advanced_prefix_count">Zähler zum Antwortpräfix hinzufügen</string>
     <string name="title_advanced_separate_reply">Eine horizontale Linie vor einer Antwort/Weiterleitung einfügen</string>
@@ -338,6 +340,7 @@
     <string name="title_advanced_signature_location">Signaturposition</string>
     <string name="title_advanced_signature_new">Signatur für neue Nachrichten verwenden</string>
     <string name="title_advanced_signature_reply">Signatur beim Antworten verwenden</string>
+    <string name="title_advanced_signature_reply_once">Nur bei der ersten Antwort (in einer Unterhaltung)</string>
     <string name="title_advanced_signature_forward">Signatur beim Weiterleiten hinzufügen</string>
     <string name="title_advanced_discard_delete">Entwürfe beim Verwerfen dauerhaft löschen</string>
     <string name="title_advanced_reply_move">Beim Antworten auf eine Nachricht die Antwort im selben Ordner speichern</string>
@@ -391,7 +394,6 @@
     <string name="title_advanced_cards_shadow">Schatten für ungelesene Nachrichten verwenden, wenn Kartenstil verwendet wird</string>
     <string name="title_advanced_cards_shadow_highlight">Hervorhebungsfarbe statt Akzentfarbe verwenden</string>
     <string name="title_advanced_tabular_dividers">Trennlinien bei Verwendung der Tabellenform verwenden</string>
-    <string name="title_advanced_category_header">Nach Kontenkategorie gruppieren</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
     <string name="title_advanced_date_fixed">Feste Datumskopfzeile oben anzeigen</string>
     <string name="title_advanced_date_bold">Datum fett anzeigen</string>
@@ -458,6 +460,7 @@
     <string name="title_advanced_seekbar">Relative Unterhaltungsposition mit einem Punkt kennzeichnen</string>
     <string name="title_advanced_actionbar">Aktionsleiste in Unterhaltung anzeigen</string>
     <string name="title_advanced_actionbar_color">Farbe des Kontos als Hintergrundfarbe der Aktionsleiste verwenden</string>
+    <string name="title_advanced_category_header">Nach Kontenkategorie gruppieren</string>
     <string name="title_advanced_navbar_colorize">Android-Navigationsleiste farbig darstellen</string>
     <string name="title_advanced_bundled_fonts">Gebündelte Schriften verwenden</string>
     <string name="title_advanced_parse_classes">Stylesheets analysieren</string>
@@ -627,8 +630,10 @@
     <string name="title_advanced_check_reply_hint">Überprüft, ob die Domain des Absenders und der Antwort-An-Adresse gleich sind</string>
     <string name="title_advanced_lookup_mx_hint">Überprüft, ob DNS-MX-Einträge vorhanden sind</string>
     <string name="title_advanced_sync_delay_hint">Dies verzögert die Synchronisierung von Nachrichten</string>
+    <string name="title_advanced_folder_nav_hint">Damit kehren Sie von einer Nachrichtenliste immer zur Ordnerliste des betreffenden Kontos zurück.</string>
     <string name="title_advanced_suggest_names_hint">Wenn deaktiviert, werden nur E-Mail-Adressen bei der Auswahl von Kontakten verwendet</string>
     <string name="title_advanced_suggest_local_hint">Zusätzlich zu den von Android bereitgestellten Kontakten werden weitere Kontaktdaten für neue gesendete oder erhaltene Nachrichten nur dann gespeichert, wenn dies aktiviert ist.</string>
+    <string name="title_advanced_auto_identity_hint">Dadurch wird die zuletzt verwendete Identität, die für den ersten Empfänger einer neuen Nachricht benutzt wurde, ausgewählt</string>
     <string name="title_advanced_send_reminders_hint">Eine Warnung anzeigen, wenn der Nachrichtentext oder der Betreff leer ist oder wenn ein Anhang zu fehlen scheint</string>
     <string name="title_advanced_reply_move_hint">Der E-Mail-Server könnte die Nachrichten trotzdem noch in den Ordner für gesendete Nachrichten hinzufügen</string>
     <string name="title_advanced_usenet_hint">Signaturtrenner »-- « zwischen Text und Signatur einfügen</string>
@@ -829,6 +834,7 @@
     <string name="title_synchronize_more_hint2">        Nachrichten werden so schnell abgerufen, wie der E-Mail-Server sie ausliefern, und so schnell gespeichert, wie das Gerät sie speichern kann.
         Der beschränkende Faktor ist normalerweise die Geschwindigkeit des internen Speicherplatzes des Gerätes.
     </string>
+    <string name="title_synchronize_more_hint3">Bitte bedenken Sie, dass das Speichern vieler Nachrichten (zehntausend oder mehr) auf Ihrem Gerät zu Verzögerungen führen kann, da der interne Speicherplatz nicht unendlich schnell ist.</string>
     <string name="title_synchronize_enabled">Synchronisieren</string>
     <string name="title_synchronize_batch_enable">Synchronisation aktivieren</string>
     <string name="title_synchronize_batch_disable">Synchronisierung deaktivieren</string>
@@ -883,6 +889,8 @@
     <string name="title_apply_to_all">Für alle übernehmen</string>
     <string name="title_edit_account_name">Kontoname ändern</string>
     <string name="title_hide_folder">Ordner ausblenden</string>
+    <string name="title_hide_seen_folder">Ordner ausblenden, wenn alle Nachrichten gelesen wurden</string>
+    <string name="title_hide_seen_folder_hint">Nur in der auf dem Startbildschirm angezeigten Ordnerliste</string>
     <string name="title_unified_folder">Im Sammeleingang anzeigen</string>
     <string name="title_navigation_folder">Im Navigationsmenü anzeigen</string>
     <string name="title_synchronize_folder">Synchronisieren (E-Mails empfangen)</string>
@@ -1028,6 +1036,7 @@
     <string name="title_no_saf">Storage Access Framework nicht verfügbar</string>
     <string name="title_no_stream">FairEmail hat keine Berechtigung diese Datei direkt zu lesen</string>
     <string name="title_no_stream_help">Das kann gelöst werden, indem man die Datei mit einer moderneren Dateiverwaltungs-App auswählt oder FairEmail die Berechtigung zum Lesen von Dateien erteilt.</string>
+    <string name="title_no_permissions">Der Anwendung, die zur Auswahl einer Datei verwendet wurde, fehlt die Leseberechtigung</string>
     <string name="title_no_internet">Keine oder keine passende Internetverbindung</string>
     <string name="title_no_connection">Zu einem oder mehreren Konten wird verbunden &#8230;</string>
     <string name="title_no_folder">Ordner nicht vorhanden</string>
@@ -1375,6 +1384,7 @@
     <string name="title_rule_original_text">Ursprünglichen Nachrichtentext einschließen</string>
     <string name="title_rule_forward_to">Weiterleiten an</string>
     <string name="title_rule_resend">Umleiten</string>
+    <string name="title_rule_attached">Nachricht-Quelltext anhängen</string>
     <string name="title_rule_cc">Den CC-Adressen antworten</string>
     <string name="title_rule_with_attachments">Mit Anhängen</string>
     <string name="title_rule_answer_remark">Für jede Unterhaltung wird per Antwortregel nur eine Antwort gesendet, um Antwortschleifen zu vermeiden</string>
@@ -1855,10 +1865,10 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>Nicht blockiert</item>
     </string-array>
     <string-array name="contactGroupTypes">
-        <item comment="contactGroupTypes&#10;Any contact type for inserting contact groups">Beliebig(e)</item>
-        <item comment="contactGroupTypes&#10;&quot;Home&quot; contact type for inserting contact groups">Privat</item>
-        <item comment="contactGroupTypes&#10;&quot;Work&quot; contact type for inserting contact groups&#10;">Arbeit</item>
-        <item comment="contactGroupTypes&#10;&quot;Other&quot; contact type for inserting contact groups&#10;">Andere</item>
-        <item comment="contactGroupTypes&#10;&quot;Mobile&quot; contact type for inserting contact groups&#10;">Mobil</item>
+        <item>Beliebig(e)</item>
+        <item>Privat</item>
+        <item>Arbeit</item>
+        <item>Andere</item>
+        <item>Mobil</item>
     </string-array>
 </resources>

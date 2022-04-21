@@ -85,7 +85,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
 
     private ExecutorService getExecutor(Context context) {
         if (wl == null) {
-            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            PowerManager pm = Helper.getSystemService(context, PowerManager.class);
             wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, BuildConfig.APPLICATION_ID + ":task");
         }
 
@@ -246,7 +246,6 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                         }
                     }
                 });
-                CoalMine.watch(SimpleTask.this, "Task done=" + name);
             }
         });
 

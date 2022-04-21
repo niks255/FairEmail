@@ -112,22 +112,25 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swDeepL;
     private ImageButton ibDeepL;
     private TextView tvSdcard;
-    private SwitchCompat swWatchdog;
     private SwitchCompat swUpdates;
     private ImageButton ibChannelUpdated;
     private SwitchCompat swCheckWeekly;
     private SwitchCompat swChangelog;
-    private SwitchCompat swExperiments;
-    private TextView tvExperimentsHint;
     private SwitchCompat swCrashReports;
     private TextView tvUuid;
     private Button btnReset;
     private SwitchCompat swCleanupAttachments;
     private Button btnCleanup;
     private TextView tvLastCleanup;
+
+    private CardView cardAdvanced;
+    private SwitchCompat swWatchdog;
+    private SwitchCompat swExperiments;
+    private TextView tvExperimentsHint;
     private SwitchCompat swProtocol;
     private SwitchCompat swLogInfo;
     private SwitchCompat swDebug;
+    private SwitchCompat swCanary;
     private SwitchCompat swTest1;
     private SwitchCompat swTest2;
     private SwitchCompat swTest3;
@@ -201,10 +204,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private final static String[] RESET_OPTIONS = new String[]{
             "sort_answers", "shortcuts", "fts",
             "classification", "class_min_probability", "class_min_difference",
-            "language", "deepl_enabled", "watchdog",
+            "language", "deepl_enabled",
             "updates", "weekly", "show_changelog",
-            "experiments", "crash_reports", "cleanup_attachments",
-            "protocol", "debug", "log_level", "test1", "test2", "test3", "test4", "test5",
+            "crash_reports", "cleanup_attachments",
+            "watchdog", "experiments", "protocol", "log_level", "debug", "leak_canary", "test1",
+            "test2", "test3", "test4", "test5",
             "work_manager", // "external_storage",
             "query_threads", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_cache",
             "chunk_size", "thread_range", "undo_manager", "webview_legacy", "browser_zoom",
@@ -278,22 +282,25 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swDeepL = view.findViewById(R.id.swDeepL);
         ibDeepL = view.findViewById(R.id.ibDeepL);
         tvSdcard = view.findViewById(R.id.tvSdcard);
-        swWatchdog = view.findViewById(R.id.swWatchdog);
         swUpdates = view.findViewById(R.id.swUpdates);
         ibChannelUpdated = view.findViewById(R.id.ibChannelUpdated);
         swCheckWeekly = view.findViewById(R.id.swWeekly);
         swChangelog = view.findViewById(R.id.swChangelog);
-        swExperiments = view.findViewById(R.id.swExperiments);
-        tvExperimentsHint = view.findViewById(R.id.tvExperimentsHint);
         swCrashReports = view.findViewById(R.id.swCrashReports);
         tvUuid = view.findViewById(R.id.tvUuid);
         btnReset = view.findViewById(R.id.btnReset);
         swCleanupAttachments = view.findViewById(R.id.swCleanupAttachments);
         btnCleanup = view.findViewById(R.id.btnCleanup);
         tvLastCleanup = view.findViewById(R.id.tvLastCleanup);
+
+        cardAdvanced = view.findViewById(R.id.cardAdvanced);
+        swWatchdog = view.findViewById(R.id.swWatchdog);
+        swExperiments = view.findViewById(R.id.swExperiments);
+        tvExperimentsHint = view.findViewById(R.id.tvExperimentsHint);
         swProtocol = view.findViewById(R.id.swProtocol);
         swLogInfo = view.findViewById(R.id.swLogInfo);
         swDebug = view.findViewById(R.id.swDebug);
+        swCanary = view.findViewById(R.id.swCanary);
         swTest1 = view.findViewById(R.id.swTest1);
         swTest2 = view.findViewById(R.id.swTest2);
         swTest3 = view.findViewById(R.id.swTest3);
@@ -593,13 +600,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
-        swWatchdog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("watchdog", checked).apply();
-            }
-        });
-
         swUpdates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -639,21 +639,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
-        tvExperimentsHint.setPaintFlags(tvExperimentsHint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        tvExperimentsHint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.viewFAQ(v.getContext(), 125);
-            }
-        });
-
-        swExperiments.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("experiments", checked).apply();
-            }
-        });
-
         swCrashReports.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -662,7 +647,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         .putBoolean("crash_reports", checked)
                         .apply();
                 Log.setCrashReporting(checked);
-                CoalMine.setup(checked);
             }
         });
 
@@ -687,6 +671,42 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swWatchdog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("watchdog", checked).apply();
+            }
+        });
+
+        tvExperimentsHint.setPaintFlags(tvExperimentsHint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvExperimentsHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 125);
+            }
+        });
+
+        swExperiments.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("experiments", checked).apply();
+            }
+        });
+
+        swProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("protocol", checked).apply();
+                if (checked)
+                    prefs.edit()
+                            .putLong("protocol_since", new Date().getTime())
+                            .putInt("log_level", android.util.Log.INFO)
+                            .apply();
+                else
+                    EntityLog.clear(compoundButton.getContext());
+            }
+        });
+
         swLogInfo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -703,9 +723,22 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     view.post(new Runnable() {
                         @Override
                         public void run() {
-                            view.scrollTo(0, swDebug.getTop());
+                            try {
+                                view.scrollTo(0, cardAdvanced.getTop() + swDebug.getTop());
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            }
                         }
                     });
+            }
+        });
+
+        swCanary.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+        swCanary.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("leak_canary", checked).apply();
+                CoalMine.setup(checked);
             }
         });
 
@@ -991,17 +1024,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // Do nothing
-            }
-        });
-
-        swProtocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("protocol", checked).apply();
-                if (checked)
-                    prefs.edit().putLong("protocol_since", new Date().getTime()).apply();
-                else
-                    EntityLog.clear(compoundButton.getContext());
             }
         });
 
@@ -1663,7 +1685,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             spLanguage.setSelection(selected);
 
         swDeepL.setChecked(prefs.getBoolean("deepl_enabled", false));
-        swWatchdog.setChecked(prefs.getBoolean("watchdog", true));
         swUpdates.setChecked(prefs.getBoolean("updates", true));
         swCheckWeekly.setChecked(prefs.getBoolean("weekly", Helper.hasPlayStore(getContext())));
         swCheckWeekly.setEnabled(swUpdates.isChecked());
@@ -1673,9 +1694,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvUuid.setText(prefs.getString("uuid", null));
         swCleanupAttachments.setChecked(prefs.getBoolean("cleanup_attachments", false));
 
+        swWatchdog.setChecked(prefs.getBoolean("watchdog", true));
         swProtocol.setChecked(prefs.getBoolean("protocol", false));
         swLogInfo.setChecked(prefs.getInt("log_level", Log.getDefaultLogLevel()) <= android.util.Log.INFO);
         swDebug.setChecked(prefs.getBoolean("debug", false));
+        swCanary.setChecked(prefs.getBoolean("leak_canary", false));
         swTest1.setChecked(prefs.getBoolean("test1", false));
         swTest2.setChecked(prefs.getBoolean("test2", false));
         swTest3.setChecked(prefs.getBoolean("test3", false));

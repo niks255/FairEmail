@@ -269,7 +269,8 @@ public class FragmentSetup extends FragmentBase {
                                         .putExtra("name", provider.description)
                                         .putExtra("privacy", provider.oauth.privacy)
                                         .putExtra("askAccount", provider.oauth.askAccount)
-                                        .putExtra("askTenant", provider.oauth.askTenant()));
+                                        .putExtra("askTenant", provider.oauth.askTenant())
+                                        .putExtra("pop", provider.pop != null));
                         resid = res.getIdentifier("provider_" + provider.id, "drawable", pkg);
                         if (resid != 0)
                             item.setIcon(resid);
@@ -743,7 +744,7 @@ public class FragmentSetup extends FragmentBase {
         updateManual();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = Helper.getSystemService(getContext(), ConnectivityManager.class);
             cm.registerDefaultNetworkCallback(networkCallback);
         }
 
@@ -770,8 +771,7 @@ public class FragmentSetup extends FragmentBase {
         tvDoze12.setVisibility(!canScheduleExact && !isIgnoring ? View.VISIBLE : View.GONE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            ActivityManager am =
-                    (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager am = Helper.getSystemService(getContext(), ActivityManager.class);
             grpBackgroundRestricted.setVisibility(am.isBackgroundRestricted()
                     ? View.VISIBLE : View.GONE);
         }
@@ -788,7 +788,7 @@ public class FragmentSetup extends FragmentBase {
         super.onPause();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = Helper.getSystemService(getContext(), ConnectivityManager.class);
             cm.unregisterNetworkCallback(networkCallback);
         }
     }
@@ -854,6 +854,8 @@ public class FragmentSetup extends FragmentBase {
             @Override
             public void run() {
                 try {
+                    if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                        return;
                     Rect rect = new Rect(
                             vwExtra.getLeft(),
                             ibExtra.getTop(),
@@ -915,7 +917,7 @@ public class FragmentSetup extends FragmentBase {
 
     private void setContactsPermission(boolean granted) {
         if (granted)
-            ContactInfo.init(getContext());
+            ContactInfo.init(getContext().getApplicationContext());
 
         tvPermissionsDone.setText(granted ? R.string.title_setup_done : R.string.title_setup_to_do);
         tvPermissionsDone.setTextColor(granted ? textColorPrimary : colorWarning);

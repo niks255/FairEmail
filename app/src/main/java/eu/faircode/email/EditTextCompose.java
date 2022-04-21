@@ -32,7 +32,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.Editable;
-import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.QuoteSpan;
@@ -52,7 +51,6 @@ import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.preference.PreferenceManager;
-import androidx.room.EntityInsertionAdapter;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -360,7 +358,7 @@ public class EditTextCompose extends FixedEditText {
                 }
 
                 Context context = getContext();
-                ClipboardManager cbm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager cbm = Helper.getSystemService(context, ClipboardManager.class);
                 if (start != end && cbm != null) {
                     CharSequence selected = getEditableText().subSequence(start, end);
                     if (selected instanceof Spanned) {
@@ -373,7 +371,7 @@ public class EditTextCompose extends FixedEditText {
             } else if (id == android.R.id.paste) {
                 final Context context = getContext();
 
-                ClipboardManager cbm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager cbm = Helper.getSystemService(context, ClipboardManager.class);
                 if (cbm == null || !cbm.hasPrimaryClip())
                     return false;
 
