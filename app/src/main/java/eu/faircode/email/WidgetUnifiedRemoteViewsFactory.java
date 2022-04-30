@@ -29,6 +29,7 @@ import android.os.Build;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
@@ -57,6 +58,7 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
     private long account;
     private boolean unseen;
     private boolean flagged;
+    private boolean highlight;
     private boolean semi;
     private int background;
     private int font;
@@ -66,6 +68,7 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
     private boolean distinguish_contacts;
     private int colorStripeWidth;
     private int colorWidgetForeground;
+    private int colorWidgetUnread;
     private int colorWidgetRead;
     private int colorSeparator;
     private boolean pro;
@@ -97,6 +100,7 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         folder = prefs.getLong("widget." + appWidgetId + ".folder", -1L);
         unseen = prefs.getBoolean("widget." + appWidgetId + ".unseen", false);
         flagged = prefs.getBoolean("widget." + appWidgetId + ".flagged", false);
+        highlight = prefs.getBoolean("widget." + appWidgetId + ".highlight", false);
         semi = prefs.getBoolean("widget." + appWidgetId + ".semi", true);
         background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
         font = prefs.getInt("widget." + appWidgetId + ".font", 0);
@@ -116,7 +120,11 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         if (lum > 0.7f) {
             colorWidgetForeground = ColorUtils.blendARGB(colorWidgetForeground, Color.BLACK, 1.0f);
             colorWidgetRead = ColorUtils.blendARGB(colorWidgetRead, Color.BLACK, 1.0f);
+            colorSeparator = ContextCompat.getColor(context, R.color.darkColorSeparator);
         }
+
+        int highlight_color = prefs.getInt("highlight_color", colorWidgetForeground);
+        colorWidgetUnread = ColorUtils.setAlphaComponent(highlight_color, 255);
 
         pro = ActivityBilling.isPro(context);
 
@@ -226,12 +234,12 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
             views.setTextViewText(idSubject, ssSubject);
             views.setTextViewText(idAccount, ssAccount);
 
-            int textColor = (message.ui_seen ? colorWidgetRead : colorWidgetForeground);
-
+            int textColor = (message.ui_seen ? colorWidgetRead : colorWidgetUnread);
             views.setTextColor(idFrom, textColor);
             views.setTextColor(idTime, textColor);
             views.setTextColor(idSubject, textColor);
             views.setTextColor(idAccount, textColor);
+            views.setInt(R.id.separator, "setBackgroundColor", colorSeparator);
 
             views.setViewVisibility(idAccount, account < 0 ? View.VISIBLE : View.GONE);
 

@@ -19,10 +19,12 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.view.ContextThemeWrapper;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,6 +54,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
 
     private String name;
     private long started;
+    private boolean destroyed;
     private boolean reported;
     private Lifecycle.State state;
     private Future<?> future;
@@ -59,6 +62,9 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
 
     private static PowerManager.WakeLock wl = null;
     private static ExecutorService globalExecutor = null;
+    private static int themeId = -1;
+    @SuppressLint("StaticFieldLeak")
+    private static Context themedContext = null;
     private static final List<SimpleTask> tasks = new ArrayList<>();
 
     private static final int MAX_WAKELOCK = 30 * 60 * 1000; // milliseconds
@@ -144,6 +150,21 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
             }
         }
 
+        LifecycleObserver watcher = new LifecycleObserver() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            public void onDestroy() {
+                EntityLog.log(context, EntityLog.Type.Debug, "Owner gone task=" + name);
+                destroyed = true;
+                owner.getLifecycle().removeObserver(this);
+            }
+        };
+
+        int themeId = FragmentDialogTheme.getTheme(context);
+        if (themedContext == null || SimpleTask.themeId != themeId) {
+            SimpleTask.themeId = themeId;
+            themedContext = new ContextThemeWrapper(context.getApplicationContext(), themeId);
+        }
+
         future = getExecutor(context).submit(new Runnable() {
             private Object data;
             private long elapsed;
@@ -158,7 +179,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                     if (log)
                         Log.i("Executing task=" + name);
                     long start = new Date().getTime();
-                    data = onExecute(context, args);
+                    data = onExecute(themedContext, args);
                     elapsed = new Date().getTime() - start;
                     if (log)
                         Log.i("Executed task=" + name + " elapsed=" + elapsed + " ms");
@@ -181,30 +202,34 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                         if (state.equals(Lifecycle.State.DESTROYED)) {
                             // No delivery
                             cleanup(context);
-                        } else if (state.isAtLeast(Lifecycle.State.RESUMED)) {
-                            // Inline delivery
-                            Log.i("Deliver task " + name + " state=" + state + " elapse=" + elapsed + " ms");
-                            deliver();
-                            cleanup(context);
                         } else {
-                            Log.i("Deferring task " + name + " state=" + state);
-                            owner.getLifecycle().addObserver(new LifecycleObserver() {
-                                @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
-                                public void onAny() {
-                                    state = owner.getLifecycle().getCurrentState();
-                                    if (state.equals(Lifecycle.State.DESTROYED)) {
-                                        Log.i("Destroyed task " + name);
-                                        owner.getLifecycle().removeObserver(this);
-                                        cleanup(context);
-                                    } else if (state.isAtLeast(Lifecycle.State.RESUMED)) {
-                                        Log.i("Deferred delivery task " + name);
-                                        owner.getLifecycle().removeObserver(this);
-                                        deliver();
-                                        cleanup(context);
-                                    } else
-                                        Log.i("Deferring task " + name + " state=" + state);
-                                }
-                            });
+                            owner.getLifecycle().removeObserver(watcher);
+
+                            if (state.isAtLeast(Lifecycle.State.RESUMED)) {
+                                // Inline delivery
+                                Log.i("Deliver task " + name + " state=" + state + " elapse=" + elapsed + " ms");
+                                deliver();
+                                cleanup(context);
+                            } else {
+                                Log.i("Deferring task " + name + " state=" + state);
+                                owner.getLifecycle().addObserver(new LifecycleObserver() {
+                                    @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
+                                    public void onAny() {
+                                        state = owner.getLifecycle().getCurrentState();
+                                        if (state.equals(Lifecycle.State.DESTROYED)) {
+                                            Log.i("Destroyed task " + name);
+                                            owner.getLifecycle().removeObserver(this);
+                                            cleanup(context);
+                                        } else if (state.isAtLeast(Lifecycle.State.RESUMED)) {
+                                            Log.i("Deferred delivery task " + name);
+                                            owner.getLifecycle().removeObserver(this);
+                                            deliver();
+                                            cleanup(context);
+                                        } else
+                                            Log.i("Deferring task " + name + " state=" + state);
+                                    }
+                                });
+                            }
                         }
                     }
 
@@ -249,15 +274,20 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
             }
         });
 
+        owner.getLifecycle().addObserver(watcher);
+
         updateTaskCount(context);
     }
 
+    public boolean isAlive() {
+        return !this.destroyed;
+    }
+
     void cancel(Context context) {
-        if (future != null)
-            if (future.cancel(false)) {
-                Log.i("Cancelled task=" + name);
-                cleanup(context);
-            }
+        if (future != null && future.cancel(false)) {
+            Log.i("Cancelled task=" + name);
+            cleanup(context);
+        }
     }
 
     private void cleanup(Context context) {

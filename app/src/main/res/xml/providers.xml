@@ -128,7 +128,7 @@
             clientSecret="r=o4@SlzU:MA6MlXM6mPG[44i4gYPq[@"
             enabled="true"
             privacy="https://privacy.microsoft.com/privacystatement"
-            prompt="select_account"
+            prompt="login"
             redirectUri="https://oauth.faircode.eu/"
             scopes="profile,openid,email,offline_access,https://outlook.office.com/IMAP.AccessAsUser.All,https://outlook.office.com/SMTP.Send"
             tokenEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
@@ -164,7 +164,7 @@
             clientSecret="k847Q~ZKtIBNp~ls_riKEbFDsvOQEdUA.YDNt"
             enabled="false"
             privacy="https://privacy.microsoft.com/privacystatement"
-            prompt="select_account"
+            prompt="login"
             redirectUri="https://oauth.faircode.eu/"
             scopes="openid,email,offline_access,https://outlook.office.com/IMAP.AccessAsUser.All,https://outlook.office.com/SMTP.Send"
             tokenEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
@@ -1591,6 +1591,58 @@
             starttls="false" />
         <smtp
             host="mail.vodamail.hu"
+            port="587"
+            starttls="true" />
+    </provider>
+    <provider
+        name="Bbox/Bouygues"
+        domain="bbox\\.fr"
+        link="https://www.assistance.bouyguestelecom.fr/s/article/logiciel-messagerie-emails-bbox">
+        <imap
+            host="imap.bbox.fr"
+            port="993"
+            starttls="false" />
+        <!-- port 587 is SSL/TLS ! -->
+        <smtp
+            host="smtp.bbox.fr"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="ILJ Mail"
+        domain="ilj\\.com,tidetalk\\.com,whatacool\\.com,righttackle\\.com,friday\\.tv,saturday\\.tv,militaryproud\\.com,oicu812\\.com,1fj\\.com,ilovejesus\\.com,christianman\\.com,christianlady\\.com"
+        link="https://www.iljmail.com/knowledge-base/incoming-outgoing-mail-server-settings-2/">
+        <imap
+            host="secure.iljmail.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="secure.iljmail.com"
+            port="587"
+            starttls="true" />
+    </provider>
+    <provider
+        name="NIC/gov.in"
+        domain="nic\\.in,.*\\.nic\\.in">
+        <imap
+            host="imap.mail.gov.in"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.mail.gov.in"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Cytanet"
+        domain="cablenet\\.com\\.cy"
+        link="https://www.eworkswsi.com.cy/eworkswsi-cyprus-internet-marketing-blog/using-your-own-smtp-server-with-a-cytanet-e-mail-account-in-cyprus-1">
+        <imap
+            host="mail.cytanet.com.cy"
+            port="143"
+            starttls="true" />
+        <smtp
+            host="mail-out.cytanet.com.cy"
             port="587"
             starttls="true" />
     </provider>

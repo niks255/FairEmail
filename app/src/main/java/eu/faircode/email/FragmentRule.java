@@ -634,6 +634,9 @@ public class FragmentRule extends FragmentBase {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (cbResend == null)
+                    return;
+
                 cbResend.setEnabled(!TextUtils.isEmpty(s.toString()));
             }
         });
@@ -807,15 +810,15 @@ public class FragmentRule extends FragmentBase {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Object tag = btnFolder.getTag();
-        outState.putInt("fair:start", spScheduleDayStart.getSelectedItemPosition());
-        outState.putInt("fair:end", spScheduleDayEnd.getSelectedItemPosition());
-        outState.putInt("fair:action", spAction.getSelectedItemPosition());
-        outState.putInt("fair:importance", spImportance.getSelectedItemPosition());
+        Object tag = (btnFolder == null ? null : btnFolder.getTag());
+        outState.putInt("fair:start", spScheduleDayStart == null ? 0 : spScheduleDayStart.getSelectedItemPosition());
+        outState.putInt("fair:end", spScheduleDayEnd == null ? 0 : spScheduleDayEnd.getSelectedItemPosition());
+        outState.putInt("fair:action", spAction == null ? 0 : spAction.getSelectedItemPosition());
+        outState.putInt("fair:importance", spImportance == null ? 0 : spImportance.getSelectedItemPosition());
         outState.putLong("fair:target", tag == null ? -1 : (long) tag);
-        outState.putCharSequence("fair:name", btnFolder.getText());
-        outState.putInt("fair:identity", spIdent.getSelectedItemPosition());
-        outState.putInt("fair:answer", spAnswer.getSelectedItemPosition());
+        outState.putCharSequence("fair:name", btnFolder == null ? null : btnFolder.getText());
+        outState.putInt("fair:identity", spIdent == null ? 0 : spIdent.getSelectedItemPosition());
+        outState.putInt("fair:answer", spAnswer == null ? 0 : spAnswer.getSelectedItemPosition());
         outState.putParcelable("fair:sound", sound);
 
         super.onSaveInstanceState(outState);
@@ -1636,9 +1639,18 @@ public class FragmentRule extends FragmentBase {
                 @Override
                 public void onClick(View v) {
                     new SimpleTask<Integer>() {
+                        private Toast toast = null;
+
                         @Override
                         protected void onPreExecute(Bundle args) {
-                            ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
+                            toast = ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+
+                        @Override
+                        protected void onPostExecute(Bundle args) {
+                            if (toast != null)
+                                toast.cancel();
                         }
 
                         @Override

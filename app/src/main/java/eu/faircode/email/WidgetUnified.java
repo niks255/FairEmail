@@ -41,6 +41,8 @@ public class WidgetUnified extends AppWidgetProvider {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         int colorWidgetForeground = context.getResources().getColor(R.color.colorWidgetForeground);
+        int lightColorSeparator = context.getResources().getColor(R.color.lightColorSeparator);
+        int darkColorSeparator = context.getResources().getColor(R.color.darkColorSeparator);
 
         for (int appWidgetId : appWidgetIds) {
             String name = prefs.getString("widget." + appWidgetId + ".name", null);
@@ -105,10 +107,6 @@ public class WidgetUnified extends AppWidgetProvider {
             views.setViewPadding(R.id.refresh, px, px, px, px);
             views.setOnClickPendingIntent(R.id.refresh, piSync);
 
-            boolean syncing = prefs.getBoolean("widget." + appWidgetId + ".syncing", false);
-            views.setImageViewResource(R.id.refresh, syncing ? R.drawable.twotone_compare_arrows_24 : R.drawable.twotone_sync_24);
-            views.setViewVisibility(R.id.refresh, refresh ? View.VISIBLE : View.GONE);
-
             views.setViewVisibility(R.id.compose, compose ? View.VISIBLE : View.GONE);
             views.setViewPadding(R.id.compose, px, px, px, px);
             views.setOnClickPendingIntent(R.id.compose, piCompose);
@@ -131,6 +129,8 @@ public class WidgetUnified extends AppWidgetProvider {
 
             views.setPendingIntentTemplate(R.id.lv, piItem);
 
+            boolean syncing = prefs.getBoolean("widget." + appWidgetId + ".syncing", false);
+
             if (background == Color.TRANSPARENT) {
                 if (semi)
                     views.setInt(R.id.background, "setBackgroundResource", R.drawable.widget_background);
@@ -138,6 +138,11 @@ public class WidgetUnified extends AppWidgetProvider {
                     views.setInt(R.id.background, "setBackgroundColor", background);
 
                 views.setTextColor(R.id.title, colorWidgetForeground);
+                views.setInt(R.id.separator, "setBackgroundColor", lightColorSeparator);
+                views.setImageViewResource(R.id.refresh, syncing
+                        ? R.drawable.twotone_compare_arrows_24_white
+                        : R.drawable.twotone_sync_24_white);
+                views.setImageViewResource(R.id.compose, R.drawable.twotone_edit_24_white);
             } else {
                 float lum = (float) ColorUtils.calculateLuminance(background);
 
@@ -148,6 +153,19 @@ public class WidgetUnified extends AppWidgetProvider {
 
                 int fg = (lum > 0.7f ? Color.BLACK : colorWidgetForeground);
                 views.setTextColor(R.id.title, fg);
+                views.setInt(R.id.separator, "setBackgroundColor",
+                        lum > 0.7f ? darkColorSeparator : lightColorSeparator);
+                if (syncing)
+                    views.setImageViewResource(R.id.refresh, lum > 0.7f
+                            ? R.drawable.twotone_compare_arrows_24_black
+                            : R.drawable.twotone_compare_arrows_24_white);
+                else
+                    views.setImageViewResource(R.id.refresh, lum > 0.7f
+                            ? R.drawable.twotone_sync_24_black
+                            : R.drawable.twotone_sync_24_white);
+                views.setImageViewResource(R.id.compose, lum > 0.7f
+                        ? R.drawable.twotone_edit_24_black
+                        : R.drawable.twotone_edit_24_white);
             }
 
             int dp6 = Helper.dp2pixels(context, 6);

@@ -56,15 +56,12 @@ public class MessageClassifier {
 
     private static final int MAX_WORDS = 1000;
 
-    static synchronized void classify(EntityMessage message, EntityFolder folder, EntityFolder target, Context context) {
+    static synchronized void classify(EntityMessage message, EntityFolder folder, boolean added, Context context) {
         try {
             if (!isEnabled(context))
                 return;
 
             if (!folder.auto_classify_source)
-                return;
-
-            if (target != null && !target.auto_classify_source)
                 return;
 
             long start = new Date().getTime();
@@ -86,12 +83,13 @@ public class MessageClassifier {
                 wordClassFrequency.put(folder.account, new HashMap<>());
 
             // Classify texts
-            String classified = classify(message, folder.name, texts, target == null, context);
+            String classified = classify(message, folder.name, texts, added, context);
 
             long elapsed = new Date().getTime() - start;
             EntityLog.log(context, EntityLog.Type.Classification, message,
                     "Classifier" +
                             " folder=" + folder.name +
+                            " added=" + added +
                             " message=" + message.id +
                             "@" + new Date(message.received) +
                             ":" + message.subject +
@@ -126,8 +124,8 @@ public class MessageClassifier {
                     db.endTransaction();
                 }
 
-                if (message.ui_hide)
-                    accountMsgIds.get(folder.account).add(message.msgid);
+                //if (message.ui_hide)
+                //    accountMsgIds.get(folder.account).add(message.msgid);
             }
 
             dirty = true;
@@ -183,9 +181,11 @@ public class MessageClassifier {
         DB db = DB.getInstance(context);
         for (String clazz : new ArrayList<>(classMessages.get(message.account).keySet())) {
             EntityFolder folder = db.folder().getFolderByName(message.account, clazz);
-            if (folder == null) {
+            if (folder == null || !folder.auto_classify_source) {
                 EntityLog.log(context, EntityLog.Type.Classification, message,
-                        "Classifier deleting folder class=" + message.account + ":" + clazz);
+                        "Classifier deleting folder" +
+                                " class=" + message.account + ":" + clazz +
+                                " exists=" + (folder != null));
                 classMessages.get(message.account).remove(clazz);
                 for (String word : wordClassFrequency.get(message.account).keySet())
                     wordClassFrequency.get(message.account).get(word).remove(clazz);

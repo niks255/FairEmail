@@ -38,9 +38,7 @@
                 android:layout_weight="0"
                 android:contentDescription="@string/tile_synchronize"
                 android:padding="6dp"
-                android:src="@drawable/twotone_sync_24"
-                android:visibility="gone"
-                app:tint="@color/colorWidgetForeground" />
+                android:src="@drawable/twotone_sync_24_white" />
 
             <ImageView
                 android:id="@+id/compose"
@@ -49,23 +47,20 @@
                 android:layout_weight="0"
                 android:contentDescription="@string/title_compose"
                 android:padding="6dp"
-                android:src="@drawable/twotone_edit_24"
-                android:visibility="gone"
-                app:tint="@color/colorWidgetForeground" />
+                android:src="@drawable/twotone_edit_24_white" />
         </LinearLayout>
 
         <FrameLayout
             android:id="@+id/separator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorWidgetRead" />
+            android:background="@color/grey" />
 
         <ListView
             android:id="@+id/lv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:divider="@color/colorWidgetRead"
-            android:dividerHeight="1dp" />
+            android:divider="@null" />
     </LinearLayout>
 </FrameLayout>

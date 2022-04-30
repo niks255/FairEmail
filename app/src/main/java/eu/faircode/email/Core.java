@@ -1385,7 +1385,7 @@ class Core {
         // De-classify
         if (!copy)
             for (EntityMessage message : messages)
-                MessageClassifier.classify(message, folder, target, context);
+                MessageClassifier.classify(message, folder, false, context);
 
         IMAPFolder itarget = (IMAPFolder) istore.getFolder(target.name);
 
@@ -1997,7 +1997,7 @@ class Core {
                 plain_only,
                 message.preview,
                 parts.getWarnings(message.warning));
-        MessageClassifier.classify(message, folder, null, context);
+        MessageClassifier.classify(message, folder, true, context);
 
         if (body != null)
             EntityLog.log(context, "Operation body size=" + body.length());
@@ -3827,7 +3827,6 @@ class Core {
         boolean download_plain = prefs.getBoolean("download_plain", false);
         boolean notify_known = prefs.getBoolean("notify_known", false);
         boolean experiments = prefs.getBoolean("experiments", false);
-        boolean dkim_verify = prefs.getBoolean("dkim_verify", false);
         boolean pro = ActivityBilling.isPro(context);
 
         long uid = ifolder.getUID(imessage);
@@ -4262,7 +4261,7 @@ class Core {
                                     parts.isPlainOnly(download_plain),
                                     message.preview,
                                     parts.getWarnings(message.warning));
-                            MessageClassifier.classify(message, folder, null, context);
+                            MessageClassifier.classify(message, folder, true, context);
 
                             if (stats != null && body != null)
                                 stats.content += body.length();
@@ -4410,6 +4409,12 @@ class Core {
                 try {
                     db.beginTransaction();
 
+                    EntityMessage existing = db.message().getMessage(message.id);
+                    if (existing != null) {
+                        message.revision = existing.revision;
+                        message.revisions = existing.revisions;
+                    }
+
                     db.message().updateMessage(message);
 
                     if (process)
@@ -4423,7 +4428,7 @@ class Core {
 
             if (process) {
                 EntityContact.received(context, account, folder, message);
-                MessageClassifier.classify(message, folder, null, context);
+                MessageClassifier.classify(message, folder, true, context);
             } else
                 Log.d(folder.name + " unchanged uid=" + uid);
 
@@ -4741,7 +4746,7 @@ class Core {
                             parts.isPlainOnly(),
                             message.preview,
                             parts.getWarnings(message.warning));
-                    MessageClassifier.classify(message, folder, null, context);
+                    MessageClassifier.classify(message, folder, true, context);
 
                     if (stats != null && body != null)
                         stats.content += body.length();
@@ -5010,7 +5015,7 @@ class Core {
             for (NotificationCompat.Builder builder : notifications) {
                 long id = builder.getExtras().getLong("id", 0);
                 if ((id == 0 && !prev.equals(current)) || add.contains(id)) {
-                    // https://developer.android.com/training/wearables/notifications/creating
+                    // https://developer.android.com/training/wearables/notifications/bridger#non-bridged
                     if (id == 0) {
                         if (!notify_summary)
                             builder.setLocalOnly(true);

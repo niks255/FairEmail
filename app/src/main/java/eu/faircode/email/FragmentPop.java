@@ -60,6 +60,8 @@ import androidx.lifecycle.Lifecycle;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -84,6 +86,7 @@ public class FragmentPop extends FragmentBase {
     private TextView tvColorPro;
 
     private CheckBox cbSynchronize;
+    private CheckBox cbIgnoreSchedule;
     private CheckBox cbOnDemand;
     private CheckBox cbPrimary;
     private CheckBox cbNotify;
@@ -94,6 +97,7 @@ public class FragmentPop extends FragmentBase {
     private CheckBox cbLeaveDevice;
     private EditText etMax;
     private EditText etInterval;
+    private CheckBox cbUnmetered;
 
     private ArrayAdapter<EntityFolder> adapterSwipe;
     private Spinner spLeft;
@@ -149,6 +153,7 @@ public class FragmentPop extends FragmentBase {
         tvColorPro = view.findViewById(R.id.tvColorPro);
 
         cbSynchronize = view.findViewById(R.id.cbSynchronize);
+        cbIgnoreSchedule = view.findViewById(R.id.cbIgnoreSchedule);
         cbOnDemand = view.findViewById(R.id.cbOnDemand);
         cbPrimary = view.findViewById(R.id.cbPrimary);
         cbNotify = view.findViewById(R.id.cbNotify);
@@ -159,6 +164,7 @@ public class FragmentPop extends FragmentBase {
         cbLeaveDevice = view.findViewById(R.id.cbLeaveDevice);
         etMax = view.findViewById(R.id.etMax);
         etInterval = view.findViewById(R.id.etInterval);
+        cbUnmetered = view.findViewById(R.id.cbUnmeteredOnly);
 
         spLeft = view.findViewById(R.id.spLeft);
         spRight = view.findViewById(R.id.spRight);
@@ -201,6 +207,9 @@ public class FragmentPop extends FragmentBase {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (tilPassword == null)
+                    return;
+
                 String password = s.toString();
                 boolean warning = (Helper.containsWhiteSpace(password) ||
                         Helper.containsControlChars(password));
@@ -238,6 +247,7 @@ public class FragmentPop extends FragmentBase {
         cbSynchronize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                cbIgnoreSchedule.setEnabled(checked);
                 cbOnDemand.setEnabled(checked);
                 cbPrimary.setEnabled(checked);
             }
@@ -313,6 +323,7 @@ public class FragmentPop extends FragmentBase {
         args.putInt("color", btnColor.getColor());
 
         args.putBoolean("synchronize", cbSynchronize.isChecked());
+        args.putBoolean("ignore_schedule", cbIgnoreSchedule.isChecked());
         args.putBoolean("ondemand", cbOnDemand.isChecked());
         args.putBoolean("primary", cbPrimary.isChecked());
         args.putBoolean("notify", cbNotify.isChecked());
@@ -323,6 +334,7 @@ public class FragmentPop extends FragmentBase {
         args.putBoolean("leave_device", cbLeaveDevice.isChecked());
         args.putString("max", etMax.getText().toString());
         args.putString("interval", etInterval.getText().toString());
+        args.putBoolean("unmetered", cbUnmetered.isChecked());
 
         args.putLong("left", ((EntityFolder) spLeft.getSelectedItem()).id);
         args.putLong("right", ((EntityFolder) spRight.getSelectedItem()).id);
@@ -364,6 +376,7 @@ public class FragmentPop extends FragmentBase {
                 Integer color = args.getInt("color");
 
                 boolean synchronize = args.getBoolean("synchronize");
+                boolean ignore_schedule = args.getBoolean("ignore_schedule");
                 boolean ondemand = args.getBoolean("ondemand");
                 boolean primary = args.getBoolean("primary");
                 boolean notify = args.getBoolean("notify");
@@ -373,6 +386,7 @@ public class FragmentPop extends FragmentBase {
                 boolean leave_device = args.getBoolean("leave_device");
                 String max = args.getString("max");
                 String interval = args.getString("interval");
+                boolean unmetered = args.getBoolean("unmetered");
 
                 long left = args.getLong("left");
                 long right = args.getLong("right");
@@ -411,6 +425,14 @@ public class FragmentPop extends FragmentBase {
                 DB db = DB.getInstance(context);
                 EntityAccount account = db.account().getAccount(id);
 
+                JSONObject jconditions = new JSONObject();
+                if (account != null && account.conditions != null)
+                    try {
+                        jconditions = new JSONObject(account.conditions);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+
                 if (should) {
                     if (account == null)
                         return !TextUtils.isEmpty(host) && !TextUtils.isEmpty(user);
@@ -435,6 +457,8 @@ public class FragmentPop extends FragmentBase {
                         return true;
                     if (!Objects.equals(account.synchronize, synchronize))
                         return true;
+                    if (ignore_schedule != jconditions.optBoolean("ignore_schedule"))
+                        return true;
                     if (!Objects.equals(account.ondemand, ondemand))
                         return true;
                     if (!Objects.equals(account.primary, account.synchronize && primary))
@@ -452,6 +476,8 @@ public class FragmentPop extends FragmentBase {
                     if (!Objects.equals(account.max_messages, max_messages))
                         return true;
                     if (!Objects.equals(account.poll_interval, poll_interval))
+                        return true;
+                    if (unmetered != jconditions.optBoolean("unmetered"))
                         return true;
 
                     if (!Objects.equals(account.swipe_left, left))
@@ -492,6 +518,8 @@ public class FragmentPop extends FragmentBase {
                     }
                 }
 
+                boolean reschedule = (ignore_schedule != jconditions.optBoolean("ignore_schedule"));
+
                 try {
                     db.beginTransaction();
 
@@ -520,6 +548,7 @@ public class FragmentPop extends FragmentBase {
                     account.color = color;
 
                     account.synchronize = synchronize;
+                    jconditions.put("ignore_schedule", ignore_schedule);
                     account.ondemand = ondemand;
                     account.primary = (account.synchronize && primary);
                     account.notify = notify;
@@ -529,6 +558,9 @@ public class FragmentPop extends FragmentBase {
                     account.leave_on_device = leave_device;
                     account.max_messages = max_messages;
                     account.poll_interval = poll_interval;
+
+                    jconditions.put("unmetered", unmetered);
+                    account.conditions = jconditions.toString();
 
                     account.swipe_left = left;
                     account.swipe_right = right;
@@ -578,7 +610,10 @@ public class FragmentPop extends FragmentBase {
                     db.endTransaction();
                 }
 
-                ServiceSynchronize.eval(context, "POP3");
+                if (reschedule)
+                    ServiceSynchronize.reschedule(context);
+                else
+                    ServiceSynchronize.eval(context, "POP3");
 
                 if (!synchronize) {
                     NotificationManager nm = Helper.getSystemService(context, NotificationManager.class);
@@ -649,7 +684,7 @@ public class FragmentPop extends FragmentBase {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString("fair:password", tilPassword.getEditText().getText().toString());
+        outState.putString("fair:password", tilPassword == null ? null : tilPassword.getEditText().getText().toString());
         outState.putInt("fair:auth", auth);
         super.onSaveInstanceState(outState);
     }
@@ -673,6 +708,14 @@ public class FragmentPop extends FragmentBase {
             @Override
             protected void onExecuted(Bundle args, final EntityAccount account) {
                 if (savedInstanceState == null) {
+                    JSONObject jcondition = new JSONObject();
+                    try {
+                        if (account != null && account.conditions != null)
+                            jcondition = new JSONObject(account.conditions);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+
                     etHost.setText(account == null ? null : account.host);
                     etPort.setText(account == null ? null : Long.toString(account.port));
 
@@ -693,6 +736,7 @@ public class FragmentPop extends FragmentBase {
                     btnColor.setColor(account == null ? null : account.color);
 
                     cbSynchronize.setChecked(account == null ? true : account.synchronize);
+                    cbIgnoreSchedule.setChecked(jcondition.optBoolean("ignore_schedule"));
                     cbOnDemand.setChecked(account == null ? false : account.ondemand);
                     cbPrimary.setChecked(account == null ? false : account.primary);
 
@@ -713,6 +757,7 @@ public class FragmentPop extends FragmentBase {
                                 ? EntityAccount.DEFAULT_MAX_MESSAGES : account.max_messages));
 
                     etInterval.setText(account == null ? "" : Long.toString(account.poll_interval));
+                    cbUnmetered.setChecked(jcondition.optBoolean("unmetered"));
                     cbIdentity.setChecked(account == null);
 
                     List<EntityFolder> folders = getSwipeActions();
@@ -761,6 +806,7 @@ public class FragmentPop extends FragmentBase {
                     tilPassword.setEnabled(false);
                 }
 
+                cbIgnoreSchedule.setEnabled(cbSynchronize.isChecked());
                 cbOnDemand.setEnabled(cbSynchronize.isChecked());
                 cbPrimary.setEnabled(cbSynchronize.isChecked());
 

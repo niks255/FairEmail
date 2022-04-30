@@ -19,6 +19,7 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -58,8 +59,7 @@ public class ServiceExternal extends Service {
     public void onCreate() {
         Log.i("Service external create");
         super.onCreate();
-        startForeground(NotificationHelper.NOTIFICATION_EXTERNAL,
-                getNotification().build());
+        startForeground(NotificationHelper.NOTIFICATION_EXTERNAL, getNotification());
     }
 
     @Override
@@ -67,7 +67,6 @@ public class ServiceExternal extends Service {
         Log.i("Service external destroy");
         stopForeground(true);
         super.onDestroy();
-        CoalMine.watch(this, getClass().getSimpleName() + "#onDestroy()");
     }
 
     @Override
@@ -77,8 +76,7 @@ public class ServiceExternal extends Service {
             Log.logExtras(intent);
 
             super.onStartCommand(intent, flags, startId);
-            startForeground(NotificationHelper.NOTIFICATION_EXTERNAL,
-                    getNotification().build());
+            startForeground(NotificationHelper.NOTIFICATION_EXTERNAL, getNotification());
 
             if (intent == null)
                 return START_NOT_STICKY;
@@ -127,7 +125,7 @@ public class ServiceExternal extends Service {
         return null;
     }
 
-    private NotificationCompat.Builder getNotification() {
+    private Notification getNotification() {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, "service")
                         .setSmallIcon(R.drawable.baseline_compare_arrows_white_24)
@@ -138,9 +136,12 @@ public class ServiceExternal extends Service {
                         .setPriority(NotificationCompat.PRIORITY_MIN)
                         .setCategory(NotificationCompat.CATEGORY_SERVICE)
                         .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                        .setLocalOnly(true);
+                        .setLocalOnly(true)
+                        .setOngoing(true);
 
-        return builder;
+        Notification notification = builder.build();
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+        return notification;
     }
 
     private static void poll(Context context, Intent intent) {

@@ -23,6 +23,7 @@ import static android.app.Activity.RESULT_OK;
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 
 import android.app.Dialog;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -76,9 +77,12 @@ import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilterOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -94,6 +98,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class FragmentFolders extends FragmentBase {
     private ViewGroup view;
@@ -901,14 +906,18 @@ public class FragmentFolders extends FragmentBase {
 
     private void onDeleteLocal(Bundle args) {
         new SimpleTask<Void>() {
+            private Toast toast = null;
+
             @Override
             protected void onPreExecute(Bundle args) {
-                ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
+                toast = ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG);
+                toast.show();
             }
 
             @Override
             protected void onPostExecute(Bundle args) {
-                ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+                if (toast != null)
+                    toast.cancel();
             }
 
             @Override
@@ -957,6 +966,11 @@ public class FragmentFolders extends FragmentBase {
                 WorkerCleanup.cleanup(context, false);
 
                 return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -1057,9 +1071,18 @@ public class FragmentFolders extends FragmentBase {
 
     private void onExecuteRules(Bundle args) {
         new SimpleTask<Integer>() {
+            private Toast toast = null;
+
             @Override
             protected void onPreExecute(Bundle args) {
-                ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
+                toast = ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG);
+                toast.show();
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                if (toast != null)
+                    toast.cancel();
             }
 
             @Override
@@ -1144,14 +1167,18 @@ public class FragmentFolders extends FragmentBase {
         args.putParcelable("uri", uri);
 
         new SimpleTask<Void>() {
+            private Toast toast = null;
+
             @Override
             protected void onPreExecute(Bundle args) {
-                ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
+                toast = ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG);
+                toast.show();
             }
 
             @Override
             protected void onPostExecute(Bundle args) {
-                ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+                if (toast != null)
+                    toast.cancel();
             }
 
             @Override
@@ -1170,12 +1197,12 @@ public class FragmentFolders extends FragmentBase {
                                 .setSmallIcon(R.drawable.baseline_get_app_white_24)
                                 .setContentTitle(getString(R.string.title_export_messages))
                                 .setAutoCancel(false)
-                                .setOngoing(true)
                                 .setShowWhen(false)
-                                .setLocalOnly(true)
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                 .setCategory(NotificationCompat.CATEGORY_PROGRESS)
-                                .setVisibility(NotificationCompat.VISIBILITY_SECRET);
+                                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                                .setLocalOnly(true)
+                                .setOngoing(true);
 
                 DB db = DB.getInstance(context);
                 List<Long> ids = db.message().getMessageIdsByFolder(fid);
@@ -1202,7 +1229,9 @@ public class FragmentFolders extends FragmentBase {
                             if (now - last > EXPORT_PROGRESS_INTERVAL) {
                                 last = now;
                                 builder.setProgress(ids.size(), i, false);
-                                nm.notify("export", NotificationHelper.NOTIFICATION_TAGGED, builder.build());
+                                Notification notification = builder.build();
+                                notification.flags |= Notification.FLAG_NO_CLEAR;
+                                nm.notify("export", NotificationHelper.NOTIFICATION_TAGGED, notification);
                             }
 
                             long id = ids.get(i);
@@ -1218,7 +1247,18 @@ public class FragmentFolders extends FragmentBase {
 
                             out.write(("From " + email + " " + df.format(message.received) + "\n").getBytes());
 
-                            Message imessage = MessageHelper.from(context, message, null, isession, false);
+                            Message imessage = null;
+
+                            if (Boolean.TRUE.equals(message.raw))
+                                try (InputStream is = new FileInputStream(message.getRawFile(context))) {
+                                    imessage = new MimeMessage(isession, is);
+                                } catch (Throwable ex) {
+                                    Log.w(ex);
+                                }
+
+                            if (imessage == null)
+                                imessage = MessageHelper.from(context, message, null, isession, false);
+
                             imessage.writeTo(new FilterOutputStream(out) {
                                 private boolean cr = false;
                                 private ByteArrayOutputStream buffer = new ByteArrayOutputStream(998);
@@ -1279,6 +1319,11 @@ public class FragmentFolders extends FragmentBase {
                 }
 
                 return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
             }
 
             @Override

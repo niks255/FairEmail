@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1877 }
+def getVersionCode = { -> return 1887 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Hulsanpes" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -52,16 +52,16 @@ android {
 
     sourceSets {
         github {
-            java.srcDirs = ['src/main/java', 'src/play/java']
+            java.srcDirs = ['src/main/java', 'src/play/java', 'src/extra/java']
         }
         fdroid {
-            java.srcDirs = ['src/main/java', 'src/fdroid/java']
+            java.srcDirs = ['src/main/java', 'src/fdroid/java', 'src/extra/java']
         }
         play {
-            java.srcDirs = ['src/main/java', 'src/play/java']
+            java.srcDirs = ['src/main/java', 'src/play/java', 'src/dummy/java']
         }
         amazon {
-            java.srcDirs = ['src/main/java', 'src/amazon/java']
+            java.srcDirs = ['src/main/java', 'src/amazon/java', 'src/extra/java']
         }
         main.res.srcDirs += 'src/main/resExtra'
     }
@@ -162,10 +162,7 @@ android {
             buildConfigField "String", "CHANGELOG", "\"https://github.com/niks255/FairEmail/releases/\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"https://api.github.com/repos/niks255/fairemail/releases/latest\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"https://github.com/niks255/FairEmail/releases\""
-            buildConfigField "String", "GRAVATAR_URI", "\"https://www.gravatar.com/avatar/\""
-            buildConfigField "String", "LIBRAVATAR_DNS", "\"_avatars-sec._tcp,_avatars._tcp\""
-            buildConfigField "String", "LIBRAVATAR_URI", "\"https://seccdn.libravatar.org/avatar/\""
-            buildConfigField "String", "LIBRAVATAR_INFO", "\"https://libravatar.org/\""
+            buildConfigField "String", "LT_URI", "\"https://api.languagetool.org/v2/\""
             buildConfigField "String", "TX_URI", localProperties.getProperty("paypal.uri", "\"\"")
             buildConfigField "String", "GPA_URI", localProperties.getProperty("gpa.uri", "\"\"")
             buildConfigField "String", "INFO_URI", localProperties.getProperty("info.uri", "\"\"")
@@ -181,10 +178,7 @@ android {
             buildConfigField "String", "CHANGELOG", "\"https://github.com/M66B/FairEmail/releases/\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"https://api.github.com/repos/M66B/FairEmail/releases/latest\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"https://github.com/M66B/FairEmail/releases\""
-            buildConfigField "String", "GRAVATAR_URI", "\"https://www.gravatar.com/avatar/\""
-            buildConfigField "String", "LIBRAVATAR_DNS", "\"_avatars-sec._tcp,_avatars._tcp\""
-            buildConfigField "String", "LIBRAVATAR_URI", "\"https://seccdn.libravatar.org/avatar/\""
-            buildConfigField "String", "LIBRAVATAR_INFO", "\"https://libravatar.org/\""
+            buildConfigField "String", "LT_URI", "\"https://api.languagetool.org/v2/\""
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
@@ -201,10 +195,7 @@ android {
             buildConfigField "String", "CHANGELOG", "\"\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"\""
-            buildConfigField "String", "GRAVATAR_URI", "\"\""
-            buildConfigField "String", "LIBRAVATAR_DNS", "\"\""
-            buildConfigField "String", "LIBRAVATAR_URI", "\"\""
-            buildConfigField "String", "LIBRAVATAR_INFO", "\"\""
+            buildConfigField "String", "LT_URI", "\"\""
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
@@ -221,10 +212,7 @@ android {
             buildConfigField "String", "CHANGELOG", "\"\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"\""
-            buildConfigField "String", "GRAVATAR_URI", "\"\""
-            buildConfigField "String", "LIBRAVATAR_DNS", "\"\""
-            buildConfigField "String", "LIBRAVATAR_URI", "\"\""
-            buildConfigField "String", "LIBRAVATAR_INFO", "\"\""
+            buildConfigField "String", "LT_URI", "\"\""
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
@@ -595,5 +583,5 @@ dependencies {
     // https://github.com/square/leakcanary
     // https://square.github.io/leakcanary/getting_started/
     // https://mvnrepository.com/artifact/com.squareup.leakcanary/leakcanary-android
-    debugImplementation "com.squareup.leakcanary:leakcanary-android-startup:$canary_version"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$canary_version"
 }

@@ -184,7 +184,6 @@ public class Helper {
     static final String ID_COMMAND_URI = "https://datatracker.ietf.org/doc/html/rfc2971#section-3.1";
     static final String AUTH_RESULTS_URI = "https://datatracker.ietf.org/doc/html/rfc7601";
     static final String FAVICON_PRIVACY_URI = "https://en.wikipedia.org/wiki/Favicon";
-    static final String GRAVATAR_PRIVACY_URI = "https://en.wikipedia.org/wiki/Gravatar";
     static final String LICENSE_URI = "https://www.gnu.org/licenses/gpl-3.0.html";
     static final String DONTKILL_URI = "https://dontkillmyapp.com/";
     static final String URI_SUPPORT_RESET_OPEN = "https://support.google.com/pixelphone/answer/6271667";
@@ -835,6 +834,9 @@ public class Helper {
     }
 
     static void customTabsWarmup(Context context) {
+        if (context == null)
+            return;
+
         try {
             CustomTabsClient.bindCustomTabsService(context, "com.android.chrome", new CustomTabsServiceConnection() {
                 @Override
@@ -1859,6 +1861,10 @@ public class Helper {
         };
     }
 
+    static boolean isDot(char c) {
+        return (c == '.' /* Latin */ || c == '。' /* Chinese */);
+    }
+
     // Files
 
     static String sanitizeFilename(String name) {
@@ -2244,7 +2250,7 @@ public class Helper {
 
                         @Override
                         public void onAuthenticationError(final int errorCode, @NonNull final CharSequence errString) {
-                            if (isCancelled(errorCode))
+                            if (isCancelled(errorCode) || errorCode == BiometricPrompt.ERROR_UNABLE_TO_PROCESS)
                                 Log.w("Authenticate biometric error " + errorCode + ": " + errString);
                             else
                                 Log.e("Authenticate biometric error " + errorCode + ": " + errString);

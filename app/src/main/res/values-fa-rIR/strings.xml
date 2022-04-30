@@ -297,6 +297,8 @@
     <string name="title_advanced_suggest_frequently">مرتب‌سازی نشانی‌های پیشنهادی در دفعات استفاده</string>
     <string name="title_advanced_send_reminders">نمایش یادآورها</string>
     <string name="title_advanced_send_delayed">وقفه ارسال پیام‌ها</string>
+    <string name="title_advanced_auto_save_paragraph">پس از هر پاراگراف، پیش‌نویس را خودکار ذخیره کن</string>
+    <string name="title_advanced_auto_save_dot">پس از هر جمله، پیش‌نویس را خودکار ذخیره کن</string>
     <string name="title_advanced_compose_font">قلم پیشفرض</string>
     <string name="title_advanced_auto_identity">برای پیام‌های جدید، هویت را خودکار انتخاب کن</string>
     <string name="title_advanced_write_above">در بالای نوشته فرستنده بنویسید</string>
@@ -348,9 +350,8 @@
     <string name="title_advanced_highlight_unread">برجسته‌سازی پیام‌های خوانده نشده</string>
     <string name="title_advanced_color_stripe">نمایش نوار رنگ</string>
     <string name="title_advanced_avatars">نمایش تصویر مخاطبین</string>
-    <string name="title_advanced_gravatars">نمایش Gravatar ها</string>
-    <string name="title_advanced_libravatars">نمایش Libravatar ها</string>
     <string name="title_advanced_bimi_verified">فرستنده تایید شده</string>
+    <string name="title_advanced_efavicons">نمایش اواتارها</string>
     <string name="title_advanced_favicons">نمایش فاوآیکون‌ها</string>
     <string name="title_advanced_favicons_partial">تنها %1$s صفحه اول از صفحات وب را اسکن کن</string>
     <string name="title_advanced_generated_icons">نمایس آیکون‌های تولید شده</string>
@@ -478,6 +479,7 @@
     <string name="title_advanced_more">گزینه‌های بیشتر</string>
     <string name="title_advanced_debug">حالت عیب‌یابی</string>
     <string name="title_advanced_schedule_hint">برای تنظیم زمان روی زمان ضربه بزنید</string>
+    <string name="title_advanced_schedule_ignore">جدول‌های زمانی می‌توانند از طریق تنظیمات پیشرفته حساب غیرفعال شوند</string>
     <string name="title_advanced_lookup_mx_hint">این بررسی خواهد کرد که آیا سابقه DNS MX وجود دارد</string>
     <string name="title_advanced_sync_delay_hint">این سرعت همگام‌سازی پیام‌ها را کاهش خواهد داد</string>
     <string name="title_advanced_folder_nav_hint">این همیشه به فهرست پوشه‌ مرتبط با حساب از یک لیست پیام‌ برخواهد گشت</string>
@@ -489,7 +491,7 @@
     <string name="title_advanced_ssl_harden_hint">فعال‌سازی این باعث غیرفعال‌سازی SSL و رمز‌های ضعیف خواهد شد، که می‌تواند موجب مشکلات اتصال شود</string>
     <string name="title_advanced_browse_hint">واکشی پیام‌های بیشتر هنگام پیمایش به پایین</string>
     <string name="title_advanced_threading_hint">پیام‌های گروهی مرتبط با یکدیگر</string>
-    <string name="title_advanced_gravatars_hint">شاید خطر حریم خصوصی وجود داشته باشد</string>
+    <string name="title_advanced_privacy_risk">شاید خطر حریم خصوصی وجود داشته باشد</string>
     <string name="title_advanced_preview_hint">فقط زمانی در دسترس است که متن پیام دانلود شده باشد</string>
     <string name="compressed">محتویات فایل‌های فشرده شده (%1$s) با بیش از %2$s فایل یا فایل‌های بزرگ‌تر از %3$s نمایش داده نخواهند شد</string>
     <string name="title_advanced_autoexpand_hint">باز کردن خودکار پیام وقتی فقط یک پیام یا فقط یک پیام خوانده نشده در مکالمه وجود دارد</string>
@@ -551,6 +553,8 @@
     <string name="title_leave_on_server">رها کردن پیام‌ها روی سرور</string>
     <string name="title_leave_deleted">رهاکردن پیام‌های حذف شده روی سرور</string>
     <string name="title_leave_on_device">رها کردن پیام‌ها روی دستگاه</string>
+    <string name="title_unmetered_only">فقط از طریق شبکه‌های نامحدود وصل شو</string>
+    <string name="title_ignore_schedule">خارج از زمان تعیین شده هم همگام‌رسانی کن</string>
     <string name="title_check">بررسی</string>
     <string name="title_no_name">نام وجود ندارد</string>
     <string name="title_no_email">ایمیل آدرس وجود ندارد</string>
@@ -812,6 +816,7 @@
     <string name="title_insert_template">درج قالب</string>
     <string name="title_translate_html">قالب‌بندی را حفظ کن</string>
     <string name="title_translate_html_hint">این، کاراکترهای بیشتری را به کار خواهد برد</string>
+    <string name="title_suggestions_none" comment="title_suggestions_none&#10;Shown when no grammar improvement suggestions, etc">بدون پیشنهاد</string>
     <string name="title_edit_plain_text">ویرایش مانند متن ساده</string>
     <string name="title_select_certificate">انتخاب کلید عمومی</string>
     <string name="title_certificate_missing">کلید عمومی برای %1$s نیست</string>
@@ -1082,6 +1087,7 @@
     <string name="title_legend_r">پاسخ</string>
     <string name="title_legend_s">انتخاب/عدم انتخاب</string>
     <string name="title_hint_folder_sync">برای محدود کردن مصرف دیتا و باتری تمامی پوشه‌ها و پیام‌ها به صورت پیش‌فرض همگام سازی نخواهند شد</string>
+    <string name="title_hint_airplane">حالت هواپیما روشن است</string>
     <string name="title_hint_support">اگر سوال یا مشکلی دارید لطفا از قسمت پشتیبانی برای کمک گرفتن استفاده کنید</string>
     <string name="title_hint_message_actions">برای حذف به چپ بکشید؛ برای بایگانی به راست بکشید (اگر در دسترس باشد)؛ کنش‌های کشیدن می‌تواند در تنظیمات حساب پیکربندی شوند</string>
     <string name="title_hint_message_junk">این پیام‌ها در پوشه هرزنامه سرور ایمیل قرار دارند. واضح است که اپلیکیشن نمی‌تواند جلوی فرستادن هرزنامه برای شما را بگیرد.</string>
@@ -1173,6 +1179,7 @@
     <string name="title_widget_folder_unified">پوشه های صندوق پستی یکپارچه</string>
     <string name="title_widget_unseen">فقط پیام‌های خوانده نشده</string>
     <string name="title_widget_flagged">فقط پیام‌های ستاره‌دار</string>
+    <string name="title_widget_highlight_remark">در قسمت تنظیمات نمایش می‌شود رنگ هایلایت را انتخاب کرد</string>
     <string name="title_widget_font_size">اندازه متن</string>
     <string name="title_widget_padding">اندازه لایه‌گذاری</string>
     <string name="title_widget_semi_transparent">پس‌زمینه نیمه شفاف</string>

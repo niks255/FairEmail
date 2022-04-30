@@ -4,6 +4,62 @@
 
 ### [Hulsanpes](https://en.wikipedia.org/wiki/Hulsanpes)
 
+### 1.1887 - 2022-04-29
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1886 - 2022-04-28
+
+* Added option to auto save after entering a dot
+* Added LanguageTool support (long press the 'Save' button)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1885 - 2022-04-26
+
+* Fixed saving drafts
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1884 - 2022-04-26
+
+* Added option to highlight unread messages in the message list widget
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1883 - 2022-04-25
+
+* Added auto save draft for every new paragraph (can be turned off in the send settings)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1882 - 2022-04-25
+
+* Fixed dark texts in dark themes
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1881 - 2022-04-24
+
+* Added advanced account option to sync outside schedule
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1879 - 2022-04-23
+
+* Added warning about airplane mode enabled
+* Added advanced account option to connect via unmetered networks only
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1878 - 2022-04-21
+
+* Fixed printing
+* Fixed signature verification in some cases
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1877 - 2022-04-21
 
 * Small improvements and minor bug fixes
@@ -60,7 +116,7 @@
 
 ### 1.1869 - 2022-04-07
 
-* Added [DeepL HTML support](https://www.deepl.com/docs-api/handling-html-(beta)/)
+* Added DeepL HTML support
 * Fixed inline image handling for external drafts
 * Small improvements and minor bug fixes
 * Updated translations
@@ -68,7 +124,7 @@
 ### 1.1868 - 2022-04-06
 
 * Small improvements and minor bug fixes
-* Updated [Public Suffix List](https://publicsuffix.org/)
+* Updated Public Suffix List
 * Updated build tools
 * Updated translations
 
@@ -113,7 +169,7 @@
 * Added managing filter rules to the navigation menu
 * Small improvements and minor bug fixes
 * Updated AndroidX
-* Updated [Public Suffix List](https://publicsuffix.org/)
+* Updated Public Suffix List
 * Updated translations
 
 ### 1.1860 - 2022-03-23
@@ -154,17 +210,16 @@
 
 * Added option to show contents of zipped attachments (enabled by default)
 * Added option to sort reply templates by frequency of use
-* Added basic [DMARC](https://en.wikipedia.org/wiki/DMARC) report viewer
-* Enabled [sqlite analyze](https://sqlite.org/lang_analyze.html)
+* Added basic DMARC report viewer
+* Enabled sqlite analyze
 * Small improvements and minor bug fixes
 * Updated translations
 
 ### 1.1854 - 2022-03-09
 
-* Added [Libravatar](https://www.libravatar.org/) support
-* Added some more [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) word lists
-* Added [CSS inherit](https://developer.mozilla.org/en-US/docs/Web/CSS/inherit) support
-* Targeting [Android 12L](https://developer.android.com/about/versions/12/12L) (SDK 32)
+* Added some more BIP39 word lists
+* Added CSS inherit support
+* Targeting Android 12L (SDK 32)
 * Small improvements and minor bug fixes
 * Updated translations
 
@@ -251,7 +306,7 @@
 ### 1.1841 - 2022-02-19
 
 * Improved plain text only check
-* Updated [Public Suffix List](https://publicsuffix.org/)
+* Updated Public Suffix List
 * Preliminary Android 13 support
 * Small improvements and minor bug fixes
 * Updated translations
@@ -276,7 +331,7 @@
 ### 1.1837 - 2022-02-14
 
 * Added menu item to show plain text part
-* Added [AMP](https://amp.dev/about/email/) support
+* Added AMP email support
 * Small improvements and minor bug fixes
 * Updated translations
 
@@ -517,7 +572,6 @@
 
 * Play store only release
 * Fixed removing inline images on replying/forwarding
-* Changes: [see here](https://github.com/M66B/FairEmail/compare/1.1796...1.1798?w=1)
 
 ### 1.1797 - 2021-12-27
 

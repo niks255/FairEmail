@@ -107,10 +107,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private TextView tvBimiHint;
     private TextView tvBimiUnverified;
     private SwitchCompat swBimi;
-    private SwitchCompat swGravatars;
-    private TextView tvGravatarsHint;
-    private SwitchCompat swLibravatars;
-    private ImageButton ibLibravatars;
+    private SwitchCompat swEFavicons;
     private SwitchCompat swFavicons;
     private SwitchCompat swFaviconsPartial;
     private TextView tvFaviconsHint;
@@ -179,7 +176,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swAuthentication;
     private SwitchCompat swAuthenticationIndicator;
 
-    private Group grpGravatars;
     private Group grpUnzip;
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
@@ -192,7 +188,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             "nav_options", "nav_categories", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
             "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_color", "group_category",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
-            "avatars", "bimi", "gravatars", "libravatars", "favicons", "favicons_partial", "generated_icons", "identicons",
+            "avatars", "bimi", "efavicons", "favicons", "favicons_partial", "generated_icons", "identicons",
             "circular", "saturation", "brightness", "threshold",
             "email_format", "prefer_contact", "only_contact", "distinguish_contacts", "show_recipients",
             "font_size_sender", "sender_ellipsize",
@@ -262,10 +258,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         tvBimiHint = view.findViewById(R.id.tvBimiHint);
         tvBimiUnverified = view.findViewById(R.id.tvBimiUnverified);
         ibBimi = view.findViewById(R.id.ibBimi);
-        swGravatars = view.findViewById(R.id.swGravatars);
-        tvGravatarsHint = view.findViewById(R.id.tvGravatarsHint);
-        swLibravatars = view.findViewById(R.id.swLibravatars);
-        ibLibravatars = view.findViewById(R.id.ibLibravatars);
+        swEFavicons = view.findViewById(R.id.swEFavicons);
         swFavicons = view.findViewById(R.id.swFavicons);
         swFaviconsPartial = view.findViewById(R.id.swFaviconsPartial);
         tvFaviconsHint = view.findViewById(R.id.tvFaviconsHint);
@@ -331,7 +324,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swAuthentication = view.findViewById(R.id.swAuthentication);
         swAuthenticationIndicator = view.findViewById(R.id.swAuthenticationIndicator);
 
-        grpGravatars = view.findViewById(R.id.grpGravatars);
         grpUnzip = view.findViewById(R.id.grpUnzip);
 
         List<StyleHelper.FontDescriptor> fonts = StyleHelper.getFonts(getContext());
@@ -643,7 +635,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             public void onClick(View v) {
                 Context context = getContext();
                 int editTextColor = Helper.resolveColor(context, android.R.attr.editTextColor);
-                int highlightColor = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorAccent));
+                int highlightColor = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorUnreadHighlight));
 
                 ColorPickerDialogBuilder builder = ColorPickerDialogBuilder
                         .with(context)
@@ -659,13 +651,15 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
                             public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
                                 prefs.edit().putInt("highlight_color", selectedColor).apply();
                                 btnHighlightColor.setColor(selectedColor);
+                                WidgetUnified.updateData(context);
                             }
                         })
                         .setNegativeButton(R.string.title_reset, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 prefs.edit().remove("highlight_color").apply();
-                                btnHighlightColor.setColor(Helper.resolveColor(context, R.attr.colorAccent));
+                                btnHighlightColor.setColor(Helper.resolveColor(context, R.attr.colorUnreadHighlight));
+                                WidgetUnified.updateData(context);
                             }
                         });
 
@@ -721,34 +715,12 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
-        swGravatars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swEFavicons.setVisibility(BuildConfig.PLAY_STORE_RELEASE ? View.GONE : View.VISIBLE);
+        swEFavicons.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("gravatars", checked).apply();
+                prefs.edit().putBoolean("efavicons", checked).apply();
                 ContactInfo.clearCache(compoundButton.getContext());
-            }
-        });
-
-        tvGravatarsHint.getPaint().setUnderlineText(true);
-        tvGravatarsHint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.view(v.getContext(), Uri.parse(Helper.GRAVATAR_PRIVACY_URI), true);
-            }
-        });
-
-        swLibravatars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("libravatars", checked).apply();
-                ContactInfo.clearCache(compoundButton.getContext());
-            }
-        });
-
-        ibLibravatars.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.view(v.getContext(), Uri.parse(BuildConfig.LIBRAVATAR_INFO), true);
             }
         });
 
@@ -1244,8 +1216,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
         swFaviconsPartial.setText(getString(R.string.title_advanced_favicons_partial,
-                Helper.humanReadableByteCount(ContactInfo.FAVICON_READ_BYTES)));
-        grpGravatars.setVisibility(ContactInfo.canGravatars() ? View.VISIBLE : View.GONE);
+                Helper.humanReadableByteCount(ContactInfo.FAVICON_READ_BYTES, false)));
         grpUnzip.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? View.GONE : View.VISIBLE);
         tvBimiUnverified.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
 
@@ -1355,8 +1326,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         //swColorStripeWide.setEnabled(swColorStripe.isChecked());
         swAvatars.setChecked(prefs.getBoolean("avatars", true));
         swBimi.setChecked(prefs.getBoolean("bimi", false));
-        swGravatars.setChecked(prefs.getBoolean("gravatars", false));
-        swLibravatars.setChecked(prefs.getBoolean("libravatars", false));
+        swEFavicons.setChecked(prefs.getBoolean("efavicons", false));
         swFavicons.setChecked(prefs.getBoolean("favicons", false));
         swFaviconsPartial.setChecked(prefs.getBoolean("favicons_partial", true));
         swFaviconsPartial.setEnabled(swFavicons.isChecked());

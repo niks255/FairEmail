@@ -75,6 +75,8 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
     private SwitchCompat swSendPending;
     private Button btnSound;
 
+    private SwitchCompat swAutoSaveParagraph;
+    private SwitchCompat swAutoSaveDot;
     private Spinner spComposeFont;
     private SwitchCompat swSeparateReply;
     private SwitchCompat swExtendedReply;
@@ -107,6 +109,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             "alt_re", "alt_fwd",
             "send_reminders", "send_chips", "send_delayed",
             "attach_new", "answer_action", "send_pending", "sound_sent",
+            "auto_save_paragraph", "auto_save_dot",
             "compose_font", "prefix_once", "prefix_count", "separate_reply", "extended_reply", "write_below", "quote_reply", "quote_limit", "resize_reply",
             "signature_location", "signature_new", "signature_reply", "signature_reply_once", "signature_forward",
             "discard_delete", "reply_move",
@@ -145,6 +148,8 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         swSendPending = view.findViewById(R.id.swSendPending);
         btnSound = view.findViewById(R.id.btnSound);
 
+        swAutoSaveParagraph = view.findViewById(R.id.swAutoSaveParagraph);
+        swAutoSaveDot = view.findViewById(R.id.swAutoSaveDot);
         spComposeFont = view.findViewById(R.id.spComposeFont);
         swSeparateReply = view.findViewById(R.id.swSeparateReply);
         swExtendedReply = view.findViewById(R.id.swExtendedReply);
@@ -359,6 +364,20 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swAutoSaveParagraph.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("auto_save_paragraph", checked).apply();
+            }
+        });
+
+        swAutoSaveDot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("auto_save_dot", checked).apply();
+            }
+        });
+
         spComposeFont.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -371,13 +390,6 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 prefs.edit().remove("compose_font").apply();
-            }
-        });
-
-        swSeparateReply.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("separate_reply", checked).apply();
             }
         });
 
@@ -648,6 +660,9 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             }
 
         swSendPending.setChecked(prefs.getBoolean("send_pending", true));
+
+        swAutoSaveParagraph.setChecked(prefs.getBoolean("auto_save_paragraph", true));
+        swAutoSaveDot.setChecked(prefs.getBoolean("auto_save_dot", false));
 
         String compose_font = prefs.getString("compose_font", "");
         List<StyleHelper.FontDescriptor> fonts = StyleHelper.getFonts(getContext());

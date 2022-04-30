@@ -211,6 +211,16 @@ public class ViewModelMessages extends ViewModel {
         }
 
         owner.getLifecycle().addObserver(new LifecycleObserver() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+            public void onPaused() {
+                Log.i("Paused model=" + viewType + " last=" + last);
+            }
+
+            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+            public void onResumed() {
+                Log.i("Resumed model=" + viewType + " last=" + last);
+            }
+
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             public void onDestroyed() {
                 Log.i("Destroy model=" + viewType);
@@ -272,14 +282,6 @@ public class ViewModelMessages extends ViewModel {
             intf.onFound(-1, 0);
             return;
         }
-
-        ObjectHolder<Boolean> alive = new ObjectHolder<>(true);
-        owner.getLifecycle().addObserver(new LifecycleObserver() {
-            @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
-            public void onAny() {
-                alive.value = owner.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED);
-            }
-        });
 
         Log.i("Observe previous/next id=" + id);
         //model.list.getValue().loadAround(lpos);
@@ -354,6 +356,9 @@ public class ViewModelMessages extends ViewModel {
                         long id = args.getLong("id");
                         int lpos = args.getInt("lpos");
 
+                        if (!isAlive())
+                            return null;
+
                         PagedList<TupleMessageEx> plist = model.list.getValue();
                         if (plist == null)
                             return null;
@@ -372,7 +377,7 @@ public class ViewModelMessages extends ViewModel {
                                     return getPair(plist, ds, count, from + j);
                         }
 
-                        for (int i = 0; i < count && alive.value; i += CHUNK_SIZE) {
+                        for (int i = 0; i < count && isAlive(); i += CHUNK_SIZE) {
                             Log.i("Observe previous/next load" +
                                     " range=" + i + "/#" + count);
                             List<TupleMessageEx> messages = ds.loadRange(i, Math.min(CHUNK_SIZE, count - i));
@@ -449,13 +454,16 @@ public class ViewModelMessages extends ViewModel {
             protected List<Long> onExecute(Context context, Bundle args) {
                 List<Long> ids = new ArrayList<>();
 
+                if (!isAlive())
+                    return ids;
+
                 PagedList<TupleMessageEx> plist = model.list.getValue();
                 if (plist == null)
                     return ids;
 
                 LimitOffsetDataSource<TupleMessageEx> ds = (LimitOffsetDataSource<TupleMessageEx>) plist.getDataSource();
                 int count = ds.countItems();
-                for (int i = 0; i < count; i += 100)
+                for (int i = 0; i < count && isAlive(); i += 100)
                     for (TupleMessageEx message : ds.loadRange(i, Math.min(100, count - i)))
                         if ((message.uid != null && !message.folderReadOnly) ||
                                 message.accountProtocol != EntityAccount.TYPE_IMAP)
@@ -475,6 +483,16 @@ public class ViewModelMessages extends ViewModel {
                 observer.onChanged(new ArrayList<Long>());
             }
         }.execute(context, owner, new Bundle(), "model:ids");
+    }
+
+    void cleanup() {
+        dump();
+        for (AdapterMessage.ViewType viewType : new ArrayList<>(models.keySet())) {
+            if (viewType != last && !models.get(viewType).list.hasObservers()) {
+                Log.i("Cleanup model viewType=" + viewType);
+                models.remove(viewType);
+            }
+        }
     }
 
     private class Args {
@@ -607,8 +625,10 @@ public class ViewModelMessages extends ViewModel {
                 owner.getLifecycle().addObserver(new LifecycleObserver() {
                     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                     public void onDestroyed() {
-                        boundary.destroy(state);
-                        boundary = null;
+                        if (boundary != null) {
+                            boundary.destroy(state);
+                            boundary = null;
+                        }
                         owner.getLifecycle().removeObserver(this);
                     }
                 });

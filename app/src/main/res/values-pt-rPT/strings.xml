@@ -104,7 +104,7 @@
     <string name="menu_faq">Suporte</string>
     <string name="menu_translate">Ajude a traduzir</string>
     <string name="menu_issue">Comunicar um problema</string>
-    <string name="menu_attribution">Atribuição</string>
+    <string name="menu_attribution">Agradecimentos</string>
     <string name="menu_privacy">Privacidade</string>
     <string name="menu_about">Sobre</string>
     <string name="menu_pro">Funcionalidades Pro</string>
@@ -265,7 +265,7 @@
     <string name="title_setup_defaults">Repor predefinições</string>
     <string name="title_setup_reset_questions">Repor perguntas</string>
     <string name="title_setup_reset_general">Perguntas gerais</string>
-    <string name="title_setup_reset_full">Mostrar mensagem originais</string>
+    <string name="title_setup_reset_full">Mostrar mensagens originais</string>
     <string name="title_setup_reset_images">Mostrar imagens</string>
     <string name="title_setup_reset_links">Confirmar hiperligações</string>
     <string name="title_check_gmail_oauth">As suas contas de Gmail continuarão a funcionar após 30 de maio de 2022</string>
@@ -394,10 +394,9 @@
     <string name="title_advanced_color_stripe">Mostrar faixa de cores</string>
     <string name="title_advanced_color_stripe_wide">Usar ampla faixa de cores</string>
     <string name="title_advanced_avatars">Mostrar fotos de contactos</string>
-    <string name="title_advanced_gravatars">Mostrar Gravatar</string>
-    <string name="title_advanced_libravatars">Mostrar Libravatars</string>
     <string name="title_advanced_bimi_unverified">Remetente não verificado</string>
     <string name="title_advanced_bimi_verified">Remetente verificado</string>
+    <string name="title_advanced_efavicons">Mostrar avatars</string>
     <string name="title_advanced_favicons">Mostrar \"favicons\"</string>
     <string name="title_advanced_favicons_partial">Digitalize apenas a primeira %1$s da página web</string>
     <string name="title_advanced_generated_icons">Mostrar ícones gerados</string>
@@ -534,12 +533,13 @@
     <string name="title_advanced_autolock">Bloquear quando o ecrã se desligar</string>
     <string name="title_advanced_autolock_nav">Bloquear ao sair da aplicação</string>
     <string name="title_advanced_generic_user_agent">Utilizar \'user agent\' de navegador genérico</string>
-    <string name="title_advanced_load_emoji">Carregar emoji atualizado do Google Play Services</string>
+    <string name="title_advanced_load_emoji">Carregar Emoji actualizados dos Serviços do Google Play</string>
     <string name="title_advanced_disconnect_auto_update">Actualizar automaticamente as listas semanalmente</string>
     <string name="title_advanced_disconnect_links">Utilizar listas para avisar sobre hiperligações que monitorizam</string>
     <string name="title_advanced_disconnect_images">Utilizar listas para reconhecer imagens de monitorização</string>
     <string name="title_advanced_mnemonic">Eliminar dados remotamente</string>
     <string name="title_advanced_mnemonic_hint">A recepção de qualquer correio electrónico com as palavras abaixo indicadas no assunto irá, de forma automática e imediata, eliminar todos os dados da aplicação</string>
+    <string name="title_advanced_clear_all">Eliminar os dados da aplicação</string>
     <string name="title_advanced_sign_default">Assinar por padrão</string>
     <string name="title_advanced_encrypt_default">Encriptar por padrão</string>
     <string name="title_advanced_auto_decrypt">Desencriptar mensagens automaticamente</string>
@@ -614,6 +614,7 @@
     <string name="title_advanced_layout_hint">Pode mudar para um layout mais compacto e alterar o tamanho do texto da mensagem no menu da barra de acção presente na parte superior da vista de mensagens</string>
     <string name="title_advanced_navbar_colorize_hint">O funcionamento disto depende da versão e variante do Android</string>
     <string name="title_advanced_split_hint">Esta opção divide o ecrã em partes</string>
+    <string name="title_advanced_privacy_risk">Pode haver um risco de privacidade</string>
     <string name="title_advanced_preview_hint">Apenas disponível quando o texto da mensagem for transferido</string>
     <string name="title_advanced_preview_lines_hint">Máximo %s caracteres no total</string>
     <string name="title_advanced_preview_issue">O movimento de deslizar pode ser lento devido a um erro em algumas versões Android, quando o número de linhas é superior a uma</string>
@@ -678,6 +679,7 @@
     <string name="title_client_certificate">Certificado do cliente</string>
     <string name="title_primary">Principal</string>
     <string name="title_received_header">Usar o cabeçalho \'Recebido\'</string>
+    <string name="title_unmetered_only">Conectar somente através de redes ilimitadas</string>
     <string name="title_check">Verificar</string>
     <string name="title_no_name">Nome em falta</string>
     <string name="title_no_email">Endereço de correio eletrónico ausente</string>
@@ -1027,6 +1029,8 @@
     <string name="title_translate_html_hint">Esta opção consumirá mais caracteres</string>
     <string name="title_translate_usage">Utilização: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Toque no texto a ser traduzido</string>
+    <string name="title_suggestions_check" comment="title_suggestions_check&#10;Show when checking grammar, etc">A verificar &#8230;</string>
+    <string name="title_suggestions_none" comment="title_suggestions_none&#10;Shown when no grammar improvement suggestions, etc">Sem sugestões</string>
     <string name="title_edit_plain_text">Editar como texto simples</string>
     <string name="title_edit_formatted_text">Editar como texto reformatado</string>
     <string name="title_select_certificate">Seleccionar chave pública</string>
@@ -1383,6 +1387,7 @@
     <string name="title_legend_t">Texto em destaque</string>
     <string name="title_hint_folder_actions">Toque e mantenha premida uma pasta para opções como adicionar uma pasta ao menu de navegação para um acesso rápido</string>
     <string name="title_hint_folder_sync">Para limitar o uso de bateria e rede, por predefinição, nem todas as pastas e mensagens serão sincronizadas</string>
+    <string name="title_hint_airplane">O modo de avião está ligado</string>
     <string name="title_hint_support">Se tiver alguma questão ou um problema, por favor utilize o menu de suporte para obter ajuda</string>
     <string name="title_hint_message_actions">Deslize para a esquerda para o lixo; Deslize para a direita para o arquivo (se disponível); As acções de deslizar pode ser configuradas nas definições de conta</string>
     <string name="title_hint_message_selection">Pressione e segure uma mensagem para começar a seleccionar múltiplas mensagens; Segure e deslize para cima ou para baixo para seleccionar mais mensagens</string>

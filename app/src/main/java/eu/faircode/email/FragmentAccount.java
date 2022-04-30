@@ -68,6 +68,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.sun.mail.imap.IMAPFolder;
 
+import org.json.JSONObject;
+
 import java.io.FileNotFoundException;
 import java.net.UnknownHostException;
 import java.security.cert.X509Certificate;
@@ -110,6 +112,7 @@ public class FragmentAccount extends FragmentBase {
 
     private Button btnAdvanced;
     private CheckBox cbSynchronize;
+    private CheckBox cbIgnoreSchedule;
     private CheckBox cbOnDemand;
     private TextView tvLeave;
     private CheckBox cbPrimary;
@@ -121,6 +124,7 @@ public class FragmentAccount extends FragmentBase {
     private CheckBox cbPartialFetch;
     private CheckBox cbIgnoreSize;
     private RadioGroup rgDate;
+    private CheckBox cbUnmetered;
 
     private Button btnCheck;
     private ContentLoadingProgressBar pbCheck;
@@ -217,6 +221,7 @@ public class FragmentAccount extends FragmentBase {
 
         btnAdvanced = view.findViewById(R.id.btnAdvanced);
         cbSynchronize = view.findViewById(R.id.cbSynchronize);
+        cbIgnoreSchedule = view.findViewById(R.id.cbIgnoreSchedule);
         cbOnDemand = view.findViewById(R.id.cbOnDemand);
         tvLeave = view.findViewById(R.id.tvLeave);
         cbPrimary = view.findViewById(R.id.cbPrimary);
@@ -228,6 +233,7 @@ public class FragmentAccount extends FragmentBase {
         cbPartialFetch = view.findViewById(R.id.cbPartialFetch);
         cbIgnoreSize = view.findViewById(R.id.cbIgnoreSize);
         rgDate = view.findViewById(R.id.rgDate);
+        cbUnmetered = view.findViewById(R.id.cbUnmeteredOnly);
 
         btnCheck = view.findViewById(R.id.btnCheck);
         pbCheck = view.findViewById(R.id.pbCheck);
@@ -352,6 +358,9 @@ public class FragmentAccount extends FragmentBase {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (tilPassword == null)
+                    return;
+
                 String password = s.toString();
                 boolean warning = (Helper.containsWhiteSpace(password) ||
                         Helper.containsControlChars(password));
@@ -434,6 +443,7 @@ public class FragmentAccount extends FragmentBase {
         cbSynchronize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                cbIgnoreSchedule.setEnabled(checked);
                 cbOnDemand.setEnabled(checked);
                 cbPrimary.setEnabled(checked);
             }
@@ -871,6 +881,7 @@ public class FragmentAccount extends FragmentBase {
         args.putInt("color", btnColor.getColor());
 
         args.putBoolean("synchronize", cbSynchronize.isChecked());
+        args.putBoolean("ignore_schedule", cbIgnoreSchedule.isChecked());
         args.putBoolean("ondemand", cbOnDemand.isChecked());
         args.putBoolean("primary", cbPrimary.isChecked());
         args.putBoolean("notify", cbNotify.isChecked());
@@ -881,6 +892,7 @@ public class FragmentAccount extends FragmentBase {
         args.putBoolean("ignore_size", cbIgnoreSize.isChecked());
         args.putBoolean("use_date", rgDate.getCheckedRadioButtonId() == R.id.radio_date_header);
         args.putBoolean("use_received", rgDate.getCheckedRadioButtonId() == R.id.radio_received_header);
+        args.putBoolean("unmetered", cbUnmetered.isChecked());
 
         args.putSerializable("drafts", drafts);
         args.putSerializable("sent", sent);
@@ -940,6 +952,7 @@ public class FragmentAccount extends FragmentBase {
                 Integer color = args.getInt("color");
 
                 boolean synchronize = args.getBoolean("synchronize");
+                boolean ignore_schedule = args.getBoolean("ignore_schedule");
                 boolean ondemand = args.getBoolean("ondemand");
                 boolean primary = args.getBoolean("primary");
                 boolean notify = args.getBoolean("notify");
@@ -950,6 +963,7 @@ public class FragmentAccount extends FragmentBase {
                 boolean ignore_size = args.getBoolean("ignore_size");
                 boolean use_date = args.getBoolean("use_date");
                 boolean use_received = args.getBoolean("use_received");
+                boolean unmetered = args.getBoolean("unmetered");
 
                 EntityFolder drafts = (EntityFolder) args.getSerializable("drafts");
                 EntityFolder sent = (EntityFolder) args.getSerializable("sent");
@@ -994,6 +1008,14 @@ public class FragmentAccount extends FragmentBase {
                 DB db = DB.getInstance(context);
                 EntityAccount account = db.account().getAccount(id);
 
+                JSONObject jconditions = new JSONObject();
+                if (account != null && account.conditions != null)
+                    try {
+                        jconditions = new JSONObject(account.conditions);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+
                 if (should) {
                     if (account == null)
                         return !TextUtils.isEmpty(host) && !TextUtils.isEmpty(user);
@@ -1026,6 +1048,8 @@ public class FragmentAccount extends FragmentBase {
                         return true;
                     if (!Objects.equals(account.synchronize, synchronize))
                         return true;
+                    if (ignore_schedule != jconditions.optBoolean("ignore_schedule"))
+                        return true;
                     if (!Objects.equals(account.ondemand, ondemand))
                         return true;
                     if (!Objects.equals(account.primary, account.synchronize && primary))
@@ -1045,6 +1069,8 @@ public class FragmentAccount extends FragmentBase {
                     if (!Objects.equals(account.use_date, use_date))
                         return true;
                     if (!Objects.equals(account.use_received, use_received))
+                        return true;
+                    if (unmetered != jconditions.optBoolean("unmetered"))
                         return true;
                     if (account.error != null && account.synchronize)
                         return true;
@@ -1135,6 +1161,8 @@ public class FragmentAccount extends FragmentBase {
                     }
                 }
 
+                boolean reschedule = (ignore_schedule != jconditions.optBoolean("ignore_schedule"));
+
                 try {
                     db.beginTransaction();
 
@@ -1166,6 +1194,7 @@ public class FragmentAccount extends FragmentBase {
                     account.color = color;
 
                     account.synchronize = synchronize;
+                    jconditions.put("ignore_schedule", ignore_schedule);
                     account.ondemand = ondemand;
                     account.primary = (account.synchronize && primary);
                     account.notify = notify;
@@ -1183,6 +1212,9 @@ public class FragmentAccount extends FragmentBase {
                     account.ignore_size = ignore_size;
                     account.use_date = use_date;
                     account.use_received = use_received;
+
+                    jconditions.put("unmetered", unmetered);
+                    account.conditions = jconditions.toString();
 
                     if (!update)
                         account.created = now;
@@ -1310,7 +1342,10 @@ public class FragmentAccount extends FragmentBase {
                     db.endTransaction();
                 }
 
-                ServiceSynchronize.eval(context, "save account");
+                if (reschedule)
+                    ServiceSynchronize.reschedule(context);
+                else
+                    ServiceSynchronize.eval(context, "save account");
 
                 if (!synchronize) {
                     NotificationManager nm = Helper.getSystemService(context, NotificationManager.class);
@@ -1409,10 +1444,10 @@ public class FragmentAccount extends FragmentBase {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt("fair:provider", spProvider.getSelectedItemPosition());
+        outState.putInt("fair:provider", spProvider == null ? 0 : spProvider.getSelectedItemPosition());
         outState.putString("fair:certificate", certificate);
-        outState.putString("fair:password", tilPassword.getEditText().getText().toString());
-        outState.putInt("fair:advanced", grpAdvanced.getVisibility());
+        outState.putString("fair:password", tilPassword == null ? null : tilPassword.getEditText().getText().toString());
+        outState.putInt("fair:advanced", grpAuthorize == null ? View.VISIBLE : grpAdvanced.getVisibility());
         outState.putInt("fair:auth", auth);
         outState.putString("fair:authprovider", provider);
         super.onSaveInstanceState(outState);
@@ -1464,6 +1499,14 @@ public class FragmentAccount extends FragmentBase {
                 spProvider.setAdapter(aaProvider);
 
                 if (savedInstanceState == null) {
+                    JSONObject jcondition = new JSONObject();
+                    try {
+                        if (account != null && account.conditions != null)
+                            jcondition = new JSONObject(account.conditions);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+
                     if (account != null) {
                         boolean found = false;
                         for (int pos = 2; pos < providers.size(); pos++) {
@@ -1522,6 +1565,7 @@ public class FragmentAccount extends FragmentBase {
                     cbNotify.setEnabled(pro);
 
                     cbSynchronize.setChecked(account == null ? true : account.synchronize);
+                    cbIgnoreSchedule.setChecked(jcondition.optBoolean("ignore_schedule"));
                     cbOnDemand.setChecked(account == null ? false : account.ondemand);
                     cbPrimary.setChecked(account == null ? false : account.primary);
                     cbBrowse.setChecked(account == null ? true : account.browse);
@@ -1529,6 +1573,7 @@ public class FragmentAccount extends FragmentBase {
                     etInterval.setText(account == null ? "" : Long.toString(account.poll_interval));
                     cbPartialFetch.setChecked(account == null ? true : account.partial_fetch);
                     cbIgnoreSize.setChecked(account == null ? false : account.ignore_size);
+                    cbUnmetered.setChecked(jcondition.optBoolean("unmetered"));
 
                     if (account != null && account.use_date)
                         rgDate.check(R.id.radio_date_header);
@@ -1655,6 +1700,7 @@ public class FragmentAccount extends FragmentBase {
                     });
                 }
 
+                cbIgnoreSchedule.setEnabled(cbSynchronize.isChecked());
                 cbOnDemand.setEnabled(cbSynchronize.isChecked());
                 cbPrimary.setEnabled(cbSynchronize.isChecked());
 

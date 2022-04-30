@@ -20,9 +20,12 @@ package eu.faircode.email;
 */
 
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import org.json.JSONObject;
 
 public class TupleAccountNetworkState {
     public boolean enabled;
@@ -33,8 +36,11 @@ public class TupleAccountNetworkState {
     @NonNull
     public TupleAccountState accountState;
 
+    private JSONObject jconditions;
+
     public TupleAccountNetworkState(
             boolean enabled,
+            boolean scheduled,
             @NonNull Bundle command,
             @NonNull ConnectionHelper.NetworkState networkState,
             @NonNull TupleAccountState accountState) {
@@ -42,9 +48,24 @@ public class TupleAccountNetworkState {
         this.command = command;
         this.networkState = networkState;
         this.accountState = accountState;
+
+        this.jconditions = new JSONObject();
+        if (!TextUtils.isEmpty(this.accountState.conditions))
+            try {
+                jconditions = new JSONObject(this.accountState.conditions);
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+
+        if (!scheduled && !jconditions.optBoolean("ignore_schedule"))
+            this.enabled = false;
     }
 
     public boolean canRun() {
+        boolean unmetered = jconditions.optBoolean("unmetered");
+        if (unmetered && !this.networkState.isUnmetered())
+            return false;
+
         return (this.networkState.isSuitable() && this.accountState.shouldRun(enabled));
     }
 

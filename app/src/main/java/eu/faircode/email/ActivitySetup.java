@@ -360,7 +360,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean("fair:toggle", drawerToggle.isDrawerIndicatorEnabled());
+        outState.putBoolean("fair:toggle", drawerToggle == null || drawerToggle.isDrawerIndicatorEnabled());
         outState.putString("fair:password", password);
         outState.putBoolean("fair:import_accounts", import_accounts);
         outState.putBoolean("fair:import_delete", import_delete);
@@ -590,9 +590,18 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         args.putString("password", this.password);
 
         new SimpleTask<Void>() {
+            private Toast toast = null;
+
             @Override
             protected void onPreExecute(Bundle args) {
-                ToastEx.makeText(ActivitySetup.this, R.string.title_executing, Toast.LENGTH_LONG).show();
+                toast = ToastEx.makeText(ActivitySetup.this, R.string.title_executing, Toast.LENGTH_LONG);
+                toast.show();
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                if (toast != null)
+                    toast.cancel();
             }
 
             @Override
@@ -1721,8 +1730,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
         @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
-            outState.putString("fair:password1", etPassword1.getEditText().getText().toString());
-            outState.putString("fair:password2", etPassword2.getEditText().getText().toString());
+            outState.putString("fair:password1", etPassword1 == null ? null : etPassword1.getEditText().getText().toString());
+            outState.putString("fair:password2", etPassword2 == null ? null : etPassword2.getEditText().getText().toString());
             super.onSaveInstanceState(outState);
         }
 
@@ -1776,7 +1785,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
         @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
-            outState.putString("fair:password1", etPassword1.getEditText().getText().toString());
+            outState.putString("fair:password1", etPassword1 == null ? null : etPassword1.getEditText().getText().toString());
             super.onSaveInstanceState(outState);
         }
 

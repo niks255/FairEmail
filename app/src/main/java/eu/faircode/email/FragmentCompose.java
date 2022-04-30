@@ -71,6 +71,7 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.ArrowKeyMovementMethod;
@@ -81,6 +82,7 @@ import android.text.style.ImageSpan;
 import android.text.style.ParagraphStyle;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.SuggestionSpan;
 import android.text.style.URLSpan;
 import android.util.LogPrinter;
 import android.util.Pair;
@@ -395,6 +397,19 @@ public class FragmentCompose extends FragmentBase {
 
         resolver = getContext().getContentResolver();
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final boolean auto_save_paragraph = prefs.getBoolean("auto_save_paragraph", true);
+        final boolean auto_save_dot = prefs.getBoolean("auto_save_dot", false);
+        final boolean keyboard_no_fullscreen = prefs.getBoolean("keyboard_no_fullscreen", false);
+        final boolean suggest_names = prefs.getBoolean("suggest_names", true);
+        final boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
+        final boolean suggest_received = prefs.getBoolean("suggest_received", false);
+        final boolean suggest_frequently = prefs.getBoolean("suggest_frequently", false);
+        final boolean cc_bcc = prefs.getBoolean("cc_bcc", false);
+        final boolean circular = prefs.getBoolean("circular", true);
+
+        final float dp3 = Helper.dp2pixels(getContext(), 3);
+
         // Wire controls
         spIdentity.setOnItemSelectedListener(identitySelected);
 
@@ -595,6 +610,7 @@ public class FragmentCompose extends FragmentBase {
 
         // https://developer.android.com/reference/android/text/TextWatcher
         etBody.addTextChangedListener(new TextWatcher() {
+            private boolean save = false;
             private Integer added = null;
             private Integer removed = null;
             private Integer translated = null;
@@ -629,14 +645,27 @@ public class FragmentCompose extends FragmentBase {
                     activity.onUserInteraction();
 
                 int index = start + before;
-                if (count - before == 1 && index > 0 && text.charAt(index) == '\n') {
-                    Log.i("Added=" + index);
-                    added = index;
+
+                if (count - before == 1 && index > 0) {
+                    char c = text.charAt(index);
+                    char b = text.charAt(index - 1);
+                    save = (auto_save_paragraph && c == '\n' && b != '\n') ||
+                            (auto_save_dot && Helper.isDot(c) && !Helper.isDot(b));
+                    if (save)
+                        Log.i("Save=" + index);
+
+                    if (c == '\n') {
+                        Log.i("Added=" + index);
+                        added = index;
+                    }
                 }
             }
 
             @Override
             public void afterTextChanged(Editable text) {
+                if (etBody == null)
+                    return;
+
                 LogPrinter lp = null;
                 if (BuildConfig.DEBUG &&
                         (added != null || removed != null))
@@ -743,35 +772,48 @@ public class FragmentCompose extends FragmentBase {
                         added = null;
                     }
 
-                if (removed != null) {
-                    ParagraphStyle[] ps = text.getSpans(removed, removed + 1, ParagraphStyle.class);
-                    if (ps != null)
-                        for (ParagraphStyle p : ps) {
-                            int start = text.getSpanStart(p);
-                            int end = text.getSpanEnd(p);
-                            if (start >= removed && end <= removed + 1)
-                                text.removeSpan(p);
-                        }
+                if (removed != null)
+                    try {
+                        ParagraphStyle[] ps = text.getSpans(removed, removed + 1, ParagraphStyle.class);
+                        if (ps != null)
+                            for (ParagraphStyle p : ps) {
+                                int start = text.getSpanStart(p);
+                                int end = text.getSpanEnd(p);
+                                if (start >= removed && end <= removed + 1)
+                                    text.removeSpan(p);
+                            }
 
-                    StyleHelper.renumber(text, true, etBody.getContext());
-
-                    removed = null;
-                }
-
-                if (translated != null) {
-                    StyleHelper.TranslatedSpan[] spans =
-                            text.getSpans(translated, translated, StyleHelper.TranslatedSpan.class);
-                    for (StyleHelper.TranslatedSpan span : spans) {
-                        int start = text.getSpanStart(span);
-                        int end = text.getSpanEnd(span);
-                        if (end == translated) {
-                            text.delete(start, end);
-                            text.removeSpan(span);
-                        }
+                        StyleHelper.renumber(text, true, etBody.getContext());
+                    } finally {
+                        removed = null;
                     }
 
-                    translated = null;
-                }
+                if (translated != null)
+                    try {
+                        StyleHelper.TranslatedSpan[] spans =
+                                text.getSpans(translated, translated, StyleHelper.TranslatedSpan.class);
+                        for (StyleHelper.TranslatedSpan span : spans) {
+                            int start = text.getSpanStart(span);
+                            int end = text.getSpanEnd(span);
+                            if (end == translated) {
+                                text.delete(start, end);
+                                text.removeSpan(span);
+                            }
+                        }
+                    } finally {
+                        translated = null;
+                    }
+
+                if (save)
+                    try {
+                        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                            Bundle extras = new Bundle();
+                            extras.putBoolean("silent", true);
+                            onAction(R.id.action_save, extras, "paragraph");
+                        }
+                    } finally {
+                        save = false;
+                    }
 
                 if (lp != null)
                     TextUtils.dumpSpans(text, lp, "---after>");
@@ -949,8 +991,6 @@ public class FragmentCompose extends FragmentBase {
         setHasOptionsMenu(true);
         FragmentDialogTheme.setBackground(getContext(), view, true);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean keyboard_no_fullscreen = prefs.getBoolean("keyboard_no_fullscreen", false);
         if (keyboard_no_fullscreen) {
             // https://developer.android.com/reference/android/view/inputmethod/EditorInfo#IME_FLAG_NO_FULLSCREEN
             etExtra.setImeOptions(etExtra.getImeOptions() | IME_FLAG_NO_FULLSCREEN);
@@ -991,14 +1031,6 @@ public class FragmentCompose extends FragmentBase {
         Helper.setViewsEnabled(view, false);
 
         final DB db = DB.getInstance(getContext());
-
-        final boolean suggest_names = prefs.getBoolean("suggest_names", true);
-        final boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
-        final boolean suggest_received = prefs.getBoolean("suggest_received", false);
-        final boolean suggest_frequently = prefs.getBoolean("suggest_frequently", false);
-        final boolean cc_bcc = prefs.getBoolean("cc_bcc", false);
-        final boolean circular = prefs.getBoolean("circular", true);
-        final float dp3 = Helper.dp2pixels(getContext(), 3);
 
         SimpleCursorAdapter cadapter = new SimpleCursorAdapter(
                 getContext(),
@@ -1784,6 +1816,15 @@ public class FragmentCompose extends FragmentBase {
         for (int i = 0; i < m.size(); i++)
             bottom_navigation.findViewById(m.getItem(i).getItemId()).setOnLongClickListener(null);
 
+        if (!BuildConfig.PLAY_STORE_RELEASE)
+            bottom_navigation.findViewById(R.id.action_save).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    onLanguageTool();
+                    return true;
+                }
+            });
+
         bottom_navigation.findViewById(R.id.action_send).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -2255,6 +2296,7 @@ public class FragmentCompose extends FragmentBase {
 
                 new SimpleTask<DeepL.Translation>() {
                     private Object highlightSpan;
+                    private Toast toast = null;
 
                     @Override
                     protected void onPreExecute(Bundle args) {
@@ -2262,13 +2304,16 @@ public class FragmentCompose extends FragmentBase {
                         highlightSpan = new BackgroundColorSpan(textColorHighlight);
                         etBody.getText().setSpan(highlightSpan, paragraph.first, paragraph.second,
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_COMPOSING);
-                        ToastEx.makeText(context, R.string.title_translating, Toast.LENGTH_SHORT).show();
+                        toast = ToastEx.makeText(context, R.string.title_translating, Toast.LENGTH_SHORT);
+                        toast.show();
                     }
 
                     @Override
                     protected void onPostExecute(Bundle args) {
                         if (highlightSpan != null)
                             etBody.getText().removeSpan(highlightSpan);
+                        if (toast != null)
+                            toast.cancel();
                     }
 
                     @Override
@@ -2347,6 +2392,87 @@ public class FragmentCompose extends FragmentBase {
         });
 
         popupMenu.showWithIcons(context, anchor);
+    }
+
+    private void onLanguageTool() {
+        etBody.clearComposingText();
+
+        Log.i("LT running enabled=" + etBody.isSuggestionsEnabled());
+
+        Bundle args = new Bundle();
+        args.putCharSequence("text", etBody.getText());
+
+        new SimpleTask<List<LT.Suggestion>>() {
+            private Toast toast = null;
+
+            @Override
+            protected void onPreExecute(Bundle args) {
+                toast = ToastEx.makeText(getContext(), R.string.title_suggestions_check, Toast.LENGTH_LONG);
+                toast.show();
+                setBusy(true);
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                if (toast != null)
+                    toast.cancel();
+                setBusy(false);
+            }
+
+            @Override
+            protected List<LT.Suggestion> onExecute(Context context, Bundle args) throws Throwable {
+                CharSequence text = args.getCharSequence("text").toString();
+                return LT.getSuggestions(context, text);
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, List<LT.Suggestion> suggestions) {
+                if (suggestions == null || suggestions.size() == 0) {
+                    ToastEx.makeText(getContext(), R.string.title_suggestions_none, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                Editable edit = etBody.getText();
+                if (edit == null)
+                    return;
+
+                // https://developer.android.com/reference/android/text/style/SuggestionSpan
+                for (SuggestionSpanEx span : edit.getSpans(0, edit.length(), SuggestionSpanEx.class)) {
+                    Log.i("LT removing=" + span);
+                    edit.removeSpan(span);
+                }
+
+                for (LT.Suggestion suggestion : suggestions) {
+                    Log.i("LT adding=" + suggestion);
+                    SuggestionSpan span = new SuggestionSpanEx(getContext(),
+                            suggestion.replacements.toArray(new String[0]),
+                            SuggestionSpan.FLAG_MISSPELLED);
+                    int start = suggestion.offset;
+                    int end = start + suggestion.length;
+                    edit.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Throwable exex = new Throwable("LanguageTool", ex);
+                Log.unexpectedError(getParentFragmentManager(), exex, false);
+            }
+        }.execute(this, args, "compose:lt");
+    }
+
+    private static class SuggestionSpanEx extends SuggestionSpan {
+        private final int textColorHighlight;
+
+        public SuggestionSpanEx(Context context, String[] suggestions, int flags) {
+            super(context, suggestions, flags);
+            textColorHighlight = Helper.resolveColor(context, android.R.attr.textColorHighlight);
+        }
+
+        @Override
+        public void updateDrawState(TextPaint tp) {
+            tp.bgColor = textColorHighlight;
+        }
     }
 
     private boolean onActionStyle(int action, View anchor) {
@@ -4110,7 +4236,6 @@ public class FragmentCompose extends FragmentBase {
         args.putBoolean("ime", ime);
         args.putBundle("extras", extras);
 
-
         Log.i("Run execute id=" + working + " reason=" + reason);
         actionLoader.execute(this, args, "compose:action:" + getActionName(action));
     }
@@ -5594,11 +5719,17 @@ public class FragmentCompose extends FragmentBase {
     private SimpleTask<EntityMessage> actionLoader = new SimpleTask<EntityMessage>() {
         @Override
         protected void onPreExecute(Bundle args) {
+            if (args.getBundle("extras").getBoolean("silent"))
+                return;
+
             setBusy(true);
         }
 
         @Override
         protected void onPostExecute(Bundle args) {
+            if (args.getBundle("extras").getBoolean("silent"))
+                return;
+
             int action = args.getInt("action");
             boolean needsEncryption = args.getBoolean("needsEncryption");
             if (action != R.id.action_check || needsEncryption)
@@ -5623,6 +5754,8 @@ public class FragmentCompose extends FragmentBase {
             boolean empty = args.getBoolean("empty");
             boolean notext = args.getBoolean("notext");
             Bundle extras = args.getBundle("extras");
+
+            boolean silent = extras.getBoolean("silent");
 
             boolean dirty = false;
             String body = HtmlHelper.toHtml(spanned, context);
@@ -5797,7 +5930,7 @@ public class FragmentCompose extends FragmentBase {
                     Elements ref = doc.select("div[fairemail=reference]");
                     ref.remove();
 
-                    if (extras != null && extras.containsKey("html"))
+                    if (extras.containsKey("html"))
                         dirty = true;
 
                     if (below != write_below &&
@@ -5829,7 +5962,7 @@ public class FragmentCompose extends FragmentBase {
 
                         // Get saved body
                         Document d;
-                        if (extras != null && extras.containsKey("html")) {
+                        if (extras.containsKey("html")) {
                             // Save current revision
                             Document c = JsoupEx.parse(body);
 
@@ -5942,6 +6075,12 @@ public class FragmentCompose extends FragmentBase {
                         draft.sent = draft.received;
                         db.message().setMessageReceived(draft.id, draft.received);
                         db.message().setMessageSent(draft.id, draft.sent);
+                    }
+
+                    if (silent) {
+                        // Skip storing on the server, etc
+                        db.setTransactionSuccessful();
+                        return draft;
                     }
 
                     // Execute action
@@ -6265,6 +6404,14 @@ public class FragmentCompose extends FragmentBase {
             if (draft == null)
                 return;
 
+            bottom_navigation.getMenu().findItem(R.id.action_undo).setVisible(draft.revision > 1);
+            bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(draft.revision < draft.revisions);
+
+            if (args.getBundle("extras").getBoolean("silent")) {
+                etBody.setTag(null);
+                return;
+            }
+
             boolean needsEncryption = args.getBoolean("needsEncryption");
             int action = args.getInt("action");
             Log.i("Loaded action id=" + draft.id +
@@ -6294,9 +6441,6 @@ public class FragmentCompose extends FragmentBase {
             boolean refedit = extras.getBoolean("refedit");
             if (show)
                 showDraft(draft, refedit, null, -1);
-
-            bottom_navigation.getMenu().findItem(R.id.action_undo).setVisible(draft.revision > 1);
-            bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(draft.revision < draft.revisions);
 
             if (needsEncryption) {
                 if (ActivityBilling.isPro(getContext()) ||
@@ -6817,6 +6961,9 @@ public class FragmentCompose extends FragmentBase {
 
                     EntityMessage draft = db.message().getMessage(id);
                     if (draft == null)
+                        return null;
+
+                    if (draft.dsn != null && !EntityMessage.DSN_NONE.equals(draft.dsn))
                         return null;
 
                     EntityIdentity identity = db.identity().getIdentity(iid);

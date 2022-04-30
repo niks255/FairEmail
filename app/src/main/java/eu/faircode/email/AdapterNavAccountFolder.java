@@ -59,6 +59,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
 
     private boolean nav_count;
     private boolean nav_count_pinned;
+    private boolean nav_unseen_drafts;
     private boolean nav_categories;
 
 
@@ -75,8 +76,6 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
     private DateFormat TF;
-
-    private static final int QUOTA_WARNING = 95; // percent
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private View view;
@@ -140,7 +139,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
             }
 
             int count;
-            if (EntityFolder.DRAFTS.equals(account.folderType))
+            if ((!nav_unseen_drafts && EntityFolder.DRAFTS.equals(account.folderType)))
                 count = account.messages;
             else
                 count = account.unseen;
@@ -182,7 +181,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
                 ivWarning.setImageResource(R.drawable.twotone_warning_24);
                 ivWarning.setVisibility(expanded ? View.VISIBLE : View.GONE);
                 view.setBackgroundColor(expanded ? Color.TRANSPARENT : colorWarning);
-            } else if (percent != null && percent > QUOTA_WARNING && account.folderName == null) {
+            } else if (percent != null && percent > EntityAccount.QUOTA_WARNING && account.folderName == null) {
                 ivWarning.setImageResource(R.drawable.twotone_disc_full_24);
                 ivWarning.setVisibility(expanded ? View.VISIBLE : View.GONE);
                 view.setBackgroundColor(expanded ? Color.TRANSPARENT : colorWarning);
@@ -275,6 +274,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.nav_count = prefs.getBoolean("nav_count", false);
         this.nav_count_pinned = prefs.getBoolean("nav_count_pinned", false);
+        this.nav_unseen_drafts = prefs.getBoolean("nav_unseen_drafts", false);
         this.nav_categories = prefs.getBoolean("nav_categories", false);
         boolean highlight_unread = prefs.getBoolean("highlight_unread", true);
         int colorHighlight = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorUnreadHighlight));

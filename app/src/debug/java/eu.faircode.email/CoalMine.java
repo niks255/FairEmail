@@ -19,6 +19,7 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
+import android.app.Application;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
@@ -37,6 +39,10 @@ import shark.ObjectInspector;
 import shark.ObjectReporter;
 
 public class CoalMine {
+    static void install(@NonNull Application app) {
+        AppWatcher.INSTANCE.manualInstall(app, TimeUnit.SECONDS.toMillis(5));
+    }
+
     static void setup(boolean enabled) {
         List<ObjectInspector> inspectors = new ArrayList<>(LeakCanary.getConfig().getObjectInspectors());
 
@@ -65,6 +71,12 @@ public class CoalMine {
                                         reporter.getLabels().add("started=" + label);
                                     }
                                 }
+                                HeapField hfDestroyed = instance.get(className, "destroyed");
+                                if (hfDestroyed != null) {
+                                    Boolean destroyed = hfDestroyed.getValue().getAsBoolean();
+                                    if (destroyed != null)
+                                        reporter.getLabels().add("destroyed=" + destroyed);
+                                }
                             } else if (className.equals(TwoStateOwner.class.getName())) {
                                 HeapField hfState = instance.get(className, "state");
                                 if (hfState != null) {
@@ -89,6 +101,7 @@ public class CoalMine {
                 .objectInspectors(inspectors)
                 .build();
         LeakCanary.setConfig(config);
+
         LeakCanary.INSTANCE.showLeakDisplayActivityLauncherIcon(true);
     }
 

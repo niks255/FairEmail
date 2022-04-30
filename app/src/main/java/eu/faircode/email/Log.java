@@ -2127,6 +2127,17 @@ public class Log {
                             messages += folder.messages;
                         }
 
+                        boolean unmetered = false;
+                        boolean ignore_schedule = false;
+                        try {
+                            if (account.conditions != null) {
+                                JSONObject jconditions = new JSONObject(account.conditions);
+                                unmetered = jconditions.optBoolean("unmetered");
+                                ignore_schedule = jconditions.optBoolean("ignore_schedule");
+                            }
+                        } catch (Throwable ignored) {
+                        }
+
                         size += write(os, account.name + (account.primary ? "*" : "") +
                                 " " + (account.protocol == EntityAccount.TYPE_IMAP ? "IMAP" : "POP") + "/" + account.auth_type +
                                 " " + account.host + ":" + account.port + "/" + account.encryption +
@@ -2136,6 +2147,8 @@ public class Log {
                                 " ondemand=" + account.ondemand +
                                 " msgs=" + content + "/" + messages +
                                 " ops=" + db.operation().getOperationCount(account.id) +
+                                " ischedule=" + ignore_schedule + (ignore_schedule ? " !!!" : "") +
+                                " unmetered=" + unmetered + (unmetered ? " !!!" : "") +
                                 " " + account.state +
                                 (account.last_connected == null ? "" : " " + dtf.format(account.last_connected)) +
                                 (account.error == null ? "" : "\r\n" + account.error) +

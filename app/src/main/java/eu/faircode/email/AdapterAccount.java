@@ -262,13 +262,21 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                     account.backoff_until == null ? "-" : DTF.format(account.backoff_until)));
             tvBackoff.setVisibility(account.backoff_until == null || !settings ? View.GONE : View.VISIBLE);
 
-            Integer percent = (settings ? null : account.getQuotaPercentage());
-            tvUsage.setText(percent == null ? null : NF.format(percent) + "%");
-            tvUsage.setVisibility(percent == null || compact ? View.GONE : View.VISIBLE);
+            Integer percent = account.getQuotaPercentage();
+            boolean warning = (percent != null && percent > EntityAccount.QUOTA_WARNING);
+
+            tvUsage.setText(settings || percent == null ? null : NF.format(percent) + "%");
+            tvUsage.setVisibility(settings || percent == null || (compact && !warning) ? View.GONE : View.VISIBLE);
             tvQuota.setText(context.getString(R.string.title_storage_quota,
                     (account.quota_usage == null ? "-" : Helper.humanReadableByteCount(account.quota_usage)),
                     (account.quota_limit == null ? "-" : Helper.humanReadableByteCount(account.quota_limit))));
             tvQuota.setVisibility(settings && (account.quota_usage != null || account.quota_limit != null) ? View.VISIBLE : View.GONE);
+
+            tvUsage.setTextColor(warning ? colorWarning : textColorSecondary);
+            tvUsage.setTypeface(warning ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+
+            tvQuota.setTextColor(warning ? colorWarning : textColorSecondary);
+            tvQuota.setTypeface(warning ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
 
             tvMaxSize.setText(account.max_size == null ? null : Helper.humanReadableByteCount(account.max_size));
             tvMaxSize.setVisibility(settings && account.max_size != null && BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
@@ -563,11 +571,6 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
 
                     new SimpleTask<Void>() {
                         @Override
-                        protected void onPostExecute(Bundle args) {
-                            ToastEx.makeText(context, R.string.title_completed, Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
                         protected Void onExecute(Context context, Bundle args) throws Throwable {
                             long id = args.getLong("id");
 
@@ -575,6 +578,11 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                             db.account().resetCreated(id);
 
                             return null;
+                        }
+
+                        @Override
+                        protected void onExecuted(Bundle args, Void data) {
+                            ToastEx.makeText(context, R.string.title_completed, Toast.LENGTH_LONG).show();
                         }
 
                         @Override

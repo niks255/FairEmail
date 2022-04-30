@@ -23,6 +23,7 @@ import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -58,6 +59,8 @@ import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.imap.protocol.IMAPProtocol;
 import com.sun.mail.imap.protocol.IMAPResponse;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -181,7 +184,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             stopForeground(true);
         else
             startForeground(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
-                    getNotificationService(null, null).build());
+                    getNotificationService(null, null));
 
         // Listen for network changes
         ConnectivityManager cm = Helper.getSystemService(this, ConnectivityManager.class);
@@ -403,7 +406,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             try {
                                 NotificationManager nm = Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
                                 nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
-                                        getNotificationService(lastAccounts, lastOperations).build());
+                                        getNotificationService(lastAccounts, lastOperations));
                             } catch (Throwable ex) {
 /*
                             java.lang.NullPointerException: Attempt to invoke interface method 'java.util.Iterator java.lang.Iterable.iterator()' on a null object reference
@@ -921,7 +924,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         nm.cancel(NotificationHelper.NOTIFICATION_SYNCHRONIZE);
 
         super.onDestroy();
-        CoalMine.watch(this, getClass().getSimpleName() + "#onDestroy()");
     }
 
     @Override
@@ -946,7 +948,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 stopForeground(true);
             else
                 startForeground(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
-                        getNotificationService(null, null).build());
+                        getNotificationService(null, null));
 
             if (action != null) {
                 switch (action.split(":")[0]) {
@@ -1221,17 +1223,33 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             @Override
             public void delegate() {
                 try {
+                    long now = new Date().getTime();
+                    long[] schedule = getSchedule(ServiceSynchronize.this);
+                    boolean scheduled = (schedule == null || (now >= schedule[0] && now < schedule[1]));
+
+                    boolean work = false;
                     DB db = DB.getInstance(ServiceSynchronize.this);
                     try {
                         db.beginTransaction();
 
                         List<EntityAccount> accounts = db.account().getPollAccounts(null);
                         for (EntityAccount account : accounts) {
-                            List<EntityFolder> folders = db.folder().getSynchronizingFolders(account.id);
-                            if (folders.size() > 0)
-                                Collections.sort(folders, folders.get(0).getComparator(ServiceSynchronize.this));
-                            for (EntityFolder folder : folders)
-                                EntityOperation.poll(ServiceSynchronize.this, folder.id);
+                            JSONObject jcondition = new JSONObject();
+                            try {
+                                if (!TextUtils.isEmpty(account.conditions))
+                                    jcondition = new JSONObject(account.conditions);
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            }
+
+                            if (scheduled || jcondition.optBoolean("ignore_schedule")) {
+                                work = true;
+                                List<EntityFolder> folders = db.folder().getSynchronizingFolders(account.id);
+                                if (folders.size() > 0)
+                                    Collections.sort(folders, folders.get(0).getComparator(ServiceSynchronize.this));
+                                for (EntityFolder folder : folders)
+                                    EntityOperation.poll(ServiceSynchronize.this, folder.id);
+                            }
                         }
 
                         db.setTransactionSuccessful();
@@ -1239,10 +1257,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         db.endTransaction();
                     }
 
-                    long now = new Date().getTime();
-                    long[] schedule = ServiceSynchronize.getSchedule(ServiceSynchronize.this);
-                    boolean scheduled = (schedule == null || (now >= schedule[0] && now < schedule[1]));
-                    schedule(ServiceSynchronize.this, scheduled, true, null);
+                    schedule(ServiceSynchronize.this, work, true, null);
 
                     // Prevent service stop
                     eval(ServiceSynchronize.this, "poll");
@@ -1276,7 +1291,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         scheduleWatchdog(this);
     }
 
-    private NotificationCompat.Builder getNotificationService(Integer accounts, Integer operations) {
+    private Notification getNotificationService(Integer accounts, Integer operations) {
         if (accounts != null)
             this.lastAccounts = accounts;
         if (operations != null)
@@ -1289,22 +1304,19 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         PendingIntent piWhy = PendingIntentCompat.getActivity(
                 this, ActivityView.PI_WHY, why, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent dump = new Intent(this, ServiceUI.class).setAction("dump");
-        PendingIntent piDump = PendingIntentCompat.getService(
-                this, ServiceUI.PI_DUMP, dump, PendingIntent.FLAG_UPDATE_CURRENT);
-
         // Build notification
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, "service")
                         .setSmallIcon(R.drawable.baseline_compare_arrows_white_24)
-                        .setContentIntent(BuildConfig.DEBUG ? piDump : piWhy)
+                        .setContentIntent(piWhy)
                         .setAutoCancel(false)
                         .setShowWhen(false)
-                        .setPriority(NotificationCompat.PRIORITY_MIN)
                         .setDefaults(0) // disable sound on pre Android 8
+                        .setPriority(NotificationCompat.PRIORITY_MIN)
                         .setCategory(NotificationCompat.CATEGORY_SERVICE)
                         .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                        .setLocalOnly(true);
+                        .setLocalOnly(true)
+                        .setOngoing(true);
 
         if (lastAccounts > 0)
             builder.setContentTitle(getResources().getQuantityString(
@@ -1319,7 +1331,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         if (lastSuitable == null || !lastSuitable)
             builder.setSubText(getString(R.string.title_notification_waiting));
 
-        return builder;
+        Notification notification = builder.build();
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+        return notification;
     }
 
     private NotificationCompat.Builder getNotificationAlert(EntityAccount account, String message) {
@@ -2340,7 +2354,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     try {
                         latch.await(5000L, TimeUnit.MILLISECONDS);
                     } catch (InterruptedException ex) {
-                        Log.w(ex);
+                        Log.i(ex);
                     }
 
                     // Stop executing operations
@@ -2751,7 +2765,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             try {
                                 NotificationManager nm = Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
                                 nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
-                                        getNotificationService(lastAccounts, lastOperations).build());
+                                        getNotificationService(lastAccounts, lastOperations));
                             } catch (Throwable ex) {
                                 Log.w(ex);
                             }
@@ -2830,7 +2844,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 List<TupleAccountNetworkState> result = new ArrayList<>();
                 for (TupleAccountState accountState : accountStates)
                     result.add(new TupleAccountNetworkState(
-                            enabled && (pollInterval == 0 || accountState.isExempted(ServiceSynchronize.this)) && scheduled,
+                            enabled && (pollInterval == 0 || accountState.isExempted(ServiceSynchronize.this)),
+                            scheduled,
                             command,
                             networkState,
                             accountState));
@@ -2903,15 +2918,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.cancel(pi);
 
-        boolean scheduled;
-        Long at = null;
+        long now = new Date().getTime();
         long[] schedule = getSchedule(context);
-        if (schedule == null)
-            scheduled = true;
-        else {
-            long now = new Date().getTime();
+        boolean scheduled = (schedule == null || (now >= schedule[0] && now < schedule[1]));
+
+        if (schedule != null) {
             long next = (now < schedule[0] ? schedule[0] : schedule[1]);
-            scheduled = (now >= schedule[0] && now < schedule[1]);
 
             Log.i("Schedule now=" + new Date(now));
             Log.i("Schedule start=" + new Date(schedule[0]));
@@ -2920,14 +2932,38 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             Log.i("Schedule scheduled=" + scheduled);
 
             AlarmManagerCompatEx.setAndAllowWhileIdle(context, am, AlarmManager.RTC_WAKEUP, next, pi);
-
-            if (scheduled && polled) {
-                at = now + 30 * 1000L;
-                Log.i("Sync at schedule start=" + new Date(at));
-            }
         }
 
-        schedule(context, scheduled, polled, at);
+        executor.submit(new RunnableEx("schedule") {
+            @Override
+            protected void delegate() {
+                boolean work = false;
+                DB db = DB.getInstance(context);
+                List<EntityAccount> accounts = db.account().getPollAccounts(null);
+                for (EntityAccount account : accounts) {
+                    JSONObject jcondition = new JSONObject();
+                    try {
+                        if (!TextUtils.isEmpty(account.conditions))
+                            jcondition = new JSONObject(account.conditions);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+
+                    if (scheduled || jcondition.optBoolean("ignore_schedule")) {
+                        work = true;
+                        break;
+                    }
+                }
+
+                Long at = null;
+                if (scheduled && polled) {
+                    at = now + 30 * 1000L;
+                    Log.i("Sync at schedule start=" + new Date(at));
+                }
+
+                schedule(context, work, polled, at);
+            }
+        });
     }
 
     private static void schedule(Context context, boolean scheduled, boolean polled, Long at) {

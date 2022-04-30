@@ -108,7 +108,7 @@ public class FragmentQuickSetup extends FragmentBase {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString("fair:password", tilPassword.getEditText().getText().toString());
+        outState.putString("fair:password", tilPassword == null ? null : tilPassword.getEditText().getText().toString());
         outState.putParcelable("fair:best", bestProvider);
         outState.putParcelable("fair:args", bestArgs);
     }
@@ -199,6 +199,9 @@ public class FragmentQuickSetup extends FragmentBase {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (tvCharacters == null || tilPassword == null)
+                    return;
+
                 String password = s.toString();
                 boolean warning = (Helper.containsWhiteSpace(password) ||
                         Helper.containsControlChars(password));

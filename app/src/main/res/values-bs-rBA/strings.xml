@@ -338,6 +338,8 @@
     <string name="title_advanced_attach_new">Dodaj dijeljene datoteke u novi nacrt</string>
     <string name="title_advanced_answer_action">Dugo pritiskanje tipke \'odgovor\' će:</string>
     <string name="title_advanced_send_pending">Prikaži nenametljivu ikonicu za odgođeno slanje</string>
+    <string name="title_advanced_auto_save_paragraph">Automatski sačuvaj nacrt nakon svakog paragrafa</string>
+    <string name="title_advanced_auto_save_dot">Automatski sačuvaj nacrt nakon svake rečenice</string>
     <string name="title_advanced_compose_font">Zadani font</string>
     <string name="title_advanced_auto_identity">Automatski izbor identiteta za nove poruke</string>
     <string name="title_advanced_prefix_once">Prefiks predmeta samo jedanput pri odgovoru ili prosljeđenju</string>
@@ -416,10 +418,9 @@
     <string name="title_advanced_color_stripe">Prikaži obojene pruge</string>
     <string name="title_advanced_color_stripe_wide">Koristi široku traku s bojama</string>
     <string name="title_advanced_avatars">Prikaži fotografije kontakata</string>
-    <string name="title_advanced_gravatars">Prikaži gravatare</string>
-    <string name="title_advanced_libravatars">Prikaži Libravatare</string>
     <string name="title_advanced_bimi_unverified">Nepotvrđeni pošiljalac</string>
     <string name="title_advanced_bimi_verified">Potvrđeni pošiljalac</string>
+    <string name="title_advanced_efavicons">Prikaži avatare</string>
     <string name="title_advanced_favicons">Prikaži fav ikonice</string>
     <string name="title_advanced_favicons_partial">Skeniraj samo prva(ih) %1$s web stranice</string>
     <string name="title_advanced_generated_icons">Prikaži generisane ikonice</string>
@@ -628,6 +629,7 @@
     <string name="title_advanced_poll_hint">Povremeno provjeravanje novih poruka će uporediti lokalne i udaljene poruke svaki put, što je zahtjevna radnja, koja može uticati na povećanu potrošnju baterije, posebno ukoliko ima mnogo poruka. Stalni prijem će spriječiti ovo tako što će se stalno pratiti promjene.</string>
     <string name="title_advanced_optimize_hint">Ovo može promijeniti učestalost sinhronizacija kako bi se smanjila potrošnja baterije, u zavisnosti od mogućnosti i ponašanja e-mail servera</string>
     <string name="title_advanced_schedule_hint">Dodirnite za postavljanje vremena</string>
+    <string name="title_advanced_schedule_ignore">Rasporedi se mogu isključiti u naprednim postavkama računa</string>
     <string name="title_advanced_quick_sync_hint">Ovo smanjuje potrošnju podataka, ali nove poruke mogu nedostajati ukoliko e-mail server ne prati standarde</string>
     <string name="title_advanced_no_date_hint">Neki provajderi čuvaju kao poruke bez datuma poruke s nepoznatim, nevažećim ili nekim budućim datumom</string>
     <string name="title_advanced_unseen_hint">Neki provajderi ne podržavaju ovo kako treba, što može uzrokovati prestanak ili potpunu sinhronizaciju poruka</string>
@@ -670,7 +672,7 @@
     <string name="title_advanced_split_min_hint">Ovaj uvjet je namijenjen za sklopive uređaje</string>
     <string name="title_advanced_threading_hint">Grupiši poruke povezane jedne s drugima</string>
     <string name="title_advanced_highlight_hint">Tematska boja za naglašavanje koristit će se za markiranje</string>
-    <string name="title_advanced_gravatars_hint">Moguće je da postoji rizik privatnosti</string>
+    <string name="title_advanced_privacy_risk">Moguće je da postoji rizik privatnosti</string>
     <string name="title_advanced_name_email_hint">Imena će se prikazivati samo kad su dostupna</string>
     <string name="title_advanced_preview_hint">Dostupno samo kada je preuzet tekst poruke</string>
     <string name="title_advanced_preview_lines_hint">Maksimalno %s znak(ov)a ukupno</string>
@@ -789,6 +791,8 @@
     <string name="title_received_header">Koristi zaglavlje za \'primljeno\'</string>
     <string name="title_date_header">Koristi zaglavlje za \'datum\' (vrijeme slanja)</string>
     <string name="title_date_remark">Promjene će biti primijenjene samo na nove poruke</string>
+    <string name="title_unmetered_only">Poveži se samo preko neograničenih mreža</string>
+    <string name="title_ignore_schedule">Sinhronizuj također van rasporeda</string>
     <string name="title_related_identity">Dodaj povezani identitet (SMTP server)</string>
     <string name="title_check">Provjeri</string>
     <string name="title_trust">Odobri certifikat servera pomoću otiska prsta %1$s</string>
@@ -1190,6 +1194,8 @@
     <string name="title_translate_html_hint">Ovo će zauzimati više znakova</string>
     <string name="title_translate_usage">Iskorištenje: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Dodirnite tekst za prevođenje</string>
+    <string name="title_suggestions_check" comment="title_suggestions_check&#10;Show when checking grammar, etc">Provjera &#8230;</string>
+    <string name="title_suggestions_none" comment="title_suggestions_none&#10;Shown when no grammar improvement suggestions, etc">Bez prijedloga</string>
     <string name="title_edit_plain_text">Uredi kao obični tekst</string>
     <string name="title_edit_formatted_text">Uredi kao preformatirani tekst</string>
     <string name="title_select_certificate">Izaberi javni ključ</string>
@@ -1550,6 +1556,7 @@
     <string name="title_legend_t">Fokus na tekst</string>
     <string name="title_hint_folder_actions">Dugi dodir na folder za opcije, poput dodavanja foldera u navigacijski meni za brzi pristup</string>
     <string name="title_hint_folder_sync">Da bi ograničili potrošnju baterije i podataka, po zadanom neće biti sinhronizirani svi folderi i poruke</string>
+    <string name="title_hint_airplane">Način rada u avionu je uključen</string>
     <string name="title_hint_support">Ukoliko imate pitanje ili problem, molimo da koristite meni za podršku i pomoć</string>
     <string name="title_hint_message_actions">Prevucite lijevo za otpad; Prevucite desno za arhiviranje (ukoliko postoji); Radnje prevlačenja mogu se podesiti u postavkama računa</string>
     <string name="title_hint_message_selection">Dugim dodirom na poruku pokreće se višestruko označavanje poruka; Držite i prevlačite gore ili dolje za označavanje više poruka</string>
@@ -1678,6 +1685,7 @@
     <string name="title_widget_folder_unified">Folderi objedinjenog inbox-a</string>
     <string name="title_widget_unseen">Samo nepročitane poruke</string>
     <string name="title_widget_flagged">Samo poruke sa zvjezdicom</string>
+    <string name="title_widget_highlight_remark">Boja za markiranje može se izabrati u postavkama prikaza</string>
     <string name="title_widget_font_size">Veličina teksta</string>
     <string name="title_widget_padding">Veličina razmaka</string>
     <string name="title_widget_semi_transparent">Poluprovidna pozadina</string>
