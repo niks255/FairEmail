@@ -1,5 +1,6 @@
-rm -rf app/schemas/mapping
+#!/bin/sh
 
-git fetch fairemail
+git reset --hard && \
+git fetch origin && \
 git merge $(git describe --tags $(git rev-list --tags --max-count=1))
 $SHELL
