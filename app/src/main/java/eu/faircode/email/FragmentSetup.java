@@ -74,6 +74,7 @@ import java.util.List;
 public class FragmentSetup extends FragmentBase {
     private ViewGroup view;
 
+    private TextView tvWelcome;
     private TextView tvPrivacy;
     private TextView tvSupport;
     private ImageButton ibWelcome;
@@ -99,6 +100,7 @@ public class FragmentSetup extends FragmentBase {
 
     private TextView tvPermissionsDone;
     private Button btnPermissions;
+    private ImageButton ibPermissions;
     private TextView tvImportContacts;
 
     private TextView tvDozeDone;
@@ -114,7 +116,9 @@ public class FragmentSetup extends FragmentBase {
     private TextView tvSyncStopped;
 
     private CardView cardExtra;
+    private TextView tvExtra;
     private Button btnApp;
+    private Button btnNotification;
     private Button btnDelete;
     private Button btnMore;
     private Button btnSupport;
@@ -147,6 +151,7 @@ public class FragmentSetup extends FragmentBase {
 
         // Get controls
 
+        tvWelcome = view.findViewById(R.id.tvWelcome);
         tvPrivacy = view.findViewById(R.id.tvPrivacy);
         tvSupport = view.findViewById(R.id.tvSupport);
         ibWelcome = view.findViewById(R.id.ibWelcome);
@@ -172,6 +177,7 @@ public class FragmentSetup extends FragmentBase {
 
         tvPermissionsDone = view.findViewById(R.id.tvPermissionsDone);
         btnPermissions = view.findViewById(R.id.btnPermissions);
+        ibPermissions = view.findViewById(R.id.ibPermissions);
         tvImportContacts = view.findViewById(R.id.tvImportContacts);
 
         tvDozeDone = view.findViewById(R.id.tvDozeDone);
@@ -187,7 +193,9 @@ public class FragmentSetup extends FragmentBase {
         tvSyncStopped = view.findViewById(R.id.tvSyncStopped);
 
         cardExtra = view.findViewById(R.id.cardExtra);
+        tvExtra = view.findViewById(R.id.tvExtra);
         btnApp = view.findViewById(R.id.btnApp);
+        btnNotification = view.findViewById(R.id.btnNotification);
         btnDelete = view.findViewById(R.id.btnDelete);
         btnMore = view.findViewById(R.id.btnMore);
         btnSupport = view.findViewById(R.id.btnSupport);
@@ -199,6 +207,15 @@ public class FragmentSetup extends FragmentBase {
         grpExtra = view.findViewById(R.id.grpExtra);
 
         // Wire controls
+
+        tvWelcome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ibWelcome.setPressed(true);
+                ibWelcome.setPressed(false);
+                ibWelcome.performClick();
+            }
+        });
 
         tvPrivacy.setPaintFlags(tvPrivacy.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvPrivacy.setOnClickListener(new View.OnClickListener() {
@@ -475,6 +492,13 @@ public class FragmentSetup extends FragmentBase {
             }
         });
 
+        ibPermissions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 1);
+            }
+        });
+
         tvImportContacts.setPaintFlags(tvImportContacts.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvImportContacts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -584,6 +608,15 @@ public class FragmentSetup extends FragmentBase {
             });
         }
 
+        tvExtra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ibExtra.setPressed(true);
+                ibExtra.setPressed(false);
+                ibExtra.performClick();
+            }
+        });
+
         final Intent app = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         app.setData(Uri.parse("package:" + getContext().getPackageName()));
         btnApp.setOnClickListener(new View.OnClickListener() {
@@ -607,6 +640,18 @@ public class FragmentSetup extends FragmentBase {
                 fragment.setArguments(args);
                 fragment.setTargetFragment(FragmentSetup.this, ActivitySetup.REQUEST_DELETE_ACCOUNT);
                 fragment.show(getParentFragmentManager(), "setup:delete");
+            }
+        });
+
+        final Intent channelService = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, getContext().getPackageName())
+                .putExtra(Settings.EXTRA_CHANNEL_ID, "service");
+
+        btnNotification.setEnabled(channelService.resolveActivity(pm) != null); // system whitelisted
+        btnNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(channelService);
             }
         });
 

@@ -10,7 +10,6 @@
     <string name="app_cake">Spațiu de stocare insuficient rămas</string>
     <string name="app_updated">Ultima actualizare: %1$s</string>
     <string name="app_download">Descărcat de la: %1$s</string>
-    <string name="channel_service">Primește</string>
     <string name="channel_send">Trimite</string>
     <string name="channel_notification">E-mail</string>
     <string name="channel_progress">Progres</string>
@@ -124,6 +123,7 @@
     <string name="menu_rate">Evaluează această aplicație</string>
     <string name="title_welcome">Bine ați venit</string>
     <string name="title_eula">Licența de utilizare</string>
+    <string name="title_license">Licență open-source</string>
     <string name="title_contributors">Colaboratori</string>
     <string name="title_agree">Sunt de acord</string>
     <string name="title_disagree">Nu sunt de acord</string>
@@ -517,7 +517,6 @@
     <string name="title_advanced_default_snooze">Timpul implicit de amânare/prelungire</string>
     <string name="title_advanced_notifications">Gestionarea notificărilor</string>
     <string name="title_advanced_notifications_default">Canal implicit</string>
-    <string name="title_advanced_notifications_service">Canal primire</string>
     <string name="title_advanced_notifications_newest_first">Arată mai întâi cele mai noi notificări</string>
     <string name="title_advanced_notifications_background">Folosește serviciul de fundal pentru a sincroniza mesajele</string>
     <string name="title_advanced_notifications_background_hint">Un serviciu de fundal poate fi oprit de Android în orice moment, dar nu necesită o notificare în bara de stare</string>
@@ -1190,6 +1189,8 @@
     <string name="title_translate_html_hint">Acest lucru va consuma mai multe caractere</string>
     <string name="title_translate_usage">Utilizare: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Atingeți ușor textul care urmează să fie tradus</string>
+    <string name="title_suggestions_check">Se verifică &#8230;</string>
+    <string name="title_suggestions_none">Fără sugestii</string>
     <string name="title_edit_plain_text">Editați ca text simplu</string>
     <string name="title_edit_formatted_text">Editați ca text reformatat</string>
     <string name="title_select_certificate">Selectare cheie publică</string>
@@ -1295,6 +1296,7 @@
     <string name="title_search_device">Căutare pe dispozitiv</string>
     <string name="title_search_server">Căutare pe server</string>
     <string name="title_search_in">Căutare în</string>
+    <string name="title_search_sender">Căutare expeditor</string>
     <string name="title_search_delete">Ștergeți căutarea salvată?</string>
     <string name="title_sort_on">Sortare</string>
     <string name="title_sort_on_time">Dată</string>
@@ -1678,9 +1680,9 @@
     <string name="title_widget_folder_unified">Dosare unificate</string>
     <string name="title_widget_unseen">Numai mesajele necitite</string>
     <string name="title_widget_flagged">Numai mesajele cu stea</string>
-    <string name="title_widget_highlight_remark">Culoarea de evidențiere poate fi selectată în setările de afișare</string>
     <string name="title_widget_font_size">Mărime text</string>
     <string name="title_widget_padding">Mărime spațiu liber</string>
+    <string name="title_widget_separator_lines">Arată liniile separatoare</string>
     <string name="title_widget_semi_transparent">Fundal semi transparent</string>
     <string name="title_widget_refresh">Buton de afișare a mesajelor de reîmprospătare</string>
     <string name="title_widget_compose">Afișați butonul de redactare a unui mesaj nou</string>

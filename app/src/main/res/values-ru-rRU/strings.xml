@@ -10,7 +10,7 @@
     <string name="app_cake">Недостаточно места</string>
     <string name="app_updated">Последнее обновление: %1$s</string>
     <string name="app_download">Загружено из: %1$s</string>
-    <string name="channel_service">Получение</string>
+    <string name="channel_service" comment="channel_service&#10;Title of &quot;Synchronizing and monitoring of accounts&quot; notification channel showing the &quot;Monitoring&quot; status bar notification, etc.">Отслеживание</string>
     <string name="channel_send">Отправка</string>
     <string name="channel_notification">Эл. почта</string>
     <string name="channel_progress">Выполнение</string>
@@ -134,6 +134,7 @@
     <string name="menu_rate">Оценить приложение</string>
     <string name="title_welcome">Добро пожаловать</string>
     <string name="title_eula">Лицензионное соглашение</string>
+    <string name="title_license">Лицензия свободного ПО</string>
     <string name="title_contributors">Переводчики</string>
     <string name="title_agree">Принимаю</string>
     <string name="title_disagree">Не принимаю</string>
@@ -527,7 +528,7 @@
     <string name="title_advanced_default_snooze">Время повтора/задержки по умолчанию</string>
     <string name="title_advanced_notifications">Настроить уведомления</string>
     <string name="title_advanced_notifications_default">Канал по умолчанию</string>
-    <string name="title_advanced_notifications_service">Канал получения</string>
+    <string name="title_advanced_notifications_service" comment="title_advanced_notifications_service&#10;Title of button to manage the notification channel &quot;Synchronizing and monitoring of accounts&quot;">Канал отслеживания</string>
     <string name="title_advanced_notifications_newest_first">Сначала показывать новые уведомления</string>
     <string name="title_advanced_notifications_background">Использовать фоновую службу для синхронизации сообщений</string>
     <string name="title_advanced_notifications_background_hint">Фоновая служба может быть остановлена Android в любое время, но не требует уведомления в статусной строке</string>
@@ -1203,8 +1204,8 @@
     <string name="title_translate_html_hint">Будет использоваться больше символов</string>
     <string name="title_translate_usage">Использование: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Нажмите на текст для перевода</string>
-    <string name="title_suggestions_check" comment="title_suggestions_check&#10;Show when checking grammar, etc">Проверка &#8230;</string>
-    <string name="title_suggestions_none" comment="title_suggestions_none&#10;Shown when no grammar improvement suggestions, etc">Нет предложений</string>
+    <string name="title_suggestions_check">Проверка &#8230;</string>
+    <string name="title_suggestions_none">Нет предложений</string>
     <string name="title_edit_plain_text">Редактировать как простой текст</string>
     <string name="title_edit_formatted_text">Редактировать как исходный текст</string>
     <string name="title_select_certificate">Выбор публичного ключа</string>
@@ -1310,6 +1311,7 @@
     <string name="title_search_device">Поиск на устройстве</string>
     <string name="title_search_server">Поиск на сервере</string>
     <string name="title_search_in">Поиск в</string>
+    <string name="title_search_sender">Поиск отправителя</string>
     <string name="title_search_delete">Удалить сохранённый поиск?</string>
     <string name="title_sort_on">Сортировка</string>
     <string name="title_sort_on_time">Время</string>
@@ -1694,9 +1696,9 @@
     <string name="title_widget_folder_unified">Папки единого почтового ящика</string>
     <string name="title_widget_unseen">Только непрочитанные сообщения</string>
     <string name="title_widget_flagged">Только избранные сообщения</string>
-    <string name="title_widget_highlight_remark">Цвет выделения можно выбрать в настройках отображения</string>
     <string name="title_widget_font_size">Размер текста</string>
     <string name="title_widget_padding">Размер отступа</string>
+    <string name="title_widget_separator_lines">Показывать разделительные линии</string>
     <string name="title_widget_semi_transparent">Полупрозрачный фон</string>
     <string name="title_widget_refresh">Показать кнопку обновления сообщений</string>
     <string name="title_widget_compose">Показать кнопку создания нового сообщения</string>

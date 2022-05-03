@@ -10,7 +10,7 @@
     <string name="app_cake">Espace de stockage restant insuffisant</string>
     <string name="app_updated">Dernière mise à jour : %1$s</string>
     <string name="app_download">Téléchargé depuis : %1$s</string>
-    <string name="channel_service">Réception</string>
+    <string name="channel_service" comment="channel_service&#10;Title of &quot;Synchronizing and monitoring of accounts&quot; notification channel showing the &quot;Monitoring&quot; status bar notification, etc.">Moniteur</string>
     <string name="channel_send">Envoi</string>
     <string name="channel_notification">Courriel</string>
     <string name="channel_progress">Progression</string>
@@ -114,6 +114,7 @@
     <string name="menu_rate">Noter cette application</string>
     <string name="title_welcome">Bienvenue</string>
     <string name="title_eula">Contrat de licence d’utilisateur final</string>
+    <string name="title_license">Licence Code source ouvert</string>
     <string name="title_contributors">Contributeurs</string>
     <string name="title_agree">J’accepte</string>
     <string name="title_disagree">Je refuse</string>
@@ -508,7 +509,7 @@
     <string name="title_advanced_default_snooze">Durée de report par défaut</string>
     <string name="title_advanced_notifications">Gérer les notifications</string>
     <string name="title_advanced_notifications_default">Canal par défaut</string>
-    <string name="title_advanced_notifications_service">Canal « Réception »</string>
+    <string name="title_advanced_notifications_service" comment="title_advanced_notifications_service&#10;Title of button to manage the notification channel &quot;Synchronizing and monitoring of accounts&quot;">Canal de surveillance</string>
     <string name="title_advanced_notifications_newest_first">Afficher les notifications les plus récentes en premier</string>
     <string name="title_advanced_notifications_background">Utiliser le service d\'arrière-plan pour synchroniser les messages</string>
     <string name="title_advanced_notifications_background_hint">Un service en arrière-plan peut être arrêté par Android à tout moment, mais ne nécessite pas de notification dans la barre d\'état</string>
@@ -1185,8 +1186,8 @@
     <string name="title_translate_html_hint">Ceci utilisera plus de caractères</string>
     <string name="title_translate_usage">Utilisation : %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">Appuyez sur le texte à traduire</string>
-    <string name="title_suggestions_check" comment="title_suggestions_check&#10;Show when checking grammar, etc">Vérification en cours&#8230;</string>
-    <string name="title_suggestions_none" comment="title_suggestions_none&#10;Shown when no grammar improvement suggestions, etc">Aucune suggestion</string>
+    <string name="title_suggestions_check">Vérification en cours&#8230;</string>
+    <string name="title_suggestions_none">Aucune suggestion</string>
     <string name="title_edit_plain_text">Modifier comme texte brut</string>
     <string name="title_edit_formatted_text">Modifier comme texte reformaté</string>
     <string name="title_select_certificate">Sélectionner la clé publique</string>
@@ -1292,6 +1293,7 @@
     <string name="title_search_device">Rechercher sur l’appareil</string>
     <string name="title_search_server">Rechercher sur le serveur</string>
     <string name="title_search_in">Rechercher dans</string>
+    <string name="title_search_sender">Rechercher un expéditeur</string>
     <string name="title_search_delete">Supprimer la recherche enregistrée?</string>
     <string name="title_sort_on">Trier par</string>
     <string name="title_sort_on_time">Date</string>
@@ -1676,9 +1678,9 @@
     <string name="title_widget_folder_unified">Dossiers de la boîte de réception unifiée</string>
     <string name="title_widget_unseen">Messages non lus seulement</string>
     <string name="title_widget_flagged">Messages suivis seulement</string>
-    <string name="title_widget_highlight_remark">La couleur de surbrillance peut être sélectionnée dans les paramètres d\'affichage</string>
     <string name="title_widget_font_size">Taille de police</string>
     <string name="title_widget_padding">Espacement des messages</string>
+    <string name="title_widget_separator_lines">Afficher des lignes de séparation</string>
     <string name="title_widget_semi_transparent">Arrière-plan semi-transparent</string>
     <string name="title_widget_refresh">Afficher le bouton d\'actualisation des messages</string>
     <string name="title_widget_compose">Afficher le bouton pour rédiger un nouveau message</string>

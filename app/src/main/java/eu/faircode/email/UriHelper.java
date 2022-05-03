@@ -86,37 +86,64 @@ public class UriHelper {
     static String getParentDomain(Context context, String host) {
         if (host == null)
             return null;
-        String parent = _getSuffix(context, host);
-        return (parent == null ? host : parent);
+        int dot = host.indexOf('.');
+        if (dot < 0)
+            return null;
+        String parent = host.substring(dot + 1);
+        String tld = getTld(context, host);
+        if (tld == null || tld.equals(parent) || parent.length() < tld.length())
+            return null;
+        return parent;
     }
 
-    static boolean hasParentDomain(Context context, String host) {
-        return (host != null && _getSuffix(context, host) != null);
+    static String getRootDomain(Context context, String host) {
+        if (host == null)
+            return null;
+        String tld = getTld(context, host);
+        if (tld == null)
+            return null;
+        if (tld.equals(host))
+            return null;
+        int dot = host.substring(0, host.length() - tld.length() - 1).lastIndexOf('.');
+        if (dot < 0)
+            return host;
+        return host.substring(dot + 1);
     }
 
-    private static String _getSuffix(Context context, @NonNull String host) {
+    static boolean isTld(Context context, String host) {
+        if (host == null)
+            return false;
+        String tld = getTld(context, host);
+        return (tld != null && tld.equals(host));
+    }
+
+    static boolean hasTld(Context context, String host) {
+        return (getTld(context, host) != null);
+    }
+
+    static String getTld(Context context, @NonNull String host) {
         ensureSuffixList(context);
 
-        String h = host.toLowerCase(Locale.ROOT);
+        String eval = host.toLowerCase(Locale.ROOT);
         while (true) {
-            int dot = h.indexOf('.');
+            int d = eval.indexOf('.');
+            String w = (d < 0 ? null : '*' + eval.substring(d));
+
+            synchronized (suffixList) {
+                if (suffixList.contains(eval))
+                    return eval;
+                if (suffixList.contains(w))
+                    if (suffixList.contains('!' + eval))
+                        return eval.substring(d + 1);
+                    else
+                        return eval;
+            }
+
+            int dot = eval.indexOf('.');
             if (dot < 0)
                 return null;
 
-            String prefix = h.substring(0, dot);
-            h = h.substring(dot + 1);
-
-            int d = h.indexOf('.');
-            String w = (d < 0 ? null : '*' + h.substring(d));
-
-            synchronized (suffixList) {
-                if (!suffixList.contains('!' + h) &&
-                        (suffixList.contains(h) || suffixList.contains(w))) {
-                    String parent = prefix + "." + h;
-                    Log.d("Host=" + host + " parent=" + parent);
-                    return parent;
-                }
-            }
+            eval = eval.substring(dot + 1);
         }
     }
 
@@ -338,5 +365,20 @@ public class UriHelper {
     static boolean isHyperLink(Uri uri) {
         return (!uri.isOpaque() &&
                 ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())));
+    }
+
+    static void test(Context context) {
+        String[] hosts = new String[]{
+                "child.parent.example.com", "parent.example.com", "example.com", "com",
+                "child.parent.co.uk", "parent.co.uk", "co.uk", "uk",
+                "child.parent.aaa.ck", "parent.aaa.ck", "aaa.ck", "ck",
+                "child.parent.www.ck", "parent.www.ck", "www.ck", "ck"
+        };
+
+        for (String host : hosts)
+            Log.i("PSL " + host + ":" +
+                    " tld=" + getTld(context, host) +
+                    " root=" + getRootDomain(context, host) +
+                    " parent=" + getParentDomain(context, host));
     }
 }

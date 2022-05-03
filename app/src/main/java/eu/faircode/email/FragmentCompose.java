@@ -613,7 +613,7 @@ public class FragmentCompose extends FragmentBase {
             private boolean save = false;
             private Integer added = null;
             private Integer removed = null;
-            private Integer translated = null;
+            private Integer inserted = null;
 
             @Override
             public void beforeTextChanged(CharSequence text, int start, int count, int after) {
@@ -625,13 +625,13 @@ public class FragmentCompose extends FragmentBase {
                 if (BuildConfig.DEBUG && count - after == 1 && start + after > 0) {
                     int replaced = start + after;
                     Spanned spanned = ((Spanned) text);
-                    StyleHelper.TranslatedSpan[] spans =
-                            spanned.getSpans(replaced, replaced, StyleHelper.TranslatedSpan.class);
-                    for (StyleHelper.TranslatedSpan span : spans) {
+                    StyleHelper.InsertedSpan[] spans =
+                            spanned.getSpans(replaced, replaced, StyleHelper.InsertedSpan.class);
+                    for (StyleHelper.InsertedSpan span : spans) {
                         int end = spanned.getSpanEnd(span);
                         Log.i("Replaced=" + replaced);
                         if (end - 1 == replaced) {
-                            translated = end - 1;
+                            inserted = end - 1;
                             break;
                         }
                     }
@@ -788,20 +788,20 @@ public class FragmentCompose extends FragmentBase {
                         removed = null;
                     }
 
-                if (translated != null)
+                if (inserted != null)
                     try {
-                        StyleHelper.TranslatedSpan[] spans =
-                                text.getSpans(translated, translated, StyleHelper.TranslatedSpan.class);
-                        for (StyleHelper.TranslatedSpan span : spans) {
+                        StyleHelper.InsertedSpan[] spans =
+                                text.getSpans(inserted, inserted, StyleHelper.InsertedSpan.class);
+                        for (StyleHelper.InsertedSpan span : spans) {
                             int start = text.getSpanStart(span);
                             int end = text.getSpanEnd(span);
-                            if (end == translated) {
+                            if (end == inserted) {
                                 text.delete(start, end);
                                 text.removeSpan(span);
                             }
                         }
                     } finally {
-                        translated = null;
+                        inserted = null;
                     }
 
                 if (save)
@@ -2192,6 +2192,8 @@ public class FragmentCompose extends FragmentBase {
                                     if (pos >= 0)
                                         etBody.setSelection(pos);
                                 }
+
+                                StyleHelper.markAsInserted(etBody.getText(), start, start + spanned.length());
                             }
 
                             @Override
@@ -2358,7 +2360,7 @@ public class FragmentCompose extends FragmentBase {
                         int len = 2 + translation.translated_text.length();
                         edit.insert(paragraph.second, translation.translated_text);
                         edit.insert(paragraph.second, "\n\n");
-                        StyleHelper.markAsTranslated(edit, paragraph.second, paragraph.second + len);
+                        StyleHelper.markAsInserted(edit, paragraph.second, paragraph.second + len);
 
                         etBody.setSelection(paragraph.second + len);
 
@@ -2987,7 +2989,7 @@ public class FragmentCompose extends FragmentBase {
                 });
                 snackbar.show();
             } else {
-                File dir = new File(getContext().getCacheDir(), "photo");
+                File dir = new File(getContext().getFilesDir(), "photo");
                 if (!dir.exists())
                     dir.mkdir();
                 File file = new File(dir, working + ".jpg");
@@ -4327,7 +4329,7 @@ public class FragmentCompose extends FragmentBase {
 
             if (BuildConfig.APPLICATION_ID.equals(uri.getAuthority())) {
                 // content://eu.faircode.email/photo/nnn.jpg
-                File tmp = new File(context.getCacheDir(), uri.getPath());
+                File tmp = new File(context.getFilesDir(), uri.getPath());
                 Log.i("Deleting " + tmp);
                 if (!tmp.delete())
                     Log.w("Error deleting " + tmp);
@@ -4432,18 +4434,23 @@ public class FragmentCompose extends FragmentBase {
                         resized = rotated;
                     }
 
-                    File tmp = File.createTempFile("image", ".resized", context.getCacheDir());
+                    File tmp = new File(file.getAbsolutePath() + ".tmp");
                     try (OutputStream out = new BufferedOutputStream(new FileOutputStream(tmp))) {
-                        resized.compress("image/jpeg".equals(attachment.type)
-                                        ? Bitmap.CompressFormat.JPEG
-                                        : Bitmap.CompressFormat.PNG,
-                                REDUCED_IMAGE_QUALITY, out);
+                        Bitmap.CompressFormat format = ("image/jpeg".equals(attachment.type)
+                                ? Bitmap.CompressFormat.JPEG : Bitmap.CompressFormat.PNG);
+                        if (!resized.compress(format, REDUCED_IMAGE_QUALITY, out))
+                            throw new IOException("compress");
+                    } catch (Throwable ex) {
+                        Log.w(ex);
+                        tmp.delete();
                     } finally {
                         resized.recycle();
                     }
 
-                    file.delete();
-                    tmp.renameTo(file);
+                    if (tmp.exists() && tmp.length() > 0) {
+                        file.delete();
+                        tmp.renameTo(file);
+                    }
 
                     DB db = DB.getInstance(context);
                     db.attachment().setDownloaded(attachment.id, file.length());
@@ -4510,6 +4517,9 @@ public class FragmentCompose extends FragmentBase {
             boolean receipt_default = prefs.getBoolean("receipt_default", false);
             boolean write_below = prefs.getBoolean("write_below", false);
             boolean save_drafts = prefs.getBoolean("save_drafts", true);
+            boolean auto_identity = prefs.getBoolean("auto_identity", true);
+            boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
+            boolean suggest_received = prefs.getBoolean("suggest_received", false);
 
             Log.i("Load draft action=" + action + " id=" + id + " reference=" + reference);
 
@@ -4610,6 +4620,27 @@ public class FragmentCompose extends FragmentBase {
                                         }
                         }
                     }
+
+                    if (selected == null && auto_identity)
+                        try {
+                            Address[] tos = MessageHelper.parseAddresses(context, to);
+                            if (tos != null && tos.length > 0) {
+                                String email = ((InternetAddress) tos[0]).getAddress();
+                                List<Integer> types = new ArrayList<>();
+                                if (suggest_sent)
+                                    types.add(EntityContact.TYPE_TO);
+                                if (suggest_received)
+                                    types.add(EntityContact.TYPE_FROM);
+                                List<Long> identities = db.contact().getIdentities(email, types);
+                                if (identities != null && identities.size() == 1) {
+                                    EntityIdentity identity = db.identity().getIdentity(identities.get(0));
+                                    if (identity != null)
+                                        selected = identity;
+                                }
+                            }
+                        } catch (AddressException ex) {
+                            Log.i(ex);
+                        }
 
                     if (selected == null)
                         for (EntityIdentity identity : data.identities)

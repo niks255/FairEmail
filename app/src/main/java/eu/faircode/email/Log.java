@@ -333,6 +333,8 @@ public class Log {
 
     public static void breadcrumb(String name, Map<String, String> crumb) {
         try {
+            crumb.put("free", Integer.toString(Log.getFreeMemMb()));
+
             StringBuilder sb = new StringBuilder();
             sb.append("Breadcrumb ").append(name);
             Map<String, Object> ocrumb = new HashMap<>();
@@ -1628,7 +1630,7 @@ public class Log {
     }
 
     static void writeCrashLog(Context context, Throwable ex) {
-        File file = new File(context.getCacheDir(), "crash.log");
+        File file = new File(context.getFilesDir(), "crash.log");
         Log.w("Writing exception to " + file);
 
         try (FileWriter out = new FileWriter(file, true)) {
@@ -1885,11 +1887,17 @@ public class Log {
 
         long storage_available = Helper.getAvailableStorageSpace();
         long storage_total = Helper.getTotalStorageSpace();
-        long storage_used = Helper.getSize(context.getFilesDir());
+        long storage_used = Helper.getSizeUsed(context.getFilesDir());
         sb.append(String.format("Storage space: %s/%s App: %s\r\n",
                 Helper.humanReadableByteCount(storage_total - storage_available),
                 Helper.humanReadableByteCount(storage_total),
                 Helper.humanReadableByteCount(storage_used)));
+
+        long cache_used = Helper.getSizeUsed(context.getCacheDir());
+        long cache_quota = Helper.getCacheQuota(context);
+        sb.append(String.format("Cache space: %s/%s\r\n",
+                Helper.humanReadableByteCount(cache_used),
+                Helper.humanReadableByteCount(cache_quota)));
 
         Runtime rt = Runtime.getRuntime();
         long hused = (rt.totalMemory() - rt.freeMemory()) / 1024L / 1024L;

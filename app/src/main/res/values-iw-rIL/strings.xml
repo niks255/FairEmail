@@ -10,7 +10,6 @@
     <string name="app_cake">לא נותר די שטח אחסון</string>
     <string name="app_updated">עדכון אחרון: %1$s</string>
     <string name="app_download">מקור ההורדה: %1$s</string>
-    <string name="channel_service">קבלה</string>
     <string name="channel_send">שליחה</string>
     <string name="channel_notification">דוא״ל</string>
     <string name="channel_progress">התקדמות</string>
@@ -134,6 +133,7 @@
     <string name="menu_rate">דירוג היישומון</string>
     <string name="title_welcome">ברוך בואך</string>
     <string name="title_eula">הסכם רישיון למשתמש קצה</string>
+    <string name="title_license">רישיון קוד פתוח</string>
     <string name="title_contributors">מתנדבים</string>
     <string name="title_agree">מקובל עלי</string>
     <string name="title_disagree">לא מקובל עלי</string>
@@ -528,7 +528,6 @@
     <string name="title_advanced_default_snooze">זמן בררת המחדל לדחיית/השהיית תזכורות</string>
     <string name="title_advanced_notifications">ניהול התראות</string>
     <string name="title_advanced_notifications_default">ערוץ בררת מחדל</string>
-    <string name="title_advanced_notifications_service">ערוץ קבלה</string>
     <string name="title_advanced_notifications_newest_first">הצגת ההתראות החדשות ביותר בהתחלה</string>
     <string name="title_advanced_notifications_background">להשתמש בשירות רקע לסנכרון הודעות</string>
     <string name="title_advanced_notifications_background_hint">שירות רקע יכול להיעצר על ידי Android בכל רגע נתון, אך אינו דורש התראה בשורת המצב</string>
@@ -1204,8 +1203,8 @@
     <string name="title_translate_html_hint">יצרוך יותר תווים</string>
     <string name="title_translate_usage">שימוש: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">נא לגעת בטקסט לתרגום</string>
-    <string name="title_suggestions_check" comment="title_suggestions_check&#10;Show when checking grammar, etc">בבדיקה&#8230;</string>
-    <string name="title_suggestions_none" comment="title_suggestions_none&#10;Shown when no grammar improvement suggestions, etc">אין הצעות</string>
+    <string name="title_suggestions_check">בבדיקה&#8230;</string>
+    <string name="title_suggestions_none">אין הצעות</string>
     <string name="title_edit_plain_text">עריכה כטקסט פשוט</string>
     <string name="title_edit_formatted_text">עריכה כטקסט שעוצב מחדש</string>
     <string name="title_select_certificate">בחירת מפתח ציבורי</string>
@@ -1311,6 +1310,7 @@
     <string name="title_search_device">חיפוש במכשיר</string>
     <string name="title_search_server">חיפוש בשרת</string>
     <string name="title_search_in">חיפוש בתוך</string>
+    <string name="title_search_sender">חיפוש מוען</string>
     <string name="title_search_delete">למחוק את החיפוש השמור?</string>
     <string name="title_sort_on">מיון לפי</string>
     <string name="title_sort_on_time">שעה</string>
@@ -1695,9 +1695,9 @@
     <string name="title_widget_folder_unified">תיקיות דואר נכנס מאוחדות</string>
     <string name="title_widget_unseen">הודעות שלא נקראו בלבד</string>
     <string name="title_widget_flagged">הודעות שמסומנות בכוכב בלבד</string>
-    <string name="title_widget_highlight_remark">אפשר לבחור את צבע ההדגשה בהגדרות התצוגה</string>
     <string name="title_widget_font_size">גודל טקסט</string>
     <string name="title_widget_padding">גודל ריפוד</string>
+    <string name="title_widget_separator_lines">הצגת קווים מפרידים</string>
     <string name="title_widget_semi_transparent">רקע שקוף למחצה</string>
     <string name="title_widget_refresh">הצגת כפתור רענון הודעות</string>
     <string name="title_widget_compose">הצגת כפתור כתיבת הודעה חדשה</string>

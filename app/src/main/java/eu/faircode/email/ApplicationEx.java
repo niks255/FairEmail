@@ -113,6 +113,9 @@ public class ApplicationEx extends Application
                 " process=" + android.os.Process.myPid());
         Log.logMemory(this, "App");
 
+        if (BuildConfig.DEBUG)
+            UriHelper.test(this);
+
         CoalMine.install(this);
 
         registerActivityLifecycleCallbacks(lifecycleCallbacks);
@@ -314,7 +317,6 @@ public class ApplicationEx extends Application
         Log.logMemory(this, "Trim memory level=" + level);
         Map<String, String> crumb = new HashMap<>();
         crumb.put("level", Integer.toString(level));
-        crumb.put("free", Integer.toString(Log.getFreeMemMb()));
         Log.breadcrumb("trim", crumb);
         super.onTrimMemory(level);
     }
@@ -614,6 +616,10 @@ public class ApplicationEx extends Application
             boolean cards = prefs.getBoolean("cards", true);
             if (!cards)
                 editor.remove("view_padding");
+        } else if (version < 1888) {
+            int class_min_difference = prefs.getInt("class_min_difference", 50);
+            if (class_min_difference == 0)
+                editor.putBoolean("classification", false);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)

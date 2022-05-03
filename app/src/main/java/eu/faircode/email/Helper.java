@@ -54,6 +54,7 @@ import android.os.LocaleList;
 import android.os.Parcel;
 import android.os.PowerManager;
 import android.os.StatFs;
+import android.os.storage.StorageManager;
 import android.provider.Settings;
 import android.security.KeyChain;
 import android.security.KeyChainAliasCallback;
@@ -117,6 +118,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.openintents.openpgp.util.OpenPgpApi;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -2017,13 +2019,26 @@ public class Helper {
         return stats.getTotalBytes();
     }
 
-    static long getSize(File dir) {
+    static long getCacheQuota(Context context) {
+        // https://developer.android.com/reference/android/content/Context#getCacheDir()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            try {
+                StorageManager sm = Helper.getSystemService(context, StorageManager.class);
+                File cache = context.getCacheDir();
+                return sm.getCacheQuotaBytes(sm.getUuidForPath(cache));
+            } catch (IOException ex) {
+                Log.w(ex);
+            }
+        return 0;
+    }
+
+    static long getSizeUsed(File dir) {
         long size = 0;
         File[] listed = dir.listFiles();
         if (listed != null)
             for (File file : listed)
                 if (file.isDirectory())
-                    size += getSize(file);
+                    size += getSizeUsed(file);
                 else
                     size += file.length();
         return size;
@@ -2083,6 +2098,22 @@ public class Helper {
                 urlConnection.disconnect();
                 throw ex;
             }
+        }
+    }
+
+    static class ByteArrayInOutStream extends ByteArrayOutputStream {
+        public ByteArrayInOutStream() {
+            super();
+        }
+
+        public ByteArrayInOutStream(int size) {
+            super(size);
+        }
+
+        public ByteArrayInputStream getInputStream() {
+            ByteArrayInputStream in = new ByteArrayInputStream(this.buf, 0, this.count);
+            this.buf = null;
+            return in;
         }
     }
 
@@ -2262,9 +2293,9 @@ public class Helper {
                             }
 
                             if (!isCancelled(errorCode))
-                                ApplicationEx.getMainHandler().post(new Runnable() {
+                                ApplicationEx.getMainHandler().post(new RunnableEx("auth:error") {
                                     @Override
-                                    public void run() {
+                                    public void delegate() {
                                         ToastEx.makeText(activity,
                                                 "Error " + errorCode + ": " + errString,
                                                 Toast.LENGTH_LONG).show();
@@ -2304,9 +2335,9 @@ public class Helper {
 
             prompt.authenticate(info.build());
 
-            final Runnable cancelPrompt = new Runnable() {
+            final Runnable cancelPrompt = new RunnableEx("auth:cancelprompt") {
                 @Override
-                public void run() {
+                public void delegate() {
                     try {
                         prompt.cancelAuthentication();
                     } catch (Throwable ex) {
@@ -2321,7 +2352,12 @@ public class Helper {
                 @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                 public void onDestroy() {
                     Log.i("Authenticate destroyed");
-                    ApplicationEx.getMainHandler().post(cancelPrompt);
+                    ApplicationEx.getMainHandler().removeCallbacks(cancelPrompt);
+                    try {
+                        prompt.cancelAuthentication();
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
                     owner.getLifecycle().removeObserver(this);
                 }
             });

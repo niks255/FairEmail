@@ -180,6 +180,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvMemoryClass;
     private TextView tvMemoryUsage;
     private TextView tvStorageUsage;
+    private TextView tvCacheUsage;
     private TextView tvContactInfo;
     private TextView tvSuffixes;
     private TextView tvAndroidId;
@@ -350,6 +351,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvMemoryClass = view.findViewById(R.id.tvMemoryClass);
         tvMemoryUsage = view.findViewById(R.id.tvMemoryUsage);
         tvStorageUsage = view.findViewById(R.id.tvStorageUsage);
+        tvCacheUsage = view.findViewById(R.id.tvCacheUsage);
         tvContactInfo = view.findViewById(R.id.tvContactInfo);
         tvSuffixes = view.findViewById(R.id.tvSuffixes);
         tvAndroidId = view.findViewById(R.id.tvAndroidId);
@@ -1811,7 +1813,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
             new SimpleTask<StorageData>() {
                 @Override
-                protected StorageData onExecute(Context context, Bundle args) throws Throwable {
+                protected StorageData onExecute(Context context, Bundle args) {
                     StorageData data = new StorageData();
                     Runtime rt = Runtime.getRuntime();
                     data.hused = rt.totalMemory() - rt.freeMemory();
@@ -1819,7 +1821,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     data.nheap = Debug.getNativeHeapAllocatedSize();
                     data.available = Helper.getAvailableStorageSpace();
                     data.total = Helper.getTotalStorageSpace();
-                    data.used = Helper.getSize(context.getFilesDir());
+                    data.used = Helper.getSizeUsed(context.getFilesDir());
+                    data.cache_used = Helper.getSizeUsed(context.getCacheDir());
+                    data.cache_quota = Helper.getCacheQuota(context);
                     return data;
                 }
 
@@ -1834,6 +1838,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                             Helper.humanReadableByteCount(data.total - data.available),
                             Helper.humanReadableByteCount(data.total),
                             Helper.humanReadableByteCount(data.used)));
+                    tvCacheUsage.setText(getString(R.string.title_advanced_cache_usage,
+                            Helper.humanReadableByteCount(data.cache_used),
+                            Helper.humanReadableByteCount(data.cache_quota)));
 
                     getView().postDelayed(new Runnable() {
                         @Override
@@ -1989,5 +1996,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         private long available;
         private long total;
         private long used;
+        private long cache_used;
+        private long cache_quota;
     }
 }

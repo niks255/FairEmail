@@ -348,7 +348,6 @@ class Core {
                         crumb.put("tries", Integer.toString(op.tries));
                         crumb.put("similar", TextUtils.join(",", sids));
                         crumb.put("thread", Thread.currentThread().getName() + ":" + Thread.currentThread().getId());
-                        crumb.put("free", Integer.toString(Log.getFreeMemMb()));
                         Log.breadcrumb("start operation", crumb);
 
                         try {
@@ -514,7 +513,6 @@ class Core {
                         }
 
                         crumb.put("thread", Thread.currentThread().getName() + ":" + Thread.currentThread().getId());
-                        crumb.put("free", Integer.toString(Log.getFreeMemMb()));
                         Log.breadcrumb("end operation", crumb);
 
                         // Operation succeeded
@@ -1383,7 +1381,9 @@ class Core {
             throw new IllegalArgumentException("not selectable type=" + target.type);
 
         // De-classify
-        if (!copy)
+        if (!copy &&
+                !EntityFolder.TRASH.equals(target.type) &&
+                !EntityFolder.ARCHIVE.equals(target.type))
             for (EntityMessage message : messages)
                 MessageClassifier.classify(message, folder, false, context);
 
@@ -1425,7 +1425,7 @@ class Core {
                 for (Message imessage : map.keySet()) {
                     EntityMessage message = map.get(imessage);
 
-                    File file = File.createTempFile("draft", "." + message.id, context.getCacheDir());
+                    File file = new File(message.getFile(context).getAbsoluteFile() + ".copy");
                     try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
                         imessage.writeTo(os);
                     }
@@ -1505,7 +1505,7 @@ class Core {
             expunge(context, ifolder, deleted);
         } else {
             int count = MessageHelper.getMessageCount(ifolder);
-            db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
+            db.folder().setFolderTotal(folder.id, count < 0 ? null : count, new Date().getTime());
         }
 
         // Fetch appended/copied when needed
@@ -1703,7 +1703,7 @@ class Core {
             db.message().deleteMessage(folder.id, uid);
         } finally {
             int count = MessageHelper.getMessageCount(ifolder);
-            db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
+            db.folder().setFolderTotal(folder.id, count < 0 ? null : count, new Date().getTime());
         }
     }
 
@@ -1814,7 +1814,7 @@ class Core {
             }
         } finally {
             int count = MessageHelper.getMessageCount(ifolder);
-            db.folder().setFolderTotal(folder.id, count < 0 ? null : count);
+            db.folder().setFolderTotal(folder.id, count < 0 ? null : count, new Date().getTime());
         }
     }
 
@@ -2910,10 +2910,10 @@ class Core {
                             msgid = helper.getMessageID();
 
                             if (TextUtils.isEmpty(msgid)) {
-                                Long time = helper.getReceived();
+                                Long time = helper.getSent();
                                 if (time == null)
-                                    time = helper.getSent();
-                                if (time != null)
+                                    msgid = helper.getHash();
+                                else
                                     msgid = Long.toString(time);
                             }
                         }
@@ -3637,7 +3637,6 @@ class Core {
                         crumb.put("folder", folder.id + ":" + folder.type);
                         crumb.put("start", Integer.toString(from));
                         crumb.put("end", Integer.toString(i));
-                        crumb.put("free", Integer.toString(free));
                         crumb.put("partial", Boolean.toString(account.partial_fetch));
                         Log.breadcrumb("sync", crumb);
                         Log.i("Sync " + from + ".." + i + " free=" + free);
@@ -3652,6 +3651,8 @@ class Core {
                                 if (full.contains(isub[j]))
                                     try {
                                         Date received = isub[j].getReceivedDate();
+                                        if (received == null || received.getTime() == 0)
+                                            received = isub[j].getSentDate();
                                         boolean unseen = (sync_unseen && !isub[j].isSet(Flags.Flag.SEEN));
                                         boolean flagged = (sync_flagged && isub[j].isSet(Flags.Flag.FLAGGED));
                                         if (received != null && received.getTime() < keep_time && !unseen && !flagged) {
@@ -3754,7 +3755,6 @@ class Core {
                     crumb.put("folder", folder.id + ":" + folder.type);
                     crumb.put("start", Integer.toString(from));
                     crumb.put("end", Integer.toString(i));
-                    crumb.put("free", Integer.toString(free));
                     crumb.put("partial", Boolean.toString(account.partial_fetch));
                     Log.breadcrumb("download", crumb);
                     Log.i("Download " + from + ".." + i + " free=" + free);
@@ -3941,6 +3941,8 @@ class Core {
                 if (received == null || received == 0 || received > future)
                     received = helper.getReceivedHeader();
             }
+            if (received == null || received == 0)
+                received = sent;
             if (received == null)
                 received = 0L;
 

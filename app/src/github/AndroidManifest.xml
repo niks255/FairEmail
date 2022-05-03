@@ -98,6 +98,7 @@
         android:name=".ApplicationEx"
         android:allowBackup="false"
         android:appCategory="productivity"
+        android:description="@string/app_name"
         android:extractNativeLibs="false"
         android:forceDarkAllowed="false"
         android:icon="@mipmap/ic_launcher"
@@ -130,8 +131,10 @@
 
         <activity
             android:name=".ActivityMain"
+            android:description="@string/app_name"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:theme="@style/Theme.AppCompat.Translucent">
 
@@ -263,7 +266,9 @@
 
         <activity
             android:name=".ActivityCompose"
+            android:description="@string/app_name"
             android:exported="true"
+            android:label="@string/app_name"
             android:launchMode="singleTask"
             android:parentActivityName=".ActivityView">
             <meta-data
@@ -307,8 +312,10 @@
 
         <activity
             android:name=".ActivityEML"
+            android:description="@string/app_name"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
             android:launchMode="singleInstance">
 
             <intent-filter>
@@ -341,8 +348,10 @@
 
         <activity
             android:name=".ActivityDSN"
+            android:description="@string/app_name"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
             android:launchMode="singleInstance">
 
             <intent-filter>
@@ -361,8 +370,10 @@
 
         <activity
             android:name=".ActivityAMP"
+            android:description="@string/app_name"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
             android:launchMode="singleInstance">
 
             <intent-filter>
@@ -379,9 +390,11 @@
 
         <activity
             android:name=".ActivityDmarc"
+            android:description="@string/app_name"
             android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
             android:launchMode="singleInstance">
 
             <intent-filter>
@@ -406,6 +419,7 @@
         <!-- https://developer.android.com/training/permissions/explaining-access -->
         <activity
             android:name=".ActivityRationale"
+            android:description="@string/app_name"
             android:excludeFromRecents="true"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"

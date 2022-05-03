@@ -10,7 +10,6 @@
     <string name="app_cake">Ez dago biltegiratze toki nahiko</string>
     <string name="app_updated">Azken eguneratzea: %1$s</string>
     <string name="app_download">Hemendik deskargatua: %1$s</string>
-    <string name="channel_service">Jaso</string>
     <string name="channel_send">Bidali</string>
     <string name="channel_notification">E-mail</string>
     <string name="channel_progress">Aurrerapena</string>
@@ -979,6 +978,7 @@
     <string name="title_search_device">Bilatu gailuan</string>
     <string name="title_search_server">Bilatu zerbitzarian</string>
     <string name="title_search_in">Bilatu hemen</string>
+    <string name="title_search_sender">Bilatu igorlea</string>
     <string name="title_search_delete">Gordetako bilaketa ezabatu?</string>
     <string name="title_sort_on">Ordenatzeko irizpidea</string>
     <string name="title_sort_on_time">Denbora</string>

@@ -190,6 +190,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         nm.cancel(NotificationHelper.NOTIFICATION_SEND);
 
         super.onDestroy();
+        CoalMine.watch(this, this.getClass().getName() + "#onDestroy");
     }
 
     @Override
@@ -388,7 +389,6 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                         crumb.put("folder", op.folder + ":outbox");
                         if (op.message != null)
                             crumb.put("message", Long.toString(op.message));
-                        crumb.put("free", Integer.toString(Log.getFreeMemMb()));
                         Log.breadcrumb("operation", crumb);
 
                         switch (op.name) {

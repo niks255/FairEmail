@@ -38,7 +38,7 @@
                 android:tag="nosuggest">
 
                 <eu.faircode.email.FixedTextView
-                    android:id="@+id/welcome"
+                    android:id="@+id/tvWelcome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title_welcome"
@@ -58,7 +58,7 @@
                     android:textColor="?android:attr/textColorPrimary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/welcome" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
 
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/simple"
@@ -612,11 +612,22 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPermissions" />
 
+                <eu.faircode.email.FixedImageButton
+                    android:id="@+id/ibPermissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:contentDescription="@string/title_info"
+                    android:tooltipText="@string/title_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnPermissions"
+                    app:srcCompat="@drawable/twotone_info_24" />
+
                 <eu.faircode.email.FixedTextView
                     android:id="@+id/tvImportContacts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="12dp"
                     android:drawableEnd="@drawable/twotone_open_in_new_12"
                     android:drawablePadding="6dp"
                     android:drawableTint="?android:attr/textColorLink"
@@ -624,7 +635,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="?android:attr/textColorLink"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnPermissions" />
+                    app:layout_constraintTop_toBottomOf="@id/ibPermissions" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -899,6 +910,18 @@
                     app:layout_constraintTop_toBottomOf="@id/tvExtra" />
 
                 <Button
+                    android:id="@+id/btnNotification"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_compare_arrows_24"
+                    android:drawablePadding="6dp"
+                    android:text="@string/title_advanced_notifications_service"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnApp" />
+
+                <Button
                     android:id="@+id/btnDelete"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
@@ -908,7 +931,7 @@
                     android:drawablePadding="6dp"
                     android:text="@string/title_delete_account"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnApp" />
+                    app:layout_constraintTop_toBottomOf="@id/btnNotification" />
 
                 <Button
                     android:id="@+id/btnMore"
@@ -978,7 +1001,7 @@
                     android:id="@+id/grpExtra"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:constraint_referenced_ids="btnApp,btnDelete,btnMore" />
+                    app:constraint_referenced_ids="btnApp,btnNotification,btnDelete,btnMore" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

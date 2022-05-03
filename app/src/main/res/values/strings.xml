@@ -14,7 +14,7 @@
     <string name="app_updated">Last update: %1$s</string>
     <string name="app_download">Downloaded from: %1$s</string>
 
-    <string name="channel_service">Receive</string>
+    <string name="channel_service">Monitor</string>
     <string name="channel_send">Send</string>
     <string name="channel_notification">Email</string>
     <string name="channel_progress">Progress</string>
@@ -150,6 +150,7 @@
 
     <string name="title_welcome">Welcome</string>
     <string name="title_eula">End-user license agreement</string>
+    <string name="title_license">Open-source license</string>
     <string name="title_gplv3" translatable="false">GNU General Public License - Version 3</string>
     <string name="title_contributors">Contributors</string>
     <string name="title_agree">I agree</string>
@@ -589,7 +590,7 @@
 
     <string name="title_advanced_notifications">Manage notifications</string>
     <string name="title_advanced_notifications_default">Default channel</string>
-    <string name="title_advanced_notifications_service">Receive channel</string>
+    <string name="title_advanced_notifications_service">Monitoring channel</string>
     <string name="title_advanced_notifications_newest_first">Show newest notifications first</string>
     <string name="title_advanced_notifications_background">Use background service to synchronize messages</string>
     <string name="title_advanced_notifications_background_hint">A background service can be stopped by Android at any time, but doesn\'t require a status bar notification</string>
@@ -755,6 +756,7 @@
     <string name="title_advanced_memory_class" translatable="false">Memory class: %1$s/%2$s Total: %3$s</string>
     <string name="title_advanced_memory_usage" translatable="false">Memory usage: %1$s/%2$s Native: %3$s</string>
     <string name="title_advanced_storage_usage" translatable="false">Storage space: %1$s/%2$s App: %3$s</string>
+    <string name="title_advanced_cache_usage" translatable="false">Cache space: %1$s/%2$s</string>
     <string name="title_advanced_cursor_window" translatable="false">Cursor window size: %1$s</string>
     <string name="title_advanced_contact_info" translatable="false">Contact lookup: %1$d cached: %2$d</string>
     <string name="title_advanced_suffixes" translatable="false">Public suffix list: %1$d</string>
@@ -1503,6 +1505,7 @@
     <string name="title_search_device">Search on device</string>
     <string name="title_search_server">Search on server</string>
     <string name="title_search_in">Search in</string>
+    <string name="title_search_sender">Search for sender</string>
 
     <string name="title_search_delete">Delete saved search?</string>
 
@@ -1926,9 +1929,9 @@
     <string name="title_widget_folder_unified">Unified inbox folders</string>
     <string name="title_widget_unseen">Unread messages only</string>
     <string name="title_widget_flagged">Starred messages only</string>
-    <string name="title_widget_highlight_remark">The highlight color can be selected in the display settings</string>
     <string name="title_widget_font_size">Text size</string>
     <string name="title_widget_padding">Padding size</string>
+    <string name="title_widget_separator_lines">Show separator lines</string>
     <string name="title_widget_semi_transparent">Semi transparent background</string>
     <string name="title_widget_refresh">Show refresh messages button</string>
     <string name="title_widget_compose">Show compose new message button</string>

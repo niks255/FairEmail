@@ -10,7 +10,6 @@
     <string name="app_cake">ストレージの空き容量が不足しています</string>
     <string name="app_updated">最終更新: %1$s</string>
     <string name="app_download">ダウンロード元: %1$s</string>
-    <string name="channel_service">受信</string>
     <string name="channel_send">送信</string>
     <string name="channel_notification">メール</string>
     <string name="channel_progress">進捗</string>
@@ -104,6 +103,7 @@
     <string name="menu_rate">このアプリを評価</string>
     <string name="title_welcome">ようこそ</string>
     <string name="title_eula">エンドユーザー使用許諾契約書</string>
+    <string name="title_license">オープンソース ライセンス</string>
     <string name="title_contributors">貢献者</string>
     <string name="title_agree">同意する</string>
     <string name="title_disagree">同意しない</string>
@@ -318,6 +318,8 @@
     <string name="title_advanced_attach_new">共有されたファイルを返信の下書きに追加</string>
     <string name="title_advanced_answer_action">返信ボタンを長押ししたときのアクション:</string>
     <string name="title_advanced_send_pending">目立たない送信遅延アイコンを表示</string>
+    <string name="title_advanced_auto_save_paragraph">段落ごとに下書きを自動で保存</string>
+    <string name="title_advanced_auto_save_dot">文章ごとに下書きを自動で保存</string>
     <string name="title_advanced_compose_font">デフォルトのフォント</string>
     <string name="title_advanced_auto_identity">新規作成するメッセージを送信する ID を自動で選択</string>
     <string name="title_advanced_prefix_once">返信/転送のプレフィックスを 1 つだけにする</string>
@@ -398,6 +400,7 @@
     <string name="title_advanced_avatars">連絡先の写真を表示</string>
     <string name="title_advanced_bimi_unverified">未確認の差出人</string>
     <string name="title_advanced_bimi_verified">認証済みの差出人</string>
+    <string name="title_advanced_efavicons">アバターを表示</string>
     <string name="title_advanced_favicons">Favicon を表示</string>
     <string name="title_advanced_favicons_partial">ウェブページの最初の %1$s だけをスキャン</string>
     <string name="title_advanced_generated_icons">アイコンを生成して表示</string>
@@ -495,7 +498,6 @@
     <string name="title_advanced_default_snooze">デフォルトのスヌーズ/遅延時間</string>
     <string name="title_advanced_notifications">通知を管理</string>
     <string name="title_advanced_notifications_default">デフォルトチャンネル</string>
-    <string name="title_advanced_notifications_service">受信チャンネル</string>
     <string name="title_advanced_notifications_newest_first">最新の通知を最初に表示</string>
     <string name="title_advanced_notifications_background">メッセージの同期にバックグラウンドサービスを使用</string>
     <string name="title_advanced_notifications_background_hint">バックグラウンドサービスは Android によって停止される可能性がありますが、ステータスバーに通知が表示されなくなります</string>
@@ -1171,6 +1173,8 @@
     <string name="title_translate_html_hint">より多くの文字数を利用します</string>
     <string name="title_translate_usage">利用文字数: %1$s / %2$s (%3$d %%)</string>
     <string name="title_translate_tap">テキストをタップして翻訳</string>
+    <string name="title_suggestions_check">確認しています&#8230;</string>
+    <string name="title_suggestions_none">候補はありません</string>
     <string name="title_edit_plain_text">プレーンテキストとして編集</string>
     <string name="title_edit_formatted_text">再フォーマットされたテキストとして編集</string>
     <string name="title_select_certificate">公開鍵を選択</string>
@@ -1276,6 +1280,7 @@
     <string name="title_search_device">デバイス上を検索</string>
     <string name="title_search_server">サーバーを検索</string>
     <string name="title_search_in">検索場所</string>
+    <string name="title_search_sender">差出人を検索</string>
     <string name="title_search_delete">保存した検索を削除しますか？</string>
     <string name="title_sort_on">並べ替え</string>
     <string name="title_sort_on_time">時間</string>
@@ -1660,9 +1665,9 @@
     <string name="title_widget_folder_unified">統合受信トレイフォルダー</string>
     <string name="title_widget_unseen">未読メッセージのみ</string>
     <string name="title_widget_flagged">スター付きメッセージのみ</string>
-    <string name="title_widget_highlight_remark">背景色はディスプレイ設定で選択できます</string>
     <string name="title_widget_font_size">テキストサイズ</string>
     <string name="title_widget_padding">余白サイズ</string>
+    <string name="title_widget_separator_lines">区切り線を表示</string>
     <string name="title_widget_semi_transparent">半透明の背景</string>
     <string name="title_widget_refresh">メッセージ更新ボタンを表示</string>
     <string name="title_widget_compose">メッセージ新規作成ボタンを表示</string>

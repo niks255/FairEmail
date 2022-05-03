@@ -29,7 +29,6 @@ import android.os.Build;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
@@ -59,6 +58,8 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
     private boolean unseen;
     private boolean flagged;
     private boolean highlight;
+    private int highlight_color;
+    private boolean separators;
     private boolean semi;
     private int background;
     private int font;
@@ -73,7 +74,10 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
     private int colorSeparator;
     private boolean pro;
     private boolean hasColor;
+    private boolean allColors;
     private List<TupleMessageWidget> messages = new ArrayList<>();
+
+    private static final int MAX_WIDGET_MESSAGES = 500;
 
     WidgetUnifiedRemoteViewsFactory(final Context context, Intent intent) {
         this.context = context;
@@ -101,6 +105,8 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         unseen = prefs.getBoolean("widget." + appWidgetId + ".unseen", false);
         flagged = prefs.getBoolean("widget." + appWidgetId + ".flagged", false);
         highlight = prefs.getBoolean("widget." + appWidgetId + ".highlight", false);
+        highlight_color = prefs.getInt("widget." + appWidgetId + ".highlight_color", Color.TRANSPARENT);
+        separators = prefs.getBoolean("widget." + appWidgetId + ".separators", true);
         semi = prefs.getBoolean("widget." + appWidgetId + ".semi", true);
         background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
         font = prefs.getInt("widget." + appWidgetId + ".font", 0);
@@ -123,8 +129,12 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
             colorSeparator = ContextCompat.getColor(context, R.color.darkColorSeparator);
         }
 
-        int highlight_color = prefs.getInt("highlight_color", colorWidgetForeground);
-        colorWidgetUnread = ColorUtils.setAlphaComponent(highlight_color, 255);
+        if (highlight) {
+            if (highlight_color == Color.TRANSPARENT)
+                highlight_color = prefs.getInt("highlight_color", colorWidgetForeground);
+            colorWidgetUnread = ColorUtils.setAlphaComponent(highlight_color, 255);
+        } else
+            colorWidgetUnread = colorWidgetForeground;
 
         pro = ActivityBilling.isPro(context);
 
@@ -135,7 +145,8 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
             messages = db.message().getWidgetUnified(
                     account < 0 ? null : account,
                     folder < 0 ? null : folder,
-                    threading, unseen, flagged);
+                    threading, unseen, flagged,
+                    MAX_WIDGET_MESSAGES);
 
             db.setTransactionSuccessful();
         } finally {
@@ -143,12 +154,13 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         }
 
         hasColor = false;
+        allColors = color_stripe;
         if (account < 0)
             for (TupleMessageWidget message : messages)
-                if (message.accountColor != null) {
+                if (message.accountColor == null)
+                    allColors = false;
+                else
                     hasColor = true;
-                    break;
-                }
     }
 
     @Override
@@ -239,9 +251,11 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
             views.setTextColor(idTime, textColor);
             views.setTextColor(idSubject, textColor);
             views.setTextColor(idAccount, textColor);
-            views.setInt(R.id.separator, "setBackgroundColor", colorSeparator);
 
-            views.setViewVisibility(idAccount, account < 0 ? View.VISIBLE : View.GONE);
+            views.setInt(R.id.separator, "setBackgroundColor", colorSeparator);
+            views.setViewVisibility(R.id.separator, separators ? View.VISIBLE : View.GONE);
+
+            views.setViewVisibility(idAccount, account < 0 && !allColors ? View.VISIBLE : View.GONE);
 
         } catch (Throwable ex) {
             Log.e(ex);

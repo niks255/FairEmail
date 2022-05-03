@@ -46,6 +46,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -62,7 +63,6 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
     private boolean nav_unseen_drafts;
     private boolean nav_categories;
 
-
     private int dp6;
     private int dp12;
     private int colorUnread;
@@ -76,6 +76,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
     private DateFormat TF;
+    private DateFormat DF;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private View view;
@@ -166,8 +167,19 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
             tvItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
 
             if (account.folderName == null) {
-                tvItemExtra.setText(account.last_connected == null ? null : TF.format(account.last_connected));
-                tvItemExtra.setVisibility(account.last_connected != null && expanded ? View.VISIBLE : View.GONE);
+                if (account.last_connected != null && expanded) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.HOUR_OF_DAY, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    if (account.last_connected < cal.getTimeInMillis())
+                        tvItemExtra.setText(DF.format(account.last_connected));
+                    else
+                        tvItemExtra.setText(TF.format(account.last_connected));
+                    tvItemExtra.setVisibility(View.VISIBLE);
+                } else
+                    tvItemExtra.setVisibility(View.GONE);
             } else {
                 tvItemExtra.setText(NF.format(account.messages));
                 tvItemExtra.setVisibility(nav_count && expanded ? View.VISIBLE : View.GONE);
@@ -276,6 +288,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
         this.nav_count_pinned = prefs.getBoolean("nav_count_pinned", false);
         this.nav_unseen_drafts = prefs.getBoolean("nav_unseen_drafts", false);
         this.nav_categories = prefs.getBoolean("nav_categories", false);
+
         boolean highlight_unread = prefs.getBoolean("highlight_unread", true);
         int colorHighlight = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorUnreadHighlight));
 
@@ -286,6 +299,9 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
         this.colorWarning = ColorUtils.setAlphaComponent(Helper.resolveColor(context, R.attr.colorWarning), 128);
 
         this.TF = Helper.getTimeInstance(context, SimpleDateFormat.SHORT);
+        this.DF = new SimpleDateFormat(
+                android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), "dd-MM"),
+                Locale.getDefault());
 
         setHasStableIds(false);
     }
