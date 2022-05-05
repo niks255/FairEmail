@@ -245,8 +245,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             layoutId = R.layout.activity_view_landscape_split;
 
         view = LayoutInflater.from(this).inflate(layoutId, null);
+        if (!prefs.getBoolean("hw_accel", true)) { view.setLayerType(View.LAYER_TYPE_SOFTWARE, null); }
         setContentView(view);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setCustomView(R.layout.action_bar);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
