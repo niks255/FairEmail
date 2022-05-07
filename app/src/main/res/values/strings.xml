@@ -378,6 +378,7 @@
     <string name="title_advanced_check_mx">Check sender email addresses on synchronizing messages</string>
     <string name="title_advanced_check_blocklist">Check if the sender\'s domain name is on a spam block list</string>
     <string name="title_advanced_use_blocklist">Move messages from domains on a block list to the spam folder</string>
+    <string name="title_advanced_use_blocklist_pop3">Skip messages from domains on a block list (POP3 only)</string>
     <string name="title_advanced_tune_keep_alive">Automatically tune the keep-alive interval</string>
 
     <string name="title_advanced_keyboard">Show keyboard by default</string>
@@ -1885,6 +1886,7 @@
         FairEmail shows a small message to remind you of this, which will be removed if you purchase the pro features.
     </string>
     <string name="title_pro_whichever">Whichever features are chosen as pro features, there is always someone who complains that a feature should be free. Please don\'t be that person.</string>
+    <string name="title_pro_google">FairEmail initiates a Play Store purchase, but ultimately Google manages the entire purchase process. So please don\'t blame the app in case of any problems!</string>
     <string name="title_pro_hide">Hide small message for %1$d weeks</string>
     <string name="title_pro_hint">Buying pro features will allow you to use all current and future pro features, will keep this app maintained, and supported.</string>
     <string name="title_pro_price">Why are the pro features so expensive?</string>
@@ -1934,9 +1936,11 @@
     <string name="title_widget_padding">Padding size</string>
     <string name="title_widget_separator_lines">Show separator lines</string>
     <string name="title_widget_semi_transparent">Semi transparent background</string>
+    <string name="title_widget_avatars">Show contact avatars</string>
     <string name="title_widget_refresh">Show refresh messages button</string>
     <string name="title_widget_compose">Show compose new message button</string>
     <string name="title_widget_background">Background color</string>
+    <string name="title_widget_day_night">Follow dark system theme</string>
 
     <string name="title_accessibility_collapsed">Collapsed</string>
     <string name="title_accessibility_expanded">Expanded</string>

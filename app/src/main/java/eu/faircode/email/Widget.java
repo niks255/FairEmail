@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -58,6 +59,7 @@ public class Widget extends AppWidgetProvider {
                 for (int appWidgetId : appWidgetIds) {
                     String name = prefs.getString("widget." + appWidgetId + ".name", null);
                     long account = prefs.getLong("widget." + appWidgetId + ".account", -1L);
+                    boolean daynight = prefs.getBoolean("widget." + appWidgetId + ".daynight", false);
                     boolean semi = prefs.getBoolean("widget." + appWidgetId + ".semi", true);
                     int background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
                     int layout = prefs.getInt("widget." + appWidgetId + ".layout", 0);
@@ -113,8 +115,14 @@ public class Widget extends AppWidgetProvider {
 
                     views.setOnClickPendingIntent(R.id.background, pi);
 
+                    if (!daynight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                        views.setColorStateListAttr(R.id.background, "setBackgroundTintList", 0);
+
                     // Set background
-                    if (semi)
+                    if (daynight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        views.setInt(R.id.background, "setBackgroundColor", Color.WHITE);
+                        views.setColorStateListAttr(R.id.background, "setBackgroundTintList", android.R.attr.colorBackground);
+                    } else if (semi)
                         if (background == Color.TRANSPARENT)
                             views.setInt(R.id.background, "setBackgroundResource",
                                     R.drawable.widget_background);
@@ -135,7 +143,14 @@ public class Widget extends AppWidgetProvider {
                                 : R.drawable.baseline_mail_24);
 
                     // Set color
-                    if (background == Color.TRANSPARENT) {
+                    if (daynight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        views.setColorAttr(R.id.ivMessage, "setColorFilter", android.R.attr.textColorPrimary);
+                        if (layout == 0)
+                            views.setColorStateListAttr(R.id.tvCount, "setTextColor", android.R.attr.textColorPrimary);
+                        else
+                            views.setTextColor(R.id.tvCount, colorWidgetForeground);
+                        views.setColorStateListAttr(R.id.tvAccount, "setTextColor", android.R.attr.textColorPrimary);
+                    } else if (background == Color.TRANSPARENT) {
                         views.setInt(R.id.ivMessage, "setColorFilter", colorWidgetForeground);
                         views.setTextColor(R.id.tvCount, colorWidgetForeground);
                         views.setTextColor(R.id.tvAccount, colorWidgetForeground);

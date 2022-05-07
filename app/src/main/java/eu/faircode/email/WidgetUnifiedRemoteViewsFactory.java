@@ -57,6 +57,7 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
     private long account;
     private boolean unseen;
     private boolean flagged;
+    private boolean daynight;
     private boolean highlight;
     private int highlight_color;
     private boolean separators;
@@ -64,6 +65,7 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
     private int background;
     private int font;
     private int padding;
+    private boolean avatars;
     private boolean prefer_contact;
     private boolean only_contact;
     private boolean distinguish_contacts;
@@ -100,17 +102,21 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
         subject_top = prefs.getBoolean("subject_top", false);
         subject_italic = prefs.getBoolean("subject_italic", true);
         color_stripe = prefs.getBoolean("color_stripe", true);
+
         account = prefs.getLong("widget." + appWidgetId + ".account", -1L);
         folder = prefs.getLong("widget." + appWidgetId + ".folder", -1L);
         unseen = prefs.getBoolean("widget." + appWidgetId + ".unseen", false);
         flagged = prefs.getBoolean("widget." + appWidgetId + ".flagged", false);
+        daynight = prefs.getBoolean("widget." + appWidgetId + ".daynight", false);
         highlight = prefs.getBoolean("widget." + appWidgetId + ".highlight", false);
         highlight_color = prefs.getInt("widget." + appWidgetId + ".highlight_color", Color.TRANSPARENT);
-        separators = prefs.getBoolean("widget." + appWidgetId + ".separators", true);
         semi = prefs.getBoolean("widget." + appWidgetId + ".semi", true);
         background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
+        separators = prefs.getBoolean("widget." + appWidgetId + ".separators", true);
         font = prefs.getInt("widget." + appWidgetId + ".font", 0);
         padding = prefs.getInt("widget." + appWidgetId + ".padding", 0);
+        avatars = prefs.getBoolean("widget." + appWidgetId + ".avatars", false);
+
         prefer_contact = prefs.getBoolean("prefer_contact", false);
         only_contact = prefs.getBoolean("only_contact", false);
         distinguish_contacts = prefs.getBoolean("distinguish_contacts", false);
@@ -214,6 +220,12 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
             views.setInt(R.id.stripe, "setBackgroundColor", colorBackground);
             views.setViewVisibility(R.id.stripe, hasColor && color_stripe ? View.VISIBLE : View.GONE);
 
+            if (avatars) {
+                ContactInfo[] info = ContactInfo.get(context, message.account, null, message.bimi_selector, message.from);
+                views.setImageViewBitmap(R.id.avatar, info.length == 0 ? null : info[0].getPhotoBitmap());
+            }
+            views.setViewVisibility(R.id.avatar, avatars ? View.VISIBLE : View.GONE);
+
             Address[] recipients = ContactInfo.fillIn(message.from, prefer_contact, only_contact);
             boolean known = (distinguish_contacts && ContactInfo.getLookupUri(message.from) != null);
 
@@ -246,13 +258,26 @@ public class WidgetUnifiedRemoteViewsFactory implements RemoteViewsService.Remot
             views.setTextViewText(idSubject, ssSubject);
             views.setTextViewText(idAccount, ssAccount);
 
-            int textColor = (message.ui_seen ? colorWidgetRead : colorWidgetUnread);
-            views.setTextColor(idFrom, textColor);
-            views.setTextColor(idTime, textColor);
-            views.setTextColor(idSubject, textColor);
-            views.setTextColor(idAccount, textColor);
+            if (!daynight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                views.setColorStateListAttr(R.id.separator, "setBackgroundTintList", 0);
+            }
 
-            views.setInt(R.id.separator, "setBackgroundColor", colorSeparator);
+            if (daynight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                views.setColorStateListAttr(idFrom, "setTextColor", android.R.attr.textColorPrimary);
+                views.setColorStateListAttr(idTime, "setTextColor", android.R.attr.textColorPrimary);
+                views.setColorStateListAttr(idSubject, "setTextColor", android.R.attr.textColorPrimary);
+                views.setColorStateListAttr(idAccount, "setTextColor", android.R.attr.textColorPrimary);
+                views.setInt(R.id.separator, "setBackgroundColor", Color.WHITE);
+                views.setColorStateListAttr(R.id.separator, "setBackgroundTintList", android.R.attr.colorControlNormal);
+            } else {
+                int textColor = (message.ui_seen ? colorWidgetRead : colorWidgetUnread);
+                views.setTextColor(idFrom, textColor);
+                views.setTextColor(idTime, textColor);
+                views.setTextColor(idSubject, textColor);
+                views.setTextColor(idAccount, textColor);
+                views.setInt(R.id.separator, "setBackgroundColor", colorSeparator);
+            }
+
             views.setViewVisibility(R.id.separator, separators ? View.VISIBLE : View.GONE);
 
             views.setViewVisibility(idAccount, account < 0 && !allColors ? View.VISIBLE : View.GONE);
