@@ -119,6 +119,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.FileProvider;
+import androidx.core.os.BuildCompat;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
@@ -3008,7 +3009,7 @@ public class FragmentCompose extends FragmentBase {
             Intent picker = new Intent("android.provider.action.PICK_IMAGES");
             picker.putExtra("android.provider.extra.PICK_IMAGES_MAX", 10);
             picker.setType("image/*");
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2 &&
+            if (BuildCompat.isAtLeastT() &&
                     picker.resolveActivity(pm) != null)
                 startActivityForResult(picker, REQUEST_IMAGE_FILE);
             else {
@@ -4520,6 +4521,7 @@ public class FragmentCompose extends FragmentBase {
             boolean auto_identity = prefs.getBoolean("auto_identity", true);
             boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
             boolean suggest_received = prefs.getBoolean("suggest_received", false);
+            boolean forward_new = prefs.getBoolean("forward_new", true);
 
             Log.i("Load draft action=" + action + " id=" + id + " reference=" + reference);
 
@@ -4851,7 +4853,12 @@ public class FragmentCompose extends FragmentBase {
                             }
 
                         } else if ("forward".equals(action)) {
-                            data.draft.thread = data.draft.msgid; // new thread
+                            if (forward_new)
+                                data.draft.thread = data.draft.msgid; // new thread
+                            else {
+                                data.draft.thread = ref.thread;
+                                data.draft.references = (ref.references == null ? "" : ref.references + " ") + ref.msgid;
+                            }
                             data.draft.wasforwardedfrom = ref.msgid;
                         } else if ("resend".equals(action)) {
                             data.draft.resend = true;
@@ -5455,7 +5462,7 @@ public class FragmentCompose extends FragmentBase {
 
             if (args.getBoolean("incomplete")) {
                 final Snackbar snackbar = Snackbar.make(
-                        view, R.string.title_attachments_incomplete, Snackbar.LENGTH_INDEFINITE)
+                                view, R.string.title_attachments_incomplete, Snackbar.LENGTH_INDEFINITE)
                         .setGestureInsetBottomIgnored(true);
                 snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
                     @Override

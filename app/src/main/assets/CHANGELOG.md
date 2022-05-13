@@ -2,7 +2,34 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### 1.1895 - 2022-05-13
+
 ### [Itemirus](https://en.wikipedia.org/wiki/Itemirus)
+
+* Prevent blocking self (report spam)
+* Preliminary Android 13 support (photo picker, hyphenation)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1895 - 2022-05-12
+
+* Added quick mark as read button
+* Added send option to disable forwarding as new conversation thread
+* Small improvements and minor bug fixes
+* Updated AndroidX / material design library
+* Updated translations
+
+### 1.1894 - 2022-05-11
+
+* Fixed widgets for older Android versions
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated translations
+
+### 1.1893 - 2022-05-10
+
+* Small improvements and minor bug fixes
+* Updated translations
 
 ### 1.1892 - 2022-05-07
 

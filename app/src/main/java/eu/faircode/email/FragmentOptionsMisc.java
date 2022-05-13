@@ -93,6 +93,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private boolean resumed = false;
     private List<Pair<String, String>> languages = new ArrayList<>();
 
+    private ImageButton ibHelp;
     private SwitchCompat swPowerMenu;
     private SwitchCompat swExternalSearch;
     private SwitchCompat swSortAnswers;
@@ -265,6 +266,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         // Get controls
 
+        ibHelp = view.findViewById(R.id.ibHelp);
         swPowerMenu = view.findViewById(R.id.swPowerMenu);
         swExternalSearch = view.findViewById(R.id.swExternalSearch);
         swSortAnswers = view.findViewById(R.id.swSortAnswers);
@@ -376,6 +378,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         // Wire controls
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        ibHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Helper.getSupportUri(v.getContext()), false);
+            }
+        });
 
         swPowerMenu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -1612,6 +1621,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                 Log.i("Removing option=" + key);
                                 editor.remove(key);
                             }
+
+                        if (BuildConfig.DEBUG) {
+                            editor.remove("gmail_checked");
+                            editor.remove("outlook_checked");
+                        }
 
                         editor.apply();
 

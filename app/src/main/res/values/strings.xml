@@ -252,6 +252,7 @@
     <string name="title_setup_configuring">Configuring account &#8230;</string>
     <string name="title_setup_app_password">You might need to use an app password</string>
     <string name="title_setup_extra">Extra</string>
+    <string name="title_setup_delete_account_hint">This will only remove accounts from the app</string>
 
     <string name="title_setup_close">Close settings</string>
     <string name="title_setup_export">Export settings</string>
@@ -329,6 +330,9 @@
 
     <string name="title_check_gmail_oauth">Your Gmail accounts will continue to work after May 30, 2022</string>
     <string name="title_check_gmail_password">Some of your Gmail accounts may stop working after May 30, 2022</string>
+
+    <string name="title_check_outlook_oauth">Your Outlook accounts will continue to work after October 1, 2022</string>
+    <string name="title_check_outlook_password">Some of your Outlook accounts may stop working after October 1, 2022</string>
 
     <string name="title_advanced_hint_title">More advanced options</string>
     <string name="title_advanced_hint_message">
@@ -423,6 +427,7 @@
     <string name="title_advanced_usenet_signature">Follow Usenet signature convention</string>
     <string name="title_advanced_remove_signatures">Remove recognized signatures</string>
     <string name="title_advanced_receipt">When requesting a receipt</string>
+    <string name="title_advanced_forward_new">Start a new conversation when forwarding</string>
     <string name="title_advanced_lookup_mx">Check recipient email addresses before sending</string>
 
     <string name="title_advanced_metered">Use metered connections</string>
@@ -444,6 +449,7 @@
     <string name="title_advanced_manage_connectivity">Manage connectivity</string>
 
     <string name="title_advanced_caption_general">General</string>
+    <string name="title_advanced_caption_navigation">Navigation</string>
     <string name="title_advanced_caption_checks">Checks</string>
     <string name="title_advanced_caption_list">List</string>
     <string name="title_advanced_caption_conversation">Conversation</string>

@@ -208,6 +208,7 @@
     <string name="title_setup_configuring">Configurazione del profilo &#8230;</string>
     <string name="title_setup_app_password">Potresti dover usare la password di un\'app</string>
     <string name="title_setup_extra">Extra</string>
+    <string name="title_setup_delete_account_hint">Questo rimuoverà i profili solo dall\'app</string>
     <string name="title_setup_close">Chiudi le impostazioni</string>
     <string name="title_setup_export">Impostazioni di esportazione</string>
     <string name="title_setup_import">Importa impostazioni</string>
@@ -272,6 +273,8 @@
     <string name="title_setup_reset_links">Confermare i link</string>
     <string name="title_check_gmail_oauth">I tuoi profili Gmail continueranno a funzionare dopo il 30 Maggio 2022</string>
     <string name="title_check_gmail_password">Alcuni dei profili Gmail potrebbero smettere di funzionare dopo il 30 Maggio 2022</string>
+    <string name="title_check_outlook_oauth">I tuoi profili di Outlook continueranno a funzionare dopo l\'1 ottobre 2022</string>
+    <string name="title_check_outlook_password">Alcuni dei tuoi profili di Outlook potrebbero smettere di funzionare dopo l\'1 ottobre 2022</string>
     <string name="title_advanced_hint_title">Opzioni più avanzate</string>
     <string name="title_advanced_hint_message">        Stai navigando alle opzioni più avanzate.
         Tutte le opzioni hanno comunemente usato valori standard, che non devi modificare a meno che tu non abbia una preferenza differente.
@@ -356,6 +359,7 @@
     <string name="title_advanced_usenet_signature">Segue la convenzione di firma di Usenet</string>
     <string name="title_advanced_remove_signatures">Rimuovi le firme riconosciute</string>
     <string name="title_advanced_receipt">Richiedendo una ricevuta</string>
+    <string name="title_advanced_forward_new">Avvia una nuova conversazione quando inoltri</string>
     <string name="title_advanced_lookup_mx">Controlla gli indirizzi email dei destinatari prima di inviare</string>
     <string name="title_advanced_metered">Usa connessioni a consumo</string>
     <string name="title_advanced_download">Scarica automaticamente messaggi e allegati su una connessione a consumo fino a</string>
@@ -372,6 +376,7 @@
     <string name="title_advanced_cert_strict">Controllo rigoroso del certificato</string>
     <string name="title_advanced_manage_connectivity">Gestisci la connettività</string>
     <string name="title_advanced_caption_general">Generale</string>
+    <string name="title_advanced_caption_navigation">Navigazione</string>
     <string name="title_advanced_caption_checks">Controlli</string>
     <string name="title_advanced_caption_list">Elenco</string>
     <string name="title_advanced_caption_conversation">Conversazione</string>

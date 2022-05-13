@@ -533,7 +533,10 @@ class Core {
                             ops.remove(s);
                     } catch (Throwable ex) {
                         iservice.dump(account.name + "/" + folder.name);
-                        if (ex instanceof OperationCanceledException)
+                        if (ex instanceof OperationCanceledException ||
+                                (ex instanceof IllegalArgumentException &&
+                                        ex.getMessage() != null &&
+                                        ex.getMessage().startsWith("Message not found for")))
                             Log.i(folder.name, ex);
                         else
                             Log.e(folder.name, ex);
@@ -2529,12 +2532,19 @@ class Core {
                         if (sep > 0)
                             parent = db.folder().getFolderByName(account.id, fullName.substring(0, sep));
 
+                        if (!EntityFolder.USER.equals(type) && !EntityFolder.SYSTEM.equals(type)) {
+                            prefs.edit().remove("updated." + account.id + "." + folder.type).apply();
+                            EntityFolder has = db.folder().getFolderByType(account.id, type);
+                            if (has != null)
+                                type = EntityFolder.USER;
+                        }
+
                         folder = new EntityFolder();
                         folder.account = account.id;
                         folder.namespace = ifolder.first.getFullName();
                         folder.separator = separator;
                         folder.name = fullName;
-                        folder.type = (EntityFolder.SYSTEM.equals(type) ? type : EntityFolder.USER);
+                        folder.type = type;
                         folder.subscribed = subscribed;
                         folder.selectable = selectable;
                         folder.inferiors = inferiors;
@@ -2639,6 +2649,7 @@ class Core {
                     childs == null || childs.size() == 0) {
                 EntityLog.log(context, name + " delete");
                 db.folder().deleteFolder(account.id, name);
+                prefs.edit().remove("updated." + account.id + "." + folder.type).apply();
             } else
                 Log.w(name + " keep type=" + folder.type);
         }
@@ -3195,6 +3206,14 @@ class Core {
                         ((POP3Message) imessage).invalidate(true);
                     }
                 }
+            }
+
+            if (account.max_messages != null && !account.leave_on_device) {
+                int hidden = db.message().setMessagesUiHide(folder.id, account.max_messages);
+                int deleted = db.message().deleteMessagesKeep(folder.id, account.max_messages + 100);
+                EntityLog.log(context, account.name + " POP" +
+                        " cleanup max=" + account.max_messages + "" +
+                        " hidden=" + hidden + " deleted=" + deleted);
             }
 
             folder.last_sync_count = imessages.length;
@@ -4179,14 +4198,25 @@ class Core {
                             if (s != null)
                                 map.put(s.id, s);
 
-                            List<EntityMessage> reported = db.message().getMessagesByMsgId(folder.account, message.inreplyto);
-                            if (reported != null)
-                                for (EntityMessage m : reported)
-                                    if (!map.containsKey(m.folder)) {
-                                        EntityFolder f = db.folder().getFolder(m.folder);
-                                        if (f != null)
-                                            map.put(f.id, f);
-                                    }
+                            List<EntityMessage> all = new ArrayList<>();
+
+                            if (message.inreplyto != null) {
+                                List<EntityMessage> replied = db.message().getMessagesByMsgId(folder.account, message.inreplyto);
+                                if (replied != null)
+                                    all.addAll(replied);
+                            }
+                            if (r.refid != null) {
+                                List<EntityMessage> refs = db.message().getMessagesByMsgId(folder.account, r.refid);
+                                if (refs != null)
+                                    all.addAll(refs);
+                            }
+
+                            for (EntityMessage m : all)
+                                if (!map.containsKey(m.folder)) {
+                                    EntityFolder f = db.folder().getFolder(m.folder);
+                                    if (f != null)
+                                        map.put(f.id, f);
+                                }
 
                             for (EntityFolder f : map.values())
                                 EntityOperation.queue(context, f, EntityOperation.REPORT, message.inreplyto, label);
@@ -4237,7 +4267,7 @@ class Core {
 
                 db.setTransactionSuccessful();
             } catch (SQLiteConstraintException ex) {
-                Log.e(ex);
+                Log.i(ex);
 
                 Map<String, String> crumb = new HashMap<>();
                 crumb.put("folder", message.account + ":" + message.folder + ":" + folder.type);
@@ -5960,8 +5990,9 @@ class Core {
                     if (thread.isAlive() &&
                             state != Thread.State.NEW &&
                             state != Thread.State.TERMINATED) {
-                        Log.e("Join " + name + " failed" +
-                                " state=" + state + " interrupted=" + interrupted);
+                        if (interrupted)
+                            Log.e("Join " + name + " failed" +
+                                    " state=" + state + " interrupted=" + interrupted);
                         if (interrupted)
                             joined = true; // giving up
                         else {

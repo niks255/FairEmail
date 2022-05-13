@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1892 }
+def getVersionCode = { -> return 1896 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Itemirus" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -17,6 +17,7 @@ if (rootProject.file("local.properties").exists())
 
 android {
     compileSdkVersion 32
+    namespace 'eu.faircode.email'
 
     // https://apilevels.com/
     defaultConfig {
@@ -329,22 +330,23 @@ dependencies {
 
     def startup_version = "1.1.0"
     def annotation_version_experimental = "1.2.0"
-    def core_version = "1.7.0" // 1.8.0-beta01 / 1.9.0-alpha01
+    def core_version = "1.8.0-rc01" // 1.9.0-alpha03
     def shortcuts_version = "1.0.0"
     def appcompat_version = "1.4.1" // 1.6.0-alpha01
     def emoji_version = "1.2.0-alpha04"
-    def activity_version = "1.4.0" // 1.5.0-beta01 / 1.6.0-alpha01
-    def fragment_version = "1.4.1" // 1.5.0-beta01
+    def activity_version = "1.5.0-rc01" // 1.6.0-alpha03
+    def fragment_version = "1.5.0-rc01"
+    def windows_version = "1.0.0" // 1.1.0-alpha01
     def webkit_version = "1.4.0"
     def recyclerview_version = "1.2.1" // 1.3.0-alpha02
     def coordinatorlayout_version = "1.2.0"
     def constraintlayout_version = "2.1.3"
-    def material_version = "1.5.0"
+    def material_version = "1.6.0"
     def browser_version = "1.4.0"
     def lbm_version = "1.1.0"
     def swiperefresh_version = "1.2.0-alpha01"
     def documentfile_version = "1.1.0-alpha01"
-    def lifecycle_version = "2.4.0" // 2.5.0-beta01
+    def lifecycle_version = "2.5.0-rc01"
     def lifecycle_extensions_version = "2.2.0"
     def room_version = "2.4.2" // 2.5.0-alpha01
     def sqlite_version = "2.2.0" // 2.3.0-alpha02
@@ -378,6 +380,7 @@ dependencies {
     def rxjava2_version = "2.2.21"
     def svg_version = "1.4"
     def compress_version = "1.21"
+    def ipaddress_version = "5.3.4"
     def canary_version = "2.8.1"
 
     // https://developer.android.com/jetpack/androidx/releases/startup
@@ -395,10 +398,12 @@ dependencies {
     // https://mvnrepository.com/artifact/androidx.emoji2/emoji2
     // https://mvnrepository.com/artifact/androidx.activity/activity
     // https://mvnrepository.com/artifact/androidx.fragment/fragment
+    // https://mvnrepository.com/artifact/androidx.window/window-java
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.emoji2:emoji2:$emoji_version"
     implementation "androidx.activity:activity:$activity_version"
     implementation "androidx.fragment:fragment:$fragment_version"
+    implementation "androidx.window:window-java:$windows_version"
 
     // https://developer.android.com/jetpack/androidx/releases/webkit
     // https://mvnrepository.com/artifact/androidx.webkit/webkit
@@ -463,7 +468,9 @@ dependencies {
     //implementation "androidx.paging:paging-runtime:$paging_version"
 
     // https://mvnrepository.com/artifact/androidx.preference/preference
-    implementation "androidx.preference:preference:$preference_version"
+    implementation("androidx.preference:preference:$preference_version") {
+        exclude group: "androidx.fragment", module: "fragment-ktx"
+    }
 
     // https://mvnrepository.com/artifact/androidx.work/work-runtime
     implementation "androidx.work:work-runtime:$work_version"
@@ -579,6 +586,10 @@ dependencies {
     // https://commons.apache.org/proper/commons-compress/
     // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
     implementation "org.apache.commons:commons-compress:$compress_version"
+
+    // https://seancfoley.github.io/IPAddress/
+    // https://mvnrepository.com/artifact/com.github.seancfoley/ipaddress
+    implementation "com.github.seancfoley:ipaddress:$ipaddress_version"
 
     // https://github.com/square/leakcanary
     // https://square.github.io/leakcanary/getting_started/

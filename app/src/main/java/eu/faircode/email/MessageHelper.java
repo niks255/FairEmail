@@ -251,6 +251,9 @@ public class MessageHelper {
         System.setProperty("mail.mime.contentdisposition.strict", "false"); // default true
         //System.setProperty("mail.mime.contenttypehandler", "eu.faircode.email.ContentTypeHandler");
 
+        //System.setProperty("mail.mime.uudecode.ignoreerrors", "true");
+        System.setProperty("mail.mime.uudecode.ignoremissingbeginend", "true");
+
         //System.setProperty("mail.imap.parse.debug", "true");
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -278,6 +281,7 @@ public class MessageHelper {
         boolean autocrypt = prefs.getBoolean("autocrypt", true);
         boolean mutual = prefs.getBoolean("autocrypt_mutual", true);
         boolean encrypt_subject = prefs.getBoolean("encrypt_subject", false);
+        boolean forward_new = prefs.getBoolean("forward_new", true);
 
         Map<String, String> c = new HashMap<>();
         c.put("id", message.id == null ? null : Long.toString(message.id));
@@ -335,8 +339,13 @@ public class MessageHelper {
             }
             imessage.addHeader("References", references);
         }
+
         if (message.inreplyto != null)
             imessage.addHeader("In-Reply-To", message.inreplyto);
+
+        if (message.wasforwardedfrom != null && !forward_new)
+            imessage.addHeader("X-Forwarded-Message-Id", message.wasforwardedfrom);
+
         imessage.addHeader(HEADER_CORRELATION_ID, message.msgid);
 
         MailDateFormat mdf = new MailDateFormat();
@@ -1490,6 +1499,16 @@ public class MessageHelper {
         if (!TextUtils.isEmpty(inreplyto) && !refs.contains(inreplyto))
             refs.add(inreplyto);
 
+        boolean forward_new = prefs.getBoolean("forward_new", true);
+        if (!forward_new)
+            try {
+                String fwd = imessage.getHeader("X-Forwarded-Message-Id", null);
+                if (!TextUtils.isEmpty(fwd) && !refs.contains(fwd))
+                    refs.add(fwd);
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
+
         DB db = DB.getInstance(context);
 
         List<String> all = new ArrayList<>(refs);
@@ -2086,7 +2105,7 @@ public class MessageHelper {
                             MailTo.parse(unsubscribe);
                             mailto = unsubscribe;
                         } catch (Throwable ex) {
-                            Log.w(new Throwable(unsubscribe, ex));
+                            Log.i(new Throwable(unsubscribe, ex));
                         }
                     }
                 } else if (Helper.EMAIL_ADDRESS.matcher(unsubscribe).matches())
@@ -2105,7 +2124,7 @@ public class MessageHelper {
                             if (m.find())
                                 link = unsubscribe.substring(m.start(), m.end());
                             else
-                                Log.w(new Throwable(unsubscribe));
+                                Log.i(new Throwable(unsubscribe));
                         }
                     }
                 }
@@ -4522,6 +4541,7 @@ public class MessageHelper {
         String status;
         String diagnostic;
         String disposition;
+        String refid;
         String html;
 
         Report(String type, String content) {
@@ -4576,6 +4596,9 @@ public class MessageHelper {
                                 break;
                             case "Disposition":
                                 this.disposition = value;
+                                break;
+                            case "Original-Message-ID":
+                                this.refid = value;
                                 break;
                         }
                     }

@@ -291,6 +291,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private FloatingActionButton fabMore;
     private TextView tvSelectedCount;
     private CardView cardMore;
+    private ImageButton ibLowImportance;
+    private ImageButton ibBatchSeen;
     private ImageButton ibInbox;
     private ImageButton ibArchive;
     private ImageButton ibJunk;
@@ -559,6 +561,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         fabMore = view.findViewById(R.id.fabMore);
         tvSelectedCount = view.findViewById(R.id.tvSelectedCount);
         cardMore = view.findViewById(R.id.cardMore);
+        ibLowImportance = view.findViewById(R.id.ibLowImportance);
+        ibBatchSeen = view.findViewById(R.id.ibBatchSeen);
         ibInbox = view.findViewById(R.id.ibInbox);
         ibArchive = view.findViewById(R.id.ibArchive);
         ibJunk = view.findViewById(R.id.ibJunk);
@@ -1033,8 +1037,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             @Override
             public void onClick(View view) {
                 Log.i("Manual GC");
-                Runtime.getRuntime().runFinalization();
-                Runtime.getRuntime().gc();
+                Runtime rt = Runtime.getRuntime();
+                rt.runFinalization();
+                rt.gc();
                 view.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -1285,6 +1290,20 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             @Override
             public void onClick(View v) {
                 onMore();
+            }
+        });
+
+        ibLowImportance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onActionSetImportanceSelection(EntityMessage.PRIORITIY_LOW, true);
+            }
+        });
+
+        ibBatchSeen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onActionSeenSelection(true, null, true);
             }
         });
 
@@ -2596,7 +2615,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 adapter.notifyItemChanged(pos);
                 onSwipeAsk(message, viewHolder);
             } else if (EntityMessage.SWIPE_ACTION_SEEN.equals(action))
-                onActionSeenSelection(!message.ui_seen, message.id);
+                onActionSeenSelection(!message.ui_seen, message.id, false);
             else if (EntityMessage.SWIPE_ACTION_FLAG.equals(action))
                 onActionFlagSelection(!message.ui_flagged, Color.TRANSPARENT, message.id);
             else if (EntityMessage.SWIPE_ACTION_SNOOZE.equals(action))
@@ -2683,10 +2702,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             public boolean onMenuItemClick(MenuItem target) {
                                 int itemId = target.getItemId();
                                 if (itemId == R.string.title_seen) {
-                                    onActionSeenSelection(true, message.id);
+                                    onActionSeenSelection(true, message.id, false);
                                     return true;
                                 } else if (itemId == R.string.title_unseen) {
-                                    onActionSeenSelection(false, message.id);
+                                    onActionSeenSelection(false, message.id, false);
                                     return true;
                                 } else if (itemId == R.string.title_flag) {
                                     onActionFlagSelection(true, Color.TRANSPARENT, message.id);
@@ -2997,7 +3016,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             }
                 }
 
-                boolean canResend = true;
+                boolean canResend = message.content;
                 for (Address r : recipients) {
                     String email = ((InternetAddress) r).getAddress();
                     if ("undisclosed-recipients:".equals(email)) {
@@ -3227,6 +3246,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private void onMore() {
         Bundle args = new Bundle();
         args.putLongArray("ids", getSelection());
+        args.putBoolean("threading", threading);
 
         new SimpleTask<MoreResult>() {
             @Override
@@ -3242,160 +3262,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             @Override
             protected MoreResult onExecute(Context context, Bundle args) {
                 long[] ids = args.getLongArray("ids");
-
-                Map<Long, EntityAccount> accounts = new HashMap<>();
-                Map<Long, EntityFolder> folders = new HashMap<>();
-
-                DB db = DB.getInstance(context);
-
-                MoreResult result = new MoreResult();
-                result.folders = new ArrayList<>();
-
-                if (ids.length > MAX_MORE) {
-                    result.seen = true;
-                    result.unseen = true;
-                    result.flagged = true;
-                    result.unflagged = true;
-                    result.importance = -1;
-                    result.visible = true;
-                    result.hidden = true;
-                }
-
-                for (long id : ids) {
-                    EntityMessage message = db.message().getMessage(id);
-                    if (message == null)
-                        continue;
-
-                    EntityAccount account = accounts.get(message.account);
-                    if (account == null) {
-                        account = db.account().getAccount(message.account);
-                        if (account == null)
-                            continue;
-                        accounts.put(account.id, account);
-                    }
-
-                    EntityFolder folder = folders.get(message.folder);
-                    if (folder == null) {
-                        folder = db.folder().getFolder(message.folder);
-                        if (folder == null)
-                            continue;
-                        if (folder.read_only)
-                            result.read_only = true;
-                        folders.put(folder.id, folder);
-                    }
-
-                    if (!result.folders.contains(message.folder))
-                        result.folders.add(message.folder);
-
-                    boolean isInbox = EntityFolder.INBOX.equals(folder.type);
-                    boolean isArchive = EntityFolder.ARCHIVE.equals(folder.type);
-                    boolean isTrash = (EntityFolder.TRASH.equals(folder.type));
-                    boolean isJunk = EntityFolder.JUNK.equals(folder.type);
-                    boolean isDrafts = EntityFolder.DRAFTS.equals(folder.type);
-                    boolean isSent = EntityFolder.SENT.equals(folder.type);
-
-                    if (account.protocol == EntityAccount.TYPE_POP && isSent)
-                        isInbox = true;
-
-                    result.isInbox = (result.isInbox == null ? isInbox : result.isInbox && isInbox);
-                    result.isArchive = (result.isArchive == null ? isArchive : result.isArchive && isArchive);
-                    result.isTrash = (result.isTrash == null ? isTrash : result.isTrash && isTrash);
-                    result.isJunk = (result.isJunk == null ? isJunk : result.isJunk && isJunk);
-                    result.isDrafts = (result.isDrafts == null ? isDrafts : result.isDrafts && isDrafts);
-
-                    if (result.seen && result.unseen &&
-                            result.flagged && result.unflagged &&
-                            result.importance == -1 &&
-                            result.visible && result.hidden)
-                        continue;
-
-                    if (message.ui_seen)
-                        result.seen = true;
-                    if (!message.ui_flagged)
-                        result.unflagged = true;
-
-                    List<EntityMessage> messages = db.message().getMessagesByThread(
-                            message.account, message.thread, threading ? null : id, null);
-                    for (EntityMessage threaded : messages) {
-                        if (threaded.folder.equals(message.folder))
-                            if (!threaded.ui_seen)
-                                result.unseen = true;
-
-                        if (threaded.ui_flagged)
-                            result.flagged = true;
-
-                        int i = (message.importance == null ? EntityMessage.PRIORITIY_NORMAL : message.importance);
-                        if (result.importance == null)
-                            result.importance = i;
-                        else if (!result.importance.equals(i))
-                            result.importance = -1; // mixed
-
-                        if (threaded.folder.equals(message.folder))
-                            if (message.ui_snoozed == null)
-                                result.visible = true;
-                            else
-                                result.hidden = true;
-                    }
-                }
-
-                for (EntityAccount account : accounts.values()) {
-                    boolean hasInbox = false;
-                    boolean hasArchive = false;
-                    boolean hasTrash = false;
-                    boolean hasJunk = false;
-
-                    if (account.protocol == EntityAccount.TYPE_IMAP) {
-                        result.hasImap = true;
-
-                        EntityFolder inbox = db.folder().getFolderByType(account.id, EntityFolder.INBOX);
-                        EntityFolder archive = db.folder().getFolderByType(account.id, EntityFolder.ARCHIVE);
-                        EntityFolder trash = db.folder().getFolderByType(account.id, EntityFolder.TRASH);
-                        EntityFolder junk = db.folder().getFolderByType(account.id, EntityFolder.JUNK);
-
-                        hasInbox = (inbox != null && inbox.selectable);
-                        hasArchive = (archive != null && archive.selectable);
-                        hasTrash = (trash != null && trash.selectable);
-                        hasJunk = (junk != null && junk.selectable);
-                    } else {
-                        result.hasPop = true;
-                        if (result.leave_deleted == null)
-                            result.leave_deleted = account.leave_deleted;
-                        else
-                            result.leave_deleted = (result.leave_deleted && account.leave_deleted);
-                    }
-
-                    result.hasInbox = (result.hasInbox == null ? hasInbox : result.hasInbox && hasInbox);
-                    result.hasArchive = (result.hasArchive == null ? hasArchive : result.hasArchive && hasArchive);
-                    result.hasTrash = (result.hasTrash == null ? hasTrash : result.hasTrash && hasTrash);
-                    result.hasJunk = (result.hasJunk == null ? hasJunk : result.hasJunk && hasJunk);
-
-                    if (accounts.size() == 1 && account.protocol == EntityAccount.TYPE_IMAP)
-                        result.copyto = account;
-                }
-
-                if (result.isInbox == null) result.isInbox = false;
-                if (result.isArchive == null) result.isArchive = false;
-                if (result.isTrash == null) result.isTrash = false;
-                if (result.isJunk == null) result.isJunk = false;
-                if (result.isDrafts == null) result.isDrafts = false;
-
-                if (result.hasInbox == null) result.hasInbox = false;
-                if (result.hasArchive == null) result.hasArchive = false;
-                if (result.hasTrash == null) result.hasTrash = false;
-                if (result.hasJunk == null) result.hasJunk = false;
-
-                result.accounts = new LinkedHashMap<>();
-                if (!result.hasPop) {
-                    List<EntityAccount> syncing = db.account().getSynchronizingAccounts(EntityAccount.TYPE_IMAP);
-                    if (syncing != null)
-                        for (EntityAccount a : syncing)
-                            result.accounts.put(a, accounts.containsKey(a.id));
-                }
-
-                if (result.folders.size() > 1)
-                    result.folders = new ArrayList<>();
-
-                return result;
+                boolean threading = args.getBoolean("threading");
+                return MoreResult.get(context, ids, threading, false);
             }
 
             @Override
@@ -3454,27 +3322,26 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_raw_send, order++, R.string.title_raw_send)
                             .setIcon(R.drawable.twotone_attachment_24);
 
+                if (result.canInbox()) // not is inbox
+                    popupMenu.getMenu().add(Menu.FIRST, R.string.title_folder_inbox, order++, R.string.title_folder_inbox)
+                            .setIcon(R.drawable.twotone_move_to_inbox_24);
+
+                if (result.canArchive()) // has archive and not is archive
+                    popupMenu.getMenu().add(Menu.FIRST, R.string.title_archive, order++, R.string.title_archive)
+                            .setIcon(R.drawable.twotone_archive_24);
+
+                if (result.canJunk()) // has junk and not junk/drafts
+                    popupMenu.getMenu().add(Menu.FIRST, R.string.title_spam, order++, R.string.title_spam)
+                            .setIcon(R.drawable.twotone_report_24);
+
+                if (result.canTrash()) // not trash and has trash and not is junk
+                    popupMenu.getMenu().add(Menu.FIRST, R.string.title_trash, order++, R.string.title_trash)
+                            .setIcon(R.drawable.twotone_delete_24);
+
                 if (!result.read_only) {
-                    if ((result.hasInbox && !result.isInbox) ||
-                            (result.leave_deleted != null && result.leave_deleted && result.isTrash)) // not is inbox
-                        popupMenu.getMenu().add(Menu.FIRST, R.string.title_folder_inbox, order++, R.string.title_folder_inbox)
-                                .setIcon(R.drawable.twotone_move_to_inbox_24);
-
-                    if (result.hasArchive && !result.isArchive) // has archive and not is archive
-                        popupMenu.getMenu().add(Menu.FIRST, R.string.title_archive, order++, R.string.title_archive)
-                                .setIcon(R.drawable.twotone_archive_24);
-
-                    if (result.hasJunk && !result.isJunk && !result.isDrafts) // has junk and not junk/drafts
-                        popupMenu.getMenu().add(Menu.FIRST, R.string.title_spam, order++, R.string.title_spam)
-                                .setIcon(R.drawable.twotone_report_24);
-
-                    if (!result.isTrash && result.hasTrash && !result.isJunk) // not trash and has trash and not is junk
-                        popupMenu.getMenu().add(Menu.FIRST, R.string.title_trash, order++, R.string.title_trash)
-                                .setIcon(R.drawable.twotone_delete_24);
-
                     boolean leave = (Boolean.TRUE.equals(result.leave_deleted) && result.isInbox);
                     popupMenu.getMenu().add(Menu.FIRST, R.string.title_delete_permanently, order++,
-                            leave ? R.string.title_trash : R.string.title_delete_permanently)
+                                    leave ? R.string.title_trash : R.string.title_delete_permanently)
                             .setIcon(leave ? R.drawable.twotone_delete_24 : R.drawable.twotone_delete_forever_24);
 
                     for (EntityAccount account : result.accounts.keySet()) {
@@ -3511,10 +3378,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     public boolean onMenuItemClick(MenuItem target) {
                         int itemId = target.getItemId();
                         if (itemId == R.string.title_seen) {
-                            onActionSeenSelection(true, null);
+                            onActionSeenSelection(true, null, false);
                             return true;
                         } else if (itemId == R.string.title_unseen) {
-                            onActionSeenSelection(false, null);
+                            onActionSeenSelection(false, null, false);
                             return true;
                         } else if (itemId == R.string.title_snooze) {
                             onActionSnoozeSelection();
@@ -3535,13 +3402,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             onActionFlagColorSelection();
                             return true;
                         } else if (itemId == R.string.title_importance_low) {
-                            onActionSetImportanceSelection(EntityMessage.PRIORITIY_LOW);
+                            onActionSetImportanceSelection(EntityMessage.PRIORITIY_LOW, false);
                             return true;
                         } else if (itemId == R.string.title_importance_normal) {
-                            onActionSetImportanceSelection(EntityMessage.PRIORITIY_NORMAL);
+                            onActionSetImportanceSelection(EntityMessage.PRIORITIY_NORMAL, false);
                             return true;
                         } else if (itemId == R.string.title_importance_high) {
-                            onActionSetImportanceSelection(EntityMessage.PRIORITIY_HIGH);
+                            onActionSetImportanceSelection(EntityMessage.PRIORITIY_HIGH, false);
                             return true;
                         } else if (itemId == R.string.title_raw_send) {
                             onActionRaw();
@@ -3607,15 +3474,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         return ids;
     }
 
-    private void onActionSeenSelection(boolean seen, Long id) {
+    private void onActionSeenSelection(boolean seen, Long id, boolean clear) {
         Bundle args = new Bundle();
         args.putLongArray("ids", id == null ? getSelection() : new long[]{id});
         args.putBoolean("seen", seen);
         args.putBoolean("threading", threading &&
                 (id == null || viewType != AdapterMessage.ViewType.THREAD));
 
-        //if (selectionTracker != null)
-        //    selectionTracker.clearSelection();
+        if (clear && selectionTracker != null)
+            selectionTracker.clearSelection();
 
         new SimpleTask<Void>() {
             @Override
@@ -3812,10 +3679,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         fragment.show(getParentFragmentManager(), "messages:color");
     }
 
-    private void onActionSetImportanceSelection(int importance) {
+    private void onActionSetImportanceSelection(int importance, boolean clear) {
         Bundle args = new Bundle();
         args.putLongArray("selected", getSelection());
         args.putInt("importance", importance);
+
+        if (clear && selectionTracker != null)
+            selectionTracker.clearSelection();
 
         new SimpleTask<Void>() {
             @Override
@@ -4488,7 +4358,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (!checkReporting())
                 if (!checkReview())
                     if (!checkFingerprint())
-                        checkGmail();
+                        if (!checkGmail())
+                            checkOutlook();
 
         prefs.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(prefs, "pro");
@@ -4615,8 +4486,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return false;
 
         final Snackbar snackbar = Snackbar.make(view,
-                R.string.title_setup_alarm_12,
-                Snackbar.LENGTH_INDEFINITE)
+                        R.string.title_setup_alarm_12,
+                        Snackbar.LENGTH_INDEFINITE)
                 .setGestureInsetBottomIgnored(true);
         snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
             @Override
@@ -4772,7 +4643,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (accounts != null)
                     for (EntityAccount account : accounts)
                         if (account.isGmail())
-                            if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_OAUTH)
+                            if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_GMAIL)
                                 oauth++;
                             else if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD)
                                 passwd++;
@@ -4809,6 +4680,90 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Log.e(ex);
             }
         }.execute(this, new Bundle(), "gmail:check");
+
+        return true;
+    }
+
+    private boolean checkOutlook() {
+        if (!BuildConfig.DEBUG)
+            return false;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if (prefs.getBoolean("outlook_checked", false))
+            return false;
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.MONTH, Calendar.OCTOBER);
+        cal.set(Calendar.YEAR, 2022);
+
+        cal.add(Calendar.MONTH, 2);
+
+        long now = new Date().getTime();
+        if (now > cal.getTimeInMillis()) {
+            prefs.edit().putBoolean("outlook_checked", true).apply();
+            return false;
+        }
+
+        new SimpleTask<List<EntityAccount>>() {
+            @Override
+            protected List<EntityAccount> onExecute(Context context, Bundle args) throws Throwable {
+                DB db = DB.getInstance(context);
+                return db.account().getAccounts();
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, List<EntityAccount> accounts) {
+                int oauth = 0;
+                int passwd = 0;
+                if (accounts != null)
+                    for (EntityAccount account : accounts)
+                        if (account.isOutlook()) {
+                            String user = (account.user == null ? "" : account.user.toLowerCase(Locale.ROOT));
+                            if (user.contains("@hotmail") || user.contains("@live"))
+                                continue;
+                            if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_OAUTH)
+                                oauth++;
+                            else if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD)
+                                passwd++;
+                        }
+
+                if (oauth + passwd == 0) {
+                    prefs.edit().putBoolean("outlook_checked", true).apply();
+                    return;
+                }
+
+                final int resid = (passwd > 0
+                        ? R.string.title_check_outlook_password
+                        : R.string.title_check_outlook_oauth);
+                final Snackbar snackbar = Snackbar.make(view, resid, Snackbar.LENGTH_INDEFINITE)
+                        .setGestureInsetBottomIgnored(true);
+                snackbar.setAction(R.string.title_info, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                        Helper.viewFAQ(v.getContext(), 14);
+                        prefs.edit().putBoolean("outlook_checked", true).apply();
+                    }
+                });
+                snackbar.addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        prefs.edit().putBoolean("outlook_checked", true).apply();
+                    }
+                });
+                snackbar.show();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.e(ex);
+            }
+        }.execute(this, new Bundle(), "outlook:check");
 
         return true;
     }
@@ -5154,6 +5109,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private void onMenuSearch() {
+        if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+            return;
+
         Bundle args = new Bundle();
         args.putLong("account", account);
         args.putLong("folder", folder);
@@ -5772,8 +5730,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         if (selectionTracker != null && selectionTracker.hasSelection()) {
             fabMore.show();
 
+            long[] selection = getSelection();
+
             Context context = tvSelectedCount.getContext();
-            int count = getSelection().length;
+            int count = selection.length;
             tvSelectedCount.setText(NF.format(count));
             if (count > (BuildConfig.DEBUG ? 10 : MAX_MORE)) {
                 int ts = Math.round(tvSelectedCount.getTextSize());
@@ -5787,77 +5747,34 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             tvSelectedCount.setVisibility(View.VISIBLE);
 
             Bundle args = new Bundle();
-            args.putLongArray("ids", getSelection());
+            args.putLongArray("ids", selection);
+            args.putBoolean("threading", threading);
 
-            new SimpleTask<Boolean[]>() {
+            new SimpleTask<MoreResult>() {
                 @Override
-                protected Boolean[] onExecute(Context context, Bundle args) {
+                protected MoreResult onExecute(Context context, Bundle args) {
                     long[] ids = args.getLongArray("ids");
-
-                    Boolean[] result = new Boolean[4];
-                    result[0] = false;
-                    result[1] = false;
-                    result[2] = false;
-                    result[3] = false;
-
-                    DB db = DB.getInstance(context);
-
-                    for (long id : ids) {
-                        EntityMessage message = db.message().getMessage(id);
-                        if (message == null)
-                            continue;
-
-                        EntityAccount account = db.account().getAccount(message.account);
-                        if (account == null || account.protocol != EntityAccount.TYPE_IMAP)
-                            continue;
-
-                        EntityFolder folder = db.folder().getFolder(message.folder);
-                        if (folder == null)
-                            continue;
-
-                        if (!result[0] &&
-                                (EntityFolder.ARCHIVE.equals(folder.type) ||
-                                        EntityFolder.JUNK.equals(folder.type) ||
-                                        EntityFolder.TRASH.equals(folder.type))) {
-                            EntityFolder inbox = db.folder().getFolderByType(message.account, EntityFolder.INBOX);
-                            result[0] = (inbox != null && inbox.selectable);
-                        }
-
-                        if (!result[1] &&
-                                !EntityFolder.ARCHIVE.equals(folder.type)) {
-                            EntityFolder archive = db.folder().getFolderByType(message.account, EntityFolder.ARCHIVE);
-                            result[1] = (archive != null && archive.selectable);
-                        }
-
-                        if (!result[2] &&
-                                !EntityFolder.JUNK.equals(folder.type) &&
-                                !EntityFolder.DRAFTS.equals(folder.type)) {
-                            EntityFolder junk = db.folder().getFolderByType(message.account, EntityFolder.JUNK);
-                            result[2] = (junk != null && junk.selectable);
-                        }
-
-                        if (!result[3] &&
-                                !EntityFolder.TRASH.equals(folder.type) &&
-                                !EntityFolder.JUNK.equals(folder.type)) {
-                            EntityFolder trash = db.folder().getFolderByType(message.account, EntityFolder.TRASH);
-                            result[3] = (trash != null && trash.selectable);
-                        }
-
-                        if (result[0] && result[1] && result[2] || result[3])
-                            break;
-                    }
-
-                    return result;
+                    boolean threading = args.getBoolean("threading");
+                    return MoreResult.get(context, ids, threading, true);
                 }
 
                 @Override
-                protected void onExecuted(Bundle args, Boolean[] result) {
-                    ibInbox.setVisibility(result[0] ? View.VISIBLE : View.GONE);
-                    ibArchive.setVisibility(result[1] ? View.VISIBLE : View.GONE);
-                    ibJunk.setVisibility(result[2] ? View.VISIBLE : View.GONE);
-                    ibTrash.setVisibility(result[3] ? View.VISIBLE : View.GONE);
+                protected void onExecuted(Bundle args, MoreResult result) {
+                    boolean importance = (BuildConfig.DEBUG &&
+                            !EntityMessage.PRIORITIY_LOW.equals(result.importance));
+                    ibLowImportance.setVisibility(importance ? View.VISIBLE : View.GONE);
+                    ibBatchSeen.setVisibility(result.unseen ? View.VISIBLE : View.GONE);
+                    ibInbox.setVisibility(result.canInbox() ? View.VISIBLE : View.GONE);
+                    ibArchive.setVisibility(result.canArchive() ? View.VISIBLE : View.GONE);
+                    ibJunk.setVisibility(result.canJunk() ? View.VISIBLE : View.GONE);
+                    ibTrash.setVisibility(result.canTrash() ? View.VISIBLE : View.GONE);
                     cardMore.setVisibility(fabMore.isOrWillBeShown() &&
-                            (result[0] || result[1] || result[2] || result[3])
+                            (importance ||
+                                    result.unseen ||
+                                    result.canInbox() ||
+                                    result.canArchive() ||
+                                    result.canJunk() ||
+                                    result.canTrash())
                             ? View.VISIBLE : View.GONE);
                 }
 
@@ -5865,7 +5782,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 protected void onException(Bundle args, Throwable ex) {
                     Log.unexpectedError(getParentFragmentManager(), ex);
                 }
-            }.setExecutor(executor).execute(this, args, "fabs");
+            }.setExecutor(executor).execute(this, args, "quickactions");
         } else {
             fabMore.hide();
             tvSelectedCount.setVisibility(View.GONE);
@@ -9533,7 +9450,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         List<EntityAnswer> answers;
     }
 
-    private class MoreResult {
+    private static class MoreResult {
         boolean seen;
         boolean unseen;
         boolean visible;
@@ -9557,6 +9474,188 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         List<Long> folders;
         Map<EntityAccount, Boolean> accounts;
         EntityAccount copyto;
+
+        boolean canInbox() {
+            if (read_only)
+                return false;
+            return ((hasInbox && !isInbox) ||
+                    (leave_deleted != null && leave_deleted && isTrash));
+        }
+
+        boolean canArchive() {
+            if (read_only)
+                return false;
+            return (hasArchive && !isArchive);
+        }
+
+        boolean canJunk() {
+            if (read_only)
+                return false;
+            return (hasJunk && !isJunk && !isDrafts);
+        }
+
+        boolean canTrash() {
+            if (read_only)
+                return false;
+            return (!isTrash && hasTrash && !isJunk);
+        }
+
+        static MoreResult get(Context context, long[] ids, boolean threading, boolean all) {
+            Map<Long, EntityAccount> accounts = new HashMap<>();
+            Map<Long, EntityFolder> folders = new HashMap<>();
+
+            DB db = DB.getInstance(context);
+
+            MoreResult result = new MoreResult();
+            result.folders = new ArrayList<>();
+
+            if (!all && ids.length > MAX_MORE) {
+                result.seen = true;
+                result.unseen = true;
+                result.flagged = true;
+                result.unflagged = true;
+                result.importance = -1;
+                result.visible = true;
+                result.hidden = true;
+            }
+
+            for (long id : ids) {
+                EntityMessage message = db.message().getMessage(id);
+                if (message == null)
+                    continue;
+
+                EntityAccount account = accounts.get(message.account);
+                if (account == null) {
+                    account = db.account().getAccount(message.account);
+                    if (account == null)
+                        continue;
+                    accounts.put(account.id, account);
+                }
+
+                EntityFolder folder = folders.get(message.folder);
+                if (folder == null) {
+                    folder = db.folder().getFolder(message.folder);
+                    if (folder == null)
+                        continue;
+                    if (folder.read_only)
+                        result.read_only = true;
+                    folders.put(folder.id, folder);
+                }
+
+                if (!result.folders.contains(message.folder))
+                    result.folders.add(message.folder);
+
+                boolean isInbox = EntityFolder.INBOX.equals(folder.type);
+                boolean isArchive = EntityFolder.ARCHIVE.equals(folder.type);
+                boolean isTrash = (EntityFolder.TRASH.equals(folder.type));
+                boolean isJunk = EntityFolder.JUNK.equals(folder.type);
+                boolean isDrafts = EntityFolder.DRAFTS.equals(folder.type);
+                boolean isSent = EntityFolder.SENT.equals(folder.type);
+
+                if (account.protocol == EntityAccount.TYPE_POP && isSent)
+                    isInbox = true;
+
+                result.isInbox = (result.isInbox == null ? isInbox : result.isInbox && isInbox);
+                result.isArchive = (result.isArchive == null ? isArchive : result.isArchive && isArchive);
+                result.isTrash = (result.isTrash == null ? isTrash : result.isTrash && isTrash);
+                result.isJunk = (result.isJunk == null ? isJunk : result.isJunk && isJunk);
+                result.isDrafts = (result.isDrafts == null ? isDrafts : result.isDrafts && isDrafts);
+
+                if (result.seen && result.unseen &&
+                        result.flagged && result.unflagged &&
+                        result.importance == -1 &&
+                        result.visible && result.hidden)
+                    continue;
+
+                if (message.ui_seen)
+                    result.seen = true;
+                if (!message.ui_flagged)
+                    result.unflagged = true;
+
+                List<EntityMessage> messages = db.message().getMessagesByThread(
+                        message.account, message.thread, threading ? null : id, null);
+                for (EntityMessage threaded : messages) {
+                    if (threaded.folder.equals(message.folder))
+                        if (!threaded.ui_seen)
+                            result.unseen = true;
+
+                    if (threaded.ui_flagged)
+                        result.flagged = true;
+
+                    int i = (message.importance == null ? EntityMessage.PRIORITIY_NORMAL : message.importance);
+                    if (result.importance == null)
+                        result.importance = i;
+                    else if (!result.importance.equals(i))
+                        result.importance = -1; // mixed
+
+                    if (threaded.folder.equals(message.folder))
+                        if (message.ui_snoozed == null)
+                            result.visible = true;
+                        else
+                            result.hidden = true;
+                }
+            }
+
+            for (EntityAccount account : accounts.values()) {
+                boolean hasInbox = false;
+                boolean hasArchive = false;
+                boolean hasTrash = false;
+                boolean hasJunk = false;
+
+                if (account.protocol == EntityAccount.TYPE_IMAP) {
+                    result.hasImap = true;
+
+                    EntityFolder inbox = db.folder().getFolderByType(account.id, EntityFolder.INBOX);
+                    EntityFolder archive = db.folder().getFolderByType(account.id, EntityFolder.ARCHIVE);
+                    EntityFolder trash = db.folder().getFolderByType(account.id, EntityFolder.TRASH);
+                    EntityFolder junk = db.folder().getFolderByType(account.id, EntityFolder.JUNK);
+
+                    hasInbox = (inbox != null && inbox.selectable);
+                    hasArchive = (archive != null && archive.selectable);
+                    hasTrash = (trash != null && trash.selectable);
+                    hasJunk = (junk != null && junk.selectable);
+                } else {
+                    result.hasPop = true;
+                    if (result.leave_deleted == null)
+                        result.leave_deleted = account.leave_deleted;
+                    else
+                        result.leave_deleted = (result.leave_deleted && account.leave_deleted);
+                }
+
+                result.hasInbox = (result.hasInbox == null ? hasInbox : result.hasInbox && hasInbox);
+                result.hasArchive = (result.hasArchive == null ? hasArchive : result.hasArchive && hasArchive);
+                result.hasTrash = (result.hasTrash == null ? hasTrash : result.hasTrash && hasTrash);
+                result.hasJunk = (result.hasJunk == null ? hasJunk : result.hasJunk && hasJunk);
+
+                if (accounts.size() == 1 && account.protocol == EntityAccount.TYPE_IMAP)
+                    result.copyto = account;
+            }
+
+            if (result.isInbox == null) result.isInbox = false;
+            if (result.isArchive == null) result.isArchive = false;
+            if (result.isTrash == null) result.isTrash = false;
+            if (result.isJunk == null) result.isJunk = false;
+            if (result.isDrafts == null) result.isDrafts = false;
+
+            if (result.hasInbox == null) result.hasInbox = false;
+            if (result.hasArchive == null) result.hasArchive = false;
+            if (result.hasTrash == null) result.hasTrash = false;
+            if (result.hasJunk == null) result.hasJunk = false;
+
+            result.accounts = new LinkedHashMap<>();
+            if (!result.hasPop) {
+                List<EntityAccount> syncing = db.account().getSynchronizingAccounts(EntityAccount.TYPE_IMAP);
+                if (syncing != null)
+                    for (EntityAccount a : syncing)
+                        result.accounts.put(a, accounts.containsKey(a.id));
+            }
+
+            if (result.folders.size() > 1)
+                result.folders = new ArrayList<>();
+
+            return result;
+
+        }
     }
 
     public static class MessageTarget implements Parcelable {

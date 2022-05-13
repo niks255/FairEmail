@@ -241,6 +241,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         liveAccountNetworkState.observeForever(new Observer<List<TupleAccountNetworkState>>() {
             private boolean fts = false;
+            private boolean lastConnected = false;
             private int lastEventId = 0;
             private int lastQuitId = -1;
             private List<Long> initialized = new ArrayList<>();
@@ -264,6 +265,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     liveAccountNetworkState.removeObserver(this);
                 } else {
                     int accounts = 0;
+                    int enabled = 0;
                     int operations = 0;
                     boolean event = false;
                     boolean runService = false;
@@ -275,9 +277,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         }
                         if (current.accountState.shouldRun(current.enabled))
                             runService = true;
-                        if (!current.accountState.isTransient(ServiceSynchronize.this) &&
-                                ("connected".equals(current.accountState.state) || current.accountState.backoff_until != null))
-                            accounts++;
+                        if (!current.accountState.isTransient(ServiceSynchronize.this)) {
+                            if (current.accountState.isEnabled(current.enabled))
+                                enabled++;
+                            if ("connected".equals(current.accountState.state) || current.accountState.backoff_until != null)
+                                accounts++;
+                        }
                         if (current.accountState.synchronize)
                             operations += current.accountState.operations;
 
@@ -380,6 +385,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             event = true;
                             delete(current);
                         }
+                    }
+
+                    boolean connected = (enabled > 0 && accounts == enabled);
+                    if (lastConnected != connected) {
+                        lastConnected = connected;
+                        prefs.edit().putBoolean("connected", connected).apply();
+                        WidgetSync.update(ServiceSynchronize.this);
                     }
 
                     if (event) {
@@ -2022,7 +2034,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                                     ifolder = iservice.getStore().getFolder(folder.name);
                                                                 } catch (IllegalStateException ex) {
                                                                     if ("Not connected".equals(ex.getMessage())) {
-                                                                        Log.w(ex);
+                                                                        Log.i(ex);
                                                                         return; // Store closed
                                                                     } else
                                                                         throw ex;
@@ -2112,7 +2124,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                             }
                                                         }
                                                     } catch (Throwable ex) {
-                                                        Log.e(ex);
+                                                        if ("Not connected".equals(ex.getMessage()))
+                                                            Log.i(ex);
+                                                        else
+                                                            Log.e(ex);
                                                     } finally {
                                                         wlOperations.release();
                                                     }
@@ -2293,7 +2308,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 } catch (Throwable ex) {
                     last_fail = ex;
                     iservice.dump(account.name);
-                    Log.e(account.name, ex);
+                    if (ex.getMessage() != null && ex.getMessage().startsWith("OAuth refresh"))
+                        Log.i(account.name, ex);
+                    else
+                        Log.e(account.name, ex);
                     EntityLog.log(this, EntityLog.Type.Account, account,
                             account.name + " connect " + ex + "\n" + android.util.Log.getStackTraceString(ex));
                     db.account().setAccountError(account.id, Log.formatThrowable(ex));
