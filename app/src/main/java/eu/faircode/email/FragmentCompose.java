@@ -2385,6 +2385,11 @@ public class FragmentCompose extends FragmentBase {
                     }
 
                     @Override
+                    protected void onDestroyed(Bundle args) {
+                        toast = null;
+                    }
+
+                    @Override
                     protected void onException(Bundle args, Throwable ex) {
                         etBody.setSelection(paragraph.second);
                         Throwable exex = new Throwable("DeepL", ex);
@@ -2454,6 +2459,11 @@ public class FragmentCompose extends FragmentBase {
                     int end = start + suggestion.length;
                     edit.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
+            }
+
+            @Override
+            protected void onDestroyed(Bundle args) {
+                toast = null;
             }
 
             @Override
@@ -4857,6 +4867,7 @@ public class FragmentCompose extends FragmentBase {
                                 data.draft.thread = data.draft.msgid; // new thread
                             else {
                                 data.draft.thread = ref.thread;
+                                data.draft.inreplyto = ref.msgid;
                                 data.draft.references = (ref.references == null ? "" : ref.references + " ") + ref.msgid;
                             }
                             data.draft.wasforwardedfrom = ref.msgid;

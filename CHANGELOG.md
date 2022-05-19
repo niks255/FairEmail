@@ -2,12 +2,28 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
-### 1.1895 - 2022-05-13
-
 ### [Itemirus](https://en.wikipedia.org/wiki/Itemirus)
 
+### 1.1899 - 2022-05-18
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1898 - 2022-05-15
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1897 - 2022-05-14
+
+* Added configurable quick actions
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1896 - 2022-05-13
+
 * Prevent blocking self (report spam)
-* Preliminary Android 13 support (photo picker, hyphenation)
+* Preliminary Android 13 support (photo picker)
 * Small improvements and minor bug fixes
 * Updated translations
 

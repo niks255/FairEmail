@@ -227,11 +227,13 @@
     <string name="title_setup_permissions">Grant permissions</string>
     <string name="title_setup_permissions_remark">To access contact information (optional)</string>
     <string name="title_setup_permissions_explanation">Contact permissions are required to look up contact info and to suggest contacts</string>
+    <string name="title_setup_permission_why">Which permissions are needed and why?</string>
     <string name="title_setup_permission_import_contacts">How can I import contacts?</string>
     <string name="title_setup_doze">Disable battery optimizations</string>
     <string name="title_setup_doze_remark">To send and receive email reliably in the background</string>
     <string name="title_setup_doze_explanation">Battery optimizations should be disabled for the app to ensure reliable sending and receiving of messages in the background</string>
     <string name="title_setup_doze_hint">Although this may sound contradictory, turning off battery optimizations for this app will result in less battery usage</string>
+    <string name="title_setup_doze_why">Why should battery optimizations be disabled?</string>
     <string name="title_setup_doze_instructions">In the next Android dialog change "Not optimized" to "All apps", select this app and select "Don\'t optimize"</string>
     <string name="title_setup_doze_battery">High battery usage?</string>
     <string name="title_setup_doze_stopped">Sync stopped?</string>
@@ -496,6 +498,7 @@
     <string name="title_advanced_efavicons">Show avatars</string>
     <string name="title_advanced_favicons">Show favicons</string>
     <string name="title_advanced_favicons_partial">Scan only the first %1$s of the web page</string>
+    <string name="title_advanced_favicons_play">Google doesn\'t allow favicons for privacy reasons</string>
     <string name="title_advanced_generated_icons">Show generated icons</string>
     <string name="title_advanced_identicons">Show identicons</string>
     <string name="title_advanced_circular">Show round icons</string>
@@ -670,10 +673,13 @@
     <string name="title_advanced_encrypt_default">Encrypt by default</string>
     <string name="title_advanced_auto_decrypt">Automatically decrypt messages</string>
     <string name="title_advanced_auto_undo_decrypt">Undo decryption on closing conversation</string>
+
     <string name="title_advanced_openpgp">OpenPGP provider</string>
     <string name="title_advanced_autocrypt">Use Autocrypt</string>
     <string name="title_advanced_autocrypt_mutual">Autocrypt mutual mode</string>
     <string name="title_advanced_encrypt_subject">Encrypt subject</string>
+    <string name="title_advanced_import_pgp">Import key</string>
+
     <string name="title_advanced_sign_algo">Signature algorithm</string>
     <string name="title_advanced_encrypt_algo">Encryption algorithm</string>
     <string name="title_advanced_remark_algo">
@@ -689,6 +695,7 @@
         This will open to the Android security settings.
         Keys and certificates can generally be found under Advanced - Encryption and credentials.
     </string>
+
     <string name="title_advanced_aes_key_size" translatable="false">Max AES key size: %1$s</string>
 
     <string name="title_advanced_power_menu">Add actions to the Android power menu</string>
@@ -785,6 +792,7 @@
     <string name="title_advanced_quick_sync_hint">This reduces data usage, but new messages might be missed if the email server doesn\'t follow the standards</string>
     <string name="title_advanced_no_date_hint">Some providers store messages with an unknown, invalid or future date as messages without date</string>
     <string name="title_advanced_unseen_hint">Some providers don\'t support this properly, which may cause synchronizing none or all messages</string>
+    <string name="title_advanced_data_usage">This can cause high data usage!</string>
     <string name="title_advanced_deleted_unseen">When disabled, unread messages are kept on the device forever</string>
     <string name="title_advanced_sync_kept_hint">This will transfer extra data and consume extra battery power, especially if a lot of messages are stored on the device</string>
     <string name="title_advanced_gmail_thread_hint">This only applies to newly received messages and can break existing groups</string>
@@ -1193,6 +1201,12 @@
     <string name="title_button_search">Search in messages</string>
     <string name="title_button_search_text">Search in message text</string>
     <string name="title_configure_buttons">Configure buttons &#8230;</string>
+
+    <string name="title_quick_actions">Select actions</string>
+    <string name="title_quick_actions_hint">Up to %1$d actions will be shown</string>
+    <string name="title_quick_actions_low">Low importance</string>
+    <string name="title_quick_actions_high">High importance</string>
+    <string name="title_quick_actions_snooze">Snooze</string>
 
     <string name="title_trash">Trash</string>
     <string name="title_copy">Copy &#8230;</string>

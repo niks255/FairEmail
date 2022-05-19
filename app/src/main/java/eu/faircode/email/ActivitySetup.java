@@ -568,7 +568,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     }
 
     private void onMenuIssue() {
-        startActivity(Helper.getIntentIssue(this));
+        startActivity(Helper.getIntentIssue(this, "Setup:issue"));
     }
 
     private void onMenuPrivacy() {
@@ -779,6 +779,11 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             @Override
             protected void onExecuted(Bundle args, Void data) {
                 ToastEx.makeText(ActivitySetup.this, R.string.title_setup_exported, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onDestroyed(Bundle args) {
+                toast = null;
             }
 
             @Override

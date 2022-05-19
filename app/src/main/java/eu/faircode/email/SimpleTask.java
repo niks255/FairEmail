@@ -155,6 +155,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
             public void onDestroy() {
                 EntityLog.log(context, EntityLog.Type.Debug, "Owner gone task=" + name);
                 destroyed = true;
+                onDestroyed(args);
                 owner.getLifecycle().removeObserver(this);
             }
         };
@@ -225,6 +226,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                                         state = owner.getLifecycle().getCurrentState();
                                         if (state.equals(Lifecycle.State.DESTROYED)) {
                                             Log.i("Destroyed task " + name);
+                                            onDestroyed(args);
                                             owner.getLifecycle().removeObserver(this);
                                             cleanup(context);
                                         } else if (state.isAtLeast(Lifecycle.State.RESUMED)) {
@@ -325,8 +327,12 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
 
         int executing = getCount();
         Log.i("Remaining tasks=" + executing + "/" + tasks.size());
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
-        lbm.sendBroadcast(new Intent(ACTION_TASK_COUNT).putExtra("count", executing));
+        if (context == null)
+            Log.e("Context is null");
+        else {
+            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+            lbm.sendBroadcast(new Intent(ACTION_TASK_COUNT).putExtra("count", executing));
+        }
     }
 
     protected void onPreExecute(Bundle args) {
@@ -360,6 +366,9 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
     protected abstract void onException(Bundle args, Throwable ex);
 
     protected void onPostExecute(Bundle args) {
+    }
+
+    protected void onDestroyed(Bundle args) {
     }
 
     @Override

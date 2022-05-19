@@ -47,7 +47,6 @@ import com.sun.mail.util.SocketConnectException;
 import com.sun.mail.util.TraceOutputStream;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -444,6 +443,7 @@ public class EmailService implements AutoCloseable {
             if (auth == AUTH_TYPE_OAUTH && "pop3s".equals(protocol) && "outlook.office365.com".equals(host))
                 properties.put("mail." + protocol + ".auth.xoauth2.two.line.authentication.format", "true");
 
+            Log.i("Connecting to " + host + ":" + port + " auth=" + auth);
             connect(host, port, auth, user, factory);
         } catch (AuthenticationFailedException ex) {
             //if ("outlook.office365.com".equals(host) &&
@@ -457,8 +457,6 @@ public class EmailService implements AutoCloseable {
                 try {
                     authenticator.refreshToken(true);
                     connect(host, port, auth, user, factory);
-                } catch (FileNotFoundException ex1) {
-                    throw new AuthenticationFailedException(ex1.getMessage(), ex1);
                 } catch (Exception ex1) {
                     Log.e(ex1);
                     String msg = ex.getMessage();
@@ -892,7 +890,7 @@ public class EmailService implements AutoCloseable {
         EntityLog.log(context, EntityLog.Type.Protocol, "Dump start " + tag);
         while (breadcrumbs != null && !breadcrumbs.isEmpty())
             EntityLog.log(context, EntityLog.Type.Protocol, "Dump " + breadcrumbs.pop());
-        EntityLog.log(context, EntityLog.Type.Protocol, "Dump end" + tag);
+        EntityLog.log(context, EntityLog.Type.Protocol, "Dump end " + tag);
     }
 
     private static class SocketFactoryService extends SocketFactory {

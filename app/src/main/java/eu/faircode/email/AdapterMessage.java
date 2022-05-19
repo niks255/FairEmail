@@ -1322,11 +1322,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             MessageHelper.AddressFormat format = email_format;
 
             if (show_recipients && recipients != null && recipients.length > 0) {
+                int maxRecipients = (viewType == ViewType.THREAD
+                        ? Integer.MAX_VALUE
+                        : (compact ? MAX_RECIPIENTS_COMPACT : MAX_RECIPIENTS_NORMAL));
                 tvFrom.setText(context.getString(outgoing && viewType != ViewType.THREAD && compact
                                 ? R.string.title_to_from
                                 : R.string.title_from_to,
-                        MessageHelper.formatAddresses(senders, format, false),
-                        MessageHelper.formatAddresses(recipients, format, false)));
+                        formatAddresses(senders, format, maxRecipients),
+                        formatAddresses(recipients, format, maxRecipients)));
             } else
                 tvFrom.setText(MessageHelper.formatAddresses(senders, format, false));
 
@@ -2193,6 +2196,21 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.setLog(false).execute(context, owner, sargs, "message:tools");
+        }
+
+        private String formatAddresses(Address[] addresses, MessageHelper.AddressFormat format, int max) {
+            List<Address> list = new ArrayList<>();
+            if (addresses != null)
+                for (Address address : addresses)
+                    if (!list.contains(address))
+                        list.add(address);
+
+            Address[] sub = list.subList(0, Math.min(list.size(), max)).toArray(new Address[0]);
+            String result = MessageHelper.formatAddresses(sub, format, false);
+            if (list.size() > sub.length)
+                result = context.getString(R.string.title_name_plus, result, list.size() - sub.length);
+
+            return result;
         }
 
         private Spanned formatAddresses(Address[] addresses, boolean full) {
@@ -4455,7 +4473,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         onHelp();
                         return true;
                     } else if (itemId == R.string.menu_faq) {
-                        Helper.view(context, Helper.getSupportUri(context), false);
+                        Helper.view(context, Helper.getSupportUri(context, "Message:error"), false);
                         return true;
                     } else if (itemId == R.string.menu_setup) {
                         onSettings();
@@ -7704,12 +7722,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     }
 
     @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        // View will become visible (possibly without rebinding)
+        holder.cowner.start();
+    }
+
+    @Override
     public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        // View is invisible, but can be reused (without rebinding)
         holder.cowner.stop();
     }
 
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
+        // Called before moving view into RecycledViewPool
         holder.cowner.recreate();
 
         if (holder.ibAvatar != null)
@@ -7718,6 +7744,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             holder.tvBody.setText(null);
         if (holder.wvBody instanceof WebView)
             ((WebView) holder.wvBody).loadDataWithBaseURL(null, "", "text/html", StandardCharsets.UTF_8.name(), null);
+
+        if (holder.taskContactInfo != null) {
+            holder.taskContactInfo.cancel(context);
+            holder.taskContactInfo = null;
+        }
     }
 
     @Override

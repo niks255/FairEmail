@@ -183,11 +183,13 @@
     <string name="title_setup_permissions">Berechtigungen erteilen</string>
     <string name="title_setup_permissions_remark">Um auf Kontaktinformationen zuzugreifen (optional)</string>
     <string name="title_setup_permissions_explanation">Der Zugriff auf Kontakte ist erforderlich, um Kontaktinformationen nachzuschlagen und Kontakte vorzuschlagen</string>
+    <string name="title_setup_permission_why">Welche Berechtigungen werden benötigt und warum?</string>
     <string name="title_setup_permission_import_contacts">Wie kann ich Kontakte importieren?</string>
     <string name="title_setup_doze">Akkuoptimierung deaktivieren</string>
     <string name="title_setup_doze_remark">Um E-Mail verlässlich im Hintergrund zu senden und zu empfangen</string>
     <string name="title_setup_doze_explanation">Akkuoptimierungen sollten für die App deaktiviert werden, um ein zuverlässiges Senden und Empfangen von Nachrichten im Hintergrund zu gewährleisten</string>
     <string name="title_setup_doze_hint">Obwohl dies widersprüchlich klingen mag, führt das Deaktivieren der Akku-Optimierungen für diese App zu einem geringeren Akkuverbrauch</string>
+    <string name="title_setup_doze_why">Warum sollten die Akkuoptimierungen deaktiviert werden?</string>
     <string name="title_setup_doze_instructions">Im nächsten Android-Dialog bitte »Nicht optimiert« in »Alle Apps« ändern und bei FairEmail »Nicht optimieren« auswählen</string>
     <string name="title_setup_doze_battery">Hoher Akkuverbrauch?</string>
     <string name="title_setup_doze_stopped">Synchronisation angehalten?</string>
@@ -357,7 +359,7 @@
     <string name="title_advanced_usenet_signature">Usenet-Signaturkonvention</string>
     <string name="title_advanced_remove_signatures">Erkannte Signaturen entfernen</string>
     <string name="title_advanced_receipt">Wenn eine Bestätigung angefordert wird, dann</string>
-    <string name="title_advanced_forward_new">Beim Weiterleiten ein neues Thema beginnen</string>
+    <string name="title_advanced_forward_new">Beim Weiterleiten eine neue Unterhaltung beginnen</string>
     <string name="title_advanced_lookup_mx">Überprüft die Empfänger-E-Mail-Adressen vor dem Senden per DNS MX</string>
     <string name="title_advanced_metered">Getaktete Verbindungen verwenden</string>
     <string name="title_advanced_download">Automatisches Herunterladen von E-Mails und Anhängen auf getakteten Verbindungen bis zu einer Größe von</string>
@@ -580,6 +582,7 @@
     <string name="title_advanced_autocrypt">Autocrypt verwenden</string>
     <string name="title_advanced_autocrypt_mutual">Gegenseitiger Autocrypt-Modus</string>
     <string name="title_advanced_encrypt_subject">Betreff verschlüsseln</string>
+    <string name="title_advanced_import_pgp">Schlüssel importieren</string>
     <string name="title_advanced_sign_algo">Signaturalgorithmus</string>
     <string name="title_advanced_encrypt_algo">Verschlüsselungsalgorithmus</string>
     <string name="title_advanced_remark_algo">        Bitte beachten Sie, dass nicht alle E-Mail-Programme alle Algorithmen unterstützen.
@@ -628,6 +631,7 @@
     <string name="title_advanced_quick_sync_hint">Dies reduziert den Datenverbrauch, aber neue Nachrichten könnten verpasst werden, wenn der E-Mail-Server die Standards nicht einhält</string>
     <string name="title_advanced_no_date_hint">Einige Anbieter speichern Nachrichten mit einem unbekannten, ungültigen oder zukünftigen Datum als Nachrichten ohne Datum</string>
     <string name="title_advanced_unseen_hint">Einige Anbieter unterstützen dies nicht richtig, was möglicherweise zu einer Synchronisierung von keiner oder allen Nachrichten führen kann</string>
+    <string name="title_advanced_data_usage">Dies kann einen hohen Datenverbrauch verursachen!</string>
     <string name="title_advanced_deleted_unseen">Wenn deaktiviert, bleiben ungelesene Nachrichten dauerhaft auf dem Gerät erhalten</string>
     <string name="title_advanced_sync_kept_hint">Dies überträgt zusätzliche Daten und verbraucht zusätzliche Akkuladung, insbesondere wenn viele Nachrichten auf dem Gerät gespeichert sind</string>
     <string name="title_advanced_gmail_thread_hint">Dies gilt nur für neu empfangene Nachrichten und kann bestehende Gruppen zerbrechen</string>
@@ -1002,6 +1006,11 @@
     <string name="title_button_search">In Nachrichten suchen</string>
     <string name="title_button_search_text">Im Nachrichtentext suchen</string>
     <string name="title_configure_buttons">Schaltflächen konfigurieren &#8230;</string>
+    <string name="title_quick_actions">Aktionen auswählen</string>
+    <string name="title_quick_actions_hint">Es werden bis zu %1$d Aktionen angezeigt</string>
+    <string name="title_quick_actions_low">Geringe Wichtigkeit</string>
+    <string name="title_quick_actions_high">Hohe Wichtigkeit</string>
+    <string name="title_quick_actions_snooze">Später lesen</string>
     <string name="title_trash">Löschen</string>
     <string name="title_copy">Kopieren &#8230;</string>
     <string name="title_copy_to">Kopieren nach &#8230;</string>

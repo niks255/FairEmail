@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1896 }
+def getVersionCode = { -> return 1899 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Itemirus" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -168,6 +168,7 @@ android {
             buildConfigField "String", "GPA_URI", localProperties.getProperty("gpa.uri", "\"\"")
             buildConfigField "String", "INFO_URI", localProperties.getProperty("info.uri", "\"\"")
             buildConfigField "String", "DEV_DOMAIN", localProperties.getProperty("dev.domain", "\"\"")
+            buildConfigField "String", "FDROID", "\"https://f-droid.org/packages/%s/\""
         }
         fdroid {
             dimension "all"
@@ -184,6 +185,7 @@ android {
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
             buildConfigField "String", "DEV_DOMAIN", "\"\""
+            buildConfigField "String", "FDROID", "\"https://f-droid.org/packages/%s/\""
         }
         play {
             dimension "all"
@@ -201,6 +203,7 @@ android {
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
             buildConfigField "String", "DEV_DOMAIN", "\"\""
+            buildConfigField "String", "FDROID", "\"\""
         }
         amazon {
             dimension "all"
@@ -218,6 +221,7 @@ android {
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
             buildConfigField "String", "DEV_DOMAIN", "\"\""
+            buildConfigField "String", "FDROID", "\"\""
         }
     }
 

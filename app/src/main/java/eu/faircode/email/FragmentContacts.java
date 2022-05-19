@@ -77,6 +77,7 @@ import ezvcard.property.FormattedName;
 import ezvcard.property.RawProperty;
 
 public class FragmentContacts extends FragmentBase {
+    private View view;
     private RecyclerView rvContacts;
     private ContentLoadingProgressBar pbWait;
     private Group grpReady;
@@ -116,7 +117,7 @@ public class FragmentContacts extends FragmentBase {
         setSubtitle(junk ? R.string.title_blocked_senders : R.string.menu_contacts);
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_contacts, container, false);
+        view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
         // Get controls
         rvContacts = view.findViewById(R.id.rvContacts);
@@ -206,10 +207,21 @@ public class FragmentContacts extends FragmentBase {
         SearchView searchView = (SearchView) menuSearch.getActionView();
         searchView.setQueryHint(getString(R.string.title_search));
 
-        if (!TextUtils.isEmpty(searching)) {
-            menuSearch.expandActionView();
-            searchView.setQuery(searching, true);
-        }
+        final String search = searching;
+        view.post(new RunnableEx("contacts:search") {
+            @Override
+            public void delegate() {
+                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                    return;
+
+                if (TextUtils.isEmpty(search))
+                    menuSearch.collapseActionView();
+                else {
+                    menuSearch.expandActionView();
+                    searchView.setQuery(search, true);
+                }
+            }
+        });
 
         getViewLifecycleOwner().getLifecycle().addObserver(new LifecycleObserver() {
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
@@ -222,7 +234,7 @@ public class FragmentContacts extends FragmentBase {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (getView() != null) {
+                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
                     searching = newText;
                     adapter.search(newText);
                 }
@@ -231,8 +243,10 @@ public class FragmentContacts extends FragmentBase {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searching = query;
-                adapter.search(query);
+                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                    searching = query;
+                    adapter.search(query);
+                }
                 return true;
             }
         });
@@ -483,6 +497,11 @@ public class FragmentContacts extends FragmentBase {
             }
 
             @Override
+            protected void onDestroyed(Bundle args) {
+                toast = null;
+            }
+
+            @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof NoStreamException)
                     ((NoStreamException) ex).report(getActivity());
@@ -574,6 +593,11 @@ public class FragmentContacts extends FragmentBase {
             @Override
             protected void onExecuted(Bundle args, Void data) {
                 ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onDestroyed(Bundle args) {
+                toast = null;
             }
 
             @Override

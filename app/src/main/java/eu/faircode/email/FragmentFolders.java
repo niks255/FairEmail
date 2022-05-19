@@ -604,12 +604,21 @@ public class FragmentFolders extends FragmentBase {
         SearchView searchView = (SearchView) menuSearch.getActionView();
         searchView.setQueryHint(getString(R.string.title_search));
 
-        if (TextUtils.isEmpty(searching))
-            menuSearch.collapseActionView();
-        else {
-            menuSearch.expandActionView();
-            searchView.setQuery(searching, true);
-        }
+        final String search = searching;
+        view.post(new RunnableEx("folders:search") {
+            @Override
+            public void delegate() {
+                if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                    return;
+
+                if (TextUtils.isEmpty(search))
+                    menuSearch.collapseActionView();
+                else {
+                    menuSearch.expandActionView();
+                    searchView.setQuery(search, true);
+                }
+            }
+        });
 
         getViewLifecycleOwner().getLifecycle().addObserver(new LifecycleObserver() {
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
@@ -622,7 +631,7 @@ public class FragmentFolders extends FragmentBase {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (getView() != null) {
+                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
                     searching = newText;
                     adapter.search(newText);
                 }
@@ -631,8 +640,10 @@ public class FragmentFolders extends FragmentBase {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searching = query;
-                adapter.search(query);
+                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                    searching = query;
+                    adapter.search(query);
+                }
                 return true;
             }
         });

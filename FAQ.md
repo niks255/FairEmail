@@ -1795,7 +1795,7 @@ The real battery usage can be seen by navigating to this screen:
 
 Alternatively: tap on the *App settings* button in the main settings screen of the app and tap on *Battery*.
 
-As a rule of thumb the battery usage should be below or in any case not be much higher than *Mobile network standby*.
+As a rule of thumb the battery usage should be below or in any case not be much higher than *Mobile network standby* for one account with a stable network connection.
 If this isn't the case, please turn on *Auto optimize* in the receive settings.
 If this doesn't help, please [ask for support](https://contact.faircode.eu/?product=fairemailsupport).
 
@@ -3779,6 +3779,9 @@ or by multiple selecting messages in the message list.
 Basically this is the same as "leave on server" of the POP3 protocol
 with the advantage that you can show the messages again when needed.
 
+Alternatively, you can disable AUTO EXPUNGE, which will result in marking messages being deleted on the server (by setting the *deleted* flag), but not expunging (deleting) them.
+You can find this option in the debug panel, which can be shown by (temporarily) enabling debug mode in the miscellaneous settings.
+
 Note that it is possible to set the swipe left or right action to hide a message.
 There is a button in the behavior settings to quickly configure the swipe left and right actions for all IMAP account.
 
@@ -4635,13 +4638,11 @@ There is no auto discovery for POP3.
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq175)
 
 If battery optimizations are enabled ([Doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby)),
-Android might stop the app, which will result in not sending and receiving messages anymore.
+Android will stop the app when it is running in the background, resulting in no more messages being sent and received in the background anymore.
 
-It shouldn't be necessary to disable battery optimizations,
-but unfortunately modifications by manufacturers often [require it anyway](https://dontkillmyapp.com/).
+Manufacturers also tweak Android rather often to stop apps in the background for ostensibly better battery life, please [see here](https://dontkillmyapp.com/) for more details.
 
 <br />
-
 
 <a name="faq176"></a>
 **(176) When will a message be considered safely transported?**
