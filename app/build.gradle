@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1899 }
+def getVersionCode = { -> return 1900 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Itemirus" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -163,7 +163,6 @@ android {
             buildConfigField "String", "CHANGELOG", "\"https://github.com/niks255/FairEmail/releases/\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"https://api.github.com/repos/niks255/fairemail/releases/latest\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"https://github.com/niks255/FairEmail/releases\""
-            buildConfigField "String", "LT_URI", "\"https://api.languagetool.org/v2/\""
             buildConfigField "String", "TX_URI", localProperties.getProperty("paypal.uri", "\"\"")
             buildConfigField "String", "GPA_URI", localProperties.getProperty("gpa.uri", "\"\"")
             buildConfigField "String", "INFO_URI", localProperties.getProperty("info.uri", "\"\"")
@@ -180,7 +179,6 @@ android {
             buildConfigField "String", "CHANGELOG", "\"https://github.com/M66B/FairEmail/releases/\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"https://api.github.com/repos/M66B/FairEmail/releases/latest\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"https://github.com/M66B/FairEmail/releases\""
-            buildConfigField "String", "LT_URI", "\"https://api.languagetool.org/v2/\""
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
@@ -198,7 +196,6 @@ android {
             buildConfigField "String", "CHANGELOG", "\"\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"\""
-            buildConfigField "String", "LT_URI", "\"\""
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
@@ -216,7 +213,6 @@ android {
             buildConfigField "String", "CHANGELOG", "\"\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"\""
-            buildConfigField "String", "LT_URI", "\"\""
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""

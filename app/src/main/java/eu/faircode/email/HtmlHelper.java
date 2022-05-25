@@ -1269,15 +1269,22 @@ public class HtmlHelper {
 
         // Lists
         for (Element e : document.select("ol,ul,blockquote")) {
+            Element parent = e.parent();
             if (view) {
-                Element parent = e.parent();
                 if ("blockquote".equals(e.tagName()) || parent == null ||
-                        !("ol".equals(parent.tagName()) || "ul".equals(parent.tagName()))) {
+                        !("li".equals(parent.tagName()) ||
+                                "ol".equals(parent.tagName()) ||
+                                "ul".equals(parent.tagName()))) {
                     if (!"false".equals(e.attr("x-line-before")))
                         e.attr("x-line-before", "true");
                     if (!"false".equals(e.attr("x-line-after")))
                         e.attr("x-line-after", "true");
                 }
+
+                // Unflatten list for viewing
+                if ((parent != null && "li".equals(parent.tagName())) &&
+                        ("ol".equals(e.tagName()) || "ul".equals(e.tagName())))
+                    e.attr("x-list-level", "false");
             } else {
                 if (!BuildConfig.DEBUG) {
                     String style = e.attr("style");
@@ -1294,6 +1301,20 @@ public class HtmlHelper {
                         li.removeAttr("dir");
                     }
                     e.attr("dir", rtl > ltr ? "rtl" : "ltr");
+                }
+
+                // Flatten list for editor
+                if (parent != null && "li".equals(parent.tagName())) {
+                    List<Node> children = parent.childNodes();
+                    for (Node child : children) {
+                        child.remove();
+                        if (child instanceof Element &&
+                                "ol".equals(child.nodeName()) || "ul".equals(child.nodeName()))
+                            parent.before(child);
+                        else
+                            parent.before(parent.shallowClone().appendChild(child));
+                    }
+                    parent.remove();
                 }
             }
         }
@@ -3367,7 +3388,8 @@ public class HtmlHelper {
                                 Element parent = element.parent();
                                 while (parent != null) {
                                     if ("ol".equals(parent.tagName()) || "ul".equals(parent.tagName())) {
-                                        level++;
+                                        if (!"false".equals(parent.attr("x-list-level")))
+                                            level++;
                                         if (list == null)
                                             list = parent;
                                         if (TextUtils.isEmpty(ltype))
@@ -3598,6 +3620,7 @@ public class HtmlHelper {
                 .removeAttr("x-tracking")
                 .removeAttr("x-border")
                 .removeAttr("x-list-style")
+                .removeAttr("x-list-level")
                 .removeAttr("x-plain")
                 .remove("x-keep-line");
     }

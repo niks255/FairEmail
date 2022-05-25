@@ -6881,7 +6881,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         boolean contacts = Helper.hasPermission(context, Manifest.permission.READ_CONTACTS);
         boolean avatars = prefs.getBoolean("avatars", true);
         boolean bimi = prefs.getBoolean("bimi", false);
-        boolean efavicons = (prefs.getBoolean("efavicons", false) && !BuildConfig.PLAY_STORE_RELEASE);
+        boolean gravatars = prefs.getBoolean("gravatars", false);
+        boolean libravatars = prefs.getBoolean("libravatars", false);
         boolean favicons = prefs.getBoolean("favicons", false);
         boolean generated = prefs.getBoolean("generated_icons", true);
 
@@ -6893,7 +6894,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.threading_unread = threading && prefs.getBoolean("threading_unread", false);
         this.indentation = prefs.getBoolean("indentation", false);
 
-        this.avatars = (contacts && avatars) || (bimi || efavicons || favicons || generated);
+        this.avatars = (contacts && avatars) || (bimi || gravatars || libravatars || favicons || generated);
         this.color_stripe = prefs.getBoolean("color_stripe", true);
         this.check_authentication = prefs.getBoolean("check_authentication", true);
         this.check_tls = prefs.getBoolean("check_tls", true);
@@ -7724,13 +7725,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     @Override
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
         // View will become visible (possibly without rebinding)
-        holder.cowner.start();
+        //holder.cowner.start();
     }
 
     @Override
     public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
         // View is invisible, but can be reused (without rebinding)
-        holder.cowner.stop();
+        //holder.cowner.stop();
     }
 
     @Override

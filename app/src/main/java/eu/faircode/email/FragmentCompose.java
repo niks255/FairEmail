@@ -741,27 +741,39 @@ public class FragmentCompose extends FragmentBase {
 
                         boolean renum = false;
                         BulletSpan[] bullets = text.getSpans(added + 1, added + 1, BulletSpan.class);
+
+                        int len = 0;
+                        BulletSpan shortest = null;
                         for (BulletSpan span : bullets) {
                             int s = text.getSpanStart(span);
                             int e = text.getSpanEnd(span);
-                            int f = text.getSpanFlags(span) | Spanned.SPAN_PARAGRAPH;
-                            Log.i(span + " " + s + "..." + e + " added=" + added);
+                            if (shortest == null || e - s < len) {
+                                shortest = span;
+                                len = e - s;
+                            }
+                        }
+
+                        if (shortest != null) {
+                            int s = text.getSpanStart(shortest);
+                            int e = text.getSpanEnd(shortest);
+                            int f = text.getSpanFlags(shortest) | Spanned.SPAN_PARAGRAPH;
+                            Log.i(shortest + " " + s + "..." + e + " added=" + added);
 
                             if (s > 0 &&
                                     added + 1 > s && e > added + 1 &&
                                     text.charAt(s - 1) == '\n' && text.charAt(e - 1) == '\n') {
                                 if (e - s > 2) {
-                                    BulletSpan b1 = StyleHelper.clone(span, span.getClass(), etBody.getContext());
+                                    BulletSpan b1 = StyleHelper.clone(shortest, shortest.getClass(), etBody.getContext());
                                     text.setSpan(b1, s, added + 1, f);
-                                    Log.i(span + " " + s + "..." + (added + 1));
+                                    Log.i(shortest + " " + s + "..." + (added + 1));
 
-                                    BulletSpan b2 = StyleHelper.clone(b1, span.getClass(), etBody.getContext());
+                                    BulletSpan b2 = StyleHelper.clone(b1, shortest.getClass(), etBody.getContext());
                                     text.setSpan(b2, added + 1, e, f);
-                                    Log.i(span + " " + (added + 1) + "..." + e);
+                                    Log.i(shortest + " " + (added + 1) + "..." + e);
                                 }
 
                                 renum = true;
-                                text.removeSpan(span);
+                                text.removeSpan(shortest);
                             }
                         }
 
@@ -1817,14 +1829,13 @@ public class FragmentCompose extends FragmentBase {
         for (int i = 0; i < m.size(); i++)
             bottom_navigation.findViewById(m.getItem(i).getItemId()).setOnLongClickListener(null);
 
-        if (!BuildConfig.PLAY_STORE_RELEASE)
-            bottom_navigation.findViewById(R.id.action_save).setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    onLanguageTool();
-                    return true;
-                }
-            });
+        bottom_navigation.findViewById(R.id.action_save).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                onLanguageTool();
+                return true;
+            }
+        });
 
         bottom_navigation.findViewById(R.id.action_send).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -2410,7 +2421,7 @@ public class FragmentCompose extends FragmentBase {
         Bundle args = new Bundle();
         args.putCharSequence("text", etBody.getText());
 
-        new SimpleTask<List<LT.Suggestion>>() {
+        new SimpleTask<List<LanguageTool.Suggestion>>() {
             private Toast toast = null;
 
             @Override
@@ -2428,13 +2439,13 @@ public class FragmentCompose extends FragmentBase {
             }
 
             @Override
-            protected List<LT.Suggestion> onExecute(Context context, Bundle args) throws Throwable {
+            protected List<LanguageTool.Suggestion> onExecute(Context context, Bundle args) throws Throwable {
                 CharSequence text = args.getCharSequence("text").toString();
-                return LT.getSuggestions(context, text);
+                return LanguageTool.getSuggestions(context, text);
             }
 
             @Override
-            protected void onExecuted(Bundle args, List<LT.Suggestion> suggestions) {
+            protected void onExecuted(Bundle args, List<LanguageTool.Suggestion> suggestions) {
                 if (suggestions == null || suggestions.size() == 0) {
                     ToastEx.makeText(getContext(), R.string.title_suggestions_none, Toast.LENGTH_LONG).show();
                     return;
@@ -2450,7 +2461,7 @@ public class FragmentCompose extends FragmentBase {
                     edit.removeSpan(span);
                 }
 
-                for (LT.Suggestion suggestion : suggestions) {
+                for (LanguageTool.Suggestion suggestion : suggestions) {
                     Log.i("LT adding=" + suggestion);
                     SuggestionSpan span = new SuggestionSpanEx(getContext(),
                             suggestion.replacements.toArray(new String[0]),

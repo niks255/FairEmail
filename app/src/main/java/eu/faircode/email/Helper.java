@@ -184,6 +184,8 @@ public class Helper {
     static final String SUPPORT_URI = "https://contact.faircode.eu/";
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
     static final String BIMI_PRIVACY_URI = "https://datatracker.ietf.org/doc/html/draft-brotman-ietf-bimi-guidance-03#section-7.4";
+    static final String GRAVATAR_PRIVACY_URI = "https://automattic.com/privacy/";
+    static final String LIBRAVATAR_PRIVACY_URI = "https://www.libravatar.org/privacy/";
     static final String ID_COMMAND_URI = "https://datatracker.ietf.org/doc/html/rfc2971#section-3.1";
     static final String AUTH_RESULTS_URI = "https://datatracker.ietf.org/doc/html/rfc7601";
     static final String FAVICON_PRIVACY_URI = "https://en.wikipedia.org/wiki/Favicon";
@@ -1229,7 +1231,7 @@ public class Helper {
 
     static void excludeFromRecents(Context context) {
         try {
-            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager am = Helper.getSystemService(context, ActivityManager.class);
             if (am == null)
                 return;
 
@@ -1298,7 +1300,8 @@ public class Helper {
                         SelectionTracker.class.isAssignableFrom(type) ||
                         SelectionTracker.SelectionPredicate.class.isAssignableFrom(type) ||
                         PagerAdapter.class.isAssignableFrom(type) ||
-                        RecyclerView.Adapter.class.isAssignableFrom(type))
+                        RecyclerView.Adapter.class.isAssignableFrom(type) ||
+                        TwoStateOwner.class.isAssignableFrom(type))
                     try {
                         Log.i("Clearing " + fname);
 
@@ -2667,7 +2670,7 @@ public class Helper {
     }
 
     static void clearAll(Context context) {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = Helper.getSystemService(context, ActivityManager.class);
         am.clearApplicationUserData();
     }
 }
