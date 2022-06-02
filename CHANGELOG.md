@@ -4,6 +4,30 @@
 
 ### [Itemirus](https://en.wikipedia.org/wiki/Itemirus)
 
+### 1.1904 - 2022-05-30
+
+* Fixed duplicate archived Gmail drafts
+
+### 1.1903 - 2022-05-30
+
+* Fixed archiving/trashing Gmail drafts
+* Auto block sender on moving (as opposed to reporting) messages to spam
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1902 - 2022-05-29
+
+* Fixed memory leak in some scenarios
+* Fixed persistent loading spinner in some situations
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.1901 - 2022-05-27
+
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1900 - 2022-05-25
 
 * Fixed mini gallery not showing in some cases

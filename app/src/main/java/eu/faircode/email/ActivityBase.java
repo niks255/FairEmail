@@ -21,9 +21,11 @@ package eu.faircode.email;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -38,6 +40,7 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -76,6 +79,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     private boolean visible;
     private boolean contacts;
     private List<IKeyPressedListener> keyPressedListeners = new ArrayList<>();
+    private List<BroadcastReceiver> registeredReceivers = new ArrayList<>();
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -285,6 +289,37 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     }
 
     @Override
+    public boolean onPreparePanel(int featureId, @Nullable View view, @NonNull Menu menu) {
+        try {
+            return super.onPreparePanel(featureId, view, menu);
+        } catch (Throwable ex) {
+            /*
+                This should never happen, but ...
+                java.lang.NullPointerException: Attempt to invoke interface method 'android.view.MenuItem android.view.MenuItem.setEnabled(boolean)' on a null object reference
+                    at eu.faircode.email.FragmentCompose.onPrepareOptionsMenu(SourceFile:3)
+                    at androidx.fragment.app.Fragment.performPrepareOptionsMenu(SourceFile:3)
+                    at androidx.fragment.app.FragmentManager.dispatchPrepareOptionsMenu(SourceFile:3)
+                    at androidx.fragment.app.FragmentManager$2.onPrepareMenu(Unknown Source:2)
+                    at androidx.core.view.MenuHostHelper.onPrepareMenu(SourceFile:2)
+                    at androidx.activity.ComponentActivity.onPrepareOptionsMenu(SourceFile:2)
+                    at android.app.Activity.onPreparePanel(Activity.java:3391)
+                    at androidx.appcompat.view.WindowCallbackWrapper.onPreparePanel(Unknown Source:2)
+                    at androidx.appcompat.app.AppCompatDelegateImpl$AppCompatWindowCallback.onPreparePanel(SourceFile:4)
+                    at androidx.appcompat.app.AppCompatDelegateImpl.preparePanel(SourceFile:28)
+                    at androidx.appcompat.app.AppCompatDelegateImpl.doInvalidatePanelMenu(SourceFile:14)
+                    at androidx.appcompat.app.AppCompatDelegateImpl$2.run(SourceFile:2)
+                    at android.view.Choreographer$CallbackRecord.run(Choreographer.java:948)
+                    at android.view.Choreographer.doCallbacks(Choreographer.java:750)
+                    at android.view.Choreographer.doFrame(Choreographer.java:679)
+                    at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:934)
+                    at android.os.Handler.handleCallback(Handler.java:869)
+             */
+            Log.e(ex);
+            return false;
+        }
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         Log.d("Config " + this.getClass().getName());
         super.onConfigurationChanged(newConfig);
@@ -316,11 +351,49 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     }
 
     @Override
+    public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
+        registeredReceivers.add(receiver);
+        return super.registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter, int flags) {
+        registeredReceivers.add(receiver);
+        return super.registerReceiver(receiver, filter, flags);
+    }
+
+    @Override
+    public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter, @Nullable String broadcastPermission, @Nullable Handler scheduler) {
+        registeredReceivers.add(receiver);
+        return super.registerReceiver(receiver, filter, broadcastPermission, scheduler);
+    }
+
+    @Override
+    public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter, @Nullable String broadcastPermission, @Nullable Handler scheduler, int flags) {
+        registeredReceivers.add(receiver);
+        return super.registerReceiver(receiver, filter, broadcastPermission, scheduler, flags);
+    }
+
+    @Override
+    public void unregisterReceiver(BroadcastReceiver receiver) {
+        super.unregisterReceiver(receiver);
+        registeredReceivers.remove(receiver);
+    }
+
+    @Override
     protected void onDestroy() {
         Log.i("Destroy " + this.getClass().getName());
         PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
         try {
             getSupportFragmentManager().unregisterFragmentLifecycleCallbacks(lifecycleCallbacks);
+
+            Log.i(this.getClass() + " receivers leaking=" + registeredReceivers.size());
+            for (BroadcastReceiver receiver : registeredReceivers) {
+                Log.e(this.getClass() + " receiver leaking class=" + receiver.getClass());
+                unregisterReceiver(receiver);
+            }
+            registeredReceivers.clear();
+
             super.onDestroy();
             originalContext = null;
         } catch (Throwable ex) {

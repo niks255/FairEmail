@@ -981,15 +981,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         rvMessage.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
                 if (dy != 0) {
-                    boolean down = (dy > 0);
+                    boolean down = (dy > 0 && rv.canScrollVertically(RecyclerView.FOCUS_DOWN));
                     if (scrolling != down) {
                         scrolling = down;
                         if (!accessibility &&
                                 (viewType == AdapterMessage.ViewType.UNIFIED ||
                                         viewType == AdapterMessage.ViewType.FOLDER))
-                            if (dy > 0)
+                            if (down)
                                 fabCompose.hide();
                             else
                                 fabCompose.show();
@@ -5982,6 +5982,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 getContext(), getViewLifecycleOwner(),
                 viewType, type, account, folder, thread, id, threading, filter_archive, criteria, server);
 
+        initialized = false;
+        loading = false;
         vmodel.setCallback(getViewLifecycleOwner(), callback);
         vmodel.setObserver(getViewLifecycleOwner(), observer);
     }
@@ -8836,7 +8838,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             throw new IllegalArgumentException(context.getString(R.string.title_no_junk_folder));
 
                         if (!message.folder.equals(junk.id))
-                            EntityOperation.queue(context, message, EntityOperation.MOVE, junk.id);
+                            EntityOperation.queue(context, message, EntityOperation.MOVE, junk.id, null, null, true);
 
                         if (block_domain) {
                             List<EntityRule> rules = EntityRule.blockSender(context, message, junk, block_domain);

@@ -142,8 +142,14 @@ public class PgpHelper {
         }
 
         Log.i("PGP bound=" + pgpService.isBound());
-        if (!pgpService.isBound())
+        if (!pgpService.isBound()) {
+            try {
+                pgpService.unbindFromService();
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
             throw new OperationCanceledException();
+        }
 
         return pgpService;
     }
