@@ -105,6 +105,11 @@
     </string>
     <string name="title_blocked_senders">Blocked senders</string>
 
+    <plurals name="title_ask_block_sender">
+        <item quantity="one">Block sender of %1$s message?</item>
+        <item quantity="other">Block sender of %1$s messages?</item>
+    </plurals>
+
     <string name="title_junk_filter">Use local spam filter</string>
     <string name="title_junk_filter_hint">This can increase battery usage and incorrectly mark messages as spam</string>
     <string name="title_junk_blocklist">Use spam block lists</string>
@@ -782,6 +787,7 @@
     <string name="title_advanced_font_map" translatable="false">Font map</string>
     <string name="title_advanced_ciphers" translatable="false">Ciphers</string>
     <string name="title_advanced_files" translatable="false">Files &gt;%1$s</string>
+    <string name="title_advanced_uris" translatable="false">URIs</string>
     <string name="title_advanced_all_permissions" translatable="false">All permissions</string>
 
     <string name="title_advanced_manual_hint">If receiving messages is disabled, it is still possible to manually receive messages by pulling down the message list</string>
@@ -820,7 +826,7 @@
     <string name="title_advanced_rlah_hint">Assuming no roaming within the EU</string>
     <string name="title_advanced_usage_hint">This will increase battery, data and storage space usage</string>
     <string name="title_advanced_plain_hint">Enabling this will limit data usage, but messages will be shown without styling</string>
-    <string name="title_advanced_tcp_keep_alive_hint">Enabling this can cause connection problems on some devices</string>
+    <string name="title_advanced_tcp_keep_alive_hint">Enabling this can cause connection problems on some devices and may increase battery usage</string>
     <string name="title_advanced_validate_hint">This can result in not synchronizing messages, for example when using a VPN, but also in other situations</string>
     <string name="title_advanced_timeout_hint">The read/write timeout will be set to the double of the connection timeout. Higher values will result in more battery use.</string>
     <string name="title_advanced_cert_strict_hint">Disabling this will relax checking of server certificates</string>
@@ -864,6 +870,7 @@
     <string name="title_advanced_display_hidden_hint">This can result in odd looking and double texts</string>
     <string name="title_advanced_display_pin_hint">A PIN takes precedence over biometrics authentication</string>
     <string name="title_advanced_display_autolock_nav_hint">There will be a grace time of %1$d seconds</string>
+    <string name="title_advanced_user_agent_hint">Some servers do not accept a generic user agent string</string>
     <string name="title_advanced_safe_browsing_hint">The Google server knows which addresses are being looked up</string>
 
     <string name="title_advanced_badge_hint">Only available on supported launchers</string>
@@ -946,6 +953,7 @@
     <string name="title_encryption_none">None</string>
     <string name="title_allow_insecure">Allow insecure connections</string>
     <string name="title_insecure_remark">Insecure connections should only be allowed on trusted networks and never on public networks</string>
+    <string name="title_notify_remark">You can enable this for account specific notifications</string>
     <string name="title_port">Port number</string>
     <string name="title_user">User name</string>
     <string name="title_password">Password</string>
@@ -1379,6 +1387,10 @@
     <string name="title_style_code" translatable="false">Code</string>
     <string name="title_style_clear">Clear formatting</string>
     <string name="title_style_link">Insert link</string>
+    <string name="title_style_link_address">Address</string>
+    <string name="title_style_link_title">Title</string>
+    <string name="title_style_link_metadata">Fetch title</string>
+    <string name="title_style_link_metadata_remark">This will fetch the title at the entered address</string>
 
     <string name="title_add_image">Add image</string>
     <string name="title_add_image_inline">Insert</string>

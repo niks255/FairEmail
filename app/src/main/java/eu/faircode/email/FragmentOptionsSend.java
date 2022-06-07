@@ -63,7 +63,6 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
     private SwitchCompat swSuggestReceived;
     private SwitchCompat swSuggestFrequently;
     private Button btnLocalContacts;
-    private Button btnBlockedSenders;
     private SwitchCompat swAutoIdentity;
     private SwitchCompat swSendChips;
     private SwitchCompat swSendReminders;
@@ -142,7 +141,6 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         swSuggestReceived = view.findViewById(R.id.swSuggestReceived);
         swSuggestFrequently = view.findViewById(R.id.swSuggestFrequently);
         btnLocalContacts = view.findViewById(R.id.btnLocalContacts);
-        btnBlockedSenders = view.findViewById(R.id.btnBlockedSenders);
         swAutoIdentity = view.findViewById(R.id.swAutoIdentity);
         swSendChips = view.findViewById(R.id.swSendChips);
         swSendReminders = view.findViewById(R.id.swSendReminders);
@@ -263,15 +261,6 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             public void onClick(View v) {
                 LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
                 lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_MANAGE_LOCAL_CONTACTS));
-            }
-        });
-
-        btnBlockedSenders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
-                lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_MANAGE_LOCAL_CONTACTS)
-                        .putExtra("junk", true));
             }
         });
 
@@ -751,9 +740,14 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         if (uri == null) // no/silent sound
             prefs.edit().remove("sound_sent").apply();
         else {
-            if ("content".equals(uri.getScheme()))
+            if ("content".equals(uri.getScheme())) {
+                try {
+                    getContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
                 prefs.edit().putString("sound_sent", uri.toString()).apply();
-            else
+            } else
                 prefs.edit().remove("sound_sent").apply();
         }
     }

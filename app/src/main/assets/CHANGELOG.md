@@ -2,6 +2,34 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Juratyrant](https://en.wikipedia.org/wiki/Juratyrant)
+
+### 1.1907 - 2022-06-07
+
+* Fixed deleted POP3 messages reappearing
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1906 - 2022-06-06
+
+* Added POP3 swipe action to report spam / block sender
+* Added POP3 report spam / block sender for multiple selected messages
+* Added check to prevent blocking self
+* Added suffix guessing on adding attachments
+* Fixed startup issue for some devices / Android versions
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1905 - 2022-06-03
+
+* Added print selected text
+* Added quick actions unread and permanent deletion
+* Added Turkish and Indonesian to DeepL languages
+* Added auto fixing filename suffix on adding image attachments
+* Improved insert link dialog
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### [Itemirus](https://en.wikipedia.org/wiki/Itemirus)
 
 ### 1.1904 - 2022-05-30

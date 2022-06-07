@@ -117,6 +117,7 @@ public class FragmentAccount extends FragmentBase {
     private TextView tvLeave;
     private CheckBox cbPrimary;
     private CheckBox cbNotify;
+    private TextView tvNotifyRemark;
     private TextView tvNotifyPro;
     private CheckBox cbBrowse;
     private CheckBox cbAutoSeen;
@@ -226,6 +227,7 @@ public class FragmentAccount extends FragmentBase {
         tvLeave = view.findViewById(R.id.tvLeave);
         cbPrimary = view.findViewById(R.id.cbPrimary);
         cbNotify = view.findViewById(R.id.cbNotify);
+        tvNotifyRemark = view.findViewById(R.id.tvNotifyRemark);
         tvNotifyPro = view.findViewById(R.id.tvNotifyPro);
         cbBrowse = view.findViewById(R.id.cbBrowse);
         cbAutoSeen = view.findViewById(R.id.cbAutoSeen);
@@ -459,8 +461,16 @@ public class FragmentAccount extends FragmentBase {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             Helper.hide(cbNotify);
+            Helper.hide(tvNotifyRemark);
             Helper.hide(view.findViewById(R.id.tvNotifyPro));
         }
+
+        tvNotifyRemark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 145);
+            }
+        });
 
         Helper.linkPro(tvNotifyPro);
 
@@ -1652,7 +1662,10 @@ public class FragmentAccount extends FragmentBase {
                                         fragment = new FragmentGmail();
                                     else if (auth == AUTH_TYPE_OAUTH)
                                         fragment = new FragmentOAuth();
-                                    else {
+                                    else if (auth == AUTH_TYPE_PASSWORD) {
+                                        onPassword();
+                                        return;
+                                    } else {
                                         Log.e("Unknown auth=" + auth);
                                         return;
                                     }

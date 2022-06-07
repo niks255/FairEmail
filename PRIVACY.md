@@ -1,8 +1,14 @@
 # Privacy policy
 
-<sub>[&#x1F30E; Google Translate](https://translate.google.com/translate?hl=&sl=en&u=https%3A%2F%2Fgithub.com%2FM66B%2FFairEmail%2Fblob%2Fmaster%2FPRIVACY.md)</sub>
+[&#x1F30E; Google Translate](https://translate.google.com/translate?hl=&sl=en&u=https%3A%2F%2Fgithub.com%2FM66B%2FFairEmail%2Fblob%2Fmaster%2FPRIVACY.md)
 
 <br />
+
+First of all, FairEmail's main goal is to help you protect your privacy.
+What follows is a complete overview of all the data that **can be** sent to the internet,
+which in the end is always your choice and therefore optional (except of course connecting to the email server).
+
+Except for error reports (disabled by default), the app does not send any data to the developer.
 
 ## Overview
 
@@ -29,14 +35,18 @@ FairEmail **can use** these services if they are explicitly enabled (off by defa
 * [Spamcop](https://www.spamcop.net/) &#8211; [Privacy policy](https://www.spamcop.net/fom-serve/cache/168.html)
 * [Barracuda](https://www.barracudacentral.org/rbl/how-to-use) &#8211; [Privacy policy](https://www.barracuda.com/company/legal/trust-center/data-privacy/privacy-policy)
 * [Thunderbird autoconfiguration](https://wiki.mozilla.org/Thunderbird:Autoconfiguration) &#8211; [Privacy policy](https://www.mozilla.org/privacy/)
+* [DeepL](https://www.deepl.com/) &#8211; [Privacy policy](https://www.deepl.com/privacy/)
 * [LanguageTool](https://languagetool.org/) &#8211; [Privacy policy](https://languagetool.org/legal/privacy)
 * [Gravatar](https://gravatar.com/) &#8211; [Privacy policy](https://automattic.com/privacy/)
 * [Libravatar](https://www.libravatar.org/)  &#8211; [Privacy policy](https://www.libravatar.org/privacy/)
+* [GitHub](https://github.com/) &#8211; [Privacy policy](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement)
 
 FairEmail **can access** the websites at the domain names of email addresses (username@domain.name)
 if [Brand Indicators for Message Identification](https://en.wikipedia.org/wiki/Brand_Indicators_for_Message_Identification) (BIMI)
 or [favicons](https://en.wikipedia.org/wiki/Favicon)
 were explicitly enabled (off by default).
+
+FairEmail **will access** the website at the link address if you tap the *Fetch title* button in the insert link dialog (from version 1.1905).
 
 FairEmail obviously **will access** the configured email servers.
 
@@ -48,7 +58,7 @@ FairEmail **is** [GDPR compliant](https://gdpr.eu/).
 
 This table provides a complete overview of all shared data and the conditions under which data will be shared:
 
-| Service           | Data sent                                                         | When the data will be sent                                                  |
+| Service/function  | Data sent                                                         | When the data will be sent                                                  |
 | ----------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | Mozilla autoconfig| Email address of email accounts                                   | Upon configuring an email account                                           |
 | Email server      | Login credentials, messages sent                                  | Upon configuring and using an account or identity and upon sending messages |
@@ -56,15 +66,23 @@ This table provides a complete overview of all shared data and the conditions un
 | Spamhaus          | IP (network) address of domain names of links or email addresses  | If spam blocklists are enabled, upon receiving a message                    |
 | Spamcop           | IP (network) address of domain names of links or email addresses  | If spam blocklists are enabled, upon receiving a message                    |
 | Barracuda         | IP (network) address of domain names of links or email addresses  | If spam blocklists are enabled, upon receiving a message                    |
+| DeepL             | Received or entered message text and target language code         | Upon pressing a translate button                                            |
 | LanguageTool      | Entered message texts                                             | Upon long pressing the save draft button                                    |
 | Gravatar          | [MD5 hash](https://en.wikipedia.org/wiki/MD5) of email addresses  | If Gravatars are enabled, upon receiving a message                          |
 | Libravatar        | [MD5 hash](https://en.wikipedia.org/wiki/MD5) of email addresses  | If Libravatars are enabled, upon receiving a message                        |
+| GitHub            | None, but see the remarks below                                   | Upon downloading Disconnect's Tracker Protection lists                      |
+|                   |                                                                   | Upon checking for updates (GitHub version only)                             |
 | BIMI              | Domain name of email addresses                                    | If BIMI is enabled, upon receiving a message                                |
 | Favicons          | Domain name of email addresses                                    | If favicons are enabled, upon receiving a message                           |
+| Link title        | Link address                                                      | Upon pressing a button in the insert link dialog                            |
 | Bugsnag           | Information about warnings and errors                             | If error reporting is enabled, upon detecting an abnormal situation         |
 
 All data is sent to improve the user experience in some way,
 like to simplify account setup, identify spam and malicious messages, display message and sender information, find bugs and errors, etc.
+
+Note that any internet connection reveals your current [network address](https://en.wikipedia.org/wiki/Network_address).
+Also, when downloading content, like images and files, the [browser's user agent string](https://en.wikipedia.org/wiki/User_agent) will be sent.
+There is a privacy option to minimize the information being sent, but please be aware that this can result in problems in some cases.
 
 <br />
 
@@ -127,12 +145,7 @@ The data subject's data is sent to and processed by sub-processors if and only i
 
 The sub-processors are:
 
-* [ipinfo.io](https://ipinfo.io/) &#8211; [Privacy policy](https://ipinfo.io/privacy-policy)
-* [Spamhaus](https://www.spamhaus.org/) &#8211; [Privacy policy](https://www.spamhaus.org/organization/privacy/)
-* [Spamcop](https://www.spamcop.net/) &#8211; [Privacy policy](https://www.spamcop.net/fom-serve/cache/168.html)
-* [Barracuda](https://www.barracudacentral.org/rbl/how-to-use) &#8211; [Privacy policy](https://www.barracuda.com/company/legal/trust-center/data-privacy/privacy-policy)
-* [Thunderbird autoconfiguration](https://wiki.mozilla.org/Thunderbird:Autoconfiguration) &#8211; [Privacy policy](https://www.mozilla.org/privacy/)
-* [LanguageTool](https://languagetool.org/) &#8211; [Privacy policy](https://languagetool.org/legal/privacy)
+* [Bugsnag](https://www.bugsnag.com/) &#8211; [Privacy policy](https://docs.bugsnag.com/legal/privacy-policy/)
 
 ### V. Permissions
 

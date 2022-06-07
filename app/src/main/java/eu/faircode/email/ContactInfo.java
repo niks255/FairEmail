@@ -35,7 +35,6 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Pair;
-import android.util.Xml;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -45,7 +44,6 @@ import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.xmlpull.v1.XmlPullParser;
 
 import java.io.BufferedOutputStream;
 import java.io.EOFException;
@@ -573,7 +571,7 @@ public class ContactInfo {
                 return true;
             }
         });
-        connection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
+        ConnectionHelper.setUserAgent(context, connection);
         connection.connect();
 
         Document doc;
@@ -629,7 +627,7 @@ public class ContactInfo {
                     m.setReadTimeout(FAVICON_READ_TIMEOUT);
                     m.setConnectTimeout(FAVICON_CONNECT_TIMEOUT);
                     m.setInstanceFollowRedirects(true);
-                    m.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
+                    ConnectionHelper.setUserAgent(context, m);
                     m.connect();
 
                     try {
@@ -861,7 +859,7 @@ public class ContactInfo {
                 return true;
             }
         });
-        connection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
+        ConnectionHelper.setUserAgent(context, connection);
         connection.connect();
 
         try {
@@ -890,7 +888,7 @@ public class ContactInfo {
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setReadTimeout(GRAVATAR_READ_TIMEOUT);
                 urlConnection.setConnectTimeout(GRAVATAR_CONNECT_TIMEOUT);
-                urlConnection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
+                ConnectionHelper.setUserAgent(context, urlConnection);
                 urlConnection.connect();
 
                 try {
@@ -936,7 +934,7 @@ public class ContactInfo {
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setReadTimeout(LIBRAVATAR_READ_TIMEOUT);
                 urlConnection.setConnectTimeout(LIBRAVATAR_CONNECT_TIMEOUT);
-                urlConnection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
+                ConnectionHelper.setUserAgent(context, urlConnection);
                 urlConnection.connect();
 
                 try {

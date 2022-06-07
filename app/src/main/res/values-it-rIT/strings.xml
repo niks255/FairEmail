@@ -82,6 +82,10 @@
         Il blocco del dominio di un mittente usa le regole del filtro, una funzionalità pro.
     </string>
     <string name="title_blocked_senders">Mittenti bloccati</string>
+    <plurals name="title_ask_block_sender">
+        <item quantity="one">Bloccare il mittente di %1$s messaggio?</item>
+        <item quantity="other">Bloccare il mittente di %1$s messaggi?</item>
+    </plurals>
     <string name="title_junk_filter">Usa filtro spam locale</string>
     <string name="title_junk_filter_hint">Questo può aumentare l\'uso della batteria e contrassegnare erroneamente i messaggi come spam</string>
     <string name="title_junk_blocklist">Usa le blacklist per lo spam</string>
@@ -660,7 +664,7 @@
     <string name="title_advanced_rlah_hint">Presumi che non ci sia roaming nell\'UE</string>
     <string name="title_advanced_usage_hint">Questo aumenterà l\'uso di batteria, dati e spazio d\'archiviazione</string>
     <string name="title_advanced_plain_hint">Abilitarlo limiterà l\'uso dei dati, ma i messaggi saranno mostrati senza stilizzazione</string>
-    <string name="title_advanced_tcp_keep_alive_hint">Abilitarlo può causare problemi di connessione su alcuni dispositivi</string>
+    <string name="title_advanced_tcp_keep_alive_hint">Abilitarlo può causare problemi di connessione su alcuni dispositivi e può aumentare l\'uso della batteria</string>
     <string name="title_advanced_validate_hint">Questo può risultare nel non sincronizzare i messaggi, ad esempio usando una VPN, ma anche altre situazioni</string>
     <string name="title_advanced_timeout_hint">Il timeout di lettura/scrittura sarà impostato al doppio del timeout di connessione. Valori superiori risulteranno in un maggiore uso della batteria.</string>
     <string name="title_advanced_cert_strict_hint">Disabilitarlo rilasserà la verifica dei certificati del server</string>
@@ -700,6 +704,7 @@
     <string name="title_advanced_display_hidden_hint">Questo può risultare in testi strani e doppi</string>
     <string name="title_advanced_display_pin_hint">Un PIN ha la precedenza sull\'autenticazione biometrica</string>
     <string name="title_advanced_display_autolock_nav_hint">Ci sarà una tolleranza di %1$d secondi</string>
+    <string name="title_advanced_user_agent_hint">Alcuni server non accettano una stringa di user agent generico</string>
     <string name="title_advanced_safe_browsing_hint">Il server di Google sa quali indirizzi sono cercati</string>
     <string name="title_advanced_badge_hint">Disponibile solo sui launcher supportati</string>
     <string name="title_advanced_notify_action_hint">Saranno mostrate al massimo tre azioni</string>
@@ -771,6 +776,7 @@
     <string name="title_encryption_none">Nessuno</string>
     <string name="title_allow_insecure">Consenti connessioni non sicure</string>
     <string name="title_insecure_remark">Le connessioni non sicure dovrebbero esser consentite solo su reti affidabili e mai sulle reti pubbliche</string>
+    <string name="title_notify_remark">Puoi abilitarlo per le notifiche specifiche del profilo</string>
     <string name="title_port">Numero di porta</string>
     <string name="title_user">Nome utente</string>
     <string name="title_password">Password</string>
@@ -1171,6 +1177,10 @@
     <string name="title_style_strikethrough">Barrato</string>
     <string name="title_style_clear">Cancella formattazione</string>
     <string name="title_style_link">Inserisci link</string>
+    <string name="title_style_link_address">Indirizzo</string>
+    <string name="title_style_link_title">Titolo</string>
+    <string name="title_style_link_metadata">Recupera titolo</string>
+    <string name="title_style_link_metadata_remark">Questo recupererà il titolo all\'indirizzo inserito</string>
     <string name="title_add_image">Aggiungi immagine</string>
     <string name="title_add_image_inline">Inserisci</string>
     <string name="title_add_image_attach">Allega</string>

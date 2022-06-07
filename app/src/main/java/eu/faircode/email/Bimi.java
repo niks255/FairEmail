@@ -136,7 +136,7 @@ public class Bimi {
                         connection.setReadTimeout(READ_TIMEOUT);
                         connection.setConnectTimeout(CONNECT_TIMEOUT);
                         connection.setInstanceFollowRedirects(true);
-                        connection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
+                        ConnectionHelper.setUserAgent(context, connection);
                         connection.connect();
 
                         try {
@@ -174,7 +174,7 @@ public class Bimi {
                         connection.setReadTimeout(READ_TIMEOUT);
                         connection.setConnectTimeout(CONNECT_TIMEOUT);
                         connection.setInstanceFollowRedirects(true);
-                        connection.setRequestProperty("User-Agent", WebViewEx.getUserAgent(context));
+                        ConnectionHelper.setUserAgent(context, connection);
                         connection.connect();
 
                         // Fetch PEM objects
@@ -222,9 +222,11 @@ public class Bimi {
 
                         // Check subject
                         boolean found = false;
+                        String root = UriHelper.getRootDomain(context, domain);
                         List<String> names = EntityCertificate.getDnsNames(cert);
                         for (String name : names)
-                            if (domain.endsWith(name.toLowerCase(Locale.ROOT))) {
+                            if (root != null &&
+                                    root.equalsIgnoreCase(UriHelper.getRootDomain(context, name))) {
                                 found = true;
                                 break;
                             }

@@ -2,6 +2,18 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Juratyrant](https://en.wikipedia.org/wiki/Juratyrant)
+
+### Next version
+
+* Added print selected text
+* Added quick actions unread and permanent deletion
+* Added Turkish and Indonesian to DeepL languages
+* Added auto fixing filename suffix on adding attachments
+* Improved insert link dialog
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### [Itemirus](https://en.wikipedia.org/wiki/Itemirus)
 
 ### 1.1904 - 2022-05-30
