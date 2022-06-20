@@ -4,6 +4,14 @@
 
 ### [Juratyrant](https://en.wikipedia.org/wiki/Juratyrant)
 
+### 1.1908 - 2022-06-09
+
+* Added searching for text in drafts
+* Added OAuth for Gmail POP3 accounts
+* Improved Android 13 compatibility (notification permissions)
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1907 - 2022-06-07
 
 * Fixed deleted POP3 messages reappearing

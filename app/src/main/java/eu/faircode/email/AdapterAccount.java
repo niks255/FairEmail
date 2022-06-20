@@ -394,14 +394,16 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_channel, order++, R.string.title_edit_channel);
             }
 
+            if (settings)
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_properties, order++, R.string.title_edit_properties);
+
             if (account.protocol == EntityAccount.TYPE_IMAP && settings)
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_copy, order++, R.string.title_copy);
 
-            if (settings)
+            if (settings) {
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, order++, R.string.title_delete);
-
-            if (settings)
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_log, order++, R.string.title_log);
+            }
 
             if (debug)
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_reset, order++, R.string.title_reset);
@@ -418,6 +420,9 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                         return true;
                     } else if (itemId == R.string.title_edit_channel) {
                         onActionEditChannel();
+                        return true;
+                    } else if (itemId == R.string.title_edit_properties) {
+                        ViewHolder.this.onClick(view);
                         return true;
                     } else if (itemId == R.string.title_copy) {
                         onActionCopy();

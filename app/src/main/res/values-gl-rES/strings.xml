@@ -148,7 +148,6 @@
     <string name="title_setup_gmail_rationale">Por favor, conceda permisos para seleccionar unha conta e ler o seu nome</string>
     <string name="title_setup_gmail_permissions">Google pedirá permisos para ler, redactar, enviar e borrar permanentemente todo o seu correo. FairEmail nunca eliminará as súas mensaxes sen o seu consentimento explícito.</string>
     <string name="title_setup_gmail_drafts">Se o cartafol de borradores non é accesible por IMAP, isto pódese solucionar na configuración de etiquetas de Gmail</string>
-    <string name="title_setup_gmail_password">Quero autorizar unha conta con un contrasinal</string>
     <string name="title_setup_office_auth">O erro \'AUTHENTICATE failed\' pode estar causado porque IMAP/SMTP estea desactivado polo administrador do sistema</string>
     <string name="title_setup_oauth_rationale">Autorizar o acceso á súa conta %1$s</string>
     <string name="title_setup_oauth_updated">A autorización da conta foi actualizada</string>
@@ -489,8 +488,6 @@
     <string name="title_advanced_notifications">Xestionar notificacións</string>
     <string name="title_advanced_notifications_default">Canal por omisión</string>
     <string name="title_advanced_notifications_newest_first">Amosar as notificacións novas primeiro</string>
-    <string name="title_advanced_notifications_background">Usar o servizo de fondo para sincronizar as mensaxes</string>
-    <string name="title_advanced_notifications_background_hint">Un servizo de fondo pode ser detido por Android en calquera momento, pero non require unha notificación na barra de estado</string>
     <string name="title_advanced_badge">Mostrar a icona de lanzamento co número de novas mensaxes</string>
     <string name="title_advanced_unseen_ignored">Facer que o número de novas mensaxes sexa o mesmo que o de notificacións</string>
     <string name="title_advanced_notify_background">Mostrar só as notificacións cando a aplicación estea de fondo</string>
@@ -520,9 +517,10 @@
     <string name="title_advanced_light">Usar a luz de notificación</string>
     <string name="title_advanced_sound">Seleccionar son de notificación</string>
     <string name="title_advanced_notify_screen_on">Acender brevemente a pantalla coas notificacións de nova mensaxe</string>
+    <string name="title_advanced_notifications_background">Usar o servizo de fondo para sincronizar as mensaxes</string>
+    <string name="title_advanced_notifications_background_hint">Un servizo de fondo pode ser detido por Android en calquera momento, pero non require unha notificación na barra de estado</string>
     <string name="title_advanced_confirm_links">Confirmar a apertura de ligazóns</string>
     <string name="title_advanced_check_links_dbl">Usa as listas de bloqueo de dominios cas ligazóns sospeitosas</string>
-    <string name="title_advanced_browse_links">Delegar a apertura de ligazóns a Android</string>
     <string name="title_advanced_confirm_images">Non mostrar imaxes por defecto</string>
     <string name="title_advanced_ask_images">Confirmar a mostra de imaxes</string>
     <string name="title_advanced_confirm_html">Mostrar por defecto as mensaxes reformatadas</string>
@@ -992,7 +990,6 @@
     <string name="title_reply_hard_bounce">Enviar unha notificación de rexeitamento</string>
     <string name="title_reply_template">Responder cun patrón</string>
     <string name="title_move_undo">Movendo a %1$s (%2$d)</string>
-    <string name="title_open_with">Abrir con</string>
     <string name="title_authentication_failed">Erro na autenticación %1$s</string>
     <string name="title_on_blocklist">Na lista de bloqueo de spam</string>
     <string name="title_receipt_subject">Acuse de recibo: %1$s</string>

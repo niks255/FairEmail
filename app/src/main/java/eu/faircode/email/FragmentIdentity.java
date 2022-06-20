@@ -36,7 +36,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,6 +54,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
@@ -491,16 +491,13 @@ public class FragmentIdentity extends FragmentBase {
             }
         });
 
-        addKeyPressedListener(new ActivityBase.IKeyPressedListener() {
+        setBackPressedCallback(new OnBackPressedCallback(true) {
             @Override
-            public boolean onKeyPressed(KeyEvent event) {
-                return false;
-            }
-
-            @Override
-            public boolean onBackPressed() {
-                onSave(true);
-                return true;
+            public void handleOnBackPressed() {
+                if (Helper.isKeyboardVisible(view))
+                    Helper.hideKeyboard(view);
+                else
+                    onSave(true);
             }
         });
 
@@ -1045,7 +1042,7 @@ public class FragmentIdentity extends FragmentBase {
                     fragment.setTargetFragment(FragmentIdentity.this, REQUEST_SAVE);
                     fragment.show(getParentFragmentManager(), "identity:save");
                 } else if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-                    getParentFragmentManager().popBackStack();
+                    finish();
             }
 
             @Override
@@ -1419,8 +1416,8 @@ public class FragmentIdentity extends FragmentBase {
                             }
                         });
                         onSave(false);
-                    } else if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-                        getParentFragmentManager().popBackStack();
+                    } else
+                        finish();
                     break;
                 case REQUEST_DELETE:
                     if (resultCode == RESULT_OK)
@@ -1461,8 +1458,7 @@ public class FragmentIdentity extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, Void data) {
-                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-                    getParentFragmentManager().popBackStack();
+                finish();
             }
 
             @Override

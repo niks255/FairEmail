@@ -107,8 +107,10 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                     EntityLog.log(ServiceSend.this, "Unsent=" + (unsent == null ? null : unsent.count));
 
                     try {
-                        NotificationManager nm = Helper.getSystemService(ServiceSend.this, NotificationManager.class);
-                        nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
+                        NotificationManager nm =
+                                Helper.getSystemService(ServiceSend.this, NotificationManager.class);
+                        if (NotificationHelper.areNotificationsEnabled(nm))
+                            nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
                     } catch (Throwable ex) {
                         Log.w(ex);
                     }
@@ -331,8 +333,10 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                 EntityLog.log(ServiceSend.this, "Service send suitable=" + suitable);
 
                 try {
-                    NotificationManager nm = Helper.getSystemService(ServiceSend.this, NotificationManager.class);
-                    nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
+                    NotificationManager nm =
+                            Helper.getSystemService(ServiceSend.this, NotificationManager.class);
+                    if (NotificationHelper.areNotificationsEnabled(nm))
+                        nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
                 } catch (Throwable ex) {
                     Log.w(ex);
                 }
@@ -430,10 +434,11 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                             try {
                                 int tries_left = (unrecoverable ? 0 : RETRY_MAX - op.tries);
                                 NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
-                                nm.notify("send:" + message.id,
-                                        NotificationHelper.NOTIFICATION_TAGGED,
-                                        getNotificationError(
-                                                MessageHelper.formatAddressesShort(message.to), ex, tries_left).build());
+                                if (NotificationHelper.areNotificationsEnabled(nm))
+                                    nm.notify("send:" + message.id,
+                                            NotificationHelper.NOTIFICATION_TAGGED,
+                                            getNotificationError(
+                                                    MessageHelper.formatAddressesShort(message.to), ex, tries_left).build());
                             } catch (Throwable ex1) {
                                 Log.w(ex1);
                             }
@@ -517,7 +522,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         }
 
         NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
-        nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(true));
+        if (NotificationHelper.areNotificationsEnabled(nm))
+            nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(true));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean reply_move = prefs.getBoolean("reply_move", false);
@@ -560,21 +566,24 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         Long sid = null;
         EntityFolder sent = null;
 
-        if (reply_move && !TextUtils.isEmpty(message.inreplyto)) {
-            List<EntityMessage> replied = db.message().getMessagesByMsgId(message.account, message.inreplyto);
-            if (replied != null)
-                for (EntityMessage m : replied)
-                    if (!m.ui_hide) {
-                        EntityFolder folder = db.folder().getFolder(m.folder);
-                        if (folder != null &&
-                                (EntityFolder.INBOX.equals(folder.type) ||
-                                        EntityFolder.ARCHIVE.equals(folder.type) ||
-                                        EntityFolder.USER.equals(folder.type))) {
-                            sent = folder;
-                            break;
+        if (reply_move && !TextUtils.isEmpty(message.inreplyto))
+            for (String inreplyto : message.inreplyto.split(" ")) {
+                List<EntityMessage> replied = db.message().getMessagesByMsgId(message.account, inreplyto);
+                if (replied != null)
+                    for (EntityMessage m : replied)
+                        if (!m.ui_hide) {
+                            EntityFolder folder = db.folder().getFolder(m.folder);
+                            if (folder != null &&
+                                    (EntityFolder.INBOX.equals(folder.type) ||
+                                            EntityFolder.ARCHIVE.equals(folder.type) ||
+                                            EntityFolder.USER.equals(folder.type))) {
+                                sent = folder;
+                                break;
+                            }
                         }
-                    }
-        }
+                if (sent != null)
+                    break;
+            }
 
         if (sent == null)
             sent = db.folder().getFolderByType(message.account, EntityFolder.SENT);
@@ -731,7 +740,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                         if (now > last + PROGRESS_UPDATE_INTERVAL) {
                             last = now;
                             lastProgress = progress;
-                            nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
+                            if (NotificationHelper.areNotificationsEnabled(nm))
+                                nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
                         }
                     }
                 }
@@ -772,7 +782,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             iservice.close();
             if (lastProgress >= 0) {
                 lastProgress = -1;
-                nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
+                if (NotificationHelper.areNotificationsEnabled(nm))
+                    nm.notify(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
             }
             db.identity().setIdentityState(ident.id, null);
         }
@@ -796,11 +807,12 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             }
 
             // Mark replied
-            if (message.inreplyto != null) {
-                List<EntityMessage> replieds = db.message().getMessagesByMsgId(message.account, message.inreplyto);
-                for (EntityMessage replied : replieds)
-                    EntityOperation.queue(this, replied, EntityOperation.ANSWERED, true);
-            }
+            if (message.inreplyto != null)
+                for (String inreplyto : message.inreplyto.split(" ")) {
+                    List<EntityMessage> replieds = db.message().getMessagesByMsgId(message.account, inreplyto);
+                    for (EntityMessage replied : replieds)
+                        EntityOperation.queue(this, replied, EntityOperation.ANSWERED, true);
+                }
 
             // Mark forwarded
             if (message.wasforwardedfrom != null) {

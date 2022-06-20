@@ -162,13 +162,14 @@
     <string name="title_setup_accounts">Korisnički Računi</string>
     <string name="title_setup_identities">Identiteti</string>
     <string name="title_setup_other">Drugi davatelj usluga</string>
+    <string name="title_setup_inbound">Samo dolazna e-pošta (e-pošta se ne može poslati!)</string>
     <string name="title_setup_pop3">POP3 račun</string>
     <string name="title_setup_oauth_permission">Davatelj usluge e-pošte odobrio je OAuth samo za verziju Play Store i GitHub</string>
     <string name="title_setup_gmail_support">Autorizacija Google računa funkcionirat će u Play Store i GitHub verziji samo zato što Android provjerava digitalni potpis programa</string>
     <string name="title_setup_gmail_rationale">Molimo dajte dopuštenje za izbor računa i čitanje vašeg imena</string>
     <string name="title_setup_gmail_permissions">Google će tražiti dopuštenja za čitanje, sastavljanje, slanje i trajno brisanje sve vaše e-pošte. FairEmail nikada neće izbrisati vaše poruke bez vašeg izričitog pristanka.</string>
     <string name="title_setup_gmail_drafts">Ako preko IMAP mapa skica nije dostupna, to se može popraviti u postavkama Gmail oznake</string>
-    <string name="title_setup_gmail_password">Želim lozinkom odobriti račun</string>
+    <string name="title_setup_gmail_password">Želim autorizirati račun lozinkom umjesto računa na uređaju</string>
     <string name="title_setup_office_auth">Greška \'AUTHENTICATE failed\' se može pojaviti ako je IMAP/SMTP isključen od strane administratora</string>
     <string name="title_setup_oauth_rationale">Autorizirajte pristup vašem %1$s računu</string>
     <string name="title_setup_oauth_update">Ponovno autoriziraj postojeći račun (inače stvori novi račun)</string>
@@ -194,6 +195,8 @@
     <string name="title_setup_permissions">Odobri dopuštenja</string>
     <string name="title_setup_permissions_remark">Pristup informacijama o kontaktu (izborno)</string>
     <string name="title_setup_permissions_explanation">Za traženje podataka o kontaktu i predlaganje kontakata potrebna su dopuštenja za kontakt</string>
+    <string name="title_setup_permissions_notify">Za prikaz obavijesti o novim porukama (izborno)</string>
+    <string name="title_setup_permissions_notify_explanation">Za prikazivanje obavijesti za nove poruke u statusnoj traci potrebna su dopuštenja za obavijesti</string>
     <string name="title_setup_permission_why">Koje dozvole su potrebne i zašto?</string>
     <string name="title_setup_permission_import_contacts">Kako mogu uvesti kontakte?</string>
     <string name="title_setup_doze">Onemogući optimizacije baterije</string>
@@ -217,6 +220,7 @@
     <string name="title_setup_still">Još treba učiniti</string>
     <string name="title_setup_error">Greška</string>
     <string name="title_setup_pop">Koristi POP3 (nije preporučeno)</string>
+    <string name="title_setup_recent">Koristi \"nedavno\" za više klijenata e-pošte</string>
     <string name="title_setup_configuring">Podešavanje računa &#8230;</string>
     <string name="title_setup_app_password">Možda ćete morati upotrijebiti zaporku aplikacije</string>
     <string name="title_setup_extra">Dodatno</string>
@@ -467,6 +471,7 @@
     <string name="title_advanced_message_text_zoom2">Zadano zumiranje teksta poruke: %1$s %%</string>
     <string name="title_advanced_overview_mode">Zumiraj izvorne poruke tako da stanu na zaslon</string>
     <string name="title_advanced_override_width">Onemogući fiksne širine u izvornim porukama</string>
+    <string name="title_advanced_hyphenation">Koristi automatsko umetanje crtica</string>
     <string name="title_advanced_contrast">Koristi visoki kontrast za tekst poruke</string>
     <string name="title_advanced_monospaced">Za tekst poruke prema zadanim postavkama koristi jednakoprostorni (monospace) font</string>
     <string name="title_advanced_monospaced_pre">Koristi jednakoprostorni (monospace) font za unaprijed formatirani tekst</string>
@@ -530,8 +535,6 @@
     <string name="title_advanced_notifications_default">Zadani kanal</string>
     <string name="title_advanced_notifications_service">Kanal za nadzor</string>
     <string name="title_advanced_notifications_newest_first">Najprije prikaži najnovije obavijesti</string>
-    <string name="title_advanced_notifications_background">Koristi pozadinski servis za sinkronizaciju poruka</string>
-    <string name="title_advanced_notifications_background_hint">Android može zaustaviti pozadinski servis bilo kada, ali ne zahtijeva obavijest na statusnoj traci</string>
     <string name="title_advanced_badge">Pokaži ikonu pokretača s brojem novih poruka</string>
     <string name="title_advanced_unseen_ignored">Neka se broj novih poruka podudara sa brojem obavijesti</string>
     <string name="title_advanced_notify_background">Prikaži obavijesti samo u pozadini</string>
@@ -561,9 +564,10 @@
     <string name="title_advanced_light">Koristi LED za obavijesti</string>
     <string name="title_advanced_sound">Odaberite zvuk obavijesti</string>
     <string name="title_advanced_notify_screen_on">Nakratko uključi zaslon za obavijesti o novim porukama</string>
+    <string name="title_advanced_notifications_background">Koristi pozadinski servis za sinkronizaciju poruka</string>
+    <string name="title_advanced_notifications_background_hint">Android može zaustaviti pozadinski servis bilo kada, ali ne zahtijeva obavijest na statusnoj traci</string>
     <string name="title_advanced_confirm_links">Potvrdi početne veze</string>
     <string name="title_advanced_check_links_dbl">Provjeri ima li na popisima blokiranih domena sumnjivih veza</string>
-    <string name="title_advanced_browse_links">Delegiraj otvaranje veza Androidu</string>
     <string name="title_advanced_confirm_images">Ne prikazuj slike prema zadanim postavkama</string>
     <string name="title_advanced_ask_images">Potvrdi prikazivanje slika</string>
     <string name="title_advanced_confirm_html">Po zadanom pokaži preoblikovane poruke</string>
@@ -1058,7 +1062,6 @@
     <string name="title_reply_hard_bounce">Pošalji \'hard bounce\'</string>
     <string name="title_reply_template">Odgovori pomoću predloška</string>
     <string name="title_move_undo">Premještanje u %1$s (%2$d)</string>
-    <string name="title_open_with">Otvori sa</string>
     <string name="title_authentication_failed">%1$s provjera autentičnosti nije uspjela</string>
     <string name="title_on_blocklist">Na popisu blokiranih neželjenih poruka</string>
     <string name="title_receipt_subject">Potvrda o čitanju: %1$s</string>
@@ -1258,6 +1261,8 @@
     <string name="title_encrypt">Šifriranje</string>
     <string name="title_decrypt">Dešifriranje</string>
     <string name="title_resync">Resinkronizacija</string>
+    <string name="title_charset">Kodiranje</string>
+    <string name="title_charset_auto">Automatski</string>
     <string name="title_alternative_text">Prikaži obični tekst</string>
     <string name="title_alternative_html">Prikaži HTML</string>
     <string name="title_no_openpgp">OpenKeychain nije pronađen</string>
@@ -1580,6 +1585,7 @@
     <string name="title_hint_folder_actions">Dugo pritisnite mapu za opcije, poput dodavanja mape navigacijskom izborniku za brzi pristup</string>
     <string name="title_hint_folder_sync">Da biste ograničili korištenje baterije i mreže prema zadanim postavkama neće se sve mape i sve poruke biti sinkronizirane</string>
     <string name="title_hint_airplane">Zrakoplovni račin rada je uključen</string>
+    <string name="title_hint_notification">Obavijesti su onemogućene</string>
     <string name="title_hint_support">Ako imate pitanje ili problem, upotrijebite izbornik za podršku da biste dobili pomoć</string>
     <string name="title_hint_message_actions">Prijeđite prstom ulijevo za otpad; Prstom povucite udesno za arhivu (ako dostupno); Akcije prelaska prstom možete konfigurirati u postavkama računa</string>
     <string name="title_hint_message_selection">Dugo pritisnite poruku za početak odabiranja više poruka; Držite i prelazite prstom prema gore ili dolje da biste odabrali više poruka</string>

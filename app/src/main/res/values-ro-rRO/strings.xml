@@ -167,13 +167,14 @@
     <string name="title_setup_accounts">Conturi</string>
     <string name="title_setup_identities">Identități</string>
     <string name="title_setup_other">Alt furnizor</string>
+    <string name="title_setup_inbound">Doar e-mail de intrare (e-mailul nu poate fi trimis!)</string>
     <string name="title_setup_pop3">Cont POP3</string>
     <string name="title_setup_oauth_permission">Furnizorul de e-mail a aprobat OAuth doar pentru versiunea Play Store și GitHub</string>
     <string name="title_setup_gmail_support">Autorizarea conturilor Google va funcționa în versiunea Play Store și GitHub doar pentru că Android verifică semnătura digitală a aplicației</string>
     <string name="title_setup_gmail_rationale">Vă rugăm să acordați permisiunea de a selecta un cont și a vă citi numele</string>
     <string name="title_setup_gmail_permissions">Google va cere permisiunea de a citi, compune, trimite și șterge în mod permanent mesajele dumneavoastră. de email. FairEmail nu vă va șterge niciodată mesajele fără consimțământul dumneavoastră explicit.</string>
     <string name="title_setup_gmail_drafts">Dacă dosarul de ciorne nu este accesibil IMAP, se poate soluționa în setările de etichete Gmail</string>
-    <string name="title_setup_gmail_password">Vreau să autorizez un cont cu o parolă</string>
+    <string name="title_setup_gmail_password">Vreau să autorizez un cont cu o parolă în loc de un cont pe dispozitiv</string>
     <string name="title_setup_office_auth">Eroarea \'Autentificare eșuată\' poate fi cauzată de dezactivarea administrativă a IMAP/SMTP</string>
     <string name="title_setup_oauth_rationale">Autorizare acces la contul %1$s</string>
     <string name="title_setup_oauth_update">Autorizați din nou un cont existent (în caz contrar, creați un cont nou)</string>
@@ -199,6 +200,8 @@
     <string name="title_setup_permissions">Acordă permisiuni</string>
     <string name="title_setup_permissions_remark">Pentru a obține informațiile contactelor (opțional)</string>
     <string name="title_setup_permissions_explanation">Permisiunile de contact sunt necesare pentru a căuta informații de contact și pentru a sugera contacte</string>
+    <string name="title_setup_permissions_notify">Pentru a afișa notificări mesaje noi (opțional)</string>
+    <string name="title_setup_permissions_notify_explanation">Permisiunile de notificare sunt necesare pentru a afișa notificări pentru mesaje noi în bara de stare</string>
     <string name="title_setup_permission_why">Ce permisiuni sunt necesare și de ce?</string>
     <string name="title_setup_permission_import_contacts">Cum pot importa contacte?</string>
     <string name="title_setup_doze">Dezactivează optimizarea bateriei</string>
@@ -222,6 +225,7 @@
     <string name="title_setup_still">Încă de făcut</string>
     <string name="title_setup_error">Eroare</string>
     <string name="title_setup_pop">Utilizați POP3 (nerecomandat)</string>
+    <string name="title_setup_recent">Folosește \'recent\' pentru mai mulți clienți de e-mail</string>
     <string name="title_setup_configuring">Configurare cont &#8230;</string>
     <string name="title_setup_app_password">Este posibil să fie nevoie să folosiți o parolă de aplicație</string>
     <string name="title_setup_extra">Suplimentar</string>
@@ -471,6 +475,7 @@
     <string name="title_advanced_message_text_zoom2">Zoom implicit al textului mesajului: %1$s %%</string>
     <string name="title_advanced_overview_mode">Măriți mesajele originale pentru a se potrivi cu ecranul</string>
     <string name="title_advanced_override_width">Dezactivați lățimile fixe în mesajele originale</string>
+    <string name="title_advanced_hyphenation">Folosește despărțirea în silabe automată</string>
     <string name="title_advanced_contrast">Folosește contrast ridicat pentru text</string>
     <string name="title_advanced_monospaced">Folosește implicit fontul proporțional pentru textul mesajului</string>
     <string name="title_advanced_monospaced_pre">Folosește fontul proporțional pentru textul preformatat</string>
@@ -534,8 +539,6 @@
     <string name="title_advanced_notifications_default">Canal implicit</string>
     <string name="title_advanced_notifications_service">Canalul de monitorizare</string>
     <string name="title_advanced_notifications_newest_first">Arată mai întâi cele mai noi notificări</string>
-    <string name="title_advanced_notifications_background">Folosește serviciul de fundal pentru a sincroniza mesajele</string>
-    <string name="title_advanced_notifications_background_hint">Un serviciu de fundal poate fi oprit de Android în orice moment, dar nu necesită o notificare în bara de stare</string>
     <string name="title_advanced_badge">Afișează iconița lansatorului cu numărul de mesaje noi</string>
     <string name="title_advanced_unseen_ignored">Fie ca numărul de mesaje noi să corespundă cu numărul de notificări</string>
     <string name="title_advanced_notify_background">Arată notificări doar când e în fundal</string>
@@ -565,9 +568,10 @@
     <string name="title_advanced_light">Folosire LED de notificare</string>
     <string name="title_advanced_sound">Selectare sunet de notificare</string>
     <string name="title_advanced_notify_screen_on">Activați pentru scurt timp ecranul pentru notificări de mesaje noi</string>
+    <string name="title_advanced_notifications_background">Folosește serviciul de fundal pentru a sincroniza mesajele</string>
+    <string name="title_advanced_notifications_background_hint">Un serviciu de fundal poate fi oprit de Android în orice moment, dar nu necesită o notificare în bara de stare</string>
     <string name="title_advanced_confirm_links">Confirma deschiderea legăturilor</string>
     <string name="title_advanced_check_links_dbl">Verificați listele de blocare a domeniilor pentru link-uri suspecte</string>
-    <string name="title_advanced_browse_links">Delegarea deschiderii de adrese către Android</string>
     <string name="title_advanced_confirm_images">Nu afișați nicio imagine în mod implicit</string>
     <string name="title_advanced_ask_images">Confirmă afișarea imaginilor</string>
     <string name="title_advanced_confirm_html">Arată implicit mesajele reformatate</string>
@@ -1061,7 +1065,6 @@
     <string name="title_reply_hard_bounce">Trimite mesaj de eroare serios</string>
     <string name="title_reply_template">Răspunde cu șablon</string>
     <string name="title_move_undo">Se mută la %1$s (%2$d)</string>
-    <string name="title_open_with">Deschide cu</string>
     <string name="title_authentication_failed">Autentificare %1$s eșuată</string>
     <string name="title_on_blocklist">Pe lista de blocare spam</string>
     <string name="title_receipt_subject">Confirmare de citire: %1$s</string>
@@ -1260,6 +1263,8 @@
     <string name="title_encrypt">Criptare</string>
     <string name="title_decrypt">Decriptare</string>
     <string name="title_resync">Resincronizare</string>
+    <string name="title_charset">Codificare</string>
+    <string name="title_charset_auto">Automat</string>
     <string name="title_alternative_text">Afișare text simplu</string>
     <string name="title_alternative_html">Afișați HTML</string>
     <string name="title_no_openpgp">OpenKeychain nu a fost găsit</string>
@@ -1582,6 +1587,7 @@
     <string name="title_hint_folder_actions">Atingeți lung un dosar pentru opțiuni, precum adăugarea la meniul de navigare pentru acces rapid</string>
     <string name="title_hint_folder_sync">Pentru a limita utilizarea bateriei şi a conexiunii, nu vor fi sincronizate în mod implicit toate dosarele si mesajele</string>
     <string name="title_hint_airplane">Modul Avion este activat</string>
+    <string name="title_hint_notification">Notificările sunt dezactivate</string>
     <string name="title_hint_support">Dacă aveți o întrebare sau o problemă, vă rugăm să utilizați meniul de suport tehnic pentru a obține ajutor</string>
     <string name="title_hint_message_actions">Glisați stânga pentru Gunoi sau dreapta pentru Arhivă (dacă este disponibilă). Acțiunile de glisare se pot configura în setările contului</string>
     <string name="title_hint_message_selection">Atingeți lung un mesaj pentru a începe selecția multiplă. Țineți și glisați sus sau jos pentru a selecta mai multe mesaje</string>

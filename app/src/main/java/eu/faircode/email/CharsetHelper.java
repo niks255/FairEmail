@@ -22,6 +22,8 @@ package eu.faircode.email;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
@@ -39,7 +41,7 @@ public class CharsetHelper {
     private static final List<String> COMMON = Collections.unmodifiableList(Arrays.asList(
             "US-ASCII",
             "ISO-8859-1", "ISO-8859-2", "ISO-8859-3", "ISO-8859-7",
-            "windows-1250", "windows-1251", "windows-1252", "windows-1257",
+            "windows-1250", "windows-1251", "windows-1252", "windows-1255", "windows-1256", "windows-1257",
             "UTF-7", "UTF-8"
     ));
     private static final List<String> LESS_COMMON = Collections.unmodifiableList(Arrays.asList(
@@ -86,7 +88,21 @@ public class CharsetHelper {
         }
     }
 
+    static boolean isUTF16(byte[] octets) {
+        CharsetDecoder utf8Decoder = StandardCharsets.UTF_16.newDecoder()
+                .onMalformedInput(CodingErrorAction.REPORT)
+                .onUnmappableCharacter(CodingErrorAction.REPORT);
+        try {
+            utf8Decoder.decode(ByteBuffer.wrap(octets));
+            return true;
+        } catch (CharacterCodingException ex) {
+            Log.w(ex);
+            return false;
+        }
+    }
+
     static boolean isUTF8Alt(String text) {
+        // This doesn't check the characters and is therefore unreliable
         byte[] octets = text.getBytes(StandardCharsets.ISO_8859_1);
 
         int bytes;
@@ -114,6 +130,42 @@ public class CharsetHelper {
                     return false;
         }
         return true;
+    }
+
+    static Boolean isUTF16LE(BufferedInputStream bis) throws IOException {
+        // https://en.wikipedia.org/wiki/Endianness
+        byte[] bytes = new byte[64];
+        bis.mark(bytes.length);
+        try {
+            int count = bis.read(bytes);
+            if (count < 32)
+                return null;
+
+            int s = ((bytes[0] & 0xff) << 8) | (bytes[1] & 0xff);
+            boolean bom = (s == 0xfeff || s == 0xfffe);
+            if (bom)
+                return null;
+
+            int odd = 0;
+            int even = 0;
+            for (int i = 0; i < count; i++)
+                if (bytes[i] == 0)
+                    if (i % 2 == 0)
+                        even++;
+                    else
+                        odd++;
+
+            int low = 30 * count / 100 / 2;
+            int high = 70 * count / 100 / 2;
+
+            if (even < low && odd > high)
+                return true; // Little endian
+            if (odd < low && even > high)
+                return false; // Big endian
+            return null; // Undetermined
+        } finally {
+            bis.reset();
+        }
     }
 
     static String utf8toW1252(String text) {

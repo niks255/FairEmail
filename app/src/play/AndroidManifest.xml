@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-permission android:name="com.android.vending.BILLING" />
 
@@ -49,6 +50,11 @@
         <!-- https://developers.google.com/web/updates/2020/07/custom-tabs-android-11#detecting_browsers_that_support_custom_tabs -->
         <intent>
             <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
         </intent>
 
         <intent>
@@ -98,6 +104,7 @@
         android:allowBackup="false"
         android:appCategory="productivity"
         android:description="@string/app_name"
+        android:enableOnBackInvokedCallback="true"
         android:extractNativeLibs="false"
         android:forceDarkAllowed="false"
         android:icon="@mipmap/ic_launcher"

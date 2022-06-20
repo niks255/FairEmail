@@ -48,6 +48,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.ColorUtils;
@@ -125,7 +126,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
 
         String requestKey = getRequestKey();
         if (!BuildConfig.PLAY_STORE_RELEASE)
-            EntityLog.log(this, "Listing key=" + requestKey);
+            EntityLog.log(this, "Listening key=" + requestKey);
         getSupportFragmentManager().setFragmentResultListener(requestKey, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
@@ -533,7 +534,16 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         } catch (Throwable ex) {
             if (this instanceof ActivityMain)
                 throw ex;
-            Helper.reportNoViewer(this, intent, ex);
+            if (intent.getPackage() == null)
+                Helper.reportNoViewer(this, intent, ex);
+            else {
+                intent.setPackage(null);
+                try {
+                    super.startActivity(intent);
+                } catch (Throwable exex) {
+                    Helper.reportNoViewer(this, intent, exex);
+                }
+            }
         }
     }
 
@@ -544,7 +554,16 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
             Log.logExtras(intent);
             super.startActivityForResult(intent, requestCode);
         } catch (Throwable ex) {
-            Helper.reportNoViewer(this, intent, ex);
+            if (intent.getPackage() == null)
+                Helper.reportNoViewer(this, intent, ex);
+            else {
+                intent.setPackage(null);
+                try {
+                    super.startActivityForResult(intent, requestCode);
+                } catch (Throwable exex) {
+                    Helper.reportNoViewer(this, intent, exex);
+                }
+            }
         }
     }
 
@@ -597,13 +616,6 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
                 owner.getLifecycle().removeObserver(this);
             }
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (backHandled())
-            return;
-        super.onBackPressed();
     }
 
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -755,18 +767,30 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-                onBackPressed();
+            // Delegate to fragment first
+            if (super.onOptionsItemSelected(item))
+                return true;
+            performBack();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    protected boolean backHandled() {
-        for (IKeyPressedListener listener : keyPressedListeners)
-            if (listener.onBackPressed())
-                return true;
-        return false;
+    public void performBack() {
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+            ActionBar ab = getSupportActionBar();
+            if (ab != null && ab.collapseActionView())
+                return;
+            FragmentManager fm = getSupportFragmentManager();
+            if (!fm.isStateSaved() && fm.popBackStackImmediate())
+                return;
+        }
+        finish();
+    }
+
+
+    public void onBackPressedFragment() {
+        performBack();
     }
 
     @Override
@@ -867,7 +891,5 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
 
     public interface IKeyPressedListener {
         boolean onKeyPressed(KeyEvent event);
-
-        boolean onBackPressed();
     }
 }

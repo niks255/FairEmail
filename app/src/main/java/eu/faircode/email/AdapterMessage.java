@@ -58,6 +58,7 @@ import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -118,7 +119,6 @@ import androidx.constraintlayout.widget.Group;
 import androidx.core.content.FileProvider;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.graphics.ColorUtils;
-import androidx.core.os.BuildCompat;
 import androidx.core.view.MenuCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -161,6 +161,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.text.Collator;
@@ -177,6 +178,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.SortedMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
@@ -282,6 +284,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean attachments_alt;
     private boolean thumbnails;
     private boolean contrast;
+    private boolean hyphenation;
     private String display_font;
     private boolean inline;
     private boolean collapse_quotes;
@@ -296,6 +299,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private List<String> languages;
     private static boolean debug;
     private int level;
+    private boolean canDarken;
     private boolean webview_legacy;
     private boolean show_recent;
 
@@ -459,6 +463,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibTools;
         private View vwEmpty;
         private TextView tvReformatted;
+        private TextView tvDecrypt;
         private TextView tvSignedData;
 
         private TextView tvBody;
@@ -875,12 +880,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibTools = vsBody.findViewById(R.id.ibTools);
             vwEmpty = vsBody.findViewById(R.id.vwEmpty);
             tvReformatted = vsBody.findViewById(R.id.tvReformatted);
+            tvDecrypt = vsBody.findViewById(R.id.tvDecrypt);
             tvSignedData = vsBody.findViewById(R.id.tvSignedData);
 
             tvBody = vsBody.findViewById(R.id.tvBody);
-            if (BuildConfig.DEBUG && BuildCompat.isAtLeastT()) {
-                tvBody.setHyphenationFrequency(4 /* HYPHENATION_FREQUENCY_FULL_FAST */);
-                tvBody.setBreakStrategy(LineBreaker.BREAK_STRATEGY_HIGH_QUALITY);
+            if (hyphenation &&
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                    tvBody.setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_NORMAL); // Default before Q
+                else
+                    tvBody.setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_FULL);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                    tvBody.setBreakStrategy(LineBreaker.BREAK_STRATEGY_HIGH_QUALITY);
             }
             wvBody = vsBody.findViewById(R.id.wvBody);
             pbBody = vsBody.findViewById(R.id.pbBody);
@@ -941,6 +952,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     }
                 });
 
+            itemView.addOnLayoutChangeListener(this);
             ibAvatar.setOnClickListener(this);
             ibVerified.setOnClickListener(this);
             ibAuth.setOnClickListener(this);
@@ -1054,6 +1066,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             final View touch = (viewType == ViewType.THREAD ? ibExpander : header);
             touch.setOnClickListener(null);
 
+            itemView.removeOnLayoutChangeListener(this);
             ibAvatar.setOnClickListener(null);
             ibVerified.setOnClickListener(null);
             ibAuth.setOnClickListener(null);
@@ -1687,6 +1700,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibTools.setVisibility(View.GONE);
             vwEmpty.setVisibility(View.GONE);
             tvReformatted.setVisibility(View.GONE);
+            tvDecrypt.setVisibility(View.GONE);
             tvSignedData.setVisibility(View.GONE);
 
             tvNoInternetBody.setVisibility(View.GONE);
@@ -1937,6 +1951,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibTools.setVisibility(View.GONE);
             vwEmpty.setVisibility(View.GONE);
             tvReformatted.setVisibility(View.GONE);
+            tvDecrypt.setVisibility(View.GONE);
             tvSignedData.setVisibility(View.GONE);
 
             // Message text
@@ -1944,20 +1959,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvNoInternetBody.setVisibility(suitable || content ? View.GONE : View.VISIBLE);
             grpDownloading.setVisibility(content ? View.GONE : View.VISIBLE);
 
-            int height = properties.getHeight(message.id, 0);
-            if (height == 0) {
-                tvBody.setVisibility(View.GONE);
+            boolean show_full = properties.getValue("full", message.id);
+            if (show_full)
                 wvBody.setVisibility(View.GONE);
-            } else {
-                boolean show_full = properties.getValue("full", message.id);
-                if (show_full) {
-                    wvBody.setVisibility(View.INVISIBLE);
-                    wvBody.setMinimumHeight(height);
-                } else {
+            else {
+                int height = properties.getHeight(message.id, 0);
+                if (height == 0)
+                    tvBody.setVisibility(View.GONE);
+                else {
                     tvBody.setVisibility(View.INVISIBLE);
                     tvBody.setMinHeight(height);
                 }
             }
+
             vwRipple.setVisibility(View.GONE);
             pbBody.setVisibility(View.GONE);
 
@@ -2156,7 +2170,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibSearch.setVisibility(tools && !outbox && button_search && (froms > 0 || tos > 0) ? View.VISIBLE : View.GONE);
                     ibTranslate.setVisibility(tools && !outbox && button_translate && DeepL.isAvailable(context) && message.content ? View.VISIBLE : View.GONE);
                     ibForceLight.setVisibility(tools && full && dark && button_force_light && message.content ? View.VISIBLE : View.GONE);
-                    ibForceLight.setImageLevel(force_light ? 1 : 0);
+                    ibForceLight.setImageLevel(!canDarken || force_light ? 1 : 0);
                     ibImportance.setVisibility(tools && button_importance && !outbox && seen ? View.VISIBLE : View.GONE);
                     ibHide.setVisibility(tools && button_hide && !outbox ? View.VISIBLE : View.GONE);
                     ibSeen.setVisibility(tools && button_seen && !outbox && seen ? View.VISIBLE : View.GONE);
@@ -2430,6 +2444,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void evalProperties(TupleMessageEx message) {
+            if (message.show_full) {
+                properties.setValue("full", message.id, hasWebView);
+                properties.setValue("full_asked", message.id, hasWebView);
+            }
+            if (message.show_images) {
+                properties.setValue("images", message.id, true);
+                properties.setValue("images_asked", message.id, true);
+            }
+
             if (message.from != null)
                 for (Address sender : message.from) {
                     String from = ((InternetAddress) sender).getAddress();
@@ -2437,14 +2460,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         continue;
                     int at = from.indexOf('@');
                     String domain = (at < 0 ? from : from.substring(at));
-                    if (message.show_full ||
-                            prefs.getBoolean(from + ".show_full", false) ||
+                    if (prefs.getBoolean(from + ".show_full", false) ||
                             prefs.getBoolean(domain + ".show_full", false)) {
-                        properties.setValue("full", message.id, true);
-                        properties.setValue("full_asked", message.id, true);
+                        properties.setValue("full", message.id, hasWebView);
+                        properties.setValue("full_asked", message.id, hasWebView);
                     }
-                    if (message.show_images ||
-                            prefs.getBoolean(from + ".show_images", false) ||
+                    if (prefs.getBoolean(from + ".show_images", false) ||
                             prefs.getBoolean(domain + ".show_images", false)) {
                         properties.setValue("images", message.id, true);
                         properties.setValue("images_asked", message.id, true);
@@ -2463,8 +2484,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (!confirm_html &&
                     !EntityFolder.JUNK.equals(message.folderType) &&
                     !properties.getValue("full_asked", message.id)) {
-                properties.setValue("full", message.id, true);
-                properties.setValue("full_asked", message.id, true);
+                properties.setValue("full", message.id, hasWebView);
+                properties.setValue("full_asked", message.id, hasWebView);
             }
 
             if (!properties.getValue("force_light_default", message.id)) {
@@ -2508,6 +2529,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Log.i("Bind size=" + size + " height=" + height);
 
             ibFull.setEnabled(hasWebView);
+            ibFull.setImageTintList(ColorStateList.valueOf(hasWebView ? colorAccent : colorSeparator));
             ibFull.setImageResource(show_full ? R.drawable.twotone_fullscreen_exit_24 : R.drawable.twotone_fullscreen_24);
             ibFull.setContentDescription(context.getString(show_full
                     ? R.string.title_legend_show_reformatted
@@ -2522,15 +2544,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 ibImages.setTooltipText(ibImages.getContentDescription());
 
-            if (show_full) {
-                // Create web view
-                WebViewEx webView;
-                if (wvBody instanceof WebView)
-                    webView = (WebViewEx) wvBody;
-                else {
-                    try {
-                        webView = new WebViewEx(context);
-                    } catch (Throwable ex) {
+            if (message.isEncrypted() && !message.isUnlocked()) {
+                tvBody.setVisibility(View.GONE);
+                wvBody.setVisibility(View.GONE);
+            } else {
+                if (show_full) {
+                    // Create web view
+                    WebViewEx webView;
+                    if (wvBody instanceof WebView)
+                        webView = (WebViewEx) wvBody;
+                    else {
+                        try {
+                            webView = new WebViewEx(context);
+                        } catch (Throwable ex) {
                         /*
                             android.util.AndroidRuntimeException: java.lang.reflect.InvocationTargetException
                                     at android.webkit.WebViewFactory.getProvider(WebViewFactory.java:270)
@@ -2547,83 +2573,84 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     at android.webkit.WebView.<init>(WebView.java:574)
                                     at android.webkit.WebView.<init>(WebView.java:564)
                          */
-                        Log.unexpectedError(parentFragment.getParentFragmentManager(), ex, false);
-                        return;
+                            Log.unexpectedError(parentFragment.getParentFragmentManager(), ex, false);
+                            return;
+                        }
+
+                        webView.setId(wvBody.getId());
+
+                        ConstraintLayout cl = (ConstraintLayout) vsBody;
+                        cl.removeView(wvBody);
+                        cl.addView(webView, wvBody.getLayoutParams());
+                        cl.setPadding(
+                                wvBody.getPaddingLeft(), wvBody.getPaddingTop(),
+                                wvBody.getPaddingRight(), wvBody.getPaddingBottom());
+
+                        wvBody = webView;
                     }
 
-                    webView.setId(wvBody.getId());
+                    webView.setMinimumHeight(dp60);
 
-                    ConstraintLayout cl = (ConstraintLayout) vsBody;
-                    cl.removeView(wvBody);
-                    cl.addView(webView, wvBody.getLayoutParams());
-                    cl.setPadding(
-                            wvBody.getPaddingLeft(), wvBody.getPaddingTop(),
-                            wvBody.getPaddingRight(), wvBody.getPaddingBottom());
-
-                    wvBody = webView;
-                }
-
-                webView.setMinimumHeight(height);
-
-                int maxHeight = (rv == null ? 0 : rv.getHeight() - rv.getPaddingTop());
-                webView.init(height, maxHeight, size, position, force_light,
-                        new WebViewEx.IWebView() {
-                            @Override
-                            public void onSizeChanged(int w, int h, int ow, int oh) {
-                                if (h > dp60)
-                                    properties.setHeight(message.id, h);
-                            }
-
-                            @Override
-                            public void onScaleChanged(float newScale) {
-                                properties.setSize(message.id, newScale);
-                            }
-
-                            @Override
-                            public void onScrollChange(int scrollX, int scrollY) {
-                                properties.setPosition(message.id, new Pair<Integer, Integer>(scrollX, scrollY));
-                            }
-
-                            @Override
-                            public void onOverScrolled(int scrollX, int scrollY, int dx, int dy, boolean clampedX, boolean clampedY) {
-                                if (clampedY && ((WebViewEx) wvBody).isZoomedY()) {
-                                    boolean flinged = false;
-                                    try {
-                                        if (!webview_legacy && rv != null)
-                                            flinged = rv.fling(dx * 10, dy * 10);
-                                    } catch (Throwable ex) {
-                                        Log.e(ex);
-                                    }
-                                    if (!flinged)
-                                        properties.scrollBy(dx, dy);
+                    int maxHeight = (rv == null ? 0 : rv.getHeight() - rv.getPaddingTop());
+                    webView.init(height, maxHeight, size, position, force_light,
+                            new WebViewEx.IWebView() {
+                                @Override
+                                public void onSizeChanged(int w, int h, int ow, int oh) {
+                                    if (h > dp60)
+                                        properties.setHeight(message.id, h);
                                 }
-                            }
 
-                            @Override
-                            public boolean onOpenLink(String url) {
-                                if (parentFragment == null)
-                                    return false;
+                                @Override
+                                public void onScaleChanged(float newScale) {
+                                    properties.setSize(message.id, newScale);
+                                }
 
-                                Uri uri = Uri.parse(url);
-                                return ViewHolder.this.onOpenLink(uri, null, false);
-                            }
-                        });
-                webView.setImages(show_images, inline);
-                webView.setOnTouchListener(touchListener);
+                                @Override
+                                public void onScrollChange(int scrollX, int scrollY) {
+                                    properties.setPosition(message.id, new Pair<Integer, Integer>(scrollX, scrollY));
+                                }
 
-                tvBody.setVisibility(View.GONE);
-                wvBody.setVisibility(View.VISIBLE);
-            } else {
-                tvBody.setMinHeight(height);
+                                @Override
+                                public void onOverScrolled(int scrollX, int scrollY, int dx, int dy, boolean clampedX, boolean clampedY) {
+                                    if (clampedY && ((WebViewEx) wvBody).isZoomedY()) {
+                                        boolean flinged = false;
+                                        try {
+                                            if (!webview_legacy && rv != null)
+                                                flinged = rv.fling(dx * 10, dy * 10);
+                                        } catch (Throwable ex) {
+                                            Log.e(ex);
+                                        }
+                                        if (!flinged)
+                                            properties.scrollBy(dx, dy);
+                                    }
+                                }
 
-                if (size != 0)
-                    tvBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+                                @Override
+                                public boolean onOpenLink(String url) {
+                                    if (parentFragment == null)
+                                        return false;
 
-                tvBody.setTextColor(contrast ? textColorPrimary : colorRead);
-                tvBody.setTypeface(StyleHelper.getTypeface(display_font, context));
+                                    Uri uri = Uri.parse(url);
+                                    return ViewHolder.this.onOpenLink(uri, null, false);
+                                }
+                            });
+                    webView.setImages(show_images, inline);
+                    webView.setOnTouchListener(touchListener);
 
-                tvBody.setVisibility(View.VISIBLE);
-                wvBody.setVisibility(View.GONE);
+                    tvBody.setVisibility(View.GONE);
+                    wvBody.setVisibility(View.VISIBLE);
+                } else {
+                    tvBody.setMinHeight(height);
+
+                    if (size != 0)
+                        tvBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+
+                    tvBody.setTextColor(contrast ? textColorPrimary : colorRead);
+                    tvBody.setTypeface(StyleHelper.getTypeface(display_font, context));
+
+                    tvBody.setVisibility(View.VISIBLE);
+                    wvBody.setVisibility(View.GONE);
+                }
             }
 
             final Bundle args = new Bundle();
@@ -2918,13 +2945,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     // Show images
                     ibImages.setVisibility(has_images && !(show_full && always_images) ? View.VISIBLE : View.INVISIBLE);
 
-                    boolean verifyable = (EntityMessage.PGP_SIGNONLY.equals(message.encrypt) ||
-                            EntityMessage.SMIME_SIGNONLY.equals(message.encrypt));
-
-                    boolean unlocked = (EntityMessage.PGP_SIGNENCRYPT.equals(message.ui_encrypt) &&
-                            !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt)) ||
-                            (EntityMessage.SMIME_SIGNENCRYPT.equals(message.ui_encrypt) &&
-                                    !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt));
+                    boolean verifiable = message.isVerifiable();
+                    boolean encrypted = message.isEncrypted() || args.getBoolean("inline_encrypted");
+                    boolean unlocked = message.isUnlocked();
 
                     // Show AMP
                     boolean has_amp = args.getBoolean("has_amp");
@@ -2932,60 +2955,64 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             ? View.VISIBLE : View.GONE);
 
                     // Show encrypt actions
-                    ibVerify.setVisibility(verifyable ? View.VISIBLE : View.GONE);
+                    ibVerify.setVisibility(verifiable ? View.VISIBLE : View.GONE);
                     ibDecrypt.setImageResource(unlocked
                             ? R.drawable.twotone_lock_24 : R.drawable.twotone_lock_open_24);
                     ibDecrypt.setImageTintList(ColorStateList.valueOf(unlocked
                             ? colorControlNormal : colorAccent));
-                    ibDecrypt.setVisibility(!EntityFolder.OUTBOX.equals(message.folderType) &&
-                            (args.getBoolean("inline_encrypted") || message.isEncrypted())
+                    ibDecrypt.setVisibility(encrypted &&
+                            !EntityFolder.OUTBOX.equals(message.folderType)
                             ? View.VISIBLE : View.GONE);
 
                     boolean reformatted_hint = prefs.getBoolean("reformatted_hint", true);
                     tvReformatted.setVisibility(reformatted_hint ? View.VISIBLE : View.GONE);
 
                     boolean signed_data = args.getBoolean("signed_data");
+                    tvDecrypt.setVisibility(encrypted && !unlocked ? View.VISIBLE : View.GONE);
                     tvSignedData.setVisibility(signed_data ? View.VISIBLE : View.GONE);
 
-                    if (show_full) {
-                        ((WebViewEx) wvBody).setOnPageLoaded(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                                        bindConversationActions(message, args.getParcelable("actions"));
-                                    bindExtras(message);
+                    if (!encrypted || unlocked) {
+                        if (show_full) {
+                            ((WebViewEx) wvBody).setOnPageLoaded(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                                            bindConversationActions(message, args.getParcelable("actions"));
+                                        bindExtras(message);
 
-                                    cowner.start(); // Show attachments
-                                } catch (Throwable ex) {
-                                    Log.e(ex);
+                                        cowner.start(); // Show attachments
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                    }
                                 }
-                            }
-                        });
+                            });
 
-                        if (result == null)
-                            ((WebView) wvBody).loadDataWithBaseURL(null, "", "text/html", StandardCharsets.UTF_8.name(), null);
-                        else
-                            ((WebView) wvBody).loadDataWithBaseURL(null, (String) result, "text/html", StandardCharsets.UTF_8.name(), null);
-                    } else {
-                        tvBody.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    tvBody.setText((Spanned) result);
-                                    vwRipple.setVisibility(View.VISIBLE);
+                            if (result == null)
+                                ((WebView) wvBody).loadDataWithBaseURL(null, "", "text/html", StandardCharsets.UTF_8.name(), null);
+                            else
+                                ((WebView) wvBody).loadDataWithBaseURL(null, (String) result, "text/html", StandardCharsets.UTF_8.name(), null);
+                        } else {
+                            tvBody.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        tvBody.setText((Spanned) result);
+                                        vwRipple.setVisibility(View.VISIBLE);
 
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                                        bindConversationActions(message, args.getParcelable("actions"));
-                                    bindExtras(message);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                                            bindConversationActions(message, args.getParcelable("actions"));
+                                        bindExtras(message);
 
-                                    cowner.start(); // Show attachments
-                                } catch (Throwable ex) {
-                                    Log.e(ex);
+                                        cowner.start(); // Show attachments
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                    }
                                 }
-                            }
-                        });
-                    }
+                            });
+                        }
+                    } else
+                        bindExtras(message);
 
                     if (scroll)
                         properties.scrollTo(getAdapterPosition(), 0);
@@ -3105,7 +3132,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             ClipData clip = ClipData.newPlainText(title, text);
                             clipboard.setPrimaryClip(clip);
-                            ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                                ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -3771,6 +3800,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         @Override
         public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+            if (itemView.getId() == v.getId()) {
+                properties.layoutChanged();
+                return;
+            }
+
             TupleMessageEx message = getMessage();
             if (message != null) {
                 int h = bottom - top;
@@ -4504,7 +4538,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ClipData clip = ClipData.newPlainText(context.getString(R.string.app_name), tvError.getText());
                     clipboard.setPrimaryClip(clip);
 
-                    ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                        ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -4776,7 +4811,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ClipData clip = ClipData.newPlainText(context.getString(R.string.app_name), message.notes);
             clipboard.setPrimaryClip(clip);
-            ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
         }
 
         private void onShow(final TupleMessageEx message, boolean full) {
@@ -4864,8 +4901,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 });
 
                 boolean isDark = Helper.isDarkTheme(context);
-                boolean canDark = WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK);
-                tvDark.setVisibility(isDark && !canDark ? View.VISIBLE : View.GONE);
+                tvDark.setVisibility(isDark && !canDarken ? View.VISIBLE : View.GONE);
             } else {
                 boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
 
@@ -5468,6 +5504,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             message.accountProtocol == EntityAccount.TYPE_POP)
                     .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP ||
                             EntityFolder.INBOX.equals(message.folderType));
+            popupMenu.getMenu().findItem(R.id.menu_charset)
+                    .setEnabled(message.uid != null)
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
 
             popupMenu.getMenu().findItem(R.id.menu_alternative)
                     .setTitle(message.isPlainOnly()
@@ -5572,6 +5611,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     } else if (itemId == R.id.menu_resync) {
                         onMenuResync(message);
                         return true;
+                    } else if (itemId == R.id.menu_charset) {
+                        onMenuCharset(message);
+                        return true;
                     } else if (itemId == R.id.menu_alternative) {
                         onMenuAlt(message);
                         return true;
@@ -5654,8 +5696,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     fragment.setArguments(args);
                     fragment.show(parentFragment.getParentFragmentManager(), "open:link");
                 } else {
-                    boolean browse_links = prefs.getBoolean("browse_links", false);
-                    Helper.view(context, UriHelper.guessScheme(uri), browse_links, browse_links);
+                    boolean tabs = prefs.getBoolean("open_with_tabs", true);
+                    Helper.view(context, UriHelper.guessScheme(uri), !tabs, !tabs);
                 }
             }
 
@@ -5925,8 +5967,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return null;
 
                     if (!TextUtils.isEmpty(message.inreplyto))
-                        for (EntityMessage m : db.message().getMessagesByMsgId(message.account, message.inreplyto))
-                            map.put(m.msgid, m);
+                        for (String inreplyto : message.inreplyto.split(" "))
+                            for (EntityMessage m : db.message().getMessagesByMsgId(message.account, inreplyto))
+                                map.put(m.msgid, m);
 
                     if (!TextUtils.isEmpty(message.references))
                         for (String ref : message.references.split(" "))
@@ -5951,7 +5994,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         start = ssb.length();
                         ssb.append("In-reply-to: ");
                         ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
-                        ssb.append(message.inreplyto).append("\n");
+                        for (String inreplyto : message.inreplyto.split(" "))
+                            ssb.append(inreplyto).append("\n");
                     }
 
                     if (!TextUtils.isEmpty(message.references)) {
@@ -6060,6 +6104,85 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }.execute(context, owner, args, "message:resync");
         }
 
+        private void onMenuCharset(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+
+            new SimpleTask<SortedMap<String, Charset>>() {
+                @Override
+                protected SortedMap<String, Charset> onExecute(Context context, Bundle args) {
+                    return Charset.availableCharsets();
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, SortedMap<String, Charset> charsets) {
+                    PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibMore);
+
+                    popupMenu.getMenu().add(Menu.NONE, 0, 0, R.string.title_charset_auto)
+                            .setIntent(new Intent().putExtra("charset", (String) null));
+
+                    int order = 0;
+                    for (String name : charsets.keySet()) {
+                        order++;
+                        popupMenu.getMenu().add(Menu.NONE, order, order, name)
+                                .setIntent(new Intent().putExtra("charset", name));
+                    }
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            properties.setSize(message.id, null);
+                            properties.setHeight(message.id, null);
+                            properties.setPosition(message.id, null);
+
+                            args.putString("charset", item.getIntent().getStringExtra("charset"));
+
+                            new SimpleTask<Void>() {
+                                @Override
+                                protected Void onExecute(Context context, Bundle args) {
+                                    long id = args.getLong("id");
+                                    String charset = args.getString("charset");
+
+                                    DB db = DB.getInstance(context);
+                                    try {
+                                        db.beginTransaction();
+
+                                        EntityMessage message = db.message().getMessage(id);
+                                        if (message == null)
+                                            return null;
+
+                                        db.message().resetMessageContent(message.id);
+                                        EntityOperation.queue(context, message, EntityOperation.BODY, null, charset);
+
+                                        db.setTransactionSuccessful();
+                                    } finally {
+                                        db.endTransaction();
+                                    }
+
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onException(Bundle args, Throwable ex) {
+                                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                                }
+                            }.execute(context, owner, args, "body:charset");
+
+                            return true;
+                        }
+                    });
+
+                    popupMenu.show();
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "message:charset");
+
+        }
+
         private void onMenuAlt(TupleMessageEx message) {
             properties.setSize(message.id, null);
             properties.setHeight(message.id, null);
@@ -6126,10 +6249,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionForceLight(TupleMessageEx message) {
-            boolean force_light = !properties.getValue("force_light", message.id);
-            properties.setValue("force_light", message.id, force_light);
-            ibForceLight.setImageLevel(force_light ? 1 : 0);
-            bindBody(message, false);
+            if (canDarken) {
+                boolean force_light = !properties.getValue("force_light", message.id);
+                properties.setValue("force_light", message.id, force_light);
+                ibForceLight.setImageLevel(force_light ? 1 : 0);
+                bindBody(message, false);
+            } else {
+                Intent update = new Intent(Intent.ACTION_VIEW)
+                        .setData(Uri.parse(Helper.PACKAGE_WEBVIEW))
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(update);
+            }
         }
 
         private void onSearchText(TupleMessageEx message) {
@@ -6334,7 +6464,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ClipData clip = ClipData.newPlainText(context.getString(R.string.title_show_headers), message.headers);
             clipboard.setPrimaryClip(clip);
 
-            ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
         }
 
         private void onMenuShowHeaders(TupleMessageEx message) {
@@ -6552,7 +6683,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             SpannableStringBuilder ssb = new SpannableStringBuilderEx();
             for (int i = 0; i < message.keywords.length; i++) {
                 String keyword = message.keywords[i];
-                if (MessageHelper.showKeyword(keyword)) {
+                if (debug || MessageHelper.showKeyword(keyword)) {
                     if (ssb.length() > 0)
                         ssb.append(' ');
 
@@ -6888,8 +7019,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         boolean contacts = Helper.hasPermission(context, Manifest.permission.READ_CONTACTS);
         boolean avatars = prefs.getBoolean("avatars", true);
         boolean bimi = prefs.getBoolean("bimi", false);
-        boolean gravatars = prefs.getBoolean("gravatars", false);
-        boolean libravatars = prefs.getBoolean("libravatars", false);
+        boolean gravatars = (prefs.getBoolean("gravatars", false) && !BuildConfig.PLAY_STORE_RELEASE);
+        boolean libravatars = (prefs.getBoolean("libravatars", false) && !BuildConfig.PLAY_STORE_RELEASE);
         boolean favicons = prefs.getBoolean("favicons", false);
         boolean generated = prefs.getBoolean("generated_icons", true);
 
@@ -6941,6 +7072,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.attachments_alt = prefs.getBoolean("attachments_alt", false);
         this.thumbnails = prefs.getBoolean("thumbnails", true);
         this.contrast = prefs.getBoolean("contrast", false);
+        this.hyphenation = prefs.getBoolean("hyphenation", false);
         this.display_font = prefs.getString("display_font", "");
         this.inline = prefs.getBoolean("inline_images", false);
         this.collapse_quotes = prefs.getBoolean("collapse_quotes", false);
@@ -6962,8 +7094,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         debug = prefs.getBoolean("debug", false);
         level = prefs.getInt("log_level", Log.getDefaultLogLevel());
 
-        webview_legacy = prefs.getBoolean("webview_legacy", false);
-        show_recent = prefs.getBoolean("show_recent", false);
+        this.canDarken = WebViewEx.isFeatureSupported(context, WebViewFeature.ALGORITHMIC_DARKENING);
+        this.webview_legacy = prefs.getBoolean("webview_legacy", false);
+        this.show_recent = prefs.getBoolean("show_recent", false);
 
         DiffUtil.ItemCallback<TupleMessageEx> callback = new DiffUtil.ItemCallback<TupleMessageEx>() {
             @Override
@@ -7860,6 +7993,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         void endSearch();
 
         void lock(long id);
+
+        void layoutChanged();
 
         void refresh();
 

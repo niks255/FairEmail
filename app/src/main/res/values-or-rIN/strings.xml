@@ -526,6 +526,7 @@
     <string name="title_answer_placeholder_lastname">ପ୍ରେରକଙ୍କ ଶେଷ ନାମ</string>
     <string name="title_rule_noop">କିଛି କରନ୍ତୁନି</string>
     <string name="title_rule_hide">ଲୁଚାଅ</string>
+    <string name="title_rule_ignore">ବିଜ୍ଞପ୍ତି ଦମନ</string>
     <string name="title_rule_snooze">ସ୍ନୁଜ୍</string>
     <string name="title_rule_flag">ତାରା ଲଗାନ୍ତୁ</string>
     <string name="title_rule_move">ଘୁଞ୍ଚାନ୍ତୁ</string>

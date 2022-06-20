@@ -128,7 +128,7 @@
     <string name="title_setup_analytics">FairEmail は広告を表示せず、あなたの行動を追跡したり分析したりしません。Bugsnag がエラーレポートに使用されますが、デフォルトでは無効になっています。</string>
     <string name="title_setup_quick_accounts">アカウントを追加または変更する</string>
     <string name="title_setup_quick_support">一部のプロバイダーはアカウントを追加しにくくしています。FairEmail を非難せずに、サポートを依頼してください。</string>
-    <string name="title_setup_quick_hint">入力されたメールアドレスは、設定情報を取得するためにメールサーバーと autoconfig.thunderbird.net への問い合わせに使用されます</string>
+    <string name="title_setup_quick_hint">入力されたメールアドレスは、設定情報を取得するためのメールサーバーと autoconfig.thunderbird.net への問い合わせに使用されます</string>
     <string name="title_setup_quick_patience">しばらくお待ちください&#8230;</string>
     <string name="title_setup_quick_imap">メッセージの受信に使用する IMAP サーバー</string>
     <string name="title_setup_quick_smtp">メッセージの送信に使用する SMTP サーバー</string>
@@ -145,16 +145,17 @@
     <string name="title_setup_accounts">アカウント</string>
     <string name="title_setup_identities">ID</string>
     <string name="title_setup_other">その他のプロバイダー (IMAP)</string>
+    <string name="title_setup_inbound">メール受信のみ (送信できません！)</string>
     <string name="title_setup_pop3">その他のプロバイダー (POP3)</string>
     <string name="title_setup_oauth_permission">OAuth 認証はメールプロバイダーより Play ストア版と GitHub版でのみ承認されています</string>
     <string name="title_setup_gmail_support">Android がアプリの署名を確認するため、Google アカウントを認証する機能は Play ストア版と GitHub 版でのみ動作します</string>
     <string name="title_setup_gmail_rationale">アカウントを選択してアクセス許可を付与してください</string>
     <string name="title_setup_gmail_permissions">Google はすべてのメールの読み取り、作成、送信、完全削除の許可を求めます。FairEmail が明示的な同意なしにメッセージを削除することはありません</string>
     <string name="title_setup_gmail_drafts">IMAP で下書きフォルダにアクセスできない場合、Gmail ラベル設定で修正できます</string>
-    <string name="title_setup_gmail_password">パスワードでアカウントを認証したい</string>
+    <string name="title_setup_gmail_password">デバイスのアカウントの代わりにパスワードで別のアカウントを認証したい</string>
     <string name="title_setup_office_auth">「AUTHENTICATE failed」というエラーは、システム管理者によって IMAP/SMTP が無効にされていることが原因である可能性があります</string>
     <string name="title_setup_oauth_rationale">%1$s アカウントへのアクセスを許可する</string>
-    <string name="title_setup_oauth_update">設定済みのアカウントをもう一度認証する (設定されていない場合、新しいアカウントを作成します)</string>
+    <string name="title_setup_oauth_update">設定済みのアカウントをもう一度認証する (設定されていない場合、新しいアカウントを作成)</string>
     <string name="title_setup_oauth_updated">アカウントの認証情報が更新されました</string>
     <string name="title_setup_oauth_authorize">認証</string>
     <string name="title_setup_select_account">アカウントを選択</string>
@@ -177,6 +178,8 @@
     <string name="title_setup_permissions">アクセス権限を付与する</string>
     <string name="title_setup_permissions_remark">連絡先へのアクセスのため (オプション)</string>
     <string name="title_setup_permissions_explanation">連絡先を検索したり、連絡先を自動入力するには連絡先へのアクセス権限が必要です</string>
+    <string name="title_setup_permissions_notify">新着メッセージの通知を表示するため (オプション)</string>
+    <string name="title_setup_permissions_notify_explanation">新着メッセージの通知をステータスバーに表示するには通知の権限が必要です</string>
     <string name="title_setup_permission_why">必要とする権限とその理由は何ですか？</string>
     <string name="title_setup_permission_import_contacts">連絡先をインポートするにはどうすればいいですか？</string>
     <string name="title_setup_doze">バッテリー最適化を無効にする</string>
@@ -200,6 +203,7 @@
     <string name="title_setup_still">実行中です</string>
     <string name="title_setup_error">エラー</string>
     <string name="title_setup_pop">POP3 を使用する (非推奨)</string>
+    <string name="title_setup_recent">複数のメールクライアントを使用するために最新モード (recent) を使用</string>
     <string name="title_setup_configuring">アカウントを設定しています&#8230;</string>
     <string name="title_setup_app_password">アプリパスワードを使用する必要があるかもしれません</string>
     <string name="title_setup_extra">その他</string>
@@ -269,7 +273,7 @@
     <string name="title_check_gmail_oauth">あなたの Gmail アカウントは 2022 年 5 月 30 日以降も引き続き利用できます</string>
     <string name="title_check_gmail_password">あなたの Gmail アカウントの一部は 2022 年 5 月 30 日以降に停止される可能性があります</string>
     <string name="title_check_outlook_oauth">あなたの Outlook アカウントは 2022 年 10 月 1 日以降も引き続き利用できます</string>
-    <string name="title_check_outlook_password">あなたの Outlook アカウントの一部は 2022 年 10 月 1 日以降に停止される可能性があります</string>
+    <string name="title_check_outlook_password">あなたの Outlook アカウントは 2022 年 10 月 1 日以降に停止される可能性があります</string>
     <string name="title_advanced_hint_title">詳細設定</string>
     <string name="title_advanced_hint_message">        詳細設定に移動しています。
         よく使われる標準的な値が設定されているため、特に変更しなくてもアプリを使うことができます。
@@ -450,6 +454,7 @@
     <string name="title_advanced_message_text_zoom2">デフォルトの本文のテキスト拡大率: %1$s %%</string>
     <string name="title_advanced_overview_mode">画面に合わせて元のメッセージを拡大</string>
     <string name="title_advanced_override_width">元のメッセージの幅の固定を無効にする</string>
+    <string name="title_advanced_hyphenation">自動ハイフンを使用</string>
     <string name="title_advanced_contrast">本文にハイコントラストテーマを使用</string>
     <string name="title_advanced_monospaced">デフォルトで本文に等幅フォントを使用</string>
     <string name="title_advanced_monospaced_pre">書式設定済みテキストに等幅フォントを使用</string>
@@ -513,8 +518,6 @@
     <string name="title_advanced_notifications_default">デフォルトチャンネル</string>
     <string name="title_advanced_notifications_service">チャンネルをモニターしています</string>
     <string name="title_advanced_notifications_newest_first">最新の通知を最初に表示</string>
-    <string name="title_advanced_notifications_background">メッセージの同期にバックグラウンドサービスを使用</string>
-    <string name="title_advanced_notifications_background_hint">バックグラウンドサービスは Android によって停止される可能性がありますが、ステータスバーに通知が表示されなくなります</string>
     <string name="title_advanced_badge">新着メッセージの数をランチャーアイコンに表示</string>
     <string name="title_advanced_unseen_ignored">新着メッセージの数を通知の数と一致させる</string>
     <string name="title_advanced_notify_background">バックグラウンドのときのみ通知を表示</string>
@@ -544,9 +547,10 @@
     <string name="title_advanced_light">通知 LED を使用</string>
     <string name="title_advanced_sound">通知音を選択</string>
     <string name="title_advanced_notify_screen_on">画面を一時オンにして新着メッセージ通知を表示</string>
+    <string name="title_advanced_notifications_background">メッセージの同期にバックグラウンドサービスを使用</string>
+    <string name="title_advanced_notifications_background_hint">バックグラウンドサービスは Android によって停止される可能性がありますが、ステータスバーに通知が表示されなくなります</string>
     <string name="title_advanced_confirm_links">リンクを開く前に確認</string>
     <string name="title_advanced_check_links_dbl">不審なリンクがないかドメインブロックリストを確認</string>
-    <string name="title_advanced_browse_links">Android の対応リンクを開く</string>
     <string name="title_advanced_confirm_images">デフォルトで画像を表示しない</string>
     <string name="title_advanced_ask_images">画像を表示する前に確認</string>
     <string name="title_advanced_confirm_html">デフォルトで再フォーマットされたメッセージを表示</string>
@@ -1041,7 +1045,6 @@
     <string name="title_reply_hard_bounce">ハードバウンスを送信</string>
     <string name="title_reply_template">テンプレートで返信</string>
     <string name="title_move_undo">%1$s に移動しました (%2$d)</string>
-    <string name="title_open_with">アプリで開く</string>
     <string name="title_authentication_failed">%1$s の認証に失敗しました</string>
     <string name="title_on_blocklist">迷惑メールブロックリストにあります</string>
     <string name="title_receipt_subject">開封確認メッセージ: %1$s</string>
@@ -1242,6 +1245,8 @@
     <string name="title_encrypt">暗号化</string>
     <string name="title_decrypt">復号</string>
     <string name="title_resync">再同期</string>
+    <string name="title_charset">エンコード</string>
+    <string name="title_charset_auto">自動</string>
     <string name="title_alternative_text">プレーンテキストを表示</string>
     <string name="title_alternative_html">HTML を表示</string>
     <string name="title_no_openpgp">OpenKeychain が見つかりません</string>
@@ -1564,6 +1569,7 @@
     <string name="title_hint_folder_actions">フォルダーを長押して、ナビゲーションメニューにフォルダーのショートカットを表示するなどの設定ができます</string>
     <string name="title_hint_folder_sync">バッテリーとネットワークの使用を抑えるためにデフォルトでは一部のフォルダーとメッセージのみ同期されます</string>
     <string name="title_hint_airplane">機内モードが ON です</string>
+    <string name="title_hint_notification">通知が無効です</string>
     <string name="title_hint_support">質問や問題がある場合はサポートメニューを使用してヘルプにアクセスしてください</string>
     <string name="title_hint_message_actions">左にスワイプしてゴミ箱に移動し、右にスワイプしてアーカイブ (利用可能な場合) します。スワイプ操作はアカウント設定で変更できます</string>
     <string name="title_hint_message_selection">メッセージを長押しして、複数のメッセージを選択します。そのまま上または下にスワイプすると、まとめてメッセージを選択できます</string>

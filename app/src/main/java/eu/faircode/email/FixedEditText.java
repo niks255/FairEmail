@@ -130,6 +130,8 @@ public class FixedEditText extends AppCompatEditText {
                   at android.widget.Editor.onDraw(Editor.java:1672)
                   at android.widget.TextView.onDraw(TextView.java:6914)
                   at android.view.View.draw(View.java:19200)
+                Fixed in Android 9:
+                https://android-review.googlesource.com/c/platform/frameworks/base/+/634929
             */
         }
     }

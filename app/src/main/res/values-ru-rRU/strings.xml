@@ -178,13 +178,14 @@
     <string name="title_setup_accounts">Учётные записи</string>
     <string name="title_setup_identities">Идентификаторы</string>
     <string name="title_setup_other">Другой провайдер</string>
+    <string name="title_setup_inbound">Только входящая почта (отправка письма невозможна!)</string>
     <string name="title_setup_pop3">Учётная запись POP3</string>
     <string name="title_setup_oauth_permission">Поставщик электронной почты одобрил OAuth только для официальных версий приложения из Play Store и GitHub</string>
     <string name="title_setup_gmail_support">Авторизация учётных записей Google будет работать только в официальных версиях из Play Store и GitHub, так как Android проверяет подпись приложения</string>
     <string name="title_setup_gmail_rationale">Пожалуйста, предоставьте разрешения для выбора учётной записи и чтения вашего имени</string>
     <string name="title_setup_gmail_permissions">Google запросит разрешения на чтение, создание, отправку и безвозвратное удаление всех ваших сообщений. FairEmail никогда не будет удалять ваши сообщения без вашего явного согласия.</string>
     <string name="title_setup_gmail_drafts">Если папка черновиков недоступна по IMAP, это может быть исправлено в настройках ярлыка Gmail</string>
-    <string name="title_setup_gmail_password">Я хочу авторизоваться в учётной записи паролем</string>
+    <string name="title_setup_gmail_password">Я хочу авторизовать учётную запись паролем вместо учётной записи на устройстве</string>
     <string name="title_setup_office_auth">Ошибка \"AUTHENTICATE failed\" может быть вызвана отключением IMAP/SMTP системным администратором</string>
     <string name="title_setup_oauth_rationale">Авторизовать доступ к вашей учётной записи %1$s</string>
     <string name="title_setup_oauth_update">Авторизация существующей учётной записи (или создание новой)</string>
@@ -210,6 +211,8 @@
     <string name="title_setup_permissions">Предоставить разрешения</string>
     <string name="title_setup_permissions_remark">Доступ к контактной информации (необязательно)</string>
     <string name="title_setup_permissions_explanation">Разрешение на контакты необходимо для поиска и подбора контактов</string>
+    <string name="title_setup_permissions_notify">Чтобы показывать новые уведомления (необязательно)</string>
+    <string name="title_setup_permissions_notify_explanation">Разрешения уведомлений для отображения новых сообщений в строке состояния</string>
     <string name="title_setup_permission_why">Какие разрешения необходимы и почему?</string>
     <string name="title_setup_permission_import_contacts">Как импортировать контакты?</string>
     <string name="title_setup_doze">Отключить оптимизацию энергопотребления</string>
@@ -233,6 +236,7 @@
     <string name="title_setup_still">Осталось сделать</string>
     <string name="title_setup_error">Ошибка</string>
     <string name="title_setup_pop">Использовать POP3 (не рекомендуется)</string>
+    <string name="title_setup_recent">Использовать \"recent\" для нескольких клиентов электронной почты</string>
     <string name="title_setup_configuring">Настройка учётной записи&#8230;</string>
     <string name="title_setup_app_password">Возможно, потребуется использовать пароль приложения</string>
     <string name="title_setup_extra">Дополнительно</string>
@@ -482,6 +486,7 @@
     <string name="title_advanced_message_text_zoom2">Масштаб текста сообщения по умолчанию: %1$s%%</string>
     <string name="title_advanced_overview_mode">Изменять масштаб исходных сообщений к размеру экрана</string>
     <string name="title_advanced_override_width">Отключить фиксированную ширину в оригинальных сообщениях</string>
+    <string name="title_advanced_hyphenation">Автоматическая расстановка переносов</string>
     <string name="title_advanced_contrast">Использовать высокий контраст для текста сообщений</string>
     <string name="title_advanced_monospaced">По умолчанию использовать моноширинный шрифт для текста сообщения</string>
     <string name="title_advanced_monospaced_pre">Использовать моноширинный шрифт для форматированного текста</string>
@@ -545,12 +550,11 @@
     <string name="title_advanced_notifications_default">Канал по умолчанию</string>
     <string name="title_advanced_notifications_service">Канал отслеживания</string>
     <string name="title_advanced_notifications_newest_first">Сначала показывать новые уведомления</string>
-    <string name="title_advanced_notifications_background">Использовать фоновую службу для синхронизации сообщений</string>
-    <string name="title_advanced_notifications_background_hint">Фоновая служба может быть остановлена Android в любое время, но не требует уведомления в статусной строке</string>
     <string name="title_advanced_badge">Показывать значок запуска с количеством новых сообщений</string>
     <string name="title_advanced_unseen_ignored">Количество уведомлений соответствует количеству новых сообщений</string>
     <string name="title_advanced_notify_background">Показывать уведомления только в фоновом режиме</string>
     <string name="title_advanced_notify_known">Показывать уведомления только для контактов</string>
+    <string name="title_advanced_notify_suppress_in_call" comment="title_advanced_notify_suppress_in_call&#10;&#10;Title of option which will delay new message notifications until after hanging up">Откладывать уведомления во время вызова</string>
     <string name="title_advanced_notify_summary">Показывать только сводное уведомление</string>
     <string name="title_advanced_notify_preview">Предпросмотр сообщений в уведомлениях</string>
     <string name="title_advanced_notify_preview_all">Предпросмотр всего текста</string>
@@ -576,9 +580,10 @@
     <string name="title_advanced_light">Использовать индикатор уведомлений</string>
     <string name="title_advanced_sound">Выбрать звук уведомления</string>
     <string name="title_advanced_notify_screen_on">Включать экран для новых уведомлений</string>
+    <string name="title_advanced_notifications_background">Использовать фоновую службу для синхронизации сообщений</string>
+    <string name="title_advanced_notifications_background_hint">Фоновая служба может быть остановлена Android в любое время, но не требует уведомления в статусной строке</string>
     <string name="title_advanced_confirm_links">Подтверждать открытие ссылок</string>
     <string name="title_advanced_check_links_dbl">Проверять списки блокировки доменов на подозрительные ссылки</string>
-    <string name="title_advanced_browse_links">Предоставить Android открывать ссылки</string>
     <string name="title_advanced_confirm_images">Не показывать изображения по умолчанию</string>
     <string name="title_advanced_ask_images">Подтверждать отображение изображений</string>
     <string name="title_advanced_confirm_html">Показывать переформатированные сообщения по умолчанию</string>
@@ -1074,7 +1079,6 @@
     <string name="title_reply_hard_bounce">Отправить жёсткий отказ</string>
     <string name="title_reply_template">Ответить с шаблоном</string>
     <string name="title_move_undo">Перемещение в %1$s (%2$d)</string>
-    <string name="title_open_with">Открыть с помощью</string>
     <string name="title_authentication_failed">Ошибка аутентификации %1$s</string>
     <string name="title_on_blocklist">По списку блокировки спама</string>
     <string name="title_receipt_subject">Уведомление о прочтении: %1$s</string>
@@ -1274,10 +1278,13 @@
     <string name="title_encrypt">Шифрование</string>
     <string name="title_decrypt">Расшифрование</string>
     <string name="title_resync">Синхронизировать заново</string>
+    <string name="title_charset">Кодировка</string>
+    <string name="title_charset_auto">Автовыбор</string>
     <string name="title_alternative_text">Показать простой текст</string>
     <string name="title_alternative_html">Показать HTML</string>
     <string name="title_no_openpgp">OpenKeychain не найдено</string>
     <string name="title_user_interaction">Перенос в OpenKeychain</string>
+    <string name="title_padlock">Использовать замок для расшифровки сообщения</string>
     <string name="title_signed_data">Проверить подпись, чтобы показать текст сообщения</string>
     <string name="title_not_encrypted">Сообщение не подписано и не зашифровано</string>
     <string name="title_no_sign_key">Ключ подписи не выбран</string>
@@ -1596,6 +1603,7 @@
     <string name="title_hint_folder_actions">Длительное нажатие на папку откроет другие действия, например, добавление папки в меню навигации для быстрого доступа.</string>
     <string name="title_hint_folder_sync">Для экономии заряда батареи и трафика по умолчанию синхронизируются не все папки и сообщения.</string>
     <string name="title_hint_airplane">Режим полета включён</string>
+    <string name="title_hint_notification">Уведомления отключены</string>
     <string name="title_hint_support">Если у вас есть вопрос или проблема, пожалуйста, используйте меню поддержки для получения помощи.</string>
     <string name="title_hint_message_actions">Смахните влево, чтобы поместить в корзину; смахните вправо, чтобы поместить в архив (если имеется); действия жестов можно изменить в настройках учётной записи.</string>
     <string name="title_hint_message_selection">Длительное нажатие на сообщение начинает выбор нескольких сообщений; удерживайте нажатие и смахните вверх или вниз, чтобы выбрать больше сообщений.</string>

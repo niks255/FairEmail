@@ -19,9 +19,6 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
-import static androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF;
-import static androidx.webkit.WebSettingsCompat.FORCE_DARK_ON;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -98,7 +95,7 @@ public class ActivityAMP extends ActivityBase {
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
-        if (WebViewEx.isFeatureSupported(WebViewFeature.SAFE_BROWSING_ENABLE))
+        if (WebViewEx.isFeatureSupported(this, WebViewFeature.SAFE_BROWSING_ENABLE))
             WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
 
         setDarkMode();
@@ -129,11 +126,10 @@ public class ActivityAMP extends ActivityBase {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        boolean available =
-                (WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK) &&
-                        Helper.isDarkTheme(this));
+        boolean dark = Helper.isDarkTheme(this);
+        boolean canDarken = WebViewEx.isFeatureSupported(this, WebViewFeature.ALGORITHMIC_DARKENING);
         menu.findItem(R.id.menu_force_light)
-                .setVisible(available)
+                .setVisible(dark && canDarken)
                 .getIcon().setLevel(force_light ? 1 : 0);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -164,8 +160,9 @@ public class ActivityAMP extends ActivityBase {
     private void setDarkMode() {
         WebSettings settings = wvAmp.getSettings();
         boolean dark = (Helper.isDarkTheme(this) && !force_light);
-        if (WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK))
-            WebSettingsCompat.setForceDark(settings, dark ? FORCE_DARK_ON : FORCE_DARK_OFF);
+        boolean canDarken = WebViewEx.isFeatureSupported(this, WebViewFeature.ALGORITHMIC_DARKENING);
+        if (canDarken)
+            WebSettingsCompat.setAlgorithmicDarkeningAllowed(settings, dark);
     }
 
     private void load() {

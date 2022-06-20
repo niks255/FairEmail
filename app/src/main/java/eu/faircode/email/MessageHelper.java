@@ -82,7 +82,12 @@ import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
+import java.security.KeyFactory;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.X509EncodedKeySpec;
 import java.text.Normalizer;
 import java.text.ParsePosition;
 import java.util.ArrayList;
@@ -1308,23 +1313,32 @@ public class MessageHelper {
     }
 
     String getInReplyTo() throws MessagingException {
+        String[] a = getInReplyTos();
+        return (a.length == 0 ? null : TextUtils.join(" ", a));
+    }
+
+    String[] getInReplyTos() throws MessagingException {
         ensureHeaders();
+
+        List<String> result = new ArrayList<>();
 
         String header = imessage.getHeader("In-Reply-To", null);
         if (header != null)
-            header = MimeUtility.unfold(header);
+            result.addAll(Arrays.asList(getReferences(header)));
 
-        if (header == null) {
+        if (result.size() == 0) {
             // Use reported message ID as synthetic in-reply-to
             InternetHeaders iheaders = getReportHeaders();
             if (iheaders != null) {
                 header = iheaders.getHeader("Message-Id", null);
-                if (header != null)
+                if (header != null) {
+                    result.add(header);
                     Log.i("rfc822 id=" + header);
+                }
             }
         }
 
-        return header;
+        return result.toArray(new String[0]);
     }
 
     private InternetHeaders getReportHeaders() {
@@ -1388,9 +1402,9 @@ public class MessageHelper {
             if (!TextUtils.isEmpty(ref) && !refs.contains(ref))
                 refs.add(ref);
 
-        String inreplyto = getInReplyTo();
-        if (!TextUtils.isEmpty(inreplyto) && !refs.contains(inreplyto))
-            refs.add(inreplyto);
+        for (String inreplyto : getInReplyTos())
+            if (!TextUtils.isEmpty(inreplyto) && !refs.contains(inreplyto))
+                refs.add(inreplyto);
 
         DB db = DB.getInstance(context);
         List<EntityMessage> before = new ArrayList<>();
@@ -1886,6 +1900,124 @@ public class MessageHelper {
             }
         }
 
+        return true;
+    }
+
+    boolean verifyDKIM(Context context) throws MessagingException {
+        // Proof of concept, doesn't work 100% reliable
+        if (true)
+            return true;
+
+        // https://datatracker.ietf.org/doc/html/rfc6376/
+        String[] headers = imessage.getHeader("DKIM-Signature");
+        if (headers == null || headers.length < 1)
+            return false;
+
+        for (String header : headers) {
+            Map<String, String> kv = getKeyValues(MimeUtility.unfold(header));
+
+            String a = kv.get("a");
+            if (!"rsa-sha256".equals(a))
+                return false;
+
+            try {
+                String dns = kv.get("s") + "._domainkey." + kv.get("d");
+                Log.i("DKIM lookup " + dns);
+                DnsHelper.DnsRecord[] records = DnsHelper.lookup(context, dns, "txt");
+                if (records.length > 0) {
+                    Log.i("DKIM got " + records[0].name);
+                    Map<String, String> dk = getKeyValues(records[0].name);
+
+                    Log.i("DKIM canonicalization=" + kv.get("c"));
+                    String[] c = kv.get("c").split("/");
+
+                    StringBuilder head = new StringBuilder();
+                    Log.i("DKIM headers=" + kv.get("h"));
+                    List<String> _h = new ArrayList<>();
+                    _h.addAll(Arrays.asList(kv.get("h").split(":")));
+                    _h.add("DKIM-Signature");
+                    for (String n : _h) {
+                        String[] h = ("DKIM-Signature".equals(n) ? new String[]{header} : imessage.getHeader(n));
+                        // TODO: missing header = \r\n?
+                        for (int i = h.length - 1; i >= 0; i--) {
+                            String v = h[i];
+                            if ("DKIM-Signature".equals(n)) {
+                                int b = v.lastIndexOf("b=");
+                                v = v.substring(0, b + 2);
+                                Log.i("DKIM v=" + v);
+                            }
+
+                            if ("simple".equals(c[0]))
+                                head.append(n).append(": ")
+                                        .append(v);
+                            else if ("relaxed".equals(c[0])) {
+                                v = MimeUtility.unfold(v);
+                                head.append(n.trim().toLowerCase()).append(':')
+                                        .append(v.replaceAll("\\s+", " ").trim());
+                            } else
+                                throw new IllegalArgumentException(c[0]);
+
+                            if (!"DKIM-Signature".equals(n))
+                                head.append("\r\n");
+                        }
+                    }
+                    Log.i("DKIM head=" + head.toString().replace("\r\n", "|"));
+
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    Helper.copy(imessage.getRawInputStream(), bos);
+                    String body = bos.toString(); // TODO: charset
+                    if ("simple".equals(c[1])) {
+                        if (TextUtils.isEmpty(body))
+                            body = "\r\n";
+                        else if (!body.endsWith("\r\n"))
+                            body += "\r\n";
+                        else {
+                            while (body.endsWith("\r\n\r\n"))
+                                body = body.substring(0, body.length() - 2);
+                        }
+                    } else if ("relaxed".equals(c[1])) {
+                        if (TextUtils.isEmpty(body))
+                            body = "";
+                        else {
+                            body = body.replaceAll("[ \\t]+\r\n", "\r\n");
+                            body = body.replaceAll("[ \\t]+", " ");
+                            while (body.endsWith("\r\n\r\n"))
+                                body = body.substring(0, body.length() - 2);
+                            if ("\r\n".equals(body))
+                                body = "";
+                        }
+                    } else
+                        throw new IllegalArgumentException(c[1]);
+
+                    Log.i("DKIM body=" + body.replace("\r\n", "|"));
+
+                    byte[] bh = MessageDigest.getInstance("SHA-256").digest(body.getBytes());  // TODO: charset
+                    Log.i("DKIM bh=" + Base64.encodeToString(bh, Base64.NO_WRAP) + "/" + kv.get("bh"));
+
+                    String p = dk.get("p").replaceAll("\\s+", "");
+                    Log.i("DKIM pubkey=" + p);
+
+                    X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(Base64.decode(p, Base64.DEFAULT));
+                    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+                    PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
+                    Signature sig = Signature.getInstance("SHA256withRSA"); // a=
+
+                    String s = kv.get("b").replaceAll("\\s+", "");
+                    Log.i("DKIM signature=" + s);
+
+                    byte[] signature = Base64.decode(s, Base64.DEFAULT);
+
+                    sig.initVerify(pubKey);
+                    sig.update(head.toString().getBytes());
+                    Log.i("DKIM valid=" + sig.verify(signature) +
+                            " results=" + getAuthentication("dkim", getAuthentication()) +
+                            " from=" + formatAddresses(getFrom()));
+                }
+            } catch (Throwable ex) {
+                Log.i("DKIM " + ex);
+                Log.e(ex);
+            }
+        }
         return true;
     }
 
@@ -2945,6 +3077,10 @@ public class MessageHelper {
         }
 
         String getHtml(Context context, boolean plain_text) throws MessagingException, IOException {
+            return getHtml(context, plain_text, null);
+        }
+
+        String getHtml(Context context, boolean plain_text, String override) throws MessagingException, IOException {
             if (text.size() == 0) {
                 Log.i("No body part");
                 return null;
@@ -2982,10 +3118,38 @@ public class MessageHelper {
                     return null;
                 }
 
-                String result;
+                // Check character set
+                String charset = h.contentType.getParameter("charset");
+                if (UnknownCharsetProvider.charsetForMime(charset) == null)
+                    warnings.add(context.getString(R.string.title_no_charset, charset));
 
+                if (TextUtils.isEmpty(charset) ||
+                        charset.equalsIgnoreCase(StandardCharsets.US_ASCII.name()))
+                    charset = null;
+
+                Charset cs = null;
+                if (charset != null)
+                    try {
+                        cs = Charset.forName(charset);
+                    } catch (UnsupportedCharsetException ignored) {
+                        cs = null;
+                    }
+
+                String result;
                 try {
-                    Object content = h.part.getContent();
+                    Object content;
+
+                    // Check for UTF-16 LE without BOM
+                    if (StandardCharsets.UTF_16.equals(cs) && override == null) {
+                        BufferedInputStream bis = new BufferedInputStream(h.part.getDataHandler().getInputStream());
+                        if (Boolean.TRUE.equals(CharsetHelper.isUTF16LE(bis))) {
+                            Log.e("Charset " + cs + " -> UTF16LE");
+                            cs = StandardCharsets.UTF_16LE;
+                        }
+                        content = Helper.readStream(bis, cs);
+                    } else
+                        content = h.part.getContent();
+
                     Log.i("Content class=" + (content == null ? null : content.getClass().getName()));
 
                     if (content == null) {
@@ -3000,15 +3164,8 @@ public class MessageHelper {
                         // Typically com.sun.mail.util.QPDecoderStream
                         if (BuildConfig.DEBUG && false)
                             warnings.add(content.getClass().getName());
-                        Charset charset;
-                        try {
-                            String cs = h.contentType.getParameter("charset");
-                            charset = (cs == null ? StandardCharsets.ISO_8859_1 : Charset.forName(cs));
-                        } catch (Throwable ex) {
-                            Log.w(ex);
-                            charset = StandardCharsets.ISO_8859_1;
-                        }
-                        result = Helper.readStream((InputStream) content, charset);
+                        result = Helper.readStream((InputStream) content,
+                                cs == null ? StandardCharsets.ISO_8859_1 : cs);
                     } else {
                         Log.e(content.getClass().getName());
                         result = content.toString();
@@ -3028,40 +3185,31 @@ public class MessageHelper {
                     return null;
                 }
 
-                // Check character set
-                String charset = h.contentType.getParameter("charset");
-                if (UnknownCharsetProvider.charsetForMime(charset) == null)
-                    warnings.add(context.getString(R.string.title_no_charset, charset));
-
-                if ((TextUtils.isEmpty(charset) || charset.equalsIgnoreCase(StandardCharsets.US_ASCII.name())))
-                    charset = null;
-
-                Charset cs = null;
-                try {
-                    if (charset != null)
-                        cs = Charset.forName(charset);
-                } catch (UnsupportedCharsetException ignored) {
-                }
-
                 if (h.isPlainText()) {
-                    if (charset == null || StandardCharsets.ISO_8859_1.equals(cs)) {
-                        if (StandardCharsets.ISO_8859_1.equals(cs) && CharsetHelper.isUTF8(result)) {
-                            Log.i("Charset upgrade=UTF8");
-                            result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                        } else {
-                            Charset detected = CharsetHelper.detect(result, StandardCharsets.ISO_8859_1);
-                            if (detected == null) {
-                                if (CharsetHelper.isUTF8(result)) {
-                                    Log.i("Charset plain=UTF8");
-                                    result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                                }
+                    if (override == null) {
+                        if (cs == null || StandardCharsets.ISO_8859_1.equals(cs)) {
+                            if (StandardCharsets.ISO_8859_1.equals(cs) && CharsetHelper.isUTF8(result)) {
+                                Log.i("Charset upgrade=UTF8");
+                                result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
                             } else {
-                                Log.i("Charset plain=" + detected.name());
-                                result = new String(result.getBytes(StandardCharsets.ISO_8859_1), detected);
+                                Charset detected = CharsetHelper.detect(result, StandardCharsets.ISO_8859_1);
+                                if (detected == null) {
+                                    if (CharsetHelper.isUTF8(result)) {
+                                        Log.i("Charset plain=UTF8");
+                                        result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                                    }
+                                } else {
+                                    Log.i("Charset plain=" + detected.name());
+                                    result = new String(result.getBytes(StandardCharsets.ISO_8859_1), detected);
+                                }
                             }
-                        }
-                    } else if (StandardCharsets.UTF_8.equals(cs))
-                        result = CharsetHelper.utf8toW1252(result);
+                        } else if (StandardCharsets.UTF_8.equals(cs))
+                            result = CharsetHelper.utf8toW1252(result);
+                    } else {
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        Helper.copy(h.part.getDataHandler().getInputStream(), bos);
+                        result = bos.toString(override);
+                    }
 
                     // https://datatracker.ietf.org/doc/html/rfc3676
                     if ("flowed".equalsIgnoreCase(h.contentType.getParameter("format")))
@@ -3092,94 +3240,101 @@ public class MessageHelper {
 
                     result = "<div x-plain=\"true\">" + HtmlHelper.formatPlainText(result) + "</div>";
                 } else if (h.isHtml()) {
-                    // Conditionally upgrade to UTF8
-                    if ((cs == null ||
-                            StandardCharsets.US_ASCII.equals(cs) ||
-                            StandardCharsets.ISO_8859_1.equals(cs)) &&
-                            CharsetHelper.isUTF8(result))
-                        result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                    if (override == null) {
+                        // Conditionally upgrade to UTF8
+                        if ((cs == null ||
+                                StandardCharsets.US_ASCII.equals(cs) ||
+                                StandardCharsets.ISO_8859_1.equals(cs)) &&
+                                CharsetHelper.isUTF8(result))
+                            result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
-                    //if (StandardCharsets.UTF_8.equals(cs))
-                    //    result = CharsetHelper.utf8w1252(result);
+                        //if (StandardCharsets.UTF_8.equals(cs))
+                        //    result = CharsetHelper.utf8w1252(result);
 
-                    // Fix incorrect UTF16
-                    try {
-                        if (CHARSET16.contains(cs)) {
-                            Charset detected = CharsetHelper.detect(result, cs);
-                            if (!CHARSET16.contains(detected))
-                                Log.w(new Throwable("Charset=" + cs + " detected=" + detected));
-                            if (StandardCharsets.US_ASCII.equals(detected) ||
-                                    StandardCharsets.UTF_8.equals(detected)) {
-                                charset = null;
-                                result = new String(result.getBytes(cs), detected);
+                        // Fix incorrect UTF16
+                        try {
+                            if (CHARSET16.contains(cs)) {
+                                Charset detected = CharsetHelper.detect(result, cs);
+                                if (!CHARSET16.contains(detected))
+                                    Log.w(new Throwable("Charset=" + cs + " detected=" + detected));
+                                // UTF-16 can be detected as US-ASCII
+                                if (StandardCharsets.UTF_8.equals(detected)) {
+                                    cs = null;
+                                    result = new String(result.getBytes(cs), detected);
+                                }
+                            }
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                        }
+
+                        if (cs == null) {
+                            // <meta charset="utf-8" />
+                            // <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            String excerpt = result.substring(0, Math.min(MAX_META_EXCERPT, result.length()));
+                            Document d = JsoupEx.parse(excerpt);
+                            for (Element meta : d.select("meta")) {
+                                String mcharset = null;
+                                if ("Content-Type".equalsIgnoreCase(meta.attr("http-equiv"))) {
+                                    try {
+                                        ContentType ct = new ContentType(meta.attr("content"));
+                                        mcharset = ct.getParameter("charset");
+                                    } catch (ParseException ex) {
+                                        Log.w(ex);
+                                    }
+                                } else
+                                    mcharset = meta.attr("charset");
+
+                                if (!TextUtils.isEmpty(mcharset))
+                                    try {
+                                        Log.i("Charset meta=" + meta);
+                                        Charset c = Charset.forName(mcharset);
+
+                                        // US-ASCII is a subset of ISO8859-1
+                                        if (StandardCharsets.US_ASCII.equals(c))
+                                            break;
+
+                                        // Check if really UTF-8
+                                        if (StandardCharsets.UTF_8.equals(c) && !CharsetHelper.isUTF8(result)) {
+                                            Log.w("Charset meta=" + meta + " !isUTF8");
+                                            break;
+                                        }
+
+                                        // 16 bits charsets cannot be converted to 8 bits
+                                        if (CHARSET16.contains(c)) {
+                                            Log.w("Charset meta=" + meta);
+                                            break;
+                                        }
+
+                                        Charset detected = CharsetHelper.detect(result, c);
+                                        if (c.equals(detected))
+                                            break;
+
+                                        // Common detected/meta
+                                        // - windows-1250, windows-1257 / ISO-8859-1
+                                        // - ISO-8859-1 / windows-1252
+                                        // - US-ASCII / windows-1250, windows-1252, ISO-8859-1, ISO-8859-15, UTF-8
+
+                                        if (StandardCharsets.US_ASCII.equals(detected) &&
+                                                ("ISO-8859-15".equals(c.name()) ||
+                                                        "windows-1250".equals(c.name()) ||
+                                                        "windows-1252".equals(c.name()) ||
+                                                        StandardCharsets.UTF_8.equals(c) ||
+                                                        StandardCharsets.ISO_8859_1.equals(c)))
+                                            break;
+
+                                        // Convert
+                                        Log.w("Converting detected=" + detected + " meta=" + c);
+                                        result = new String(result.getBytes(StandardCharsets.ISO_8859_1), c);
+                                        break;
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                    }
                             }
                         }
-                    } catch (Throwable ex) {
-                        Log.w(ex);
-                    }
-
-                    if (charset == null) {
-                        // <meta charset="utf-8" />
-                        // <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-                        String excerpt = result.substring(0, Math.min(MAX_META_EXCERPT, result.length()));
-                        Document d = JsoupEx.parse(excerpt);
-                        for (Element meta : d.select("meta")) {
-                            if ("Content-Type".equalsIgnoreCase(meta.attr("http-equiv"))) {
-                                try {
-                                    ContentType ct = new ContentType(meta.attr("content"));
-                                    charset = ct.getParameter("charset");
-                                } catch (ParseException ex) {
-                                    Log.w(ex);
-                                }
-                            } else
-                                charset = meta.attr("charset");
-
-                            if (!TextUtils.isEmpty(charset))
-                                try {
-                                    Log.i("Charset meta=" + meta);
-                                    Charset c = Charset.forName(charset);
-
-                                    // US-ASCII is a subset of ISO8859-1
-                                    if (StandardCharsets.US_ASCII.equals(c))
-                                        break;
-
-                                    // Check if really UTF-8
-                                    if (StandardCharsets.UTF_8.equals(c) && !CharsetHelper.isUTF8(result)) {
-                                        Log.w("Charset meta=" + meta + " !isUTF8");
-                                        break;
-                                    }
-
-                                    // 16 bits charsets cannot be converted to 8 bits
-                                    if (CHARSET16.contains(c)) {
-                                        Log.w("Charset meta=" + meta);
-                                        break;
-                                    }
-
-                                    Charset detected = CharsetHelper.detect(result, c);
-                                    if (c.equals(detected))
-                                        break;
-
-                                    // Common detected/meta
-                                    // - windows-1250, windows-1257 / ISO-8859-1
-                                    // - ISO-8859-1 / windows-1252
-                                    // - US-ASCII / windows-1250, windows-1252, ISO-8859-1, ISO-8859-15, UTF-8
-
-                                    if (StandardCharsets.US_ASCII.equals(detected) &&
-                                            ("ISO-8859-15".equals(c.name()) ||
-                                                    "windows-1250".equals(c.name()) ||
-                                                    "windows-1252".equals(c.name()) ||
-                                                    StandardCharsets.UTF_8.equals(c) ||
-                                                    StandardCharsets.ISO_8859_1.equals(c)))
-                                        break;
-
-                                    // Convert
-                                    Log.w("Converting detected=" + detected + " meta=" + c);
-                                    result = new String(result.getBytes(StandardCharsets.ISO_8859_1), c);
-                                    break;
-                                } catch (Throwable ex) {
-                                    Log.e(ex);
-                                }
-                        }
+                    } else {
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        Helper.copy(h.part.getDataHandler().getInputStream(), bos);
+                        result = bos.toString(override);
                     }
                 } else if (h.isReport()) {
                     Report report = new Report(h.contentType.getBaseType(), result);

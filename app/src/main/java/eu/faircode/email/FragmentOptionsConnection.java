@@ -20,6 +20,7 @@ package eu.faircode.email;
 */
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -50,6 +51,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
@@ -79,6 +81,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private TextView tvNetworkMetered;
     private TextView tvNetworkRoaming;
     private CardView cardDebug;
+    private Button btnCiphers;
     private TextView tvNetworkInfo;
 
     private Group grpValidated;
@@ -125,6 +128,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         tvNetworkRoaming = view.findViewById(R.id.tvNetworkRoaming);
 
         cardDebug = view.findViewById(R.id.cardDebug);
+        btnCiphers = view.findViewById(R.id.btnCiphers);
         tvNetworkInfo = view.findViewById(R.id.tvNetworkInfo);
 
         grpValidated = view.findViewById(R.id.grpValidated);
@@ -302,6 +306,23 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             }
         });
 
+        btnCiphers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext())
+                        .setIcon(R.drawable.twotone_info_24)
+                        .setTitle(R.string.title_advanced_ciphers)
+                        .setMessage(Log.getCiphers())
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing
+                            }
+                        })
+                        .show();
+            }
+        });
+
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
         tvNetworkMetered.setVisibility(View.GONE);
@@ -324,8 +345,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         if ("timeout".equals(key))
             return;
 
-        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-            setOptions();
+        setOptions();
     }
 
     @Override
@@ -370,6 +390,9 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     }
 
     private void setOptions() {
+        if (getContext() == null)
+            return;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         swMetered.setChecked(prefs.getBoolean("metered", true));

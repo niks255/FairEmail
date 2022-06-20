@@ -146,7 +146,6 @@
     <string name="title_setup_gmail_rationale">Eman baimena kontu bat aukeratu eta zure izena irakurtzeko</string>
     <string name="title_setup_gmail_permissions">Google-k zure posta elektronikoa irakurri, konposatu, bidali eta ezabatzeko baimenak eskatuko ditu. FairEmail-ek ez ditu zure mezuak ezabatuko baimen espliziturik gabe.</string>
     <string name="title_setup_gmail_drafts">Zirriborroen karpeta IMAP bidez eskuragarri ez badago, Gmailen etiketen ezarpenetan konpondu daiteke</string>
-    <string name="title_setup_gmail_password">Pasahitz batekin kontu bat baimendu nahi dut</string>
     <string name="title_setup_office_auth">\'AUTENTIFIKAZIOAK huts egin du\' errorea sistema administratzaileak IMAP/SMTP desgaitu duelako izan daiteke</string>
     <string name="title_setup_oauth_rationale">Baimendu zure %1$s kontura sarbidea</string>
     <string name="title_setup_oauth_update">Berriro baimendu lehendik dagoen kontu bat (bestela sortu kontu berri bat)</string>
@@ -402,8 +401,6 @@
     <string name="title_advanced_reset_importance">Berrezarri garrantzia mezuak mugitzean</string>
     <string name="title_advanced_notifications">Kudeatu jakinarazpenak</string>
     <string name="title_advanced_notifications_default">Kanal lehenetsia</string>
-    <string name="title_advanced_notifications_background">Erabili bigarren planoko zerbitzua mezuak sinkrinizatzeko</string>
-    <string name="title_advanced_notifications_background_hint">Bigarren planoko zerbitzua Androidek gelditu dezake noiznahi, baina ez du jakinarazpenik behar egoera barran</string>
     <string name="title_advanced_badge">Erakutsi mezu berrien kopurua abiarazleko ikonoan</string>
     <string name="title_advanced_unseen_ignored">Mezu berri kopurua eta jakinarazpenen kopurua berdina izan dadila</string>
     <string name="title_advanced_notify_background">Erakutsi jakinarazpenak bigarren planoan soilik</string>
@@ -429,8 +426,9 @@
     <string name="title_advanced_biometrics_notify">Erakutsi jakinarazpenen edukia autentifikazio biometrikoa erabiltzean</string>
     <string name="title_advanced_light">Erabili jakinarazpen-argia</string>
     <string name="title_advanced_sound">Aukeratu jakinarazpenen soinua</string>
+    <string name="title_advanced_notifications_background">Erabili bigarren planoko zerbitzua mezuak sinkrinizatzeko</string>
+    <string name="title_advanced_notifications_background_hint">Bigarren planoko zerbitzua Androidek gelditu dezake noiznahi, baina ez du jakinarazpenik behar egoera barran</string>
     <string name="title_advanced_confirm_links">Berretsi estekak irekitzea</string>
-    <string name="title_advanced_browse_links">Delegatu Androiden estekak irekitzea</string>
     <string name="title_advanced_ask_images">Berretsi irudiak erakustea</string>
     <string name="title_advanced_confirm_html">Berez erakutsi erreformatutako mezuak</string>
     <string name="title_advanced_hide_timezone">Bidali mezuak denbora-zona daturik gabe</string>
@@ -767,7 +765,6 @@
     <string name="title_reply_list">Erantzun zerrendari</string>
     <string name="title_reply_receipt">Bidali jaso izanaren agiria</string>
     <string name="title_reply_template">Erantzun txantiloia erabiliz</string>
-    <string name="title_open_with">Ireki honekin</string>
     <string name="title_authentication_failed">%1$s autentifikazioak huts egin du</string>
     <string name="title_on_blocklist">Spam blokeoaren zerrendan</string>
     <string name="title_receipt_subject">Irakurragiria: %1$s</string>

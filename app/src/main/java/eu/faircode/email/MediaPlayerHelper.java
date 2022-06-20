@@ -32,9 +32,8 @@ public class MediaPlayerHelper {
             @Override
             public void run() {
                 try {
-                    if (MediaPlayerHelper.isInCall(context))
-                        return;
-                    MediaPlayerHelper.play(context, uri, alarm, duration);
+                    if (!isInCall(context))
+                        play(context, uri, alarm, duration);
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
@@ -85,9 +84,18 @@ public class MediaPlayerHelper {
         if (am == null)
             return false;
 
-        // This doesn't require READ_PHONE_STATE permission
-        int mode = am.getMode();
-        EntityLog.log(context, "Audio mode=" + mode);
+        try {
+            // This doesn't require READ_PHONE_STATE permission
+            int mode = am.getMode();
+            Log.i("Audio mode=" + mode);
+            return isInCall(mode);
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
+    }
+
+    static boolean isInCall(int mode) {
         return (mode == AudioManager.MODE_RINGTONE ||
                 mode == AudioManager.MODE_IN_CALL ||
                 mode == AudioManager.MODE_IN_COMMUNICATION);

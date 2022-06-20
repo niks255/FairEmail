@@ -200,13 +200,14 @@
     <string name="title_setup_gmail" translatable="false">Gmail</string>
     <string name="title_setup_oauth" translatable="false">%1$s (OAuth)</string>
     <string name="title_setup_other">Other provider</string>
+    <string name="title_setup_inbound">Incoming email only (email cannot be sent!)</string>
     <string name="title_setup_pop3">POP3 account</string>
     <string name="title_setup_oauth_permission">The email provider has approved OAuth only for the Play Store and GitHub version</string>
     <string name="title_setup_gmail_support">Authorizing Google accounts will work in the Play Store and GitHub version only because Android checks the digital app signature</string>
     <string name="title_setup_gmail_rationale">Please grant permissions to select an account and read your name</string>
     <string name="title_setup_gmail_permissions">Google will ask for permissions to read, compose, send and permanently delete all your email. FairEmail will never delete your messages without your explicit consent.</string>
     <string name="title_setup_gmail_drafts">If the drafts folder is not accessible by IMAP, this can be fixed in the Gmail label settings</string>
-    <string name="title_setup_gmail_password">I want to authorize an account with a password</string>
+    <string name="title_setup_gmail_password">I want to authorize an account with a password instead of an on-device account</string>
     <string name="title_setup_office_auth">The error \'AUTHENTICATE failed\' can be caused by IMAP/SMTP being disabled by the system administrator</string>
     <string name="title_setup_oauth_rationale">Authorize access to your %1$s account</string>
     <string name="title_setup_oauth_update">Authorize an existing account again (otherwise create a new account)</string>
@@ -232,6 +233,8 @@
     <string name="title_setup_permissions">Grant permissions</string>
     <string name="title_setup_permissions_remark">To access contact information (optional)</string>
     <string name="title_setup_permissions_explanation">Contact permissions are required to look up contact info and to suggest contacts</string>
+    <string name="title_setup_permissions_notify">To show new messages notifications (optional)</string>
+    <string name="title_setup_permissions_notify_explanation">Notification permissions are required to show notifications for new messages in the status bar</string>
     <string name="title_setup_permission_why">Which permissions are needed and why?</string>
     <string name="title_setup_permission_import_contacts">How can I import contacts?</string>
     <string name="title_setup_doze">Disable battery optimizations</string>
@@ -256,6 +259,7 @@
     <string name="title_setup_still">Still to do</string>
     <string name="title_setup_error">Error</string>
     <string name="title_setup_pop">Use POP3 (not recommended)</string>
+    <string name="title_setup_recent">Use \'recent\' for multiple email clients</string>
     <string name="title_setup_configuring">Configuring account &#8230;</string>
     <string name="title_setup_app_password">You might need to use an app password</string>
     <string name="title_setup_extra">Extra</string>
@@ -542,6 +546,7 @@
     <string name="title_advanced_message_text_zoom2">Default message text zoom: %1$s %%</string>
     <string name="title_advanced_overview_mode">Zoom original messages to fit the screen</string>
     <string name="title_advanced_override_width">Disable fixed widths in original messages</string>
+    <string name="title_advanced_hyphenation">Use automatic hyphenation</string>
     <string name="title_advanced_contrast">Use high contrast for message text</string>
     <string name="title_advanced_monospaced">Use monospaced font for message text by default</string>
     <string name="title_advanced_monospaced_pre">Use monospaced font for preformatted text</string>
@@ -607,13 +612,12 @@
     <string name="title_advanced_notifications_default">Default channel</string>
     <string name="title_advanced_notifications_service">Monitoring channel</string>
     <string name="title_advanced_notifications_newest_first">Show newest notifications first</string>
-    <string name="title_advanced_notifications_background">Use background service to synchronize messages</string>
-    <string name="title_advanced_notifications_background_hint">A background service can be stopped by Android at any time, but doesn\'t require a status bar notification</string>
 
     <string name="title_advanced_badge">Show launcher icon with number of new messages</string>
     <string name="title_advanced_unseen_ignored">Let the number of new messages match the number of notifications</string>
     <string name="title_advanced_notify_background">Show notifications when in the background only</string>
     <string name="title_advanced_notify_known">Show notifications for contacts only</string>
+    <string name="title_advanced_notify_suppress_in_call">Delay notifications while on a call</string>
     <string name="title_advanced_notify_summary">Show summary notification only</string>
     <string name="title_advanced_notify_preview">Show message preview in notifications</string>
     <string name="title_advanced_notify_preview_all">Preview all text</string>
@@ -640,6 +644,8 @@
     <string name="title_advanced_light">Use notification light</string>
     <string name="title_advanced_sound">Select notification sound</string>
     <string name="title_advanced_notify_screen_on">Briefly turn on the screen for new message notifications</string>
+    <string name="title_advanced_notifications_background">Use background service to synchronize messages</string>
+    <string name="title_advanced_notifications_background_hint">A background service can be stopped by Android at any time, but doesn\'t require a status bar notification</string>
     <string name="title_advanced_alert_once" translatable="false">MIUI notification sound workaround</string>
 
     <string name="title_advanced_caption_pgp" translatable="false">PGP</string>
@@ -647,7 +653,6 @@
 
     <string name="title_advanced_confirm_links">Confirm opening links</string>
     <string name="title_advanced_check_links_dbl">Check domain block lists for suspicious links</string>
-    <string name="title_advanced_browse_links">Delegate opening links to Android</string>
     <string name="title_advanced_confirm_images">Show no images by default</string>
     <string name="title_advanced_ask_images">Confirm showing images</string>
     <string name="title_advanced_confirm_html">Show reformatted messages by default</string>
@@ -1247,7 +1252,6 @@
     <string name="title_reply_hard_bounce">Send hard bounce</string>
     <string name="title_reply_template">Reply with template</string>
     <string name="title_move_undo">Moving to %1$s (%2$d)</string>
-    <string name="title_open_with">Open with</string>
     <string name="title_authentication_failed">%1$s authentication failed</string>
     <string name="title_on_blocklist">On spam block list</string>
 
@@ -1469,10 +1473,13 @@
     <string name="title_decrypt">Decrypt</string>
     <string name="title_thread_info" translatable="false">Thread info</string>
     <string name="title_resync">Resync</string>
+    <string name="title_charset">Encoding</string>
+    <string name="title_charset_auto">Automatic</string>
     <string name="title_alternative_text">Show plain text</string>
     <string name="title_alternative_html">Show HTML</string>
     <string name="title_no_openpgp">OpenKeychain not found</string>
     <string name="title_user_interaction">Transferring to OpenKeychain</string>
+    <string name="title_padlock">Use the padlock to decrypt the message</string>
     <string name="title_signed_data">Verify the signature to show the message text</string>
     <string name="title_not_encrypted">Message is not signed or encrypted</string>
     <string name="title_no_sign_key">No sign key selected</string>
@@ -1823,6 +1830,7 @@
     <string name="title_hint_folder_actions">Long press a folder for options, like adding a folder to the navigation menu for quick access</string>
     <string name="title_hint_folder_sync">To limit battery and network usage not all folders and not all messages will be synchronized by default</string>
     <string name="title_hint_airplane">Airplane mode is on</string>
+    <string name="title_hint_notification">Notifications are disabled</string>
     <string name="title_hint_support">If you have a question or a problem, please use the support menu to get help</string>
     <string name="title_hint_message_actions">Swipe left to trash; Swipe right to archive (if available); The swipe actions can be configured in the account settings</string>
     <string name="title_hint_message_selection">Long press a message to start selecting multiple messages; Hold and swipe up or down to select more messages</string>

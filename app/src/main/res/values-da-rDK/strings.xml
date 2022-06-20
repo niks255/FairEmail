@@ -156,13 +156,14 @@
     <string name="title_setup_accounts">Konti</string>
     <string name="title_setup_identities">Identiteter</string>
     <string name="title_setup_other">Anden udbyder</string>
+    <string name="title_setup_inbound">Kun indgående e-mail (e-mail kan ikke sendes!)</string>
     <string name="title_setup_pop3">POP3-konto</string>
     <string name="title_setup_oauth_permission">E-mailudbyderen har kun godkendt OAuth til Play Store- og GitHub-versioner</string>
     <string name="title_setup_gmail_support">Godkendelse af Google-konti fungerer kun i Play Store-versioner, da Android tjekker den digitale app-signatur</string>
     <string name="title_setup_gmail_rationale">Giv tilladelser til at vælge en konto og læse dit navn</string>
     <string name="title_setup_gmail_permissions">Google vil beder om tilladelse til at læse, komponere, sende samt permanent slette alle din e-mails. FairEmail sletter aldrig dine beskeder uden dit samtykke.</string>
     <string name="title_setup_gmail_drafts">Er kladdermappen ikke er tilgængelig med IMAP, kan dette rettes i Gmail-etiketindstillingerne</string>
-    <string name="title_setup_gmail_password">Jeg ønsker at godkende en konto med en adgangskode</string>
+    <string name="title_setup_gmail_password">Jeg ønsker at godkende en konto med en adgangskode i stedet for en enhedskonto</string>
     <string name="title_setup_office_auth">Fejlen \'GODKENDELSE mislykkedes\' kan skyldes, at IMAP/SMTP er deaktiveret af systemadministratoren</string>
     <string name="title_setup_oauth_rationale">Godkend adgang til din %1$s-konto</string>
     <string name="title_setup_oauth_update">Godkend en eksisterende konto igen (ellers opret en ny konto)</string>
@@ -188,6 +189,8 @@
     <string name="title_setup_permissions">Giv tilladelser</string>
     <string name="title_setup_permissions_remark">For at få tilgå kontaktoplysninger (valgfrit)</string>
     <string name="title_setup_permissions_explanation">Kontakttilladelser kræves for at slå kontaktoplysninger op og foreslå kontaktpersoner</string>
+    <string name="title_setup_permissions_notify">For at vise nye beskednotifikationer (valgfrit)</string>
+    <string name="title_setup_permissions_notify_explanation">Notifikationstilladelse kræves for at vise notifikationer om nye beskeder på statusbjælken</string>
     <string name="title_setup_permission_why">Hvilke tilladelser kræves, og hvorfor?</string>
     <string name="title_setup_permission_import_contacts">Hvordan importeres kontakter?</string>
     <string name="title_setup_doze">Deaktivér batterioptimering</string>
@@ -211,6 +214,7 @@
     <string name="title_setup_still">Resterer stadig</string>
     <string name="title_setup_error">Fejl</string>
     <string name="title_setup_pop">Brug POP3 (anbefales ikke)</string>
+    <string name="title_setup_recent">Brug \'recent\' for flere e-mailklienter</string>
     <string name="title_setup_configuring">Opsætter konto &#8230;</string>
     <string name="title_setup_app_password">En app-adgangskode skal muligvis benyttes</string>
     <string name="title_setup_extra">Ekstra</string>
@@ -461,6 +465,7 @@
     <string name="title_advanced_message_text_zoom2">Standard beskedtekstzoom %1$s%%</string>
     <string name="title_advanced_overview_mode">Zoom originale beskeder for skærmtilpasning</string>
     <string name="title_advanced_override_width">Deaktivér faste bredder i oprindelige beskeder</string>
+    <string name="title_advanced_hyphenation">Brug automatisk orddeling</string>
     <string name="title_advanced_contrast">Benyt høj kontrast til beskedtekst</string>
     <string name="title_advanced_monospaced">Benyt som standard monospatieret skrifttype til beskedtekst</string>
     <string name="title_advanced_monospaced_pre">Benyt monospatieret skrifttype til præformateret tekst</string>
@@ -524,12 +529,11 @@
     <string name="title_advanced_notifications_default">Standardkanal</string>
     <string name="title_advanced_notifications_service">Monitorér kanal</string>
     <string name="title_advanced_notifications_newest_first">Vis seneste notifikationer først</string>
-    <string name="title_advanced_notifications_background">Benyt baggrundstjeneste til beskedsynkronisering</string>
-    <string name="title_advanced_notifications_background_hint">En baggrundstjeneste kan til enhver tid stoppes af Android, men behøver ingen statusbjælkenotifikation</string>
     <string name="title_advanced_badge">Vis launcher-ikon med antal nye beskeder</string>
     <string name="title_advanced_unseen_ignored">Lad antal Nye beskeder matche notifikationsantal</string>
     <string name="title_advanced_notify_background">Vis kun notifikationer i baggrundstilstand</string>
     <string name="title_advanced_notify_known">Vis kun notifikationer for kontakter</string>
+    <string name="title_advanced_notify_suppress_in_call" comment="title_advanced_notify_suppress_in_call&#10;&#10;Title of option which will delay new message notifications until after hanging up">Udsæt notifikationer under opkald</string>
     <string name="title_advanced_notify_summary">Vis kun resuménotifikationer</string>
     <string name="title_advanced_notify_preview">Beskedforhåndsvisning i notifikationer</string>
     <string name="title_advanced_notify_preview_all">Forhåndsvis al tekst</string>
@@ -555,9 +559,10 @@
     <string name="title_advanced_light">Benyt notifikations-LED</string>
     <string name="title_advanced_sound">Vælg notifikationslyd</string>
     <string name="title_advanced_notify_screen_on">Tænd kortvarigt skærmen ved nye beskednotifikationer</string>
+    <string name="title_advanced_notifications_background">Benyt baggrundstjeneste til beskedsynkronisering</string>
+    <string name="title_advanced_notifications_background_hint">En baggrundstjeneste kan til enhver tid stoppes af Android, men behøver ingen statusbjælkenotifikation</string>
     <string name="title_advanced_confirm_links">Bekræft åbning af links</string>
     <string name="title_advanced_check_links_dbl">Tjek domæneblokeringslister for mistænkelige links</string>
-    <string name="title_advanced_browse_links">Delegér åbningslinks til Android</string>
     <string name="title_advanced_confirm_images">Som standard Ingen billedvisning</string>
     <string name="title_advanced_ask_images">Bekræft visning af billeder</string>
     <string name="title_advanced_confirm_html">Vis som standard omformaterede beskeder</string>
@@ -664,7 +669,7 @@
     <string name="title_advanced_rlah_hint">Antager ingen roaming inden for EU</string>
     <string name="title_advanced_usage_hint">Dette vil forøge batteri-, data- samt lagerpladsforbrug</string>
     <string name="title_advanced_plain_hint">Aktivering af dette reducerer dataforbruget, men beskeder vises uden styling</string>
-    <string name="title_advanced_tcp_keep_alive_hint">Aktivering af dette kan forårsage forbindelsesproblemer på visse enheder samt øge batteriforbruget</string>
+    <string name="title_advanced_tcp_keep_alive_hint">Aktivering af dette kan forårsage forbindelsesproblemer på visse enheder samt øge strømforbruget</string>
     <string name="title_advanced_validate_hint">Dette kan betyde, at beskeder i visse situationer ikke synkes, bl.a. ved brug af VPN</string>
     <string name="title_advanced_timeout_hint">Læse-/skrive-timeout indstilles til det dobbelte af forbindelses-timeout. Højere værdier vil resultere i øget batteriforbrug.</string>
     <string name="title_advanced_cert_strict_hint">Deaktivering af dette gør servercertifikatkontrol mindre striks</string>
@@ -776,6 +781,7 @@
     <string name="title_encryption_none">Ingen</string>
     <string name="title_allow_insecure">Tillad usikre forbindelser</string>
     <string name="title_insecure_remark">Usikre forbindelser bør kun tillades på betroede netværk og aldrig på offentlige netværk</string>
+    <string name="title_notify_remark">Dette kan aktivere for kontospecifikke notifikationer</string>
     <string name="title_port">Portnummer</string>
     <string name="title_user">Brugernavn</string>
     <string name="title_password">Adgangskode</string>
@@ -1052,7 +1058,6 @@
     <string name="title_reply_hard_bounce">Send hard bounce</string>
     <string name="title_reply_template">Besvar med skabelon</string>
     <string name="title_move_undo">Flytter til %1$s (%2$d)</string>
-    <string name="title_open_with">Åbn med</string>
     <string name="title_authentication_failed">%1$s godkendelse mislykkedes</string>
     <string name="title_on_blocklist">På spamblokeringsliste</string>
     <string name="title_receipt_subject">Læsningskvittering: %1$s</string>
@@ -1253,10 +1258,13 @@
     <string name="title_encrypt">Kryptér</string>
     <string name="title_decrypt">Dekryptér</string>
     <string name="title_resync">Synkronisér igen</string>
+    <string name="title_charset">Indkodning</string>
+    <string name="title_charset_auto">Automatisk</string>
     <string name="title_alternative_text">Vis simpel tekst</string>
     <string name="title_alternative_html">Vis HTML</string>
     <string name="title_no_openpgp">OpenKeychain ikke fundet</string>
     <string name="title_user_interaction">Overfører til OpenKeychain</string>
+    <string name="title_padlock">Brug hængelåsen til at dekryptere beskeden</string>
     <string name="title_signed_data">Bekræft signaturen for at vise beskedtekst</string>
     <string name="title_not_encrypted">Besked er ikke signeret eller krypteret</string>
     <string name="title_no_sign_key">Ingen signeringsnøgle valgt</string>
@@ -1575,6 +1583,7 @@
     <string name="title_hint_folder_actions">Langt tryk på en mappe for indstillinger, såsom tilføjelse af en mappe til navigeringsmenuen for hurtig adgang</string>
     <string name="title_hint_folder_sync">For at reducere strøm- og dataforbruget synkroniseres visse mapper og beskeder ikke som standard</string>
     <string name="title_hint_airplane">Flytilstand er Til</string>
+    <string name="title_hint_notification">Notifikationer er deaktiveret</string>
     <string name="title_hint_support">Har du et spørgsmål eller problem, så benyt venligst supportmenuen for at få hjælp</string>
     <string name="title_hint_message_actions">Stryg til venstre for Papirkurv; Stryg til højre for at arkivere (hvis tilgængeligt); Strygehandlingerne kan opsættes i kontoindstillingerne</string>
     <string name="title_hint_message_selection">Langt tryk på en besked for at tilgå valg af flere beskeder; Hold og stryg op/ned for at vælge flere beskeder</string>
@@ -1665,7 +1674,7 @@
         For at minde om dette, viser FairEmail en lille meddelelse, der dog forsvinder ved køb af Pro-funktionerne.
     </string>
     <string name="title_pro_whichever">Uanset valgte Pro-funktioner, er der altid nogle, som klager over, at en funktion ikke er gratis. Vær venligst ikke en sådan person.</string>
-    <string name="title_pro_google">FairEmail igangsætter et Play Butik-køb, men i sidste ende håndterer Google hele købsprocessen, så bebrejd ikke appen i tilfælde af problemer!</string>
+    <string name="title_pro_google">FairEmail indleder et Play Butik-køb, men Google er ansvarlig for selve købsprocessen og evt. fejlmeddelelser undervejs.</string>
     <string name="title_pro_hide">Skjul små meddelelser i %1$d uger</string>
     <string name="title_pro_hint">Køb af Pro-funktioner vil tillade brug alle aktuelle og fremtidige Pro-funktioner samt sikre denne apps vedligeholdelse og understøttelse</string>
     <string name="title_pro_price">Hvorfor er Pro-funktionerne så dyre?</string>
@@ -1712,6 +1721,7 @@
     <string name="title_widget_refresh">Vis Opfrisk beskeder-knap</string>
     <string name="title_widget_compose">Vis Skriv ny besked-knap</string>
     <string name="title_widget_background">Baggrundsfarve</string>
+    <string name="title_widget_day_night">Følg mørkt systemtema</string>
     <string name="title_accessibility_collapsed">Sammenfoldet</string>
     <string name="title_accessibility_expanded">Udfoldet</string>
     <string name="title_accessibility_seen">Læst</string>

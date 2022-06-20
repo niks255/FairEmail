@@ -40,6 +40,8 @@ import android.webkit.CookieManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.emoji2.text.DefaultEmojiCompatConfig;
 import androidx.emoji2.text.EmojiCompat;
 import androidx.emoji2.text.FontRequestEmojiCompatConfig;
@@ -62,6 +64,9 @@ public class ApplicationEx extends Application
     }
 
     static Context getLocalizedContext(Context context) {
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && false)
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.getEmptyLocaleList());
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (prefs.contains("english")) {
@@ -620,6 +625,12 @@ public class ApplicationEx extends Application
             int class_min_difference = prefs.getInt("class_min_difference", 50);
             if (class_min_difference == 0)
                 editor.putBoolean("classification", false);
+        } else if (version < 1918) {
+            if (prefs.contains("browse_links")) {
+                boolean browse_links = prefs.getBoolean("browse_links", false);
+                editor.remove("browse_links")
+                        .putBoolean("open_with_tabs", !browse_links);
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)

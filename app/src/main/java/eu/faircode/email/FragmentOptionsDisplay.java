@@ -52,7 +52,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceManager;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -158,6 +157,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swOverrideWidth;
 
     private SwitchCompat swContrast;
+    private SwitchCompat swHyphenation;
     private Spinner spDisplayFont;
     private SwitchCompat swMonospacedPre;
     private SwitchCompat swTextSeparators;
@@ -180,6 +180,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swAuthentication;
     private SwitchCompat swAuthenticationIndicator;
 
+    private Group grpAvatar;
     private Group grpUnzip;
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
@@ -201,7 +202,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             "preview", "preview_italic", "preview_lines",
             "addresses",
             "message_zoom", "overview_mode", "override_width",
-            "display_font", "contrast", "monospaced_pre",
+            "hyphenation", "display_font", "contrast", "monospaced_pre",
             "text_separators",
             "collapse_quotes", "image_placeholders", "inline_images", "button_extra",
             "unzip", "attachments_alt", "thumbnails",
@@ -312,6 +313,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swOverviewMode = view.findViewById(R.id.swOverviewMode);
         swOverrideWidth = view.findViewById(R.id.swOverrideWidth);
         swContrast = view.findViewById(R.id.swContrast);
+        swHyphenation = view.findViewById(R.id.swHyphenation);
         spDisplayFont = view.findViewById(R.id.spDisplayFont);
         swMonospacedPre = view.findViewById(R.id.swMonospacedPre);
         swTextSeparators = view.findViewById(R.id.swTextSeparators);
@@ -334,6 +336,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swAuthentication = view.findViewById(R.id.swAuthentication);
         swAuthenticationIndicator = view.findViewById(R.id.swAuthenticationIndicator);
 
+        grpAvatar = view.findViewById(R.id.grpAvatar);
         grpUnzip = view.findViewById(R.id.grpUnzip);
 
         List<StyleHelper.FontDescriptor> fonts = StyleHelper.getFonts(getContext());
@@ -744,7 +747,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         tvGravatarPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.view(v.getContext(), Uri.parse(Helper.GRAVATAR_PRIVACY_URI), true);
+                Helper.view(v.getContext(), Uri.parse(Avatar.GRAVATAR_PRIVACY_URI), true);
             }
         });
 
@@ -760,7 +763,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         tvLibravatarPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.view(v.getContext(), Uri.parse(Helper.LIBRAVATAR_PRIVACY_URI), true);
+                Helper.view(v.getContext(), Uri.parse(Avatar.LIBRAVATAR_PRIVACY_URI), true);
             }
         });
 
@@ -1101,6 +1104,14 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
+        swHyphenation.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? View.GONE : View.VISIBLE);
+        swHyphenation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("hyphenation", checked).apply();
+            }
+        });
+
         spDisplayFont.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -1257,6 +1268,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         FragmentDialogTheme.setBackground(getContext(), view, false);
         swFaviconsPartial.setText(getString(R.string.title_advanced_favicons_partial,
                 Helper.humanReadableByteCount(ContactInfo.FAVICON_READ_BYTES, false)));
+        grpAvatar.setVisibility(BuildConfig.PLAY_STORE_RELEASE ? View.GONE : View.VISIBLE);
         grpUnzip.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.O ? View.GONE : View.VISIBLE);
         tvBimiUnverified.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
 
@@ -1276,8 +1288,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         if ("message_zoom".equals(key))
             return;
 
-        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-            setOptions();
+        setOptions();
     }
 
     @Override
@@ -1301,6 +1312,9 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     }
 
     private void setOptions() {
+        if (getContext() == null)
+            return;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         String startup = prefs.getString("startup", "unified");
@@ -1454,6 +1468,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swOverrideWidth.setChecked(prefs.getBoolean("override_width", false));
 
         swContrast.setChecked(prefs.getBoolean("contrast", false));
+        swHyphenation.setChecked(prefs.getBoolean("hyphenation", false));
 
         String display_font = prefs.getString("display_font", "");
         List<StyleHelper.FontDescriptor> fonts = StyleHelper.getFonts(getContext());

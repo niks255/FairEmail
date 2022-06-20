@@ -158,7 +158,6 @@
     <string name="title_setup_gmail_rationale">Ole hyvä ja myönnä oikeudet tilin valitsemiseksi ja nimesi lukemiseksi</string>
     <string name="title_setup_gmail_permissions">Google kysyy oikeuksia lukea, kirjoittaa, lähettää ja poistaa viestejäsi pysyvästi. FairEmail ei koskaan poista viestejäsi ilman yksiselitteistä hyväksyntääsi.</string>
     <string name="title_setup_gmail_drafts">Jos luonnokset-kansio ei ole IMAPin saatavilla, asia voidaan korjata Gmailin tunnisteiden asetuksissa</string>
-    <string name="title_setup_gmail_password">Haluan käyttää salasanaa tilin valtuuttamiseen</string>
     <string name="title_setup_office_auth">Virhe \'AUTHENTICATE failed\' voi aiheutua siitä, että järjestelmän ylläpitäjän on poistanut IMAP/SMTP-protokollat käytöstä</string>
     <string name="title_setup_oauth_rationale">Valtuuta pääsy tilillesi %1$s</string>
     <string name="title_setup_oauth_update">Valtuuta olemassa oleva tili uudelleen (muussa tapauksessa luo uusi tili)</string>
@@ -519,8 +518,6 @@
     <string name="title_advanced_notifications_default">Oletuskanava</string>
     <string name="title_advanced_notifications_service">Monitorointikanava</string>
     <string name="title_advanced_notifications_newest_first">Näytä uusimmat ilmoitukset ensin</string>
-    <string name="title_advanced_notifications_background">Käytä taustapalvelua viestien synkronointiin</string>
-    <string name="title_advanced_notifications_background_hint">Android voi lopettaa taustapalvelun koska tahansa, mutta taustapalvelu ei tarvitse tilapalkki-ilmoitusta</string>
     <string name="title_advanced_badge">Näytä käynnistinsovelluksen kuvakkeessa uusien viestien lukumäärä</string>
     <string name="title_advanced_unseen_ignored">Anna uusien viestien lukumäärän vastata ilmoitusten lukumäärää</string>
     <string name="title_advanced_notify_background">Näytä ilmoitukset vain, kun sovellus on taustalla</string>
@@ -550,9 +547,10 @@
     <string name="title_advanced_light">Käytä LED-ilmoitusta</string>
     <string name="title_advanced_sound">Valitse ilmoituksen ääni</string>
     <string name="title_advanced_notify_screen_on">Laita näyttö hetkeksi päälle uusia ilmoituksia varten</string>
+    <string name="title_advanced_notifications_background">Käytä taustapalvelua viestien synkronointiin</string>
+    <string name="title_advanced_notifications_background_hint">Android voi lopettaa taustapalvelun koska tahansa, mutta taustapalvelu ei tarvitse tilapalkki-ilmoitusta</string>
     <string name="title_advanced_confirm_links">Vahvista linkkien avaaminen</string>
     <string name="title_advanced_check_links_dbl">Tarkista, ovatko linkkien verkkotunnukset epäilyttävien verkkotunnusten listalla</string>
-    <string name="title_advanced_browse_links">Anna linkkien avaaminen Androidille hoidettavaksi</string>
     <string name="title_advanced_confirm_images">Älä näytä kuvia oletuksena</string>
     <string name="title_advanced_ask_images">Vahvista kuvien näyttäminen</string>
     <string name="title_advanced_confirm_html">Näytä oletuksena uudelleenmuotoillut viestit</string>
@@ -1042,7 +1040,6 @@
     <string name="title_reply_hard_bounce">Lähetä hard bounce</string>
     <string name="title_reply_template">Vastaa viestipohjalla</string>
     <string name="title_move_undo">Siirretään kansioon %1$s (%2$d)</string>
-    <string name="title_open_with">Avaa sovelluksessa</string>
     <string name="title_authentication_failed">%1$s-tunnistautuminen epäonnistui</string>
     <string name="title_on_blocklist">Roskapostin estolistalla</string>
     <string name="title_receipt_subject">Vastaanottokuittaus: %1$s</string>

@@ -31,6 +31,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.Network;
@@ -47,9 +48,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.preference.PreferenceManager;
 
 import com.sun.mail.iap.Argument;
@@ -419,9 +423,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                         if (!isBackgroundService(ServiceSynchronize.this))
                             try {
-                                NotificationManager nm = Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
-                                nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
-                                        getNotificationService(lastAccounts, lastOperations));
+                                NotificationManager nm =
+                                        Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
+                                if (NotificationHelper.areNotificationsEnabled(nm))
+                                    nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
+                                            getNotificationService(lastAccounts, lastOperations));
                             } catch (Throwable ex) {
 /*
                             java.lang.NullPointerException: Attempt to invoke interface method 'java.util.Iterator java.lang.Iterable.iterator()' on a null object reference
@@ -672,7 +678,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             };
         });
 
-        final TwoStateOwner cowner = new TwoStateOwner(this, "liveUnseenNotify");
+        final TwoStateOwner cowner = new TwoStateOwner(this, "liveSynchronizing");
 
         db.folder().liveSynchronizing().observe(this, new Observer<List<TupleFolderSync>>() {
             private List<Long> lastAccounts = new ArrayList<>();
@@ -746,15 +752,79 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
         });
 
+        // New message notifications batching
+
         Core.NotificationData notificationData = new Core.NotificationData(this);
 
+        MutableLiveData<List<TupleMessageEx>> mutableUnseenNotify = new MutableLiveData<>();
         db.message().liveUnseenNotify().observe(cowner, new Observer<List<TupleMessageEx>>() {
+            @Override
+            public void onChanged(List<TupleMessageEx> messages) {
+                mutableUnseenNotify.setValue(messages);
+            }
+        });
+
+        final TwoStateOwner mowner = new TwoStateOwner(this, "mutableUnseenNotify");
+
+        AudioManager am = Helper.getSystemService(this, AudioManager.class);
+        if (am == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            mowner.start();
+            Log.i("Audio mode legacy");
+        } else {
+            AudioManager.OnModeChangedListener listener = new AudioManager.OnModeChangedListener() {
+                @Override
+                public void onModeChanged(int mode) {
+                    getMainHandler().post(new RunnableEx("AudioMode") {
+                        @Override
+                        public void delegate() {
+                            boolean incall = MediaPlayerHelper.isInCall(mode);
+                            boolean suppress = prefs.getBoolean("notify_suppress_in_call", false);
+                            boolean start = (!suppress || !incall);
+                            Log.i("Audio mode start=" + start +
+                                    " incall=" + incall +
+                                    " suppress=" + suppress);
+                            if (start)
+                                mowner.start();
+                            else
+                                mowner.stop();
+                        }
+                    });
+                }
+            };
+            listener.onModeChanged(am.getMode()); // Init
+
+            getLifecycle().addObserver(new LifecycleObserver() {
+                private boolean registered = false;
+
+                @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
+                public void onStateChanged() {
+                    try {
+                        if (ServiceSynchronize.this.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                            if (!registered) {
+                                am.addOnModeChangedListener(executor, listener);
+                                registered = true;
+                            }
+                        } else {
+                            if (registered) {
+                                am.removeOnModeChangedListener(listener);
+                                registered = false;
+                            }
+                        }
+                        Log.i("Audio mode registered=" + registered);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+                }
+            });
+        }
+
+        mutableUnseenNotify.observe(mowner, new Observer<List<TupleMessageEx>>() {
             private final ExecutorService executor =
                     Helper.getBackgroundExecutor(1, "notify");
 
             @Override
             public void onChanged(final List<TupleMessageEx> messages) {
-                executor.submit(new RunnableEx("liveUnseenNotify") {
+                executor.submit(new RunnableEx("mutableUnseenNotify") {
                     @Override
                     public void delegate() {
                         try {
@@ -770,6 +840,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 });
             }
         });
+
+        // Message count widgets
 
         db.message().liveWidgetUnseen(null).observe(cowner, new Observer<List<TupleMessageStats>>() {
             private Integer lastCount = null;
@@ -835,6 +907,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 }
             }
         });
+
+        // Message list widgets
 
         db.message().liveWidgetUnified().observe(cowner, new Observer<List<TupleMessageWidgetCount>>() {
             private List<TupleMessageWidgetCount> last = null;
@@ -1478,10 +1552,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 if (!ConnectionHelper.isMaxConnections(message))
                                     try {
-                                        NotificationManager nm = Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
-                                        nm.notify("alert:" + account.id,
-                                                NotificationHelper.NOTIFICATION_TAGGED,
-                                                getNotificationAlert(account, message).build());
+                                        NotificationManager nm =
+                                                Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
+                                        if (NotificationHelper.areNotificationsEnabled(nm))
+                                            nm.notify("alert:" + account.id,
+                                                    NotificationHelper.NOTIFICATION_TAGGED,
+                                                    getNotificationAlert(account, message).build());
                                     } catch (Throwable ex) {
                                         Log.w(ex);
                                     }
@@ -1541,11 +1617,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                 try {
                                     state.setBackoff(2 * CONNECT_BACKOFF_ALARM_MAX * 60);
-                                    NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
-                                    nm.notify("receive:" + account.id,
-                                            NotificationHelper.NOTIFICATION_TAGGED,
-                                            Core.getNotificationError(this, "error", account, 0, ex)
-                                                    .build());
+                                    NotificationManager nm =
+                                            Helper.getSystemService(this, NotificationManager.class);
+                                    if (NotificationHelper.areNotificationsEnabled(nm))
+                                        nm.notify("receive:" + account.id,
+                                                NotificationHelper.NOTIFICATION_TAGGED,
+                                                Core.getNotificationError(this, "error", account, 0, ex)
+                                                        .build());
                                 } catch (Throwable ex1) {
                                     Log.w(ex1);
                                 }
@@ -2339,11 +2417,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             Helper.getDateTimeInstance(this, DateFormat.SHORT, DateFormat.SHORT)
                                                     .format(account.last_connected)), ex);
                             try {
-                                NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
-                                nm.notify("receive:" + account.id,
-                                        NotificationHelper.NOTIFICATION_TAGGED,
-                                        Core.getNotificationError(this, "warning", account, 0, warning)
-                                                .build());
+                                NotificationManager nm =
+                                        Helper.getSystemService(this, NotificationManager.class);
+                                if (NotificationHelper.areNotificationsEnabled(nm))
+                                    nm.notify("receive:" + account.id,
+                                            NotificationHelper.NOTIFICATION_TAGGED,
+                                            Core.getNotificationError(this, "warning", account, 0, warning)
+                                                    .build());
                             } catch (Throwable ex1) {
                                 Log.w(ex1);
                             }
@@ -2787,9 +2867,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                         if (!isBackgroundService(ServiceSynchronize.this))
                             try {
-                                NotificationManager nm = Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
-                                nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
-                                        getNotificationService(lastAccounts, lastOperations));
+                                NotificationManager nm =
+                                        Helper.getSystemService(ServiceSynchronize.this, NotificationManager.class);
+                                if (NotificationHelper.areNotificationsEnabled(nm))
+                                    nm.notify(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
+                                            getNotificationService(lastAccounts, lastOperations));
                             } catch (Throwable ex) {
                                 Log.w(ex);
                             }

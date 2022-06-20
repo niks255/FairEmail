@@ -34,6 +34,7 @@ import static me.everything.android.ui.overscroll.OverScrollBounceEffectDecorato
 import static me.everything.android.ui.overscroll.OverScrollBounceEffectDecoratorBase.DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK;
 import static me.everything.android.ui.overscroll.OverScrollBounceEffectDecoratorBase.DEFAULT_TOUCH_DRAG_MOVE_RATIO_FWD;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.Dialog;
@@ -70,6 +71,7 @@ import android.os.Debug;
 import android.os.OperationCanceledException;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
@@ -122,6 +124,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -258,6 +261,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private ViewGroup view;
     private SwipeRefreshLayoutEx swipeRefresh;
     private TextView tvAirplane;
+    private TextView tvNotifications;
     private TextView tvSupport;
     private ImageButton ibHintSupport;
     private ImageButton ibHintSwipe;
@@ -280,6 +284,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     private BottomNavigationView bottom_navigation;
     private ContentLoadingProgressBar pbWait;
     private Group grpAirplane;
+    private Group grpNotifications;
     private Group grpSupport;
     private Group grpHintSupport;
     private Group grpHintSwipe;
@@ -537,6 +542,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         // Get controls
         swipeRefresh = view.findViewById(R.id.swipeRefresh);
         tvAirplane = view.findViewById(R.id.tvAirplane);
+        tvNotifications = view.findViewById(R.id.tvNotifications);
         tvSupport = view.findViewById(R.id.tvSupport);
         ibHintSupport = view.findViewById(R.id.ibHintSupport);
         ibHintSwipe = view.findViewById(R.id.ibHintSwipe);
@@ -560,6 +566,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         pbWait = view.findViewById(R.id.pbWait);
         grpAirplane = view.findViewById(R.id.grpAirplane);
+        grpNotifications = view.findViewById(R.id.grpNotifications);
         grpSupport = view.findViewById(R.id.grpSupport);
         grpHintSupport = view.findViewById(R.id.grpHintSupport);
         grpHintSwipe = view.findViewById(R.id.grpHintSwipe);
@@ -611,6 +618,15 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.Settings.ACTION_AIRPLANE_MODE_SETTINGS)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+        tvNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ActivitySetup.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 v.getContext().startActivity(intent);
             }
         });
@@ -736,6 +752,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                      */
                     Log.w(ex);
                 }
+            }
+
+            @Override
+            public void onItemsAdded(@NonNull RecyclerView recyclerView, int positionStart, int itemCount) {
+                iProperties.layoutChanged();
+            }
+
+            @Override
+            public void onItemsRemoved(@NonNull RecyclerView recyclerView, int positionStart, int itemCount) {
+                iProperties.layoutChanged();
             }
         };
         rvMessage.setLayoutManager(llm);
@@ -989,16 +1015,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             @Override
             public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
                 if (dy != 0) {
-                    boolean down = (dy > 0 && rv.canScrollVertically(RecyclerView.FOCUS_DOWN));
+                    boolean down = (dy > 0 && rv.canScrollVertically(1));
                     if (scrolling != down) {
                         scrolling = down;
-                        if (!accessibility &&
-                                (viewType == AdapterMessage.ViewType.UNIFIED ||
-                                        viewType == AdapterMessage.ViewType.FOLDER))
-                            if (down)
-                                fabCompose.hide();
-                            else
-                                fabCompose.show();
+                        updateCompose();
                         updateExpanded();
                     }
                 }
@@ -1612,11 +1632,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             }
         });
 
-        addKeyPressedListener(onBackPressedListener);
+        addKeyPressedListener(keyPressedListener);
+        setBackPressedCallback(backPressedCallback);
 
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
         grpAirplane.setVisibility(View.GONE);
+        grpNotifications.setVisibility(View.GONE);
         tvNoEmail.setVisibility(View.GONE);
         tvNoEmailHint.setVisibility(View.GONE);
         etSearch.setVisibility(View.GONE);
@@ -2108,11 +2130,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     }
                 });
             }
-
-            if ("headers".equals(name)) {
-                scrolling = false;
-                updateExpanded();
-            }
         }
 
         @Override
@@ -2192,9 +2209,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     }
             }
 
-            if (value)
-                scrolling = false;
-
+            scrolling = false;
             updateExpanded();
             if (value)
                 handleExpand(message.id);
@@ -2392,6 +2407,26 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     Log.unexpectedError(getParentFragmentManager(), ex);
                 }
             }.execute(FragmentMessages.this, args, "message:lock");
+        }
+
+        @Override
+        public void layoutChanged() {
+            rvMessage.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (scrolling &&
+                                rvMessage != null &&
+                                !rvMessage.canScrollVertically(-1)) {
+                            scrolling = false;
+                            updateCompose();
+                            updateExpanded();
+                        }
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+                }
+            });
         }
 
         @Override
@@ -3167,6 +3202,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 popupMenu.getMenu().findItem(R.id.menu_reply_to_sender).setEnabled(message.content);
                 popupMenu.getMenu().findItem(R.id.menu_reply_to_all).setEnabled(message.content);
                 popupMenu.getMenu().findItem(R.id.menu_forward).setEnabled(message.content);
+                popupMenu.getMenu().findItem(R.id.menu_forward_raw)
+                        .setEnabled(message.uid != null)
+                        .setVisible(Boolean.TRUE.equals(message.raw) || message.accountProtocol == EntityAccount.TYPE_IMAP);
                 popupMenu.getMenu().findItem(R.id.menu_editasnew).setEnabled(message.content);
                 popupMenu.getMenu().findItem(R.id.menu_reply_answer).setEnabled(message.content);
 
@@ -3224,6 +3262,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             return true;
                         } else if (itemId == R.id.menu_forward) {
                             onMenuReply(message, "forward");
+                            return true;
+                        } else if (itemId == R.id.menu_forward_raw) {
+                            onActionRaw(message.id);
                             return true;
                         } else if (itemId == R.id.menu_resend) {
                             onMenuResend(message);
@@ -3537,7 +3578,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                             onActionSetImportanceSelection(EntityMessage.PRIORITIY_HIGH, false);
                             return true;
                         } else if (itemId == R.string.title_raw_send) {
-                            onActionRaw();
+                            onActionRaw(null);
                             return true;
                         } else if (itemId == R.string.title_folder_inbox) {
                             onActionMoveSelection(EntityFolder.INBOX, false);
@@ -3862,12 +3903,12 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         }.execute(this, args, "messages:set:importance");
     }
 
-    private void onActionRaw() {
+    private void onActionRaw(Long id) {
         Bundle args = new Bundle();
-        args.putLongArray("ids", getSelection());
+        args.putLongArray("ids", id == null ? getSelection() : new long[]{id});
         args.putBoolean("threads", false);
 
-        if (selectionTracker != null)
+        if (id == null && selectionTracker != null)
             selectionTracker.clearSelection();
 
         FragmentDialogForwardRaw ask = new FragmentDialogForwardRaw();
@@ -4413,7 +4454,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                 positions.remove(id);
                                 attachments.remove(id);
                             }
-                            updateExpanded();
                         }
                     }
                 });
@@ -4461,15 +4501,21 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         iff.addAction(ACTION_KEYWORDS);
         lbm.registerReceiver(receiver, iff);
 
-        ConnectivityManager cm = Helper.getSystemService(getContext(), ConnectivityManager.class);
+        final Context context = getContext();
+        ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
         cm.registerNetworkCallback(builder.build(), networkCallback);
 
-        updateAirplaneMode(ConnectionHelper.airplaneMode(getContext()));
-        getContext().registerReceiver(airplanemode, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
+        updateAirplaneMode(ConnectionHelper.airplaneMode(context));
+        context.registerReceiver(airplanemode, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean canNotify =
+                (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                        hasPermission(Manifest.permission.POST_NOTIFICATIONS));
+        grpNotifications.setVisibility(canNotify ? View.GONE : View.VISIBLE);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean compact = prefs.getBoolean("compact", false);
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
         adapter.setCompact(compact);
@@ -4526,15 +4572,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     public void onPause() {
         super.onPause();
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
 
-        getContext().unregisterReceiver(airplanemode);
+        context.unregisterReceiver(airplanemode);
 
-        ConnectivityManager cm = Helper.getSystemService(getContext(), ConnectivityManager.class);
+        ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
         cm.unregisterNetworkCallback(networkCallback);
 
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
         lbm.unregisterReceiver(receiver);
     }
 
@@ -4732,7 +4779,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private boolean checkGmail() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.getBoolean("gmail_checked", false))
             return false;
 
@@ -4744,6 +4792,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         cal.set(Calendar.DAY_OF_MONTH, 30);
         cal.set(Calendar.MONTH, Calendar.MAY);
         cal.set(Calendar.YEAR, 2022);
+
+        if (Helper.getInstallTime(context) > cal.getTimeInMillis()) {
+            prefs.edit().putBoolean("gmail_checked", true).apply();
+            return false;
+        }
 
         cal.add(Calendar.MONTH, 2);
 
@@ -4812,7 +4865,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         if (!BuildConfig.DEBUG)
             return false;
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.getBoolean("outlook_checked", false))
             return false;
 
@@ -4824,6 +4878,11 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.MONTH, Calendar.OCTOBER);
         cal.set(Calendar.YEAR, 2022);
+
+        if (Helper.getInstallTime(context) > cal.getTimeInMillis()) {
+            prefs.edit().putBoolean("outlook_checked", true).apply();
+            return false;
+        }
 
         cal.add(Calendar.MONTH, 2);
 
@@ -4948,6 +5007,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         String filter_language = prefs.getString("filter_language", null);
         boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
         boolean compact = prefs.getBoolean("compact", false);
+        boolean confirm_links = prefs.getBoolean("confirm_links", true);
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
         int padding = prefs.getInt("view_padding", compact || !cards ? 0 : 1);
         boolean quick_filter = prefs.getBoolean("quick_filter", false);
@@ -5062,6 +5122,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         PopupMenuLifecycle.insertIcon(context, menu.findItem(R.id.menu_padding), false);
 
         menu.findItem(R.id.menu_theme).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
+
+        menu.findItem(R.id.menu_confirm_links)
+                .setChecked(confirm_links)
+                .setVisible(viewType == AdapterMessage.ViewType.THREAD);
 
         menu.findItem(R.id.menu_select_all).setVisible(folder);
         menu.findItem(R.id.menu_select_found).setVisible(viewType == AdapterMessage.ViewType.SEARCH);
@@ -5203,6 +5267,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return true;
         } else if (itemId == R.id.menu_theme) {
             onMenuTheme();
+            return true;
+        } else if (itemId == R.id.menu_confirm_links) {
+            onMenuConfirmLinks();
             return true;
         } else if (itemId == R.id.menu_select_all || itemId == R.id.menu_select_found) {
             onMenuSelectAll();
@@ -5531,6 +5598,13 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     private void onMenuTheme() {
         new FragmentDialogTheme().show(getParentFragmentManager(), "messages:theme");
+    }
+
+    private void onMenuConfirmLinks() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean compact = !prefs.getBoolean("confirm_links", true);
+        prefs.edit().putBoolean("confirm_links", compact).apply();
+        invalidateOptionsMenu();
     }
 
     private void clearMeasurements() {
@@ -6093,6 +6167,19 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (viewType == AdapterMessage.ViewType.THREAD) {
                 if (handleThreadActions(messages, null, null))
                     return;
+
+                List<Long> ids = values.get("expanded");
+                if (ids != null)
+                    for (long id : ids) {
+                        boolean found = false;
+                        for (TupleMessageEx message : messages)
+                            if (message != null && Objects.equals(message.id, id)) {
+                                found = true;
+                                break;
+                            }
+                        if (!found)
+                            ids.remove(id);
+                    }
             } else {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                 boolean autoscroll = prefs.getBoolean("autoscroll", false);
@@ -6137,7 +6224,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 (filter_unknown && !EntityFolder.isOutgoing(type)) ||
                 (language_detection && !TextUtils.isEmpty(filter_language) && !outbox));
 
-        boolean none = (items == 0 && !loading && tasks == 0 && initialized);
+        boolean none = (items == 0 && !loading && initialized);
         boolean filtered = (filter_active && viewType != AdapterMessage.ViewType.SEARCH);
 
         pbWait.setVisibility(loading || tasks > 0 ? View.VISIBLE : View.GONE);
@@ -6154,6 +6241,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 " no=" + (tvNoEmail.getVisibility() == View.VISIBLE));
     }
 
+    private Long lastCpu = null;
+    private Long lastTime = null;
+
     private void updateDebugInfo() {
         if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
             return;
@@ -6163,7 +6253,21 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         long hmax = rt.maxMemory();
         long nheap = Debug.getNativeHeapAllocatedSize();
         int perc = Math.round(hused * 100f / hmax);
-        tvDebug.setText(perc + "% " + (nheap / (1024 * 1024)) + "M");
+
+        int utilization = 0;
+        long cpu = android.os.Process.getElapsedCpuTime();
+        long time = SystemClock.elapsedRealtime();
+        if (lastCpu != null) {
+            int cpuDelta = (int) (cpu - lastCpu);
+            int timeDelta = (int) (time - lastTime);
+            if (timeDelta != 0)
+                utilization = 100 * cpuDelta / timeDelta / rt.availableProcessors();
+        }
+        lastCpu = cpu;
+        lastTime = time;
+
+
+        tvDebug.setText(utilization + "%\n" + perc + "% " + (nheap / (1024 * 1024)) + "M");
     }
 
     private boolean handleThreadActions(
@@ -6495,6 +6599,16 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         return false;
     }
 
+    private void updateCompose() {
+        if (!accessibility &&
+                (viewType == AdapterMessage.ViewType.UNIFIED ||
+                        viewType == AdapterMessage.ViewType.FOLDER))
+            if (scrolling)
+                fabCompose.hide();
+            else
+                fabCompose.show();
+    }
+
     private void updateExpanded() {
         if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
             return;
@@ -6600,8 +6714,10 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 Log.i("Navigating to id=" + closeId);
 
                 Context context = getContext();
-                if (context == null)
+                if (context == null) {
                     finish();
+                    return;
+                }
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean reversed = prefs.getBoolean("reversed", false);
@@ -6852,14 +6968,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
             @Override
             protected void onExecuted(Bundle args, Void data) {
-                if (viewType == AdapterMessage.ViewType.THREAD) {
-                    PagedList<TupleMessageEx> messages = adapter.getCurrentList();
-                    if (messages != null && result.size() > 0) {
-                        Log.i("Eval undo messages=" + messages.size() + " targets=" + result.size());
-                        handleThreadActions(messages, result, null);
-                    }
-                }
-
                 FragmentActivity activity = getActivity();
                 if (!(activity instanceof ActivityView)) {
                     Log.e("Undo: activity missing");
@@ -6868,6 +6976,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
                 String title = getString(R.string.title_move_undo, getNames(result, true), result.size());
                 ((ActivityView) activity).undo(title, args, taskUndoMove, taskUndoShow);
+
+                if (viewType == AdapterMessage.ViewType.THREAD) {
+                    PagedList<TupleMessageEx> messages = adapter.getCurrentList();
+                    if (messages != null && result.size() > 0) {
+                        Log.i("Eval undo messages=" + messages.size() + " targets=" + result.size());
+                        handleThreadActions(messages, result, null);
+                    }
+                }
             }
 
             @Override
@@ -7052,6 +7168,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     EntityAttachment.SMIME_SIGNED_DATA
             });
             db.message().setMessageEncrypt(message.id, message.ui_encrypt);
+            db.message().setMessageRaw(message.id, false);
             db.message().setMessageRevision(message.id, null);
             db.message().setMessageStored(message.id, new Date().getTime());
 
@@ -7112,7 +7229,8 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         // Scroll to found text
         if (pos >= 0) {
-            int color = Helper.resolveColor(searchView.getContext(), R.attr.colorHighlight);
+            Context context = searchView.getContext();
+            int color = Helper.resolveColor(context, R.attr.colorHighlight);
             SpannableString ss = new SpannableString(searchView.getText());
             ss.setSpan(new BackgroundColorSpan(color),
                     pos, pos + query.length(), Spannable.SPAN_COMPOSING);
@@ -7124,8 +7242,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             if (layout != null) {
                 int line = layout.getLineForOffset(pos);
                 int y = layout.getLineTop(line);
-                int dy = searchView.getContext().getResources()
-                        .getDimensionPixelSize(R.dimen.search_in_text_margin);
+                int dy = context.getResources().getDimensionPixelSize(R.dimen.search_in_text_margin);
 
                 View itemView = rvMessage.findContainingItemView(searchView);
                 if (itemView != null) {
@@ -7155,7 +7272,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             searchView.clearComposingText();
     }
 
-    private ActivityBase.IKeyPressedListener onBackPressedListener = new ActivityBase.IKeyPressedListener() {
+    private ActivityBase.IKeyPressedListener keyPressedListener = new ActivityBase.IKeyPressedListener() {
         @Override
         public boolean onKeyPressed(KeyEvent event) {
             Context context = getContext();
@@ -7233,44 +7350,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             return holder.onKeyPressed(event);
         }
 
-        @Override
-        public boolean onBackPressed() {
-            if (isSearching()) {
-                endSearch();
-                return true;
-            }
-
-            if (selectionTracker != null && selectionTracker.hasSelection()) {
-                selectionTracker.clearSelection();
-                return true;
-            }
-
-            if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-                return true;
-
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            boolean collapse_multiple = prefs.getBoolean("collapse_multiple", true);
-
-            int count = 0;
-            for (int i = 0; i < adapter.getItemCount(); i++) {
-                TupleMessageEx message = adapter.getItemAtPosition(i);
-                if (message != null && !message.duplicate)
-                    count++;
-            }
-
-            int expanded = (values.containsKey("expanded") ? values.get("expanded").size() : 0);
-            if (collapse_multiple && expanded > 0 && count > 1) {
-                values.get("expanded").clear();
-                updateExpanded();
-                iProperties.refresh();
-                return true;
-            }
-
-            handleExit();
-
-            return false;
-        }
-
         private boolean onNext(Context context) {
             if (next == null) {
                 Animation bounce = AnimationUtils.loadAnimation(context, R.anim.bounce_left);
@@ -7338,6 +7417,55 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             int h = context.getResources().getDisplayMetrics().heightPixels;
             rvMessage.scrollBy(0, Math.round((up ? -1 : 1) * h * percent));
             return true;
+        }
+    };
+
+    private OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (Helper.isKeyboardVisible(view)) {
+                Helper.hideKeyboard(view);
+                return;
+            }
+
+            if (isSearching()) {
+                endSearch();
+                return;
+            }
+
+            if (selectionTracker != null && selectionTracker.hasSelection()) {
+                selectionTracker.clearSelection();
+                return;
+            }
+
+            if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                return;
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean collapse_multiple = prefs.getBoolean("collapse_multiple", true);
+
+            int count = 0;
+            for (int i = 0; i < adapter.getItemCount(); i++) {
+                TupleMessageEx message = adapter.getItemAtPosition(i);
+                if (message != null && !message.duplicate)
+                    count++;
+            }
+
+            int expanded = (values.containsKey("expanded") ? values.get("expanded").size() : 0);
+            if (collapse_multiple && expanded > 0 && count > 1) {
+                values.get("expanded").clear();
+                updateExpanded();
+                iProperties.refresh();
+                return;
+            }
+
+            handleExit();
+
+            FragmentActivity activity = getActivity();
+            if (activity instanceof ActivityBase)
+                ((ActivityBase) activity).onBackPressedFragment();
+            else
+                finish();
         }
     };
 
@@ -7937,22 +8065,6 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                             }
                                         }
 
-                                        boolean debug = prefs.getBoolean("debug", false);
-                                        if (debug) {
-                                            EntityAttachment eml = new EntityAttachment();
-                                            eml.message = id;
-                                            eml.sequence = remotes.size() + 1;
-                                            eml.name = "body.eml";
-                                            eml.type = "message/rfc822";
-                                            eml.disposition = Part.ATTACHMENT;
-                                            eml.size = null;
-                                            eml.progress = 0;
-                                            eml.id = db.attachment().insertAttachment(eml);
-                                            File file = eml.getFile(context);
-                                            Helper.copy(plain, file);
-                                            db.attachment().setDownloaded(eml.id, file.length());
-                                        }
-
                                         checkPep(message, remotes, context);
 
                                         encrypt = parts.getEncryption();
@@ -7961,11 +8073,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                         db.message().setMessageStored(message.id, new Date().getTime());
                                         db.message().setMessageFts(message.id, false);
 
-                                        if (BuildConfig.DEBUG) {
-                                            File raw = message.getRawFile(context);
-                                            Helper.copy(plain, raw);
-                                            db.message().setMessageRaw(message.id, true);
-                                        }
+                                        File raw = message.getRawFile(context);
+                                        Helper.copy(plain, raw);
+                                        db.message().setMessageRaw(message.id, true);
 
                                         db.setTransactionSuccessful();
                                     } catch (SQLiteConstraintException ex) {

@@ -69,6 +69,7 @@ import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentSetup extends FragmentBase {
@@ -98,6 +99,7 @@ public class FragmentSetup extends FragmentBase {
     private TextView tvFree;
     private TextView tvNoComposable;
 
+    private TextView tvNotificationPermissions;
     private TextView tvPermissionsDone;
     private Button btnPermissions;
     private TextView tvPermissionsWhy;
@@ -175,6 +177,7 @@ public class FragmentSetup extends FragmentBase {
         tvFree = view.findViewById(R.id.tvFree);
         tvNoComposable = view.findViewById(R.id.tvNoComposable);
 
+        tvNotificationPermissions = view.findViewById(R.id.tvNotificationPermissions);
         tvPermissionsDone = view.findViewById(R.id.tvPermissionsDone);
         btnPermissions = view.findViewById(R.id.btnPermissions);
         tvPermissionsWhy = view.findViewById(R.id.tvPermissionsWhy);
@@ -467,11 +470,15 @@ public class FragmentSetup extends FragmentBase {
 
         btnPermissions.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 try {
                     btnPermissions.setEnabled(false);
-                    String permission = Manifest.permission.READ_CONTACTS;
-                    requestPermissions(new String[]{permission}, REQUEST_PERMISSIONS);
+                    List<String> requesting = new ArrayList<>();
+                    for (String permission : Helper.getDesiredPermissions(getContext()))
+                        if (!hasPermission(permission))
+                            requesting.add((permission));
+                    Log.i("Requesting permissions " + TextUtils.join(",", requesting));
+                    requestPermissions(requesting.toArray(new String[0]), REQUEST_PERMISSIONS);
                 } catch (Throwable ex) {
                     Log.unexpectedError(getParentFragmentManager(), ex);
                     /*
@@ -681,6 +688,9 @@ public class FragmentSetup extends FragmentBase {
         btnIdentity.setEnabled(false);
         tvNoComposable.setVisibility(View.GONE);
 
+        tvNotificationPermissions.setVisibility(
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                        ? View.GONE : View.VISIBLE);
         tvPermissionsDone.setText(null);
         tvPermissionsDone.setCompoundDrawables(null, null, null, null);
 
@@ -694,8 +704,6 @@ public class FragmentSetup extends FragmentBase {
         grpBackgroundRestricted.setVisibility(View.GONE);
         grpDataSaver.setVisibility(View.GONE);
         tvStamina.setVisibility(View.GONE);
-
-        setContactsPermission(hasPermission(Manifest.permission.READ_CONTACTS));
 
         return view;
     }
@@ -794,6 +802,9 @@ public class FragmentSetup extends FragmentBase {
             ConnectivityManager cm = Helper.getSystemService(getContext(), ConnectivityManager.class);
             cm.registerDefaultNetworkCallback(networkCallback);
         }
+
+        // Permissions
+        setGrantedPermissions();
 
         // Doze
         boolean isIgnoring = !Boolean.FALSE.equals(Helper.isIgnoringOptimizations(getContext()));
@@ -959,20 +970,52 @@ public class FragmentSetup extends FragmentBase {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        for (int i = 0; i < permissions.length; i++)
-            if (Manifest.permission.READ_CONTACTS.equals(permissions[i]))
-                setContactsPermission(grantResults[i] == PackageManager.PERMISSION_GRANTED);
+        setGrantedPermissions();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = prefs.edit();
+
+        int denied = 0;
+        for (int i = 0; i < Math.min(permissions.length, grantResults.length); i++) {
+            String key = "requested." + permissions[i];
+
+            Log.i("Permission " + permissions[i] + "=" +
+                    (grantResults[i] == PackageManager.PERMISSION_GRANTED));
+
+            if (grantResults[i] == PackageManager.PERMISSION_DENIED &&
+                    grantResults[i] == prefs.getInt(key, PackageManager.PERMISSION_GRANTED))
+                denied++;
+
+            if (grantResults[i] == PackageManager.PERMISSION_GRANTED &&
+                    Manifest.permission.READ_CONTACTS.equals(permissions[i]))
+                ContactInfo.init(getContext().getApplicationContext());
+
+            editor.putInt(key, grantResults[i]);
+        }
+
+        editor.apply();
+
+        if (denied > 0) {
+            Intent settings = new Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+            startActivity(settings);
+        }
     }
 
-    private void setContactsPermission(boolean granted) {
-        if (granted)
-            ContactInfo.init(getContext().getApplicationContext());
+    private void setGrantedPermissions() {
+        boolean all = true;
+        for (String permission : Helper.getDesiredPermissions(getContext()))
+            if (!hasPermission(permission)) {
+                all = false;
+                break;
+            }
 
-        tvPermissionsDone.setText(granted ? R.string.title_setup_done : R.string.title_setup_to_do);
-        tvPermissionsDone.setTextColor(granted ? textColorPrimary : colorWarning);
-        tvPermissionsDone.setTypeface(null, granted ? Typeface.NORMAL : Typeface.BOLD);
-        tvPermissionsDone.setCompoundDrawablesWithIntrinsicBounds(granted ? check : null, null, null, null);
-        btnPermissions.setEnabled(!granted);
+        tvPermissionsDone.setText(all ? R.string.title_setup_done : R.string.title_setup_to_do);
+        tvPermissionsDone.setTextColor(all ? textColorPrimary : colorWarning);
+        tvPermissionsDone.setTypeface(null, all ? Typeface.NORMAL : Typeface.BOLD);
+        tvPermissionsDone.setCompoundDrawablesWithIntrinsicBounds(all ? check : null, null, null, null);
+        btnPermissions.setEnabled(!all);
     }
 
     private void onDeleteAccount(Bundle args) {

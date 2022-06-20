@@ -156,13 +156,14 @@
     <string name="title_setup_accounts">Comptes</string>
     <string name="title_setup_identities">Identités</string>
     <string name="title_setup_other">Autre fournisseur</string>
+    <string name="title_setup_inbound">Courrier entrant seulement (le courriel ne peut pas être envoyé!)</string>
     <string name="title_setup_pop3">Compte POP3</string>
     <string name="title_setup_oauth_permission">Le fournisseur de messagerie a approuvé OAuth uniquement pour les versions Play Store et GitHub</string>
     <string name="title_setup_gmail_support">L\'autorisation des comptes Google fonctionnera uniquement avec les versions Play Store et GitHub parce qu\'Android vérifie la signature numérique de l\'application</string>
     <string name="title_setup_gmail_rationale">Veuillez accorder les autorisations pour sélectionner un compte et lire votre nom</string>
     <string name="title_setup_gmail_permissions">Google vous demandera l’autorisation de lire, rédiger, envoyer et supprimer définitivement tous vos courriels. FairEmail ne supprimera jamais vos messages sans votre approbation.</string>
     <string name="title_setup_gmail_drafts">Si le dossier « Brouillons » n’est pas accessible via IMAP, ceci peut être corrigé dans les paramètres de libellé Gmail</string>
-    <string name="title_setup_gmail_password">Je veux autoriser un compte avec un mot de passe</string>
+    <string name="title_setup_gmail_password">Je veux autoriser un compte avec un mot de passe au lieu d\'un compte de l\'appareil</string>
     <string name="title_setup_office_auth">L’erreur \'AUTHENTICATE failed\' peut être due à la désactivation d’IMAP/SMTP par l’administrateur système</string>
     <string name="title_setup_oauth_rationale">Autoriser l’accès à votre compte %1$s</string>
     <string name="title_setup_oauth_update">Autoriser à nouveau un compte existant (sinon créer un nouveau compte)</string>
@@ -188,6 +189,8 @@
     <string name="title_setup_permissions">Accorder les autorisations</string>
     <string name="title_setup_permissions_remark">Pour accéder aux informations de contact (facultatif)</string>
     <string name="title_setup_permissions_explanation">L\'autorisation d\'accès aux contacts est requise pour rechercher des informations de contact et pour suggérer des contacts</string>
+    <string name="title_setup_permissions_notify">Pour afficher les notifications de nouveaux messages (facultatif)</string>
+    <string name="title_setup_permissions_notify_explanation">Les autorisations de notification sont requises pour afficher les notifications pour les nouveaux messages dans la barre d\'état</string>
     <string name="title_setup_permission_why">Quelles autorisations sont nécessaires et pourquoi?</string>
     <string name="title_setup_permission_import_contacts">Comment puis-je importer des contacts?</string>
     <string name="title_setup_doze">Désactiver les optimisations de la pile</string>
@@ -211,6 +214,7 @@
     <string name="title_setup_still">Encore à faire</string>
     <string name="title_setup_error">Erreur</string>
     <string name="title_setup_pop">Utiliser POP3 (non recommandé)</string>
+    <string name="title_setup_recent">Utiliser « recent » pour plusieurs clients de messagerie</string>
     <string name="title_setup_configuring">Configuration du compte&#8230;</string>
     <string name="title_setup_app_password">Vous devrez éventuellement utiliser un mot de passe d\'application</string>
     <string name="title_setup_extra">Options supplémentaires</string>
@@ -461,6 +465,7 @@
     <string name="title_advanced_message_text_zoom2">Zoom du texte du message par défaut : %1$s %%</string>
     <string name="title_advanced_overview_mode">Zoomer sur les messages originaux pour les adapter à l\'écran</string>
     <string name="title_advanced_override_width">Désactiver les largeurs fixes dans les messages originaux</string>
+    <string name="title_advanced_hyphenation">Utiliser la césure automatique</string>
     <string name="title_advanced_contrast">Utiliser un contraste élevé pour le texte du message</string>
     <string name="title_advanced_monospaced">Utiliser une police à espacement fixe pour le texte du message</string>
     <string name="title_advanced_monospaced_pre">Utiliser une police à espacement fixe pour le texte préformaté</string>
@@ -524,12 +529,11 @@
     <string name="title_advanced_notifications_default">Canal par défaut</string>
     <string name="title_advanced_notifications_service">Canal de surveillance</string>
     <string name="title_advanced_notifications_newest_first">Afficher les notifications les plus récentes en premier</string>
-    <string name="title_advanced_notifications_background">Utiliser le service d\'arrière-plan pour synchroniser les messages</string>
-    <string name="title_advanced_notifications_background_hint">Un service en arrière-plan peut être arrêté par Android à tout moment, mais ne nécessite pas de notification dans la barre d\'état</string>
     <string name="title_advanced_badge">Afficher le nombre de nouveaux messages sur l\'icône de lancement</string>
     <string name="title_advanced_unseen_ignored">Faire correspondre le nombre de nouveaux messages et le nombre de notifications</string>
     <string name="title_advanced_notify_background">Afficher les notifications en arrière-plan uniquement</string>
     <string name="title_advanced_notify_known">Afficher les notifications uniquement pour les contacts</string>
+    <string name="title_advanced_notify_suppress_in_call" comment="title_advanced_notify_suppress_in_call&#10;&#10;Title of option which will delay new message notifications until after hanging up">Différer les notifications pendant un appel</string>
     <string name="title_advanced_notify_summary">Afficher uniquement une notification résumée</string>
     <string name="title_advanced_notify_preview">Afficher l’aperçu du message dans les notifications</string>
     <string name="title_advanced_notify_preview_all">Aperçu de tout le texte</string>
@@ -555,9 +559,10 @@
     <string name="title_advanced_light">Utiliser le voyant lumineux pour les notifications</string>
     <string name="title_advanced_sound">Sélectionner le son pour les notifications</string>
     <string name="title_advanced_notify_screen_on">Allumer brièvement l\'écran lors des nouvelles notifications de message</string>
+    <string name="title_advanced_notifications_background">Utiliser le service d\'arrière-plan pour synchroniser les messages</string>
+    <string name="title_advanced_notifications_background_hint">Un service en arrière-plan peut être arrêté par Android à tout moment, mais ne nécessite pas de notification dans la barre d\'état</string>
     <string name="title_advanced_confirm_links">Confirmer l’ouverture des liens</string>
     <string name="title_advanced_check_links_dbl">Rechercher les liens suspects dans des listes de blocage de domaines</string>
-    <string name="title_advanced_browse_links">Déléguer l\'ouverture des liens à Android</string>
     <string name="title_advanced_confirm_images">N\'afficher aucune image par défaut</string>
     <string name="title_advanced_ask_images">Confirmer l’affichage des images</string>
     <string name="title_advanced_confirm_html">Afficher les messages reformatés par défaut</string>
@@ -1053,7 +1058,6 @@
     <string name="title_reply_hard_bounce">Envoyer un avis de non-livraison définitive</string>
     <string name="title_reply_template">Répondre avec un modèle</string>
     <string name="title_move_undo">Déplacement vers %1$s (%2$d)</string>
-    <string name="title_open_with">Ouvrir avec</string>
     <string name="title_authentication_failed">L\'authentification %1$s a échoué</string>
     <string name="title_on_blocklist">Sur la liste de blocage des indésirables</string>
     <string name="title_receipt_subject">Confirmation de lecture : %1$s</string>
@@ -1254,10 +1258,13 @@
     <string name="title_encrypt">Chiffrer</string>
     <string name="title_decrypt">Déchiffrer</string>
     <string name="title_resync">Resynchroniser</string>
+    <string name="title_charset">Encodage</string>
+    <string name="title_charset_auto">Automatique</string>
     <string name="title_alternative_text">Afficher le texte brut</string>
     <string name="title_alternative_html">Afficher en HTML</string>
     <string name="title_no_openpgp">OpenKeychain introuvable</string>
     <string name="title_user_interaction">Transfert vers OpenKeychain</string>
+    <string name="title_padlock">Utiliser le cadenas pour déchiffrer le message</string>
     <string name="title_signed_data">Vérifier la signature pour afficher le texte du message</string>
     <string name="title_not_encrypted">Le message n\'est ni signé ni chiffré</string>
     <string name="title_no_sign_key">Aucune clé de signature sélectionnée</string>
@@ -1576,6 +1583,7 @@
     <string name="title_hint_folder_actions">Appuyez longuement sur un dossier pour afficher les options, comme ajouter un dossier au menu de navigation pour un accès rapide</string>
     <string name="title_hint_folder_sync">Afin de limiter l’utilisation de la pile et du réseau, les dossiers et messages ne seront pas tous synchronisés par défaut</string>
     <string name="title_hint_airplane">Le mode avion est activé</string>
+    <string name="title_hint_notification">Les notifications sont désactivées</string>
     <string name="title_hint_support">Si vous avez une question ou un problème, veuillez utiliser le menu « Assistance » pour obtenir de l’aide</string>
     <string name="title_hint_message_actions">Balayer vers la gauche pour mettre à la corbeille; balayer vers la droite pour archiver (si disponible); les actions de balayage peuvent être configurées dans les paramètres du compte</string>
     <string name="title_hint_message_selection">Appuyez longuement sur un message pour activer la sélection multiple; maintenez et faites glisser vers le haut ou vers le bas pour sélectionner davantage de messages</string>

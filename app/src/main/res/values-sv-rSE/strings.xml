@@ -82,6 +82,10 @@
         Att blockera en avsändardomän använder filterregler, vilket är en pro-funktion.
     </string>
     <string name="title_blocked_senders">Blockerade avsändare</string>
+    <plurals name="title_ask_block_sender">
+        <item quantity="one">Blockera avsändare av %1$s meddelande?</item>
+        <item quantity="other">Blockera avsändare av %1$s meddelanden?</item>
+    </plurals>
     <string name="title_junk_filter">Använd lokalt skräppostfilter</string>
     <string name="title_junk_filter_hint">Detta kan öka batterianvändningen och felaktigt markera meddelanden som skräppost</string>
     <string name="title_junk_blocklist">Använd skräppostblockeringslistor</string>
@@ -152,13 +156,14 @@
     <string name="title_setup_accounts">Konton</string>
     <string name="title_setup_identities">Identiteter</string>
     <string name="title_setup_other">Annan leverantör</string>
+    <string name="title_setup_inbound">Endast inkommande e-post (e-post kan inte skickas!)</string>
     <string name="title_setup_pop3">POP3-konto</string>
     <string name="title_setup_oauth_permission">E-postleverantören har godkänt OAuth endast för Play Store- och GitHub-versionen</string>
     <string name="title_setup_gmail_support">Auktorisera Google-konton kommer endast att fungera i Play Store- och GitHub-versionen eftersom Android kontrollerar den digitala app-signaturen</string>
     <string name="title_setup_gmail_rationale">Vänligen bevilja behörigheter för att välja ett konto och läsa ditt namn</string>
     <string name="title_setup_gmail_permissions">Google kommer att be om behörighet att läsa, komponera, skicka och permanent ta bort all din e-post. FairEmail kommer aldrig att ta bort dina meddelanden utan ditt uttryckliga medgivande.</string>
     <string name="title_setup_gmail_drafts">Om mappen för utkast inte är åtkomlig för IMAP kan detta lösas under inställningarna för Gmail-etiketten</string>
-    <string name="title_setup_gmail_password">Jag vill auktorisera ett konto med ett lösenord</string>
+    <string name="title_setup_gmail_password">Jag vill auktorisera ett konto med ett lösenord istället för ett konto på enheten</string>
     <string name="title_setup_office_auth">Felet \"AUTHENTICATE failed\" kan orsakas av att IMAP/SMTP inaktiveras av systemadministratören</string>
     <string name="title_setup_oauth_rationale">Auktorisera åtkomst till ditt %1$s konto</string>
     <string name="title_setup_oauth_update">Auktorisera ett befintligt konto igen (annars skapa ett nytt konto)</string>
@@ -184,6 +189,8 @@
     <string name="title_setup_permissions">Bevilja behörigheter</string>
     <string name="title_setup_permissions_remark">Få tillgång till kontaktinformation (valfritt)</string>
     <string name="title_setup_permissions_explanation">Kontaktbehörigheter krävs för att söka kontaktinfo och föreslå kontakter</string>
+    <string name="title_setup_permissions_notify">Visa aviseringar för nya meddelanden (valfritt)</string>
+    <string name="title_setup_permissions_notify_explanation">Aviseringsbehörigheter krävs för att visa aviseringar för nya meddelanden i statusfältet</string>
     <string name="title_setup_permission_why">Vilka behörigheter behövs och varför?</string>
     <string name="title_setup_permission_import_contacts">Hur kan jag importera kontakter?</string>
     <string name="title_setup_doze">Inaktivera batterioptimeringar</string>
@@ -207,6 +214,7 @@
     <string name="title_setup_still">Fortfarande att göra</string>
     <string name="title_setup_error">Fel</string>
     <string name="title_setup_pop">Använd POP3 (rekommenderas inte)</string>
+    <string name="title_setup_recent">Använd \"senaste\" för flera e-postklienter</string>
     <string name="title_setup_configuring">Konfigurerar konto &#8230;</string>
     <string name="title_setup_app_password">Du kan behöva använda ett applösenord</string>
     <string name="title_setup_extra">Extra</string>
@@ -453,6 +461,7 @@
     <string name="title_advanced_message_text_zoom2">Standard meddelandetext zoom: %1$s %%</string>
     <string name="title_advanced_overview_mode">Zooma originalmeddelanden för att passa skärmen</string>
     <string name="title_advanced_override_width">Inaktivera fasta bredder i ursprungliga meddelanden</string>
+    <string name="title_advanced_hyphenation">Använd automatisk avstavning</string>
     <string name="title_advanced_contrast">Använd hög kontrast för meddelandetext</string>
     <string name="title_advanced_monospaced">Använd monospaced typsnitt för meddelandetext som standard</string>
     <string name="title_advanced_monospaced_pre">Använd monospaced typsnitt till förformaterad text</string>
@@ -516,8 +525,6 @@
     <string name="title_advanced_notifications_default">Standard kanal</string>
     <string name="title_advanced_notifications_service">Övervakar kanal</string>
     <string name="title_advanced_notifications_newest_first">Visa nyaste aviseringar först</string>
-    <string name="title_advanced_notifications_background">Använd en bakgrundstjänst för att synkronisera meddelanden</string>
-    <string name="title_advanced_notifications_background_hint">En bakgrundstjänst kan stoppas av Android när som helst, men kräver inte ett meddelande i statusfältet</string>
     <string name="title_advanced_badge">Visa programstartarikon med antal nya meddelanden</string>
     <string name="title_advanced_unseen_ignored">Låt antalet nya meddelanden matcha antalet aviseringar</string>
     <string name="title_advanced_notify_background">Visa aviseringar endast i bakgrunden</string>
@@ -547,9 +554,10 @@
     <string name="title_advanced_light">Använda aviseringslampan</string>
     <string name="title_advanced_sound">Välj aviseringsljud</string>
     <string name="title_advanced_notify_screen_on">Slå på skärmen en kort stund när det kommer nya meddelanden</string>
+    <string name="title_advanced_notifications_background">Använd en bakgrundstjänst för att synkronisera meddelanden</string>
+    <string name="title_advanced_notifications_background_hint">En bakgrundstjänst kan stoppas av Android när som helst, men kräver inte ett meddelande i statusfältet</string>
     <string name="title_advanced_confirm_links">Bekräfta att länkar öppnas</string>
     <string name="title_advanced_check_links_dbl">Kontrollera domänblockeringslistor för misstänkta länkar</string>
-    <string name="title_advanced_browse_links">Låt Android öppna länkar</string>
     <string name="title_advanced_confirm_images">Visa inga bilder som standard</string>
     <string name="title_advanced_ask_images">Bekräfta visning av bilder</string>
     <string name="title_advanced_confirm_html">Visa omformaterade meddelanden som standard</string>
@@ -695,6 +703,7 @@
     <string name="title_advanced_display_hidden_hint">Detta kan resultera i udda utseende och dubbla texter</string>
     <string name="title_advanced_display_pin_hint">En PIN-kod har företräde framför biometrisk autentisering</string>
     <string name="title_advanced_display_autolock_nav_hint">Det kommer att finnas en nådetid på %1$d sekunder</string>
+    <string name="title_advanced_user_agent_hint">Vissa servrar accepterar inte en generisk användaragentsträng</string>
     <string name="title_advanced_safe_browsing_hint">Googles server vet vilka adresser som det görs uppslag för</string>
     <string name="title_advanced_badge_hint">Endast tillgänglig på programstartare som stöds</string>
     <string name="title_advanced_notify_action_hint">Högst tre åtgärder kommer att visas</string>
@@ -1042,7 +1051,6 @@
     <string name="title_reply_hard_bounce">Skicka hard bounce</string>
     <string name="title_reply_template">Svara med mall</string>
     <string name="title_move_undo">Flyttar till %1$s (%2$d)</string>
-    <string name="title_open_with">Öppna med</string>
     <string name="title_authentication_failed">%1$s autentisering misslyckades</string>
     <string name="title_on_blocklist">På listan för skräppostblockering</string>
     <string name="title_receipt_subject">Läs kvitto: %1$s</string>
@@ -1164,6 +1172,10 @@
     <string name="title_style_strikethrough">Genomstruken</string>
     <string name="title_style_clear">Rensa formatering</string>
     <string name="title_style_link">Infoga länk</string>
+    <string name="title_style_link_address">Adress</string>
+    <string name="title_style_link_title">Rubrik</string>
+    <string name="title_style_link_metadata">Hämta rubrik</string>
+    <string name="title_style_link_metadata_remark">Detta kommer att hämta rubriken på den angivna adressen</string>
     <string name="title_add_image">Lägg till bild</string>
     <string name="title_add_image_inline">Infoga</string>
     <string name="title_add_image_attach">Bifoga</string>
@@ -1237,6 +1249,8 @@
     <string name="title_encrypt">Kryptera</string>
     <string name="title_decrypt">Dekryptera</string>
     <string name="title_resync">Synkronisera om</string>
+    <string name="title_charset">Kodning</string>
+    <string name="title_charset_auto">Automatiskt</string>
     <string name="title_alternative_text">Visa oformaterad text</string>
     <string name="title_alternative_html">Visa HTML</string>
     <string name="title_no_openpgp">OpenKeychain hittades inte</string>
@@ -1559,6 +1573,7 @@
     <string name="title_hint_folder_actions">Tryck länge på en mapp för alternativ, som att lägga till en mapp till navigationsmenyn för snabb åtkomst</string>
     <string name="title_hint_folder_sync">För att begränsa batteri- och nätverksanvändning synkroniseras inte alla mappar och inte alla meddelanden som standard</string>
     <string name="title_hint_airplane">Flygplansläge är på</string>
+    <string name="title_hint_notification">Aviseringar är inaktiverade</string>
     <string name="title_hint_support">Om du har en fråga eller ett problem, vänligen använd supportmenyn för att få hjälp</string>
     <string name="title_hint_message_actions">Dra åt vänster för att kasta; Svep åt höger för att arkivera (om tillgängligt); Svepåtgärderna kan konfigureras i kontoinställningarna</string>
     <string name="title_hint_message_selection">Långt tryck på ett meddelande för att börja välja flera meddelanden; håll och svep uppåt eller nedåt för att välja fler meddelanden</string>

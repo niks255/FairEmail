@@ -720,9 +720,10 @@ class Core {
                                 if (title != null) {
                                     NotificationCompat.Builder builder =
                                             getNotificationError(context, "warning", account, message.id, new Throwable(title, ex));
-                                    nm.notify(op.name + ":" + op.message,
-                                            NotificationHelper.NOTIFICATION_TAGGED,
-                                            builder.build());
+                                    if (NotificationHelper.areNotificationsEnabled(nm))
+                                        nm.notify(op.name + ":" + op.message,
+                                                NotificationHelper.NOTIFICATION_TAGGED,
+                                                builder.build());
                                 }
                             }
 
@@ -1630,8 +1631,9 @@ class Core {
             return;
         }
 
-        // Move from trash/drafts only
+        // Move from drafts/sent/trash+leave_delete only
         if (!EntityFolder.DRAFTS.equals(folder.type) &&
+                !EntityFolder.SENT.equals(folder.type) &&
                 !(EntityFolder.TRASH.equals(folder.type) && account.leave_deleted))
             throw new IllegalArgumentException("Invalid POP3 folder" +
                     " source=" + folder.type + " target=" + target.type +
@@ -1988,11 +1990,15 @@ class Core {
 
     private static void onBody(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, IOException {
         boolean plain_text = jargs.optBoolean(0);
+        String charset = jargs.optString(1, null);
+
+        if (message.uid == null)
+            throw new IllegalArgumentException("uid missing");
 
         // Download message body
         DB db = DB.getInstance(context);
 
-        if (message.content && message.isPlainOnly() == plain_text)
+        if (message.content && message.isPlainOnly() == plain_text && charset == null)
             return;
 
         // Get message
@@ -2002,7 +2008,7 @@ class Core {
 
         MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
         MessageHelper.MessageParts parts = helper.getMessageParts();
-        String body = parts.getHtml(context, plain_text);
+        String body = parts.getHtml(context, plain_text, charset);
         File file = message.getFile(context);
         Helper.writeText(file, body);
         String text = HtmlHelper.getFullText(body);
@@ -3019,6 +3025,8 @@ class Core {
                         message.bimi_selector = helper.getBimiSelector();
                         message.tls = helper.getTLS();
                         message.dkim = MessageHelper.getAuthentication("dkim", authentication);
+                        if (BuildConfig.DEBUG)
+                            helper.verifyDKIM(context);
                         if (Boolean.TRUE.equals(message.dkim))
                             message.dkim = helper.checkDKIMRequirements();
                         message.spf = MessageHelper.getAuthentication("spf", authentication);
@@ -3278,6 +3286,9 @@ class Core {
             boolean delete_unseen = prefs.getBoolean("delete_unseen", false);
             boolean use_modseq = prefs.getBoolean("use_modseq", true);
             boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
+
+            if (account.isYahoo() || account.isAol())
+                sync_nodate = false;
 
             if (account.isZoho()) {
                 sync_unseen = false;
@@ -4049,6 +4060,8 @@ class Core {
             message.bimi_selector = helper.getBimiSelector();
             message.tls = helper.getTLS();
             message.dkim = MessageHelper.getAuthentication("dkim", authentication);
+            if (BuildConfig.DEBUG)
+                helper.verifyDKIM(context);
             if (Boolean.TRUE.equals(message.dkim))
                 message.dkim = helper.checkDKIMRequirements();
             message.spf = MessageHelper.getAuthentication("spf", authentication);
@@ -4229,11 +4242,12 @@ class Core {
 
                             List<EntityMessage> all = new ArrayList<>();
 
-                            if (message.inreplyto != null) {
-                                List<EntityMessage> replied = db.message().getMessagesByMsgId(folder.account, message.inreplyto);
-                                if (replied != null)
-                                    all.addAll(replied);
-                            }
+                            if (message.inreplyto != null)
+                                for (String inreplyto : message.inreplyto.split(" ")) {
+                                    List<EntityMessage> replied = db.message().getMessagesByMsgId(folder.account, inreplyto);
+                                    if (replied != null)
+                                        all.addAll(replied);
+                                }
                             if (r.refid != null) {
                                 List<EntityMessage> refs = db.message().getMessagesByMsgId(folder.account, r.refid);
                                 if (refs != null)
@@ -4247,8 +4261,10 @@ class Core {
                                         map.put(f.id, f);
                                 }
 
-                            for (EntityFolder f : map.values())
-                                EntityOperation.queue(context, f, EntityOperation.REPORT, message.inreplyto, label);
+                            if (message.inreplyto != null)
+                                for (EntityFolder f : map.values())
+                                    for (String inreplyto : message.inreplyto.split(" "))
+                                        EntityOperation.queue(context, f, EntityOperation.REPORT, inreplyto, label);
                         }
                     }
                 } catch (Throwable ex) {
@@ -5129,7 +5145,8 @@ class Core {
                                             : " channel=" + notification.getChannelId()) +
                                     " sort=" + notification.getSortKey());
                     try {
-                        nm.notify(tag, NotificationHelper.NOTIFICATION_TAGGED, notification);
+                        if (NotificationHelper.areNotificationsEnabled(nm))
+                            nm.notify(tag, NotificationHelper.NOTIFICATION_TAGGED, notification);
                         // https://github.com/leolin310148/ShortcutBadger/wiki/Xiaomi-Device-Support
                         if (id == 0 && badge && Helper.isXiaomi())
                             ShortcutBadger.applyNotification(context, notification, current);

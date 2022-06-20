@@ -156,13 +156,14 @@
     <string name="title_setup_accounts">Λογαριασμοί</string>
     <string name="title_setup_identities">Ταυτότητες</string>
     <string name="title_setup_other">Άλλος πάροχος</string>
+    <string name="title_setup_inbound">Μόνο εισερχόμενα μηνύματα (δεν μπορούν να αποστέλλονται μηνύματα!)</string>
     <string name="title_setup_pop3">Λογαριασμός POP3</string>
     <string name="title_setup_oauth_permission">Ο πάροχος ηλ. ταχυδρομείου έχει εγκρίνει OAuth μόνον για την έκδοση του Play Store και του GitHub</string>
     <string name="title_setup_gmail_support">Η εξουσιοδότηση λογαριασμών Google θα λειτουργήσει μόνον στην έκδοση του Play Store και του GitHub, επειδή το Android ελέγχει την ψηφιακή υπογραφή της εφαρμογής</string>
     <string name="title_setup_gmail_rationale">Παρακαλώ, παραχωρήστε τις απαιτούμενες άδειες για την επιλογή ενός λογαριασμού και την ανάγνωση του ονόματός σας</string>
     <string name="title_setup_gmail_permissions">Η Google θα ζητήσει άδειες που αφορούν στην ανάγνωση, σύνταξη, αποστολή και οριστική διαγραφή όλων των μηνυμάτων σας. Το FairEmail δεν θα διαγράψει ποτέ τα μηνύματά σας χωρίς τη ρητή συγκατάθεσή σας.</string>
     <string name="title_setup_gmail_drafts">Αν ο φάκελος με τα πρόχειρα δεν είναι διαθέσιμος μέσω IMAP, αυτό μπορεί να διορθωθεί στις ρυθμίσεις ετικετών του Gmail</string>
-    <string name="title_setup_gmail_password">Θέλω να εξουσιοδοτήσω έναν λογαριασμό με έναν κωδικό πρόσβασης</string>
+    <string name="title_setup_gmail_password">Θέλω να εξουσιοδοτήσω έναν λογαριασμό με έναν κωδικό πρόσβασης αντί για έναν λογαριασμό στη συσκευή</string>
     <string name="title_setup_office_auth">Το σφάλμα \'ΠΙΣΤΟΠΟΙΗΣΗ απέτυχε\' μπορεί να προκληθεί επειδή το IMAP/SMTP έχει απενεργοποιηθεί από το διαχειριστή του συστήματος</string>
     <string name="title_setup_oauth_rationale">Παραχωρήστε πρόσβαση στον λογαριασμό σας %1$s</string>
     <string name="title_setup_oauth_update">Εκ νέου εξουσιοδότηση ενός ήδη υπάρχοντος λογαριασμού (διαφορετικά, δημιουργήστε έναν καινούργιο λογαριασμό)</string>
@@ -188,6 +189,8 @@
     <string name="title_setup_permissions">Απαιτούμενα δικαιώματα</string>
     <string name="title_setup_permissions_remark">Για πρόσβαση στις πληροφορίες επαφών (προαιρετικό)</string>
     <string name="title_setup_permissions_explanation">Απαιτείται άδεια πρόσβασης στις επαφές για την αναζήτηση πληροφοριών επικοινωνίας και για προτάσεις επαφών</string>
+    <string name="title_setup_permissions_notify">Για να προβάλλονται ειδοποιήσεις νέων μηνυμάτων (προαιρετικό)</string>
+    <string name="title_setup_permissions_notify_explanation">Απαιτούνται δικαιώματα ειδοποιήσεων για να προβάλλονται ειδοποιήσεις νέων μηνυμάτων στη γραμμή κατάστασης</string>
     <string name="title_setup_permission_why">Ποιες άδειες χρειάζονται και γιατί;</string>
     <string name="title_setup_permission_import_contacts">Πώς μπορώ να εισαγάγω επαφές;</string>
     <string name="title_setup_doze">Απενεργοποίηση βελτιστοποίησης μπαταρίας</string>
@@ -211,6 +214,7 @@
     <string name="title_setup_still">Απομένουν να γίνουν</string>
     <string name="title_setup_error">Σφάλμα</string>
     <string name="title_setup_pop">Χρήση POP3 (δεν συνιστάται)</string>
+    <string name="title_setup_recent">Χρήση \"recent\" για πολλαπλούς πελάτες ηλ. ταχυδρομείου</string>
     <string name="title_setup_configuring">Ρύθμιση λογαριασμού &#8230;</string>
     <string name="title_setup_app_password">Ίσως χρειαστεί να χρησιμοποιήσετε έναν κωδικό πρόσβασης εφαρμογής</string>
     <string name="title_setup_extra">Επιπλέον επιλογές</string>
@@ -460,6 +464,7 @@
     <string name="title_advanced_message_text_zoom2">Μεγέθυνση κειμένου μηνύματος από προεπιλογή: %1$s %%</string>
     <string name="title_advanced_overview_mode">Μεγέθυνση αρχικού μηνύματος για προσαρμογή στην οθόνη</string>
     <string name="title_advanced_override_width">Να απενεργοποιηθούν τα σταθερά πλάτη στα αρχικά μηνύματα</string>
+    <string name="title_advanced_hyphenation">Χρήση αυτόματου συλλαβισμού</string>
     <string name="title_advanced_contrast">Χρήση υψηλής αντίθεσης για το κείμενο του μηνύματος</string>
     <string name="title_advanced_monospaced">Χρήση γραμματοσειράς σταθερού πλάτους από προεπιλογή</string>
     <string name="title_advanced_monospaced_pre">Χρήση γραμματοσειράς σταθερού πλάτους για προ-μορφοποιημένο κείμενο</string>
@@ -523,12 +528,11 @@
     <string name="title_advanced_notifications_default">Προεπιλεγμένο κανάλι</string>
     <string name="title_advanced_notifications_service">Κανάλι παρακολούθησης</string>
     <string name="title_advanced_notifications_newest_first">Να προβάλλονται πρώτα οι πιο πρόσφατες ειδοποιήσεις</string>
-    <string name="title_advanced_notifications_background">Χρήση υπηρεσίας στο παρασκήνιο για το συγχρονισμό των μηνυμάτων</string>
-    <string name="title_advanced_notifications_background_hint">Μια υπηρεσία που εκτελείται στο παρασκήνιο αλλά δεν απαιτεί κάποια ειδοποίηση στη γραμμή κατάστασης, μπορεί να τερματιστεί από το Android οποιαδήποτε στιγμή</string>
     <string name="title_advanced_badge">Προβολή του αριθμού των νέων μηνυμάτων πάνω στο εικονίδιο εκκίνησης</string>
     <string name="title_advanced_unseen_ignored">Να αντιστοιχεί ο αριθμός των νέων μηνυμάτων με τον αριθμό των ειδοποιήσεων</string>
     <string name="title_advanced_notify_background">Προβολή ειδοποιήσεων μόνο στο υπόβαθρο</string>
     <string name="title_advanced_notify_known">Προβολή ειδοποιήσεων μόνο για τις επαφές</string>
+    <string name="title_advanced_notify_suppress_in_call" comment="title_advanced_notify_suppress_in_call&#10;&#10;Title of option which will delay new message notifications until after hanging up">Αναβολή ειδοποιήσεων κατά τη διάρκεια μιας κλήσης</string>
     <string name="title_advanced_notify_summary">Προβολή μόνο μιας συνοπτικής ειδοποίησης</string>
     <string name="title_advanced_notify_preview">Προβολή μιας προεπισκόπησης του μηνύματος στις ειδοποιήσεις</string>
     <string name="title_advanced_notify_preview_all">Προεπισκόπηση ολόκληρου του κειμένου</string>
@@ -554,9 +558,10 @@
     <string name="title_advanced_light">Χρήση φωτεινής ένδειξης ειδοποιήσεων</string>
     <string name="title_advanced_sound">Επιλογή ήχου ειδοποιήσεων</string>
     <string name="title_advanced_notify_screen_on">Να ανάβει σύντομα η οθόνη κατά τις ειδοποιήσεις νέων μηνυμάτων</string>
+    <string name="title_advanced_notifications_background">Χρήση υπηρεσίας στο παρασκήνιο για το συγχρονισμό των μηνυμάτων</string>
+    <string name="title_advanced_notifications_background_hint">Μια υπηρεσία που εκτελείται στο παρασκήνιο αλλά δεν απαιτεί κάποια ειδοποίηση στη γραμμή κατάστασης, μπορεί να τερματιστεί από το Android οποιαδήποτε στιγμή</string>
     <string name="title_advanced_confirm_links">Επιβεβαίωση ανοίγματος συνδέσμων</string>
     <string name="title_advanced_check_links_dbl">Έλεγχος λιστών αποκλεισμένων τομέων για τους ύποπτους συνδέσμους</string>
-    <string name="title_advanced_browse_links">Ανάθεση του ανοίγματος των συνδέσμων στο Android</string>
     <string name="title_advanced_confirm_images">Να μην προβάλλεται καμία εικόνα από προεπιλογή</string>
     <string name="title_advanced_ask_images">Επιβεβαίωση προβολής των εικόνων</string>
     <string name="title_advanced_confirm_html">Προβολή αναμορφοποιημένων μηνυμάτων από προεπιλογή</string>
@@ -1048,7 +1053,6 @@
     <string name="title_reply_hard_bounce">Αποστολή σκληρής αναπήδησης (hard bounce)</string>
     <string name="title_reply_template">Απάντηση με ένα πρότυπο</string>
     <string name="title_move_undo">Μετακίνηση προς %1$s (%2$d)</string>
-    <string name="title_open_with">Άνοιγμα με</string>
     <string name="title_authentication_failed">Η ταυτοποίηση %1$s απέτυχε</string>
     <string name="title_on_blocklist">Σε λίστα αποκλεισμού ανεπιθύμητης αλληλογραφίας</string>
     <string name="title_receipt_subject">Αποδεικτικό ανάγνωσης: %1$s</string>
@@ -1247,10 +1251,13 @@
     <string name="title_encrypt">Κρυπτογράφηση</string>
     <string name="title_decrypt">Αποκρυπτογράφηση</string>
     <string name="title_resync">Επανασυγχρονισμός</string>
+    <string name="title_charset">Κωδικοποίηση</string>
+    <string name="title_charset_auto">Αυτόματο</string>
     <string name="title_alternative_text">Προβολή απλού κειμένου</string>
     <string name="title_alternative_html">Προβολή HTML</string>
     <string name="title_no_openpgp">Δεν βρέθηκε OpenKeychain</string>
     <string name="title_user_interaction">Μεταφορά προς OpenKeychain</string>
+    <string name="title_padlock">Χρησιμοποιήστε το λουκέτο για να αποκρυπτογραφήσετε το μήνυμα</string>
     <string name="title_signed_data">Επαλήθευση της υπογραφής για προβολή του κειμένου του μηνύματος</string>
     <string name="title_not_encrypted">Το μήνυμα δεν είναι υπογεγραμμένο ή κρυπτογραφημένο</string>
     <string name="title_no_sign_key">Κανένα κλειδί υπογραφής δεν επιλέχθηκε</string>
@@ -1569,6 +1576,7 @@
     <string name="title_hint_folder_actions">Παρατεταμένο πάτημα σε έναν φάκελο για επιλογές, όπως προσθήκη ενός φακέλου στο μενού πλοήγησης για γρήγορη πρόσβαση</string>
     <string name="title_hint_folder_sync">Για να μειωθεί η χρήση μπαταρίας και δικτύου δεν συγχρονίζονται όλοι οι φάκελοι και όλα τα μηνύματα από προεπιλογή</string>
     <string name="title_hint_airplane">Η λειτουργία πτήσης είναι ενεργοποιημένη</string>
+    <string name="title_hint_notification">Οι ειδοποιήσεις είναι απενεργοποιημένες</string>
     <string name="title_hint_support">Αν έχετε μία ερώτηση ή ένα πρόβλημα, παρακαλώ χρησιμοποιήστε το μενού \"Υποστήριξη\" για να λάβετε βοήθεια</string>
     <string name="title_hint_message_actions">Σάρωση αριστερά για απορρίμματα• σάρωση δεξιά για αρχειοθέτηση (αν είναι διαθέσιμη)• μπορείτε να ρυθμίσετε τις ενέργειες σάρωσης στις ρυθμίσεις του λογαριασμού</string>
     <string name="title_hint_message_selection">Πατήστε παρατεταμένα σε ένα μήνυμα για να αρχίσετε να επιλέγετε πολλαπλά μηνύματα. Συνεχίστε το πάτημα και σύρετε προς τα πάνω ή κάτω για να επιλέξετε περισσότερα μηνύματα</string>

@@ -152,12 +152,14 @@
     <string name="title_setup_accounts">حساب‌ها</string>
     <string name="title_setup_identities">هویت‌ها</string>
     <string name="title_setup_other">فراهم کننده دیگر</string>
+    <string name="title_setup_inbound">فقط ایمیل دریافتی (نمی‌توان ایمیل فرستاد!)</string>
     <string name="title_setup_pop3">حساب POP3</string>
     <string name="title_setup_oauth_permission">سرویس دهنده ی ایمیل OAuth را فقط برای نسخه پلی استور و گیت هاب تایید کرده</string>
     <string name="title_setup_gmail_support">حساب های گوگل فقط در نسخه‌های پلی استور و گیت هاب مجاز می‌شوند چون اندروید امضای برنامه را بررسی می‌کند</string>
     <string name="title_setup_gmail_rationale">لطفا مجوز برای انتخاب حساب و خواندن نام شما را اعطا کنید</string>
     <string name="title_setup_gmail_permissions">گوگل برای خواندن، نوشتن، فرستادن و حذف همیشگی همه ایمیل‌های شما درخواست دسترسی خواهد کرد. FairEmail هیچ‌وقت بدون رضایت آشکار شما پیام‌های شما را حذف نخواهد کرد.</string>
     <string name="title_setup_gmail_drafts">اگر پوشه پیش‌نویس‌ها به‌وسیله IMAP قابل دسترسی نیست، می‌توان آن را در تنظیمات برچسب‌های جیمیل درست کرد</string>
+    <string name="title_setup_gmail_password">می‌خواهم به جای حسابی روی دستگاه، به یک حساب با رمز عبور اجازه بدهم</string>
     <string name="title_setup_office_auth">خطای \'AUTHENTICATE failed\' می‌تواند به‌دلیل غیرفعال بودن IMAP/SMTP به‌ دست مدیر سیستم باشد</string>
     <string name="title_setup_oauth_rationale">برای دسترسی به %1$s حسابتان اجازه دهید</string>
     <string name="title_setup_oauth_update">به یک حساب موجود اجازه بدهید (در غیر این صورت یک حساب جدید بسازید)</string>
@@ -179,6 +181,7 @@
     <string name="title_setup_permissions">دادن دسترسی</string>
     <string name="title_setup_permissions_remark">برای دسترسی به اطلاعات مخاطبین (اختیاری)</string>
     <string name="title_setup_permissions_explanation">اجازه دسترسی به لیست مخاطبین برای جستجوی اطلاعات آنها و پیشنهاد دادن‌شان لازم است</string>
+    <string name="title_setup_permissions_notify">برای نمایش اعلان پیام‌های جدید (دلبخواه)</string>
     <string name="title_setup_permission_why">کدام اجازه دسترسی‌ها لازمند و چرا؟</string>
     <string name="title_setup_permission_import_contacts">چگونه می‌توانم مخاطبین را وارد کنم؟</string>
     <string name="title_setup_doze">غیرفعال کردن بهینه سازی باتری</string>
@@ -394,6 +397,7 @@
     <string name="title_advanced_addresses">نمایش جزئیات آدرس به صورت پیش‌فرض</string>
     <string name="title_advanced_unzip">محتویات ضمیمه‌های فشرده‌ شده را نشان بده</string>
     <string name="title_advanced_attachments_alt">نمایش پیوست‌ها بعد از متن پیام</string>
+    <string name="title_advanced_hyphenation">از خط تیره گذاری خودکار استفاده کن</string>
     <string name="title_advanced_contrast">از کنتراست زیاد برای متن پیام استفاده کن</string>
     <string name="title_advanced_background_color">استفاده از رنگ‌های پس‌زمینه</string>
     <string name="title_advanced_text_color">استفاده از رنگ‌های متن</string>
@@ -429,10 +433,9 @@
     <string name="title_advanced_notifications_default">کانال پیش‌فرض</string>
     <string name="title_advanced_notifications_service">کانال نظارت</string>
     <string name="title_advanced_notifications_newest_first">ابتدا اطلاع‌رسانی‌های جدید را نشان بده</string>
-    <string name="title_advanced_notifications_background">استفاده از سرویس پس‌زمینه برای همگام‌سازی پیام‌ها</string>
-    <string name="title_advanced_notifications_background_hint">یک سرویس پس‌زمینه می‌تواند هر هنگام توسط اندروید متوقف شود، ولی نیاز به اعلان نوار وضعیت ندارد</string>
     <string name="title_advanced_badge">نمایش عدد پیام‌های جدید با آیکون راه‌انداز</string>
     <string name="title_advanced_notify_known">اعلان‌ها را تنها برای مخاطبین نمایش بده</string>
+    <string name="title_advanced_notify_suppress_in_call" comment="title_advanced_notify_suppress_in_call&#10;&#10;Title of option which will delay new message notifications until after hanging up">در صورت مکالمه تلفنی، اعلان‌های اطلاع‌رسانی را به عقب بیانداز</string>
     <string name="title_advanced_notify_summary">تنها چکیده اعلان را نمایش بده</string>
     <string name="title_advanced_notify_preview">پیش‌نمایش پیام را در اعلان‌ها نمایش بده</string>
     <string name="title_advanced_notify_preview_all">پیش‌نمایش تمام متن</string>
@@ -452,8 +455,9 @@
     <string name="title_advanced_wearable_preview">تنها اعلان با پیش‌نمایش پیام را به پوشیدنی‌ها بفرست</string>
     <string name="title_advanced_light">استفاده از چراغ اعلان‌ها</string>
     <string name="title_advanced_sound">انتخاب صدای اعلان‌ها</string>
+    <string name="title_advanced_notifications_background">استفاده از سرویس پس‌زمینه برای همگام‌سازی پیام‌ها</string>
+    <string name="title_advanced_notifications_background_hint">یک سرویس پس‌زمینه می‌تواند هر هنگام توسط اندروید متوقف شود، ولی نیاز به اعلان نوار وضعیت ندارد</string>
     <string name="title_advanced_confirm_links">تایید بازکردن پیوندها</string>
-    <string name="title_advanced_browse_links">بازکردن پیوند‌ها را به اندروید واگذار کن</string>
     <string name="title_advanced_ask_images">تایید نمایش تصاویر</string>
     <string name="title_advanced_hide_timezone">پیام‌ها را بدون داده منطقه زمانی بفرست</string>
     <string name="title_advanced_display_hidden">نمایش متن پیام‌های پنهان</string>
@@ -739,7 +743,6 @@
     <string name="title_reply_receipt">فرستادن رسید خواندن</string>
     <string name="title_reply_template">پاسخ با قالب</string>
     <string name="title_move_undo">در حال انتقال به %1$s (%2$d)</string>
-    <string name="title_open_with">باز کردن با</string>
     <string name="title_authentication_failed">تایید %1$s ناموفق بود</string>
     <string name="title_receipt_subject">رسید خواندن: %1$s</string>
     <string name="title_receipt_text">این رسید خواندن تنها نشان می‌دهد که پیام نمایش داده شده. هیچ ضمانتی وجود ندارد که گیرنده محتویات پیام را خوانده باشد.</string>
@@ -872,8 +875,11 @@
     <string name="title_encrypt">رمزگذاری</string>
     <string name="title_decrypt">رمزگشایی</string>
     <string name="title_resync">همگام‌سازی دوباره</string>
+    <string name="title_charset">رمزگذاری</string>
+    <string name="title_charset_auto">خودکار</string>
     <string name="title_no_openpgp">OpenKeychain یافت نشد</string>
     <string name="title_user_interaction">در حال انتقال به OpenKeychain</string>
+    <string name="title_padlock">از قفل برای رمزگشایی پیام استفاده کن</string>
     <string name="title_not_encrypted">پیام امضا یا رمزگذاری نشده است</string>
     <string name="title_no_sign_key">کلید امضائی انتخاب نشده</string>
     <string name="title_reset_sign_key">بازنشانی کلید امضا</string>
@@ -1116,6 +1122,7 @@
     <string name="title_legend_s">انتخاب/عدم انتخاب</string>
     <string name="title_hint_folder_sync">برای محدود کردن مصرف دیتا و باتری تمامی پوشه‌ها و پیام‌ها به صورت پیش‌فرض همگام سازی نخواهند شد</string>
     <string name="title_hint_airplane">حالت هواپیما روشن است</string>
+    <string name="title_hint_notification">اعلان‌ها غیرفعالند</string>
     <string name="title_hint_support">اگر سوال یا مشکلی دارید لطفا از قسمت پشتیبانی برای کمک گرفتن استفاده کنید</string>
     <string name="title_hint_message_actions">برای حذف به چپ بکشید؛ برای بایگانی به راست بکشید (اگر در دسترس باشد)؛ کنش‌های کشیدن می‌تواند در تنظیمات حساب پیکربندی شوند</string>
     <string name="title_hint_message_junk">این پیام‌ها در پوشه هرزنامه سرور ایمیل قرار دارند. واضح است که اپلیکیشن نمی‌تواند جلوی فرستادن هرزنامه برای شما را بگیرد.</string>

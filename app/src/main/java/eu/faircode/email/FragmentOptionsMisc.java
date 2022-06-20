@@ -70,7 +70,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
@@ -86,6 +85,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.SortedMap;
 
 import io.requery.android.database.sqlite.SQLiteDatabase;
@@ -110,7 +110,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvFtsIndexed;
     private TextView tvFtsPro;
     private Spinner spLanguage;
-    private ImageButton ibResetLanguage;
     private SwitchCompat swDeepL;
     private ImageButton ibDeepL;
     private TextView tvSdcard;
@@ -193,7 +192,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private Button btnGC;
     private Button btnCharsets;
     private Button btnFontMap;
-    private Button btnCiphers;
     private Button btnFiles;
     private Button btnUris;
     private Button btnAllPermissions;
@@ -241,7 +239,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "setup_reminder", "setup_advanced",
             "signature_images_hint",
             "gmail_checked",
-            "eml_auto_confirm"
+            "eml_auto_confirm",
+            "open_with_pkg", "open_with_tabs"
     };
 
     @Override
@@ -286,7 +285,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvFtsIndexed = view.findViewById(R.id.tvFtsIndexed);
         tvFtsPro = view.findViewById(R.id.tvFtsPro);
         spLanguage = view.findViewById(R.id.spLanguage);
-        ibResetLanguage = view.findViewById(R.id.ibResetLanguage);
         swDeepL = view.findViewById(R.id.swDeepL);
         ibDeepL = view.findViewById(R.id.ibDeepL);
         tvSdcard = view.findViewById(R.id.tvSdcard);
@@ -369,7 +367,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         btnGC = view.findViewById(R.id.btnGC);
         btnCharsets = view.findViewById(R.id.btnCharsets);
         btnFontMap = view.findViewById(R.id.btnFontMap);
-        btnCiphers = view.findViewById(R.id.btnCiphers);
         btnFiles = view.findViewById(R.id.btnFiles);
         btnUris = view.findViewById(R.id.btnUris);
         btnAllPermissions = view.findViewById(R.id.btnAllPermissions);
@@ -528,57 +525,26 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         spLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                if (position == 0)
-                    onNothingSelected(adapterView);
-                else {
-                    String tag = languages.get(position - 1).first;
-                    if (tag.equals(spLanguage.getTag()))
-                        return;
+                String current = prefs.getString("language", null);
+                String selected = (position == 0 ? null : languages.get(position - 1).first);
+                if (Objects.equals(current, selected))
+                    return;
 
-                    new AlertDialog.Builder(view.getContext())
-                            .setIcon(R.drawable.twotone_help_24)
-                            .setTitle(languages.get(position - 1).second)
-                            .setMessage(R.string.title_advanced_english_hint)
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    prefs.edit().putString("language", tag).commit(); // apply won't work here
-                                }
-                            })
-                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Do nothing
-                                }
-                            })
-                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    setOptions();
-                                }
-                            })
-                            .show();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                prefs.edit().remove("language").commit(); // apply won't work here
-            }
-        });
-
-        ibResetLanguage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Locale system = Resources.getSystem().getConfiguration().locale;
-                new AlertDialog.Builder(v.getContext())
+                String title = (position == 0
+                        ? getString(R.string.title_advanced_language_system)
+                        : languages.get(position - 1).second);
+                new AlertDialog.Builder(adapterView.getContext())
                         .setIcon(R.drawable.twotone_help_24)
-                        .setTitle(system.getDisplayName(system))
-                        .setMessage(Helper.getString(v.getContext(), system, R.string.title_advanced_english_hint))
+                        .setTitle(title)
+                        .setMessage(R.string.title_advanced_english_hint)
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                prefs.edit().remove("language").commit(); // apply won't work here
+                                // apply won't work here
+                                if (selected == null)
+                                    prefs.edit().remove("language").commit();
+                                else
+                                    prefs.edit().putString("language", selected).commit();
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -594,6 +560,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                             }
                         })
                         .show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                prefs.edit().remove("language").commit();
             }
         });
 
@@ -626,7 +597,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 swCheckWeekly.setEnabled(checked);
                 if (!checked) {
                     NotificationManager nm =
-                            (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                            Helper.getSystemService(getContext(), NotificationManager.class);
                     nm.cancel(NotificationHelper.NOTIFICATION_UPDATE);
                 }
             }
@@ -1060,6 +1031,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swWebViewLegacy.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
         swWebViewLegacy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1296,23 +1268,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         .setIcon(R.drawable.twotone_info_24)
                         .setTitle(R.string.title_advanced_font_map)
                         .setMessage(ssb)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing
-                            }
-                        })
-                        .show();
-            }
-        });
-
-        btnCiphers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(getContext())
-                        .setIcon(R.drawable.twotone_info_24)
-                        .setTitle(R.string.title_advanced_ciphers)
-                        .setMessage(Log.getCiphers())
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -1578,7 +1533,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         if (!Helper.isPlayStoreInstall() &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager nm =
+                    Helper.getSystemService(getContext(), NotificationManager.class);
 
             NotificationChannel notification = nm.getNotificationChannel("update");
             if (notification != null) {
@@ -1612,11 +1568,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-            setOptions();
-            if ("last_cleanup".equals(key))
-                setLastCleanup(prefs.getLong(key, -1));
-        }
+        if ("last_cleanup".equals(key))
+            setLastCleanup(prefs.getLong(key, -1));
+
+        setOptions();
     }
 
     @Override
@@ -1715,6 +1670,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     }
 
     private void setOptions() {
+        if (getContext() == null)
+            return;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         ActivityManager am = Helper.getSystemService(getContext(), ActivityManager.class);
@@ -1751,8 +1709,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             if (lang.first.equals(language))
                 selected = pos + 1;
         }
-
-        spLanguage.setTag(language);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, android.R.id.text1, display);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -1928,6 +1884,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     }
 
     private void setLastCleanup(long time) {
+        if (getContext() == null)
+            return;
+
         java.text.DateFormat DTF = Helper.getDateTimeInstance(getContext());
         tvLastCleanup.setText(
                 getString(R.string.title_advanced_last_cleanup,

@@ -50,7 +50,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.lifecycle.Lifecycle;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
@@ -500,8 +499,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         if ("default_snooze".equals(key))
             return;
 
-        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-            setOptions();
+        setOptions();
     }
 
     @Override
@@ -520,6 +518,9 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     }
 
     private void setOptions() {
+        if (getContext() == null)
+            return;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         swSyncOnlaunch.setChecked(prefs.getBoolean("sync_on_launch", false));

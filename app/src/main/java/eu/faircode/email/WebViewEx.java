@@ -19,11 +19,9 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
-import static androidx.webkit.WebSettingsCompat.FORCE_DARK_OFF;
-import static androidx.webkit.WebSettingsCompat.FORCE_DARK_ON;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -42,6 +40,7 @@ import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewCompat;
 import androidx.webkit.WebViewFeature;
 
 public class WebViewEx extends WebView implements DownloadListener, View.OnLongClickListener {
@@ -80,10 +79,11 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
         settings.setAllowFileAccess(false);
+        settings.setAllowContentAccess(true); // default
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
-        if (WebViewEx.isFeatureSupported(WebViewFeature.SAFE_BROWSING_ENABLE))
+        if (WebViewEx.isFeatureSupported(context, WebViewFeature.SAFE_BROWSING_ENABLE))
             WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
     }
 
@@ -109,18 +109,21 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean compact = prefs.getBoolean("compact", false);
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
-        boolean browser_zoom = prefs.getBoolean("browser_zoom", false) && BuildConfig.DEBUG;
+        boolean browser_zoom = (prefs.getBoolean("browser_zoom", false) && BuildConfig.DEBUG);
         int message_zoom = prefs.getInt("message_zoom", 100);
         boolean monospaced = prefs.getBoolean("monospaced", false);
-        legacy = prefs.getBoolean("webview_legacy", false);
+        legacy = (prefs.getBoolean("webview_legacy", false) && BuildConfig.DEBUG);
 
         WebSettings settings = getSettings();
 
         boolean dark = Helper.isDarkTheme(context);
-        boolean canForce = WebViewEx.isFeatureSupported(WebViewFeature.FORCE_DARK);
-        if (canForce)
-            WebSettingsCompat.setForceDark(settings, dark && !force_light ? FORCE_DARK_ON : FORCE_DARK_OFF);
-        setBackgroundColor(canForce && force_light ? Color.WHITE : Color.TRANSPARENT);
+
+        // https://developer.android.com/reference/android/webkit/WebSettings#setAlgorithmicDarkeningAllowed(boolean)
+        // https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
+        boolean canDarken = WebViewEx.isFeatureSupported(context, WebViewFeature.ALGORITHMIC_DARKENING);
+        if (canDarken)
+            WebSettingsCompat.setAlgorithmicDarkeningAllowed(settings, dark && !force_light);
+        setBackgroundColor(canDarken && dark && !force_light ? Color.TRANSPARENT : Color.WHITE);
 
         float fontSize = 16f /* Default */ *
                 (browser_zoom ? 1f : message_zoom / 100f);
@@ -214,6 +217,12 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         settings.setLoadsImagesAutomatically(show_images || inline);
         settings.setBlockNetworkLoads(!show_images);
         settings.setBlockNetworkImage(!show_images);
+    }
+
+    @Override
+    public void setMinimumHeight(int minHeight) {
+        super.setMinimumHeight(minHeight);
+        Log.i("Set min height=" + minHeight);
     }
 
     @Override
@@ -345,7 +354,16 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         return (yscale > 1.01);
     }
 
-    public static boolean isFeatureSupported(String feature) {
+    public static boolean isFeatureSupported(Context context, String feature) {
+        if (WebViewFeature.ALGORITHMIC_DARKENING.equals(feature))
+            try {
+                PackageInfo pkg = WebViewCompat.getCurrentWebViewPackage(context);
+                if (pkg != null && pkg.versionCode / 100000 < 5005) // Version 102.*
+                    return false;
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+
         try {
             return WebViewFeature.isFeatureSupported(feature);
         } catch (Throwable ex) {

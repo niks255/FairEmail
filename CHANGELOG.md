@@ -4,6 +4,109 @@
 
 ### [Juratyrant](https://en.wikipedia.org/wiki/Juratyrant)
 
+### 1.1924 - 2022-06-19
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1923 - 2022-06-18
+
+* Added option to delay notifications while on a call (Android 12 or later)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1922 - 2022-06-18
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1921 - 2022-06-17
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1920 - 2022-06-16
+
+* Fixed double back to exit
+* Improved browser selection
+* Added forward as attachment to answer menu
+* Small improvements and minor bug fixes
+
+### 1.1919 - 2022-06-15
+
+* Fixed fragment back
+* Small improvements and minor bug fixes
+* Updated AndroidX
+
+### 1.1918 - 2022-06-15
+
+* Added browser selection to open link dialog
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1917 - 2022-06-14
+
+* Fixed moving to selected folder
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1916 - 2022-06-14
+
+* Added option to suppress new message notifications when calling
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1915 - 2022-06-13
+
+* Fixed initializing option values
+
+### 1.1914 - 2022-06-13
+
+* Added option for automatic hyphenation
+* Improved Android 13 compatibility
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1913 - 2022-06-12
+
+* Fixed asking for permissions on Android 12 and before
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1912 - 2022-06-11
+
+* Targetting SDK 33 (Android 13)
+* Small improvements and minor bug fixes
+* Updated AndroidX Webkit
+* Updated translations
+
+### 1.1911 - 2022-06-11
+
+* Added encoding (character set) override option
+* Added UTF-16 endianness detection
+* Small improvements and minor bug fixes
+* Updated AndroidX and material design library
+* Updated translations
+
+### 1.1910 - 2022-06-10
+
+* Fixed dark theme / original message view on Android 12 and before
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1909 - 2022-06-10
+
+* Fixed dark theme / original message view on Android 13
+* Updated translations
+
+### 1.1908 - 2022-06-09
+
+* Added searching for text in drafts
+* Added OAuth for Gmail POP3 accounts
+* Improved Android 13 compatibility (notification permissions)
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1907 - 2022-06-07
 
 * Fixed deleted POP3 messages reappearing

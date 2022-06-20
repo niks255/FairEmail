@@ -154,7 +154,6 @@
     <string name="title_setup_gmail_rationale">Kérem adja meg a szükséges engedélyeket hogy a kijelölhessen egy fiókot, illetve az alkalmazás hozzáférjen</string>
     <string name="title_setup_gmail_permissions">A Google engedélyeket fog kérni hogy olvashasson, írhasson, küldhessen és véglegesen törölhessen üzeneteket. A FairEmail sosem törli az üzeneteit az Ön beleegyezése nélkül.</string>
     <string name="title_setup_gmail_drafts">Ha a piszkozatok mappa nem elérhető IMAP-on keresztül, a hibát orvosolhatja a Gmail címkék beállításai között</string>
-    <string name="title_setup_gmail_password">Szeretnék egy fiókot hitelesíteni jelszóval</string>
     <string name="title_setup_office_auth">Az \'AUTHENTICATE failed\' hibának oka lehet hogy a rendszeradminisztrátor kikapcsolta az IMAP/SMTP-t</string>
     <string name="title_setup_oauth_rationale">Engedélyezze a hozzáférést a %1$s fiókjához</string>
     <string name="title_setup_oauth_updated">A fiókhitelesítés frissült</string>
@@ -494,8 +493,6 @@
     <string name="title_advanced_notifications_default">Alapértelmezett csatorna</string>
     <string name="title_advanced_notifications_service">Figyelési csatorna</string>
     <string name="title_advanced_notifications_newest_first">A legújabb értesítések mutatása először</string>
-    <string name="title_advanced_notifications_background">Háttérfolyamat használata üzenetek szinkronizálásához</string>
-    <string name="title_advanced_notifications_background_hint">Egy háttérfolyamat leállítható az Android által bármikor, de nem szükséges státusz sor értesítés hozzá</string>
     <string name="title_advanced_badge">Új üzenetek számának megjelenítése az indító ikonon</string>
     <string name="title_advanced_unseen_ignored">Külön értesítés megjelnítése minden egyes új üzenethez</string>
     <string name="title_advanced_notify_background">Mutasd a figyelmeztetéseket, amikor a háttérben vannak csak</string>
@@ -525,9 +522,10 @@
     <string name="title_advanced_light">Értesítő fény használata</string>
     <string name="title_advanced_sound">Válasszon értesítő hangot</string>
     <string name="title_advanced_notify_screen_on">Rövid időre kapcsolja be a képernyőt az új üzeneteknél</string>
+    <string name="title_advanced_notifications_background">Háttérfolyamat használata üzenetek szinkronizálásához</string>
+    <string name="title_advanced_notifications_background_hint">Egy háttérfolyamat leállítható az Android által bármikor, de nem szükséges státusz sor értesítés hozzá</string>
     <string name="title_advanced_confirm_links">Linkek megnyitásának megerősítésehez kötése</string>
     <string name="title_advanced_check_links_dbl">Ellenőrizze a tartomány blokkoló listát a gyanús linkeknél</string>
-    <string name="title_advanced_browse_links">A linkeket a rendzser kezelje</string>
     <string name="title_advanced_confirm_images">Ne mutasson képeket alapból</string>
     <string name="title_advanced_ask_images">Képek megjelenítésének megerősítéshez kötése</string>
     <string name="title_advanced_confirm_html">Üzenetek alapértelmezett újraformázása</string>
@@ -558,6 +556,7 @@
     <string name="title_advanced_autocrypt">Autocrypt használata</string>
     <string name="title_advanced_autocrypt_mutual">Autocrypt kölcsönös mód</string>
     <string name="title_advanced_encrypt_subject">Tárgy titkosítása</string>
+    <string name="title_advanced_import_pgp">Kulcs importálása</string>
     <string name="title_advanced_sign_algo">Aláírás algoritmus</string>
     <string name="title_advanced_encrypt_algo">Titkosítási algoritmus</string>
     <string name="title_advanced_remark_algo">        Vegye figyelembe, hogy nem minden email kliens támogat minden algoritmust.
@@ -967,6 +966,7 @@
     <string name="title_button_search">Keresés üzenetekben</string>
     <string name="title_button_search_text">Keresés üzenet szövegében</string>
     <string name="title_configure_buttons">Gombok konfigurálása &#8230;</string>
+    <string name="title_quick_actions">Művelet kiválasztása</string>
     <string name="title_quick_actions_snooze">Szundi</string>
     <string name="title_trash">Kuka</string>
     <string name="title_copy">Másolás &#8230;</string>
@@ -998,7 +998,6 @@
     <string name="title_reply_hard_bounce">\'Hard bounce\' küldése</string>
     <string name="title_reply_template">Válasz sablon használatával</string>
     <string name="title_move_undo">Mozgatás ide: %1$s (%2$d)</string>
-    <string name="title_open_with">Megnyitás a következővel</string>
     <string name="title_authentication_failed">%1$s azonosítás sikertelen</string>
     <string name="title_on_blocklist">Levélszemét blokkoló listán megtalálható</string>
     <string name="title_receipt_subject">Olvasási visszajelzés: %1$s</string>

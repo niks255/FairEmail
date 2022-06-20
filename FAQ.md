@@ -6,6 +6,16 @@
 If you have a question, please check the following frequently asked questions first.
 [At the bottom](#user-content-get-support),
 you can find out how to ask other questions, request features, and report bugs.
+You will receive an answer in your own language.
+
+Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die folgenden häufig gestellten Fragen.
+[Unten](#user-content-get-support) erfahren Sie, wie Sie andere Fragen stellen, Funktionen anfordern und Fehler melden können.
+Sie erhalten eine Antwort in Ihrer eigenen Sprache.
+
+Si vous avez une question, veuillez d'abord vérifier les questions fréquemment posées suivantes.
+[En bas](#user-content-get-support), vous pouvez découvrir comment poser d'autres questions, demander des fonctionnalités et signaler des bogues.
+Vous recevrez une réponse dans votre propre langue.
+
 
 ## Index
 
@@ -335,6 +345,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(177) What does 'Sensitivity' mean?](#user-content-faq177)
 * [(178) Why are widgets not updating?](#user-content-faq178)
 * [(179) What are reply templates?](#user-content-faq179)
+* [(180) How do I use LanguageTool?](#user-content-faq180)
 
 [I have another question.](#user-content-get-support)
 
@@ -353,6 +364,7 @@ The following Android permissions are **required**:
 * *prevent device from sleeping* (WAKE_LOCK): to keep the device awake while performing actions, like synchronization of messages
 * *use fingerprint hardware* (USE_FINGERPRINT) and *use biometric hardware* (USE_BIOMETRIC): to use biometric authentication (fingerprint, face unlock, etc)
 * *ask to ingore battery optimizations* (REQUEST_IGNORE_BATTERY_OPTIMIZATIONS): to disable battery optimizations, please see [this FAQ](#user-content-faq175) for more information
+* *allow the app to show notifications* (POST_NOTIFICATIONS): to show new message notifications and (account) warnings and errors (Android 13 and later only)
 * *Google Play (in-app) billing service* (BILLING): for in-app purchases
 
 <br />
@@ -582,14 +594,16 @@ Some people ask:
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq6)
 
+**FairEmail fully supports OAuth through the quick setup wizard and will continue to work after May 30, please see below what to do if you used your account password to set up an account.**
+
 >
-> **Important**: using your account password [won't be possible anymore from May 30, 2022](https://support.google.com/accounts/answer/6010255).
+> **Important: using your *account* password [won't be possible anymore from May 30, 2022](https://support.google.com/accounts/answer/6010255).**
 >
 > "*To help keep your account secure, starting May 30, 2022, ​​Google will no longer support the use of third-party apps or devices which ask you to sign in to your Google Account using only your username and password.*"
 >
 > &#x2714; If you authorized your Gmail account with the quick setup wizard or manually with an app password, your account will keep being synchronized after May 30, 2022.
 >
-> &#x274C; If you enabled *Less secure apps* in the Google account settings and authorized your Gmail account manually with your normal account password, your account can't be synchronized from May 30, 2022 anymore.
+> &#x274C; If you enabled *Less secure apps* in the Google account settings and authorized your Gmail account manually with your normal account password, your account can't be synchronized from May 30, 2022 anymore. The app will show the error **Invalid credentials (Failure)**.
 >
 > How to check:
 >
@@ -607,7 +621,7 @@ Some people ask:
 > * Fill in the fields and follow the steps
 > * Repeat for each account
 >
-> Alternatively, you can use an app password, please see below.
+> Note that this won't work on devices without Google Play Store/Services, such as recent Huawei devices. In this case you will need to use an app password, see below.
 >
 > **Note that other email apps, possibly on other devices, which still use your account password could cause your account to be blocked!**
 >
@@ -665,23 +679,23 @@ tap on *Accounts*, tap on the account and tap on the pencil icon after the passw
 
 ~~*Enable "Less secure apps"*~~
 
-**Important**: using this method is not recommended because it is less reliable.
+~~**Important**: using this method is not recommended because it is less reliable.~~
 
-**Important**: Gsuite accounts authorized with a username/password will stop working [in the near future](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html).
+~~**Important**: Gsuite accounts authorized with a username/password will stop working [in the near future](https://gsuiteupdates.googleblog.com/2019/12/less-secure-apps-oauth-google-username-password-incorrect.html).~~
 
-See [here](https://support.google.com/accounts/answer/6010255) about how to enable "less secure apps"
-or go [directy to the setting](https://www.google.com/settings/security/lesssecureapps).
+~~See [here](https://support.google.com/accounts/answer/6010255) about how to enable "less secure apps"~~
+~~or go [directy to the setting](https://www.google.com/settings/security/lesssecureapps).~~
 
-If you use multiple Gmail accounts, make sure you change the "less secure apps" setting of the right account(s).
+~~If you use multiple Gmail accounts, make sure you change the "less secure apps" setting of the right account(s).~~
 
-Be aware that you need to leave the "less secure apps" settings screen by using the back arrow to apply the setting.
+~~Be aware that you need to leave the "less secure apps" settings screen by using the back arrow to apply the setting.~~
 
-If you use this method, you should use a [strong password](https://en.wikipedia.org/wiki/Password_strength) for your Gmail account, which is a good idea anyway.
-Note that using the [standard](https://tools.ietf.org/html/rfc3501) IMAP protocol in itself is not less secure.
+~~If you use this method, you should use a [strong password](https://en.wikipedia.org/wiki/Password_strength) for your Gmail account, which is a good idea anyway.~~
+~~Note that using the [standard](https://tools.ietf.org/html/rfc3501) IMAP protocol in itself is not less secure.~~
 
-When "less secure apps" is not enabled,
-you'll get the error *Authentication failed - invalid credentials* for accounts (IMAP)
-and *Username and Password not accepted* for identities (SMTP).
+~~When "less secure apps" is not enabled,~~
+~~you'll get the error *Authentication failed - invalid credentials* for accounts (IMAP)~~
+~~and *Username and Password not accepted* for identities (SMTP).~~
 
 <br />
 
@@ -1930,6 +1944,8 @@ or by Android not supporting older protocols anymore, like SSLv3.
 Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore.
 There is no way to workaround lacking RC4 and SSLv3 support because it has completely been removed from Android (which should say something).
 
+Please [see here](https://developer.android.com/reference/javax/net/ssl/SSLSocket) for an overview of supported protocols and cipher suites by Android version.
+
 You can use [this website](https://ssl-tools.net/mailservers) or [this website](https://www.immuniweb.com/ssl/) to check for SSL/TLS problems of email servers.
 
 <br />
@@ -2247,7 +2263,8 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can long press the folder name in the message header when viewing a conversation to navigate to the folder? (since version 1.1720)
 * Did you know that you can long press the add contact button in the message composer to insert a contact group? (since version 1.1721)
 * Did you know that you can long press the image action to show the image dialog, even if it was disabled? (since version 1.1772)
-* Did you know that you can long press the "] [" button to fit original messages to the screen width? (this might result in "thin" messages)
+* Did you know that you can long press the "] \[" button to fit original messages to the screen width? (this might result in "thin" messages)
+* Did you know that you can long press on the save drafts button for a grammar, style, and spell check?
 
 <br />
 
@@ -2362,6 +2379,8 @@ FairEmail shows all attachment types. To distinguish inline and regular attachme
 
 See [here](https://support.google.com/googleone/answer/7007852)
 under "*See if content is eligible to be added to Family Library*", "*Apps & games*".
+
+In other words, only subscriptions can be shared and since there is no subscription, FairEmail is not shareable via the Google Play Family Library.
 
 <br />
 
@@ -2562,6 +2581,17 @@ Note that *regex* should be disable and that there should be no white space.
 
 Please be aware that a difference in the *from* and *reply-to* domain, and no or multi *from* addresses isn't a good indication of spam.
 
+Since the app sets the keyword *$Filtered$* after the rules have been executed for a message,
+you can create a rule to prevent the rules from being executed again (which is sometimes desirable):
+
+* Name: anything you like
+* Order: lower than all other rules, for example 0
+* Stop processing rules after executing this rule: enabled
+* Header contains: *$$Filtered$* (no spaces)
+* Action: No action
+
+Note that not all email servers support IMAP keywords.
+
 <br />
 
 The automation action will broadcast the intent *eu.faircode.email.AUTOMATION* with the following string extras:
@@ -2576,6 +2606,12 @@ An app like Tasker can listen for this intent and perform some action.
 <br />
 
 In the three-dots *more* message menu there is an item to create a rule for a received message with the most common conditions filled in.
+
+<br />
+
+If you want to set up archiving by week, month, year, etc,
+you can do this with filter rules with an absolute time condition on a 'jump' archive folder where archived messages are being moved to as a first step.
+The filter rules will move the messages to a (sub) archive folder as a second step.
 
 The POP3 protocol does not support setting keywords and moving or copying messages.
 
@@ -2879,6 +2915,10 @@ If the password is incorrect/expired, you will have to update the password in th
 
 If the account authorization has expired, you will have to select the account again.
 You will likely need to save the associated identity again as well.
+
+In the case of a Gmail account the error *Invalid credentials (Failure)* can be the result of *accounts.google.com* being blocked for the Android account manager,
+for example due to using a VPN, firewall, ad blocker, or similar.
+So, try to disable all VPN based apps or allow this address.
 
 <br />
 
@@ -3447,7 +3487,8 @@ Note that:
 * Google does not expose details (name, e-mail, etc) about buyers to developers
 * An app like FairEmail cannot select which Google account to use
 * It may take a while until the Play store app has synchronized a purchase to another device
-* Play Store purchases cannot be used without the Play Store, which is also not allowed by Play Store rules
+* Play Store purchases cannot be used without the Play Store app/services
+* Play Store purchases cannot be transferred to another account
 * You can't restore purchases with [microG](https://microg.org/)
 
 If you cannot solve the problem with the purchase, you will have to contact Google about it.
@@ -3840,6 +3881,9 @@ Also, I prefer to do a few things very well, instead of many things only half.
 Moreover, from a security perspective, it is not a good idea to grant many permissions to a single app.
 
 You are advised to use the excellent, open source [DAVx⁵](https://f-droid.org/packages/at.bitfire.davdroid/) app to synchronize/manage your calendars/contacts.
+
+If you want to synchronize Outlook contacts and you have access to Google Workspace,
+please [see here](https://support.google.com/a/users/answer/156595) about how you can set up contact syncing.
 
 Most providers support exporting your contacts.
 Please [see here](https://support.google.com/contacts/answer/1069522) about how you can import contacts if synchronizing is not possible.
@@ -4601,6 +4645,7 @@ Related questions:
 
 * The Play store version does not support Android Auto, see [this FAQ](#user-content-faq165) for more information
 * The Play store version does not support Amazon devices with Android 5 Lollipop because there are critical bugs in this Android version of Amazon
+* The Play Store version does not support Gravatars/Libravatars due to Play Store policies
 * The GitHub version will check for [updates on GitHub](https://github.com/M66B/FairEmail/releases) and is updated more frequently
 * The GitHub version has some different links, some more options (like sharing the HTML of a message) and some different default values (more geared to advanced users)
 * The F-Droid build does not support OAuth, see [this FAQ](#user-content-faq147) about why not
@@ -4732,6 +4777,16 @@ Templates can have the following options:
 
 <br />
 
+<a name="faq180"></a>
+**(180) How do I use LanguageTool?**
+
+After writing some text, you can long press on the save draft button to perform a grammar, style, and spell check via [LanguageTool](https://languagetool.org/).
+Texts with suggestions will be marked and if you tap on a marked suggestion,
+it will be shown by the keyboard if the keyboard supports this,
+else you can double tap or long press the marked text to show suggestions.
+
+<br />
+
 <h2><a name="get-support"></a>Get support</h2>
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-get-support)
@@ -4759,7 +4814,13 @@ A feature will be considered useful to most people if more than 0.1% of the user
 Features not fulfilling these requirements will likely be rejected.
 This is also to keep maintenance and support in the long term feasible.
 
+Note that there are already more features and options in FairEmail than in any other Android email client.
+
 If you have a question, want to request a feature or report a bug, **please use [this form](https://contact.faircode.eu/?product=fairemailsupport)**.
+
+Wenn Sie eine Frage haben, eine Funktion anfordern oder einen Fehler melden möchten, **verwenden Sie bitte [dieses Formular](https://contact.faircode.eu/?product=fairemailsupport)**.
+
+Si vous avez une question, souhaitez demander une fonctionnalité ou signaler un bogue, **veuillez utiliser [ce formulaire](https://contact.faircode.eu/?product=fairemailsupport)**.
 
 GitHub issues are disabled due to frequent misusage.
 

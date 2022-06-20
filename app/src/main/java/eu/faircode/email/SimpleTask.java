@@ -36,6 +36,7 @@ import androidx.lifecycle.LifecycleService;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -243,6 +244,25 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                     }
 
                     private void deliver() {
+                        if ("androidx.fragment.app.FragmentViewLifecycleOwner".equals(owner.getClass().getName()))
+                            try {
+                                Field mFragment = owner.getClass().getDeclaredField("mFragment");
+                                mFragment.setAccessible(true);
+                                Fragment fragment = (Fragment) mFragment.get(owner);
+                                if (fragment != null &&
+                                        (fragment.getContext() == null || fragment.getActivity() == null)) {
+                                    // Since deliver is executed for resumed fragments only, this should never happen
+                                    Log.e("Fragment without activity" +
+                                            " task=" + name +
+                                            " context=" + (fragment.getContext() != null) +
+                                            " activity=" + (fragment.getActivity() != null) +
+                                            " fragment=" + fragment.getClass().getName() +
+                                            " lifecycle=" + owner.getLifecycle().getCurrentState());
+                                    return;
+                                }
+                            } catch (Throwable ex) {
+                                Log.w(ex);
+                            }
                         try {
                             onPostExecute(args);
                         } catch (Throwable ex) {
