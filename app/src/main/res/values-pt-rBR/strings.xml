@@ -532,7 +532,7 @@
     <string name="title_advanced_unseen_ignored">Permitir que o número de novas mensagens corresponda ao número de notificações</string>
     <string name="title_advanced_notify_background">Mostrar notificações apenas em segundo plano</string>
     <string name="title_advanced_notify_known">Mostrar notificações apenas para contatos</string>
-    <string name="title_advanced_notify_suppress_in_call" comment="title_advanced_notify_suppress_in_call&#10;&#10;Title of option which will delay new message notifications until after hanging up">Atrasar notificações durante uma chamada</string>
+    <string name="title_advanced_notify_suppress_in_call">Atrasar notificações durante uma chamada</string>
     <string name="title_advanced_notify_summary">Mostrar apenas notificação de resumo</string>
     <string name="title_advanced_notify_preview">Mostrar pré-visualização de mensagem nas notificações</string>
     <string name="title_advanced_notify_preview_all">Pré-visualizar todo o texto</string>
@@ -745,8 +745,9 @@
     <string name="title_advanced_sender_regex">Regex para corresponder ao nome de usuário de endereços de e-mail recebidos</string>
     <string name="title_identity_reply_to">Resposta para o endereço</string>
     <string name="title_identity_internal">Nomes de domínio internos (separados por vírgula)</string>
-    <string name="title_identity_unicode">Usar transporte Unicode</string>
+    <string name="title_identity_unicode">Permitir UTF-8 nos cabeçalhos da mensagem</string>
     <string name="title_identity_unicode_remark">A maioria dos servidores não suporta isso</string>
+    <string name="title_identity_octetmime">Permitir 8BITMIME</string>
     <string name="title_identity_max_size">Tamanho máximo da mensagem (MB)</string>
     <string name="title_identity_receipt">Solicitar confirmação de entrega/leitura por padrão</string>
     <string name="title_identity_receipt_legacy">Use cabeçalhos de solicitação de recebimento legado</string>
@@ -1049,6 +1050,7 @@
     <string name="title_archive">Arquivar</string>
     <string name="title_reply">Responder</string>
     <string name="title_reply_to_sender">Responder ao remetente</string>
+    <string name="title_reply_to_recipient">Responder ao destinatário</string>
     <string name="title_reply_to_all">Responder a todos</string>
     <string name="title_reply_list">Responder à lista</string>
     <string name="title_reply_receipt">Enviar confirmação de leitura</string>

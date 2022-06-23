@@ -554,7 +554,7 @@
     <string name="title_advanced_unseen_ignored">Количество уведомлений соответствует количеству новых сообщений</string>
     <string name="title_advanced_notify_background">Показывать уведомления только в фоновом режиме</string>
     <string name="title_advanced_notify_known">Показывать уведомления только для контактов</string>
-    <string name="title_advanced_notify_suppress_in_call" comment="title_advanced_notify_suppress_in_call&#10;&#10;Title of option which will delay new message notifications until after hanging up">Откладывать уведомления во время вызова</string>
+    <string name="title_advanced_notify_suppress_in_call">Откладывать уведомления во время вызова</string>
     <string name="title_advanced_notify_summary">Показывать только сводное уведомление</string>
     <string name="title_advanced_notify_preview">Предпросмотр сообщений в уведомлениях</string>
     <string name="title_advanced_notify_preview_all">Предпросмотр всего текста</string>
@@ -768,8 +768,9 @@
     <string name="title_advanced_sender_regex">Регулярное выражение для имени в адресе входящей электронной почты</string>
     <string name="title_identity_reply_to">Обратный адрес</string>
     <string name="title_identity_internal">Внутренние доменные имена (через запятую)</string>
-    <string name="title_identity_unicode">Использовать транспорт Unicode</string>
+    <string name="title_identity_unicode">Использовать UTF-8 в заголовках сообщений</string>
     <string name="title_identity_unicode_remark">Большинство серверов это не поддерживают</string>
+    <string name="title_identity_octetmime">Использовать 8BITMIME</string>
     <string name="title_identity_max_size">Максимальный размер сообщения (МБ)</string>
     <string name="title_identity_receipt">Запрашивать уведомление о доставке/прочтении по умолчанию</string>
     <string name="title_identity_receipt_legacy">Использовать устаревшие заголовки запроса уведомлений</string>
@@ -1073,6 +1074,7 @@
     <string name="title_archive">Архив</string>
     <string name="title_reply">Ответить</string>
     <string name="title_reply_to_sender">Ответить отправителю</string>
+    <string name="title_reply_to_recipient">Ответить получателю</string>
     <string name="title_reply_to_all">Ответить всем</string>
     <string name="title_reply_list">Ответить в рассылку</string>
     <string name="title_reply_receipt">Отправить уведомление о прочтении</string>

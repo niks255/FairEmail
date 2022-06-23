@@ -532,6 +532,7 @@
     <string name="title_advanced_unseen_ignored">Permitir que el número de mensajes nuevos coincida con el número de notificaciones</string>
     <string name="title_advanced_notify_background">Mostrar notificaciones sólo en segundo plano</string>
     <string name="title_advanced_notify_known">Mostrar notificaciones sólo para contactos</string>
+    <string name="title_advanced_notify_suppress_in_call">Demorar notificaciones durante una llamada</string>
     <string name="title_advanced_notify_summary">Mostrar notificación resumen únicamente</string>
     <string name="title_advanced_notify_preview">Mostrar vista previa del mensaje en notificaciones</string>
     <string name="title_advanced_notify_preview_all">Previsualizar todo el texto</string>
@@ -744,8 +745,9 @@
     <string name="title_advanced_sender_regex">Expresión regular que coincida con el nombre de usuario de las direcciones de correo entrantes</string>
     <string name="title_identity_reply_to">Responder a la dirección</string>
     <string name="title_identity_internal">Nombres de dominio internos (separados por comas)</string>
-    <string name="title_identity_unicode">Usar transporte Unicode</string>
+    <string name="title_identity_unicode">Permitir UTF-8 en los encabezados de mensajes</string>
     <string name="title_identity_unicode_remark">La mayoría de servidores no soportan esto</string>
+    <string name="title_identity_octetmime">Permitir 8BITMIME</string>
     <string name="title_identity_max_size">Tamaño máximo del mensaje (MB)</string>
     <string name="title_identity_receipt">Solicitar acuse de recibo/lectura por defecto</string>
     <string name="title_identity_receipt_legacy">Usar encabezados de solicitud de recibo heredados</string>
@@ -1048,6 +1050,7 @@
     <string name="title_archive">Archivar</string>
     <string name="title_reply">Responder</string>
     <string name="title_reply_to_sender">Responder al remitente</string>
+    <string name="title_reply_to_recipient">Responder al destinatario</string>
     <string name="title_reply_to_all">Responder a todos</string>
     <string name="title_reply_list">Responder a la lista</string>
     <string name="title_reply_receipt">Enviar acuse de lectura</string>
@@ -1258,6 +1261,7 @@
     <string name="title_alternative_html">Mostrar en HTML</string>
     <string name="title_no_openpgp">OpenKeychain no encontrado</string>
     <string name="title_user_interaction">Transfiriendo a OpenKeychain</string>
+    <string name="title_padlock">Use el candado para descifrar el mensaje</string>
     <string name="title_signed_data">Verificar la firma para mostrar el texto del mensaje</string>
     <string name="title_not_encrypted">El mensaje no está firmado ni cifrado</string>
     <string name="title_no_sign_key">Ninguna clave de firma seleccionada</string>

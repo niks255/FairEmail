@@ -533,7 +533,7 @@
     <string name="title_advanced_unseen_ignored">Lascia che il numero di nuovi messaggi corrisponda al numero di notifiche</string>
     <string name="title_advanced_notify_background">Mostra le notifiche solo quando in background</string>
     <string name="title_advanced_notify_known">Mostra le notifiche solo per i contatti</string>
-    <string name="title_advanced_notify_suppress_in_call" comment="title_advanced_notify_suppress_in_call&#10;&#10;Title of option which will delay new message notifications until after hanging up">Ritarda le notifiche durante una chiamata</string>
+    <string name="title_advanced_notify_suppress_in_call">Ritarda le notifiche durante una chiamata</string>
     <string name="title_advanced_notify_summary">Mostra solo le notifiche del riepilogo</string>
     <string name="title_advanced_notify_preview">Mostra l\'anteprima del messaggio nelle notifiche</string>
     <string name="title_advanced_notify_preview_all">Visualizza tutto il testo</string>
@@ -747,8 +747,9 @@
     <string name="title_advanced_sender_regex">Regex per abbinare il nome utente degli indirizzi email in arrivo</string>
     <string name="title_identity_reply_to">Rispondi all\'indirizzo</string>
     <string name="title_identity_internal">Nomi di dominio interni (separati da virgole)</string>
-    <string name="title_identity_unicode">Usa il trasporto Unicode</string>
+    <string name="title_identity_unicode">Consenti UTF-8 nelle intestazioni dei messaggi</string>
     <string name="title_identity_unicode_remark">Gran parte dei server non lo supportano</string>
+    <string name="title_identity_octetmime">Consenti 8BITMIME</string>
     <string name="title_identity_max_size">Dimensione massima del messaggio (MB)</string>
     <string name="title_identity_receipt">Richiedi ricevuta di consegna/lettura di default</string>
     <string name="title_identity_receipt_legacy">Usa le intestazioni di richiesta di ricevuta preesistenti</string>
@@ -1052,6 +1053,7 @@
     <string name="title_archive">Archivia</string>
     <string name="title_reply">Risposta</string>
     <string name="title_reply_to_sender">Rispondi al mittente</string>
+    <string name="title_reply_to_recipient">Respondi al destinatario</string>
     <string name="title_reply_to_all">Rispondi a tutti</string>
     <string name="title_reply_list">Rispondi all\'elenco</string>
     <string name="title_reply_receipt">Invia conferma di lettura</string>

@@ -919,8 +919,9 @@
     <string name="title_advanced_sender_regex">Regex to match username of incoming email addresses</string>
     <string name="title_identity_reply_to">Reply to address</string>
     <string name="title_identity_internal">Internal domain names (comma separated)</string>
-    <string name="title_identity_unicode">Use Unicode transport</string>
+    <string name="title_identity_unicode">Allow UTF-8 in message headers</string>
     <string name="title_identity_unicode_remark">Most servers do not support this</string>
+    <string name="title_identity_octetmime">Allow 8BITMIME</string>
     <string name="title_identity_max_size">Maximum message size (MB)</string>
     <string name="title_identity_receipt">Request delivery/read receipt by default</string>
     <string name="title_identity_receipt_legacy">Use legacy receipt request headers</string>
@@ -1246,6 +1247,7 @@
     <string name="title_archive">Archive</string>
     <string name="title_reply">Reply</string>
     <string name="title_reply_to_sender">Reply to sender</string>
+    <string name="title_reply_to_recipient">Reply to recipient</string>
     <string name="title_reply_to_all">Reply to all</string>
     <string name="title_reply_list">Reply to list</string>
     <string name="title_reply_receipt">Send read receipt</string>
@@ -1869,7 +1871,6 @@
     <string name="title_undo">Undo</string>
     <string name="title_redo">Redo</string>
     <string name="title_insert_line">Insert line</string>
-    <string name="title_insert_arrow" translatable="false">Insert arrow</string>
     <string name="title_add">Add</string>
     <string name="title_browse">Open with</string>
     <string name="title_info">Info</string>
