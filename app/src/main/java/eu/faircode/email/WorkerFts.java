@@ -59,7 +59,7 @@ public class WorkerFts extends Worker {
             Context context = getApplicationContext();
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean checkpoints = prefs.getBoolean("sqlite_checkpoints", false);
+            boolean checkpoints = prefs.getBoolean("sqlite_checkpoints", true);
 
             int indexed = 0;
             List<Long> ids = new ArrayList<>(INDEX_BATCH_SIZE);
@@ -109,8 +109,10 @@ public class WorkerFts extends Worker {
 
             markIndexed(db, ids);
 
-            if (checkpoints)
+            if (checkpoints) {
                 DB.checkpoint(context);
+                Helper.sync();
+            }
 
             Log.i("FTS indexed=" + indexed);
             return Result.success();

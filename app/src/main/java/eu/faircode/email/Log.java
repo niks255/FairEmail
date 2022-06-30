@@ -81,6 +81,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
+import androidx.webkit.WebViewCompat;
 import androidx.webkit.WebViewFeature;
 
 import com.bugsnag.android.BreadcrumbType;
@@ -370,6 +371,7 @@ public class Log {
             // https://docs.bugsnag.com/platforms/android/sdk/
             com.bugsnag.android.Configuration config =
                     new com.bugsnag.android.Configuration("9d2d57476a0614974449a3ec33f2604a");
+            config.setTelemetry(Collections.emptySet());
 
             if (BuildConfig.DEBUG)
                 config.setReleaseStage("debug");
@@ -1439,7 +1441,38 @@ public class Log {
 
         for (StackTraceElement ste : stack) {
             String clazz = ste.getClassName();
-            if (clazz != null && clazz.startsWith("org.chromium.net."))
+            if (clazz != null && clazz.startsWith("org.chromium."))
+                /*
+                    android.content.res.Resources$NotFoundException:
+                      at android.content.res.ResourcesImpl.getValue (ResourcesImpl.java:225)
+                      at android.content.res.Resources.getInteger (Resources.java:1192)
+                      at org.chromium.ui.base.DeviceFormFactor.a (chromium-TrichromeWebViewGoogle6432.aab-stable-500512534:105)
+                      at y8.onCreateActionMode (chromium-TrichromeWebViewGoogle6432.aab-stable-500512534:744)
+                      at px.onCreateActionMode (chromium-TrichromeWebViewGoogle6432.aab-stable-500512534:36)
+                      at com.android.internal.policy.DecorView$ActionModeCallback2Wrapper.onCreateActionMode (DecorView.java:2722)
+                      at com.android.internal.policy.DecorView.startActionMode (DecorView.java:926)
+                      at com.android.internal.policy.DecorView.startActionModeForChild (DecorView.java:882)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.ViewGroup.startActionModeForChild (ViewGroup.java:1035)
+                      at android.view.View.startActionMode (View.java:7654)
+                      at org.chromium.content.browser.selection.SelectionPopupControllerImpl.B (chromium-TrichromeWebViewGoogle6432.aab-stable-500512534:31)
+                      at uh0.a (chromium-TrichromeWebViewGoogle6432.aab-stable-500512534:1605)
+                      at Kk0.i (chromium-TrichromeWebViewGoogle6432.aab-stable-500512534:259)
+                      at B6.run (chromium-TrichromeWebViewGoogle6432.aab-stable-500512534:454)
+                      at android.os.Handler.handleCallback (Handler.java:938)
+                 */
                 return false;
         }
 
@@ -1811,6 +1844,9 @@ public class Log {
 
         ContentResolver resolver = context.getContentResolver();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean main_log = prefs.getBoolean("main_log", true);
+        boolean protocol = prefs.getBoolean("protocol", false);
+        int level = prefs.getInt("log_level", Log.getDefaultLogLevel());
         long last_cleanup = prefs.getLong("last_cleanup", 0);
 
         PackageManager pm = context.getPackageManager();
@@ -1863,6 +1899,8 @@ public class Log {
             sb.append(String.format("SoC: %s/%s\r\n", Build.SOC_MANUFACTURER, Build.SOC_MODEL));
         sb.append(String.format("OS version: %s\r\n", osVersion));
         sb.append(String.format("uid: %d\r\n", android.os.Process.myUid()));
+        sb.append(String.format("Log main: %b protocol: %b level: %d=%b\r\n",
+                main_log, protocol, level, level <= android.util.Log.INFO));
         sb.append("\r\n");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -2011,6 +2049,15 @@ public class Log {
 
         sb.append(String.format("Darken support: %b\r\n",
                 WebViewEx.isFeatureSupported(context, WebViewFeature.ALGORITHMIC_DARKENING)));
+        try {
+            PackageInfo pkg = WebViewCompat.getCurrentWebViewPackage(context);
+            sb.append(String.format("WebView %d/%s %s\r\n",
+                    pkg == null ? -1 : pkg.versionCode,
+                    pkg == null ? null : pkg.versionName,
+                    pkg == null || pkg.versionCode / 100000 < 5005 ? "!!!" : ""));
+        } catch (Throwable ex) {
+            sb.append(ex).append("\r\n");
+        }
 
         sb.append("\r\n");
 

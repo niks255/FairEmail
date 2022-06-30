@@ -46,6 +46,7 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.lifecycle.Lifecycle;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
@@ -632,6 +633,8 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
     private void setOptions() {
         if (getContext() == null)
             return;
+        if (getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED))
+            return;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
@@ -642,7 +645,7 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         swSuggestReceived.setChecked(prefs.getBoolean("suggest_received", false));
         swSuggestFrequently.setChecked(prefs.getBoolean("suggest_frequently", false));
         swSuggestFrequently.setEnabled(swSuggestSent.isChecked() || swSuggestReceived.isChecked());
-        swAutoIdentity.setChecked(prefs.getBoolean("auto_identity", true));
+        swAutoIdentity.setChecked(prefs.getBoolean("auto_identity", false));
         swSendChips.setChecked(prefs.getBoolean("send_chips", true));
         swSendReminders.setChecked(prefs.getBoolean("send_reminders", true));
         swSendPending.setChecked(prefs.getBoolean("send_pending", true));

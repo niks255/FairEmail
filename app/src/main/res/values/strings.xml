@@ -574,6 +574,7 @@
     <string name="title_advanced_authentication_some">Partial authentication</string>
     <string name="title_advanced_authentication_all">Complete authentication</string>
 
+    <string name="title_advanced_restore_on_launch">Restore app state on start</string>
     <string name="title_advanced_sync_on_launch">Synchronize on start</string>
     <string name="title_advanced_double_back">Double \'back\' to exit</string>
     <string name="title_advanced_conversation_actions">Suggest actions (Android 10+)</string>
@@ -734,6 +735,7 @@
     <string name="title_advanced_last_cleanup">Last cleanup: %1$s</string>
     <string name="title_advanced_app">App settings</string>
     <string name="title_advanced_more">More options</string>
+    <string name="title_advanced_main_log">Main logging</string>
     <string name="title_advanced_protocol">Protocol logging</string>
     <string name="title_advanced_log_info">Debug logging</string>
     <string name="title_advanced_debug">Debug mode</string>
@@ -820,7 +822,7 @@
 
     <string name="title_advanced_suggest_names_hint">If disabled, only email addresses will be used when selecting contacts</string>
     <string name="title_advanced_suggest_local_hint">In addition to contacts provided by Android. Contact data will be stored for newly sent or received messages only when enabled.</string>
-    <string name="title_advanced_auto_identity_hint">This will select the last identity used for the first recipient of new messages</string>
+    <string name="title_advanced_auto_identity_hint">This will select the last identity used when selecting a recipient for new messages</string>
     <string name="title_advanced_send_reminders_hint">Show a warning when the message text or the subject is empty or when an attachment might be missing</string>
     <string name="title_advanced_reply_move_hint">The email server could still add the messages to the sent message folder</string>
     <string name="title_advanced_usenet_hint">Insert \'-- \' between the text and the signature</string>
@@ -861,6 +863,7 @@
     <string name="compressed">The contents of compressed files (%1$s) with more than %2$s files or with files larger than %3$s will not be shown</string>
     <string name="title_advanced_parse_classes_hint">This will more accurately display messages, but possibly with a delay</string>
 
+    <string name="title_advanced_restore_on_launch_hint">Restore last app state when restarted via the launcher icon within %1$d minutes</string>
     <string name="title_advanced_language_detection_hint">Language detection support depends on the device manufacturer</string>
     <string name="title_advanced_autoexpand_hint">Automatically open message when there is just one message or just one unread message in a conversation</string>
     <string name="title_advanced_expandall_hint">The answer button will not be shown when multiple messages are expanded because it is unclear which message the button applies to</string>
@@ -1018,6 +1021,7 @@
     <string name="title_account_delete">Delete this account permanently?</string>
     <string name="title_identity_delete">Delete this identity permanently?</string>
     <string name="title_edit_html">Edit as HTML</string>
+    <string name="title_import_file">Import file</string>
     <string name="title_sign_key">Sign key: %1$s</string>
     <string name="title_created_at">Created: %1$s</string>
     <string name="title_last_connected">Last connected: %1$s</string>
@@ -1104,6 +1108,7 @@
     <string name="title_search_folder">Search for folder</string>
     <string name="title_apply_to_all">Apply to all</string>
     <string name="title_edit_account_name">Edit account name</string>
+    <string name="title_edit_account_color">Edit account color</string>
     <string name="title_hide_folder">Hide folder</string>
     <string name="title_hide_seen_folder">Hide folder if all messages are read</string>
     <string name="title_hide_seen_folder_hint">Only in the folder list shown on the start screen</string>

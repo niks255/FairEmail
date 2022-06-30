@@ -617,7 +617,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.Settings.ACTION_AIRPLANE_MODE_SETTINGS)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 v.getContext().startActivity(intent);
             }
         });
@@ -7204,6 +7204,9 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
     }
 
     private void endSearch() {
+        if (etSearch == null)
+            return;
+
         Helper.hideKeyboard(etSearch);
         etSearch.setVisibility(View.GONE);
         clearSearch();
@@ -7524,6 +7527,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
         Intent create = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         create.addCategory(Intent.CATEGORY_OPENABLE);
+        create.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         create.setType("*/*");
         create.putExtra(Intent.EXTRA_TITLE, name);
         Helper.openAdvanced(create);

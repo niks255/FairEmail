@@ -107,6 +107,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.activation.FileTypeMap;
 import javax.mail.Address;
@@ -198,6 +199,7 @@ public class MessageHelper {
     static final String FLAG_NOT_DELIVERED = "$NotDelivered";
     static final String FLAG_DISPLAYED = "$Displayed";
     static final String FLAG_NOT_DISPLAYED = "$NotDisplayed";
+    static final String FLAG_COMPLAINT = "Complaint";
     static final String FLAG_LOW_IMPORTANCE = "$LowImportance";
     static final String FLAG_HIGH_IMPORTANCE = "$HighImportance";
 
@@ -1314,7 +1316,7 @@ public class MessageHelper {
 
     String getInReplyTo() throws MessagingException {
         String[] a = getInReplyTos();
-        return (a.length == 0 ? null : TextUtils.join(" ", a));
+        return (a.length < 1 ? null : a[0]);
     }
 
     String[] getInReplyTos() throws MessagingException {
@@ -1349,7 +1351,8 @@ public class MessageHelper {
                 ContentType ct = new ContentType(imessage.getContentType());
                 String reportType = ct.getParameter("report-type");
                 if ("delivery-status".equalsIgnoreCase(reportType) ||
-                        "disposition-notification".equalsIgnoreCase(reportType)) {
+                        "disposition-notification".equalsIgnoreCase(reportType) ||
+                        "feedback-report".equalsIgnoreCase(reportType)) {
                     MessageParts parts = new MessageParts();
                     getMessageParts(null, imessage, parts, null);
                     for (AttachmentPart apart : parts.attachments)
@@ -2877,6 +2880,11 @@ public class MessageHelper {
                 try {
                     byte[] b1 = decodeWord(p1.text, p1.encoding, p1.charset);
                     byte[] b2 = decodeWord(p2.text, p2.encoding, p2.charset);
+                    if (CharsetHelper.isValid(b1, p1.charset) && CharsetHelper.isValid(b2, p2.charset)) {
+                        p++;
+                        continue;
+                    }
+
                     byte[] b = new byte[b1.length + b2.length];
                     System.arraycopy(b1, 0, b, 0, b1.length);
                     System.arraycopy(b2, 0, b, b1.length, b2.length);
@@ -2979,7 +2987,9 @@ public class MessageHelper {
 
         boolean isReport() {
             String ct = contentType.getBaseType();
-            return Report.isDeliveryStatus(ct) || Report.isDispositionNotification(ct);
+            return (Report.isDeliveryStatus(ct) ||
+                    Report.isDispositionNotification(ct) ||
+                    Report.isFeedbackReport(ct));
         }
     }
 
@@ -3167,8 +3177,21 @@ public class MessageHelper {
                         result = Helper.readStream((InputStream) content,
                                 cs == null ? StandardCharsets.ISO_8859_1 : cs);
                     } else {
-                        Log.e(content.getClass().getName());
-                        result = content.toString();
+                        StringBuilder m = new StringBuilder();
+                        if (content instanceof Multipart) {
+                            m.append("multipart");
+                            Multipart mp = (Multipart) content;
+                            for (int i = 0; i < mp.getCount(); i++)
+                                m.append(' ').append(mp.getBodyPart(i).getContentType());
+                        } else
+                            m.append(content.getClass().getName());
+
+                        String msg = "Expected " + h.contentType + " got " + m;
+                        Log.e(msg);
+                        warnings.add(msg);
+
+                        result = Helper.readStream(h.part.getInputStream(),
+                                cs == null ? StandardCharsets.ISO_8859_1 : cs);
                     }
                 } catch (DecodingException ex) {
                     Log.e(ex);
@@ -3360,6 +3383,11 @@ public class MessageHelper {
                     if (report.isDispositionNotification() && !report.isMdnDisplayed()) {
                         if (report.disposition != null)
                             w.append(report.disposition);
+                    }
+
+                    if (report.isFeedbackReport()) {
+                        if (!TextUtils.isEmpty(report.feedback))
+                            w.append(report.feedback);
                     }
 
                     if (w.length() > 0)
@@ -4042,6 +4070,10 @@ public class MessageHelper {
 
                 if (part.isMimeType("multipart/mixed")) {
                     Object content = part.getContent();
+
+                    if (content instanceof String)
+                        content = tryParseMultipart((String) content, part.getContentType());
+
                     if (content instanceof Multipart) {
                         Multipart mp = (Multipart) content;
                         for (int i = 0; i < mp.getCount(); i++) {
@@ -4065,6 +4097,10 @@ public class MessageHelper {
                             "application/pkcs7-signature".equals(protocol) ||
                             "application/x-pkcs7-signature".equals(protocol)) {
                         Object content = part.getContent();
+
+                        if (content instanceof String)
+                            content = tryParseMultipart((String) content, part.getContentType());
+
                         if (content instanceof Multipart) {
                             Multipart multipart = (Multipart) content;
                             if (multipart.getCount() == 2) {
@@ -4111,6 +4147,10 @@ public class MessageHelper {
                     String protocol = ct.getParameter("protocol");
                     if ("application/pgp-encrypted".equals(protocol) || protocol == null) {
                         Object content = part.getContent();
+
+                        if (content instanceof String)
+                            content = tryParseMultipart((String) content, part.getContentType());
+
                         if (content instanceof Multipart) {
                             Multipart multipart = (Multipart) content;
                             if (multipart.getCount() == 2) {
@@ -4209,6 +4249,10 @@ public class MessageHelper {
             if (part.isMimeType("multipart/*")) {
                 Multipart multipart;
                 Object content = part.getContent(); // Should always be Multipart
+
+                if (content instanceof String)
+                    content = tryParseMultipart((String) content, part.getContentType());
+
                 if (content instanceof Multipart) {
                     multipart = (Multipart) part.getContent();
                     int count = multipart.getCount();
@@ -4294,7 +4338,9 @@ public class MessageHelper {
                     !Part.ATTACHMENT.equalsIgnoreCase(disposition) && TextUtils.isEmpty(filename)) {
                 parts.text.add(new PartHolder(part, contentType));
             } else {
-                if (Report.isDeliveryStatus(ct) || Report.isDispositionNotification(ct))
+                if (Report.isDeliveryStatus(ct) ||
+                        Report.isDispositionNotification(ct) ||
+                        Report.isFeedbackReport(ct))
                     parts.extra.add(new PartHolder(part, contentType));
 
                 AttachmentPart apart = new AttachmentPart();
@@ -4360,6 +4406,35 @@ public class MessageHelper {
             else
                 Log.w(ex);
             parts.warnings.add(Log.formatThrowable(ex, false));
+        }
+    }
+
+    private Object tryParseMultipart(String text, String contentType) {
+        try {
+            return new MimeMultipart(new DataSource() {
+                @Override
+                public InputStream getInputStream() throws IOException {
+                    return new ByteArrayInputStream(text.getBytes(StandardCharsets.ISO_8859_1));
+                }
+
+                @Override
+                public OutputStream getOutputStream() throws IOException {
+                    return null;
+                }
+
+                @Override
+                public String getContentType() {
+                    return contentType;
+                }
+
+                @Override
+                public String getName() {
+                    return "String";
+                }
+            });
+        } catch (MessagingException ex) {
+            Log.e(ex);
+            return text;
         }
     }
 
@@ -4703,6 +4778,7 @@ public class MessageHelper {
         String diagnostic;
         String disposition;
         String refid;
+        String feedback;
         String html;
 
         Report(String type, String content) {
@@ -4762,6 +4838,15 @@ public class MessageHelper {
                                 this.refid = value;
                                 break;
                         }
+                    } else if (isFeedbackReport(type)) {
+                        // https://datatracker.ietf.org/doc/html/rfc5965
+                        feedback = "complaint";
+                        switch (name) {
+                            case "Feedback-Type":
+                                // abuse, fraud, other, virus
+                                feedback = value;
+                                break;
+                        }
                     }
                 }
             } catch (Throwable ex) {
@@ -4778,6 +4863,10 @@ public class MessageHelper {
 
         boolean isDispositionNotification() {
             return isDispositionNotification(type);
+        }
+
+        boolean isFeedbackReport() {
+            return isFeedbackReport(type);
         }
 
         boolean isDelivered() {
@@ -4838,6 +4927,10 @@ public class MessageHelper {
 
         static boolean isDispositionNotification(String type) {
             return "message/disposition-notification".equalsIgnoreCase(type);
+        }
+
+        static boolean isFeedbackReport(String type) {
+            return "message/feedback-report".equalsIgnoreCase(type);
         }
     }
 }

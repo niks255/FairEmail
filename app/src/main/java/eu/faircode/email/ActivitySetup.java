@@ -709,8 +709,39 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         }
 
                         JSONArray jrules = new JSONArray();
-                        for (EntityRule rule : db.rule().getRules(folder.id))
+                        for (EntityRule rule : db.rule().getRules(folder.id)) {
+                            try {
+                                JSONObject jaction = new JSONObject(rule.action);
+                                int type = jaction.getInt("type");
+                                switch (type) {
+                                    case EntityRule.TYPE_MOVE:
+                                    case EntityRule.TYPE_COPY:
+                                        long target = jaction.getLong("target");
+                                        EntityFolder f = db.folder().getFolder(target);
+                                        EntityAccount a = (f == null ? null : db.account().getAccount(f.account));
+                                        if (a != null)
+                                            jaction.put("targetAccountUuid", a.uuid);
+                                        if (f != null)
+                                            jaction.put("targetFolderName", f.name);
+                                        break;
+                                    case EntityRule.TYPE_ANSWER:
+                                        long identity = jaction.getLong("identity");
+                                        long answer = jaction.getLong("answer");
+                                        EntityIdentity i = db.identity().getIdentity(identity);
+                                        EntityAnswer t = db.answer().getAnswer(answer);
+                                        if (i != null)
+                                            jaction.put("identityUuid", i.uuid);
+                                        if (t != null)
+                                            jaction.put("answerUuid", t.uuid);
+                                        break;
+                                }
+                                rule.action = jaction.toString();
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            }
+
                             jrules.put(rule.toJSON());
+                        }
                         jfolder.put("rules", jrules);
 
                         jfolders.put(jfolder);
@@ -984,6 +1015,10 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                             long id = answer.id;
                             answer.id = null;
 
+                            EntityAnswer existing = db.answer().getAnswerByUUID(answer.uuid);
+                            if (existing != null)
+                                db.answer().deleteAnswer(existing.id);
+
                             answer.id = db.answer().insertAnswer(answer);
                             xAnswer.put(id, answer.id);
 
@@ -1165,17 +1200,48 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                                     switch (type) {
                                         case EntityRule.TYPE_MOVE:
                                         case EntityRule.TYPE_COPY:
+                                            String targetAccountUuid = jaction.optString("targetAccountUuid");
+                                            String targetFolderName = jaction.optString("targetFolderName");
+                                            if (!TextUtils.isEmpty(targetAccountUuid) && !TextUtils.isEmpty(targetFolderName)) {
+                                                EntityAccount a = db.account().getAccountByUUID(targetAccountUuid);
+                                                if (a != null) {
+                                                    EntityFolder f = db.folder().getFolderByName(a.id, targetFolderName);
+                                                    if (f != null) {
+                                                        jaction.put("target", f.id);
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            // Legacy
                                             long target = jaction.getLong("target");
-                                            Log.i("XLAT target " + target + " > " + xFolder.get(target));
-                                            jaction.put("target", xFolder.get(target));
+                                            Long tid = xFolder.get(target);
+                                            Log.i("XLAT target " + target + " > " + tid);
+                                            if (tid != null)
+                                                jaction.put("target", tid);
                                             break;
                                         case EntityRule.TYPE_ANSWER:
+                                            String identityUuid = jaction.optString("identityUuid");
+                                            String answerUuid = jaction.optString("answerUuid");
+                                            if (!TextUtils.isEmpty(identityUuid) && !TextUtils.isEmpty(answerUuid)) {
+                                                EntityIdentity i = db.identity().getIdentityByUUID(identityUuid);
+                                                EntityAnswer a = db.answer().getAnswerByUUID(answerUuid);
+                                                if (i != null && a != null) {
+                                                    jaction.put("identity", i.id);
+                                                    jaction.put("answer", a.id);
+                                                    break;
+                                                }
+                                            }
+
+                                            // Legacy
                                             long identity = jaction.getLong("identity");
                                             long answer = jaction.getLong("answer");
-                                            Log.i("XLAT identity " + identity + " > " + xIdentity.get(identity));
-                                            Log.i("XLAT answer " + answer + " > " + xAnswer.get(answer));
-                                            jaction.put("identity", xIdentity.get(identity));
-                                            jaction.put("answer", xAnswer.get(answer));
+                                            Long iid = xIdentity.get(identity);
+                                            Long aid = xAnswer.get(answer);
+                                            Log.i("XLAT identity " + identity + " > " + iid);
+                                            Log.i("XLAT answer " + answer + " > " + aid);
+                                            jaction.put("identity", iid);
+                                            jaction.put("answer", aid);
                                             break;
                                     }
 
@@ -1752,6 +1818,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     private void onImportCertificate(Intent intent) {
         Intent open = new Intent(Intent.ACTION_GET_CONTENT);
         open.addCategory(Intent.CATEGORY_OPENABLE);
+        open.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         open.setType("*/*");
         if (open.resolveActivity(getPackageManager()) == null)  // system whitelisted
             ToastEx.makeText(this, R.string.title_no_saf, Toast.LENGTH_LONG).show();
@@ -1766,6 +1833,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     private static Intent getIntentExport() {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_TITLE, "fairemail_" +
                 new SimpleDateFormat("yyyyMMdd").format(new Date().getTime()) + ".backup");
@@ -1776,6 +1844,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     private static Intent getIntentImport() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setType("*/*");
         return intent;
     }

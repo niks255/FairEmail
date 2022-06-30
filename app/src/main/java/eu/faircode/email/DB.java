@@ -71,7 +71,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 236,
+        version = 239,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -2113,19 +2113,14 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `account` ADD COLUMN `uuid` TEXT NOT NULL DEFAULT ''");
-                        Cursor cursor = null;
-                        try {
-                            cursor = db.query("SELECT id FROM account");
+                        try (Cursor cursor = db.query("SELECT id FROM account")) {
                             while (cursor != null && cursor.moveToNext()) {
                                 long id = cursor.getLong(0);
                                 String uuid = UUID.randomUUID().toString();
-                                Log.i("MMM account=" + id + " uuid=" + uuid);
-                                db.execSQL("UPDATE account SET uuid = ? WHERE id = ?",
-                                        new Object[]{uuid, id});
+                                db.execSQL("UPDATE account SET uuid = ? WHERE id = ?", new Object[]{uuid, id});
                             }
                         } catch (Throwable ex) {
-                            if (cursor != null)
-                                cursor.close();
+                            Log.e(ex);
                         }
                     }
                 }).addMigrations(new Migration(204, 205) {
@@ -2355,6 +2350,51 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `identity` ADD COLUMN `octetmime` INTEGER NOT NULL DEFAULT 0");
                     }
+                }).addMigrations(new Migration(236, 237) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `rule` ADD COLUMN `uuid` TEXT NOT NULL DEFAULT ''");
+                        try (Cursor cursor = db.query("SELECT id FROM rule")) {
+                            while (cursor != null && cursor.moveToNext()) {
+                                long id = cursor.getLong(0);
+                                String uuid = UUID.randomUUID().toString();
+                                db.execSQL("UPDATE rule SET uuid = ? WHERE id = ?", new Object[]{uuid, id});
+                            }
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
+                }).addMigrations(new Migration(237, 238) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `answer` ADD COLUMN `uuid` TEXT NOT NULL DEFAULT ''");
+                        try (Cursor cursor = db.query("SELECT id FROM answer")) {
+                            while (cursor != null && cursor.moveToNext()) {
+                                long id = cursor.getLong(0);
+                                String uuid = UUID.randomUUID().toString();
+                                db.execSQL("UPDATE answer SET uuid = ? WHERE id = ?", new Object[]{uuid, id});
+                            }
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
+                }).addMigrations(new Migration(238, 239) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `identity` ADD COLUMN `uuid` TEXT NOT NULL DEFAULT ''");
+                        try (Cursor cursor = db.query("SELECT id FROM identity")) {
+                            while (cursor != null && cursor.moveToNext()) {
+                                long id = cursor.getLong(0);
+                                String uuid = UUID.randomUUID().toString();
+                                db.execSQL("UPDATE identity SET uuid = ? WHERE id = ?", new Object[]{uuid, id});
+                            }
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
                 }).addMigrations(new Migration(998, 999) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
@@ -2378,7 +2418,8 @@ public abstract class DB extends RoomDatabase {
                     long start = new Date().getTime();
                     StringBuilder sb = new StringBuilder();
                     SupportSQLiteDatabase sdb = db.getOpenHelper().getWritableDatabase();
-                    try (Cursor cursor = sdb.query("PRAGMA wal_checkpoint(PASSIVE);")) {
+                    String mode = (BuildConfig.DEBUG ? "RESTART" : "PASSIVE");
+                    try (Cursor cursor = sdb.query("PRAGMA wal_checkpoint(" + mode + ");")) {
                         if (cursor.moveToNext()) {
                             for (int i = 0; i < cursor.getColumnCount(); i++) {
                                 if (i > 0)
@@ -2389,7 +2430,8 @@ public abstract class DB extends RoomDatabase {
                     }
 
                     long elapse = new Date().getTime() - start;
-                    Log.i("PRAGMA wal_checkpoint=" + sb + " elapse=" + elapse);
+                    EntityLog.log(context, EntityLog.Type.Debug,
+                            "PRAGMA wal_checkpoint(" + mode + ")=" + sb + " elapse=" + elapse + " ms");
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }

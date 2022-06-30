@@ -1373,7 +1373,7 @@ public class FragmentCompose extends FragmentBase {
                 String email = args.getString("email");
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                boolean auto_identity = prefs.getBoolean("auto_identity", true);
+                boolean auto_identity = prefs.getBoolean("auto_identity", false);
                 boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
                 boolean suggest_received = prefs.getBoolean("suggest_received", false);
 
@@ -1663,6 +1663,9 @@ public class FragmentCompose extends FragmentBase {
             extras.putBoolean("autosave", true);
             onAction(R.id.action_save, extras, "pause");
         }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit().putLong("last_composing", working).apply();
 
         ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
         cm.unregisterNetworkCallback(networkCallback);
@@ -2593,6 +2596,7 @@ public class FragmentCompose extends FragmentBase {
     private void onActionAttachment() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         PackageManager pm = getContext().getPackageManager();
@@ -3038,6 +3042,7 @@ public class FragmentCompose extends FragmentBase {
                 Log.i("Using file picker");
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 if (intent.resolveActivity(pm) == null) // GET_CONTENT whitelisted
@@ -4565,7 +4570,7 @@ public class FragmentCompose extends FragmentBase {
             boolean receipt_default = prefs.getBoolean("receipt_default", false);
             boolean write_below = prefs.getBoolean("write_below", false);
             boolean save_drafts = prefs.getBoolean("save_drafts", true);
-            boolean auto_identity = prefs.getBoolean("auto_identity", true);
+            boolean auto_identity = prefs.getBoolean("auto_identity", false);
             boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
             boolean suggest_received = prefs.getBoolean("suggest_received", false);
             boolean forward_new = prefs.getBoolean("forward_new", true);
@@ -5710,7 +5715,7 @@ public class FragmentCompose extends FragmentBase {
 
                                     Intent thread = new Intent(v.getContext(), ActivityView.class);
                                     thread.setAction("thread:" + message.id);
-                                    thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     thread.putExtra("account", message.account);
                                     thread.putExtra("folder", message.folder);
                                     thread.putExtra("thread", message.thread);
@@ -6453,13 +6458,12 @@ public class FragmentCompose extends FragmentBase {
 
                         if (extras.getBoolean("archive")) {
                             EntityFolder archive = db.folder().getFolderByType(draft.account, EntityFolder.ARCHIVE);
-                            if (archive != null)
-                                for (String inreplyto : draft.inreplyto.split(" ")) {
-                                    List<EntityMessage> messages = db.message().getMessagesByMsgId(draft.account, inreplyto);
-                                    if (messages != null)
-                                        for (EntityMessage message : messages)
-                                            EntityOperation.queue(context, message, EntityOperation.MOVE, archive.id);
-                                }
+                            if (archive != null) {
+                                List<EntityMessage> messages = db.message().getMessagesByMsgId(draft.account, draft.inreplyto);
+                                if (messages != null)
+                                    for (EntityMessage message : messages)
+                                        EntityOperation.queue(context, message, EntityOperation.MOVE, archive.id);
+                            }
                         }
                     }
                 }
@@ -6986,6 +6990,9 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void endSearch() {
+        if (etSearch == null)
+            return;
+
         Helper.hideKeyboard(etSearch);
         etSearch.setVisibility(View.GONE);
         clearSearch();
@@ -7944,15 +7951,18 @@ public class FragmentCompose extends FragmentBase {
                         return false;
                     }
 
-                    for (String inreplyto : draft.inreplyto.split(" ")) {
-                        List<EntityMessage> messages = db.message().getMessagesByMsgId(draft.account, inreplyto);
-                        for (EntityMessage message : messages) {
-                            EntityFolder folder = db.folder().getFolder(message.folder);
-                            if (folder == null)
-                                continue;
-                            if (EntityFolder.INBOX.equals(folder.type) || EntityFolder.USER.equals(folder.type))
-                                return true;
-                        }
+                    List<EntityMessage> messages = db.message().getMessagesByMsgId(draft.account, draft.inreplyto);
+                    if (messages == null || messages.size() == 0) {
+                        args.putString("reason", "In-reply-to gone");
+                        return false;
+                    }
+
+                    for (EntityMessage message : messages) {
+                        EntityFolder folder = db.folder().getFolder(message.folder);
+                        if (folder == null)
+                            continue;
+                        if (EntityFolder.INBOX.equals(folder.type) || EntityFolder.USER.equals(folder.type))
+                            return true;
                     }
 
                     args.putString("reason", "Not in inbox or unread");

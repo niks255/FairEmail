@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <eu.faircode.email.ScrollViewEx xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="24dp"
@@ -43,6 +44,7 @@
             android:maxLines="2"
             android:text="Link title"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textIsSelectable="true"
             android:textStyle="italic"
             app:layout_constraintEnd_toStartOf="@+id/ibDifferent"
             app:layout_constraintStart_toStartOf="parent"

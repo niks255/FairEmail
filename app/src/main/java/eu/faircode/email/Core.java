@@ -1417,8 +1417,7 @@ class Core {
 
         // Some providers do not support the COPY operation for drafts
         boolean draft = (EntityFolder.DRAFTS.equals(folder.type) || EntityFolder.DRAFTS.equals(target.type));
-        boolean duplicate = (copy && !account.isGmail()) ||
-                (draft && EntityFolder.ARCHIVE.equals(target.type) && account.isGmail());
+        boolean duplicate = (copy && !account.isGmail()) || (draft && account.isGmail());
         if (draft || duplicate) {
             Log.i(folder.name + " " + (duplicate ? "copy" : "move") +
                     " from " + folder.type + " to " + target.type);
@@ -4134,6 +4133,9 @@ class Core {
                     reply.setPersonal(from.getPersonal());
             }
 
+            if (helper.isReport() && EntityFolder.DRAFTS.equals(folder.type))
+                message.dsn = EntityMessage.DSN_HARD_BOUNCE;
+
             EntityIdentity identity = matchIdentity(context, folder, message);
             message.identity = (identity == null ? null : identity.id);
 
@@ -4226,12 +4228,16 @@ class Core {
             if (experiments && helper.isReport())
                 try {
                     MessageHelper.Report r = parts.getReport();
-                    if (r != null) {
+                    boolean client_id = prefs.getBoolean("client_id", true);
+                    String we = "dns;" + (client_id ? EmailService.getDefaultEhlo() : "example.com");
+                    if (r != null && !we.equals(r.reporter)) {
                         String label = null;
                         if (r.isDeliveryStatus())
                             label = (r.isDelivered() ? MessageHelper.FLAG_DELIVERED : MessageHelper.FLAG_NOT_DELIVERED);
                         else if (r.isDispositionNotification())
                             label = (r.isMdnDisplayed() ? MessageHelper.FLAG_DISPLAYED : MessageHelper.FLAG_NOT_DISPLAYED);
+                        else if (r.isFeedbackReport())
+                            label = MessageHelper.FLAG_COMPLAINT;
 
                         if (label != null) {
                             Map<Long, EntityFolder> map = new HashMap<>();
@@ -4242,12 +4248,11 @@ class Core {
 
                             List<EntityMessage> all = new ArrayList<>();
 
-                            if (message.inreplyto != null)
-                                for (String inreplyto : message.inreplyto.split(" ")) {
-                                    List<EntityMessage> replied = db.message().getMessagesByMsgId(folder.account, inreplyto);
-                                    if (replied != null)
-                                        all.addAll(replied);
-                                }
+                            if (message.inreplyto != null) {
+                                List<EntityMessage> replied = db.message().getMessagesByMsgId(folder.account, message.inreplyto);
+                                if (replied != null)
+                                    all.addAll(replied);
+                            }
                             if (r.refid != null) {
                                 List<EntityMessage> refs = db.message().getMessagesByMsgId(folder.account, r.refid);
                                 if (refs != null)
@@ -4261,10 +4266,8 @@ class Core {
                                         map.put(f.id, f);
                                 }
 
-                            if (message.inreplyto != null)
-                                for (EntityFolder f : map.values())
-                                    for (String inreplyto : message.inreplyto.split(" "))
-                                        EntityOperation.queue(context, f, EntityOperation.REPORT, inreplyto, label);
+                            for (EntityFolder f : map.values())
+                                EntityOperation.queue(context, f, EntityOperation.REPORT, message.inreplyto, label);
                         }
                     }
                 } catch (Throwable ex) {
@@ -5256,7 +5259,7 @@ class Core {
             } else
                 content = new Intent(context, ActivityView.class)
                         .setAction("unified" + (notify_remove ? ":" + group : ""));
-            content.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            content.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent piContent = PendingIntentCompat.getActivity(
                     context, ActivityView.PI_UNIFIED, content, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -5381,7 +5384,7 @@ class Core {
             // Build pending intents
             Intent thread = new Intent(context, ActivityView.class);
             thread.setAction("thread:" + message.id);
-            thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             thread.putExtra("account", message.account);
             thread.putExtra("folder", message.folder);
             thread.putExtra("thread", message.thread);
@@ -5853,7 +5856,7 @@ class Core {
         intent.putExtra("protocol", account.protocol);
         intent.putExtra("auth_type", account.auth_type);
         intent.putExtra("faq", 22);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pi = PendingIntentCompat.getActivity(
                 context, ActivityError.PI_ERROR, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

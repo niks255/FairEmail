@@ -272,7 +272,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     private static PendingIntent getPendingIntent(Context context) {
         Intent intent = new Intent(context, ActivityView.class);
         intent.setAction("outbox");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return PendingIntentCompat.getActivity(
                 context, ActivityView.PI_OUTBOX, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
@@ -500,6 +500,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             }
 
             db.setTransactionSuccessful();
+        } catch (IllegalArgumentException ex) {
+            Log.w(ex);
         } finally {
             db.endTransaction();
         }
@@ -566,24 +568,21 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         Long sid = null;
         EntityFolder sent = null;
 
-        if (reply_move && !TextUtils.isEmpty(message.inreplyto))
-            for (String inreplyto : message.inreplyto.split(" ")) {
-                List<EntityMessage> replied = db.message().getMessagesByMsgId(message.account, inreplyto);
-                if (replied != null)
-                    for (EntityMessage m : replied)
-                        if (!m.ui_hide) {
-                            EntityFolder folder = db.folder().getFolder(m.folder);
-                            if (folder != null &&
-                                    (EntityFolder.INBOX.equals(folder.type) ||
-                                            EntityFolder.ARCHIVE.equals(folder.type) ||
-                                            EntityFolder.USER.equals(folder.type))) {
-                                sent = folder;
-                                break;
-                            }
+        if (reply_move && !TextUtils.isEmpty(message.inreplyto)) {
+            List<EntityMessage> replied = db.message().getMessagesByMsgId(message.account, message.inreplyto);
+            if (replied != null)
+                for (EntityMessage m : replied)
+                    if (!m.ui_hide) {
+                        EntityFolder folder = db.folder().getFolder(m.folder);
+                        if (folder != null &&
+                                (EntityFolder.INBOX.equals(folder.type) ||
+                                        EntityFolder.ARCHIVE.equals(folder.type) ||
+                                        EntityFolder.USER.equals(folder.type))) {
+                            sent = folder;
+                            break;
                         }
-                if (sent != null)
-                    break;
-            }
+                    }
+        }
 
         if (sent == null)
             sent = db.folder().getFolderByType(message.account, EntityFolder.SENT);
@@ -808,12 +807,11 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             }
 
             // Mark replied
-            if (message.inreplyto != null)
-                for (String inreplyto : message.inreplyto.split(" ")) {
-                    List<EntityMessage> replieds = db.message().getMessagesByMsgId(message.account, inreplyto);
-                    for (EntityMessage replied : replieds)
-                        EntityOperation.queue(this, replied, EntityOperation.ANSWERED, true);
-                }
+            if (message.inreplyto != null) {
+                List<EntityMessage> replieds = db.message().getMessagesByMsgId(message.account, message.inreplyto);
+                for (EntityMessage replied : replieds)
+                    EntityOperation.queue(this, replied, EntityOperation.ANSWERED, true);
+            }
 
             // Mark forwarded
             if (message.wasforwardedfrom != null) {

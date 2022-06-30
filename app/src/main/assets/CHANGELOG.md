@@ -2,6 +2,25 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Kinnareemimus](https://en.wikipedia.org/wiki/Kinnareemimus)
+
+### 1.1928 - 2022-06-30
+
+* Added *Select app* to browser selection
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.1927 - 2022-06-25
+
+* Added import file to signature editor
+* Added option to restore app state on start
+* Added edit account color to folder list menu
+* Added create/delete notification channel to account popup menu
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated translations
+
 ### [Juratyrant](https://en.wikipedia.org/wiki/Juratyrant)
 
 ### 1.1926 - 2022-06-23

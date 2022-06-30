@@ -2264,7 +2264,7 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can long press the add contact button in the message composer to insert a contact group? (since version 1.1721)
 * Did you know that you can long press the image action to show the image dialog, even if it was disabled? (since version 1.1772)
 * Did you know that you can long press the "] \[" button to fit original messages to the screen width? (this might result in "thin" messages)
-* Did you know that you can long press on the save drafts button for a grammar, style, and spell check?
+* Did you know that you can long press on the save drafts button for a grammar, style, and spell check via [LanguageTools](https://languagetool.org/)?
 
 <br />
 
@@ -3491,6 +3491,8 @@ Note that:
 * Play Store purchases cannot be transferred to another account
 * You can't restore purchases with [microG](https://microg.org/)
 
+Please [see here](https://support.google.com/googleplay/answer/4646404) about how to add, remove, or edit your Google Play payment method.
+
 If you cannot solve the problem with the purchase, you will have to contact Google about it.
 
 <br />
@@ -4025,13 +4027,20 @@ Voice notes will automatically be attached.
 
 Account:
 
-* Enable *Separate notifications* in the advanced account settings (Settings, tap Manual setup, tap Accounts, tap account, tap Advanced)
-* Long press the account in the account list (Settings, tap Manual setup, tap Accounts) and select *Edit notification channel* to change the notification sound
+* Version 1.1927-: enable *Separate notifications* in the advanced account settings
+* Version 1.1927+: long press the account in the account list and select *Create notification channel*
+* Long press the account in the account list and select *Edit notification channel* to change the notification sound
+
+To go to the account list: navigation menu (left side menu), tap *Settings*, tap *Manual setup and account options* and tap *Accounts*.<br>
+To go to the advanced account settings from the account list: tap on the account and tap on *Advanced*.
 
 Folder:
 
+* Long press the folder in the folder list and select *Notify on new messages*
 * Long press the folder in the folder list and select *Create notification channel*
 * Long press the folder in the folder list and select *Edit notification channel* to change the notification sound
+
+To go to the folder list: tap on the account name in the navigation menu (left side menu).
 
 Sender:
 

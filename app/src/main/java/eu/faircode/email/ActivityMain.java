@@ -42,8 +42,9 @@ import java.util.Date;
 import java.util.List;
 
 public class ActivityMain extends ActivityBase implements FragmentManager.OnBackStackChangedListener, SharedPreferences.OnSharedPreferenceChangeListener {
+    static final int RESTORE_STATE_INTERVAL = 3; // minutes
+
     private static final long SPLASH_DELAY = 1500L; // milliseconds
-    private static final long RESTORE_STATE_INTERVAL = 3 * 60 * 1000L; // milliseconds
     private static final long SERVICE_START_DELAY = 5 * 1000L; // milliseconds
 
     @Override
@@ -111,7 +112,7 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
 
                     Intent thread = new Intent(ActivityMain.this, ActivityView.class);
                     thread.setAction("thread:" + message.id);
-                    thread.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     thread.putExtra("account", message.account);
                     thread.putExtra("folder", message.folder);
                     thread.putExtra("thread", message.thread);
@@ -173,11 +174,23 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
 
                 @Override
                 protected Boolean onExecute(Context context, Bundle args) {
+                    DB db = DB.getInstance(context);
+
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    String last_activity = prefs.getString("last_activity", null);
+                    long composing = prefs.getLong("last_composing", -1L);
+                    if (ActivityCompose.class.getName().equals(last_activity) && composing >= 0) {
+                        EntityMessage draft = db.message().getMessage(composing);
+                        if (draft == null || draft.ui_hide)
+                            prefs.edit()
+                                    .remove("last_activity")
+                                    .remove("last_composing")
+                                    .apply();
+                    }
+
                     if (prefs.getBoolean("has_accounts", false))
                         return true;
 
-                    DB db = DB.getInstance(context);
                     List<EntityAccount> accounts = db.account().getSynchronizingAccounts(null);
                     boolean hasAccounts = (accounts != null && accounts.size() > 0);
 
@@ -205,9 +218,18 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
                         // https://developer.android.com/docs/quality-guidelines/core-app-quality
                         long now = new Date().getTime();
                         long last = prefs.getLong("last_launched", 0L);
-                        if (!BuildConfig.PLAY_STORE_RELEASE &&
-                                now - last > RESTORE_STATE_INTERVAL)
+                        boolean restore_on_launch = prefs.getBoolean("restore_on_launch", true);
+                        if (!restore_on_launch || now - last > RESTORE_STATE_INTERVAL * 60 * 1000L)
                             view.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        else {
+                            String last_activity = prefs.getString("last_activity", null);
+                            long composing = prefs.getLong("last_composing", -1L);
+                            if (ActivityCompose.class.getName().equals(last_activity) && composing >= 0)
+                                view = new Intent(ActivityMain.this, ActivityCompose.class)
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        .putExtra("action", "edit")
+                                        .putExtra("id", composing);
+                        }
 
                         Intent saved = args.getParcelable("intent");
                         if (saved == null) {

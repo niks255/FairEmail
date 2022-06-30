@@ -60,6 +60,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -83,6 +84,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FragmentDialogOpenLink extends FragmentDialogBase {
+    private ScrollView scroll;
     private ImageButton ibMore;
     private TextView tvMore;
     private Button btnOwner;
@@ -135,8 +137,29 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         } else
             uriTitle = null;
 
+        MailTo mailto = null;
+        if ("mailto".equals(uri.getScheme()))
+            try {
+                mailto = MailTo.parse(uri);
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
+
+        String host = uri.getHost();
+        String thost = (uriTitle == null ? null : uriTitle.getHost());
+
+        String puny = null;
+        try {
+            if (host != null)
+                puny = IDN.toASCII(host, IDN.ALLOW_UNASSIGNED);
+        } catch (Throwable ex) {
+            Log.i(ex);
+            puny = host;
+        }
+
         // Get views
         final View dview = LayoutInflater.from(context).inflate(R.layout.dialog_open_link, null);
+        scroll = dview.findViewById(R.id.scroll);
         final ImageButton ibInfo = dview.findViewById(R.id.ibInfo);
         final TextView tvTitle = dview.findViewById(R.id.tvTitle);
         final ImageButton ibDifferent = dview.findViewById(R.id.ibDifferent);
@@ -180,7 +203,10 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         ibDifferent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etLink.setText(format(uriTitle, context));
+                Package pkg = (Package) spOpenWith.getSelectedItem();
+                Log.i("Open title uri=" + uri + " with=" + pkg);
+                boolean tabs = (pkg != null && pkg.tabs);
+                Helper.view(context, uriTitle, !tabs, !tabs);
             }
         });
 
@@ -417,28 +443,9 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         tvTitle.setText(title);
         tvTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);
 
-        MailTo mailto = null;
-        if ("mailto".equals(uri.getScheme()))
-            try {
-                mailto = MailTo.parse(uri);
-            } catch (Throwable ex) {
-                Log.w(ex);
-            }
         ibSearch.setVisibility(
                 mailto != null && !TextUtils.isEmpty(mailto.getTo())
                         ? View.VISIBLE : View.GONE);
-
-        String host = uri.getHost();
-        String thost = (uriTitle == null ? null : uriTitle.getHost());
-
-        String puny = null;
-        try {
-            if (host != null)
-                puny = IDN.toASCII(host, IDN.ALLOW_UNASSIGNED);
-        } catch (Throwable ex) {
-            Log.i(ex);
-            puny = host;
-        }
 
         if (host != null && !host.equals(puny)) {
             etLink.setText(format(uri.buildUpon().encodedAuthority(puny).build(), context));
@@ -580,6 +587,15 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                         }
                     }
 
+                    Drawable android = context.getDrawable(R.drawable.twotone_android_24);
+                    android.setBounds(0, 0, dp24, dp24);
+                    pkgs.add(new Package(
+                            android,
+                            context.getString(R.string.title_select_app),
+                            "chooser",
+                            false,
+                            true));
+
                     return pkgs;
                 }
 
@@ -659,6 +675,16 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         btnSettings.setVisibility(show ? View.VISIBLE : View.GONE);
         btnDefault.setVisibility(show && n ? View.VISIBLE : View.GONE);
         tvReset.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (show)
+            scroll.post(new RunnableEx("link:scroll#1") {
+                public void delegate() {
+                    scroll.getChildAt(0).post(new RunnableEx("link:scroll#2") {
+                        public void delegate() {
+                            scroll.scrollTo(0, scroll.getBottom());
+                        }
+                    });
+                }
+            });
     }
 
     private Spanned format(Uri uri, Context context) {
