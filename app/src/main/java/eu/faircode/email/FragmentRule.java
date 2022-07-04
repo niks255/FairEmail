@@ -335,6 +335,7 @@ public class FragmentRule extends FragmentBase {
             @Override
             public void onClick(View v) {
                 Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
+                pick.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(Helper.getChooser(getContext(), pick), REQUEST_SENDER);
             }
         });
@@ -352,6 +353,7 @@ public class FragmentRule extends FragmentBase {
             @Override
             public void onClick(View v) {
                 Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
+                pick.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(Helper.getChooser(getContext(), pick), REQUEST_RECIPIENT);
             }
         });
@@ -646,6 +648,7 @@ public class FragmentRule extends FragmentBase {
             @Override
             public void onClick(View v) {
                 Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
+                pick.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(Helper.getChooser(getContext(), pick), REQUEST_TO);
             }
         });
@@ -912,7 +915,15 @@ public class FragmentRule extends FragmentBase {
                 et.setText(cursor.getString(0));
         } catch (Throwable ex) {
             Log.e(ex);
-            Log.unexpectedError(getParentFragmentManager(), ex);
+            if (ex instanceof SecurityException)
+                try {
+                    String permission = android.Manifest.permission.READ_CONTACTS;
+                    requestPermissions(new String[]{permission}, REQUEST_PERMISSIONS);
+                } catch (Throwable ex1) {
+                    Log.unexpectedError(getParentFragmentManager(), ex1);
+                }
+            else
+                Log.unexpectedError(getParentFragmentManager(), ex);
         }
     }
 
@@ -1724,6 +1735,7 @@ public class FragmentRule extends FragmentBase {
                     rule.folder = args.getLong("folder");
                     rule.condition = args.getString("condition");
                     rule.action = args.getString("action");
+                    rule.validate(context);
 
                     List<EntityMessage> matching = new ArrayList<>();
 

@@ -188,6 +188,7 @@ public class Helper {
     static final String PACKAGE_CHROME = "com.android.chrome";
     static final String PACKAGE_WEBVIEW = "https://play.google.com/store/apps/details?id=com.google.android.webview";
     static final String PRIVACY_URI = "https://email.faircode.eu/privacy/";
+    static final String TUTORIALS_URI = "https://github.com/M66B/FairEmail/tree/master/tutorials";
     static final String XDA_URI = "https://forum.xda-developers.com/showthread.php?t=3824168";
     static final String SUPPORT_URI = "https://contact.faircode.eu/";
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
@@ -417,7 +418,8 @@ public class Helper {
         PackageManager pm = context.getPackageManager();
         Intent view = new Intent(Intent.ACTION_VIEW, uri);
 
-        List<ResolveInfo> ris = pm.queryIntentActivities(view, 0); // action whitelisted
+        int flags = (Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? 0 : PackageManager.MATCH_ALL);
+        List<ResolveInfo> ris = pm.queryIntentActivities(view, flags); // action whitelisted
         for (ResolveInfo info : ris) {
             Intent intent = new Intent();
             intent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
@@ -828,7 +830,8 @@ public class Helper {
             List<ResolveInfo> ris = null;
             try {
                 PackageManager pm = context.getPackageManager();
-                ris = pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                int flags = (Build.VERSION.SDK_INT < Build.VERSION_CODES.M ? 0 : PackageManager.MATCH_ALL);
+                ris = pm.queryIntentActivities(intent, flags);
                 for (ResolveInfo ri : ris) {
                     Log.i("Target=" + ri);
                     context.grantUriPermission(ri.activityInfo.packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -898,6 +901,14 @@ public class Helper {
         String open_with_pkg = prefs.getString("open_with_pkg", null);
         boolean open_with_tabs = prefs.getBoolean("open_with_tabs", true);
 
+        Log.i("View=" + uri +
+                " browse=" + browse +
+                " task=" + task +
+                " pkg=" + open_with_pkg + ":" + open_with_tabs +
+                " isHyperLink=" + UriHelper.isHyperLink(uri) +
+                " isInstalled=" + isInstalled(context, open_with_pkg) +
+                " hasCustomTabs=" + hasCustomTabs(context, uri, open_with_pkg));
+
         if (!UriHelper.isHyperLink(uri)) {
             open_with_pkg = null;
             open_with_tabs = false;
@@ -911,15 +922,11 @@ public class Helper {
         if (open_with_tabs && !hasCustomTabs(context, uri, open_with_pkg))
             open_with_tabs = false;
 
-        Log.i("View=" + uri +
-                " browse=" + browse +
-                " task=" + task +
-                " pkg=" + open_with_pkg + ":" + open_with_tabs);
-
         if ("chooser".equals(open_with_pkg)) {
             Intent view = new Intent(Intent.ACTION_VIEW, uri);
             Intent chooser = Intent.createChooser(view, context.getString(R.string.title_select_app));
             try {
+                EntityLog.log(context, "Launching chooser uri=" + uri);
                 context.startActivity(chooser);
             } catch (ActivityNotFoundException ex) {
                 Log.w(ex);
@@ -935,6 +942,9 @@ public class Helper {
                 if (task)
                     view.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 view.setPackage(open_with_pkg);
+                EntityLog.log(context, "Launching view uri=" + uri +
+                        " intent=" + view +
+                        " extras=" + TextUtils.join(", ", Log.getExtras(view.getExtras())));
                 context.startActivity(view);
             } catch (Throwable ex) {
                 reportNoViewer(context, uri, ex);
@@ -974,7 +984,6 @@ public class Helper {
                     languages.add(slocale.getLanguage() + ";q=0.7");
             }
             languages.add("*;q=0.5");
-            Log.i("MMM " + TextUtils.join(", ", languages));
 
             Bundle headers = new Bundle();
             // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language
@@ -985,6 +994,9 @@ public class Helper {
             customTabsIntent.intent.setPackage(open_with_pkg);
 
             try {
+                EntityLog.log(context, "Launching tab uri=" + uri +
+                        " intent=" + customTabsIntent.intent +
+                        " extras=" + TextUtils.join(", ", Log.getExtras(customTabsIntent.intent.getExtras())));
                 customTabsIntent.launchUrl(context, uri);
             } catch (Throwable ex) {
                 reportNoViewer(context, uri, ex);
@@ -1210,6 +1222,16 @@ public class Helper {
 
     static boolean isXiaomi() {
         return "Xiaomi".equalsIgnoreCase(Build.MANUFACTURER);
+    }
+
+    static boolean isRedmiNote() {
+        // Manufacturer: Xiaomi
+        // Model: Redmi Note 8 Pro
+        // Model: Redmi Note 10S
+        return isXiaomi() &&
+                !TextUtils.isEmpty(Build.MODEL) &&
+                Build.MODEL.toLowerCase(Locale.ROOT).contains("redmi") &&
+                Build.MODEL.toLowerCase(Locale.ROOT).contains("note");
     }
 
     static boolean isMeizu() {

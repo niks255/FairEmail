@@ -162,6 +162,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swUndoManager;
     private SwitchCompat swWebViewLegacy;
     private SwitchCompat swBrowserZoom;
+    private SwitchCompat swFakeDark;
     private SwitchCompat swShowRecent;
     private SwitchCompat swModSeq;
     private SwitchCompat swUid;
@@ -217,7 +218,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "test2", "test3", "test4", "test5",
             "work_manager", // "external_storage",
             "query_threads", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_cache",
-            "chunk_size", "thread_range", "undo_manager", "webview_legacy", "browser_zoom", "show_recent",
+            "chunk_size", "thread_range", "undo_manager",
+            "webview_legacy", "browser_zoom", "fake_dark",
+            "show_recent",
             "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop",
             "keep_alive_poll", "empty_pool", "idle_done", "logarithmic_backoff",
@@ -242,7 +245,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "signature_images_hint",
             "gmail_checked",
             "eml_auto_confirm",
-            "open_with_pkg", "open_with_tabs"
+            "open_with_pkg", "open_with_tabs",
+            "gmail_checked", "outlook_checked",
+            "redmi_note"
     };
 
     @Override
@@ -338,6 +343,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swUndoManager = view.findViewById(R.id.swUndoManager);
         swWebViewLegacy = view.findViewById(R.id.swWebViewLegacy);
         swBrowserZoom = view.findViewById(R.id.swBrowserZoom);
+        swFakeDark = view.findViewById(R.id.swFakeDark);
         swShowRecent = view.findViewById(R.id.swShowRecent);
         swModSeq = view.findViewById(R.id.swModSeq);
         swUid = view.findViewById(R.id.swUid);
@@ -1057,6 +1063,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swFakeDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("fake_dark", checked).apply();
+            }
+        });
+
         swShowRecent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1630,11 +1643,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                 editor.remove(key);
                             }
 
-                        if (BuildConfig.DEBUG) {
-                            editor.remove("gmail_checked");
-                            editor.remove("outlook_checked");
-                        }
-
                         editor.apply();
 
                         ToastEx.makeText(context, R.string.title_setup_done, Toast.LENGTH_LONG).show();
@@ -1785,6 +1793,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swUndoManager.setChecked(prefs.getBoolean("undo_manager", false));
         swWebViewLegacy.setChecked(prefs.getBoolean("webview_legacy", false));
         swBrowserZoom.setChecked(prefs.getBoolean("browser_zoom", false));
+        swFakeDark.setChecked(prefs.getBoolean("fake_dark", false));
         swShowRecent.setChecked(prefs.getBoolean("show_recent", false));
         swModSeq.setChecked(prefs.getBoolean("use_modseq", true));
         swUid.setChecked(prefs.getBoolean("uid_command", false));

@@ -1,7 +1,7 @@
 <a name="top"></a>
 # FairEmail support
 
-&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md)
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fgithub.com%2FM66B%2FFairEmail%2Fblob%2Fmaster%2FFAQ.md)
 
 If you have a question, please check the following frequently asked questions first.
 [At the bottom](#user-content-get-support),
@@ -16,6 +16,9 @@ Si vous avez une question, veuillez d'abord vérifier les questions fréquemment
 [En bas](#user-content-get-support), vous pouvez découvrir comment poser d'autres questions, demander des fonctionnalités et signaler des bogues.
 Vous recevrez une réponse dans votre propre langue.
 
+## Tutorials
+
+Please [see here](https://github.com/M66B/FairEmail/tree/master/tutorials) for tutorials.
 
 ## Index
 
@@ -118,40 +121,71 @@ Related questions:
 * A [bug in Crowdin](https://crowdin.com/messages/536694) blocks updating FAQ.md (this text) for translation.
 * Search suggestions causes the keyboard losing focus on Android 12L
 
+<a name="redmi"></a>
+
+<br />
+
+**Xiaomi Redmi Note**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23redmi)
+
+On Xiaomi Redmi Note devices the database occasionally gets corrupted, resulting in total data loss
+(on the device only, unless you are using a POP3 account with the option *Leave messages on server* disabled).
+
+The cause of this problem are disk I/O errors due to an Android bug or maybe a hardware issue, please [see here](https://www.sqlite.org/rescode.html#ioerr_write).
+This can't be fixed by the app and should be fixed by Xiaomi / Redmi.
+
+*Please do not blame the app for this!*
+
+For the record the stack trace:
+
+```
+android.database.sqlite.SQLiteDiskIOException: disk I/O error (code 778)
+        at io.requery.android.database.sqlite.SQLiteConnection.nativeExecute(SourceFile:-2)
+        at io.requery.android.database.sqlite.SQLiteConnection.execute(SQLiteConnection:595)
+        at io.requery.android.database.sqlite.SQLiteSession.endTransactionUnchecked(SQLiteSession:447)
+        at io.requery.android.database.sqlite.SQLiteSession.endTransaction(SQLiteSession:411)
+        at io.requery.android.database.sqlite.SQLiteDatabase.endTransaction(SQLiteDatabase:551)
+        at androidx.room.RoomDatabase.internalEndTransaction(RoomDatabase:594)
+        at androidx.room.RoomDatabase.endTransaction(RoomDatabase:584)
+```
+
 <h2><a name="planned-features"></a>Planned features</h2>
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-planned-features)
 
-* ~~Synchronize on demand (manual)~~
-* ~~Semi-automatic encryption~~
-* ~~Copy message~~
-* ~~Colored stars~~
-* ~~Notification settings per folder~~
-* ~~Select local images for signatures~~ (this will not be added because it requires image file management and because images are not shown by default in most email clients anyway)
-* ~~Show messages matched by a rule~~
-* ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
-* ~~Search for messages with/without attachments~~ (this cannot be added because IMAP doesn't support searching for attachments)
-* ~~Search for a folder~~ (filtering a hierarchical folder list is problematic)
-* ~~Search suggestions~~
-* ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
-* ~~Generic unified folders~~
-* ~~New per account message notification schedules~~ (implemented by adding a time condition to rules so messages can be snoozed during selected periods)
-* ~~Copy accounts and identities~~
-* ~~Pinch zoom~~ (not reliably possible in a scrolling list; the full message view can be zoomed instead)
-* ~~More compact folder view~~
-* ~~Compose lists and tables~~ (this requires a rich text editor, see [this FAQ](#user-content-faq99))
-* ~~Pinch zoom text size~~
-* ~~Display GIFs~~
-* ~~Themes~~ (a grey light and dark theme were added because this is what most people seems to want)
-* ~~Any day time condition~~ (any day doesn't really fit into the from/to date/time condition)
-* ~~Send as attachment~~
-* ~~Widget for selected account~~
-* ~~Remind to attach files~~
-* ~~Select domains to show images for~~ (this will be too complicated to use)
-* ~~Unified starred messages view~~ (there is already a special search for this)
-* ~~Move notification action~~
-* ~~S/MIME support~~
-* ~~Search for settings~~
+* &#x2714; ~~Synchronize on demand (manual)~~
+* &#x2714; ~~Semi-automatic encryption~~
+* &#x2714; ~~Copy message~~
+* &#x2714; ~~Colored stars~~
+* &#x2714; ~~Notification settings per folder~~
+* &#x2714; ~~Select local images for signatures~~
+* &#x2714; ~~Show messages matched by a rule~~
+* &#x274C; ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
+* &#x2714; ~~Search for messages with/without attachments~~ (on-device only because IMAP doesn't support searching for attachments)
+* &#x2714; ~~Search for a folder~~
+* &#x2714; ~~Search suggestions~~
+* &#x274C; ~~[Autocrypt Setup Message](https://autocrypt.org/autocrypt-spec-1.0.0.pdf) (section 4.4)~~ (IMO it is not a good idea to let an email client handle sensitive encryption keys for an exceptional use case while OpenKeychain can export keys too)
+* &#x2714; ~~Generic unified folders~~
+* &#x2714; ~~New per account message notification schedules~~ (implemented by adding a time condition to rules so messages can be snoozed during selected periods)
+* &#x2714; ~~Copy accounts and identities~~
+* &#x2714; ~~Pinch zoom~~
+* &#x2714; ~~More compact folder view~~
+* &#x2714; ~~Compose lists~~
+* &#x274C; ~~Compose tables~~ (the Android editor doesn't suppor tables)
+* &#x2714; ~~Pinch zoom text size~~
+* &#x2714; ~~Display GIFs~~
+* &#x2714; ~~Themes~~
+* &#x274C; ~~Any day time condition~~ (any day doesn't really fit into the from/to date/time condition)
+* &#x2714; ~~Send as attachment~~
+* &#x2714; ~~Widget for selected account~~
+* &#x2714; ~~Remind to attach files~~
+* &#x2714; ~~Select domains to show images for~~
+* &#x2714; ~~Unified starred messages view~~ (implemented as saved search)
+* &#x2714; ~~Move notification action~~
+* &#x2714; ~~S/MIME support~~
+* &#x2714; ~~Search for settings~~
+* &#x2714; Many more ...
 
 Anything on this list is in random order and *might* be added in the near future.
 
@@ -900,11 +934,16 @@ All key handling is delegated to the OpenKey chain app for security reasons. Thi
 Inline encrypted PGP in received messages is supported, but inline PGP signatures and inline PGP in outgoing messages is not supported,
 see [here](https://josefsson.org/inline-openpgp-considered-harmful.html) about why not.
 
+If you wish to verify a signature manually, check *Show inline attachments* and save the files *content.asc* (the signed content) and *signature.asc* (the digital signature).
+Install [GnuPG](https://www.gnupg.org/) on your preferred operating system and execute this command:
+
+```gpg --verify signature.asc.pgp content.asc```
+
 Signed-only or encrypted-only messages are not a good idea, please see here about why not:
 
-* [OpenPGP Considerations Part I](https://k9mail.github.io/2016/11/24/OpenPGP-Considerations-Part-I.html)
-* [OpenPGP Considerations Part II](https://k9mail.github.io/2017/01/30/OpenPGP-Considerations-Part-II.html)
-* [OpenPGP Considerations Part III Autocrypt](https://k9mail.github.io/2018/02/26/OpenPGP-Considerations-Part-III-Autocrypt.html)
+* [OpenPGP Considerations Part I](https://www.openkeychain.org/openpgp-considerations-part-i)
+* [OpenPGP Considerations Part II](https://www.openkeychain.org/openpgp-considerations-part-ii)
+* [OpenPGP Considerations Part III Autocrypt](https://www.openkeychain.org/openpgp-considerations-part-iii-autocrypt)
 
 Signed-only messages are supported, encrypted-only messages are not supported.
 
@@ -1348,7 +1387,7 @@ Some devices have a firewall, which you can access like this:
 
 Android *Settings, Data usage, Three-dots overflow menu, Data usage control*
 
-The error *... Connection refused ...* means that the email server
+The error *... Connection refused ...* (ECONNREFUSED) means that the email server
 or something between the email server and the app, like a firewall, actively refused the connection.
 
 The error *... Network unreachable ...* means that the email server was not reachable via the current internet connection,
@@ -1389,6 +1428,8 @@ The error *... NO mailbox selected READ-ONLY ...* indicates [this Zimbra problem
 
 The Outlook specific error *... Command Error. 10 ...* probably means that the OAuth token expired or was invalidated.
 Authenticating the account again with the quick setup wizard will probably resolve this condition.
+Another possible cause is a bug in an older Exchange version, please [see here](https://bugzilla.mozilla.org/show_bug.cgi?id=886261).
+In this case the system administrator needs to update the server software.
 
 Please [see here](#user-content-faq4) for the errors *... Untrusted ... not in certificate ...*, *... Invalid security certificate (Can't verify identity of server) ...* or *... Trust anchor for certification path not found ...*
 
@@ -2774,7 +2815,7 @@ To set the poll interval:
 (adb shell) adb shell am start-foreground-service -a eu.faircode.email.INTERVAL --ei minutes nnn
 ```
 
-Where *nnn* is one of 0, 15, 30, 60, 120, 240, 480, 1440. A value of 0 means push messages.
+Where *nnn* is one of 0, 5, 15, 30, 60, 120, 240, 480, 1440. A value of 0 means push messages.
 
 You can automatically send commands with for example [Tasker](https://tasker.joaoapps.com/userguide/en/intents.html):
 
@@ -4107,6 +4148,13 @@ Please [see here](https://github.com/M66B/FairEmail/blob/master/README.md#user-c
 and [see here](#user-content-faq173) for the differences between the different release types.
 
 If you have a problem with the F-Droid build, please check if there is a newer GitHub version first.
+
+You can see the source of the app in *About* of the navigation menu (left side menu),
+either *Play store*, *GitHub*, *F-Droid*, or *?* (for example in the case of a custom build).
+
+[IzzyOnDroid](https://apt.izzysoft.de/fdroid/) hosts the GitHub release of the app.
+[Aurora Store](https://f-droid.org/packages/com.aurora.store/) hosts the Play store version of the app,
+even though the Aurora Store app was downloaded from F-Droid.
 
 <br />
 
