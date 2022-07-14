@@ -557,6 +557,7 @@
     <string name="title_advanced_text_size">Use text sizes</string>
     <string name="title_advanced_text_font">Use fonts</string>
     <string name="title_advanced_text_align">Use text alignment</string>
+    <string name="title_advanced_text_titles">Show {HTML titles}</string>
     <string name="title_advanced_text_separators">Use separator lines</string>
     <string name="title_advanced_collapse_quotes">Collapse quoted text</string>
     <string name="title_advanced_image_placeholders">Show image placeholders</string>
@@ -567,6 +568,7 @@
     <string name="title_advanced_actionbar_color">Use account color as background color for conversation action bar</string>
     <string name="title_advanced_category_header">Group by account category</string>
     <string name="title_advanced_navbar_colorize">Colorize the Android navigation bar</string>
+    <string name="title_advanced_list_count">Show the number of messages or conversations in the top action bar</string>
     <string name="title_advanced_bundled_fonts">Use bundled fonts</string>
     <string name="title_advanced_parse_classes">Parse style sheets</string>
     <string name="title_advanced_authentication">Show authentication warnings</string>
@@ -621,6 +623,7 @@
     <string name="title_advanced_notify_background">Show notifications when in the background only</string>
     <string name="title_advanced_notify_known">Show notifications for contacts only</string>
     <string name="title_advanced_notify_suppress_in_call">Delay notifications while on a call</string>
+    <string name="title_advanced_notify_suppress_in_car">Delay notifications while Android Auto is connected</string>
     <string name="title_advanced_notify_summary">Show summary notification only</string>
     <string name="title_advanced_notify_preview">Show message preview in notifications</string>
     <string name="title_advanced_notify_preview_all">Preview all text</string>
@@ -755,6 +758,7 @@
     <string name="title_advanced_wal" translatable="false">sqlite WAL</string>
     <string name="title_advanced_checkpoints" translatable="false">sqlite checkpoints</string>
     <string name="title_advanced_analyze" translatable="false">sqlite analyze</string>
+    <string name="title_advanced_auto_vacuum" translatable="false">sqlite auto vacuum</string>
     <string name="title_advanced_sqlite_cache" translatable="false">sqlite cache: %1$s %% - %2$s</string>
     <string name="title_advanced_chunk_size" translatable="false">Chunk size: %1$d</string>
     <string name="title_advanced_thread_range" translatable="false">Thread range: %1$d days</string>
@@ -886,6 +890,7 @@
 
     <string name="title_advanced_badge_hint">Only available on supported launchers</string>
     <string name="title_advanced_notify_action_hint">At most three actions will be shown</string>
+    <string name="title_advanced_notify_car_hint">Connected means something is being projected, such as a map for navigation</string>
     <string name="title_advanced_notify_remove_hint">New message notifications will always be removed on being swiped away and on marking messages read</string>
     <string name="title_advanced_notify_manage_hint">Tap on the channel name to set the channel properties</string>
     <string name="title_advanced_notify_manage_default_hint">To set the default sound, etc</string>
@@ -1877,6 +1882,7 @@
     <string name="title_yes">Yes</string>
     <string name="title_no">No</string>
     <string name="title_later">Later</string>
+    <string name="title_paste_plain">Paste as plain text</string>
     <string name="title_undo">Undo</string>
     <string name="title_redo">Redo</string>
     <string name="title_insert_line">Insert line</string>

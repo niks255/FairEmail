@@ -424,6 +424,7 @@ public class HtmlHelper {
         boolean text_size = (!view || prefs.getBoolean("text_size", true));
         boolean text_font = (!view || prefs.getBoolean("text_font", true));
         boolean text_align = prefs.getBoolean("text_align", true);
+        boolean text_titles = prefs.getBoolean("text_titles", false);
         boolean display_hidden = prefs.getBoolean("display_hidden", false);
         boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
         boolean parse_classes = prefs.getBoolean("parse_classes", true);
@@ -509,6 +510,7 @@ public class HtmlHelper {
                 .addAttributes("td", "height")
                 .addAttributes("tr", "width")
                 .addAttributes("tr", "height")
+                .addAttributes(":all", "title")
                 .removeAttributes("td", "colspan", "rowspan", "width")
                 .removeAttributes("th", "colspan", "rowspan", "width")
                 .addProtocols("img", "src", "cid")
@@ -1030,6 +1032,18 @@ public class HtmlHelper {
                     !"true".equals(element.attr("x-inline")))
                 element.attr("x-block", "true");
         }
+
+        // Insert titles
+        if (text_titles)
+            for (Element e : document.select("[title]")) {
+                String title = e.attr("title");
+                if (TextUtils.isEmpty(title))
+                    continue;
+                if ("img".equals(e.tagName()) &&
+                        title.equals(e.attr("alt")))
+                    continue;
+                e.prependChild(document.createElement("span").text("{" + title + "}"));
+            }
 
         // Replace headings
         Elements hs = document.select("h1,h2,h3,h4,h5,h6");
@@ -2372,9 +2386,38 @@ public class HtmlHelper {
         document.select("head").append(sb.toString());
     }
 
+    static boolean hasColorScheme(Document document, String name) {
+        List<CSSStyleSheet> sheets = parseStyles(document.head().select("style"));
+        for (CSSStyleSheet sheet : sheets)
+            if (sheet.getCssRules() != null) {
+                for (int i = 0; i < sheet.getCssRules().getLength(); i++) {
+                    CSSRule rule = sheet.getCssRules().item(i);
+                    if (rule instanceof CSSMediaRuleImpl) {
+                        MediaList list = ((CSSMediaRuleImpl) rule).getMedia();
+                        String media = (list == null ? null : list.getMediaText());
+                        if (media != null &&
+                                media.toLowerCase(Locale.ROOT).contains("prefers-color-scheme") &&
+                                media.toLowerCase(Locale.ROOT).contains(name)) {
+                            Log.i("@media=" + media);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+        return false;
+    }
+
     static void fakeDark(Document document) {
+        // https://issuetracker.google.com/issues/237785596
         // https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/invert
         // https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/hue-rotate
+        // https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
+        // https://developer.android.com/reference/android/webkit/WebSettings#setAlgorithmicDarkeningAllowed(boolean)
+
+        if (true || hasColorScheme(document, "dark"))
+            return;
+
         document.head().appendElement("style").html(
                 "body { filter: invert(100%) hue-rotate(180deg) !important; background: black !important; }" +
                         "img { filter: invert(100%) hue-rotate(180deg) !important; }");

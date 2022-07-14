@@ -5,7 +5,7 @@
     <string name="app_welcome">Το FairEmail είναι μια ανοικτού κώδικα εφαρμογή ηλεκτρονικού ταχυδρομείου που επικεντρώνεται στην προστασία του απορρήτου και την ασφάλειά σας. Για τον λόγο αυτό ορισμένες δυνατότητες ενδέχεται να λειτουργούν διαφορετικά από ό,τι έχετε συνηθίσει.</string>
     <string name="app_limitations">Για παράδειγμα, τα μηνύματα επαναμορφοποιούνται από προεπιλογή, με στόχο την αφαίρεση μη ασφαλών στοιχείων και τη βελτίωση της αναγνωσιμότητας, ενώ το άνοιγμα συνδέσμων πρέπει να επιβεβαιώνεται για λόγους ασφάλειας. Και οι δύο λειτουργίες απενεργοποιούνται, εφόσον το επιθυμείτε.</string>
     <string name="app_unsupported">Σφάλματα στην έκδοση Android της συγκεκριμένης συσκευής κάνουν την εφαρμογή να καταρρέει</string>
-    <string name="app_data_loss" comment="app_data_loss&#10;&#10;Warning which will link to: https://github.com/M66B/FairEmail/blob/master/FAQ.md#redmi&#10;">Όλα τα δεδομένα ενδέχεται να χαθούν</string>
+    <string name="app_data_loss">Όλα τα δεδομένα ενδέχεται να χαθούν</string>
     <string name="app_continue">Συνέχεια ούτως ή άλλως</string>
     <string name="app_exit">\"Πίσω\" ξανά για έξοδο</string>
     <string name="app_cake">Ανεπαρκής χώρος αποθήκευσης</string>
@@ -340,7 +340,7 @@
     <string name="title_advanced_alt_re_fwd">Εναλλακτικό πρόθεμα απάντησης/προώθησης</string>
     <string name="title_advanced_send_chips">Προβολή διευθύνσεων μέσα σε φυσαλίδες</string>
     <string name="title_advanced_send_reminders">Εμφάνιση υπενθυμίσεων</string>
-    <string name="title_advanced_send_delayed">Καθυστέρηση στην αποστολή μηνυμάτων</string>
+    <string name="title_advanced_send_delayed">Καθυστέρηση αποστολής μηνυμάτων</string>
     <string name="title_advanced_attach_new">Προσθήκη κοινόχρηστων αρχείων σε ένα νέο πρόχειρο</string>
     <string name="title_advanced_answer_action">Το παρατεταμένο πάτημα στο κουμπί απάντησης θα:</string>
     <string name="title_advanced_send_pending">Προβολή διακριτικού εικονιδίου για απεσταλμένα με χρονοκαθυστέρηση</string>
@@ -475,6 +475,7 @@
     <string name="title_advanced_text_size">Χρήση των μεγεθών του κειμένου</string>
     <string name="title_advanced_text_font">Χρήση των γραμματοσειρών</string>
     <string name="title_advanced_text_align">Χρήση της στοίχισης του κειμένου</string>
+    <string name="title_advanced_text_titles" comment="title_advanced_text_titles&#10;&#10;Title for advanced display option to show HTML titles.&#10;The curly braces indicate that inserted titles will be surrounded by curly braces.&#10;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title&#10;">Προβολή {HTML titles}</string>
     <string name="title_advanced_text_separators">Χρήση γραμμών διαχωρισμού</string>
     <string name="title_advanced_collapse_quotes">Σύμπτυξη του παρατιθέμενου κειμένου</string>
     <string name="title_advanced_image_placeholders">Να προβάλλονται οι κρατημένες για εικόνες θέσεις</string>
@@ -485,6 +486,7 @@
     <string name="title_advanced_actionbar_color">Χρήση του χρώματος του λογαριασμού ως χρωματικό υπόβαθρο για τη γραμμή ενεργειών της συζήτησης</string>
     <string name="title_advanced_category_header">Ομαδοποίηση ανά κατηγορία λογαριασμού</string>
     <string name="title_advanced_navbar_colorize">Να χρωματίζεται η γραμμή πλοήγησης του Android</string>
+    <string name="title_advanced_list_count">Προβολή του αριθμού μηνυμάτων ή συζητήσεων στην πάνω γραμμή ενεργειών</string>
     <string name="title_advanced_bundled_fonts">Χρήση γραμματοσειρών σε πακέτο</string>
     <string name="title_advanced_parse_classes">Χρήση φύλλων στιλ</string>
     <string name="title_advanced_authentication">Να προβάλλονται προειδοποιήσεις ταυτοποίησης</string>
@@ -536,6 +538,7 @@
     <string name="title_advanced_notify_background">Προβολή ειδοποιήσεων μόνο στο υπόβαθρο</string>
     <string name="title_advanced_notify_known">Προβολή ειδοποιήσεων μόνο για τις επαφές</string>
     <string name="title_advanced_notify_suppress_in_call">Αναβολή ειδοποιήσεων κατά τη διάρκεια μιας κλήσης</string>
+    <string name="title_advanced_notify_suppress_in_car">Αναβολή ειδοποιήσεων ενόσω το Android Auto είναι συνδεδεμένο</string>
     <string name="title_advanced_notify_summary">Προβολή μόνο μιας συνοπτικής ειδοποίησης</string>
     <string name="title_advanced_notify_preview">Προβολή μιας προεπισκόπησης του μηνύματος στις ειδοποιήσεις</string>
     <string name="title_advanced_notify_preview_all">Προεπισκόπηση ολόκληρου του κειμένου</string>
@@ -714,6 +717,7 @@
     <string name="title_advanced_safe_browsing_hint">Ο διακομιστής Google γνωρίζει ποιες διευθύνσεις αναζητούνται</string>
     <string name="title_advanced_badge_hint">Διαθέσιμο μόνο σε launcher που υποστηρίζονται</string>
     <string name="title_advanced_notify_action_hint">Θα προβάλλονται, το μέγιστο, τρεις ενέργειες</string>
+    <string name="title_advanced_notify_car_hint">Συνδεδεμένο σημαίνει ότι κάτι προβάλλεται, όπως, λ.χ., ένας χάρτης πλοήγησης</string>
     <string name="title_advanced_notify_remove_hint">Οι ειδοποιήσεις νέων μηνυμάτων θα απομακρύνονται πάντα, όταν σαρώνονται με το δάχτυλο και όταν τα μηνύματα επισημαίνονται ως αναγνωσμένα</string>
     <string name="title_advanced_notify_manage_hint">Πατήστε στο όνομα ενός καναλιού για να ορίσετε τις ιδιότητές του</string>
     <string name="title_advanced_notify_manage_default_hint">Για τον ορισμό του προκαθορισμένου ήχου, κτλ</string>
@@ -1620,6 +1624,7 @@
     <string name="title_yes">Ναι</string>
     <string name="title_no">Όχι</string>
     <string name="title_later">Αργότερα</string>
+    <string name="title_paste_plain">Επικόλληση ως απλό κείμενο</string>
     <string name="title_undo">Αναίρεση</string>
     <string name="title_redo">Επαναφορά</string>
     <string name="title_insert_line">Εισαγωγή γραμμής</string>

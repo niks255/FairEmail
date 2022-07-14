@@ -5,7 +5,7 @@
     <string name="app_welcome">FairEmail to aplikacja e-mail o otwartym kodzie źródłowym, koncentrująca się na prywatności i bezpieczeństwie. Z tego powodu niektóre funkcje mogą działać inaczej niż to, do czego jesteś przyzwyczajony.</string>
     <string name="app_limitations">Przykładowo, wiadomości są domyślnie formatowane tak, aby usunąć niebezpieczne elementy i poprawić czytelność, a otwieranie linków musi zostać potwierdzone ze względów bezpieczeństwa. Obie funkcje mogą zostać wyłączone w opcjach.</string>
     <string name="app_unsupported">Błędy w wersji Androida tego urządzenia powodują awarie</string>
-    <string name="app_data_loss" comment="app_data_loss&#10;&#10;Warning which will link to: https://github.com/M66B/FairEmail/blob/master/FAQ.md#redmi&#10;">Wszystkie dane mogą zostać utracone</string>
+    <string name="app_data_loss">Wszystkie dane mogą zostać utracone</string>
     <string name="app_continue">Kontynuuj mimo to</string>
     <string name="app_exit">Użyj przycisku \'wstecz\', aby wyjść</string>
     <string name="app_cake">Za mało miejsca w pamięci</string>
@@ -497,6 +497,7 @@
     <string name="title_advanced_text_size">Użyj rozmiarów tekstu</string>
     <string name="title_advanced_text_font">Użyj czcionek</string>
     <string name="title_advanced_text_align">Użyj wyrównania tekstu</string>
+    <string name="title_advanced_text_titles" comment="title_advanced_text_titles&#10;&#10;Title for advanced display option to show HTML titles.&#10;The curly braces indicate that inserted titles will be surrounded by curly braces.&#10;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title&#10;">Pokaż {HTML titles}</string>
     <string name="title_advanced_text_separators">Użyj linii separatora</string>
     <string name="title_advanced_collapse_quotes">Zwiń cytowany tekst</string>
     <string name="title_advanced_image_placeholders">Pokaż symbole zastępcze obrazu</string>
@@ -507,6 +508,7 @@
     <string name="title_advanced_actionbar_color">Użyj koloru konta jako koloru tła dla paska akcji rozmowy</string>
     <string name="title_advanced_category_header">Grupuj według kategorii konta</string>
     <string name="title_advanced_navbar_colorize">Koloruj pasek nawigacji Androida</string>
+    <string name="title_advanced_list_count">Pokaż liczbę wiadomości lub konwersacji na górnym pasku akcji</string>
     <string name="title_advanced_bundled_fonts">Użyj dołączonych czcionek</string>
     <string name="title_advanced_parse_classes">Parsowanie arkuszy stylów</string>
     <string name="title_advanced_authentication">Pokaż ostrzeżenia o uwierzytelnieniu</string>
@@ -558,6 +560,7 @@
     <string name="title_advanced_notify_background">Pokaż powiadomienia tylko, gdy pracuje w tle</string>
     <string name="title_advanced_notify_known">Pokaż powiadomienia tylko dla kontaktów</string>
     <string name="title_advanced_notify_suppress_in_call">Opóźnij powiadomienia podczas połączenia</string>
+    <string name="title_advanced_notify_suppress_in_car">Opóźnij powiadomienia, gdy Android Auto jest połączony</string>
     <string name="title_advanced_notify_summary">Pokaż tylko podsumowanie</string>
     <string name="title_advanced_notify_preview">Pokaż podgląd wiadomości w powiadomieniach</string>
     <string name="title_advanced_notify_preview_all">Podgląd całego tekstu</string>
@@ -738,6 +741,7 @@
     <string name="title_advanced_safe_browsing_hint">Serwer Google wie, które adresy są wyszukiwane</string>
     <string name="title_advanced_badge_hint">Dostępne tylko na wspieranych launcherach</string>
     <string name="title_advanced_notify_action_hint">Wyświetlone zostaną co najwyżej trzy akcje</string>
+    <string name="title_advanced_notify_car_hint">Połączony oznacza, że coś jest wyświetlane, na przykład mapa do nawigacji</string>
     <string name="title_advanced_notify_remove_hint">Powiadomienia o nowych wiadomościach będą zawsze usuwane po przesunięciu i oznaczeniu wiadomości jako przeczytane</string>
     <string name="title_advanced_notify_manage_hint">Dotknij nazwę kanału, aby ustawić właściwości kanału</string>
     <string name="title_advanced_notify_manage_default_hint">Aby ustawić domyślny dźwięk, itp.</string>
@@ -1645,6 +1649,7 @@
     <string name="title_yes">Tak</string>
     <string name="title_no">Nie</string>
     <string name="title_later">Później</string>
+    <string name="title_paste_plain">Wklej jako zwykły tekst</string>
     <string name="title_undo">Cofnij</string>
     <string name="title_redo">Ponów</string>
     <string name="title_insert_line">Wstaw linię</string>

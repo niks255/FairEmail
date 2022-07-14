@@ -137,7 +137,7 @@ public abstract class DB extends RoomDatabase {
             "page_count", "page_size", "max_page_count", "freelist_count",
             "cache_size", "cache_spill",
             "soft_heap_limit", "hard_heap_limit", "mmap_size",
-            "foreign_keys"
+            "foreign_keys", "auto_vacuum"
     ));
 
     @Override
@@ -407,6 +407,15 @@ public abstract class DB extends RoomDatabase {
                         crumb.put("version", Integer.toString(db.getVersion()));
                         crumb.put("WAL", Boolean.toString(db.isWriteAheadLoggingEnabled()));
                         Log.breadcrumb("Database", crumb);
+
+                        // https://www.sqlite.org/pragma.html#pragma_auto_vacuum
+                        // https://android.googlesource.com/platform/external/sqlite.git/+/6ab557bdc070f11db30ede0696888efd19800475%5E!/
+                        boolean sqlite_auto_vacuum = prefs.getBoolean("sqlite_auto_vacuum", !Helper.isRedmiNote());
+                        String mode = (sqlite_auto_vacuum ? "FULL" : "INCREMENTAL");
+                        Log.i("Set PRAGMA auto_vacuum = " + mode);
+                        try (Cursor cursor = db.query("PRAGMA auto_vacuum = " + mode + ";", null)) {
+                            cursor.moveToNext(); // required
+                        }
 
                         // https://www.sqlite.org/pragma.html#pragma_cache_size
                         Integer cache_size = getCacheSizeKb(context);
@@ -2418,7 +2427,7 @@ public abstract class DB extends RoomDatabase {
                     long start = new Date().getTime();
                     StringBuilder sb = new StringBuilder();
                     SupportSQLiteDatabase sdb = db.getOpenHelper().getWritableDatabase();
-                    String mode = (BuildConfig.DEBUG ? "RESTART" : "PASSIVE");
+                    String mode = (BuildConfig.DEBUG || !BuildConfig.PLAY_STORE_RELEASE ? "RESTART" : "PASSIVE");
                     try (Cursor cursor = sdb.query("PRAGMA wal_checkpoint(" + mode + ");")) {
                         if (cursor.moveToNext()) {
                             for (int i = 0; i < cursor.getColumnCount(); i++) {

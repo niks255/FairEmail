@@ -145,7 +145,8 @@ public class FragmentOptions extends FragmentBase {
             "keywords_header", "labels_header", "flags", "flags_background", "preview", "preview_italic", "preview_lines",
             "message_zoom", "overview_mode", "override_width", "addresses", "button_extra", "attachments_alt", "thumbnails",
             "contrast", "hyphenation", "display_font", "monospaced_pre",
-            "background_color", "text_color", "text_size", "text_font", "text_align", "text_separators",
+            "list_count", "bundled_fonts", "parse_classes",
+            "background_color", "text_color", "text_size", "text_font", "text_align", "text_titles", "text_separators",
             "collapse_quotes", "image_placeholders", "inline_images",
             "seekbar", "actionbar", "actionbar_color", "group_category",
             "autoscroll", "swipenav", "reversed", "swipe_close", "swipe_move", "autoexpand", "autoclose", "onclose",
@@ -153,7 +154,8 @@ public class FragmentOptions extends FragmentBase {
             "language_detection",
             "quick_filter", "quick_scroll",
             "experiments", "debug", "log_level", "test1", "test2", "test3", "test4", "test5",
-            "webview_legacy", "browser_zoom", "show_recent",
+            "webview_legacy", "browser_zoom", "fake_dark",
+            "show_recent",
             "biometrics",
             "default_light"
     };

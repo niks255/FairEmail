@@ -5,7 +5,7 @@
     <string name="app_welcome">FairEmail یک برنامه منبع باز بوده که تمرکز آن بر روی امنیت و حفظ حریم خصوصی است. بنابر دلایلی ممکن است برخی ویژگی‌ها بسته به نوع استفاده شما متفاوت باشند.</string>
     <string name="app_limitations">به عنوان مثال ، پیامها به طور پیش فرض برای حذف عناصر ناامن و بهبود خوانایی مجدداً قالب بندی می شوند و باز شدن پیوندها باید از نظر ایمنی تأیید شود. در صورت تمایل می توان هر دو را غیرفعال کرد.</string>
     <string name="app_unsupported">اشکالات در نسخه اندروید این دستگاه خاص باعث خروج ناگهانی می شود</string>
-    <string name="app_data_loss" comment="app_data_loss&#10;&#10;Warning which will link to: https://github.com/M66B/FairEmail/blob/master/FAQ.md#redmi&#10;">تمام داده‌ها ممکن است از دست بروند</string>
+    <string name="app_data_loss">تمام داده‌ها ممکن است از دست بروند</string>
     <string name="app_continue">به هر حال ادامه بده</string>
     <string name="app_exit">برای خروج دوباره روی \'بازگشت\' کلیک کنید</string>
     <string name="app_cake">فضای ذخیره سازی کافی باقی نمانده است</string>
@@ -406,6 +406,7 @@
     <string name="title_advanced_text_size">استفاده از اندازه متن</string>
     <string name="title_advanced_text_font">استفاده از قلم‌ها</string>
     <string name="title_advanced_text_align">استفاده از چیدمان متن</string>
+    <string name="title_advanced_text_titles" comment="title_advanced_text_titles&#10;&#10;Title for advanced display option to show HTML titles.&#10;The curly braces indicate that inserted titles will be surrounded by curly braces.&#10;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title&#10;">نمایش {HTML titles}</string>
     <string name="title_advanced_text_separators">استفاده از خطوط جدا کننده</string>
     <string name="title_advanced_collapse_quotes">بستن متن نقل شده</string>
     <string name="title_advanced_images_inline">تصاویر درون خطی را خودکار نمایش بده</string>
@@ -1149,6 +1150,7 @@
     <string name="title_yes">بله</string>
     <string name="title_no">خير</string>
     <string name="title_later">بعدا</string>
+    <string name="title_paste_plain">جای‌گذاری به عنوان متن ساده</string>
     <string name="title_undo">عقبگرد</string>
     <string name="title_redo">انجام دوباره</string>
     <string name="title_add">افزودن</string>

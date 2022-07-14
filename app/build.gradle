@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1930 }
+def getVersionCode = { -> return 1932 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Kinnareemimus" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -596,6 +596,9 @@ dependencies {
     // https://seancfoley.github.io/IPAddress/
     // https://mvnrepository.com/artifact/com.github.seancfoley/ipaddress
     implementation "com.github.seancfoley:ipaddress:$ipaddress_version"
+
+    // https://mvnrepository.com/artifact/androidx.car.app/app?repo=google
+    // implementation "androidx.car.app:app:1.2.0-rc01"
 
     // https://github.com/square/leakcanary
     // https://square.github.io/leakcanary/getting_started/
