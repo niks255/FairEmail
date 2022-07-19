@@ -160,7 +160,6 @@
     <string name="title_setup_gmail_support">Google kontuak baimentzeak Play Store eta Github bertsioetan bakarrik funtzionatuko du, Androidek aplikazioaren sinadura digitala egiaztatzen duelako</string>
     <string name="title_setup_gmail_rationale">Eman baimena kontu bat aukeratu eta zure izena irakurtzeko</string>
     <string name="title_setup_gmail_permissions">Google-k zure posta elektronikoa irakurri, konposatu, bidali eta ezabatzeko baimenak eskatuko ditu. FairEmail-ek ez ditu zure mezuak ezabatuko baimen espliziturik gabe.</string>
-    <string name="title_setup_gmail_drafts">Zirriborroen karpeta IMAP bidez eskuragarri ez badago, Gmailen etiketen ezarpenetan konpondu daiteke</string>
     <string name="title_setup_office_auth">\'AUTENTIFIKAZIOAK huts egin du\' errorea sistema administratzaileak IMAP/SMTP desgaitu duelako izan daiteke</string>
     <string name="title_setup_oauth_rationale">Baimendu zure %1$s kontura sarbidea</string>
     <string name="title_setup_oauth_update">Berriro baimendu lehendik dagoen kontu bat (bestela sortu kontu berri bat)</string>
@@ -372,7 +371,6 @@
     <string name="title_advanced_two_col">Erabili bi zutabe</string>
     <string name="title_advanced_min_screen_size">Pantailaren gutxieneko tamaina pantaila zatitzeko</string>
     <string name="title_advanced_close_pane">Tolestu errenkada edo zutabea elkarrizketa ixtean</string>
-    <string name="title_advanced_column_width">Mezuen zutabearen zabalera: %% %1$s</string>
     <string name="title_advanced_nav_options">Erakutsi nabigazio-menuaren aukerak</string>
     <string name="title_advanced_nav_categories">Erakutsi kontuen kategoriak nabigazio-menuan</string>
     <string name="title_advanced_nav_pin">Finkatu nabigazio-menua</string>
@@ -659,7 +657,6 @@
     <string name="title_custom">Pertsonalizatua</string>
     <string name="title_host">Ostalari-izena</string>
     <string name="title_encryption">Zifratzea</string>
-    <string name="title_encryption_none">Bat ere ez</string>
     <string name="title_allow_insecure">Baimendu konexio ez seguruak</string>
     <string name="title_insecure_remark">Konexio ez seguruak konfiantzazko sareetan besterik ez lirateke onartu behar, inoiz ez sare publikoetan</string>
     <string name="title_port">Ataka zenbakia</string>
@@ -1521,6 +1518,7 @@
     <string-array name="pollIntervalNames">
         <item>Beti</item>
         <item>5 minuturik behin</item>
+        <item>10 minuturik behin</item>
         <item>15 minuturik behin</item>
         <item>30 minuturik behin</item>
         <item>Orduero</item>
@@ -1564,6 +1562,7 @@
         <item>Joan hurrengo elkarrizketara</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Oso txikia</item>
         <item>Estra txikia</item>
         <item>Txikia</item>
         <item>Ertaina</item>

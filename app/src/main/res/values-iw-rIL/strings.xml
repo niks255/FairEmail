@@ -179,6 +179,7 @@
     <string name="title_setup_account_identity_hint">אפשר להגדיר את השם, הצבע ואת פעולות ההחלקה בהגדרות החשבון ולהגדיר חתימה בהגדרות הזהות</string>
     <string name="title_setup_accounts">חשבונות</string>
     <string name="title_setup_identities">זהויות</string>
+    <string name="title_setup_google_sign_in">כניסה עם Google</string>
     <string name="title_setup_other">ספק אחר</string>
     <string name="title_setup_inbound">הודעות נכנסות בלבד (אי אפשר לשלוח הודעה בדוא״ל!)</string>
     <string name="title_setup_pop3">חשבון POP3</string>
@@ -186,7 +187,7 @@
     <string name="title_setup_gmail_support">אימות חשבונות Google יעבוד רק עם גרסה מחנות Play או מ־GitHub כיוון ש־Android בודק את חתימת היישומון</string>
     <string name="title_setup_gmail_rationale">נא להרשות לבחור חשבון ולקרוא את שמך</string>
     <string name="title_setup_gmail_permissions">Google יבקש לקרוא, לכתוב, לשלוח, ולמחוק את כל ההודעות שלך לצמיתות. Fairmail לעולם לא ימחק ללא הסכמתך המפורשת.</string>
-    <string name="title_setup_gmail_drafts">אם אי אפשר לגשת לתיקיית טיוטות דרך IMAP, אפשר לתקן את זה דרך הגדרות התוויות של Gmail</string>
+    <string name="title_setup_gmail_on_device">מדוע עלי לבחור בחשבון שכבר מחובר במכשיר?</string>
     <string name="title_setup_gmail_password">ארצה לאמת חשבון עם סיסמה במקום חשבון פנימי במכשיר</string>
     <string name="title_setup_office_auth">השגיאה ‚AUTHENTICATE נכשל’ עלולה להיגרם עקב IMAP/SMTP שהושבתו על ידי הנהלת המערכת</string>
     <string name="title_setup_oauth_rationale">להרשות גישה לחשבון %1$s שלך</string>
@@ -407,6 +408,7 @@
     <string name="title_advanced_timeout">זמן קצוב לחיבור (בשניות)</string>
     <string name="title_advanced_prefer_ip4">להעדיף IPv4 על פני IPv6</string>
     <string name="title_advanced_ssl_harden">הקשחת חיבורי SSL</string>
+    <string name="title_advanced_ssl_harden_strict">לדרוש TLS‎ 1.3</string>
     <string name="title_advanced_cert_strict">בדיקת אישורים קפדנית</string>
     <string name="title_advanced_manage_connectivity">ניהול קישוריות</string>
     <string name="title_advanced_caption_general">כללי</string>
@@ -423,7 +425,7 @@
     <string name="title_advanced_two_col">להשתמש בשתי עמודות</string>
     <string name="title_advanced_min_screen_size">גודל המסך המזערי לפיצול המסך</string>
     <string name="title_advanced_close_pane">לצמצם שורה או עמודה בעת סגירת דיון</string>
-    <string name="title_advanced_column_width">רוחב עמודת הודעה: %1$s %%</string>
+    <string name="title_advanced_column_width">רוחב עמודה / גובה שורה של הודעה: %1$s %%</string>
     <string name="title_advanced_nav_options">הצגת אפשרויות תפריט הניווט</string>
     <string name="title_advanced_nav_categories">להציג את קטגוריות החשבונות בתפריט הניווט</string>
     <string name="title_advanced_nav_pin">נעיצת תפריט הניווט</string>
@@ -498,6 +500,7 @@
     <string name="title_advanced_text_size">להשתמש בגדלי טקסט</string>
     <string name="title_advanced_text_font">להשתמש בגופנים</string>
     <string name="title_advanced_text_align">להשתמש ביישור טקסט</string>
+    <string name="title_advanced_text_titles">הצגת {HTML titles}</string>
     <string name="title_advanced_text_separators">להשתמש בשורות מפרידות</string>
     <string name="title_advanced_collapse_quotes">צמצום טקסט מצוטט</string>
     <string name="title_advanced_image_placeholders">הצגת ממלאי מקום תמונות</string>
@@ -508,6 +511,7 @@
     <string name="title_advanced_actionbar_color">להשתמש בצבע החשבון כצבע הרקע לסרגל הפעולות של הדיון</string>
     <string name="title_advanced_category_header">קיבוץ לפי קטגוריית חשבון</string>
     <string name="title_advanced_navbar_colorize">לצבוע את סרגל הניווט של Android</string>
+    <string name="title_advanced_list_count">הצגת מספר ההודעות או הדיונים בסרגל הפעולות העליון</string>
     <string name="title_advanced_bundled_fonts">להשתמש בגופנים מאוגדים</string>
     <string name="title_advanced_parse_classes">פענוח גיליונות עיצוב</string>
     <string name="title_advanced_authentication">הצגת אזהרות אימות</string>
@@ -559,6 +563,7 @@
     <string name="title_advanced_notify_background">להציג התראות כאשר במצב רקע בלבד</string>
     <string name="title_advanced_notify_known">הצגת התראות לאנשי קשר בלבד</string>
     <string name="title_advanced_notify_suppress_in_call">להשהות התראות בזמן שיחה</string>
+    <string name="title_advanced_notify_suppress_in_car">השבתת ההתראות כאשר מחובר ל־Android Auto</string>
     <string name="title_advanced_notify_summary">הצגת התראות תקציר בלבד</string>
     <string name="title_advanced_notify_preview">תצוגה מקדימה של ההודעות בהתראות</string>
     <string name="title_advanced_notify_preview_all">תצוגה מקדימה של כל הטקסט</string>
@@ -644,6 +649,7 @@
     <string name="title_advanced_class_min_difference">הפרש מזערי בין מחלקות: %1$s %%</string>
     <string name="title_advanced_language">שפה</string>
     <string name="title_advanced_language_system">מערכת</string>
+    <string name="title_advanced_lt">שילוב מול LanguageTool</string>
     <string name="title_advanced_deepl">שילוב של DeepL</string>
     <string name="title_advanced_sdcard">ארצה להשתמש בכרטיס SD</string>
     <string name="title_advanced_watchdog">לבדוק מדי פעם אם FairEmail עדיין פעיל</string>
@@ -739,6 +745,7 @@
     <string name="title_advanced_safe_browsing_hint">השרת של Google יודע אחר אילו כתובות מחפשים</string>
     <string name="title_advanced_badge_hint">זמין רק במשגרים נתמכים</string>
     <string name="title_advanced_notify_action_hint">תוצגנה שלוש פעולות לכל היותר</string>
+    <string name="title_advanced_notify_car_hint">מחובר כלומר שמשהו מוקרן כגון מפה לניווט</string>
     <string name="title_advanced_notify_remove_hint">התראות על הודעות חשבות תמיד תוסרנה עם החלקה כלפי חוץ ועם סימון הודעות כנקראו</string>
     <string name="title_advanced_notify_manage_hint">יש לגעת בשם הערוץ כדי להגדיר את מאפייניו</string>
     <string name="title_advanced_notify_manage_default_hint">כדי להגדיר את צלילי בררת המחדל וכו׳</string>
@@ -805,7 +812,7 @@
     <string name="title_custom">משלך</string>
     <string name="title_host">שם מארח</string>
     <string name="title_encryption">הצפנה</string>
-    <string name="title_encryption_none">אין</string>
+    <string name="title_encryption_none">ללא (בלתי מאובטח)</string>
     <string name="title_allow_insecure">לאפשר חיבורים מפוקפקים</string>
     <string name="title_insecure_remark">חיבורים בלתי מאובטחים/מפוקפקים יש לאפשר רק ברשתות מהימנות ואף פעם לא ברשתות ציבוריות</string>
     <string name="title_notify_remark">אפשר להפעיל את זה לקבלת התראות לחשבון מסוים</string>
@@ -1565,6 +1572,7 @@
     <string name="title_legend_embedded_image">ממלא מקום לתמונה מוטמעת</string>
     <string name="title_legend_tracking_pixel">תמונת מעקב</string>
     <string name="title_legend_broken_image">תמונה פגומה</string>
+    <string name="title_legend_open_external">לפתוח מחוץ ליישומון</string>
     <string name="title_legend_pick">בחירת איש קשר</string>
     <string name="title_legend_cc">הצגת עותק/מוסתר</string>
     <string name="title_legend_link">הוספת קישור</string>
@@ -1794,6 +1802,7 @@
     <string-array name="pollIntervalNames">
         <item>תמיד</item>
         <item>כל 5 דקות</item>
+        <item>כל 10 דקות</item>
         <item>כל רבע שעה</item>
         <item>כל חצי שעה</item>
         <item>כל שעה</item>
@@ -1837,6 +1846,7 @@
         <item>מעבר לדיון הבא</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>זעיר</item>
         <item>קטן במיוחד</item>
         <item>קטן</item>
         <item>בינוני</item>

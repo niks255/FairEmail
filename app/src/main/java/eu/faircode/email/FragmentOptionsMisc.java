@@ -37,6 +37,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.fonts.Font;
 import android.graphics.fonts.SystemFonts;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Debug;
@@ -95,6 +96,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private boolean resumed = false;
     private List<Pair<String, String>> languages = new ArrayList<>();
 
+    private View view;
     private ImageButton ibHelp;
     private SwitchCompat swPowerMenu;
     private SwitchCompat swExternalSearch;
@@ -111,6 +113,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvFtsIndexed;
     private TextView tvFtsPro;
     private Spinner spLanguage;
+    private SwitchCompat swLanguageTool;
+    private TextView tvLanguageToolPrivacy;
+    private ImageButton ibLanguageTool;
     private SwitchCompat swDeepL;
     private ImageButton ibDeepL;
     private TextView tvSdcard;
@@ -174,6 +179,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAuthNtlm;
     private SwitchCompat swAuthSasl;
     private SwitchCompat swAuthApop;
+    private SwitchCompat swUseTop;
     private SwitchCompat swKeepAlivePoll;
     private SwitchCompat swEmptyPool;
     private SwitchCompat swIdleDone;
@@ -212,7 +218,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private final static String[] RESET_OPTIONS = new String[]{
             "sort_answers", "shortcuts", "fts",
             "classification", "class_min_probability", "class_min_difference",
-            "language", "deepl_enabled",
+            "language", "lt_enabled", "deepl_enabled",
             "updates", "weekly", "show_changelog",
             "crash_reports", "cleanup_attachments",
             "watchdog", "experiments", "main_log", "protocol", "log_level", "debug", "leak_canary", "test1",
@@ -223,7 +229,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "webview_legacy", "browser_zoom", "fake_dark",
             "show_recent",
             "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop",
+            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", "use_top",
             "keep_alive_poll", "empty_pool", "idle_done", "logarithmic_backoff",
             "exact_alarms", "infra", "dkim_verify", "dup_msgids", "test_iab"
     };
@@ -273,7 +279,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         setSubtitle(R.string.title_setup);
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_options_misc, container, false);
+        view = inflater.inflate(R.layout.fragment_options_misc, container, false);
 
         // Get controls
 
@@ -293,6 +299,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvFtsIndexed = view.findViewById(R.id.tvFtsIndexed);
         tvFtsPro = view.findViewById(R.id.tvFtsPro);
         spLanguage = view.findViewById(R.id.spLanguage);
+        swLanguageTool = view.findViewById(R.id.swLanguageTool);
+        tvLanguageToolPrivacy = view.findViewById(R.id.tvLanguageToolPrivacy);
+        ibLanguageTool = view.findViewById(R.id.ibLanguageTool);
         swDeepL = view.findViewById(R.id.swDeepL);
         ibDeepL = view.findViewById(R.id.ibDeepL);
         tvSdcard = view.findViewById(R.id.tvSdcard);
@@ -356,6 +365,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthNtlm = view.findViewById(R.id.swAuthNtlm);
         swAuthSasl = view.findViewById(R.id.swAuthSasl);
         swAuthApop = view.findViewById(R.id.swAuthApop);
+        swUseTop = view.findViewById(R.id.swUseTop);
         swKeepAlivePoll = view.findViewById(R.id.swKeepAlivePoll);
         swEmptyPool = view.findViewById(R.id.swEmptyPool);
         swIdleDone = view.findViewById(R.id.swIdleDone);
@@ -576,6 +586,28 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 prefs.edit().remove("language").commit();
+            }
+        });
+
+        swLanguageTool.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("lt_enabled", checked).apply();
+            }
+        });
+
+        tvLanguageToolPrivacy.getPaint().setUnderlineText(true);
+        tvLanguageToolPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(Helper.LT_PRIVACY_URI), true);
+            }
+        });
+
+        ibLanguageTool.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 180);
             }
         });
 
@@ -1158,6 +1190,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swUseTop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("use_top", checked).apply();
+            }
+        });
+
         swKeepAlivePoll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1702,9 +1741,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     }
 
     private void setOptions() {
-        if (getContext() == null)
-            return;
-        if (getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED))
+        if (view == null || getContext() == null)
             return;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -1750,6 +1787,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         if (selected >= 0)
             spLanguage.setSelection(selected);
 
+        swLanguageTool.setChecked(prefs.getBoolean("lt_enabled", false));
         swDeepL.setChecked(prefs.getBoolean("deepl_enabled", false));
         swUpdates.setChecked(prefs.getBoolean("updates", true));
         swCheckWeekly.setChecked(prefs.getBoolean("weekly", Helper.hasPlayStore(getContext())));
@@ -1818,6 +1856,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthNtlm.setChecked(prefs.getBoolean("auth_ntlm", true));
         swAuthSasl.setChecked(prefs.getBoolean("auth_sasl", true));
         swAuthApop.setChecked(prefs.getBoolean("auth_apop", false));
+        swUseTop.setChecked(prefs.getBoolean("use_top", true));
         swKeepAlivePoll.setChecked(prefs.getBoolean("keep_alive_poll", false));
         swEmptyPool.setChecked(prefs.getBoolean("empty_pool", true));
         swIdleDone.setChecked(prefs.getBoolean("idle_done", true));

@@ -146,6 +146,7 @@
     <string name="title_setup_account_identity_hint">你可以在账户设置中配置名称、颜色和滑动操作，以及在身份设置中配置签名</string>
     <string name="title_setup_accounts">账户</string>
     <string name="title_setup_identities">身份</string>
+    <string name="title_setup_google_sign_in">使用 Google 账号登录</string>
     <string name="title_setup_other">其他提供商</string>
     <string name="title_setup_inbound">仅限收到的邮件（邮件不能发送！）</string>
     <string name="title_setup_pop3">POP3 账户</string>
@@ -153,7 +154,7 @@
     <string name="title_setup_gmail_support">只有 Play 商店和 GitHub 版本才支持授权 Google 账户，因为 Android 会检查应用的数字签名</string>
     <string name="title_setup_gmail_rationale">请授予权限来选择一个账户并读取您的姓名</string>
     <string name="title_setup_gmail_permissions">Google 会请求读取、撰写、发送和永久删除您的所有电子邮件的权限。相比之下，未经您的明确同意，FairEmail 永远不会删除您的邮件。</string>
-    <string name="title_setup_gmail_drafts">可以借助更改 Gmail 的标签设置来修复无法通过IMAP访问草稿文件夹的问题</string>
+    <string name="title_setup_gmail_on_device">为什么我需要选择设备上账户？</string>
     <string name="title_setup_gmail_password">我想使用密码而不是设备上的帐户进行授权</string>
     <string name="title_setup_office_auth">\"认证失败\" 的错误可能是由于 IMAP/SMTP 被系统管理员禁用导致的</string>
     <string name="title_setup_oauth_rationale">授权访问您的 %1$s 账户</string>
@@ -373,6 +374,7 @@
     <string name="title_advanced_timeout">连接超时 (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv4 优先于 IPv6</string>
     <string name="title_advanced_ssl_harden">加强 SSL 连接</string>
+    <string name="title_advanced_ssl_harden_strict">需要 TLS 1.3</string>
     <string name="title_advanced_cert_strict">严格的证书检查</string>
     <string name="title_advanced_manage_connectivity">管理连接</string>
     <string name="title_advanced_caption_general">常规​​​​​</string>
@@ -389,7 +391,7 @@
     <string name="title_advanced_two_col">使用两列</string>
     <string name="title_advanced_min_screen_size">分屏下的最小屏幕尺寸</string>
     <string name="title_advanced_close_pane">关闭会话时收起行或列</string>
-    <string name="title_advanced_column_width">消息列宽：%1$s %%</string>
+    <string name="title_advanced_column_width">邮件列宽/行高：%1$s %%</string>
     <string name="title_advanced_nav_options">显示导航菜单选项</string>
     <string name="title_advanced_nav_categories">在导航菜单中显示账户类别</string>
     <string name="title_advanced_nav_pin">固定导航菜单</string>
@@ -464,7 +466,7 @@
     <string name="title_advanced_text_size">使用文本大小</string>
     <string name="title_advanced_text_font">使用字体</string>
     <string name="title_advanced_text_align">使用文本对齐</string>
-    <string name="title_advanced_text_titles" comment="title_advanced_text_titles&#10;&#10;Title for advanced display option to show HTML titles.&#10;The curly braces indicate that inserted titles will be surrounded by curly braces.&#10;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title&#10;">显示 {HTML titles}</string>
+    <string name="title_advanced_text_titles">显示 {HTML titles}</string>
     <string name="title_advanced_text_separators">使用分隔线</string>
     <string name="title_advanced_collapse_quotes">折叠引用文本</string>
     <string name="title_advanced_image_placeholders">显示图像占位符</string>
@@ -612,6 +614,7 @@
     <string name="title_advanced_class_min_difference">不同分类的最小差异：%1$s %%</string>
     <string name="title_advanced_language">界面语言</string>
     <string name="title_advanced_language_system">系统</string>
+    <string name="title_advanced_lt">LanguageTool 集成</string>
     <string name="title_advanced_deepl">DeepL 集成</string>
     <string name="title_advanced_sdcard">我想使用 SD 卡</string>
     <string name="title_advanced_watchdog">定期检查 FairEmail 是否仍在运行</string>
@@ -775,7 +778,7 @@
     <string name="title_custom">自定义</string>
     <string name="title_host">主机名</string>
     <string name="title_encryption">加密</string>
-    <string name="title_encryption_none">无</string>
+    <string name="title_encryption_none">无（不安全）</string>
     <string name="title_allow_insecure">允许不安全的连接</string>
     <string name="title_insecure_remark">只应在受信任的网络中允许不安全连接，请勿用于公共网络</string>
     <string name="title_notify_remark">你可以为特定于账户的通知启用该选项</string>
@@ -1530,6 +1533,7 @@
     <string name="title_legend_embedded_image">嵌入图像的占位符</string>
     <string name="title_legend_tracking_pixel">追踪用途的图像</string>
     <string name="title_legend_broken_image">损坏的图像</string>
+    <string name="title_legend_open_external">在 App 外打开</string>
     <string name="title_legend_pick">选择联系人</string>
     <string name="title_legend_cc">显示抄送和密送</string>
     <string name="title_legend_link">插入链接</string>
@@ -1754,6 +1758,7 @@
     <string-array name="pollIntervalNames">
         <item>总是</item>
         <item>每 5 分钟</item>
+        <item>每 10 分钟</item>
         <item>每 15 分钟</item>
         <item>每 30 分钟</item>
         <item>每小时</item>
@@ -1797,6 +1802,7 @@
         <item>转到下一个会话</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>极小</item>
         <item>超小</item>
         <item>小</item>
         <item>中等</item>

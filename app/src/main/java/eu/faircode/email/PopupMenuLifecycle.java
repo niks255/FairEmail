@@ -20,10 +20,12 @@ package eu.faircode.email;
 */
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ImageSpan;
 import android.view.Gravity;
 import android.view.Menu;
@@ -117,7 +119,6 @@ public class PopupMenuLifecycle extends PopupMenu {
 
     static void insertIcon(Context context, MenuItem menuItem, boolean submenu) {
         Drawable icon = menuItem.getIcon();
-
         if (icon == null)
             icon = new ColorDrawable(Color.TRANSPARENT);
         else {

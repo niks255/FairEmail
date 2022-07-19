@@ -371,6 +371,7 @@ public class EditTextMultiAutoComplete extends AppCompatMultiAutoCompleteTextVie
                                     if (kar == ',' &&
                                             (i + 1 == edit.length() || edit.charAt(i + 1) != ' '))
                                         edit.insert(++i, " ");
+
                                     added = true;
                                 }
                             }
@@ -384,8 +385,10 @@ public class EditTextMultiAutoComplete extends AppCompatMultiAutoCompleteTextVie
                 for (ClipImageSpan span : tbd)
                     edit.removeSpan(span);
 
-                if (tbd.size() > 0 || added)
-                    invalidate();
+                if (tbd.size() > 0 || added) {
+                    setText(edit);
+                    setSelection(selStart, selEnd);
+                }
             } catch (Throwable ex) {
                 Log.e(ex);
             }

@@ -146,8 +146,10 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     static final int REQUEST_IMPORT_CERTIFICATE = 7;
     static final int REQUEST_OAUTH = 8;
     static final int REQUEST_STILL = 9;
-    static final int REQUEST_DELETE_ACCOUNT = 10;
-    static final int REQUEST_IMPORT_PROVIDERS = 11;
+    static final int REQUEST_SELECT_IDENTITY = 10;
+    static final int REQUEST_EDIT_SIGNATURE = 11;
+    static final int REQUEST_DELETE_ACCOUNT = 12;
+    static final int REQUEST_IMPORT_PROVIDERS = 13;
 
     static final int PI_MISC = 1;
 
@@ -437,6 +439,11 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         if (drawerLayout.isDrawerOpen(drawerContainer))
             drawerLayout.closeDrawer(drawerContainer);
         else {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                performBack();
+                return;
+            }
+
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             boolean setup_reminder = prefs.getBoolean("setup_reminder", true);
 

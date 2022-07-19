@@ -63,6 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class FragmentOptionsPrivacy extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private View view;
     private ImageButton ibHelp;
     private SwitchCompat swConfirmLinks;
     private SwitchCompat swCheckLinksDbl;
@@ -123,7 +124,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         setSubtitle(R.string.title_setup);
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_options_privacy, container, false);
+        view = inflater.inflate(R.layout.fragment_options_privacy, container, false);
 
         // Get controls
 
@@ -183,7 +184,13 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         swConfirmLinks.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("confirm_links", checked).apply();
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("confirm_links", checked);
+                if (!checked)
+                    for (String key : prefs.getAll().keySet())
+                        if (key.endsWith(".confirm_link"))
+                            editor.remove(key);
+                editor.apply();
                 swCheckLinksDbl.setEnabled(checked);
             }
         });
@@ -206,7 +213,13 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         swAskImages.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("ask_images", checked).apply();
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("ask_images", checked);
+                if (!checked)
+                    for (String key : prefs.getAll().keySet())
+                        if (key.endsWith(".show_images"))
+                            editor.remove(key);
+                editor.apply();
             }
         });
 
@@ -228,7 +241,13 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         swAskHtml.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("ask_html", checked).apply();
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("ask_html", checked);
+                if (!checked)
+                    for (String key : prefs.getAll().keySet())
+                        if (key.endsWith(".show_full"))
+                            editor.remove(key);
+                editor.apply();
             }
         });
 
@@ -529,9 +548,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
     }
 
     private void setOptions() {
-        if (getContext() == null)
-            return;
-        if (getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED))
+        if (view == null || getContext() == null)
             return;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());

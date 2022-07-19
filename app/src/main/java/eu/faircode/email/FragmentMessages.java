@@ -256,7 +256,8 @@ import me.everything.android.ui.overscroll.IOverScrollUpdateListener;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
 
-public class FragmentMessages extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class FragmentMessages extends FragmentBase
+        implements SharedPreferences.OnSharedPreferenceChangeListener, FragmentManager.OnBackStackChangedListener {
     private ViewGroup view;
     private SwipeRefreshLayoutEx swipeRefresh;
     private TextView tvAirplane;
@@ -521,14 +522,20 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
         if (viewType != AdapterMessage.ViewType.THREAD && EntityFolder.ARCHIVE.equals(type))
             filter_archive = false;
 
-        if (viewType != AdapterMessage.ViewType.THREAD)
-            getParentFragmentManager().setFragmentResultListener("message.selected", this, new FragmentResultListener() {
-                @Override
-                public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                    long id = result.getLong("id", -1);
-                    iProperties.setValue("selected", id, true);
-                }
-            });
+        try {
+            FragmentManager fm = getParentFragmentManager();
+            if (viewType != AdapterMessage.ViewType.THREAD)
+                fm.setFragmentResultListener("message.selected", this, new FragmentResultListener() {
+                    @Override
+                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                        long id = result.getLong("id", -1);
+                        iProperties.setValue("selected", id, true);
+                    }
+                });
+            fm.addOnBackStackChangedListener(this);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     @Override
@@ -1944,7 +1951,30 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
 
     @Override
     public void onDestroy() {
+        try {
+            FragmentManager fm = getParentFragmentManager();
+            fm.removeOnBackStackChangedListener(this);
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        if (viewType == AdapterMessage.ViewType.THREAD)
+            return;
+
+        FragmentActivity activity = getActivity();
+        FragmentManager fm = getParentFragmentManager();
+        int count = fm.getBackStackEntryCount();
+        boolean split = (activity instanceof ActivityView &&
+                ((ActivityView) activity).isSplit() &&
+                count > 0 && "thread".equals(fm.getBackStackEntryAt(count - 1).getName()));
+        List<Long> ids = values.get("selected");
+        if (ids != null)
+            for (long id : ids)
+                iProperties.setValue("split", id, split);
     }
 
     private void scrollToVisibleItem(LinearLayoutManager llm, boolean bottom) {
@@ -2095,7 +2125,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
             } else
                 values.get(name).remove(id);
 
-            if ("selected".equals(name) && enabled) {
+            if ("split".equals(name) || ("selected".equals(name) && enabled)) {
                 if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
                     return;
 
@@ -2105,7 +2135,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 if (pos != NO_POSITION)
                     changed.add(pos);
 
-                for (Long other : new ArrayList<>(values.get("selected")))
+                for (Long other : new ArrayList<>(values.get(name)))
                     if (!other.equals(id)) {
                         values.get(name).remove(other);
 
@@ -6194,7 +6224,7 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                 return;
 
             if (viewType != AdapterMessage.ViewType.SEARCH)
-                setCount(messages.size() == 0 ? null : NF.format(messages.size()));
+                setCount(messages.size() <= 1 ? null : NF.format(messages.size()));
 
             if (viewType == AdapterMessage.ViewType.THREAD) {
                 if (handleThreadActions(messages, null, null))
@@ -8386,11 +8416,14 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                                             for (EntityCertificate ec : ecs)
                                                 local.add(ec.getCertificate());
 
+                                            // TODO: check digitalSignature/nonRepudiation key usage
+                                            // https://datatracker.ietf.org/doc/html/rfc3850#section-4.4.2
+
                                             for (X509Certificate c : certs) {
                                                 boolean[] usage = c.getKeyUsage();
-                                                boolean root = (usage != null && usage[5]);
+                                                boolean keyCertSign = (usage != null && usage.length > 5 && usage[5]);
                                                 boolean selfSigned = c.getIssuerX500Principal().equals(c.getSubjectX500Principal());
-                                                if (root && !selfSigned && ks.getCertificateAlias(c) == null) {
+                                                if (keyCertSign && !selfSigned && ks.getCertificateAlias(c) == null) {
                                                     boolean found = false;
                                                     String issuer = (c.getIssuerDN() == null ? "" : c.getIssuerDN().getName());
                                                     EntityCertificate record = EntityCertificate.from(c, true, issuer);
@@ -8822,12 +8855,28 @@ public class FragmentMessages extends FragmentBase implements SharedPreferences.
                     try {
                         X509Certificate cert = (X509Certificate) c;
                         boolean[] usage = cert.getKeyUsage();
-                        boolean keyCertSign = (usage != null && usage[5]);
+                        boolean digitalSignature = (usage != null && usage.length > 0 && usage[0]);
+                        boolean nonRepudiation = (usage != null && usage.length > 1 && usage[1]);
+                        boolean keyEncipherment = (usage != null && usage.length > 2 && usage[2]);
+                        boolean dataEncipherment = (usage != null && usage.length > 3 && usage[4]);
+                        boolean keyAgreement = (usage != null && usage.length > 4 && usage[4]);
+                        boolean keyCertSign = (usage != null && usage.length > 5 && usage[5]);
+                        boolean cRLSign = (usage != null && usage.length > 6 && usage[6]);
+                        boolean encipherOnly = (usage != null && usage.length > 7 && usage[7]);
+                        boolean decipherOnly = (usage != null && usage.length > 8 && usage[8]);
                         boolean selfSigned = cert.getIssuerX500Principal().equals(cert.getSubjectX500Principal());
                         EntityCertificate record = EntityCertificate.from(cert, null);
                         trace.add(record.subject +
                                 " (" + (selfSigned ? "selfSigned" : cert.getIssuerX500Principal()) + ")" +
+                                (digitalSignature ? " (digitalSignature)" : "") +
+                                (nonRepudiation ? " (nonRepudiation)" : "") +
+                                (keyEncipherment ? " (keyEncipherment)" : "") +
+                                (dataEncipherment ? " (dataEncipherment)" : "") +
+                                (keyAgreement ? " (keyAgreement)" : "") +
                                 (keyCertSign ? " (keyCertSign)" : "") +
+                                (cRLSign ? " (cRLSign)" : "") +
+                                (encipherOnly ? " (encipherOnly)" : "") +
+                                (decipherOnly ? " (decipherOnly)" : "") +
                                 (ks != null && ks.getCertificateAlias(cert) != null ? " (Android)" : ""));
                     } catch (Throwable ex) {
                         Log.e(ex);

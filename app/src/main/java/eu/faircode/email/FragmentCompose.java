@@ -915,8 +915,17 @@ public class FragmentCompose extends FragmentBase {
         ibReferenceImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ibReferenceImages.setVisibility(View.GONE);
-                onReferenceImages();
+                new AlertDialog.Builder(v.getContext())
+                        .setMessage(R.string.title_ask_show_image)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ibReferenceImages.setVisibility(View.GONE);
+                                onReferenceImages();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
             }
         });
 
@@ -1193,6 +1202,10 @@ public class FragmentCompose extends FragmentBase {
                     if (typed == null)
                         return result;
 
+                    final Context context = getContext();
+                    if (context == null)
+                        return result;
+
                     String wildcard = "%" + typed + "%";
                     Map<String, EntityContact> map = new HashMap<>();
 
@@ -1210,7 +1223,7 @@ public class FragmentCompose extends FragmentBase {
                                     .replace("?", "[?]") +
                             "*";
 
-                    boolean contacts = Helper.hasPermission(getContext(), Manifest.permission.READ_CONTACTS);
+                    boolean contacts = Helper.hasPermission(context, Manifest.permission.READ_CONTACTS);
                     if (contacts) {
                         try (Cursor cursor = resolver.query(
                                 ContactsContract.CommonDataKinds.Email.CONTENT_URI,
@@ -1449,6 +1462,22 @@ public class FragmentCompose extends FragmentBase {
             }
 
             private void convertRef(boolean plain) {
+                if (plain)
+                    _convertRef(plain);
+                else
+                    new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.title_ask_show_html)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    _convertRef(false);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, null)
+                            .show();
+            }
+
+            private void _convertRef(boolean plain) {
                 etBody.clearComposingText();
 
                 Bundle args = new Bundle();
@@ -1871,9 +1900,12 @@ public class FragmentCompose extends FragmentBase {
 
         bottom_navigation.findViewById(R.id.action_save).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View view) {
-                onLanguageTool();
-                return true;
+            public boolean onLongClick(View v) {
+                if (LanguageTool.isEnabled(v.getContext())) {
+                    onLanguageTool();
+                    return true;
+                } else
+                    return false;
             }
         });
 
@@ -3725,6 +3757,8 @@ public class FragmentCompose extends FragmentBase {
                     // Check public key validity
                     try {
                         chain[0].checkValidity();
+                        // TODO: check digitalSignature/nonRepudiation key usage
+                        // https://datatracker.ietf.org/doc/html/rfc3850#section-4.4.2
                     } catch (CertificateException ex) {
                         String msg = ex.getMessage();
                         throw new IllegalArgumentException(

@@ -153,7 +153,6 @@
     <string name="title_setup_gmail_support">Google fiókok engedélyezése csak a Play Store és GitHub verzióknál engedélyezett, mert az Android rendszer ellenőrzi az app digitális aláírását</string>
     <string name="title_setup_gmail_rationale">Kérem adja meg a szükséges engedélyeket hogy a kijelölhessen egy fiókot, illetve az alkalmazás hozzáférjen</string>
     <string name="title_setup_gmail_permissions">A Google engedélyeket fog kérni hogy olvashasson, írhasson, küldhessen és véglegesen törölhessen üzeneteket. A FairEmail sosem törli az üzeneteit az Ön beleegyezése nélkül.</string>
-    <string name="title_setup_gmail_drafts">Ha a piszkozatok mappa nem elérhető IMAP-on keresztül, a hibát orvosolhatja a Gmail címkék beállításai között</string>
     <string name="title_setup_office_auth">Az \'AUTHENTICATE failed\' hibának oka lehet hogy a rendszeradminisztrátor kikapcsolta az IMAP/SMTP-t</string>
     <string name="title_setup_oauth_rationale">Engedélyezze a hozzáférést a %1$s fiókjához</string>
     <string name="title_setup_oauth_updated">A fiókhitelesítés frissült</string>
@@ -370,7 +369,6 @@
     <string name="title_advanced_two_col">Két oszlop használata</string>
     <string name="title_advanced_min_screen_size">Legkisebb képernyő méret a kettévágáshoz</string>
     <string name="title_advanced_close_pane">Sor vagy oszlop összecsukása beszélgetés bezárásánál</string>
-    <string name="title_advanced_column_width">Üzenet oszlop szélesség: %1$s %%</string>
     <string name="title_advanced_nav_options">Navigációs menü opciók mutatása</string>
     <string name="title_advanced_nav_pin">Navigációs menü kitűzése</string>
     <string name="title_advanced_nav_hide_title">Navigációs menü opciók elrejtése?</string>
@@ -728,7 +726,6 @@
     <string name="title_custom">Egyéni</string>
     <string name="title_host">Kiszolgálónév</string>
     <string name="title_encryption">Titkosítás</string>
-    <string name="title_encryption_none">Egyik sem</string>
     <string name="title_allow_insecure">Nem biztonságos mért kapcsolatok engedélyezése</string>
     <string name="title_insecure_remark">Nem biztonságos kapcsolatokat csak megbízható hálózatokon ajánlott használni és soha publikus hálózatokon</string>
     <string name="title_port">Port szám</string>
@@ -1669,6 +1666,7 @@
     <string-array name="pollIntervalNames">
         <item>Mindig</item>
         <item>Minden 5 percenként</item>
+        <item>Minden 10 percenként</item>
         <item>Minden 15 percenként</item>
         <item>30 percenként</item>
         <item>Óránként</item>
@@ -1712,6 +1710,7 @@
         <item>Ugrás a következő beszélgetéshez</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Apró</item>
         <item>Nagyon kicsi</item>
         <item>Kicsi</item>
         <item>Közepes</item>

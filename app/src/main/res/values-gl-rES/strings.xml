@@ -147,7 +147,6 @@
     <string name="title_setup_gmail_support">Autorizar contas de Google só funcionará nas versións de Play Store e GitHub desta aplicación porque Android verifica a súa sinatura dixital</string>
     <string name="title_setup_gmail_rationale">Por favor, conceda permisos para seleccionar unha conta e ler o seu nome</string>
     <string name="title_setup_gmail_permissions">Google pedirá permisos para ler, redactar, enviar e borrar permanentemente todo o seu correo. FairEmail nunca eliminará as súas mensaxes sen o seu consentimento explícito.</string>
-    <string name="title_setup_gmail_drafts">Se o cartafol de borradores non é accesible por IMAP, isto pódese solucionar na configuración de etiquetas de Gmail</string>
     <string name="title_setup_office_auth">O erro \'AUTHENTICATE failed\' pode estar causado porque IMAP/SMTP estea desactivado polo administrador do sistema</string>
     <string name="title_setup_oauth_rationale">Autorizar o acceso á súa conta %1$s</string>
     <string name="title_setup_oauth_updated">A autorización da conta foi actualizada</string>
@@ -361,7 +360,6 @@
     <string name="title_advanced_two_col">Usar dúas columnas</string>
     <string name="title_advanced_min_screen_size">Tamaño mínimo de pantalla para podela dividir</string>
     <string name="title_advanced_close_pane">Agocha fila ou columna cando se peche unha conversa</string>
-    <string name="title_advanced_column_width">Lonxitude da columna de mensaxes: %1$s %%</string>
     <string name="title_advanced_nav_options">Mostrar o menú de opcións de navegación</string>
     <string name="title_advanced_nav_pin">Fixar o menú de navegación</string>
     <string name="title_advanced_nav_hide_title">Agochar o menú de opcións de navegación?</string>
@@ -724,7 +722,6 @@
     <string name="title_custom">Personalizado</string>
     <string name="title_host">Nome do servidor</string>
     <string name="title_encryption">Cifrado</string>
-    <string name="title_encryption_none">Ningún</string>
     <string name="title_allow_insecure">Permitir conexións non seguras</string>
     <string name="title_insecure_remark">Deberíase permitir só as conexións non seguras en redes de confianza e nunca nas redes públicas</string>
     <string name="title_port">Número de porto</string>
@@ -1662,6 +1659,7 @@
     <string-array name="pollIntervalNames">
         <item>Sempre</item>
         <item>Cada 5 minutos</item>
+        <item>Cada 10 minutos</item>
         <item>Cada 15 minutos</item>
         <item>Cada 30 minutos</item>
         <item>Cada hora</item>
@@ -1705,6 +1703,7 @@
         <item>Ir á conversa seguinte</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Minúsculo</item>
         <item>Moi pequeno</item>
         <item>Pequeno</item>
         <item>Mediano</item>

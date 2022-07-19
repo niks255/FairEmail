@@ -116,7 +116,6 @@
     <string name="title_setup_pop3">Акаунт на POP3</string>
     <string name="title_setup_gmail_rationale">Моля, дайте разрешения за избор на профил</string>
     <string name="title_setup_gmail_permissions">Google ще поиска разрешения за четене, съставяне, изпращане и окончателно изтриване на целия ви имейл. FairEmail никога няма да изтрие вашите съобщения без вашето изрично съгласие.</string>
-    <string name="title_setup_gmail_drafts">Ако папката за чернови не е достъпна от IMAP, това може да бъде коригирано в настройките на етикета на Gmail</string>
     <string name="title_setup_office_auth">Грешката „УДОСТОВЕРЯВАНЕТО не е успешно“ може да бъде причинена от деактивиране на IMAP/SMTP от системния администратор</string>
     <string name="title_setup_oauth_rationale">Разрешете достъп до вашия %1$s акаунт</string>
     <string name="title_setup_oauth_authorize">Упълномощявам</string>
@@ -510,7 +509,6 @@
     <string name="title_custom">Персонализиран</string>
     <string name="title_host">Име на хост</string>
     <string name="title_encryption">Криптиране</string>
-    <string name="title_encryption_none">Нищо</string>
     <string name="title_allow_insecure">Разрешаване на несигурни връзки</string>
     <string name="title_insecure_remark">Несигурните връзки трябва да се разрешават само в доверени мрежи и никога в обществени мрежи</string>
     <string name="title_port">Номер на порт</string>
@@ -1294,6 +1292,7 @@
     <string-array name="pollIntervalNames">
         <item>Винаги</item>
         <item>На всеки 5 минути</item>
+        <item>На всеки 10 минути</item>
         <item>На всеки 15 минути</item>
         <item>На всеки 30 минути</item>
         <item>На всеки час</item>
@@ -1337,6 +1336,7 @@
         <item>Към следващия разговор</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Tiny</item>
         <item>Extra small</item>
         <item>Малък</item>
         <item>Среден</item>

@@ -157,6 +157,7 @@
     <string name="title_setup_account_identity_hint">Puede configurar el nombre, color y acciones de deslizamiento en la configuración de la cuenta, y configurar una firma en los ajustes de identidad</string>
     <string name="title_setup_accounts">Cuentas</string>
     <string name="title_setup_identities">Identidades</string>
+    <string name="title_setup_google_sign_in">Iniciar sesión con Google</string>
     <string name="title_setup_other">Otro proveedor</string>
     <string name="title_setup_inbound">Sólo correo entrante (¡no se puede enviar el correo electrónico!)</string>
     <string name="title_setup_pop3">Cuenta POP3</string>
@@ -164,7 +165,7 @@
     <string name="title_setup_gmail_support">Autorizar cuentas de Google sólo funcionará en las versiones de Play Store y GitHub porque Android comprueba la firma digital de la aplicación</string>
     <string name="title_setup_gmail_rationale">Por favor, conceda permisos para seleccionar una cuenta y leer su nombre</string>
     <string name="title_setup_gmail_permissions">Google solicitará permisos para leer, redactar, enviar y eliminar permanentemente todo su correo electrónico. FairEmail nunca eliminará sus mensajes sin su consentimiento explícito.</string>
-    <string name="title_setup_gmail_drafts">Si la carpeta de borradores no es accesible por IMAP, esto se puede arreglar en la configuración de etiquetas de Gmail</string>
+    <string name="title_setup_gmail_on_device">¿Por qué necesito seleccionar una cuenta del dispositivo?</string>
     <string name="title_setup_gmail_password">Quiero autorizar una cuenta con una contraseña en lugar de una cuenta en el dispositivo</string>
     <string name="title_setup_office_auth">El error \'AUTHENTICATE failed\' puede ser causado por IMAP/SMTP desactivado por el administrador de sistemas</string>
     <string name="title_setup_oauth_rationale">Autorizar acceso a su cuenta %1$s</string>
@@ -384,6 +385,7 @@
     <string name="title_advanced_timeout">Tiempo de espera de conexión (segundos)</string>
     <string name="title_advanced_prefer_ip4">Preferir IPv4 sobre IPv6</string>
     <string name="title_advanced_ssl_harden">Endurecer conexiones SSL</string>
+    <string name="title_advanced_ssl_harden_strict">Requerir TLS 1.3</string>
     <string name="title_advanced_cert_strict">Verificación estricta de certificados</string>
     <string name="title_advanced_manage_connectivity">Administrar conectividad</string>
     <string name="title_advanced_caption_general">General</string>
@@ -400,7 +402,7 @@
     <string name="title_advanced_two_col">Usar dos columnas</string>
     <string name="title_advanced_min_screen_size">Tamaño mínimo de pantalla para dividir la pantalla</string>
     <string name="title_advanced_close_pane">Colapsar fila o columna al cerrar una conversación</string>
-    <string name="title_advanced_column_width">Ancho de columna de mensajes: %1$s %%</string>
+    <string name="title_advanced_column_width">Ancho de columna de mensaje / altura de fila: %1$s %%</string>
     <string name="title_advanced_nav_options">Mostrar opciones de menú de navegación</string>
     <string name="title_advanced_nav_categories">Mostrar categorías de cuentas en el menú de navegación</string>
     <string name="title_advanced_nav_pin">Fijar menú de navegación</string>
@@ -475,7 +477,7 @@
     <string name="title_advanced_text_size">Usar tamaños de texto</string>
     <string name="title_advanced_text_font">Usar fuentes</string>
     <string name="title_advanced_text_align">Usar alineación de texto</string>
-    <string name="title_advanced_text_titles" comment="title_advanced_text_titles&#10;&#10;Title for advanced display option to show HTML titles.&#10;The curly braces indicate that inserted titles will be surrounded by curly braces.&#10;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title&#10;">Mostrar {títulos HTML}</string>
+    <string name="title_advanced_text_titles">Mostrar {títulos HTML}</string>
     <string name="title_advanced_text_separators">Usar líneas separadoras</string>
     <string name="title_advanced_collapse_quotes">Colapsar texto citado</string>
     <string name="title_advanced_image_placeholders">Mostrar marcadores de posición de imagen</string>
@@ -623,6 +625,7 @@
     <string name="title_advanced_class_min_difference">Diferencia mínima de la clase: %1$s %%</string>
     <string name="title_advanced_language">Idioma</string>
     <string name="title_advanced_language_system">Sistema</string>
+    <string name="title_advanced_lt">Integración con LanguageTool</string>
     <string name="title_advanced_deepl">Integración con DeepL</string>
     <string name="title_advanced_sdcard">Quiero usar una tarjeta SD</string>
     <string name="title_advanced_watchdog">Comprobar periódicamente si FairEmail sigue activo</string>
@@ -786,7 +789,7 @@
     <string name="title_custom">Personalizado</string>
     <string name="title_host">Nombre de host</string>
     <string name="title_encryption">Cifrado</string>
-    <string name="title_encryption_none">Ninguno</string>
+    <string name="title_encryption_none">Ninguno (inseguro)</string>
     <string name="title_allow_insecure">Permitir conexiones inseguras</string>
     <string name="title_insecure_remark">Las conexiones inseguras sólo deberían permitirse con redes de confianza y nunca con redes públicas</string>
     <string name="title_notify_remark">Puedes activar esto para notificaciones específicas de la cuenta</string>
@@ -1542,6 +1545,7 @@
     <string name="title_legend_embedded_image">Marcador de posición de imagen incrustada</string>
     <string name="title_legend_tracking_pixel">Imagen de rastreo</string>
     <string name="title_legend_broken_image">Imagen rota</string>
+    <string name="title_legend_open_external">Abrir fuera de la aplicación</string>
     <string name="title_legend_pick">Seleccionar contacto</string>
     <string name="title_legend_cc">Mostrar CC/CCO</string>
     <string name="title_legend_link">Insertar enlace</string>
@@ -1768,6 +1772,7 @@
     <string-array name="pollIntervalNames">
         <item>Siempre</item>
         <item>Cada 5 minutos</item>
+        <item>Cada 10 minutos</item>
         <item>Cada 15 minutos</item>
         <item>Cada 30 minutos</item>
         <item>Cada hora</item>
@@ -1811,6 +1816,7 @@
         <item>Ir a la siguiente conversación</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Pequeño</item>
         <item>Muy pequeño</item>
         <item>Pequeño</item>
         <item>Mediano</item>

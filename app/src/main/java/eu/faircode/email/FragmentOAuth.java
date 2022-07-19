@@ -21,7 +21,6 @@ package eu.faircode.email;
 
 import static android.app.Activity.RESULT_OK;
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_OAUTH;
-import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -29,7 +28,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -121,7 +123,6 @@ public class FragmentOAuth extends FragmentBase {
     private TextView tvGmailHint;
 
     private TextView tvError;
-    private TextView tvGmailDraftsHint;
     private TextView tvOfficeAuthHint;
     private Button btnSupport;
     private Button btnHelp;
@@ -172,7 +173,6 @@ public class FragmentOAuth extends FragmentBase {
         tvGmailHint = view.findViewById(R.id.tvGmailHint);
 
         tvError = view.findViewById(R.id.tvError);
-        tvGmailDraftsHint = view.findViewById(R.id.tvGmailDraftsHint);
         tvOfficeAuthHint = view.findViewById(R.id.tvOfficeAuthHint);
         btnSupport = view.findViewById(R.id.btnSupport);
         btnHelp = view.findViewById(R.id.btnHelp);
@@ -190,6 +190,33 @@ public class FragmentOAuth extends FragmentBase {
                 Helper.view(v.getContext(), Uri.parse(privacy), false);
             }
         });
+
+        if ("gmail".equals(id)) {
+            // https://developers.google.com/identity/branding-guidelines
+            final Context context = getContext();
+            final boolean dark = Helper.isDarkTheme(context);
+            int dp12 = Helper.dp2pixels(context, 12);
+            int dp24 = Helper.dp2pixels(context, 24);
+            Drawable g = context.getDrawable(R.drawable.google_logo);
+            g.setBounds(0, 0, g.getIntrinsicWidth(), g.getIntrinsicHeight());
+            btnOAuth.setCompoundDrawablesRelative(g, null, null, null);
+            btnOAuth.setCompoundDrawablePadding(dp24);
+            btnOAuth.setText(R.string.title_setup_google_sign_in);
+            btnOAuth.setTextColor(new ColorStateList(
+                    new int[][]{
+                            new int[]{android.R.attr.state_enabled},
+                            new int[]{-android.R.attr.state_enabled},
+                    },
+                    new int[]{
+                            dark ? Color.WHITE : Color.DKGRAY, // 0xff444444
+                            Color.LTGRAY // 0xffcccccc
+                    }
+            ));
+            btnOAuth.setBackground(context.getDrawable(dark
+                    ? R.drawable.google_signin_background_dark
+                    : R.drawable.google_signin_background_light));
+            btnOAuth.setPaddingRelative(dp12, 0, dp12, 0);
+        }
 
         btnOAuth.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -380,12 +407,19 @@ public class FragmentOAuth extends FragmentBase {
                     ? new LinkedHashMap<>()
                     : provider.oauth.parameters);
 
+            String clientId = provider.oauth.clientId;
+            Uri redirectUri = Uri.parse(provider.oauth.redirectUri);
+            if ("gmail".equals(id) && BuildConfig.DEBUG) {
+                clientId = "803253368361-hr8kelm53hqodj7c6brdjeb2ctn5jg3p.apps.googleusercontent.com";
+                redirectUri = Uri.parse("eu.faircode.email.debug:/");
+            }
+
             AuthorizationRequest.Builder authRequestBuilder =
                     new AuthorizationRequest.Builder(
                             serviceConfig,
-                            provider.oauth.clientId,
+                            clientId,
                             ResponseTypeValues.CODE,
-                            Uri.parse(provider.oauth.redirectUri))
+                            redirectUri)
                             .setScopes(provider.oauth.scopes)
                             .setState(provider.id)
                             .setAdditionalParameters(params);
@@ -577,7 +611,7 @@ public class FragmentOAuth extends FragmentBase {
                 List<String> usernames = new ArrayList<>();
                 usernames.add(sharedname == null ? username : sharedname);
 
-                if (token != null && sharedname == null) {
+                if (token != null && sharedname == null && !"gmail".equals(id)) {
                     // https://docs.microsoft.com/en-us/azure/active-directory/develop/access-tokens
                     String[] segments = token.split("\\.");
                     if (segments.length > 1)
@@ -774,10 +808,7 @@ public class FragmentOAuth extends FragmentBase {
                     db.beginTransaction();
 
                     if (args.getBoolean("update")) {
-                        List<EntityAccount> accounts =
-                                db.account().getAccounts(username,
-                                        protocol,
-                                        new int[]{AUTH_TYPE_OAUTH, AUTH_TYPE_PASSWORD});
+                        List<EntityAccount> accounts = db.account().getAccounts(username, protocol);
                         if (accounts != null && accounts.size() == 1)
                             update = accounts.get(0);
                     }
@@ -876,8 +907,8 @@ public class FragmentOAuth extends FragmentBase {
                         args.putLong("account", update.id);
                         EntityLog.log(context, "OAuth update account=" + update.name);
                         db.account().setAccountSynchronize(update.id, true);
-                        db.account().setAccountPassword(update.id, state, AUTH_TYPE_OAUTH);
-                        db.identity().setIdentityPassword(update.id, update.user, state, update.auth_type, AUTH_TYPE_OAUTH);
+                        db.account().setAccountPassword(update.id, state, AUTH_TYPE_OAUTH, provider.id);
+                        db.identity().setIdentityPassword(update.id, update.user, state, update.auth_type, AUTH_TYPE_OAUTH, provider.id);
                     }
 
                     db.setTransactionSuccessful();
@@ -885,12 +916,8 @@ public class FragmentOAuth extends FragmentBase {
                     db.endTransaction();
                 }
 
-                if (update == null)
-                    ServiceSynchronize.eval(context, "OAuth");
-                else {
-                    args.putBoolean("updated", true);
-                    ServiceSynchronize.reload(context, update.id, true, "OAuth");
-                }
+                ServiceSynchronize.eval(context, "OAuth");
+                args.putBoolean("updated", update != null);
 
                 return null;
             }
@@ -942,9 +969,6 @@ public class FragmentOAuth extends FragmentBase {
 
         grpError.setVisibility(View.VISIBLE);
 
-        if ("gmail".equals(id))
-            tvGmailDraftsHint.setVisibility(View.VISIBLE);
-
         if ("office365".equals(id) || "outlook".equals(id)) {
             if (ex instanceof AuthenticationFailedException)
                 tvOfficeAuthHint.setVisibility(View.VISIBLE);
@@ -982,7 +1006,6 @@ public class FragmentOAuth extends FragmentBase {
     private void hideError() {
         btnHelp.setVisibility(View.GONE);
         grpError.setVisibility(View.GONE);
-        tvGmailDraftsHint.setVisibility(View.GONE);
         tvOfficeAuthHint.setVisibility(View.GONE);
     }
 }

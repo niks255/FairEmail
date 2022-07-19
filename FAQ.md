@@ -3399,6 +3399,7 @@ OAuth for Gmail is supported via the quick setup wizard.
 The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts.
 OAuth for non on-device accounts is not supported
 because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this.
+Since FairEmail is basically offered free of charge, it is not an option to pay such an amount annually for a security audit.
 You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
 
 OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
@@ -4842,6 +4843,8 @@ Templates can have the following options:
 
 <a name="faq180"></a>
 **(180) How do I use LanguageTool?**
+
+LanguageTool need to be enabled in the miscellaneous settings.
 
 After writing some text, you can long press on the save draft button to perform a grammar, style, and spell check via [LanguageTool](https://languagetool.org/).
 Texts with suggestions will be marked and if you tap on a marked suggestion,

@@ -156,6 +156,7 @@
     <string name="title_setup_account_identity_hint">Sie können Namen, Farbe und Wischen in den Kontoeinstellungen und eine Signatur in den Identitätseinstellungen konfigurieren</string>
     <string name="title_setup_accounts">Konten</string>
     <string name="title_setup_identities">Identitäten</string>
+    <string name="title_setup_google_sign_in">Mit Google anmelden</string>
     <string name="title_setup_other">Anderer Anbieter</string>
     <string name="title_setup_inbound">Nur eingehende Nachrichten (E-Mails können nicht gesendet werden!)</string>
     <string name="title_setup_pop3">POP3-Konto</string>
@@ -163,7 +164,7 @@
     <string name="title_setup_gmail_support">Das Autorisieren von Google-Konten funktioniert nur in der Play-Store- und in der GitHub-Version, weil Android die digitale App-Signatur überprüft</string>
     <string name="title_setup_gmail_rationale">Bitte erteilen Sie die Berechtigung, ein Konto auszuwählen und Ihren Namen zu lesen</string>
     <string name="title_setup_gmail_permissions">Google wird Sie um Erlaubnis bitten, alle Ihre E-Mails zu lesen, zu verfassen, zu senden und dauerhaft zu löschen. FairEmail löscht niemals Ihre Nachrichten ohne Ihre ausdrückliche Zustimmung.</string>
-    <string name="title_setup_gmail_drafts">Wenn der Entwürfe-Ordner über IMAP nicht zugänglich ist, kann dies in den Gmail Label-Einstellungen korrigiert werden</string>
+    <string name="title_setup_gmail_on_device">Warum muss ich ein Konto auf dem Gerät auswählen?</string>
     <string name="title_setup_gmail_password">Ich möchte ein Gmail-Konto mit einem eigenen App-Passwort anstatt über das geräteinterne Google-Konto autorisieren</string>
     <string name="title_setup_office_auth">Der Fehler »AUTHENTICATE failed« kann dadurch verursacht werden, dass IMAP/SMTP vom Systemverwalter deaktiviert wurde</string>
     <string name="title_setup_oauth_rationale">Zugriff auf Ihr %1$s -Konto autorisieren</string>
@@ -383,6 +384,7 @@
     <string name="title_advanced_timeout">Zeitüberschreitung der Verbindung (Sekunden)</string>
     <string name="title_advanced_prefer_ip4">IPv4 gegenüber IPv6 bevorzugen</string>
     <string name="title_advanced_ssl_harden">SSL-Verbindungen stärken</string>
+    <string name="title_advanced_ssl_harden_strict">TLS 1.3 erforderlich</string>
     <string name="title_advanced_cert_strict">Strenge Zertifikatsprüfung</string>
     <string name="title_advanced_manage_connectivity">Konnektivität verwalten</string>
     <string name="title_advanced_caption_general">Allgemein</string>
@@ -399,7 +401,7 @@
     <string name="title_advanced_two_col">Zwei Spalten verwenden</string>
     <string name="title_advanced_min_screen_size">Minimale Bildschirmgröße zum Teilen des Bildschirms</string>
     <string name="title_advanced_close_pane">Zeile oder Spalte beim Schließen einer Unterhaltung einklappen</string>
-    <string name="title_advanced_column_width">Breite der Nachrichtenspalte: %1$s %%</string>
+    <string name="title_advanced_column_width">Spaltenbreite/Zeilenhöhe der Nachricht: %1$s %%</string>
     <string name="title_advanced_nav_options">Navigationsmenü-Optionen anzeigen</string>
     <string name="title_advanced_nav_categories">Kontokategorien im Navigationsmenü anzeigen</string>
     <string name="title_advanced_nav_pin">Navigationsmenü anheften</string>
@@ -474,7 +476,7 @@
     <string name="title_advanced_text_size">Textgrößen verwenden</string>
     <string name="title_advanced_text_font">Schriftarten verwenden</string>
     <string name="title_advanced_text_align">Textausrichtung verwenden</string>
-    <string name="title_advanced_text_titles" comment="title_advanced_text_titles&#10;&#10;Title for advanced display option to show HTML titles.&#10;The curly braces indicate that inserted titles will be surrounded by curly braces.&#10;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title&#10;">{HTML titles} anzeigen</string>
+    <string name="title_advanced_text_titles">{HTML titles} anzeigen</string>
     <string name="title_advanced_text_separators">Trennlinien verwenden</string>
     <string name="title_advanced_collapse_quotes">Zitierten Text ausblenden</string>
     <string name="title_advanced_image_placeholders">Platzhalter für Bilder anzeigen</string>
@@ -488,7 +490,7 @@
     <string name="title_advanced_list_count">Anzahl der Nachrichten oder Unterhaltungen in der oberen Aktionsleiste anzeigen</string>
     <string name="title_advanced_bundled_fonts">Interne Schriftarten verwenden</string>
     <string name="title_advanced_parse_classes">Stylesheets analysieren</string>
-    <string name="title_advanced_authentication">Authentifizierungswarnhinweise anzeigen</string>
+    <string name="title_advanced_authentication">Authentifizierungswarnungen anzeigen</string>
     <string name="title_advanced_authentication_hint">Die zugrunde liegenden Prüfungen können in den Empfangseinstellungen konfiguriert werden</string>
     <string name="title_advanced_authentication_indicator">Statusmeldung der Authentifizierung anzeigen</string>
     <string name="title_advanced_authentication_none">Keine Authentifizierung</string>
@@ -512,21 +514,21 @@
     <string name="title_advanced_expand_first">Automatisch die erste Nachricht erweitern, wenn die Unterhaltung gelesen wird</string>
     <string name="title_advanced_expand_all">Alle gelesenen Nachrichten automatisch erweitern</string>
     <string name="title_advanced_expand_one">Jeweils nur eine Nachricht erweitern</string>
-    <string name="title_advanced_collapse_multiple">Nachrichten, in einer Unterhaltung mit mehreren Nachrichten, bei »Zurück« zusammenfassen</string>
+    <string name="title_advanced_collapse_multiple">Nachrichten in einer Unterhaltung mit mehreren Nachrichten bei »Zurück« zusammenfassen</string>
     <string name="title_advanced_autoclose">Unterhaltungen automatisch schließen</string>
     <string name="title_advanced_onclose">Beim Schließen einer Unterhaltung</string>
     <string name="title_advanced_autoclose_unread">Unterhaltungen schließen, wenn Nachrichten als ungelesen markiert werden</string>
     <string name="title_advanced_collapse_marked">Manuell als gelesen oder ungelesen gekennzeichnete Nachrichten einklappen</string>
     <string name="title_advanced_undo">Anzeigedauer von »Rückgängig«</string>
     <string name="title_advanced_quick_filter">Unaufdringliche Schnellfiltersymbole anzeigen</string>
-    <string name="title_advanced_quick_scroll">Nicht aufdringliche Symbole für schnellen Bildlauf nach oben oder unten anzeigen</string>
+    <string name="title_advanced_quick_scroll">Unaufdringliche Symbole für schnellen Bildlauf nach oben oder unten anzeigen</string>
     <string name="title_advanced_folder_nav">Von einer Nachrichtenliste immer zur Ordnerliste zurückkehren</string>
     <string name="title_advanced_autoread">Nachrichten beim Verschieben automatisch als gelesen kennzeichnen</string>
     <string name="title_advanced_star_snoozed">Zurückgestellte Nachrichten automatisch kennzeichnen</string>
     <string name="title_advanced_autounstar">Markierungen automatisch von Nachrichten entfernen, wenn sie verschoben werden</string>
     <string name="title_advanced_auto_important">Markierte Nachrichten automatisch wichtig machen</string>
     <string name="title_advanced_reset_importance">Wichtigkeit beim Verschieben von Nachrichten zurücksetzen</string>
-    <string name="title_advanced_swipe_reply">Erweiterte Nachricht nach rechts wischen um zu antworten</string>
+    <string name="title_advanced_swipe_reply">Erweiterte Nachricht nach rechts wischen, um zu antworten</string>
     <string name="title_advanced_default_snooze">Standardzeit für Zurückstellen/Verzögern</string>
     <string name="title_advanced_notifications">Benachrichtigungen verwalten</string>
     <string name="title_advanced_notifications_default">Standardkanal</string>
@@ -543,7 +545,7 @@
     <string name="title_advanced_notify_preview_all">Vorschau des ganzen Textes</string>
     <string name="title_advanced_notify_preview_only">Nur Benachrichtigungen mit Vorschautext anzeigen</string>
     <string name="title_advanced_notify_actions">Benachrichtigungsaktionen</string>
-    <string name="title_advanced_notify_action_trash">Löschen</string>
+    <string name="title_advanced_notify_action_trash">Papierkorb</string>
     <string name="title_advanced_notify_action_delete">Löschen</string>
     <string name="title_advanced_notify_action_junk">Spam</string>
     <string name="title_advanced_notify_action_archive">Archivieren</string>
@@ -556,7 +558,7 @@
     <string name="title_advanced_notify_action_snooze">Zurückstellen</string>
     <string name="title_advanced_notify_remove">Benachrichtigung über neue Nachrichten durch Tippen auf die Benachrichtigung entfernen</string>
     <string name="title_advanced_notify_clear">Benachrichtigung über neue Nachrichten beim Anzeigen der Nachrichtenliste entfernen</string>
-    <string name="title_advanced_notify_subtext">Konten- oder Ordnername als Untertitel anzeigen</string>
+    <string name="title_advanced_notify_subtext">Konto- oder Ordnername als Untertitel anzeigen</string>
     <string name="title_advanced_wearable_preview">Nur Benachrichtigungen mit einer Nachrichtenvorschau an tragbare Gerätschaften senden</string>
     <string name="title_advanced_notify_messaging">Androids Benachrichtigungsformat »messaging style« verwenden</string>
     <string name="title_advanced_biometrics_notify">Benachrichtigungsinhalt bei Nutzung der biometrischen Authentifizierung anzeigen</string>
@@ -622,6 +624,7 @@
     <string name="title_advanced_class_min_difference">Minimaler Unterschied zur nächsten Klasse: %1$s %%</string>
     <string name="title_advanced_language">Sprache</string>
     <string name="title_advanced_language_system">System</string>
+    <string name="title_advanced_lt">LanguageTool-Integration</string>
     <string name="title_advanced_deepl">DeepL-Einbindung</string>
     <string name="title_advanced_sdcard">Ich möchte eine SD-Karte verwenden</string>
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
@@ -785,7 +788,7 @@
     <string name="title_custom">Benutzerdefiniert</string>
     <string name="title_host">Hostname</string>
     <string name="title_encryption">Verschlüsselung</string>
-    <string name="title_encryption_none">Keine</string>
+    <string name="title_encryption_none">Keine (unsicher)</string>
     <string name="title_allow_insecure">Unsichere Verbindungen zulassen</string>
     <string name="title_insecure_remark">Unsichere Verbindungen sollten nur in vertrauenswürdigen Netzwerken und niemals in öffentlichen Netzwerken erlaubt werden</string>
     <string name="title_notify_remark">Sie können das für kontenspezifische Benachrichtigungen aktivieren</string>
@@ -1542,6 +1545,7 @@
     <string name="title_legend_embedded_image">Platzhalter für eingebettete Bilder</string>
     <string name="title_legend_tracking_pixel">Verfolgungsbild</string>
     <string name="title_legend_broken_image">Defekte Bilddatei</string>
+    <string name="title_legend_open_external">Außerhalb der App öffnen</string>
     <string name="title_legend_pick">Kontakt auswählen</string>
     <string name="title_legend_cc">Kopie/Blindkopie anzeigen</string>
     <string name="title_legend_link">Link hinzufügen</string>
@@ -1768,13 +1772,14 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <string-array name="pollIntervalNames">
         <item>Immer</item>
         <item>Alle 5 Minuten</item>
+        <item>Alle 10 Minuten</item>
         <item>Alle 15 Minuten</item>
         <item>Alle 30 Minuten</item>
         <item>Stündlich</item>
         <item>Alle 2 Stunden</item>
         <item>Alle 4 Stunden</item>
         <item>Alle 8 Stunden</item>
-        <item>Jeden Tag</item>
+        <item>Täglich</item>
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Nein</item>
@@ -1811,6 +1816,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
         <item>Zur nächsten Unterhaltung wechseln</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Winzig</item>
         <item>Sehr klein</item>
         <item>Klein</item>
         <item>Mittel</item>

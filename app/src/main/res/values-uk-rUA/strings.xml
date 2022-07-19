@@ -174,6 +174,7 @@
     <string name="title_setup_account_identity_hint">Ви можете налаштувати ім\'я, колір і свайп дії в налаштуваннях облікового запису та налаштувати підпис в налаштуваннях ідентифікації</string>
     <string name="title_setup_accounts">Облікові записи</string>
     <string name="title_setup_identities">Особисті дані</string>
+    <string name="title_setup_google_sign_in">Увійти за допомогою Google</string>
     <string name="title_setup_other">Інші постачальники</string>
     <string name="title_setup_inbound">Тільки вхідний лист (адреса електронної пошти не може бути надіслана!)</string>
     <string name="title_setup_pop3">Обліковий запис POP3</string>
@@ -181,7 +182,7 @@
     <string name="title_setup_gmail_support">Авторизація облікових записів Google працюватиме тільки в версії з Play Store та GitHub, тому що Android перевіряє підпис цифрового додатку</string>
     <string name="title_setup_gmail_rationale">Будь ласка, надайте дозвіл для вибору облікового запису та читання вашого імені</string>
     <string name="title_setup_gmail_permissions">Google буде запитувати про дозволи на читання, створення, надсилання і остаточне видаляння всієї Вашої електронної пошти. FairEmail ніколи не буде видаляти ваші повідомлення без вашої явної згоди.</string>
-    <string name="title_setup_gmail_drafts">Якщо тека чернеток недоступна для IMAP, то її можна виправити в налаштуваннях Gmail</string>
+    <string name="title_setup_gmail_on_device">Навіщо мені обрати обліковий запис на пристрої?</string>
     <string name="title_setup_gmail_password">Я хочу авторизувати обліковий запис за допомогою пароля замість облікового запису на пристрої</string>
     <string name="title_setup_office_auth">Помилка \'Автентифікація не вдалася\' викликана помилкою IMAP/SMTP можливо вимкненою системним адміністратором</string>
     <string name="title_setup_oauth_rationale">Авторизувати доступ до вашого облікового запису %1$s</string>
@@ -401,6 +402,7 @@
     <string name="title_advanced_timeout">Час очікування зв\'язку (секунди)</string>
     <string name="title_advanced_prefer_ip4">Віддавати перевагу IPv4 над IPv6</string>
     <string name="title_advanced_ssl_harden">Посилене SSL з\'єднання</string>
+    <string name="title_advanced_ssl_harden_strict">Вимагати TLS 1.3</string>
     <string name="title_advanced_cert_strict">Сувора перевірка сертифікату</string>
     <string name="title_advanced_manage_connectivity">Керувати підключенням</string>
     <string name="title_advanced_caption_general">Загальні налаштування</string>
@@ -417,7 +419,6 @@
     <string name="title_advanced_two_col">Використовувати два стовпчики</string>
     <string name="title_advanced_min_screen_size">Мінімальний розмір екрану для його розділення</string>
     <string name="title_advanced_close_pane">Згорнути рядок або стовпець при закритті розмови</string>
-    <string name="title_advanced_column_width">Ширина стовпця повідомлення: %1$s %%</string>
     <string name="title_advanced_nav_options">Показати параметри меню навігації</string>
     <string name="title_advanced_nav_categories">Показувати категорії облікових записів у навігаційному меню</string>
     <string name="title_advanced_nav_pin">Прикріпити меню навігації</string>
@@ -492,6 +493,7 @@
     <string name="title_advanced_text_size">Використовувати розмір тексту</string>
     <string name="title_advanced_text_font">Використовувати шрифти</string>
     <string name="title_advanced_text_align">Використовувати вирівнювання тексту</string>
+    <string name="title_advanced_text_titles">Показати {HTML titles}</string>
     <string name="title_advanced_text_separators">Використовувати розділюючі лінії</string>
     <string name="title_advanced_collapse_quotes">Згорнути цитований текст</string>
     <string name="title_advanced_image_placeholders">Показати заповнювачі для зображень</string>
@@ -638,6 +640,7 @@
     <string name="title_advanced_class_min_difference">Мінімальна різниця у класі: %1$s %%</string>
     <string name="title_advanced_language">Мова</string>
     <string name="title_advanced_language_system">Системи</string>
+    <string name="title_advanced_lt">Інтеграція з LanguageTool</string>
     <string name="title_advanced_deepl">Інтеграція з DeepL</string>
     <string name="title_advanced_sdcard">Я хочу використовувати SD-карту</string>
     <string name="title_advanced_watchdog">Періодично перевіряти, чи ще активнний додатк FairEmail</string>
@@ -798,7 +801,7 @@
     <string name="title_custom">Користувача</string>
     <string name="title_host">Ім\'я хосту</string>
     <string name="title_encryption">Шифрування</string>
-    <string name="title_encryption_none">Жодного</string>
+    <string name="title_encryption_none">Немає (незахищено)</string>
     <string name="title_allow_insecure">Дозволити незахищене з’єднання</string>
     <string name="title_insecure_remark">Небезпечні підключення повинні бути дозволені тільки в надійних мережах і ніколи в мережах спільного користування</string>
     <string name="title_notify_remark">Ви можете ввімкнути цю функцію для сповіщень в певному обліковому записі</string>
@@ -1556,6 +1559,7 @@
     <string name="title_legend_embedded_image">Вбудований заповнювач зображень</string>
     <string name="title_legend_tracking_pixel">Зображення для відстеження</string>
     <string name="title_legend_broken_image">Пошкоджене зображення</string>
+    <string name="title_legend_open_external">Відкрити за межами програми</string>
     <string name="title_legend_pick">Вибрати контакт</string>
     <string name="title_legend_cc">Показати CC/BCC</string>
     <string name="title_legend_link">Вставити посилання</string>
@@ -1784,6 +1788,7 @@
     <string-array name="pollIntervalNames">
         <item>Завжди</item>
         <item>Кожні 5 хвилин</item>
+        <item>Кожні 10 хвилин</item>
         <item>Кожні 15 хвилин</item>
         <item>Кожні 30 хвилин</item>
         <item>Кожну годину</item>
@@ -1827,6 +1832,7 @@
         <item>Перейти до наступної розмови</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Дрібний</item>
         <item>Дуже маленький</item>
         <item>Малий</item>
         <item>Середній</item>

@@ -157,6 +157,7 @@
     <string name="title_setup_account_identity_hint">Hesab tənzimləmələrində adı, rəngi və sürüşdürmə əməliyyatlarını konfiqurasiya edə bilərsiniz və kimlik tənzimləmələrində bir imza konfiqurasiya edə bilərsiniz</string>
     <string name="title_setup_accounts">Hesablar</string>
     <string name="title_setup_identities">Kimliklər</string>
+    <string name="title_setup_google_sign_in">Google ilə daxil ol</string>
     <string name="title_setup_other">Digər təchizatçı</string>
     <string name="title_setup_inbound">Yalnız gələn e-poçt (e-poçt göndərilə bilməz!)</string>
     <string name="title_setup_pop3">POP3 hesabı</string>
@@ -164,7 +165,7 @@
     <string name="title_setup_gmail_support">Google hesablarının səlahiyyətləndirilməsi, Android tətbiq imzalarını yoxladığı üçün yalnız Play Store və GitHub versiyalarında işləyəcək</string>
     <string name="title_setup_gmail_rationale">Zəhmət olmasa bir hesab seçmək və adınızı oxumaq üçün icazə verin</string>
     <string name="title_setup_gmail_permissions">Google, bütün e-poçtları oxumaq, yaratmaq, göndərmək və birdəfəlik silmək üçün icazə istəyəcək. FairEmail, açıq-aşkar razılığınız olmadan heç vaxt mesajlarınızı silməyəcək.</string>
-    <string name="title_setup_gmail_drafts">Əgər qaralamalar qovluğu IMAP üçün əlçatmazdırsa, bunu Gmail etiket tənzimləmələrində düzəltmək mümkündür</string>
+    <string name="title_setup_gmail_on_device">Niyə bir cihaz hesabı seçməliyəm?</string>
     <string name="title_setup_gmail_password">Cihazdakı bir hesabın əvəzinə parollu bir hesaba səlahiyyət vermək istəyirəm</string>
     <string name="title_setup_office_auth">\'AUTHENTICATE failed\' xətası, sistem administratorunun IMAP/SMTP-ni sıradan çıxartdığı üçün baş verə bilər</string>
     <string name="title_setup_oauth_rationale">%1$s hesabınıza müraciət üçün səlahiyyət verin</string>
@@ -385,6 +386,7 @@
     <string name="title_advanced_timeout">Bağlantı bitmə vaxtı (saniyə)</string>
     <string name="title_advanced_prefer_ip4">IPv6 əvəzinə IPv4 tərcih et</string>
     <string name="title_advanced_ssl_harden">SSL bağlantılarını sağlam et</string>
+    <string name="title_advanced_ssl_harden_strict">TLS 1.3 tələb et</string>
     <string name="title_advanced_cert_strict">Ciddi sertifikat yoxlanışı</string>
     <string name="title_advanced_manage_connectivity">Bağlantını idarə et</string>
     <string name="title_advanced_caption_general">Ümumi</string>
@@ -401,7 +403,7 @@
     <string name="title_advanced_two_col">İki sütun istifadə et</string>
     <string name="title_advanced_min_screen_size">Ekranı bölmək üçün minimum ekran ölçüsü</string>
     <string name="title_advanced_close_pane">Bir danışığı bağlayarkən sətri və ya sütunu yığcamlaşdır</string>
-    <string name="title_advanced_column_width">Mesaj sütunu eni: %1$s %%</string>
+    <string name="title_advanced_column_width">Mesajın sütun eni / sətir hündürlüyü: %1$s %%</string>
     <string name="title_advanced_nav_options">Naviqasiya menyu seçimlərini göstər</string>
     <string name="title_advanced_nav_categories">Naviqasiya menyusunda hesab kateqoriyalarını göstər</string>
     <string name="title_advanced_nav_pin">Naviqasiya menyusunu sancaqla</string>
@@ -476,6 +478,7 @@
     <string name="title_advanced_text_size">Mətn ölçülərini istifadə et</string>
     <string name="title_advanced_text_font">Şriftləri istifadə et</string>
     <string name="title_advanced_text_align">Mətn düzləşdirməsini istifadə et</string>
+    <string name="title_advanced_text_titles">{HTML titles} göstər</string>
     <string name="title_advanced_text_separators">Ayırıcı xəttləri istifadə et</string>
     <string name="title_advanced_collapse_quotes">Sitat gətirilən mətni yığcamlaşdır</string>
     <string name="title_advanced_image_placeholders">Təsvir yertutanlarını göstər</string>
@@ -486,6 +489,7 @@
     <string name="title_advanced_actionbar_color">Hesab rəngini danışıq əməliyyat sətri üçün arxaplan rəngi kimi istifadə et</string>
     <string name="title_advanced_category_header">Hesab kateqoriyasına görə qruplaşdır</string>
     <string name="title_advanced_navbar_colorize">Android naviqasiya sətrini rəngləndir</string>
+    <string name="title_advanced_list_count">Üst əməliyyat sətrində mesaj və ya danışıq sayını göstər</string>
     <string name="title_advanced_bundled_fonts">Paketlənmiş yazı növlərini istifadə et</string>
     <string name="title_advanced_parse_classes">CSS-i təhlil et</string>
     <string name="title_advanced_authentication">Kimlik təsdiqləmə xəbərdarlıqlarını göstər</string>
@@ -537,6 +541,7 @@
     <string name="title_advanced_notify_background">Bildirişləri yalnız arxaplanda olanda göstər</string>
     <string name="title_advanced_notify_known">Yalnız əlaqələr üçün bildirişləri göstər</string>
     <string name="title_advanced_notify_suppress_in_call">Zəng əsnasında bildirişləri gecikdirmə</string>
+    <string name="title_advanced_notify_suppress_in_car">Android Auto ilə bağlantı qurularkən bildirişləri gecikdir</string>
     <string name="title_advanced_notify_summary">Yalnız icmal bildirişini göstər</string>
     <string name="title_advanced_notify_preview">Bildirişlərdə mesaja önbaxışı göstər</string>
     <string name="title_advanced_notify_preview_all">Mətnin hamısına önbaxış</string>
@@ -622,6 +627,7 @@
     <string name="title_advanced_class_min_difference">Minimum sinif fərqi: %1$s %%</string>
     <string name="title_advanced_language">Dil</string>
     <string name="title_advanced_language_system">Sistem</string>
+    <string name="title_advanced_lt">LanguageTool inteqrasiyası</string>
     <string name="title_advanced_deepl">DeepL inteqrasiyası</string>
     <string name="title_advanced_sdcard">SD kart istifadə etmək istəyirəm</string>
     <string name="title_advanced_watchdog">Mütəmadi olaraq \"FairEmail\"in aktivliyini yoxla</string>
@@ -717,6 +723,7 @@
     <string name="title_advanced_safe_browsing_hint">Google serveri, hansı ünvanların axtarıldığını bilir</string>
     <string name="title_advanced_badge_hint">Yalnız dəstəklənən başladıcılarda əlçatandır</string>
     <string name="title_advanced_notify_action_hint">Ən çox üç əməliyyat göstəriləcək</string>
+    <string name="title_advanced_notify_car_hint">Bağlantı quruldu, naviqasiya üçün xəritə kimi bir şeyin əks olunduğu mənasını verir</string>
     <string name="title_advanced_notify_remove_hint">Yeni mesaj bildirişləri, sürüşdürüləndə və oxundu kimi işarələnəndə həmişə silənəcək</string>
     <string name="title_advanced_notify_manage_hint">Kanal xüsusiyyətlərini tənzimləmək üçün kanal adına toxunun</string>
     <string name="title_advanced_notify_manage_default_hint">İlkin səsi tənzimləmək üçün və s.</string>
@@ -783,7 +790,7 @@
     <string name="title_custom">Xüsusi</string>
     <string name="title_host">Host adı</string>
     <string name="title_encryption">Şifrələmə</string>
-    <string name="title_encryption_none">Heç biri</string>
+    <string name="title_encryption_none">Heç biri (güvənsiz)</string>
     <string name="title_allow_insecure">Güvənli olmayan bağlantılara icazə ver</string>
     <string name="title_insecure_remark">Güvənli olmayan bağlantılara, yalnız güvənli şəbəkələrdə icazə verilməli və heç vaxt ictimai şəbəkələrdə icazə verilməməlidir</string>
     <string name="title_notify_remark">Bunu, hesaba özəl bildirişlər üçün fəallaşdıra bilərsiniz</string>
@@ -1543,6 +1550,7 @@
     <string name="title_legend_embedded_image">Pərçimlənmiş təsvir yertutanı</string>
     <string name="title_legend_tracking_pixel">İzləmə təsviri</string>
     <string name="title_legend_broken_image">Zədəli təsvir</string>
+    <string name="title_legend_open_external">Tətbiq xaricində aç</string>
     <string name="title_legend_pick">Əlaqəni seç</string>
     <string name="title_legend_cc">CC/BCC göstər</string>
     <string name="title_legend_link">Bağlantı daxil et</string>
@@ -1770,6 +1778,7 @@
     <string-array name="pollIntervalNames">
         <item>Həmişə</item>
         <item>Hər 5 dəqiqədə</item>
+        <item>Hər 10 dəqiqədə</item>
         <item>Hər 15 dəqiqədə</item>
         <item>Hər 30 dəqiqədə</item>
         <item>Hər saat</item>
@@ -1813,6 +1822,7 @@
         <item>Sonrakı danışığa get</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Çox kiçik</item>
         <item>Ekstra kiçik</item>
         <item>Kiçik</item>
         <item>Orta</item>

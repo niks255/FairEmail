@@ -109,7 +109,6 @@
     <string name="title_setup_other">Остали провајдери</string>
     <string name="title_setup_gmail_rationale">Одобрите дозволе да се одабере налог и чита Ваше име</string>
     <string name="title_setup_gmail_permissions">Гугл ће питати за дозволе за читање, састављае, слање и трајно брисање свих Ваших мејлова. FairEmail никад неће обрисати Ваше поруке без Вашег експлицитног одобрења.</string>
-    <string name="title_setup_gmail_drafts">Фасцикла нацрта није доступна преко IMAP-а, ово се решава у Gmail поставкама ознака</string>
     <string name="title_setup_select_account">Изабери налог</string>
     <string name="title_setup_instructions">Упутства за поставку</string>
     <string name="title_setup_no_settings">Нису нађене поставке за домен ’%1$s’</string>
@@ -350,7 +349,6 @@
     <string name="title_custom">Прилагођено</string>
     <string name="title_host">Назив домаћина</string>
     <string name="title_encryption">Шифровање</string>
-    <string name="title_encryption_none">Ниједно</string>
     <string name="title_allow_insecure">Дозволи небезбедне конекције</string>
     <string name="title_insecure_remark">Небезбедне везе треба да буду дозвољене само на мрежама од поверења и никад на јавним мрежама</string>
     <string name="title_port">Број порта</string>
@@ -952,6 +950,7 @@
     <string-array name="pollIntervalNames">
         <item>Увек</item>
         <item>Сваких 5 минута</item>
+        <item>Сваких 10 минута</item>
         <item>Сваких 15 минута</item>
         <item>Сваких 30 минута</item>
         <item>На сваких сат времена</item>
@@ -995,6 +994,7 @@
         <item>Иди на следећи разговор</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Сићушно</item>
         <item>Extra small</item>
         <item>Мала</item>
         <item>Средња</item>

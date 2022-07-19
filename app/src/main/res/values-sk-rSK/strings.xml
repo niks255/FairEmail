@@ -176,7 +176,6 @@
     <string name="title_setup_gmail_support">Autorizácia účtov Google funguje len vo verziách z obchodu Play a Github, pretože systém Android kontroluje podpis aplikácií</string>
     <string name="title_setup_gmail_rationale">Prosím o udelenie povolenia na výberr účtu a načítanie Vášho mena</string>
     <string name="title_setup_gmail_permissions">Google sa opýta na povolenia pre čítanie, písanie, odosielanie a trvalé vymazanie všetkých vašich e-mailov. FairEmail nikdy nevymaže vaše správy bez vášho vysloveného súhlasu.</string>
-    <string name="title_setup_gmail_drafts">Ak nie je priečinok s konceptami dostupný cez protokol IMAP, môžete to vyriešiť v nastaveniach štítkov Gmail</string>
     <string name="title_setup_office_auth">Chyba \"OVERENIE zlyhalo\" môže byť zapríčinená zakázanými IMAP/SMTP správcom systému</string>
     <string name="title_setup_oauth_rationale">Autorizovať prístup do vášho %1$s účtu</string>
     <string name="title_setup_oauth_update">Opätovne autorizovať existujúci účet (ak neexistuje, bude vytvorený nový)</string>
@@ -408,7 +407,6 @@
     <string name="title_advanced_two_col">Použiť dva stĺpce</string>
     <string name="title_advanced_min_screen_size">Minimálna veľkosť obrazovky pre funkciu rozdelenie obrazovky</string>
     <string name="title_advanced_close_pane">Zbaliť riadok alebo stĺpec pri zatvorení konverzácie</string>
-    <string name="title_advanced_column_width">Šírka stĺpca správy: %1$s %%</string>
     <string name="title_advanced_nav_options">Zobrazovať možnosti navigačnej ponuky</string>
     <string name="title_advanced_nav_categories">Zobrazovať kategórie účtov v navigačnej ponuke</string>
     <string name="title_advanced_nav_pin">Pripnúť navigačnú ponuku</string>
@@ -779,7 +777,6 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_custom">Vlastný</string>
     <string name="title_host">Názov hostiteľa</string>
     <string name="title_encryption">Šifrovanie</string>
-    <string name="title_encryption_none">Nič</string>
     <string name="title_allow_insecure">Povoliť nezabezpečené spojenia</string>
     <string name="title_insecure_remark">Nezabezpečené spojenia by ste mali povoliť len v dôveryhodných sieťach a nie na verejnom internete</string>
     <string name="title_port">Číslo portu</string>
@@ -1749,6 +1746,7 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string-array name="pollIntervalNames">
         <item>Vždy</item>
         <item>Každých 5 minút</item>
+        <item>Každých 10 minút</item>
         <item>Každých 15 minút</item>
         <item>Každých 30 minút</item>
         <item>Každú hodinu</item>
@@ -1792,6 +1790,7 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
         <item>Prejsť na nasledujúcu konverzáciu</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Veľmi malé</item>
         <item>Veľmi malá</item>
         <item>Malá</item>
         <item>Stredná</item>

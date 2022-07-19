@@ -153,7 +153,6 @@
     <string name="title_setup_gmail_support">因為 Android 會檢查程式的數字簽名，所以只有 FairEmail 在 Play Store 和 GitHub 發布的版本支持授權 Google 帳戶</string>
     <string name="title_setup_gmail_rationale">請授予權限以選擇帳戶並讀取您的姓名</string>
     <string name="title_setup_gmail_permissions">Google 會請求權限以讀取、撰寫、傳送及永久刪除您的電子郵件。FairEmail 永遠不會在您未予明確同意的前提下刪除您的訊息。</string>
-    <string name="title_setup_gmail_drafts">如遇草稿資料夾無法透過 IMAP 存取的情況，可於 Gmail 標籤設定中獲得修復</string>
     <string name="title_setup_gmail_password">我要使用密碼登入帳戶而不使用綁定裝置作為認證</string>
     <string name="title_setup_office_auth">“驗證失敗”錯誤可能是由系統管理員停用 IMAP/SMTP 所致</string>
     <string name="title_setup_oauth_rationale">授權存取您的 %1$s 帳戶</string>
@@ -390,7 +389,6 @@
     <string name="title_advanced_two_col">使用雙列</string>
     <string name="title_advanced_min_screen_size">分屏時熒幕最小尺寸</string>
     <string name="title_advanced_close_pane">關閉會話時摺疊行或列</string>
-    <string name="title_advanced_column_width">訊息欄寬: %1$s %%</string>
     <string name="title_advanced_nav_options">顯示導航功能表選項</string>
     <string name="title_advanced_nav_categories">導覽選單中顯示帳戶類別</string>
     <string name="title_advanced_nav_pin">固定導航功能表</string>
@@ -465,7 +463,7 @@
     <string name="title_advanced_text_size">使用文字大小</string>
     <string name="title_advanced_text_font">使用字型</string>
     <string name="title_advanced_text_align">使用文字對齊</string>
-    <string name="title_advanced_text_titles" comment="title_advanced_text_titles&#10;&#10;Title for advanced display option to show HTML titles.&#10;The curly braces indicate that inserted titles will be surrounded by curly braces.&#10;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title&#10;">顯示 {HTML titles}</string>
+    <string name="title_advanced_text_titles">顯示 {HTML titles}</string>
     <string name="title_advanced_text_separators">使用分隔線</string>
     <string name="title_advanced_collapse_quotes">摺疊引用的文字</string>
     <string name="title_advanced_image_placeholders">顯示圖片占位符</string>
@@ -765,7 +763,6 @@
     <string name="title_custom">自訂</string>
     <string name="title_host">主機名稱</string>
     <string name="title_encryption">加密</string>
-    <string name="title_encryption_none">無</string>
     <string name="title_allow_insecure">允許不安全的連線</string>
     <string name="title_insecure_remark">應僅在可信網路中允許使用不安全的連線，公共網路中永遠不要允許</string>
     <string name="title_port">埠號</string>
@@ -1700,6 +1697,7 @@
     <string-array name="pollIntervalNames">
         <item>時時</item>
         <item>每 5 分鐘</item>
+        <item>每 10 分鐘</item>
         <item>每 15 分鐘</item>
         <item>每 30 分鐘</item>
         <item>每 1 小時</item>
@@ -1743,6 +1741,7 @@
         <item>前往下一個會話</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>極小</item>
         <item>Extra small</item>
         <item>小</item>
         <item>中</item>

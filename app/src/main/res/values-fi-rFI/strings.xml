@@ -157,7 +157,6 @@
     <string name="title_setup_gmail_support">Google-tilien valtuutus toimii vain Play Kaupan ja GitHubin versioissa, koska Android tarkistaa sovelluksen digitaalisen allekirjoituksen</string>
     <string name="title_setup_gmail_rationale">Ole hyvä ja myönnä oikeudet tilin valitsemiseksi ja nimesi lukemiseksi</string>
     <string name="title_setup_gmail_permissions">Google kysyy oikeuksia lukea, kirjoittaa, lähettää ja poistaa viestejäsi pysyvästi. FairEmail ei koskaan poista viestejäsi ilman yksiselitteistä hyväksyntääsi.</string>
-    <string name="title_setup_gmail_drafts">Jos luonnokset-kansio ei ole IMAPin saatavilla, asia voidaan korjata Gmailin tunnisteiden asetuksissa</string>
     <string name="title_setup_office_auth">Virhe \'AUTHENTICATE failed\' voi aiheutua siitä, että järjestelmän ylläpitäjän on poistanut IMAP/SMTP-protokollat käytöstä</string>
     <string name="title_setup_oauth_rationale">Valtuuta pääsy tilillesi %1$s</string>
     <string name="title_setup_oauth_update">Valtuuta olemassa oleva tili uudelleen (muussa tapauksessa luo uusi tili)</string>
@@ -389,7 +388,6 @@
     <string name="title_advanced_two_col">Käytä kahta saraketta</string>
     <string name="title_advanced_min_screen_size">Näytön vähimmäiskoko näytön jakamiseksi</string>
     <string name="title_advanced_close_pane">Tiivistä rivi tai sarake, kun keskustelu suljetaan</string>
-    <string name="title_advanced_column_width">Viestisarakkeen leveys: %1$s %%</string>
     <string name="title_advanced_nav_options">Näytä asetukset navigointivalikossa</string>
     <string name="title_advanced_nav_categories">Näytä tilien luokat navigointivalikossa</string>
     <string name="title_advanced_nav_pin">Kiinnitä navigointivalikko</string>
@@ -760,7 +758,6 @@
     <string name="title_custom">Mukautettu</string>
     <string name="title_host">Verkko-osoite</string>
     <string name="title_encryption">Salaus</string>
-    <string name="title_encryption_none">Ei mitään</string>
     <string name="title_allow_insecure">Salli salaamattomat yhteydet</string>
     <string name="title_insecure_remark">Salaamattomat yhteydet tulisi sallia vain turvallisissa verkoissa eikä koskaan julkisissa verkoissa</string>
     <string name="title_port">Porttinumero</string>
@@ -1730,6 +1727,7 @@
     <string-array name="pollIntervalNames">
         <item>Jatkuvasti</item>
         <item>5 minuutin välein</item>
+        <item>10 minuutin välein</item>
         <item>15 minuutin välein</item>
         <item>30 minuutin välein</item>
         <item>Joka tunti</item>
@@ -1773,6 +1771,7 @@
         <item>Siirry seuraavaan keskusteluun</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Erittäin pieni</item>
         <item>Erittäin pieni</item>
         <item>Pieni</item>
         <item>Keskikokoinen</item>

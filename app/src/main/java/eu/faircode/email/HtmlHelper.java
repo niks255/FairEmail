@@ -55,6 +55,7 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
+import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
@@ -64,6 +65,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.util.PatternsCompat;
 import androidx.preference.PreferenceManager;
@@ -140,8 +142,8 @@ public class HtmlHelper {
     private static final int DEFAULT_FONT_SIZE_PT = 12; // points
     private static final int GRAY_THRESHOLD = Math.round(255 * 0.2f);
     private static final int COLOR_THRESHOLD = Math.round(255 * 0.1f);
-    private static final float MIN_LUMINANCE = 0.7f;
-    private static final float MIN_LUMINANCE_DARK = 0.1f;
+    private static final float MIN_LUMINANCE_VIEW = 0.7f;
+    private static final float MIN_LUMINANCE_COMPOSE = 0.85f;
     private static final int TAB_SIZE = 4;
     private static final int MAX_ALT = 250;
     private static final int MAX_AUTO_LINK = 250;
@@ -342,41 +344,71 @@ public class HtmlHelper {
         x11ColorMap.put("yellowgreen", 0x9ACD32);
     }
 
-    // http://www.alanwood.net/demos/wingdings.html
-    static int[] WINGDING_TO_UNICODE = {
-            0x0020, 0x1F589, 0x2702, 0x2701, 0x1F453, 0x1F56D, 0x1F56E, 0x1F56F,
-            0x1F57F, 0x2706, 0x1F582, 0x1F583, 0x1F4EA, 0x1F4EB, 0x1F4EC, 0x1F4ED,
-            0x1F4C1, 0x1F4C2, 0x1F4C4, 0x1F5CF, 0x1F5D0, 0x1F5C4, 0x231B, 0x1F5AE,
-            0x1F5B0, 0x1F5B2, 0x1F5B3, 0x1F5B4, 0x1F5AB, 0x1F5AC, 0x2707, 0x270D,
-            0x1F58E, 0x270C, 0x1F44C, 0x1F44D, 0x1F44E, 0x261C, 0x261E, 0x261D,
-            0x261F, 0x1F590, 0x263A, 0x1F610, 0x2639, 0x1F4A3, 0x2620, 0x1F3F3,
-            0x1F3F1, 0x2708, 0x263C, 0x1F4A7, 0x2744, 0x1F546, 0x271E, 0x1F548,
-            0x2720, 0x2721, 0x262A, 0x262F, 0x0950, 0x2638, 0x2648, 0x2649,
-            0x264A, 0x264B, 0x264C, 0x264D, 0x264E, 0x264F, 0x2650, 0x2651,
-            0x2652, 0x2653, 0x1F670, 0x1F675, 0x25CF, 0x1F53E, 0x25A0, 0x25A1,
-            0x1F790, 0x2751, 0x2752, 0x2B27, 0x29EB, 0x25C6, 0x2756, 0x2B25,
-            0x2327, 0x2BB9, 0x2318, 0x1F3F5, 0x1F3F6, 0x1F676, 0x1F677, 0x003F,
-            0x24EA, 0x2460, 0x2461, 0x2462, 0x2463, 0x2464, 0x2465, 0x2466,
-            0x2467, 0x2468, 0x2469, 0x24FF, 0x2776, 0x2777, 0x2778, 0x2779,
-            0x277A, 0x277B, 0x277C, 0x277D, 0x277E, 0x277F, 0x1F662, 0x1F660,
-            0x1F661, 0x1F663, 0x1F65E, 0x1F65C, 0x1F65D, 0x1F65F, 0x00B7, 0x2022,
-            0x25AA, 0x26AA, 0x1F786, 0x1F788, 0x25C9, 0x25CE, 0x1F53F, 0x25AA,
-            0x25FB, 0x1F7C2, 0x2726, 0x2605, 0x2736, 0x2734, 0x2739, 0x2735,
-            0x2BD0, 0x2316, 0x27E1, 0x2311, 0x2BD1, 0x272A, 0x2730, 0x1F550,
-            0x1F551, 0x1F552, 0x1F553, 0x1F554, 0x1F555, 0x1F556, 0x1F557, 0x1F558,
-            0x1F559, 0x1F55A, 0x1F55B, 0x2BB0, 0x2BB1, 0x2BB2, 0x2BB3, 0x2BB4,
-            0x2BB5, 0x2BB6, 0x2BB7, 0x1F66A, 0x1F66B, 0x1F655, 0x1F654, 0x1F657,
-            0x1F656, 0x1F650, 0x1F651, 0x1F652, 0x1F653, 0x232B, 0x2326, 0x2B98,
-            0x2B9A, 0x2B99, 0x2B9B, 0x2B88, 0x2B8A, 0x2B89, 0x2B8B, 0x1F868,
-            0x1F86A, 0x1F869, 0x1F86B, 0x1F86C, 0x1F86D, 0x1F86F, 0x1F86E, 0x1F878,
-            0x1F87A, 0x1F879, 0x1F87B, 0x1F87C, 0x1F87D, 0x1F87F, 0x1F87E, 0x21E6,
-            0x21E8, 0x21E7, 0x21E9, 0x2B04, 0x21F3, 0x2B00, 0x2B01, 0x2B03,
-            0x2B02, 0x1F8AC, 0x1F8AD, 0x1F5F6, 0x2714, 0x1F5F7, 0x1F5F9, 0x0077
-    };
-
     private static final List<String> TRACKING_HOSTS = Collections.unmodifiableList(Arrays.asList(
             "www.google-analytics.com"
     ));
+
+    static Map<Integer, Integer> MAP_WINGDINGS;
+
+    static {
+        // http://www.alanwood.net/demos/wingdings.html
+        // https://unicode.org/L2/L2011/11052r-wingding.pdf
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(37, 0x1F514); // Bell
+        map.put(39, 0x1F56F); // Candle
+        map.put(44, 0x1F4EA); // Closed mailbox with lowered flag
+        map.put(45, 0x1F4EB); // Closed mailbox with raised flag
+        map.put(46, 0x1F4EC); // Open mailbox with raised flag
+        map.put(47, 0x1F4ED); // Open mailbox with lowered flag
+        map.put(48, 0x1F4C1); // Folder
+        map.put(49, 0x1F4C2); // Open folder
+        map.put(53, 0x1F5C4); // File cabinet
+        map.put(54, 0x231B); // Hourglass
+        map.put(57, 0x1F5B2); // Trackball
+        map.put(58, 0x1F5A5); // Computer
+        map.put(65, 0x270C); // Victory hand
+        map.put(66, 0x1F44C); // OK hand
+        map.put(67, 0x1F44D); // Thumb up
+        map.put(68, 0x1F44E); // Thumb down
+        map.put(69, 0x1F448); // Pointing left
+        map.put(70, 0x1F449); // Pointing right
+        map.put(71, 0x261D); // Pointing up
+        map.put(72, 0x1F447); // Pointing down
+        map.put(73, 0x1F590); // Raised hand
+        map.put(74, 0x1F642); // Smiling face
+        map.put(75, 0x1F610); // Neutral face
+        map.put(76, 0x1F641); // Frowning face
+        map.put(77, 0x1F4A3); // Bomb
+        map.put(83, 0x1F4A7); // Droplet
+        map.put(84, 0x2744); // Snowflake
+        map.put(94, 0x2648); // Aries
+        map.put(95, 0x2649); // Taurus
+        map.put(96, 0x264A); // Gemini
+        map.put(97, 0x264B); // Cancer
+        map.put(98, 0x264C); // Leo
+        map.put(99, 0x264D); // Virgo
+        map.put(100, 0x264E); // Libra
+        map.put(101, 0x264F); // Scorpio
+        map.put(102, 0x2650); // Sagittarius
+        map.put(103, 0x2651); // Capricorn
+        map.put(104, 0x2652); // Aquarius
+        map.put(105, 0x2653); // Pisces
+        map.put(183, 0x1F550); // Clock 1
+        map.put(184, 0x1F551); // Clock 2
+        map.put(185, 0x1F552); // Clock 3
+        map.put(186, 0x1F553); // Clock 4
+        map.put(187, 0x1F554); // Clock 5
+        map.put(188, 0x1F555); // Clock 6
+        map.put(189, 0x1F556); // Clock 7
+        map.put(190, 0x1F557); // Clock 8
+        map.put(191, 0x1F558); // Clock 9
+        map.put(192, 0x1F559); // Clock 10
+        map.put(193, 0x1F55A); // Clock 11
+        map.put(194, 0x1F55B); // Clock 12
+        map.put(251, 0x274C); // Red cross
+        map.put(252, 0x2705); // Green check
+        MAP_WINGDINGS = Collections.unmodifiableMap(map);
+    }
 
     static Document sanitizeCompose(Context context, String html, boolean show_images) {
         try {
@@ -713,12 +745,12 @@ public class HtmlHelper {
                                             e = e.parent();
                                 }
 
-                                if (!view && dark &&
+                                if (!view &&
                                         color != null && (bg == null || bg == Color.TRANSPARENT)) {
                                     // Special case:
-                                    //   external draft / dark background / very dark/light font
+                                    //   external draft: very dark/light font
                                     double lum = ColorUtils.calculateLuminance(color);
-                                    if (lum < MIN_LUMINANCE_DARK || lum > 1 - MIN_LUMINANCE_DARK)
+                                    if (lum < MIN_LUMINANCE_COMPOSE || lum > 1 - MIN_LUMINANCE_COMPOSE)
                                         color = null;
                                 }
 
@@ -729,7 +761,7 @@ public class HtmlHelper {
                                     // Background color was suppressed because "no color"
                                     if (color != null) {
                                         double lum = ColorUtils.calculateLuminance(color);
-                                        if (dark ? lum < MIN_LUMINANCE : lum > 1 - MIN_LUMINANCE)
+                                        if (dark ? lum < MIN_LUMINANCE_VIEW : lum > 1 - MIN_LUMINANCE_VIEW)
                                             color = textColorPrimary;
                                     }
                                 }
@@ -2060,7 +2092,7 @@ public class HtmlHelper {
         if (r == g && r == b && (dark ? 255 - r : r) * a < GRAY_THRESHOLD)
             color = textColorPrimary;
 
-        return adjustLuminance(color, dark, MIN_LUMINANCE);
+        return adjustLuminance(color, dark, MIN_LUMINANCE_VIEW);
     }
 
     static int adjustLuminance(int color, boolean dark, float min) {
@@ -3151,6 +3183,7 @@ public class HtmlHelper {
         NodeTraversor.traverse(new NodeVisitor() {
             private Element element;
             private TextNode tnode;
+            private Typeface wingdings = null;
 
             @Override
             public void head(Node node, int depth) {
@@ -3225,14 +3258,28 @@ public class HtmlHelper {
                                     break;
                                 case "font-family":
                                     if ("wingdings".equalsIgnoreCase(value)) {
+                                        if (wingdings == null)
+                                            wingdings = ResourcesCompat.getFont(context.getApplicationContext(), R.font.wingdings);
+
+                                        int from = start;
                                         for (int i = start; i < ssb.length(); i++) {
                                             int kar = ssb.charAt(i);
-                                            if (kar >= 0x20 && kar < 0x20 + WINGDING_TO_UNICODE.length) {
-                                                int codepoint = WINGDING_TO_UNICODE[kar - 0x20];
+                                            if (MAP_WINGDINGS.containsKey(kar)) {
+                                                if (from < i) {
+                                                    TypefaceSpan span = new CustomTypefaceSpan("wingdings", wingdings);
+                                                    setSpan(ssb, span, from, i);
+                                                }
+                                                int codepoint = MAP_WINGDINGS.get(kar);
                                                 String replacement = new String(Character.toChars(codepoint));
-                                                if (replacement.length() == 1)
-                                                    ssb.replace(i, i + 1, replacement);
+                                                ssb.replace(i, i + 1, replacement);
+                                                i += replacement.length() - 1;
+                                                from = i + 1;
                                             }
+                                        }
+
+                                        if (from < ssb.length()) {
+                                            TypefaceSpan span = new CustomTypefaceSpan("wingdings", wingdings);
+                                            setSpan(ssb, span, from, ssb.length());
                                         }
                                     } else
                                         setSpan(ssb, StyleHelper.getTypefaceSpan(value, context), start, ssb.length());

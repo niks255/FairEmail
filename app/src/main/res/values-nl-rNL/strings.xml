@@ -156,6 +156,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_account_identity_hint">U kunt de naam, kleur en veegacties configureren in de accountinstellingen en een handtekening configureren in de identiteitsinstellingen</string>
     <string name="title_setup_accounts">Accounts</string>
     <string name="title_setup_identities">Identiteiten</string>
+    <string name="title_setup_google_sign_in">Log in met Google</string>
     <string name="title_setup_other">Andere provider</string>
     <string name="title_setup_inbound">Alleen inkomende mail (mail kan niet verzonden worden!)</string>
     <string name="title_setup_pop3">POP3 account</string>
@@ -163,8 +164,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_gmail_support">Autoriseren van Google accounts werkt alleen in de Play Store en GitHub versie omdat Android de digitale app handtekening controleert</string>
     <string name="title_setup_gmail_rationale">Geef a.u.b. toestemming om een account te selecteren en uw naam te lezen</string>
     <string name="title_setup_gmail_permissions">Google zal machtigingen vragen om al uw e-mail te lezen, op te stellen, te verzenden en definitief te verwijderen. FairEmail zal uw berichten nooit verwijderen zonder uw expliciete toestemming.</string>
-    <string name="title_setup_gmail_drafts">Als de conceptmap niet toegankelijk is voor IMAP, dan kan dit worden opgelost in de Gmail label instellingen</string>
-    <string name="title_setup_gmail_password">Ik wil een account autoriseren met een wachtwoord in plaats van een on-device account</string>
+    <string name="title_setup_gmail_on_device">Waarom moet ik een account op het apparaat selecteren?</string>
+    <string name="title_setup_gmail_password">Ik wil een account autoriseren met een wachtwoord in plaats van een account op het apparaat</string>
     <string name="title_setup_office_auth">De fout \'AUTHENTICATE failed\' kan worden veroorzaakt doordat IMAP/SMTP door de systeemadministrator is uitgeschakeld</string>
     <string name="title_setup_oauth_rationale">Autoriseer toegang tot uw %1$s account</string>
     <string name="title_setup_oauth_update">Autoriseer een bestaand account opnieuw (anders een nieuwe account aanmaken)</string>
@@ -383,6 +384,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_timeout">Verbinding timeout (seconden)</string>
     <string name="title_advanced_prefer_ip4">Geef de voorkeur aan IPv4 boven IPv6</string>
     <string name="title_advanced_ssl_harden">Verhard SSL-verbindingen</string>
+    <string name="title_advanced_ssl_harden_strict">Vereis TLS 1.3</string>
     <string name="title_advanced_cert_strict">Strenge certificaatcontrole</string>
     <string name="title_advanced_manage_connectivity">Beheer connectiviteit</string>
     <string name="title_advanced_caption_general">Algemeen</string>
@@ -399,7 +401,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_two_col">Gebruik twee kolommen</string>
     <string name="title_advanced_min_screen_size">Minimale schermgrootte voor het splitsen van het scherm</string>
     <string name="title_advanced_close_pane">Rij of kolom samenvouwen bij het sluiten van een gesprek</string>
-    <string name="title_advanced_column_width">Breedte berichtkolom: %1$s %%</string>
+    <string name="title_advanced_column_width">Berichtkolom breedte / rij hoogte: %1$s %%</string>
     <string name="title_advanced_nav_options">Toon navigatiemenu opties</string>
     <string name="title_advanced_nav_categories">Toon account categorieën in het navigatiemenu</string>
     <string name="title_advanced_nav_pin">Navigatiemenu vastzetten</string>
@@ -474,7 +476,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_text_size">Gebruik tekstgrootte</string>
     <string name="title_advanced_text_font">Gebruik lettertypen</string>
     <string name="title_advanced_text_align">Gebruik tekst uitlijning</string>
-    <string name="title_advanced_text_titles" comment="title_advanced_text_titles&#10;&#10;Title for advanced display option to show HTML titles.&#10;The curly braces indicate that inserted titles will be surrounded by curly braces.&#10;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title&#10;">Toon {HTML titles}</string>
+    <string name="title_advanced_text_titles">Toon {HTML titles}</string>
     <string name="title_advanced_text_separators">Gebruik scheidingslijnen</string>
     <string name="title_advanced_collapse_quotes">Geciteerde tekst samenvouwen</string>
     <string name="title_advanced_image_placeholders">Plaatsvervangers van afbeelding weergeven</string>
@@ -622,6 +624,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_class_min_difference">Minimale klasse verschil: %1$s %%</string>
     <string name="title_advanced_language">Taal</string>
     <string name="title_advanced_language_system">Systeem</string>
+    <string name="title_advanced_lt">LanguageTool integratie</string>
     <string name="title_advanced_deepl">DeepL integratie</string>
     <string name="title_advanced_sdcard">Ik wil een SD-kaart gebruiken</string>
     <string name="title_advanced_watchdog">Periodiek controleren of FairEmail nog actief is</string>
@@ -785,7 +788,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_custom">Aangepast</string>
     <string name="title_host">Hostnaam</string>
     <string name="title_encryption">Versleuteling</string>
-    <string name="title_encryption_none">Geen</string>
+    <string name="title_encryption_none">Geen (onveilig)</string>
     <string name="title_allow_insecure">Onveilige verbindingen toestaan</string>
     <string name="title_insecure_remark">Onveilige verbindingen mogen alleen worden toegestaan op vertrouwde netwerken en nooit op openbare netwerken</string>
     <string name="title_notify_remark">U kunt dit inschakelen voor account specifieke meldingen</string>
@@ -1538,6 +1541,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_legend_embedded_image">Plaatshouder ingesloten afbeelding</string>
     <string name="title_legend_tracking_pixel">Tracking afbeelding</string>
     <string name="title_legend_broken_image">Defecte afbeelding</string>
+    <string name="title_legend_open_external">Open buiten de app</string>
     <string name="title_legend_pick">Kies contact</string>
     <string name="title_legend_cc">Toon CC/BCC</string>
     <string name="title_legend_link">Koppeling invoegen</string>
@@ -1763,6 +1767,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string-array name="pollIntervalNames">
         <item>Altijd</item>
         <item>Elke 5 minuten</item>
+        <item>Elke 10 minuten</item>
         <item>Elke 15 minuten</item>
         <item>Elke 30 minuten</item>
         <item>Elk uur</item>
@@ -1806,6 +1811,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
         <item>Ga naar volgende gesprek</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Minuscuul</item>
         <item>Extra klein</item>
         <item>Klein</item>
         <item>Gemiddeld</item>

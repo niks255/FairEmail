@@ -23,20 +23,21 @@
         <oauth
             askAccount="true"
             authorizationEndpoint="https://accounts.google.com/o/oauth2/auth"
-            clientId=""
-            clientSecret=""
-            enabled="false"
+            clientId="803253368361-11ias0ee6bqhvdi4f21fs1lh7fsb0il2.apps.googleusercontent.com"
+            enabled="true"
             privacy="https://policies.google.com/privacy"
             prompt="consent"
-            redirectUri="https://oauth.faircode.eu/"
+            redirectUri="eu.faircode.email:/"
             scopes="https://mail.google.com/"
             tokenEndpoint="https://oauth2.googleapis.com/token">
-            <!-- promp=consent offline access -->
+            <!-- https://developers.google.com/identity/protocols/oauth2/native-app -->
+            <!-- https://github.com/openid/AppAuth-Android/blob/master/app/README-Google.md -->
             <parameter
                 key="access_type"
                 value="offline" />
         </oauth>
-        <!-- https://email.faircode.eu/.well-known/assetlinks.json -->
+        <!-- https://oauth.faircode.eu/.well-known/assetlinks.json -->
+        <!-- https://developer.android.com/training/app-links/verify-site-associations -->
         <!-- /opt/android-studio/jre/bin/keytool -keystore ~/.android/debug.keystore -list -v -->
     </provider>
     <provider

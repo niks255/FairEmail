@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1932 }
+def getVersionCode = { -> return 1934 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Kinnareemimus" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -341,7 +341,7 @@ dependencies {
     def annotation_version_experimental = "1.2.0"
     def core_version = "1.8.0" // 1.9.0-alpha05
     def appcompat_version = "1.6.0-alpha05"
-    def emoji_version = "1.2.0-alpha04"
+    def emoji_version = "1.2.0-beta01"
     def activity_version = "1.5.0" // 1.6.0-alpha03
     def fragment_version = "1.5.0"
     def windows_version = "1.0.0" // 1.1.0-alpha01

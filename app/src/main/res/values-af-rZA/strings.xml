@@ -83,6 +83,7 @@
     <string-array name="pollIntervalNames">
         <item>Always</item>
         <item>Elke 5 minute</item>
+        <item>Elke 10 minute</item>
         <item>Elke 15 minute</item>
         <item>Elke 30 minute</item>
         <item>Elke uur</item>

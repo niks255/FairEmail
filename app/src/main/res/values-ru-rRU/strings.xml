@@ -179,6 +179,7 @@
     <string name="title_setup_account_identity_hint">Вы можете настроить имя, цвет и жесты в настройках учётной записи, а также настроить подпись в настройках идентификатора</string>
     <string name="title_setup_accounts">Учётные записи</string>
     <string name="title_setup_identities">Идентификаторы</string>
+    <string name="title_setup_google_sign_in">Войти с помощью Google</string>
     <string name="title_setup_other">Другой провайдер</string>
     <string name="title_setup_inbound">Только входящая почта (отправка письма невозможна!)</string>
     <string name="title_setup_pop3">Учётная запись POP3</string>
@@ -186,7 +187,7 @@
     <string name="title_setup_gmail_support">Авторизация учётных записей Google будет работать только в официальных версиях из Play Store и GitHub, так как Android проверяет подпись приложения</string>
     <string name="title_setup_gmail_rationale">Пожалуйста, предоставьте разрешения для выбора учётной записи и чтения вашего имени</string>
     <string name="title_setup_gmail_permissions">Google запросит разрешения на чтение, создание, отправку и безвозвратное удаление всех ваших сообщений. FairEmail никогда не будет удалять ваши сообщения без вашего явного согласия.</string>
-    <string name="title_setup_gmail_drafts">Если папка черновиков недоступна по IMAP, это может быть исправлено в настройках ярлыка Gmail</string>
+    <string name="title_setup_gmail_on_device">Зачем выбирать учётную запись на устройстве?</string>
     <string name="title_setup_gmail_password">Я хочу авторизовать учётную запись паролем вместо учётной записи на устройстве</string>
     <string name="title_setup_office_auth">Ошибка \"AUTHENTICATE failed\" может быть вызвана отключением IMAP/SMTP системным администратором</string>
     <string name="title_setup_oauth_rationale">Авторизовать доступ к вашей учётной записи %1$s</string>
@@ -406,6 +407,7 @@
     <string name="title_advanced_timeout">Время ожидания подключения (сек.)</string>
     <string name="title_advanced_prefer_ip4">Предпочитать IPv4</string>
     <string name="title_advanced_ssl_harden">Усиленные SSL-подключения</string>
+    <string name="title_advanced_ssl_harden_strict">Требуется TLS 1.3</string>
     <string name="title_advanced_cert_strict">Строгая проверка сертификатов</string>
     <string name="title_advanced_manage_connectivity">Управление подключением</string>
     <string name="title_advanced_caption_general">По умолчанию</string>
@@ -422,7 +424,7 @@
     <string name="title_advanced_two_col">Использовать две колонки</string>
     <string name="title_advanced_min_screen_size">Минимальный размер экрана для его разделения</string>
     <string name="title_advanced_close_pane">Свернуть строку или колонку при закрытии диалога</string>
-    <string name="title_advanced_column_width">Ширина колонки сообщения: %1$s %%</string>
+    <string name="title_advanced_column_width">Ширина колонки / высота строки: %1$s %%</string>
     <string name="title_advanced_nav_options">Показывать панель меню навигации</string>
     <string name="title_advanced_nav_categories">Показывать категории учётных записей в меню навигации</string>
     <string name="title_advanced_nav_pin">Закрепить меню навигации</string>
@@ -497,7 +499,7 @@
     <string name="title_advanced_text_size">Использовать размер текста</string>
     <string name="title_advanced_text_font">Использовать шрифты</string>
     <string name="title_advanced_text_align">Использовать выравнивание текста</string>
-    <string name="title_advanced_text_titles" comment="title_advanced_text_titles&#10;&#10;Title for advanced display option to show HTML titles.&#10;The curly braces indicate that inserted titles will be surrounded by curly braces.&#10;https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title&#10;">Показывать {HTML titles}</string>
+    <string name="title_advanced_text_titles">Показывать {HTML titles}</string>
     <string name="title_advanced_text_separators">Использовать разделитель строк</string>
     <string name="title_advanced_collapse_quotes">Сворачивать цитируемый текст</string>
     <string name="title_advanced_image_placeholders">Показывать места расположения изображений</string>
@@ -646,6 +648,7 @@
     <string name="title_advanced_class_min_difference">Минимальная разница между классами: %1$s %%</string>
     <string name="title_advanced_language">Язык</string>
     <string name="title_advanced_language_system">Системный</string>
+    <string name="title_advanced_lt">Интеграция с LanguageTool</string>
     <string name="title_advanced_deepl">Интеграция с DeepL</string>
     <string name="title_advanced_sdcard">Я хочу использовать SD-карту</string>
     <string name="title_advanced_watchdog">Регулярно проверять, активен ли FairEmail</string>
@@ -809,7 +812,7 @@
     <string name="title_custom">Пользовательское</string>
     <string name="title_host">Имя хоста</string>
     <string name="title_encryption">Шифрование</string>
-    <string name="title_encryption_none">Нет</string>
+    <string name="title_encryption_none">Нет (небезопасно)</string>
     <string name="title_allow_insecure">Разрешить небезопасные подключения</string>
     <string name="title_insecure_remark">Небезопасные соединения могут быть разрешены только в доверенных сетях и никогда в публичных сетях</string>
     <string name="title_notify_remark">Вы можете включить это для уведомлений конкретной учётной записи</string>
@@ -1568,6 +1571,7 @@
     <string name="title_legend_embedded_image">Встроенное изображение</string>
     <string name="title_legend_tracking_pixel">Отслеживающее изображение</string>
     <string name="title_legend_broken_image">Повреждённое изображение</string>
+    <string name="title_legend_open_external">Открыть вне приложения</string>
     <string name="title_legend_pick">Выбрать контакт</string>
     <string name="title_legend_cc">Показать копию/скрытую копию</string>
     <string name="title_legend_link">Вставить ссылку</string>
@@ -1797,6 +1801,7 @@
     <string-array name="pollIntervalNames">
         <item>Непрерывно</item>
         <item>Каждые 5 минут</item>
+        <item>Каждые 10 минут</item>
         <item>Каждые 15 минут</item>
         <item>Каждые 30 минут</item>
         <item>Каждый час</item>
@@ -1840,6 +1845,7 @@
         <item>Перейти к следующему диалогу</item>
     </string-array>
     <string-array name="resizeNames">
+        <item>Минимальный</item>
         <item>Очень маленький</item>
         <item>Маленький</item>
         <item>Средний</item>

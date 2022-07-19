@@ -23,16 +23,20 @@ import static android.app.Activity.RESULT_OK;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.StatusBarManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
+import android.graphics.drawable.Icon;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.service.quicksettings.TileService;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,8 +60,11 @@ import androidx.lifecycle.Lifecycle;
 import androidx.preference.PreferenceManager;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
 
 public class FragmentOptionsNotifications extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private View view;
     private ImageButton ibHelp;
     private Button btnManage;
     private ImageButton ibClear;
@@ -109,12 +116,18 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
     private SwitchCompat swBiometricsNotify;
     private SwitchCompat swBackground;
     private SwitchCompat swAlertOnce;
+    private ImageButton ibTileSync;
+    private ImageButton ibTileUnseen;
     private TextView tvNoGrouping;
     private TextView tvNoChannels;
 
     private Group grpChannel;
     private Group grpProperties;
     private Group grpBackground;
+    private Group grpTiles;
+
+    private static final ExecutorService executor =
+            Helper.getBackgroundExecutor(1, "notifications");
 
     private final static String[] RESET_OPTIONS = new String[]{
             "notify_newest_first", "notify_summary",
@@ -137,7 +150,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
         setSubtitle(R.string.title_setup);
         setHasOptionsMenu(true);
 
-        View view = inflater.inflate(R.layout.fragment_options_notifications, container, false);
+        view = inflater.inflate(R.layout.fragment_options_notifications, container, false);
 
         // Get controls
 
@@ -192,12 +205,15 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
         swBiometricsNotify = view.findViewById(R.id.swBiometricsNotify);
         swBackground = view.findViewById(R.id.swBackground);
         swAlertOnce = view.findViewById(R.id.swAlertOnce);
+        ibTileSync = view.findViewById(R.id.ibTileSync);
+        ibTileUnseen = view.findViewById(R.id.ibTileUnseen);
         tvNoGrouping = view.findViewById(R.id.tvNoGrouping);
         tvNoChannels = view.findViewById(R.id.tvNoChannels);
 
         grpChannel = view.findViewById(R.id.grpChannel);
         grpProperties = view.findViewById(R.id.grpProperties);
         grpBackground = view.findViewById(R.id.grpBackground);
+        grpTiles = view.findViewById(R.id.grpTiles);
 
         setOptions();
 
@@ -478,6 +494,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("notify_suppress_in_call", checked).apply();
+                ServiceSynchronize.restart(compoundButton.getContext());
             }
         });
 
@@ -488,6 +505,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("notify_suppress_in_car", checked).apply();
+                ServiceSynchronize.restart(compoundButton.getContext());
             }
         });
 
@@ -598,6 +616,22 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
             }
         });
 
+        ibTileSync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+            public void onClick(View v) {
+                addTile(v.getContext(), ServiceTileSynchronize.class, R.string.tile_synchronize, R.drawable.twotone_sync_24);
+            }
+        });
+
+        ibTileUnseen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+            public void onClick(View v) {
+                addTile(v.getContext(), ServiceTileUnseen.class, R.string.tile_unseen, R.drawable.twotone_mail_outline_24);
+            }
+        });
+
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
 
@@ -618,6 +652,9 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
         grpBackground.setVisibility(
                 Build.VERSION.SDK_INT < Build.VERSION_CODES.O || BuildConfig.DEBUG
                         ? View.VISIBLE : View.GONE);
+        grpTiles.setVisibility(
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || !BuildConfig.DEBUG
+                        ? View.GONE : View.VISIBLE);
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
 
@@ -672,9 +709,7 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
     }
 
     private void setOptions() {
-        if (getContext() == null)
-            return;
-        if (getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED))
+        if (view == null || getContext() == null)
             return;
 
         boolean pro = ActivityBilling.isPro(getContext());
@@ -774,5 +809,38 @@ public class FragmentOptionsNotifications extends FragmentBase implements Shared
             } else
                 prefs.edit().remove("sound").apply();
         }
+    }
+
+    @RequiresApi(api = 33)
+    private void addTile(Context context, Class<? extends TileService> cls, int title, int icon) {
+        StatusBarManager sbm = Helper.getSystemService(context, StatusBarManager.class);
+        sbm.requestAddTileService(
+                ComponentName.createRelative(context, cls.getName()),
+                context.getString(title),
+                Icon.createWithResource(context, icon),
+                executor,
+                new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer result) {
+                        Log.i("Tile result=" + result + " class=" + cls.getName());
+                        if (result == null)
+                            return;
+                        switch (result) {
+                            case StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED:
+                            case StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_NOT_ADDED:
+                                break;
+                            case StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED:
+                                getMainHandler().post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ToastEx.makeText(context, R.string.tile_already_added, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                break;
+                            default:
+                                Log.e("Tile result=" + result + " class=" + cls.getName());
+                        }
+                    }
+                });
     }
 }
