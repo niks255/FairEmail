@@ -1236,6 +1236,9 @@
     <string name="title_search_server">Buscar en servidor</string>
     <string name="title_search_in">Buscar en</string>
     <string name="title_search_sender">Procurar remitente</string>
+    <string name="title_save_search_name">Nome</string>
+    <string name="title_save_search_order">Orde</string>
+    <string name="title_save_search_color">Cor</string>
     <string name="title_sort_on">Ordenar por</string>
     <string name="title_sort_on_time">Data</string>
     <string name="title_sort_on_unread">Sen ler</string>
@@ -1591,7 +1594,6 @@
     <string name="title_boundary_retry">Tentar de novo</string>
     <string name="title_unexpected_error">Erro imprevisto</string>
     <string name="title_log">Rexistro</string>
-    <string name="title_auto_scroll">Desprazamento automático</string>
     <string name="title_log_clear">Limpar</string>
     <string name="title_rules_search_hint">Buscar nome ou condición</string>
     <string name="title_rules_export">Exportar regras</string>

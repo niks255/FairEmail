@@ -493,6 +493,10 @@
     <string name="title_search_flag_notes">ନୋଟଗୁଡ଼ିକ</string>
     <string name="title_search_flag_invite">ଆମନ୍ତ୍ରଣ</string>
     <string name="title_search_flag_size">ଆକାର &gt; %1$s</string>
+    <string name="title_save_search">ସଞ୍ଚିତ ସନ୍ଧାନ</string>
+    <string name="title_save_search_name">ନାମ</string>
+    <string name="title_save_search_order">କ୍ରମ</string>
+    <string name="title_save_search_color">ରଙ୍ଗ</string>
     <string name="title_sort_on_time">ସମୟ</string>
     <string name="title_sort_on_unread">ପଢ଼ି ନାହାଁନ୍ତି</string>
     <string name="title_sort_on_starred">ତାରାଙ୍କିତ</string>
@@ -537,6 +541,7 @@
     <string name="title_rule_delete">ସବୁଦିନ ପାଇଁ ବିଲୋପ କରନ୍ତୁ</string>
     <string name="title_rule_sound">ଧ୍ୱନି ବଜାନ୍ତୁ</string>
     <string name="title_rule_name">ନାମ</string>
+    <string name="title_rule_order">କ୍ରମ</string>
     <string name="title_rule_enabled">ସକ୍ଷମ ହୋଇଛି</string>
     <string name="title_rule_body">ପାଠ୍ୟ ଧାରଣ କରେ</string>
     <string name="title_rule_body_remark">ଏହି ସର୍ତ୍ତ ବ୍ୟବହାର କରିବା ଦ୍ୱାରା ସର୍ବଦା ବାର୍ତ୍ତାର ପାଠ୍ୟ ଡାଉନଲୋଡ୍ ହେବ, ଯାହା ବାର୍ତ୍ତା ତାଲିକାର ସିଙ୍କ୍ରୋନାଇଜେସନ୍ ମନ୍ଥର କରିପାରେ</string>
@@ -722,6 +727,7 @@
         <item>ମଧ୍ୟମ</item>
         <item>ବଡ଼</item>
     </string-array>
+    <string name="title_size_tiny">ସାନ</string>
     <string-array name="receiptNames">
         <item>କେବଳ ପଠନ ରସିଦ</item>
         <item>କେବଳ ବିତରଣ ରସିଦ</item>

@@ -1335,6 +1335,9 @@
     <string name="title_search_in">Sök i</string>
     <string name="title_search_sender">Sök efter avsändare</string>
     <string name="title_search_delete">Ta bort sparad sökning?</string>
+    <string name="title_save_search_name">Namn</string>
+    <string name="title_save_search_order">Ordning</string>
+    <string name="title_save_search_color">Färg</string>
     <string name="title_sort_on">Sortera på</string>
     <string name="title_sort_on_time">Tid</string>
     <string name="title_sort_on_unread">Olästa</string>
@@ -1697,7 +1700,6 @@
     <string name="title_boundary_retry">Försök igen</string>
     <string name="title_unexpected_error">Oväntat fel</string>
     <string name="title_log">Logg</string>
-    <string name="title_auto_scroll">Automatisk rullning</string>
     <string name="title_log_clear">Rensa</string>
     <string name="title_rules_search_hint">Sök namn eller villkor</string>
     <string name="title_rules_export">Exportera regler</string>

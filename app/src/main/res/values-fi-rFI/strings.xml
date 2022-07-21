@@ -1297,6 +1297,9 @@
     <string name="title_search_in">Hae kohteesta</string>
     <string name="title_search_sender">Hae lähettäjää</string>
     <string name="title_search_delete">Poistetaanko tallennettu haku?</string>
+    <string name="title_save_search_name">Nimi</string>
+    <string name="title_save_search_order">Järjestys</string>
+    <string name="title_save_search_color">Väri</string>
     <string name="title_sort_on">Järjestys</string>
     <string name="title_sort_on_time">Aika</string>
     <string name="title_sort_on_unread">Lukematon</string>
@@ -1656,7 +1659,6 @@
     <string name="title_boundary_retry">Yritä uudelleen</string>
     <string name="title_unexpected_error">Odottamaton virhe</string>
     <string name="title_log">Lokitiedot</string>
-    <string name="title_auto_scroll">Automaattinen vieritys</string>
     <string name="title_log_clear">Tyhjennä</string>
     <string name="title_rules_search_hint">Hae nimeä tai ehtoa</string>
     <string name="title_rules_export">Vie säännöt</string>

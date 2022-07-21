@@ -4,6 +4,34 @@
 
 ### [Kinnareemimus](https://en.wikipedia.org/wiki/Kinnareemimus)
 
+### 1.1939 - 2022-07-21
+
+* Fixed saving searches
+
+### 1.1938 - 2022-07-21
+
+* Enabled Gmail web OAuth flow again
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1937 - 2022-07-20
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1936 - 2022-07-20
+
+* Disabled Gmail web OAuth flow
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1935 - 2022-07-20
+
+* Added editing saved search name, order (new) and color
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated translations
+
 ### 1.1934 - 2022-07-17
 
 * Added Gmail web OAuth flow

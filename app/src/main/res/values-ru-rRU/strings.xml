@@ -407,7 +407,7 @@
     <string name="title_advanced_timeout">Время ожидания подключения (сек.)</string>
     <string name="title_advanced_prefer_ip4">Предпочитать IPv4</string>
     <string name="title_advanced_ssl_harden">Усиленные SSL-подключения</string>
-    <string name="title_advanced_ssl_harden_strict">Требуется TLS 1.3</string>
+    <string name="title_advanced_ssl_harden_strict">Требовать TLS 1.3</string>
     <string name="title_advanced_cert_strict">Строгая проверка сертификатов</string>
     <string name="title_advanced_manage_connectivity">Управление подключением</string>
     <string name="title_advanced_caption_general">По умолчанию</string>
@@ -1364,6 +1364,10 @@
     <string name="title_search_in">Поиск в</string>
     <string name="title_search_sender">Поиск отправителя</string>
     <string name="title_search_delete">Удалить сохранённый поиск?</string>
+    <string name="title_save_search">Сохранённый поиск</string>
+    <string name="title_save_search_name">Название</string>
+    <string name="title_save_search_order">Порядок</string>
+    <string name="title_save_search_color">Цвет</string>
     <string name="title_sort_on">Сортировка</string>
     <string name="title_sort_on_time">Время</string>
     <string name="title_sort_on_unread">Не прочитано</string>
@@ -1727,7 +1731,6 @@
     <string name="title_boundary_retry">Повторить</string>
     <string name="title_unexpected_error">Непредвиденная ошибка</string>
     <string name="title_log">Журнал</string>
-    <string name="title_auto_scroll">Автопрокрутка</string>
     <string name="title_log_clear">Очистить</string>
     <string name="title_rules_search_hint">Поиск имени или условия</string>
     <string name="title_rules_export">Экспорт правил</string>

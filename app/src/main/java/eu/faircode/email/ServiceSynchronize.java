@@ -64,6 +64,8 @@ import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.imap.protocol.IMAPProtocol;
 import com.sun.mail.imap.protocol.IMAPResponse;
 
+import net.openid.appauth.AuthState;
+
 import org.json.JSONObject;
 
 import java.io.File;
@@ -2239,10 +2241,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 throw new StoreClosedException(iservice.getStore(), "Unrecoverable", cause);
                             }
 
-                            // Check token expiration
-                            if (!account.isTransient(this))
-                                iservice.check();
-
                             // Sends store NOOP
                             if (EmailService.SEPARATE_STORE_CONNECTION) {
                                 EntityLog.log(this, EntityLog.Type.Account, account,
@@ -2357,6 +2355,19 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         try {
                             long duration = account.poll_interval * 60 * 1000L;
                             long trigger = System.currentTimeMillis() + duration;
+
+                            if (!account.isTransient(this)) {
+                                Long expirationTime = iservice.getAccessTokenExpirationTime();
+                                if (expirationTime != null &&
+                                        expirationTime < trigger &&
+                                        expirationTime > new Date().getTime()) {
+                                    expirationTime += AuthState.EXPIRY_TIME_TOLERANCE_MS;
+                                    EntityLog.log(this, EntityLog.Type.Debug, "Expedite keep alive" +
+                                            " from " + new Date(trigger) + " to " + new Date(expirationTime));
+                                    trigger = expirationTime;
+                                }
+                            }
+
                             EntityLog.log(this, EntityLog.Type.Account, account,
                                     "### " + account.name + " keep alive" +
                                             " wait=" + account.poll_interval + " until=" + new Date(trigger));

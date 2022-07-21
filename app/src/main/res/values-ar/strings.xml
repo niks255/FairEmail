@@ -333,6 +333,9 @@
     <string name="title_search_flag_flagged">مميّزة بنجمة</string>
     <string name="title_search_device">البحث في الجهاز</string>
     <string name="title_search_server">البحث في الخادم</string>
+    <string name="title_save_search_name">الإسم</string>
+    <string name="title_save_search_order">الترتيب</string>
+    <string name="title_save_search_color">اللون</string>
     <string name="title_sort_on">الفرز حسب</string>
     <string name="title_sort_on_time">التاريخ</string>
     <string name="title_sort_on_unread">غير مقروءة</string>
@@ -459,7 +462,6 @@
     <string name="title_pro_invalid">استجابة غير صالحة</string>
     <string name="title_unexpected_error">لقد حدث خطأ غير متوقع</string>
     <string name="title_log">السجل</string>
-    <string name="title_auto_scroll">تمرير تلقائي</string>
     <string name="title_log_clear">محو</string>
     <string name="title_debug_info_remark">الرجاء أوصف المشكلة وبيّن وقت المشكلة</string>
     <string name="title_widget_account_all">الكل</string>

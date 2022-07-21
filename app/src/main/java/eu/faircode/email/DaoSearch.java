@@ -23,17 +23,25 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
 @Dao
 public interface DaoSearch {
     @Query("SELECT * FROM search" +
-            " ORDER BY name COLLATE NOCASE")
+            " ORDER BY `order`, name COLLATE NOCASE")
     LiveData<List<EntitySearch>> liveSearch();
 
     @Insert
     long insertSearch(EntitySearch search);
+
+    @Query("SELECT * FROM search" +
+            " WHERE id = :id")
+    EntitySearch getSearch(long id);
+
+    @Update
+    int updateSearch(EntitySearch search);
 
     @Query("DELETE FROM search" +
             " WHERE id = :id")
