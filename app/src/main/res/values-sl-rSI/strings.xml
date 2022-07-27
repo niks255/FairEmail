@@ -177,7 +177,7 @@
     <string name="title_setup_account_remark">Prejemanje e-pošte</string>
     <string name="title_setup_identity_remark">Pošiljanje e-pošte</string>
     <string name="title_setup_account_identity_hint">Ime, barvo in dejanja potegov lahko nastavite v nastavitvah računa, podpis pa lahko nastavite v nastavitvah identitete.</string>
-    <string name="title_setup_accounts">račune</string>
+    <string name="title_setup_accounts">Računi</string>
     <string name="title_setup_identities">Identitete</string>
     <string name="title_setup_google_sign_in">Prijavi se z Googlom</string>
     <string name="title_setup_other">Drug ponudnik</string>
@@ -330,7 +330,7 @@
     <string name="title_advanced_receive">Prejmi sporočila za vse račune</string>
     <string name="title_advanced_when">Kdaj</string>
     <string name="title_advanced_optimize">Samodejno optimiziraj</string>
-    <string name="title_advanced_always">Vedno prejmi sporoila za te račune</string>
+    <string name="title_advanced_always">Vedno prejmi sporočila za te račune</string>
     <string name="title_advanced_schedule">Urnik</string>
     <string name="title_advanced_advanced">Napredno</string>
     <string name="title_advanced_quick_sync">Hitra sinhronizacija</string>
@@ -649,6 +649,7 @@
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_lt">Povezava z LanguageToolom</string>
     <string name="title_advanced_deepl">Povezava z DeepL-om</string>
+    <string name="title_advanced_virus_total">Povezava z VirusTotalom</string>
     <string name="title_advanced_sdcard">Želim uporabiti kartico SD</string>
     <string name="title_advanced_watchdog">Občasno preveri, ali je FairEmail še vedno dejaven</string>
     <string name="title_advanced_updates">Preveri za posodobitve GitHub</string>
@@ -1108,7 +1109,7 @@
     <string name="title_no_stream_help">To lahko rešite tako, da datoteko izberete z bolj sodobnim programom za upravljanje datotek ali da odobrite dovoljenje za branje datotek.</string>
     <string name="title_no_permissions">Program za izbiro datoteke ni odobril dovoljenja za branje.</string>
     <string name="title_no_internet">Ni primerne internetne povezave.</string>
-    <string name="title_no_connection">Povezovanje na enega ali več računov &#8230;</string>
+    <string name="title_no_connection">Povezovanje z enim ali več računov &#8230;</string>
     <string name="title_no_folder">Mapa ne obstaja</string>
     <string name="title_no_format">Izvirno prejeto sporočilo bo vključeno.</string>
     <string name="title_no_search">Iskanje na strežniku za ta račun ni na voljo.</string>
@@ -1265,6 +1266,11 @@
     <string name="title_send_dsn">Poročilo o stanju</string>
     <string name="title_send_receipt">Zahtevaj potrdilo</string>
     <string name="title_send_receipt_remark">Večina ponudnikov in e-poštnih odjemalcev prezre zahteve za potrdilo.</string>
+    <string name="title_vt_unknown">VirusTotal še ne pozna te datoteke.</string>
+    <string name="title_vt_summary">%1$s pregledovalnikov za viruse poroča o tej datoteki kot zlonamerni.</string>
+    <string name="title_vt_report">Polno poročilo</string>
+    <string name="title_vt_upload">Pošlji</string>
+    <string name="title_vt_analyzing">VirusTotal preučuje datoteko.  To lahko traja nekaj časa &#8230;</string>
     <string name="title_from_missing">Manjka pošiljatelj.</string>
     <string name="title_pgp_reminder">Ključi PGP so na voljo.</string>
     <string name="title_smime_reminder">Ključu S/MIME so na voljo.</string>

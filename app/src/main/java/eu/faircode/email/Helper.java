@@ -178,7 +178,7 @@ public class Helper {
     static final int BUFFER_SIZE = 8192; // Same as in Files class
     static final long MIN_REQUIRED_SPACE = 250 * 1024L * 1024L;
     static final int MAX_REDIRECTS = 5; // https://www.freesoft.org/CIE/RFC/1945/46.htm
-    static final int AUTOLOCK_GRACE = 7; // seconds
+    static final int AUTOLOCK_GRACE = 15; // seconds
     static final long PIN_FAILURE_DELAY = 3; // seconds
 
     static final String PGP_OPENKEYCHAIN_PACKAGE = "org.sufficientlysecure.keychain";
@@ -2387,6 +2387,17 @@ public class Helper {
     static String sha(String digest, byte[] data) throws NoSuchAlgorithmException {
         byte[] bytes = MessageDigest.getInstance(digest).digest(data);
         return hex(bytes);
+    }
+
+    static String getHash(InputStream is, String algorithm) throws NoSuchAlgorithmException, IOException {
+        MessageDigest digest = MessageDigest.getInstance(algorithm);
+
+        int count;
+        byte[] buffer = new byte[BUFFER_SIZE];
+        while ((count = is.read(buffer)) != -1)
+            digest.update(buffer, 0, count);
+
+        return hex(digest.digest());
     }
 
     static String hex(byte[] bytes) {

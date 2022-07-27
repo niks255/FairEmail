@@ -30,7 +30,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -51,6 +50,7 @@ public class CharsetHelper {
             "Big5", "BIG5-CP950",
             "ISO-2022-JP", "Shift_JIS",
             "cp852",
+            "KOI8-R",
             "x-binaryenc"
     ));
     private static final int MIN_W1252 = 10;

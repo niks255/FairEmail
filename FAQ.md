@@ -383,6 +383,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(178) Why are widgets not updating?](#user-content-faq178)
 * [(179) What are reply templates?](#user-content-faq179)
 * [(180) How do I use LanguageTool?](#user-content-faq180)
+* [(181) How do I use VirusTotal?](#user-content-faq181)
 
 [I have another question.](#user-content-get-support)
 
@@ -1982,7 +1983,7 @@ The error '*Handshake failed SSL handshake terminated ... SSLV3_ALERT_HANDSHAKE_
 can be caused by [this Android 7.0 bug](https://issuetracker.google.com/issues/37122132). This can unfortunately not be fixed by FairEmail.
 
 The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION or SSLV3_ALERT_HANDSHAKE_FAILURE ...*'
-might be caused by enabling hardening connections in the connection settings
+might be caused by enabling hardening connections, or requiring TLS 1.3 in the connection settings
 or by Android not supporting older protocols anymore, like SSLv3.
 
 Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore.
@@ -3397,11 +3398,11 @@ Disabling *Partial fetch* will result in more memory usage.
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq111)
 
 OAuth for Gmail is supported via the quick setup wizard.
-The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts.
-OAuth for non on-device accounts is not supported
-because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this.
-Since FairEmail is basically offered free of charge, it is not an option to pay such an amount annually for a security audit.
-You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).
+~~The Android account manager will be used to fetch and refresh OAuth tokens for selected on-device accounts.~~
+~~OAuth for non on-device accounts is not supported~~
+~~because Google requires a [yearly security audit](https://support.google.com/cloud/answer/9110914) ($15,000 to $75,000) for this.~~
+~~Since FairEmail is basically offered free of charge, it is not an option to pay such an amount annually for a security audit.~~
+~~You can read more about this [here](https://www.theregister.com/2019/02/11/google_gmail_developer/).~~
 
 OAuth for Outlook/Office 365, Yahoo, Mail.ru and Yandex is supported via the quick setup wizard.
 
@@ -4845,12 +4846,27 @@ Templates can have the following options:
 <a name="faq180"></a>
 **(180) How do I use LanguageTool?**
 
-LanguageTool need to be enabled in the miscellaneous settings.
+LanguageTool integration needs to be enabled in the miscellaneous settings.
 
 After writing some text, you can long press on the save draft button to perform a grammar, style, and spell check via [LanguageTool](https://languagetool.org/).
 Texts with suggestions will be marked and if you tap on a marked suggestion,
 it will be shown by the keyboard if the keyboard supports this,
 else you can double tap or long press the marked text to show suggestions.
+
+<br />
+
+<a name="faq181"></a>
+**(181) How do I use VirusTotal?**
+
+VirusTotal integration needs to be enabled in the miscellaneous settings and an API key needs to be entered.
+To get an API key, you'll need to sign up via the [VirusTotal website](https://www.virustotal.com/).
+
+When integration is enabled and an API key is available, a *scan* icon button will be shown for each attachment.
+Tapping on the scan button will calculate the SHA-256 hash of the attachment and lookup the file via the VirusTotal API.
+If the file is known by VirusTotal, the number of virus scanners considering the file as malicious will be shown.
+If the file isn't known by VirusTotal, an upload button will be shown to upload the file for analysis by VirusTotal.
+
+This feature was added in version 1.1942 and is available in non Play store versions of the app only.
 
 <br />
 

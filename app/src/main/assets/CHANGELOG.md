@@ -2,6 +2,25 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Ledumahadi](https://en.wikipedia.org/wiki/Ledumahadi)
+
+### 1.1946 - 2022-07-27
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1942 - 2022-07-25
+
+* Improved VirusTotal integration
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1941 - 2022-07-24
+
+* Added VirusTotal integration
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### [Kinnareemimus](https://en.wikipedia.org/wiki/Kinnareemimus)
 
 ### 1.1940 - 2022-07-21

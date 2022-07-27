@@ -150,8 +150,7 @@ public class DnsHelper {
                                     @Override
                                     public void onError(@NonNull DnsResolver.DnsException e) {
                                         try {
-                                            Log.w(e);
-                                            ex = new IOException(e.getMessage());
+                                            ex = new IOException(e.getMessage(), e);
                                         } finally {
                                             sem.release();
                                         }
@@ -172,7 +171,7 @@ public class DnsHelper {
                             Log.i("DNS answer=" + result.toString() + " flags=" + result.getHeader().printFlags());
                             return result;
                         } else {
-                            Log.w(ex);
+                            Log.i(ex);
                             throw ex;
                         }
                     }
