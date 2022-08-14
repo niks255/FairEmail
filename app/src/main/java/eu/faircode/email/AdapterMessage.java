@@ -116,6 +116,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.helper.widget.Flow;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.graphics.ColorUtils;
@@ -224,6 +225,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean suitable;
     private boolean unmetered;
 
+    private int colorCardBackground;
     private int colorStripeWidth;
     private int colorAccent;
     private int textColorPrimary;
@@ -465,6 +467,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibMore;
         private ImageButton ibTools;
         private View vwEmpty;
+        private Flow buttons;
         private TextView tvReformatted;
         private TextView tvDecrypt;
         private TextView tvSignedData;
@@ -840,7 +843,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             rvAttachment.setLayoutManager(llm);
             rvAttachment.setItemAnimator(null);
 
-            adapterAttachment = new AdapterAttachment(parentFragment, true);
+            adapterAttachment = new AdapterAttachment(parentFragment, true, properties);
             rvAttachment.setAdapter(adapterAttachment);
 
             cbInline = attachments.findViewById(R.id.cbInline);
@@ -883,6 +886,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibMore = vsBody.findViewById(R.id.ibMore);
             ibTools = vsBody.findViewById(R.id.ibTools);
             vwEmpty = vsBody.findViewById(R.id.vwEmpty);
+            buttons = vsBody.findViewById(R.id.buttons);
             tvReformatted = vsBody.findViewById(R.id.tvReformatted);
             tvDecrypt = vsBody.findViewById(R.id.tvDecrypt);
             tvSignedData = vsBody.findViewById(R.id.tvSignedData);
@@ -1184,9 +1188,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
             boolean outgoing = isOutgoing(message);
             boolean reverse = (outgoing && viewType != ViewType.THREAD &&
-                    (EntityFolder.isOutgoing(type) || viewType == ViewType.SEARCH) ||
+                    (EntityFolder.isOutgoing(type) || viewType == ViewType.SEARCH)) ||
                     (viewType == ViewType.UNIFIED && type == null &&
-                            message.folderUnified && EntityFolder.isOutgoing(message.folderType)));
+                            message.folderUnified && EntityFolder.isOutgoing(message.folderType)) ||
+                    EntityFolder.isOutgoing(message.folderInheritedType);
             String selector = (reverse ? null : message.bimi_selector);
             Address[] addresses = (reverse ? message.to : message.from);
             Address[] senders = ContactInfo.fillIn(
@@ -1706,6 +1711,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibMore.setVisibility(View.GONE);
             ibTools.setVisibility(View.GONE);
             vwEmpty.setVisibility(View.GONE);
+            clearButtons();
             tvReformatted.setVisibility(View.GONE);
             tvDecrypt.setVisibility(View.GONE);
             tvSignedData.setVisibility(View.GONE);
@@ -1726,6 +1732,26 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSeenBottom.setVisibility(View.GONE);
 
             ibStoreMedia.setVisibility(View.GONE);
+        }
+
+        private void clearButtons() {
+            ConstraintLayout cl = (ConstraintLayout) buttons.getParent();
+            for (int id : buttons.getReferencedIds()) {
+                View v = cl.findViewById(id);
+                cl.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            buttons.removeView(v);
+                            cl.removeView(v);
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
+                });
+                // https://github.com/androidx/constraintlayout/issues/430
+                // v.setVisibility(View.GONE);
+            }
         }
 
         private void clearActions() {
@@ -1819,8 +1845,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void bindFlagged(TupleMessageEx message, boolean expanded) {
             boolean pro = ActivityBilling.isPro(context);
             boolean flagged = (message.count - message.unflagged) > 0;
-            int color = (message.color == null || !pro ? colorAccent : message.color);
-            int tint = (flagged ? color : textColorSecondary);
+            int mcolor = (message.color == null || !pro ? colorAccent : message.color);
+            int tint = (flagged ? mcolor : textColorSecondary);
 
             if (!Objects.equals(ibFlagged.getTag(), flagged)) {
                 ibFlagged.setTag(flagged);
@@ -1834,12 +1860,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibFlagged.setEnabled(message.uid != null || message.accountProtocol != EntityAccount.TYPE_IMAP);
 
             boolean split = (viewType != ViewType.THREAD && properties.getValue("split", message.id));
-            if (split)
-                color = textColorHighlightInverse;
 
-            card.setCardBackgroundColor(
-                    split || (flags_background && flagged && !expanded)
-                            ? ColorUtils.setAlphaComponent(color, 127) : Color.TRANSPARENT);
+            int color = Color.TRANSPARENT;
+            if (cards && shadow_unread && message.unseen > 0)
+                color = ColorUtils.setAlphaComponent(colorCardBackground, 192);
+            else if (split)
+                color = ColorUtils.setAlphaComponent(textColorHighlightInverse, 127);
+            else if (flags_background && flagged && !expanded)
+                color = ColorUtils.setAlphaComponent(mcolor, 127);
+
+            card.setCardBackgroundColor(color);
 
             ibFlagged.setVisibility(flags || message.ui_flagged ? View.VISIBLE : View.GONE);
         }
@@ -1962,6 +1992,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibMore.setVisibility(View.GONE);
             ibTools.setVisibility(View.GONE);
             vwEmpty.setVisibility(View.GONE);
+            clearButtons();
             tvReformatted.setVisibility(View.GONE);
             tvDecrypt.setVisibility(View.GONE);
             tvSignedData.setVisibility(View.GONE);
@@ -2209,6 +2240,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibTools.setVisibility(outbox ? View.GONE : View.VISIBLE);
                     vwEmpty.setVisibility(outbox ? View.GONE : View.VISIBLE);
 
+                    if (tools)
+                        bindButtons(message);
+                    else
+                        clearButtons();
+
                     if (bind)
                         bindBody(message, scroll);
                     else
@@ -2220,6 +2256,77 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.setLog(false).execute(context, owner, sargs, "message:tools");
+        }
+
+        private void bindButtons(TupleMessageEx message) {
+            String keywords = prefs.getString("global_keywords", null);
+            if (keywords == null)
+                return;
+
+            int dp3 = Helper.dp2pixels(context, 3);
+            Drawable on = ContextCompat.getDrawable(context, R.drawable.twotone_check_12);
+            Drawable off = ContextCompat.getDrawable(context, R.drawable.twotone_close_12);
+            on.setBounds(0, 0, on.getIntrinsicWidth(), on.getIntrinsicHeight());
+            off.setBounds(0, 0, off.getIntrinsicWidth(), off.getIntrinsicHeight());
+
+            List<String> selected = Arrays.asList(message.keywords);
+            for (String keyword : keywords.split(" ")) {
+                boolean set = selected.contains(keyword);
+                String title = prefs.getString("kwtitle." + keyword, keyword);
+                String c = "kwcolor." + keyword;
+                Integer color = (prefs.contains(c) ? prefs.getInt(c, Color.GRAY) : null);
+
+                Button button = new Button(context, null, android.R.attr.buttonStyleSmall);
+                button.setId(View.generateViewId());
+                button.setText(title);
+                button.setCompoundDrawablePadding(dp3);
+                button.setCompoundDrawablesRelative(null, null, set ? off : on, null);
+                if (color != null)
+                    button.setBackgroundTintList(ColorStateList.valueOf(color));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle args = new Bundle();
+                        args.putLong("id", message.id);
+                        args.putString("keyword", keyword);
+                        args.putBoolean("set", !set);
+
+                        new SimpleTask<Void>() {
+                            @Override
+                            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                                long id = args.getLong("id");
+                                String keyword = args.getString("keyword");
+                                boolean set = args.getBoolean("set");
+
+                                DB db = DB.getInstance(context);
+                                try {
+                                    db.beginTransaction();
+
+                                    EntityMessage message = db.message().getMessage(id);
+                                    if (message == null)
+                                        return null;
+
+                                    EntityOperation.queue(context, message, EntityOperation.KEYWORD, keyword, set);
+
+                                    db.setTransactionSuccessful();
+                                } finally {
+                                    db.endTransaction();
+                                }
+
+                                return null;
+                            }
+
+                            @Override
+                            protected void onException(Bundle args, Throwable ex) {
+
+                            }
+                        }.execute(context, owner, args, "toggle:keyword");
+                    }
+                });
+
+                ((ConstraintLayout) buttons.getParent()).addView(button);
+                buttons.addView(button);
+            }
         }
 
         private String formatAddresses(Address[] addresses, MessageHelper.AddressFormat format, int max) {
@@ -2733,7 +2840,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     for (EntityAttachment attachment : attachments)
                         if (attachment.available && "message/rfc822".equals(attachment.getMimeType()))
                             try (FileInputStream fis = new FileInputStream(attachment.getFile(context))) {
-                                Properties props = MessageHelper.getSessionProperties();
+                                Properties props = MessageHelper.getSessionProperties(true);
                                 Session isession = Session.getInstance(props, null);
                                 MimeMessage imessage = new MimeMessage(isession, fis);
                                 MessageHelper helper = new MessageHelper(imessage, context);
@@ -2937,7 +3044,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     new DynamicDrawableSpan() {
                                         @Override
                                         public Drawable getDrawable() {
-                                            Drawable d = context.getDrawable(R.drawable.twotone_format_quote_24);
+                                            Drawable d = ContextCompat.getDrawable(context, R.drawable.twotone_format_quote_24);
                                             d.setTint(colorAccent);
                                             d.setBounds(0, 0, px, px);
                                             return d;
@@ -3793,7 +3900,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private boolean isOutgoing(TupleMessageEx message) {
-            if (EntityFolder.isOutgoing(message.folderType))
+            if (EntityFolder.isOutgoing(message.folderType) || EntityFolder.isOutgoing(message.folderInheritedType))
                 return true;
             else {
                 if (message.identityEmail == null)
@@ -5537,7 +5644,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_alternative)
                     .setTitle(message.isPlainOnly()
                             ? R.string.title_alternative_html : R.string.title_alternative_text)
-                    .setEnabled(message.uid != null && message.hasAlt())
+                    .setEnabled(message.uid != null && message.hasAlt() && !message.isEncrypted())
                     .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
 
             popupMenu.insertIcons(context);
@@ -5874,6 +5981,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             args.putLong("folder", message.folder);
             args.putString("thread", message.thread);
             args.putLong("id", message.id);
+            if (message.ui_snoozed != null)
+                args.putLong("time", message.ui_snoozed);
             args.putBoolean("finish", true);
 
             FragmentDialogDuration fragment = new FragmentDialogDuration();
@@ -7030,6 +7139,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.suitable = state.isSuitable();
         this.unmetered = state.isUnmetered();
 
+        this.colorCardBackground = Helper.resolveColor(context, R.attr.colorCardBackground);
         boolean color_stripe_wide = prefs.getBoolean("color_stripe_wide", false);
         this.colorStripeWidth = Helper.dp2pixels(context, color_stripe_wide ? 12 : 6);
         this.colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
@@ -7996,6 +8106,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         void setValue(String name, long id, boolean enabled);
 
+        String getValue(String key);
+
         boolean getValue(String name, long id);
 
         void setExpanded(TupleMessageEx message, boolean expanded, boolean scroll);
@@ -8195,16 +8307,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             final long id = getArguments().getLong("id");
 
-            final View dview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_keyword_manage, null);
+            final Context context = getContext();
+            final View dview = LayoutInflater.from(context).inflate(R.layout.dialog_keyword_manage, null);
             final RecyclerView rvKeyword = dview.findViewById(R.id.rvKeyword);
             final FloatingActionButton fabAdd = dview.findViewById(R.id.fabAdd);
             final ContentLoadingProgressBar pbWait = dview.findViewById(R.id.pbWait);
 
             rvKeyword.setHasFixedSize(false);
-            final LinearLayoutManager llm = new LinearLayoutManager(getContext());
+            final LinearLayoutManager llm = new LinearLayoutManager(context);
             rvKeyword.setLayoutManager(llm);
 
-            final AdapterKeyword adapter = new AdapterKeyword(getContext(), getViewLifecycleOwner());
+            final AdapterKeyword adapter = new AdapterKeyword(context, getViewLifecycleOwner());
             rvKeyword.setAdapter(adapter);
 
             fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -8221,16 +8334,30 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             pbWait.setVisibility(View.VISIBLE);
 
-            DB db = DB.getInstance(getContext());
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+            DB db = DB.getInstance(context);
             db.message().liveMessageKeywords(id).observe(getViewLifecycleOwner(), new Observer<TupleKeyword.Persisted>() {
                 @Override
                 public void onChanged(TupleKeyword.Persisted data) {
+                    if (data == null)
+                        data = new TupleKeyword.Persisted();
+
+                    String global = prefs.getString("global_keywords", null);
+                    if (global != null) {
+                        List<String> available = new ArrayList<>();
+                        available.addAll(Arrays.asList(global.split(" ")));
+                        if (data.available != null)
+                            available.addAll(Arrays.asList(data.available));
+                        data.available = available.toArray(new String[0]);
+                    }
+
                     pbWait.setVisibility(View.GONE);
-                    adapter.set(id, TupleKeyword.from(getContext(), data));
+                    adapter.set(id, TupleKeyword.from(context, data));
                 }
             });
 
-            return new AlertDialog.Builder(getContext())
+            return new AlertDialog.Builder(context)
                     .setIcon(R.drawable.twotone_label_important_24)
                     .setTitle(R.string.title_manage_keywords)
                     .setView(dview)

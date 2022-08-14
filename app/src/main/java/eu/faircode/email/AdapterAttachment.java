@@ -71,6 +71,8 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
     private LayoutInflater inflater;
 
     private boolean readonly;
+    private AdapterMessage.IProperties properties;
+
     private boolean vt_enabled;
     private String vt_apikey;
     private boolean debug;
@@ -207,6 +209,16 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
 
             tvError.setText(attachment.error);
             tvError.setVisibility(attachment.error == null ? View.GONE : View.VISIBLE);
+
+            if (properties != null) {
+                String aid = properties.getValue("attachment");
+                if (aid != null) {
+                    if (attachment.id.equals(Long.parseLong(aid)) && attachment.available) {
+                        properties.setValue("attachment", null);
+                        onShare(attachment);
+                    }
+                }
+            }
         }
 
         @Override
@@ -337,6 +349,9 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
         }
 
         private void onDownload(EntityAttachment attachment) {
+            if (properties != null)
+                properties.setValue("attachment", Long.toString(attachment.id));
+
             Bundle args = new Bundle();
             args.putLong("id", attachment.id);
             args.putLong("message", attachment.message);
@@ -392,9 +407,10 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
         }
     }
 
-    AdapterAttachment(Fragment parentFragment, boolean readonly) {
+    AdapterAttachment(Fragment parentFragment, boolean readonly, final AdapterMessage.IProperties properties) {
         this.parentFragment = parentFragment;
         this.readonly = readonly;
+        this.properties = properties;
 
         this.context = parentFragment.getContext();
         this.owner = parentFragment.getViewLifecycleOwner();
@@ -594,6 +610,7 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
                 protected void onExecuted(Bundle args, Bundle result) {
                     List<VirusTotal.ScanResult> scans = result.getParcelableArrayList("scans");
                     String label = result.getString("label");
+                    String analysis = args.getString("analysis");
 
                     int malicious = 0;
                     if (scans != null)
@@ -615,6 +632,11 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
                     rvScan.setVisibility(scans == null ? View.GONE : View.VISIBLE);
                     btnUpload.setVisibility(scans == null && !TextUtils.isEmpty(apiKey) ? View.VISIBLE : View.GONE);
                     tvPrivacy.setVisibility(btnUpload.getVisibility());
+
+                    if (analysis != null && args.getBoolean("init")) {
+                        args.remove("init");
+                        btnUpload.callOnClick();
+                    }
                 }
 
                 @Override
@@ -642,14 +664,14 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
                 protected Void onExecute(Context context, Bundle args) throws Throwable {
                     String apiKey = args.getString("apiKey");
                     File file = (File) args.getSerializable("file");
-                    VirusTotal.upload(context, file, apiKey, new Runnable() {
-                        private int step = 0;
 
-                        @Override
-                        public void run() {
-                            postProgress(Integer.toString(++step));
-                        }
-                    });
+                    String analysis = args.getString("analysis");
+                    if (analysis == null) {
+                        analysis = VirusTotal.upload(context, file, apiKey);
+                        args.putString("analysis", analysis);
+                    }
+                    postProgress(analysis);
+                    VirusTotal.waitForAnalysis(context, analysis, apiKey);
                     return null;
                 }
 
@@ -708,10 +730,12 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
                 }
             });
 
-            if (!TextUtils.isEmpty(apiKey))
-                taskLookup.execute(this, args, "attachment:lookup");
-            else
+            if (TextUtils.isEmpty(apiKey))
                 pbWait.setVisibility(View.GONE);
+            else {
+                args.putBoolean("init", true);
+                taskLookup.execute(this, args, "attachment:lookup");
+            }
 
             return new AlertDialog.Builder(context)
                     .setView(view)

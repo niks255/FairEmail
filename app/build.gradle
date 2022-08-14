@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1946 }
+def getVersionCode = { -> return 1950 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Ledumahadi" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -40,7 +40,7 @@ android {
         // https://developer.android.com/guide/topics/graphics/vector-drawable-resources
         vectorDrawables.useSupportLibrary = true
 
-        ndkVersion "23.2.8568313" // r23c
+        ndkVersion "25.0.8775105" // r25
         splits {
             abi {
               enable true
@@ -80,6 +80,7 @@ android {
 
     externalNativeBuild {
         cmake {
+            version "3.10.2"
             path "CMakeLists.txt"
         }
     }
@@ -105,7 +106,9 @@ android {
                     'META-INF/LICENSE.gpl.txt',
                     'META-INF/LICENSE.commercial.txt',
                     'LICENSE-2.0.txt',
-                    'RELEASE.txt'
+                    'RELEASE.txt',
+                    'DebugProbesKt.bin',
+                    'font_metrics.properties'
             ]
         }
     }
@@ -337,16 +340,16 @@ configurations.all {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    def startup_version = "1.1.0"
-    def annotation_version_experimental = "1.2.0"
-    def core_version = "1.8.0" // 1.9.0-alpha05
-    def appcompat_version = "1.6.0-alpha05"
-    def emoji_version = "1.2.0-beta01"
-    def activity_version = "1.5.0" // 1.6.0-alpha03
-    def fragment_version = "1.5.0"
-    def windows_version = "1.0.0" // 1.1.0-alpha01
-    def webkit_version = "1.5.0-beta01"
-    def recyclerview_version = "1.2.1" // 1.3.0-alpha02
+    def startup_version = "1.1.1" // 1.2.0-alpha01
+    def annotation_version_experimental = "1.3.0-beta01"
+    def core_version = "1.8.0" // 1.9.0-beta01
+    def appcompat_version = "1.6.0-beta01"
+    def emoji_version = "1.2.0"
+    def activity_version = "1.5.1" // 1.6.0-beta01
+    def fragment_version = "1.5.2" // 1.6.0-alpha01
+    def windows_version = "1.0.0" // 1.1.0-alpha03
+    def webkit_version = "1.5.0-rc01"
+    def recyclerview_version = "1.2.1" // 1.3.0-beta02
     def coordinatorlayout_version = "1.2.0"
     def constraintlayout_version = "2.1.4" // 2.2.0-alpha01
     def material_version = "1.6.1"
@@ -354,14 +357,14 @@ dependencies {
     def lbm_version = "1.1.0"
     def swiperefresh_version = "1.2.0-alpha01"
     def documentfile_version = "1.1.0-alpha01"
-    def lifecycle_version = "2.5.0" // 2.6.0-alpha01
+    def lifecycle_version = "2.5.1" // 2.6.0-alpha01
     def lifecycle_extensions_version = "2.2.0"
-    def room_version = "2.4.2" // 2.5.0-alpha02
-    def sqlite_version = "2.2.0" // 2.3.0-alpha03
-    def requery_version = "3.36.0"
+    def room_version = "2.4.3" // 2.5.0-alpha02
+    def sqlite_version = "2.2.0" // 2.3.0-alpha04
+    def requery_version = "3.39.0-1"
     def paging_version = "2.1.2" //  3.2.0-alpha01
     def preference_version = "1.2.0"
-    def work_version = "2.7.1" // 2.8.0-alpha02
+    def work_version = "2.7.1" // 2.8.0-alpha03
     def exif_version = "1.3.3"
     def biometric_version = "1.2.0-alpha04"
     def billingclient_version = "4.1.0"
@@ -377,7 +380,7 @@ dependencies {
     def vcard_version = "0.11.3"
     def relinker_version = "1.4.5"
     def markwon_version = "4.6.2"
-    def bouncycastle_version = "1.70"
+    def bouncycastle_version = "1.71"
     def colorpicker_version = "0.0.15"
     def overscroll_version = "1.1.1"
     def appauth_version = "0.8.1"
@@ -390,6 +393,7 @@ dependencies {
     def compress_version = "1.21"
     def ipaddress_version = "5.3.4"
     def canary_version = "2.9.1"
+    def ws_version = "2.14"
 
     // https://developer.android.com/jetpack/androidx/releases/startup
     implementation "androidx.startup:startup-runtime:$startup_version"
@@ -604,4 +608,7 @@ dependencies {
     // https://square.github.io/leakcanary/getting_started/
     // https://mvnrepository.com/artifact/com.squareup.leakcanary/leakcanary-android
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$canary_version"
+
+    // https://github.com/TakahikoKawasaki/nv-websocket-client
+    implementation "com.neovisionaries:nv-websocket-client:$ws_version"
 }

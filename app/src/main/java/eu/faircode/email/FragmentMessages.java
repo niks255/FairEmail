@@ -132,6 +132,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.MenuItemCompat;
@@ -1273,11 +1274,24 @@ public class FragmentMessages extends FragmentBase
             }
 
             private void onActionSnooze() {
+                Long time = null;
+                List<TupleMessageEx> list = adapter.getCurrentList();
+                if (list != null)
+                    for (TupleMessageEx message : list)
+                        if (message != null && message.ui_snoozed != null) {
+                            if (time == null || message.ui_snoozed < time || message.id.equals(id))
+                                time = message.ui_snoozed;
+                            if (message.id.equals(id))
+                                break;
+                        }
+
                 Bundle args = new Bundle();
                 args.putString("title", getString(R.string.title_snooze));
                 args.putLong("account", account);
                 args.putString("thread", thread);
                 args.putLong("id", id);
+                if (time != null)
+                    args.putLong("time", time);
                 args.putBoolean("finish", true);
 
                 FragmentDialogDuration fragment = new FragmentDialogDuration();
@@ -2111,7 +2125,10 @@ public class FragmentMessages extends FragmentBase
     private AdapterMessage.IProperties iProperties = new AdapterMessage.IProperties() {
         @Override
         public void setValue(String key, String value) {
-            kv.put(key, value);
+            if (value == null)
+                kv.remove(key);
+            else
+                kv.put(key, value);
         }
 
         @Override
@@ -2158,6 +2175,11 @@ public class FragmentMessages extends FragmentBase
                     }
                 });
             }
+        }
+
+        @Override
+        public String getValue(String key) {
+            return kv.get(key);
         }
 
         @Override
@@ -2683,7 +2705,7 @@ public class FragmentMessages extends FragmentBase
             else
                 icon = EntityFolder.getIcon(dX > 0 ? swipes.right_type : swipes.left_type);
 
-            Drawable d = context.getDrawable(icon).mutate();
+            Drawable d = ContextCompat.getDrawable(context, icon).mutate();
             d.setTint(Helper.resolveColor(context, android.R.attr.textColorSecondary));
 
             int half = rect.width() / 2;
@@ -2921,6 +2943,8 @@ public class FragmentMessages extends FragmentBase
                                 args.putLong("account", message.account);
                                 args.putString("thread", message.thread);
                                 args.putLong("id", message.id);
+                                if (message.ui_snoozed != null)
+                                    args.putLong("time", message.ui_snoozed);
                                 args.putBoolean("finish", false);
 
                                 FragmentDialogDuration fragment = new FragmentDialogDuration();
@@ -4680,7 +4704,7 @@ public class FragmentMessages extends FragmentBase
 
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean redmi_note = prefs.getBoolean("redmi_note", true);
+        boolean redmi_note = prefs.getBoolean("redmi_note", false);
         if (!redmi_note)
             return false;
 
@@ -5999,7 +6023,7 @@ public class FragmentMessages extends FragmentBase
             tvSelectedCount.setText(NF.format(count));
             if (count > (BuildConfig.DEBUG ? 10 : MAX_MORE)) {
                 int ts = Math.round(tvSelectedCount.getTextSize());
-                Drawable w = context.getDrawable(R.drawable.twotone_warning_24);
+                Drawable w = ContextCompat.getDrawable(context, R.drawable.twotone_warning_24);
                 w.setBounds(0, 0, ts, ts);
                 w.setTint(tvSelectedCount.getCurrentTextColor());
                 tvSelectedCount.setCompoundDrawablesRelative(null, null, w, null);
@@ -6114,7 +6138,7 @@ public class FragmentMessages extends FragmentBase
                 protected void onException(Bundle args, Throwable ex) {
                     Log.unexpectedError(getParentFragmentManager(), ex);
                 }
-            }.setExecutor(executor).execute(this, args, "quickactions");
+            }.setExecutor(executor).setId("messages:" + FragmentMessages.this.hashCode()).execute(this, args, "quickactions");
         } else {
             fabMore.hide();
             tvSelectedCount.setVisibility(View.GONE);
@@ -6481,8 +6505,16 @@ public class FragmentMessages extends FragmentBase
                 }
 
                 if (expand != null &&
-                        (expand.content || unmetered || (expand.size != null && expand.size < download)))
+                        (expand.content || unmetered || (expand.size != null && expand.size < download))) {
                     iProperties.setExpanded(expand, true, false);
+                    for (int pos = 0; pos < messages.size(); pos++) {
+                        TupleMessageEx message = messages.get(pos);
+                        if (message == expand) {
+                            adapter.gotoPos(pos);
+                            break;
+                        }
+                    }
+                }
             }
 
             // Auto expand all seen messages
@@ -8083,7 +8115,7 @@ public class FragmentMessages extends FragmentBase
                                 } else {
                                     // Decode message
                                     MessageHelper.MessageParts parts;
-                                    Properties props = MessageHelper.getSessionProperties();
+                                    Properties props = MessageHelper.getSessionProperties(true);
                                     Session isession = Session.getInstance(props, null);
                                     MimeMessage imessage;
                                     try (InputStream fis = new FileInputStream(plain)) {
@@ -8782,7 +8814,7 @@ public class FragmentMessages extends FragmentBase
                 boolean duplicate = args.getBoolean("duplicate");
 
                 // Decode message
-                Properties props = MessageHelper.getSessionProperties();
+                Properties props = MessageHelper.getSessionProperties(true);
                 Session isession = Session.getInstance(props, null);
                 MimeMessage imessage = new MimeMessage(isession, is);
                 MessageHelper helper = new MessageHelper(imessage, context);
@@ -8895,7 +8927,7 @@ public class FragmentMessages extends FragmentBase
         for (EntityAttachment remote : remotes)
             if ("message/rfc822".equals(remote.getMimeType()))
                 try {
-                    Properties props = MessageHelper.getSessionProperties();
+                    Properties props = MessageHelper.getSessionProperties(true);
                     Session isession = Session.getInstance(props, null);
 
                     MimeMessage imessage;
@@ -10435,20 +10467,20 @@ public class FragmentMessages extends FragmentBase
 
             Drawable source = null;
             if (sources.size() == 1) {
-                source = context.getDrawable(EntityFolder.getIcon(sources.get(0)));
+                source = ContextCompat.getDrawable(context, EntityFolder.getIcon(sources.get(0)));
                 if (source != null)
                     source.setBounds(0, 0, source.getIntrinsicWidth(), source.getIntrinsicHeight());
                 if (sourceColor == null)
                     sourceColor = EntityFolder.getDefaultColor(sources.get(0), context);
             } else {
-                source = context.getDrawable(R.drawable.twotone_folders_24);
+                source = ContextCompat.getDrawable(context, R.drawable.twotone_folders_24);
                 source.setBounds(0, 0, source.getIntrinsicWidth(), source.getIntrinsicHeight());
                 sourceColor = null;
             }
 
             Drawable target = null;
             if (targets.size() == 1) {
-                target = context.getDrawable(EntityFolder.getIcon(targets.get(0)));
+                target = ContextCompat.getDrawable(context, EntityFolder.getIcon(targets.get(0)));
                 if (target != null)
                     target.setBounds(0, 0, target.getIntrinsicWidth(), target.getIntrinsicHeight());
                 if (targetColor == null)

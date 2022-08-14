@@ -23,8 +23,11 @@ import static android.app.Activity.RESULT_OK;
 
 import android.app.Dialog;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -36,15 +39,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.Group;
+import androidx.documentfile.provider.DocumentFile;
+import androidx.preference.PreferenceManager;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -54,9 +62,16 @@ import java.nio.charset.StandardCharsets;
 public class FragmentDialogInsertLink extends FragmentDialogBase {
     private EditText etLink;
     private EditText etTitle;
+    private Button btnUpload;
+    private ProgressBar pbUpload;
+    private TextView tvDLimit;
+    private SeekBar sbDLimit;
+    private TextView tvTLimit;
+    private SeekBar sbTLimit;
 
     private static final int METADATA_CONNECT_TIMEOUT = 10 * 1000; // milliseconds
     private static final int METADATA_READ_TIMEOUT = 15 * 1000; // milliseconds
+    private static final int REQUEST_SEND = 1;
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -79,6 +94,16 @@ public class FragmentDialogInsertLink extends FragmentDialogBase {
         etTitle = view.findViewById(R.id.etTitle);
         final Button btnMetadata = view.findViewById(R.id.btnMetadata);
         final ProgressBar pbWait = view.findViewById(R.id.pbWait);
+        btnUpload = view.findViewById(R.id.btnUpload);
+        pbUpload = view.findViewById(R.id.pbUpload);
+        tvDLimit = view.findViewById(R.id.tvDLimit);
+        sbDLimit = view.findViewById(R.id.sbDLimit);
+        tvTLimit = view.findViewById(R.id.tvTLimit);
+        sbTLimit = view.findViewById(R.id.sbTLimit);
+        Group grpUpload = view.findViewById(R.id.grpUpload);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean send_enabled = prefs.getBoolean("send_enabled", false);
 
         etLink.addTextChangedListener(new TextWatcher() {
             @Override
@@ -225,6 +250,61 @@ public class FragmentDialogInsertLink extends FragmentDialogBase {
             }
         });
 
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setType("*/*");
+                startActivityForResult(Helper.getChooser(getContext(), intent), REQUEST_SEND);
+            }
+        });
+
+        sbDLimit.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progress++;
+                tvDLimit.setText(getString(R.string.title_style_link_send_dlimit, Integer.toString(progress)));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+        });
+
+        sbTLimit.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progress++;
+
+                if (progress < 24)
+                    tvTLimit.setText(getString(R.string.title_style_link_send_tlimit,
+                            getResources().getQuantityString(R.plurals.title_hours, progress, progress)));
+                else {
+                    progress = (progress - 24 + 1);
+                    tvTLimit.setText(getString(R.string.title_style_link_send_tlimit,
+                            getResources().getQuantityString(R.plurals.title_days, progress, progress)));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+        });
+
         if (savedInstanceState == null) {
             String link = (uri == null ? "https://" : uri.toString());
             etLink.setText(link);
@@ -234,7 +314,13 @@ public class FragmentDialogInsertLink extends FragmentDialogBase {
             etTitle.setText(savedInstanceState.getString("fair:text"));
         }
 
+        sbDLimit.setProgress(Send.DEFAULT_DLIMIT - 1);
+        sbTLimit.setProgress(Send.DEFAULT_TLIMIT - 1);
+
         pbWait.setVisibility(View.GONE);
+        pbUpload.setVisibility(View.GONE);
+        grpUpload.setVisibility(send_enabled && !BuildConfig.PLAY_STORE_RELEASE
+                ? View.VISIBLE : View.GONE);
 
         return new AlertDialog.Builder(context)
                 .setView(view)
@@ -247,13 +333,120 @@ public class FragmentDialogInsertLink extends FragmentDialogBase {
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
-                .setNeutralButton(R.string.title_reset, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendResult(RESULT_OK);
-                    }
-                })
+                //.setNeutralButton(R.string.title_reset, new DialogInterface.OnClickListener() {
+                //    @Override
+                //    public void onClick(DialogInterface dialog, int which) {
+                //        sendResult(RESULT_OK);
+                //    }
+                //})
                 .create();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try {
+            switch (requestCode) {
+                case REQUEST_SEND:
+                    if (resultCode == RESULT_OK && data != null)
+                        onSend(data.getData());
+                    break;
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+    }
+
+    private void onSend(Uri uri) {
+        int dlimit = sbDLimit.getProgress() + 1;
+        int tlimit = sbTLimit.getProgress() + 1;
+
+        if (tlimit >= 24)
+            tlimit = (tlimit - 24 + 1) * 24;
+
+        Bundle args = new Bundle();
+        args.putParcelable("uri", uri);
+        args.putInt("dlimit", dlimit);
+        args.putInt("tlimit", tlimit);
+
+        new SimpleTask<String>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                btnUpload.setEnabled(false);
+                sbDLimit.setEnabled(false);
+                sbTLimit.setEnabled(false);
+                pbUpload.setProgress(0);
+                pbUpload.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                btnUpload.setEnabled(true);
+                sbDLimit.setEnabled(true);
+                sbTLimit.setEnabled(true);
+                pbUpload.setVisibility(View.GONE);
+            }
+
+            @Override
+            protected String onExecute(Context context, Bundle args) throws Throwable {
+                Uri uri = args.getParcelable("uri");
+                int dlimit = args.getInt("dlimit");
+                int tlimit = args.getInt("tlimit");
+
+                if (uri == null)
+                    throw new FileNotFoundException("uri");
+
+                if (!"content".equals(uri.getScheme()))
+                    throw new FileNotFoundException("content");
+
+                DocumentFile dfile = DocumentFile.fromSingleUri(context, uri);
+                if (dfile == null)
+                    throw new FileNotFoundException("dfile");
+
+                if (dlimit == 0)
+                    dlimit = Send.DEFAULT_DLIMIT;
+                if (tlimit == 0)
+                    tlimit = Send.DEFAULT_TLIMIT;
+
+                Log.i("Send uri=" + uri + " dlimit=" + dlimit + " tlimit=" + tlimit);
+
+                args.putString("title", dfile.getName());
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                String send_host = prefs.getString("send_host", Send.DEFAULT_SERVER);
+
+                ContentResolver resolver = context.getContentResolver();
+                try (InputStream is = resolver.openInputStream(uri)) {
+                    return Send.upload(is, dfile, dlimit, tlimit * 60 * 60, send_host, new Send.IProgress() {
+                        @Override
+                        public void onProgress(int percentage) {
+                            Bundle args = new Bundle();
+                            args.putInt("progress", percentage);
+                            postProgress(null, args);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            protected void onProgress(CharSequence status, Bundle data) {
+                int progress = data.getInt("progress");
+                Log.i("Send progress=" + progress);
+                pbUpload.setProgress(progress);
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, String link) {
+                etLink.setText(link);
+                etTitle.setText(args.getString("title"));
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "send");
     }
 
     private static class OpenGraph {

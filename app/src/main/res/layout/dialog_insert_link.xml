@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/twotone_insert_link_45_24"
             android:drawablePadding="6dp"
-            android:labelFor="@+id/etLink"
             android:text="@string/title_style_link"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +36,6 @@
             android:id="@+id/etLink"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
             android:inputType="textUri|textMultiLine"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:labelFor="@+id/etLink"
+            android:labelFor="@+id/etTitle"
             android:text="@string/title_style_link_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +72,6 @@
             android:id="@+id/etTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:imeOptions="actionDone"
             android:inputType="text|textMultiLine"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toEndOf="parent"
@@ -109,11 +106,81 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:labelFor="@+id/etLink"
             android:text="@string/title_style_link_metadata_remark"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="italic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnMetadata" />
+
+        <Button
+            android:id="@+id/btnUpload"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:drawableEnd="@drawable/twotone_file_upload_24"
+            android:drawablePadding="6dp"
+            android:text="@string/title_style_link_send"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMetadataRemark" />
+
+        <ProgressBar
+            android:id="@+id/pbUpload"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:progress="25"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnUpload" />
+
+        <TextView
+            android:id="@+id/tvDLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:labelFor="@+id/sbDLimit"
+            android:text="@string/title_style_link_send_dlimit"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pbUpload" />
+
+        <SeekBar
+            android:id="@+id/sbDLimit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="99"
+            android:min="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDLimit" />
+
+        <TextView
+            android:id="@+id/tvTLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:labelFor="@+id/sbTLimit"
+            android:text="@string/title_style_link_send_tlimit"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sbDLimit" />
+
+        <SeekBar
+            android:id="@+id/sbTLimit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="52"
+            android:min="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTLimit" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/grpUpload"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:constraint_referenced_ids="btnUpload,tvDLimit,sbDLimit,tvTLimit,sbTLimit" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </eu.faircode.email.ScrollViewEx>

@@ -86,6 +86,14 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
         <item quantity="one">Blokkeer afzender van één bericht?</item>
         <item quantity="other">Blokkeer de afzender van %1$s berichten?</item>
     </plurals>
+    <plurals name="title_hours">
+        <item quantity="one">%1$s uur</item>
+        <item quantity="other">%1$s uren</item>
+    </plurals>
+    <plurals name="title_days">
+        <item quantity="one">%1$s dag</item>
+        <item quantity="other">%1$s dagen</item>
+    </plurals>
     <string name="title_junk_filter">Lokale spam filter gebruiken</string>
     <string name="title_junk_filter_hint">Dit kan het batterijgebruik verhogen en berichten onjuist markeren als spam</string>
     <string name="title_junk_blocklist">Gebruik spam blokkeerlijsten</string>
@@ -502,6 +510,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_conversation_actions">Acties voorstellen (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">Stel antwoordteksten voor (Android 10+)</string>
     <string name="title_advanced_language_detection">Detecteer de taal van de berichttekst</string>
+    <string name="title_advanced_photo_picker" comment="title_advanced_photo_picker&#10;https://developer.android.com/about/versions/13/features/photopicker">Gebruik de Android fotokiezer</string>
     <string name="title_advanced_pull_refresh">Omlaag schuiven om te verversen</string>
     <string name="title_advanced_autoscroll">Scroll naar boven bij het ontvangen van nieuwe berichten</string>
     <string name="title_advanced_double_tap">Dubbel tik om bericht gelezen/ongelezen te markeren</string>
@@ -1195,6 +1204,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_style_link_title">Titel</string>
     <string name="title_style_link_metadata">Titel ophalen</string>
     <string name="title_style_link_metadata_remark">Dit zal de titel ophalen op het ingevoerde adres</string>
+    <string name="title_style_link_send_dlimit">Download limiet (%1$s)</string>
+    <string name="title_style_link_send_tlimit">Tijdslimiet (%1$s)</string>
     <string name="title_add_image">Afbeelding toevoegen</string>
     <string name="title_add_image_inline">Invoegen</string>
     <string name="title_add_image_attach">Bijlage</string>

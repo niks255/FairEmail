@@ -54,6 +54,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
     private boolean count = true;
     private boolean keepawake = false;
 
+    private String id;
     private String name;
     private long started;
     private boolean destroyed;
@@ -73,6 +74,11 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
     private static final int REPORT_AFTER = 15 * 60 * 1000; // milliseconds
 
     static final String ACTION_TASK_COUNT = BuildConfig.APPLICATION_ID + ".ACTION_TASK_COUNT";
+
+    public SimpleTask<T> setId(String id) {
+        this.id = id;
+        return this;
+    }
 
     public SimpleTask<T> setLog(boolean log) {
         this.log = log;
@@ -143,6 +149,10 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
 
         // prevent garbage collection
         synchronized (tasks) {
+            if (id != null)
+                for (SimpleTask task : new ArrayList<>(tasks))
+                    if (id.equals(task.id))
+                        task.cancel(context);
             tasks.add(this);
         }
 
@@ -183,7 +193,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
         future = getExecutor(context).submit(new Runnable() {
             private Object data;
             private long elapsed;
-            private Throwable ex;
+            private Throwable error;
 
             @Override
             public void run() {
@@ -206,7 +216,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                         Log.i(ex);
                     else
                         Log.e(ex);
-                    this.ex = ex;
+                    error = ex;
                 } finally {
                     if (wl.isHeld())
                         wl.release();
@@ -283,7 +293,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                             }
                         } finally {
                             try {
-                                if (ex == null) {
+                                if (error == null) {
                                     if (log && BuildConfig.BETA_RELEASE) {
                                         Log.i("Crumb " + name);
                                         Map<String, String> crumb = new HashMap<>();
@@ -294,7 +304,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
                                     onExecuted(args, (T) data);
                                 } else
                                     try {
-                                        onException(args, ex);
+                                        onException(args, error);
                                     } catch (Throwable exex) {
                                         Log.e(exex);
                                     }

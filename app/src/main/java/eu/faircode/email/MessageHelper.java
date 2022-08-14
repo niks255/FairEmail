@@ -268,11 +268,12 @@ public class MessageHelper {
         System.setProperty("fairemail.uid_command", Boolean.toString(uid_command));
     }
 
-    static Properties getSessionProperties() {
+    static Properties getSessionProperties(boolean unicode) {
         Properties props = new Properties();
 
         // MIME
-        props.put("mail.mime.allowutf8", "false"); // SMTPTransport, MimeMessage
+        // https://javaee.github.io/javamail/docs/api/javax/mail/internet/package-summary.html
+        props.put("mail.mime.allowutf8", Boolean.toString(unicode)); // SMTPTransport, MimeMessage
         props.put("mail.mime.address.strict", "false");
 
         return props;
@@ -381,7 +382,7 @@ public class MessageHelper {
         } else {
             // https://datatracker.ietf.org/doc/html/rfc2822#section-3.6.6
             ByteArrayInputStream bis = new ByteArrayInputStream(message.headers.getBytes());
-            List<Header> headers = Collections.list(new InternetHeaders(bis).getAllHeaders());
+            List<Header> headers = Collections.list(new InternetHeaders(bis, identity.unicode).getAllHeaders());
 
             for (Header header : headers)
                 try {
@@ -1363,10 +1364,10 @@ public class MessageHelper {
                     getMessageParts(null, imessage, parts, null);
                     for (AttachmentPart apart : parts.attachments)
                         if ("text/rfc822-headers".equalsIgnoreCase(apart.attachment.type)) {
-                            reportHeaders = new InternetHeaders(apart.part.getInputStream());
+                            reportHeaders = new InternetHeaders(apart.part.getInputStream(), true);
                             break;
                         } else if ("message/rfc822".equalsIgnoreCase(apart.attachment.type)) {
-                            Properties props = MessageHelper.getSessionProperties();
+                            Properties props = MessageHelper.getSessionProperties(true);
                             Session isession = Session.getInstance(props, null);
                             MimeMessage amessage = new MimeMessage(isession, apart.part.getInputStream());
                             reportHeaders = amessage.getHeaders();
@@ -3622,7 +3623,7 @@ public class MessageHelper {
 
                 if ("message/rfc822".equals(local.type))
                     try (FileInputStream fis = new FileInputStream(local.getFile(context))) {
-                        Properties props = MessageHelper.getSessionProperties();
+                        Properties props = MessageHelper.getSessionProperties(true);
                         Session isession = Session.getInstance(props, null);
                         MimeMessage imessage = new MimeMessage(isession, fis);
                         MessageHelper helper = new MessageHelper(imessage, context);
@@ -4543,7 +4544,7 @@ public class MessageHelper {
                     if (bis.available() == 0)
                         throw new IOException("NIL");
 
-                    Properties props = MessageHelper.getSessionProperties();
+                    Properties props = MessageHelper.getSessionProperties(true);
                     Session isession = Session.getInstance(props, null);
 
                     Log.w("Decoding raw message");
@@ -4637,13 +4638,18 @@ public class MessageHelper {
             return null;
 
         int skip = 0;
+        boolean quoted = false;
         StringBuilder sb = new StringBuilder();
         int len = text.length();
         for (int i = 0; i < len; i++) {
             char kar = text.charAt(i);
-            if (kar == '(' && text.indexOf(')', i) > 0)
+
+            if (kar == '"' && (quoted || text.indexOf('"', i + 1) > 0))
+                quoted = !quoted;
+
+            if (!quoted && kar == '(' && text.indexOf(')', i) > 0)
                 skip++;
-            else if (kar == ')' && skip > 0)
+            else if (!quoted && kar == ')' && skip > 0)
                 skip--;
             else if (skip == 0)
                 sb.append(kar);
@@ -4828,7 +4834,7 @@ public class MessageHelper {
             content = content.replaceAll("(\\r?\\n)+", "\n");
             ByteArrayInputStream bis = new ByteArrayInputStream(content.getBytes());
             try {
-                Enumeration<Header> headers = new InternetHeaders(bis).getAllHeaders();
+                Enumeration<Header> headers = new InternetHeaders(bis, true).getAllHeaders();
                 while (headers.hasMoreElements()) {
                     Header header = headers.nextElement();
                     String name = header.getName();

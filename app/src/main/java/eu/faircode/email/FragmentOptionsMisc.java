@@ -126,6 +126,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvVirusTotalPrivacy;
     private EditText etVirusTotal;
     private ImageButton ibVirusTotal;
+    private SwitchCompat swSend;
+    private EditText etSend;
+    private ImageButton ibSend;
     private SwitchCompat swUpdates;
     private ImageButton ibChannelUpdated;
     private SwitchCompat swCheckWeekly;
@@ -195,6 +198,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swExactAlarms;
     private SwitchCompat swInfra;
     private SwitchCompat swDupMsgId;
+    private EditText etKeywords;
     private SwitchCompat swTestIab;
     private Button btnImportProviders;
     private TextView tvProcessors;
@@ -216,6 +220,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvPermissions;
 
     private Group grpVirusTotal;
+    private Group grpSend;
     private Group grpUpdates;
     private Group grpTest;
     private CardView cardDebug;
@@ -227,11 +232,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private final static String[] RESET_OPTIONS = new String[]{
             "sort_answers", "shortcuts", "fts",
             "classification", "class_min_probability", "class_min_difference",
-            "language", "lt_enabled", "deepl_enabled", "vt_enabled", "vt_apikey",
+            "language", "lt_enabled", "deepl_enabled", "vt_enabled", "vt_apikey", "send_enabled", "send_host",
             "updates", "weekly", "show_changelog",
             "crash_reports", "cleanup_attachments",
-            "watchdog", "experiments", "main_log", "protocol", "log_level", "debug", "leak_canary", "test1",
-            "test2", "test3", "test4", "test5",
+            "watchdog", "experiments", "main_log", "protocol", "log_level", "debug", "leak_canary",
+            "test1", "test2", "test3", "test4", "test5",
             "work_manager", // "external_storage",
             "query_threads", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_auto_vacuum", "sqlite_cache",
             "chunk_size", "thread_range", "undo_manager",
@@ -240,7 +245,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", "use_top",
             "keep_alive_poll", "empty_pool", "idle_done", "logarithmic_backoff",
-            "exact_alarms", "infra", "dkim_verify", "dup_msgids", "test_iab"
+            "exact_alarms", "infra", "dkim_verify", "dup_msgids", "global_keywords", "test_iab"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -318,6 +323,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvVirusTotalPrivacy = view.findViewById(R.id.tvVirusTotalPrivacy);
         etVirusTotal = view.findViewById(R.id.etVirusTotal);
         ibVirusTotal = view.findViewById(R.id.ibVirusTotal);
+        swSend = view.findViewById(R.id.swSend);
+        etSend = view.findViewById(R.id.etSend);
+        ibSend = view.findViewById(R.id.ibSend);
         swUpdates = view.findViewById(R.id.swUpdates);
         ibChannelUpdated = view.findViewById(R.id.ibChannelUpdated);
         swCheckWeekly = view.findViewById(R.id.swWeekly);
@@ -387,6 +395,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swExactAlarms = view.findViewById(R.id.swExactAlarms);
         swInfra = view.findViewById(R.id.swInfra);
         swDupMsgId = view.findViewById(R.id.swDupMsgId);
+        etKeywords = view.findViewById(R.id.etKeywords);
         swTestIab = view.findViewById(R.id.swTestIab);
         btnImportProviders = view.findViewById(R.id.btnImportProviders);
         tvProcessors = view.findViewById(R.id.tvProcessors);
@@ -408,6 +417,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvPermissions = view.findViewById(R.id.tvPermissions);
 
         grpVirusTotal = view.findViewById(R.id.grpVirusTotal);
+        grpSend = view.findViewById(R.id.grpSend);
         grpUpdates = view.findViewById(R.id.grpUpdates);
         grpTest = view.findViewById(R.id.grpTest);
         cardDebug = view.findViewById(R.id.cardDebug);
@@ -688,6 +698,42 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onClick(View v) {
                 Helper.viewFAQ(v.getContext(), 181);
+            }
+        });
+
+        swSend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("send_enabled", checked).apply();
+            }
+        });
+
+        etSend.setHint(Send.DEFAULT_SERVER);
+        etSend.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String apikey = s.toString().trim();
+                if (TextUtils.isEmpty(apikey))
+                    prefs.edit().remove("send_host").apply();
+                else
+                    prefs.edit().putString("send_host", apikey).apply();
+            }
+        });
+
+        ibSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 183);
             }
         });
 
@@ -1052,7 +1098,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onClick(View v) {
                 prefs.edit().remove("debug").commit();
-                ApplicationEx.restart(v.getContext());
+                ApplicationEx.restart(v.getContext(), "query_threads");
             }
         });
 
@@ -1084,7 +1130,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         .putBoolean("sqlite_auto_vacuum", checked)
                         .remove("debug")
                         .apply();
-                ApplicationEx.restart(v.getContext());
+                ApplicationEx.restart(v.getContext(), "sqlite_auto_vacuum");
             }
         });
 
@@ -1109,7 +1155,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onClick(View v) {
                 prefs.edit().remove("debug").commit();
-                ApplicationEx.restart(v.getContext());
+                ApplicationEx.restart(v.getContext(), "sqlite_cache");
             }
         });
 
@@ -1309,6 +1355,32 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("dup_msgids", checked).apply();
+            }
+        });
+
+        etKeywords.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String keywords = s.toString().trim();
+                String[] keyword = keywords.replaceAll("\\s+", " ").split(" ");
+                for (int i = 0; i < keyword.length; i++)
+                    keyword[i] = MessageHelper.sanitizeKeyword(keyword[i]);
+                keywords = String.join(" ", keyword);
+
+                if (TextUtils.isEmpty(keywords))
+                    prefs.edit().remove("global_keywords").apply();
+                else
+                    prefs.edit().putString("global_keywords", keywords).apply();
             }
         });
 
@@ -1641,6 +1713,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         });
 
         grpVirusTotal.setVisibility(BuildConfig.PLAY_STORE_RELEASE ? View.GONE : View.VISIBLE);
+        grpSend.setVisibility(BuildConfig.PLAY_STORE_RELEASE ? View.GONE : View.VISIBLE);
 
         grpUpdates.setVisibility(!BuildConfig.DEBUG &&
                 (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext()))
@@ -1715,7 +1788,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         if ("last_cleanup".equals(key))
             setLastCleanup(prefs.getLong(key, -1));
 
-        if ("vt_apikey".equals(key))
+        if ("vt_apikey".equals(key) || "send_host".equals(key))
+            return;
+
+        if ("global_keywords".equals(key))
             return;
 
         setOptions();
@@ -1862,6 +1938,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swDeepL.setChecked(prefs.getBoolean("deepl_enabled", false));
         swVirusTotal.setChecked(prefs.getBoolean("vt_enabled", false));
         etVirusTotal.setText(prefs.getString("vt_apikey", null));
+        swSend.setChecked(prefs.getBoolean("send_enabled", false));
+        etSend.setText(prefs.getString("send_host", null));
         swUpdates.setChecked(prefs.getBoolean("updates", true));
         swCheckWeekly.setChecked(prefs.getBoolean("weekly", Helper.hasPlayStore(getContext())));
         swCheckWeekly.setEnabled(swUpdates.isChecked());
@@ -1937,6 +2015,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swExactAlarms.setChecked(prefs.getBoolean("exact_alarms", true));
         swInfra.setChecked(prefs.getBoolean("infra", false));
         swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
+        etKeywords.setText(prefs.getString("global_keywords", null));
         swTestIab.setChecked(prefs.getBoolean("test_iab", false));
 
         tvProcessors.setText(getString(R.string.title_advanced_processors, Runtime.getRuntime().availableProcessors()));

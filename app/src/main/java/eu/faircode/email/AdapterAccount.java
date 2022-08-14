@@ -56,6 +56,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -203,7 +204,7 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
             ivSync.setImageResource(account.synchronize ? R.drawable.twotone_sync_24 : R.drawable.twotone_sync_disabled_24);
             ivSync.setContentDescription(context.getString(account.synchronize ? R.string.title_legend_synchronize_on : R.string.title_legend_synchronize_off));
 
-            ivOAuth.setImageDrawable(context.getDrawable(account.auth_type == AUTH_TYPE_GMAIL
+            ivOAuth.setImageDrawable(ContextCompat.getDrawable(context, account.auth_type == AUTH_TYPE_GMAIL
                     ? R.drawable.twotone_android_24 : R.drawable.twotone_security_24));
             ivOAuth.setVisibility(
                     settings && account.auth_type != AUTH_TYPE_PASSWORD ? View.VISIBLE : View.GONE);
@@ -384,8 +385,9 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
             ss.setSpan(new RelativeSizeSpan(0.9f), 0, ss.length(), 0);
             popupMenu.getMenu().add(Menu.NONE, 0, order++, ss).setEnabled(false);
 
-            popupMenu.getMenu().add(Menu.NONE, R.string.title_enabled, order++, R.string.title_enabled)
-                    .setCheckable(true).setChecked(account.synchronize);
+            if (settings)
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_enabled, order++, R.string.title_enabled)
+                        .setCheckable(true).setChecked(account.synchronize);
             popupMenu.getMenu().add(Menu.NONE, R.string.title_primary, order++, R.string.title_primary)
                     .setCheckable(true).setChecked(account.primary);
 

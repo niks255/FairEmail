@@ -47,6 +47,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -268,7 +269,7 @@ public class ActivityEML extends ActivityBase {
                     if (is == null)
                         throw new FileNotFoundException(uri.toString());
 
-                    Properties props = MessageHelper.getSessionProperties();
+                    Properties props = MessageHelper.getSessionProperties(true);
                     Session isession = Session.getInstance(props, null);
                     MimeMessage imessage = new MimeMessage(isession, is);
 
@@ -294,9 +295,9 @@ public class ActivityEML extends ActivityBase {
                             public Drawable getDrawable(Element img) {
                                 Drawable d;
                                 if (TextUtils.isEmpty(img.attr("x-tracking")))
-                                    d = context.getDrawable(R.drawable.twotone_image_24);
+                                    d = ContextCompat.getDrawable(context, R.drawable.twotone_image_24);
                                 else {
-                                    d = context.getDrawable(R.drawable.twotone_my_location_24);
+                                    d = ContextCompat.getDrawable(context, R.drawable.twotone_my_location_24);
                                     d.setTint(Helper.resolveColor(context, R.attr.colorWarning));
                                 }
                                 d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
@@ -664,12 +665,12 @@ public class ActivityEML extends ActivityBase {
                     if (is == null)
                         throw new FileNotFoundException(uri.toString());
 
-                    Properties props = MessageHelper.getSessionProperties();
+                    Properties props = MessageHelper.getSessionProperties(true);
                     Session isession = Session.getInstance(props, null);
                     MimeMessage imessage = new MimeMessage(isession, is);
 
                     try (EmailService iservice = new EmailService(
-                            context, account.getProtocol(), account.realm, account.encryption, account.insecure, true)) {
+                            context, account.getProtocol(), account.realm, account.encryption, account.insecure, account.unicode, true)) {
                         iservice.setPartialFetch(account.partial_fetch);
                         iservice.setIgnoreBodyStructureSize(account.ignore_size);
                         iservice.connect(account);

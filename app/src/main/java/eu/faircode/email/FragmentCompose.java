@@ -125,6 +125,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -1366,7 +1367,7 @@ public class FragmentCompose extends FragmentBase {
         rvAttachment.setLayoutManager(llm);
         rvAttachment.setItemAnimator(null);
 
-        adapter = new AdapterAttachment(this, false);
+        adapter = new AdapterAttachment(this, false, null);
         rvAttachment.setAdapter(adapter);
 
         tvNoInternetAttachments.setVisibility(View.GONE);
@@ -3033,7 +3034,8 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onAddImage(boolean photo) {
-        PackageManager pm = getContext().getPackageManager();
+        Context context = getContext();
+        PackageManager pm = context.getPackageManager();
         if (photo) {
             // https://developer.android.com/training/camera/photobasics
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -3048,26 +3050,28 @@ public class FragmentCompose extends FragmentBase {
                 });
                 snackbar.show();
             } else {
-                File dir = new File(getContext().getFilesDir(), "photo");
+                File dir = new File(context.getFilesDir(), "photo");
                 if (!dir.exists())
                     dir.mkdir();
                 File file = new File(dir, working + ".jpg");
                 try {
-                    photoURI = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID, file);
+                    photoURI = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     startActivityForResult(intent, REQUEST_TAKE_PHOTO);
                 } catch (Throwable ex) {
                     // java.lang.IllegalArgumentException: Failed to resolve canonical path for ...
-                    Helper.reportNoViewer(getContext(), intent, ex);
+                    Helper.reportNoViewer(context, intent, ex);
                 }
             }
         } else {
             // https://developer.android.com/reference/android/provider/MediaStore#ACTION_PICK_IMAGES
             // Android 12: cmd device_config put storage_native_boot picker_intent_enabled true
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean photo_picker = prefs.getBoolean("photo_picker", true);
             Intent picker = new Intent(MediaStore.ACTION_PICK_IMAGES);
             picker.setType("image/*");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                    picker.resolveActivity(pm) != null) {
+                    photo_picker && picker.resolveActivity(pm) != null) {
                 Log.i("Using photo picker");
                 picker.putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, MediaStore.getPickImagesMaxLimit());
                 startActivityForResult(picker, REQUEST_IMAGE_FILE);
@@ -3081,7 +3085,7 @@ public class FragmentCompose extends FragmentBase {
                 if (intent.resolveActivity(pm) == null) // GET_CONTENT whitelisted
                     noStorageAccessFramework();
                 else
-                    startActivityForResult(Helper.getChooser(getContext(), intent), REQUEST_IMAGE_FILE);
+                    startActivityForResult(Helper.getChooser(context, intent), REQUEST_IMAGE_FILE);
             }
         }
     }
@@ -3150,7 +3154,7 @@ public class FragmentCompose extends FragmentBase {
 
                     if (d == null) {
                         int px = Helper.dp2pixels(context, (zoom + 1) * 24);
-                        d = context.getDrawable(R.drawable.twotone_broken_image_24);
+                        d = ContextCompat.getDrawable(context, R.drawable.twotone_broken_image_24);
                         d.setBounds(0, 0, px, px);
                     }
 
@@ -3364,7 +3368,7 @@ public class FragmentCompose extends FragmentBase {
                         }
 
                     // Build message
-                    Properties props = MessageHelper.getSessionProperties();
+                    Properties props = MessageHelper.getSessionProperties(true);
                     Session isession = Session.getInstance(props, null);
                     MimeMessage imessage = new MimeMessage(isession);
                     MessageHelper.build(context, draft, attachments, identity, true, imessage);
@@ -3716,7 +3720,7 @@ public class FragmentCompose extends FragmentBase {
                     }
 
                 // Build message to sign
-                Properties props = MessageHelper.getSessionProperties();
+                Properties props = MessageHelper.getSessionProperties(true);
                 Session isession = Session.getInstance(props, null);
                 MimeMessage imessage = new MimeMessage(isession);
                 MessageHelper.build(context, draft, attachments, identity, true, imessage);
@@ -6401,7 +6405,7 @@ public class FragmentCompose extends FragmentBase {
                             // Check size
                             if (identity != null && identity.max_size != null)
                                 try {
-                                    Properties props = MessageHelper.getSessionProperties();
+                                    Properties props = MessageHelper.getSessionProperties(true);
                                     if (identity.unicode)
                                         props.put("mail.mime.allowutf8", "true");
                                     Session isession = Session.getInstance(props, null);

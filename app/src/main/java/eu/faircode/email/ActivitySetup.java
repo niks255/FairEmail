@@ -101,6 +101,7 @@ import java.security.cert.X509Certificate;
 import java.security.spec.KeySpec;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -910,9 +911,28 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         TextView tvLog = dview.findViewById(R.id.tvLog);
         tvLog.setText(null);
 
+        Map<String, Object> defer = Collections.synchronizedMap(new HashMap<>());
+
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(dview)
                 .setPositiveButton(android.R.string.ok, null)
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(dview.getContext());
+                        SharedPreferences.Editor editor = prefs.edit();
+
+                        for (String key : defer.keySet()) {
+                            Object value = defer.get(key);
+                            if (value instanceof Boolean)
+                                editor.putBoolean(key, (Boolean) value);
+                            else if (value instanceof String)
+                                editor.putString(key, (String) value);
+                        }
+
+                        editor.apply();
+                    }
+                })
                 .show();
 
         Button ok = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -1292,6 +1312,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                             if ("pro".equals(key) && !BuildConfig.DEBUG)
                                 continue;
 
+                            if ("accept_unsupported".equals(key))
+                                continue;
+
                             if ("biometrics".equals(key) || "pin".equals(key))
                                 continue;
 
@@ -1307,10 +1330,16 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
                             // Prevent restart
                             if ("secure".equals(key) ||
+                                    "load_emoji".equals(key) ||
                                     "shortcuts".equals(key) ||
                                     "language".equals(key) ||
                                     "wal".equals(key))
                                 continue;
+
+                            if ("theme".equals(key) || "beige".equals(key)) {
+                                defer.put(key, jsetting.get("value"));
+                                continue;
+                            }
 
                             if (key != null && key.startsWith("widget."))
                                 continue;
@@ -1884,7 +1913,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
             Dialog dialog = new AlertDialog.Builder(context)
                     .setView(dview)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.title_add_image_select, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String password1 = etPassword1.getEditText().getText().toString();
@@ -1949,7 +1978,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
             Dialog dialog = new AlertDialog.Builder(context)
                     .setView(dview)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.title_add_image_select, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String password1 = etPassword1.getEditText().getText().toString();
