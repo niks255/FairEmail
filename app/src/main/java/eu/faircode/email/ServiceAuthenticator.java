@@ -24,9 +24,6 @@ import static eu.faircode.email.GmailState.TYPE_GOOGLE;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
-import android.content.SharedPreferences;
-
-import androidx.preference.PreferenceManager;
 
 import net.openid.appauth.AuthState;
 import net.openid.appauth.AuthorizationException;
@@ -58,6 +55,7 @@ public class ServiceAuthenticator extends Authenticator {
     static final int AUTH_TYPE_GMAIL = 2;
     static final int AUTH_TYPE_OAUTH = 3;
 
+    static final long MIN_REFRESH_INTERVAL = 15 * 60 * 1000L;
     static final long MIN_FORCE_REFRESH_INTERVAL = 15 * 60 * 1000L;
 
     ServiceAuthenticator(
@@ -156,25 +154,11 @@ public class ServiceAuthenticator extends Authenticator {
 
             if (!needsRefresh && forceRefresh &&
                     expiration != null &&
-                    expiration - ServiceAuthenticator.MIN_FORCE_REFRESH_INTERVAL < now)
+                    expiration - MIN_FORCE_REFRESH_INTERVAL < now)
                 needsRefresh = true;
 
             if (needsRefresh)
                 authState.setNeedsTokenRefresh(true);
-
-            if (needsRefresh || authState.getNeedsTokenRefresh()) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                String key = "token." + id + "." + user;
-                long last_refresh = prefs.getLong(key, 0);
-                long ago = now - last_refresh;
-                EntityLog.log(context, EntityLog.Type.Debug, "Token needs refresh" +
-                        " user=" + id + ":" + user + " ago=" + (ago / 60 / 1000L) + " min");
-                if (ago < ServiceAuthenticator.MIN_FORCE_REFRESH_INTERVAL) {
-                    Log.e("Blocked token refresh id=" + id + " ago=" + (ago / 1000L));
-                    return;
-                }
-                prefs.edit().putLong(key, now).apply();
-            }
 
             EntityLog.log(context, EntityLog.Type.Debug, "Token user=" + id + ":" + user +
                     " expiration=" + (expiration == null ? null : new Date(expiration)) +
@@ -208,8 +192,10 @@ public class ServiceAuthenticator extends Authenticator {
             semaphore.acquire();
             Log.i("OAuth refreshed user=" + id + ":" + user);
 
-            if (holder.error != null)
+            if (holder.error != null) {
+                Log.e(new Throwable("Token refresh failed id=" + id, holder.error));
                 throw holder.error;
+            }
         } catch (Exception ex) {
             throw new MessagingException("OAuth refresh id=" + id, ex);
         }

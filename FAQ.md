@@ -62,6 +62,7 @@ For authorizing:
 * T-online.de: please make sure you use [an email password](https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-adresse-passwoerter-und-sicherheit/passwort-fuer-e-mail-programme-einrichten) (German) and not your account password
 * Ionos (1und1): please make sure you use [an email password](https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-11-ionos-aendern/) (German) and not your account password
 * Yandex: please check if [IMAP is enabled](https://yandex.com/support/mail/mail-clients/others.html)
+* Comcast/Xfinity: please check if [third part email access](https://www.xfinity.com/support/articles/third-party-email-access) is enabled
 
 Please see [here](#user-content-faq22) for common error messages and solutions.
 
@@ -1011,6 +1012,7 @@ Common errors:
 * *Private key does not match any encryption keys*: the selected key cannot be used to decrypt the message, probably because it is the incorrect key
 * *No private key*: no certificate was selected or no certificate was available in the Android keystore
 * *Memory allocation failed*: Android supports keys up to 4096 bits only (Android [issue 199605614](https://issuetracker.google.com/issues/199605614))
+* *message-digest attribute value does not match calculated value*: the signature doesn't match the message, possible because the message was changed.
 
 In case the certificate chain is incorrect, you can tap on the little info button to show the all certificates.
 After the certificate details the issuer or "selfSign" is shown.
@@ -4530,6 +4532,8 @@ because Google rejected the application of FairEmail for this reason:
 At this time, we are only accepting apps within the Media, short form Messaging,
 or categories supported by the Android for Cars App Library.*
 
+Also, not all Android Auto versions support this (as installed in the car).
+
 **Use of this feature with the Github version is expressly at your own risk!**
 
 For notification (messaging) support you'll need to enable the following notification options:
@@ -4884,6 +4888,7 @@ In addition, *Select app* will be listed, which means that the link will be hand
 In most cases, this will be with the default browser, which you can select in the Android settings.
 If there is choice, Android will ask you how to open the link. You can select *Always* or *Just Once*.
 If you want to reset *Always*, please [see here](https://support.google.com/pixelphone/answer/6271667) about how to.
+Note that Android will always use the default browser as selected in the Android settings and therefore will never ask which browser to use.
 
 If you ticked *Do not ask this again for [domain name]*, you can undo this by using the *Reset questions* button in the miscellaneous settings tab page of the app.
 

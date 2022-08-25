@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_support">Overjanje računov Google bo delovalo samo v različici iz Trgovine Play in GitHuba, ker Android preveri digitalni podpis programa.</string>
     <string name="title_setup_gmail_rationale">Odobrite dovoljenja za izbiro računa in branje vašega imena.</string>
     <string name="title_setup_gmail_permissions">Google vas bo vprašal za dovoljenje za branje, sestavljanje, pošiljanje in trajno brisanje vaše e-pošte.  FairEmail brez vašega izrecnega dovoljenja ne bo nikoli izbrisal sporočil.</string>
+    <string name="title_setup_gmail_login">Če ste v Chromeu prijavljeni v račun, lahko nov račun dodate samo preko Androida.  Temu se lahko izognete z odjavo v Chromeu v Chromeovih nastavitvah snhronizacije.</string>
     <string name="title_setup_gmail_on_device">Zakaj moram izbrati sistemski račun?</string>
     <string name="title_setup_gmail_password">Račun želim odobriti z geslom namesto z računom v napravi.</string>
     <string name="title_setup_office_auth">Napaka \'OVERITEV je spodletela\' se lahko pojavi, če je skrbnik sistema onemogočil IMAP/SMTP.</string>
@@ -421,6 +422,7 @@
     <string name="title_advanced_ssl_harden">Utrdi povezave SSL</string>
     <string name="title_advanced_ssl_harden_strict">Zahtevaj TLS 3.1</string>
     <string name="title_advanced_cert_strict">Strogo preverjanje potrdil</string>
+    <string name="title_advanced_open_safe">Odpri samo varne povezave</string>
     <string name="title_advanced_manage_connectivity">Upravljaj s povezljivostjo</string>
     <string name="title_advanced_caption_general">Splošno</string>
     <string name="title_advanced_caption_navigation">Krmarjenje</string>
@@ -537,7 +539,7 @@
     <string name="title_advanced_conversation_actions">Predlagaj dejanja (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">Predlagaj besedila za odgovor (Android 10+)</string>
     <string name="title_advanced_language_detection">Zaznaj jezik besedila sporočila</string>
-    <string name="title_advanced_photo_picker" comment="title_advanced_photo_picker&#10;https://developer.android.com/about/versions/13/features/photopicker">Uporabi izbirnika fotografij Android</string>
+    <string name="title_advanced_photo_picker">Uporabi izbirnika fotografij Android</string>
     <string name="title_advanced_pull_refresh">Povleci dol za osvežitev</string>
     <string name="title_advanced_autoscroll">Ob prejemanju novih sporočil se pomakni na vrh</string>
     <string name="title_advanced_double_tap">Dvojni dotik za označevanje sporočil kot prebranih/neprebranih</string>
@@ -717,6 +719,7 @@
     <string name="title_advanced_timeout_hint">Časovna omejitev za branje/pisanje bo nastavljena na dvakratno vrednost časovne omejitve povezave.  Višje vrednosti bodo povzročile večjo porabo energije.</string>
     <string name="title_advanced_cert_strict_hint">Onemogočanje tega bo razbremenilo preverjanje potrdil strežnika.</string>
     <string name="title_advanced_ssl_harden_hint">Omogočanje tega bo onemogočilo šibke protokole SSL in šifre, kar lahko povzroči težave pri povezavi.</string>
+    <string name="title_advanced_open_safe_hint">Omogočanje tega bo zahtevalo varne povezave za prejem slik itd.</string>
     <string name="title_advanced_roaming_hint">Med gostovanjem bodo glave sporočil vedno prenesene.  Za onemogočanje interneta med gostovanjem lahko uporabite nastavitve naprave za gostovanje.</string>
     <string name="title_advanced_browse_hint">Ob pomikanju navzdol prenesi več sporočil</string>
     <string name="title_advanced_layout_hint">Preklop na bolj strnjeno razporeditev in spremembo velikosti pisave sporočila lahko opravite v meniju zgornje vrstice z dejanji v pogledu sporočil.</string>
@@ -971,6 +974,7 @@
     <string name="title_hide_seen_folder_hint">Samo na seznamu map začetnega zaslona</string>
     <string name="title_unified_folder">Prikaži v poenoteni mapi \'Prejeto\'</string>
     <string name="title_navigation_folder">Prikaži v meniju za krmarjenje</string>
+    <string name="title_navigation_folder_hide">Skrij v meniju za krmarjenje</string>
     <string name="title_synchronize_folder">Sinhroniziraj (prejmi sporočila)</string>
     <string name="title_poll_folder">Preveri občasno namesto neprestane sinhronizacije</string>
     <string name="title_poll_folder_remark">Večina e-poštnih strežnikov dovoli potisna sporočila samo za peščico map!</string>
@@ -1393,7 +1397,7 @@
     <string name="title_sort_on_priority">Prednosti</string>
     <string name="title_sort_on_sender">Pošiljatelju</string>
     <string name="title_sort_on_subject">Zadevi</string>
-    <string name="title_sort_on_size">Velik.</string>
+    <string name="title_sort_on_size">Velikosti</string>
     <string name="title_sort_on_attachments">Prilogah</string>
     <string name="title_sort_on_hidden">Skrito</string>
     <string name="title_sort_ascending">Najprej najstarejša</string>
@@ -1408,6 +1412,7 @@
     <string name="title_compact">Strnjen pogled</string>
     <string name="title_zoom">Velikost besedila</string>
     <string name="title_padding">Velikost blazinjenja</string>
+    <string name="title_large_buttons">Večji gumbi</string>
     <string name="title_select_language">Izberite jezik</string>
     <string name="title_select_all">Izberi vse</string>
     <string name="title_select_found">Izberi najdene</string>
@@ -1425,6 +1430,8 @@
     <string name="title_edit_signature_image_hint">        Med pošiljanjem sporočila se slika kopira v sporočilo z izbranega mesta..
         Ne izbrišite datoteke slike!
     </string>
+    <string name="title_answer_define_name">Ime</string>
+    <string name="title_answer_define_value">Vrednost</string>
     <string name="title_answer_caption">Uredi predlogo</string>
     <string name="title_answer_reply">Predloga za odgovor</string>
     <string name="title_answer_name">Ime predloge</string>
@@ -1744,7 +1751,7 @@
     <string name="title_pro_activated">Vse značilnosti Pro so aktivirane.</string>
     <string name="title_pro_valid">Vse značilnosti Pro so aktivirane.</string>
     <string name="title_pro_invalid">Neveljaven odziv.</string>
-    <string name="title_pro_support">FarMail potrebuje vašo pomoč.  Dotaknite se za nakup značilnosti Pro, da projekt ohranite pri življenju ali da izklopite to sporočilo.</string>
+    <string name="title_pro_support">FairMail potrebuje vašo pomoč.  Dotaknite se za nakup značilnosti Pro, da projekt ohranite pri življenju ali da izklopite to sporočilo.</string>
     <string name="title_boundary_error">Napaka pri prejemanju sporočil s poštnega strežnika.</string>
     <string name="title_boundary_retry">Poizkusi znova</string>
     <string name="title_unexpected_error">Nepričakovana napaka</string>

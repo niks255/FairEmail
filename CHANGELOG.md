@@ -4,6 +4,43 @@
 
 ### [Ledumahadi](https://en.wikipedia.org/wiki/Ledumahadi)
 
+### 1.1957 - 2022-08-22
+
+* Added custom placeholder values for reply templates
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1956 - 2022-08-20
+
+* Added overflow menu item for larger message action buttons
+* Added recognition of a series tracking parameters
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated translations
+
+### 1.1955 - 2022-08-18
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1954 - 2022-08-17
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1952 - 2022-08-16
+
+* Small improvements and minor bug fixes
+* Updated build tools (Android Studio, gradle)
+* Updated translations
+
+### 1.1951 - 2022-08-15
+
+* Added option to download images, etc via secure connections only
+* Small improvements and minor bug fixes
+* Updated libraries (OAuth)
+* Updated translations
+
 ### 1.1950 - 2022-08-13
 
 * Fixed authenticating on-device Gmail accounts in some cases

@@ -173,6 +173,7 @@
     <string name="title_setup_gmail_support">Autorizar cuentas de Google sólo funcionará en las versiones de Play Store y GitHub porque Android comprueba la firma digital de la aplicación</string>
     <string name="title_setup_gmail_rationale">Por favor, conceda permisos para seleccionar una cuenta y leer su nombre</string>
     <string name="title_setup_gmail_permissions">Google solicitará permisos para leer, redactar, enviar y eliminar permanentemente todo su correo electrónico. FairEmail nunca eliminará sus mensajes sin su consentimiento explícito.</string>
+    <string name="title_setup_gmail_login">Si Chrome ha iniciado sesión en una cuenta, sólo se puede añadir una nueva cuenta a través de Android. Esto se puede evitar desconectando Chrome a través de los ajustes de sincronización de Chrome.</string>
     <string name="title_setup_gmail_on_device">¿Por qué necesito seleccionar una cuenta del dispositivo?</string>
     <string name="title_setup_gmail_password">Quiero autorizar una cuenta con una contraseña en lugar de una cuenta en el dispositivo</string>
     <string name="title_setup_office_auth">El error \'AUTHENTICATE failed\' puede ser causado por IMAP/SMTP desactivado por el administrador de sistemas</string>
@@ -395,6 +396,7 @@
     <string name="title_advanced_ssl_harden">Endurecer conexiones SSL</string>
     <string name="title_advanced_ssl_harden_strict">Requerir TLS 1.3</string>
     <string name="title_advanced_cert_strict">Verificación estricta de certificados</string>
+    <string name="title_advanced_open_safe">Abrir solo conexiones seguras</string>
     <string name="title_advanced_manage_connectivity">Administrar conectividad</string>
     <string name="title_advanced_caption_general">General</string>
     <string name="title_advanced_caption_navigation">Navegación</string>
@@ -511,7 +513,7 @@
     <string name="title_advanced_conversation_actions">Sugerir acciones (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">Sugerir textos de respuesta (Android 10+)</string>
     <string name="title_advanced_language_detection">Detectar idioma de texto del mensaje</string>
-    <string name="title_advanced_photo_picker" comment="title_advanced_photo_picker&#10;https://developer.android.com/about/versions/13/features/photopicker">Usar el selector de fotos de Android</string>
+    <string name="title_advanced_photo_picker">Usar el selector de fotos de Android</string>
     <string name="title_advanced_pull_refresh">Tire hacia abajo para actualizar</string>
     <string name="title_advanced_autoscroll">Desplazar hacia arriba al recibir nuevos mensajes</string>
     <string name="title_advanced_double_tap">Doble toque para marcar mensaje como leído/no leído</string>
@@ -692,6 +694,7 @@
     <string name="title_advanced_timeout_hint">El tiempo de espera de lectura/escritura se establecerá al doble del tiempo de espera de conexión. Valores más altos resultarán en un mayor uso de la batería.</string>
     <string name="title_advanced_cert_strict_hint">Desactivar esto relajará la comprobación de los certificados del servidor</string>
     <string name="title_advanced_ssl_harden_hint">Activar esto desactivará los protocolos SSL y cifrados débiles, lo que puede provocar problemas de conexión</string>
+    <string name="title_advanced_open_safe_hint">Habilitar esto requerirá conexiones seguras para descargar imágenes, etc</string>
     <string name="title_advanced_roaming_hint">Los encabezados de mensajes siempre se obtendrán cuando en itinerancia. Puede usar la configuración de itinerancia del dispositivo para desactivar internet mientras se está en itinerancia.</string>
     <string name="title_advanced_browse_hint">Obtener más mensajes al desplazarse hacia abajo</string>
     <string name="title_advanced_layout_hint">Cambiar a un diseño más compacto y cambiar el tamaño del texto del mensaje puede hacerse en el menú de la barra de acción superior en la vista de mensaje</string>
@@ -946,6 +949,7 @@
     <string name="title_hide_seen_folder_hint">Sólo en la lista de carpetas mostrada en la pantalla de inicio</string>
     <string name="title_unified_folder">Mostrar en bandeja de entrada unificada</string>
     <string name="title_navigation_folder">Mostrar en el menú de navegación</string>
+    <string name="title_navigation_folder_hide">Ocultar en el menú de navegación</string>
     <string name="title_synchronize_folder">Sincronizar (recibir mensajes)</string>
     <string name="title_poll_folder">Comprobar periódicamente en lugar de sincronizar continuamente</string>
     <string name="title_poll_folder_remark">¡La mayoría de los servidores de correo electrónico sólo permiten mensajes push para un puñado de carpetas!</string>
@@ -1398,6 +1402,7 @@
     <string name="title_edit_signature_image_hint">        Al enviar un mensaje, la imagen se copia en el mensaje desde la ubicación seleccionada.
         ¡Así que no borre el archivo de imagen!
     </string>
+    <string name="title_answer_define_name">Nombre</string>
     <string name="title_answer_caption">Editar plantilla</string>
     <string name="title_answer_reply">Plantilla de respuesta</string>
     <string name="title_answer_name">Nombre de plantilla</string>

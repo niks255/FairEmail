@@ -73,7 +73,8 @@
     </plurals>
     <string name="title_ask_spam_who">Definir a mensagem de %1$s como indesejada?</string>
     <string name="title_junk_hint">O seu fornecedor de correio electrónico é responsável por filtrar o ‘spam’. Uma aplicação de correio eletrónico não possui toda a informação necessária para o fazer de forma confiável.</string>
-    <string name="title_junk_pop_hint">Mensagens de remetentes bloqueados não serão baixadas. Se \"Deixar mensagens no servidor\" não estiver ativado, essas mensagens serão perdidas permanentemente!
+    <string name="title_junk_pop_hint">        Mensagens de remetentes bloqueados não serão transferidas.
+        Se \"Deixar mensagens no servidor\" não estiver activado, essas mensagens serão perdidas permanentemente!
     </string>
     <string name="title_block">Bloquear %1$s</string>
     <string name="title_block_sender">Bloquear Remetente</string>
@@ -148,13 +149,13 @@
     <string name="title_setup_quick_accounts">Adicionar ou alterar contas</string>
     <string name="title_setup_quick_support">Alguns provedores tornam difícil adicionar uma conta. Por favor, não culpe o FairEmail por isso, peça-lhes suporte.</string>
     <string name="title_setup_quick_hint">O endereço de e-mail inserido é usado para consultar o servidor de e-mail e autoconfig.thunderbird.net para informações de configuração</string>
-    <string name="title_setup_quick_patience">Por favor seja paciente &#8230;</string>
+    <string name="title_setup_quick_patience">Por favor, seja paciente &#8230;</string>
     <string name="title_setup_quick_imap">Servidor IMAP para receber mensagens</string>
     <string name="title_setup_quick_smtp">Servidor SMTP para enviar mensagens</string>
     <string name="title_setup_quick_certificates">Certificados do servidor</string>
     <string name="title_setup_wizard">Assistente</string>
     <string name="title_setup_wizard_tutorials">Tutoriais</string>
-    <string name="title_setup_wizard_multiple">O assistente pode ser usado várias vezes para configurar várias contas</string>
+    <string name="title_setup_wizard_multiple">O assistente pode ser novamente utilizado para configurar mais contas</string>
     <string name="title_setup_wizard_new">Preciso de um novo endereço de e-mail</string>
     <string name="title_setup_manual">Configuração manual e opções da conta</string>
     <string name="title_setup_classic">Configuração clássica</string>
@@ -172,9 +173,10 @@
     <string name="title_setup_gmail_support">Autorizar contas do Google funcionará na Play Store e na versão GitHub apenas porque o Android verifica a assinatura da aplicação digital</string>
     <string name="title_setup_gmail_rationale">Por favor, conceda permissões para selecionar uma conta e ler o seu nome</string>
     <string name="title_setup_gmail_permissions">O Google pedirá permissões para ler, compor, enviar e eliminar permanentemente todos os seus e-mails. O FairEmail nunca apagará as suas mensagens sem o seu consentimento explícito.</string>
+    <string name="title_setup_gmail_login">Se o Chrome estiver ligado a uma conta, só pode adicionar uma nova através do Android. Evite esta situação, saindo do Chrome através das configurações de sincronização do mesmo.</string>
     <string name="title_setup_gmail_on_device">Por que é que preciso selecionar uma conta no dispositivo?</string>
     <string name="title_setup_gmail_password">Quero autorizar uma conta com a palavra-passe ao invés da conta em utilização no dispositivo</string>
-    <string name="title_setup_office_auth">O erro \'AUTHENTICATE falhou\' pode ser causado por IMAP/SMTP estar desativado pelo administrador do sistema</string>
+    <string name="title_setup_office_auth">O erro \'AUTHENTICATE failed\' pode ser causado pelo protocolo IMAP/SMTP ter sido desactivado pelo administrador do sistema</string>
     <string name="title_setup_oauth_rationale">Autorizar o acesso à sua conta %1$s</string>
     <string name="title_setup_oauth_update">Autorizar novamente uma conta existente (caso contrário, criar uma conta)</string>
     <string name="title_setup_oauth_updated">Autorização de conta actualizada</string>
@@ -186,10 +188,10 @@
     <string name="title_setup_no_auth_hint">Por favor, verifique novamente o seu endereço de correio electrónico e a palavra-passe, e confirme se o acesso externo (IMAP/SMTP) está activado para a sua conta</string>
     <string name="title_setup_app_password_hint">Este fornecedor requer uma palavra-passe de aplicação em vez da palavra-passe da conta, por favor verifique as instruções do seu fornecedor</string>
     <string name="title_setup_no_inbox">Caixa de entrada não encontrada</string>
-    <string name="title_setup_advanced_protection">Quando inscrito no programa avançado de proteção não é possível usar uma aplicação de e-mail de terceiros. Esta é uma restrição imposta pelo Google.</string>
+    <string name="title_setup_advanced_protection">Quando inscrito no programa avançado de protecção não é possível usar uma aplicação de correio electrónico de terceiros. Esta é uma restrição imposta pela Google.</string>
     <string name="title_setup_quick_success">Uma conta foi adicionada com sucesso</string>
-    <string name="title_setup_quick_no_sent">Não foi selecionada nenhuma pasta de mensagens enviadas. As mensagens enviadas podem não ser armazenadas.</string>
-    <string name="title_setup_quick_configure">Para editar o nome, cor, ações de puxe, etc</string>
+    <string name="title_setup_quick_no_sent">Não foi seleccionada qualquer pasta de mensagens enviadas. As mensagens enviadas poderão não ser guardadas.</string>
+    <string name="title_setup_quick_configure">Para editar o nome, cor, acções de deslize, etc.</string>
     <string name="title_setup_manage">Gerir</string>
     <string name="title_setup_grant">Conceder</string>
     <string name="title_setup_grant_again">Conceder as permissões necessárias</string>
@@ -200,7 +202,7 @@
     <string name="title_setup_permissions_remark">Para aceder a informações de contacto (opcional)</string>
     <string name="title_setup_permissions_explanation">As permissões de contacto são necessárias para procurar informações de contacto e sugerir contactos</string>
     <string name="title_setup_permissions_notify">Para mostrar novas notificações de mensagens (opcional)</string>
-    <string name="title_setup_permissions_notify_explanation">São necessárias permissões de notificação para mostrar notificações de novas mensagens na barra de status</string>
+    <string name="title_setup_permissions_notify_explanation">São necessárias permissões de notificação para mostrar notificações de novas mensagens na barra de estado</string>
     <string name="title_setup_permission_why">Que permissões são necessárias e porquê?</string>
     <string name="title_setup_permission_import_contacts">Como posso importar contactos?</string>
     <string name="title_setup_doze">Desactivar optimização de bateria</string>
@@ -396,6 +398,7 @@
     <string name="title_advanced_ssl_harden">Fortificar conexões SSL</string>
     <string name="title_advanced_ssl_harden_strict">Requer TLS 1.3</string>
     <string name="title_advanced_cert_strict">Verificação rigorosa de certificado</string>
+    <string name="title_advanced_open_safe">Abrir apenas ligações seguras</string>
     <string name="title_advanced_manage_connectivity">Gerir conectividade</string>
     <string name="title_advanced_caption_general">Geral</string>
     <string name="title_advanced_caption_navigation">Navegação</string>
@@ -407,8 +410,8 @@
     <string name="title_advanced_caption_message_body">Corpo da mensagem</string>
     <string name="title_advanced_portrait">Modo retrato</string>
     <string name="title_advanced_landscape">Modo paisagem</string>
-    <string name="title_advanced_two_row">Use duas linhas</string>
-    <string name="title_advanced_two_col">Use duas colunas</string>
+    <string name="title_advanced_two_row">Usar duas linhas</string>
+    <string name="title_advanced_two_col">Usar duas colunas</string>
     <string name="title_advanced_min_screen_size">Tamanho mínimo de ecrã para dividir</string>
     <string name="title_advanced_close_pane">Recolher linha ou coluna ao fechar uma conversa</string>
     <string name="title_advanced_column_width">Largura / altura da linha da Mensagem: %1$s %%</string>
@@ -512,7 +515,7 @@
     <string name="title_advanced_conversation_actions">Sugerir ações (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">Sugerir mensagens de resposta (Android 10+)</string>
     <string name="title_advanced_language_detection">Detectar idioma do texto da mensagem</string>
-    <string name="title_advanced_photo_picker" comment="title_advanced_photo_picker&#10;https://developer.android.com/about/versions/13/features/photopicker">Use o seletor de fotos do Android</string>
+    <string name="title_advanced_photo_picker">Use o seletor de fotos do Android</string>
     <string name="title_advanced_pull_refresh">Arrastar para baixo para atualizar</string>
     <string name="title_advanced_autoscroll">Voltar ao topo quando recebe novas mensagens</string>
     <string name="title_advanced_double_tap">Toque duplo para marcar a mensagem como lida/não lida</string>
@@ -572,7 +575,7 @@
     <string name="title_advanced_notify_subtext">Mostrar nome da conta ou pasta como subtexto</string>
     <string name="title_advanced_wearable_preview">Enviar notificações apenas com uma visualização de mensagem para wearables</string>
     <string name="title_advanced_notify_messaging">Utilizar o \'estilo de mensagens\' do Android como formato de notificação</string>
-    <string name="title_advanced_biometrics_notify">Mostrar conteúdo de notificação ao usar autenticação biométrica</string>
+    <string name="title_advanced_biometrics_notify">Mostrar o resumo de correio e outro conteúdo nas notificações ao utilizar a autenticação biométrica</string>
     <string name="title_advanced_light">Usar luz de notificações</string>
     <string name="title_advanced_sound">Selecionar som de notificação</string>
     <string name="title_advanced_notify_screen_on">Ligar o ecrã por breves instantes para novas notificações de mensagens</string>
@@ -691,8 +694,9 @@
     <string name="title_advanced_tcp_keep_alive_hint">Habilitar isto pode causar problemas de ligação em alguns dispositivos e aumentar o uso da bateria</string>
     <string name="title_advanced_validate_hint">Isto pode resultar em problemas na sincronização de mensagens, por exemplo, ao utilizar uma VPN, mas também noutras situações</string>
     <string name="title_advanced_timeout_hint">O tempo de leitura/gravação será definido para o dobro do tempo limite de ligação. Valores maiores resultarão em mais uso de bateria.</string>
-    <string name="title_advanced_cert_strict_hint">Desativar isto irá relaxar a verificação de certificados de servidor</string>
-    <string name="title_advanced_ssl_harden_hint">Ao activar isto, serão desactivados os protocolos e cifras SSL fracos, o que pode levar a problemas de ligação</string>
+    <string name="title_advanced_cert_strict_hint">Desactivar isto irá aliviar a verificação de certificados do servidor</string>
+    <string name="title_advanced_ssl_harden_hint">Ao activar isto, os protocolos e cifras SSL fracos serão desactivados, o que pode levar a problemas de ligação</string>
+    <string name="title_advanced_open_safe_hint">Activar isto exigirá uma ligação segura para transferir imagens, etc.</string>
     <string name="title_advanced_roaming_hint">Os cabeçalhos de mensagens serão sempre obtidos em roaming. Pode usar a configuração de roaming do dispositivo para desactivar a internet em roaming.</string>
     <string name="title_advanced_browse_hint">Procurar mais mensagens ao deslizar para baixo</string>
     <string name="title_advanced_layout_hint">Pode mudar para um layout mais compacto e alterar o tamanho do texto da mensagem no menu da barra de acção presente na parte superior da vista de mensagens</string>
@@ -947,6 +951,7 @@
     <string name="title_hide_seen_folder_hint">Apenas na lista de pastas mostrada na página inicial</string>
     <string name="title_unified_folder">Mostrar na cx. entrada unificada</string>
     <string name="title_navigation_folder">Mostrar no menu de navegação</string>
+    <string name="title_navigation_folder_hide">Ocultar no menu de navegação</string>
     <string name="title_synchronize_folder">Sincronizar (receber mensagens)</string>
     <string name="title_poll_folder">Verificar periodicamente em vez da sincronização contínua</string>
     <string name="title_poll_folder_remark">A maioria dos servidores de e-mail apenas permite mensagens push em determinadas pastas!</string>
@@ -1385,6 +1390,7 @@
     <string name="title_compact">Vista compacta</string>
     <string name="title_zoom">Tamanho do texto</string>
     <string name="title_padding">Tamanho do espaçamento</string>
+    <string name="title_large_buttons">Botões maiores</string>
     <string name="title_select_language">Seleccionar idioma</string>
     <string name="title_select_all">Seleccionar todas</string>
     <string name="title_select_found">Seleccionar encontradas</string>
@@ -1402,6 +1408,8 @@
     <string name="title_edit_signature_image_hint">        Quando enviar uma mensagem, a imagem é copiada para a mensagem a partir do local seleccionado.
         Por isso, não elimine o ficheiro da imagem!
     </string>
+    <string name="title_answer_define_name">Nome</string>
+    <string name="title_answer_define_value">Texto</string>
     <string name="title_answer_caption">Editar modelo</string>
     <string name="title_answer_reply">Modelo de resposta</string>
     <string name="title_answer_name">Nome do modelo</string>

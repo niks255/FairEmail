@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 1950 }
+def getVersionCode = { -> return 1957 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Ledumahadi" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -361,7 +361,7 @@ dependencies {
     def lifecycle_extensions_version = "2.2.0"
     def room_version = "2.4.3" // 2.5.0-alpha02
     def sqlite_version = "2.2.0" // 2.3.0-alpha04
-    def requery_version = "3.39.0-1"
+    def requery_version = "3.39.2"
     def paging_version = "2.1.2" //  3.2.0-alpha01
     def preference_version = "1.2.0"
     def work_version = "2.7.1" // 2.8.0-alpha03
@@ -383,7 +383,7 @@ dependencies {
     def bouncycastle_version = "1.71"
     def colorpicker_version = "0.0.15"
     def overscroll_version = "1.1.1"
-    def appauth_version = "0.8.1"
+    def appauth_version = "0.11.1"
     def jcharset_version = "2.1"
     def apache_poi = "3.17" // Do not update
     def outlook_parser_version = "1.7.13" // Do not update
@@ -569,7 +569,7 @@ dependencies {
     implementation "org.bouncycastle:bcpkix-jdk15to18:$bouncycastle_version"
 
     // https://github.com/openid/AppAuth-Android
-    // https://mvnrepository.com/artifact/net.openid/appauth?repo=bt-openid
+    // https://mvnrepository.com/artifact/net.openid/appauth
     implementation "net.openid:appauth:$appauth_version"
 
     // http://www.freeutils.net/source/jcharset/

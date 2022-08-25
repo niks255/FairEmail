@@ -173,6 +173,7 @@
     <string name="title_setup_gmail_support">Godkendelse af Google-konti fungerer kun i Play Store-versioner, da Android tjekker den digitale app-signatur</string>
     <string name="title_setup_gmail_rationale">Giv tilladelser til at vælge en konto og læse dit navn</string>
     <string name="title_setup_gmail_permissions">Google vil beder om tilladelse til at læse, komponere, sende samt permanent slette alle din e-mails. FairEmail sletter aldrig dine beskeder uden dit samtykke.</string>
+    <string name="title_setup_gmail_login">Er Chrome logget ind på en konto, kan en ny konto kun tilføjes via Android. Dette kan undgås ved at logge ud af Chrome via dens synkindstillinger.</string>
     <string name="title_setup_gmail_on_device">Hvorfor skal der vælges en enhedsbaseret konto?</string>
     <string name="title_setup_gmail_password">Jeg ønsker at godkende en konto med en adgangskode i stedet for en enhedskonto</string>
     <string name="title_setup_office_auth">Fejlen \'GODKENDELSE mislykkedes\' kan skyldes, at IMAP/SMTP er deaktiveret af systemadministratoren</string>
@@ -396,6 +397,7 @@
     <string name="title_advanced_ssl_harden">Hærd SSL-forbindelser</string>
     <string name="title_advanced_ssl_harden_strict">Kræv TLS 1.3</string>
     <string name="title_advanced_cert_strict">Striks certifikatkontrol</string>
+    <string name="title_advanced_open_safe">Åbn kun sikre forbindelser</string>
     <string name="title_advanced_manage_connectivity">Håndtér konnektivitet</string>
     <string name="title_advanced_caption_general">Generelt</string>
     <string name="title_advanced_caption_navigation">Navigering</string>
@@ -512,7 +514,7 @@
     <string name="title_advanced_conversation_actions">Foreslå handlinger (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">Foreslå svartekster (Android 10+)</string>
     <string name="title_advanced_language_detection">Detektér beskedtekstsprog</string>
-    <string name="title_advanced_photo_picker" comment="title_advanced_photo_picker&#10;https://developer.android.com/about/versions/13/features/photopicker">Brug Android-fotovælger</string>
+    <string name="title_advanced_photo_picker">Brug Android-fotovælger</string>
     <string name="title_advanced_pull_refresh">Træk ned for at opfriske</string>
     <string name="title_advanced_autoscroll">Rul til toppen, når ny besked modtages</string>
     <string name="title_advanced_double_tap">Dobbelttryk for at markere besked læst/ulæst</string>
@@ -694,6 +696,7 @@
     <string name="title_advanced_timeout_hint">Læse-/skrive-timeout indstilles til det dobbelte af forbindelses-timeout. Højere værdier vil resultere i øget batteriforbrug.</string>
     <string name="title_advanced_cert_strict_hint">Deaktivering af dette gør servercertifikatkontrol mindre striks</string>
     <string name="title_advanced_ssl_harden_hint">Aktivering af dette vil deaktivere svage SSL-protokoller og algoritmer, hvilket kan føre til forbindelsesproblemer</string>
+    <string name="title_advanced_open_safe_hint">Aktivering af dette kræver sikre forbindelser for download af billeder mv.</string>
     <string name="title_advanced_roaming_hint">Beskedoverskrifter hentes altid under roaming. Du kan benytte enhedens roamingindstilling til at deaktivere mobilnetværk under roaming.</string>
     <string name="title_advanced_browse_hint">Hent flere beskeder, når du ruller nedad</string>
     <string name="title_advanced_layout_hint">Skift til et mere kompakt layout og ændring af beskedtekststørrelse kan ske via den øverste handlingsbjælkemenu fra beskedvisning</string>
@@ -948,6 +951,7 @@
     <string name="title_hide_seen_folder_hint">Kun i mappelisten, der vises på startskærmen</string>
     <string name="title_unified_folder">Vis i samlet indbakke</string>
     <string name="title_navigation_folder">Vis i navigationsmenu</string>
+    <string name="title_navigation_folder_hide">Skjul i navigeringsmenuen</string>
     <string name="title_synchronize_folder">Synkronisér (modtag beskeder)</string>
     <string name="title_poll_folder">Tjek periodisk i stedet for kontinuerlig synkronisering</string>
     <string name="title_poll_folder_remark">De fleste e-mailservere tillader kun push-beskeder for en håndfuld mapper!</string>
@@ -1387,6 +1391,7 @@
     <string name="title_compact">Kompaktvisning</string>
     <string name="title_zoom">Tekststørrelse</string>
     <string name="title_padding">Fyldstørrelse</string>
+    <string name="title_large_buttons">Større knapper</string>
     <string name="title_select_language">Vælg sprog</string>
     <string name="title_select_all">Markér alle</string>
     <string name="title_select_found">Markér fundne</string>
@@ -1404,6 +1409,8 @@
     <string name="title_edit_signature_image_hint">        Ved beskedafsendelse kopieres billedet ind i beskeden fra den valgte placering.
         Slet derfor ikke billedfilen!
     </string>
+    <string name="title_answer_define_name">Navn</string>
+    <string name="title_answer_define_value">Værdi</string>
     <string name="title_answer_caption">Redigér skabelon</string>
     <string name="title_answer_reply">Svarskabelon</string>
     <string name="title_answer_name">Skabelonnavn</string>

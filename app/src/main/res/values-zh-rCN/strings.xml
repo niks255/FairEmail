@@ -160,6 +160,7 @@
     <string name="title_setup_gmail_support">只有 Play 商店和 GitHub 版本才支持授权 Google 账户，因为 Android 会检查应用的数字签名</string>
     <string name="title_setup_gmail_rationale">请授予权限来选择一个账户并读取您的姓名</string>
     <string name="title_setup_gmail_permissions">Google 会请求读取、撰写、发送和永久删除您的所有电子邮件的权限。相比之下，未经您的明确同意，FairEmail 永远不会删除您的邮件。</string>
+    <string name="title_setup_gmail_login">如果 Chrome 登录到 Google 账户，那么只能通过 Android 添加一个新账户。 通过 Chrome 同步设置退出 Chrome 账户登录可以避免这种情况。</string>
     <string name="title_setup_gmail_on_device">为什么我需要选择设备上账户？</string>
     <string name="title_setup_gmail_password">我想使用密码而不是设备上的帐户进行授权</string>
     <string name="title_setup_office_auth">“认证失败”的错误可能是由于 IMAP/SMTP 被系统管理员禁用导致的</string>
@@ -382,6 +383,7 @@
     <string name="title_advanced_ssl_harden">加强 SSL 连接</string>
     <string name="title_advanced_ssl_harden_strict">需要 TLS 1.3</string>
     <string name="title_advanced_cert_strict">严格的证书检查</string>
+    <string name="title_advanced_open_safe">仅打开安全连接</string>
     <string name="title_advanced_manage_connectivity">管理连接</string>
     <string name="title_advanced_caption_general">常规​​​​​</string>
     <string name="title_advanced_caption_navigation">导航栏</string>
@@ -498,7 +500,7 @@
     <string name="title_advanced_conversation_actions">建议操作 (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">建议回复内容 (Android 10+)</string>
     <string name="title_advanced_language_detection">检测消息文本的语言</string>
-    <string name="title_advanced_photo_picker" comment="title_advanced_photo_picker&#10;https://developer.android.com/about/versions/13/features/photopicker">使用 Android 照片选择器</string>
+    <string name="title_advanced_photo_picker">使用 Android 照片选择器</string>
     <string name="title_advanced_pull_refresh">下拉刷新</string>
     <string name="title_advanced_autoscroll">在收到新消息时滚动至顶部</string>
     <string name="title_advanced_double_tap">双击标记消息已读/未读</string>
@@ -679,6 +681,7 @@
     <string name="title_advanced_timeout_hint">读/写超时时间将翻倍，值越高将越耗电</string>
     <string name="title_advanced_cert_strict_hint">禁用此项将放松服务器证书检查</string>
     <string name="title_advanced_ssl_harden_hint">启用此选项将禁用较弱的 SSL 协议和加密算法，这可能导致连接遇到问题</string>
+    <string name="title_advanced_open_safe_hint">启用此选项需要安全连接下才能下载图像等</string>
     <string name="title_advanced_roaming_hint">当漫游时，将始终获取消息头。您可以使用设备的漫游设置在漫游时禁用互联网。</string>
     <string name="title_advanced_browse_hint">向下滚动时拉取更多邮件</string>
     <string name="title_advanced_layout_hint">切换到更为紧凑的布局，改变消息文本大小可以在邮件视图中的顶部动作栏菜单中完成</string>
@@ -932,6 +935,7 @@
     <string name="title_hide_seen_folder_hint">仅在开始屏幕上显示的文件夹列表</string>
     <string name="title_unified_folder">在聚合收件箱中显示</string>
     <string name="title_navigation_folder">在导航菜单中显示</string>
+    <string name="title_navigation_folder_hide">在导航菜单中隐藏</string>
     <string name="title_synchronize_folder">同步(接收邮件)</string>
     <string name="title_poll_folder">用定期检索代替持续同步(即推送)</string>
     <string name="title_poll_folder_remark">大多数电子邮件服务器仅允许少数文件夹推送消息！</string>
@@ -1367,6 +1371,7 @@
     <string name="title_compact">紧凑视图</string>
     <string name="title_zoom">文本大小</string>
     <string name="title_padding">内边距尺寸</string>
+    <string name="title_large_buttons">较大的按钮</string>
     <string name="title_select_language">选择语言</string>
     <string name="title_select_all">全选</string>
     <string name="title_select_found">选中找到的</string>
@@ -1384,6 +1389,8 @@
     <string name="title_edit_signature_image_hint">        发送消息时，图像从所选位置被复制到消息中。
         因此，不要删除图像文件！
     </string>
+    <string name="title_answer_define_name">名称</string>
+    <string name="title_answer_define_value">值</string>
     <string name="title_answer_caption">编辑模板</string>
     <string name="title_answer_reply">回复模板</string>
     <string name="title_answer_name">模板名称</string>

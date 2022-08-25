@@ -135,9 +135,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -178,7 +175,6 @@ public class Helper {
 
     static final int BUFFER_SIZE = 8192; // Same as in Files class
     static final long MIN_REQUIRED_SPACE = 250 * 1024L * 1024L;
-    static final int MAX_REDIRECTS = 5; // https://www.freesoft.org/CIE/RFC/1945/46.htm
     static final int AUTOLOCK_GRACE = 15; // seconds
     static final long PIN_FAILURE_DELAY = 3; // seconds
 
@@ -949,27 +945,21 @@ public class Helper {
         if (task)
             view.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        if ("chooser".equals(open_with_pkg)) {
+        if ("chooser".equals(open_with_pkg) && !open_with_tabs) {
             try {
-                if (open_with_tabs) {
-                    EntityLog.log(context, "Launching direct uri=" + uri +
-                            " intent=" + view +
-                            " extras=" + TextUtils.join(", ", Log.getExtras(view.getExtras())));
-                    context.startActivity(view);
-                } else {
-                    EntityLog.log(context, "Launching chooser uri=" + uri +
-                            " intent=" + view +
-                            " extras=" + TextUtils.join(", ", Log.getExtras(view.getExtras())));
-                    Intent chooser = Intent.createChooser(view, context.getString(R.string.title_select_app));
-                    context.startActivity(chooser);
-                }
+                EntityLog.log(context, "Launching chooser uri=" + uri +
+                        " intent=" + view +
+                        " extras=" + TextUtils.join(", ", Log.getExtras(view.getExtras())));
+                Intent chooser = Intent.createChooser(view, context.getString(R.string.title_select_app));
+                context.startActivity(chooser);
             } catch (ActivityNotFoundException ex) {
                 Log.w(ex);
                 reportNoViewer(context, uri, ex);
             }
         } else if (browse || !open_with_tabs) {
             try {
-                view.setPackage(open_with_pkg);
+                if (!"chooser".equals(open_with_pkg))
+                    view.setPackage(open_with_pkg);
                 EntityLog.log(context, "Launching view uri=" + uri +
                         " intent=" + view +
                         " extras=" + TextUtils.join(", ", Log.getExtras(view.getExtras())));
@@ -1019,7 +1009,8 @@ public class Helper {
 
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.putExtra(Browser.EXTRA_HEADERS, headers);
-            customTabsIntent.intent.setPackage(open_with_pkg);
+            if (!"chooser".equals(open_with_pkg))
+                customTabsIntent.intent.setPackage(open_with_pkg);
 
             try {
                 EntityLog.log(context, "Launching tab uri=" + uri +
@@ -2359,53 +2350,6 @@ public class Helper {
         //intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Uri.fromFile(initial));
     }
 
-    static HttpURLConnection openUrlRedirect(Context context, String source, int timeout) throws IOException {
-        int redirects = 0;
-        URL url = new URL(source);
-        while (true) {
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setDoOutput(false);
-            urlConnection.setReadTimeout(timeout);
-            urlConnection.setConnectTimeout(timeout);
-            urlConnection.setInstanceFollowRedirects(true);
-            ConnectionHelper.setUserAgent(context, urlConnection);
-            urlConnection.connect();
-
-            try {
-                int status = urlConnection.getResponseCode();
-
-                if (status == HttpURLConnection.HTTP_MOVED_PERM ||
-                        status == HttpURLConnection.HTTP_MOVED_TEMP ||
-                        status == HttpURLConnection.HTTP_SEE_OTHER ||
-                        status == 307 /* Temporary redirect */ ||
-                        status == 308 /* Permanent redirect */) {
-                    if (++redirects > MAX_REDIRECTS)
-                        throw new IOException("Too many redirects");
-
-                    String header = urlConnection.getHeaderField("Location");
-                    if (header == null)
-                        throw new IOException("Location header missing");
-
-                    String location = URLDecoder.decode(header, StandardCharsets.UTF_8.name());
-                    url = new URL(url, location);
-                    Log.i("Redirect #" + redirects + " to " + url);
-
-                    urlConnection.disconnect();
-                    continue;
-                }
-
-                if (status != HttpURLConnection.HTTP_OK)
-                    throw new IOException("Error " + status + ": " + urlConnection.getResponseMessage());
-
-                return urlConnection;
-            } catch (IOException ex) {
-                urlConnection.disconnect();
-                throw ex;
-            }
-        }
-    }
-
     static class ByteArrayInOutStream extends ByteArrayOutputStream {
         public ByteArrayInOutStream() {
             super();
@@ -2932,6 +2876,20 @@ public class Helper {
         List<List<T>> result = new ArrayList<>(list.size() / size);
         for (int i = 0; i < list.size(); i += size)
             result.add(list.subList(i, i + size < list.size() ? i + size : list.size()));
+        return result;
+    }
+
+    static int[] toIntArray(List<Integer> list) {
+        int[] result = new int[list.size()];
+        for (int i = 0; i < list.size(); i++)
+            result[i] = list.get(i);
+        return result;
+    }
+
+    static List<Integer> fromIntArray(int[] array) {
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < array.length; i++)
+            result.add(array[i]);
         return result;
     }
 

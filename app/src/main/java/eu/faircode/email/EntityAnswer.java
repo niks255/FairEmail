@@ -99,11 +99,13 @@ public class EntityAnswer implements Serializable {
     public Integer applied = 0;
     public Long last_applied;
 
-    String getHtml(Address[] address) {
-        return replacePlaceholders(text, address);
+    private static final String PREF_PLACEHOLDER = "answer.value.";
+
+    String getHtml(Context context, Address[] address) {
+        return replacePlaceholders(context, text, address);
     }
 
-    static String replacePlaceholders(String text, Address[] address) {
+    static String replacePlaceholders(Context context, String text, Address[] address) {
         String fullName = null;
         String email = null;
         if (address != null && address.length > 0) {
@@ -173,7 +175,53 @@ public class EntityAnswer implements Serializable {
         text = text.replace("$lastname$", last == null ? "" : Html.escapeHtml(last));
         text = text.replace("$email$", email == null ? "" : Html.escapeHtml(email));
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        for (String key : prefs.getAll().keySet())
+            if (key.startsWith(PREF_PLACEHOLDER)) {
+                String name = key.substring(PREF_PLACEHOLDER.length());
+                String value = prefs.getString(key, null);
+
+                String[] lines = (value == null ? new String[0] : value.split("\n"));
+                for (int i = 0; i < lines.length; i++)
+                    lines[i] = Html.escapeHtml(lines[i]);
+
+                text = text.replace("$" + name + "$", TextUtils.join("<br>", lines));
+            }
+
         return text;
+    }
+
+    static void setCustomPlaceholder(Context context, String name, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (TextUtils.isEmpty(value))
+            prefs.edit().remove(EntityAnswer.PREF_PLACEHOLDER + name).apply();
+        else
+            prefs.edit().putString(EntityAnswer.PREF_PLACEHOLDER + name, value).apply();
+    }
+
+    static String getCustomPlaceholder(Context context, String name) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(EntityAnswer.PREF_PLACEHOLDER + name, null);
+    }
+
+    static List<String> getCustomPlaceholders(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        List<String> names = new ArrayList<>();
+        for (String key : prefs.getAll().keySet())
+            if (key.startsWith(EntityAnswer.PREF_PLACEHOLDER))
+                names.add(key.substring(EntityAnswer.PREF_PLACEHOLDER.length()));
+
+        final Collator collator = Collator.getInstance(Locale.getDefault());
+        collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
+        Collections.sort(names, new Comparator<String>() {
+            @Override
+            public int compare(String n1, String n2) {
+                return collator.compare(n1, n2);
+            }
+        });
+
+        return names;
     }
 
     static void fillMenu(Menu main, boolean compose, List<EntityAnswer> answers, Context context) {

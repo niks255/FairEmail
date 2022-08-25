@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_support">אימות חשבונות Google יעבוד רק עם גרסה מחנות Play או מ־GitHub כיוון ש־Android בודק את חתימת היישומון</string>
     <string name="title_setup_gmail_rationale">נא להרשות לבחור חשבון ולקרוא את שמך</string>
     <string name="title_setup_gmail_permissions">Google יבקש לקרוא, לכתוב, לשלוח, ולמחוק את כל ההודעות שלך לצמיתות. Fairmail לעולם לא ימחק ללא הסכמתך המפורשת.</string>
+    <string name="title_setup_gmail_login">אם נכנסת לחשבון ב־Chrome אפשר להוסיף חשבון חדש רק דרך Android. אפשר להימנע מזה על ידי יציאה מהחשבון ב־Chrome דרך הגדרות הסנכרון של Chrome.</string>
     <string name="title_setup_gmail_on_device">מדוע עלי לבחור בחשבון שכבר מחובר במכשיר?</string>
     <string name="title_setup_gmail_password">ארצה לאמת חשבון עם סיסמה במקום חשבון פנימי במכשיר</string>
     <string name="title_setup_office_auth">השגיאה ‚AUTHENTICATE נכשל’ עלולה להיגרם עקב IMAP/SMTP שהושבתו על ידי הנהלת המערכת</string>
@@ -422,6 +423,7 @@
     <string name="title_advanced_ssl_harden">הקשחת חיבורי SSL</string>
     <string name="title_advanced_ssl_harden_strict">לדרוש TLS‎ 1.3</string>
     <string name="title_advanced_cert_strict">בדיקת אישורים קפדנית</string>
+    <string name="title_advanced_open_safe">פתיחת חיבורים מאובטחים בלבד</string>
     <string name="title_advanced_manage_connectivity">ניהול קישוריות</string>
     <string name="title_advanced_caption_general">כללי</string>
     <string name="title_advanced_caption_navigation">ניווט</string>
@@ -538,7 +540,7 @@
     <string name="title_advanced_conversation_actions">להציע פעולות (Android 10+‎)</string>
     <string name="title_advanced_conversation_actions_replies">להציע טקסטים כתגובה (Android 10+‎)</string>
     <string name="title_advanced_language_detection">זיהוי שפת טקסט ההודעה</string>
-    <string name="title_advanced_photo_picker" comment="title_advanced_photo_picker&#10;https://developer.android.com/about/versions/13/features/photopicker">להשתמש בבורר התמונות של Android</string>
+    <string name="title_advanced_photo_picker">להשתמש בבורר התמונות של Android</string>
     <string name="title_advanced_pull_refresh">לרענון - למשוך למטה</string>
     <string name="title_advanced_autoscroll">יש לגלול למעלה כדי לקבל הודעות חדשות</string>
     <string name="title_advanced_double_tap">נגיעה כפולה תסמן הודעות כנקראו/לא נקראו</string>
@@ -719,6 +721,7 @@
     <string name="title_advanced_timeout_hint">תום זמן קריאה/כתיבה יוגדר להיות כפול מהזמן המוקצב לחיבור. ערכים גבוהים יותר יובילו לצריכה גבוהה יותר של סוללה.</string>
     <string name="title_advanced_cert_strict_hint">השבתת אפשרות זו תקל על בדיקת אישורי השרת</string>
     <string name="title_advanced_ssl_harden_hint">הפעלת האפשרות הזאת תשבית פרוטוקולים וצפנים חלשים של SSL, מה שיכול לגרום לתקלות בחיבור</string>
+    <string name="title_advanced_open_safe_hint">הפעלת האפשרות תדרוש חיבורים מאובטחים להורדת תמונות וכו׳</string>
     <string name="title_advanced_roaming_hint">כותרות ההודעות תמיד תימשכנה בזמן נדידה. אפשר להשתמש בהגדרות הנדידה של המכשיר כדי להשבית את האינטרנט בזמן נדידה.</string>
     <string name="title_advanced_browse_hint">למשוך עוד הודעות בעת גלילה למטה</string>
     <string name="title_advanced_layout_hint">אפשר להחליף לתצוגה מצומצמת יותר ולהחליף את גודל הכתב בסרגל הפעולות העליון בתצוגת ההודעות</string>
@@ -973,6 +976,7 @@
     <string name="title_hide_seen_folder_hint">רק ברשימת התיקיות שמופיעה במסך הפתיחה</string>
     <string name="title_unified_folder">הצגה בדואר נכנס מאוחד</string>
     <string name="title_navigation_folder">הצגה בתפריט הניווט</string>
+    <string name="title_navigation_folder_hide">הסתרה בתפריט הניווט</string>
     <string name="title_synchronize_folder">סנכרון (קבלת הודעות)</string>
     <string name="title_poll_folder">לבדוק תקופתיות במקום לסנכרן באופן רציף</string>
     <string name="title_poll_folder_remark">רוב שרתי הדוא״ל מאפשרים הודעות דחיפה למגוון מצומצם של תיקיות בלבד!</string>
@@ -1412,6 +1416,7 @@
     <string name="title_compact">תצוגה מצומצמת</string>
     <string name="title_zoom">גודל טקסט</string>
     <string name="title_padding">גודל ריפוד</string>
+    <string name="title_large_buttons">כפתורים גדולים יותר</string>
     <string name="title_select_language">בחירת שפה</string>
     <string name="title_select_all">לבחור הכול</string>
     <string name="title_select_found">לבחור את מה שנמצא</string>
@@ -1429,6 +1434,8 @@
     <string name="title_edit_signature_image_hint">        בעת שליחת הודעה, התמונה מועתקת להודעה מהמיקום הנבחר.
         לכן, אין למחוק את קובץ התמונה!
     </string>
+    <string name="title_answer_define_name">שם</string>
+    <string name="title_answer_define_value">ערך</string>
     <string name="title_answer_caption">עריכת תבנית</string>
     <string name="title_answer_reply">תבנית מענה</string>
     <string name="title_answer_name">שם תבנית</string>

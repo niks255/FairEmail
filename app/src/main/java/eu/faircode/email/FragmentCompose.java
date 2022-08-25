@@ -1463,22 +1463,6 @@ public class FragmentCompose extends FragmentBase {
             }
 
             private void convertRef(boolean plain) {
-                if (plain)
-                    _convertRef(plain);
-                else
-                    new AlertDialog.Builder(getContext())
-                            .setMessage(R.string.title_ask_show_html)
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    _convertRef(false);
-                                }
-                            })
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .show();
-            }
-
-            private void _convertRef(boolean plain) {
                 etBody.clearComposingText();
 
                 Bundle args = new Bundle();
@@ -2246,7 +2230,7 @@ public class FragmentCompose extends FragmentBase {
                                 } catch (AddressException ignored) {
                                 }
 
-                                String html = EntityAnswer.replacePlaceholders(answer.text, to);
+                                String html = EntityAnswer.replacePlaceholders(context, answer.text, to);
 
                                 Spanned spanned = HtmlHelper.fromHtml(html, new HtmlHelper.ImageGetterEx() {
                                     @Override
@@ -3720,6 +3704,7 @@ public class FragmentCompose extends FragmentBase {
                     }
 
                 // Build message to sign
+                //   openssl smime -verify <xxx.eml
                 Properties props = MessageHelper.getSessionProperties(true);
                 Session isession = Session.getInstance(props, null);
                 MimeMessage imessage = new MimeMessage(isession);
@@ -3938,8 +3923,9 @@ public class FragmentCompose extends FragmentBase {
                 // Encrypt
                 CMSEnvelopedDataGenerator cmsEnvelopedDataGenerator = new CMSEnvelopedDataGenerator();
                 if ("EC".equals(privkey.getAlgorithm())) {
+                    // https://datatracker.ietf.org/doc/html/draft-ietf-smime-3278bis
                     JceKeyAgreeRecipientInfoGenerator gen = new JceKeyAgreeRecipientInfoGenerator(
-                            CMSAlgorithm.ECDH_SHA256KDF,
+                            CMSAlgorithm.ECCDH_SHA256KDF,
                             privkey,
                             chain[0].getPublicKey(),
                             CMSAlgorithm.AES128_WRAP);
@@ -4835,7 +4821,7 @@ public class FragmentCompose extends FragmentBase {
                             if (answer > 0)
                                 data.draft.subject = a.name;
                             if (TextUtils.isEmpty(external_body)) {
-                                Document d = JsoupEx.parse(a.getHtml(null));
+                                Document d = JsoupEx.parse(a.getHtml(context, null));
                                 document.body().append(d.body().html());
                             }
                         }
@@ -5018,7 +5004,7 @@ public class FragmentCompose extends FragmentBase {
                                 else {
                                     db.answer().applyAnswer(receipt.id, new Date().getTime());
                                     texts = new String[0];
-                                    Document d = JsoupEx.parse(receipt.getHtml(null));
+                                    Document d = JsoupEx.parse(receipt.getHtml(context, null));
                                     document.body().append(d.body().html());
                                 }
                             }
@@ -5080,7 +5066,7 @@ public class FragmentCompose extends FragmentBase {
 
                         if (a != null) {
                             db.answer().applyAnswer(a.id, new Date().getTime());
-                            Document d = JsoupEx.parse(a.getHtml(data.draft.to));
+                            Document d = JsoupEx.parse(a.getHtml(context, data.draft.to));
                             document.body().append(d.body().html());
                         }
 

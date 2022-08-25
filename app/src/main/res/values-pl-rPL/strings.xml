@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_support">Autoryzacja kont Google będzie działać tylko w wersji Sklep Play i GitHub, ponieważ Android sprawdza podpis aplikacji cyfrowej</string>
     <string name="title_setup_gmail_rationale">Przyznaj uprawnienia, aby wybrać konto i odczytać twoje imię</string>
     <string name="title_setup_gmail_permissions">Google poprosi o uprawnienia do odczytu, tworzenia, wysyłania i trwałego usuwania wszystkich wiadomości e-mail. FairEmail nigdy nie usunie twoich wiadomości bez Twojej wyraźnej zgody.</string>
+    <string name="title_setup_gmail_login">Jeśli Chrome jest zalogowany do konta, nowe konto można dodać tylko przez Androida. Można tego uniknąć wylogowując się z Chrome poprzez ustawienia synchronizacji Chrome.</string>
     <string name="title_setup_gmail_on_device">Dlaczego muszę wybrać konto na urządzeniu?</string>
     <string name="title_setup_gmail_password">Chcę autoryzować konto za pomocą hasła zamiast konta na urządzeniu</string>
     <string name="title_setup_office_auth">Błąd \"AUTHENTICATE failed\" może być spowodowany wyłączeniem protokołu IMAP/SMTP przez administratora systemu</string>
@@ -421,6 +422,7 @@
     <string name="title_advanced_ssl_harden">Wzmocnij połączenia SSL</string>
     <string name="title_advanced_ssl_harden_strict">Wymagaj TLS 1.3</string>
     <string name="title_advanced_cert_strict">Ścisła kontrola certyfikatu</string>
+    <string name="title_advanced_open_safe">Otwieraj tylko bezpieczne połączenia</string>
     <string name="title_advanced_manage_connectivity">Zarządzaj połączeniami</string>
     <string name="title_advanced_caption_general">Ogólne</string>
     <string name="title_advanced_caption_navigation">Nawigacja</string>
@@ -537,7 +539,7 @@
     <string name="title_advanced_conversation_actions">Sugeruj akcje (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">Sugeruj teksty odpowiedzi (Android 10+)</string>
     <string name="title_advanced_language_detection">Wykryj język tekstu wiadomości</string>
-    <string name="title_advanced_photo_picker" comment="title_advanced_photo_picker&#10;https://developer.android.com/about/versions/13/features/photopicker">Użyj selektora zdjęć z Androida</string>
+    <string name="title_advanced_photo_picker">Użyj selektora zdjęć z Androida</string>
     <string name="title_advanced_pull_refresh">Przeciągnij w dół, aby odświeżyć</string>
     <string name="title_advanced_autoscroll">Przewiń do góry po otrzymaniu nowych wiadomości</string>
     <string name="title_advanced_double_tap">Podwójne kliknięcie, aby oznaczyć odczytane/nieodczytane</string>
@@ -718,6 +720,7 @@
     <string name="title_advanced_timeout_hint">Limit czasu odczytu/zapisu zostanie ustawiony na dwukrotność limitu czasu połączenia. Wyższe wartości spowodują większe zużycie baterii.</string>
     <string name="title_advanced_cert_strict_hint">Wyłączenie tej opcji spowoduje złagodzenie sprawdzania certyfikatów serwera</string>
     <string name="title_advanced_ssl_harden_hint">Włączenie tego spowoduje wyłączenie słabych protokołów SSL i szyfrowania, co może prowadzić do problemów z połączeniem</string>
+    <string name="title_advanced_open_safe_hint">Włączenie tej opcji będzie wymagało bezpiecznych połączeń do pobierania zdjęć itp.</string>
     <string name="title_advanced_roaming_hint">Nagłówki wiadomości będą zawsze pobierane podczas roamingu. Możesz użyć ustawienia roamingu urządzenia, aby wyłączyć Internet podczas roamingu.</string>
     <string name="title_advanced_browse_hint">Pobierz więcej wiadomości podczas przewijania w dół</string>
     <string name="title_advanced_layout_hint">Przełączanie do bardziej zwartego układu i zmianę rozmiaru tekstu wiadomości można wykonać w menu górnego paska działań w widoku wiadomości</string>
@@ -972,6 +975,7 @@
     <string name="title_hide_seen_folder_hint">Tylko na liście folderów wyświetlanej na ekranie startowym</string>
     <string name="title_unified_folder">Pokaż we wspólnej skrzynce</string>
     <string name="title_navigation_folder">Pokaż w menu nawigacji</string>
+    <string name="title_navigation_folder_hide">Ukryj w menu nawigacji</string>
     <string name="title_synchronize_folder">Synchronizuj (odbierz wiadomości)</string>
     <string name="title_poll_folder">Sprawdzaj cyklicznie zamiast ciągłej synchronizacji</string>
     <string name="title_poll_folder_remark">Większość serwerów e-mail pozwala na wysyłanie wiadomości tylko dla kilku folderów!</string>
@@ -1408,6 +1412,7 @@
     <string name="title_compact">Widok kompaktowy</string>
     <string name="title_zoom">Rozmiar tekstu</string>
     <string name="title_padding">Rozmiar wypełnienia</string>
+    <string name="title_large_buttons">Większe przyciski</string>
     <string name="title_select_language">Wybierz język</string>
     <string name="title_select_all">Wybierz wszystkie</string>
     <string name="title_select_found">Wybierz znalezione</string>
@@ -1426,6 +1431,8 @@
         Nie usuwaj więc pliku z obrazem!
     
     </string>
+    <string name="title_answer_define_name">Nazwa</string>
+    <string name="title_answer_define_value">Wartość</string>
     <string name="title_answer_caption">Edytuj szablon</string>
     <string name="title_answer_reply">Szablon odpowiedzi</string>
     <string name="title_answer_name">Nazwa szablonu</string>

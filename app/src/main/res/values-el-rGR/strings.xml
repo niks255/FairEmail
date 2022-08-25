@@ -173,6 +173,7 @@
     <string name="title_setup_gmail_support">Η εξουσιοδότηση λογαριασμών Google θα λειτουργήσει μόνον στην έκδοση του Play Store και του GitHub, επειδή το Android ελέγχει την ψηφιακή υπογραφή της εφαρμογής</string>
     <string name="title_setup_gmail_rationale">Παρακαλώ, παραχωρήστε τις απαιτούμενες άδειες για την επιλογή ενός λογαριασμού και την ανάγνωση του ονόματός σας</string>
     <string name="title_setup_gmail_permissions">Η Google θα ζητήσει άδειες που αφορούν στην ανάγνωση, σύνταξη, αποστολή και οριστική διαγραφή όλων των μηνυμάτων σας. Το FairEmail δεν θα διαγράψει ποτέ τα μηνύματά σας χωρίς τη ρητή συγκατάθεσή σας.</string>
+    <string name="title_setup_gmail_login">Εάν το Chrome είναι συνδεδεμένο με έναν λογαριασμό, μπορεί να προστεθεί ένας καινούργιος λογαριασμός μόνον μέσα από το Android. Αυτό μπορεί να αποφευχθεί, εάν αποσυνδεθείτε από το Chrome μέσω των ρυθμίσεων συγχρονισμού στο Chrome.</string>
     <string name="title_setup_gmail_on_device">Γιατί πρέπει να επιλέξω έναν λογαριασμό περασμένο στη συσκευή;</string>
     <string name="title_setup_gmail_password">Θέλω να εξουσιοδοτήσω έναν λογαριασμό με έναν κωδικό πρόσβασης αντί για έναν λογαριασμό στη συσκευή</string>
     <string name="title_setup_office_auth">Το σφάλμα \'ΠΙΣΤΟΠΟΙΗΣΗ απέτυχε\' μπορεί να προκληθεί επειδή το IMAP/SMTP έχει απενεργοποιηθεί από το διαχειριστή του συστήματος</string>
@@ -395,6 +396,7 @@
     <string name="title_advanced_ssl_harden">Θωράκιση συνδέσεων SSL</string>
     <string name="title_advanced_ssl_harden_strict">Απαιτείται TLS 1.3</string>
     <string name="title_advanced_cert_strict">Αυστηρός έλεγχος πιστοποιητικών</string>
+    <string name="title_advanced_open_safe">Άνοιγμα ασφαλών συνδέσεων μόνο</string>
     <string name="title_advanced_manage_connectivity">Διαχείριση συνδεσιμότητας</string>
     <string name="title_advanced_caption_general">Γενικά</string>
     <string name="title_advanced_caption_navigation">Πλοήγηση</string>
@@ -511,7 +513,7 @@
     <string name="title_advanced_conversation_actions">Να προτείνονται ενέργειες (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">Να προτείνονται κείμενα απάντησης (Android 10+)</string>
     <string name="title_advanced_language_detection">Αναγνώριση της γλώσσας του κειμένου του μηνύματος</string>
-    <string name="title_advanced_photo_picker" comment="title_advanced_photo_picker&#10;https://developer.android.com/about/versions/13/features/photopicker">Χρήση του επιλογέα φωτογραφιών του Android</string>
+    <string name="title_advanced_photo_picker">Χρήση του επιλογέα φωτογραφιών του Android</string>
     <string name="title_advanced_pull_refresh">Σύρετε προς τα κάτω για ανανέωση</string>
     <string name="title_advanced_autoscroll">Κύλιση προς τα πάνω κατά τη λήψη νέων μηνυμάτων</string>
     <string name="title_advanced_double_tap">Διπλό άγγιγμα για να επισημαίνεται ένα μήνυμα ως αναγνωσμένο/μη αναγνωσμένο</string>
@@ -690,6 +692,7 @@
     <string name="title_advanced_timeout_hint">Το χρονικό όριο για τις διαδικασίες ανάγνωσης/εγγραφής θα τεθεί στο διπλάσιο από εκείνο για τη λήξη της σύνδεσης. Υψηλότερες τιμές συνεπάγονται μεγαλύτερη χρήση μπαταρίας.</string>
     <string name="title_advanced_cert_strict_hint">Αν απενεργοποιηθεί, ο έλεγχος των πιστοποιητικών διακομιστή θα γίνει χαλαρότερος</string>
     <string name="title_advanced_ssl_harden_hint">Αν ενεργοποιηθεί, θα απενεργοποιηθούν τα ασθενή πρωτόκολλα SSL και οι αλγόριθμοι κρυπτογράφησης, το οποίο ενδέχεται να οδηγήσει σε προβλήματα σύνδεσης</string>
+    <string name="title_advanced_open_safe_hint">Αν ενεργοποιηθεί, θα απαιτούνται ασφαλείς συνδέσεις για τη λήψη εικόνων, κλπ</string>
     <string name="title_advanced_roaming_hint">Οι κεφαλίδες μηνυμάτων θα λαμβάνονται πάντα κατά την περιαγωγή. Από τις ρυθμίσεις περιαγωγής της συσκευής σας, μπορείτε να απενεργοποίησετε το ίντερνετ κατά την περιαγωγή.</string>
     <string name="title_advanced_browse_hint">Ανάκτηση περισσοτέρων μηνυμάτων με την κύλιση προς τα κάτω</string>
     <string name="title_advanced_layout_hint">Εναλλαγή σε πιο συμπαγή διάταξη καθώς και αλλαγές στο μέγεθος του κειμένου του μηνύματος, μπορούν να γίνουν από την πάνω γραμμή ενεργειών στην οθόνη προβολής του μηνύματος</string>
@@ -944,6 +947,7 @@
     <string name="title_hide_seen_folder_hint">Μόνο για τη λίστα φακέλων που εμφανίζεται στην οθόνη έναρξης</string>
     <string name="title_unified_folder">Προβολή στα ενοποιημένα εισερχόμενα</string>
     <string name="title_navigation_folder">Προβολή στο μενού πλοήγησης</string>
+    <string name="title_navigation_folder_hide">Απόκρυψη στο μενού πλοήγησης</string>
     <string name="title_synchronize_folder">Συγχρονισμός (λήψη μηνυμάτων)</string>
     <string name="title_poll_folder">Περιοδικός έλεγχος αντί για συνεχή συγχρονισμό</string>
     <string name="title_poll_folder_remark">Οι περισσότεροι διακομιστές ηλ. ταχυδρομείου επιτρέπουν μηνύματα ώθησης (push) μόνον για έναν πολύ μικρό αριθμό φακέλων!</string>
@@ -1380,6 +1384,7 @@
     <string name="title_compact">Συνεπτυγμένη προβολή</string>
     <string name="title_zoom">Μέγεθος κειμένου</string>
     <string name="title_padding">Μέγεθος διαστήματος μεταξύ μηνυμάτων</string>
+    <string name="title_large_buttons">Μεγαλύτερα κουμπιά</string>
     <string name="title_select_language">Επιλογή γλώσσας</string>
     <string name="title_select_all">Επιλογή όλων</string>
     <string name="title_select_found">Επιλογή αποτελεσμάτων αναζήτησης</string>
@@ -1397,6 +1402,8 @@
     <string name="title_edit_signature_image_hint">        Κατά την αποστολή μηνύματος, η εικόνα αντιγράφεται στο μήνυμα από την επιλεγμένη τοποθεσία.
         Άρα, μην διαγράψετε το αρχείο εικόνας!
     </string>
+    <string name="title_answer_define_name">Όνομα</string>
+    <string name="title_answer_define_value">Τιμή</string>
     <string name="title_answer_caption">Επεξεργασία προτύπου</string>
     <string name="title_answer_reply">Πρότυπο απάντησης</string>
     <string name="title_answer_name">Όνομα προτύπου</string>

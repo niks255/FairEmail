@@ -221,6 +221,7 @@
     <string name="title_setup_gmail_support">Authorizing Google accounts will work in the Play Store and GitHub version only because Android checks the digital app signature</string>
     <string name="title_setup_gmail_rationale">Please grant permissions to select an account and read your name</string>
     <string name="title_setup_gmail_permissions">Google will ask for permissions to read, compose, send and permanently delete all your email. FairEmail will never delete your messages without your explicit consent.</string>
+    <string name="title_setup_gmail_login">If Chrome is signed in to an account, a new account can only be added through Android. This can be avoided by logging out of Chrome via the Chrome sync settings.</string>
     <string name="title_setup_gmail_on_device">Why do I need to select an on-device account?</string>
     <string name="title_setup_gmail_password">I want to authorize an account with a password instead of an on-device account</string>
     <string name="title_setup_office_auth">The error \'AUTHENTICATE failed\' can be caused by IMAP/SMTP being disabled by the system administrator</string>
@@ -473,6 +474,7 @@
     <string name="title_advanced_ssl_harden">Harden SSL connections</string>
     <string name="title_advanced_ssl_harden_strict">Require TLS 1.3</string>
     <string name="title_advanced_cert_strict">Strict certificate checking</string>
+    <string name="title_advanced_open_safe">Open secure connections only</string>
     <string name="title_advanced_manage_connectivity">Manage connectivity</string>
 
     <string name="title_advanced_caption_general">General</string>
@@ -866,6 +868,7 @@
     <string name="title_advanced_timeout_hint">The read/write timeout will be set to the double of the connection timeout. Higher values will result in more battery use.</string>
     <string name="title_advanced_cert_strict_hint">Disabling this will relax checking of server certificates</string>
     <string name="title_advanced_ssl_harden_hint">Enabling this will disable weak SSL protocols and ciphers, which can lead to connection problems</string>
+    <string name="title_advanced_open_safe_hint">Enabling this will require secure connections to download images, etc</string>
     <string name="title_advanced_roaming_hint">Messages headers will always be fetched when roaming. You can use the device\'s roaming setting to disable internet while roaming.</string>
 
     <string name="title_advanced_browse_hint">Fetch more messages when scrolling down</string>
@@ -1144,6 +1147,7 @@
     <string name="title_hide_seen_folder_hint">Only in the folder list shown on the start screen</string>
     <string name="title_unified_folder">Show in unified inbox</string>
     <string name="title_navigation_folder">Show in navigation menu</string>
+    <string name="title_navigation_folder_hide">Hide in navigation menu</string>
     <string name="title_synchronize_folder">Synchronize (receive messages)</string>
     <string name="title_poll_folder">Check periodically instead of continuous synchronize</string>
     <string name="title_poll_folder_remark">Most email servers allow push messages for a handful of folders only!</string>
@@ -1626,6 +1630,7 @@
     <string name="title_compact">Compact view</string>
     <string name="title_zoom">Text size</string>
     <string name="title_padding">Padding size</string>
+    <string name="title_large_buttons">Larger buttons</string>
     <string name="title_select_language">Select language</string>
     <string name="title_select_all">Select all</string>
     <string name="title_select_found">Select found</string>
@@ -1648,6 +1653,8 @@
         So, don\'t delete the image file!
     </string>
 
+    <string name="title_answer_define_name">Name</string>
+    <string name="title_answer_define_value">Value</string>
     <string name="title_answer_caption">Edit template</string>
     <string name="title_answer_reply">Reply template</string>
     <string name="title_answer_name">Template name</string>

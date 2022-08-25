@@ -56,6 +56,8 @@ import com.google.android.material.snackbar.Snackbar;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.util.List;
+
 public class FragmentAnswer extends FragmentBase {
     private ViewGroup view;
     private EditText etName;
@@ -279,6 +281,13 @@ public class FragmentAnswer extends FragmentBase {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_answer, menu);
+
+        Menu smenu = menu.findItem(R.id.menu_placeholders).getSubMenu();
+
+        List<String> names = EntityAnswer.getCustomPlaceholders(getContext());
+        for (int i = 0; i < names.size(); i++)
+            smenu.add(Menu.FIRST, i + 1, i + 1, names.get(i));
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -291,22 +300,28 @@ public class FragmentAnswer extends FragmentBase {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.menu_help) {
-            onMenuHelp();
+        if (item.getGroupId() == Menu.FIRST) {
+            String name = item.getTitle().toString();
+            onMenuPlaceholder("$" + name + "$");
             return true;
-        } else if (itemId == R.id.menu_placeholder_name) {
-            onMenuPlaceholder("$name$");
-            return true;
-        } else if (itemId == R.id.menu_placeholder_email) {
-            onMenuPlaceholder("$email$");
-            return true;
-        } else if (itemId == R.id.menu_placeholder_firstname) {
-            onMenuPlaceholder("$firstname$");
-            return true;
-        } else if (itemId == R.id.menu_placeholder_lastname) {
-            onMenuPlaceholder("$lastname$");
-            return true;
+        } else {
+            int itemId = item.getItemId();
+            if (itemId == R.id.menu_help) {
+                onMenuHelp();
+                return true;
+            } else if (itemId == R.id.menu_placeholder_name) {
+                onMenuPlaceholder("$name$");
+                return true;
+            } else if (itemId == R.id.menu_placeholder_email) {
+                onMenuPlaceholder("$email$");
+                return true;
+            } else if (itemId == R.id.menu_placeholder_firstname) {
+                onMenuPlaceholder("$firstname$");
+                return true;
+            } else if (itemId == R.id.menu_placeholder_lastname) {
+                onMenuPlaceholder("$lastname$");
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
