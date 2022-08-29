@@ -22,4 +22,4 @@ app/full
 build
 captures
 metadata
-app/schemas/mapping
+app/schemas/mapping/
