@@ -4,6 +4,35 @@
 
 ### [Ledumahadi](https://en.wikipedia.org/wiki/Ledumahadi)
 
+### 1.1962 - 2022-09-02
+
+* Added workaround for Outlook push messages (IMAP IDLE) bug
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1961 - 2022-09-01
+
+* Fixed OAuth
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1960 - 2022-08-31
+
+* Enabled sqlite sync extra
+
+### 1.1959 - 2022-08-31
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1958 - 2022-08-30
+
+* Added extra small/large font size to message editor
+* Small improvements and minor bug fixes
+* Updated Public Suffix List
+* Updated AndroidX
+* Updated translations
+
 ### 1.1957 - 2022-08-22
 
 * Added custom placeholder values for reply templates

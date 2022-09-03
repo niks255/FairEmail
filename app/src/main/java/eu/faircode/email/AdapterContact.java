@@ -131,7 +131,7 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                 ivType.setImageResource(R.drawable.twotone_report_24);
                 ivType.setContentDescription(context.getString(R.string.title_legend_junk));
             } else if (contact.type == EntityContact.TYPE_NO_JUNK) {
-                ivType.setImageResource(R.drawable.twotone_person_off_24);
+                ivType.setImageResource(R.drawable.twotone_report_off_24);
                 ivType.setContentDescription(context.getString(R.string.title_no_junk));
             } else {
                 ivType.setImageDrawable(null);
@@ -331,8 +331,9 @@ public class AdapterContact extends RecyclerView.Adapter<AdapterContact.ViewHold
                 }
 
                 private void onActionSearch() {
-                    Intent search = new Intent(context, ActivitySearch.class);
-                    search.putExtra(Intent.EXTRA_PROCESS_TEXT, contact.email);
+                    Intent search = new Intent(context, ActivityView.class)
+                            .putExtra(Intent.EXTRA_PROCESS_TEXT, contact.email)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     context.startActivity(search);
                 }
 

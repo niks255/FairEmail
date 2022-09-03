@@ -603,7 +603,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 ImageSpan[] image = buffer.getSpans(off, off, ImageSpan.class);
                                 if (image.length > 0 && image[0].getSource() != null) {
                                     Uri uri = Uri.parse(image[0].getSource());
-                                    if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme())) {
+                                    if (UriHelper.isHyperLink(uri)) {
                                         ripple(event);
                                         if (onOpenLink(uri, null, false))
                                             return true;
@@ -2284,6 +2284,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void bindButtons(TupleMessageEx message) {
             String keywords = prefs.getString("global_keywords", null);
             if (keywords == null)
+                return;
+
+            if (buttons.getReferencedIds().length > 0)
                 return;
 
             int dp3 = Helper.dp2pixels(context, 3);
@@ -5841,7 +5844,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 String host = guri.getHost();
 
                 boolean confirm_link =
-                        !"https".equals(scheme) || TextUtils.isEmpty(host) ||
+                        !"https".equalsIgnoreCase(scheme) || TextUtils.isEmpty(host) ||
                                 prefs.getBoolean(host + ".confirm_link", true);
                 if (always_confirm || (confirm_links && confirm_link)) {
                     Bundle args = new Bundle();
@@ -5900,7 +5903,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     }
                 }.execute(context, owner, args, "view:cid");
 
-            else if ("http".equals(scheme) || "https".equals(scheme))
+            else if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))
                 onOpenLink(uri, null, false);
 
             else if ("data".equals(scheme))

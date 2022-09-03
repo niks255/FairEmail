@@ -9,6 +9,8 @@
     <string name="app_continue">Συνέχεια ούτως ή άλλως</string>
     <string name="app_exit">\"Πίσω\" ξανά για έξοδο</string>
     <string name="app_cake">Ανεπαρκής χώρος αποθήκευσης</string>
+    <string name="app_cake_remaining">Υπολειπόμενος αποθηκευτικός χώρος στη συσκευή: %1$s</string>
+    <string name="app_cake_required">Ελάχιστος απαιτούμενος χώρος αποθήκευσης: %1$s</string>
     <string name="app_updated">Τελευταία ενημέρωση: %1$s</string>
     <string name="app_download">Λήφθηκε από: %1$s</string>
     <string name="channel_service">Παρακολούθηση</string>
@@ -374,6 +376,7 @@
     <string name="title_advanced_signature_forward">Χρήση υπογραφής κατά την προώθηση</string>
     <string name="title_advanced_discard_delete">Οριστική διαγραφή ενός προχείρου όταν αυτό απορρίπτεται</string>
     <string name="title_advanced_reply_move">Κατά την απάντηση ενός μηνύματος, να αποθηκεύεται η απάντηση μέσα στον ίδιο φάκελο</string>
+    <string name="title_advanced_reply_move_inbox">Το ίδιο για τα μηνύματα στα εισερχόμενα</string>
     <string name="title_advanced_auto_link">Αυτόματη δημιουργία συνδέσμων</string>
     <string name="title_advanced_plain_only">Αποστολή απλού κειμένου από προεπιλογή</string>
     <string name="title_advanced_flow">Αναπροσαρμοσμένη μορφοποίηση για απλό κείμενο</string>
@@ -390,6 +393,7 @@
     <string name="title_advanced_download_eml">Λήψη αρχείων αρχικών μηνυμάτων</string>
     <string name="title_advanced_download_plain">Να κατεβαίνουν, από προεπιλογή, μόνον τα τμήματα απλού κειμένου (εφόσον είναι διαθέσιμα)</string>
     <string name="title_advanced_validated">Απαιτείται επικυρωμένη (επαληθευμένη) σύνδεση</string>
+    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">Απαιτείται επαληθευμένη σύνδεση σε δεσμευτική πύλη</string>
     <string name="title_advanced_vpn_only">Σύνδεση μόνο μέσω VPN</string>
     <string name="title_advanced_timeout">Χρονικό όριο σύνδεσης (δευτερόλεπτα)</string>
     <string name="title_advanced_prefer_ip4">Να προτιμάται IPv4 παρά IPv6</string>
@@ -1184,9 +1188,11 @@
     <string name="title_style_italic">Πλάγια</string>
     <string name="title_style_underline">Υπογράμμιση</string>
     <string name="title_style_size">Μέγεθος</string>
+    <string name="title_style_size_xsmall">Πολύ μικρό</string>
     <string name="title_style_size_small">Μικρά</string>
     <string name="title_style_size_medium">Μεσαία</string>
     <string name="title_style_size_large">Μεγάλα</string>
+    <string name="title_style_size_xlarge">Πολύ μεγάλο</string>
     <string name="title_style_align">Στοίχιση</string>
     <string name="title_style_align_start">Αρχή</string>
     <string name="title_style_align_center">Κέντρο</string>
@@ -1621,7 +1627,7 @@
     <string name="title_hint_folder_actions">Παρατεταμένο πάτημα σε έναν φάκελο για επιλογές, όπως προσθήκη ενός φακέλου στο μενού πλοήγησης για γρήγορη πρόσβαση</string>
     <string name="title_hint_folder_sync">Για να μειωθεί η χρήση μπαταρίας και δικτύου δεν συγχρονίζονται όλοι οι φάκελοι και όλα τα μηνύματα από προεπιλογή</string>
     <string name="title_hint_airplane">Η λειτουργία πτήσης είναι ενεργοποιημένη</string>
-    <string name="title_hint_notification">Οι ειδοποιήσεις είναι απενεργοποιημένες</string>
+    <string name="title_hint_notifications">Δεν έχει δοθεί καμία άδεια ειδοποιήσεων</string>
     <string name="title_hint_support">Αν έχετε μία ερώτηση ή ένα πρόβλημα, παρακαλώ χρησιμοποιήστε το μενού \"Υποστήριξη\" για να λάβετε βοήθεια</string>
     <string name="title_hint_message_actions">Σάρωση αριστερά για απορρίμματα• σάρωση δεξιά για αρχειοθέτηση (αν είναι διαθέσιμη)• μπορείτε να ρυθμίσετε τις ενέργειες σάρωσης στις ρυθμίσεις του λογαριασμού</string>
     <string name="title_hint_message_selection">Πατήστε παρατεταμένα σε ένα μήνυμα για να αρχίσετε να επιλέγετε πολλαπλά μηνύματα. Συνεχίστε το πάτημα και σύρετε προς τα πάνω ή κάτω για να επιλέξετε περισσότερα μηνύματα</string>

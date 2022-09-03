@@ -12,6 +12,8 @@
     <string name="app_continue">Continue anyway</string>
     <string name="app_exit">Go \'back\' again to exit</string>
     <string name="app_cake">Insufficient storage space left</string>
+    <string name="app_cake_remaining">Remaining storage space on the device: %1$s</string>
+    <string name="app_cake_required">Minimum required storage space: %1$s</string>
     <string name="app_updated">Last update: %1$s</string>
     <string name="app_download">Downloaded from: %1$s</string>
 
@@ -447,6 +449,7 @@
     <string name="title_advanced_signature_forward">Use signature when forwarding</string>
     <string name="title_advanced_discard_delete">On discard draft permanently delete draft</string>
     <string name="title_advanced_reply_move">On replying to a message, save the reply in the same folder</string>
+    <string name="title_advanced_reply_move_inbox">Also for messages in the inbox</string>
 
     <string name="title_advanced_auto_link">Automatically create links</string>
     <string name="title_advanced_plain_only">Send plain text only by default</string>
@@ -465,6 +468,7 @@
     <string name="title_advanced_download_eml">Download raw message files</string>
     <string name="title_advanced_download_plain">Download plain text only parts by default (if available)</string>
     <string name="title_advanced_validated">Require a validated (checked) connection</string>
+    <string name="title_advanced_validated_captive">Require a validated captive portal connection</string>
     <string name="title_advanced_vpn_only">Connect only via a VPN</string>
     <string name="title_advanced_timeout">Connection timeout (seconds)</string>
     <string name="title_advanced_prefer_ip4">Prefer IPv4 over IPv6</string>
@@ -776,10 +780,12 @@
     <string name="title_advanced_work_manager" translatable="false">Initialize work manager</string>
     <string name="title_advanced_external_storage" translatable="false">Use external storage</string>
     <string name="title_advanced_room_query_threads" translatable="false">ROOM query threads: %1$s</string>
+    <string name="title_advanced_integrity" translatable="false">sqlite integrity check</string>
     <string name="title_advanced_wal" translatable="false">sqlite WAL</string>
     <string name="title_advanced_checkpoints" translatable="false">sqlite checkpoints</string>
     <string name="title_advanced_analyze" translatable="false">sqlite analyze</string>
     <string name="title_advanced_auto_vacuum" translatable="false">sqlite auto vacuum</string>
+    <string name="title_advanced_sync_extra" translatable="false">sqlite sync extra</string>
     <string name="title_advanced_sqlite_cache" translatable="false">sqlite cache: %1$s %% - %2$s</string>
     <string name="title_advanced_chunk_size" translatable="false">Chunk size: %1$d</string>
     <string name="title_advanced_thread_range" translatable="false">Thread range: %1$d days</string>
@@ -1411,9 +1417,11 @@
     <string name="title_style_underline">Underline</string>
 
     <string name="title_style_size">Size</string>
+    <string name="title_style_size_xsmall">Extra small</string>
     <string name="title_style_size_small">Small</string>
     <string name="title_style_size_medium">Medium</string>
     <string name="title_style_size_large">Large</string>
+    <string name="title_style_size_xlarge">Extra large</string>
     <string name="title_style_align">Align</string>
     <string name="title_style_align_start">Start</string>
     <string name="title_style_align_center">Center</string>
@@ -1889,7 +1897,7 @@
     <string name="title_hint_folder_actions">Long press a folder for options, like adding a folder to the navigation menu for quick access</string>
     <string name="title_hint_folder_sync">To limit battery and network usage not all folders and not all messages will be synchronized by default</string>
     <string name="title_hint_airplane">Airplane mode is on</string>
-    <string name="title_hint_notification">Notifications are disabled</string>
+    <string name="title_hint_notifications">No notification permissions</string>
     <string name="title_hint_support">If you have a question or a problem, please use the support menu to get help</string>
     <string name="title_hint_message_actions">Swipe left to trash; Swipe right to archive (if available); The swipe actions can be configured in the account settings</string>
     <string name="title_hint_message_selection">Long press a message to start selecting multiple messages; Hold and swipe up or down to select more messages</string>

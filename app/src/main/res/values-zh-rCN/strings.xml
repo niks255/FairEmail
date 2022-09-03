@@ -9,6 +9,8 @@
     <string name="app_continue">仍然继续</string>
     <string name="app_exit">再按一次退出</string>
     <string name="app_cake">剩余存储空间不足</string>
+    <string name="app_cake_remaining">设备上剩余的存储空间： %1$s</string>
+    <string name="app_cake_required">需要的最小存储空间： %1$s</string>
     <string name="app_updated">上次更新：%1$s</string>
     <string name="app_download">下载自：%1$s</string>
     <string name="channel_service">监控</string>
@@ -361,6 +363,7 @@
     <string name="title_advanced_signature_forward">转发时使用签名</string>
     <string name="title_advanced_discard_delete">舍弃草稿时将其永久删除</string>
     <string name="title_advanced_reply_move">回复邮件时，将回复保存在相同文件夹中</string>
+    <string name="title_advanced_reply_move_inbox">也适用于收件箱中的消息</string>
     <string name="title_advanced_auto_link">自动创建链接</string>
     <string name="title_advanced_plain_only">默认仅发送纯文本</string>
     <string name="title_advanced_flow">纯文本中采用可流动换行格式（format=flowed）</string>
@@ -377,6 +380,7 @@
     <string name="title_advanced_download_eml">下载原始消息文件</string>
     <string name="title_advanced_download_plain">默认只下载纯文本部分（如果可用）</string>
     <string name="title_advanced_validated">仅限已通过可用性检查的连接</string>
+    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">需要经确认的无线网络强制认证门户连接</string>
     <string name="title_advanced_vpn_only">仅通过 VPN 连接</string>
     <string name="title_advanced_timeout">连接超时 (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv4 优先于 IPv6</string>
@@ -1171,9 +1175,11 @@
     <string name="title_style_italic">斜体</string>
     <string name="title_style_underline">下划线</string>
     <string name="title_style_size">大小</string>
+    <string name="title_style_size_xsmall">超小</string>
     <string name="title_style_size_small">小</string>
     <string name="title_style_size_medium">中等</string>
     <string name="title_style_size_large">大</string>
+    <string name="title_style_size_xlarge">特大</string>
     <string name="title_style_align">对齐</string>
     <string name="title_style_align_start">起始</string>
     <string name="title_style_align_center">居中</string>
@@ -1608,7 +1614,7 @@
     <string name="title_hint_folder_actions">长按文件夹查看选项，例如将文件夹添加到导航菜单以便快速访问</string>
     <string name="title_hint_folder_sync">为了降低电量和网络流量的消耗，默认不会同步全部的文件夹和消息</string>
     <string name="title_hint_airplane">飞行模式已开启</string>
-    <string name="title_hint_notification">通知已禁用</string>
+    <string name="title_hint_notifications">无通知权限</string>
     <string name="title_hint_support">如果您要提问或有疑问，请使用支持选项获取帮助</string>
     <string name="title_hint_message_actions">向左滑移动到回收站；向右滑存档（如果支持） ；可在账户设置中配置滑动操作</string>
     <string name="title_hint_message_selection">长按进行多选；按住的同时并上下滑动可选择多个邮件</string>

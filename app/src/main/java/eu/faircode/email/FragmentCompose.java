@@ -3051,7 +3051,7 @@ public class FragmentCompose extends FragmentBase {
             // https://developer.android.com/reference/android/provider/MediaStore#ACTION_PICK_IMAGES
             // Android 12: cmd device_config put storage_native_boot picker_intent_enabled true
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean photo_picker = prefs.getBoolean("photo_picker", true);
+            boolean photo_picker = prefs.getBoolean("photo_picker", false);
             Intent picker = new Intent(MediaStore.ACTION_PICK_IMAGES);
             picker.setType("image/*");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
@@ -4318,6 +4318,10 @@ public class FragmentCompose extends FragmentBase {
         EntityAttachment attachment = new EntityAttachment();
         UriInfo info = getInfo(uri, context);
 
+        EntityLog.log(context, "Add attachment" +
+                " uri=" + uri + " image=" + image + " resize=" + resize + " privacy=" + privacy +
+                " name=" + info.name + " type=" + info.type + " size=" + info.size);
+
         String ext = Helper.getExtension(info.name);
         if (info.name != null && ext == null && info.type != null) {
             String guessed = MimeTypeMap.getSingleton()
@@ -5044,13 +5048,15 @@ public class FragmentCompose extends FragmentBase {
                                     EntityMessage.PGP_SIGNENCRYPT.equals(ref.ui_encrypt)) {
                                 if (Helper.isOpenKeychainInstalled(context) &&
                                         selected.sign_key != null &&
-                                        PgpHelper.hasPgpKey(context, recipients))
+                                        (EntityMessage.PGP_SIGNENCRYPT.equals(ref.ui_encrypt) ||
+                                                PgpHelper.hasPgpKey(context, recipients)))
                                     data.draft.ui_encrypt = ref.ui_encrypt;
                             } else if (EntityMessage.SMIME_SIGNONLY.equals(ref.ui_encrypt) ||
                                     EntityMessage.SMIME_SIGNENCRYPT.equals(ref.ui_encrypt)) {
                                 if (ActivityBilling.isPro(context) &&
                                         selected.sign_key_alias != null &&
-                                        SmimeHelper.hasSmimeKey(context, recipients))
+                                        (EntityMessage.SMIME_SIGNENCRYPT.equals(ref.ui_encrypt) ||
+                                                SmimeHelper.hasSmimeKey(context, recipients)))
                                     data.draft.ui_encrypt = ref.ui_encrypt;
                             }
                         }
@@ -8077,6 +8083,7 @@ public class FragmentCompose extends FragmentBase {
         }
     }
 
+    @NonNull
     private static UriInfo getInfo(Uri uri, Context context) {
         UriInfo result = new UriInfo();
         try {

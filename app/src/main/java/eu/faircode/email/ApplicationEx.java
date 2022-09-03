@@ -651,6 +651,11 @@ public class ApplicationEx extends Application
         } else if (version < 1955) {
             if (!prefs.contains("doubletap"))
                 editor.putBoolean("doubletap", true);
+        } else if (version < 1960)
+            editor.remove("sqlite_auto_vacuum");
+        else if (version < 1961) {
+            if (!prefs.contains("photo_picker"))
+                editor.putBoolean("photo_picker", true);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)
