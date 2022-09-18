@@ -380,7 +380,7 @@
     <string name="title_advanced_download_eml">下载原始消息文件</string>
     <string name="title_advanced_download_plain">默认只下载纯文本部分（如果可用）</string>
     <string name="title_advanced_validated">仅限已通过可用性检查的连接</string>
-    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">需要经确认的无线网络强制认证门户连接</string>
+    <string name="title_advanced_validated_captive">需要经确认的无线网络强制认证门户连接</string>
     <string name="title_advanced_vpn_only">仅通过 VPN 连接</string>
     <string name="title_advanced_timeout">连接超时 (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv4 优先于 IPv6</string>
@@ -643,6 +643,7 @@
     <string name="title_advanced_app">应用信息</string>
     <string name="title_advanced_more">更多选项</string>
     <string name="title_advanced_main_log">主要日志</string>
+    <string name="title_advanced_main_log_mem">记录内存使用情况</string>
     <string name="title_advanced_protocol">协议日志</string>
     <string name="title_advanced_log_info">调试日志</string>
     <string name="title_advanced_debug">调试模式</string>
@@ -776,6 +777,7 @@
     <string name="title_account_category">类别</string>
     <string name="title_account_name_hint">用于区分文件夹</string>
     <string name="title_account_interval_hint">刷新连接推送消息的频率或检查新消息的频率</string>
+    <string name="title_account_noop_hint">这将更加主动地刷新连接，但也会消耗更多电量</string>
     <string name="title_account_partial_fetch_hint">仅在空消息或损坏的附件时禁用此功能</string>
     <string name="title_color">颜色</string>
     <string name="title_background">背景</string>
@@ -816,6 +818,7 @@
     <string name="title_max_messages">下载邮件的最大数（留空则下载全部）</string>
     <string name="title_keep_poll_interval">轮询间隔(分钟)</string>
     <string name="title_keep_alive_interval">保活间隔（分钟）</string>
+    <string name="title_keep_alive_noop">定期重启 IMAP IDLE</string>
     <string name="title_server_time">使用接收时间 (服务器)</string>
     <string name="title_received_header">使用“已接收”标头</string>
     <string name="title_date_header">使用“日期”标头 (发送时间)</string>
@@ -1412,6 +1415,7 @@
     <string name="title_answer_placeholder_email">发件人电子邮件地址</string>
     <string name="title_answer_placeholder_firstname">发件人名字</string>
     <string name="title_answer_placeholder_lastname">发件人姓氏</string>
+    <string name="title_answer_placeholder_date">当前日期</string>
     <string name="title_rule_noop">无操作</string>
     <string name="title_rule_seen">标为已读</string>
     <string name="title_rule_unseen">标记为未读</string>

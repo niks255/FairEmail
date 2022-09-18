@@ -419,7 +419,7 @@
     <string name="title_advanced_download_eml">Stáhnout zdrojové soubory zprávy</string>
     <string name="title_advanced_download_plain">Stahovat pouze prostý text (vždy v případě dostupnosti)</string>
     <string name="title_advanced_validated">Vyžadovat ověřené (zkontrolované) připojení</string>
-    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">Vyžadovat ověření při připojení přes captive portál</string>
+    <string name="title_advanced_validated_captive">Vyžadovat ověření při připojení přes captive portál</string>
     <string name="title_advanced_vpn_only">Připojit pouze pomocí VPN</string>
     <string name="title_advanced_timeout">Časový limit připojení (sekundy)</string>
     <string name="title_advanced_prefer_ip4">Upřednostňovat IPv4 před IPv6</string>
@@ -682,6 +682,7 @@
     <string name="title_advanced_app">Nastavení aplikace</string>
     <string name="title_advanced_more">Více možností</string>
     <string name="title_advanced_main_log">Hlavní logování</string>
+    <string name="title_advanced_main_log_mem">Využití paměti protokolu</string>
     <string name="title_advanced_protocol">Protokolovat protokoly</string>
     <string name="title_advanced_log_info">Protokolování při ladění</string>
     <string name="title_advanced_debug">Režim ladění</string>
@@ -815,6 +816,7 @@
     <string name="title_account_category">Kategorie</string>
     <string name="title_account_name_hint">Použito k odlišení složek</string>
     <string name="title_account_interval_hint">Četnost obnovy spojení pro okamžité zprávy nebo četnost kontroly nových zpráv</string>
+    <string name="title_account_noop_hint">Tímto se připojení bude obnovovat aktivněji, ale sníží se výdrž baterie</string>
     <string name="title_account_partial_fetch_hint">Vypnout pouze v případě prázdných zpráv nebo poškozených příloh</string>
     <string name="title_color">Barva</string>
     <string name="title_background">Pozadí</string>
@@ -855,6 +857,7 @@
     <string name="title_max_messages">Maximální počet zpráv ke stažení (prázdné pro všechny)</string>
     <string name="title_keep_poll_interval">Interval dotazování (minuty)</string>
     <string name="title_keep_alive_interval">Interval udržování spojení (minuty)</string>
+    <string name="title_keep_alive_noop">Restartovat IMAP IDLE periodicky</string>
     <string name="title_server_time">Použít čas přijetí (server)</string>
     <string name="title_received_header">Použít hlavičku „přijato“</string>
     <string name="title_date_header">Použít hlavičku „datum“ (čas odeslání)</string>
@@ -1453,6 +1456,7 @@
     <string name="title_answer_placeholder_email">E-mailová adresa odesílatele</string>
     <string name="title_answer_placeholder_firstname">Křestní jméno odesílatele</string>
     <string name="title_answer_placeholder_lastname">Příjmení odesílatele</string>
+    <string name="title_answer_placeholder_date">Aktuální datum</string>
     <string name="title_rule_noop">Žádná akce</string>
     <string name="title_rule_seen">Označit přečtené</string>
     <string name="title_rule_unseen">Označit nepřečtené</string>

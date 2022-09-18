@@ -1399,6 +1399,7 @@ class Core {
         boolean seen = jargs.optBoolean(1);
         boolean unflag = jargs.optBoolean(3);
         boolean delete = jargs.optBoolean(4);
+        boolean create = jargs.optBoolean(5);
 
         Flags flags = ifolder.getPermanentFlags();
 
@@ -1410,6 +1411,21 @@ class Core {
             throw new IllegalArgumentException("self");
         if (!target.selectable)
             throw new IllegalArgumentException("not selectable type=" + target.type);
+
+        if (create) {
+            Folder icreate = istore.getFolder(target.name);
+            if (!icreate.exists()) {
+                ((IMAPFolder) ifolder).doCommand(new IMAPFolder.ProtocolCommand() {
+                    @Override
+                    public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                        protocol.create(target.name);
+                        return null;
+                    }
+                });
+                ifolder.setSubscribed(true);
+                db.folder().resetFolderTbc(target.id);
+            }
+        }
 
         // De-classify
         if (!copy &&
@@ -2625,6 +2641,8 @@ class Core {
                             folder.download = parent.download;
                             folder.auto_classify_source = parent.auto_classify_source;
                             folder.auto_classify_target = parent.auto_classify_target;
+                            folder.sync_days = parent.sync_days;
+                            folder.keep_days = parent.keep_days;
                             folder.unified = parent.unified;
                             folder.navigation = parent.navigation;
                             folder.notify = parent.notify;
@@ -2771,15 +2789,31 @@ class Core {
 
             EntityLog.log(context, folder.name + " purging=" + idelete.size() + "/" + imessages.length);
             if (account.isYahooJp()) {
-                for (Message imessage : idelete)
-                    imessage.setFlag(Flags.Flag.DELETED, true);
+                for (Message imessage : new ArrayList<>(idelete))
+                    try {
+                        imessage.setFlag(Flags.Flag.DELETED, true);
+                    } catch (MessagingException mex) {
+                        Log.w(mex);
+                        idelete.remove(imessage);
+                    }
             } else {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNK_SIZE);
 
                 Flags flags = new Flags(Flags.Flag.DELETED);
                 for (List<Message> list : Helper.chunkList(idelete, chunk_size))
-                    ifolder.setFlags(list.toArray(new Message[0]), flags, true);
+                    try {
+                        ifolder.setFlags(list.toArray(new Message[0]), flags, true);
+                    } catch (MessagingException ex) {
+                        Log.w(ex);
+                        for (Message imessage : list)
+                            try {
+                                imessage.setFlag(Flags.Flag.DELETED, true);
+                            } catch (MessagingException mex) {
+                                Log.w(mex);
+                                idelete.remove(imessage);
+                            }
+                    }
             }
             Log.i(folder.name + " purge deleted");
             expunge(context, ifolder, idelete);
@@ -2829,7 +2863,7 @@ class Core {
         }
     }
 
-    private static void onRule(Context context, JSONArray jargs, EntityMessage message) throws JSONException, IOException, AddressException {
+    private static void onRule(Context context, JSONArray jargs, EntityMessage message) throws JSONException, MessagingException {
         // Download message body
         DB db = DB.getInstance(context);
 
@@ -5020,7 +5054,7 @@ class Core {
         }
 
         // Auto disable partial fetch
-        if (account.partial_fetch) {
+        if (account.partial_fetch && false) {
             account.partial_fetch = false;
             DB db = DB.getInstance(context);
             db.account().setAccountPartialFetch(account.id, account.partial_fetch);
@@ -6100,6 +6134,8 @@ class Core {
             if (!started)
                 return true;
             if (!running)
+                return false;
+            if (thread == null)
                 return false;
             return thread.isAlive();
         }

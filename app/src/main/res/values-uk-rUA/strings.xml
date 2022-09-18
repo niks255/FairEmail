@@ -34,8 +34,8 @@
     </plurals>
     <plurals name="page_message">
         <item quantity="one">Повідомлення</item>
-        <item quantity="few">Повідомлень</item>
-        <item quantity="many">Повідомлень</item>
+        <item quantity="few">Повідомлення</item>
+        <item quantity="many">Повідомлення</item>
         <item quantity="other">Повідомлення</item>
     </plurals>
     <string name="page_folders">Теки</string>
@@ -420,7 +420,7 @@
     <string name="title_advanced_download_eml">Завантажити неформатовані повідомлення</string>
     <string name="title_advanced_download_plain">Звантажити лише частини повідомлення з простим текстом (якщо доступно)</string>
     <string name="title_advanced_validated">Вимагати надійне (перевірене) підключення</string>
-    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">Вимагати з\'єднання засвідчене порталом для перевірки</string>
+    <string name="title_advanced_validated_captive">Вимагати з\'єднання засвідчене порталом для перевірки</string>
     <string name="title_advanced_vpn_only">Під’єднатися тільки через VPN</string>
     <string name="title_advanced_timeout">Час очікування зв\'язку (секунди)</string>
     <string name="title_advanced_prefer_ip4">Віддавати перевагу IPv4 над IPv6</string>
@@ -682,6 +682,7 @@
     <string name="title_advanced_app">Налаштування додатка</string>
     <string name="title_advanced_more">Інші параметри</string>
     <string name="title_advanced_main_log">Основне журналювання</string>
+    <string name="title_advanced_main_log_mem">Вести журнал використання пам\'яті</string>
     <string name="title_advanced_protocol">Журналювання протоколів</string>
     <string name="title_advanced_log_info">Журнал налагодження</string>
     <string name="title_advanced_debug">Режим зневадження</string>
@@ -815,6 +816,7 @@
     <string name="title_account_category">Категорія</string>
     <string name="title_account_name_hint">Використовується для диференціювання тек</string>
     <string name="title_account_interval_hint">Частота оновлення з\'єднання для push-повідомлень або частота перевірки на нові повідомлення</string>
+    <string name="title_account_noop_hint">Це буде оновлювати підключення активніше, але також буде використовувати більше заряду акумулятора</string>
     <string name="title_account_partial_fetch_hint">Вимкнути це лише у випадку пустих повідомлень або пошкоджених вкладень</string>
     <string name="title_color">Колір</string>
     <string name="title_background">Тло</string>
@@ -855,6 +857,7 @@
     <string name="title_max_messages">Максимальна кількість повідомлень для завантаження (якщо порожньо то всі)</string>
     <string name="title_keep_poll_interval">Інтервал опитування (хвилини)</string>
     <string name="title_keep_alive_interval">Інтервал підтримування каналу (хв.)</string>
+    <string name="title_keep_alive_noop">Періодично перезапускати IDLE IMAP</string>
     <string name="title_server_time">Використовувати отриманий час (сервер)</string>
     <string name="title_received_header">Використовувати заголовок \'Received\'</string>
     <string name="title_date_header">Використовувати заголовок \'Date\' (час відправлення)</string>
@@ -1454,6 +1457,7 @@
     <string name="title_answer_placeholder_email">Адреса електронної пошти відправника</string>
     <string name="title_answer_placeholder_firstname">Ім\'я відправника</string>
     <string name="title_answer_placeholder_lastname">Прізвище відправника</string>
+    <string name="title_answer_placeholder_date">Поточна дата</string>
     <string name="title_rule_noop">Жодної дії</string>
     <string name="title_rule_seen">Позначити як прочитане</string>
     <string name="title_rule_unseen">Позначити як непрочитане</string>

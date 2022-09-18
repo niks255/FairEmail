@@ -55,14 +55,15 @@ public class LanguageTool {
                 "text=" + URLEncoder.encode(text.toString(), StandardCharsets.UTF_8.name()) +
                         "&language=auto";
 
-        // curl -X GET --header 'Accept: application/json' 'https://api.languagetool.org/v2/languages
-        String code = null;
+        // curl -X GET --header 'Accept: application/json' 'https://api.languagetool.org/v2/languages'
         JSONArray jlanguages;
-        Locale locale = Locale.getDefault();
         try (InputStream is = context.getAssets().open("lt.json")) {
             String json = Helper.readStream(is);
             jlanguages = new JSONArray(json);
         }
+
+        String code = null;
+        Locale locale = Locale.getDefault();
         for (int i = 0; i < jlanguages.length(); i++) {
             JSONObject jlanguage = jlanguages.getJSONObject(i);
             String c = jlanguage.optString("longCode");
@@ -74,6 +75,12 @@ public class LanguageTool {
 
         if (code != null)
             request += "&preferredVariants=" + code;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean lt_picky = prefs.getBoolean("lt_picky", false);
+
+        if (lt_picky)
+            request += "&level=picky";
 
         Log.i("LT locale=" + locale + " request=" + request);
 

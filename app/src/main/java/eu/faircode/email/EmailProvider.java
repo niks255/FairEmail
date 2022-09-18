@@ -84,6 +84,7 @@ public class EmailProvider implements Parcelable {
     public int order;
     public String type;
     public int keepalive;
+    public boolean noop;
     public boolean partial;
     public boolean useip;
     public boolean appPassword;
@@ -236,6 +237,7 @@ public class EmailProvider implements Parcelable {
 
                         provider.order = getAttributeIntValue(xml, "order", Integer.MAX_VALUE);
                         provider.keepalive = getAttributeIntValue(xml, "keepalive", 0);
+                        provider.noop = getAttributeBooleanValue(xml, "noop", false);
                         provider.partial = getAttributeBooleanValue(xml, "partial", true);
                         provider.useip = getAttributeBooleanValue(xml, "useip", true);
                         provider.appPassword = getAttributeBooleanValue(xml, "appPassword", false);
@@ -354,8 +356,7 @@ public class EmailProvider implements Parcelable {
                 for (String d : provider.domain)
                     if (domain.toLowerCase(Locale.ROOT).matches(d)) {
                         EntityLog.log(context, "Provider from domain=" + domain + " (" + d + ")");
-                        if (!BuildConfig.DEBUG)
-                            return Arrays.asList(provider);
+                        return Arrays.asList(provider);
                     }
 
         List<EmailProvider> candidates =

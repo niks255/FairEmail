@@ -392,6 +392,7 @@
     <string name="title_advanced_download_eml">Rohnachrichtendateien herunterladen</string>
     <string name="title_advanced_download_plain">Standardmäßig nur Textteile herunterladen (falls verfügbar)</string>
     <string name="title_advanced_validated">Erfordert eine validierte (geprüfte) Verbindung</string>
+    <string name="title_advanced_validated_captive">Erfordert eine geprüfte Captive-Portal-Verbindung</string>
     <string name="title_advanced_vpn_only">Nur über ein VPN verbinden</string>
     <string name="title_advanced_timeout">Zeitüberschreitung der Verbindung (Sekunden)</string>
     <string name="title_advanced_prefer_ip4">IPv4 gegenüber IPv6 bevorzugen</string>
@@ -654,6 +655,7 @@
     <string name="title_advanced_app">Android-App-Einstellungen</string>
     <string name="title_advanced_more">Weitere Optionen</string>
     <string name="title_advanced_main_log">Hauptprotokollierung</string>
+    <string name="title_advanced_main_log_mem">Speichernutzung protokollieren</string>
     <string name="title_advanced_protocol">Protokollaufzeichnung</string>
     <string name="title_advanced_log_info">Fehlerprotokollierung</string>
     <string name="title_advanced_debug">Fehlersuchmodus</string>
@@ -787,6 +789,7 @@
     <string name="title_account_category">Kategorie</string>
     <string name="title_account_name_hint">Wird verwendet, um Ordner zu unterscheiden</string>
     <string name="title_account_interval_hint">Häufigkeit der Aktualisierung der Verbindung für Push-Meldungen oder Häufigkeit der Überprüfung auf neue Nachrichten</string>
+    <string name="title_account_noop_hint">Dies wird die Verbindung aktiver aktualisieren, aber auch mehr Akkuleistung verbrauchen</string>
     <string name="title_account_partial_fetch_hint">Nur bei Nachrichten ohne Inhalt oder beschädigten Anhängen deaktivieren</string>
     <string name="title_color">Farbe</string>
     <string name="title_background">Hintergrund</string>
@@ -827,6 +830,7 @@
     <string name="title_max_messages">Maximale Anzahl der Nachrichten zum Herunterladen (leer für alle)</string>
     <string name="title_keep_poll_interval">Abrufintervall (Minuten)</string>
     <string name="title_keep_alive_interval">Aktivitätsintervall (Minuten)</string>
+    <string name="title_keep_alive_noop">IMAP IDLE periodisch neu starten</string>
     <string name="title_server_time">Empfangzeit verwenden (Server)</string>
     <string name="title_received_header">Received-Kopfzeile verwenden</string>
     <string name="title_date_header">Date-Kopfzeile verwenden (Sendezeit)</string>
@@ -1425,6 +1429,7 @@
     <string name="title_answer_placeholder_email">E-Mail-Adresse des Absenders</string>
     <string name="title_answer_placeholder_firstname">Vorname des Absenders</string>
     <string name="title_answer_placeholder_lastname">Nachname des Absenders</string>
+    <string name="title_answer_placeholder_date">Aktuelles Datum</string>
     <string name="title_rule_noop">Keine Aktion</string>
     <string name="title_rule_seen">Gelesen kennzeichnen</string>
     <string name="title_rule_unseen">Als ungelesen kennzeichnen</string>

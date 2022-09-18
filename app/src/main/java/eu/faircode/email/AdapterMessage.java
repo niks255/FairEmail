@@ -191,11 +191,19 @@ import javax.mail.internet.MimeMessage;
 import biweekly.Biweekly;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
+import biweekly.parameter.CalendarUserType;
 import biweekly.parameter.ParticipationStatus;
+import biweekly.parameter.Role;
 import biweekly.property.Attendee;
+import biweekly.property.CalendarScale;
+import biweekly.property.Created;
+import biweekly.property.LastModified;
 import biweekly.property.Method;
 import biweekly.property.Organizer;
 import biweekly.property.RawProperty;
+import biweekly.property.Status;
+import biweekly.property.Summary;
+import biweekly.property.Transparency;
 import biweekly.util.ICalDate;
 
 public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHolder> {
@@ -3633,8 +3641,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 return intent;
                             }
 
+                            Created created = event.getCreated();
+                            LastModified modified = event.getLastModified();
+                            Transparency transparancy = event.getTransparency();
+
                             // https://tools.ietf.org/html/rfc5546#section-4.2.2
                             VEvent ev = new VEvent();
+
+                            if (created != null && false)
+                                ev.setCreated(created);
+                            if (modified != null && false)
+                                ev.setLastModified(modified);
+                            if (transparancy != null && false)
+                                ev.setTransparency(transparancy);
 
                             ev.setOrganizer(event.getOrganizer());
 
@@ -3699,19 +3718,44 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 name = name.replaceAll("\\s+", " ");
 
                             Attendee attendee = new Attendee(name, email);
+                            //attendee.setCalendarUserType(CalendarUserType.INDIVIDUAL);
+                            //attendee.setRole(Role.ATTENDEE);
+                            //attendee.setRsvp(true);
 
+                            String status = null;
                             if (action == R.id.btnCalendarAccept) {
+                                //ev.setStatus(Status.accepted());
                                 attendee.setParticipationStatus(ParticipationStatus.ACCEPTED);
+                                status = context.getString(R.string.title_icalendar_accept);
                             } else if (action == R.id.btnCalendarDecline) {
+                                //ev.setStatus(Status.declined());
                                 attendee.setParticipationStatus(ParticipationStatus.DECLINED);
+                                status = context.getString(R.string.title_icalendar_decline);
                             } else if (action == R.id.btnCalendarMaybe) {
+                                //ev.setStatus(Status.tentative());
                                 attendee.setParticipationStatus(ParticipationStatus.TENTATIVE);
+                                status = context.getString(R.string.title_icalendar_maybe);
                             }
 
                             ev.addAttendee(attendee);
 
+                            if (status != null) {
+                                args.putString("status", status);
+                                Summary summary = ev.getSummary();
+                                ev.setSummary(status + ": " + (summary == null ? "" : summary.getValue()));
+                            }
+
+                            // Microsoft specific properties:
+                            // X-MICROSOFT-CDO-BUSYSTATUS:TENTATIVE
+                            // X-MICROSOFT-CDO-IMPORTANCE:1
+                            // X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+                            // X-MICROSOFT-DISALLOW-COUNTER:FALSE
+                            // X-MS-OLK-AUTOSTARTCHECK:FALSE
+                            // X-MS-OLK-CONFTYPE:0
+
                             // https://icalendar.org/validator.html
                             ICalendar response = new ICalendar();
+                            response.setCalendarScale(CalendarScale.gregorian());
                             response.setMethod(Method.REPLY);
                             response.addEvent(ev);
 
@@ -3730,14 +3774,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @Override
                 protected void onExecuted(Bundle args, Object result) {
                     if (result instanceof File) {
-                        String status = null;
-                        if (action == R.id.btnCalendarAccept) {
-                            status = context.getString(R.string.title_icalendar_accept);
-                        } else if (action == R.id.btnCalendarDecline) {
-                            status = context.getString(R.string.title_icalendar_decline);
-                        } else if (action == R.id.btnCalendarMaybe) {
-                            status = context.getString(R.string.title_icalendar_maybe);
-                        }
+                        String status = args.getString("status");
 
                         if (args.getBoolean("share"))
                             Helper.share(context, (File) result, "text/calendar", status + ".ics");
@@ -5435,6 +5472,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 return;
 
             Bundle args = new Bundle();
+            args.putInt("icon", copy ? R.drawable.twotone_file_copy_24 : R.drawable.twotone_drive_file_move_24);
             args.putString("title", context.getString(copy ? R.string.title_copy_to : R.string.title_move_to_folder));
             args.putLong("account", account);
             args.putLongArray("disabled", disabled);

@@ -217,6 +217,7 @@ public class ApplicationEx extends Application
         if (Helper.hasWebView(this))
             CookieManager.getInstance().setAcceptCookie(false);
 
+        // https://issuetracker.google.com/issues/233525229
         Log.i("Load emoji=" + load_emoji);
         if (!load_emoji)
             try {
@@ -656,7 +657,8 @@ public class ApplicationEx extends Application
         else if (version < 1961) {
             if (!prefs.contains("photo_picker"))
                 editor.putBoolean("photo_picker", true);
-        }
+        } else if (version < 1966)
+            editor.remove("hide_timezone");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)
             editor.remove("background_service");

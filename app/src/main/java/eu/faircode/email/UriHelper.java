@@ -26,6 +26,7 @@ import android.util.Base64;
 import android.webkit.URLUtil;
 
 import androidx.annotation.NonNull;
+import androidx.core.net.MailTo;
 import androidx.core.util.PatternsCompat;
 
 import java.io.BufferedReader;
@@ -420,6 +421,14 @@ public class UriHelper {
         }
 
         return uri;
+    }
+
+    static String getHost(Uri uri) {
+        if ("mailto".equalsIgnoreCase(uri.getScheme())) {
+            MailTo email = MailTo.parse(uri.toString());
+            return getEmailDomain(email.getTo());
+        } else
+            return uri.getHost();
     }
 
     static void test(Context context) {

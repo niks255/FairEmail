@@ -3,22 +3,22 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fgithub.com%2FM66B%2FFairEmail%2Fblob%2Fmaster%2FFAQ.md)
 
-If you have a question, please check the following frequently asked questions first.
-[At the bottom](#user-content-get-support),
+&#x1F1EC;&#x1F1E7; If you have a question, please check the following frequently asked questions first.
+[At the bottom](#user-content-quick-support),
 you can find out how to ask other questions, request features, and report bugs.
 You will receive an answer in your own language.
 
-Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die folgenden häufig gestellten Fragen.
-[Unten](#user-content-get-support) erfahren Sie, wie Sie andere Fragen stellen, Funktionen anfordern und Fehler melden können.
+&#x1F1E9;&#x1F1EA; Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die folgenden häufig gestellten Fragen.
+[Unten](#user-content-quick-support) erfahren Sie, wie Sie andere Fragen stellen, Funktionen anfordern und Fehler melden können.
 Sie erhalten eine Antwort in Ihrer eigenen Sprache.
 
-Si vous avez une question, veuillez d'abord vérifier les questions fréquemment posées suivantes.
-[En bas](#user-content-get-support), vous pouvez découvrir comment poser d'autres questions, demander des fonctionnalités et signaler des bogues.
+&#x1F1EB;&#x1F1F7; Si vous avez une question, veuillez d'abord vérifier les questions fréquemment posées suivantes.
+[En bas](#user-content-quick-support), vous pouvez découvrir comment poser d'autres questions, demander des fonctionnalités et signaler des bogues.
 Vous recevrez une réponse dans votre propre langue.
 
 ## Tutorials
 
-Please [see here](https://github.com/M66B/FairEmail/tree/master/tutorials) for tutorials.
+Please [see here](https://github.com/M66B/FairEmail/tree/master/tutorials) for tutorials &#x1F4D6;.
 
 ## Index
 
@@ -320,7 +320,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(112) Which email provider do you recommend?](#user-content-faq112)
 * [(113) How does biometric authentication work?](#user-content-faq113)
 * [(114) Can you add an import for the settings of other email apps?](#user-content-faq114)
-* [(115) Can you add email address chips?](#user-content-faq115)
+* [~~(115) Can you add email address chips?~~](#user-content-faq115)
 * [~~(116) How can I show images in messages from trusted senders by default?~~](#user-content-faq116)
 * [(117) How can I restore a purchase (on another device) ?](#user-content-faq117)
 * [(118) What does 'Remove tracking parameters' exactly?](#user-content-faq118)
@@ -889,22 +889,24 @@ Signing in short:
 * **Incoming** messages are verified with the **public key** of the sender
 
 To sign/encrypt a message, just select the appropriate method in the send dialog.
-You can always open the send dialog using the three-dots overflow menu in case you selected *Don't show again* before.
+The simplest way to show the send dialog (again) is to long press the *Send* button in the bottom action bar.
+It might be necessary to disable signing/encryption with the padlock icon in the top action bar first, to prevent the select key dialog, etc. from being in the way.
+The encryption method will be remembered for the selected identity (at the top of the message editor).
 
 To verify a signature or to decrypt a received message, open the message and just tap the gesture or padlock icon just below the message action bar.
 
-The first time you send a signed/encrypted message you might be asked for a sign key.
+The first time you send a signed/encrypted message, you might be asked for a sign key.
 FairEmail will automatically store the selected sign key in the used identity for the next time.
 If you need to reset the sign key, just save the identity or long press the identity in the list of identities and select *Reset sign key*.
 The selected sign key is visible in the list of identities.
 If need to select a key on a case by case basis, you can create multiple identities for the same account with the same email address.
 
-In the encryption settings you can select the default encryption method (PGP or S/MIME),
+In the encryption settings, you can select the default encryption method (PGP or S/MIME),
 enable *Sign by default*, *Encrypt by default* and *Automatically decrypt messages*,
 but be aware that automatic decryption is not possible if user interaction is required, like selecting a key or reading a security token.
 
 The to be encrypted message text/attachments and the decrypted message text/attachments are stored locally only and will never be added to the remote server.
-If you want to undo decryption, you can use the *resync* menu item in the three-dots menu of the message action bar.
+If you want to undo decryption, you can tap on the "close" padlock icon.
 
 <br />
 
@@ -2585,6 +2587,17 @@ and to set up auto deletion for the trash folder in the folder properties (long 
 If you want to forward a message, consider to use a *move* action instead.
 This will be more reliable than forwarding because forwarded messages might be considered as spam.
 
+<br>
+
+A *move* action can optionally create subfolders (since version 1.1966) to move messages to, for which you can use the following placeholders:
+
+```
+$week$
+$month$
+$year$
+$domain$
+```
+
 <br />
 
 Since message headers are not downloaded and stored by default to save on battery and data usage and to save storage space
@@ -3485,19 +3498,19 @@ Moreover, setting up an account/identity with the quick setup wizard is simple, 
 <br />
 
 <a name="faq115"></a>
-**(115) Can you add email address chips?**
+**~~(115) Can you add email address chips?~~**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq115)
 
-Email address [chips](https://material.io/design/components/chips.html) look nice, but cannot be edited,
-which is quite inconvenient when you made a typo in an email address.
+~~Email address [chips](https://material.io/design/components/chips.html) look nice, but cannot be edited,~~
+~~which is quite inconvenient when you made a typo in an email address.~~
 
-Note that FairEmail will select the address only when long pressing an address, which makes it easy to delete an address.
+~~Note that FairEmail will select the address only when long pressing an address, which makes it easy to delete an address.~~
 
-Chips are not suitable for showing in a list
-and since the message header in a list should look similar to the message header of the message view it is not an option to use chips for viewing messages.
+~~Chips are not suitable for showing in a list~~
+~~and since the message header in a list should look similar to the message header of the message view it is not an option to use chips for viewing messages.~~
 
-Reverted [commit](https://github.com/M66B/FairEmail/commit/2c80c25b8aa75af2287f471b882ec87d5a5a5015).
+~~Reverted [commit](https://github.com/M66B/FairEmail/commit/2c80c25b8aa75af2287f471b882ec87d5a5a5015).~~
 
 <br />
 
@@ -3526,7 +3539,7 @@ You can select the account in the Play store app by tapping on the avatar at the
 Google manages all purchases, so as a developer I have little control over purchases.
 So, basically the only thing I can do, is give some advice:
 
-* Make sure you have an active, working internet connection
+* Make sure you have an active, working internet connection, and turn off any VPN based app because it might prevent the Play store from checking purchases
 * Make sure you are logged in with the right Google account and that there is nothing wrong with your Google account
 * Make sure you installed FairEmail via the right Google account if you configured multiple Google accounts on your device (you might need to reinstall the app)
 * Make sure the Play store app is up to date, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
@@ -3964,6 +3977,7 @@ The confusing Microsoft specific server error *User is authenticated but not con
 * SMTP was administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission) about how an administrator can enable it again
 * Push messages are enabled for too many folders: see [this FAQ](#user-content-faq23) for more information and a workaround
 * There were too many login attempts in a too short time, for example by using multiple email clients at the same time
+* An ad blocker or DNS changer is being used
 * There is a problem with the Exchange server license: it might be expired or for another server edition
 * An alias email address is being used as username instead of the primary email address
 * An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain\SharedMailboxAlias*
@@ -4952,11 +4966,19 @@ This is also to keep maintenance and support in the long term feasible.
 
 Note that there are already more features and options in FairEmail than in any other Android email client.
 
-If you have a question, want to request a feature or report a bug, **please use [this form](https://contact.faircode.eu/?product=fairemailsupport)**.
+<a name="quick-support"></a>
 
-Wenn Sie eine Frage haben, eine Funktion anfordern oder einen Fehler melden möchten, **verwenden Sie bitte [dieses Formular](https://contact.faircode.eu/?product=fairemailsupport)**.
+<br />
 
-Si vous avez une question, souhaitez demander une fonctionnalité ou signaler un bogue, **veuillez utiliser [ce formulaire](https://contact.faircode.eu/?product=fairemailsupport)**.
+&#x1F6DF; &#x1F6DF; &#x1F6DF; &#x1F6DF; &#x1F6DF;
+
+&#x1F1EC;&#x1F1E7; If you have a question, want to request a feature or report a bug, **please use [this form](https://contact.faircode.eu/?product=fairemailsupport)**.
+
+&#x1F1E9;&#x1F1EA; Wenn Sie eine Frage haben, eine Funktion anfordern oder einen Fehler melden möchten, **verwenden Sie bitte [dieses Formular](https://contact.faircode.eu/?product=fairemailsupport)**.
+
+&#x1F1EB;&#x1F1F7; Si vous avez une question, souhaitez demander une fonctionnalité ou signaler un bogue, **veuillez utiliser [ce formulaire](https://contact.faircode.eu/?product=fairemailsupport)**.
+
+<br />
 
 GitHub issues are disabled due to frequent misusage.
 

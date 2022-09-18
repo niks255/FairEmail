@@ -406,6 +406,7 @@
     <string name="title_advanced_download_eml">Descărcați fișiere cu mesaje brute</string>
     <string name="title_advanced_download_plain">Descărcați în mod implicit numai părți de text simplu (dacă sunt disponibile)</string>
     <string name="title_advanced_validated">Necesită o conexiune validată (verificată)</string>
+    <string name="title_advanced_validated_captive">Necesită o conexiune validată la portalul captiv</string>
     <string name="title_advanced_vpn_only">Conectați-vă numai prin intermediul unui VPN</string>
     <string name="title_advanced_timeout">Expirarea conexiunii (secunde)</string>
     <string name="title_advanced_prefer_ip4">Preferă IPv4 înaintea IPv6</string>
@@ -668,6 +669,7 @@
     <string name="title_advanced_app">Setări aplicație</string>
     <string name="title_advanced_more">Mai multe opțiuni</string>
     <string name="title_advanced_main_log">Jurnal principal de depanare</string>
+    <string name="title_advanced_main_log_mem">Înregistrează utilizarea memoriei</string>
     <string name="title_advanced_protocol">Jurnalizare protocol</string>
     <string name="title_advanced_log_info">Jurnal depanare</string>
     <string name="title_advanced_debug">Depanare</string>
@@ -801,6 +803,7 @@
     <string name="title_account_category">Categorie</string>
     <string name="title_account_name_hint">Folosit la diferențierea dosarelor</string>
     <string name="title_account_interval_hint">Frecvența de actualizare a conexiunii pentru mesaje push sau frecventa de verificare de mesaje noi</string>
+    <string name="title_account_noop_hint">Acest lucru va reîmprospăta conexiunea mai activ, dar va consuma mai multă energie din baterie</string>
     <string name="title_account_partial_fetch_hint">Dezactivați numai pentru mesaje goale sau atașamente corupte</string>
     <string name="title_color">Culoare</string>
     <string name="title_background">Fundal</string>
@@ -841,6 +844,7 @@
     <string name="title_max_messages">Numărul maxim de mesaje de descărcat (liber pentru toate)</string>
     <string name="title_keep_poll_interval">Interval verificare (minute)</string>
     <string name="title_keep_alive_interval">Interval menținere conexiune (minute)</string>
+    <string name="title_keep_alive_noop">Reporniți periodic IMAP IDLE</string>
     <string name="title_server_time">Utilizează ora primită (server)</string>
     <string name="title_received_header">Folosește antetul \"Primit\"</string>
     <string name="title_date_header">Folosește antetul \'Dată\' (ora trimisă)</string>
@@ -1439,6 +1443,7 @@
     <string name="title_answer_placeholder_email">Adresa de e-mail a expeditorului</string>
     <string name="title_answer_placeholder_firstname">Prenumele expeditorului</string>
     <string name="title_answer_placeholder_lastname">Numele de familie al expeditorului</string>
+    <string name="title_answer_placeholder_date">Data curentă</string>
     <string name="title_rule_noop">Nicio acțiune</string>
     <string name="title_rule_seen">Marcare ca citit</string>
     <string name="title_rule_unseen">Marcare ca necitit</string>

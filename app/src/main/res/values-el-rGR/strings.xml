@@ -393,7 +393,7 @@
     <string name="title_advanced_download_eml">Λήψη αρχείων αρχικών μηνυμάτων</string>
     <string name="title_advanced_download_plain">Να κατεβαίνουν, από προεπιλογή, μόνον τα τμήματα απλού κειμένου (εφόσον είναι διαθέσιμα)</string>
     <string name="title_advanced_validated">Απαιτείται επικυρωμένη (επαληθευμένη) σύνδεση</string>
-    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">Απαιτείται επαληθευμένη σύνδεση σε δεσμευτική πύλη</string>
+    <string name="title_advanced_validated_captive">Απαιτείται επαληθευμένη σύνδεση σε δεσμευτική πύλη</string>
     <string name="title_advanced_vpn_only">Σύνδεση μόνο μέσω VPN</string>
     <string name="title_advanced_timeout">Χρονικό όριο σύνδεσης (δευτερόλεπτα)</string>
     <string name="title_advanced_prefer_ip4">Να προτιμάται IPv4 παρά IPv6</string>
@@ -654,6 +654,7 @@
     <string name="title_advanced_app">Ρυθμίσεις εφαρμογής</string>
     <string name="title_advanced_more">Περισσότερες επιλογές</string>
     <string name="title_advanced_main_log">Κύρια καταγραφή</string>
+    <string name="title_advanced_main_log_mem">Καταγραφή χρήσης μνήμης</string>
     <string name="title_advanced_protocol">Τήρηση αρχείων καταγραφής πρωτοκόλλου</string>
     <string name="title_advanced_log_info">Καταγραφές αποσφαλμάτωσης</string>
     <string name="title_advanced_debug">Λειτουργία αποσφαλμάτωσης</string>
@@ -787,6 +788,7 @@
     <string name="title_account_category">Κατηγορία</string>
     <string name="title_account_name_hint">Χρησιμοποιείται για τη διαφοροποίηση φακέλων</string>
     <string name="title_account_interval_hint">Συχνότητα ανανέωσης της σύνδεσης για μηνύματα ώθησης (push) ή συχνότητα ελέγχου για νέα μηνύματα</string>
+    <string name="title_account_noop_hint">Αυτό θα ανανεώνει τη σύνδεση πιο ενεργά, αλλά θα χρησιμοποιεί, επίσης, περισσότερη μπαταρία</string>
     <string name="title_account_partial_fetch_hint">Απενεργοποιήστε το μόνο σε περιπτώσεις κενών μηνυμάτων ή χαλασμένων συνημμένων</string>
     <string name="title_color">Χρώμα</string>
     <string name="title_background">Φόντο</string>
@@ -827,6 +829,7 @@
     <string name="title_max_messages">Μέγιστος αριθμός μηνυμάτων για κατέβασμα (κενό για όλα)</string>
     <string name="title_keep_poll_interval">Χρονικό διάστημα μεταξύ συγχρονισμών (λεπτά)</string>
     <string name="title_keep_alive_interval">Μεσοδιάστημα διατήρησης ενεργούς σύνδεσης (λεπτά)</string>
+    <string name="title_keep_alive_noop">Επανεκκίνηση IMAP IDLE περιοδικά</string>
     <string name="title_server_time">Χρήση της ώρας λήψης (διακομιστής)</string>
     <string name="title_received_header">Χρήση της κεφαλίδας \"Λήφθηκε\"</string>
     <string name="title_date_header">Χρήση κεφαλίδας \"Ημερομηνία\" (ώρα αποστολής)</string>
@@ -1425,6 +1428,7 @@
     <string name="title_answer_placeholder_email">Διεύθυνση ηλ. ταχυδρομείου αποστολέα</string>
     <string name="title_answer_placeholder_firstname">Όνομα αποστολέα</string>
     <string name="title_answer_placeholder_lastname">Επίθετο αποστολέα</string>
+    <string name="title_answer_placeholder_date">Τρέχουσα ημερομηνία</string>
     <string name="title_rule_noop">Καμία ενέργεια</string>
     <string name="title_rule_seen">Σήμανση ως αναγνωσμένου</string>
     <string name="title_rule_unseen">Σήμανση ως μη αναγνωσμένου</string>

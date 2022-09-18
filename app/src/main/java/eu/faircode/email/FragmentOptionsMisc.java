@@ -19,9 +19,11 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -79,7 +81,10 @@ import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.text.NumberFormat;
@@ -117,6 +122,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvFtsPro;
     private Spinner spLanguage;
     private SwitchCompat swLanguageTool;
+    private SwitchCompat swLanguageToolPicky;
     private TextView tvLanguageToolPrivacy;
     private ImageButton ibLanguageTool;
     private SwitchCompat swDeepL;
@@ -146,6 +152,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swExperiments;
     private TextView tvExperimentsHint;
     private SwitchCompat swMainLog;
+    private SwitchCompat swMainLogMem;
     private SwitchCompat swProtocol;
     private SwitchCompat swLogInfo;
     private SwitchCompat swDebug;
@@ -203,6 +210,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private EditText etKeywords;
     private SwitchCompat swTestIab;
     private Button btnImportProviders;
+    private Button btnExportClassifier;
     private TextView tvProcessors;
     private TextView tvMemoryClass;
     private TextView tvMemoryUsage;
@@ -229,15 +237,16 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
 
-    private final static long MIN_FILE_SIZE = 1024 * 1024L;
+    private static final int REQUEST_CLASSIFIER = 1;
+    private static final long MIN_FILE_SIZE = 1024 * 1024L;
 
     private final static String[] RESET_OPTIONS = new String[]{
             "sort_answers", "shortcuts", "fts",
             "classification", "class_min_probability", "class_min_difference",
-            "language", "lt_enabled", "deepl_enabled", "vt_enabled", "vt_apikey", "send_enabled", "send_host",
+            "language", "lt_enabled", "lt_picky", "deepl_enabled", "vt_enabled", "vt_apikey", "send_enabled", "send_host",
             "updates", "weekly", "show_changelog",
             "crash_reports", "cleanup_attachments",
-            "watchdog", "experiments", "main_log", "protocol", "log_level", "debug", "leak_canary",
+            "watchdog", "experiments", "main_log", "main_log_memory", "protocol", "log_level", "debug", "leak_canary",
             "test1", "test2", "test3", "test4", "test5",
             "work_manager", // "external_storage",
             "query_threads",
@@ -272,7 +281,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "open_with_pkg", "open_with_tabs",
             "gmail_checked", "outlook_checked",
             "redmi_note",
-            "accept_space", "accept_unsupported"
+            "accept_space", "accept_unsupported",
+            "junk_hint"
     };
 
     @Override
@@ -318,6 +328,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvFtsPro = view.findViewById(R.id.tvFtsPro);
         spLanguage = view.findViewById(R.id.spLanguage);
         swLanguageTool = view.findViewById(R.id.swLanguageTool);
+        swLanguageToolPicky = view.findViewById(R.id.swLanguageToolPicky);
         tvLanguageToolPrivacy = view.findViewById(R.id.tvLanguageToolPrivacy);
         ibLanguageTool = view.findViewById(R.id.ibLanguageTool);
         swDeepL = view.findViewById(R.id.swDeepL);
@@ -347,6 +358,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swExperiments = view.findViewById(R.id.swExperiments);
         tvExperimentsHint = view.findViewById(R.id.tvExperimentsHint);
         swMainLog = view.findViewById(R.id.swMainLog);
+        swMainLogMem = view.findViewById(R.id.swMainLogMem);
         swProtocol = view.findViewById(R.id.swProtocol);
         swLogInfo = view.findViewById(R.id.swLogInfo);
         swDebug = view.findViewById(R.id.swDebug);
@@ -404,6 +416,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         etKeywords = view.findViewById(R.id.etKeywords);
         swTestIab = view.findViewById(R.id.swTestIab);
         btnImportProviders = view.findViewById(R.id.btnImportProviders);
+        btnExportClassifier = view.findViewById(R.id.btnExportClassifier);
         tvProcessors = view.findViewById(R.id.tvProcessors);
         tvMemoryClass = view.findViewById(R.id.tvMemoryClass);
         tvMemoryUsage = view.findViewById(R.id.tvMemoryUsage);
@@ -624,6 +637,14 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("lt_enabled", checked).apply();
+                swLanguageToolPicky.setEnabled(checked);
+            }
+        });
+
+        swLanguageToolPicky.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("lt_picky", checked).apply();
             }
         });
 
@@ -848,6 +869,14 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("main_log", checked).apply();
+                swMainLogMem.setEnabled(checked);
+            }
+        });
+
+        swMainLogMem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("main_log_memory", checked).apply();
             }
         });
 
@@ -1431,6 +1460,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        btnExportClassifier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onExportClassifier(v.getContext());
+            }
+        });
+
         btnGC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1812,6 +1848,22 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try {
+            switch (requestCode) {
+                case REQUEST_CLASSIFIER:
+                    if (resultCode == Activity.RESULT_OK && data != null)
+                        onHandleExportClassifier(data);
+                    break;
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if ("last_cleanup".equals(key))
             setLastCleanup(prefs.getLong(key, -1));
@@ -1963,6 +2015,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             spLanguage.setSelection(selected);
 
         swLanguageTool.setChecked(prefs.getBoolean("lt_enabled", false));
+        swLanguageToolPicky.setChecked(prefs.getBoolean("lt_picky", false));
+        swLanguageToolPicky.setEnabled(swLanguageTool.isChecked());
         swDeepL.setChecked(prefs.getBoolean("deepl_enabled", false));
         swVirusTotal.setChecked(prefs.getBoolean("vt_enabled", false));
         etVirusTotal.setText(prefs.getString("vt_apikey", null));
@@ -1979,6 +2033,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         swWatchdog.setChecked(prefs.getBoolean("watchdog", true));
         swMainLog.setChecked(prefs.getBoolean("main_log", true));
+        swMainLogMem.setChecked(prefs.getBoolean("main_log_memory", false));
+        swMainLogMem.setEnabled(swMainLog.isChecked());
         swProtocol.setChecked(prefs.getBoolean("protocol", false));
         swLogInfo.setChecked(prefs.getInt("log_level", Log.getDefaultLogLevel()) <= android.util.Log.INFO);
         swDebug.setChecked(prefs.getBoolean("debug", false));
@@ -2271,6 +2327,48 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 tvPermissions.setText(ex.toString());
             }
         }.execute(this, new Bundle(), "permissions");
+    }
+
+    private void onExportClassifier(Context context) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_TITLE, "classifier.json");
+        Helper.openAdvanced(intent);
+        startActivityForResult(intent, REQUEST_CLASSIFIER);
+    }
+
+    private void onHandleExportClassifier(Intent intent) {
+        Bundle args = new Bundle();
+        args.putParcelable("uri", intent.getData());
+
+        new SimpleTask<Void>() {
+            @Override
+            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                Uri uri = args.getParcelable("uri");
+
+                ContentResolver resolver = context.getContentResolver();
+                File file = MessageClassifier.getFile(context, false);
+                try (OutputStream os = resolver.openOutputStream(uri)) {
+                    try (InputStream is = new FileInputStream(file)) {
+                        Helper.copy(is, os);
+                    }
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                ToastEx.makeText(getContext(), R.string.title_setup_exported, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "classifier");
     }
 
     private static class StorageData {

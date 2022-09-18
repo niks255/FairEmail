@@ -395,7 +395,7 @@
     <string name="title_advanced_download_eml">Transferir ficheiros de mensagem em bruto</string>
     <string name="title_advanced_download_plain">Transferir apenas partes de texto simples (caso esteja disponível)</string>
     <string name="title_advanced_validated">Exigir uma conexão validada (verificada)</string>
-    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">Exige uma ligação do portal validada</string>
+    <string name="title_advanced_validated_captive">Exige uma ligação do portal validada</string>
     <string name="title_advanced_vpn_only">Apenas conectar-se através de uma VPN</string>
     <string name="title_advanced_timeout">Tempo limite de ligação (em segundos)</string>
     <string name="title_advanced_prefer_ip4">Preferir IPv4 sobre IPv6</string>
@@ -658,6 +658,7 @@
     <string name="title_advanced_app">Definições da aplicação</string>
     <string name="title_advanced_more">Mais opções</string>
     <string name="title_advanced_main_log">Principais registos</string>
+    <string name="title_advanced_main_log_mem">Registrar uso de memória</string>
     <string name="title_advanced_protocol">Registo do protocolo</string>
     <string name="title_advanced_log_info">Registo de depuração</string>
     <string name="title_advanced_debug">Modo de depuração</string>
@@ -791,6 +792,7 @@
     <string name="title_account_category">Categoria</string>
     <string name="title_account_name_hint">Utilizado para diferenciar pastas</string>
     <string name="title_account_interval_hint">Frequência para atualizar a ligação para mensagens push ou frequência de verificação de novas mensagens (não é para defenir o tempo de verificação de novas mensagens, para isso ir ao menu \"Receber\")</string>
+    <string name="title_account_noop_hint">Isto atualizará a ligação com mais frequência, mas também irá consumir mais bateria</string>
     <string name="title_account_partial_fetch_hint">Desactivar isto apenas em caso de mensagens vazias ou anexos corrompidos</string>
     <string name="title_color">Cor</string>
     <string name="title_background">Fundo</string>
@@ -831,6 +833,7 @@
     <string name="title_max_messages">Número máximo de mensagens a serem transferidas (espaço em branco para todas)</string>
     <string name="title_keep_poll_interval">Intervalo de verificação (em minutos)</string>
     <string name="title_keep_alive_interval">Tempo para manter ligação activa (minutos)</string>
+    <string name="title_keep_alive_noop">Reiniciar IMAP IDLE periodicamente</string>
     <string name="title_server_time">Usar tempo recebido (do servidor)</string>
     <string name="title_received_header">Usar o cabeçalho \'Recebido\'</string>
     <string name="title_date_header">Usar cabeçalho \'Data\' (tempo enviado)</string>
@@ -1431,6 +1434,7 @@
     <string name="title_answer_placeholder_email">Endereço de e-mail do remetente</string>
     <string name="title_answer_placeholder_firstname">Primeiro nome do remetente</string>
     <string name="title_answer_placeholder_lastname">Apelido do remetente</string>
+    <string name="title_answer_placeholder_date">Data atual</string>
     <string name="title_rule_noop">Nenhuma acção</string>
     <string name="title_rule_seen">Marcar como lida</string>
     <string name="title_rule_unseen">Marcar como não lida</string>

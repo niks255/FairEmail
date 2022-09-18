@@ -419,7 +419,7 @@
     <string name="title_advanced_download_eml">Загружать оригиналы сообщений</string>
     <string name="title_advanced_download_plain">По умолчанию загружать только обычный текст (если доступно)</string>
     <string name="title_advanced_validated">Требовать проверенное подключение</string>
-    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">Требовать подключение, подтверждённое порталом авторизации</string>
+    <string name="title_advanced_validated_captive">Требовать подключение, подтверждённое порталом авторизации</string>
     <string name="title_advanced_vpn_only">Подключаться только через VPN</string>
     <string name="title_advanced_timeout">Время ожидания подключения (сек.)</string>
     <string name="title_advanced_prefer_ip4">Предпочитать IPv4</string>
@@ -683,6 +683,7 @@
     <string name="title_advanced_app">Настройки приложения</string>
     <string name="title_advanced_more">Другие возможности</string>
     <string name="title_advanced_main_log">Основной журнал</string>
+    <string name="title_advanced_main_log_mem">Журнал использования памяти</string>
     <string name="title_advanced_protocol">Журнал протокола</string>
     <string name="title_advanced_log_info">Журнал отладки</string>
     <string name="title_advanced_debug">Режим отладки</string>
@@ -816,6 +817,7 @@
     <string name="title_account_category">Категория</string>
     <string name="title_account_name_hint">Используется для разграничения папок</string>
     <string name="title_account_interval_hint">Частота обновления соединения для push-сообщений или частота проверки новых сообщений</string>
+    <string name="title_account_noop_hint">Подключение будет обновляться более активно, но также больше расходовать заряд батареи</string>
     <string name="title_account_partial_fetch_hint">Отключайте это только в случае пустых сообщений или повреждённых вложений</string>
     <string name="title_color">Цвет</string>
     <string name="title_background">Фон</string>
@@ -856,6 +858,7 @@
     <string name="title_max_messages">Максимальное количество загружаемых сообщений (пусто для всех)</string>
     <string name="title_keep_poll_interval">Интервал опроса (мин.)</string>
     <string name="title_keep_alive_interval">Интервал поддержания активности (мин.)</string>
+    <string name="title_keep_alive_noop">Периодически перезапускать IMAP IDLE</string>
     <string name="title_server_time">Использовать время получения (сервер)</string>
     <string name="title_received_header">Использовать заголовок \"Received\"</string>
     <string name="title_date_header">Использовать заголовок \"Date\" (время отправки)</string>
@@ -1456,6 +1459,7 @@
     <string name="title_answer_placeholder_email">Электронная почта отправителя</string>
     <string name="title_answer_placeholder_firstname">Имя отправителя</string>
     <string name="title_answer_placeholder_lastname">Фамилия отправителя</string>
+    <string name="title_answer_placeholder_date">Текущая дата</string>
     <string name="title_rule_noop">Нет действия</string>
     <string name="title_rule_seen">Отметить прочитанным</string>
     <string name="title_rule_unseen">Отметить непрочитанным</string>

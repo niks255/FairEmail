@@ -53,6 +53,7 @@ import android.os.Bundle;
 import android.os.DeadObjectException;
 import android.os.DeadSystemException;
 import android.os.Debug;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.LocaleList;
 import android.os.OperationCanceledException;
@@ -172,6 +173,37 @@ public class Log {
     private static final long MAX_LOG_SIZE = 8 * 1024 * 1024L;
     private static final int MAX_CRASH_REPORTS = (BuildConfig.TEST_RELEASE ? 50 : 5);
     private static final String TAG = "fairemail";
+
+    // https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html
+    // https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html
+    private static final List<String> NETWORK_PROPS = Collections.unmodifiableList(Arrays.asList(
+            "java.net.preferIPv4Stack",
+            "java.net.preferIPv6Addresses",
+            "http.proxyHost",
+            "http.proxyPort",
+            "http.nonProxyHosts",
+            "https.proxyHost",
+            "https.proxyPort",
+            //"ftp.proxyHost",
+            //"ftp.proxyPort",
+            //"ftp.nonProxyHosts",
+            "socksProxyHost",
+            "socksProxyPort",
+            "socksProxyVersion",
+            "java.net.socks.username",
+            //"java.net.socks.password",
+            "http.agent",
+            "http.keepalive",
+            "http.maxConnections",
+            "http.maxRedirects",
+            "http.auth.digest.validateServer",
+            "http.auth.digest.validateProxy",
+            "http.auth.digest.cnonceRepeat",
+            "http.auth.ntlm.domain",
+            "jdk.https.negotiate.cbt",
+            "networkaddress.cache.ttl",
+            "networkaddress.cache.negative.ttl"
+    ));
 
     static final String TOKEN_REFRESH_REQUIRED =
             "Token refresh required. Is there a VPN based app running?";
@@ -2229,7 +2261,7 @@ public class Log {
                 size += write(os, "enabled=" + enabled + (enabled ? "" : " !!!") +
                         " interval=" + pollInterval + "\r\n" +
                         "metered=" + metered + (metered ? "" : " !!!") +
-                        " restricted=" + ds + ("enabled".equals(ds) ? " !!!" : "") +
+                        " saving=" + ds + ("enabled".equals(ds) ? " !!!" : "") +
                         " vpn=" + vpn + (vpn ? " !!!" : "") +
                         " ng=" + ng + " tc=" + tc + "\r\n" +
                         "optimizing=" + (ignoring == null ? null : !ignoring) + (Boolean.FALSE.equals(ignoring) ? " !!!" : "") +
@@ -2771,12 +2803,17 @@ public class Log {
                 }
                 size += write(os, "\r\n");
 
+                for (String prop : NETWORK_PROPS)
+                    size += write(os, prop + "=" + System.getProperty(prop) + "\r\n");
+                size += write(os, "\r\n");
+
                 ApplicationInfo ai = context.getApplicationInfo();
                 if (ai != null)
                     size += write(os, String.format("Source: %s\r\n public: %s\r\n",
                             ai.sourceDir, ai.publicSourceDir));
-                size += write(os, String.format("Files: %s\r\n  external: %s\r\n",
-                        context.getFilesDir(), context.getExternalFilesDir(null)));
+                size += write(os, String.format("Files: %s\r\n  external: %s\r\n  storage: %s\r\n",
+                        context.getFilesDir(), context.getExternalFilesDir(null),
+                        Environment.getExternalStorageDirectory()));
                 size += write(os, String.format("Cache: %s\r\n  external: %s\n",
                         context.getCacheDir(), context.getExternalCacheDir()));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)

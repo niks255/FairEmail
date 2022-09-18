@@ -2,7 +2,34 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Mei long](https://en.wikipedia.org/wiki/Mei_long)
+
+### 1.1966 - 2022-09-17
+
+* Added create subfolder option to move filter rule
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1965 - 2022-09-10
+
+* Added an advanced account option to use a VPN connection only
+* Reduced memory usage of message classifier
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
 ### [Ledumahadi](https://en.wikipedia.org/wiki/Ledumahadi)
+
+### 1.1964 - 2022-09-05
+
+* Added 'whois' to open link dialog options
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1963 - 2022-09-03
+
+* Small improvements and minor bug fixes
+* Updated translations
 
 ### 1.1962 - 2022-09-02
 

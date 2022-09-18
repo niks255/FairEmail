@@ -419,7 +419,7 @@
     <string name="title_advanced_download_eml">Prejmi datoteke surovega sporočila</string>
     <string name="title_advanced_download_plain">Privzeto prejmi samo dele z golim besedilom (če je na voljo)</string>
     <string name="title_advanced_validated">Zahtevaj preverjeno povezavo</string>
-    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">Zahtevaj povezavo s preverjenim prestrežnim portalom</string>
+    <string name="title_advanced_validated_captive">Zahtevaj povezavo s preverjenim prestrežnim portalom</string>
     <string name="title_advanced_vpn_only">Poveži se samo preko VPN-a</string>
     <string name="title_advanced_timeout">Časovna omejitev povezave (v sekundah)</string>
     <string name="title_advanced_prefer_ip4">Prednost ima IPv4 pred IPv6</string>
@@ -681,6 +681,7 @@
     <string name="title_advanced_app">Nastavitve programa</string>
     <string name="title_advanced_more">Več možnosti</string>
     <string name="title_advanced_main_log">Glavno beleženje</string>
+    <string name="title_advanced_main_log_mem">Beleži porabo pomnilnika</string>
     <string name="title_advanced_protocol">Beleženje protokolov</string>
     <string name="title_advanced_log_info">Razhroščevalno beleženje</string>
     <string name="title_advanced_debug">Razhroščevalni način</string>
@@ -814,6 +815,7 @@
     <string name="title_account_category">Kategorija</string>
     <string name="title_account_name_hint">Uporablja se za razlikovanje map.</string>
     <string name="title_account_interval_hint">Pogostost osveževanja povezave za potisna sporočila ali preverjanja za nova sporočila.</string>
+    <string name="title_account_noop_hint">To bo dejavneje osveževalo povezavo, vendar tudi porabilo več energije.</string>
     <string name="title_account_partial_fetch_hint">Onemogočite to samo v primeru praznih sporočil ali okvarjenih prilog.</string>
     <string name="title_color">Barva</string>
     <string name="title_background">Ozadje</string>
@@ -854,6 +856,7 @@
     <string name="title_max_messages">Največje število prejetih sporočil (prazno za vse)</string>
     <string name="title_keep_poll_interval">Razmik med poizvedbami (min.)</string>
     <string name="title_keep_alive_interval">Razmik med osvežitvami (min.)</string>
+    <string name="title_keep_alive_noop">Občasno ponovno zaženi IMAP IDLE</string>
     <string name="title_server_time">Uporabi čas prejema (strežnik)</string>
     <string name="title_received_header">Uporabi glavo \'Prejeto\'</string>
     <string name="title_date_header">Uporabi glavo \'Datum\' (datum pošiljanja)</string>
@@ -1453,6 +1456,7 @@
     <string name="title_answer_placeholder_email">Pošiljateljev e-poštni naslov</string>
     <string name="title_answer_placeholder_firstname">Pošiljateljevo ime</string>
     <string name="title_answer_placeholder_lastname">Pošiljateljev priimek</string>
+    <string name="title_answer_placeholder_date">Trenutni datum</string>
     <string name="title_rule_noop">Brez dejanja</string>
     <string name="title_rule_seen">Označi kot prebrano</string>
     <string name="title_rule_unseen">Označi kot neprebrano</string>

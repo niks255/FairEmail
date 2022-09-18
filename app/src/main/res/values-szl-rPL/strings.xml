@@ -419,7 +419,7 @@
     <string name="title_advanced_download_eml">Pobierz nieprzetworzone pliki wiadomości</string>
     <string name="title_advanced_download_plain">Domyślnie pobieraj tylko części w postaci zwykłego tekstu (jeśli jest dostępny)</string>
     <string name="title_advanced_validated">Wymagaj zweryfikowanego (sprawdzonego) połączenia</string>
-    <string name="title_advanced_validated_captive" comment="title_advanced_validated_captive&#10;Captive portal: https://en.wikipedia.org/wiki/Captive_portal&#10;Validated: the internet connection was tested (by Android) and found to be working">Wymagaj potwierdzonego połączenia z portalem przechwytującym</string>
+    <string name="title_advanced_validated_captive">Wymagaj potwierdzonego połączenia z portalem przechwytującym</string>
     <string name="title_advanced_vpn_only">Połącz tylko przez VPN</string>
     <string name="title_advanced_timeout">Limit czasu połączenia (sekundy)</string>
     <string name="title_advanced_prefer_ip4">Preferuj IPv4 nad IPv6</string>
@@ -682,6 +682,7 @@
     <string name="title_advanced_app">Ustawienia aplikacji</string>
     <string name="title_advanced_more">Więcej opcji</string>
     <string name="title_advanced_main_log">Logowanie główne</string>
+    <string name="title_advanced_main_log_mem">Rejestruj użycie pamięci</string>
     <string name="title_advanced_protocol">Rejestrowanie protokołów</string>
     <string name="title_advanced_log_info">Rejestrowanie debugowania</string>
     <string name="title_advanced_debug">Debuguj</string>
@@ -815,6 +816,7 @@
     <string name="title_account_category">Kategoria</string>
     <string name="title_account_name_hint">Używany do odróżnienia folderów</string>
     <string name="title_account_interval_hint">Częstotliwość odświeżania połączenia dla wiadomości Push lub częstotliwość sprawdzania nowych wiadomości</string>
+    <string name="title_account_noop_hint">Dzięki temu połączenie będzie odświeżane bardziej aktywnie, ale również zużyje więcej energii z baterii</string>
     <string name="title_account_partial_fetch_hint">Wyłącz to tylko w przypadku pustych wiadomości lub uszkodzonych załączników</string>
     <string name="title_color">Kolor</string>
     <string name="title_background">Tło</string>
@@ -855,6 +857,7 @@
     <string name="title_max_messages">Maksymalna liczba wiadomości do pobrania (puste dla wszystkich)</string>
     <string name="title_keep_poll_interval">Interwał sprawdzania (minuty)</string>
     <string name="title_keep_alive_interval">Interwał utrzymywania aktywności (minuty)</string>
+    <string name="title_keep_alive_noop">Okresowo restartuj IMAP IDLE</string>
     <string name="title_server_time">Użyj czasu otrzymanego (serwer)</string>
     <string name="title_received_header">Użyj nagłówka \'Odbiorca\'</string>
     <string name="title_date_header">Użyj nagłówka \'Data\' (wysłany czas)</string>
@@ -1454,6 +1457,7 @@
     <string name="title_answer_placeholder_email">Adres e-mail nadawcy</string>
     <string name="title_answer_placeholder_firstname">Imię nadawcy</string>
     <string name="title_answer_placeholder_lastname">Nazwisko nadawcy</string>
+    <string name="title_answer_placeholder_date">Bieżąca data</string>
     <string name="title_rule_noop">Brak akcji</string>
     <string name="title_rule_seen">Oznacz jako przeczytane</string>
     <string name="title_rule_unseen">Oznacz jako nieprzeczytane</string>

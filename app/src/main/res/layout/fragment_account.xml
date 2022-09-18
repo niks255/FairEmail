@@ -612,13 +612,32 @@
             app:layout_constraintTop_toBottomOf="@id/etInterval" />
 
         <CheckBox
+            android:id="@+id/cbNoop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_keep_alive_noop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvIntervalRemark" />
+
+        <TextView
+            android:id="@+id/tvNoopRemark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_account_noop_hint"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbNoop" />
+
+        <CheckBox
             android:id="@+id/cbPartialFetch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/title_partial_fetch"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvIntervalRemark" />
+            app:layout_constraintTop_toBottomOf="@id/tvNoopRemark" />
 
         <TextView
             android:id="@+id/tvPartialFetchRemark"
@@ -696,6 +715,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cbUnicode" />
 
+        <CheckBox
+            android:id="@+id/cbVpnOnly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_advanced_vpn_only"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbUnmeteredOnly" />
+
         <!-- check -->
 
         <Button
@@ -708,7 +736,7 @@
             android:tag="disable"
             android:text="@string/title_check"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cbUnmeteredOnly" />
+            app:layout_constraintTop_toBottomOf="@id/cbVpnOnly" />
 
         <eu.faircode.email.ContentLoadingProgressBar
             android:id="@+id/pbCheck"
@@ -1094,9 +1122,9 @@
                 cbSynchronize,cbIgnoreSchedule,cbOnDemand,tvLeave,cbPrimary,
                 cbBrowse,tvBrowseHint,
                 cbAutoSeen,
-                tvInterval,etInterval,tvIntervalRemark,
+                tvInterval,etInterval,tvIntervalRemark,cbNoop,tvNoopRemark,
                 cbPartialFetch,tvPartialFetchRemark,cbIgnoreSize,rgDate,tvDateRemark,
-                cbUnicode,cbUnmeteredOnly" />
+                cbUnicode,cbUnmeteredOnly,cbVpnOnly" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/grpFolders"
