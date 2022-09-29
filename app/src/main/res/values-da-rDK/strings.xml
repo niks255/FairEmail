@@ -434,6 +434,7 @@
     <string name="title_advanced_cards_shadow_highlight">Brug fremhævningsfarve i stedet for accentfarve</string>
     <string name="title_advanced_tabular_dividers">Brug skillelinjer ifm. tabelform</string>
     <string name="title_advanced_date_header">Gruppér efter dato</string>
+    <string name="title_advanced_date_week">Gruppér efter uge i stedet for dag</string>
     <string name="title_advanced_date_fixed">Vis fast datohoved øverst</string>
     <string name="title_advanced_date_bold">Vis dato med fed</string>
     <string name="title_advanced_threading">Samtaler i tråde</string>
@@ -1050,6 +1051,7 @@
     <string name="title_download_all">Download alle</string>
     <string name="title_save_all">Gem alt</string>
     <string name="title_save_eml">Gem besked i råformatsfil</string>
+    <string name="title_save_file">Gem fil</string>
     <string name="title_eml_remark">Beskedvideresendelse kræver download af de rå (originale) beskeder fra e-mailserveren. Dette kræver Internetforbindelse, og beskederne skal stadig lagres på e-mailserveren.</string>
     <string name="title_eml_option">Dette kan forhindres ved i forbindelsesindstillingerne at aktivere Download altid rå beskedfiler</string>
     <string name="title_eml_downloaded">Rå beskeder downloadet: %1$s</string>
@@ -1242,6 +1244,7 @@
     <string name="title_save_drafts">Gem udkast på serveren</string>
     <string name="title_send_dialog">Vis Send-muligheder</string>
     <string name="title_image_dialog">Vis Billed-muligheder</string>
+    <string name="title_block_toolbar">Blokværktøjsbjælke</string>
     <string name="title_media_toolbar">Medieværktøjsbjælke</string>
     <string name="title_manage_local_contacts">Håndtér lokale kontakter</string>
     <string name="title_insert_contact_group">Indsæt kontaktgruppe</string>
@@ -1289,6 +1292,7 @@
     <string name="title_text_reminder">Besked er tom</string>
     <string name="title_attachment_keywords">vedhæft,vedhæftet,vedhæftede,vedhæftning,vedhæftninger,vedhæftningen</string>
     <string name="title_attachment_reminder">Ville du tilføje en vedhæftning?</string>
+    <string name="title_attachment_warning">Potentiel fare: %1$s</string>
     <string name="title_plain_reminder">Al formatering vil gå tabt</string>
     <string name="title_dsn_reminder">Hard bounces skader den oprindelige afsenders e-mailomdømme!</string>
     <string name="title_size_reminder">Besked (%1$s) større end servergrænsen (%2$s)</string>
@@ -1478,6 +1482,7 @@
     <string name="title_rule_hours">Timer</string>
     <string name="title_rule_schedule_end">Fra slutpunktet af tidsbetingelsen</string>
     <string name="title_rule_folder">Mappe</string>
+    <string name="title_rule_folder_create">Opret undermappe</string>
     <string name="title_rule_thread">Alle beskeder i samme samtale og mappe</string>
     <string name="title_rule_identity">Identitet</string>
     <string name="title_rule_template">Besvarelsesskabelon</string>
@@ -1677,6 +1682,7 @@
     <string name="title_undo">Fortryd</string>
     <string name="title_redo">Annullér fortryd</string>
     <string name="title_insert_line">Indsæt linje</string>
+    <string name="title_select_block">Vælg blok</string>
     <string name="title_add">Tilføj</string>
     <string name="title_browse">Åbn med</string>
     <string name="title_info">Info</string>

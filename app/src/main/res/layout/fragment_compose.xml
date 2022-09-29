@@ -22,7 +22,7 @@
             android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/media_bar"
+            app:layout_constraintBottom_toTopOf="@+id/block_bar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -589,10 +589,23 @@
             app:itemIconTint="@color/action_foreground"
             app:itemTextColor="@color/action_foreground"
             app:labelVisibilityMode="unlabeled"
-            app:layout_constraintBottom_toTopOf="@+id/media_bar"
+            app:layout_constraintBottom_toTopOf="@+id/block_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/action_compose_style" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/block_bar"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:background="?attr/colorActionBackground"
+            app:itemIconTint="@color/action_foreground"
+            app:itemTextColor="@color/action_foreground"
+            app:labelVisibilityMode="unlabeled"
+            app:layout_constraintBottom_toTopOf="@+id/media_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/action_compose_paragraph" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/media_bar"

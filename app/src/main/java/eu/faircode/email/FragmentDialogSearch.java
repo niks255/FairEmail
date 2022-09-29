@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -57,8 +58,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import io.requery.android.database.sqlite.SQLiteDatabase;
 
 public class FragmentDialogSearch extends FragmentDialogBase {
     private ImageButton ibMore;
@@ -154,8 +153,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                     return cursor;
 
                 if (cbSearchIndex.isEnabled() && cbSearchIndex.isChecked()) {
-                    SQLiteDatabase db = FtsDbHelper.getInstance(context);
-                    List<String> suggestions = FtsDbHelper.getSuggestions(
+                    SQLiteDatabase db = Fts4DbHelper.getInstance(context);
+                    List<String> suggestions = Fts4DbHelper.getSuggestions(
                             db,
                             typed + "%",
                             MAX_SUGGESTIONS);

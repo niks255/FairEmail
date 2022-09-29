@@ -433,6 +433,7 @@
     <string name="title_advanced_cards_shadow_highlight">Use a cor de destaque em vez da cor do realce</string>
     <string name="title_advanced_tabular_dividers">Use linhas divisórias ao usar o estilo tabular</string>
     <string name="title_advanced_date_header">Agrupar por data</string>
+    <string name="title_advanced_date_week">Agrupar por semana em vez de dia</string>
     <string name="title_advanced_date_fixed">Mostrar cabeçalho de data fixo no topo</string>
     <string name="title_advanced_date_bold">Exibir a data em negrito</string>
     <string name="title_advanced_threading">Encadeamento de conversas</string>
@@ -1047,6 +1048,7 @@
     <string name="title_download_all">Baixar todos</string>
     <string name="title_save_all">Salvar todos</string>
     <string name="title_save_eml">Salvar arquivo de mensagem bruta</string>
+    <string name="title_save_file">Salvar arquivo</string>
     <string name="title_eml_remark">Para encaminhar mensagens, as mensagens brutas (originais) precisam ser baixadas do servidor de e-mail. Isso requer uma conexão com a internet e as mensagens ainda devem ser armazenadas no servidor de e-mail.</string>
     <string name="title_eml_option">Isso pode ser impedido ao ativar sempre baixar arquivos de mensagens brutas nas configurações de conexão</string>
     <string name="title_eml_downloaded">Mensagens não baixadas: %1$s</string>
@@ -1238,6 +1240,7 @@
     <string name="title_save_drafts">Salvar rascunhos no servidor</string>
     <string name="title_send_dialog">Mostrar opções de envio</string>
     <string name="title_image_dialog">Mostrar opções de imagem</string>
+    <string name="title_block_toolbar">Bloquear barra de ferramentas</string>
     <string name="title_media_toolbar">Barra de mídia</string>
     <string name="title_manage_local_contacts">Gerenciar contatos locais</string>
     <string name="title_insert_contact_group">Inserir grupo de contato</string>
@@ -1285,6 +1288,7 @@
     <string name="title_text_reminder">A mensagem está em branco</string>
     <string name="title_attachment_keywords">anexado,anexo,anexos,incluídos</string>
     <string name="title_attachment_reminder">Você quis adicionar um anexo?</string>
+    <string name="title_attachment_warning">Potencialmente perigoso: %1$s</string>
     <string name="title_plain_reminder">Todas as formatações serão perdidas</string>
     <string name="title_dsn_reminder">Saltos demais atrapalham a reputação do email do remetente original!</string>
     <string name="title_size_reminder">A mensagem (%1$s) é maior que o limite do servidor (%2$s)</string>
@@ -1474,6 +1478,7 @@
     <string name="title_rule_hours">Horas</string>
     <string name="title_rule_schedule_end">A partir do final da condição de tempo</string>
     <string name="title_rule_folder">Pasta</string>
+    <string name="title_rule_folder_create">Criar subpasta</string>
     <string name="title_rule_thread">Todas as mensagens na mesma conversa e pasta</string>
     <string name="title_rule_identity">Identidade</string>
     <string name="title_rule_template">Modelo de resposta</string>
@@ -1673,6 +1678,7 @@
     <string name="title_undo">Desfazer</string>
     <string name="title_redo">Refazer</string>
     <string name="title_insert_line">Inserir linha</string>
+    <string name="title_select_block">Selecionar bloco</string>
     <string name="title_add">Adicionar</string>
     <string name="title_browse">Abrir com</string>
     <string name="title_info">Informações</string>

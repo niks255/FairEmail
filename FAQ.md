@@ -124,14 +124,15 @@ Related questions:
 
 <a name="redmi"></a>
 <a name="oneplus"></a>
+<a name="oppo"></a>
 
 <br />
 
-**Xiaomi Redmi / OnePlus**
+**Xiaomi Redmi / OnePlus / Oppo**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23redmi)
 
-On some Xiaomi Redmi (Note) and some OnePlus devices the database occasionally gets corrupted, resulting in total data loss
+On some Xiaomi Redmi (Note) devices, some OnePlus devices with Android 12 and some Oppo devices with Android 12 the database occasionally gets corrupted, resulting in total data loss
 (on the device only, unless you are using a POP3 account with the option *Leave messages on server* disabled).
 
 The cause of this problem are disk I/O errors due to an Android bug (more likely) or maybe a hardware issue (less likely),
@@ -155,6 +156,8 @@ android.database.sqlite.SQLiteDiskIOException: disk I/O error (code 778)
         at androidx.room.RoomDatabase.internalEndTransaction(RoomDatabase:594)
         at androidx.room.RoomDatabase.endTransaction(RoomDatabase:584)
 ```
+
+The cause might be [changes in Android 7 Nougat](https://ericsink.com/entries/sqlite_android_n.html), which is why sqlite isn't bundled anymore since version 1.1970.
 
 <h2><a name="planned-features"></a>Planned features</h2>
 
@@ -1989,7 +1992,7 @@ The error '*Handshake failed SSL handshake terminated ... SSLV3_ALERT_HANDSHAKE_
 can be caused by [this Android 7.0 bug](https://issuetracker.google.com/issues/37122132). This can unfortunately not be fixed by FairEmail.
 
 The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION or SSLV3_ALERT_HANDSHAKE_FAILURE ...*'
-might be caused by enabling hardening connections, or requiring TLS 1.3 in the connection settings
+might be caused by enabling **hardening connections**, or requiring TLS 1.3 in the connection settings
 or by Android not supporting older protocols anymore, like SSLv3.
 
 Android 8 Oreo and later [do not support](https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all) SSLv3 anymore.
@@ -3735,6 +3738,13 @@ See [this FAQ](#user-content-faq71) for a header condition to recognize receipts
 
 <br />
 
+*Block toolbar (version 1.1967+)*
+
+When enabled in the three-dots overflow menu of the message editor,
+a toolbar to perform operations (align text, insert list, indent text, insert blockquote) on a block of text (consecutive non-empty lines) will be shown.
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my wearable?**
 
@@ -4736,12 +4746,18 @@ Related questions:
 * The Play store version does not support Android Auto, see [this FAQ](#user-content-faq165) for more information
 * The Play store version does not support Amazon devices with Android 5 Lollipop because there are critical bugs in this Android version of Amazon
 * The Play Store version does not support Gravatars/Libravatars due to Play Store policies
-* The GitHub version will check for [updates on GitHub](https://github.com/M66B/FairEmail/releases) and is updated more frequently
+* The GitHub version will check for [updates on GitHub](https://github.com/M66B/FairEmail/releases) and is updated more frequently, but updates need to be installed manually
 * The GitHub version has some different links, some more options (like sharing the HTML of a message) and some different default values (more geared to advanced users)
-* The GitHub version can be installed as an update over the Play store version
+* The GitHub version can be installed as an update over the Play store version, whereas the F-Droid build can't (see below for more details)
 * The F-Droid build does not support OAuth, see [this FAQ](#user-content-faq147) about why not
 * The F-Droid build does not include [Google Play Billing](https://developer.android.com/google/play/billing/integrate), so Play store purchases cannot be reused
-* The F-Droid build is supported only if the version number is the same as the the version number of the latest GitHub version, see also [this FAQ](#user-content-faq147)
+* The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub version, see also [this FAQ](#user-content-faq147)
+
+The Play store and GitHub version are signed with the [same digital signature](https://github.com/M66B/FairEmail#user-content-downloads) (security certificate).
+The F-Droid build is signed by the F-Droid organization with a different digital key.
+This means you can't update the F-Droid build with the Play store or GitHub version or the other way around without reinstalling.
+However, it is possible to install the GitHub version over the Play store version,
+and the Play store app will do the same, when auto updating isn't disabled for the app in the app description.
 
 <br />
 
@@ -4877,6 +4893,8 @@ After writing some text, you can long press on the save draft button to perform 
 Texts with suggestions will be marked and if you tap on a marked suggestion,
 it will be shown by the keyboard if the keyboard supports this,
 else you can double tap or long press the marked text to show suggestions.
+
+The suboption *Use formal form* can be enabled to let LanguageTool suggest more formal text (business, legal, etc).
 
 <br />
 

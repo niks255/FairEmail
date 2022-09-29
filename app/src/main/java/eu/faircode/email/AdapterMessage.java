@@ -258,6 +258,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private float textSize;
 
     private boolean date;
+    private boolean week;
     private boolean cards;
     private boolean shadow_unread;
     private boolean shadow_highlight;
@@ -1397,7 +1398,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     message.totalSize != null && ("size".equals(sort) || "attachments".equals(sort))
                             ? View.VISIBLE : View.GONE);
             SpannableStringBuilder time = new SpannableStringBuilderEx(
-                    date && FragmentMessages.SORT_DATE_HEADER.contains(sort)
+                    (date && !week) && FragmentMessages.SORT_DATE_HEADER.contains(sort)
                             ? TF.format(message.received)
                             : Helper.getRelativeTimeSpanString(context, message.received));
             if (show_recent && message.recent)
@@ -3034,13 +3035,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                         return document.html();
                     } else {
+                        if (message.ui_found && found && !TextUtils.isEmpty(searched))
+                            HtmlHelper.highlightSearched(context, document, searched);
+
                         // Cleanup message
                         document = HtmlHelper.sanitizeView(context, document, show_images);
 
                         HtmlHelper.autoLink(document);
-
-                        if (message.ui_found && found && !TextUtils.isEmpty(searched))
-                            HtmlHelper.highlightSearched(context, document, searched);
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                             args.putParcelable("actions", getConversationActions(message, document, context));
@@ -3145,7 +3146,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                                             bindConversationActions(message, args.getParcelable("actions"));
                                         bindExtras(message);
-
                                         cowner.start(); // Show attachments
                                     } catch (Throwable ex) {
                                         Log.e(ex);
@@ -3168,7 +3168,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                                             bindConversationActions(message, args.getParcelable("actions"));
                                         bindExtras(message);
-
                                         cowner.start(); // Show attachments
                                     } catch (Throwable ex) {
                                         Log.e(ex);
@@ -3176,8 +3175,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 }
                             });
                         }
-                    } else
+                    } else {
                         bindExtras(message);
+                        cowner.start(); // Show attachments
+                    }
 
                     if (scroll)
                         properties.scrollTo(getAdapterPosition(), 0);
@@ -7242,6 +7243,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         boolean generated = prefs.getBoolean("generated_icons", true);
 
         this.date = prefs.getBoolean("date", true);
+        this.week = prefs.getBoolean("date_week", false);
         this.cards = prefs.getBoolean("cards", true);
         this.shadow_unread = prefs.getBoolean("shadow_unread", false);
         this.shadow_highlight = prefs.getBoolean("shadow_highlight", false);

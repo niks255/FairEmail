@@ -1089,7 +1089,7 @@ class Core {
                 archived = (imessages != null && imessages.length > 0);
             } finally {
                 if (iarchive.isOpen())
-                    iarchive.close();
+                    iarchive.close(false);
             }
 
             if (archived)
@@ -1642,7 +1642,7 @@ class Core {
                 Log.w(ex);
             } finally {
                 if (itarget.isOpen())
-                    itarget.close();
+                    itarget.close(false);
             }
 
         // Delete junk contacts
@@ -2337,7 +2337,7 @@ class Core {
                             try {
                                 itarget.open(READ_WRITE);
                                 itarget.setSubscribed(subscribed);
-                                itarget.close();
+                                itarget.close(false);
                             } catch (MessagingException ex) {
                                 Log.w(ex);
                             }
@@ -4308,27 +4308,12 @@ class Core {
 
             boolean check_blocklist = prefs.getBoolean("check_blocklist", false);
             if (check_blocklist) {
-                boolean notJunk = false;
-                if (message.from != null)
-                    for (Address from : message.from) {
-                        String email = ((InternetAddress) from).getAddress();
-                        if (TextUtils.isEmpty(email))
-                            continue;
-                        EntityContact contact = db.contact().getContact(message.account, EntityContact.TYPE_NO_JUNK, email);
-                        if (contact != null) {
-                            contact.times_contacted++;
-                            contact.last_contacted = new Date().getTime();
-                            db.contact().updateContact(contact);
-                            notJunk = true;
-                        }
-                    }
-
                 if (!have &&
                         !EntityFolder.isOutgoing(folder.type) &&
                         !EntityFolder.ARCHIVE.equals(folder.type) &&
                         !EntityFolder.TRASH.equals(folder.type) &&
                         !EntityFolder.JUNK.equals(folder.type) &&
-                        !notJunk &&
+                        !message.isNotJunk(context) &&
                         !Arrays.asList(message.keywords).contains(MessageHelper.FLAG_NOT_JUNK))
                     try {
                         message.blocklist = DnsBlockList.isJunk(context,

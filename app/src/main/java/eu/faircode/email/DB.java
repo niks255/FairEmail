@@ -6,6 +6,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.net.Uri;
 import android.os.Build;
@@ -23,8 +24,6 @@ import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-
-import com.getkeepsafe.relinker.ReLinker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,9 +45,6 @@ import java.util.concurrent.ExecutorService;
 
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
-
-import io.requery.android.database.sqlite.RequerySQLiteOpenHelperFactory;
-import io.requery.android.database.sqlite.SQLiteDatabase;
 
 /*
     This file is part of FairEmail.
@@ -72,7 +68,7 @@ import io.requery.android.database.sqlite.SQLiteDatabase;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 243,
+        version = 244,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -127,6 +123,7 @@ public abstract class DB extends RoomDatabase {
     static final String DB_NAME = "fairemail";
     static final int DEFAULT_QUERY_THREADS = 4; // AndroidX default thread count: 4
     static final int DEFAULT_CACHE_SIZE = 10; // percentage of memory class
+    private static final int DB_JOURNAL_SIZE_LIMIT = 1048576; // requery/sqlite-android default
     private static final int DB_CHECKPOINT = 1000; // requery/sqlite-android default
 
     private static final String[] DB_TABLES = new String[]{
@@ -138,7 +135,8 @@ public abstract class DB extends RoomDatabase {
             "page_count", "page_size", "max_page_count", "freelist_count",
             "cache_size", "cache_spill",
             "soft_heap_limit", "hard_heap_limit", "mmap_size",
-            "foreign_keys", "auto_vacuum"
+            "foreign_keys", "auto_vacuum",
+            "compile_options"
     ));
 
     @Override
@@ -150,7 +148,7 @@ public abstract class DB extends RoomDatabase {
 
         // https://www.sqlite.org/pragma.html#pragma_integrity_check
         if (sqlite_integrity_check && dbfile.exists()) {
-            String check = (Helper.isRedmiNote() || Helper.isOnePlus() || BuildConfig.DEBUG
+            String check = (Helper.isRedmiNote() || Helper.isOnePlus() || Helper.isOppo() || BuildConfig.DEBUG
                     ? "integrity_check" : "quick_check");
             try (SQLiteDatabase db = SQLiteDatabase.openDatabase(dbfile.getPath(), null, SQLiteDatabase.OPEN_READWRITE)) {
                 Log.i("PRAGMA " + check);
@@ -400,17 +398,6 @@ public abstract class DB extends RoomDatabase {
     }
 
     private static RoomDatabase.Builder<DB> getBuilder(Context context) {
-        try {
-            ReLinker.log(new ReLinker.Logger() {
-                @Override
-                public void log(String message) {
-                    Log.i("Relinker: " + message);
-                }
-            }).loadLibrary(context, "sqlite3x");
-        } catch (Throwable ex) {
-            Log.e(ex);
-        }
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int threads = prefs.getInt("query_threads", DEFAULT_QUERY_THREADS);
         boolean wal = prefs.getBoolean("wal", true);
@@ -420,7 +407,7 @@ public abstract class DB extends RoomDatabase {
 
         return Room
                 .databaseBuilder(context, DB.class, DB_NAME)
-                .openHelperFactory(new RequerySQLiteOpenHelperFactory())
+                //.openHelperFactory(new RequerySQLiteOpenHelperFactory())
                 .setQueryExecutor(executorQuery)
                 .setTransactionExecutor(executorTransaction)
                 .setJournalMode(wal ? JournalMode.WRITE_AHEAD_LOGGING : JournalMode.TRUNCATE) // using the latest sqlite
@@ -436,16 +423,21 @@ public abstract class DB extends RoomDatabase {
                         // https://android.googlesource.com/platform/external/sqlite.git/+/6ab557bdc070f11db30ede0696888efd19800475%5E!/
                         boolean sqlite_auto_vacuum = prefs.getBoolean("sqlite_auto_vacuum", false);
                         String mode = (sqlite_auto_vacuum ? "FULL" : "INCREMENTAL");
-                        Log.i("Set PRAGMA auto_vacuum = " + mode);
-                        try (Cursor cursor = db.query("PRAGMA auto_vacuum = " + mode + ";", null)) {
+                        Log.i("Set PRAGMA auto_vacuum=" + mode);
+                        try (Cursor cursor = db.query("PRAGMA auto_vacuum=" + mode + ";", null)) {
                             cursor.moveToNext(); // required
                         }
 
                         // https://sqlite.org/pragma.html#pragma_synchronous
                         boolean sqlite_sync_extra = prefs.getBoolean("sqlite_sync_extra", true);
                         String sync = (sqlite_sync_extra ? "EXTRA" : "NORMAL");
-                        Log.i("Set PRAGMA synchronous = " + sync);
-                        try (Cursor cursor = db.query("PRAGMA synchronous = " + sync + ";", null)) {
+                        Log.i("Set PRAGMA synchronous=" + sync);
+                        try (Cursor cursor = db.query("PRAGMA synchronous=" + sync + ";", null)) {
+                            cursor.moveToNext(); // required
+                        }
+
+                        Log.i("Set PRAGMA journal_size_limit=" + DB_JOURNAL_SIZE_LIMIT);
+                        try (Cursor cursor = db.query("PRAGMA journal_size_limit=" + DB_JOURNAL_SIZE_LIMIT + ";", null)) {
                             cursor.moveToNext(); // required
                         }
 
@@ -468,9 +460,16 @@ public abstract class DB extends RoomDatabase {
 
                         // https://www.sqlite.org/pragma.html
                         for (String pragma : DB_PRAGMAS)
-                            try (Cursor cursor = db.query("PRAGMA " + pragma + ";")) {
-                                Log.i("Get PRAGMA " + pragma + "=" + (cursor.moveToNext() ? cursor.getString(0) : "?"));
-                            }
+                            if (!"compile_options".equals(pragma) || BuildConfig.DEBUG)
+                                try (Cursor cursor = db.query("PRAGMA " + pragma + ";")) {
+                                    boolean has = false;
+                                    while (cursor.moveToNext()) {
+                                        has = true;
+                                        Log.i("Get PRAGMA " + pragma + "=" + (cursor.isNull(0) ? "<null>" : cursor.getString(0)));
+                                    }
+                                    if (!has)
+                                        Log.i("Get PRAGMA " + pragma + "=<?>");
+                                }
 
                         if (BuildConfig.DEBUG && false) {
                             db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
@@ -2447,7 +2446,7 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `folder` ADD COLUMN `inherited_type` TEXT");
-                        db.execSQL("DROP VIEW `folder_view`");
+                        db.execSQL("DROP VIEW IF EXISTS `folder_view`");
                         db.execSQL("CREATE VIEW IF NOT EXISTS `folder_view` AS " + TupleFolderView.query);
                     }
                 }).addMigrations(new Migration(241, 242) {
@@ -2462,6 +2461,13 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `account` ADD COLUMN `keep_alive_noop` INTEGER NOT NULL DEFAULT 0");
                         db.execSQL("UPDATE account SET keep_alive_noop = 1" +
+                                " WHERE host = 'outlook.office365.com' AND pop = " + EntityAccount.TYPE_IMAP);
+                    }
+                }).addMigrations(new Migration(243, 244) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("UPDATE account SET keep_alive_noop = 0" +
                                 " WHERE host = 'outlook.office365.com' AND pop = " + EntityAccount.TYPE_IMAP);
                     }
                 }).addMigrations(new Migration(998, 999) {
@@ -2540,7 +2546,14 @@ public abstract class DB extends RoomDatabase {
     @Override
     @SuppressWarnings("deprecation")
     public void endTransaction() {
-        super.endTransaction();
+        try {
+            super.endTransaction();
+        } catch (IllegalStateException ex) {
+            if ("Cannot perform this operation because there is no current transaction.".equals(ex.getMessage()))
+                Log.w(ex);
+            else
+                throw ex;
+        }
     }
 
     public static class Converters {

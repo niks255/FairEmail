@@ -639,7 +639,7 @@ public class EntityRule {
             create = create.replace("$domain$", domain == null ? "" : domain);
 
             String name = folder.name + (folder.separator == null ? "" : folder.separator) + create;
-            EntityFolder created = db.folder().getFolderByName(message.account, name);
+            EntityFolder created = db.folder().getFolderByName(folder.account, name);
             if (created == null) {
                 created = new EntityFolder();
                 created.tbc = true;
@@ -1050,7 +1050,7 @@ public class EntityRule {
         Integer color = (jargs.has("color") && !jargs.isNull("color")
                 ? jargs.getInt("color") : null);
 
-        EntityOperation.queue(context, message, EntityOperation.FLAG, true, color);
+        EntityOperation.queue(context, message, EntityOperation.FLAG, true, color, false);
 
         message.ui_flagged = true;
         message.color = color;

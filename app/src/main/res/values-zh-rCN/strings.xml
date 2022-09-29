@@ -420,6 +420,7 @@
     <string name="title_advanced_cards_shadow_highlight">使用高亮色而不是强调色</string>
     <string name="title_advanced_tabular_dividers">使用表格样式时使用分隔线</string>
     <string name="title_advanced_date_header">按日期分组</string>
+    <string name="title_advanced_date_week">按星期而不是按日分组</string>
     <string name="title_advanced_date_fixed">在顶部显示固定日期标题</string>
     <string name="title_advanced_date_bold">以粗体显示日期</string>
     <string name="title_advanced_threading">邮件会话</string>
@@ -1032,6 +1033,7 @@
     <string name="title_download_all">全部下载</string>
     <string name="title_save_all">全部保存</string>
     <string name="title_save_eml">保存原始消息文件</string>
+    <string name="title_save_file">保存文件</string>
     <string name="title_eml_remark">若要转发消息，需要从电子邮件服务器下载原始 (原始) 消息。 这需要互联网连接，且消息必须仍存储在电子邮件服务器上。</string>
     <string name="title_eml_option">可通过在连接设置中启用“始终下载原始消息文件”防止发生这种情况</string>
     <string name="title_eml_downloaded">已下载原始消息： %1$s</string>
@@ -1222,6 +1224,7 @@
     <string name="title_save_drafts">将草稿保存在服务器上</string>
     <string name="title_send_dialog">显示发送选项</string>
     <string name="title_image_dialog">显示图像选项</string>
+    <string name="title_block_toolbar">多功能文本操作栏</string>
     <string name="title_media_toolbar">媒体工具栏</string>
     <string name="title_manage_local_contacts">管理本地联系人</string>
     <string name="title_insert_contact_group">插入联系人组</string>
@@ -1269,6 +1272,7 @@
     <string name="title_text_reminder">消息为空</string>
     <string name="title_attachment_keywords">至少包含一个附件</string>
     <string name="title_attachment_reminder">您是否打算添加一个附件？</string>
+    <string name="title_attachment_warning">潜在危险： %1$s</string>
     <string name="title_plain_reminder">所有文本格式都将丢失</string>
     <string name="title_dsn_reminder">“硬退信”会损害原发件人的邮件声誉！</string>
     <string name="title_size_reminder">消息 (%1$s) 超出服务器限制 (%2$s)</string>
@@ -1458,6 +1462,7 @@
     <string name="title_rule_hours">小时</string>
     <string name="title_rule_schedule_end">从时间条件结束开始</string>
     <string name="title_rule_folder">文件夹</string>
+    <string name="title_rule_folder_create">创建子文件夹</string>
     <string name="title_rule_thread">在同一会话和文件夹中的所有消息</string>
     <string name="title_rule_identity">身份</string>
     <string name="title_rule_template">回复模板</string>
@@ -1657,6 +1662,7 @@
     <string name="title_undo">撤销</string>
     <string name="title_redo">重做</string>
     <string name="title_insert_line">插入行</string>
+    <string name="title_select_block">选择文本块</string>
     <string name="title_add">添加</string>
     <string name="title_browse">打开方式</string>
     <string name="title_info">信息</string>

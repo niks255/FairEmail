@@ -373,6 +373,27 @@ public class EntityMessage implements Serializable {
                         !EntityMessage.SMIME_SIGNENCRYPT.equals(encrypt));
     }
 
+    boolean isNotJunk(Context context) {
+        DB db = DB.getInstance(context);
+
+        boolean notJunk = false;
+        if (from != null)
+            for (Address sender : from) {
+                String email = ((InternetAddress) sender).getAddress();
+                if (TextUtils.isEmpty(email))
+                    continue;
+
+                EntityContact contact = db.contact().getContact(account, EntityContact.TYPE_NO_JUNK, email);
+                if (contact != null) {
+                    contact.times_contacted++;
+                    contact.last_contacted = new Date().getTime();
+                    db.contact().updateContact(contact);
+                    notJunk = true;
+                }
+            }
+        return notJunk;
+    }
+
     String[] checkFromDomain(Context context) {
         return MessageHelper.equalRootDomain(context, from, smtp_from);
     }

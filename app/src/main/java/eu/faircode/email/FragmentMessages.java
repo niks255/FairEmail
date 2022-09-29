@@ -341,6 +341,7 @@ public class FragmentMessages extends FragmentBase
     private boolean dividers;
     private boolean category;
     private boolean date;
+    private boolean date_week;
     private boolean date_fixed;
     private boolean date_bold;
     private boolean threading;
@@ -481,6 +482,7 @@ public class FragmentMessages extends FragmentBase
         dividers = prefs.getBoolean("dividers", true);
         category = prefs.getBoolean("group_category", false);
         date = prefs.getBoolean("date", true);
+        date_week = prefs.getBoolean("date_week", false);
         date_fixed = (!date && prefs.getBoolean("date_fixed", false));
         date_bold = prefs.getBoolean("date_bold", false);
         threading = (prefs.getBoolean("threading", true) ||
@@ -946,8 +948,8 @@ public class FragmentMessages extends FragmentBase
                     cal1.setTimeInMillis(message.received);
                     int year0 = cal0.get(Calendar.YEAR);
                     int year1 = cal1.get(Calendar.YEAR);
-                    int day0 = cal0.get(Calendar.DAY_OF_YEAR);
-                    int day1 = cal1.get(Calendar.DAY_OF_YEAR);
+                    int day0 = cal0.get(date_week ? Calendar.WEEK_OF_YEAR : Calendar.DAY_OF_YEAR);
+                    int day1 = cal1.get(date_week ? Calendar.WEEK_OF_YEAR : Calendar.DAY_OF_YEAR);
                     if (year0 == year1 && day0 == day1)
                         dh = false;
                 }
@@ -980,7 +982,9 @@ public class FragmentMessages extends FragmentBase
                         vSeparator.setVisibility(View.GONE);
                     }
 
-                    tvDate.setText(getRelativeDate(message.received, parent.getContext()));
+                    tvDate.setText(date_week
+                            ? getWeek(message.received, parent.getContext())
+                            : getRelativeDate(message.received, parent.getContext()));
 
                     view.setContentDescription(tvDate.getText().toString());
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
@@ -1015,6 +1019,17 @@ public class FragmentMessages extends FragmentBase
                             time, now.getTime(),
                             DAY_IN_MILLIS, 0);
                 return (rtime == null ? "" : rtime.toString());
+            }
+
+            @NonNull
+            String getWeek(long time, Context context) {
+                StringBuilder sb = new StringBuilder();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(time);
+                sb.append(cal.get(Calendar.YEAR)).append("-W").append(cal.get(Calendar.WEEK_OF_YEAR));
+                cal.set(Calendar.DAY_OF_WEEK, 1);
+                sb.append(' ').append(Helper.getDateInstance(context).format(cal.getTimeInMillis()));
+                return sb.toString();
             }
         };
         rvMessage.addItemDecoration(dateDecorator);
@@ -2765,20 +2780,20 @@ public class FragmentMessages extends FragmentBase
             try {
                 int pos = viewHolder.getAdapterPosition();
                 if (pos == NO_POSITION) {
-                    adapter.notifyDataSetChanged();
+                    redraw(NO_POSITION);
                     return;
                 }
 
                 TupleMessageEx message = getMessage(pos);
                 if (message == null) {
-                    adapter.notifyDataSetChanged();
+                    redraw(NO_POSITION);
                     return;
                 }
 
                 boolean expanded = iProperties.getValue("expanded", message.id);
 
                 if (expanded && swipe_reply) {
-                    adapter.notifyItemChanged(pos);
+                    redraw(pos);
                     onMenuReply(message, "reply", null);
                     return;
                 }
@@ -2790,7 +2805,7 @@ public class FragmentMessages extends FragmentBase
 
                 TupleAccountSwipes swipes = accountSwipes.get(message.account);
                 if (swipes == null) {
-                    adapter.notifyDataSetChanged();
+                    redraw(NO_POSITION);
                     return;
                 }
 
@@ -2804,7 +2819,7 @@ public class FragmentMessages extends FragmentBase
                 Long action = (direction == ItemTouchHelper.LEFT ? swipes.swipe_left : swipes.swipe_right);
                 String actionType = (direction == ItemTouchHelper.LEFT ? swipes.left_type : swipes.right_type);
                 if (action == null) {
-                    adapter.notifyDataSetChanged();
+                    redraw(NO_POSITION);
                     return;
                 }
 
@@ -2823,7 +2838,7 @@ public class FragmentMessages extends FragmentBase
                         " folder=" + message.folderType);
 
                 if (EntityMessage.SWIPE_ACTION_ASK.equals(action)) {
-                    adapter.notifyItemChanged(pos);
+                    redraw(pos);
                     onSwipeAsk(message, viewHolder);
                 } else if (EntityMessage.SWIPE_ACTION_SEEN.equals(action))
                     onActionSeenSelection(message.unseen > 0, message.id, false);
@@ -2833,16 +2848,16 @@ public class FragmentMessages extends FragmentBase
                     if (ActivityBilling.isPro(getContext()))
                         onActionSnooze(message);
                     else {
-                        adapter.notifyItemChanged(pos);
+                        redraw(pos);
                         startActivity(new Intent(getContext(), ActivityBilling.class));
                     }
                 else if (EntityMessage.SWIPE_ACTION_HIDE.equals(action))
                     onActionHide(message);
                 else if (EntityMessage.SWIPE_ACTION_MOVE.equals(action)) {
-                    adapter.notifyItemChanged(pos);
+                    redraw(pos);
                     onSwipeMove(message);
                 } else if (EntityMessage.SWIPE_ACTION_JUNK.equals(action)) {
-                    adapter.notifyItemChanged(pos);
+                    redraw(pos);
                     onSwipeJunk(message);
                 } else if (EntityMessage.SWIPE_ACTION_DELETE.equals(action) ||
                         (action.equals(message.folder) && EntityFolder.TRASH.equals(message.folderType)) ||
@@ -2885,6 +2900,24 @@ public class FragmentMessages extends FragmentBase
                 return null;
 
             return message;
+        }
+
+        private void redraw(int pos) {
+            rvMessage.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                            return;
+                        if (pos == NO_POSITION)
+                            adapter.notifyDataSetChanged();
+                        else
+                            adapter.notifyItemChanged(pos);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+                }
+            });
         }
 
         private void onSwipeAsk(final @NonNull TupleMessageEx message, @NonNull RecyclerView.ViewHolder viewHolder) {
@@ -3066,7 +3099,7 @@ public class FragmentMessages extends FragmentBase
             }
 
             if (pos != NO_POSITION)
-                adapter.notifyItemChanged(pos);
+                redraw(pos);
 
             FragmentDialogAsk ask = new FragmentDialogAsk();
             ask.setArguments(args);
@@ -8168,8 +8201,17 @@ public class FragmentMessages extends FragmentBase
                                     String protect_subject = parts.getProtectedSubject();
 
                                     // Write decrypted body
+                                    boolean debug = prefs.getBoolean("debug", false);
                                     boolean download_plain = prefs.getBoolean("download_plain", false);
                                     String html = parts.getHtml(context, download_plain);
+
+                                    if (html == null && debug) {
+                                        int textColorLink = Helper.resolveColor(context, android.R.attr.textColorLink);
+                                        SpannableStringBuilder ssb = new SpannableStringBuilderEx();
+                                        MessageHelper.getStructure(imessage, ssb, 0, textColorLink);
+                                        html = HtmlHelper.toHtml(ssb, context);
+                                    }
+
                                     Helper.writeText(message.getFile(context), html);
                                     Log.i("pgp html=" + (html == null ? null : html.length()));
 
@@ -8601,7 +8643,7 @@ public class FragmentMessages extends FragmentBase
                     if (chain == null || chain.length == 0)
                         throw new IllegalArgumentException("Public key missing");
 
-                    // Get encrypted message
+                    // Get last encrypted message
                     File input = null;
                     List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
                     for (EntityAttachment attachment : attachments)
@@ -8609,7 +8651,6 @@ public class FragmentMessages extends FragmentBase
                             if (!attachment.available)
                                 throw new IllegalArgumentException(context.getString(R.string.title_attachments_missing));
                             input = attachment.getFile(context);
-                            break;
                         }
 
                     if (input == null)
@@ -8863,8 +8904,17 @@ public class FragmentMessages extends FragmentBase
 
                 // Write decrypted body
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean debug = prefs.getBoolean("debug", false);
                 boolean download_plain = prefs.getBoolean("download_plain", false);
                 String html = parts.getHtml(context, download_plain);
+
+                if (html == null && debug) {
+                    int textColorLink = Helper.resolveColor(context, android.R.attr.textColorLink);
+                    SpannableStringBuilder ssb = new SpannableStringBuilderEx();
+                    MessageHelper.getStructure(imessage, ssb, 0, textColorLink);
+                    html = HtmlHelper.toHtml(ssb, context);
+                }
+
                 Helper.writeText(message.getFile(context), html);
                 Log.i("s/mime html=" + (html == null ? null : html.length()));
 
@@ -8890,23 +8940,38 @@ public class FragmentMessages extends FragmentBase
                     });
 
                     // Add decrypted attachments
+                    boolean signedData = false;
                     List<EntityAttachment> remotes = parts.getAttachments();
                     for (int index = 0; index < remotes.size(); index++) {
                         EntityAttachment remote = remotes.get(index);
                         remote.message = message.id;
                         remote.sequence = index + 1;
                         remote.id = db.attachment().insertAttachment(remote);
+                        Log.i("s/mime attachment=" + remote);
+
                         try {
                             parts.downloadAttachment(context, index, remote);
                         } catch (Throwable ex) {
                             Log.e(ex);
                         }
-                        Log.i("s/mime attachment=" + remote);
+
+                        if (!parts.hasBody() && remotes.size() == 1 &&
+                                ("application/pkcs7-mime".equals(remote.type) ||
+                                        "application/x-pkcs7-mime".equals(remote.type)))
+                            try (FileInputStream fos = new FileInputStream(remote.getFile(context))) {
+                                new CMSSignedData(fos).getSignedContent().getContent();
+                                signedData = true;
+                                remote.encryption = EntityAttachment.SMIME_SIGNED_DATA;
+                                db.attachment().setEncryption(remote.id, remote.encryption);
+                            } catch (Throwable ex) {
+                                Log.w(ex);
+                            }
                     }
 
                     checkPep(message, remotes, context);
 
-                    db.message().setMessageEncrypt(message.id, parts.getEncryption());
+                    db.message().setMessageEncrypt(message.id,
+                            signedData ? EntityMessage.SMIME_SIGNONLY : parts.getEncryption());
                     db.message().setMessageStored(message.id, new Date().getTime());
                     db.message().setMessageFts(message.id, false);
 

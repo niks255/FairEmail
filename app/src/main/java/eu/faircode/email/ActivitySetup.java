@@ -470,9 +470,11 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     public void onBackStackChanged() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
         if (count == 0) {
-            if (hasAccount)
+            if (hasAccount) {
                 startActivity(new Intent(this, ActivityView.class));
-            finish();
+                finishAndRemoveTask();
+            } else
+                finish();
         } else {
             if (drawerLayout.isDrawerOpen(drawerContainer))
                 drawerLayout.closeDrawer(drawerContainer);
@@ -1924,7 +1926,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
             Dialog dialog = new AlertDialog.Builder(context)
                     .setView(dview)
-                    .setPositiveButton(R.string.title_add_image_select, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.title_save_file, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String password1 = etPassword1.getEditText().getText().toString();

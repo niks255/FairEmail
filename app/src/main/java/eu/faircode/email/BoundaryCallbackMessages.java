@@ -21,6 +21,7 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -82,8 +83,6 @@ import javax.mail.search.RecipientStringTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SizeTerm;
 import javax.mail.search.SubjectTerm;
-
-import io.requery.android.database.sqlite.SQLiteDatabase;
 
 public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMessageEx> {
     private Context context;
@@ -282,8 +281,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
         if (criteria.fts && criteria.query != null) {
             if (state.ids == null) {
-                SQLiteDatabase sdb = FtsDbHelper.getInstance(context);
-                state.ids = FtsDbHelper.match(sdb, account, folder, exclude, criteria);
+                SQLiteDatabase sdb = Fts4DbHelper.getInstance(context);
+                state.ids = Fts4DbHelper.match(sdb, account, folder, exclude, criteria);
                 EntityLog.log(context, "Boundary FTS " +
                         " account=" + account +
                         " folder=" + folder +
@@ -814,7 +813,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
         try {
             if (state.ifolder != null && state.ifolder.isOpen())
-                state.ifolder.close();
+                state.ifolder.close(false);
         } catch (Throwable ex) {
             Log.e("Boundary", ex);
         }

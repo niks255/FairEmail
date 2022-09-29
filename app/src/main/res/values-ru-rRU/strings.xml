@@ -459,6 +459,7 @@
     <string name="title_advanced_cards_shadow_highlight">Использовать цвет подсветки вместо цвета акцента</string>
     <string name="title_advanced_tabular_dividers">Разделительные линии при использовании стиля с табуляцией</string>
     <string name="title_advanced_date_header">Группировать по дате</string>
+    <string name="title_advanced_date_week">Группировать по неделям вместо дней</string>
     <string name="title_advanced_date_fixed">Показывать постоянный заголовок с датой вверху</string>
     <string name="title_advanced_date_bold">Показывать дату жирным шрифтом</string>
     <string name="title_advanced_threading">Связанные диалоги</string>
@@ -1075,6 +1076,7 @@
     <string name="title_download_all">Загрузить все</string>
     <string name="title_save_all">Сохранить все</string>
     <string name="title_save_eml">Сохранить оригинальный файл сообщения</string>
+    <string name="title_save_file">Сохранить файл</string>
     <string name="title_eml_remark">Для пересылки исходные (оригинальные) сообщения необходимо загрузить с сервера электронной почты. Это требует подключения к интернету, а сами сообщения должны храниться на сервере.</string>
     <string name="title_eml_option">Это можно предотвратить, включив загрузку исходных сообщений в настройках подключения</string>
     <string name="title_eml_downloaded">Загружены исходные сообщения: %1$s</string>
@@ -1266,6 +1268,7 @@
     <string name="title_save_drafts">Сохранять черновики на сервере</string>
     <string name="title_send_dialog">Параметры отправки</string>
     <string name="title_image_dialog">Параметры изображения</string>
+    <string name="title_block_toolbar">Панель блоков текста</string>
     <string name="title_media_toolbar">Панель медиа</string>
     <string name="title_manage_local_contacts">Управление локальными контактами</string>
     <string name="title_insert_contact_group">Добавить группу контактов</string>
@@ -1313,6 +1316,7 @@
     <string name="title_text_reminder">Сообщение пустое</string>
     <string name="title_attachment_keywords">attached,attachment,attachments,included,вложение,вложения,вложении,приложено</string>
     <string name="title_attachment_reminder">Вы хотите добавить вложение?</string>
+    <string name="title_attachment_warning">Потенциально опасно: %1$s</string>
     <string name="title_plain_reminder">Всё форматирование будет утрачено</string>
     <string name="title_dsn_reminder">Жёсткие отказы наносят ущерб репутации электронной почты оригинального отправителя!</string>
     <string name="title_size_reminder">Сообщение (%1$s) больше, чем лимит сервера (%2$s)</string>
@@ -1502,6 +1506,7 @@
     <string name="title_rule_hours">Часов</string>
     <string name="title_rule_schedule_end">До конца срока</string>
     <string name="title_rule_folder">Папка</string>
+    <string name="title_rule_folder_create">Создать подпапку</string>
     <string name="title_rule_thread">Все сообщения в одном диалоге и папке</string>
     <string name="title_rule_identity">Идентификатор</string>
     <string name="title_rule_template">Шаблон ответа</string>
@@ -1701,6 +1706,7 @@
     <string name="title_undo">Отменить</string>
     <string name="title_redo">Восстановить</string>
     <string name="title_insert_line">Вставить строку</string>
+    <string name="title_select_block">Выбор блока</string>
     <string name="title_add">Добавить</string>
     <string name="title_browse">В браузере</string>
     <string name="title_info">Информация</string>

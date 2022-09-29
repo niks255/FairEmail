@@ -4,6 +4,42 @@
 
 ### [Mei long](https://en.wikipedia.org/wiki/Mei_long)
 
+### 1.1972 - 2022-09-27
+
+* Fixed crash
+
+### 1.1971 - 2022-09-27
+
+* Fixed sqlite compatibility
+* Updated translations
+
+### 1.1970 - 2022-09-27
+
+* Switched to native sqlite
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1969 - 2022-09-23
+
+* Added Material You monochrome themes (Android 12+)
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.1968 - 2022-09-20
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1967 - 2022-09-19
+
+* Added warnings for unsafe attachment types
+* Added experimental text block toolbar
+* Added option for grouping messages by week
+* Extended ipinfo with city, region and country
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.1966 - 2022-09-17
 
 * Added create subfolder option to move filter rule

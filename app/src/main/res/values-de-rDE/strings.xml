@@ -432,6 +432,7 @@
     <string name="title_advanced_cards_shadow_highlight">Hervorhebungsfarbe statt Akzentfarbe verwenden</string>
     <string name="title_advanced_tabular_dividers">Trennlinien bei Verwendung der Tabellenform verwenden</string>
     <string name="title_advanced_date_header">Nach Datum gruppieren</string>
+    <string name="title_advanced_date_week">Nach Woche statt nach Tag gruppieren</string>
     <string name="title_advanced_date_fixed">Feste Datumskopfzeile oben anzeigen</string>
     <string name="title_advanced_date_bold">Datum fett anzeigen</string>
     <string name="title_advanced_threading">Themenbaum</string>
@@ -1045,6 +1046,7 @@
     <string name="title_download_all">Alle herunterladen</string>
     <string name="title_save_all">Alles speichern</string>
     <string name="title_save_eml">Rohdaten speichern</string>
+    <string name="title_save_file">Datei speichern</string>
     <string name="title_eml_remark">Um Nachrichten weiterzuleiten, müssen die ursprünglichen Nachrichten vom E-Mail-Server heruntergeladen werden. Dazu ist eine Internetverbindung erforderlich und die Nachrichten müssen noch auf dem E-Mail-Server verfügbar sein.</string>
     <string name="title_eml_option">Das kann verhindert werden, indem in den Verbindungseinstellungen „Rohnachrichtendateien herunterladen“ eingeschaltet wird</string>
     <string name="title_eml_downloaded">Rohnachrichten heruntergeladen: %1$s</string>
@@ -1235,6 +1237,7 @@
     <string name="title_save_drafts">Entwürfe auf dem Server speichern</string>
     <string name="title_send_dialog">Sendeoptionen anzeigen</string>
     <string name="title_image_dialog">Grafikoptionen anzeigen</string>
+    <string name="title_block_toolbar">Textblockleiste</string>
     <string name="title_media_toolbar">Mediensymbolleiste</string>
     <string name="title_manage_local_contacts">Lokale Kontakte verwalten</string>
     <string name="title_insert_contact_group">Kontaktgruppe einfügen</string>
@@ -1282,6 +1285,7 @@
     <string name="title_text_reminder">Nachricht ist leer</string>
     <string name="title_attachment_keywords">angehängt,Anhang,Anhänge,beigefügt,Anlage,Anlagen,anbei,liegt bei,beigelegt</string>
     <string name="title_attachment_reminder">Beabsichtigen Sie einen Anhang hinzuzufügen?</string>
+    <string name="title_attachment_warning">Möglicherweise gefährlich: %1$s</string>
     <string name="title_plain_reminder">Alle Formatierungen gehen verloren</string>
     <string name="title_dsn_reminder">Unzustellbarkeitsnachrichten schaden dem E-Mail-Ruf des ursprünglichen Absenders!</string>
     <string name="title_size_reminder">Nachricht (%1$s) größer als Serverbegrenzung (%2$s)</string>
@@ -1472,6 +1476,7 @@
     <string name="title_rule_hours">Stunden</string>
     <string name="title_rule_schedule_end">Vom Ende der Zeitbedingung</string>
     <string name="title_rule_folder">Ordner</string>
+    <string name="title_rule_folder_create">Unterordner erstellen</string>
     <string name="title_rule_thread">Alle Nachrichten zur selben Unterhaltung und Ordner</string>
     <string name="title_rule_identity">Identität</string>
     <string name="title_rule_template">Antwortvorlage</string>
@@ -1671,6 +1676,7 @@
     <string name="title_undo">Rückgängig</string>
     <string name="title_redo">Wiederherstellen</string>
     <string name="title_insert_line">Linie einfügen</string>
+    <string name="title_select_block">Block auswählen</string>
     <string name="title_add">Hinzufügen</string>
     <string name="title_browse">Öffnen mit</string>
     <string name="title_info">Info</string>
