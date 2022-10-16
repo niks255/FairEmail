@@ -495,7 +495,7 @@ public class EntityMessage implements Serializable {
 
         DateFormat DTF = Helper.getDateTimeInstance(context);
         DTF.setTimeZone(hide_timezone ? TimeZone.getTimeZone("UTC") : TimeZone.getDefault());
-        String date = DTF.format(received);
+        String date = (received instanceof Number ? DTF.format(received) : "-");
 
         Element p = document.createElement("p");
         if (extended) {
@@ -577,10 +577,24 @@ public class EntityMessage implements Serializable {
     }
 
     static File getFile(Context context, Long id) {
-        File dir = new File(context.getFilesDir(), "messages");
-        if (!dir.exists())
-            dir.mkdir();
+        File root = new File(context.getFilesDir(), "messages");
+        File dir = Helper.ensureExists(new File(root, "D" + (id / 1000)));
         return new File(dir, id.toString());
+    }
+
+    static void convert(Context context) {
+        File root = new File(context.getFilesDir(), "messages");
+        List<File> files = Helper.listFiles(root);
+        for (File file : files)
+            if (file.isFile())
+                try {
+                    long id = Long.parseLong(file.getName());
+                    File target = getFile(context, id);
+                    if (!file.renameTo(target))
+                        throw new IllegalArgumentException("Failed moving " + file);
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
     }
 
     File getFile(Context context) {
@@ -588,16 +602,12 @@ public class EntityMessage implements Serializable {
     }
 
     File getFile(Context context, int revision) {
-        File dir = new File(context.getFilesDir(), "revision");
-        if (!dir.exists())
-            dir.mkdir();
+        File dir = Helper.ensureExists(new File(context.getFilesDir(), "revision"));
         return new File(dir, id + "." + revision);
     }
 
     File getRefFile(Context context) {
-        File dir = new File(context.getFilesDir(), "references");
-        if (!dir.exists())
-            dir.mkdir();
+        File dir = Helper.ensureExists(new File(context.getFilesDir(), "references"));
         return new File(dir, id.toString());
     }
 
@@ -606,9 +616,7 @@ public class EntityMessage implements Serializable {
     }
 
     static File getRawFile(Context context, Long id) {
-        File dir = new File(context.getFilesDir(), "raw");
-        if (!dir.exists())
-            dir.mkdir();
+        File dir = Helper.ensureExists(new File(context.getFilesDir(), "raw"));
         return new File(dir, id + ".eml");
     }
 

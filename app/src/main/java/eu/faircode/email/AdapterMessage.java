@@ -191,9 +191,7 @@ import javax.mail.internet.MimeMessage;
 import biweekly.Biweekly;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
-import biweekly.parameter.CalendarUserType;
 import biweekly.parameter.ParticipationStatus;
-import biweekly.parameter.Role;
 import biweekly.property.Attendee;
 import biweekly.property.CalendarScale;
 import biweekly.property.Created;
@@ -201,7 +199,6 @@ import biweekly.property.LastModified;
 import biweekly.property.Method;
 import biweekly.property.Organizer;
 import biweekly.property.RawProperty;
-import biweekly.property.Status;
 import biweekly.property.Summary;
 import biweekly.property.Transparency;
 import biweekly.util.ICalDate;
@@ -2861,8 +2858,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
 
                     File file = message.getFile(context);
-                    if (!file.exists())
+                    if (!file.exists()) {
+                        try {
+                            db.beginTransaction();
+
+                            db.message().resetMessageContent(message.id);
+                            EntityOperation.queue(context, message, EntityOperation.BODY);
+
+                            db.setTransactionSuccessful();
+                        } finally {
+                            db.endTransaction();
+                        }
+
                         return null;
+                    }
 
                     if (file.length() > 0)
                         signed_data = false;
@@ -3760,9 +3769,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             response.setMethod(Method.REPLY);
                             response.addEvent(ev);
 
-                            File dir = new File(context.getFilesDir(), "calendar");
-                            if (!dir.exists())
-                                dir.mkdir();
+                            File dir = Helper.ensureExists(new File(context.getFilesDir(), "calendar"));
                             File ics = new File(dir, message.id + ".ics");
                             response.write(ics);
 
@@ -6759,10 +6766,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             element.attr("x-computed", computed);
                     }
 
-                    File dir = new File(context.getFilesDir(), "shared");
-                    if (!dir.exists())
-                        dir.mkdir();
-
+                    File dir = Helper.ensureExists(new File(context.getFilesDir(), "shared"));
                     File share = new File(dir, message.id + ".txt");
                     Helper.writeText(share, d.html());
 
@@ -8001,8 +8005,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         if (filter_duplicates && message.duplicate)
             return R.layout.item_message_duplicate;
 
-        if (filter_trash && differ.getItemCount() > 1 &&
-                EntityFolder.TRASH.equals(message.folderType))
+        if (filter_trash && EntityFolder.TRASH.equals(message.folderType) && !allTrashed())
             return R.layout.item_message_duplicate;
 
         return (compact ? R.layout.item_message_compact : R.layout.item_message_normal);
@@ -8052,8 +8055,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         if ((filter_duplicates && message.duplicate) ||
-                (filter_trash && differ.getItemCount() > 1 &&
-                        EntityFolder.TRASH.equals(message.folderType))) {
+                (filter_trash && EntityFolder.TRASH.equals(message.folderType) && !allTrashed())) {
             holder.card.setCardBackgroundColor(message.folderColor == null
                     ? Color.TRANSPARENT
                     : ColorUtils.setAlphaComponent(message.folderColor, 128));
@@ -8078,6 +8080,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         holder.unwire();
         holder.bindTo(message, scroll);
         holder.wire();
+    }
+
+    private boolean allTrashed() {
+        if (differ.getItemCount() == 1)
+            return true;
+
+        for (int i = 0; i < differ.getItemCount(); i++) {
+            TupleMessageEx m = differ.getItem(i);
+            if (m == null || !EntityFolder.TRASH.equals(m.folderType))
+                return false;
+        }
+
+        return true;
     }
 
     public void onItemSelected(@NonNull ViewHolder holder, boolean selected) {
@@ -8310,6 +8325,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     }
 
                     return null;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Void data) {
+                    WorkerFts.init(context, false);
                 }
 
                 @Override

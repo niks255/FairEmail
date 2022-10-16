@@ -25,8 +25,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.text.TextUtils;
 
+import java.io.File;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +37,8 @@ import java.util.List;
 import javax.mail.Address;
 
 // https://www.sqlite.org/fts3.html
-// fts4 requires sqlite version 3.7.4, API 21 Android
+// fts4 requires sqlite 3.7.4, API 21
+// "unicode61" tokenizer requires sqlite 3.7.13, API 21
 public class Fts4DbHelper extends SQLiteOpenHelper {
     private Context context;
 
@@ -115,10 +119,10 @@ public class Fts4DbHelper extends SQLiteOpenHelper {
         cv.put("folder", message.folder);
         cv.put("time", message.received);
         cv.put("address", MessageHelper.formatAddresses(address.toArray(new Address[0]), true, false));
-        cv.put("subject", message.subject == null ? "" : message.subject);
-        cv.put("keyword", TextUtils.join(", ", message.keywords));
-        cv.put("text", text);
-        cv.put("notes", message.notes);
+        cv.put("subject", breakText(message.subject));
+        cv.put("keyword", TextUtils.join(" ", message.keywords));
+        cv.put("text", breakText(text));
+        cv.put("notes", breakText(message.notes));
         db.insertWithOnConflict("message", null, cv, SQLiteDatabase.CONFLICT_FAIL);
     }
 
@@ -130,6 +134,39 @@ public class Fts4DbHelper extends SQLiteOpenHelper {
         db.delete("message", "rowid = ?", new String[]{Long.toString(id)});
     }
 
+    static String preprocessText(String text) {
+        return Normalizer.normalize(text.trim().toLowerCase(), Normalizer.Form.NFKD)
+                .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+    }
+
+    static String breakText(String text) {
+        if (TextUtils.isEmpty(text))
+            return "";
+
+        text = preprocessText(text);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            return text;
+
+        // https://www.sqlite.org/fts3.html#tokenizer
+
+        StringBuilder sb = new StringBuilder();
+        android.icu.text.BreakIterator boundary = android.icu.text.BreakIterator.getWordInstance();
+        boundary.setText(text);
+        int start = boundary.first();
+        for (int end = boundary.next(); end != android.icu.text.BreakIterator.DONE; end = boundary.next()) {
+            String word = text.substring(start, end).trim().toLowerCase();
+            if (!TextUtils.isEmpty(word)) {
+                if (sb.length() > 0)
+                    sb.append(' ');
+                sb.append(word);
+            }
+            start = end;
+        }
+
+        return sb.toString();
+    }
+
     static List<String> getSuggestions(SQLiteDatabase db, String query, int max) {
         List<String> result = new ArrayList<>();
 
@@ -139,7 +176,7 @@ public class Fts4DbHelper extends SQLiteOpenHelper {
                         " GROUP BY term" +
                         " ORDER BY SUM(occurrences) DESC" +
                         " LIMIT " + max,
-                new String[]{query})) {
+                new String[]{preprocessText(query)})) {
             while (cursor != null && cursor.moveToNext())
                 result.add(cursor.getString(0));
         }
@@ -150,62 +187,8 @@ public class Fts4DbHelper extends SQLiteOpenHelper {
     static List<Long> match(
             SQLiteDatabase db,
             Long account, Long folder, long[] exclude,
-            BoundaryCallbackMessages.SearchCriteria criteria) {
-
-        List<String> word = new ArrayList<>();
-        List<String> plus = new ArrayList<>();
-        List<String> minus = new ArrayList<>();
-        List<String> opt = new ArrayList<>();
-        StringBuilder all = new StringBuilder();
-        for (String w : criteria.query.trim().split("\\s+")) {
-            if (all.length() > 0)
-                all.append(' ');
-
-            if (w.length() > 1 && w.startsWith("+")) {
-                plus.add(w.substring(1));
-                all.append(w.substring(1));
-            } else if (w.length() > 1 && w.startsWith("-")) {
-                minus.add(w.substring(1));
-                all.append(w.substring(1));
-            } else if (w.length() > 1 && w.startsWith("?")) {
-                opt.add(w.substring(1));
-                all.append(w.substring(1));
-            } else {
-                word.add(w);
-                all.append(w);
-            }
-        }
-
-        StringBuilder sb = new StringBuilder();
-        if (plus.size() + minus.size() + opt.size() > 0) {
-            if (word.size() > 0)
-                sb.append(escape(TextUtils.join(" ", word)));
-
-            for (String p : plus) {
-                if (sb.length() > 0)
-                    sb.append(" AND ");
-                sb.append(escape(p));
-            }
-
-            for (String m : minus) {
-                if (sb.length() > 0)
-                    sb.append(" NOT ");
-                sb.append(escape(m));
-            }
-
-            if (sb.length() > 0) {
-                sb.insert(0, '(');
-                sb.append(')');
-            }
-
-            for (String o : opt) {
-                if (sb.length() > 0)
-                    sb.append(" OR ");
-                sb.append(escape(o));
-            }
-        }
-
-        String search = (sb.length() > 0 ? sb.toString() : escape(criteria.query));
+            BoundaryCallbackMessages.SearchCriteria criteria, String query) {
+        String search = escape(breakText(query));
 
         String select = "";
         if (account != null)
@@ -226,7 +209,7 @@ public class Fts4DbHelper extends SQLiteOpenHelper {
         if (criteria.before != null)
             select += "time < " + criteria.before + " AND ";
 
-        Log.i("FTS select=" + select + " search=" + search);
+        Log.i("FTS select=" + select + " search=" + search + " query=" + query);
         List<Long> result = new ArrayList<>();
         try (Cursor cursor = db.query(
                 "message", new String[]{"rowid"},
@@ -241,7 +224,7 @@ public class Fts4DbHelper extends SQLiteOpenHelper {
     }
 
     private static String escape(String word) {
-        return "\"" + word.replaceAll("\"", "\"\"") + "\"";
+        return "'" + word.replaceAll("'", "''") + "'";
     }
 
     static Cursor getIds(SQLiteDatabase db) {
@@ -261,6 +244,11 @@ public class Fts4DbHelper extends SQLiteOpenHelper {
     }
 
     static void delete(Context context) {
-        context.getDatabasePath(DATABASE_NAME).delete();
+        File db = context.getDatabasePath(DATABASE_NAME);
+        for (File file : db.getParentFile().listFiles())
+            if (file.getName().startsWith(DATABASE_NAME)) {
+                Log.i("FTS delete=" + file);
+                file.delete();
+            }
     }
 }

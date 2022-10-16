@@ -312,6 +312,12 @@ public class EntityRule {
                     } else if ("$highpriority".equals(keyword)) {
                         if (!EntityMessage.PRIORITIY_HIGH.equals(message.priority))
                             return false;
+                    } else if ("$signed".equals(keyword)) {
+                        if (!message.isSigned())
+                            return false;
+                    } else if ("$encrypted".equals(keyword)) {
+                        if (!message.isEncrypted())
+                            return false;
                     } else {
                         List<String> keywords = new ArrayList<>();
                         keywords.addAll(Arrays.asList(message.keywords));
@@ -450,7 +456,7 @@ public class EntityRule {
 
     boolean execute(Context context, EntityMessage message) throws JSONException {
         boolean executed = _execute(context, message);
-        if (id != null && executed) {
+        if (this.id != null && executed) {
             DB db = DB.getInstance(context);
             db.rule().applyRule(id, new Date().getTime());
         }
@@ -460,7 +466,7 @@ public class EntityRule {
     private boolean _execute(Context context, EntityMessage message) throws JSONException, IllegalArgumentException {
         JSONObject jaction = new JSONObject(action);
         int type = jaction.getInt("type");
-        Log.i("Executing rule=" + type + ":" + name + " message=" + message.id);
+        EntityLog.log(context, EntityLog.Type.Rules, message, "Executing rule=" + type + ":" + name);
 
         switch (type) {
             case TYPE_NOOP:
@@ -738,9 +744,9 @@ public class EntityRule {
             EntityOperation.queue(context, message, EntityOperation.RAW);
         }
 
-        if (!complete) {
+        if (!complete && this.id != null) {
             EntityOperation.queue(context, message, EntityOperation.RULE, this.id);
-            return false;
+            return true;
         }
 
         executor.submit(new Runnable() {
@@ -957,7 +963,7 @@ public class EntityRule {
         if (message.ui_seen)
             return false;
 
-        if (!message.content) {
+        if (!message.content && this.id != null) {
             EntityOperation.queue(context, message, EntityOperation.BODY);
             EntityOperation.queue(context, message, EntityOperation.RULE, this.id);
             return true;

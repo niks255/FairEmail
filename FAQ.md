@@ -57,8 +57,8 @@ For authorizing:
 * Posteo: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) ([German](https://posteo.de/hilfe/zusaetzlichen-postfachschutz-deaktivieren)) isn't enabled
 * Web.de: please check if [IMAP is enabled](https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html)
 * Web.de: with two factor authentication you'll need to use [an app password](https://web.de/email/sicherheit/zwei-faktor-authentifizierung/)
-* GMX: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html))
-* GMX: with two factor authentication you'll need to use [an app password](https://support.gmx.com/security/2fa/application-specific-passwords.html) ([German](https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html))
+* GMX: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html)). Reportedly, you need to do this on a desktop computer.
+* GMX: with two factor authentication you'll need to use [an app password](https://support.gmx.com/security/2fa/application-specific-passwords.html) ([German](https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html)). Not that enabling two-factor authentication does not automatically enable IMAP.
 * T-online.de: please make sure you use [an email password](https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-adresse-passwoerter-und-sicherheit/passwort-fuer-e-mail-programme-einrichten) (German) and not your account password
 * Ionos (1und1): please make sure you use [an email password](https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-11-ionos-aendern/) (German) and not your account password
 * Yandex: please check if [IMAP is enabled](https://yandex.com/support/mail/mail-clients/others.html)
@@ -120,7 +120,8 @@ Related questions:
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
 * A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 * A [bug in Crowdin](https://crowdin.com/messages/536694) blocks updating FAQ.md (this text) for translation.
-* Search suggestions causes the keyboard losing focus on Android 12L
+* Search suggestions causes the keyboard losing focus on Android 12L.
+* [A bug](https://techcommunity.microsoft.com/t5/outlook/outlook-office-365-imap-idle-is-broken/m-p/3616242) in the Outlook IMAP server causes delayed new message notifications.
 
 <a name="redmi"></a>
 <a name="oneplus"></a>
@@ -148,13 +149,13 @@ For the record the stack trace:
 
 ```
 android.database.sqlite.SQLiteDiskIOException: disk I/O error (code 778)
-        at io.requery.android.database.sqlite.SQLiteConnection.nativeExecute(SourceFile:-2)
-        at io.requery.android.database.sqlite.SQLiteConnection.execute(SQLiteConnection:595)
-        at io.requery.android.database.sqlite.SQLiteSession.endTransactionUnchecked(SQLiteSession:447)
-        at io.requery.android.database.sqlite.SQLiteSession.endTransaction(SQLiteSession:411)
-        at io.requery.android.database.sqlite.SQLiteDatabase.endTransaction(SQLiteDatabase:551)
-        at androidx.room.RoomDatabase.internalEndTransaction(RoomDatabase:594)
-        at androidx.room.RoomDatabase.endTransaction(RoomDatabase:584)
+	at io.requery.android.database.sqlite.SQLiteConnection.nativeExecute(SourceFile:-2)
+	at io.requery.android.database.sqlite.SQLiteConnection.execute(SQLiteConnection:595)
+	at io.requery.android.database.sqlite.SQLiteSession.endTransactionUnchecked(SQLiteSession:447)
+	at io.requery.android.database.sqlite.SQLiteSession.endTransaction(SQLiteSession:411)
+	at io.requery.android.database.sqlite.SQLiteDatabase.endTransaction(SQLiteDatabase:551)
+	at androidx.room.RoomDatabase.internalEndTransaction(RoomDatabase:594)
+	at androidx.room.RoomDatabase.endTransaction(RoomDatabase:584)
 ```
 
 The cause might be [changes in Android 7 Nougat](https://ericsink.com/entries/sqlite_android_n.html), which is why sqlite isn't bundled anymore since version 1.1970.
@@ -784,11 +785,13 @@ Note that this will result in extra internet traffic.
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq8)
 
+Firstly, Exchange *protocol* is not the same as Exchange *server* or Exchange *account*.
+
 The Microsoft Exchange Web Services (EWS) protocol [is being phased out](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055).
-Microsoft stopped updating the EWS libraries [in 2018](https://github.com/OfficeDev/ews-java-api).
+Microsoft stopped updating the EWS libraries [in 2016](https://github.com/OfficeDev/ews-java-api).
 So, it makes little sense to add this protocol anymore.
 
-You can use a Microsoft Exchange account if it is accessible via IMAP, which is mostly the case.
+You can use a Microsoft Exchange account if it is accessible via IMAP, which is almost always the case because all Exchange servers support the standard IMAP protocol.
 See [here](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for more information.
 
 Note that the desciption of FairEmail starts with the remark
@@ -1137,23 +1140,34 @@ Since version 1.1315 it is possible to use search expressions like this:
 apple +banana -cherry ?nuts
 ```
 
-This will result in searching like this:
+This will result in searching in the subject or text (only) like this:
 
 ```
 ("apple" AND "banana" AND NOT "cherry") OR "nuts"
 ```
 
-Search expressions can be used for searching on the device via the search index and for searching on the email server,
-but not for searching on the device without search index for performance reasons.
+Since version 1.1980 it is possible to use these prefixes as a search expression:
+
+```
+from:<email address>
+to:<email address>
+cc:<email address>
+bcc:<email address>
+keyword:<keyword>
+```
+
+There should be no space between the prefix and the search term, which will be applied as an AND-condition.
+
+Only AND conditions (+) and NOT conditions (-) can be used for on-device searching (since version 1.1981).
+If you try to use other search expressions, you get the error *Select a folder for a complex search*,
+which means that a folder in an account's folder list must be selected in order to perform the search on the server.
 
 Since version 1.1733 it is possible to save searches, which means that a named entry in the navigation menu will be created to repeat the same search later.
 You can save a search after searching by tapping on the save button in the top action bar.
 After repeating a search there will be a delete button at the same place to delete a saved search again.
 A saved search might be useful to quickly search for starred messages, or for messages from a specific email address, etc.
 
-Searching on the device is a free feature, using the search index and searching on the server is a pro feature.
-Note that you can download as many messages to your device as you like.
-The easiest way is to use the menu item *Fetch more messages* in the three-dots menu of the start screen.
+Using the search index is a pro feature.
 
 <br />
 
@@ -1287,11 +1301,11 @@ See also [this FAQ](#user-content-faq15).
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq19)
 
-First of all, **FairEmail is basically free to use** and only some advanced features need to be purchased.
+**FairEmail is basically free to use** and only some advanced features need to be purchased.
 
-Zuerst, **FairEmail ist grundsätzlich kostenlos** und nur einige erweiterte Funktionen müssen gekauft werden.
+**FairEmail ist grundsätzlich kostenlos** und nur einige erweiterte Funktionen müssen gekauft werden.
 
-Tout d'abord, **FairEmail est au fond gratuit** et seulement quelques fonctionnalités avancées doivent être achetés.
+**FairEmail est au fond gratuit** et seulement quelques fonctionnalités avancées doivent être achetés.
 
 Please see the Play store description of the app or [see here](https://email.faircode.eu/#pro) for a complete list of pro features.
 
@@ -1308,7 +1322,7 @@ Also note that most free apps will appear not to be sustainable in the end, wher
 and that free apps may have a catch, like sending privacy sensitive information to the internet.
 There are no privacy violating ads in the app either.
 
-I have been working on FairEmail almost every day for more than three years, so I think the price is more than reasonable.
+I have been working on FairEmail almost every day for more than four years, so I think the price is more than reasonable.
 For this reason there won't be discounts either.
 
 <br />
@@ -1492,7 +1506,8 @@ Too large messages and triggering the spam filter of an email server are the mos
 * *550 We're sorry, but we can't send your email. Either the subject matter, a link, or an attachment potentially contains spam, or phishing or malware.* means that the email provider considers an outgoing message as harmful.
 * *550 ...*, [see here](https://www.crazydomains.com.au/help/550-blocked-error-explained/) for a list of possible causes
 * *571 5.7.1 Message contains spam or virus or sender is blocked ...* means that the email server considered an outgoing message as spam. This probably means that the spam filters of the email server are too strict. You'll need to contact the email provider for support on this.
-* *451 4.7.0 Temporary server error. Please try again later. PRX4 ...*: please [see here](https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4) or [see here](https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/).
+* *451 4.7.0 Temporary server error. Please try again later. PRX4 ...* indicates a server configuration problem, please [see here](https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4) or [see here](https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/).
+* *451 4.7.0 Temporary server error. Please try again later. PRX5 ...* indicates a server configuration problem, please [see here](https://www.limilabs.com/qa/4471/451-4-7-0-temporary-server-error-please-try-again-later-prx5)
 * *571 5.7.1 Relay access denied*: please double check the username and email address in the advanced identity settings (via the manual setup).
 * Please [see here](https://support.google.com/a/answer/3726730) for more information and other SMTP error codes
 
@@ -2611,7 +2626,7 @@ Some common header conditions (regex):
 
 * *.&ast;Auto-Submitted:.&ast;* [RFC3834](https://tools.ietf.org/html/rfc3834)
 * *.&ast;List-Unsubscribe:.&ast;* [RFC3834](https://datatracker.ietf.org/doc/html/rfc2369)
-* *.&ast;Content-Type: multipart/report.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
+* *.&ast;Content-Type:.&ast;multipart/report.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
 
 To match *set* IMAP flags (keywords) via a header condition (since version 1.1777):
 
@@ -2643,6 +2658,8 @@ $$multifrom$ (since version 1.1791)
 $$automatic$ (since version 1.1862)
 $$lowpriority$ (since version 1.1958)
 $$highpriority$ (since version 1.1958)
+$$signed$ (since version 1.1981)
+$$encrypted$ (since version 1.1981)
 ```
 
 Note that *regex* should be disable and that there should be no white space.
@@ -3091,6 +3108,13 @@ Note that the POP3 protocol gives access to the inbox only. So, it is won't be p
 
 Note that you should not delete spam messages, also not from the spam folder,
 because the email server uses the messages in the spam folder to "learn" what spam messages are.
+
+If you are wondering why a message was moved into the spam folder, these are all possible reasons:
+
+* The email server of your email provider moved the message into the spam folder. The app can't undo this automatically because this can result in an endless loop.
+* The message classifier (miscellaneous settings tab page) moved the message into the spam folder.
+* A filter rule (navigation menu = left side menu of the start screen), for example a block domain name rule, moved the message into the spam folder.
+* An email address or a network address is on a block list (receive settings tab page).
 
 If you receive a lot of spam messages in your inbox, the best you can do is to contact the email provider to ask if spam filtering can be improved.
 
@@ -3983,8 +4007,9 @@ Note that FairEmail does support replying to calendar invites (a pro feature) an
 
 The confusing Microsoft specific server error *User is authenticated but not connected* might occur if:
 
-* External access was administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules) about how an administrator can enable it again
-* SMTP was administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission) about how an administrator can enable it again
+* External access is administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules) about how an administrator can enable it again
+* SMTP is administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission) about how an administrator can enable it again
+* Required server components are disabled, please see [this article](https://learn.microsoft.com/en-us/exchange/troubleshoot/user-and-shared-mailboxes/pop3-imap-owa-activesync-office-365) about enabling IMAP, MAPI, etc.
 * Push messages are enabled for too many folders: see [this FAQ](#user-content-faq23) for more information and a workaround
 * There were too many login attempts in a too short time, for example by using multiple email clients at the same time
 * An ad blocker or DNS changer is being used
@@ -4894,6 +4919,8 @@ Texts with suggestions will be marked and if you tap on a marked suggestion,
 it will be shown by the keyboard if the keyboard supports this,
 else you can double tap or long press the marked text to show suggestions.
 
+Since version 1.1974 there is an option to check paragraphs after a new line.
+
 The suboption *Use formal form* can be enabled to let LanguageTool suggest more formal text (business, legal, etc).
 
 <br />
@@ -4965,16 +4992,20 @@ Only the latest Play store version and latest GitHub release are supported.
 The F-Droid build is supported only if the version number is the same as the version number of the latest GitHub release.
 This also means that downgrading is not supported.
 
-There is no support on things that are not directly related to FairEmail.
+There is no support for things that are not directly related to FairEmail.
 
 There is no support on building and developing things by yourself.
+
+A change will be considered only if more than a few people ask for it.
+Changes in the past resulted too often in lots of complaints of other people.
+You can ask for support for changes [in this forum](https://forum.xda-developers.com/android/apps-games/source-email-t3824168).
 
 Requested features should:
 
 * be useful to most people
 * not complicate the usage of FairEmail
-* fit within the philosophy of FairEmail (privacy oriented, security minded)
-* comply with common standards (IMAP, SMTP, etc)
+* fit within the philosophy of FairEmail (privacy-oriented, security-minded)
+* comply with common standards (IMAP, SMTP, etc.)
 * comply with the [Core app quality guidelines](https://developer.android.com/docs/quality-guidelines/core-app-quality)
 
 A feature will be considered useful to most people if more than 0.1% of the users request a feature, which in practice means about 500 people.

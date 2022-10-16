@@ -53,12 +53,14 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
+import java.util.regex.Pattern;
 
 import javax.mail.Address;
 import javax.mail.FetchProfile;
@@ -99,7 +101,6 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     private final ExecutorService executor = Helper.getBackgroundExecutor(1, "boundary");
 
     private static final int SEARCH_LIMIT_DEVICE = 1000;
-    private static final int SEARCH_LIMIT_SERVER = 250;
 
     interface IBoundaryCallbackMessages {
         void onLoading();
@@ -132,15 +133,6 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
         this.intf = intf;
         this.state = new State();
-
-        if (criteria != null)
-            executor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i("Boundary reset search");
-                    DB.getInstance(context).message().resetSearch();
-                }
-            });
 
         return this.state;
     }
@@ -277,12 +269,26 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         }
 
         int found = 0;
-        String query = (criteria.query == null ? null : criteria.query.toLowerCase());
 
-        if (criteria.fts && criteria.query != null) {
+        List<String> word = new ArrayList<>();
+        List<String> plus = new ArrayList<>();
+        List<String> minus = new ArrayList<>();
+        if (criteria.query != null) {
+            for (String w : criteria.query.trim().split("\\s+"))
+                if (w.length() > 1 && w.startsWith("+"))
+                    plus.add(w.substring(1));
+                else if (w.length() > 1 && w.startsWith("-"))
+                    minus.add(w.substring(1));
+                else
+                    word.add(w);
+            if (word.size() == 0 && plus.size() > 0)
+                word.add(plus.get(0));
+        }
+
+        if (criteria.fts && word.size() > 0) {
             if (state.ids == null) {
                 SQLiteDatabase sdb = Fts4DbHelper.getInstance(context);
-                state.ids = Fts4DbHelper.match(sdb, account, folder, exclude, criteria);
+                state.ids = Fts4DbHelper.match(sdb, account, folder, exclude, criteria, TextUtils.join(" ", word));
                 EntityLog.log(context, "Boundary FTS " +
                         " account=" + account +
                         " folder=" + folder +
@@ -301,91 +307,14 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     if (message == null || message.ui_hide)
                         continue;
 
-                    if (criteria.with_unseen) {
-                        if (message.ui_seen)
-                            continue;
-                    }
-
-                    if (criteria.with_flagged) {
-                        if (!message.ui_flagged)
-                            continue;
-                    }
-
-                    if (criteria.with_hidden) {
-                        if (message.ui_snoozed == null)
-                            continue;
-                    }
-
-                    if (criteria.with_encrypted) {
-                        if (message.encrypt == null ||
-                                EntityMessage.ENCRYPT_NONE.equals(message.encrypt))
-                            continue;
-                    }
-
-                    if (criteria.with_attachments) {
-                        if (message.attachments == 0)
-                            continue;
-                    }
-
                     if (excluded.contains(message.folder))
                         continue;
 
-                    boolean matched = false;
-
-                    if (!matched && criteria.in_senders) {
-                        if (contains(message.from, query))
-                            matched = true;
-                    }
-
-                    if (!matched && criteria.in_recipients) {
-                        if (contains(message.to, query) ||
-                                contains(message.cc, query) ||
-                                contains(message.bcc, query))
-                            matched = true;
-                    }
-
-                    if (!matched && criteria.in_subject) {
-                        if (message.subject != null &&
-                                message.subject.toLowerCase().contains(query))
-                            matched = true;
-                    }
-
-                    if (!matched && criteria.in_keywords) {
-                        if (message.keywords != null)
-                            for (String keyword : message.keywords)
-                                if (keyword.toLowerCase().contains(query)) {
-                                    matched = true;
-                                    break;
-                                }
-                    }
-
-                    if (!matched && criteria.in_notes) {
-                        if (message.notes != null &&
-                                message.notes.toLowerCase().contains(query))
-                            matched = true;
-                    }
-
-                    if (!matched && criteria.in_message)
-                        try {
-                            File file = EntityMessage.getFile(context, id);
-                            if (file.exists()) {
-                                String html = Helper.readText(file);
-                                if (html.toLowerCase().contains(query)) {
-                                    String text = HtmlHelper.getFullText(html);
-                                    if (text != null &&
-                                            text.toLowerCase().contains(query))
-                                        matched = true;
-                                }
-                            }
-                        } catch (IOException ex) {
-                            Log.e(ex);
-                        }
-
-                    if (!matched)
+                    if (!matchMessage(context, message, criteria))
                         continue;
 
-                    found += db.message().setMessageFound(id, true);
-                    Log.i("Boundary matched=" + id + " found=" + found);
+                    found += db.message().setMessageFound(message.id, true);
+                    Log.i("Boundary matched=" + message.id + " found=" + found);
                 }
                 db.setTransactionSuccessful();
 
@@ -399,16 +328,17 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         while (found < pageSize && !state.destroyed) {
             if (state.matches == null ||
                     (state.matches.size() > 0 && state.index >= state.matches.size())) {
+                String query = (word.size() == 0 ? null : '%' + TextUtils.join("%", word) + '%');
                 state.matches = db.message().matchMessages(
                         account, folder, exclude,
-                        criteria.query == null ? null : "%" + criteria.query + "%",
-                        criteria.in_senders,
-                        criteria.in_recipients,
-                        criteria.in_subject,
-                        criteria.in_keywords,
-                        criteria.in_message,
-                        criteria.in_notes,
-                        criteria.in_headers,
+                        query,
+                        //criteria.in_senders,
+                        //criteria.in_recipients,
+                        //criteria.in_subject,
+                        //criteria.in_keywords,
+                        //criteria.in_message,
+                        //criteria.in_notes,
+                        //criteria.in_headers,
                         criteria.with_unseen,
                         criteria.with_flagged,
                         criteria.with_hidden,
@@ -425,6 +355,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         " account=" + account +
                         " folder=" + folder +
                         " criteria=" + criteria +
+                        " query=" + query +
                         " offset=" + state.offset +
                         " size=" + state.matches.size());
                 state.offset += Math.min(state.matches.size(), SEARCH_LIMIT_DEVICE);
@@ -438,27 +369,12 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 state.index = i + 1;
 
                 TupleMatch match = state.matches.get(i);
-                boolean matched = (match.matched != null && match.matched);
+                boolean matched = (criteria.query == null || Boolean.TRUE.equals(match.matched));
 
-                if (query != null) {
-                    if (!matched && (criteria.in_message || criteria.in_html))
-                        try {
-                            File file = EntityMessage.getFile(context, match.id);
-                            if (file.exists()) {
-                                String html = Helper.readText(file);
-                                if (html.toLowerCase().contains(query)) {
-                                    if (criteria.in_html)
-                                        matched = true;
-                                    else {
-                                        String text = HtmlHelper.getFullText(html);
-                                        if (text != null && text.toLowerCase().contains(query))
-                                            matched = true;
-                                    }
-                                }
-                            }
-                        } catch (IOException ex) {
-                            Log.e(ex);
-                        }
+                if (!matched) {
+                    EntityMessage message = db.message().getMessage(match.id);
+                    if (message != null && !message.ui_hide)
+                        matched = matchMessage(context, message, criteria);
                 }
 
                 if (matched) {
@@ -541,6 +457,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         state.imessages = state.ifolder.getMessages();
                     else
                         state.imessages = state.ifolder.search(new AndTerm(and.toArray(new SearchTerm[0])));
+
                     EntityLog.log(context, "Boundary filter messages=" + state.imessages.length);
                 } else
                     try {
@@ -633,6 +550,33 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     }
                 EntityLog.log(context, "Boundary found messages=" + state.imessages.length);
 
+                FetchProfile fp = new FetchProfile();
+                fp.add(UIDFolder.FetchProfileItem.UID);
+                fp.add(IMAPFolder.FetchProfileItem.INTERNALDATE);
+                state.ifolder.fetch(state.imessages, fp);
+                Arrays.sort(state.imessages, new Comparator<Message>() {
+                    @Override
+                    public int compare(Message m1, Message m2) {
+                        Date d1 = null;
+                        try {
+                            d1 = m1.getReceivedDate();
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                        }
+
+                        Date d2 = null;
+                        try {
+                            d2 = m2.getReceivedDate();
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                        }
+
+                        return Long.compare(d1 == null ? 0 : d1.getTime(), d2 == null ? 0 : d2.getTime());
+                    }
+                });
+
+                EntityLog.log(context, "Boundary sorted messages=" + state.imessages.length);
+
                 state.index = state.imessages.length - 1;
             } catch (Throwable ex) {
                 state.error = true;
@@ -652,10 +596,6 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             Message[] isub = Arrays.copyOfRange(state.imessages, from, state.index + 1);
             Arrays.fill(state.imessages, from, state.index + 1, null);
             state.index -= (pageSize - found);
-
-            FetchProfile fp0 = new FetchProfile();
-            fp0.add(UIDFolder.FetchProfileItem.UID);
-            state.ifolder.fetch(isub, fp0);
 
             List<Message> add = new ArrayList<>();
             for (Message m : isub)
@@ -681,7 +621,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 fp.add(IMAPFolder.FetchProfileItem.HEADERS);
                 //fp.add(IMAPFolder.FetchProfileItem.MESSAGE);
                 fp.add(FetchProfile.Item.SIZE);
-                fp.add(IMAPFolder.FetchProfileItem.INTERNALDATE);
+                //fp.add(IMAPFolder.FetchProfileItem.INTERNALDATE);
                 if (account.isGmail()) {
                     fp.add(GmailFolder.FetchProfileItem.THRID);
                     fp.add(GmailFolder.FetchProfileItem.LABELS);
@@ -765,7 +705,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             throw new ProtocolException(responses[responses.length - 1]);
 
         List<Integer> msgnums = new ArrayList<>();
-        for (int r = 0; r < Math.min(responses.length, SEARCH_LIMIT_SERVER); r++) {
+        for (int r = 0; r < responses.length; r++) {
             IMAPResponse response = (IMAPResponse) responses[r];
             if (response.keyEquals("SEARCH")) {
                 int msgnum;
@@ -782,13 +722,140 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         return imessages;
     }
 
-    private static boolean contains(Address[] addresses, String text) {
+    private static boolean matchMessage(Context context, EntityMessage message, SearchCriteria criteria) {
+        if (criteria.with_unseen) {
+            if (message.ui_seen)
+                return false;
+        }
+
+        if (criteria.with_flagged) {
+            if (!message.ui_flagged)
+                return false;
+        }
+
+        if (criteria.with_hidden) {
+            if (message.ui_snoozed == null)
+                return false;
+        }
+
+        if (criteria.with_encrypted) {
+            if (message.encrypt == null ||
+                    EntityMessage.ENCRYPT_NONE.equals(message.encrypt))
+                return false;
+        }
+
+        if (criteria.with_attachments) {
+            if (message.attachments == 0)
+                return false;
+        }
+
+        //
+        if (criteria.with_notes) {
+            if (message.notes == null)
+                return false;
+        }
+
+        //
+        if (criteria.with_size != null) {
+            if (message.total == null || message.total < criteria.with_size)
+                return false;
+        }
+
+        //
+        if (criteria.before != null) {
+            if (message.received > criteria.before)
+                return false;
+        }
+
+        //
+        if (criteria.after != null) {
+            if (message.received < criteria.after)
+                return false;
+        }
+
+        if (criteria.in_senders) {
+            if (contains(message.from, criteria.query))
+                return true;
+        }
+
+        if (criteria.in_recipients) {
+            if (contains(message.to, criteria.query) ||
+                    contains(message.cc, criteria.query) ||
+                    contains(message.bcc, criteria.query))
+                return true;
+        }
+
+        if (criteria.in_subject) {
+            if (contains(message.subject, criteria.query, false))
+                return true;
+        }
+
+        if (criteria.in_keywords) {
+            if (message.keywords != null)
+                for (String keyword : message.keywords)
+                    if (contains(keyword, criteria.query, false))
+                        return true;
+        }
+
+        if (criteria.in_notes) {
+            if (contains(message.notes, criteria.query, false))
+                return true;
+        }
+
+        if (criteria.in_headers) {
+            if (contains(message.headers, criteria.query, false))
+                return true;
+        }
+
+        if (criteria.in_message)
+            try {
+                File file = EntityMessage.getFile(context, message.id);
+                if (file.exists()) {
+                    String html = Helper.readText(file);
+                    if (contains(html, criteria.query, true)) {
+                        String text = HtmlHelper.getFullText(html);
+                        if (contains(text, criteria.query, false))
+                            return true;
+                    }
+                }
+            } catch (IOException ex) {
+                Log.e(ex);
+            }
+
+        return false;
+    }
+
+    private static boolean contains(Address[] addresses, String query) {
         if (addresses == null)
             return false;
         for (Address address : addresses)
-            if (address.toString().toLowerCase().contains(text))
+            if (contains(address.toString(), query, false))
                 return true;
         return false;
+    }
+
+    private static boolean contains(String text, String query, boolean html) {
+        if (TextUtils.isEmpty(text))
+            return false;
+
+        text = Fts4DbHelper.breakText(text);
+
+        List<String> word = new ArrayList<>();
+        for (String w : query.trim().split("\\s+"))
+            if (w.length() > 1 && w.startsWith("+")) {
+                if (!text.contains(Fts4DbHelper.preprocessText(w.substring(1))))
+                    return false;
+            } else if (w.length() > 1 && w.startsWith("-")) {
+                if (!html && text.contains(Fts4DbHelper.preprocessText(w.substring(1))))
+                    return false;
+            } else
+                word.addAll(Arrays.asList(Fts4DbHelper.breakText(w).split("\\s+")));
+
+        if (word.size() == 0)
+            return true;
+
+        Pattern pat = Pattern.compile(".*?\\b(" + TextUtils.join("\\s+", word) + ")\\b.*?", Pattern.DOTALL);
+        return pat.matcher(text).matches();
     }
 
     State getState() {
@@ -883,6 +950,33 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         Long after = null;
         Long before = null;
 
+        private static final String FROM = "from:";
+        private static final String TO = "to:";
+        private static final String CC = "cc:";
+        private static final String BCC = "bcc:";
+        private static final String KEYWORD = "keyword:";
+
+        boolean onServer() {
+            if (query == null)
+                return false;
+
+            for (String w : query.trim().split("\\s+"))
+                if (w.length() > 1 && w.startsWith("?"))
+                    return true;
+                else if (w.length() > FROM.length() && w.startsWith(FROM))
+                    return true;
+                else if (w.length() > TO.length() && w.startsWith(TO))
+                    return true;
+                else if (w.length() > CC.length() && w.startsWith(CC))
+                    return true;
+                else if (w.length() > BCC.length() && w.startsWith(BCC))
+                    return true;
+                else if (w.length() > KEYWORD.length() && w.startsWith(KEYWORD))
+                    return true;
+
+            return false;
+        }
+
         SearchTerm getTerms(boolean utf8, Flags flags, String[] keywords) {
             List<SearchTerm> or = new ArrayList<>();
             List<SearchTerm> and = new ArrayList<>();
@@ -903,6 +997,11 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 List<String> plus = new ArrayList<>();
                 List<String> minus = new ArrayList<>();
                 List<String> opt = new ArrayList<>();
+                List<String> andFrom = new ArrayList<>();
+                List<String> andTo = new ArrayList<>();
+                List<String> andCc = new ArrayList<>();
+                List<String> andBcc = new ArrayList<>();
+                List<String> andKeyword = new ArrayList<>();
                 StringBuilder all = new StringBuilder();
                 for (String w : search.trim().split("\\s+")) {
                     if (all.length() > 0)
@@ -917,13 +1016,24 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     } else if (w.length() > 1 && w.startsWith("?")) {
                         opt.add(w.substring(1));
                         all.append(w.substring(1));
-                    } else {
+                    } else if (w.length() > FROM.length() && w.startsWith(FROM))
+                        andFrom.add(w.substring(FROM.length()));
+                    else if (w.length() > TO.length() && w.startsWith(TO))
+                        andTo.add(w.substring(TO.length()));
+                    else if (w.length() > CC.length() && w.startsWith(CC))
+                        andCc.add(w.substring(CC.length()));
+                    else if (w.length() > BCC.length() && w.startsWith(BCC))
+                        andBcc.add(w.substring(BCC.length()));
+                    else if (w.length() > KEYWORD.length() && w.startsWith(KEYWORD))
+                        andKeyword.add(w.substring(KEYWORD.length()));
+                    else {
                         word.add(w);
                         all.append(w);
                     }
                 }
 
-                if (plus.size() + minus.size() + opt.size() > 0)
+                if (plus.size() + minus.size() + opt.size() +
+                        andFrom.size() + andTo.size() + andCc.size() + andBcc.size() + andKeyword.size() > 0)
                     search = all.toString();
 
                 // Yahoo! does not support keyword search, but uses the flags $Forwarded $Junk $NotJunk
@@ -934,15 +1044,32 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         break;
                     }
 
-                if (in_senders)
-                    or.add(new FromStringTerm(search));
-                if (in_recipients) {
-                    or.add(new RecipientStringTerm(Message.RecipientType.TO, search));
-                    or.add(new RecipientStringTerm(Message.RecipientType.CC, search));
-                    or.add(new RecipientStringTerm(Message.RecipientType.BCC, search));
+                if (andFrom.size() > 0) {
+                    for (String term : andFrom)
+                        and.add(new FromStringTerm(term));
+                } else {
+                    if (in_senders && !TextUtils.isEmpty(search) &&
+                            plus.size() + minus.size() + opt.size() == 0)
+                        or.add(new FromStringTerm(search));
                 }
 
-                if (in_subject)
+                if (andTo.size() + andCc.size() + andBcc.size() > 0) {
+                    for (String term : andTo)
+                        and.add(new RecipientStringTerm(Message.RecipientType.TO, term));
+                    for (String term : andCc)
+                        and.add(new RecipientStringTerm(Message.RecipientType.CC, term));
+                    for (String term : andBcc)
+                        and.add(new RecipientStringTerm(Message.RecipientType.BCC, term));
+                } else {
+                    if (in_recipients && !TextUtils.isEmpty(search) &&
+                            plus.size() + minus.size() + opt.size() == 0) {
+                        or.add(new RecipientStringTerm(Message.RecipientType.TO, search));
+                        or.add(new RecipientStringTerm(Message.RecipientType.CC, search));
+                        or.add(new RecipientStringTerm(Message.RecipientType.BCC, search));
+                    }
+                }
+
+                if (in_subject && !TextUtils.isEmpty(search))
                     if (plus.size() + minus.size() + opt.size() == 0)
                         or.add(new SubjectTerm(search));
                     else
@@ -953,15 +1080,22 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                             or.add(new SubjectTerm(search));
                         }
 
-                if (in_keywords && hasKeywords) {
-                    String keyword = MessageHelper.sanitizeKeyword(search);
-                    if (TextUtils.isEmpty(keyword))
-                        Log.w("Keyword empty=" + search);
-                    else
-                        or.add(new FlagTerm(new Flags(keyword), true));
-                }
+                if (hasKeywords)
+                    if (andKeyword.size() > 0) {
+                        for (String term : andKeyword)
+                            and.add(new FlagTerm(new Flags(term), true));
+                    } else {
+                        if (in_keywords && !TextUtils.isEmpty(search) &&
+                                plus.size() + minus.size() + opt.size() == 0) {
+                            String keyword = MessageHelper.sanitizeKeyword(search);
+                            if (TextUtils.isEmpty(keyword))
+                                Log.w("Keyword empty=" + search);
+                            else
+                                or.add(new FlagTerm(new Flags(keyword), true));
+                        }
+                    }
 
-                if (in_message)
+                if (in_message && !TextUtils.isEmpty(search))
                     if (plus.size() + minus.size() + opt.size() == 0)
                         or.add(new BodyTerm(search));
                     else

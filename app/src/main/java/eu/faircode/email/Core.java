@@ -597,6 +597,7 @@ class Core {
                         long attachments = (op.message == null ? 0 : db.attachment().countAttachments(op.message));
 
                         if (op.tries >= TOTAL_RETRY_MAX ||
+                                ex instanceof JSONException ||
                                 ex instanceof OutOfMemoryError ||
                                 ex instanceof FileNotFoundException ||
                                 ex instanceof FolderNotFoundException ||
@@ -616,8 +617,7 @@ class Core {
                                         EntityOperation.BODY.equals(op.name)) ||
                                 EntityOperation.ATTACHMENT.equals(op.name) ||
                                 ((op.tries >= LOCAL_RETRY_MAX || attachments > 0) &&
-                                        EntityOperation.ADD.equals(op.name) &&
-                                        EntityFolder.DRAFTS.equals(folder.type)) ||
+                                        EntityOperation.ADD.equals(op.name)) ||
                                 (op.tries >= LOCAL_RETRY_MAX &&
                                         EntityOperation.SYNC.equals(op.name) &&
                                         (account.protocol == EntityAccount.TYPE_POP ||
@@ -2930,7 +2930,7 @@ class Core {
                 MessageHelper helper = new MessageHelper((MimeMessage) imessages[imessages.length - 1], context);
                 String msgid = helper.getMessageID();
                 if (msgid != null) {
-                    int count = db.message().countMessageByMsgId(folder.id, msgid);
+                    int count = db.message().countMessageByMsgId(folder.id, msgid, true);
                     if (count == 1) {
                         Log.i(account.name + " POP having last msgid=" + msgid);
                         sync = false;

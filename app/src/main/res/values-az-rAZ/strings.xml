@@ -644,6 +644,7 @@
     <string name="title_advanced_language">Dil</string>
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_lt">LanguageTool inteqrasiyası</string>
+    <string name="title_advanced_lt_auto">Yeni bir sətirdən sonra paraqrafı yoxla</string>
     <string name="title_advanced_deepl">DeepL inteqrasiyası</string>
     <string name="title_advanced_virus_total">VirusTotal inteqrasiyası</string>
     <string name="title_advanced_sdcard">SD kart istifadə etmək istəyirəm</string>
@@ -1050,6 +1051,7 @@
     <string name="title_download_all">Hamısını endir</string>
     <string name="title_save_all">Hamısını saxla</string>
     <string name="title_save_eml">Xam mesaj faylını saxla</string>
+    <string name="title_save_file">Faylı saxla</string>
     <string name="title_eml_remark">Mesajları yönləndirmək üçün, xam (orijinal) mesajlar, e-poçt serverindən endirilməlidir. Bu, internet bağlantısı tələb edir və mesajlar, e-poçt serverdə saxlanılacaq.</string>
     <string name="title_eml_option">Bunun qarşısı, bağlantı tənzimləmələrində xam mesajlarının endirilməsi həmişəlik fəallaşdırılaraq alına bilər</string>
     <string name="title_eml_downloaded">Xam mesajlar endirildi: %1$s</string>
@@ -1681,6 +1683,8 @@
     <string name="title_redo">Təkrar et</string>
     <string name="title_insert_line">Sətir daxil et</string>
     <string name="title_select_block">Bloku seç</string>
+    <string name="title_insert_brackets">Mötərizə</string>
+    <string name="title_insert_quotes">Sitat</string>
     <string name="title_add">Əlavə et</string>
     <string name="title_browse">Aç</string>
     <string name="title_info">Məlumat</string>

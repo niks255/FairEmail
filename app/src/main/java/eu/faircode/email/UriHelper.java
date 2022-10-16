@@ -29,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.core.net.MailTo;
 import androidx.core.util.PatternsCompat;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -306,6 +308,40 @@ public class UriHelper {
             Uri result = Uri.parse(uri.getQueryParameter("url"));
             changed = (result != null);
             url = (result == null ? uri : result);
+        } else if (uri.getPath() != null &&
+                uri.getPath().startsWith("/track/click") &&
+                uri.getQueryParameter("p") != null) {
+            try {
+                // Mandrill
+                String p = new String(Base64.decode(uri.getQueryParameter("p"), Base64.URL_SAFE));
+                JSONObject json = new JSONObject(p);
+                json = new JSONObject(json.getString("p"));
+                Uri result = Uri.parse(json.getString("url"));
+                changed = (result != null);
+                url = (result == null ? uri : result);
+            } catch (Throwable ex) {
+                Log.i(ex);
+                url = uri;
+            }
+        } else if (uri.getHost() != null && uri.getHost().endsWith(".awstrack.me")) {
+            // https://docs.aws.amazon.com/ses/latest/dg/configure-custom-open-click-domains.html
+            String path = uri.getPath();
+            int s = path.indexOf('/', 1);
+            Uri result = (s > 0 ? Uri.parse(path.substring(s + 1)) : null);
+            changed = (result != null);
+            url = (result == null ? uri : result);
+        } else if (uri.getHost() != null && uri.getHost().equals("go.dhlparcel.nl")) {
+            try {
+                String path = uri.getPath();
+                int s = path.lastIndexOf('/');
+                String b = (s > 0 ? new String(Base64.decode(path.substring(s + 1), Base64.URL_SAFE)) : null);
+                Uri result = (b == null ? null : Uri.parse(b));
+                changed = (result != null);
+                url = (result == null ? uri : result);
+            } catch (Throwable ex) {
+                Log.i(ex);
+                url = uri;
+            }
         } else if (uri.getQueryParameterNames().size() == 1) {
             // Sophos Email Appliance
             Uri result = null;
@@ -313,7 +349,7 @@ public class UriHelper {
             String key = uri.getQueryParameterNames().iterator().next();
             if (TextUtils.isEmpty(uri.getQueryParameter(key)))
                 try {
-                    String data = new String(Base64.decode(key, Base64.DEFAULT));
+                    String data = new String(Base64.decode(key, Base64.URL_SAFE));
                     int v = data.indexOf("ver=");
                     int u = data.indexOf("&&url=");
                     if (v == 0 && u > 0)
@@ -327,7 +363,7 @@ public class UriHelper {
         } else if (uri.getQueryParameter("redirectUrl") != null) {
             // https://.../link-tracker?redirectUrl=<base64>&sig=...&iat=...&a=...&account=...&email=...&s=...&i=...
             try {
-                byte[] bytes = Base64.decode(uri.getQueryParameter("redirectUrl"), 0);
+                byte[] bytes = Base64.decode(uri.getQueryParameter("redirectUrl"), Base64.URL_SAFE);
                 String u = URLDecoder.decode(new String(bytes), StandardCharsets.UTF_8.name());
                 Uri result = Uri.parse(u);
                 changed = (result != null);

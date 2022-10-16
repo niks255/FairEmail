@@ -69,6 +69,7 @@ public class Send {
         Uri uri = Uri.parse("wss://" + Uri.parse(host).getHost() + "/api/ws");
 
         WebSocket ws = new WebSocketFactory().createSocket(uri.toString(), TIMEOUT);
+        ws.setFrameQueueSize(32); // 32 x 64KB = 2 MB
 
         Semaphore sem = new Semaphore(0);
         List<String> queue = Collections.synchronizedList(new ArrayList<>());
@@ -184,6 +185,9 @@ public class Send {
                 ws.sendBinary(message);
 
                 seq++;
+
+                if (!intf.isRunning())
+                    throw new InterruptedException();
             }
 
             Log.i("Send EOF size=" + size);
@@ -260,5 +264,7 @@ public class Send {
 
     public interface IProgress {
         void onProgress(int percentage);
+
+        boolean isRunning();
     }
 }

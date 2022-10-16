@@ -645,6 +645,7 @@
     <string name="title_advanced_language">Idioma</string>
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_lt">Integração LanguageTool</string>
+    <string name="title_advanced_lt_auto">Verificar parágrafo depois de uma nova linha</string>
     <string name="title_advanced_deepl">Integração DeepL</string>
     <string name="title_advanced_virus_total">Integração VirusTotal</string>
     <string name="title_advanced_sdcard">Quero utilizar um cartão SD</string>
@@ -1050,6 +1051,7 @@
     <string name="title_download_all">Transferir todas</string>
     <string name="title_save_all">Guardar tudo</string>
     <string name="title_save_eml">Guardar ficheiro de mensagem (.eml)</string>
+    <string name="title_save_file">Gravar ficheiro</string>
     <string name="title_eml_remark">Para encaminhar mensagens, é preciso transferir as mensagens em bruto (original) do servidor de correio electrónico. Requer uma ligação à Internet e as mensagens devem continuar armazenadas no servidor de correio electrónico.</string>
     <string name="title_eml_option">Isto pode ser prevenido activando, nas definições de ligação, a opção de transferir os ficheiros de mensagem em bruto</string>
     <string name="title_eml_downloaded">Download de mensagens originais: %1$s</string>
@@ -1115,6 +1117,7 @@
     <string name="title_no_folder">A pasta não existe</string>
     <string name="title_no_format">A mensagem originalmente recebida será incluída</string>
     <string name="title_no_search">Pesquisa no servidor não está disponível para esta conta</string>
+    <string name="title_complex_search">Selecione uma pasta para uma busca complexa</string>
     <string name="title_too_large">Mensagem demasiado grande para reformatar na íntegra</string>
     <string name="title_truncated">Mensagem demasiado grande para ser mostrada na íntegra</string>
     <string name="title_insufficient_memory">Mensagem muito grande para a memória disponível (%1$d)</string>
@@ -1217,6 +1220,8 @@
     <string name="title_style_blockquote">Citação em destaque</string>
     <string name="title_style_indentation">Recuo</string>
     <string name="title_style_mark">Destacar</string>
+    <string name="title_style_subscript" comment="title_style_subscript&#10;Title for menu item to style text">Sub-script</string>
+    <string name="title_style_superscript" comment="title_style_superscript&#10;Title for menu item to style text">Super-script</string>
     <string name="title_style_strikethrough">Riscado</string>
     <string name="title_style_clear">Limpar formatação</string>
     <string name="title_style_link">Inserir hiperligação</string>
@@ -1681,6 +1686,8 @@
     <string name="title_redo">Refazer</string>
     <string name="title_insert_line">Inserir linha</string>
     <string name="title_select_block">Selecionar bloco</string>
+    <string name="title_insert_brackets">Parêntesis</string>
+    <string name="title_insert_quotes">Citar</string>
     <string name="title_add">Adicionar</string>
     <string name="title_browse">Abrir com</string>
     <string name="title_info">Informação</string>

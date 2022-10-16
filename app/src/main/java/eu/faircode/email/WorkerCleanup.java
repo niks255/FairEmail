@@ -206,7 +206,7 @@ public class WorkerCleanup extends Worker {
             long now = new Date().getTime();
 
             List<File> files = new ArrayList<>();
-            File[] messages = new File(context.getFilesDir(), "messages").listFiles();
+            File[] messages = Helper.listFiles(new File(context.getFilesDir(), "messages")).toArray(new File[0]);
             File[] revision = new File(context.getFilesDir(), "revision").listFiles();
             File[] references = new File(context.getFilesDir(), "references").listFiles();
             File[] encryption = new File(context.getFilesDir(), "encryption").listFiles();
@@ -277,7 +277,7 @@ public class WorkerCleanup extends Worker {
 
             // Cleanup attachment files
             Log.i("Cleanup attachment files");
-            File[] attachments = new File(context.getFilesDir(), "attachments").listFiles();
+            File[] attachments = new File(EntityAttachment.getRoot(context), "attachments").listFiles();
             if (attachments != null)
                 for (File file : attachments)
                     if (manual || file.lastModified() + KEEP_FILES_DURATION < now)

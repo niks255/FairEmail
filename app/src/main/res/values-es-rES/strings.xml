@@ -642,6 +642,7 @@
     <string name="title_advanced_language">Idioma</string>
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_lt">Integración con LanguageTool</string>
+    <string name="title_advanced_lt_auto">Comprobar párrafo después de una nueva línea</string>
     <string name="title_advanced_deepl">Integración con DeepL</string>
     <string name="title_advanced_virus_total">Integración con VirusTotal</string>
     <string name="title_advanced_sdcard">Quiero usar una tarjeta SD</string>
@@ -1048,6 +1049,7 @@
     <string name="title_download_all">Descargar todo</string>
     <string name="title_save_all">Guardar todo</string>
     <string name="title_save_eml">Guardar archivo de mensajes sin procesar</string>
+    <string name="title_save_file">Guardar archivo</string>
     <string name="title_eml_remark">Para reenviar mensajes, los mensajes sin procesar (originales) deben ser descargados desde el servidor de correo electrónico. Esto requiere una conexión a Internet y los mensajes deben estar aún almacenados en el servidor de correo electrónico.</string>
     <string name="title_eml_option">Esto se puede prevenir al habilitar siempre la descarga de archivos de mensajes sin procesar en la configuración de la conexión</string>
     <string name="title_eml_downloaded">Mensajes sin procesar descargados: %1$s</string>
@@ -1113,6 +1115,7 @@
     <string name="title_no_folder">La carpeta no existe</string>
     <string name="title_no_format">El mensaje recibido originalmente será incluido</string>
     <string name="title_no_search">La búsqueda en el servidor no está disponible para esta cuenta</string>
+    <string name="title_complex_search">Seleccione una carpeta para una búsqueda compleja</string>
     <string name="title_too_large">Mensaje demasiado grande para reformatear completamente</string>
     <string name="title_truncated">Mensaje demasiado grande para mostrarlo por completo</string>
     <string name="title_insufficient_memory">Mensaje demasiado grande para la memoria disponible (%1$d)</string>
@@ -1676,6 +1679,8 @@
     <string name="title_redo">Rehacer</string>
     <string name="title_insert_line">Insertar línea</string>
     <string name="title_select_block">Seleccionar bloque</string>
+    <string name="title_insert_brackets">Corchete</string>
+    <string name="title_insert_quotes">Comillas</string>
     <string name="title_add">Agregar</string>
     <string name="title_browse">Abrir con</string>
     <string name="title_info">Información</string>

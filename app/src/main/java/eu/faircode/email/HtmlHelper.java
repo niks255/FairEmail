@@ -53,8 +53,6 @@ import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
-import android.text.style.SubscriptSpan;
-import android.text.style.SuperscriptSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
@@ -111,6 +109,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.text.DateFormat;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
@@ -122,6 +121,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1203,13 +1203,6 @@ public class HtmlHelper {
         // Abbreviations
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/abbr
         document.select("abbr").tagName("u");
-
-        // Subscript/Superscript
-        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/sub
-        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/sup
-        if (!view)
-            for (Element subp : document.select("sub,sup"))
-                subp.tagName("small");
 
         // Tables
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table
@@ -2934,52 +2927,76 @@ public class HtmlHelper {
         return ssb;
     }
 
-    static Document highlightSearched(Context context, Document document, String searched) {
-        String find = searched.toLowerCase();
+    static Document highlightSearched(Context context, Document document, String query) {
         int color = Helper.resolveColor(context, R.attr.colorHighlight);
+        query = Normalizer.normalize(query, Normalizer.Form.NFKD)
+                .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
 
-        NodeTraversor.traverse(new NodeVisitor() {
-            @Override
-            public void head(Node node, int depth) {
-                if (node instanceof TextNode) {
-                    TextNode tnode = (TextNode) node;
-                    String text = tnode.getWholeText();
+        // TODO: fix highlighting pre processed text
 
-                    int start = text.toLowerCase().indexOf(find);
-                    if (start < 0)
-                        return;
+        List<String> word = new ArrayList<>();
+        List<String> plus = new ArrayList<>();
+        for (String w : query.trim().split("\\s+"))
+            if (w.length() > 1 && (w.startsWith("+") || w.startsWith("-"))) {
+                if (w.startsWith("+"))
+                    plus.add(w.substring(1));
+            } else
+                word.add(w);
 
-                    int prev = 0;
-                    Element holder = document.createElement("span");
+        int flags = Pattern.DOTALL | Pattern.CASE_INSENSITIVE;
+        List<Pattern> pat = new ArrayList<>();
+        pat.add(Pattern.compile(".*?\\b(" + TextUtils.join("\\s+", word) + ")\\b.*?", flags));
+        for (String w : plus)
+            pat.add(Pattern.compile(".*?\\b(" + w + ")\\b.*?", flags));
 
-                    while (start >= 0) {
-                        if (start > prev)
-                            holder.appendText(text.substring(prev, start));
+        for (Pattern p : pat)
+            NodeTraversor.traverse(new NodeVisitor() {
+                @Override
+                public void head(Node node, int depth) {
+                    if (node instanceof TextNode)
+                        try {
+                            TextNode tnode = (TextNode) node;
+                            String text = Normalizer.normalize(tnode.getWholeText(), Normalizer.Form.NFKD)
+                                    .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
 
-                        Element span = document.createElement("span");
-                        span.attr("style", mergeStyles(
-                                span.attr("style"),
-                                "font-size:larger; background-color:" + encodeWebColor(color)
-                        ));
-                        span.text(text.substring(start, start + find.length()));
-                        holder.appendChild(span);
+                            Matcher result = p.matcher(text);
 
-                        prev = start + find.length();
-                        start = text.toLowerCase().indexOf(find, prev);
-                    }
+                            int prev = 0;
+                            Element holder = document.createElement("span");
+                            while (result.find()) {
+                                int start = result.start(1);
+                                int end = result.end(1);
 
-                    if (prev < text.length())
-                        holder.appendText(text.substring(prev));
+                                holder.appendText(text.substring(prev, start));
 
-                    tnode.before(holder);
-                    tnode.text("");
+                                Element span = document.createElement("span");
+                                span.attr("style", mergeStyles(
+                                        span.attr("style"),
+                                        "font-size:larger; background-color:" + encodeWebColor(color)
+                                ));
+                                span.text(text.substring(start, end));
+                                holder.appendChild(span);
+
+                                prev = end;
+                            }
+
+                            if (prev == 0) // No matches
+                                return;
+
+                            if (prev < text.length())
+                                holder.appendText(text.substring(prev));
+
+                            tnode.before(holder);
+                            tnode.text("");
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
                 }
-            }
 
-            @Override
-            public void tail(Node node, int depth) {
-            }
-        }, document);
+                @Override
+                public void tail(Node node, int depth) {
+                }
+            }, document);
 
         return document;
     }
@@ -3619,12 +3636,10 @@ public class HtmlHelper {
                                 // Do nothing
                                 break;
                             case "sub":
-                                setSpan(ssb, new SubscriptSpan(), start, ssb.length());
-                                setSpan(ssb, new RelativeSizeSpan(FONT_SMALL), start, ssb.length());
+                                setSpan(ssb, new SubscriptSpanEx(), start, ssb.length());
                                 break;
                             case "sup":
-                                setSpan(ssb, new SuperscriptSpan(), start, ssb.length());
-                                setSpan(ssb, new RelativeSizeSpan(FONT_SMALL), start, ssb.length());
+                                setSpan(ssb, new SuperscriptSpanEx(), start, ssb.length());
                                 break;
                             case "table":
                             case "thead":

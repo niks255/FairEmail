@@ -68,7 +68,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 244,
+        version = 249,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -2469,6 +2469,36 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("UPDATE account SET keep_alive_noop = 0" +
                                 " WHERE host = 'outlook.office365.com' AND pop = " + EntityAccount.TYPE_IMAP);
+                    }
+                }).addMigrations(new Migration(244, 245) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("UPDATE account SET keep_alive_noop = 1" +
+                                " WHERE host = 'outlook.office365.com' AND pop = " + EntityAccount.TYPE_IMAP);
+                    }
+                }).addMigrations(new Migration(245, 246) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                    }
+                }).addMigrations(new Migration(246, 247) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                    }
+                }).addMigrations(new Migration(247, 248) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        EntityMessage.convert(context);
+                    }
+                }).addMigrations(new Migration(248, 249) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        Fts4DbHelper.delete(context);
+                        Fts5DbHelper.delete(context);
+                        db.execSQL("UPDATE `message` SET fts = 0");
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

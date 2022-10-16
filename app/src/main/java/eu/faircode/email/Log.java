@@ -39,7 +39,9 @@ import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.CursorWindowAllocationException;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteFullException;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -1546,6 +1548,27 @@ public class Log {
              */
             return false;
 
+        if (ex instanceof NullPointerException &&
+                ex.getMessage() != null &&
+                ex.getMessage().contains("com.android.server.job.controllers.JobStatus"))
+            /*
+                java.lang.RuntimeException: java.lang.NullPointerException: Attempt to invoke virtual method 'int com.android.server.job.controllers.JobStatus.getUid()' on a null object reference
+                    at android.app.job.JobService$JobHandler.handleMessage(JobService.java:139)
+                    at android.os.Handler.dispatchMessage(Handler.java:102)
+                    at android.os.Looper.loop(Looper.java:148)
+                    at android.app.ActivityThread.main(ActivityThread.java:5525)
+                    at java.lang.reflect.Method.invoke(Native Method)
+                    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:730)
+                    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:620)
+                Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'int com.android.server.job.controllers.JobStatus.getUid()' on a null object reference
+                    at android.os.Parcel.readException(Parcel.java:1605)
+                    at android.os.Parcel.readException(Parcel.java:1552)
+                    at android.app.job.IJobCallback$Stub$Proxy.acknowledgeStopMessage(IJobCallback.java:144)
+                    at android.app.job.JobService$JobHandler.ackStopMessage(JobService.java:183)
+                    at android.app.job.JobService$JobHandler.handleMessage(JobService.java:136)
+             */
+            return false;
+
         if (isDead(ex))
             return false;
 
@@ -2819,6 +2842,20 @@ public class Log {
                     size += write(os, String.format("Data: %s\r\n", context.getDataDir().getAbsolutePath()));
                 size += write(os, String.format("Database: %s\r\n",
                         context.getDatabasePath(DB.DB_NAME)));
+
+                try (Cursor cursor = SQLiteDatabase.create(null).rawQuery(
+                        "SELECT sqlite_version() AS sqlite_version", null)) {
+                    if (cursor.moveToNext())
+                        size += write(os, String.format("sqlite: %s\r\n", cursor.getString(0)));
+                }
+                try {
+                    TupleFtsStats stats = db.message().getFts();
+                    size += write(os, String.format("fts: %d/%d %s\r\n", stats.fts, stats.total,
+                            Helper.humanReadableByteCount(Fts4DbHelper.size(context))));
+                } catch (Throwable ex) {
+                    size += write(os, String.format("%s\r\n", ex));
+                }
+
                 size += write(os, "\r\n");
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

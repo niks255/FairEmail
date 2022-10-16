@@ -74,6 +74,12 @@ public class FragmentDialogInsertLink extends FragmentDialogBase {
     private static final int REQUEST_SEND = 1;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        lockOrientation();
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putString("fair:link", etLink == null ? null : etLink.getText().toString());
         outState.putString("fair:text", etTitle == null ? null : etTitle.getText().toString());
@@ -425,6 +431,11 @@ public class FragmentDialogInsertLink extends FragmentDialogBase {
                             args.putInt("progress", percentage);
                             postProgress(null, args);
                         }
+
+                        @Override
+                        public boolean isRunning() {
+                            return (pbUpload != null);
+                        }
                     });
                 }
             }
@@ -433,7 +444,8 @@ public class FragmentDialogInsertLink extends FragmentDialogBase {
             protected void onProgress(CharSequence status, Bundle data) {
                 int progress = data.getInt("progress");
                 Log.i("Send progress=" + progress);
-                pbUpload.setProgress(progress);
+                if (pbUpload != null)
+                    pbUpload.setProgress(progress);
             }
 
             @Override

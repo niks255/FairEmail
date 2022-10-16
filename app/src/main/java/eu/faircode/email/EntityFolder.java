@@ -259,8 +259,8 @@ public class EntityFolder extends EntityOrder implements Serializable {
     private static final List<Boolean> SYSTEM_FOLDER_DOWNLOAD = Collections.unmodifiableList(Arrays.asList(
             true, // inbox
             true, // drafts
-            false, // sent
-            false, // archive
+            true, // sent
+            true, // archive
             false, // trash
             false // junk
     )); // MUST match SYSTEM_FOLDER_SYNC

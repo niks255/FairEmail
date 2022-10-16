@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -85,14 +86,13 @@ public class WorkerFts extends Worker {
                         if (text == null)
                             text = "";
 
-                        boolean fts = prefs.getBoolean("fts", false);
-                        if (!fts)
-                            break;
-
                         try {
                             sdb.beginTransaction();
                             Fts4DbHelper.insert(sdb, message, text);
                             sdb.setTransactionSuccessful();
+                        } catch (SQLiteException ex) {
+                            Log.w(ex);
+                            break;
                         } finally {
                             sdb.endTransaction();
                         }
@@ -101,6 +101,10 @@ public class WorkerFts extends Worker {
 
                         if (ids.size() >= INDEX_BATCH_SIZE)
                             markIndexed(db, ids);
+
+                        boolean fts = prefs.getBoolean("fts", false);
+                        if (!fts)
+                            break;
                     } catch (Throwable ex) {
                         Log.e(ex);
                     }

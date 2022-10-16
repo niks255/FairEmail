@@ -21,6 +21,13 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.text.Editable;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.style.SuggestionSpan;
+import android.widget.EditText;
 
 import androidx.preference.PreferenceManager;
 
@@ -41,7 +48,7 @@ import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
 
 public class LanguageTool {
-    private static final String LT_URI = "https://api.languagetool.org/v2/";
+    static final String LT_URI = "https://api.languagetool.org/v2/";
     private static final int LT_TIMEOUT = 20; // seconds
 
     static boolean isEnabled(Context context) {
@@ -49,7 +56,17 @@ public class LanguageTool {
         return prefs.getBoolean("lt_enabled", false);
     }
 
+    static boolean isAuto(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean lt_enabled = prefs.getBoolean("lt_enabled", false);
+        boolean lt_auto = prefs.getBoolean("lt_auto", true);
+        return (lt_enabled && lt_auto);
+    }
+
     static List<Suggestion> getSuggestions(Context context, CharSequence text) throws IOException, JSONException {
+        if (TextUtils.isEmpty(text))
+            return new ArrayList<>();
+
         // https://languagetool.org/http-api/swagger-ui/#!/default/post_check
         String request =
                 "text=" + URLEncoder.encode(text.toString(), StandardCharsets.UTF_8.name()) +
@@ -82,9 +99,13 @@ public class LanguageTool {
         if (lt_picky)
             request += "&level=picky";
 
-        Log.i("LT locale=" + locale + " request=" + request);
+        String uri = prefs.getString("lt_uri", LT_URI);
+        if (!uri.endsWith("/"))
+            uri += '/';
 
-        URL url = new URL(LT_URI + "check");
+        Log.i("LT locale=" + locale + " uri=" + uri + " request=" + request);
+
+        URL url = new URL(uri + "check");
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
@@ -146,6 +167,33 @@ public class LanguageTool {
         }
     }
 
+    static void applySuggestions(EditText etBody, int start, int end, List<Suggestion> suggestions) {
+        Editable edit = etBody.getText();
+        if (edit == null)
+            return;
+
+        // https://developer.android.com/reference/android/text/style/SuggestionSpan
+        for (SuggestionSpanEx suggestion : edit.getSpans(start, end, SuggestionSpanEx.class)) {
+            Log.i("LT removing=" + suggestion);
+            edit.removeSpan(suggestion);
+        }
+
+        if (suggestions != null)
+            for (LanguageTool.Suggestion suggestion : suggestions) {
+                Log.i("LT adding=" + suggestion);
+                SuggestionSpan span = new SuggestionSpanEx(etBody.getContext(),
+                        suggestion.replacements.toArray(new String[0]),
+                        SuggestionSpan.FLAG_MISSPELLED);
+                int s = start + suggestion.offset;
+                int e = s + suggestion.length;
+                if (s < 0 || s > edit.length() || e < 0 || e > edit.length()) {
+                    Log.w("LT " + s + "..." + e + " length=" + edit.length());
+                    continue;
+                }
+                edit.setSpan(span, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+    }
+
     static class Suggestion {
         String title; // shortMessage
         String description; // message
@@ -156,6 +204,30 @@ public class LanguageTool {
         @Override
         public String toString() {
             return title;
+        }
+    }
+
+    private static class SuggestionSpanEx extends SuggestionSpan {
+        private final int highlightColor;
+        private final int dp3;
+
+        public SuggestionSpanEx(Context context, String[] suggestions, int flags) {
+            super(context, suggestions, flags);
+            highlightColor = Helper.resolveColor(context,
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+                            ? android.R.attr.textColorHighlight
+                            : android.R.attr.colorError);
+            dp3 = Helper.dp2pixels(context, 2);
+        }
+
+        @Override
+        public void updateDrawState(TextPaint tp) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+                tp.bgColor = highlightColor;
+            else {
+                tp.underlineColor = highlightColor;
+                tp.underlineThickness = dp3;
+            }
         }
     }
 }

@@ -106,6 +106,68 @@ public class EditTextCompose extends FixedEditText {
         boolean undo_manager = prefs.getBoolean("undo_manager", false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    try {
+                        int order = 1000;
+                        menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_brackets, order++, context.getString(R.string.title_insert_brackets));
+                        menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_quotes, order++, context.getString(R.string.title_insert_quotes));
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    int start = getSelectionStart();
+                    int end = getSelectionEnd();
+                    boolean selection = (start >= 0 && start < end);
+                    menu.findItem(R.string.title_insert_brackets).setVisible(selection);
+                    menu.findItem(R.string.title_insert_quotes).setVisible(selection);
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    if (item.getGroupId() == Menu.CATEGORY_SECONDARY) {
+                        int id = item.getItemId();
+                        if (id == R.string.title_insert_brackets)
+                            return surround("(", ")");
+                        else if (id == R.string.title_insert_quotes)
+                            return surround("\"", "\"");
+                    }
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    // Do nothing
+                }
+
+                private boolean surround(String before, String after) {
+                    Editable edit = getText();
+                    int start = getSelectionStart();
+                    int end = getSelectionEnd();
+                    boolean selection = (edit != null && start >= 0 && start < end);
+                    if (selection) {
+                        int s = start - before.length();
+                        int e = end + after.length();
+                        if (s >= 0 && e < length() &&
+                                edit.subSequence(s, start).toString().equals(before) &&
+                                edit.subSequence(end, e).toString().equals(after)) {
+                            edit.delete(end, e);
+                            edit.delete(s, start);
+                        } else {
+                            edit.insert(end, after);
+                            edit.insert(start, before);
+                        }
+                    }
+                    return selection;
+                }
+            });
+
             setCustomInsertionActionModeCallback(new ActionMode.Callback() {
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {

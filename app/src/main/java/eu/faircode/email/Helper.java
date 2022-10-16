@@ -55,6 +55,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.LocaleList;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.PowerManager;
 import android.os.StatFs;
@@ -149,8 +150,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
@@ -2224,6 +2227,21 @@ public class Helper {
 
     public static native void sync();
 
+    private static final Map<File, Boolean> exists = new HashMap<>();
+
+    static File ensureExists(File dir) {
+        synchronized (exists) {
+            if (exists.containsKey(dir))
+                return dir;
+            exists.put(dir, true);
+        }
+
+        if (!dir.exists() && !dir.mkdirs())
+            throw new IllegalArgumentException("Failed to create=" + dir);
+
+        return dir;
+    }
+
     static String sanitizeFilename(String name) {
         if (name == null)
             return null;
@@ -2372,6 +2390,18 @@ public class Helper {
         return size;
     }
 
+    static List<File> listFiles(File dir) {
+        List<File> result = new ArrayList<>();
+        File[] files = dir.listFiles();
+        if (files != null)
+            for (File file : files)
+                if (file.isDirectory())
+                    result.addAll(listFiles(file));
+                else
+                    result.add(file);
+        return result;
+    }
+
     static long getAvailableStorageSpace() {
         StatFs stats = new StatFs(Environment.getDataDirectory().getAbsolutePath());
         return stats.getAvailableBlocksLong() * stats.getBlockSizeLong();
@@ -2431,6 +2461,10 @@ public class Helper {
             this.buf = null;
             return in;
         }
+    }
+
+    static boolean isUiThread() {
+        return (Looper.myLooper() == Looper.getMainLooper());
     }
 
     // Cryptography
