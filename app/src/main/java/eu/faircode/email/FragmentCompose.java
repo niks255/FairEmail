@@ -296,7 +296,6 @@ public class FragmentCompose extends FragmentBase {
 
     private long working = -1;
     private State state = State.NONE;
-    private boolean identity_selectable = false;
     private boolean show_images = false;
     private Integer last_plain_only = null;
     private List<EntityAttachment> last_attachments = null;
@@ -339,7 +338,7 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_SEND = 14;
     private static final int REQUEST_REMOVE_ATTACHMENTS = 15;
 
-    private static ExecutorService executor = Helper.getBackgroundExecutor(1, "compose");
+    private static final ExecutorService executor = Helper.getBackgroundExecutor(1, "compose");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -634,6 +633,7 @@ public class FragmentCompose extends FragmentBase {
             private Integer added = null;
             private Integer removed = null;
             private Integer inserted = null;
+            private Pair<Integer, Integer> lt = null;
 
             @Override
             public void beforeTextChanged(CharSequence text, int start, int count, int after) {
@@ -804,7 +804,7 @@ public class FragmentCompose extends FragmentBase {
                             while (start > 0 && text.charAt(start - 1) != '\n')
                                 start--;
                             if (start < added)
-                                onLanguageTool(start, added, true);
+                                lt = new Pair<>(start, added);
                         }
                     } catch (Throwable ex) {
                         Log.e(ex);
@@ -854,6 +854,14 @@ public class FragmentCompose extends FragmentBase {
                     } finally {
                         save = false;
                     }
+
+                if (lt != null)
+                    try {
+                        onLanguageTool(lt.first, lt.second, true);
+                    } finally {
+                        lt = null;
+                    }
+
 
                 if (lp != null)
                     TextUtils.dumpSpans(text, lp, "---after>");
@@ -2591,10 +2599,16 @@ public class FragmentCompose extends FragmentBase {
 
         new SimpleTask<List<LanguageTool.Suggestion>>() {
             private Toast toast = null;
+            private BackgroundColorSpan highlightSpan = null;
 
             @Override
             protected void onPreExecute(Bundle args) {
-                if (!silent) {
+                if (silent) {
+                    int textColorHighlight = Helper.resolveColor(getContext(), android.R.attr.textColorHighlight);
+                    highlightSpan = new BackgroundColorSpan(textColorHighlight);
+                    etBody.getText().setSpan(highlightSpan, start, end,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_COMPOSING);
+                } else {
                     toast = ToastEx.makeText(getContext(), R.string.title_suggestions_check, Toast.LENGTH_LONG);
                     toast.show();
                     setBusy(true);
@@ -2603,7 +2617,10 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onPostExecute(Bundle args) {
-                if (!silent) {
+                if (silent) {
+                    if (highlightSpan != null)
+                        etBody.getText().removeSpan(highlightSpan);
+                } else {
                     if (toast != null)
                         toast.cancel();
                     setBusy(false);
@@ -5940,7 +5957,7 @@ public class FragmentCompose extends FragmentBase {
                     dirty = true;
                     EntityFolder trash = db.folder().getFolderByType(draft.account, EntityFolder.TRASH);
                     EntityFolder drafts = db.folder().getFolderByType(draft.account, EntityFolder.DRAFTS);
-                    if (empty || trash == null || discard_delete || (drafts != null && drafts.local))
+                    if (empty || trash == null || discard_delete || !save_drafts || (drafts != null && drafts.local))
                         EntityOperation.queue(context, draft, EntityOperation.DELETE);
                     else {
                         Map<String, String> c = new HashMap<>();

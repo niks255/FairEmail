@@ -215,10 +215,21 @@ class Core {
                     if (!Objects.equals(folder.id, op.folder))
                         throw new IllegalArgumentException("Invalid folder=" + folder.id + "/" + op.folder);
 
-                    if (account.protocol == EntityAccount.TYPE_IMAP &&
-                            !folder.local &&
-                            ifolder != null && !ifolder.isOpen())
-                        throw new FolderClosedException(ifolder, account.name + "/" + folder.name + " unexpectedly closed");
+                    if (account.protocol == EntityAccount.TYPE_IMAP && !folder.local && ifolder != null) {
+                        try {
+                            ((IMAPFolder) ifolder).doCommand(new IMAPFolder.ProtocolCommand() {
+                                @Override
+                                public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                                    long ago = System.currentTimeMillis() - protocol.getTimestamp();
+                                    if (ago > 20000)
+                                        protocol.noop();
+                                    return null;
+                                }
+                            });
+                        } catch (MessagingException ex) {
+                            throw new FolderClosedException(ifolder, account.name + "/" + folder.name + " unexpectedly closed", ex);
+                        }
+                    }
 
                     if (account.protocol == EntityAccount.TYPE_POP &&
                             EntityFolder.INBOX.equals(folder.type) &&
@@ -1751,8 +1762,32 @@ class Core {
                         Log.e(ex1);
                     }
 
-                if (download)
-                    downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state, stats);
+                if (download) {
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    boolean fast_fetch = prefs.getBoolean("fast_fetch", false);
+                    if (fast_fetch) {
+                        long maxSize = prefs.getInt("download", MessageHelper.DEFAULT_DOWNLOAD_SIZE);
+                        if (maxSize == 0)
+                            maxSize = Long.MAX_VALUE;
+                        boolean download_eml = prefs.getBoolean("download_eml", false);
+
+                        if (!message.content)
+                            if (state.getNetworkState().isUnmetered() || (message.size != null && message.size < maxSize))
+                                EntityOperation.queue(context, message, EntityOperation.BODY);
+
+                        List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
+                        for (EntityAttachment attachment : attachments)
+                            if (!attachment.available)
+                                if (state.getNetworkState().isUnmetered() || (attachment.size != null && attachment.size < maxSize))
+                                    EntityOperation.queue(context, message, EntityOperation.ATTACHMENT, attachment.id);
+
+                        if (download_eml &&
+                                (message.raw == null || !message.raw) &&
+                                (state.getNetworkState().isUnmetered() || (message.total != null && message.total < maxSize)))
+                            EntityOperation.queue(context, message, EntityOperation.RAW);
+                    } else
+                        downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state, stats);
+                }
             }
 
             if (!stats.isEmpty())
@@ -2984,10 +3019,11 @@ class Core {
                                 known.remove(uidl);
                         }
 
-                        for (TupleUidl uidl : known.values()) {
-                            EntityLog.log(context, account.name + " POP purging uidl=" + uidl.uidl);
-                            db.message().deleteMessage(uidl.id);
-                        }
+                        for (TupleUidl uidl : known.values())
+                            if (!uidl.ui_flagged) {
+                                EntityLog.log(context, account.name + " POP purging uidl=" + uidl.uidl);
+                                db.message().deleteMessage(uidl.id);
+                            }
                     } else {
                         Map<String, TupleUidl> known = new HashMap<>();
                         for (TupleUidl id : ids)
@@ -3002,10 +3038,11 @@ class Core {
                                 known.remove(msgid);
                         }
 
-                        for (TupleUidl uidl : known.values()) {
-                            EntityLog.log(context, account.name + " POP purging msgid=" + uidl.msgid);
-                            db.message().deleteMessage(uidl.id);
-                        }
+                        for (TupleUidl uidl : known.values())
+                            if (!uidl.ui_flagged) {
+                                EntityLog.log(context, account.name + " POP purging msgid=" + uidl.msgid);
+                                db.message().deleteMessage(uidl.id);
+                            }
                     }
                 }
 
@@ -4468,10 +4505,11 @@ class Core {
                             File file = message.getFile(context);
                             Helper.writeText(file, body);
                             String text = HtmlHelper.getFullText(body);
+                            message.content = true;
                             message.preview = HtmlHelper.getPreview(text);
                             message.language = HtmlHelper.getLanguage(context, message.subject, text);
                             db.message().setMessageContent(message.id,
-                                    true,
+                                    message.content,
                                     message.language,
                                     parts.isPlainOnly(download_plain),
                                     message.preview,

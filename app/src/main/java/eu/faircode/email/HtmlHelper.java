@@ -121,7 +121,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -573,7 +572,6 @@ public class HtmlHelper {
 
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/font
         for (Element font : document.select("font")) {
-            // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/font
             String style = font.attr("style");
             String color = font.attr("color").trim();
             String size = font.attr("size").trim();
@@ -605,12 +603,18 @@ public class HtmlHelper {
                             size = "larger";
                         else
                             throw new NumberFormatException("size=" + size);
-                    } else if (s < 3)
-                        size = "small";
-                    else if (s > 3)
-                        size = "large";
-                    else
-                        size = "medium";
+                    } else {
+                        if (s < 2)
+                            size = "x-small";
+                        else if (s < 3)
+                            size = "small";
+                        else if (s > 4)
+                            size = "x-large";
+                        else if (s > 3)
+                            size = "large";
+                        else
+                            size = "medium";
+                    }
                     sb.append("font-size:").append(size).append(";");
                 } catch (NumberFormatException ex) {
                     Log.i(ex);
@@ -1654,8 +1658,11 @@ public class HtmlHelper {
                         tag.startsWith("html:") || tag.startsWith("body:"));
                 if (display_hidden || show) {
                     String[] nstag = tag.split(":");
-                    e.tagName(nstag[nstag.length > 1 ? 1 : 0]);
-                    Log.i("Updated tag=" + tag + " to=" + e.tagName());
+                    String t = nstag[nstag.length > 1 ? 1 : 0];
+                    if (!TextUtils.isEmpty(t)) {
+                        e.tagName(t);
+                        Log.i("Updated tag=" + tag + " to=" + t);
+                    }
 
                     if (!show) {
                         String style = e.attr("style");

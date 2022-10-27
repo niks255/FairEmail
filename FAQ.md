@@ -393,6 +393,7 @@ Fonts, sizes, colors, etc should be material design whenever possible.
 * [(181) How do I use VirusTotal?](#user-content-faq181)
 * [(182) How can I select how a link should be opened?](#user-content-faq182)
 * [(183) How do I use Send?](#user-content-faq183)
+* [(184) How do I password protect content?](#user-content-faq184)
 
 [I have another question.](#user-content-get-support)
 
@@ -1846,8 +1847,15 @@ Short version: AES 256 bit
 
 Long version:
 
-* The 256 bit key is generated with *PBKDF2WithHmacSHA1* using a 128 bit secure random salt and 65536 iterations
-* The cipher is *AES/CBC/PKCS5Padding*
+*Before version 1.1987*
+
+* A 256 bit key is derived with *PBKDF2WithHmacSHA1* using a 128 bit secure random salt and 65536 iterations
+* The used cipher is *AES/CBC/PKCS5Padding*
+
+*Since version 1.1987*
+
+* A 256 bit key is derived with *PBKDF2WithHmacSHA512* using a 128 bit secure random salt and 120000 iterations
+* The used cipher is *AES/GCM/NoPadding*
 
 <br />
 
@@ -1880,14 +1888,15 @@ The real battery usage can be seen by navigating to this screen:
 
 Alternatively: tap on the *App settings* button in the main settings screen of the app and tap on *Battery*.
 
-As a rule of thumb the battery usage should be below or in any case not be much higher than *Mobile network standby* for one account with a stable network connection.
-If this isn't the case, please turn on *Auto optimize* in the receive settings.
+As a rule of thumb, the battery usage should be below or in any case not be much higher than *Mobile network standby* for one account with a stable network connection.
+If this isn't the case, please turn on *Auto optimize* in the receive settings tab page.
 If this doesn't help, please [ask for support](https://contact.faircode.eu/?product=fairemailsupport).
 
-It is inevitable that synchronizing messages will use battery power because it requires network access and accessing the messages database.
+It is inevitable that synchronizing messages will use battery power because it requires network access and accessing the messages' database.
+Since the app needs to wait for responses of the email server, which requires the processor (CPU) to be active, slower email servers will result in more battery usage.
 
-If you are comparing the battery usage of FairEmail with another email client, please make sure the other email client is setup similarly.
-For example comparing always sync (push messages) and (infrequent) periodic checking for new messages is not a fair comparison.
+If you are comparing the battery usage of FairEmail with another email client, please make sure the other email client is set up similarly.
+For example, comparing always sync (push messages) and (infrequent) periodic checking for new messages is not a fair comparison.
 
 Reconnecting to an email server will use extra battery power, so an unstable internet connection will result in extra battery usage.
 Also, some email servers prematurely terminate idle connections, while [the standard](https://tools.ietf.org/html/rfc2177) says that an idle connection should be kept open for 29 minutes.
@@ -1910,41 +1919,42 @@ You could for example initially synchronize messages for a large number of days 
 reduce the number of days to synchronize messages, but leave the number of days to keep messages.
 After decreasing the number of days to keep messages, you might want to run the cleanup in the miscellaneous settings to remove old files.
 
-In the receive settings you can enable to always synchronize starred messages,
+In the receive settings tab page you can enable to always synchronize starred messages,
 which will allow you to keep older messages around while synchronizing messages for a limited number of days.
 
 Disabling the folder option *Automatically download message texts and attachments*
 will result in less network traffic and thus less battery usage.
-You could disable this option for example for the sent folder and the archive.
+You could disable this option, for example for the sent folder and the archive.
 
 Synchronizing messages at night is mostly not useful, so you can save on battery usage by not synchronizing at night.
-In the settings you can select a schedule for message synchronization (this is a pro feature).
+In the settings, you can select a schedule for message synchronization (this is a pro feature).
 
 FairEmail will by default synchronize the folder list on each connection.
-Since folders are mostly not created, renamed and deleted very often, you can save some network and battery usage by disabling this in the receive settings.
+Since folders are mostly not created, renamed and deleted very often, you can save some network and battery usage by disabling this in the receive settings tab page.
 
 FairEmail will by default check if old messages were deleted from the server on each connection.
-If you don't mind that old messages that were delete from the server are still visible in FairEmail, you can save some network and battery usage by disabling this in the receive settings.
+If you don't mind that old messages that were deleted from the server are still visible in FairEmail,
+you can save some network and battery usage by disabling this in the receive settings tab page.
 
 Some providers don't follow the IMAP standard and [don't keep connections open](https://datatracker.ietf.org/doc/html/rfc3501#section-5.4) long enough, forcing FairEmail to reconnect often, causing extra battery usage.
-You can inspect the *Log* via the main navigation menu to check if there are frequent reconnects (connection closed/reset, read/write error/timeout, etc).
-You can workaround this by lowering the keep-alive interval in the advanced account settings to for example 9 or 15 minutes.
+You can inspect the *Log* via the main navigation menu to check if there are frequent reconnects (connection closed/reset, read/write error/timeout, etc.).
+You can work around this by lowering the keep-alive interval in the advanced account settings to for example 9 or 15 minutes.
 Note that battery optimizations need to be disabled in setup step 3 to reliably keep connections alive.
 
 Some providers send every two minutes something like '*Still here*' resulting in network traffic and your device to wake up and causing unnecessary extra battery usage.
 You can inspect the *Log* via the main navigation menu to check if your provider is doing this.
 If your provider is using [Dovecot](https://www.dovecot.org/) as IMAP server,
 you could ask your provider to change the [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) setting to a higher value or better yet, to disable this.
-If your provider is not able or willing to change/disable this, you should consider to switch to periodically instead of continuous synchronization.
-You can change this in the receive settings.
+If your provider is not able or willing to change/disable this, you should consider switching to periodically instead of continuous synchronization.
+You can change this in the receive settings tab page.
 
-If you got the message *This provider does not support push messages* while configuring an account,
+If you got the message, *This provider does not support push messages* while configuring an account,
 consider switching to a modern provider which supports push messages (IMAP IDLE) to reduce battery usage.
 
 If your device has an [AMOLED](https://en.wikipedia.org/wiki/AMOLED) screen,
 you can save battery usage while viewing messages by switching to the black theme.
 
-If auto optimize in the receive settings is enabled,
+If auto optimize in the receive settings tab page is enabled,
 an account will automatically be switched to periodically checking for new messages when the email server:
 
 * Says '*Still here*' within 3 minutes
@@ -3022,7 +3032,7 @@ To authorize a Yahoo/AT&T, AOL, or Sky account you need to use an app password i
 For instructions about how to create an app password, please see here:
 
 * [for Yahoo/AT&T](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
-* [for AOL](https://help.aol.com/articles/Create-and-manage-app-password)
+* [for AOL](https://help.aol.com/articles/Create-and-manage-app-password) **Important**: app password generation is broken, [frustrating many people](https://aol.uservoice.com/forums/912886-aol-mail/suggestions/45235399-i-wanted-to-generate-a-third-party-app-password-bu) because this means you can use the AOL app and the browser only.
 * [for Sky](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (under *Other email apps*)
 
 Please see [this FAQ](#user-content-faq111) about OAuth support.
@@ -3733,7 +3743,7 @@ Remarks:
 * The original attachments are sent as they are, unless attachments are being added or removed
 * Default CC and BCC addresses will not be applied
 * Read and delivery receipts will be requested when enabled, they could go to the original sender or to you
-* The email server might refuse resent messages
+* The email server might refuse or incorrectly process resent messages
 * DKIM, SPF and DMARC will likely fail, often causing resent messages to be considered as spam
 
 <br />
@@ -4858,6 +4868,8 @@ Received: brown.elm.relay.mailchannels.net (brown.elm.relay.mailchannels.net. [2
 	for <test@example.org> (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
 ```
 
+The feature depends on the header *Authentication-Results*, which the receiving email server should add.
+
 <br />
 
 <a name="faq177"></a>
@@ -4912,6 +4924,8 @@ Templates can have the following options:
 <a name="faq180"></a>
 **(180) How do I use LanguageTool?**
 
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq180)
+
 LanguageTool integration needs to be enabled in the miscellaneous settings.
 
 After writing some text, you can long press on the save draft button to perform a grammar, style, and spell check via [LanguageTool](https://languagetool.org/).
@@ -4928,6 +4942,8 @@ The suboption *Use formal form* can be enabled to let LanguageTool suggest more 
 <a name="faq181"></a>
 **(181) How do I use VirusTotal?**
 
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq181)
+
 VirusTotal integration needs to be enabled in the miscellaneous settings and an API key needs to be entered.
 To get an API key, you'll need to sign up via the [VirusTotal website](https://www.virustotal.com/).
 
@@ -4943,6 +4959,8 @@ This feature was added in version 1.1942 and is available in non Play store vers
 
 <a name="faq182"></a>
 **(182) How can I select how a link should be opened?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq182)
 
 When clicking on a link, a confirmation dialog will be shown. You can select how to open a link below *Open with*.
 The available browser(s) will be listed and if a browser supports [Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs/), it will be listed twice,
@@ -4967,6 +4985,8 @@ Please see [this FAQ](#user-content-faq35) on why you should be careful when ope
 <a name="faq183"></a>
 **(183) How do I use Send?**
 
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq183)
+
 [Send](https://github.com/timvisee/send) is designed as temporary end-to-end encrypted file storage.
 Only people with a link to a file can download and decrypt a file.
 See for some more information [Wikipedia](https://en.wikipedia.org/wiki/Firefox_Send).
@@ -4979,6 +4999,41 @@ Please [see here](https://github.com/timvisee/send-instances) for a list of publ
 To upload a file and insert a link, you can use the insert link button in the message editor.
 
 Send is only available in non-Play Store versions of the app (since version 1.1947).
+
+<br />
+
+<a name="faq184"></a>
+**(184) How do I password protect content?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq184)
+
+Password protected content is a simple, yet secure form of end-to-end encryption that requires no configuration.
+
+How to use: select some text by long pressing it, and in the style toolbar at the bottom tap on the *<ins>A</ins>*-button and select *Password protect* in the pop-up menu.
+This will replace the selected content with a link that the recipient can click to decrypt the content on a dedicated static web page.
+
+Password protected content is sent as a [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) and decrypted in the browser with JavaScript.
+In other words, protected content is never stored on or seen by third party servers.
+Since version 1.1990 received protected content will be decrypted by the app, with as fallback decryption in the browser for other email clients.
+
+Password protected content is encrypted with [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) / [GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode)
+with a 256 bits key derived with [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) / [SHA](https://en.wikipedia.org/wiki/Secure_Hash_Algorithms)-512 with 120,000 iterations.
+With a sufficiently long/complex password, which is communicated to the recipient securely, this is considered safe in 2022 and for the foreseeable future.
+
+Due to [length limitations](https://stackoverflow.com/a/417184/1794097) of [URL](https://en.wikipedia.org/wiki/URL)s and
+Android [binder limitations](https://developer.android.com/reference/android/os/TransactionTooLargeException),
+the maximum content size is 1,500 bytes, which includes [HTML](https://en.wikipedia.org/wiki/HTML) formatting tags.
+Images will be replaced with placeholders to reduce the content size, but other formatting, like bold, italic, links, etc., will be retained.
+If the content is too long, there will be a popup *Text too long*.
+
+The content size limit is also why complete messages (possibly including a long reply chain) cannot be password protected.
+You can use [PGP](https://en.wikipedia.org/wiki/Pretty_Good_Privacy) or [S/MIME](https://en.wikipedia.org/wiki/S/MIME) encryption for this (see [this FAQ](#user-content-faq12)).
+
+[Cross-site scripting](https://en.wikipedia.org/wiki/Cross-site_scripting) is prevented by using [DOMPurify](https://github.com/cure53/DOMPurify) (Apache License Version 2.0).
+
+Protected content is only available in non-Play Store versions of the app (since version 1.1985).
+
+Sending protected content is a pro feature, decrypting protected content is a free feature.
 
 <br />
 
@@ -5033,4 +5088,4 @@ GitHub issues are disabled due to frequent misusage.
 
 <br />
 
-Copyright &copy; 2018-2021 Marcel Bokhorst.
+Copyright &copy; 2018-2022 Marcel Bokhorst.

@@ -41,15 +41,19 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -94,6 +98,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -134,9 +139,6 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     private boolean import_contacts;
     private boolean import_answers;
     private boolean import_settings;
-
-    private static final int KEY_ITERATIONS = 65536;
-    private static final int KEY_LENGTH = 256;
 
     static final int REQUEST_SOUND_INBOUND = 1;
     static final int REQUEST_SOUND_OUTBOUND = 2;
@@ -844,12 +846,14 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         random.nextBytes(salt);
 
                         // https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
-                        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-                        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, KEY_ITERATIONS, KEY_LENGTH);
+                        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+                        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 120000, 256);
                         SecretKey secret = keyFactory.generateSecret(keySpec);
-                        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+                        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
                         cipher.init(Cipher.ENCRYPT_MODE, secret);
 
+                        raw.write("___FairEmail___".getBytes(StandardCharsets.US_ASCII));
+                        raw.write(1); // version
                         raw.write(salt);
                         raw.write(cipher.getIV());
 
@@ -996,16 +1000,36 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                         in = raw;
                     else {
                         byte[] salt = new byte[16];
-                        byte[] prefix = new byte[16];
                         Helper.readBuffer(raw, salt);
-                        Helper.readBuffer(raw, prefix);
 
-                        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-                        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, KEY_ITERATIONS, KEY_LENGTH);
+                        int version = 0;
+                        String magic = new String(salt, 0, 15, StandardCharsets.US_ASCII);
+                        if ("___FairEmail___".equals(magic)) {
+                            version = salt[15];
+                            Helper.readBuffer(raw, salt);
+                        }
+
+                        int ivLen = (version == 0 ? 16 : 12);
+                        String derivation = (version == 0 ? "PBKDF2WithHmacSHA1" : "PBKDF2WithHmacSHA512");
+                        int iterations = (version == 0 ? 65536 : 120000);
+                        int keyLen = 256;
+                        String transformation = (version == 0 ? "AES/CBC/PKCS5Padding" : "AES/GCM/NoPadding");
+                        Log.i("Import version=" + version +
+                                " ivLen=" + ivLen +
+                                " derivation=" + derivation +
+                                " iterations=" + iterations +
+                                " keyLen=" + keyLen +
+                                " transformation=" + transformation);
+
+                        byte[] iv = new byte[ivLen];
+                        Helper.readBuffer(raw, iv);
+
+                        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(derivation);
+                        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, iterations, 256);
                         SecretKey secret = keyFactory.generateSecret(keySpec);
-                        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-                        IvParameterSpec iv = new IvParameterSpec(prefix);
-                        cipher.init(Cipher.DECRYPT_MODE, secret, iv);
+                        Cipher cipher = Cipher.getInstance(transformation);
+                        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+                        cipher.init(Cipher.DECRYPT_MODE, secret, ivSpec);
 
                         in = new CipherInputStream(raw, cipher);
                     }
@@ -1360,6 +1384,9 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                                 continue;
                             }
 
+                            if ("external_storage".equals(key))
+                                continue;
+
                             Object value = jsetting.get("value");
                             String type = jsetting.optString("type");
                             Log.i("Setting name=" + key + " value=" + value + " type=" + type);
@@ -1445,7 +1472,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                     ((NoStreamException) ex).report(ActivitySetup.this);
                 else {
                     SpannableStringBuilder ssb = new SpannableStringBuilder();
-                    if (ex.getCause() instanceof BadPaddingException)
+                    if (ex.getCause() instanceof BadPaddingException /* GCM: AEADBadTagException */)
                         ssb.append(getString(R.string.title_setup_password_invalid));
                     else if (ex instanceof IOException && ex.getCause() instanceof IllegalBlockSizeException)
                         ssb.append(getString(R.string.title_setup_import_invalid));
@@ -1901,13 +1928,13 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     }
 
     public static class FragmentDialogExport extends FragmentDialogBase {
-        private TextInputLayout etPassword1;
-        private TextInputLayout etPassword2;
+        private TextInputLayout tilPassword1;
+        private TextInputLayout tilPassword2;
 
         @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
-            outState.putString("fair:password1", etPassword1 == null ? null : etPassword1.getEditText().getText().toString());
-            outState.putString("fair:password2", etPassword2 == null ? null : etPassword2.getEditText().getText().toString());
+            outState.putString("fair:password1", tilPassword1 == null ? null : tilPassword1.getEditText().getText().toString());
+            outState.putString("fair:password2", tilPassword2 == null ? null : tilPassword2.getEditText().getText().toString());
             super.onSaveInstanceState(outState);
         }
 
@@ -1916,12 +1943,12 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             Context context = getContext();
             View dview = LayoutInflater.from(context).inflate(R.layout.dialog_export, null);
-            etPassword1 = dview.findViewById(R.id.tilPassword1);
-            etPassword2 = dview.findViewById(R.id.tilPassword2);
+            tilPassword1 = dview.findViewById(R.id.tilPassword1);
+            tilPassword2 = dview.findViewById(R.id.tilPassword2);
 
             if (savedInstanceState != null) {
-                etPassword1.getEditText().setText(savedInstanceState.getString("fair:password1"));
-                etPassword2.getEditText().setText(savedInstanceState.getString("fair:password2"));
+                tilPassword1.getEditText().setText(savedInstanceState.getString("fair:password1"));
+                tilPassword2.getEditText().setText(savedInstanceState.getString("fair:password2"));
             }
 
             Dialog dialog = new AlertDialog.Builder(context)
@@ -1929,22 +1956,10 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
                     .setPositiveButton(R.string.title_save_file, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String password1 = etPassword1.getEditText().getText().toString();
-                            String password2 = etPassword2.getEditText().getText().toString();
-
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                            boolean debug = prefs.getBoolean("debug", false);
-
-                            if (TextUtils.isEmpty(password1) && !(debug || BuildConfig.DEBUG))
-                                ToastEx.makeText(context, R.string.title_setup_password_missing, Toast.LENGTH_LONG).show();
-                            else {
-                                if (password1.equals(password2)) {
-                                    ((ActivitySetup) getActivity()).password = password1;
-                                    getActivity().startActivityForResult(
-                                            Helper.getChooser(context, getIntentExport()), REQUEST_EXPORT);
-                                } else
-                                    ToastEx.makeText(context, R.string.title_setup_password_different, Toast.LENGTH_LONG).show();
-                            }
+                            ((ActivitySetup) getActivity()).password =
+                                    tilPassword1.getEditText().getText().toString();
+                            getActivity().startActivityForResult(
+                                    Helper.getChooser(context, getIntentExport()), REQUEST_EXPORT);
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)
@@ -1954,14 +1969,61 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
             return dialog;
         }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean debug = (BuildConfig.DEBUG || prefs.getBoolean("debug", false));
+
+            Button btnOk = ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE);
+
+            TextWatcher w = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // Do nothing
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // Do nothing
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String p1 = tilPassword1.getEditText().getText().toString();
+                    String p2 = tilPassword2.getEditText().getText().toString();
+                    btnOk.setEnabled((debug || !TextUtils.isEmpty(p1)) && p1.equals(p2));
+                    tilPassword2.setHint(!TextUtils.isEmpty(p2) && !p2.equals(p1)
+                            ? R.string.title_setup_password_different
+                            : R.string.title_setup_password_repeat);
+                }
+            };
+
+            tilPassword1.getEditText().addTextChangedListener(w);
+            tilPassword2.getEditText().addTextChangedListener(w);
+            w.afterTextChanged(null);
+
+            tilPassword2.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        btnOk.performClick();
+                        return true;
+                    } else
+                        return false;
+                }
+            });
+        }
     }
 
     public static class FragmentDialogImport extends FragmentDialogBase {
-        private TextInputLayout etPassword1;
+        private TextInputLayout tilPassword1;
 
         @Override
         public void onSaveInstanceState(@NonNull Bundle outState) {
-            outState.putString("fair:password1", etPassword1 == null ? null : etPassword1.getEditText().getText().toString());
+            outState.putString("fair:password1", tilPassword1 == null ? null : tilPassword1.getEditText().getText().toString());
             super.onSaveInstanceState(outState);
         }
 
@@ -1970,7 +2032,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             Context context = getContext();
             View dview = LayoutInflater.from(context).inflate(R.layout.dialog_import, null);
-            etPassword1 = dview.findViewById(R.id.tilPassword1);
+            tilPassword1 = dview.findViewById(R.id.tilPassword1);
             CheckBox cbAccounts = dview.findViewById(R.id.cbAccounts);
             CheckBox cbDelete = dview.findViewById(R.id.cbDelete);
             CheckBox cbRules = dview.findViewById(R.id.cbRules);
@@ -1987,14 +2049,14 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             });
 
             if (savedInstanceState != null)
-                etPassword1.getEditText().setText(savedInstanceState.getString("fair:password1"));
+                tilPassword1.getEditText().setText(savedInstanceState.getString("fair:password1"));
 
             Dialog dialog = new AlertDialog.Builder(context)
                     .setView(dview)
                     .setPositiveButton(R.string.title_add_image_select, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String password1 = etPassword1.getEditText().getText().toString();
+                            String password1 = tilPassword1.getEditText().getText().toString();
 
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                             boolean debug = prefs.getBoolean("debug", false);
@@ -2021,6 +2083,24 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
             dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
             return dialog;
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+
+            Button btnOk = ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE);
+
+            tilPassword1.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        btnOk.performClick();
+                        return true;
+                    } else
+                        return false;
+                }
+            });
         }
     }
 

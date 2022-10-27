@@ -178,6 +178,7 @@ public class Helper {
 
     static final float LOW_LIGHT = 0.6f;
 
+    static final int WAKELOCK_MAX = 30 * 60 * 1000; // milliseconds
     static final int BUFFER_SIZE = 8192; // Same as in Files class
     static final long MIN_REQUIRED_SPACE = 100 * 1000L * 1000L;
     static final int AUTOLOCK_GRACE = 15; // seconds
@@ -513,17 +514,22 @@ public class Helper {
     }
 
     static Boolean isIgnoringOptimizations(Context context) {
-        if (isArc())
-            return true;
+        try {
+            if (isArc())
+                return true;
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+                return null;
+
+            PowerManager pm = Helper.getSystemService(context, PowerManager.class);
+            if (pm == null)
+                return null;
+
+            return pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID);
+        } catch (Throwable ex) {
+            Log.e(ex);
             return null;
-
-        PowerManager pm = Helper.getSystemService(context, PowerManager.class);
-        if (pm == null)
-            return null;
-
-        return pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID);
+        }
     }
 
     static Integer getBatteryLevel(Context context) {
@@ -1440,6 +1446,9 @@ public class Helper {
     }
 
     static void reportNoViewer(Context context, @NonNull Intent intent, @Nullable Throwable ex) {
+        if (context == null)
+            return;
+
         if (ex != null) {
             if (ex instanceof ActivityNotFoundException && BuildConfig.PLAY_STORE_RELEASE)
                 Log.w(ex);

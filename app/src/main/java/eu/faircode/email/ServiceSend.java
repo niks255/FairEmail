@@ -78,7 +78,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     private PowerManager.WakeLock wlOutbox;
     private List<Long> handling = new ArrayList<>();
 
-    private static ExecutorService executor = Helper.getBackgroundExecutor(1, "send");
+    private static final ExecutorService executor = Helper.getBackgroundExecutor(1, "send");
 
     private static final int RETRY_MAX = 3;
     private static final int CONNECTIVITY_DELAY = 5000; // milliseconds
@@ -352,8 +352,9 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
     };
 
     private void processOperations(List<EntityOperation> ops) {
+        long start = new Date().getTime();
         try {
-            wlOutbox.acquire();
+            wlOutbox.acquire(Helper.WAKELOCK_MAX);
 
             DB db = DB.getInstance(this);
             EntityFolder outbox = db.folder().getOutbox();
@@ -464,7 +465,10 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                 db.folder().setFolderSyncState(outbox.id, null);
             }
         } finally {
-            wlOutbox.release();
+            if (wlOutbox.isHeld())
+                wlOutbox.release();
+            else
+                Log.i("send release elapse=" + (new Date().getTime() - start));
         }
     }
 

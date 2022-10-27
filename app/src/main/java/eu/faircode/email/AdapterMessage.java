@@ -536,6 +536,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         float factor = detector.getScaleFactor();
                         float size = tvBody.getTextSize() * factor;
                         float scale = (textSize == 0 ? 1.0f : size / (textSize * message_zoom / 100f));
+                        boolean show_images = properties.getValue("images", message.id);
+
                         if (scale > 10)
                             return true;
 
@@ -550,8 +552,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             int w = 0;
                             int h = 0;
                             if (img instanceof ImageSpanEx) {
-                                w = ((ImageSpanEx) img).getWidth();
-                                h = ((ImageSpanEx) img).getHeight();
+                                if (show_images) {
+                                    w = ((ImageSpanEx) img).getWidth();
+                                    h = ((ImageSpanEx) img).getHeight();
+                                } else {
+                                    w = (zoom + 1) * 24;
+                                    h = w;
+                                }
                             }
                             ImageHelper.fitDrawable(d, w, h, scale, tvBody);
                         }
@@ -596,9 +603,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
 
                         private boolean onClick(MotionEvent event) {
-                            TextView widget = tvBody;
                             Spannable buffer = (Spannable) tvBody.getText();
-                            int off = Helper.getOffset(widget, buffer, event);
+                            int off = Helper.getOffset(tvBody, buffer, event);
 
                             TupleMessageEx message = getMessage();
                             if (message == null)
@@ -3561,7 +3567,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
-                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                    // https://github.com/mangstadt/biweekly/issues/121
+                    if (!(ex instanceof AssertionError))
+                        Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.setLog(false).execute(context, owner, args, "message:calendar");
         }
@@ -3805,7 +3813,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
-                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                    if (!(ex instanceof AssertionError))
+                        Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.execute(context, owner, args, "message:participation");
         }
@@ -5843,6 +5852,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private boolean onOpenLink(Uri uri, String title, boolean always_confirm) {
             Log.i("Opening uri=" + uri + " title=" + title);
             uri = Uri.parse(uri.toString().replaceAll("\\s+", ""));
+
+            if (ProtectedContent.isProtectedContent(uri)) {
+                Bundle args = new Bundle();
+                args.putParcelable("uri", uri);
+
+                FragmentDialogBase dialog = new ProtectedContent.FragmentDialogDecrypt();
+                dialog.setArguments(args);
+                dialog.show(parentFragment.getParentFragmentManager(), "decrypt");
+                return true;
+            }
 
             try {
                 String url = uri.getQueryParameter("url");

@@ -53,6 +53,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
@@ -71,7 +72,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class StyleHelper {
-    private static final List<Class> CLEAR_STYLES = Collections.unmodifiableList(Arrays.asList(
+    private static final List<Class<?>> CLEAR_STYLES = Collections.unmodifiableList(Arrays.asList(
             StyleSpan.class,
             UnderlineSpan.class,
             RelativeSizeSpan.class,
@@ -214,6 +215,7 @@ public class StyleHelper {
                 popupMenu.getMenu().findItem(R.id.menu_style_indentation_increase).setEnabled(maxLevel == null);
                 popupMenu.getMenu().findItem(R.id.menu_style_indentation_decrease).setEnabled(indents.length > 0);
 
+                popupMenu.getMenu().findItem(R.id.menu_style_password).setVisible(!BuildConfig.PLAY_STORE_RELEASE);
                 popupMenu.getMenu().findItem(R.id.menu_style_code).setEnabled(BuildConfig.DEBUG);
 
                 popupMenu.insertIcons(context);
@@ -253,6 +255,8 @@ public class StyleHelper {
                                 return setSuperscript(item);
                             } else if (groupId == R.id.group_style_strikethrough) {
                                 return setStrikeThrough(item);
+                            } else if (groupId == R.id.group_style_password) {
+                                return setPassword(item);
                             } else if (groupId == R.id.group_style_code) {
                                 return setCode(item);
                             } else if (groupId == R.id.group_style_clear) {
@@ -540,6 +544,31 @@ public class StyleHelper {
 
                         etBody.setText(edit);
                         etBody.setSelection(start, end);
+
+                        return true;
+                    }
+
+                    private boolean setPassword(MenuItem item) {
+                        if (!ActivityBilling.isPro(context)) {
+                            context.startActivity(new Intent(context, ActivityBilling.class));
+                            return true;
+                        }
+
+                        boolean toolong = false;
+                        if (end - start > ProtectedContent.MAX_PROTECTED_TEXT) {
+                            toolong = true;
+                        } else {
+                            Spanned text = (Spanned) edit.subSequence(start, end);
+                            String html = ProtectedContent.getContent(context, text);
+                            if (html.length() > ProtectedContent.MAX_PROTECTED_TEXT)
+                                toolong = true;
+                        }
+                        if (toolong) {
+                            ToastEx.makeText(context, R.string.title_style_protect_size, Toast.LENGTH_LONG).show();
+                            return true;
+                        }
+
+                        ProtectedContent.showDialogEncrypt(context, owner, etBody);
 
                         return true;
                     }
