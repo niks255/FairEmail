@@ -297,6 +297,15 @@ class Core {
                                     }
                                     break;
 
+                                case EntityOperation.DOWNLOAD:
+                                    if (EntityOperation.DOWNLOAD.equals(next.name)) {
+                                        JSONArray jnext = new JSONArray(next.args);
+                                        // Same uid
+                                        if (jargs.getLong(0) == jnext.getLong(0))
+                                            skip = true;
+                                    }
+                                    break;
+
                                 case EntityOperation.MOVE:
                                     if (group &&
                                             message.uid != null &&
@@ -432,6 +441,10 @@ class Core {
                                     onRaw(context, jargs, folder, message, (POP3Store) istore, (POP3Folder) ifolder);
                                     break;
 
+                                case EntityOperation.ATTACHMENT:
+                                    onAttachment(context, jargs, folder, message, (POP3Folder) ifolder, (POP3Store) istore);
+                                    break;
+
                                 case EntityOperation.SYNC:
                                     Helper.gc();
                                     onSynchronizeMessages(context, jargs, account, folder, (POP3Folder) ifolder, (POP3Store) istore, state);
@@ -538,6 +551,10 @@ class Core {
 
                                 case EntityOperation.RULE:
                                     onRule(context, jargs, message);
+                                    break;
+
+                                case EntityOperation.DOWNLOAD:
+                                    onDownload(context, jargs, account, folder, message, (IMAPStore) istore, (IMAPFolder) ifolder, state);
                                     break;
 
                                 default:
@@ -730,11 +747,6 @@ class Core {
                                     if (message != null &&
                                             !EntityOperation.SEEN.equals(op.name))
                                         db.message().deleteMessage(message.id);
-
-                                    if (EntityOperation.FETCH.equals(op.name)) {
-                                        long uid = jargs.getLong(0);
-                                        db.message().deleteMessage(folder.id, uid);
-                                    }
                                 }
 
                                 db.setTransactionSuccessful();
@@ -1187,6 +1199,26 @@ class Core {
             if (!message.content)
                 throw new IllegalArgumentException("Message body missing");
 
+            if (!BuildConfig.DEBUG) {
+                List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
+                for (EntityAttachment attachment : attachments)
+                    if (EntityAttachment.SMIME_SIGNATURE.equals(attachment.encryption))
+                        for (EntityAttachment content : attachments)
+                            if (EntityAttachment.SMIME_CONTENT.equals(content.encryption)) {
+                                boolean afile = attachment.getFile(context).exists();
+                                boolean cfile = content.getFile(context).exists();
+                                if (!attachment.available || !afile || !content.available || !cfile) {
+                                    Log.e("S/MIME vanished" +
+                                            " available=" + attachment.available + "/" + content.available +
+                                            " file=" + afile + "/" + cfile);
+                                    db.attachment().setAvailable(attachment.id, false);
+                                    db.attachment().setAvailable(content.id, false);
+                                    db.attachment().setEncryption(attachment.id, null);
+                                    db.attachment().setEncryption(content.id, null);
+                                }
+                            }
+            }
+
             imessage = MessageHelper.from(context, message, null, isession, false);
 
             try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
@@ -1483,35 +1515,37 @@ class Core {
                 for (Message imessage : map.keySet()) {
                     EntityMessage message = map.get(imessage);
 
-                    File file = new File(message.getFile(context).getAbsoluteFile() + ".copy");
-                    try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
-                        imessage.writeTo(os);
-                    }
-
-                    Properties props = MessageHelper.getSessionProperties(account.unicode);
-                    Session isession = Session.getInstance(props, null);
-
                     Message icopy;
-                    try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
-                        if (duplicate) {
-                            String msgid = EntityMessage.generateMessageId();
-                            msgids.put(message, msgid);
-                            icopy = new MimeMessageEx(isession, is, msgid);
-                            icopy.saveChanges();
+                    File file = new File(message.getFile(context).getAbsoluteFile() + ".copy");
+                    try {
+                        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                            imessage.writeTo(os);
+                        }
 
-                            if (!copy) {
-                                List<EntityMessage> tmps = db.message().getMessagesByMsgId(message.account, message.msgid);
-                                for (EntityMessage tmp : tmps)
-                                    if (target.id.equals(tmp.folder)) {
-                                        db.message().setMessageMsgId(tmp.id, msgid);
-                                        break;
-                                    }
-                            }
-                        } else
-                            icopy = new MimeMessage(isession, is);
+                        Properties props = MessageHelper.getSessionProperties(account.unicode);
+                        Session isession = Session.getInstance(props, null);
+
+                        try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
+                            if (duplicate) {
+                                String msgid = EntityMessage.generateMessageId();
+                                msgids.put(message, msgid);
+                                icopy = new MimeMessageEx(isession, is, msgid);
+                                icopy.saveChanges();
+
+                                if (!copy) {
+                                    List<EntityMessage> tmps = db.message().getMessagesByMsgId(message.account, message.msgid);
+                                    for (EntityMessage tmp : tmps)
+                                        if (target.id.equals(tmp.folder)) {
+                                            db.message().setMessageMsgId(tmp.id, msgid);
+                                            break;
+                                        }
+                                }
+                            } else
+                                icopy = new MimeMessage(isession, is);
+                        }
+                    } finally {
+                        file.delete();
                     }
-
-                    file.delete();
 
                     for (Flags.Flag flag : imessage.getFlags().getSystemFlags())
                         icopy.setFlag(flag, true);
@@ -1717,19 +1751,16 @@ class Core {
         boolean invalidate = jargs.optBoolean(1);
         boolean removed = jargs.optBoolean(2);
 
-        if (uid < 0)
-            throw new MessageRemovedException(folder.name + " fetch uid=" + uid);
-
         DB db = DB.getInstance(context);
         EntityAccount account = db.account().getAccount(folder.account);
         if (account == null)
             throw new IllegalArgumentException("account missing");
 
         try {
-            if (removed) {
-                db.message().deleteMessage(folder.id, uid);
+            if (uid < 0)
+                throw new MessageRemovedException(folder.name + " fetch uid=" + uid);
+            if (removed)
                 throw new MessageRemovedException("removed uid=" + uid);
-            }
 
             MimeMessage imessage = (MimeMessage) ifolder.getMessageByUID(uid);
             if (imessage == null)
@@ -1765,6 +1796,8 @@ class Core {
                 if (download) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                     boolean fast_fetch = prefs.getBoolean("fast_fetch", false);
+
+                    boolean async = false;
                     if (fast_fetch) {
                         long maxSize = prefs.getInt("download", MessageHelper.DEFAULT_DOWNLOAD_SIZE);
                         if (maxSize == 0)
@@ -1773,19 +1806,23 @@ class Core {
 
                         if (!message.content)
                             if (state.getNetworkState().isUnmetered() || (message.size != null && message.size < maxSize))
-                                EntityOperation.queue(context, message, EntityOperation.BODY);
+                                async = true;
 
                         List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
                         for (EntityAttachment attachment : attachments)
                             if (!attachment.available)
                                 if (state.getNetworkState().isUnmetered() || (attachment.size != null && attachment.size < maxSize))
-                                    EntityOperation.queue(context, message, EntityOperation.ATTACHMENT, attachment.id);
+                                    async = true;
 
                         if (download_eml &&
                                 (message.raw == null || !message.raw) &&
                                 (state.getNetworkState().isUnmetered() || (message.total != null && message.total < maxSize)))
-                            EntityOperation.queue(context, message, EntityOperation.RAW);
-                    } else
+                            async = true;
+                    }
+
+                    if (async && message.uid != null && !message.ui_hide)
+                        EntityOperation.queue(context, message, EntityOperation.DOWNLOAD, message.uid);
+                    else
                         downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state, stats);
                 }
             }
@@ -1793,23 +1830,27 @@ class Core {
             if (!stats.isEmpty())
                 EntityLog.log(context, EntityLog.Type.Statistics,
                         account.name + "/" + folder.name + " fetch stats " + stats);
-        } catch (MessageRemovedException | MessageRemovedIOException ex) {
-            Log.i(ex);
+        } catch (Throwable ex) {
+            if (MessageHelper.isRemoved(ex)) {
+                Log.i(ex);
 
-            if (account.isGmail() && EntityFolder.USER.equals(folder.type)) {
-                EntityMessage message = db.message().getMessageByUid(folder.id, uid);
-                if (message != null)
-                    try {
-                        JSONArray jlabel = new JSONArray();
-                        jlabel.put(0, folder.name);
-                        jlabel.put(1, false);
-                        onLabel(context, jlabel, folder, message, istore, ifolder, state);
-                    } catch (Throwable ex1) {
-                        Log.e(ex1);
-                    }
-            }
+                if (account.isGmail() && EntityFolder.USER.equals(folder.type)) {
+                    EntityMessage message = db.message().getMessageByUid(folder.id, uid);
+                    if (message != null)
+                        try {
+                            JSONArray jlabel = new JSONArray();
+                            jlabel.put(0, folder.name);
+                            jlabel.put(1, false);
+                            onLabel(context, jlabel, folder, message, istore, ifolder, state);
+                        } catch (Throwable ex1) {
+                            Log.e(ex1);
+                        }
+                }
 
-            db.message().deleteMessage(folder.id, uid);
+                int count = db.message().deleteMessage(folder.id, uid);
+                Log.i(folder.name + " delete local uid=" + uid + " count=" + count);
+            } else
+                throw ex;
         } finally {
             int count = MessageHelper.getMessageCount(ifolder);
             db.folder().setFolderTotal(folder.id, count < 0 ? null : count, new Date().getTime());
@@ -2148,6 +2189,35 @@ class Core {
 
         // Get message parts
         MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
+        MessageHelper.MessageParts parts = helper.getMessageParts();
+
+        // Download attachment
+        parts.downloadAttachment(context, attachment);
+
+        if (attachment.size != null)
+            EntityLog.log(context, "Operation attachment size=" + attachment.size);
+    }
+
+    private static void onAttachment(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, POP3Folder ifolder, POP3Store istore) throws JSONException, MessagingException, IOException {
+        long id = jargs.getLong(0);
+
+        if (!EntityFolder.INBOX.equals(folder.type))
+            throw new IllegalArgumentException("Not INBOX");
+
+        DB db = DB.getInstance(context);
+        EntityAttachment attachment = db.attachment().getAttachment(id);
+        if (attachment == null)
+            throw new IllegalArgumentException("Local attachment not found");
+        if (attachment.subsequence != null)
+            throw new IllegalArgumentException("Download of sub attachment");
+        if (attachment.available)
+            return;
+
+        Map<EntityMessage, Message> map = findMessages(context, folder, Arrays.asList(message), istore, ifolder);
+        if (map.size() == 0)
+            throw new MessageRemovedException("Message not found");
+
+        MessageHelper helper = new MessageHelper((MimeMessage) map.entrySet().iterator().next().getValue(), context);
         MessageHelper.MessageParts parts = helper.getMessageParts();
 
         // Download attachment
@@ -2836,6 +2906,7 @@ class Core {
                 int chunk_size = prefs.getInt("chunk_size", DEFAULT_CHUNK_SIZE);
 
                 Flags flags = new Flags(Flags.Flag.DELETED);
+                List<Message> iremove = new ArrayList<>();
                 for (List<Message> list : Helper.chunkList(idelete, chunk_size))
                     try {
                         ifolder.setFlags(list.toArray(new Message[0]), flags, true);
@@ -2846,9 +2917,12 @@ class Core {
                                 imessage.setFlag(Flags.Flag.DELETED, true);
                             } catch (MessagingException mex) {
                                 Log.w(mex);
-                                idelete.remove(imessage);
+                                iremove.add(imessage);
                             }
                     }
+
+                for (Message imessage : iremove)
+                    idelete.remove(imessage);
             }
             Log.i(folder.name + " purge deleted");
             expunge(context, ifolder, idelete);
@@ -2911,6 +2985,15 @@ class Core {
             throw new IllegalArgumentException("Message without content id=" + rule.id + ":" + rule.name);
 
         rule.execute(context, message);
+    }
+
+    private static void onDownload(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws MessagingException, IOException, JSONException {
+        long uid = jargs.getLong(0);
+        if (!Objects.equals(uid, message.uid))
+            throw new IllegalArgumentException("Different uid" + uid + "/" + message.uid);
+
+        MimeMessage imessage = (MimeMessage) ifolder.getMessageByUID(uid);
+        downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state, new SyncStats());
     }
 
     private static void onSynchronizeMessages(
@@ -3309,9 +3392,13 @@ class Core {
                                 message.preview,
                                 parts.getWarnings(message.warning));
 
-                        for (EntityAttachment attachment : parts.getAttachments())
-                            if (attachment.subsequence == null)
-                                parts.downloadAttachment(context, attachment);
+                        try {
+                            for (EntityAttachment attachment : parts.getAttachments())
+                                if (attachment.subsequence == null)
+                                    parts.downloadAttachment(context, attachment);
+                        } catch (Throwable ex) {
+                            Log.w(ex);
+                        }
 
                         if (download_eml)
                             try {
@@ -5899,6 +5986,12 @@ class Core {
                 // Device
                 if (!notify_messaging) {
                     StringBuilder sbm = new StringBuilder();
+
+                    if (message.keywords != null && BuildConfig.DEBUG)
+                        for (String keyword : message.keywords)
+                            if (keyword.startsWith("!"))
+                                sbm.append(Html.escapeHtml(keyword)).append(": ");
+
                     if (!TextUtils.isEmpty(message.subject))
                         sbm.append("<em>").append(Html.escapeHtml(message.subject)).append("</em>").append("<br>");
 

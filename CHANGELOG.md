@@ -2,7 +2,51 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Ninjatitan](https://en.wikipedia.org/wiki/Ninjatitan)
+
+### 1.1999 - 2022-11-05
+
+* Fixed refreshing OAuth tokens in some situations
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1998 - 2022-11-05
+
+* Fixed purging spam/trash in some situations
+
+### 1.1997 - 2022-11-05
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1996 - 2022-11-04
+
+* Added auto storing iCalendar invitations, [see the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq186)
+* Added Jsoup selector conditions, [see the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq71)
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### [Mei long](https://en.wikipedia.org/wiki/Mei_long)
+
+### 1.1995 - 2022-10-30
+
+* Added selectable widget opacity for Android 12 and later
+* Added option to auto encrypt when all public keys are available
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated translations
+
+### 1.1994 - 2022-10-29
+
+* Fixed settings export for older devices
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.1993 - 2022-10-28
+
+* Fixed rare crash
+* Small improvements and minor bug fixes
+* Updated translations
 
 ### 1.1992 - 2022-10-27
 

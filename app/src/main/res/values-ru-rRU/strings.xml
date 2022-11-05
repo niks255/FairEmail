@@ -368,6 +368,7 @@
     <string name="title_advanced_use_blocklist">Перемещать сообщения с доменов из списка блокировки в \"Спам\"</string>
     <string name="title_advanced_use_blocklist_pop3">Пропускать сообщения от доменов из списка блокировки (только для POP3)</string>
     <string name="title_advanced_tune_keep_alive">Автоматически настраивать интервал keep-alive</string>
+    <string name="title_advanced_blocklist_warning">Списки блокировки спама не идеальны и могут блокировать не только спам!</string>
     <string name="title_advanced_keyboard">Показывать клавиатуру по умолчанию</string>
     <string name="title_advanced_keyboard_no_fullscreen">Не показывать клавиатуру в полноэкранном режиме</string>
     <string name="title_advanced_suggest_names">Использовать имена и адреса электронной почты</string>
@@ -405,7 +406,7 @@
     <string name="title_advanced_reply_move_inbox">Также для сообщений во \"Входящих\"</string>
     <string name="title_advanced_auto_link">Автоматическое создание ссылок</string>
     <string name="title_advanced_plain_only">По умолчанию отправлять простым текстом</string>
-    <string name="title_advanced_flow">\"Пластичное\" форматирование обычного текста</string>
+    <string name="title_advanced_flow">\"Пластичное\" форматирование простого текста</string>
     <string name="title_advanced_usenet_signature">Стиль подписи Usenet</string>
     <string name="title_advanced_remove_signatures">Удалять распознанные подписи</string>
     <string name="title_advanced_receipt">При запросе уведомления</string>
@@ -637,6 +638,7 @@
     <string name="title_advanced_clear_all_remark">Данные приложения будут безвозвратно удалены!</string>
     <string name="title_advanced_sign_default">Подписывать по умолчанию</string>
     <string name="title_advanced_encrypt_default">Шифровать по умолчанию</string>
+    <string name="title_advanced_encrypt_auto">Автоматически шифровать, если доступны ключи всех получателей</string>
     <string name="title_advanced_auto_decrypt">Автоматически расшифровывать сообщения</string>
     <string name="title_advanced_auto_undo_decrypt">Убирать расшифрованное при закрытии диалога</string>
     <string name="title_advanced_openpgp">Провайдер OpenPGP</string>
@@ -647,7 +649,7 @@
     <string name="title_advanced_sign_algo">Алгоритм подписи</string>
     <string name="title_advanced_encrypt_algo">Алгоритм шифрования</string>
     <string name="title_advanced_remark_algo">        Имейте в виду, что не все почтовые клиенты поддерживают все алгоритмы.
-        Алгоритмы по умолчанию (SHA256 и AES128) обычно поддерживаются.
+        Алгоритмы по умолчанию (SHA-256 и AES-128) обычно поддерживаются.
     </string>
     <string name="title_advanced_check_certificate">Проверять публичный ключ при отправке</string>
     <string name="title_advanced_manage_certificates">Управление публичными ключами</string>
@@ -676,6 +678,7 @@
     <string name="title_advanced_watchdog">Регулярно проверять, активен ли FairEmail</string>
     <string name="title_advanced_updates">Проверять обновления на GitHub</string>
     <string name="title_advanced_check_weekly">Еженедельная проверка вместо ежедневной</string>
+    <string name="title_advanced_beta">Проверять тестовые версии на BitBucket</string>
     <string name="title_advanced_changelog">Показывать список изменений после обновления</string>
     <string name="title_advanced_experiments">Попробовать экспериментальные функции</string>
     <string name="title_advanced_crash_reports">Отправлять отчёты об ошибках</string>
@@ -822,6 +825,7 @@
     <string name="title_account_noop_hint">Подключение будет обновляться более активно, но также больше расходовать заряд батареи</string>
     <string name="title_account_partial_fetch_hint">Отключайте это только в случае пустых сообщений или повреждённых вложений</string>
     <string name="title_color">Цвет</string>
+    <string name="title_calendar">Календарь</string>
     <string name="title_background">Фон</string>
     <string name="title_transparent">Прозрачность</string>
     <string name="title_account_ondemand">Синхронизировать вручную</string>
@@ -1249,7 +1253,7 @@
     <string name="title_style_superscript">Надстрочный</string>
     <string name="title_style_strikethrough">Зачёркнутый</string>
     <string name="title_style_protect">Защита паролем</string>
-    <string name="title_style_protected" comment="title_style_protected&#10;Title of dialog to decrypt protect content">Защищённое содержимое</string>
+    <string name="title_style_protected">Защищённое содержимое</string>
     <string name="title_style_protect_size">Текст слишком длинный</string>
     <string name="title_style_clear">Очистить форматирование</string>
     <string name="title_style_link">Вставить ссылку</string>
@@ -1313,8 +1317,8 @@
     <string name="title_vt_upload">Загрузить</string>
     <string name="title_vt_analyzing">VirusTotal анализирует файл, это может занять некоторое время&#8230;</string>
     <string name="title_from_missing">Отсутствует отправитель</string>
-    <string name="title_pgp_reminder">Доступные ключи PGP</string>
-    <string name="title_smime_reminder">Доступные ключи S/MIME</string>
+    <string name="title_pgp_reminder">Доступны ключи PGP</string>
+    <string name="title_smime_reminder">Доступны ключи S/MIME</string>
     <string name="title_to_missing">Отсутствует получатель</string>
     <string name="title_extra_missing">Отсутствует имя пользователя</string>
     <string name="title_noreply_reminder">Отправка на адрес \"no-reply\"</string>
@@ -1345,7 +1349,7 @@
     <string name="title_alternative_html">Показать HTML</string>
     <string name="title_no_openpgp">OpenKeychain не найдено</string>
     <string name="title_user_interaction">Перенос в OpenKeychain</string>
-    <string name="title_padlock">Использовать замок для расшифровки сообщения</string>
+    <string name="title_padlock">Используйте замок для расшифровки сообщения</string>
     <string name="title_signed_data">Проверить подпись, чтобы показать текст сообщения</string>
     <string name="title_not_encrypted">Сообщение не подписано и не зашифровано</string>
     <string name="title_no_sign_key">Ключ подписи не выбран</string>

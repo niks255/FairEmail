@@ -19,6 +19,7 @@ package eu.faircode.email;
     Copyright 2018-2022 by Marcel Bokhorst (M66B)
 */
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -67,6 +68,11 @@ import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import biweekly.Biweekly;
+import biweekly.ICalendar;
+import biweekly.component.VEvent;
+import biweekly.property.Method;
 
 public class ServiceSend extends ServiceBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private TupleUnsent lastUnsent = null;
@@ -857,9 +863,40 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             } finally {
                 db.endTransaction();
             }
+
+            checkICalendar(sid);
         }
 
         ServiceSynchronize.eval(this, "sent");
+    }
+
+    private void checkICalendar(long sid) {
+        boolean permission = Helper.hasPermission(this, Manifest.permission.WRITE_CALENDAR);
+        if (!permission)
+            return;
+
+        DB db = DB.getInstance(this);
+        List<EntityAttachment> attachments = db.attachment().getAttachments(sid);
+        if (attachments == null || attachments.size() == 0)
+            return;
+
+        for (EntityAttachment attachment : attachments)
+            if ("text/calendar".equals(attachment.type))
+                try {
+                    File ics = attachment.getFile(this);
+                    ICalendar icalendar = Biweekly.parse(ics).first();
+
+                    Method method = icalendar.getMethod();
+                    if (method == null || !method.isReply())
+                        return;
+
+                    VEvent event = icalendar.getEvents().get(0);
+                    EntityMessage message = db.message().getMessage(sid);
+                    CalendarHelper.update(this, event, message);
+                    break;
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
     }
 
     static void boot(final Context context) {

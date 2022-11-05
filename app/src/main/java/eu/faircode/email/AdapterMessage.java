@@ -189,8 +189,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import biweekly.Biweekly;
+import biweekly.ICalVersion;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
+import biweekly.io.WriteContext;
+import biweekly.io.scribe.property.RecurrenceRuleScribe;
 import biweekly.parameter.ParticipationStatus;
 import biweekly.property.Attendee;
 import biweekly.property.CalendarScale;
@@ -199,6 +202,7 @@ import biweekly.property.LastModified;
 import biweekly.property.Method;
 import biweekly.property.Organizer;
 import biweekly.property.RawProperty;
+import biweekly.property.RecurrenceRule;
 import biweekly.property.Summary;
 import biweekly.property.Transparency;
 import biweekly.util.ICalDate;
@@ -1767,6 +1771,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSeenBottom.setVisibility(View.GONE);
 
             ibStoreMedia.setVisibility(View.GONE);
+            ibShareImages.setVisibility(View.GONE);
         }
 
         private void clearButtons() {
@@ -3430,16 +3435,23 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             });
 
+            int iavailable = 0;
             List<EntityAttachment> images = new ArrayList<>();
-            if (thumbnails && bind_extras)
+            if (thumbnails && bind_extras) {
                 for (EntityAttachment attachment : attachments)
-                    if (attachment.isAttachment() && attachment.isImage())
+                    if (attachment.isAttachment() && attachment.isImage()) {
                         images.add(attachment);
+                        if (attachment.available)
+                            iavailable++;
+                    }
+            }
             adapterImage.set(images);
             grpImages.setVisibility(images.size() > 0 ? View.VISIBLE : View.GONE);
+
             ibStoreMedia.setVisibility(
-                    images.size() > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                    iavailable > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
                             ? View.VISIBLE : View.GONE);
+            ibShareImages.setVisibility(iavailable > 0 ? View.VISIBLE : View.GONE);
         }
 
         private void bindCalendar(final TupleMessageEx message, EntityAttachment attachment) {
@@ -3651,6 +3663,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                                 if (end != null)
                                     intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end.getTime());
+
+                                RecurrenceRule recurrence = event.getRecurrenceRule();
+                                if (recurrence != null) {
+                                    RecurrenceRuleScribe scribe = new RecurrenceRuleScribe();
+                                    WriteContext wcontext = new WriteContext(ICalVersion.V2_0, icalendar.getTimezoneInfo(), null);
+                                    String rrule = scribe.writeText(recurrence, wcontext);
+                                    intent.putExtra(CalendarContract.Events.RRULE, rrule);
+                                }
 
                                 // This will result in sending unwanted invites
                                 //if (attendee.size() > 0)
@@ -4984,7 +5004,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         db.beginTransaction();
 
                         EntityMessage message = db.message().getMessage(mid);
-                        if (message == null || message.uid == null)
+                        if (message == null)
+                            return null;
+
+                        EntityAccount account = db.account().getAccount(message.account);
+                        if (account == null)
+                            return null;
+
+                        if (account.protocol == EntityAccount.TYPE_IMAP && message.uid == null)
                             return null;
 
                         for (EntityAttachment attachment : db.attachment().getAttachments(message.id))
@@ -6761,7 +6788,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 protected File onExecute(Context context, Bundle args) throws IOException {
                     Long id = args.getLong("id");
 
-                    File file = EntityMessage.getFile(context, id);
+                    DB db = DB.getInstance(context);
+                    EntityMessage message = db.message().getMessage(id);
+                    if (message == null || !message.content)
+                        return null;
+
+                    File file = message.getFile(context);
                     Document d = JsoupEx.parse(file);
 
                     if (BuildConfig.DEBUG) {
@@ -6772,6 +6804,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (override_width)
                             HtmlHelper.overrideWidth(d);
                     }
+
+                    d.head().prependElement("meta").attr("charset", "utf-8");
+
+                    if (message.language != null)
+                        d.body().attr("lang", message.language);
 
                     List<CSSStyleSheet> sheets =
                             HtmlHelper.parseStyles(d.head().select("style"));

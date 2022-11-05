@@ -250,6 +250,7 @@
     <string name="title_setup_free">Is this app free to use?</string>
     <string name="title_setup_permissions">Grant permissions</string>
     <string name="title_setup_permissions_remark">To access contact information (optional)</string>
+    <string name="title_setup_permissions_calendar">To store invitations (optional)</string>
     <string name="title_setup_permissions_explanation">Contact permissions are required to look up contact info and to suggest contacts</string>
     <string name="title_setup_permissions_notify">To show new messages notifications (optional)</string>
     <string name="title_setup_permissions_notify_explanation">Notification permissions are required to show notifications for new messages in the status bar</string>
@@ -414,6 +415,7 @@
     <string name="title_advanced_use_blocklist">Move messages from domains on a block list to the spam folder</string>
     <string name="title_advanced_use_blocklist_pop3">Skip messages from domains on a block list (POP3 only)</string>
     <string name="title_advanced_tune_keep_alive">Automatically tune the keep-alive interval</string>
+    <string name="title_advanced_blocklist_warning">Block lists aren\'t perfect and may block more than just spam!</string>
 
     <string name="title_advanced_keyboard">Show keyboard by default</string>
     <string name="title_advanced_keyboard_no_fullscreen">Prevent fullscreen keyboard</string>
@@ -711,6 +713,7 @@
 
     <string name="title_advanced_sign_default">Sign by default</string>
     <string name="title_advanced_encrypt_default">Encrypt by default</string>
+    <string name="title_advanced_encrypt_auto">Automatically encrypt when all recipients\' keys are available</string>
     <string name="title_advanced_auto_decrypt">Automatically decrypt messages</string>
     <string name="title_advanced_auto_undo_decrypt">Undo decryption on closing conversation</string>
 
@@ -759,6 +762,7 @@
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_updates">Check for GitHub updates</string>
     <string name="title_advanced_check_weekly">Check weekly instead of daily</string>
+    <string name="title_advanced_beta">Check for test versions on BitBucket</string>
     <string name="title_advanced_changelog">Show changelog after update</string>
     <string name="title_advanced_experiments">Try experimental features</string>
     <string name="title_advanced_crash_reports">Send error reports</string>
@@ -985,6 +989,7 @@
     <string name="title_account_noop_hint">This will refresh the connection more actively, but also use more battery power</string>
     <string name="title_account_partial_fetch_hint">Disable this only in case of empty messages or corrupt attachments</string>
     <string name="title_color">Color</string>
+    <string name="title_calendar">Calendar</string>
     <string name="title_background">Background</string>
     <string name="title_transparent">Transparent</string>
     <string name="title_account_ondemand">Synchronize manually</string>

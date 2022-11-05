@@ -202,6 +202,7 @@
     <string name="title_setup_free">Este aplicativo é gratuito?</string>
     <string name="title_setup_permissions">Conceder permissões</string>
     <string name="title_setup_permissions_remark">Para acessar informações de contato (opcional)</string>
+    <string name="title_setup_permissions_calendar" comment="title_setup_permissions_calendar&#10;Description of calendar read/write permission">Para armazenar convites (opcional)</string>
     <string name="title_setup_permissions_explanation">Permissões de contato são exigidas para procurar por informações de contato e para sugerir contatos</string>
     <string name="title_setup_permissions_notify">Para mostrar notificações de novas mensagens (opcional)</string>
     <string name="title_setup_permissions_notify_explanation">Permissões de notificação são requeridas para mostrar notificações para novas mensagens na barra de status</string>
@@ -342,6 +343,7 @@
     <string name="title_advanced_use_blocklist">Mover mensagens de domínios em uma lista de bloqueios para a pasta de spam</string>
     <string name="title_advanced_use_blocklist_pop3">Ignorar mensagens dos domínios na lista de bloqueio (Somente para POP3)</string>
     <string name="title_advanced_tune_keep_alive">Sintonizar automaticamente o intervalo de manutenção de vida</string>
+    <string name="title_advanced_blocklist_warning">Listas de bloqueio não são perfeitas e podem bloquear mais do que apenas spam!</string>
     <string name="title_advanced_keyboard">Mostrar teclado por padrão</string>
     <string name="title_advanced_keyboard_no_fullscreen">Desativar o teclado em tela cheia</string>
     <string name="title_advanced_suggest_names">Use os nomes e endereços de e-mail</string>
@@ -611,6 +613,7 @@
     <string name="title_advanced_clear_all_remark">Os dados do aplicativo serão irremediavelmente excluídos!</string>
     <string name="title_advanced_sign_default">Assinar por padrão</string>
     <string name="title_advanced_encrypt_default">Criptografar por padrão</string>
+    <string name="title_advanced_encrypt_auto">Criptografar automaticamente quando as chaves de todos os destinatários estiverem disponíveis</string>
     <string name="title_advanced_auto_decrypt">Descriptografar mensagens automaticamente</string>
     <string name="title_advanced_auto_undo_decrypt">Desfazer criptografia ao fechar a conversa</string>
     <string name="title_advanced_openpgp">Provedor OpenPGP</string>
@@ -649,6 +652,7 @@
     <string name="title_advanced_watchdog">Verifique periodicamente se o FairEmail ainda está ativo</string>
     <string name="title_advanced_updates">Buscar atualizações</string>
     <string name="title_advanced_check_weekly">Verificar semanalmente ao invés de diariamente</string>
+    <string name="title_advanced_beta">Checar por versões de teste no BitBucket</string>
     <string name="title_advanced_changelog">Mostrar mudanças depois da atualização</string>
     <string name="title_advanced_experiments">Experimente recursos experimentais</string>
     <string name="title_advanced_crash_reports">Enviar relatórios de erro</string>
@@ -795,6 +799,7 @@
     <string name="title_account_noop_hint">Isto atualizará a conexão mais ativamente, mas também usará mais bateria</string>
     <string name="title_account_partial_fetch_hint">Desativar isto somente em caso de mensagens vazias ou anexos corrompidos</string>
     <string name="title_color">Cor</string>
+    <string name="title_calendar">Calendário</string>
     <string name="title_background">Fundo</string>
     <string name="title_transparent">Transparente</string>
     <string name="title_account_ondemand">Sincronizar manualmente</string>
@@ -1221,7 +1226,7 @@
     <string name="title_style_superscript">Sobrescrito</string>
     <string name="title_style_strikethrough">Riscar</string>
     <string name="title_style_protect">Proteger com senha</string>
-    <string name="title_style_protected" comment="title_style_protected&#10;Title of dialog to decrypt protect content">Conteúdo protegido</string>
+    <string name="title_style_protected">Conteúdo protegido</string>
     <string name="title_style_protect_size">Texto longo demais</string>
     <string name="title_style_clear">Limpar formatação</string>
     <string name="title_style_link">Inserir link</string>

@@ -343,6 +343,7 @@
     <string name="title_advanced_use_blocklist">Flyt beskeder fra blokeringslistedomæner til Spammappen</string>
     <string name="title_advanced_use_blocklist_pop3">Overspring beskeder fra domæner på en sortliste (kun POP3)</string>
     <string name="title_advanced_tune_keep_alive">Justér automatisk hold i live intervallet</string>
+    <string name="title_advanced_blocklist_warning">Bloklister er ikke perfekt og kan blokere mere end blot spam!</string>
     <string name="title_advanced_keyboard">Vis tastatur som standard</string>
     <string name="title_advanced_keyboard_no_fullscreen">Forhindr fuldskærmstastatur</string>
     <string name="title_advanced_suggest_names">Brugernavne og e-mailadresser</string>
@@ -612,6 +613,7 @@
     <string name="title_advanced_clear_all_remark">Alle app-data slettes irreversibelt!</string>
     <string name="title_advanced_sign_default">Signér som standard</string>
     <string name="title_advanced_encrypt_default">Kryptér som standard</string>
+    <string name="title_advanced_encrypt_auto">Kryptér automatisk, når alle modtageres nøgler er tilgængelige</string>
     <string name="title_advanced_auto_decrypt">Auto-dekryptér beskeder</string>
     <string name="title_advanced_auto_undo_decrypt">Fortryd dekryptering ved lukning af samtale</string>
     <string name="title_advanced_openpgp">OpenPGP-leverandør</string>
@@ -651,6 +653,7 @@
     <string name="title_advanced_watchdog">Tjek periodisk om FairEmail stadig er aktiv</string>
     <string name="title_advanced_updates">Tjek for GitHub-opdateringer</string>
     <string name="title_advanced_check_weekly">Tjek ugentligt i stedet for dagligt</string>
+    <string name="title_advanced_beta">Tjek for testversioner på BitBucket</string>
     <string name="title_advanced_changelog">Vis ændringslog efter opdatering</string>
     <string name="title_advanced_experiments">Prøv eksperimentelle funktioner</string>
     <string name="title_advanced_crash_reports">Send fejlrapporter</string>
@@ -797,6 +800,7 @@
     <string name="title_account_noop_hint">Dette vil opdatere forbindelsen mere aktivt, men også forbruge mere batteristrøm</string>
     <string name="title_account_partial_fetch_hint">Deaktivér dette kun i tilfælde af tomme beskeder eller ødelagte vedhæftninger</string>
     <string name="title_color">Farve</string>
+    <string name="title_calendar">Kalender</string>
     <string name="title_background">Baggrund</string>
     <string name="title_transparent">Gennemsigtig</string>
     <string name="title_account_ondemand">Synkronisér manuelt</string>
@@ -1225,7 +1229,7 @@
     <string name="title_style_superscript">Hævet</string>
     <string name="title_style_strikethrough">Gennemstreget</string>
     <string name="title_style_protect">Adgangskodebeskyttelse</string>
-    <string name="title_style_protected" comment="title_style_protected&#10;Title of dialog to decrypt protect content">Beskyttet indhold</string>
+    <string name="title_style_protected">Beskyttet indhold</string>
     <string name="title_style_protect_size">Tekst for lang</string>
     <string name="title_style_clear">Ryd formatering</string>
     <string name="title_style_link">Indsæt link</string>

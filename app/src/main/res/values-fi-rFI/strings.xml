@@ -794,6 +794,7 @@
     <string name="title_account_noop_hint">Tämä päivittää yhteyttä useammin, mutta käyttää enemmän akkua</string>
     <string name="title_account_partial_fetch_hint">Kytke tämä pois ainoastaan, jos ilmenee tyhjiä viestejä tai korruptoituneita liitteitä</string>
     <string name="title_color">Väri</string>
+    <string name="title_calendar">Kalenteri</string>
     <string name="title_background">Tausta</string>
     <string name="title_transparent">Läpinäkyvä</string>
     <string name="title_account_ondemand">Synkronoi manuaalisesti</string>
@@ -1220,7 +1221,7 @@
     <string name="title_style_superscript">Yläindeksi</string>
     <string name="title_style_strikethrough">Yliviivattu</string>
     <string name="title_style_protect">Salasanasuojaus</string>
-    <string name="title_style_protected" comment="title_style_protected&#10;Title of dialog to decrypt protect content">Suojattu sisältö</string>
+    <string name="title_style_protected">Suojattu sisältö</string>
     <string name="title_style_protect_size">Liian pitkä teksti</string>
     <string name="title_style_clear">Poista muotoilu</string>
     <string name="title_style_link">Lisää linkki</string>

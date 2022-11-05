@@ -40,6 +40,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -146,6 +147,14 @@ public class ActivityWidgetUnified extends ActivityBase {
             }
         });
 
+        cbSemiTransparent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    btnColor.setColor(Color.TRANSPARENT);
+            }
+        });
+
         cbHighlight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -187,7 +196,14 @@ public class ActivityWidgetUnified extends ActivityBase {
         btnColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int color = btnColor.getColor();
                 int editTextColor = Helper.resolveColor(ActivityWidgetUnified.this, android.R.attr.editTextColor);
+
+                if (color == Color.TRANSPARENT) {
+                    color = Color.WHITE;
+                    if (cbSemiTransparent.isChecked() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                        color = ColorUtils.setAlphaComponent(color, 127);
+                }
 
                 ColorPickerDialogBuilder
                         .with(ActivityWidgetUnified.this)
@@ -196,10 +212,14 @@ public class ActivityWidgetUnified extends ActivityBase {
                         .setColorEditTextColor(editTextColor)
                         .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                         .density(6)
-                        .lightnessSliderOnly()
+                        .initialColor(color)
+                        .showLightnessSlider(true)
+                        .showAlphaSlider(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
                         .setPositiveButton(android.R.string.ok, new ColorPickerClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                                    cbSemiTransparent.setChecked(false);
                                 btnColor.setColor(selectedColor);
                             }
                         })

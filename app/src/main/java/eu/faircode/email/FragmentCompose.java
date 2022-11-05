@@ -498,20 +498,35 @@ public class FragmentCompose extends FragmentBase {
             }
         };
 
+        View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    try {
+                        updateEncryption((EntityIdentity) spIdentity.getSelectedItem());
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+            }
+        };
+
         etTo.setMaxLines(Integer.MAX_VALUE);
         etTo.setHorizontallyScrolling(false);
         etTo.setOnTouchListener(onTouchListener);
         etTo.setOnLongClickListener(longClickListener);
+        etTo.setOnFocusChangeListener(focusListener);
 
         etCc.setMaxLines(Integer.MAX_VALUE);
         etCc.setHorizontallyScrolling(false);
         etCc.setOnTouchListener(onTouchListener);
         etCc.setOnLongClickListener(longClickListener);
+        etCc.setOnFocusChangeListener(focusListener);
 
         etBcc.setMaxLines(Integer.MAX_VALUE);
         etBcc.setHorizontallyScrolling(false);
         etBcc.setOnTouchListener(onTouchListener);
         etBcc.setOnLongClickListener(longClickListener);
+        etBcc.setOnFocusChangeListener(focusListener);
 
         etSubject.setMaxLines(Integer.MAX_VALUE);
         etSubject.setHorizontallyScrolling(false);
@@ -1524,6 +1539,95 @@ public class FragmentCompose extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(FragmentCompose.this, args, "compose:contact");
+    }
+
+    private void updateEncryption(EntityIdentity identity) {
+        if (identity == null)
+            return;
+
+        Bundle args = new Bundle();
+        args.putLong("id", working);
+        args.putLong("identity", identity.id);
+        args.putString("to", etTo.getText().toString().trim());
+        args.putString("cc", etCc.getText().toString().trim());
+        args.putString("bcc", etBcc.getText().toString().trim());
+
+        new SimpleTask<Integer>() {
+            @Override
+            protected Integer onExecute(Context context, Bundle args) {
+                long id = args.getLong("id");
+                long iid = args.getLong("identity");
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sign_default = prefs.getBoolean("sign_default", false);
+                boolean encrypt_default = prefs.getBoolean("encrypt_default", false);
+                boolean encrypt_auto = prefs.getBoolean("encrypt_auto", false);
+
+                DB db = DB.getInstance(context);
+
+                EntityMessage draft = db.message().getMessage(id);
+                if (draft == null)
+                    return null;
+
+                if (draft.dsn != null && !EntityMessage.DSN_NONE.equals(draft.dsn))
+                    return null;
+
+                EntityIdentity identity = db.identity().getIdentity(iid);
+                if (identity == null)
+                    return draft.ui_encrypt;
+
+                if (encrypt_auto) {
+                    draft.ui_encrypt = null;
+                    try {
+                        InternetAddress[] to = MessageHelper.parseAddresses(context, args.getString("to"));
+                        InternetAddress[] cc = MessageHelper.parseAddresses(context, args.getString("cc"));
+                        InternetAddress[] bcc = MessageHelper.parseAddresses(context, args.getString("bcc"));
+
+                        List<Address> recipients = new ArrayList<>();
+                        if (to != null)
+                            recipients.addAll(Arrays.asList(to));
+                        if (cc != null)
+                            recipients.addAll(Arrays.asList(cc));
+                        if (bcc != null)
+                            recipients.addAll(Arrays.asList(bcc));
+
+                        if (identity.encrypt == 0 && PgpHelper.hasPgpKey(context, recipients, true))
+                            draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
+                        else if (identity.encrypt == 1 && SmimeHelper.hasSmimeKey(context, recipients, true))
+                            draft.ui_encrypt = EntityMessage.SMIME_SIGNENCRYPT;
+                    } catch (Throwable ex) {
+                        Log.w(ex);
+                    }
+                }
+
+                if (!encrypt_auto || draft.ui_encrypt == null) {
+                    if (encrypt_default || identity.encrypt_default)
+                        draft.ui_encrypt = (identity.encrypt == 0
+                                ? EntityMessage.PGP_SIGNENCRYPT
+                                : EntityMessage.SMIME_SIGNENCRYPT);
+                    else if (sign_default || identity.sign_default)
+                        draft.ui_encrypt = (identity.encrypt == 0
+                                ? EntityMessage.PGP_SIGNONLY
+                                : EntityMessage.SMIME_SIGNONLY);
+                    else
+                        draft.ui_encrypt = null;
+                }
+
+                db.message().setMessageUiEncrypt(draft.id, draft.ui_encrypt);
+
+                return draft.ui_encrypt;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Integer encrypt) {
+                FragmentCompose.this.encrypt = encrypt;
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.setExecutor(executor).execute(FragmentCompose.this, args, "compose:identity");
     }
 
     private void onReferenceEdit() {
@@ -5137,13 +5241,13 @@ public class FragmentCompose extends FragmentBase {
                                     EntityMessage.PGP_SIGNENCRYPT.equals(ref.ui_encrypt)) {
                                 if (Helper.isOpenKeychainInstalled(context) &&
                                         selected.sign_key != null &&
-                                        PgpHelper.hasPgpKey(context, recipients))
+                                        PgpHelper.hasPgpKey(context, recipients, true))
                                     data.draft.ui_encrypt = ref.ui_encrypt;
                             } else if (EntityMessage.SMIME_SIGNONLY.equals(ref.ui_encrypt) ||
                                     EntityMessage.SMIME_SIGNENCRYPT.equals(ref.ui_encrypt)) {
                                 if (ActivityBilling.isPro(context) &&
                                         selected.sign_key_alias != null &&
-                                        SmimeHelper.hasSmimeKey(context, recipients))
+                                        SmimeHelper.hasSmimeKey(context, recipients, true))
                                     data.draft.ui_encrypt = ref.ui_encrypt;
                             }
                         }
@@ -6400,8 +6504,8 @@ public class FragmentCompose extends FragmentBase {
                                     EntityMessage.DSN_NONE.equals(draft.dsn)) &&
                                     (draft.ui_encrypt == null ||
                                             EntityMessage.ENCRYPT_NONE.equals(draft.ui_encrypt))) {
-                                args.putBoolean("remind_pgp", PgpHelper.hasPgpKey(context, recipients));
-                                args.putBoolean("remind_smime", SmimeHelper.hasSmimeKey(context, recipients));
+                                args.putBoolean("remind_pgp", PgpHelper.hasPgpKey(context, recipients, false));
+                                args.putBoolean("remind_smime", SmimeHelper.hasSmimeKey(context, recipients, false));
                             }
 
                             if (TextUtils.isEmpty(draft.subject))
@@ -7166,8 +7270,10 @@ public class FragmentCompose extends FragmentBase {
             grpExtra.setVisibility(identity != null && identity.sender_extra ? View.VISIBLE : View.GONE);
 
             Spanned signature = null;
-            if (identity != null && !TextUtils.isEmpty(identity.signature))
-                signature = HtmlHelper.fromHtml(identity.signature, new HtmlHelper.ImageGetterEx() {
+            if (identity != null && !TextUtils.isEmpty(identity.signature)) {
+                Document d = JsoupEx.parse(identity.signature);
+                d = HtmlHelper.sanitizeView(getContext(), d, show_images);
+                signature = HtmlHelper.fromDocument(getContext(), d, new HtmlHelper.ImageGetterEx() {
                     @Override
                     public Drawable getDrawable(Element element) {
                         String source = element.attr("src");
@@ -7176,7 +7282,8 @@ public class FragmentCompose extends FragmentBase {
                         return ImageHelper.decodeImage(getContext(),
                                 working, element, true, 0, 1.0f, tvSignature);
                     }
-                }, null, getContext());
+                }, null);
+            }
             tvSignature.setText(signature);
             grpSignature.setVisibility(signature == null ? View.GONE : View.VISIBLE);
 
@@ -7199,73 +7306,6 @@ public class FragmentCompose extends FragmentBase {
             setBodyPadding();
 
             updateEncryption(null);
-        }
-
-        private void updateEncryption(EntityIdentity identity) {
-            if (identity == null)
-                return;
-
-            Bundle args = new Bundle();
-            args.putLong("id", working);
-            args.putLong("identity", identity.id);
-
-            new SimpleTask<Integer>() {
-                @Override
-                protected Integer onExecute(Context context, Bundle args) {
-                    long id = args.getLong("id");
-                    long iid = args.getLong("identity");
-
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean sign_default = prefs.getBoolean("sign_default", false);
-                    boolean encrypt_default = prefs.getBoolean("encrypt_default", false);
-
-                    DB db = DB.getInstance(context);
-
-                    EntityMessage draft = db.message().getMessage(id);
-                    if (draft == null)
-                        return null;
-
-                    if (draft.dsn != null && !EntityMessage.DSN_NONE.equals(draft.dsn))
-                        return null;
-
-                    EntityIdentity identity = db.identity().getIdentity(iid);
-                    if (identity == null)
-                        return draft.ui_encrypt;
-
-                    if (encrypt_default || identity.encrypt_default)
-                        draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
-                    else if (sign_default || identity.sign_default)
-                        draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
-                    else
-                        draft.ui_encrypt = null;
-
-                    if (identity.encrypt == 0) {
-                        if (EntityMessage.SMIME_SIGNONLY.equals(draft.ui_encrypt))
-                            draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
-                        else if (EntityMessage.SMIME_SIGNENCRYPT.equals(draft.ui_encrypt))
-                            draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
-                    } else {
-                        if (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt))
-                            draft.ui_encrypt = EntityMessage.SMIME_SIGNONLY;
-                        else if (EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt))
-                            draft.ui_encrypt = EntityMessage.SMIME_SIGNENCRYPT;
-                    }
-
-                    db.message().setMessageUiEncrypt(draft.id, draft.ui_encrypt);
-
-                    return draft.ui_encrypt;
-                }
-
-                @Override
-                protected void onExecuted(Bundle args, Integer encrypt) {
-                    FragmentCompose.this.encrypt = encrypt;
-                }
-
-                @Override
-                protected void onException(Bundle args, Throwable ex) {
-                    Log.unexpectedError(getParentFragmentManager(), ex);
-                }
-            }.setExecutor(executor).execute(FragmentCompose.this, args, "compose:identity");
         }
     };
 
@@ -7759,18 +7799,6 @@ public class FragmentCompose extends FragmentBase {
                 }
             });
 
-            if (Helper.isOpenKeychainInstalled(context)) {
-                tvEncrypt.setPaintFlags(tvEncrypt.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                tvEncrypt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String pkg = Helper.getOpenKeychainPackage(v.getContext());
-                        PackageManager pm = v.getContext().getPackageManager();
-                        v.getContext().startActivity(pm.getLaunchIntentForPackage(pkg));
-                    }
-                });
-            }
-
             spEncrypt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -7778,6 +7806,23 @@ public class FragmentCompose extends FragmentBase {
                     if (last != position) {
                         spEncrypt.setTag(position);
                         setEncrypt(encryptValues[position]);
+
+                        if ((encryptValues[position] == EntityMessage.PGP_SIGNONLY ||
+                                encryptValues[position] == EntityMessage.PGP_SIGNENCRYPT) &&
+                                Helper.isOpenKeychainInstalled(context)) {
+                            tvEncrypt.setPaintFlags(tvEncrypt.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                            tvEncrypt.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String pkg = Helper.getOpenKeychainPackage(v.getContext());
+                                    PackageManager pm = v.getContext().getPackageManager();
+                                    v.getContext().startActivity(pm.getLaunchIntentForPackage(pkg));
+                                }
+                            });
+                        } else {
+                            tvEncrypt.setPaintFlags(tvEncrypt.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
+                            tvEncrypt.setOnClickListener(null);
+                        }
                     }
                 }
 

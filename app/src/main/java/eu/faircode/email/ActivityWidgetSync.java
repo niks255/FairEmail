@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -85,10 +86,25 @@ public class ActivityWidgetSync extends ActivityBase {
             }
         });
 
+        cbSemiTransparent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    btnColor.setColor(Color.TRANSPARENT);
+            }
+        });
+
         btnColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int color = btnColor.getColor();
                 int editTextColor = Helper.resolveColor(ActivityWidgetSync.this, android.R.attr.editTextColor);
+
+                if (color == Color.TRANSPARENT) {
+                    color = Color.WHITE;
+                    if (cbSemiTransparent.isChecked() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                        color = ColorUtils.setAlphaComponent(color, 127);
+                }
 
                 ColorPickerDialogBuilder
                         .with(ActivityWidgetSync.this)
@@ -97,10 +113,14 @@ public class ActivityWidgetSync extends ActivityBase {
                         .setColorEditTextColor(editTextColor)
                         .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                         .density(6)
-                        .lightnessSliderOnly()
+                        .initialColor(color)
+                        .showLightnessSlider(true)
+                        .showAlphaSlider(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
                         .setPositiveButton(android.R.string.ok, new ColorPickerClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                                    cbSemiTransparent.setChecked(false);
                                 btnColor.setColor(selectedColor);
                             }
                         })

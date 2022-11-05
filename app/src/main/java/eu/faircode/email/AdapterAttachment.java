@@ -349,8 +349,12 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
         }
 
         private void onShare(EntityAttachment attachment) {
-            String title = (attachment.name == null ? attachment.cid : attachment.name);
-            Helper.share(context, attachment.getFile(context), attachment.getMimeType(), title);
+            try {
+                String title = (attachment.name == null ? attachment.cid : attachment.name);
+                Helper.share(context, attachment.getFile(context), attachment.getMimeType(), title);
+            } catch (Throwable ex) {
+                Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+            }
         }
 
         private void onDownload(EntityAttachment attachment) {
@@ -375,11 +379,14 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
                         db.beginTransaction();
 
                         EntityMessage message = db.message().getMessage(mid);
-                        if (message == null || message.uid == null)
+                        if (message == null)
                             return null;
 
                         EntityAccount account = db.account().getAccount(message.account);
                         if (account == null)
+                            return null;
+
+                        if (account.protocol == EntityAccount.TYPE_IMAP && message.uid == null)
                             return null;
 
                         if (!"connected".equals(account.state) && !account.isTransient(context))

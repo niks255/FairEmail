@@ -137,8 +137,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private EditText etSend;
     private ImageButton ibSend;
     private SwitchCompat swUpdates;
+    private TextView tvGithubPrivacy;
     private ImageButton ibChannelUpdated;
     private SwitchCompat swCheckWeekly;
+    private SwitchCompat swBeta;
+    private TextView tvBitBucketPrivacy;
     private SwitchCompat swChangelog;
     private SwitchCompat swCrashReports;
     private TextView tvUuid;
@@ -250,7 +253,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "deepl_enabled",
             "vt_enabled", "vt_apikey",
             "send_enabled", "send_host",
-            "updates", "weekly", "show_changelog",
+            "updates", "weekly", "beta", "show_changelog",
             "crash_reports", "cleanup_attachments",
             "watchdog", "experiments", "main_log", "main_log_memory", "protocol", "log_level", "debug", "leak_canary",
             "test1", "test2", "test3", "test4", "test5",
@@ -350,8 +353,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         etSend = view.findViewById(R.id.etSend);
         ibSend = view.findViewById(R.id.ibSend);
         swUpdates = view.findViewById(R.id.swUpdates);
+        tvGithubPrivacy = view.findViewById(R.id.tvGithubPrivacy);
         ibChannelUpdated = view.findViewById(R.id.ibChannelUpdated);
         swCheckWeekly = view.findViewById(R.id.swWeekly);
+        swBeta = view.findViewById(R.id.swBeta);
+        tvBitBucketPrivacy = view.findViewById(R.id.tvBitBucketPrivacy);
         swChangelog = view.findViewById(R.id.swChangelog);
         swCrashReports = view.findViewById(R.id.swCrashReports);
         tvUuid = view.findViewById(R.id.tvUuid);
@@ -808,11 +814,20 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("updates", checked).apply();
                 swCheckWeekly.setEnabled(checked);
+                swBeta.setEnabled(checked);
                 if (!checked) {
                     NotificationManager nm =
                             Helper.getSystemService(getContext(), NotificationManager.class);
                     nm.cancel(NotificationHelper.NOTIFICATION_UPDATE);
                 }
+            }
+        });
+
+        tvGithubPrivacy.getPaint().setUnderlineText(true);
+        tvGithubPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(Helper.GITHUB_PRIVACY_URI), true);
             }
         });
 
@@ -832,6 +847,21 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("weekly", checked).apply();
+            }
+        });
+
+        swBeta.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("beta", checked).apply();
+            }
+        });
+
+        tvBitBucketPrivacy.getPaint().setUnderlineText(true);
+        tvBitBucketPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(Helper.BITBUCKET_PRIVACY_URI), true);
             }
         });
 
@@ -1097,7 +1127,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
-        swExternalStorage.setEnabled(getContext().getExternalFilesDir(null) != null);
+        swExternalStorage.setEnabled(Helper.getExternalFilesDir(getContext()) != null);
         swExternalStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1112,11 +1142,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         boolean external_storage = args.getBoolean("external_storage");
 
                         File source = (!external_storage
-                                ? context.getExternalFilesDir(null)
+                                ? Helper.getExternalFilesDir(context)
                                 : context.getFilesDir());
 
                         File target = (external_storage
-                                ? context.getExternalFilesDir(null)
+                                ? Helper.getExternalFilesDir(context)
                                 : context.getFilesDir());
 
                         source = Helper.ensureExists(new File(source, "attachments"));
@@ -1623,7 +1653,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         files.addAll(getFiles(context.getCacheDir(), MIN_FILE_SIZE));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                             files.addAll(getFiles(context.getDataDir(), MIN_FILE_SIZE));
-                        files.addAll(getFiles(context.getExternalFilesDir(null), MIN_FILE_SIZE));
+                        files.addAll(getFiles(Helper.getExternalFilesDir(context), MIN_FILE_SIZE));
 
                         Collections.sort(files, new Comparator<File>() {
                             @Override
@@ -1657,7 +1687,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                 ? null : context.getDataDir());
                         File filesDir = context.getFilesDir();
                         File cacheDir = context.getCacheDir();
-                        File externalDir = context.getExternalFilesDir(null);
+                        File externalDir = Helper.getExternalFilesDir(context);
 
                         if (dataDir != null)
                             ssb.append("Data: ").append(dataDir.getAbsolutePath()).append("\r\n");
@@ -1829,7 +1859,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         setLastCleanup(prefs.getLong("last_cleanup", -1));
 
-        File external = getContext().getExternalFilesDir(null);
+        File external = Helper.getExternalFilesDir(getContext());
         boolean emulated = (external != null && Environment.isExternalStorageEmulated(external));
         tvExternalStorageFolder.setText(
                 (external == null ? null : external.getAbsolutePath()) + (emulated ? " emulated" : ""));
@@ -2071,6 +2101,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swUpdates.setChecked(prefs.getBoolean("updates", true));
         swCheckWeekly.setChecked(prefs.getBoolean("weekly", Helper.hasPlayStore(getContext())));
         swCheckWeekly.setEnabled(swUpdates.isChecked());
+        swBeta.setChecked(prefs.getBoolean("beta", false));
+        swBeta.setEnabled(swUpdates.isChecked());
         swChangelog.setChecked(prefs.getBoolean("show_changelog", !BuildConfig.PLAY_STORE_RELEASE));
         swExperiments.setChecked(prefs.getBoolean("experiments", false));
         swCrashReports.setChecked(prefs.getBoolean("crash_reports", false));

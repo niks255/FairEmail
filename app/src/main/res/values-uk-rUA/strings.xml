@@ -229,6 +229,7 @@
     <string name="title_setup_free">Цей додаток може використовуватися безкоштовно?</string>
     <string name="title_setup_permissions">Надати дозволи</string>
     <string name="title_setup_permissions_remark">Доступ до контактної інформації (необов\'язково)</string>
+    <string name="title_setup_permissions_calendar" comment="title_setup_permissions_calendar&#10;Description of calendar read/write permission">Зберігати запрошення (необов\'язково)</string>
     <string name="title_setup_permissions_explanation">Щоб переглянути контактні дані й запропонувати контакти</string>
     <string name="title_setup_permissions_notify">Для показу нових сповіщень (необов\'язково)</string>
     <string name="title_setup_permissions_notify_explanation">Потрібні дозволи для показу сповіщень для нових повідомлень в рядку стану</string>
@@ -369,6 +370,7 @@
     <string name="title_advanced_use_blocklist">Перенести повідомлення з доменів що є у списку з блокування у теку зі спамом</string>
     <string name="title_advanced_use_blocklist_pop3">Пропускати повідомлення від доменів в списку блокувань (тільки POP3)</string>
     <string name="title_advanced_tune_keep_alive">Автоматично налаштовувати інтервал активності</string>
+    <string name="title_advanced_blocklist_warning">Списки блокувань неідеальні та можуть блокувати більше ніж просто спам!</string>
     <string name="title_advanced_keyboard">Показувати клавіатуру за замовчуванням</string>
     <string name="title_advanced_keyboard_no_fullscreen">Заборонити повноекранну клавіатуру</string>
     <string name="title_advanced_suggest_names">Показати імена та адреси електронної пошти</string>
@@ -638,6 +640,7 @@
     <string name="title_advanced_clear_all_remark">Дані застосунку будуть видалені назавжди!</string>
     <string name="title_advanced_sign_default">Підписати за замовчуванням</string>
     <string name="title_advanced_encrypt_default">Шифрувати за замовчуванням</string>
+    <string name="title_advanced_encrypt_auto">Автоматично шифрувати при доступності всіх ключів одержувачів</string>
     <string name="title_advanced_auto_decrypt">Автоматично розшифрувати повідомлення</string>
     <string name="title_advanced_auto_undo_decrypt">Скасувати дешифрування при закритті розмови</string>
     <string name="title_advanced_openpgp">OpenPGP додаток</string>
@@ -676,6 +679,7 @@
     <string name="title_advanced_watchdog">Періодично перевіряти, чи ще активнний додатк FairEmail</string>
     <string name="title_advanced_updates">Перевірити наявність оновлень з GitHub</string>
     <string name="title_advanced_check_weekly">Щотижнева перевірка замість щоденної</string>
+    <string name="title_advanced_beta">Перевірити наявність тестових версій на BitBucket</string>
     <string name="title_advanced_changelog">Показати список змін після оновлення</string>
     <string name="title_advanced_experiments">Спробуйте експериментальні функції</string>
     <string name="title_advanced_crash_reports">Надіслати звіт про помилки</string>
@@ -821,6 +825,7 @@
     <string name="title_account_noop_hint">Це буде оновлювати підключення активніше, але також буде використовувати більше заряду акумулятора</string>
     <string name="title_account_partial_fetch_hint">Вимкнути це лише у випадку пустих повідомлень або пошкоджених вкладень</string>
     <string name="title_color">Колір</string>
+    <string name="title_calendar">Календар</string>
     <string name="title_background">Тло</string>
     <string name="title_transparent">Прозорість</string>
     <string name="title_account_ondemand">Синхронізувати вручну</string>
@@ -1247,7 +1252,7 @@
     <string name="title_style_superscript">Верхній індекс</string>
     <string name="title_style_strikethrough">Закреслений</string>
     <string name="title_style_protect">Захист паролем</string>
-    <string name="title_style_protected" comment="title_style_protected&#10;Title of dialog to decrypt protect content">Захищений вміст</string>
+    <string name="title_style_protected">Захищений вміст</string>
     <string name="title_style_protect_size">Задовгий текст</string>
     <string name="title_style_clear">Очистити форматування</string>
     <string name="title_style_link">Вставити посилання</string>

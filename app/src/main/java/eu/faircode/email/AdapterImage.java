@@ -210,7 +210,11 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ViewHolder> 
 
             EntityAttachment attachment = items.get(pos);
             if (attachment.available)
-                Helper.share(context, attachment.getFile(context), attachment.getMimeType(), attachment.name);
+                try {
+                    Helper.share(context, attachment.getFile(context), attachment.getMimeType(), attachment.name);
+                } catch (Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
             else {
                 if (attachment.progress == null) {
                     Bundle args = new Bundle();
@@ -230,11 +234,14 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ViewHolder> 
                                 db.beginTransaction();
 
                                 EntityMessage message = db.message().getMessage(mid);
-                                if (message == null || message.uid == null)
+                                if (message == null)
                                     return null;
 
                                 EntityAccount account = db.account().getAccount(message.account);
                                 if (account == null)
+                                    return null;
+
+                                if (account.protocol == EntityAccount.TYPE_IMAP && message.uid == null)
                                     return null;
 
                                 if (!"connected".equals(account.state) && !account.isTransient(context))
