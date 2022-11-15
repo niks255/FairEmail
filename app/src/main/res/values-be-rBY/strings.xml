@@ -228,6 +228,7 @@
     <string name="title_setup_free">Ці з\'яўляецца гэта праграма бясплатнай?</string>
     <string name="title_setup_permissions">Даць дазволы</string>
     <string name="title_setup_permissions_remark">Доступ да кантактнай інфармацыі (неабавязкова)</string>
+    <string name="title_setup_permissions_calendar">Для захавання запрашэнняў (неабавязкова)</string>
     <string name="title_setup_permissions_explanation">Для пошуку кантактнай інфармацыі і прапановы кантактаў патрабуюцца дазволы на доступ да спісу кантактаў</string>
     <string name="title_setup_permissions_notify">Для паказу апавяшчэнняў аб новых паведамленнях (неабавязкова)</string>
     <string name="title_setup_permissions_notify_explanation">Дазволы на апавяшчэнні патрабуюцца для паказу апавяшчэнняў аб новых паведамленнях у радку стану</string>
@@ -614,6 +615,8 @@
     <string name="title_advanced_notifications_background">Выкарыстоўваць фонавую службу для сінхранізацыі паведамленняў</string>
     <string name="title_advanced_notifications_background_hint">Фонавая служба можа быць спынена Android у любы час і не патрабуе апавяшчэння ў радку стану</string>
     <string name="title_advanced_confirm_links">Пацвярджаць адкрыццё спасылак</string>
+    <string name="title_advanced_sanitize_links">Выдаліць параметры адсочвання па змаўчанні</string>
+    <string name="title_advanced_sanitize_links_hint">Толькі пры пацвярджэнні спасылак</string>
     <string name="title_advanced_check_links_dbl">Правяраць спісы блакіроўкі даменаў на наяўнасць падазроных спасылак</string>
     <string name="title_advanced_confirm_images">Па змаўчанні не паказваць выявы</string>
     <string name="title_advanced_ask_images">Пацвярджаць адлюстраванне выяў</string>
@@ -674,6 +677,8 @@
     <string name="title_advanced_language_system">Сістэмная</string>
     <string name="title_advanced_lt">Інтэграцыя з LanguageTool</string>
     <string name="title_advanced_lt_auto">Правяраць абзац пасля новага радка</string>
+    <string name="title_advanced_lt_user">Імя карыстальніка (неабавязкова)</string>
+    <string name="title_advanced_lt_key">Ключ API (неабавязкова)</string>
     <string name="title_advanced_deepl">Інтэграцыя з DeepL</string>
     <string name="title_advanced_virus_total">Інтэграцыя з VirusTotal</string>
     <string name="title_advanced_sdcard">Я хачу выкарыстоўваць карту памяці</string>
@@ -899,6 +904,7 @@
     <string name="title_drafts_select">Для адпраўкі электроннай пошты ў наладах уліковага запісу трэба выбраць папку для чарнавікоў</string>
     <string name="title_account_auth_update">Абнавіць аўтарызацыю</string>
     <string name="title_account_auth_password">Пераключыцца на аўтэнтыфікацыю праз пароль</string>
+    <string name="title_change_password">Змяніць пароль</string>
     <string name="title_delete_account">Выдаліць уліковы запіс</string>
     <string name="title_account_delete">Выдаліць гэты ўліковы запіс назаўсёды?</string>
     <string name="title_identity_delete">Выдаліць гэты ідэнтыфікатар назаўсёды?</string>
@@ -1098,6 +1104,7 @@
     <string name="title_quick_actions_low">Нізкая важнасць</string>
     <string name="title_quick_actions_high">Высокая важнасць</string>
     <string name="title_quick_actions_snooze">Адкласці</string>
+    <string name="title_quick_actions_clear" comment="title_quick_actions_clear&#10;Title for quick actions option to clear the selection of selected messages after performing the action (mark as read, etc.)">Ачысціць выбар пасля выканання дзеяння</string>
     <string name="title_trash">Выдаленыя</string>
     <string name="title_copy">Капіраваць &#8230;</string>
     <string name="title_copy_to">Капіраваць у &#8230;</string>
@@ -1348,8 +1355,8 @@
     <string name="title_resync">Сінхранізаваць паўторна</string>
     <string name="title_charset">Кадзіраванне</string>
     <string name="title_charset_auto">Аўтаматычна</string>
-    <string name="title_alternative_text">Паказаць звычайны тэкст</string>
-    <string name="title_alternative_html">Паказаць HTML</string>
+    <string name="title_alternative_text">Загрузіць звычайны тэкст</string>
+    <string name="title_alternative_html">Загрузіць HTML</string>
     <string name="title_no_openpgp">OpenKeychain не знойдзена</string>
     <string name="title_user_interaction">Перанос на OpenKeychain</string>
     <string name="title_padlock">Выкарыстоўваць замок для расшыфроўкі паведамлення</string>
@@ -1712,6 +1719,7 @@
     <string name="title_reset_open">Задаць або ачысціць праграмы па змаўчанні</string>
     <string name="title_select_app">Выберыце праграму</string>
     <string name="title_updated">Даступна абнаўленне да версіі %1$s</string>
+    <string name="title_no_update">Няма даступных абнаўленняў</string>
     <string name="title_issue">У вас ёсць пытанне або праблема?</string>
     <string name="title_yes">Так</string>
     <string name="title_no">Не</string>
@@ -1723,6 +1731,8 @@
     <string name="title_select_block">Выбраць блок</string>
     <string name="title_insert_brackets">У дужкі</string>
     <string name="title_insert_quotes">Цытата</string>
+    <string name="title_lt_add">Дадаць слова</string>
+    <string name="title_lt_delete">Выдаліць слова</string>
     <string name="title_add">Дадаць</string>
     <string name="title_browse">Адкрыць з дапамогай</string>
     <string name="title_info">Інфармацыя</string>
@@ -1824,22 +1834,27 @@
     <string name="title_widget_background">Колер фону</string>
     <string name="title_widget_day_night">Выкарыстоўваць цёмную сістэмную тэму</string>
     <string name="title_compat_dark">Google выдаліў цёмны рэжым для версій Android да версіі 10</string>
-    <string name="title_accessibility_collapsed">Згорнута</string>
-    <string name="title_accessibility_expanded">Разгорнута</string>
-    <string name="title_accessibility_seen">Прачытана</string>
-    <string name="title_accessibility_unseen">Непрачытанае</string>
-    <plurals name="title_accessibility_messages">
-        <item quantity="one">%1$d паведамленне</item>
-        <item quantity="few">%1$d паведамленні</item>
-        <item quantity="many">%1$d паведамленняў</item>
-        <item quantity="other">%1$d паведамленняў</item>
-    </plurals>
     <!-- Thunderbird -->
     <string name="title_keyword_label1">Важнае</string>
     <string name="title_keyword_label2">Праца</string>
     <string name="title_keyword_label3">Персанальны</string>
     <string name="title_keyword_label4">Выканаць</string>
     <string name="title_keyword_label5">Пазней</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="one">%1$d паведамленне</item>
+        <item quantity="few">%1$d паведамленні</item>
+        <item quantity="many">%1$d паведамленняў</item>
+        <item quantity="other">%1$d паведамленняў</item>
+    </plurals>
+    <string name="title_accessibility_accounts">Уліковыя запісы</string>
+    <string name="title_accessibility_folders">Папкі</string>
+    <string name="title_accessibility_searches">Пошукі</string>
+    <string name="title_accessibility_menus">Меню</string>
+    <string name="title_accessibility_extras">Дадаткова</string>
+    <string name="title_accessibility_collapsed">Згорнута</string>
+    <string name="title_accessibility_expanded">Разгорнута</string>
+    <string name="title_accessibility_seen">Прачытана</string>
+    <string name="title_accessibility_unseen">Непрачытанае</string>
     <string name="title_accessibility_flagged">Пазначаныя</string>
     <string name="title_accessibility_unflagged">Не пазначаныя</string>
     <string name="title_accessibility_collapse">Згарнуць</string>

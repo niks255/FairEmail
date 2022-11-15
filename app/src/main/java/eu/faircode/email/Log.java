@@ -360,6 +360,13 @@ public class Log {
             EntityLog.log(ctx, message);
     }
 
+    public static void persist(EntityLog.Type type, String message) {
+        if (ctx == null)
+            Log.e(message);
+        else
+            EntityLog.log(ctx, type, message);
+    }
+
     static void setCrashReporting(boolean enabled) {
         try {
             if (enabled)
@@ -435,7 +442,7 @@ public class Log {
             etypes.setAnrs(BuildConfig.DEBUG);
             etypes.setNdkCrashes(false);
             config.setEnabledErrorTypes(etypes);
-            config.setMaxBreadcrumbs(BuildConfig.PLAY_STORE_RELEASE ? 50 : 100);
+            config.setMaxBreadcrumbs(BuildConfig.PLAY_STORE_RELEASE ? 250 : 500);
 
             Set<String> ignore = new HashSet<>();
 
@@ -2127,7 +2134,7 @@ public class Log {
             sb.append(String.format("WebView %d/%s %s\r\n",
                     pkg == null ? -1 : pkg.versionCode,
                     pkg == null ? null : pkg.versionName,
-                    pkg == null || pkg.versionCode / 100000 < 5005 ? "!!!" : ""));
+                    pkg == null || pkg.versionCode / 100000 < 5304 ? "!!!" : ""));
         } catch (Throwable ex) {
             sb.append(ex).append("\r\n");
         }
@@ -2609,6 +2616,8 @@ public class Log {
             }
 
             db.attachment().setDownloaded(attachment.id, size);
+            if (!BuildConfig.DEBUG)
+                attachment.zip(context);
         } catch (Throwable ex) {
             Log.e(ex);
         }
@@ -2717,6 +2726,8 @@ public class Log {
                 }
 
                 db.attachment().setDownloaded(attachment.id, size);
+                if (!BuildConfig.DEBUG)
+                    attachment.zip(context);
             } finally {
                 if (proc != null)
                     proc.destroy();

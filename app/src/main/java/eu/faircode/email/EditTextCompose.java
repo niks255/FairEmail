@@ -45,9 +45,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputConnectionWrapper;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
@@ -111,8 +113,14 @@ public class EditTextCompose extends FixedEditText {
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                     try {
                         int order = 1000;
-                        menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_brackets, order++, context.getString(R.string.title_insert_brackets));
-                        menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_quotes, order++, context.getString(R.string.title_insert_quotes));
+                        menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_brackets,
+                                order++, context.getString(R.string.title_insert_brackets));
+                        menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_quotes,
+                                order++, context.getString(R.string.title_insert_quotes));
+                        menu.add(Menu.CATEGORY_SECONDARY, R.string.title_lt_add,
+                                order++, context.getString(R.string.title_lt_add));
+                        menu.add(Menu.CATEGORY_SECONDARY, R.string.title_lt_delete,
+                                order++, context.getString(R.string.title_lt_delete));
                     } catch (Throwable ex) {
                         Log.e(ex);
                     }
@@ -124,8 +132,17 @@ public class EditTextCompose extends FixedEditText {
                     int start = getSelectionStart();
                     int end = getSelectionEnd();
                     boolean selection = (start >= 0 && start < end);
+                    Context context = getContext();
+                    Editable edit = getText();
+                    boolean dictionary = (selection &&
+                            context instanceof AppCompatActivity &&
+                            LanguageTool.isPremium(context) &&
+                            edit != null &&
+                            edit.subSequence(start, end).toString().indexOf(' ') < 0);
                     menu.findItem(R.string.title_insert_brackets).setVisible(selection);
                     menu.findItem(R.string.title_insert_quotes).setVisible(selection);
+                    menu.findItem(R.string.title_lt_add).setVisible(dictionary);
+                    menu.findItem(R.string.title_lt_delete).setVisible(dictionary);
                     return false;
                 }
 
@@ -137,6 +154,10 @@ public class EditTextCompose extends FixedEditText {
                             return surround("(", ")");
                         else if (id == R.string.title_insert_quotes)
                             return surround("\"", "\"");
+                        else if (id == R.string.title_lt_add)
+                            return modifyDictionary(true);
+                        else if (id == R.string.title_lt_delete)
+                            return modifyDictionary(false);
                     }
                     return false;
                 }
@@ -165,6 +186,50 @@ public class EditTextCompose extends FixedEditText {
                         }
                     }
                     return selection;
+                }
+
+                private boolean modifyDictionary(boolean add) {
+                    int start = getSelectionStart();
+                    int end = getSelectionEnd();
+                    if (start < 0 || start >= end)
+                        return false;
+
+                    final Context context = getContext();
+                    if (!(context instanceof AppCompatActivity))
+                        return false;
+                    AppCompatActivity activity = (AppCompatActivity) getContext();
+
+                    Editable edit = getText();
+                    if (edit == null)
+                        return false;
+
+                    String word = edit.subSequence(start, end).toString();
+
+                    Bundle args = new Bundle();
+                    args.putString("word", word);
+                    args.putBoolean("add", add);
+
+                    new SimpleTask<Void>() {
+                        @Override
+                        protected Void onExecute(Context context, Bundle args) throws Throwable {
+                            String word = args.getString("word");
+                            boolean add = args.getBoolean("add");
+                            LanguageTool.modifyDictionary(context, word, null, add);
+                            return null;
+                        }
+
+                        @Override
+                        protected void onExecuted(Bundle args, Void data) {
+                            setSelection(end);
+                        }
+
+                        @Override
+                        protected void onException(Bundle args, Throwable ex) {
+                            ToastEx.makeText(getContext(), ex.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    }.execute(activity, args, "dictionary:modify");
+
+                    return true;
                 }
             });
 
@@ -566,6 +631,41 @@ public class EditTextCompose extends FixedEditText {
         InputConnection ic = super.onCreateInputConnection(editorInfo);
         if (ic == null)
             return null;
+
+        ic = new InputConnectionWrapper(ic, false) {
+            @Override
+            public boolean deleteSurroundingText(int beforeLength, int afterLength) {
+                try {
+                    return super.deleteSurroundingText(beforeLength, afterLength);
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                    return true;
+                    /*
+                        java.lang.IndexOutOfBoundsException: replace (107 ... -2147483542) has end before start
+                                at android.text.SpannableStringBuilder.checkRange(SpannableStringBuilder.java:1318)
+                                at android.text.SpannableStringBuilder.replace(SpannableStringBuilder.java:513)
+                                at androidx.emoji2.text.SpannableBuilder.replace(SourceFile:7)
+                                at android.text.SpannableStringBuilder.delete(SpannableStringBuilder.java:230)
+                                at androidx.emoji2.text.SpannableBuilder.delete(SourceFile:2)
+                                at androidx.emoji2.text.SpannableBuilder.delete(SourceFile:1)
+                                at android.view.inputmethod.BaseInputConnection.deleteSurroundingText(BaseInputConnection.java:276)
+                                at android.view.inputmethod.InputConnectionWrapper.deleteSurroundingText(InputConnectionWrapper.java:133)
+                                at androidx.emoji2.viewsintegration.EmojiInputConnection.deleteSurroundingText(SourceFile:17)
+                                at android.view.inputmethod.InputConnectionWrapper.deleteSurroundingText(InputConnectionWrapper.java:133)
+                     */
+                }
+            }
+
+            @Override
+            public boolean deleteSurroundingTextInCodePoints(int beforeLength, int afterLength) {
+                try {
+                    return super.deleteSurroundingTextInCodePoints(beforeLength, afterLength);
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                    return true;
+                }
+            }
+        };
 
         EditorInfoCompat.setContentMimeTypes(editorInfo, new String[]{"image/*"});
 

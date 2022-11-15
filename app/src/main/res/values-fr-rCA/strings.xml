@@ -202,7 +202,7 @@
     <string name="title_setup_free">L\'utilisation de cette application est-elle gratuite?</string>
     <string name="title_setup_permissions">Accorder les autorisations</string>
     <string name="title_setup_permissions_remark">Pour accéder aux informations de contact (facultatif)</string>
-    <string name="title_setup_permissions_calendar" comment="title_setup_permissions_calendar&#10;Description of calendar read/write permission">Pour enregistrer les invitations (facultatif)</string>
+    <string name="title_setup_permissions_calendar">Pour enregistrer les invitations (facultatif)</string>
     <string name="title_setup_permissions_explanation">L\'autorisation d\'accès aux contacts est requise pour rechercher des informations de contact et pour suggérer des contacts</string>
     <string name="title_setup_permissions_notify">Pour afficher les notifications de nouveaux messages (facultatif)</string>
     <string name="title_setup_permissions_notify_explanation">Les autorisations de notification sont requises pour afficher les notifications pour les nouveaux messages dans la barre d\'état</string>
@@ -588,6 +588,8 @@
     <string name="title_advanced_notifications_background">Utiliser le service d\'arrière-plan pour synchroniser les messages</string>
     <string name="title_advanced_notifications_background_hint">Un service en arrière-plan peut être arrêté par Android à tout moment, mais ne nécessite pas de notification dans la barre d\'état</string>
     <string name="title_advanced_confirm_links">Confirmer l’ouverture des liens</string>
+    <string name="title_advanced_sanitize_links">Supprimer les paramètres de suivi par défaut</string>
+    <string name="title_advanced_sanitize_links_hint">Seulement lors de la confirmation des liens</string>
     <string name="title_advanced_check_links_dbl">Rechercher les liens suspects dans des listes de blocage de domaines</string>
     <string name="title_advanced_confirm_images">N\'afficher aucune image par défaut</string>
     <string name="title_advanced_ask_images">Confirmer l’affichage des images</string>
@@ -648,6 +650,8 @@
     <string name="title_advanced_language_system">Système</string>
     <string name="title_advanced_lt">Intégration de LanguageTool</string>
     <string name="title_advanced_lt_auto">Vérifier le paragraphe après une nouvelle ligne</string>
+    <string name="title_advanced_lt_user">Identifiant (facultatif)</string>
+    <string name="title_advanced_lt_key">Clé API (facultatif)</string>
     <string name="title_advanced_deepl">Intégration de DeepL</string>
     <string name="title_advanced_virus_total">Intégration de VirusTotal</string>
     <string name="title_advanced_sdcard">Je veux utiliser une carte SD</string>
@@ -874,6 +878,7 @@
     <string name="title_drafts_select">L\'envoi de courriels nécessite la sélection d\'un dossier « Brouillons » dans les paramètres du compte</string>
     <string name="title_account_auth_update">Mettre à jour l\'autorisation</string>
     <string name="title_account_auth_password">Passer à l\'authentification par mot de passe</string>
+    <string name="title_change_password">Changer le mot de passe</string>
     <string name="title_delete_account">Supprimer le compte</string>
     <string name="title_account_delete">Supprimer définitivement ce compte?</string>
     <string name="title_identity_delete">Supprimer définitivement cette identité?</string>
@@ -1072,6 +1077,7 @@
     <string name="title_quick_actions_low">Peu important</string>
     <string name="title_quick_actions_high">Très important</string>
     <string name="title_quick_actions_snooze">Reporter</string>
+    <string name="title_quick_actions_clear" comment="title_quick_actions_clear&#10;Title for quick actions option to clear the selection of selected messages after performing the action (mark as read, etc.)">Désélectionner les messages après une action</string>
     <string name="title_trash">Supprimer</string>
     <string name="title_copy">Copier&#8230;</string>
     <string name="title_copy_to">Copier vers&#8230;</string>
@@ -1322,8 +1328,8 @@
     <string name="title_resync">Resynchroniser</string>
     <string name="title_charset">Encodage</string>
     <string name="title_charset_auto">Automatique</string>
-    <string name="title_alternative_text">Afficher le texte brut</string>
-    <string name="title_alternative_html">Afficher en HTML</string>
+    <string name="title_alternative_text">Charger le texte brut</string>
+    <string name="title_alternative_html">Charger le HTML</string>
     <string name="title_no_openpgp">OpenKeychain introuvable</string>
     <string name="title_user_interaction">Transfert vers OpenKeychain</string>
     <string name="title_padlock">Utiliser le cadenas pour déchiffrer le message</string>
@@ -1686,6 +1692,7 @@
     <string name="title_reset_open">Définir ou effacer les applications par défaut</string>
     <string name="title_select_app">Sélectionner une application</string>
     <string name="title_updated">Mise à jour vers la version %1$s disponible</string>
+    <string name="title_no_update">Aucune mise à jour disponible</string>
     <string name="title_issue">Avez-vous une question ou un problème?</string>
     <string name="title_yes">Oui</string>
     <string name="title_no">Non</string>
@@ -1697,6 +1704,8 @@
     <string name="title_select_block">Sélectionner le bloc</string>
     <string name="title_insert_brackets">Mettre entre parenthèses</string>
     <string name="title_insert_quotes">Mettre entre guillemets</string>
+    <string name="title_lt_add">Ajouter un mot</string>
+    <string name="title_lt_delete">Supprimer un mot</string>
     <string name="title_add">Ajouter</string>
     <string name="title_browse">Ouvrir avec</string>
     <string name="title_info">Infos</string>
@@ -1798,20 +1807,25 @@
     <string name="title_widget_background">Couleur d\'arrière-plan</string>
     <string name="title_widget_day_night">Utiliser le thème sombre du système</string>
     <string name="title_compat_dark">Google a supprimé le mode sombre dans les versions d\'Android inférieures à la version 10</string>
-    <string name="title_accessibility_collapsed">Replié</string>
-    <string name="title_accessibility_expanded">Déplié</string>
-    <string name="title_accessibility_seen">Lu</string>
-    <string name="title_accessibility_unseen">Non lu</string>
-    <plurals name="title_accessibility_messages">
-        <item quantity="one">%1$d message</item>
-        <item quantity="other">%1$d messages</item>
-    </plurals>
     <!-- Thunderbird -->
     <string name="title_keyword_label1">Important</string>
     <string name="title_keyword_label2">Travail</string>
     <string name="title_keyword_label3">Personnel</string>
     <string name="title_keyword_label4">À faire</string>
     <string name="title_keyword_label5">Plus tard</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="one">%1$d message</item>
+        <item quantity="other">%1$d messages</item>
+    </plurals>
+    <string name="title_accessibility_accounts">Comptes</string>
+    <string name="title_accessibility_folders">Dossiers</string>
+    <string name="title_accessibility_searches">Recherches</string>
+    <string name="title_accessibility_menus">Menus</string>
+    <string name="title_accessibility_extras">Suppléments</string>
+    <string name="title_accessibility_collapsed">Replié</string>
+    <string name="title_accessibility_expanded">Déplié</string>
+    <string name="title_accessibility_seen">Lu</string>
+    <string name="title_accessibility_unseen">Non lu</string>
     <string name="title_accessibility_flagged">Suivi</string>
     <string name="title_accessibility_unflagged">Non suivi</string>
     <string name="title_accessibility_collapse">Replier</string>

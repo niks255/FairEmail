@@ -4,6 +4,29 @@ Changelog
 
 Ninjatitan
 
+Next version
+
+* Added OAuth for AOL (quick setup wizard)
+* Added change password button (settings/extras)
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+BETA 1.1999c - 2022-11-08
+
+* Added adding/deleting words to/from LanguageTool dictionary (copy/paste menu; requires LanguageTool premium)
+* Added zipping attachments in the message composer (long press attached file)
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+BETA 1.1999b - 2022-11-07
+
+* Added optional unified inbox nav menu item (when the inboxes and unified folders diverge)
+* Added LanguageTool username/API key fields (to access the premium features)
+* Small improvements and minor bug fixes
+* Updated translations
+
 1.1999 - 2022-11-05
 
 * Fixed refreshing OAuth tokens in some situations

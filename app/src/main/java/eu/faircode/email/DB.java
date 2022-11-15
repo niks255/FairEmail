@@ -68,7 +68,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 252,
+        version = 253,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -424,7 +424,7 @@ public abstract class DB extends RoomDatabase {
                         boolean sqlite_auto_vacuum = prefs.getBoolean("sqlite_auto_vacuum", false);
                         String mode = (sqlite_auto_vacuum ? "FULL" : "INCREMENTAL");
                         Log.i("Set PRAGMA auto_vacuum=" + mode);
-                        try (Cursor cursor = db.query("PRAGMA auto_vacuum=" + mode + ";", null)) {
+                        try (Cursor cursor = db.query("PRAGMA auto_vacuum=" + mode + ";")) {
                             cursor.moveToNext(); // required
                         }
 
@@ -432,12 +432,12 @@ public abstract class DB extends RoomDatabase {
                         boolean sqlite_sync_extra = prefs.getBoolean("sqlite_sync_extra", true);
                         String sync = (sqlite_sync_extra ? "EXTRA" : "NORMAL");
                         Log.i("Set PRAGMA synchronous=" + sync);
-                        try (Cursor cursor = db.query("PRAGMA synchronous=" + sync + ";", null)) {
+                        try (Cursor cursor = db.query("PRAGMA synchronous=" + sync + ";")) {
                             cursor.moveToNext(); // required
                         }
 
                         Log.i("Set PRAGMA journal_size_limit=" + DB_JOURNAL_SIZE_LIMIT);
-                        try (Cursor cursor = db.query("PRAGMA journal_size_limit=" + DB_JOURNAL_SIZE_LIMIT + ";", null)) {
+                        try (Cursor cursor = db.query("PRAGMA journal_size_limit=" + DB_JOURNAL_SIZE_LIMIT + ";")) {
                             cursor.moveToNext(); // required
                         }
 
@@ -446,7 +446,7 @@ public abstract class DB extends RoomDatabase {
                         if (cache_size != null) {
                             cache_size = -cache_size; // kibibytes
                             Log.i("Set PRAGMA cache_size=" + cache_size);
-                            try (Cursor cursor = db.query("PRAGMA cache_size=" + cache_size + ";", null)) {
+                            try (Cursor cursor = db.query("PRAGMA cache_size=" + cache_size + ";")) {
                                 cursor.moveToNext(); // required
                             }
                         }
@@ -454,7 +454,7 @@ public abstract class DB extends RoomDatabase {
                         // Prevent long running operations from getting an exclusive lock
                         // https://www.sqlite.org/pragma.html#pragma_cache_spill
                         Log.i("Set PRAGMA cache_spill=0");
-                        try (Cursor cursor = db.query("PRAGMA cache_spill=0;", null)) {
+                        try (Cursor cursor = db.query("PRAGMA cache_spill=0;")) {
                             cursor.moveToNext(); // required
                         }
 
@@ -2535,6 +2535,45 @@ public abstract class DB extends RoomDatabase {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         db.execSQL("ALTER TABLE `account` ADD COLUMN `calendar` TEXT");
+                    }
+                }).addMigrations(new Migration(252, 253) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        for (String key : prefs.getAll().keySet())
+                            if (key.startsWith("updated.") || key.startsWith("unset."))
+                                editor.remove(key);
+                        try (Cursor cursor = db.query("SELECT account.id" +
+                                ", archive.type AS archive" +
+                                ", drafts.type AS drafts" +
+                                ", trash.type AS trash" +
+                                ", junk.type AS junk" +
+                                ", sent.type AS sent" +
+                                " FROM `account`" +
+                                " LEFT JOIN folder AS archive ON archive.account = account.id AND archive.type = 'All'" +
+                                " LEFT JOIN folder AS drafts ON drafts.account = account.id AND drafts.type = 'Drafts'" +
+                                " LEFT JOIN folder AS trash ON trash.account = account.id AND trash.type = 'Trash'" +
+                                " LEFT JOIN folder AS junk ON junk.account = account.id AND junk.type = 'Junk'" +
+                                " LEFT JOIN folder AS sent ON sent.account = account.id AND sent.type = 'Sent'" +
+                                " WHERE account.pop = 0")) {
+                            while (cursor.moveToNext()) {
+                                long id = cursor.getLong(0);
+                                if (cursor.getString(1) == null)
+                                    editor.putBoolean("unset." + id + ".All", true);
+                                if (cursor.getString(2) == null)
+                                    editor.putBoolean("unset." + id + ".Drafts", true);
+                                if (cursor.getString(3) == null)
+                                    editor.putBoolean("unset." + id + ".Trash", true);
+                                if (cursor.getString(4) == null)
+                                    editor.putBoolean("unset." + id + ".Junk", true);
+                                if (cursor.getString(5) == null)
+                                    editor.putBoolean("unset." + id + ".Sent", true);
+                            }
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                        editor.apply();
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

@@ -116,6 +116,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.helper.widget.Flow;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.content.pm.ShortcutInfoCompat;
@@ -3984,12 +3985,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (uris == null)
                         return;
 
-                    final Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-                    intent.setType("image/*");
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    context.startActivity(Intent.createChooser(intent, context.getString(R.string.app_name)));
+                    ShareCompat.IntentBuilder shareIntentBuilder = new ShareCompat.IntentBuilder(context);
+                    shareIntentBuilder.setType("image/*");
+                    for (Uri uri : uris)
+                        shareIntentBuilder.addStream(uri);
+                    shareIntentBuilder
+                            .setChooserTitle(R.string.title_select_app)
+                            .startChooser();
                 }
 
                 @Override
@@ -5935,13 +5937,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 String scheme = guri.getScheme();
                 String host = guri.getHost();
 
+                boolean sanitize_links = prefs.getBoolean("sanitize_links", false);
                 boolean confirm_link =
                         !"https".equalsIgnoreCase(scheme) || TextUtils.isEmpty(host) ||
                                 prefs.getBoolean(host + ".confirm_link", true);
-                if (always_confirm || (confirm_links && confirm_link)) {
+                if (always_confirm || sanitize_links || (confirm_links && confirm_link)) {
                     Bundle args = new Bundle();
                     args.putParcelable("uri", uri);
                     args.putString("title", title);
+                    args.putBoolean("always_confirm", always_confirm);
 
                     FragmentDialogOpenLink fragment = new FragmentDialogOpenLink();
                     fragment.setArguments(args);
@@ -6506,7 +6510,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibForceLight.setImageLevel(force_light ? 1 : 0);
                 bindBody(message, false);
             } else {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && false) {
                     View view = LayoutInflater.from(context).inflate(R.layout.dialog_dark, null);
                     final Button btnIssue = view.findViewById(R.id.btnIssue);
 

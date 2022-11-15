@@ -30,6 +30,7 @@ import android.Manifest;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -64,6 +65,7 @@ import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -319,9 +321,8 @@ public class FragmentAccount extends FragmentBase {
                 etUser.setTag(null);
                 etUser.setText(null);
                 tilPassword.getEditText().setText(null);
-                tvAppPassword.setVisibility(
-                        "office365".equals(provider.id) || "outlook".equals(provider.id)
-                                ? View.VISIBLE : View.GONE);
+                tvAppPassword.setVisibility(EntityAccount.isOutlook(provider.id)
+                        ? View.VISIBLE : View.GONE);
                 certificate = null;
                 tvCertificate.setText(R.string.title_optional);
                 etRealm.setText(null);
@@ -1420,6 +1421,15 @@ public class FragmentAccount extends FragmentBase {
 
                 args.putBoolean("saved", true);
 
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("unset." + account.id + "." + EntityFolder.DRAFTS, drafts == null);
+                editor.putBoolean("unset." + account.id + "." + EntityFolder.SENT, sent == null);
+                editor.putBoolean("unset." + account.id + "." + EntityFolder.ARCHIVE, archive == null);
+                editor.putBoolean("unset." + account.id + "." + EntityFolder.TRASH, trash == null);
+                editor.putBoolean("unset." + account.id + "." + EntityFolder.JUNK, junk == null);
+                editor.apply();
+
                 return false;
             }
 
@@ -1555,7 +1565,7 @@ public class FragmentAccount extends FragmentBase {
             protected void onExecuted(Bundle args, final EntityAccount account) {
                 // Get providers
                 final Context context = getContext();
-                List<EmailProvider> providers = EmailProvider.loadProfiles(context);
+                List<EmailProvider> providers = EmailProvider.getProviders(context);
                 providers.add(0, new EmailProvider(getString(R.string.title_select)));
                 providers.add(1, new EmailProvider(getString(R.string.title_custom)));
 
@@ -1606,8 +1616,7 @@ public class FragmentAccount extends FragmentBase {
 
                     etUser.setText(account == null ? null : account.user);
                     tilPassword.getEditText().setText(account == null ? null : account.password);
-                    tvAppPassword.setVisibility(account != null &&
-                            ("office365".equals(account.provider) || "outlook".equals(account.provider))
+                    tvAppPassword.setVisibility(account != null && EntityAccount.isOutlook(account.provider)
                             ? View.VISIBLE : View.GONE);
                     certificate = (account == null ? null : account.certificate_alias);
                     tvCertificate.setText(certificate == null ? getString(R.string.title_optional) : certificate);

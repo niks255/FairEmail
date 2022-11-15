@@ -202,6 +202,7 @@
     <string name="title_setup_free">Bu tətbiq ödənişsizdir?</string>
     <string name="title_setup_permissions">Verilən icazələr</string>
     <string name="title_setup_permissions_remark">Əlaqə məlumatlarına müraciət (məcburi deyil)</string>
+    <string name="title_setup_permissions_calendar">Dəvətləri saxlamaq üçün (ixtiyari)</string>
     <string name="title_setup_permissions_explanation">Əlaqə icazələri, əlaqə məlumatlarının axtarışı və əlaqə təklifi üçün tələb olunur</string>
     <string name="title_setup_permissions_notify">Yeni mesaj bildirişlərini göstərmək üçün (ixtiyari)</string>
     <string name="title_setup_permissions_notify_explanation">Bildiriş icazələri vəziyyət sətrində yeni mesajların bildirişlərini göstərmək üçün tələb olunur</string>
@@ -587,6 +588,8 @@
     <string name="title_advanced_notifications_background">Mesajları eyniləşdirmək üçün arxaplan xidməti istifadə et</string>
     <string name="title_advanced_notifications_background_hint">Bir arxaplan xidməti istənilən vaxt Android tərəfindən dayandırıla bilər, ancaq vəziyyət sətri bildirişini tələb etmir</string>
     <string name="title_advanced_confirm_links">Bağlantıların açılmasını təsdiqlə</string>
+    <string name="title_advanced_sanitize_links">İzləmə parametrlərini ilkin olaraq çıxart</string>
+    <string name="title_advanced_sanitize_links_hint">Yalnız keçidləri təsdiqləyərkən</string>
     <string name="title_advanced_check_links_dbl">Şübhəli bağlantılar üçün domen əngəlləmə siyahılarını yoxlayın</string>
     <string name="title_advanced_confirm_images">İlkin olaraq təsvirləri göstərmə</string>
     <string name="title_advanced_ask_images">Təsvirlərin göstərilməsini təsdiqlə</string>
@@ -647,6 +650,8 @@
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_lt">LanguageTool inteqrasiyası</string>
     <string name="title_advanced_lt_auto">Yeni bir sətirdən sonra paraqrafı yoxla</string>
+    <string name="title_advanced_lt_user">İstifadəçi adı (ixtiyari)</string>
+    <string name="title_advanced_lt_key">API açarı (ixtiyari)</string>
     <string name="title_advanced_deepl">DeepL inteqrasiyası</string>
     <string name="title_advanced_virus_total">VirusTotal inteqrasiyası</string>
     <string name="title_advanced_sdcard">SD kart istifadə etmək istəyirəm</string>
@@ -872,6 +877,7 @@
     <string name="title_drafts_select">E-poçtları göndərmək, hesab tənzimləmələrdə bir qaralamalar qovluğunun seçilməsini tələb edir</string>
     <string name="title_account_auth_update">Səlahiyyətləndirməni yenilə</string>
     <string name="title_account_auth_password">Parol təsdiqləməsinə keç</string>
+    <string name="title_change_password">Parolu dəyişdir</string>
     <string name="title_delete_account">Hesabı sil</string>
     <string name="title_account_delete">Bu hesab birdəfəlik silinsin?</string>
     <string name="title_identity_delete">Bu kimlik birdəfəlik silinsin?</string>
@@ -1320,8 +1326,6 @@
     <string name="title_resync">Yenidən eyniləşdirmə</string>
     <string name="title_charset">Kodlaşdırma</string>
     <string name="title_charset_auto">Avtomatik</string>
-    <string name="title_alternative_text">Düz mətni göstər</string>
-    <string name="title_alternative_html">HTML göstər</string>
     <string name="title_no_openpgp">OpenKeychain tapılmadı</string>
     <string name="title_user_interaction">\"OpenKeychain\"ə köçürülür</string>
     <string name="title_padlock">Mesajın şifrəsini açmaq üçün asma kilid istifadə et</string>
@@ -1684,6 +1688,7 @@
     <string name="title_reset_open">İlkin tətbiqləri tənzimlə və təmizlə</string>
     <string name="title_select_app">Tətbiq seç</string>
     <string name="title_updated">%1$s versiyasına yenilənə bilər</string>
+    <string name="title_no_update">Güncəlləmə yoxdur</string>
     <string name="title_issue">Sualınız və ya probleminiz var?</string>
     <string name="title_yes">Bəli</string>
     <string name="title_no">Xeyr</string>
@@ -1695,6 +1700,8 @@
     <string name="title_select_block">Bloku seç</string>
     <string name="title_insert_brackets">Mötərizə</string>
     <string name="title_insert_quotes">Sitat</string>
+    <string name="title_lt_add">Söz əlavə et</string>
+    <string name="title_lt_delete">Sözü sil</string>
     <string name="title_add">Əlavə et</string>
     <string name="title_browse">Aç</string>
     <string name="title_info">Məlumat</string>
@@ -1796,20 +1803,25 @@
     <string name="title_widget_background">Arxaplan rəngi</string>
     <string name="title_widget_day_night">Sistemin qaranlıq temasına uyğunlaşma</string>
     <string name="title_compat_dark">Google, Android 10-dan əvvəlki versiyalar üçün qaranlıq rejimi çıxartdı</string>
-    <string name="title_accessibility_collapsed">Yığcamlaşdırılan</string>
-    <string name="title_accessibility_expanded">Genişləndirilən</string>
-    <string name="title_accessibility_seen">Oxunan</string>
-    <string name="title_accessibility_unseen">Oxunmayan</string>
-    <plurals name="title_accessibility_messages">
-        <item quantity="one">%1$d mesaj</item>
-        <item quantity="other">%1$d mesaj</item>
-    </plurals>
     <!-- Thunderbird -->
     <string name="title_keyword_label1">Vacib</string>
     <string name="title_keyword_label2">İş</string>
     <string name="title_keyword_label3">Şəxsi</string>
     <string name="title_keyword_label4">Edilməli</string>
     <string name="title_keyword_label5">Sonra</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="one">%1$d mesaj</item>
+        <item quantity="other">%1$d mesaj</item>
+    </plurals>
+    <string name="title_accessibility_accounts">Hesablar</string>
+    <string name="title_accessibility_folders">Qovluqlar</string>
+    <string name="title_accessibility_searches">Axtarışlar</string>
+    <string name="title_accessibility_menus">Menyular</string>
+    <string name="title_accessibility_extras">Ekstralar</string>
+    <string name="title_accessibility_collapsed">Yığcamlaşdırılan</string>
+    <string name="title_accessibility_expanded">Genişləndirilən</string>
+    <string name="title_accessibility_seen">Oxunan</string>
+    <string name="title_accessibility_unseen">Oxunmayan</string>
     <string name="title_accessibility_flagged">Ulduzlu</string>
     <string name="title_accessibility_unflagged">Ulduzlu olmayan</string>
     <string name="title_accessibility_collapse">Yığcam et</string>

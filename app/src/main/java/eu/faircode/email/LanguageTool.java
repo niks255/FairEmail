@@ -21,14 +21,19 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Build;
+import android.os.LocaleList;
 import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.SuggestionSpan;
+import android.util.Pair;
 import android.widget.EditText;
 
+import androidx.core.util.PatternsCompat;
 import androidx.preference.PreferenceManager;
 
 import org.json.JSONArray;
@@ -39,17 +44,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class LanguageTool {
     static final String LT_URI = "https://api.languagetool.org/v2/";
+    static final String LT_URI_PLUS = "https://api.languagetoolplus.com/v2/";
+
     private static final int LT_TIMEOUT = 20; // seconds
+    private static final int LT_MAX_RANGES = 10; // paragraphs
+
+    private static JSONArray jlanguages = null;
 
     static boolean isEnabled(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -63,49 +73,178 @@ public class LanguageTool {
         return (lt_enabled && lt_auto);
     }
 
+    static JSONArray getLanguages(Context context) throws IOException, JSONException {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String lt_uri = prefs.getString("lt_uri", LT_URI_PLUS);
+
+        // https://languagetool.org/http-api/swagger-ui/#!/default/get_words
+        Uri uri = Uri.parse(lt_uri).buildUpon().appendPath("languages").build();
+        Log.i("LT uri=" + uri);
+
+        URL url = new URL(uri.toString());
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setDoOutput(false);
+        connection.setReadTimeout(LT_TIMEOUT * 1000);
+        connection.setConnectTimeout(LT_TIMEOUT * 1000);
+        ConnectionHelper.setUserAgent(context, connection);
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.connect();
+
+        try {
+            checkStatus(connection);
+
+            String response = Helper.readStream(connection.getInputStream());
+            Log.i("LT response=" + response);
+
+            return new JSONArray(response);
+        } finally {
+            connection.disconnect();
+        }
+    }
+
     static List<Suggestion> getSuggestions(Context context, CharSequence text) throws IOException, JSONException {
-        if (TextUtils.isEmpty(text))
-            return new ArrayList<>();
+        if (isPremium(context))
+            try {
+                List<Pair<Integer, Integer>> paragraphs = new ArrayList<>();
 
-        // https://languagetool.org/http-api/swagger-ui/#!/default/post_check
-        String request =
-                "text=" + URLEncoder.encode(text.toString(), StandardCharsets.UTF_8.name()) +
-                        "&language=auto";
+                // Skip links and email addresses
+                Pattern pattern = Pattern.compile("(" + Helper.EMAIL_ADDRESS + ")" +
+                        "|(" + PatternsCompat.AUTOLINK_WEB_URL.pattern() + ")");
 
-        // curl -X GET --header 'Accept: application/json' 'https://api.languagetool.org/v2/languages'
-        JSONArray jlanguages;
-        try (InputStream is = context.getAssets().open("lt.json")) {
-            String json = Helper.readStream(is);
-            jlanguages = new JSONArray(json);
-        }
+                Matcher matcher = pattern.matcher(text);
+                int index = 0;
+                boolean links = false;
+                while (matcher.find()) {
+                    links = true;
+                    int start = matcher.start();
+                    int end = matcher.end();
+                    paragraphs.addAll(getParagraphs(index, start, text));
+                    Log.i("LT skipping " + start + "..." + end +
+                            " '" + text.subSequence(start, end).toString().replace('\n', '|') + "'");
+                    index = end;
+                }
+                paragraphs.addAll(getParagraphs(index, text.length(), text));
 
-        String code = null;
-        Locale locale = Locale.getDefault();
-        for (int i = 0; i < jlanguages.length(); i++) {
-            JSONObject jlanguage = jlanguages.getJSONObject(i);
-            String c = jlanguage.optString("longCode");
-            if (locale.toLanguageTag().equals(c) && c.contains("-")) {
-                code = c;
-                break;
+                // Get suggestions for paragraphs
+                for (Pair<Integer, Integer> paragraph : paragraphs)
+                    Log.i("LT paragraph " + paragraph.first + "..." + paragraph.second +
+                            " '" + text.subSequence(paragraph.first, paragraph.second).toString().replace('\n', '|') + "'");
+                if (links || paragraphs.size() <= LT_MAX_RANGES) {
+                    List<Suggestion> result = new ArrayList<>();
+                    for (Pair<Integer, Integer> range : paragraphs)
+                        result.addAll(getSuggestions(context, text, range.first, range.second));
+                    return result;
+                }
+            } catch (Throwable ex) {
+                if (BuildConfig.DEBUG)
+                    throw ex;
+                Log.e(ex);
             }
+
+        return getSuggestions(context, text, 0, text.length());
+    }
+
+    private static List<Pair<Integer, Integer>> getParagraphs(int from, int to, CharSequence text) {
+        Log.i("LT paragraphs " + from + "..." + to +
+                " '" + text.subSequence(from, to).toString().replace('\n', '|') + "'");
+
+        List<Pair<Integer, Integer>> paragraphs = new ArrayList<>();
+
+        int start = from;
+        int end = start;
+        while (end < to) {
+            while (end < to && text.charAt(end) != '\n')
+                end++;
+            if (end > start) {
+                String fragment = text.subSequence(start, end).toString();
+                if (!TextUtils.isEmpty(fragment.trim()))
+                    paragraphs.add(new Pair<>(start, end));
+            }
+            start = end + 1;
+            end = start;
         }
 
-        if (code != null)
-            request += "&preferredVariants=" + code;
+        return paragraphs;
+    }
+
+    private static List<Suggestion> getSuggestions(Context context, CharSequence text, int start, int end) throws IOException, JSONException {
+        if (start < 0 || end > text.length() || start == end)
+            return new ArrayList<>();
+        String t = text.subSequence(start, end).toString();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean lt_picky = prefs.getBoolean("lt_picky", false);
+        String lt_user = prefs.getString("lt_user", null);
+        String lt_key = prefs.getString("lt_key", null);
+        boolean isPlus = (!TextUtils.isEmpty(lt_user) && !TextUtils.isEmpty(lt_key));
+        String lt_uri = prefs.getString("lt_uri", isPlus ? LT_URI_PLUS : LT_URI);
+
+        // https://languagetool.org/http-api/swagger-ui/#!/default/post_check
+        Uri.Builder builder = new Uri.Builder()
+                .appendQueryParameter("text", t)
+                .appendQueryParameter("language", "auto");
+
+        // curl -X GET --header 'Accept: application/json' 'https://api.languagetool.org/v2/languages'
+        if (jlanguages == null)
+            jlanguages = getLanguages(context);
+
+        List<Locale> locales = new ArrayList<>();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            locales.add(Locale.getDefault());
+        else {
+            LocaleList ll = context.getResources().getConfiguration().getLocales();
+            for (int i = 0; i < ll.size(); i++)
+                locales.add(ll.get(i));
+        }
+
+        List<String> code = new ArrayList<>();
+        for (Locale locale : locales)
+            for (int i = 0; i < jlanguages.length(); i++) {
+                JSONObject jlanguage = jlanguages.getJSONObject(i);
+                String c = jlanguage.optString("longCode");
+                if (locale.toLanguageTag().equals(c) && c.contains("-")) {
+                    code.add(c);
+                    break;
+                }
+            }
+
+        if (code.size() > 0)
+            builder.appendQueryParameter("preferredVariants", TextUtils.join(",", code));
+
+        String motherTongue = null;
+        String slocale = Resources.getSystem().getConfiguration().locale.toLanguageTag();
+        for (int i = 0; i < jlanguages.length(); i++) {
+            JSONObject jlanguage = jlanguages.getJSONObject(i);
+            String c = jlanguage.optString("longCode");
+            if (TextUtils.isEmpty(c))
+                continue;
+            if (slocale.equals(c)) {
+                motherTongue = c;
+                break;
+            }
+            if (slocale.split("-")[0].equals(c))
+                motherTongue = c;
+        }
+
+        if (motherTongue != null)
+            builder.appendQueryParameter("motherTongue", motherTongue);
 
         if (lt_picky)
-            request += "&level=picky";
+            builder.appendQueryParameter("level", "picky");
 
-        String uri = prefs.getString("lt_uri", LT_URI);
-        if (!uri.endsWith("/"))
-            uri += '/';
+        if (isPlus)
+            builder
+                    .appendQueryParameter("username", lt_user)
+                    .appendQueryParameter("apiKey", lt_key);
 
-        Log.i("LT locale=" + locale + " uri=" + uri + " request=" + request);
+        Uri uri = Uri.parse(lt_uri).buildUpon().appendPath("check").build();
+        String request = builder.build().toString().substring(1);
 
-        URL url = new URL(uri + "check");
+        Log.i("LT uri=" + uri + " request=" + request);
+
+        URL url = new URL(uri.toString());
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
@@ -119,19 +258,7 @@ public class LanguageTool {
 
         try {
             connection.getOutputStream().write(request.getBytes());
-
-            int status = connection.getResponseCode();
-            if (status != HttpsURLConnection.HTTP_OK) {
-                String error = "Error " + status + ": " + connection.getResponseMessage();
-                try {
-                    InputStream is = connection.getErrorStream();
-                    if (is != null)
-                        error += "\n" + Helper.readStream(is);
-                } catch (Throwable ex) {
-                    Log.w(ex);
-                }
-                throw new FileNotFoundException(error);
-            }
+            checkStatus(connection);
 
             String response = Helper.readStream(connection.getInputStream());
             Log.i("LT response=" + response);
@@ -146,7 +273,7 @@ public class LanguageTool {
                 Suggestion suggestion = new Suggestion();
                 suggestion.title = jmatch.getString("shortMessage");
                 suggestion.description = jmatch.getString("message");
-                suggestion.offset = jmatch.getInt("offset");
+                suggestion.offset = jmatch.getInt("offset") + start;
                 suggestion.length = jmatch.getInt("length");
 
                 JSONArray jreplacements = jmatch.getJSONArray("replacements");
@@ -160,6 +287,111 @@ public class LanguageTool {
                 if (suggestion.replacements.size() > 0)
                     result.add(suggestion);
             }
+
+            return result;
+        } finally {
+            connection.disconnect();
+        }
+    }
+
+    static boolean modifyDictionary(Context context, String word, String dictionary, boolean add) throws IOException, JSONException {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String lt_user = prefs.getString("lt_user", null);
+        String lt_key = prefs.getString("lt_key", null);
+        String lt_uri = prefs.getString("lt_uri", LT_URI_PLUS);
+
+        if (TextUtils.isEmpty(lt_user) || TextUtils.isEmpty(lt_key))
+            return false;
+
+        // https://languagetool.org/http-api/swagger-ui/#!/default/post_words_add
+        // https://languagetool.org/http-api/swagger-ui/#!/default/post_words_delete
+        Uri.Builder builder = new Uri.Builder()
+                .appendQueryParameter("word", word)
+                .appendQueryParameter("username", lt_user)
+                .appendQueryParameter("apiKey", lt_key);
+
+        if (dictionary != null)
+            builder.appendQueryParameter("dict", dictionary);
+
+        Uri uri = Uri.parse(lt_uri).buildUpon()
+                .appendPath(add ? "words/add" : "words/delete")
+                .build();
+        String request = builder.build().toString().substring(1);
+
+        Log.i("LT uri=" + uri + " request=" + request);
+
+        URL url = new URL(uri.toString());
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+        connection.setReadTimeout(LT_TIMEOUT * 1000);
+        connection.setConnectTimeout(LT_TIMEOUT * 1000);
+        ConnectionHelper.setUserAgent(context, connection);
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Content-Length", Integer.toString(request.length()));
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.connect();
+
+        try {
+            connection.getOutputStream().write(request.getBytes());
+            checkStatus(connection);
+
+            String response = Helper.readStream(connection.getInputStream());
+            Log.i("LT response=" + response);
+
+            JSONObject jroot = new JSONObject(response);
+            return jroot.getBoolean(add ? "added" : "deleted");
+        } finally {
+            connection.disconnect();
+        }
+    }
+
+    static List<String> getWords(Context context, String[] dictionary) throws IOException, JSONException {
+        List<String> result = new ArrayList<>();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String lt_user = prefs.getString("lt_user", null);
+        String lt_key = prefs.getString("lt_key", null);
+        String lt_uri = prefs.getString("lt_uri", LT_URI_PLUS);
+
+        if (TextUtils.isEmpty(lt_user) || TextUtils.isEmpty(lt_key))
+            return result;
+
+        // https://languagetool.org/http-api/swagger-ui/#!/default/get_words
+        Uri.Builder builder = Uri.parse(lt_uri).buildUpon()
+                .appendPath("words")
+                .appendQueryParameter("offset", "0")
+                .appendQueryParameter("limit", "500")
+                .appendQueryParameter("username", lt_user)
+                .appendQueryParameter("apiKey", lt_key);
+
+        if (dictionary != null && dictionary.length > 0)
+            builder.appendQueryParameter("dicts", TextUtils.join(",", dictionary));
+
+        Uri uri = builder.build();
+        Log.i("LT uri=" + uri);
+
+        URL url = new URL(uri.toString());
+        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setDoOutput(false);
+        connection.setReadTimeout(LT_TIMEOUT * 1000);
+        connection.setConnectTimeout(LT_TIMEOUT * 1000);
+        ConnectionHelper.setUserAgent(context, connection);
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.connect();
+
+        try {
+            checkStatus(connection);
+
+            String response = Helper.readStream(connection.getInputStream());
+            Log.i("LT response=" + response);
+
+            JSONObject jroot = new JSONObject(response);
+            JSONArray jwords = jroot.getJSONArray("words");
+            for (int i = 0; i < jwords.length(); i++)
+                result.add(jwords.getString(i));
 
             return result;
         } finally {
@@ -192,6 +424,29 @@ public class LanguageTool {
                 }
                 edit.setSpan(span, s, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
+    }
+
+    static boolean isPremium(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String lt_user = prefs.getString("lt_user", null);
+        String lt_key = prefs.getString("lt_key", null);
+        return (!TextUtils.isEmpty(lt_user) && !TextUtils.isEmpty(lt_key));
+    }
+
+    private static void checkStatus(HttpsURLConnection connection) throws IOException {
+        int status = connection.getResponseCode();
+        if (status != HttpsURLConnection.HTTP_OK) {
+            String error = "Error " + status + ": " + connection.getResponseMessage();
+            try {
+                InputStream is = connection.getErrorStream();
+                if (is != null)
+                    error += "\n" + Helper.readStream(is);
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
+            Log.w("LT " + error);
+            throw new FileNotFoundException(error);
+        }
     }
 
     static class Suggestion {

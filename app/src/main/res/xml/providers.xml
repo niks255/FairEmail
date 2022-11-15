@@ -107,6 +107,7 @@
     <provider
         name="Outlook"
         description="Outlook/Office 365"
+        enabled="false"
         id="office365"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
         noop="true"
@@ -140,10 +141,49 @@
             tokenScopes="true" />
         <!-- https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow -->
         <!-- https://docs.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth -->
+        <!-- https://learn.microsoft.com/en-us/azure/active-directory/develop/redirect-uris-ios -->
+    </provider>
+    <provider
+        name="Outlook"
+        description="Outlook/Office 365"
+        id="office365pcke"
+        link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
+        noop="true"
+        order="5"
+        partial="false"
+        useip="false">
+        <imap
+            host="outlook.office365.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.office365.com"
+            port="587"
+            starttls="true" />
+        <!--pop
+            host="outlook.office365.com"
+            port="995"
+            starttls="false" /-->
+        <!-- https://outlook.office.com/POP.AccessAsUser.All -->
+        <oauth
+            askAccount="true"
+            authorizationEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize"
+            clientId="3514cf2c-e7a3-45a2-80d4-6a3c3498eca0"
+            enabled="true"
+            privacy="https://privacy.microsoft.com/privacystatement"
+            prompt="login"
+            redirectUri="msauth.eu.faircode.email://auth"
+            scopes="profile,openid,email,offline_access,https://outlook.office.com/IMAP.AccessAsUser.All,https://outlook.office.com/SMTP.Send"
+            tokenEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
+            tokenScopes="true" />
+        <!-- https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow -->
+        <!-- https://docs.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth -->
+        <!-- https://learn.microsoft.com/en-us/azure/active-directory/develop/redirect-uris-ios -->
     </provider>
     <provider
         name="Outlook"
         description="Outlook"
+        enabled="false"
         id="outlook"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
         noop="true"
@@ -167,15 +207,13 @@
             askAccount="true"
             authorizationEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize"
             clientId="17e57eca-a59b-4574-ac91-b343004898a6"
-            clientSecret="k847Q~ZKtIBNp~ls_riKEbFDsvOQEdUA.YDNt"
-            enabled="false"
+            enabled="true"
             privacy="https://privacy.microsoft.com/privacystatement"
             prompt="login"
-            redirectUri="https://oauth.faircode.eu/"
+            redirectUri="msauth.eu.faircode.email://auth"
             scopes="openid,email,offline_access,https://outlook.office.com/IMAP.AccessAsUser.All,https://outlook.office.com/SMTP.Send"
             tokenEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
             tokenScopes="true" />
-        <!-- https://docs.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth -->
     </provider>
     <!-- needs subscription -->
     <provider
@@ -212,6 +250,7 @@
         appPassword="true"
         description="Yahoo/AT&amp;T"
         domain="yahoo\\..*"
+        enabled="false"
         id="yahoo"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88"
         order="7"
@@ -234,7 +273,38 @@
             clientId="dj0yJmk9SWtNZm1vUFc2THJDJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWRi"
             clientSecret="261a91fbbdb2852c4e80fdd3d1db4a8ebfa4c42b"
             enabled="true"
-            pcke="true"
+            privacy="https://www.verizonmedia.com/policies/us/en/verizonmedia/privacy/index.html"
+            redirectUri="https://oauth.faircode.eu/"
+            scopes="mail-w"
+            tokenEndpoint="https://api.login.yahoo.com/oauth2/get_token" />
+        <!-- https://developer.yahoo.com/oauth2/guide/ -->
+    </provider>
+    <provider
+        name="Yahoo"
+        appPassword="true"
+        description="Yahoo/AT&amp;T"
+        domain="yahoo\\..*"
+        id="yahoo2"
+        link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88"
+        order="7"
+        partial="false">
+        <imap
+            host="imap.mail.yahoo.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.mail.yahoo.com"
+            port="465"
+            starttls="false" />
+        <pop
+            host="pop.mail.yahoo.com"
+            port="995"
+            starttls="false" />
+        <oauth
+            askAccount="true"
+            authorizationEndpoint="https://api.login.yahoo.com/oauth2/request_auth"
+            clientId="dj0yJmk9RnRORGNuNTlnaXlUJmQ9WVdrOVVrMXViV2RDU1dZbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTBm"
+            enabled="true"
             privacy="https://www.verizonmedia.com/policies/us/en/verizonmedia/privacy/index.html"
             redirectUri="https://oauth.faircode.eu/"
             scopes="mail-w"
@@ -857,8 +927,9 @@
     </provider>
     <provider
         name="AOL"
-        documentation="For AOL you need to use an app password instead of your normal account password, please  &lt;a href=&quot;https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88&quot;&gt;see here&lt;/a&gt;."
+        documentation="For AOL you need to use an app password instead of your normal account password, please &lt;a href=&quot;https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88&quot;&gt;see here&lt;/a&gt;."
         domain="aol\\..*,compuserve\\.com"
+        id="aol"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88">
         <imap
             host="imap.aol.com"
@@ -868,6 +939,15 @@
             host="smtp.aol.com"
             port="465"
             starttls="false" />
+        <oauth
+            askAccount="true"
+            authorizationEndpoint="https://api.login.aol.com/oauth2/request_auth"
+            clientId="dj0yJmk9SFVJYWVtS21RMjYyJmQ9WVdrOVJVcENRMXBTT1drbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTJh"
+            enabled="true"
+            privacy="https://legal.yahoo.com/us/en/yahoo/privacy/index.html"
+            redirectUri="https://oauth.faircode.eu/"
+            scopes="mail-w"
+            tokenEndpoint="https://api.login.aol.com/oauth2/get_token" />
     </provider>
     <provider
         name="Verizon"
@@ -1776,5 +1856,18 @@
             host="promail.ptd.net"
             port="587"
             starttls="true" />
+    </provider>
+    <provider
+        name="Gelsen-net"
+        domain="gelsennet\\.de"
+        link="https://help.gelsennet.de/faq.php">
+        <imap
+            host="mx.gelsennet.de"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mx.gelsennet.de"
+            port="465"
+            starttls="false" />
     </provider>
 </providers>

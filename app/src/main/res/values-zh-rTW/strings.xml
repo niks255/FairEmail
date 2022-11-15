@@ -1254,8 +1254,6 @@
     <string name="title_resync">重新同步</string>
     <string name="title_charset">字元編碼</string>
     <string name="title_charset_auto">自動</string>
-    <string name="title_alternative_text">顯示純文字</string>
-    <string name="title_alternative_html">顯示 HTML</string>
     <string name="title_no_openpgp">未發現 OpenKeychain</string>
     <string name="title_user_interaction">正在轉移至 OpenKeychain</string>
     <string name="title_signed_data">驗證簽名以顯示訊息文字</string>
@@ -1702,19 +1700,21 @@
     <string name="title_widget_refresh">顯示重整訊息按鈕</string>
     <string name="title_widget_compose">顯示撰寫新訊息按鈕</string>
     <string name="title_widget_background">背景顏色</string>
-    <string name="title_accessibility_collapsed">已摺疊</string>
-    <string name="title_accessibility_expanded">已展開</string>
-    <string name="title_accessibility_seen">已讀取</string>
-    <string name="title_accessibility_unseen">未讀取</string>
-    <plurals name="title_accessibility_messages">
-        <item quantity="other">%1$d 則訊息</item>
-    </plurals>
     <!-- Thunderbird -->
     <string name="title_keyword_label1">重要</string>
     <string name="title_keyword_label2">公司</string>
     <string name="title_keyword_label3">個人</string>
     <string name="title_keyword_label4">待辦</string>
     <string name="title_keyword_label5">過後</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="other">%1$d 則訊息</item>
+    </plurals>
+    <string name="title_accessibility_accounts">帳戶</string>
+    <string name="title_accessibility_folders">資料夾</string>
+    <string name="title_accessibility_collapsed">已摺疊</string>
+    <string name="title_accessibility_expanded">已展開</string>
+    <string name="title_accessibility_seen">已讀取</string>
+    <string name="title_accessibility_unseen">未讀取</string>
     <string name="title_accessibility_flagged">已加星號</string>
     <string name="title_accessibility_unflagged">未加星號</string>
     <string name="title_accessibility_collapse">摺疊</string>

@@ -202,6 +202,7 @@
     <string name="title_setup_free">Esta aplicação é gratuita?</string>
     <string name="title_setup_permissions">Conceder permissões</string>
     <string name="title_setup_permissions_remark">Para aceder a informações de contacto (opcional)</string>
+    <string name="title_setup_permissions_calendar">Para armazenar convites (opcional)</string>
     <string name="title_setup_permissions_explanation">As permissões de contacto são necessárias para procurar informações de contacto e sugerir contactos</string>
     <string name="title_setup_permissions_notify">Para mostrar novas notificações de mensagens (opcional)</string>
     <string name="title_setup_permissions_notify_explanation">São necessárias permissões de notificação para mostrar notificações de novas mensagens na barra de estado</string>
@@ -344,6 +345,7 @@
     <string name="title_advanced_use_blocklist">Mover mensagens de domínios numa lista de bloqueios para a pasta de ‘spam’</string>
     <string name="title_advanced_use_blocklist_pop3">Ignorar mensagens de domínios numa lista de blocos (só POP3)</string>
     <string name="title_advanced_tune_keep_alive">Ajustar automaticamente o intervalo de ligação \'keep-alive\'</string>
+    <string name="title_advanced_blocklist_warning">Listas de blocos não são perfeitas e podem bloquear mais do que apenas spam!</string>
     <string name="title_advanced_keyboard">Mostrar teclado por padrão</string>
     <string name="title_advanced_keyboard_no_fullscreen">Prevenir teclado em modo ecrã inteiro</string>
     <string name="title_advanced_suggest_names">Usar nomes e endereços de e-mail</string>
@@ -587,6 +589,8 @@
     <string name="title_advanced_notifications_background">Use o serviço em segundo plano para sincronizar mensagens</string>
     <string name="title_advanced_notifications_background_hint">Um serviço em segundo plano pode ser interrompido pelo Android a qualquer momento, mas não requer uma notificação na barra de estado</string>
     <string name="title_advanced_confirm_links">Pedir confirmação ao abrir hiperligações</string>
+    <string name="title_advanced_sanitize_links">Remover parâmetros de rastreamento por padrão</string>
+    <string name="title_advanced_sanitize_links_hint">Somente quando confirmar links</string>
     <string name="title_advanced_check_links_dbl">Verificar listas de bloqueio de domínios para hiperligações suspeitas</string>
     <string name="title_advanced_confirm_images">Não mostrar imagens por padrão</string>
     <string name="title_advanced_ask_images">Confirmar a exibição de imagens</string>
@@ -613,6 +617,7 @@
     <string name="title_advanced_clear_all_remark">Os dados da aplicação serão definitivamente eliminados!</string>
     <string name="title_advanced_sign_default">Assinar por padrão</string>
     <string name="title_advanced_encrypt_default">Encriptar por padrão</string>
+    <string name="title_advanced_encrypt_auto">Criptografar automaticamente quando as chaves de todos os destinatários estiverem disponíveis</string>
     <string name="title_advanced_auto_decrypt">Desencriptar mensagens automaticamente</string>
     <string name="title_advanced_auto_undo_decrypt">Reverter a descodificação ao fechar conversas</string>
     <string name="title_advanced_openpgp">Provedor OpenPGP</string>
@@ -646,6 +651,8 @@
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_lt">Integração LanguageTool</string>
     <string name="title_advanced_lt_auto">Verificar parágrafo depois de uma nova linha</string>
+    <string name="title_advanced_lt_user">Nome do utilizador (opcional)</string>
+    <string name="title_advanced_lt_key">Chave da API (opcional)</string>
     <string name="title_advanced_deepl">Integração DeepL</string>
     <string name="title_advanced_virus_total">Integração VirusTotal</string>
     <string name="title_advanced_sdcard">Quero utilizar um cartão SD</string>
@@ -871,6 +878,7 @@
     <string name="title_drafts_select">O envio de mensagens de correio electrónico requer uma pasta de rascunhos a ser seleccionada nas configurações da conta</string>
     <string name="title_account_auth_update">Atualizar autorização</string>
     <string name="title_account_auth_password">Mudar para autenticação de palavra-passe</string>
+    <string name="title_change_password">Alterar palavra-passe</string>
     <string name="title_delete_account">Eliminar conta</string>
     <string name="title_account_delete">Eliminar esta conta permanentemente?</string>
     <string name="title_identity_delete">Eliminar esta identidade permanentemente?</string>
@@ -1318,8 +1326,8 @@
     <string name="title_resync">Ressincronizar</string>
     <string name="title_charset">Codificação</string>
     <string name="title_charset_auto">Automático</string>
-    <string name="title_alternative_text">Mostrar texto simples</string>
-    <string name="title_alternative_html">Mostrar HTML</string>
+    <string name="title_alternative_text">Carregar texto simples</string>
+    <string name="title_alternative_html">Carregar HTML</string>
     <string name="title_no_openpgp">OpenKeychain não encontrado</string>
     <string name="title_user_interaction">A transferir para o OpenKeychain</string>
     <string name="title_padlock">Use o cadeado para descriptografar a mensagem</string>
@@ -1682,6 +1690,7 @@
     <string name="title_reset_open">Definir ou limpar as aplicações predefinidas</string>
     <string name="title_select_app">Seleccionar aplicação</string>
     <string name="title_updated">Atualização para a versão %1$s disponível</string>
+    <string name="title_no_update">Não há atualizações disponíveis</string>
     <string name="title_issue">Tem alguma questão ou um problema?</string>
     <string name="title_yes">Sim</string>
     <string name="title_no">Não</string>
@@ -1693,6 +1702,8 @@
     <string name="title_select_block">Selecionar bloco</string>
     <string name="title_insert_brackets">Parêntesis</string>
     <string name="title_insert_quotes">Citar</string>
+    <string name="title_lt_add">Adicionar palavra</string>
+    <string name="title_lt_delete">Remover palavra</string>
     <string name="title_add">Adicionar</string>
     <string name="title_browse">Abrir com</string>
     <string name="title_info">Informação</string>
@@ -1794,20 +1805,25 @@
     <string name="title_widget_background">Cor do fundo</string>
     <string name="title_widget_day_night">Adoptar o tema escuro do sistema</string>
     <string name="title_compat_dark">A Google removeu o modo escuro para versões do Android antes da versão 10</string>
-    <string name="title_accessibility_collapsed">Ocultado</string>
-    <string name="title_accessibility_expanded">Expandido</string>
-    <string name="title_accessibility_seen">Lida</string>
-    <string name="title_accessibility_unseen">Não lida</string>
-    <plurals name="title_accessibility_messages">
-        <item quantity="one">%1$d mensagem</item>
-        <item quantity="other">%1$d mensagens</item>
-    </plurals>
     <!-- Thunderbird -->
     <string name="title_keyword_label1">Importante</string>
     <string name="title_keyword_label2">Trabalho</string>
     <string name="title_keyword_label3">Pessoal</string>
     <string name="title_keyword_label4">Pendente</string>
     <string name="title_keyword_label5">Mais tarde</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="one">%1$d mensagem</item>
+        <item quantity="other">%1$d mensagens</item>
+    </plurals>
+    <string name="title_accessibility_accounts">Contas</string>
+    <string name="title_accessibility_folders">Pastas</string>
+    <string name="title_accessibility_searches">Pesquisas</string>
+    <string name="title_accessibility_menus">Menus</string>
+    <string name="title_accessibility_extras">Extras</string>
+    <string name="title_accessibility_collapsed">Ocultado</string>
+    <string name="title_accessibility_expanded">Expandido</string>
+    <string name="title_accessibility_seen">Lida</string>
+    <string name="title_accessibility_unseen">Não lida</string>
     <string name="title_accessibility_flagged">Com estrela</string>
     <string name="title_accessibility_unflagged">Sem estrela</string>
     <string name="title_accessibility_collapse">Ocultar</string>

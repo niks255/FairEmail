@@ -81,6 +81,8 @@ import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -125,13 +127,15 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swLanguageToolAuto;
     private SwitchCompat swLanguageToolPicky;
     private EditText etLanguageTool;
+    private EditText etLanguageToolUser;
+    private TextInputLayout tilLanguageToolKey;
     private ImageButton ibLanguageTool;
     private SwitchCompat swDeepL;
     private TextView tvDeepLPrivacy;
     private ImageButton ibDeepL;
     private SwitchCompat swVirusTotal;
     private TextView tvVirusTotalPrivacy;
-    private EditText etVirusTotal;
+    private TextInputLayout tilVirusTotal;
     private ImageButton ibVirusTotal;
     private SwitchCompat swSend;
     private EditText etSend;
@@ -249,7 +253,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "sort_answers", "shortcuts", "fts",
             "classification", "class_min_probability", "class_min_difference",
             "language",
-            "lt_enabled", "lt_auto", "lt_picky", "lt_uri",
+            "lt_enabled", "lt_auto", "lt_picky", "lt_uri", "lt_user", "lt_key",
             "deepl_enabled",
             "vt_enabled", "vt_apikey",
             "send_enabled", "send_host",
@@ -341,13 +345,15 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swLanguageToolAuto = view.findViewById(R.id.swLanguageToolAuto);
         swLanguageToolPicky = view.findViewById(R.id.swLanguageToolPicky);
         etLanguageTool = view.findViewById(R.id.etLanguageTool);
+        etLanguageToolUser = view.findViewById(R.id.etLanguageToolUser);
+        tilLanguageToolKey = view.findViewById(R.id.tilLanguageToolKey);
         ibLanguageTool = view.findViewById(R.id.ibLanguageTool);
         swDeepL = view.findViewById(R.id.swDeepL);
         tvDeepLPrivacy = view.findViewById(R.id.tvDeepLPrivacy);
         ibDeepL = view.findViewById(R.id.ibDeepL);
         swVirusTotal = view.findViewById(R.id.swVirusTotal);
         tvVirusTotalPrivacy = view.findViewById(R.id.tvVirusTotalPrivacy);
-        etVirusTotal = view.findViewById(R.id.etVirusTotal);
+        tilVirusTotal = view.findViewById(R.id.tilVirusTotal);
         ibVirusTotal = view.findViewById(R.id.ibVirusTotal);
         swSend = view.findViewById(R.id.swSend);
         etSend = view.findViewById(R.id.etSend);
@@ -701,6 +707,48 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        etLanguageToolUser.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String apikey = s.toString().trim();
+                if (TextUtils.isEmpty(apikey))
+                    prefs.edit().remove("lt_user").apply();
+                else
+                    prefs.edit().putString("lt_user", apikey).apply();
+            }
+        });
+
+        tilLanguageToolKey.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String apikey = s.toString().trim();
+                if (TextUtils.isEmpty(apikey))
+                    prefs.edit().remove("lt_key").apply();
+                else
+                    prefs.edit().putString("lt_key", apikey).apply();
+            }
+        });
+
         ibLanguageTool.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -726,7 +774,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         ibDeepL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.viewFAQ(v.getContext(), 167, true);
+                DeepL.FragmentDialogDeepL fragment = new DeepL.FragmentDialogDeepL();
+                fragment.show(getParentFragmentManager(), "deepl:configure");
             }
         });
 
@@ -745,7 +794,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
-        etVirusTotal.addTextChangedListener(new TextWatcher() {
+        tilVirusTotal.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // Do nothing
@@ -1131,7 +1180,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swExternalStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                prefs.edit().putBoolean("external_storage", isChecked).apply();
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean("external_storage", isChecked);
+                if (BuildConfig.DEBUG)
+                    editor.putBoolean("external_storage_message", isChecked);
+                editor.apply();
 
                 Bundle args = new Bundle();
                 args.putBoolean("external_storage", isChecked);
@@ -1141,16 +1194,16 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     protected Integer onExecute(Context context, Bundle args) throws IOException {
                         boolean external_storage = args.getBoolean("external_storage");
 
-                        File source = (!external_storage
+                        File sourceRoot = (!external_storage
                                 ? Helper.getExternalFilesDir(context)
                                 : context.getFilesDir());
 
-                        File target = (external_storage
+                        File targetRoot = (external_storage
                                 ? Helper.getExternalFilesDir(context)
                                 : context.getFilesDir());
 
-                        source = Helper.ensureExists(new File(source, "attachments"));
-                        target = Helper.ensureExists(new File(target, "attachments"));
+                        File source = Helper.ensureExists(new File(sourceRoot, "attachments"));
+                        File target = Helper.ensureExists(new File(targetRoot, "attachments"));
 
                         File[] attachments = source.listFiles();
                         if (attachments != null)
@@ -1160,6 +1213,29 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                 Helper.copy(attachment, dest);
                                 attachment.delete();
                             }
+
+                        if (BuildConfig.DEBUG) {
+                            source = Helper.ensureExists(new File(sourceRoot, "messages"));
+                            target = Helper.ensureExists(new File(targetRoot, "messages"));
+                            File[] dirs = source.listFiles();
+                            if (dirs != null)
+                                for (File dir : dirs) {
+                                    File[] messages = dir.listFiles();
+                                    if (messages != null)
+                                        for (File message : messages) {
+                                            String path = dir.getPath();
+                                            path = path.substring(path.lastIndexOf(File.separator));
+                                            File t = new File(target, path);
+                                            if (!t.exists() && !t.mkdir())
+                                                throw new IOException("Could not create dir=" + t);
+                                            File dest = new File(t, message.getName());
+                                            Log.i("Move " + message + " to " + dest);
+                                            Helper.copy(message, dest);
+                                            message.delete();
+                                        }
+                                    dir.delete();
+                                }
+                        }
 
                         return (attachments == null ? -1 : attachments.length);
                     }
@@ -1941,7 +2017,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         if ("last_cleanup".equals(key))
             setLastCleanup(prefs.getLong(key, -1));
 
-        if ("lt_uri".equals(key) || "vt_apikey".equals(key) || "send_host".equals(key))
+        if ("lt_uri".equals(key) ||
+                "lt_user".equals(key) ||
+                "lt_key".equals(key) ||
+                "vt_apikey".equals(key) ||
+                "send_host".equals(key))
             return;
 
         if ("global_keywords".equals(key))
@@ -2093,9 +2173,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swLanguageToolPicky.setChecked(prefs.getBoolean("lt_picky", false));
         swLanguageToolPicky.setEnabled(swLanguageTool.isChecked());
         etLanguageTool.setText(prefs.getString("lt_uri", null));
+        etLanguageToolUser.setText(prefs.getString("lt_user", null));
+        tilLanguageToolKey.getEditText().setText(prefs.getString("lt_key", null));
         swDeepL.setChecked(prefs.getBoolean("deepl_enabled", false));
         swVirusTotal.setChecked(prefs.getBoolean("vt_enabled", false));
-        etVirusTotal.setText(prefs.getString("vt_apikey", null));
+        tilVirusTotal.getEditText().setText(prefs.getString("vt_apikey", null));
         swSend.setChecked(prefs.getBoolean("send_enabled", false));
         etSend.setText(prefs.getString("send_host", null));
         swUpdates.setChecked(prefs.getBoolean("updates", true));

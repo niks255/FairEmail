@@ -1441,14 +1441,16 @@ public class FragmentMessages extends FragmentBase
         ibBatchSeen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onActionSeenSelection(true, null, true);
+                boolean more_clear = prefs.getBoolean("more_clear", true);
+                onActionSeenSelection(true, null, more_clear);
             }
         });
 
         ibBatchUnseen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onActionSeenSelection(false, null, true);
+                boolean more_clear = prefs.getBoolean("more_clear", true);
+                onActionSeenSelection(false, null, more_clear);
             }
         });
 
@@ -1469,21 +1471,24 @@ public class FragmentMessages extends FragmentBase
         ibBatchFlag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onActionFlagSelection(true, Color.TRANSPARENT, null, true);
+                boolean more_clear = prefs.getBoolean("more_clear", true);
+                onActionFlagSelection(true, Color.TRANSPARENT, null, more_clear);
             }
         });
 
         ibLowImportance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onActionSetImportanceSelection(EntityMessage.PRIORITIY_LOW, true);
+                boolean more_clear = prefs.getBoolean("more_clear", true);
+                onActionSetImportanceSelection(EntityMessage.PRIORITIY_LOW, more_clear);
             }
         });
 
         ibHighImportance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onActionSetImportanceSelection(EntityMessage.PRIORITIY_HIGH, true);
+                boolean more_clear = prefs.getBoolean("more_clear", true);
+                onActionSetImportanceSelection(EntityMessage.PRIORITIY_HIGH, more_clear);
             }
         });
 
@@ -3678,7 +3683,7 @@ public class FragmentMessages extends FragmentBase
 
                 if (ids.length < MAX_SEND_RAW)
                     popupMenu.getMenu().add(Menu.NONE, R.string.title_raw_send, order++, R.string.title_raw_send)
-                            .setIcon(R.drawable.twotone_attachment_24);
+                            .setIcon(R.drawable.twotone_attach_email_24);
 
                 if (result.canInbox()) // not is inbox
                     popupMenu.getMenu().add(Menu.FIRST, R.string.title_folder_inbox, order++, R.string.title_folder_inbox)
@@ -6123,7 +6128,8 @@ public class FragmentMessages extends FragmentBase
             }
         }
 
-        if (Objects.equals(lastUnseen, unseen) &&
+        if (refreshing == swipeRefresh.isRefreshing() &&
+                Objects.equals(lastUnseen, unseen) &&
                 Objects.equals(lastRefreshing, refreshing) &&
                 Objects.equals(lastFolderErrors, folderErrors) &&
                 Objects.equals(lastAccountErrors, accountErrors)) {
@@ -10865,6 +10871,7 @@ public class FragmentMessages extends FragmentBase
             final CheckBox cbTrash = dview.findViewById(R.id.cbTrash);
             final CheckBox cbDelete = dview.findViewById(R.id.cbDelete);
             final CheckBox cbMove = dview.findViewById(R.id.cbMove);
+            final CheckBox cbClear = dview.findViewById(R.id.cbClear);
 
             tvHint.setText(getString(R.string.title_quick_actions_hint, MAX_QUICK_ACTIONS));
             cbSeen.setChecked(prefs.getBoolean("more_seen", true));
@@ -10880,6 +10887,7 @@ public class FragmentMessages extends FragmentBase
             cbTrash.setChecked(prefs.getBoolean("more_trash", true));
             cbDelete.setChecked(prefs.getBoolean("more_delete", false));
             cbMove.setChecked(prefs.getBoolean("more_move", true));
+            cbClear.setChecked(prefs.getBoolean("more_clear", true));
 
             return new AlertDialog.Builder(getContext())
                     .setView(dview)
@@ -10900,6 +10908,7 @@ public class FragmentMessages extends FragmentBase
                             editor.putBoolean("more_trash", cbTrash.isChecked());
                             editor.putBoolean("more_delete", cbDelete.isChecked());
                             editor.putBoolean("more_move", cbMove.isChecked());
+                            editor.putBoolean("more_clear", cbClear.isChecked());
                             editor.apply();
                             sendResult(Activity.RESULT_OK);
                         }

@@ -212,8 +212,10 @@ public class ServiceAuthenticator extends Authenticator {
             Log.i("OAuth refreshed user=" + id + ":" + user);
 
             if (holder.error != null) {
-                if (!BuildConfig.PLAY_STORE_RELEASE)
-                    Log.e(new Throwable("Token refresh failed id=" + id, holder.error));
+                Log.e(new Throwable("Token refresh failed" +
+                        " id=" + id +
+                        " error=" + holder.error.getMessage(),
+                        holder.error));
                 throw holder.error;
             }
         } catch (Exception ex) {

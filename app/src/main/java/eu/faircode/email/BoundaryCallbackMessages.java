@@ -60,6 +60,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import javax.mail.Address;
@@ -160,12 +161,12 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     }
 
     private void queue_load(final State state) {
-        if (state.queued > 1) {
-            Log.i("Boundary queued =" + state.queued);
+        if (state.queued.get() > 1) {
+            Log.i("Boundary queued =" + state.queued.get());
             return;
         }
-        state.queued++;
-        Log.i("Boundary queued +" + state.queued);
+        state.queued.incrementAndGet();
+        Log.i("Boundary queued +" + state.queued.get());
 
         executor.submit(new Runnable() {
             @Override
@@ -174,7 +175,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
                 int free = Log.getFreeMemMb();
                 Map<String, String> crumb = new HashMap<>();
-                crumb.put("queued", Integer.toString(state.queued));
+                crumb.put("queued", Integer.toString(state.queued.get()));
                 Log.breadcrumb("Boundary run", crumb);
 
                 Log.i("Boundary run free=" + free);
@@ -223,11 +224,11 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         }
                     });
                 } finally {
-                    state.queued--;
-                    Log.i("Boundary queued -" + state.queued);
+                    state.queued.decrementAndGet();
+                    Log.i("Boundary queued -" + state.queued.get());
                     Helper.gc();
 
-                    crumb.put("queued", Integer.toString(state.queued));
+                    crumb.put("queued", Integer.toString(state.queued.get()));
                     Log.breadcrumb("Boundary done", crumb);
 
                     final int f = found;
@@ -508,20 +509,38 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                                             return search(true, browsable.keywords, protocol, state);
                                         } catch (Throwable ex) {
                                             EntityLog.log(context, ex.toString());
-                                            if (ex instanceof ProtocolException &&
-                                                    ex.getMessage() != null &&
-                                                    ex.getMessage().contains("full text search not supported")) {
-                                                String msg = context.getString(R.string.title_service_auth,
-                                                        account.host + ": " + getMessage(ex));
-                                                ApplicationEx.getMainHandler().post(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (intf != null)
-                                                            intf.onWarning(msg);
+                                            if (ex instanceof ProtocolException && ex.getMessage() != null)
+                                                try {
+                                                    boolean retry = false;
+                                                    String remark = null;
+                                                    if (ex.getMessage().contains("full text search not supported")) {
+                                                        retry = true;
+                                                        criteria.in_message = false;
+                                                    } else if (ex.getMessage().contains("invalid search criteria")) {
+                                                        // invalid SEARCH command syntax, invalid search criteria syntax
+                                                        retry = true;
+                                                        criteria.in_keywords = false;
+                                                        remark = "Keyword search not supported?";
                                                     }
-                                                });
-                                                criteria.in_message = false;
-                                            }
+
+                                                    if (retry) {
+                                                        String msg = context.getString(R.string.title_service_auth,
+                                                                account.host + ": " +
+                                                                        (remark == null ? "" : remark + " - ") +
+                                                                        getMessage(ex));
+                                                        ApplicationEx.getMainHandler().post(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                if (intf != null)
+                                                                    intf.onWarning(msg);
+                                                            }
+                                                        });
+
+                                                        return search(true, browsable.keywords, protocol, state);
+                                                    }
+                                                } catch (Throwable exex) {
+                                                    Log.w(exex);
+                                                }
                                         }
 
                                         return search(false, browsable.keywords, protocol, state);
@@ -854,7 +873,16 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         if (word.size() == 0)
             return true;
 
-        Pattern pat = Pattern.compile(".*?\\b(" + TextUtils.join("\\s+", word) + ")\\b.*?", Pattern.DOTALL);
+        StringBuilder sb = new StringBuilder();
+        sb.append(".*?\\b(");
+        for (int i = 0; i < word.size(); i++) {
+            if (i > 0)
+                sb.append("\\s+");
+            sb.append(Pattern.quote(word.get(i)));
+        }
+        sb.append(")\\b.*?");
+
+        Pattern pat = Pattern.compile(sb.toString(), Pattern.DOTALL);
         return pat.matcher(text).matches();
     }
 
@@ -897,7 +925,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     }
 
     static class State {
-        int queued = 0;
+        final AtomicInteger queued = new AtomicInteger(0);
         boolean destroyed = false;
         boolean error = false;
         int index = 0;
@@ -911,7 +939,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
         void reset() {
             Log.i("Boundary reset");
-            queued = 0;
+            queued.set(0);
             destroyed = false;
             error = false;
             index = 0;

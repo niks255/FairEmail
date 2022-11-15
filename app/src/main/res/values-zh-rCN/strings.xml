@@ -189,6 +189,7 @@
     <string name="title_setup_free">本应用是否免费？</string>
     <string name="title_setup_permissions">授予权限</string>
     <string name="title_setup_permissions_remark">获取联系人信息(可选)</string>
+    <string name="title_setup_permissions_calendar">存储邀请 (可选)</string>
     <string name="title_setup_permissions_explanation">需要联系人权限来查找联系人信息和推荐联系人</string>
     <string name="title_setup_permissions_notify">显示新消息通知 (可选)</string>
     <string name="title_setup_permissions_notify_explanation">在状态栏显示新消息通知时需要通知权限</string>
@@ -573,6 +574,8 @@
     <string name="title_advanced_notifications_background">使用后台服务来同步消息</string>
     <string name="title_advanced_notifications_background_hint">后台服务不会显示状态栏通知，但随时可能会被 Android 终止</string>
     <string name="title_advanced_confirm_links">确认打开链接</string>
+    <string name="title_advanced_sanitize_links">默认删除跟踪参数</string>
+    <string name="title_advanced_sanitize_links_hint">仅当确认链接时</string>
     <string name="title_advanced_check_links_dbl">使用域名拦截列表检查可疑链接</string>
     <string name="title_advanced_confirm_images">默认不显示图片</string>
     <string name="title_advanced_ask_images">确认显示图片</string>
@@ -632,6 +635,8 @@
     <string name="title_advanced_language_system">系统</string>
     <string name="title_advanced_lt">LanguageTool 集成</string>
     <string name="title_advanced_lt_auto">换行后检查段落</string>
+    <string name="title_advanced_lt_user">用户名 (选填)</string>
+    <string name="title_advanced_lt_key">API 密钥 (选填)</string>
     <string name="title_advanced_deepl">DeepL 集成</string>
     <string name="title_advanced_virus_total">VirusTotal 集成</string>
     <string name="title_advanced_sdcard">我想使用 SD 卡</string>
@@ -858,6 +863,7 @@
     <string name="title_drafts_select">需在账户设置中选定草稿文件夹才能发送邮件</string>
     <string name="title_account_auth_update">重新授权</string>
     <string name="title_account_auth_password">改用密码认证</string>
+    <string name="title_change_password">更改密码</string>
     <string name="title_delete_account">删除帐户</string>
     <string name="title_account_delete">确定永久删除这个账户吗？</string>
     <string name="title_identity_delete">确定永久删除这个身份吗？</string>
@@ -1053,6 +1059,7 @@
     <string name="title_quick_actions_low">低重要性</string>
     <string name="title_quick_actions_high">高重要性</string>
     <string name="title_quick_actions_snooze">打盹</string>
+    <string name="title_quick_actions_clear" comment="title_quick_actions_clear&#10;Title for quick actions option to clear the selection of selected messages after performing the action (mark as read, etc.)">操作后清除选择</string>
     <string name="title_trash">回收站</string>
     <string name="title_copy">复制 &#8230;</string>
     <string name="title_copy_to">复制到 &#8230;</string>
@@ -1301,8 +1308,8 @@
     <string name="title_resync">重新同步</string>
     <string name="title_charset">编码</string>
     <string name="title_charset_auto">自动</string>
-    <string name="title_alternative_text">显示纯文本</string>
-    <string name="title_alternative_html">显示 HTML</string>
+    <string name="title_alternative_text">加载纯文本</string>
+    <string name="title_alternative_html">加载 HTML</string>
     <string name="title_no_openpgp">OpenKeychain 未找到</string>
     <string name="title_user_interaction">正传输到 OpenKeychain</string>
     <string name="title_padlock">使用挂锁解密消息</string>
@@ -1665,6 +1672,7 @@
     <string name="title_reset_open">设置或清除默认应用</string>
     <string name="title_select_app">选择应用</string>
     <string name="title_updated">可更新到版本 %1$s</string>
+    <string name="title_no_update">没有可用更新</string>
     <string name="title_issue">您要提问或有疑问吗？</string>
     <string name="title_yes">是</string>
     <string name="title_no">否</string>
@@ -1676,6 +1684,8 @@
     <string name="title_select_block">选择文本块</string>
     <string name="title_insert_brackets">用括号括起来</string>
     <string name="title_insert_quotes">引用</string>
+    <string name="title_lt_add">添加单词</string>
+    <string name="title_lt_delete">删除单词</string>
     <string name="title_add">添加</string>
     <string name="title_browse">打开方式</string>
     <string name="title_info">信息</string>
@@ -1775,19 +1785,24 @@
     <string name="title_widget_background">背景颜色</string>
     <string name="title_widget_day_night">跟随系统主题</string>
     <string name="title_compat_dark">谷歌移除了安卓 10 之前的暗黑模式</string>
-    <string name="title_accessibility_collapsed">折叠</string>
-    <string name="title_accessibility_expanded">展开</string>
-    <string name="title_accessibility_seen">阅读</string>
-    <string name="title_accessibility_unseen">未读</string>
-    <plurals name="title_accessibility_messages">
-        <item quantity="other">%1$d 条消息</item>
-    </plurals>
     <!-- Thunderbird -->
     <string name="title_keyword_label1">重要</string>
     <string name="title_keyword_label2">工作</string>
     <string name="title_keyword_label3">个人</string>
     <string name="title_keyword_label4">待办事项</string>
     <string name="title_keyword_label5">稍后再说</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="other">%1$d 条消息</item>
+    </plurals>
+    <string name="title_accessibility_accounts">帐号</string>
+    <string name="title_accessibility_folders">文件夹</string>
+    <string name="title_accessibility_searches">搜索</string>
+    <string name="title_accessibility_menus">菜单</string>
+    <string name="title_accessibility_extras">附加</string>
+    <string name="title_accessibility_collapsed">折叠</string>
+    <string name="title_accessibility_expanded">展开</string>
+    <string name="title_accessibility_seen">阅读</string>
+    <string name="title_accessibility_unseen">未读</string>
     <string name="title_accessibility_flagged">标星</string>
     <string name="title_accessibility_unflagged">取消标星</string>
     <string name="title_accessibility_collapse">折叠</string>

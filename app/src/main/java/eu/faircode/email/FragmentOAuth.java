@@ -460,9 +460,6 @@ public class FragmentOAuth extends FragmentBase {
                     authRequestBuilder.setLoginHint(address);
             }
 
-            if (provider.oauth.pcke)
-                authRequestBuilder.setCodeVerifier(CodeVerifierUtil.generateRandomCodeVerifier());
-
             if (!TextUtils.isEmpty(provider.oauth.prompt))
                 authRequestBuilder.setPrompt(provider.oauth.prompt);
 
@@ -1009,7 +1006,7 @@ public class FragmentOAuth extends FragmentBase {
 
         grpError.setVisibility(View.VISIBLE);
 
-        if ("office365".equals(id) || "outlook".equals(id)) {
+        if (EntityAccount.isOutlook(id)) {
             if (ex instanceof AuthenticationFailedException)
                 tvOfficeAuthHint.setVisibility(View.VISIBLE);
         }

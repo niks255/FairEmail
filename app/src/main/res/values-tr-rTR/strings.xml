@@ -201,6 +201,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_free">Bu uygulama ücretsiz mi?</string>
     <string name="title_setup_permissions">Verilen izinler</string>
     <string name="title_setup_permissions_remark">İletişim bilgilerine erişim için (isteğe bağlı)</string>
+    <string name="title_setup_permissions_calendar">Davetiyeleri saklamak (isteğe bağlı)</string>
     <string name="title_setup_permissions_explanation">Kişi bilgilerini aramak ve kişi önermek için kişi izinleri gerekir</string>
     <string name="title_setup_permissions_notify">Yeni mesaj bildirimlerini göstermek için (isteğe bağlı)</string>
     <string name="title_setup_permissions_notify_explanation">Durum çubuğunda yeni mesajlarda bildirimleri göstermek için bildirim izinleri gerekir</string>
@@ -585,6 +586,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_notifications_background">İletileri senkronize etmek için arka plan servisi kullan</string>
     <string name="title_advanced_notifications_background_hint">Bir arka plan servisi Android tarafından herhangi bir zamanda durdurulabilir, ama çalışmak için sabit bir bildirime ihtiyaç duymaz</string>
     <string name="title_advanced_confirm_links">Bağlantıları açmayı onayla</string>
+    <string name="title_advanced_sanitize_links">Varsayılan olarak izleme parametrelerini kaldırın</string>
+    <string name="title_advanced_sanitize_links_hint">Sadece bağlantıları doğrularken</string>
     <string name="title_advanced_check_links_dbl">Şüpheli bağlantılar için alan engelleme listelerini kontrol edin</string>
     <string name="title_advanced_confirm_images">Varsayılan olarak resim gösterme</string>
     <string name="title_advanced_ask_images">Görüntüleri göstermeyi onayla</string>
@@ -644,6 +647,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_lt">Dil Aracı entegrasyonu</string>
     <string name="title_advanced_lt_auto">Yeni bir satırdan sonra paragrafı kontrol et</string>
+    <string name="title_advanced_lt_user">Kullanıcı adı (isteğe bağlı)</string>
+    <string name="title_advanced_lt_key">API anahtarı (isteğe bağlı)</string>
     <string name="title_advanced_deepl">DeepL entegrasyonu</string>
     <string name="title_advanced_virus_total">VirüsTotal entegrasyonu</string>
     <string name="title_advanced_sdcard">SD kart kullanmak istiyorum</string>
@@ -870,6 +875,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_drafts_select">İleti göndermek için hesap ayarlarından taslaklar klasörü seçilmelidir</string>
     <string name="title_account_auth_update">Yetkilendirmeyi güncelle</string>
     <string name="title_account_auth_password">Parola kimlik doğrulamasına geç</string>
+    <string name="title_change_password">Parolayı değiştir</string>
     <string name="title_delete_account">Hesabı sil</string>
     <string name="title_account_delete">Bu hesap kalıcı olarak silinsin mi?</string>
     <string name="title_identity_delete">Bu kimlik kalıcı olarak silinsin mi?</string>
@@ -1315,8 +1321,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_resync">Yeniden eşzamanla</string>
     <string name="title_charset">Metin kodlaması</string>
     <string name="title_charset_auto">Otomatik</string>
-    <string name="title_alternative_text">Düz metni göster</string>
-    <string name="title_alternative_html">HTML Göster</string>
+    <string name="title_alternative_text">Düzen metni yükle</string>
+    <string name="title_alternative_html">HTML\'i yükle</string>
     <string name="title_no_openpgp">OpenKeychain bulunamadı</string>
     <string name="title_user_interaction">OpenKeychain\'e gönderiliyor</string>
     <string name="title_padlock">Mesajın şifresini çözmek için asma kilidi kullan</string>
@@ -1678,6 +1684,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_reset_open">Varsayılan uygulamaları ayarlayın veya temizleyin</string>
     <string name="title_select_app">Uygulama seçin</string>
     <string name="title_updated">%1$s sürümüne güncelleme mevcut</string>
+    <string name="title_no_update">Kullanılabilir güncelleme yok</string>
     <string name="title_issue">Bir sorunuz ya da probleminiz mi var?</string>
     <string name="title_yes">Evet</string>
     <string name="title_no">Hayır</string>
@@ -1689,6 +1696,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_select_block">Blok seç</string>
     <string name="title_insert_brackets">Parantez içine al</string>
     <string name="title_insert_quotes">Alıntıla</string>
+    <string name="title_lt_add">Kelime ekle</string>
+    <string name="title_lt_delete">Kelime sil</string>
     <string name="title_add">Ekle</string>
     <string name="title_browse">Birlikte aç</string>
     <string name="title_info">Bilgi</string>
@@ -1789,20 +1798,25 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_widget_background">Arka plan rengi</string>
     <string name="title_widget_day_night">Karanlık sistem temasına uyum sağla</string>
     <string name="title_compat_dark">Google Android 10 öncesi sürümler için karanlık modu kaldırdı</string>
-    <string name="title_accessibility_collapsed">Daraltılan</string>
-    <string name="title_accessibility_expanded">Genişletilen</string>
-    <string name="title_accessibility_seen">Okunan</string>
-    <string name="title_accessibility_unseen">Okunmayan</string>
-    <plurals name="title_accessibility_messages">
-        <item quantity="one">%1$d mesaj</item>
-        <item quantity="other">%1$d mesaj</item>
-    </plurals>
     <!-- Thunderbird -->
     <string name="title_keyword_label1">Önemli</string>
     <string name="title_keyword_label2">İş</string>
     <string name="title_keyword_label3">Kişisel</string>
     <string name="title_keyword_label4">Yapılacaklar</string>
     <string name="title_keyword_label5">Daha sonra</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="one">%1$d mesaj</item>
+        <item quantity="other">%1$d mesaj</item>
+    </plurals>
+    <string name="title_accessibility_accounts">Hesaplar</string>
+    <string name="title_accessibility_folders">Klasörler</string>
+    <string name="title_accessibility_searches">Aramalar</string>
+    <string name="title_accessibility_menus">Menüler</string>
+    <string name="title_accessibility_extras">Ekstralar</string>
+    <string name="title_accessibility_collapsed">Daraltılan</string>
+    <string name="title_accessibility_expanded">Genişletilen</string>
+    <string name="title_accessibility_seen">Okunan</string>
+    <string name="title_accessibility_unseen">Okunmayan</string>
     <string name="title_accessibility_flagged">Yıldızlı</string>
     <string name="title_accessibility_unflagged">Yıldızlı olmayan</string>
     <string name="title_accessibility_collapse">Daralt</string>

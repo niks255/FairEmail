@@ -215,6 +215,7 @@
     <string name="title_setup_free">Da li je ova aplikacija besplatna?</string>
     <string name="title_setup_permissions">Odobri dozvole</string>
     <string name="title_setup_permissions_remark">Za pristup informacijama o kontaktima (opcionalno)</string>
+    <string name="title_setup_permissions_calendar">Na pozivnice trgovine (opcionalno)</string>
     <string name="title_setup_permissions_explanation">Dozvole za kontakte su neophodne za traženje informacija o kontaktima i predlaganje kontakata</string>
     <string name="title_setup_permissions_notify">Za prikaz obavještenja o novim porukama (opcionalno)</string>
     <string name="title_setup_permissions_notify_explanation">Dozvole obavještenja su neophodne za prikaz obavještenja o novim porukama na statusnoj traci</string>
@@ -600,6 +601,8 @@
     <string name="title_advanced_notifications_background">Koristi pozadinski servis za sinhronizaciju poruka</string>
     <string name="title_advanced_notifications_background_hint">Android može zaustaviti pozadinski servis bilo kada, ali on ne zahtijeva obavještenje na statusnoj traci</string>
     <string name="title_advanced_confirm_links">Potvrdi linkove na otvaranju</string>
+    <string name="title_advanced_sanitize_links">Ukloni parametre \'praćenja\' po default-u</string>
+    <string name="title_advanced_sanitize_links_hint">Samo pri potvrđivanju linkova</string>
     <string name="title_advanced_check_links_dbl">Provjeri spisak blokiranja domena za sumnjive linkove</string>
     <string name="title_advanced_confirm_images">Ne prikazuj slike po zadanom</string>
     <string name="title_advanced_ask_images">Potvrdi prikazivanje slika</string>
@@ -660,6 +663,8 @@
     <string name="title_advanced_language_system">Sistemski</string>
     <string name="title_advanced_lt">LanguageTool integracija</string>
     <string name="title_advanced_lt_auto">Provjeri pasus nakon nove linije</string>
+    <string name="title_advanced_lt_user">Korisničko ime (opcionalno)</string>
+    <string name="title_advanced_lt_key">API ključ (opcionalno)</string>
     <string name="title_advanced_deepl">DeepL integracija</string>
     <string name="title_advanced_virus_total">Integracija s VirusTotal-om</string>
     <string name="title_advanced_sdcard">Želim koristiti SD karticu</string>
@@ -885,6 +890,7 @@
     <string name="title_drafts_select">Slanje e-pošte zahtijeva da se izabere folder za nacrte u postavkama računa</string>
     <string name="title_account_auth_update">Osvježi autorizaciju</string>
     <string name="title_account_auth_password">Prebaci na provjeru lozinkom</string>
+    <string name="title_change_password">Promijeni lozinku</string>
     <string name="title_delete_account">Izbriši račun</string>
     <string name="title_account_delete">Izbrisati ovaj račun trajno?</string>
     <string name="title_identity_delete">Izbrisati ovaj identitet trajno?</string>
@@ -1083,6 +1089,7 @@
     <string name="title_quick_actions_low">Niska važnost</string>
     <string name="title_quick_actions_high">Visoka važnost</string>
     <string name="title_quick_actions_snooze">Odgodi</string>
+    <string name="title_quick_actions_clear" comment="title_quick_actions_clear&#10;Title for quick actions option to clear the selection of selected messages after performing the action (mark as read, etc.)">Deselekcija označenog nakon izvršene radnje</string>
     <string name="title_trash">Otpad</string>
     <string name="title_copy">Kopiraj &#8230;</string>
     <string name="title_copy_to">Kopiraj u &#8230;</string>
@@ -1333,8 +1340,8 @@
     <string name="title_resync">Ponovo sinhronizuj</string>
     <string name="title_charset">Kodiranje</string>
     <string name="title_charset_auto">Automatski</string>
-    <string name="title_alternative_text">Prikaži obični tekst</string>
-    <string name="title_alternative_html">Prikaži HTML</string>
+    <string name="title_alternative_text">Učitaj obični tekst</string>
+    <string name="title_alternative_html">Učitaj HTML</string>
     <string name="title_no_openpgp">OpenKeychan nije pronađen</string>
     <string name="title_user_interaction">Prebacivanje na OpenKeychain</string>
     <string name="title_padlock">Koristi lokot za dešifriranje poruke</string>
@@ -1697,6 +1704,7 @@
     <string name="title_reset_open">Postavi ili očisti zadane aplikacije</string>
     <string name="title_select_app">Izaberite aplikaciju</string>
     <string name="title_updated">Dostupno ažuriranje na verziju %1$s</string>
+    <string name="title_no_update">Nema dostupnih ažuriranja</string>
     <string name="title_issue">Imate li pitanje ili problem?</string>
     <string name="title_yes">Da</string>
     <string name="title_no">Ne</string>
@@ -1708,6 +1716,8 @@
     <string name="title_select_block">Selekcija bloka teksta</string>
     <string name="title_insert_brackets">Zagrada</string>
     <string name="title_insert_quotes">Citat</string>
+    <string name="title_lt_add">Dodaj riječ</string>
+    <string name="title_lt_delete">Ukloni riječ</string>
     <string name="title_add">Dodaj</string>
     <string name="title_browse">Otvori pomoću</string>
     <string name="title_info">Informacije</string>
@@ -1809,21 +1819,26 @@
     <string name="title_widget_background">Boja pozadine</string>
     <string name="title_widget_day_night">Prati tamnu sistemsku temu</string>
     <string name="title_compat_dark">Google je uklonio tamnu temu za Android verzije prije verzije 10</string>
-    <string name="title_accessibility_collapsed">Suženo</string>
-    <string name="title_accessibility_expanded">Prošireno</string>
-    <string name="title_accessibility_seen">Pročitano</string>
-    <string name="title_accessibility_unseen">Nepročitano</string>
-    <plurals name="title_accessibility_messages">
-        <item quantity="one">%1$d poruka</item>
-        <item quantity="few">%1$d poruke</item>
-        <item quantity="other">%1$d poruka</item>
-    </plurals>
     <!-- Thunderbird -->
     <string name="title_keyword_label1">Važno</string>
     <string name="title_keyword_label2">Posao</string>
     <string name="title_keyword_label3">Lično</string>
     <string name="title_keyword_label4">Za uraditi</string>
     <string name="title_keyword_label5">Kasnije</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="one">%1$d poruka</item>
+        <item quantity="few">%1$d poruke</item>
+        <item quantity="other">%1$d poruka</item>
+    </plurals>
+    <string name="title_accessibility_accounts">Računi</string>
+    <string name="title_accessibility_folders">Folderi</string>
+    <string name="title_accessibility_searches">Pretrage</string>
+    <string name="title_accessibility_menus">Meniji</string>
+    <string name="title_accessibility_extras">Dodatne opcije</string>
+    <string name="title_accessibility_collapsed">Suženo</string>
+    <string name="title_accessibility_expanded">Prošireno</string>
+    <string name="title_accessibility_seen">Pročitano</string>
+    <string name="title_accessibility_unseen">Nepročitano</string>
     <string name="title_accessibility_flagged">Favoritima</string>
     <string name="title_accessibility_unflagged">Bez zvjezdice</string>
     <string name="title_accessibility_collapse">Suzi</string>

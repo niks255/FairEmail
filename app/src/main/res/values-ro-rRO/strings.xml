@@ -215,6 +215,7 @@
     <string name="title_setup_free">Este această aplicație gratuită?</string>
     <string name="title_setup_permissions">Acordă permisiuni</string>
     <string name="title_setup_permissions_remark">Pentru a obține informațiile contactelor (opțional)</string>
+    <string name="title_setup_permissions_calendar">Pentru a stoca invitațiile (opțional)</string>
     <string name="title_setup_permissions_explanation">Permisiunile de contact sunt necesare pentru a căuta informații de contact și pentru a sugera contacte</string>
     <string name="title_setup_permissions_notify">Pentru a afișa notificări mesaje noi (opțional)</string>
     <string name="title_setup_permissions_notify_explanation">Permisiunile de notificare sunt necesare pentru a afișa notificări pentru mesaje noi în bara de stare</string>
@@ -599,6 +600,8 @@
     <string name="title_advanced_notifications_background">Folosește serviciul de fundal pentru a sincroniza mesajele</string>
     <string name="title_advanced_notifications_background_hint">Un serviciu de fundal poate fi oprit de Android în orice moment, dar nu necesită o notificare în bara de stare</string>
     <string name="title_advanced_confirm_links">Confirma deschiderea legăturilor</string>
+    <string name="title_advanced_sanitize_links">Elimină implicit parametrii de urmărire</string>
+    <string name="title_advanced_sanitize_links_hint">Doar la confirmarea legăturilor</string>
     <string name="title_advanced_check_links_dbl">Verificați listele de blocare a domeniilor pentru link-uri suspecte</string>
     <string name="title_advanced_confirm_images">Nu afișați nicio imagine în mod implicit</string>
     <string name="title_advanced_ask_images">Confirmă afișarea imaginilor</string>
@@ -658,6 +661,8 @@
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_lt">Integrare cu LanguageTool</string>
     <string name="title_advanced_lt_auto">Verifică paragraful după o nouă linie</string>
+    <string name="title_advanced_lt_user">Nume utilizator (opţional)</string>
+    <string name="title_advanced_lt_key">Cheie API (opțional)</string>
     <string name="title_advanced_deepl">Integrare DeepL</string>
     <string name="title_advanced_virus_total">Integrare VirusTotal</string>
     <string name="title_advanced_sdcard">Vreau să folosesc un sdcard</string>
@@ -884,6 +889,7 @@
     <string name="title_drafts_select">Trimiterea de e-mailuri necesită un dosar ciorne selectat în setările contului</string>
     <string name="title_account_auth_update">Actualizarea autorizației</string>
     <string name="title_account_auth_password">Treceți la autentificarea prin parolă</string>
+    <string name="title_change_password">Schimbați parola</string>
     <string name="title_delete_account">Ștergere cont</string>
     <string name="title_account_delete">Ștergeți definitiv acest cont?</string>
     <string name="title_identity_delete">Ștergeți definitiv această identitate?</string>
@@ -1329,8 +1335,8 @@
     <string name="title_resync">Resincronizare</string>
     <string name="title_charset">Codificare</string>
     <string name="title_charset_auto">Automat</string>
-    <string name="title_alternative_text">Afișare text simplu</string>
-    <string name="title_alternative_html">Afișați HTML</string>
+    <string name="title_alternative_text">Încărcați text simplu</string>
+    <string name="title_alternative_html">Încărcați HTML</string>
     <string name="title_no_openpgp">OpenKeychain nu a fost găsit</string>
     <string name="title_user_interaction">Transfer la OpenKeychain</string>
     <string name="title_padlock">Folosiți lacătul pentru a decripta mesajul</string>
@@ -1693,6 +1699,7 @@
     <string name="title_reset_open">Setați sau ștergeți aplicațiile implicite</string>
     <string name="title_select_app">Selectează aplicația</string>
     <string name="title_updated">Actualizare la versiunea %1$s disponibilă</string>
+    <string name="title_no_update">Nicio actualizare disponibilă</string>
     <string name="title_issue">Aveți o întrebare sau problemă?</string>
     <string name="title_yes">Da</string>
     <string name="title_no">Nu</string>
@@ -1704,6 +1711,8 @@
     <string name="title_select_block">Selectează bloc</string>
     <string name="title_insert_brackets">Inserează paranteze</string>
     <string name="title_insert_quotes">Citează</string>
+    <string name="title_lt_add">Adăugați un cuvânt</string>
+    <string name="title_lt_delete">Eliminați cuvântul</string>
     <string name="title_add">Adaugă</string>
     <string name="title_browse">Deschide cu</string>
     <string name="title_info">Informații</string>
@@ -1804,21 +1813,26 @@
     <string name="title_widget_background">Culoare fundal</string>
     <string name="title_widget_day_night">Urmați tema sistemului întunecat</string>
     <string name="title_compat_dark">Google a eliminat modul întunecat pentru versiunile de Android anterioare versiunii 10</string>
-    <string name="title_accessibility_collapsed">Restrâns</string>
-    <string name="title_accessibility_expanded">Extins</string>
-    <string name="title_accessibility_seen">Citit</string>
-    <string name="title_accessibility_unseen">Necitit</string>
-    <plurals name="title_accessibility_messages">
-        <item quantity="one">%1$d mesaj</item>
-        <item quantity="few">%1$d mesaje</item>
-        <item quantity="other">%1$d de mesaje</item>
-    </plurals>
     <!-- Thunderbird -->
     <string name="title_keyword_label1">Important</string>
     <string name="title_keyword_label2">Serviciu</string>
     <string name="title_keyword_label3">Personal</string>
     <string name="title_keyword_label4">De făcut</string>
     <string name="title_keyword_label5">Mai târziu</string>
+    <plurals name="title_accessibility_messages">
+        <item quantity="one">%1$d mesaj</item>
+        <item quantity="few">%1$d mesaje</item>
+        <item quantity="other">%1$d de mesaje</item>
+    </plurals>
+    <string name="title_accessibility_accounts">Conturi</string>
+    <string name="title_accessibility_folders">Dosare</string>
+    <string name="title_accessibility_searches">Căutări</string>
+    <string name="title_accessibility_menus">Meniuri</string>
+    <string name="title_accessibility_extras">Extra</string>
+    <string name="title_accessibility_collapsed">Restrâns</string>
+    <string name="title_accessibility_expanded">Extins</string>
+    <string name="title_accessibility_seen">Citit</string>
+    <string name="title_accessibility_unseen">Necitit</string>
     <string name="title_accessibility_flagged">Marcat</string>
     <string name="title_accessibility_unflagged">Nemarcat</string>
     <string name="title_accessibility_collapse">Restrânge</string>

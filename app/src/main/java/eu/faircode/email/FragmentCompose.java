@@ -993,6 +993,7 @@ public class FragmentCompose extends FragmentBase {
                         Bundle args = new Bundle();
                         args.putParcelable("uri", uri);
                         args.putString("title", title);
+                        args.putBoolean("always_confirm", true);
 
                         FragmentDialogOpenLink fragment = new FragmentDialogOpenLink();
                         fragment.setArguments(args);
@@ -2411,16 +2412,41 @@ public class FragmentCompose extends FragmentBase {
 
                         Bundle args = new Bundle();
                         args.putLong("id", id);
+                        args.putString("to", etTo.getText().toString());
 
                         new SimpleTask<EntityAnswer>() {
                             @Override
                             protected EntityAnswer onExecute(Context context, Bundle args) throws Throwable {
                                 long id = args.getLong("id");
+                                String to = args.getString("to");
 
                                 DB db = DB.getInstance(context);
                                 EntityAnswer answer = db.answer().getAnswer(id);
-                                if (answer != null)
+                                if (answer != null) {
+                                    InternetAddress[] tos = null;
+                                    try {
+                                        tos = MessageHelper.parseAddresses(context, to);
+                                    } catch (AddressException ignored) {
+                                    }
+
+                                    String html = EntityAnswer.replacePlaceholders(context, answer.text, tos);
+
+                                    Document d = JsoupEx.parse(html);
+                                    d = HtmlHelper.sanitizeView(context, d, true);
+                                    Spanned spanned = HtmlHelper.fromDocument(context, d, new HtmlHelper.ImageGetterEx() {
+                                        @Override
+                                        public Drawable getDrawable(Element element) {
+                                            String source = element.attr("src");
+                                            if (source.startsWith("cid:"))
+                                                element.attr("src", "cid:");
+                                            return ImageHelper.decodeImage(context,
+                                                    working, element, true, zoom, 1.0f, etBody);
+                                        }
+                                    }, null);
+                                    args.putCharSequence("spanned", spanned);
+
                                     db.answer().applyAnswer(answer.id, new Date().getTime());
+                                }
 
                                 return answer;
                             }
@@ -2433,24 +2459,7 @@ public class FragmentCompose extends FragmentBase {
                                 if (etSubject.getText().length() == 0)
                                     etSubject.setText(answer.name);
 
-                                InternetAddress[] to = null;
-                                try {
-                                    to = MessageHelper.parseAddresses(getContext(), etTo.getText().toString());
-                                } catch (AddressException ignored) {
-                                }
-
-                                String html = EntityAnswer.replacePlaceholders(context, answer.text, to);
-
-                                Spanned spanned = HtmlHelper.fromHtml(html, new HtmlHelper.ImageGetterEx() {
-                                    @Override
-                                    public Drawable getDrawable(Element element) {
-                                        String source = element.attr("src");
-                                        if (source.startsWith("cid:"))
-                                            element.attr("src", "cid:");
-                                        return ImageHelper.decodeImage(getContext(),
-                                                working, element, true, zoom, 1.0f, etBody);
-                                    }
-                                }, null, getContext());
+                                Spanned spanned = (Spanned) args.getCharSequence("spanned");
 
                                 int start = etBody.getSelectionStart();
                                 int end = etBody.getSelectionEnd();
@@ -3378,13 +3387,15 @@ public class FragmentCompose extends FragmentBase {
                     Helper.writeText(file, doc.html());
                 }
 
-                return HtmlHelper.fromHtml(html, new HtmlHelper.ImageGetterEx() {
+                Document d = JsoupEx.parse(html);
+                d = HtmlHelper.sanitizeView(context, d, true);
+                return HtmlHelper.fromDocument(context, d, new HtmlHelper.ImageGetterEx() {
                     @Override
                     public Drawable getDrawable(Element element) {
                         return ImageHelper.decodeImage(context,
                                 id, element, true, zoom, 1.0f, etBody);
                     }
-                }, null, getContext());
+                }, null);
             }
 
             @Override
@@ -6577,6 +6588,8 @@ public class FragmentCompose extends FragmentBase {
                                 } catch (Throwable ex) {
                                     Log.e(ex);
                                 }
+
+                            args.putBoolean("remind_internet", !ConnectionHelper.getNetworkState(context).isConnected());
                         } else {
                             int mid;
                             if (action == R.id.action_undo)
@@ -6637,9 +6650,13 @@ public class FragmentCompose extends FragmentBase {
                             EntityOperation.queue(context, draft, EntityOperation.SEND);
 
                         final String feedback;
-                        if (draft.ui_snoozed == null)
-                            feedback = context.getString(R.string.title_queued);
-                        else {
+                        if (draft.ui_snoozed == null) {
+                            boolean suitable = ConnectionHelper.getNetworkState(context).isSuitable();
+                            if (suitable)
+                                feedback = context.getString(R.string.title_queued);
+                            else
+                                feedback = context.getString(R.string.title_notification_waiting);
+                        } else {
                             DateFormat DTF = Helper.getDateTimeInstance(context);
                             feedback = context.getString(R.string.title_queued_at, DTF.format(draft.ui_snoozed));
                         }
@@ -6772,6 +6789,7 @@ public class FragmentCompose extends FragmentBase {
                 boolean remind_text = args.getBoolean("remind_text", false);
                 boolean remind_attachment = args.getBoolean("remind_attachment", false);
                 String remind_extension = args.getString("remind_extension");
+                boolean remind_internet = args.getBoolean("remind_internet", false);
                 boolean styled = args.getBoolean("styled", false);
 
                 int recipients = (draft.to == null ? 0 : draft.to.length) +
@@ -6785,7 +6803,8 @@ public class FragmentCompose extends FragmentBase {
                         (styled && draft.isPlainOnly()) ||
                         (send_reminders &&
                                 (remind_extra || remind_subject || remind_text ||
-                                        remind_attachment || remind_extension != null))) {
+                                        remind_attachment || remind_extension != null ||
+                                        remind_internet))) {
                     setBusy(false);
 
                     Helper.hideKeyboard(view);
@@ -7607,6 +7626,7 @@ public class FragmentCompose extends FragmentBase {
             final boolean remind_text = args.getBoolean("remind_text", false);
             final boolean remind_attachment = args.getBoolean("remind_attachment", false);
             final String remind_extension = args.getString("remind_extension");
+            final boolean remind_internet = args.getBoolean("remind_internet", false);
             final boolean styled = args.getBoolean("styled", false);
             final long size = args.getLong("size", -1);
             final long max_size = args.getLong("max_size", -1);
@@ -7639,6 +7659,7 @@ public class FragmentCompose extends FragmentBase {
             final TextView tvRemindText = dview.findViewById(R.id.tvRemindText);
             final TextView tvRemindAttachment = dview.findViewById(R.id.tvRemindAttachment);
             final TextView tvRemindExtension = dview.findViewById(R.id.tvRemindExtension);
+            final TextView tvRemindInternet = dview.findViewById(R.id.tvRemindInternet);
             final SwitchCompat swSendReminders = dview.findViewById(R.id.swSendReminders);
             final TextView tvSendRemindersHint = dview.findViewById(R.id.tvSendRemindersHint);
             final TextView tvTo = dview.findViewById(R.id.tvTo);
@@ -7697,6 +7718,8 @@ public class FragmentCompose extends FragmentBase {
             tvRemindExtension.setText(getString(R.string.title_attachment_warning, remind_extension));
             tvRemindExtension.setVisibility(send_reminders && remind_extension != null ? View.VISIBLE : View.GONE);
 
+            tvRemindInternet.setVisibility(send_reminders && remind_internet ? View.VISIBLE : View.GONE);
+
             tvTo.setText(null);
             tvVia.setText(null);
             tvPlainHint.setVisibility(View.GONE);
@@ -7716,7 +7739,7 @@ public class FragmentCompose extends FragmentBase {
             Helper.setViewsEnabled(dview, false);
 
             boolean reminder = (remind_extra || remind_subject || remind_text ||
-                    remind_attachment || remind_extension != null);
+                    remind_attachment || remind_extension != null || remind_internet);
             swSendReminders.setChecked(send_reminders);
             swSendReminders.setVisibility(send_reminders && reminder ? View.VISIBLE : View.GONE);
             tvSendRemindersHint.setVisibility(View.GONE);
@@ -7729,6 +7752,7 @@ public class FragmentCompose extends FragmentBase {
                     tvRemindText.setVisibility(checked && remind_text ? View.VISIBLE : View.GONE);
                     tvRemindAttachment.setVisibility(checked && remind_attachment ? View.VISIBLE : View.GONE);
                     tvRemindExtension.setVisibility(checked && remind_extension != null ? View.VISIBLE : View.GONE);
+                    tvRemindInternet.setVisibility(checked && remind_internet ? View.VISIBLE : View.GONE);
                     tvSendRemindersHint.setVisibility(checked ? View.GONE : View.VISIBLE);
                 }
             });

@@ -4,6 +4,43 @@
 
 ### [Ninjatitan](https://en.wikipedia.org/wiki/Ninjatitan)
 
+### 1.2004 - 2022-11-15
+
+* Added send reminder for no/suitable internet
+* Added option to retain selection after quick action
+* LanguageTool premium: check per paragraph
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated translations
+
+### 1.2003 - 2022-11-12
+
+* Added option to remove tracking parameters by default (privacy settings tab page)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2002 - 2022-11-10
+
+* Fixed Outlook / Office 365 authentication
+* Updated translations
+
+### 1.2001 - 2022-11-10
+
+* Fixed Outlook / Office 365 OAuth in some cases
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2000 - 2022-11-10
+
+* Added OAuth for AOL (quick setup wizard)
+* Added change password button (main settings/extras section)
+* Added support for LanguageTool premium features, [see the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq180)
+* Added optional unified inbox navigation menu item (when the inboxes and unified folders diverge)
+* Added zipping attachments in the message composer (long press attached file)
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
 ### 1.1999 - 2022-11-05
 
 * Fixed refreshing OAuth tokens in some situations

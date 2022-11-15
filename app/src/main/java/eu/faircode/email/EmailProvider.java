@@ -177,7 +177,7 @@ public class EmailProvider implements Parcelable {
         return result;
     }
 
-    static List<EmailProvider> loadProfiles(Context context) {
+    private static List<EmailProvider> loadProfiles(Context context) {
         List<EmailProvider> result = null;
 
         try {
@@ -281,7 +281,6 @@ public class EmailProvider implements Parcelable {
                         provider.oauth.askAccount = getAttributeBooleanValue(xml, "askAccount", false);
                         provider.oauth.clientId = xml.getAttributeValue(null, "clientId");
                         provider.oauth.clientSecret = xml.getAttributeValue(null, "clientSecret");
-                        provider.oauth.pcke = getAttributeBooleanValue(xml, "pcke", false);
                         provider.oauth.scopes = xml.getAttributeValue(null, "scopes").split(",");
                         provider.oauth.authorizationEndpoint = xml.getAttributeValue(null, "authorizationEndpoint");
                         provider.oauth.tokenEndpoint = xml.getAttributeValue(null, "tokenEndpoint");
@@ -298,7 +297,7 @@ public class EmailProvider implements Parcelable {
                     } else
                         throw new IllegalAccessException(name);
                 } else if (eventType == XmlPullParser.END_TAG) {
-                    if ("provider".equals(xml.getName()) && provider.enabled) {
+                    if ("provider".equals(xml.getName())) {
                         result.add(provider);
                         provider = null;
                     }
@@ -313,12 +312,12 @@ public class EmailProvider implements Parcelable {
         return result;
     }
 
-    static boolean getAttributeBooleanValue(XmlPullParser parser, String name, boolean defaultValue) {
+    private static boolean getAttributeBooleanValue(XmlPullParser parser, String name, boolean defaultValue) {
         String value = parser.getAttributeValue(null, name);
         return (value == null ? defaultValue : Boolean.parseBoolean(value));
     }
 
-    static int getAttributeIntValue(XmlPullParser parser, String name, int defaultValue) {
+    private static int getAttributeIntValue(XmlPullParser parser, String name, int defaultValue) {
         String value = parser.getAttributeValue(null, name);
         return (value == null ? defaultValue : Integer.parseInt(value));
     }
@@ -330,6 +329,14 @@ public class EmailProvider implements Parcelable {
                     return provider;
 
         throw new FileNotFoundException("provider id=" + id);
+    }
+
+    static List<EmailProvider> getProviders(Context context) {
+        List<EmailProvider> result = new ArrayList<>();
+        for (EmailProvider provider : loadProfiles(context))
+            if (provider.enabled)
+                result.add(provider);
+        return result;
     }
 
     @NonNull
@@ -1306,7 +1313,6 @@ public class EmailProvider implements Parcelable {
         boolean askAccount;
         String clientId;
         String clientSecret;
-        boolean pcke;
         String[] scopes;
         String authorizationEndpoint;
         String tokenEndpoint;

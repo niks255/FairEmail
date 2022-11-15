@@ -113,7 +113,6 @@ Related questions:
 * ~~The folder selector sometimes shows no folders for yet unknown reasons. This seems to be fixed.~~
 * ~~A [bug in AndroidX](https://issuetracker.google.com/issues/64729576) makes it hard to grap the fast scroller. A workaround was added.~~
 * ~~Encryption with YubiKey results into an infinite loop. This seems to be caused by a [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2507).~~
-* Scrolling to an internally linked location in original messages does not work. This can't be fixed because the original message view is contained in a scrolling view.
 * A preview of a message text doesn't (always) appear on Samsung watches because [setLocalOnly](https://developer.android.com/reference/androidx/core/app/NotificationCompat.Builder.html#setLocalOnly(boolean)) seem to be ignored. Message preview texts are known to be displayed correctly on Pebble 2, Fitbit Charge 3, Mi band 3, and Xiaomi Amazfit BIP wearables. See also [this FAQ](#user-content-faq126).
 * A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
@@ -696,8 +695,6 @@ To use a password you can use the quick setup wizard and select *Other provider*
 
 This Google security check is triggered more often with *less secure apps* enabled, less with an app password, and hardly when using an on-device account (OAuth).
 You might see the error *OAUTH2 asked for more*, which basically says the connection is temporarily blocked, until you confirm it is you.
-
-Please see [this FAQ](#user-content-faq111) on why only on-device accounts can be used.
 
 Note that an app specific password is required when two factor authentication is enabled.
 After enabling two factor authentication there will be this error message:
@@ -2939,9 +2936,9 @@ You'll likely want to disabled [browse on server](#user-content-faq24) too.
 
 The original message view will use a dark background when using a dark theme for Android version 10 and later.
 
-For Android before version 10 Google removed this feature from the [Android System WebView](https://play.google.com/store/apps/details?id=com.google.android.webview),
-even though it worked fine in most cases.
-Please see [this issue](https://issuetracker.google.com/issues/237785596) (requires a Google account login) requesting to restore this feature again for more information.
+~~For Android before version 10 Google removed this feature from the [Android System WebView](https://play.google.com/store/apps/details?id=com.google.android.webview),~~
+~~even though it worked fine in most cases.~~
+~~Please see [this issue](https://issuetracker.google.com/issues/237785596) (requires a Google account login) requesting to restore this feature again for more information.~~
 
 <br />
 
@@ -3854,6 +3851,10 @@ and [does not support IMAP](https://tutanota.com/faq/#imap),
 so you cannot use FairEmail or any other email client to access Tutanota.
 
 **Cyberfear** does not support IMAP, so you'll need to manually configure a POP3 account.
+
+**Skiff** uses a proprietary email protocol
+and [does not support IMAP](https://www.skiff.com/blog/tutanota-alternatives-comparison)
+so you cannot use FairEmail or any other email client to access Skiff.
 
 <br />
 
@@ -4950,6 +4951,9 @@ else you can double tap or long press the marked text to show suggestions.
 Since version 1.1974 there is an option to check paragraphs after a new line.
 
 The suboption *Use formal form* can be enabled to let LanguageTool suggest more formal text (business, legal, etc).
+
+Since version 1.2000 you can configure a username and an API key to access the premium features.
+You can long press text to select a word, and add it to or remove it from the personal dictionary via the *copy/paste* pop-up menu.
 
 <br />
 
