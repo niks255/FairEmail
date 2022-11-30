@@ -869,6 +869,7 @@
     <string name="title_drafts_select">Att skicka e-post kräver att en utkastmapp väljs i kontoinställningarna</string>
     <string name="title_account_auth_update">Uppdatera auktorisering</string>
     <string name="title_account_auth_password">Byt till lösenordsautentisering</string>
+    <string name="title_change_password">Ändra lösenord</string>
     <string name="title_delete_account">Radera konto</string>
     <string name="title_account_delete">Ta bort detta konto permanent?</string>
     <string name="title_identity_delete">Ta bort denna identitet permanent?</string>
@@ -1058,7 +1059,7 @@
     <string name="title_auto_confirm">Bekräfta automatiskt efter några sekunder</string>
     <string name="title_buttons">Välj knappar</string>
     <string name="title_buttons_hint">De faktiska åtgärder som är tillgängliga beror på kontotyp och konfiguration</string>
-    <string name="title_button_search">Sök i meddelanden</string>
+    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Sök liknande meddelanden</string>
     <string name="title_button_search_text">Sök i meddelandetext</string>
     <string name="title_configure_buttons">Konfigurera knappar &#8230;</string>
     <string name="title_quick_actions">Välj åtgärd</string>
@@ -1066,7 +1067,7 @@
     <string name="title_quick_actions_low">Ej viktigt</string>
     <string name="title_quick_actions_high">Viktigt</string>
     <string name="title_quick_actions_snooze">Pausa</string>
-    <string name="title_quick_actions_clear" comment="title_quick_actions_clear&#10;Title for quick actions option to clear the selection of selected messages after performing the action (mark as read, etc.)">Nollställ urval efter åtgärd</string>
+    <string name="title_quick_actions_clear">Nollställ urval efter åtgärd</string>
     <string name="title_trash">Papperskorg</string>
     <string name="title_copy">Kopiera &#8230;</string>
     <string name="title_copy_to">Kopiera till &#8230;</string>

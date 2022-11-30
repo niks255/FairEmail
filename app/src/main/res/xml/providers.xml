@@ -44,6 +44,7 @@
         name="Outlook"
         domain="outlook\\..*"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
+        maxtls="1.2"
         noop="true"
         order="2"
         partial="false"
@@ -61,6 +62,7 @@
         name="Live"
         domain="live\\..*"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
+        maxtls="1.2"
         noop="true"
         order="3"
         partial="false"
@@ -78,6 +80,7 @@
         name="Hotmail"
         domain="hotmail\\..*"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
+        maxtls="1.2"
         noop="true"
         order="4"
         partial="false"
@@ -94,6 +97,7 @@
     <provider
         name="MSN"
         domain="\\.msn\\..*"
+        maxtls="1.2"
         partial="false">
         <imap
             host="imap-mail.outlook.com"
@@ -110,6 +114,7 @@
         enabled="false"
         id="office365"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
+        maxtls="1.2"
         noop="true"
         order="5"
         partial="false"
@@ -148,6 +153,7 @@
         description="Outlook/Office 365"
         id="office365pcke"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
+        maxtls="1.2"
         noop="true"
         order="5"
         partial="false"
@@ -186,6 +192,7 @@
         enabled="false"
         id="outlook"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
+        maxtls="1.2"
         noop="true"
         order="5"
         partial="false"
@@ -249,10 +256,11 @@
         name="Yahoo"
         appPassword="true"
         description="Yahoo/AT&amp;T"
-        domain="yahoo\\..*"
+        domain="yahoo\\..*,ymail\\.com"
         enabled="false"
         id="yahoo"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88"
+        noop="true"
         order="7"
         partial="false">
         <imap
@@ -283,9 +291,10 @@
         name="Yahoo"
         appPassword="true"
         description="Yahoo/AT&amp;T"
-        domain="yahoo\\..*"
+        domain="yahoo\\..*,ymail\\.com"
         id="yahoo2"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88"
+        noop="true"
         order="7"
         partial="false">
         <imap
@@ -345,7 +354,8 @@
         appPassword="true"
         documentation="SMTP est désactivé par défaut, veuillez &lt;a href=&quot;http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/configurer-smtp-free-fr&quot;&gt;voir ici&lt;/a&gt; pour un guide détaillé."
         domain="free\\.fr,libertysurf\\.fr"
-        link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq157">
+        link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq157"
+        maxtls="1.2">
         <imap
             host="imap.free.fr"
             port="993"
@@ -683,7 +693,8 @@
     <provider
         name="Zoho"
         domain="zoho\\.com"
-        link="https://www.zoho.com/mail/help/imap-access.html">
+        link="https://www.zoho.com/mail/help/imap-access.html"
+        maxtls="1.2">
         <imap
             host="imap.zoho.com"
             port="993"
@@ -696,7 +707,8 @@
     <provider
         name="Zoho EU"
         domain="zohomail\\.eu"
-        link="https://www.zoho.eu/mail/help/imap-access.html">
+        link="https://www.zoho.eu/mail/help/imap-access.html"
+        maxtls="1.2">
         <imap
             host="imap.zoho.eu"
             port="993"
@@ -708,7 +720,8 @@
     </provider>
     <provider
         name="Zoho AU"
-        domain="zohomail\\.com\\.au">
+        domain="zohomail\\.com\\.au"
+        maxtls="1.2">
         <imap
             host="imap.zoho.com.au"
             port="993"
@@ -722,7 +735,8 @@
         name="Mail.ru"
         domain="mail\\.ru,inbox\\.ru,list\\.ru,bk\\.ru"
         id="mailru"
-        link="https://help.mail.ru/mail-help/mailer/popsmtp">
+        link="https://help.mail.ru/mail-help/mailer/popsmtp"
+        maxtls="1.2">
         <imap
             host="imap.mail.ru"
             port="993"
@@ -793,7 +807,8 @@
     <provider
         name="Runbox"
         domain="runbox\\..*"
-        link="https://help.runbox.com/email-program-settings/">
+        link="https://help.runbox.com/email-program-settings/"
+        maxtls="1.2">
         <imap
             host="mail.runbox.com"
             port="993"
@@ -930,7 +945,8 @@
         documentation="For AOL you need to use an app password instead of your normal account password, please &lt;a href=&quot;https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88&quot;&gt;see here&lt;/a&gt;."
         domain="aol\\..*,compuserve\\.com"
         id="aol"
-        link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88">
+        link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq88"
+        noop="true">
         <imap
             host="imap.aol.com"
             port="993"
@@ -1069,6 +1085,7 @@
         name="o2.pl"
         domain="o2\\.pl"
         link="https://pomoc.o2.pl/jak-skonfigurowac-program-pocztowy"
+        maxtls="1.2"
         noop="true">
         <imap
             host="poczta.o2.pl"
@@ -1409,8 +1426,7 @@
         <smtp
             host="mail.twc.com"
             port="587"
-            starttls="false" />
-        <!-- Unusual, but no STARTTLS at port 587 -->
+            starttls="true" />
     </provider>
     <provider
         name="Tin.it"
@@ -1635,7 +1651,8 @@
         name="wp.pl"
         appPassword="true"
         domain="wp\\.pl"
-        link="https://pomoc.wp.pl/jak-skonfigurowac-program-pocztowy">
+        link="https://pomoc.wp.pl/jak-skonfigurowac-program-pocztowy"
+        maxtls="1.2">
         <imap
             host="imap.wp.pl"
             port="993"
@@ -1867,6 +1884,19 @@
             starttls="false" />
         <smtp
             host="mx.gelsennet.de"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Cox"
+        domain="cox\\.net"
+        link="https://www.cox.com/residential/support/imap-server-settings.html">
+        <imap
+            host="imap.cox.net"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.cox.net"
             port="465"
             starttls="false" />
     </provider>

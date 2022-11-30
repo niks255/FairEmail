@@ -253,6 +253,7 @@
     <string name="title_setup_import_rules">Import af filterregler</string>
     <string name="title_setup_import_contacts">Import af lokale kontakter</string>
     <string name="title_setup_import_answers">Importér svarskabeloner</string>
+    <string name="title_setup_import_searches">Importér gemte søgninger</string>
     <string name="title_setup_import_settings">Importindstillinger</string>
     <string name="title_setup_exported">Indstillinger eksporteret</string>
     <string name="title_setup_imported">Indstillinger importeret</string>
@@ -1041,10 +1042,12 @@
     <string name="title_editasnew">Redigér som ny</string>
     <string name="title_edit_notes">Redigér lokale notater</string>
     <string name="title_create_rule">Opret regel &#8230;</string>
+    <string name="title_full_screen">Fuldskærm</string>
     <string name="title_force_light">Gennemtving lyst tema</string>
     <string name="title_share">Del</string>
     <string name="title_event">Føj til kalender</string>
     <string name="title_pin">Tilføj genvej</string>
+    <string name="title_pin_label">Genvejsnavn</string>
     <string name="title_print">Udskriv</string>
     <string name="title_print_header">Udskriv header</string>
     <string name="title_print_images">Udskriv billeder</string>
@@ -1069,7 +1072,7 @@
     <string name="title_auto_confirm">Auto-bekræft efter et par sekunder</string>
     <string name="title_buttons">Vælg knapper</string>
     <string name="title_buttons_hint">De faktisk tilgængelige handlinger afhænger af kontotype og opsætning</string>
-    <string name="title_button_search">Søg i beskeder</string>
+    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Søg i tilsvarende beskeder</string>
     <string name="title_button_search_text">Søg i beskedtekst</string>
     <string name="title_configure_buttons">Opsæt knapper &#8230;</string>
     <string name="title_quick_actions">Vælg handlinger</string>
@@ -1077,6 +1080,7 @@
     <string name="title_quick_actions_low">Lav vigtighed</string>
     <string name="title_quick_actions_high">Høj vigtighed</string>
     <string name="title_quick_actions_snooze">Udsæt</string>
+    <string name="title_quick_actions_clear">Ryd valg efter handling</string>
     <string name="title_trash">Papirkurv</string>
     <string name="title_copy">Kopiér &#8230;</string>
     <string name="title_copy_to">Kopiér til &#8230;</string>
@@ -1267,6 +1271,7 @@
     <string name="title_insert_contact_group">Indsæt kontaktgruppe</string>
     <string name="title_insert_template">Indsæt skabelon</string>
     <string name="title_create_template">Opret skabelon</string>
+    <string name="title_select_default_identity">Vælg standardadresse</string>
     <string name="title_translate">Oversæt</string>
     <string name="title_translate_configure">Opsæt&#8230;</string>
     <string name="title_translate_key">Angiv nøgle</string>

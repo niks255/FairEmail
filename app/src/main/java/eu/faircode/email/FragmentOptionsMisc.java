@@ -194,7 +194,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SeekBar sbThreadRange;
     private ImageButton ibSqliteCache;
     private SwitchCompat swUndoManager;
-    private SwitchCompat swWebViewLegacy;
     private SwitchCompat swBrowserZoom;
     private SwitchCompat swFakeDark;
     private SwitchCompat swShowRecent;
@@ -241,6 +240,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private Group grpVirusTotal;
     private Group grpSend;
     private Group grpUpdates;
+    private Group grpBitbucket;
     private Group grpTest;
     private CardView cardDebug;
 
@@ -265,7 +265,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "query_threads",
             "sqlite_integrity_check", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_auto_vacuum", "sqlite_sync_extra", "sqlite_cache",
             "chunk_size", "thread_range", "undo_manager",
-            "webview_legacy", "browser_zoom", "fake_dark",
+            "browser_zoom", "fake_dark",
             "show_recent",
             "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", "use_top",
@@ -412,7 +412,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvThreadRange = view.findViewById(R.id.tvThreadRange);
         sbThreadRange = view.findViewById(R.id.sbThreadRange);
         swUndoManager = view.findViewById(R.id.swUndoManager);
-        swWebViewLegacy = view.findViewById(R.id.swWebViewLegacy);
         swBrowserZoom = view.findViewById(R.id.swBrowserZoom);
         swFakeDark = view.findViewById(R.id.swFakeDark);
         swShowRecent = view.findViewById(R.id.swShowRecent);
@@ -459,6 +458,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         grpVirusTotal = view.findViewById(R.id.grpVirusTotal);
         grpSend = view.findViewById(R.id.grpSend);
         grpUpdates = view.findViewById(R.id.grpUpdates);
+        grpBitbucket = view.findViewById(R.id.grpBitbucket);
         grpTest = view.findViewById(R.id.grpTest);
         cardDebug = view.findViewById(R.id.cardDebug);
 
@@ -1403,14 +1403,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
-        swWebViewLegacy.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
-        swWebViewLegacy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("webview_legacy", checked).apply();
-            }
-        });
-
         swBrowserZoom.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
         swBrowserZoom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -1931,6 +1923,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         grpUpdates.setVisibility(!BuildConfig.DEBUG &&
                 (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext()))
                 ? View.GONE : View.VISIBLE);
+        grpBitbucket.setVisibility(View.GONE);
         grpTest.setVisibility(BuildConfig.TEST_RELEASE ? View.VISIBLE : View.GONE);
 
         setLastCleanup(prefs.getLong("last_cleanup", -1));
@@ -2196,7 +2189,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swMainLogMem.setChecked(prefs.getBoolean("main_log_memory", false));
         swMainLogMem.setEnabled(swMainLog.isChecked());
         swProtocol.setChecked(prefs.getBoolean("protocol", false));
-        swLogInfo.setChecked(prefs.getInt("log_level", Log.getDefaultLogLevel()) <= android.util.Log.INFO);
+        swLogInfo.setChecked(prefs.getInt("log_level", android.util.Log.WARN) <= android.util.Log.INFO);
         swDebug.setChecked(prefs.getBoolean("debug", false));
         swCanary.setChecked(prefs.getBoolean("leak_canary", false));
         swTest1.setChecked(prefs.getBoolean("test1", false));
@@ -2240,7 +2233,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         sbThreadRange.setProgress(thread_range);
 
         swUndoManager.setChecked(prefs.getBoolean("undo_manager", false));
-        swWebViewLegacy.setChecked(prefs.getBoolean("webview_legacy", false));
         swBrowserZoom.setChecked(prefs.getBoolean("browser_zoom", false));
         swFakeDark.setChecked(prefs.getBoolean("fake_dark", false));
         swShowRecent.setChecked(prefs.getBoolean("show_recent", false));

@@ -176,6 +176,7 @@ public class FragmentRule extends FragmentBase {
     private Group grpSound;
     private Group grpAutomation;
     private Group grpDelete;
+    private Group grpLocalOnly;
 
     private ArrayAdapter<String> adapterDay;
     private ArrayAdapter<Action> adapterAction;
@@ -332,6 +333,7 @@ public class FragmentRule extends FragmentBase {
         grpSound = view.findViewById(R.id.grpSound);
         grpAutomation = view.findViewById(R.id.grpAutomation);
         grpDelete = view.findViewById(R.id.grpDelete);
+        grpLocalOnly = view.findViewById(R.id.grpLocalOnly);
 
         ibSender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -541,6 +543,8 @@ public class FragmentRule extends FragmentBase {
         actions.add(new Action(EntityRule.TYPE_UNSEEN, getString(R.string.title_rule_unseen)));
         actions.add(new Action(EntityRule.TYPE_HIDE, getString(R.string.title_rule_hide)));
         actions.add(new Action(EntityRule.TYPE_IGNORE, getString(R.string.title_rule_ignore)));
+        if (BuildConfig.DEBUG)
+            actions.add(new Action(EntityRule.TYPE_LOCAL_ONLY, getString(R.string.title_rule_local_only)));
         actions.add(new Action(EntityRule.TYPE_SNOOZE, getString(R.string.title_rule_snooze)));
         actions.add(new Action(EntityRule.TYPE_FLAG, getString(R.string.title_rule_flag)));
         actions.add(new Action(EntityRule.TYPE_IMPORTANCE, getString(R.string.title_rule_importance)));
@@ -692,6 +696,7 @@ public class FragmentRule extends FragmentBase {
                 Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.title_advanced_sound));
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, sound);
                 startActivityForResult(Helper.getChooser(getContext(), intent), REQUEST_SOUND);
             }
@@ -737,6 +742,7 @@ public class FragmentRule extends FragmentBase {
         grpSound.setVisibility(View.GONE);
         grpAutomation.setVisibility(View.GONE);
         grpDelete.setVisibility(View.GONE);
+        grpLocalOnly.setVisibility(View.GONE);
 
         pbWait.setVisibility(View.VISIBLE);
 
@@ -1267,6 +1273,7 @@ public class FragmentRule extends FragmentBase {
         grpSound.setVisibility(type == EntityRule.TYPE_SOUND ? View.VISIBLE : View.GONE);
         grpAutomation.setVisibility(type == EntityRule.TYPE_AUTOMATION ? View.VISIBLE : View.GONE);
         grpDelete.setVisibility(type == EntityRule.TYPE_DELETE ? View.VISIBLE : View.GONE);
+        grpLocalOnly.setVisibility(type == EntityRule.TYPE_LOCAL_ONLY ? View.VISIBLE : View.GONE);
     }
 
     private void onActionDelete() {

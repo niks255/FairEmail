@@ -1213,6 +1213,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                             " ui_hide=" + message.ui_hide +
                                             " notifying=" + message.notifying +
                                             " silent=" + message.ui_silent +
+                                            " local=" + message.ui_local_only +
                                             " received=" + new Date(message.received) +
                                             " sent=" + (message.sent == null ? null : new Date(message.sent)) +
                                             " created=" + (account.created == null ? null : new Date(account.created)) +
@@ -1228,6 +1229,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 message.id = null;
                                 message.fts = false;
                                 message.ui_silent = false;
+                                message.ui_local_only = false;
                                 message.notifying = 0;
                                 message.stored = new Date().getTime();
                                 message.id = db.message().insertMessage(message);
@@ -1677,7 +1679,9 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     }
 
                     // https://tools.ietf.org/html/rfc2177
-                    final boolean capIdle = iservice.hasCapability("IDLE");
+                    final boolean capIdle =
+                            iservice.hasCapability("IDLE") &&
+                                    !"poczta.o2.pl".equals(account.host);
                     final boolean capUtf8 =
                             iservice.hasCapability("UTF8=ACCEPT") ||
                                     iservice.hasCapability("UTF8=ONLY");
@@ -3425,14 +3429,14 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     private static void start(Context context, Intent intent) {
-        if (isBackgroundService(context))
-            context.startService(intent);
-        else
-            try {
+        try {
+            if (isBackgroundService(context))
+                context.startService(intent);
+            else
                 ContextCompat.startForegroundService(context, intent);
-            } catch (Throwable ex) {
-                Log.e(ex);
-            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     private static boolean isBackgroundService(Context context) {

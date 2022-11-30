@@ -778,7 +778,13 @@
                     android:id="@+id/grpUpdates"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:constraint_referenced_ids="swUpdates,tvGithubPrivacy,swWeekly,swBeta,tvBitBucketPrivacy" />
+                    app:constraint_referenced_ids="swUpdates,tvGithubPrivacy,swWeekly" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/grpBitbucket"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="swBeta,tvBitBucketPrivacy" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -1356,18 +1362,6 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/swWebViewLegacy"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:checked="true"
-                    android:text="@string/title_advanced_webview_legacy"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swUndoManager"
-                    app:switchPadding="12dp" />
-
-                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swBrowserZoom"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -1376,7 +1370,7 @@
                     android:text="@string/title_advanced_browser_zoom"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swWebViewLegacy"
+                    app:layout_constraintTop_toBottomOf="@id/swUndoManager"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat

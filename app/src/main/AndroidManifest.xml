@@ -254,7 +254,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="eu.faircode.email.search" />
+                <data android:scheme="${namespace}.search" />
             </intent-filter>
         </activity>
 
@@ -348,11 +348,11 @@
                 <data android:scheme="content" />
                 <data android:mimeType="*/*" />
                 <data android:host="*" />
-                <data android:pathPattern=".*\\.eml" />
-                <data android:pathPattern=".*\\..*\\.eml" />
-                <data android:pathPattern=".*\\..*\\..*\\.eml" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.eml" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.eml" />
+                <data android:pathPattern="/.*\\.eml" />
+                <data android:pathPattern="/.*\\..*\\.eml" />
+                <data android:pathPattern="/.*\\..*\\..*\\.eml" />
+                <data android:pathPattern="/.*\\..*\\..*\\..*\\.eml" />
+                <data android:pathPattern="/.*\\..*\\..*\\..*\\..*\\.eml" />
             </intent-filter>
         </activity>
 
@@ -467,16 +467,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="eu.faircode.email" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="eu.faircode.email.debug" />
+                <data android:scheme="${namespace}" />
             </intent-filter>
 
             <intent-filter>
@@ -487,7 +478,7 @@
 
                 <data
                     android:host="auth"
-                    android:scheme="msauth.eu.faircode.email" />
+                    android:scheme="msauth.${namespace}" />
             </intent-filter>
         </activity>
 
@@ -576,7 +567,7 @@
         </service>
 
         <provider
-            android:name="eu.faircode.email.FileProviderEx"
+            android:name=".FileProviderEx"
             android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true">

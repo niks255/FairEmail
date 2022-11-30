@@ -67,12 +67,12 @@ import com.sun.mail.imap.IMAPStore;
 import com.sun.mail.imap.protocol.FLAGS;
 import com.sun.mail.imap.protocol.FetchResponse;
 import com.sun.mail.imap.protocol.IMAPProtocol;
+import com.sun.mail.imap.protocol.Status;
 import com.sun.mail.imap.protocol.UID;
 import com.sun.mail.imap.protocol.UIDSet;
 import com.sun.mail.pop3.POP3Folder;
 import com.sun.mail.pop3.POP3Message;
 import com.sun.mail.pop3.POP3Store;
-import com.sun.mail.util.MessageRemovedIOException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -745,7 +745,8 @@ class Core {
                                 // Cleanup messages
                                 if (MessageHelper.isRemoved(ex)) {
                                     if (message != null &&
-                                            !EntityOperation.SEEN.equals(op.name))
+                                            !EntityOperation.SEEN.equals(op.name) &&
+                                            !EntityOperation.FLAG.equals(op.name))
                                         db.message().deleteMessage(message.id);
                                 }
 
@@ -920,7 +921,7 @@ class Core {
                 MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
 
                 String uidl = (hasUidl ? ifolder.getUID(imessage) : null);
-                String msgid = (TextUtils.isEmpty(uidl) ? helper.getMessageID() : null);
+                String msgid = (TextUtils.isEmpty(uidl) ? helper.getPOP3MessageID() : null);
 
                 if ((uidl != null && uidl.equals(message.uidl)) ||
                         (msgid != null && msgid.equals(message.msgid))) {
@@ -3051,7 +3052,19 @@ class Core {
             // Get capabilities
             Map<String, String> caps = istore.capabilities();
             boolean hasUidl = caps.containsKey("UIDL");
-            EntityLog.log(context, account.name + " POP capabilities= " + caps.keySet());
+            EntityLog.log(context, account.name +
+                    " POP capabilities= " + caps.keySet() +
+                    " uidl=" + account.capability_uidl);
+
+            if (hasUidl) {
+                if (Boolean.FALSE.equals(account.capability_uidl)) {
+                    hasUidl = false;
+                    Log.w(account.host + " did not had UIDL before");
+                }
+            } else {
+                account.capability_uidl = false;
+                db.account().setAccountUidl(account.id, account.capability_uidl);
+            }
 
             // Get messages
             Message[] imessages = ifolder.getMessages();
@@ -3066,7 +3079,7 @@ class Core {
                     imessages.length == folder.last_sync_count) {
                 // Check if last message known as new messages indicator
                 MessageHelper helper = new MessageHelper((MimeMessage) imessages[imessages.length - 1], context);
-                String msgid = helper.getMessageID();
+                String msgid = helper.getPOP3MessageID();
                 if (msgid != null) {
                     int count = db.message().countMessageByMsgId(folder.id, msgid, true);
                     if (count == 1) {
@@ -3136,9 +3149,8 @@ class Core {
                         for (int i = imessages.length - max; i < imessages.length; i++) {
                             Message imessage = imessages[i];
                             MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
-                            String msgid = helper.getMessageID(); // expensive!
-                            if (!TextUtils.isEmpty(msgid))
-                                known.remove(msgid);
+                            String msgid = helper.getPOP3MessageID(); // expensive!
+                            known.remove(msgid);
                         }
 
                         for (TupleUidl uidl : known.values())
@@ -3175,15 +3187,7 @@ class Core {
                             }
                         } else {
                             uidl = null;
-                            msgid = helper.getMessageID();
-
-                            if (TextUtils.isEmpty(msgid)) {
-                                Long time = helper.getSent();
-                                if (time == null)
-                                    msgid = helper.getHash();
-                                else
-                                    msgid = Long.toString(time);
-                            }
+                            msgid = helper.getPOP3MessageID();
                         }
 
                         if (TextUtils.isEmpty(msgid)) {
@@ -3493,7 +3497,7 @@ class Core {
             Context context, JSONArray jargs,
             EntityAccount account, final EntityFolder folder,
             IMAPStore istore, final IMAPFolder ifolder, State state)
-            throws JSONException, ProtocolException, MessagingException, IOException {
+            throws JSONException, MessagingException, IOException {
         final DB db = DB.getInstance(context);
         try {
             SyncStats stats = new SyncStats();
@@ -3521,6 +3525,7 @@ class Core {
             boolean delete_unseen = prefs.getBoolean("delete_unseen", false);
             boolean use_modseq = prefs.getBoolean("use_modseq", true);
             boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
+            boolean log = prefs.getBoolean("protocol", false);
 
             if (account.isYahoo() || account.isAol())
                 sync_nodate = false;
@@ -3639,6 +3644,20 @@ class Core {
                 // Get list of local uids
                 final List<Long> uids = db.message().getUids(folder.id, sync_kept || force ? null : sync_time);
                 Log.i(folder.name + " local count=" + uids.size());
+
+                if (BuildConfig.DEBUG || log)
+                    try {
+                        Status status = (Status) ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
+                            @Override
+                            public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                                return protocol.status(ifolder.getFullName(), null);
+                            }
+                        });
+                        EntityLog.log(context, EntityLog.Type.Protocol, folder.name + " status" +
+                                " total=" + status.total + " unseen=" + status.unseen);
+                    } catch (Throwable ex) {
+                        Log.w(ex);
+                    }
 
                 // Reduce list of local uids
                 SearchTerm dateTerm = account.use_date
@@ -5696,6 +5715,10 @@ class Core {
             if (message.ui_silent) {
                 mbuilder.setSilent(true);
                 Log.i("Notify silent=" + message.id);
+            }
+            if (message.ui_local_only) {
+                mbuilder.setLocalOnly(true);
+                Log.i("Notify local=" + message.id);
             }
 
             if (notify_messaging) {

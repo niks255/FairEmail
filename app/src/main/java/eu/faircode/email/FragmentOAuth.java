@@ -68,7 +68,6 @@ import net.openid.appauth.AuthorizationService;
 import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.ClientSecretPost;
-import net.openid.appauth.CodeVerifierUtil;
 import net.openid.appauth.GrantTypeValues;
 import net.openid.appauth.NoClientAuthentication;
 import net.openid.appauth.ResponseTypeValues;
@@ -292,6 +291,7 @@ public class FragmentOAuth extends FragmentBase {
         try {
             switch (requestCode) {
                 case ActivitySetup.REQUEST_OAUTH:
+                    Helper.setAuthenticated(getContext());
                     if (resultCode == RESULT_OK && data != null)
                         onHandleOAuth(data);
                     else

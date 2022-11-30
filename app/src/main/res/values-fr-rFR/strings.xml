@@ -253,6 +253,7 @@
     <string name="title_setup_import_rules">Importer les règles de filtrage</string>
     <string name="title_setup_import_contacts">Importer les contacts locaux</string>
     <string name="title_setup_import_answers">Importer les modèles de réponse</string>
+    <string name="title_setup_import_searches">Importer les recherches enregistrées</string>
     <string name="title_setup_import_settings">Importer les paramètres</string>
     <string name="title_setup_exported">Paramètres exportés</string>
     <string name="title_setup_imported">Paramètres importés</string>
@@ -1041,10 +1042,12 @@
     <string name="title_editasnew">Modifier comme nouveau message</string>
     <string name="title_edit_notes">Modifier les notes locales</string>
     <string name="title_create_rule">Créer une règle&#8230;</string>
+    <string name="title_full_screen">Plein écran</string>
     <string name="title_force_light">Forcer le thème clair</string>
     <string name="title_share">Partager</string>
     <string name="title_event">Ajouter au calendrier</string>
     <string name="title_pin">Ajouter un raccourci</string>
+    <string name="title_pin_label">Nom du raccourci</string>
     <string name="title_print">Imprimer</string>
     <string name="title_print_header">Imprimer l\'en-tête</string>
     <string name="title_print_images">Imprimer les images</string>
@@ -1069,7 +1072,7 @@
     <string name="title_auto_confirm">Confirmer automatiquement après quelques secondes</string>
     <string name="title_buttons">Sélectionner les boutons</string>
     <string name="title_buttons_hint">Les actions réellement disponibles dépendent du type de compte et de la configuration</string>
-    <string name="title_button_search">Rechercher dans les messages</string>
+    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Rechercher des messages similaires</string>
     <string name="title_button_search_text">Rechercher dans le texte du message</string>
     <string name="title_configure_buttons">Configurer les boutons&#8230;</string>
     <string name="title_quick_actions">Sélectionner les actions</string>
@@ -1077,7 +1080,7 @@
     <string name="title_quick_actions_low">Peu important</string>
     <string name="title_quick_actions_high">Très important</string>
     <string name="title_quick_actions_snooze">Reporter</string>
-    <string name="title_quick_actions_clear" comment="title_quick_actions_clear&#10;Title for quick actions option to clear the selection of selected messages after performing the action (mark as read, etc.)">Effacer la sélection après l\'action</string>
+    <string name="title_quick_actions_clear">Effacer la sélection après l\'action</string>
     <string name="title_trash">Supprimer</string>
     <string name="title_copy">Copier&#8230;</string>
     <string name="title_copy_to">Copier vers&#8230;</string>
@@ -1268,6 +1271,7 @@
     <string name="title_insert_contact_group">Insérer un groupe de contacts</string>
     <string name="title_insert_template">Insérer un modèle</string>
     <string name="title_create_template">Créer un modèle</string>
+    <string name="title_select_default_identity">Sélectionner l\'adresse par défaut</string>
     <string name="title_translate">Traduire</string>
     <string name="title_translate_configure">Configurer&#8230;</string>
     <string name="title_translate_key">Saisir la clé</string>

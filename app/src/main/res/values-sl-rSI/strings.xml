@@ -279,6 +279,7 @@
     <string name="title_setup_import_rules">Uvozi pravila filtriranja</string>
     <string name="title_setup_import_contacts">Uvozite krajevne stike</string>
     <string name="title_setup_import_answers">Uvozi predloge za odgovor</string>
+    <string name="title_setup_import_searches">Uvozi shranjena iskanja</string>
     <string name="title_setup_import_settings">Uvozi možnosti</string>
     <string name="title_setup_exported">Nastavitve so bile izvožene.</string>
     <string name="title_setup_imported">Nastavitve so bile uvožene.</string>
@@ -1063,10 +1064,12 @@
     <string name="title_editasnew">uredil kot novo</string>
     <string name="title_edit_notes">Uredi krajevne zapiske</string>
     <string name="title_create_rule">Ustvari pravilo &#8230;</string>
+    <string name="title_full_screen">Celoten zaslon</string>
     <string name="title_force_light">Vsili svetlo temo</string>
     <string name="title_share">Deli</string>
     <string name="title_event">Dodaj v koledar</string>
     <string name="title_pin">Dodaj bližnjico</string>
+    <string name="title_pin_label">Naziv bližnjice</string>
     <string name="title_print">Natisni</string>
     <string name="title_print_header">Natisni glavo</string>
     <string name="title_print_images">Natisni slike</string>
@@ -1091,7 +1094,7 @@
     <string name="title_auto_confirm">Samodejno potrdi po nekaj sekundah</string>
     <string name="title_buttons">Izberite gumbe</string>
     <string name="title_buttons_hint">Dejanska razpoložljivost gumbov je odvisna od vrste računa in nastavitev.</string>
-    <string name="title_button_search">Išči v sporočilih</string>
+    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Išči podobna sporočila</string>
     <string name="title_button_search_text">Išči v besedilu sporočil</string>
     <string name="title_configure_buttons">Nastavi gumbe &#8230;</string>
     <string name="title_quick_actions">Izberite dejanja</string>
@@ -1099,6 +1102,7 @@
     <string name="title_quick_actions_low">Nizka pomembnost</string>
     <string name="title_quick_actions_high">Visoka pomembnost</string>
     <string name="title_quick_actions_snooze">Dremež</string>
+    <string name="title_quick_actions_clear">Počisti izbiro po dejanju</string>
     <string name="title_trash">Smeti</string>
     <string name="title_copy">Kopiraj &#8230;</string>
     <string name="title_copy_to">Kopiraj v &#8230;</string>
@@ -1288,6 +1292,7 @@
     <string name="title_insert_contact_group">Vstavi skupno stikov</string>
     <string name="title_insert_template">Vstavi predlogo</string>
     <string name="title_create_template">Ustvari predlogo</string>
+    <string name="title_select_default_identity">Shrani privzeti naslov</string>
     <string name="title_translate">Prevedi</string>
     <string name="title_translate_configure">Nastavi &#8230;</string>
     <string name="title_translate_key">Vnesite ključ</string>
@@ -1348,6 +1353,8 @@
     <string name="title_resync">Pon. sinhr.</string>
     <string name="title_charset">Kodiranje</string>
     <string name="title_charset_auto">Samodejno</string>
+    <string name="title_alternative_text">Naloži golo besedilo</string>
+    <string name="title_alternative_html">Naloži HTML</string>
     <string name="title_no_openpgp">OpenKeychain ni bil najden.</string>
     <string name="title_user_interaction">Prenašanje v OpenKeychain</string>
     <string name="title_padlock">Uporabi ključavnico za odšifriranje besedila</string>

@@ -415,8 +415,12 @@ public class HtmlHelper {
     }
 
     static Document sanitizeCompose(Context context, String html, boolean show_images) {
+        return sanitizeCompose(context, JsoupEx.parse(html), show_images);
+    }
+
+    static Document sanitizeCompose(Context context, Document parsed, boolean show_images) {
         try {
-            return sanitize(context, JsoupEx.parse(html), false, show_images);
+            return sanitize(context, parsed, false, show_images);
         } catch (Throwable ex) {
             // OutOfMemoryError
             Log.e(ex);
@@ -2587,6 +2591,27 @@ public class HtmlHelper {
             public FilterResult head(Node node, int depth) {
                 if (node instanceof Element) {
                     Element e = (Element) node;
+
+                    String style = e.attr("style");
+                    if (!TextUtils.isEmpty(style)) {
+                        String[] params = style.split(";");
+                        for (String param : params) {
+                            int colon = param.indexOf(':');
+                            if (colon <= 0)
+                                continue;
+                            String key = param.substring(0, colon).trim();
+                            if ("color".equalsIgnoreCase(key) ||
+                                    "background-color".equalsIgnoreCase(key) ||
+                                    "font-family".equalsIgnoreCase(key) ||
+                                    "font-size".equalsIgnoreCase(key) ||
+                                    "text-align".equalsIgnoreCase(key) ||
+                                    "text-decoration".equalsIgnoreCase(key) /* line-through */) {
+                                Log.i("Style element=" + node + " style=" + style);
+                                result.value = true;
+                                return FilterResult.STOP;
+                            }
+                        }
+                    }
 
                     if (STRUCTURE.contains(e.tagName()))
                         return FilterResult.CONTINUE;

@@ -304,6 +304,7 @@
     <string name="title_setup_import_rules">Import filter rules</string>
     <string name="title_setup_import_contacts">Import local contacts</string>
     <string name="title_setup_import_answers">Import reply templates</string>
+    <string name="title_setup_import_searches">Import saved searches</string>
     <string name="title_setup_import_settings">Import options</string>
     <string name="title_setup_exported">Settings exported</string>
     <string name="title_setup_imported">Settings imported</string>
@@ -802,7 +803,6 @@
     <string name="title_advanced_chunk_size" translatable="false">Chunk size: %1$d</string>
     <string name="title_advanced_thread_range" translatable="false">Thread range: %1$d days</string>
     <string name="title_advanced_undo_manager" translatable="false">Use Android\'s undo manager</string>
-    <string name="title_advanced_webview_legacy" translatable="false">Old WebView behavior</string>
     <string name="title_advanced_browser_zoom" translatable="false">Use browser zoom</string>
     <string name="title_advanced_fake_dark" translatable="false">Fake dark</string>
     <string name="title_advanced_show_recent" translatable="false">Show recent flag</string>
@@ -1247,11 +1247,14 @@
     <string name="title_editasnew">Edit as new</string>
     <string name="title_edit_notes">Edit local notes</string>
     <string name="title_create_rule">Create rule &#8230;</string>
+    <string name="title_full_screen">Full screen</string>
     <string name="title_force_light">Force light theme</string>
     <string name="title_share">Share</string>
     <string name="title_zip" translatable="false">ZIP</string>
     <string name="title_event">Add to calendar</string>
     <string name="title_pin">Add shortcut</string>
+    <string name="title_pin_label">Shortcut title</string>
+
     <string name="title_print">Print</string>
     <string name="title_print_header">Print header</string>
     <string name="title_print_images">Print images</string>
@@ -1278,7 +1281,7 @@
 
     <string name="title_buttons">Select buttons</string>
     <string name="title_buttons_hint">The actual actions available depend on the account type and configuration</string>
-    <string name="title_button_search">Search in messages</string>
+    <string name="title_button_search_similar">Search similar messages</string>
     <string name="title_button_search_text">Search in message text</string>
     <string name="title_configure_buttons">Configure buttons &#8230;</string>
 
@@ -1498,6 +1501,7 @@
     <string name="title_insert_contact_group">Insert contact group</string>
     <string name="title_insert_template">Insert template</string>
     <string name="title_create_template">Create template</string>
+    <string name="title_select_default_identity">Select default address</string>
     <string name="title_translate">Translate</string>
     <string name="title_translate_configure">Configure &#8230;</string>
     <string name="title_translate_key">Enter key</string>
@@ -1714,6 +1718,7 @@
     <string name="title_rule_unseen">Mark unread</string>
     <string name="title_rule_hide">Hide</string>
     <string name="title_rule_ignore">Suppress notification</string>
+    <string name="title_rule_local_only" translatable="false">Local notification only</string>
     <string name="title_rule_snooze">Snooze</string>
     <string name="title_rule_flag">Add star</string>
     <string name="title_rule_importance">Set importance</string>
@@ -1773,6 +1778,7 @@
     <string name="title_rule_keyword_missing">Keyword missing</string>
     <string name="title_rule_automation_hint">This will send the intent \'%1$s\' with the extras \'%2$s\'</string>
     <string name="title_rule_delete_hint">Permanent deletion is irreversible, so make sure the rule conditions are correct!</string>
+    <string name="title_rule_local_only_hint" translatable="false">Try to avoid bridging notifications to other devices, such as smartwatches. Not all devices support this.</string>
 
     <string name="title_rule_execute">Execute now</string>
     <string name="title_rule_applied">Affected messages: %1$d</string>

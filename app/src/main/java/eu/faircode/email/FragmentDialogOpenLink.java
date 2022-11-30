@@ -275,7 +275,8 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                         new Intent(ActivityView.ACTION_SEARCH_ADDRESS)
                                 .putExtra("account", -1L)
                                 .putExtra("folder", -1L)
-                                .putExtra("query", MailTo.parse(uri).getTo()));
+                                .putExtra("query", MailTo.parse(uri).getTo())
+                                .putExtra("sender_only", false));
             }
         });
 
@@ -525,9 +526,9 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         tvTitle.setText(title);
         tvTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);
 
-        ibSearch.setVisibility(
+        ibSearch.setVisibility(context instanceof ActivityView &&
                 mailto != null && !TextUtils.isEmpty(mailto.getTo())
-                        ? View.VISIBLE : View.GONE);
+                ? View.VISIBLE : View.GONE);
 
         if (host != null && !host.equals(puny)) {
             etLink.setText(format(uri.buildUpon().encodedAuthority(puny).build(), context));

@@ -88,6 +88,7 @@ public class EmailProvider implements Parcelable {
     public boolean partial;
     public boolean useip;
     public boolean appPassword;
+    public String maxtls;
     public String link;
     public Server imap = new Server();
     public Server smtp = new Server();
@@ -116,7 +117,10 @@ public class EmailProvider implements Parcelable {
             "tutamail.com", // tutanota
             "tuta.io", // tutanota
             "keemail.me", // tutanota
-            "ctemplar.com"
+            "ctemplar.com",
+            "cyberfear.com",
+            "skiff.com",
+            "tildamail.com"
     ));
 
     private EmailProvider() {
@@ -241,6 +245,7 @@ public class EmailProvider implements Parcelable {
                         provider.partial = getAttributeBooleanValue(xml, "partial", true);
                         provider.useip = getAttributeBooleanValue(xml, "useip", true);
                         provider.appPassword = getAttributeBooleanValue(xml, "appPassword", false);
+                        provider.maxtls = xml.getAttributeValue(null, "maxtls");
                         provider.link = xml.getAttributeValue(null, "link");
 
                         String documentation = xml.getAttributeValue(null, "documentation");
@@ -329,6 +334,19 @@ public class EmailProvider implements Parcelable {
                     return provider;
 
         throw new FileNotFoundException("provider id=" + id);
+    }
+
+    static EmailProvider getProviderByHost(Context context, @NonNull String host) {
+        for (EmailProvider provider : loadProfiles(context)) {
+            if (provider.imap != null && host.equals(provider.imap.host))
+                return provider;
+            if (provider.pop != null && host.equals(provider.pop.host))
+                return provider;
+            if (provider.smtp != null && host.equals(provider.smtp.host))
+                return provider;
+        }
+
+        return null;
     }
 
     static List<EmailProvider> getProviders(Context context) {

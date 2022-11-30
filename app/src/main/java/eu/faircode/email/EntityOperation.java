@@ -232,10 +232,14 @@ public class EntityOperation {
                         Objects.equals(source.account, target.account) &&
                         (jargs.opt(3) == null || !jargs.optBoolean(3))) {
                     jargs.remove(3);
-                    EntityLog.log(context, "Auto block sender=" + MessageHelper.formatAddresses(message.from));
-                    EntityContact.update(context,
-                            message.account, message.identity, message.from,
-                            EntityContact.TYPE_JUNK, message.received);
+                    // Prevent blocking self
+                    List<TupleIdentityEx> identities = db.identity().getComposableIdentities(null);
+                    if (!message.fromSelf(identities)) {
+                        EntityLog.log(context, "Auto block sender=" + MessageHelper.formatAddresses(message.from));
+                        EntityContact.update(context,
+                                message.account, message.identity, message.from,
+                                EntityContact.TYPE_JUNK, message.received);
+                    }
                 }
 
                 if (EntityFolder.DRAFTS.equals(source.type) &&
@@ -665,7 +669,8 @@ public class EntityOperation {
     void cleanup(Context context, boolean fetch) {
         DB db = DB.getInstance(context);
 
-        EntityLog.log(context, "Cleanup op=" + id + "/" + name + " folder=" + folder + " message=" + message);
+        EntityLog.log(context, "Cleanup op=" + id + "/" + name +
+                " folder=" + folder + " message=" + message + " fetch=" + fetch);
 
         if (message != null) {
             if (MOVE.equals(name) || DELETE.equals(name))
@@ -724,7 +729,9 @@ public class EntityOperation {
         if (SYNC.equals(name))
             db.folder().setFolderSyncState(folder, null);
 
-        if (fetch && message != null) {
+        if (fetch && message != null &&
+                !SEEN.equals(name) &&
+                !FLAG.equals(name)) {
             EntityMessage m = db.message().getMessage(message);
             if (m == null || m.uid == null)
                 return;

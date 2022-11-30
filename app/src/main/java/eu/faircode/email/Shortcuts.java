@@ -278,7 +278,7 @@ class Shortcuts {
     }
 
     @NonNull
-    static ShortcutInfoCompat.Builder getShortcut(Context context, EntityMessage message, ContactInfo[] contactInfo) {
+    static ShortcutInfoCompat.Builder getShortcut(Context context, EntityMessage message, String label, ContactInfo[] contactInfo) {
         Intent thread = new Intent(context, ActivityView.class);
         thread.setAction("thread:" + message.id);
         thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -300,14 +300,6 @@ class Shortcuts {
                     d.getIntrinsicHeight(),
                     Bitmap.Config.ARGB_8888);
         }
-
-        String label;
-        if (!TextUtils.isEmpty(message.notes))
-            label = message.notes;
-        else if (!TextUtils.isEmpty(message.subject))
-            label = message.subject;
-        else
-            label = context.getString(R.string.app_name);
 
         IconCompat icon = IconCompat.createWithBitmap(bm);
         String id = "message:" + message.id;
@@ -350,7 +342,27 @@ class Shortcuts {
         return ShortcutManagerCompat.isRequestPinShortcutSupported(context.getApplicationContext());
     }
 
-    static void requestPinShortcut(Context context, ShortcutInfoCompat info){
+    static void requestPinShortcut(Context context, ShortcutInfoCompat info) {
         ShortcutManagerCompat.requestPinShortcut(context.getApplicationContext(), info, null);
+    }
+
+    static void cleanup(Context context) {
+        if (!BuildConfig.DEBUG)
+            return;
+
+        DB db = DB.getInstance(context);
+        List<ShortcutInfoCompat> pinned =
+                ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_PINNED);
+        for (ShortcutInfoCompat shortcut : pinned) {
+            String[] id = shortcut.getId().split(":");
+            if (id.length == 2 && "message".equals(id[0])) {
+                Intent intent = shortcut.getIntent();
+                long account = intent.getLongExtra("account", -1L);
+                String thread = intent.getStringExtra("thread");
+                List<EntityMessage> messages = db.message().getMessagesByThread(account, thread, null, null);
+                if (messages != null && messages.size() == 0)
+                    ; // Delete the shortcut, if only this was possible ...
+            }
+        }
     }
 }

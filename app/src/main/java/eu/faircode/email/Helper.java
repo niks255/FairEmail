@@ -260,6 +260,13 @@ public class Helper {
             }
         };
 
+        if (threads == 0) {
+            // java.lang.OutOfMemoryError: pthread_create (1040KB stack) failed: Try again
+            // 1040 KB native stack size / 32 KB thread stack size ~ 32 threads
+            int processors = Runtime.getRuntime().availableProcessors(); // Modern devices: 8
+            threads = processors * (BuildConfig.DEBUG ? 8 : 4);
+        }
+
         if (threads == 0)
             return new ThreadPoolExecutorEx(
                     name,

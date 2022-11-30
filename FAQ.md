@@ -993,6 +993,19 @@ There is a shortcut (button) for this in the encryption settings for Android ver
 Android will ask you to set a PIN, pattern, or password if you didn't before.
 If you have a Nokia device with Android 9, please [read this first](https://nokiamob.net/2019/08/10/a-bug-prevents-nokia-1-owners-from-unlocking-their-screen-even-with-right-pin-pattern/).
 
+**Important**: If Android doesn't accept the password of a certificate, it probably means it doesn't support the certificate's encryption method.
+The solution is to convert the certificate like this:
+
+```
+openssl pkcs12 -nodes <your.p12 >certbag.pem
+openssl pkcs12 -export -legacy -in certbag.pem >legacy.p12
+```
+
+Note that .p12 and .pfx are interchangeable.
+You can find more information about this issue [here](https://stackoverflow.com/questions/71872900/installing-pcks12-certificate-in-android-wrong-password-bug)
+
+<br>
+
 Note that certificates can contains multiple keys for multiple purposes,  for example for authentication, encryption and signing.
 Android only imports the first key, so to import all the keys, the certificate must first be split.
 This is not very trivial and you are advised to ask the certificate supplier for support.
@@ -1046,6 +1059,8 @@ The use of expired keys, inline encrypted/signed messages and hardware security 
 If you are looking for a free (test) S/MIME certificate, see [here](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for the options.
 Please be sure to [read this first](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219)
 if you want to request an S/MIME Actalis certificate.
+
+S/MIME certificates can for example be purchased via [Xolphin](https://www.xolphin.com/).
 
 How to extract a public key from a S/MIME certificate:
 
@@ -3856,6 +3871,9 @@ so you cannot use FairEmail or any other email client to access Tutanota.
 and [does not support IMAP](https://www.skiff.com/blog/tutanota-alternatives-comparison)
 so you cannot use FairEmail or any other email client to access Skiff.
 
+**Tildamail** uses a proprietary email protocol and does not support IMAP,
+so you cannot use FairEmail or any other email client to access Tildamail.
+
 <br />
 
 <a name="faq130"></a>
@@ -5073,6 +5091,8 @@ cd /path/to/platform-tools
 adb connect 127.0.0.1:58526
 adb install /path/to/FairEmail-xxx.apk
 ```
+
+It is also possible to install the Play Store, but this is more complicated.
 
 The app isn't available in the Amazon store because Amazon rebuilds all Android apps, and unfortunately, the app doesn't work correctly after rebuilding anymore.
 Amazon never responded to an issue reported about this.

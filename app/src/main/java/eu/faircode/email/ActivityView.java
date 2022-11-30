@@ -999,17 +999,17 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             }
         });
 
-        db.search().liveSearch().observe(owner, new Observer<List<EntitySearch>>() {
+        db.search().liveSearches().observe(owner, new Observer<List<EntitySearch>>() {
             @Override
-            public void onChanged(List<EntitySearch> search) {
-                if (search == null)
-                    search = new ArrayList<>();
-                adapterNavSearch.set(search, nav_expanded);
+            public void onChanged(List<EntitySearch> searches) {
+                if (searches == null)
+                    searches = new ArrayList<>();
+                adapterNavSearch.set(searches, nav_expanded);
 
                 boolean nav_search = prefs.getBoolean("nav_search", true);
-                ibExpanderSearch.setVisibility(search.size() > 0 ? View.VISIBLE : View.GONE);
-                rvSearch.setVisibility(search.size() > 0 && nav_search ? View.VISIBLE : View.GONE);
-                vSeparatorSearch.setVisibility(search.size() > 0 ? View.VISIBLE : View.GONE);
+                ibExpanderSearch.setVisibility(searches.size() > 0 ? View.VISIBLE : View.GONE);
+                rvSearch.setVisibility(searches.size() > 0 && nav_search ? View.VISIBLE : View.GONE);
+                vSeparatorSearch.setVisibility(searches.size() > 0 ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -1067,7 +1067,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     @Override
     protected void onResume() {
         super.onResume();
-        ServiceSynchronize.state(this, true);
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         IntentFilter iff = new IntentFilter();
@@ -1094,7 +1093,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
     @Override
     protected void onPause() {
-        ServiceSynchronize.state(this, false);
         super.onPause();
 
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
@@ -1506,7 +1504,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean updates = prefs.getBoolean("updates", true);
-        boolean beta = prefs.getBoolean("beta", false);
+        boolean beta = prefs.getBoolean("beta", false) && false;
         boolean weekly = prefs.getBoolean("weekly", Helper.hasPlayStore(this));
         long last_update_check = prefs.getLong("last_update_check", 0);
 
@@ -2181,6 +2179,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         long account = intent.getLongExtra("account", -1);
         long folder = intent.getLongExtra("folder", -1);
         String query = intent.getStringExtra("query");
+        boolean sender_only = intent.getBooleanExtra("sender_only", false);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean fts = prefs.getBoolean("fts", false);
@@ -2188,6 +2187,14 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         BoundaryCallbackMessages.SearchCriteria criteria = new BoundaryCallbackMessages.SearchCriteria();
         criteria.query = query;
         criteria.fts = fts;
+        criteria.in_senders = true;
+        if (sender_only) {
+            criteria.in_recipients = false;
+            criteria.in_subject = false;
+            criteria.in_keywords = false;
+            criteria.in_message = false;
+            criteria.in_notes = false;
+        }
 
         FragmentMessages.search(
                 this, this, getSupportFragmentManager(),

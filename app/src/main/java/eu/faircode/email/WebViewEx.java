@@ -48,7 +48,6 @@ import java.util.Objects;
 public class WebViewEx extends WebView implements DownloadListener, View.OnLongClickListener {
     private int height;
     private int maxHeight;
-    private boolean legacy;
     private IWebView intf;
     private Runnable onPageLoaded;
     private String hash;
@@ -115,7 +114,6 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         boolean browser_zoom = (prefs.getBoolean("browser_zoom", false) && BuildConfig.DEBUG);
         int message_zoom = prefs.getInt("message_zoom", 100);
         boolean monospaced = prefs.getBoolean("monospaced", false);
-        legacy = (prefs.getBoolean("webview_legacy", false) && BuildConfig.DEBUG);
 
         WebSettings settings = getSettings();
 
@@ -247,19 +245,10 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // Unable to create layer for WebViewEx, size 1088x16384 max size 16383 color type 4 has context 1)
         int limitHeight = MeasureSpec.makeMeasureSpec(16000, MeasureSpec.AT_MOST);
-        if (legacy) {
-            if (height > getMinimumHeight())
-                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST));
-            else
-                super.onMeasure(widthMeasureSpec, limitHeight);
-        } else {
-            super.onMeasure(widthMeasureSpec, limitHeight);
-        }
+        super.onMeasure(widthMeasureSpec, limitHeight);
 
         int mh = getMeasuredHeight();
         Log.i("Measured height=" + mh + " last=" + height + "/" + maxHeight + " ch=" + getContentHeight());
-        if (mh == 0 && legacy)
-            setMeasuredDimension(getMeasuredWidth(), height);
     }
 
     @Override
@@ -267,71 +256,6 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         super.onSizeChanged(w, h, ow, oh);
         Log.i("Size changed height=" + h);
         this.intf.onSizeChanged(w, h, ow, oh);
-    }
-
-    @Override
-    protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX, int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
-        final int overScrollMode = getOverScrollMode();
-        final boolean canScrollHorizontal =
-                computeHorizontalScrollRange() > computeHorizontalScrollExtent();
-        final boolean canScrollVertical =
-                computeVerticalScrollRange() > computeVerticalScrollExtent();
-        final boolean overScrollHorizontal = overScrollMode == OVER_SCROLL_ALWAYS ||
-                (overScrollMode == OVER_SCROLL_IF_CONTENT_SCROLLS && canScrollHorizontal);
-        final boolean overScrollVertical = overScrollMode == OVER_SCROLL_ALWAYS ||
-                (overScrollMode == OVER_SCROLL_IF_CONTENT_SCROLLS && canScrollVertical);
-
-        int newScrollX = scrollX + deltaX;
-        if (!overScrollHorizontal) {
-            maxOverScrollX = 0;
-        }
-
-        int newScrollY = scrollY + deltaY;
-        if (!overScrollVertical) {
-            maxOverScrollY = 0;
-        }
-
-        // Clamp values if at the limits and record
-        final int left = -maxOverScrollX;
-        final int right = maxOverScrollX + scrollRangeX;
-        final int top = -maxOverScrollY;
-        final int bottom = maxOverScrollY + scrollRangeY;
-
-        boolean clampedX = false;
-        if (newScrollX > right) {
-            newScrollX = right;
-            clampedX = true;
-        } else if (newScrollX < left) {
-            newScrollX = left;
-            clampedX = true;
-        }
-
-        boolean clampedY = false;
-        if (newScrollY > bottom) {
-            newScrollY = bottom;
-            clampedY = true;
-        } else if (newScrollY < top) {
-            newScrollY = top;
-            clampedY = true;
-        }
-
-        Log.i("onOverScrolled" +
-                " clampedY=" + clampedY +
-                " scrollY=" + scrollY +
-                " deltaY=" + deltaY +
-                " RangeY=" + scrollRangeY +
-                " maxY=" + maxOverScrollY +
-                " newY=" + (scrollY + deltaY) + "/" + newScrollY +
-                " dy=" + deltaY +
-                " top=" + top +
-                " bottom=" + bottom);
-
-        if (Math.abs(deltaY) > bottom - top)
-            deltaY = (deltaY > 0 ? 1 : -1) * (bottom - top);
-
-        intf.onOverScrolled(scrollX, scrollY, deltaX, deltaY, clampedX, clampedY);
-
-        return super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX, scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
     }
 
     @Override
@@ -372,19 +296,28 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         return super.onGenericMotionEvent(event);
     }
 
-    public boolean isZoomedY() {
-/*
-        DisplayMetrics dm = getResources().getDisplayMetrics();
-        int ch = Math.round(getContentHeight() * dm.density);
-        int dp6 = Math.round(6 * dm.density);
-        return (ch - dp6 > getHeight());
-*/
-        int ytend = computeVerticalScrollExtent();
-        if (ytend == 0)
-            return false;
+    private float lastY;
 
-        float yscale = computeVerticalScrollRange() / (float) ytend;
-        return (yscale > 1.01);
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        boolean intercept = false;
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+            intercept = true; // Prevent ACTION_CANCEL on fling
+        else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            int range = computeVerticalScrollRange();
+            int extend = computeVerticalScrollExtent();
+            boolean canScrollVertical = (range > extend);
+            if (canScrollVertical) {
+                int bottom = range - extend;
+                int off = computeVerticalScrollOffset();
+                float dy = lastY - event.getY();
+                intercept = (off > 0 || dy >= 0) && (off < bottom || dy <= 0);
+            }
+        }
+        getParent().requestDisallowInterceptTouchEvent(intercept);
+
+        lastY = event.getY();
+        return super.onTouchEvent(event);
     }
 
     public static boolean isFeatureSupported(Context context, String feature) {
@@ -461,8 +394,6 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         void onScaleChanged(float newScale);
 
         void onScrollChange(int scrollX, int scrollY);
-
-        void onOverScrolled(int scrollX, int scrollY, int dx, int dy, boolean clampedX, boolean clampedY);
 
         boolean onOpenLink(String url);
     }

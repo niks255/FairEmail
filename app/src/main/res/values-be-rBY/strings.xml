@@ -280,6 +280,7 @@
     <string name="title_setup_import_rules">Імпартаваць правілы фільтраў</string>
     <string name="title_setup_import_contacts">Імпартаваць лакальныя кантакты</string>
     <string name="title_setup_import_answers">Імпартаваць шаблоны адказаў</string>
+    <string name="title_setup_import_searches">Імпартаваць захаваныя пошукавыя запыты</string>
     <string name="title_setup_import_settings">Параметры імпартавання</string>
     <string name="title_setup_exported">Налады экспартаваны</string>
     <string name="title_setup_imported">Налады імпартаваны</string>
@@ -1068,10 +1069,12 @@
     <string name="title_editasnew">Рэдагаваць як новы</string>
     <string name="title_edit_notes">Рэдагаваць лакальныя нататкі</string>
     <string name="title_create_rule">Стварыць правіла &#8230;</string>
+    <string name="title_full_screen">На ўвесь экран</string>
     <string name="title_force_light">Прымусовае выкарыстанне светлай тэмы</string>
     <string name="title_share">Падзяліцца</string>
     <string name="title_event">Дадаць у каляндар</string>
     <string name="title_pin">Дадаць ярлык</string>
+    <string name="title_pin_label">Назва ярлыка</string>
     <string name="title_print">Друк</string>
     <string name="title_print_header">Друкаваць загаловак</string>
     <string name="title_print_images">Друкаваць выявы</string>
@@ -1096,7 +1099,7 @@
     <string name="title_auto_confirm">Аўтаматычна пацвярджаць праз некалькі секунд</string>
     <string name="title_buttons">Выбраць кнопкі</string>
     <string name="title_buttons_hint">Фактычныя даступныя дзеянні залежаць ад тыпу і канфігурацыі ўліковага запісу</string>
-    <string name="title_button_search">Шукаць у паведамленнях</string>
+    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Пошук падобных паведамленняў</string>
     <string name="title_button_search_text">Шукаць у тэксце паведамлення</string>
     <string name="title_configure_buttons">Наладзіць кнопкі &#8230;</string>
     <string name="title_quick_actions">Выберыце дзеянні</string>
@@ -1104,7 +1107,7 @@
     <string name="title_quick_actions_low">Нізкая важнасць</string>
     <string name="title_quick_actions_high">Высокая важнасць</string>
     <string name="title_quick_actions_snooze">Адкласці</string>
-    <string name="title_quick_actions_clear" comment="title_quick_actions_clear&#10;Title for quick actions option to clear the selection of selected messages after performing the action (mark as read, etc.)">Ачысціць выбар пасля выканання дзеяння</string>
+    <string name="title_quick_actions_clear">Ачысціць выбар пасля выканання дзеяння</string>
     <string name="title_trash">Выдаленыя</string>
     <string name="title_copy">Капіраваць &#8230;</string>
     <string name="title_copy_to">Капіраваць у &#8230;</string>
@@ -1295,6 +1298,7 @@
     <string name="title_insert_contact_group">Уставіць групу кантактаў</string>
     <string name="title_insert_template">Уставіць шаблон</string>
     <string name="title_create_template">Стварыць шаблон</string>
+    <string name="title_select_default_identity">Выбраць адрас па змаўчанні</string>
     <string name="title_translate">Пераклад</string>
     <string name="title_translate_configure">Наладзіць &#8230;</string>
     <string name="title_translate_key">Увядзіце ключ</string>

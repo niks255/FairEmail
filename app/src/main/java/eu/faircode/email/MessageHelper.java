@@ -1277,6 +1277,19 @@ public class MessageHelper {
         return (header == null ? null : MimeUtility.unfold(header));
     }
 
+    @NonNull
+    String getPOP3MessageID() throws MessagingException {
+        String msgid = getMessageID();
+        if (TextUtils.isEmpty(msgid)) {
+            Long time = getSent();
+            if (time == null)
+                msgid = getHash();
+            else
+                msgid = Long.toString(time);
+        }
+        return msgid;
+    }
+
     List<Header> getAllHeaders() throws MessagingException {
         ensureHeaders();
         return Collections.list(imessage.getAllHeaders());
@@ -1427,6 +1440,7 @@ public class MessageHelper {
         String msgid = getMessageID();
 
         List<String> refs = new ArrayList<>();
+
         for (String ref : getReferences())
             if (!TextUtils.isEmpty(ref) && !refs.contains(ref))
                 refs.add(ref);
@@ -1538,13 +1552,19 @@ public class MessageHelper {
         String msgid = getMessageID();
 
         List<String> refs = new ArrayList<>();
-        for (String ref : getReferences())
-            if (!TextUtils.isEmpty(ref) && !refs.contains(ref))
-                refs.add(ref);
 
         String inreplyto = getInReplyTo();
         if (!TextUtils.isEmpty(inreplyto) && !refs.contains(inreplyto))
             refs.add(inreplyto);
+
+        // The "References:" field will contain the contents of the parent's "References:" field (if any)
+        // followed by the contents of the parent's "Message-ID:" field (if any).
+        String[] r = getReferences();
+        for (int i = r.length - 1; i >= 0; i--) {
+            String ref = r[i];
+            if (!TextUtils.isEmpty(ref) && !refs.contains(ref))
+                refs.add(ref);
+        }
 
         boolean forward_new = prefs.getBoolean("forward_new", true);
         if (!forward_new)
@@ -1558,9 +1578,14 @@ public class MessageHelper {
 
         DB db = DB.getInstance(context);
 
-        List<String> all = new ArrayList<>(refs);
+        List<String> all = new ArrayList<>();
         if (!TextUtils.isEmpty(msgid))
             all.add(msgid);
+        all.addAll(refs);
+
+        // https://www.sqlite.org/limits.html
+        if (all.size() > 450)
+            all = all.subList(0, 450);
 
         int thread_range = prefs.getInt("thread_range", MessageHelper.DEFAULT_THREAD_RANGE);
         int range = (int) Math.pow(2, thread_range);
@@ -4488,6 +4513,14 @@ public class MessageHelper {
                     !Part.ATTACHMENT.equalsIgnoreCase(disposition) && TextUtils.isEmpty(filename)) {
                 parts.text.add(new PartHolder(part, contentType));
             } else {
+                // Workaround for NIL message content type
+                if ("application/octet-stream".equals(ct) && part instanceof MimeMessage) {
+                    ContentType plain = new ContentType("text/plain");
+                    plain.setParameterList(contentType.getParameterList());
+                    Log.w("Converting from " + contentType + " to " + plain);
+                    parts.text.add(new PartHolder(part, plain));
+                }
+
                 if (Report.isDeliveryStatus(ct) ||
                         Report.isDispositionNotification(ct) ||
                         Report.isFeedbackReport(ct))

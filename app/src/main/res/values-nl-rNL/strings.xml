@@ -252,6 +252,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_import_rules">Importeer filterregels</string>
     <string name="title_setup_import_contacts">Importeer lokale contacten</string>
     <string name="title_setup_import_answers">Importeer antwoordsjablonen</string>
+    <string name="title_setup_import_searches">Importeer opgeslagen zoekopdrachten</string>
     <string name="title_setup_import_settings">Importeer opties</string>
     <string name="title_setup_exported">Instellingen geëxporteerd</string>
     <string name="title_setup_imported">Instellingen geïmporteerd</string>
@@ -1036,10 +1037,12 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_editasnew">Bewerken als nieuw</string>
     <string name="title_edit_notes">Lokale notities bewerken</string>
     <string name="title_create_rule">Maak regel &#8230;</string>
+    <string name="title_full_screen">Volledig scherm</string>
     <string name="title_force_light">Forceer licht thema</string>
     <string name="title_share">Delen</string>
     <string name="title_event">Toevoegen aan agenda</string>
     <string name="title_pin">Snelkoppeling toevoegen</string>
+    <string name="title_pin_label">Snelkoppeling titel</string>
     <string name="title_print">Afdrukken</string>
     <string name="title_print_header">Kop afdrukken</string>
     <string name="title_print_images">Afbeeldingen afdrukken</string>
@@ -1064,7 +1067,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_auto_confirm">Automatisch bevestigen na enkele seconden</string>
     <string name="title_buttons">Selecteer knoppen</string>
     <string name="title_buttons_hint">De daadwerkelijk beschikbare acties hangen af van het accounttype en de configuratie</string>
-    <string name="title_button_search">Zoeken in berichten</string>
+    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Zoek soortgelijke berichten</string>
     <string name="title_button_search_text">Zoeken in berichttekst</string>
     <string name="title_configure_buttons">Configureer knoppen &#8230;</string>
     <string name="title_quick_actions">Selecteer acties</string>
@@ -1072,7 +1075,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_quick_actions_low">Laag belang</string>
     <string name="title_quick_actions_high">Hoog belang</string>
     <string name="title_quick_actions_snooze">Sluimeren</string>
-    <string name="title_quick_actions_clear" comment="title_quick_actions_clear&#10;Title for quick actions option to clear the selection of selected messages after performing the action (mark as read, etc.)">Selectie wissen na actie</string>
+    <string name="title_quick_actions_clear">Selectie wissen na actie</string>
     <string name="title_trash">Prullenbak</string>
     <string name="title_copy">Kopieer &#8230;</string>
     <string name="title_copy_to">Kopieer naar &#8230;</string>
@@ -1261,6 +1264,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_insert_contact_group">Contactgroep toevoegen</string>
     <string name="title_insert_template">Sjabloon invoegen</string>
     <string name="title_create_template">Maak sjabloon</string>
+    <string name="title_select_default_identity">Selecteer standaardadres</string>
     <string name="title_translate">Vertalen</string>
     <string name="title_translate_configure">Configureer &#8230;</string>
     <string name="title_translate_key">Sleutel invoeren</string>

@@ -115,9 +115,7 @@ public class LanguageTool {
 
                 Matcher matcher = pattern.matcher(text);
                 int index = 0;
-                boolean links = false;
                 while (matcher.find()) {
-                    links = true;
                     int start = matcher.start();
                     int end = matcher.end();
                     paragraphs.addAll(getParagraphs(index, start, text));
@@ -131,7 +129,7 @@ public class LanguageTool {
                 for (Pair<Integer, Integer> paragraph : paragraphs)
                     Log.i("LT paragraph " + paragraph.first + "..." + paragraph.second +
                             " '" + text.subSequence(paragraph.first, paragraph.second).toString().replace('\n', '|') + "'");
-                if (links || paragraphs.size() <= LT_MAX_RANGES) {
+                if (paragraphs.size() <= LT_MAX_RANGES) {
                     List<Suggestion> result = new ArrayList<>();
                     for (Pair<Integer, Integer> range : paragraphs)
                         result.addAll(getSuggestions(context, text, range.first, range.second));
@@ -413,9 +411,12 @@ public class LanguageTool {
         if (suggestions != null)
             for (LanguageTool.Suggestion suggestion : suggestions) {
                 Log.i("LT adding=" + suggestion);
+                int flags = ("Spelling mistake".equals(suggestion.title)
+                        || Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+                        ? SuggestionSpan.FLAG_MISSPELLED
+                        : SuggestionSpan.FLAG_GRAMMAR_ERROR);
                 SuggestionSpan span = new SuggestionSpanEx(etBody.getContext(),
-                        suggestion.replacements.toArray(new String[0]),
-                        SuggestionSpan.FLAG_MISSPELLED);
+                        suggestion.replacements.toArray(new String[0]), flags);
                 int s = start + suggestion.offset;
                 int e = s + suggestion.length;
                 if (s < 0 || s > edit.length() || e < 0 || e > edit.length()) {
@@ -463,25 +464,25 @@ public class LanguageTool {
     }
 
     private static class SuggestionSpanEx extends SuggestionSpan {
-        private final int highlightColor;
-        private final int dp3;
+        private final int underlineColor;
+        private final int underlineThickness;
 
         public SuggestionSpanEx(Context context, String[] suggestions, int flags) {
             super(context, suggestions, flags);
-            highlightColor = Helper.resolveColor(context,
+            underlineColor = Helper.resolveColor(context,
                     Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
                             ? android.R.attr.textColorHighlight
                             : android.R.attr.colorError);
-            dp3 = Helper.dp2pixels(context, 2);
+            underlineThickness = Helper.dp2pixels(context, (getFlags() & FLAG_MISSPELLED) != 0 ? 2 : 1);
         }
 
         @Override
         public void updateDrawState(TextPaint tp) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-                tp.bgColor = highlightColor;
+                tp.bgColor = underlineColor;
             else {
-                tp.underlineColor = highlightColor;
-                tp.underlineThickness = dp3;
+                tp.underlineColor = underlineColor;
+                tp.underlineThickness = underlineThickness;
             }
         }
     }

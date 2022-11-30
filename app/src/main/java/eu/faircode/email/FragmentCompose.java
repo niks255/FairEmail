@@ -333,10 +333,11 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_RECORD_AUDIO = 9;
     private static final int REQUEST_OPENPGP = 10;
     private static final int REQUEST_CONTACT_GROUP = 11;
-    private static final int REQUEST_LINK = 12;
-    private static final int REQUEST_DISCARD = 13;
-    private static final int REQUEST_SEND = 14;
-    private static final int REQUEST_REMOVE_ATTACHMENTS = 15;
+    private static final int REQUEST_SELECT_IDENTITY = 12;
+    private static final int REQUEST_LINK = 13;
+    private static final int REQUEST_DISCARD = 14;
+    private static final int REQUEST_SEND = 15;
+    private static final int REQUEST_REMOVE_ATTACHMENTS = 16;
 
     private static final ExecutorService executor = Helper.getBackgroundExecutor(1, "compose");
 
@@ -1448,9 +1449,15 @@ public class FragmentCompose extends FragmentBase {
         etTo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Cursor cursor = (Cursor) adapterView.getAdapter().getItem(position);
-                int colEmail = cursor.getColumnIndex("email");
-                selectIdentityForEmail(colEmail < 0 ? null : cursor.getString(colEmail));
+                try {
+                    Cursor cursor = (Cursor) adapterView.getAdapter().getItem(position);
+                    if (cursor != null && cursor.getCount() > 0) {
+                        int colEmail = cursor.getColumnIndex("email");
+                        selectIdentityForEmail(colEmail < 0 ? null : cursor.getString(colEmail));
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
             }
         });
 
@@ -2149,6 +2156,9 @@ public class FragmentCompose extends FragmentBase {
         } else if (itemId == R.id.menu_answer_create) {
             onMenuAnswerCreate();
             return true;
+        } else if (itemId == R.id.menu_select_identity) {
+            onMenuIdentitySelect();
+            return true;
         } else if (itemId == R.id.title_search_in_text) {
             startSearch();
             return true;
@@ -2431,8 +2441,7 @@ public class FragmentCompose extends FragmentBase {
 
                                     String html = EntityAnswer.replacePlaceholders(context, answer.text, tos);
 
-                                    Document d = JsoupEx.parse(html);
-                                    d = HtmlHelper.sanitizeView(context, d, true);
+                                    Document d = HtmlHelper.sanitizeCompose(context, html, true);
                                     Spanned spanned = HtmlHelper.fromDocument(context, d, new HtmlHelper.ImageGetterEx() {
                                         @Override
                                         public Drawable getDrawable(Element element) {
@@ -2518,6 +2527,13 @@ public class FragmentCompose extends FragmentBase {
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("compose:answer");
         fragmentTransaction.commit();
+    }
+
+    private void onMenuIdentitySelect() {
+        FragmentDialogSelectIdentity fragment = new FragmentDialogSelectIdentity();
+        fragment.setArguments(new Bundle());
+        fragment.setTargetFragment(this, REQUEST_SELECT_IDENTITY);
+        fragment.show(getParentFragmentManager(), "select:identity");
     }
 
     private void onTranslate(View anchor) {
@@ -3042,6 +3058,10 @@ public class FragmentCompose extends FragmentBase {
                     if (resultCode == RESULT_OK && data != null)
                         onContactGroupSelected(data.getBundleExtra("args"));
                     break;
+                case REQUEST_SELECT_IDENTITY:
+                    if (resultCode == RESULT_OK && data != null)
+                        onSelectIdentity(data.getBundleExtra("args"));
+                    break;
                 case REQUEST_LINK:
                     if (resultCode == RESULT_OK && data != null)
                         onLinkSelected(data.getBundleExtra("args"));
@@ -3387,8 +3407,7 @@ public class FragmentCompose extends FragmentBase {
                     Helper.writeText(file, doc.html());
                 }
 
-                Document d = JsoupEx.parse(html);
-                d = HtmlHelper.sanitizeView(context, d, true);
+                Document d = HtmlHelper.sanitizeCompose(context, html, true);
                 return HtmlHelper.fromDocument(context, d, new HtmlHelper.ImageGetterEx() {
                     @Override
                     public Drawable getDrawable(Element element) {
@@ -4400,6 +4419,45 @@ public class FragmentCompose extends FragmentBase {
         }.setExecutor(executor).execute(this, args, "compose:picked");
     }
 
+    private void onSelectIdentity(Bundle args) {
+        new SimpleTask<EntityIdentity>() {
+            @Override
+            protected EntityIdentity onExecute(Context context, Bundle args) throws Throwable {
+                long id = args.getLong("id");
+
+                EntityIdentity identity;
+                DB db = DB.getInstance(context);
+                try {
+                    db.beginTransaction();
+
+                    identity = db.identity().getIdentity(id);
+                    if (identity != null) {
+                        db.account().resetPrimary();
+                        db.account().setAccountPrimary(identity.account, true);
+                        db.identity().resetPrimary(identity.account);
+                        db.identity().setIdentityPrimary(identity.id, true);
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                return identity;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, EntityIdentity identity) {
+                ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "select:identity");
+    }
+
     private void onLinkSelected(Bundle args) {
         String link = args.getString("link");
         int start = args.getInt("start");
@@ -5086,51 +5144,57 @@ public class FragmentCompose extends FragmentBase {
                                     data.draft.to = (ref.reply == null || ref.reply.length == 0 ? ref.from : ref.reply);
                                 }
 
-                                if (data.draft.from != null && data.draft.from.length > 0) {
-                                    Address preferred = null;
-                                    if (ref.identity != null) {
-                                        EntityIdentity recognized = db.identity().getIdentity(ref.identity);
-                                        EntityLog.log(context, "Recognized=" + (recognized == null ? null : recognized.email));
+                                Address preferred = null;
+                                if (ref.identity != null) {
+                                    EntityIdentity recognized = db.identity().getIdentity(ref.identity);
+                                    EntityLog.log(context, "Recognized=" + (recognized == null ? null : recognized.email));
 
-                                        if (recognized != null) {
-                                            Address same = null;
-                                            Address similar = null;
+                                    if (recognized != null) {
+                                        Address same = null;
+                                        Address similar = null;
 
-                                            for (Address from : data.draft.from) {
-                                                if (same == null && recognized.sameAddress(from))
-                                                    same = from;
-                                                if (similar == null && recognized.similarAddress(from))
-                                                    similar = from;
-                                            }
+                                        List<Address> addresses = new ArrayList<>();
+                                        if (data.draft.from != null)
+                                            addresses.addAll(Arrays.asList(data.draft.from));
+                                        if (ref.cc != null)
+                                            addresses.addAll(Arrays.asList(ref.cc));
+                                        if (ref.bcc != null)
+                                            addresses.addAll(Arrays.asList(ref.bcc));
 
-                                            //if (ref.deliveredto != null)
-                                            //    try {
-                                            //        Address deliveredto = new InternetAddress(ref.deliveredto);
-                                            //        if (same == null && recognized.sameAddress(deliveredto))
-                                            //            same = deliveredto;
-                                            //        if (similar == null && recognized.similarAddress(deliveredto))
-                                            //            similar = deliveredto;
-                                            //    } catch (AddressException ex) {
-                                            //        Log.w(ex);
-                                            //    }
-
-                                            EntityLog.log(context, "From=" + MessageHelper.formatAddresses(data.draft.from) +
-                                                    " delivered-to=" + ref.deliveredto +
-                                                    " same=" + (same == null ? null : ((InternetAddress) same).getAddress()) +
-                                                    " similar=" + (similar == null ? null : ((InternetAddress) similar).getAddress()));
-
-                                            preferred = (same == null ? similar : same);
+                                        for (Address from : addresses) {
+                                            if (same == null && recognized.sameAddress(from))
+                                                same = from;
+                                            if (similar == null && recognized.similarAddress(from))
+                                                similar = from;
                                         }
-                                    } else
-                                        EntityLog.log(context, "Recognized=null");
 
-                                    if (preferred != null) {
-                                        String from = ((InternetAddress) preferred).getAddress();
-                                        EntityLog.log(context, "Preferred=" + from);
-                                        data.draft.extra = UriHelper.getEmailUser(from);
-                                    } else
-                                        EntityLog.log(context, "Preferred=null");
-                                }
+                                        //if (ref.deliveredto != null)
+                                        //    try {
+                                        //        Address deliveredto = new InternetAddress(ref.deliveredto);
+                                        //        if (same == null && recognized.sameAddress(deliveredto))
+                                        //            same = deliveredto;
+                                        //        if (similar == null && recognized.similarAddress(deliveredto))
+                                        //            similar = deliveredto;
+                                        //    } catch (AddressException ex) {
+                                        //        Log.w(ex);
+                                        //    }
+
+                                        EntityLog.log(context, "From=" + MessageHelper.formatAddresses(data.draft.from) +
+                                                " delivered-to=" + ref.deliveredto +
+                                                " same=" + (same == null ? null : ((InternetAddress) same).getAddress()) +
+                                                " similar=" + (similar == null ? null : ((InternetAddress) similar).getAddress()));
+
+                                        preferred = (same == null ? similar : same);
+                                    }
+                                } else
+                                    EntityLog.log(context, "Recognized=null");
+
+                                if (preferred != null) {
+                                    String from = ((InternetAddress) preferred).getAddress();
+                                    EntityLog.log(context, "Preferred=" + from);
+                                    data.draft.extra = UriHelper.getEmailUser(from);
+                                } else
+                                    EntityLog.log(context, "Preferred=null");
                             }
 
                             if ("reply_all".equals(action))
@@ -7290,15 +7354,15 @@ public class FragmentCompose extends FragmentBase {
 
             Spanned signature = null;
             if (identity != null && !TextUtils.isEmpty(identity.signature)) {
-                Document d = JsoupEx.parse(identity.signature);
-                d = HtmlHelper.sanitizeView(getContext(), d, show_images);
-                signature = HtmlHelper.fromDocument(getContext(), d, new HtmlHelper.ImageGetterEx() {
+                final Context context = getContext();
+                Document d = HtmlHelper.sanitizeCompose(context, identity.signature, true);
+                signature = HtmlHelper.fromDocument(context, d, new HtmlHelper.ImageGetterEx() {
                     @Override
                     public Drawable getDrawable(Element element) {
                         String source = element.attr("src");
                         if (source.startsWith("cid:"))
                             element.attr("src", "cid:");
-                        return ImageHelper.decodeImage(getContext(),
+                        return ImageHelper.decodeImage(context,
                                 working, element, true, 0, 1.0f, tvSignature);
                     }
                 }, null);
@@ -7476,22 +7540,27 @@ public class FragmentCompose extends FragmentBase {
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            int target = spTarget.getSelectedItemPosition();
-                            Cursor cursor = (Cursor) spGroup.getSelectedItem();
-                            if (target != INVALID_POSITION && cursor != null) {
-                                long group = cursor.getLong(0);
-                                String name = cursor.getString(1);
+                            try {
+                                int target = spTarget.getSelectedItemPosition();
+                                Cursor cursor = (Cursor) spGroup.getSelectedItem();
+                                if (target != INVALID_POSITION &&
+                                        cursor != null && cursor.getCount() > 0) {
+                                    long group = cursor.getLong(0);
+                                    String name = cursor.getString(1);
 
-                                Bundle args = getArguments();
-                                args.putLong("id", working);
-                                args.putInt("target", target);
-                                args.putLong("group", group);
-                                args.putString("name", name);
-                                args.putInt("type", spType.getSelectedItemPosition());
+                                    Bundle args = getArguments();
+                                    args.putLong("id", working);
+                                    args.putInt("target", target);
+                                    args.putLong("group", group);
+                                    args.putString("name", name);
+                                    args.putInt("type", spType.getSelectedItemPosition());
 
-                                sendResult(RESULT_OK);
-                            } else
-                                sendResult(RESULT_CANCELED);
+                                    sendResult(RESULT_OK);
+                                } else
+                                    sendResult(RESULT_CANCELED);
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            }
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, null)

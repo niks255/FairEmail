@@ -2,7 +2,43 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+### [Ostromia](https://en.wikipedia.org/wiki/Ostromia)
+
+### 1.2011 - 2022-11-29
+
+* Added optional button to show original message full screen
+* Added optional colored star quick action button
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2010 - 2022-11-25
+
+* Fixed inserting links into signatures
+* Small improvements and minor bug fixes
+
+### 1.2009 - 2022-11-25
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2008 - 2022-11-23
+
+* Improved original message view scrolling
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### [Ninjatitan](https://en.wikipedia.org/wiki/Ninjatitan)
+
+### 1.2007 - 2022-11-17
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2006 - 2022-11-16
+
+* Added searching again on the server in another account/folder
+* Small improvements and minor bug fixes
+* Updated translations
 
 ### 1.2004 - 2022-11-15
 
