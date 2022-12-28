@@ -220,6 +220,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_inexact">Alarmlar &amp; hatırlatıcılar devre dışı bırakıldı</string>
     <string name="title_setup_background">Arka plan kısıtlamaları etkinleştirildi</string>
     <string name="title_setup_data">Veri koruyucu etkin</string>
+    <string name="title_setup_always">Anlık yeni mesaj bildirimleri</string>
+    <string name="title_setup_always_remark">Etkinleştirilirse, dengesiz bağlantılar, eski ağ donanımı vb. daha yüksek pil kullanımına neden olabilir</string>
     <string name="title_setup_advanced_options">Gelişmiş seçenekleri göster</string>
     <string name="title_setup_inbox">Gelen kutusuna git</string>
     <string name="title_setup_go">Git</string>
@@ -360,6 +362,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_send_pending">Rahatsız edici olmayan gecikmeli gönderme simgesini göster</string>
     <string name="title_advanced_auto_save_paragraph">Her paragraftan sonra bir taslağı otomatik olarak kaydet</string>
     <string name="title_advanced_auto_save_dot">Her cümleden sonra bir taslağı otomatik olarak kaydet</string>
+    <string name="title_advanced_compose_color">Varsayılan metin rengi</string>
     <string name="title_advanced_compose_font">Varsayılan yazı tipi</string>
     <string name="title_advanced_auto_identity">Yeni mesajlar için kimlikleri otomatik olarak seç</string>
     <string name="title_advanced_prefix_once">Önek konu sadece bir kez yanıtlarken veya yönlendirme</string>
@@ -432,6 +435,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_cards_beige">Kart stilini kullanırken bej arka plan kullan (yalnızca açık renkli temalar)</string>
     <string name="title_advanced_tabular_background">Tablo stilini kullanırken kart rengini arka plan rengi olarak kullan</string>
     <string name="title_advanced_cards_shadow">Kart stilini kullanırken okunmamış mesajlar için gölge kullanın</string>
+    <string name="title_advanced_cards_shadow_border">Çerçeveyi göster</string>
     <string name="title_advanced_cards_shadow_highlight">Vurgu rengi yerine vurgu rengi kullanın</string>
     <string name="title_advanced_tabular_dividers">Tablo stilini kullanırken ayırıcı çizgiler kullan</string>
     <string name="title_advanced_date_header">Tarihe göre grup</string>
@@ -502,6 +506,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_button_extra">Mesajın altında fazladan düğmeler göster</string>
     <string name="title_advanced_seekbar">Göreli konuşma konumunu nokta ile göster</string>
     <string name="title_advanced_actionbar">Sohbet eylem çubuğunu göster</string>
+    <string name="title_advanced_actionbar_swap">Çöp ve arşiv düğmesini değiştir</string>
     <string name="title_advanced_actionbar_color">Hesap rengini konuşma eylem çubuğu için arka plan rengi olarak kullan</string>
     <string name="title_advanced_category_header">Hesap kategorisine göre grupla</string>
     <string name="title_advanced_navbar_colorize">Android gezinme çubuğunu renklendirin</string>
@@ -547,6 +552,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_autounstar">Mesajları taşırken otomatik olarak yıldızı kaldır</string>
     <string name="title_advanced_auto_important">Yıldızlanan mesajları otomatik olarak önemli hale getir</string>
     <string name="title_advanced_reset_importance">Mesajları taşırken önem derecesini sıfırla</string>
+    <string name="title_advanced_cancel_snooze">Hareketli mesajlarda ertelemeyi iptal et</string>
     <string name="title_advanced_swipe_reply">Genişletilmiş mesajları yanıtlamak için sağa kaydırın</string>
     <string name="title_advanced_default_snooze">Varsayılan erteleme/gecikme süresi</string>
     <string name="title_advanced_notifications">Bildirimleri yönet</string>
@@ -733,7 +739,6 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="compressed">%2$s\'den fazla dosya içeren veya %3$s\'den büyük dosyalar içeren sıkıştırılmış dosyaların (%1$s) içerikleri gösterilmeyecek</string>
     <string name="title_advanced_parse_classes_hint">Bu, mesajları daha doğru bir şekilde gösterecektir, ancak muhtemelen bir gecikme ile</string>
     <string name="title_advanced_restore_on_launch_hint">%1$d dakika içinde başlatıcı simgesi aracılığıyla yeniden başlatıldığında son uygulama durumunu geri yükle</string>
-    <string name="title_advanced_language_detection_hint">Dil algılama desteği, cihaz üreticisine bağlıdır</string>
     <string name="title_advanced_autoexpand_hint">Bir sohbette yalnızca bir ileti veya yalnızca bir okunmamış ileti olduğunda iletiyi otomatik olarak aç</string>
     <string name="title_advanced_expandall_hint">Düğmenin hangi mesaja uygulanacağı belirsiz olduğundan, birden fazla mesaj genişletildiğinde cevap düğmesi gösterilmeyecektir</string>
     <string name="title_advanced_autoseen_hint">Genişletme sırasında okunan mesajları otomatik olarak işaretleme, bireysel hesap ayarlarında devre dışı bırakılabilir</string>
@@ -772,6 +777,9 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_cleanup_hint">Bu bütün geçici dosyaları silecek</string>
     <string name="title_advanced_never_favorite">Asla sık kullanılan değil</string>
     <string name="title_advanced_edit_name">Adı düzenle</string>
+    <string name="title_create_folder">Klasör oluştur</string>
+    <string name="title_create_folder_name">Klasör adı</string>
+    <string name="title_create_folder_parent">Üst klasör</string>
     <string name="title_advanced_swipe_actions">Kaydırma eylemlerini ayarlayın</string>
     <string name="title_advanced_swipe_actions_hint">Bu, tüm IMAP hesapları için sola ve sağa kaydırma işlemini ayarlayacaktır.</string>
     <string name="title_advanced_swipe_sensitivity">Sol/sağ kaydırma hassasiyeti</string>
@@ -899,6 +907,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_service_token">Android hesap yöneticisi bir VPN, güvenlik duvarı, reklam engelleyici vb. tarafından engellenebilir ve erişim jetonu almasını engelleyebilir</string>
     <string name="title_service_port">Lütfen port numarasını tekrardan kontrol edin</string>
     <string name="title_service_protocol">Lütfen protokolü iki kez kontrol edin (SSL / TLS veya STARTTLS)</string>
+    <string name="title_service_error10">Bu hesabın kimliğinin yeniden doğrulanması gerekiyor, bu işlem hızlı kurulum sihirbazı aracılığıyla yapılabilir</string>
     <string name="title_advanced_browse">Sunucudaki iletilere göz atın</string>
     <string name="title_advanced_expand_read">Genişletirken mesajları okundu olarak işaretle</string>
     <string name="title_synchronize_now">Şimdi eşzamanla</string>
@@ -1067,7 +1076,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_auto_confirm">Birkaç saniye sonra otomatik olarak onayla</string>
     <string name="title_buttons">Seçim düğmeleri</string>
     <string name="title_buttons_hint">Gerçek eylemler, hesap türüne ve yapılandırmaya bağlıdır</string>
-    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Benzer iletileri ara</string>
+    <string name="title_button_search_similar">Benzer iletileri ara</string>
     <string name="title_button_search_text">Mesajda ara</string>
     <string name="title_configure_buttons">Düğme &#8230; yapılandır</string>
     <string name="title_quick_actions">Eylem seç</string>
@@ -1259,7 +1268,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_save_drafts">Taslakları sunucuya kaydet</string>
     <string name="title_send_dialog">Gönderme seçeneklerini göster</string>
     <string name="title_image_dialog">Görsel seçeneklerini göster</string>
-    <string name="title_block_toolbar">Araç çubuğunu engelle</string>
+    <string name="title_style_toolbar">Stil araç çubuğu</string>
     <string name="title_media_toolbar">Medya araç çubuğu</string>
     <string name="title_manage_local_contacts">Yerel kişileri yönet</string>
     <string name="title_insert_contact_group">Kişi grubuna ekle</string>

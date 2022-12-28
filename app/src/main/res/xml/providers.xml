@@ -166,11 +166,10 @@
             host="smtp.office365.com"
             port="587"
             starttls="true" />
-        <!--pop
+        <pop
             host="outlook.office365.com"
             port="995"
-            starttls="false" /-->
-        <!-- https://outlook.office.com/POP.AccessAsUser.All -->
+            starttls="false" />
         <oauth
             askAccount="true"
             authorizationEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize"
@@ -179,7 +178,7 @@
             privacy="https://privacy.microsoft.com/privacystatement"
             prompt="login"
             redirectUri="msauth.eu.faircode.email://auth"
-            scopes="profile,openid,email,offline_access,https://outlook.office.com/IMAP.AccessAsUser.All,https://outlook.office.com/SMTP.Send"
+            scopes="profile,openid,email,offline_access,https://outlook.office.com/IMAP.AccessAsUser.All,https://outlook.office.com/SMTP.Send,https://outlook.office.com/POP.AccessAsUser.All"
             tokenEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
             tokenScopes="true" />
         <!-- https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow -->
@@ -1298,6 +1297,7 @@
     </provider>
     <provider
         name="Interia"
+        documentation="Please check if IMAP is enabled on the website of the email provider. Sprawdź, czy protokół IMAP jest włączony na stronie internetowej dostawcy poczty e-mail."
         domain="interia\\.pl,interia\\.eu,poczta\\.fm,vip\\.interia\\.pl,intmail\\.pl,interia\\.com,interiowy\\.pl,adresik\\.net,pacz\\.to,pisz\\.to,ogarnij\\.se,.*\\.hub\\.pl"
         link="https://pomoc.poczta.interia.pl/news-parametry-do-konfiguracji-programow-pocztowych,nId,2136275">
         <imap
@@ -1849,9 +1849,11 @@
             starttls="false" />
     </provider>
     <provider
-        name="SBCGlobal"
+        name="AT&amp;T"
+        appPassword="true"
+        documentation="Instead of a password you should use &lt;a href=&quot;https://www.att.com/support/article/email-support/KM1240308&quot;&gt;a secure mail key&lt;/a&gt;"
         domain="ameritech\\.net,att\\.net,bellsouth\\.net,flash\\.net,nvbell\\.net,pacbell\\.net,prodigy\\.net,sbcglobal\\.net,snet\\.net,swbell\\.net,wans\\.net"
-        link="https://www.sbcglobal-help.com/access-sbcglobal-net-email-settings/">
+        link="https://www.att.com/support/article/email-support/KM1010523/">
         <imap
             host="imap.mail.att.net"
             port="993"
@@ -1899,5 +1901,19 @@
             host="smtp.cox.net"
             port="465"
             starttls="false" />
+    </provider>
+    <provider
+        name="minuskel.de"
+        domain="minuskel\\.de"
+        link="https://support.minuskel.de/mail-einstellungen.html"
+        mx="mail\\.ipn\\.de">
+        <imap
+            host="home.minuskel.de"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.minuskel.de"
+            port="587"
+            starttls="true" />
     </provider>
 </providers>

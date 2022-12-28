@@ -221,6 +221,8 @@
     <string name="title_setup_inexact">Alarmer og påmindelser er deaktiveret</string>
     <string name="title_setup_background">Baggrundsbegrænsninger er aktive</string>
     <string name="title_setup_data">Datasparer er aktiveret</string>
+    <string name="title_setup_always">Ny besked-notifikationer i realtid</string>
+    <string name="title_setup_always_remark">Hvis aktiveret, vil ustabile forbindelser, gammelt netværkshardware mv. kunne betyde højere strømforbrug</string>
     <string name="title_setup_advanced_options">Vis avancerede indstillinger</string>
     <string name="title_setup_inbox">Gå til Indbakke</string>
     <string name="title_setup_go">Start</string>
@@ -362,6 +364,7 @@
     <string name="title_advanced_send_pending">Vis ikke-påtrængende afsendelsesforsinkelsesikon</string>
     <string name="title_advanced_auto_save_paragraph">Gem automatisk udkast efter hvert afsnit</string>
     <string name="title_advanced_auto_save_dot">Gem automatisk udkast efter hver sætning</string>
+    <string name="title_advanced_compose_color">Standardtekstfarve</string>
     <string name="title_advanced_compose_font">Standardskrifttype</string>
     <string name="title_advanced_auto_identity">Vælg automatisk identiteter for nye beskeder</string>
     <string name="title_advanced_prefix_once">Kun ét emnepræfiks ved svar eller videresendelse</string>
@@ -434,6 +437,7 @@
     <string name="title_advanced_cards_beige">Brug beige baggrund ifm. kortstil (kun lyse temaer)</string>
     <string name="title_advanced_tabular_background">Brug kortfarve som baggrundsfarve ifm. tabelform</string>
     <string name="title_advanced_cards_shadow">Brug skyggeeffekt til ulæste beskeder, når kortstil benyttes</string>
+    <string name="title_advanced_cards_shadow_border">Vis kant</string>
     <string name="title_advanced_cards_shadow_highlight">Brug fremhævningsfarve i stedet for accentfarve</string>
     <string name="title_advanced_tabular_dividers">Brug skillelinjer ifm. tabelform</string>
     <string name="title_advanced_date_header">Gruppér efter dato</string>
@@ -504,6 +508,7 @@
     <string name="title_advanced_button_extra">Vis ekstra knapper nederst i en besked</string>
     <string name="title_advanced_seekbar">Vis relativ samtaleposition med en prik</string>
     <string name="title_advanced_actionbar">Vis samtale-handlingsbjælke</string>
+    <string name="title_advanced_actionbar_swap">Ombyt papirkurv- og arkiv-knap</string>
     <string name="title_advanced_actionbar_color">Benyt kontofarve som baggrundsfarve til samtalens handlingsbjælke</string>
     <string name="title_advanced_category_header">Gruppering efter kontokategori</string>
     <string name="title_advanced_navbar_colorize">Farvelæg Android-navigeringsbjælken</string>
@@ -549,6 +554,7 @@
     <string name="title_advanced_autounstar">Fjern automatisk stjerner fra beskeder, når de flyttes</string>
     <string name="title_advanced_auto_important">Gør automatisk stjernemarkerede beskeder vigtige</string>
     <string name="title_advanced_reset_importance">Nulstil vigtighed, når beskeder flyttes</string>
+    <string name="title_advanced_cancel_snooze">Afbryd udsættelse ved flytning af beskeder</string>
     <string name="title_advanced_swipe_reply">Stryg udvidede beskeder til højre for at besvare</string>
     <string name="title_advanced_default_snooze">Standard slumre-/forsinkelsestid</string>
     <string name="title_advanced_notifications">Håndtér notifikationer</string>
@@ -736,7 +742,6 @@
     <string name="compressed">Komprimerede filer (%1$s) indeholdende flere end %2$s filer, eller med filer større end %3$s, vises ikke</string>
     <string name="title_advanced_parse_classes_hint">Dette viser beskeder mere korrekt, men muligvis med en forsinkelse</string>
     <string name="title_advanced_restore_on_launch_hint">Gendan seneste app-tilstand ved genstart inden for %1$d minutter via app-ikonet</string>
-    <string name="title_advanced_language_detection_hint">Sprogdetekteringsunderstøttelse afhænger af enhedsproducenten</string>
     <string name="title_advanced_autoexpand_hint">Åbn automatisk besked, når der kun er én besked eller kun én ulæst besked i en samtale</string>
     <string name="title_advanced_expandall_hint">Svar-knappen vises ikke, når flere beskeder er udvidet, da det vil være uklart, hvilken besked knappen gælder for</string>
     <string name="title_advanced_autoseen_hint">Automarkering af beskeder som læst ved udvidelse kan deaktiveres i de individuelle kontoindstillinger</string>
@@ -775,6 +780,9 @@
     <string name="title_advanced_cleanup_hint">Dette vil slette alle midlertidige filer</string>
     <string name="title_advanced_never_favorite">Gør aldrig til favorit</string>
     <string name="title_advanced_edit_name">Redigér navn</string>
+    <string name="title_create_folder">Opret mappe</string>
+    <string name="title_create_folder_name">Mappenavn</string>
+    <string name="title_create_folder_parent">Overordnet mappe</string>
     <string name="title_advanced_swipe_actions">Indstil strygehandlinger</string>
     <string name="title_advanced_swipe_actions_hint">Dette opsætter handlinger for venstre- og højrestrygning for alle IMAP-konti</string>
     <string name="title_advanced_swipe_sensitivity">Venstre/højre strygefølsomhed</string>
@@ -902,6 +910,7 @@
     <string name="title_service_token">Androids kontohåndtering kan blive forhindret i at få en adgangstoken grundet blokering af et VPN, firewall, adblocker mv.</string>
     <string name="title_service_port">Dobbelttjek portnummeret</string>
     <string name="title_service_protocol">Dobbelttjek protokollen (SSL/TLS eller STARTTLS)</string>
+    <string name="title_service_error10">Denne konto skal godkendes igen, hvilket kan gøres via guiden til hurtig opsætning</string>
     <string name="title_advanced_browse">Gennemse beskeder på serveren</string>
     <string name="title_advanced_expand_read">Markér beskeder Læst ved udvidelse</string>
     <string name="title_synchronize_now">Synkronisér nu</string>
@@ -1072,7 +1081,7 @@
     <string name="title_auto_confirm">Auto-bekræft efter et par sekunder</string>
     <string name="title_buttons">Vælg knapper</string>
     <string name="title_buttons_hint">De faktisk tilgængelige handlinger afhænger af kontotype og opsætning</string>
-    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Søg i tilsvarende beskeder</string>
+    <string name="title_button_search_similar">Søg i tilsvarende beskeder</string>
     <string name="title_button_search_text">Søg i beskedtekst</string>
     <string name="title_configure_buttons">Opsæt knapper &#8230;</string>
     <string name="title_quick_actions">Vælg handlinger</string>
@@ -1265,7 +1274,7 @@
     <string name="title_save_drafts">Gem udkast på serveren</string>
     <string name="title_send_dialog">Vis Send-muligheder</string>
     <string name="title_image_dialog">Vis Billed-muligheder</string>
-    <string name="title_block_toolbar">Blokværktøjsbjælke</string>
+    <string name="title_style_toolbar">Tilpas værktøjslinje</string>
     <string name="title_media_toolbar">Medieværktøjsbjælke</string>
     <string name="title_manage_local_contacts">Håndtér lokale kontakter</string>
     <string name="title_insert_contact_group">Indsæt kontaktgruppe</string>
@@ -1483,6 +1492,8 @@
     <string name="title_rule_name">Navn</string>
     <string name="title_rule_order">Rækkefølge</string>
     <string name="title_rule_enabled">Aktiveret</string>
+    <string name="title_rule_daily">Kør kun dagligt</string>
+    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Beskeder ældre end (dage)</string>
     <string name="title_rule_stop">Stop afvikling af regler efter eksekvering af denne regel</string>
     <string name="title_rule_sender">Afsender indeholder</string>
     <string name="title_rule_sender_known">Afsender er en kontakt</string>

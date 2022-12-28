@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
 
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
@@ -68,7 +67,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 256,
+        version = 260,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -363,7 +362,7 @@ public abstract class DB extends RoomDatabase {
 
             sInstance = migrate(sContext, getBuilder(sContext)).build();
 
-            sInstance.getQueryExecutor().execute(new Runnable() {
+            Helper.getSerialExecutor().execute(new Runnable() {
                 @Override
                 public void run() {
                     checkEmergencyBackup(sContext);
@@ -399,19 +398,21 @@ public abstract class DB extends RoomDatabase {
 
     private static RoomDatabase.Builder<DB> getBuilder(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int threads = prefs.getInt("query_threads", DEFAULT_QUERY_THREADS);
         boolean wal = prefs.getBoolean("wal", true);
-        Log.i("DB query threads=" + threads + " wal=" + wal);
-        ExecutorService executorQuery = Helper.getBackgroundExecutor(threads, "query");
-        ExecutorService executorTransaction = Helper.getBackgroundExecutor(0, "transaction");
+        Log.i("DB wal=" + wal);
 
         RoomDatabase.Builder<DB> builder = Room
                 .databaseBuilder(context, DB.class, DB_NAME)
                 //.openHelperFactory(new RequerySQLiteOpenHelperFactory())
-                .setQueryExecutor(executorQuery)
-                .setTransactionExecutor(executorTransaction)
+                //.setQueryExecutor()
+                .setTransactionExecutor(Helper.getBackgroundExecutor(1, 4, 3, "db"))
                 .setJournalMode(wal ? JournalMode.WRITE_AHEAD_LOGGING : JournalMode.TRUNCATE) // using the latest sqlite
                 .addCallback(new Callback() {
+                    @Override
+                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                        defaultSearches(db, context);
+                    }
+
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
                         Map<String, String> crumb = new HashMap<>();
@@ -486,7 +487,7 @@ public abstract class DB extends RoomDatabase {
                 public void onQuery(@NonNull String sqlQuery, @NonNull List<Object> bindArgs) {
                     Log.i("query=" + sqlQuery);
                 }
-            }, executorQuery);
+            }, Helper.getParallelExecutor());
 
         return builder;
     }
@@ -2595,6 +2596,32 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `account` ADD COLUMN `capability_uidl` INTEGER");
                     }
+                }).addMigrations(new Migration(256, 257) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `search` ADD COLUMN `account_uuid` TEXT");
+                        db.execSQL("ALTER TABLE `search` ADD COLUMN `folder_name` TEXT");
+                    }
+                }).addMigrations(new Migration(257, 258) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        defaultSearches(db, context);
+                    }
+                }).addMigrations(new Migration(258, 259) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("UPDATE account SET keep_alive_noop = 0" +
+                                " WHERE host = 'outlook.office365.com' AND pop = " + EntityAccount.TYPE_IMAP);
+                    }
+                }).addMigrations(new Migration(259, 260) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `rule` ADD COLUMN `daily` INTEGER NOT NULL DEFAULT 0");
+                    }
                 }).addMigrations(new Migration(998, 999) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
@@ -2606,6 +2633,33 @@ public abstract class DB extends RoomDatabase {
                                 " OR host = 'imap.nexgo.de'");
                     }
                 });
+    }
+
+    public static void defaultSearches(SupportSQLiteDatabase db, Context context) {
+        try {
+            BoundaryCallbackMessages.SearchCriteria criteria;
+
+            criteria = new BoundaryCallbackMessages.SearchCriteria();
+            criteria.with_flagged = true;
+
+            db.execSQL("INSERT INTO `search` (`name`, `order`, `data`) VALUES (?, ?, ?)",
+                    new Object[]{
+                            context.getString(R.string.title_search_with_flagged),
+                            0,
+                            criteria.toJsonData().toString()
+                    });
+
+            criteria = new BoundaryCallbackMessages.SearchCriteria();
+            criteria.with_unseen = true;
+            db.execSQL("INSERT INTO `search` (`name`, `order`, `data`) VALUES (?, ?, ?)",
+                    new Object[]{
+                            context.getString(R.string.title_search_with_unseen),
+                            0,
+                            criteria.toJsonData().toString()
+                    });
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     public static void checkpoint(Context context) {

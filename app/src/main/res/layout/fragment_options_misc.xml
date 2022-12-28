@@ -1084,6 +1084,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvCaptionDebug" />
 
+                <Button
+                    android:id="@+id/btnDaily"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_hourglass_top_24"
+                    android:drawablePadding="6dp"
+                    android:text="@string/title_advanced_daily"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnRepair" />
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swAutostart"
                     android:layout_width="0dp"
@@ -1093,7 +1105,7 @@
                     android:text="@string/title_advanced_autostart"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnRepair"
+                    app:layout_constraintTop_toBottomOf="@id/btnDaily"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -1146,50 +1158,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swExternalStorage" />
 
-                <TextView
-                    android:id="@+id/tvRoomQueryThreads"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginEnd="48dp"
-                    android:text="@string/title_advanced_room_query_threads"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvExternalStorageFolder" />
-
-                <SeekBar
-                    android:id="@+id/sbRoomQueryThreads"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:max="32"
-                    android:min="0"
-                    android:progress="4"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvRoomQueryThreads" />
-
-                <ImageButton
-                    android:id="@+id/ibRoom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sbRoomQueryThreads"
-                    app:srcCompat="@drawable/twotone_check_24" />
-
-                <TextView
-                    android:id="@+id/tvRoomHint"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="48dp"
-                    android:text="@string/title_advanced_english_hint"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textStyle="italic"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ibRoom" />
-
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swIntegrity"
                     android:layout_width="0dp"
@@ -1199,7 +1167,7 @@
                     android:text="@string/title_advanced_integrity"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvRoomHint"
+                    app:layout_constraintTop_toBottomOf="@id/tvExternalStorageFolder"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat

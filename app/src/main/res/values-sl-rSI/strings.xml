@@ -247,6 +247,8 @@
     <string name="title_setup_inexact">Budilke in opomniki so onemogočeni.</string>
     <string name="title_setup_background">Omejitve v ozadju so omogočene.</string>
     <string name="title_setup_data">Ohranjevalnik podatkov je omogočen.</string>
+    <string name="title_setup_always">Takojšnja obvestila o novih sporočilih</string>
+    <string name="title_setup_always_remark">Če je omogočeno, lahko nestabilne povezave, stara omrežna oprema itd. povzročijo višjo porabo energije.</string>
     <string name="title_setup_advanced_options">Prikaži napredne možnosti</string>
     <string name="title_setup_inbox">Pojdi v mapo Prejeto</string>
     <string name="title_setup_go">Pojdi</string>
@@ -387,6 +389,7 @@
     <string name="title_advanced_send_pending">Prikaži nevsiljivo ikono zakasnelega pošiljanja</string>
     <string name="title_advanced_auto_save_paragraph">Samodejno shrani osnutek po vsakem odstavku</string>
     <string name="title_advanced_auto_save_dot">Samodejno shrani osnutek po vsakem stavku</string>
+    <string name="title_advanced_compose_color">Privzeta barva besedila</string>
     <string name="title_advanced_compose_font">Privzeta pisava</string>
     <string name="title_advanced_auto_identity">Samodejno izberi identitete za nova sporočila</string>
     <string name="title_advanced_prefix_once">V odgovorih ali posredovanih sporočilih zadevi dodaj predpono samo enkrat</string>
@@ -459,6 +462,7 @@
     <string name="title_advanced_cards_beige">Uporabi sivo-rjavo ozadje ob uporabi kartičnega sloga (samo svetle teme)</string>
     <string name="title_advanced_tabular_background">Uporabi barvo kartic kot ozadje ob uporabi sloga z zavihki</string>
     <string name="title_advanced_cards_shadow">Uporabi senčenje za neprebrana sporočila ob uporabi kartičnega sloga</string>
+    <string name="title_advanced_cards_shadow_border">Prikaži rob</string>
     <string name="title_advanced_cards_shadow_highlight">Uporabi barvo poudarkov namesto barve odtenka</string>
     <string name="title_advanced_tabular_dividers">Uporabi ločilne črte ob uporabi sloga z zavihki</string>
     <string name="title_advanced_date_header">Združi po datumu</string>
@@ -529,6 +533,7 @@
     <string name="title_advanced_button_extra">Prikaži dodatne gumbe na dnu sporočila</string>
     <string name="title_advanced_seekbar">Prikaži relativni položaj pogovora s piko</string>
     <string name="title_advanced_actionbar">Prikaži vrstico z dejanji pogovorov</string>
+    <string name="title_advanced_actionbar_swap">Zamenjaj gumba za smeti in arhiviranje</string>
     <string name="title_advanced_actionbar_color">Za barvo ozadja vrstice z dejanji pogovorov uporabi barvo računa</string>
     <string name="title_advanced_category_header">Združi po kategorijah računa</string>
     <string name="title_advanced_navbar_colorize">Obarvaj Androidovo vrstico za krmarjenje</string>
@@ -574,6 +579,7 @@
     <string name="title_advanced_autounstar">Ob premikanju sporočil samodejno odstrani zvezdice</string>
     <string name="title_advanced_auto_important">Samodejno naredi sporočila, označena z zvezdico, pomembna</string>
     <string name="title_advanced_reset_importance">Ponastavi pomembnost ob premikanju sporočil</string>
+    <string name="title_advanced_cancel_snooze">Prekliči dremež ob premikanju sporočil</string>
     <string name="title_advanced_swipe_reply">Potegni razširjena sporočila desno za odgovor</string>
     <string name="title_advanced_default_snooze">Privzeti čas dremeža/zakasnitve</string>
     <string name="title_advanced_notifications">Upravljaj z obvestili</string>
@@ -759,7 +765,6 @@
     <string name="compressed">Vsebina stisnjenih datotek (%1$s) z več kot %2$s-imi datotekami ali z datotekami, večjimi kot %3$s ne bo prikazana.</string>
     <string name="title_advanced_parse_classes_hint">To bo natančneje prikazalo sporočila, vendar morda z zakasnitvijo.</string>
     <string name="title_advanced_restore_on_launch_hint">Obnovi zadnje stanje programa, ko je ponovno zagnan z ikono zaganjalnika v %1$d-h minutah.</string>
-    <string name="title_advanced_language_detection_hint">Podpora za zaznavanje jezika je odvisna od izdelovalca naprave.</string>
     <string name="title_advanced_autoexpand_hint">Samodejno odpri sporočilo, ko je v pogovoru samo eno sporočilo ali eno neprebrano sporočilo.</string>
     <string name="title_advanced_expandall_hint">Gumb za odgovor ne bo prikazan, kadar je razširjenih več sporočil, ker potem ni jasno, za katero sporočilo to velja.</string>
     <string name="title_advanced_autoseen_hint">Samodejno označevanje sporočil kot prebranih ob razširitvi lahko onemogočite v naprednih nastavitvah za posamezni račun.</string>
@@ -798,6 +803,9 @@
     <string name="title_advanced_cleanup_hint">To bo izbrisalo vse začasne datoteke.</string>
     <string name="title_advanced_never_favorite">Nikoli ne dodaj med priljub.</string>
     <string name="title_advanced_edit_name">Uredi ime</string>
+    <string name="title_create_folder">Ustvari mapo</string>
+    <string name="title_create_folder_name">Ime mape</string>
+    <string name="title_create_folder_parent">Nadrejena mapa</string>
     <string name="title_advanced_swipe_actions">Nastavi dejanja vlečenja</string>
     <string name="title_advanced_swipe_actions_hint">To bo nastavilo dejanje vlečenja v levo in desno za vse račune IMAP.</string>
     <string name="title_advanced_swipe_sensitivity">Občutljivost levega/desnega potega</string>
@@ -925,6 +933,7 @@
     <string name="title_service_token">Upravitelja računov Android lahko blokira VPN, požarni zid, blokator oglasov itd., tako da ne more pridobiti žetona za dostop.</string>
     <string name="title_service_port">Preverite število vrat.</string>
     <string name="title_service_protocol">Prosim, še enkrat preverite protokol (SSL/TLS ali STARTTLS)</string>
+    <string name="title_service_error10">Ta račun je treba ponovno overiti, kar lahko storite preko čarovnika za hitro nastavitev.</string>
     <string name="title_advanced_browse">Brskaj za sporočila na strežniku</string>
     <string name="title_advanced_expand_read">Označi sporočila kot prebrana ob razširitvi</string>
     <string name="title_synchronize_now">Sinhroniziraj zdaj</string>
@@ -1094,7 +1103,7 @@
     <string name="title_auto_confirm">Samodejno potrdi po nekaj sekundah</string>
     <string name="title_buttons">Izberite gumbe</string>
     <string name="title_buttons_hint">Dejanska razpoložljivost gumbov je odvisna od vrste računa in nastavitev.</string>
-    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Išči podobna sporočila</string>
+    <string name="title_button_search_similar">Išči podobna sporočila</string>
     <string name="title_button_search_text">Išči v besedilu sporočil</string>
     <string name="title_configure_buttons">Nastavi gumbe &#8230;</string>
     <string name="title_quick_actions">Izberite dejanja</string>
@@ -1286,7 +1295,7 @@
     <string name="title_save_drafts">Shrani osnutke na strežnik</string>
     <string name="title_send_dialog">Prikaži možnosti pošiljanja</string>
     <string name="title_image_dialog">Prikaži možnosti za slike</string>
-    <string name="title_block_toolbar">Or. vrstica za blok bes.</string>
+    <string name="title_style_toolbar">Slog orodne vrstice</string>
     <string name="title_media_toolbar">Orodna vrstica predst.</string>
     <string name="title_manage_local_contacts">Upravljaj s krajevnimi stiki</string>
     <string name="title_insert_contact_group">Vstavi skupno stikov</string>
@@ -1504,6 +1513,8 @@
     <string name="title_rule_name">Ime</string>
     <string name="title_rule_order">Vrstni red</string>
     <string name="title_rule_enabled">Omogočeno</string>
+    <string name="title_rule_daily">Zaženi (samo) dnevno</string>
+    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Sporočila, starejša od (dni)</string>
     <string name="title_rule_stop">Ustavi izvajanje pravil po izvedbi tega pravila</string>
     <string name="title_rule_sender">Pošiljatelj vsebuje</string>
     <string name="title_rule_sender_known">Pošiljatelj je med stiki</string>

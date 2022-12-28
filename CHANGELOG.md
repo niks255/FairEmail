@@ -2,13 +2,72 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
-### [Ostromia](https://en.wikipedia.org/wiki/Ostromia)
+### [Pelecanimimus](https://en.wikipedia.org/wiki/Pelecanimimus)
+
+For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
+
+### 1.2019 - 2022-12-28
+
+* Fixed push messages in some circumstances
+* Small improvements and minor bug fixes
+
+### 1.2018 - 2022-12-28
+
+* Fixed occasional freezes
+* Added option to run rules daily
+* Added inserting lines to style toolbar
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2017 - 2022-12-23
+
+* Added option to disable unread shadow border
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2016 - 2022-12-18
+
+* Fixed crash introduced in previous version
+* Small improvements and minor bug fixes
+
+### 1.2015 - 2022-12-18
+
+* Fixed default compose font / text color
+* Updated translations
+
+### 1.2014 - 2022-12-17
+
+* Added saved search for specific account/folder
+* Added option for default text color for message composer
+* Added option to swap trash/archive button in bottom action bar
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2013 - 2022-12-09
+
+* Added scrolling/fixed style toolbar
+* Added folder create button to folder selection dialog
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.2012 - 2022-12-01
+
+* Small improvements and minor bug fixes
+
+### Next version
+
+* Added send option for default text color
+* Added display option to swap trash/archive in bottom action bar
+* Small improvements and minor bug fixes
+* Updated translations
 
 ### 1.2011 - 2022-11-29
 
 * Added optional button to show original message full screen
 * Added optional colored star quick action button
 * Small improvements and minor bug fixes
+* Updated AndroidX
 * Updated translations
 
 ### 1.2010 - 2022-11-25

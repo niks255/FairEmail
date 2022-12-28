@@ -247,6 +247,8 @@
     <string name="title_setup_inexact">Alarmy &amp; przypomnienia są wyłączone</string>
     <string name="title_setup_background">Ograniczenia w tle są włączone</string>
     <string name="title_setup_data">Oszczędzanie danych jest włączone</string>
+    <string name="title_setup_always">Błyskawiczne powiadomienia o nowej wiadomości</string>
+    <string name="title_setup_always_remark">Jeśli włączono, niestabilne połączenia, starszy sprzęt sieciowy itp. mogą powodować większe zużycie baterii</string>
     <string name="title_setup_advanced_options">Pokaż opcje zaawansowane</string>
     <string name="title_setup_inbox">Przejdź do skrzynki odbiorczej</string>
     <string name="title_setup_go">Idź</string>
@@ -387,6 +389,7 @@
     <string name="title_advanced_send_pending">Pokaż nieprzeszkadzającą ikonę wysłania z opóźnieniem</string>
     <string name="title_advanced_auto_save_paragraph">Automatycznie zapisuj wersję roboczą po każdym akapicie</string>
     <string name="title_advanced_auto_save_dot">Automatycznie zapisuj wersję roboczą po każdym zdaniu</string>
+    <string name="title_advanced_compose_color">Domyślny kolor tekstu</string>
     <string name="title_advanced_compose_font">Domyślna czcionka</string>
     <string name="title_advanced_auto_identity">Automatycznie wybierz tożsamości dla nowych wiadomości</string>
     <string name="title_advanced_prefix_once">Prefiksuj temat tylko raz przy odpowiedzi lub przesyłaniu dalej</string>
@@ -459,6 +462,7 @@
     <string name="title_advanced_cards_beige">Użyj beżowego tła podczas używania stylu karty (tylko jasne motywy)</string>
     <string name="title_advanced_tabular_background">Użyj koloru karty jako koloru tła podczas korzystania ze stylu tabelarycznego</string>
     <string name="title_advanced_cards_shadow">Użyj cienia do nieprzeczytanych wiadomości, jeśli używasz stylu karty</string>
+    <string name="title_advanced_cards_shadow_border">Pokaż obramowanie</string>
     <string name="title_advanced_cards_shadow_highlight">Użyj koloru podświetlenia zamiast koloru akcentu</string>
     <string name="title_advanced_tabular_dividers">Używaj linii oddzielających podczas używania stylu tabelarycznego</string>
     <string name="title_advanced_date_header">Grupuj według daty</string>
@@ -529,6 +533,7 @@
     <string name="title_advanced_button_extra">Pokaż dodatkowe przyciski na dole wiadomości</string>
     <string name="title_advanced_seekbar">Pokaż względną pozycję rozmowy za pomocą kropki</string>
     <string name="title_advanced_actionbar">Pokaż pasek akcji konwersacji</string>
+    <string name="title_advanced_actionbar_swap">Zamień miejscami przycisk kosza i archiwum</string>
     <string name="title_advanced_actionbar_color">Użyj koloru konta jako koloru tła dla paska akcji rozmowy</string>
     <string name="title_advanced_category_header">Grupuj według kategorii konta</string>
     <string name="title_advanced_navbar_colorize">Koloruj pasek nawigacji Androida</string>
@@ -574,6 +579,7 @@
     <string name="title_advanced_autounstar">Automatycznie usuwaj gwiazdki z wiadomości przy ich przenoszeniu</string>
     <string name="title_advanced_auto_important">Wiadomości oznaczone gwiazdką automatycznie ustaw jako ważne</string>
     <string name="title_advanced_reset_importance">Resetuj ważność przy przenoszeniu wiadomości</string>
+    <string name="title_advanced_cancel_snooze">Anuluj drzemkę przy przenoszeniu wiadomości</string>
     <string name="title_advanced_swipe_reply">Przesuń rozszerzone wiadomości w prawo, aby odpowiedzieć</string>
     <string name="title_advanced_default_snooze">Domyślny czas odłożenia/opóźnienia</string>
     <string name="title_advanced_notifications">Zarządzaj powiadomieniami</string>
@@ -760,7 +766,6 @@
     <string name="compressed">Nie zostanie wyświetlona zawartość plików skompresowanych (%1$s), z więcej niż %2$s plikami lub z plikami większymi niż %3$s</string>
     <string name="title_advanced_parse_classes_hint">Spowoduje to poprawniejsze wyświetlanie wiadomości, ale z możliwym opóźnieniem</string>
     <string name="title_advanced_restore_on_launch_hint">Przywraca ostatni stan aplikacji po jej ponownym uruchomieniu za pomocą ikony launchera, w ciągu %1$d minut</string>
-    <string name="title_advanced_language_detection_hint">Obsługa wykrywania języków zależy od producenta urządzenia</string>
     <string name="title_advanced_autoexpand_hint">Automatycznie otwieraj wiadomość, gdy w rozmowie jest tylko jedna wiadomość lub tylko jedna nieprzeczytana wiadomość</string>
     <string name="title_advanced_expandall_hint">Przycisk odpowiedzi nie będzie wyświetlany, gdy zostanie rozwinięte wiele wiadomości, ponieważ nie jest jasne, do której wiadomości odnosi się przycisk</string>
     <string name="title_advanced_autoseen_hint">Automatycznie oznaczanie wiadomości jako przeczytane po rozwinięciu może być wyłączone w zaawansowanych ustawieniach konta dla każdego konta</string>
@@ -799,6 +804,9 @@
     <string name="title_advanced_cleanup_hint">Spowoduje to usunięcie wszystkich plików tymczasowych</string>
     <string name="title_advanced_never_favorite">Nigdy ulubiony</string>
     <string name="title_advanced_edit_name">Zmień nazwę</string>
+    <string name="title_create_folder">Utwórz folder</string>
+    <string name="title_create_folder_name">Nazwa folderu</string>
+    <string name="title_create_folder_parent">Folder nadrzędny</string>
     <string name="title_advanced_swipe_actions">Ustaw akcje przesuwania</string>
     <string name="title_advanced_swipe_actions_hint">Spowoduje to ustawienie akcji przesuwania w lewo i w prawo dla wszystkich kont IMAP</string>
     <string name="title_advanced_swipe_sensitivity">Czułość przesunięcia w lewo/prawo</string>
@@ -926,6 +934,7 @@
     <string name="title_service_token">Menedżer konta Android może być zablokowany przez VPN, zaporę sieciową, bloker reklam itp., uniemożliwiając uzyskanie tokena dostępu</string>
     <string name="title_service_port">Zweryfikuj dokładnie numer portu</string>
     <string name="title_service_protocol">Upewnij się w kwestii protokołu (SSL/TLS lub STARTTLS)</string>
+    <string name="title_service_error10">To konto musi zostać ponownie uwierzytelnione, można to wykonać za pomocą kreatora szybkich ustawień</string>
     <string name="title_advanced_browse">Przeglądaj wiadomości na serwerze</string>
     <string name="title_advanced_expand_read">Oznacz wiadomości jako przeczytane przy rozwijaniu</string>
     <string name="title_synchronize_now">Synchronizuj teraz</string>
@@ -1095,7 +1104,7 @@
     <string name="title_auto_confirm">Potwierdź automatycznie po kilku sekundach</string>
     <string name="title_buttons">Wybierz przyciski</string>
     <string name="title_buttons_hint">Dostępne działania zależą od typu konta i konfiguracji</string>
-    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Szukaj podobnych wiadomości</string>
+    <string name="title_button_search_similar">Szukaj podobnych wiadomości</string>
     <string name="title_button_search_text">Szukaj w tekście wiadomości</string>
     <string name="title_configure_buttons">Konfiguruj przyciski &#8230;</string>
     <string name="title_quick_actions">Wybierz działania</string>
@@ -1286,7 +1295,7 @@
     <string name="title_save_drafts">Zapisz szkice na serwerze</string>
     <string name="title_send_dialog">Pokaż opcje wysyłania</string>
     <string name="title_image_dialog">Pokaż opcje obrazu</string>
-    <string name="title_block_toolbar">Pasek narzędzi tekstowych</string>
+    <string name="title_style_toolbar">Styl paska narzędzi</string>
     <string name="title_media_toolbar">Pasek mediów</string>
     <string name="title_manage_local_contacts">Zarządzaj kontaktami lokalnymi</string>
     <string name="title_insert_contact_group">Wstaw grupę kontaktów</string>
@@ -1505,6 +1514,8 @@
     <string name="title_rule_name">Nazwa</string>
     <string name="title_rule_order">Kolejność</string>
     <string name="title_rule_enabled">Włączone</string>
+    <string name="title_rule_daily">Uruchom codziennie (tylko)</string>
+    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Wiadomości starsze niż (dni)</string>
     <string name="title_rule_stop">Zatrzymaj przetwarzanie reguł po uruchomieniu tej reguły</string>
     <string name="title_rule_sender">Nadawca zawiera</string>
     <string name="title_rule_sender_known">Nadawca jest kontaktem</string>

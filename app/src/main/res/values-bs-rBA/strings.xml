@@ -234,6 +234,8 @@
     <string name="title_setup_inexact">Alarmi &amp; podsjetnici su isključeni</string>
     <string name="title_setup_background">Pozadinska ograničenja su uključena</string>
     <string name="title_setup_data">Štednja podataka je uključena</string>
+    <string name="title_setup_always">Instantna obavještenja za nove poruke</string>
+    <string name="title_setup_always_remark">Ako je omogućeno, nestabilne konekcije, starija mrežna oprema itd. mogu povećati potrošnju baterije</string>
     <string name="title_setup_advanced_options">Prikaži napredne opcije</string>
     <string name="title_setup_inbox">Idi u inbox</string>
     <string name="title_setup_go">Kreni</string>
@@ -375,6 +377,7 @@
     <string name="title_advanced_send_pending">Prikaži nenametljivu ikonicu za odgođeno slanje</string>
     <string name="title_advanced_auto_save_paragraph">Automatski sačuvaj nacrt nakon svakog paragrafa</string>
     <string name="title_advanced_auto_save_dot">Automatski sačuvaj nacrt nakon svake rečenice</string>
+    <string name="title_advanced_compose_color">Zadana boja teksta</string>
     <string name="title_advanced_compose_font">Zadani font</string>
     <string name="title_advanced_auto_identity">Automatski izbor identiteta za nove poruke</string>
     <string name="title_advanced_prefix_once">Prefiks predmeta samo jedanput pri odgovoru ili prosljeđenju</string>
@@ -447,6 +450,7 @@
     <string name="title_advanced_cards_beige">Koristi bež pozadinu kada se koristi kartični stil (samo kod svijetlih tema)</string>
     <string name="title_advanced_tabular_background">Koristi boju kartice kao pozadinsku boju kada se koristi tabelarni stil</string>
     <string name="title_advanced_cards_shadow">Koristi sjenku za nepročitane poruke u kartičnom stilu</string>
+    <string name="title_advanced_cards_shadow_border">Prikaži granicu</string>
     <string name="title_advanced_cards_shadow_highlight">Koristi boju markiranja umjesto boje naglašavanja</string>
     <string name="title_advanced_tabular_dividers">Koristi razdjelne linije kod tabelarnog stila</string>
     <string name="title_advanced_date_header">Grupiši po datumu</string>
@@ -517,6 +521,7 @@
     <string name="title_advanced_button_extra">Prikaži dodatna dugmad na dnu poruke</string>
     <string name="title_advanced_seekbar">Tačkom prikaži relativnu poziciju konverzacije</string>
     <string name="title_advanced_actionbar">Prikaži radnu traku za konverzaciju</string>
+    <string name="title_advanced_actionbar_swap">Zamijeni dugmad za otpad i arhiviranje</string>
     <string name="title_advanced_actionbar_color">Koristi boju računa kao pozadinsku boju radne trake za konverzaciju</string>
     <string name="title_advanced_category_header">Grupiši prema kategoriji računa</string>
     <string name="title_advanced_navbar_colorize">Oboji navigacijsku traku Androida</string>
@@ -562,6 +567,7 @@
     <string name="title_advanced_autounstar">Automatski ukloni zvjezdicu s poruka pri premještanju istih</string>
     <string name="title_advanced_auto_important">Automatski označi poruke sa zvjezdicom kao važne</string>
     <string name="title_advanced_reset_importance">Resetuj važnost pri premještanju poruka</string>
+    <string name="title_advanced_cancel_snooze">Otkaži odgađanje pri premještanju poruka</string>
     <string name="title_advanced_swipe_reply">Prstom prevucite proširene poruke na desno za odgovor</string>
     <string name="title_advanced_default_snooze">Zadano vrijeme odlaganja/odgađanja</string>
     <string name="title_advanced_notifications">Upravljaj obavještenjima</string>
@@ -748,7 +754,6 @@
     <string name="compressed">Sadržaj kompresovanih datoteka (%1$s) sa više od %2$s datoteke(a) ili sa datotekama većim od %3$s neće se prikazivati</string>
     <string name="title_advanced_parse_classes_hint">Ovo će preciznije prikazivati poruke, ali vjerovatno sa kašnjenjem</string>
     <string name="title_advanced_restore_on_launch_hint">Vrati posljednje stanje aplikacije kada se ona ponovo pokrene dodirom na ikonicu početnog ekrana unutar %1$d minute(a)</string>
-    <string name="title_advanced_language_detection_hint">Podrška za otkrivanje jezika zavisi od proizvođača uređaja</string>
     <string name="title_advanced_autoexpand_hint">Automatski otvori poruku kada se u konverzaciji nalazi samo jedna poruka ili samo jedna nepročitana poruka</string>
     <string name="title_advanced_expandall_hint">Dugme za odgovor neće se prikazivati kada se prošire višestruke poruke, jer nije jasno na koju od poruka se odnosi to dugme</string>
     <string name="title_advanced_autoseen_hint">Automatsko označavanje poruke kao pročitane pri proširivanju je opcija koja se može isključiti u naprednim postavkama svakog računa</string>
@@ -787,6 +792,9 @@
     <string name="title_advanced_cleanup_hint">Ovo će izbrisati sve privremene datoteke</string>
     <string name="title_advanced_never_favorite">Nikada omiljeni</string>
     <string name="title_advanced_edit_name">Uredi ime</string>
+    <string name="title_create_folder">Kreiraj folder</string>
+    <string name="title_create_folder_name">Naziv foldera</string>
+    <string name="title_create_folder_parent">Matičani folder</string>
     <string name="title_advanced_swipe_actions">Podesi radnje prevlačenja</string>
     <string name="title_advanced_swipe_actions_hint">Ovo će postaviti radnje prevlačenja lijevo i desno za sve IMAP račune</string>
     <string name="title_advanced_swipe_sensitivity">Osjetljivost prevlačenja lijevo/desno</string>
@@ -914,6 +922,7 @@
     <string name="title_service_token">Upravljač Android računima može biti blokiran od strane VPN-a, vatrozida, blokatora reklama itd., sprječavajući ga da dobije pristupni token</string>
     <string name="title_service_port">Molimo, ponovo provjerite broj porta</string>
     <string name="title_service_protocol">Molimo, ponovo provjerite protokol (SSL/TLS ili STARTTLS)</string>
+    <string name="title_service_error10">Ovaj račun treba ponovnu provjeru autentičnosti, što se može učiniti pomoću čarobnjaka brzih postavki</string>
     <string name="title_advanced_browse">Pretražuj poruke na serveru</string>
     <string name="title_advanced_expand_read">Pri proširivanju, označi poruke kao pročitane</string>
     <string name="title_synchronize_now">Sinhronizuj sada</string>
@@ -1084,7 +1093,7 @@
     <string name="title_auto_confirm">Automatski potvrdi nakon par sekundi</string>
     <string name="title_buttons">Izaberi dugmad</string>
     <string name="title_buttons_hint">Aktualne radnje su dostupne u zavisnosti od vrste i podešavanja računa</string>
-    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Traži slične poruke</string>
+    <string name="title_button_search_similar">Traži slične poruke</string>
     <string name="title_button_search_text">Pretraži u tekstu poruka</string>
     <string name="title_configure_buttons">Podesi dugmad &#8230;</string>
     <string name="title_quick_actions">Izaberite radnje</string>
@@ -1277,7 +1286,7 @@
     <string name="title_save_drafts">Sačuvaj nacrte na serveru</string>
     <string name="title_send_dialog">Prikaži opcije za slanje</string>
     <string name="title_image_dialog">Prikaži opcije za slike</string>
-    <string name="title_block_toolbar">Alatna traka za tekst</string>
+    <string name="title_style_toolbar">Alatna traka stilova</string>
     <string name="title_media_toolbar">Medijska alatna traka</string>
     <string name="title_manage_local_contacts">Upravljaj lokalnim kontaktima</string>
     <string name="title_insert_contact_group">Ubaci grupu kontakata</string>
@@ -1495,6 +1504,8 @@
     <string name="title_rule_name">Naziv</string>
     <string name="title_rule_order">Redoslijed</string>
     <string name="title_rule_enabled">Uključeno</string>
+    <string name="title_rule_daily">Pokreni dnevno</string>
+    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Poruke starije od (dana)</string>
     <string name="title_rule_stop">Zaustavi obradu pravila nakon izvršavanja ovog pravila</string>
     <string name="title_rule_sender">Pošiljalac sadrži</string>
     <string name="title_rule_sender_known">Pošiljalac je u kontaktima</string>

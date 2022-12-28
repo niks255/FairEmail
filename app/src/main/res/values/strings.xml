@@ -270,6 +270,8 @@
     <string name="title_setup_background">Background restrictions are enabled</string>
     <string name="title_setup_data">Data saver is enabled</string>
     <string name="title_setup_stamina" translatable="false">Stamina mode is enabled</string>
+    <string name="title_setup_always">Instant new message notifications</string>
+    <string name="title_setup_always_remark">If enabled, unstable connections, old network hardware, etc. may result in higher battery usage</string>
     <string name="title_setup_advanced_options">Show advanced options</string>
     <string name="title_setup_inbox">Go to inbox</string>
     <string name="title_setup_go">Go</string>
@@ -435,6 +437,7 @@
 
     <string name="title_advanced_auto_save_paragraph">Automatically save a draft after every paragraph</string>
     <string name="title_advanced_auto_save_dot">Automatically save a draft after every sentence</string>
+    <string name="title_advanced_compose_color">Default text color</string>
     <string name="title_advanced_compose_font">Default font</string>
     <string name="title_advanced_auto_identity">Automatically select identities for new messages</string>
     <string name="title_advanced_prefix_once">Prefix subject only once on replying or forwarding</string>
@@ -515,6 +518,7 @@
     <string name="title_advanced_cards_beige">Use beige background when using card style (light themes only)</string>
     <string name="title_advanced_tabular_background">Use card color as background color when using tabular style</string>
     <string name="title_advanced_cards_shadow">Use shadow for unread messages when using card style</string>
+    <string name="title_advanced_cards_shadow_border">Show border</string>
     <string name="title_advanced_cards_shadow_highlight">Use highlight color instead of accent color</string>
     <string name="title_advanced_tabular_dividers">Use divider lines when using tabular style</string>
     <string name="title_advanced_date_header">Group by date</string>
@@ -590,6 +594,7 @@
     <string name="title_advanced_button_extra">Show extra buttons at the bottom of a message</string>
     <string name="title_advanced_seekbar">Show relative conversation position with a dot</string>
     <string name="title_advanced_actionbar">Show conversation action bar</string>
+    <string name="title_advanced_actionbar_swap">Swap trash and archive button</string>
     <string name="title_advanced_actionbar_color">Use account color as background color for conversation action bar</string>
     <string name="title_advanced_category_header">Group by account category</string>
     <string name="title_advanced_navbar_colorize">Colorize the Android navigation bar</string>
@@ -636,6 +641,7 @@
     <string name="title_advanced_autounstar">Automatically remove stars from messages on moving messages</string>
     <string name="title_advanced_auto_important">Automatically make starred messages important</string>
     <string name="title_advanced_reset_importance">Reset importance on moving messages</string>
+    <string name="title_advanced_cancel_snooze">Cancel snooze on moving messages</string>
     <string name="title_advanced_swipe_reply">Swipe expanded messages to the right to reply</string>
     <string name="title_advanced_default_snooze">Default snooze/delay time</string>
 
@@ -788,11 +794,11 @@
     <string name="title_advanced_test4" translatable="false">Test #4</string>
     <string name="title_advanced_test5" translatable="false">Test #5</string>
     <string name="title_advanced_repair" translatable="false">Repair</string>
+    <string name="title_advanced_daily" translatable="false">Daily</string>
     <string name="title_advanced_autostart" translatable="false">Autostart app</string>
     <string name="title_advanced_hwaccel" translatable="false">Hardware Acceleration</string>
     <string name="title_advanced_work_manager" translatable="false">Initialize work manager</string>
     <string name="title_advanced_external_storage" translatable="false">Use external storage</string>
-    <string name="title_advanced_room_query_threads" translatable="false">ROOM query threads: %1$s</string>
     <string name="title_advanced_integrity" translatable="false">sqlite integrity check</string>
     <string name="title_advanced_wal" translatable="false">sqlite WAL</string>
     <string name="title_advanced_checkpoints" translatable="false">sqlite checkpoints</string>
@@ -915,7 +921,6 @@
     <string name="title_advanced_parse_classes_hint">This will more accurately display messages, but possibly with a delay</string>
 
     <string name="title_advanced_restore_on_launch_hint">Restore last app state when restarted via the launcher icon within %1$d minutes</string>
-    <string name="title_advanced_language_detection_hint">Language detection support depends on the device manufacturer</string>
     <string name="title_advanced_autoexpand_hint">Automatically open message when there is just one message or just one unread message in a conversation</string>
     <string name="title_advanced_expandall_hint">The answer button will not be shown when multiple messages are expanded because it is unclear which message the button applies to</string>
     <string name="title_advanced_autoseen_hint">Automatically marking messages as read on expanding can be disabled in the advanced account settings of each account</string>
@@ -959,6 +964,10 @@
 
     <string name="title_advanced_never_favorite">Never favorite</string>
     <string name="title_advanced_edit_name">Edit name</string>
+
+    <string name="title_create_folder">Create folder</string>
+    <string name="title_create_folder_name">Folder name</string>
+    <string name="title_create_folder_parent">Parent folder</string>
 
     <string name="title_advanced_swipe_actions">Set swipe actions</string>
     <string name="title_advanced_swipe_actions_hint">This will set the swipe left and right action for all IMAP accounts</string>
@@ -1097,6 +1106,7 @@
     <string name="title_service_token">The Android account manager could be blocked by a VPN, firewall, ad blocker, etc., preventing it from obtaining an access token</string>
     <string name="title_service_port">Please double check the port number</string>
     <string name="title_service_protocol">Please double check the protocol (SSL/TLS or STARTTLS)</string>
+    <string name="title_service_error10">This account needs to be authenticated again, which can be done via the quick setup wizard</string>
 
     <string name="title_advanced_browse">Browse messages on the server</string>
     <string name="title_advanced_expand_read">Mark messages read on expanding</string>
@@ -1495,7 +1505,7 @@
     <string name="title_save_drafts">Save drafts on the server</string>
     <string name="title_send_dialog">Show send options</string>
     <string name="title_image_dialog">Show image options</string>
-    <string name="title_block_toolbar">Block toolbar</string>
+    <string name="title_style_toolbar">Style toolbar</string>
     <string name="title_media_toolbar">Media toolbar</string>
     <string name="title_manage_local_contacts">Manage local contacts</string>
     <string name="title_insert_contact_group">Insert contact group</string>
@@ -1736,6 +1746,8 @@
     <string name="title_rule_name">Name</string>
     <string name="title_rule_order">Order</string>
     <string name="title_rule_enabled">Enabled</string>
+    <string name="title_rule_daily">Run daily (only)</string>
+    <string name="title_rule_age">Messages older than (days)</string>
     <string name="title_rule_stop">Stop processing rules after executing this rule</string>
     <string name="title_rule_sender">Sender contains</string>
     <string name="title_rule_sender_known">Sender is a contact</string>

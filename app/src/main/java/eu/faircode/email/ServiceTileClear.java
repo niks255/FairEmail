@@ -21,17 +21,10 @@ package eu.faircode.email;
 
 import android.annotation.TargetApi;
 import android.os.Build;
-import android.service.quicksettings.TileService;
 
 @TargetApi(Build.VERSION_CODES.N)
-public class ServiceTileClear extends TileService {
+public class ServiceTileClear extends ServiceTileBase {
     public void onClick() {
         startActivityAndCollapse(ActivityClear.getIntent(this));
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        CoalMine.watch(this, this.getClass().getName() + "#onDestroy");
     }
 }

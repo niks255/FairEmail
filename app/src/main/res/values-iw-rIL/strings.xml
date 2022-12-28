@@ -247,6 +247,8 @@
     <string name="title_setup_inexact">התראות ותזכורות מושבתות</string>
     <string name="title_setup_background">הגבלות רקע פעילות</string>
     <string name="title_setup_data">חיסכון בתעבורת נתונים פעיל</string>
+    <string name="title_setup_always">התראות מיידיות על הודעות חדשות</string>
+    <string name="title_setup_always_remark">אם האפשרות מופעלת, חיבורים לא יציבים, חומרת רשת ישנה וכו׳ יכולים להעלות את צריכת הסוללה</string>
     <string name="title_setup_advanced_options">הצגת אפשרויות מתקדמות</string>
     <string name="title_setup_inbox">מעבר אל תיבת הדואר הנכנס</string>
     <string name="title_setup_go">ביצוע</string>
@@ -388,6 +390,7 @@
     <string name="title_advanced_send_pending">הצגת סמלי שליחה מושהית שאינם בולטים</string>
     <string name="title_advanced_auto_save_paragraph">לשמור טיוטה אוטומטית אחרי כל פרק</string>
     <string name="title_advanced_auto_save_dot">לשמור טיוטה אוטומטית אחרי כל משפט</string>
+    <string name="title_advanced_compose_color">צבע טקסט כברירת מחדל</string>
     <string name="title_advanced_compose_font">גופן ברירת המחדל</string>
     <string name="title_advanced_auto_identity">בחירת זהויות להודעות חדשות אוטומטית</string>
     <string name="title_advanced_prefix_once">ליצור קידומת לנושא רק פעם אחת במענה או העברה</string>
@@ -460,6 +463,7 @@
     <string name="title_advanced_cards_beige">להשתמש ברקע בז׳ בעת שימוש בסגנון כרטיסים (ערכות עיצוב בהירות בלבד)</string>
     <string name="title_advanced_tabular_background">להשתמש בצבע הכרטיס כצבע הרקע בעת שימוש בסגנון כרטיסיות</string>
     <string name="title_advanced_cards_shadow">להשתמש בהצללה להודעות שלא נקראו בעת שימוש בסגנון כרטיסים</string>
+    <string name="title_advanced_cards_shadow_border">הצגת גבולות</string>
     <string name="title_advanced_cards_shadow_highlight">להשתמש בצבע ההדגשה במקום בצבע המשני</string>
     <string name="title_advanced_tabular_dividers">להשתמש בקווי הפרדה בסגנון הטבלאי</string>
     <string name="title_advanced_date_header">קיבוץ לפי תאריך</string>
@@ -530,6 +534,7 @@
     <string name="title_advanced_button_extra">להציג כפתורים נוספים בתחתית ההודעה</string>
     <string name="title_advanced_seekbar">הצגת המיקום היחסי בדיון עם נקודה</string>
     <string name="title_advanced_actionbar">הצגת סרגל פעולות דיון</string>
+    <string name="title_advanced_actionbar_swap">החלפה בין כפתורי האשפה והארכיון</string>
     <string name="title_advanced_actionbar_color">להשתמש בצבע החשבון כצבע הרקע לסרגל הפעולות של הדיון</string>
     <string name="title_advanced_category_header">קיבוץ לפי קטגוריית חשבון</string>
     <string name="title_advanced_navbar_colorize">לצבוע את סרגל הניווט של Android</string>
@@ -575,6 +580,7 @@
     <string name="title_advanced_autounstar">להסיר כוכבים מהודעות אוטומטית בעת העברת הודעות</string>
     <string name="title_advanced_auto_important">להפוך הודעות שסומנו בכוכב לחשובות אוטומטית</string>
     <string name="title_advanced_reset_importance">איפוס החשיבות בעת העברת הודעות</string>
+    <string name="title_advanced_cancel_snooze">ביטול נודניק בעת העברת הודעות</string>
     <string name="title_advanced_swipe_reply">החלקת הודעות מורחבות לימין פותחת מענה</string>
     <string name="title_advanced_default_snooze">זמן בררת המחדל לדחיית/השהיית תזכורות</string>
     <string name="title_advanced_notifications">ניהול התראות</string>
@@ -761,7 +767,6 @@
     <string name="compressed">תוכן קבצים דחוסים (%1$s) עם למעלה מ־%2$s קבצים או עם קבצים שגודלם עולה על %3$s לא יוצגו</string>
     <string name="title_advanced_parse_classes_hint">זה יציג הודעות בצורה יותר מדויקת אך כנראה עם עיכוב מסוים</string>
     <string name="title_advanced_restore_on_launch_hint">שחזור המצב האחרון של היישומון כאשר הוא מופעל מחדש דרך הסמל במשגר תוך %1$d דקות</string>
-    <string name="title_advanced_language_detection_hint">תמיכה בזיהוי שפות תלויה ביצרן המכשיר</string>
     <string name="title_advanced_autoexpand_hint">לפתוח הודעות אוטומטית כשיש רק הודעה אחת או רק הודעה אחת שלא נקראה בדיון</string>
     <string name="title_advanced_expandall_hint">כפתור המענה לא יופיע כאשר מספר הודעות מורחבות כיוון שלא ברור לאיזו הודעה הכפתור מתייחס</string>
     <string name="title_advanced_autoseen_hint">אפשר להשבית את סימון ההודעות כנקראו אוטומטית בעת ההרחבה בהגדרות החשבון המתקדמות של כל חשבון בנפרד</string>
@@ -800,6 +805,9 @@
     <string name="title_advanced_cleanup_hint">פעולה זו תמחק את כל הקבצים הזמניים</string>
     <string name="title_advanced_never_favorite">לעולם לא להציב במועדפים</string>
     <string name="title_advanced_edit_name">עריכת שם</string>
+    <string name="title_create_folder">יצירת תיקייה</string>
+    <string name="title_create_folder_name">שם תיקייה</string>
+    <string name="title_create_folder_parent">תיקיית הורה</string>
     <string name="title_advanced_swipe_actions">הגדרת פעולות החלקה</string>
     <string name="title_advanced_swipe_actions_hint">יגדיר את פעולות החלקה שמאלה וימינה לכל חשבונות ה־IMAP</string>
     <string name="title_advanced_swipe_sensitivity">רגישות החלקה שמאלה/ימינה</string>
@@ -927,6 +935,7 @@
     <string name="title_service_token">לא ניתן לחסום את מנהל החשבונות של Android עם VPN, חומת אש, חוסם פרסומות וכו׳, מה שימנע ממנו לקבל אסימון גישה</string>
     <string name="title_service_port">נא לבדוק היטב את מספר הפתחה</string>
     <string name="title_service_protocol">נא לבדוק את הפרוטוקול היטב (SSL/TLS או STARTTLS)</string>
+    <string name="title_service_error10">יש לאמת את החשבון הזה שוב, ניתן לעשות זאת דרך אשף ההגדרות המהירות</string>
     <string name="title_advanced_browse">עיון בהודעות שבשרת</string>
     <string name="title_advanced_expand_read">סימון הודעות כנקראו בעת הרחבתן</string>
     <string name="title_synchronize_now">לסנכרן עכשיו</string>
@@ -1097,7 +1106,7 @@
     <string name="title_auto_confirm">לאשר אוטומטית לאחר מספר שניות</string>
     <string name="title_buttons">בחירת כפתורים</string>
     <string name="title_buttons_hint">הפעולות שזמינות בפועל תלויות בסוג החשבון וההגדרות</string>
-    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">חיפוש הודעות דומות</string>
+    <string name="title_button_search_similar">חיפוש הודעות דומות</string>
     <string name="title_button_search_text">חיפוש בטקסט ההודעות</string>
     <string name="title_configure_buttons">הגדרת כפתורים&#8230;</string>
     <string name="title_quick_actions">בחירת פעולות</string>
@@ -1290,7 +1299,7 @@
     <string name="title_save_drafts">שמירת טיוטות בשרת</string>
     <string name="title_send_dialog">הצגת אפשרויות שילוח</string>
     <string name="title_image_dialog">הצגת אפשרויות תמונה</string>
-    <string name="title_block_toolbar">סרגל כלים למקטע</string>
+    <string name="title_style_toolbar">סרגל כלי עיצוב</string>
     <string name="title_media_toolbar">סרגל כלי מדיה</string>
     <string name="title_manage_local_contacts">ניהול אנשי קשר מקומיים</string>
     <string name="title_insert_contact_group">הוספת קבוצת אנשי קשר</string>
@@ -1508,6 +1517,8 @@
     <string name="title_rule_name">שם</string>
     <string name="title_rule_order">סדר</string>
     <string name="title_rule_enabled">פעיל</string>
+    <string name="title_rule_daily">להריץ יומית (בלבד)</string>
+    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">הודעות מלפני (ימים)</string>
     <string name="title_rule_stop">להפסיק לעבד כללים אחרי הפעלת הכלל הזה</string>
     <string name="title_rule_sender">המוען מכיל</string>
     <string name="title_rule_sender_known">המוען באנשי הקשר</string>

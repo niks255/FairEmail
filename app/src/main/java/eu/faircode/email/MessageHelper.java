@@ -24,6 +24,7 @@ import static android.system.OsConstants.ENOSPC;
 import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.system.ErrnoException;
@@ -238,7 +239,9 @@ public class MessageHelper {
             "$HasAttachment", // Dovecot
             "$HasNoAttachment", // Dovecot
             "$IsTrusted", // Fastmail
-            "$X-ME-Annot-2" // Fastmail
+            "$X-ME-Annot-2", // Fastmail
+            "$purchases", // mailbox.org
+            "$social " // mailbox.org
     ));
 
     // https://tools.ietf.org/html/rfc4021
@@ -383,8 +386,11 @@ public class MessageHelper {
             if (message.cc != null && message.cc.length > 0)
                 imessage.setRecipients(Message.RecipientType.CC, convertAddress(message.cc, identity));
 
-            if (message.bcc != null && message.bcc.length > 0)
+            if (message.bcc != null && message.bcc.length > 0) {
+                if (false && (message.to == null || message.to.length == 0))
+                    imessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse("Undisclosed-Recipients:"));
                 imessage.setRecipients(Message.RecipientType.BCC, convertAddress(message.bcc, identity));
+            }
         } else {
             // https://datatracker.ietf.org/doc/html/rfc2822#section-3.6.6
             ByteArrayInputStream bis = new ByteArrayInputStream(message.headers.getBytes());
@@ -926,6 +932,7 @@ public class MessageHelper {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean format_flowed = prefs.getBoolean("format_flowed", false);
+        int compose_color = prefs.getInt("compose_color", Color.TRANSPARENT);
         String compose_font = prefs.getString("compose_font", "");
         boolean auto_link = prefs.getBoolean("auto_link", false);
 
@@ -957,7 +964,7 @@ public class MessageHelper {
                     HtmlHelper.autoLink(document, true);
                 }
 
-                if (!TextUtils.isEmpty(compose_font)) {
+                if (!TextUtils.isEmpty(compose_font) || compose_color != Color.TRANSPARENT) {
                     List<Node> childs = new ArrayList<>();
                     for (Node child : document.body().childNodes())
                         if (TextUtils.isEmpty(child.attr("fairemail"))) {
@@ -966,8 +973,14 @@ public class MessageHelper {
                         } else
                             break;
 
-                    Element div = document.createElement("div").attr("style",
-                            "font-family:" + StyleHelper.getFamily(compose_font));
+                    StringBuilder style = new StringBuilder();
+                    if (!TextUtils.isEmpty(compose_font))
+                        style.append("font-family: ").append(StyleHelper.getFamily(compose_font)).append(';');
+                    if (compose_color != Color.TRANSPARENT)
+                        style.append("color: ").append(HtmlHelper.encodeWebColor(compose_color)).append(';');
+
+                    Element div = document.createElement("div").attr("style", style.toString());
+
                     for (Node child : childs)
                         div.appendChild(child);
                     document.body().prependChild(div);
@@ -3640,19 +3653,19 @@ public class MessageHelper {
                 }
 
                 if ("message/rfc822".equals(local.type))
-                    decodeRfc822(context, local);
+                    decodeRfc822(context, local, 1);
 
                 else if ("text/calendar".equals(local.type) && ActivityBilling.isPro(context))
                     decodeICalendar(context, local);
 
                 else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && local.isCompressed()) {
-                    decodeCompressed(context, local);
+                    decodeCompressed(context, local, 1);
 
                 } else if (Helper.isTnef(local.type, local.name))
-                    decodeTNEF(context, local);
+                    decodeTNEF(context, local, 1);
 
                 else if ("msg".equalsIgnoreCase(Helper.getExtension(local.name)))
-                    decodeOutlook(context, local);
+                    decodeOutlook(context, local, 1);
             }
         }
 
@@ -3685,7 +3698,7 @@ public class MessageHelper {
             db.attachment().setDownloaded(local.id, file.length());
         }
 
-        private void decodeRfc822(Context context, EntityAttachment local) {
+        private int decodeRfc822(Context context, EntityAttachment local, int subsequence) {
             DB db = DB.getInstance(context);
             try (FileInputStream fis = new FileInputStream(local.getFile(context))) {
                 Properties props = MessageHelper.getSessionProperties(true);
@@ -3694,7 +3707,6 @@ public class MessageHelper {
                 MessageHelper helper = new MessageHelper(imessage, context);
                 MessageParts parts = helper.getMessageParts();
 
-                int subsequence = 1;
                 for (AttachmentPart epart : parts.getAttachmentParts())
                     try {
                         Log.i("Embedded attachment seq=" + local.sequence + ":" + subsequence);
@@ -3715,6 +3727,10 @@ public class MessageHelper {
                         }
 
                         db.attachment().setDownloaded(epart.attachment.id, efile.length());
+
+                        if (Helper.isTnef(epart.attachment.type, epart.attachment.name))
+                            subsequence = decodeTNEF(context, epart.attachment, subsequence);
+
                     } catch (Throwable ex) {
                         db.attachment().setError(epart.attachment.id, Log.formatThrowable(ex));
                         db.attachment().setAvailable(epart.attachment.id, true); // unrecoverable
@@ -3726,14 +3742,16 @@ public class MessageHelper {
                 else
                     db.attachment().setWarning(local.id, Log.formatThrowable(ex));
             }
+
+            return subsequence;
         }
 
-        private void decodeCompressed(Context context, EntityAttachment local) {
+        private int decodeCompressed(Context context, EntityAttachment local, int subsequence) {
             // https://commons.apache.org/proper/commons-compress/examples.html
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean unzip = prefs.getBoolean("unzip", !BuildConfig.PLAY_STORE_RELEASE);
             if (!unzip)
-                return;
+                return subsequence;
 
             DB db = DB.getInstance(context);
 
@@ -3753,7 +3771,7 @@ public class MessageHelper {
                         EntityAttachment attachment = new EntityAttachment();
                         attachment.message = local.message;
                         attachment.sequence = local.sequence;
-                        attachment.subsequence = 1;
+                        attachment.subsequence = subsequence++;
                         attachment.name = name;
                         attachment.type = Helper.guessMimeType(name);
                         if (total >= 0)
@@ -3815,7 +3833,6 @@ public class MessageHelper {
                         ais = new ArchiveStreamFactory().createArchiveInputStream(
                                 new BufferedInputStream(local.isTarGzip() ? new GzipCompressorInputStream(fis) : fis));
 
-                        int subsequence = 1;
                         while ((entry = ais.getNextEntry()) != null) {
                             if (!ais.canReadEntryData(entry)) {
                                 Log.w("Zip invalid=" + entry);
@@ -3884,6 +3901,8 @@ public class MessageHelper {
                     else
                         db.attachment().setWarning(local.id, Log.formatThrowable(ex));
                 }
+
+            return subsequence;
         }
 
         private void decodeICalendar(Context context, EntityAttachment local) {
@@ -3919,6 +3938,7 @@ public class MessageHelper {
 
                 VEvent event = icalendar.getEvents().get(0);
 
+                // https://www.rfc-editor.org/rfc/rfc5546#section-3.2
                 if (method.isRequest() || method.isCancel())
                     CalendarHelper.delete(context, event, message);
 
@@ -3928,14 +3948,14 @@ public class MessageHelper {
                     try {
                         JSONObject jselected = new JSONObject(account.calendar);
                         selectedAccount = jselected.getString("account");
-                        selectedName = jselected.getString("name");
+                        selectedName = jselected.optString("name", null);
                     } catch (Throwable ex) {
                         Log.i(ex);
                         selectedAccount = account.calendar;
                         selectedName = null;
                     }
 
-                    CalendarHelper.insert(context, icalendar.getTimezoneInfo(), event,
+                    CalendarHelper.insert(context, icalendar, event,
                             selectedAccount, selectedName, message);
                 }
             } catch (Throwable ex) {
@@ -3944,10 +3964,9 @@ public class MessageHelper {
             }
         }
 
-        private void decodeTNEF(Context context, EntityAttachment local) {
+        private int decodeTNEF(Context context, EntityAttachment local, int subsequence) {
             try {
                 DB db = DB.getInstance(context);
-                int subsequence = 0;
 
                 // https://poi.apache.org/components/hmef/index.html
                 File file = local.getFile(context);
@@ -3958,7 +3977,7 @@ public class MessageHelper {
                     EntityAttachment attachment = new EntityAttachment();
                     attachment.message = local.message;
                     attachment.sequence = local.sequence;
-                    attachment.subsequence = ++subsequence;
+                    attachment.subsequence = subsequence++;
                     attachment.name = "subject.txt";
                     attachment.type = "text/plain";
                     attachment.disposition = Part.ATTACHMENT;
@@ -3983,7 +4002,7 @@ public class MessageHelper {
                         EntityAttachment attachment = new EntityAttachment();
                         attachment.message = local.message;
                         attachment.sequence = local.sequence;
-                        attachment.subsequence = ++subsequence;
+                        attachment.subsequence = subsequence++;
                         if (attr.getProperty().equals(org.apache.poi.hsmf.datatypes.MAPIProperty.BODY_HTML)) {
                             attachment.name = "body.html";
                             attachment.type = "text/html";
@@ -4007,7 +4026,7 @@ public class MessageHelper {
                     EntityAttachment attachment = new EntityAttachment();
                     attachment.message = local.message;
                     attachment.sequence = local.sequence;
-                    attachment.subsequence = ++subsequence;
+                    attachment.subsequence = subsequence++;
                     attachment.name = "body.rtf";
                     attachment.type = "application/rtf";
                     attachment.disposition = Part.ATTACHMENT;
@@ -4035,7 +4054,7 @@ public class MessageHelper {
                     EntityAttachment attachment = new EntityAttachment();
                     attachment.message = local.message;
                     attachment.sequence = local.sequence;
-                    attachment.subsequence = ++subsequence;
+                    attachment.subsequence = subsequence++;
                     attachment.name = filename;
                     attachment.type = Helper.guessMimeType(attachment.name);
                     attachment.disposition = Part.ATTACHMENT;
@@ -4066,7 +4085,7 @@ public class MessageHelper {
                     EntityAttachment attachment = new EntityAttachment();
                     attachment.message = local.message;
                     attachment.sequence = local.sequence;
-                    attachment.subsequence = ++subsequence;
+                    attachment.subsequence = subsequence++;
                     attachment.name = "attributes.txt";
                     attachment.type = "text/plain";
                     attachment.disposition = Part.ATTACHMENT;
@@ -4083,12 +4102,13 @@ public class MessageHelper {
             } catch (Throwable ex) {
                 Log.w(ex);
             }
+
+            return subsequence;
         }
 
-        private void decodeOutlook(Context context, EntityAttachment local) {
+        private int decodeOutlook(Context context, EntityAttachment local, int subsequence) {
             try {
                 DB db = DB.getInstance(context);
-                int subsequence = 0;
 
                 // https://poi.apache.org/components/hmef/index.html
                 File file = local.getFile(context);
@@ -4099,7 +4119,7 @@ public class MessageHelper {
                     EntityAttachment attachment = new EntityAttachment();
                     attachment.message = local.message;
                     attachment.sequence = local.sequence;
-                    attachment.subsequence = ++subsequence;
+                    attachment.subsequence = subsequence++;
                     attachment.name = "headers.txt";
                     attachment.type = "text/rfc822-headers";
                     attachment.disposition = Part.ATTACHMENT;
@@ -4114,7 +4134,7 @@ public class MessageHelper {
                     EntityAttachment attachment = new EntityAttachment();
                     attachment.message = local.message;
                     attachment.sequence = local.sequence;
-                    attachment.subsequence = ++subsequence;
+                    attachment.subsequence = subsequence++;
                     attachment.name = "body.html";
                     attachment.type = "text/html";
                     attachment.disposition = Part.ATTACHMENT;
@@ -4131,7 +4151,7 @@ public class MessageHelper {
                         EntityAttachment attachment = new EntityAttachment();
                         attachment.message = local.message;
                         attachment.sequence = local.sequence;
-                        attachment.subsequence = ++subsequence;
+                        attachment.subsequence = subsequence++;
                         attachment.name = "body.txt";
                         attachment.type = "text/plain";
                         attachment.disposition = Part.ATTACHMENT;
@@ -4148,7 +4168,7 @@ public class MessageHelper {
                     EntityAttachment attachment = new EntityAttachment();
                     attachment.message = local.message;
                     attachment.sequence = local.sequence;
-                    attachment.subsequence = ++subsequence;
+                    attachment.subsequence = subsequence++;
                     attachment.name = "body.rtf";
                     attachment.type = "application/rtf";
                     attachment.disposition = Part.ATTACHMENT;
@@ -4167,7 +4187,7 @@ public class MessageHelper {
                         EntityAttachment attachment = new EntityAttachment();
                         attachment.message = local.message;
                         attachment.sequence = local.sequence;
-                        attachment.subsequence = ++subsequence;
+                        attachment.subsequence = subsequence++;
                         attachment.name = ofa.getFilename();
                         attachment.type = ofa.getMimeTag();
                         attachment.disposition = Part.ATTACHMENT;
@@ -4187,6 +4207,8 @@ public class MessageHelper {
             } catch (Throwable ex) {
                 Log.w(ex);
             }
+
+            return subsequence;
         }
 
         String getWarnings(String existing) {

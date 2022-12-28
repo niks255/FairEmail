@@ -101,7 +101,7 @@ public interface DaoMessage {
             " AND (NOT :filter_snoozed OR message.ui_snoozed IS NULL OR " + is_drafts + ")" +
             " AND (NOT :filter_deleted OR NOT message.ui_deleted)" +
             " AND (:filter_language IS NULL OR SUM(message.language = :filter_language) > 0)" +
-            " ORDER BY -IFNULL(message.importance, 1)" +
+            " ORDER BY CASE WHEN :found THEN 0 ELSE -IFNULL(message.importance, 1) END" +
             ", CASE WHEN :group_category THEN account.category ELSE '' END COLLATE NOCASE" +
             ", CASE" +
             "   WHEN 'unread' = :sort THEN SUM(1 - message.ui_seen) = 0" +
@@ -176,7 +176,7 @@ public interface DaoMessage {
             " AND (NOT :filter_snoozed OR message.ui_snoozed IS NULL OR " + is_outbox + " OR " + is_drafts + ")" +
             " AND (NOT :filter_deleted OR NOT message.ui_deleted)" +
             " AND (:filter_language IS NULL OR SUM(message.language = :filter_language) > 0 OR " + is_outbox + ")" +
-            " ORDER BY -IFNULL(message.importance, 1)" +
+            " ORDER BY CASE WHEN :found THEN 0 ELSE -IFNULL(message.importance, 1) END" +
             ", CASE" +
             "   WHEN 'unread' = :sort THEN SUM(1 - message.ui_seen) = 0" +
             "   WHEN 'starred' = :sort THEN COUNT(message.id) - SUM(1 - message.ui_flagged) = 0" +
@@ -451,8 +451,9 @@ public interface DaoMessage {
             " LEFT JOIN message AS base ON base.id = :id" +
             " WHERE message.account = :account" +
             " AND (message.id = :id" +
-            " OR (message.msgid = :msgid AND message.folder <> base.folder))")
-    List<EntityMessage> getMessagesBySimilarity(long account, long id, String msgid);
+            " OR (message.msgid = :msgid AND message.folder <> base.folder)" +
+            " OR (NOT :hash IS NULL AND message.hash IS :hash))")
+    List<EntityMessage> getMessagesBySimilarity(long account, long id, String msgid, String hash);
 
     @Query("SELECT COUNT(*) FROM message" +
             " WHERE folder = :folder" +
@@ -665,7 +666,8 @@ public interface DaoMessage {
     int getSnoozedCount();
 
     @Query("SELECT id AS _id, subject AS suggestion FROM message" +
-            " WHERE (:account IS NULL OR message.account = :account)" +
+            " WHERE :subject" +
+            " AND (:account IS NULL OR message.account = :account)" +
             " AND (:folder IS NULL OR message.folder = :folder)" +
             " AND subject LIKE :query" +
             " AND NOT message.ui_hide" +
@@ -674,7 +676,8 @@ public interface DaoMessage {
             " UNION" +
 
             " SELECT id AS _id, sender AS suggestion FROM message" +
-            " WHERE (:account IS NULL OR message.account = :account)" +
+            " WHERE :senders" +
+            " AND (:account IS NULL OR message.account = :account)" +
             " AND (:folder IS NULL OR message.folder = :folder)" +
             " AND sender LIKE :query" +
             " AND NOT message.ui_hide" +
@@ -682,7 +685,7 @@ public interface DaoMessage {
 
             " ORDER BY sender, subject" +
             " LIMIT :limit")
-    Cursor getSuggestions(Long account, Long folder, String query, int limit);
+    Cursor getSuggestions(boolean subject, boolean senders, Long account, Long folder, String query, int limit);
 
     @Query("SELECT language FROM message" +
             " WHERE (:account IS NULL OR message.account = :account)" +
@@ -947,10 +950,12 @@ public interface DaoMessage {
             " AND NOT uid IS NULL")
     int deleteBrowsedMessages(long folder, long before);
 
-    @Query("DELETE FROM message" +
+    @Query("DELETE FROM message WHERE id IN (" +
+            " SELECT id FROM message" +
             " WHERE folder = :folder" +
-            " AND ui_hide")
-    int deleteHiddenMessages(long folder);
+            " AND ui_hide" +
+            " LIMIT :limit)")
+    int deleteHiddenMessages(long folder, int limit);
 
     @Query("DELETE FROM message" +
             " WHERE folder = :folder" +

@@ -59,7 +59,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -77,9 +76,6 @@ public class EditTextCompose extends FixedEditText {
     private int colorBlockquote;
     private int quoteGap;
     private int quoteStripe;
-
-    private static final ExecutorService executor =
-            Helper.getBackgroundExecutor(1, "paste");
 
     public EditTextCompose(Context context) {
         super(context);
@@ -321,37 +317,7 @@ public class EditTextCompose extends FixedEditText {
                 }
 
                 private boolean insertLine() {
-                    try {
-                        int start = getSelectionStart();
-                        if (start < 0)
-                            return false;
-
-                        Editable edit = getText();
-                        if (edit == null)
-                            return false;
-
-                        if (start == 0 || edit.charAt(start - 1) != '\n')
-                            edit.insert(start++, "\n");
-                        if (start == edit.length() || edit.charAt(start) != '\n')
-                            edit.insert(start, "\n");
-
-                        edit.insert(start, "\uFFFC"); // Object replacement character
-
-                        int colorSeparator = Helper.resolveColor(getContext(), R.attr.colorSeparator);
-                        float stroke = context.getResources().getDisplayMetrics().density;
-                        edit.setSpan(
-                                new LineSpan(colorSeparator, stroke, 0f),
-                                start, start + 1,
-                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        setSelection(start + 2);
-
-                        return true;
-                    } catch (Throwable ex) {
-                        Log.e(ex);
-                        ToastEx.makeText(context, Log.formatThrowable(ex), Toast.LENGTH_LONG).show();
-                        return false;
-                    }
+                    return StyleHelper.apply(R.id.menu_style_insert_line, null, null, EditTextCompose.this);
                 }
 
                 private boolean insertSnippet(long id) {
@@ -371,7 +337,7 @@ public class EditTextCompose extends FixedEditText {
                         if (snippet.id.equals(id)) {
                             String html = snippet.getHtml(context, to);
 
-                            executor.submit(new Runnable() {
+                            Helper.getParallelExecutor().submit(new Runnable() {
                                 @Override
                                 public void run() {
                                     try {
@@ -418,7 +384,7 @@ public class EditTextCompose extends FixedEditText {
             });
 
             DB db = DB.getInstance(context);
-            executor.submit(new Runnable() {
+            Helper.getParallelExecutor().submit(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -527,7 +493,7 @@ public class EditTextCompose extends FixedEditText {
                 } else
                     html = h;
 
-                executor.submit(new Runnable() {
+                Helper.getParallelExecutor().submit(new Runnable() {
                     @Override
                     public void run() {
                         try {

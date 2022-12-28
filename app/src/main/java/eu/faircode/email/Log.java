@@ -40,7 +40,6 @@ import android.content.pm.PermissionInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.database.CursorWindowAllocationException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteFullException;
 import android.graphics.Point;
@@ -138,6 +137,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -173,6 +173,7 @@ public class Log {
     private static int level = android.util.Log.INFO;
     private static final long MAX_LOG_SIZE = 8 * 1024 * 1024L;
     private static final int MAX_CRASH_REPORTS = (BuildConfig.TEST_RELEASE ? 50 : 5);
+    private static final long MIN_FILE_SIZE = 1024 * 1024L;
     private static final String TAG = "fairemail";
 
     // https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html
@@ -797,6 +798,16 @@ public class Log {
              */
             return false;
 
+        if ("android.app.RemoteServiceException$CannotPostForegroundServiceNotificationException".equals(ex.getClass().getName()))
+            /*
+                android.app.RemoteServiceException$CannotPostForegroundServiceNotificationException: Bad notification for startForeground
+                    at android.app.ActivityThread.throwRemoteServiceException(ActivityThread.java:2219)
+                    at android.app.ActivityThread.-$$Nest$mthrowRemoteServiceException(Unknown Source:0)
+                    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2505)
+                    at android.os.Handler.dispatchMessage(Handler.java:106)
+             */
+            return false;
+
         if ("android.view.WindowManager$BadTokenException".equals(ex.getClass().getName()))
             /*
                 android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@e9084db is not valid; is your activity running?
@@ -1046,8 +1057,7 @@ public class Log {
                 ex.getMessage().contains("finalize"))
             return false;
 
-        if (ex instanceof CursorWindowAllocationException ||
-                "android.database.CursorWindowAllocationException".equals(ex.getClass().getName()))
+        if ("android.database.CursorWindowAllocationException".equals(ex.getClass().getName()))
             /*
                 android.database.CursorWindowAllocationException: Could not allocate CursorWindow '/data/user/0/eu.faircode.email/no_backup/androidx.work.workdb' of size 2097152 due to error -12.
                   at android.database.CursorWindow.nativeCreate(Native Method)
@@ -1065,7 +1075,8 @@ public class Log {
             return false;
 
         if (ex instanceof RuntimeException &&
-                ex.getCause() instanceof CursorWindowAllocationException)
+                ex.getCause() != null &&
+                "android.database.CursorWindowAllocationException".equals(ex.getCause().getClass().getName()))
             /*
                 java.lang.RuntimeException: Exception while computing database live data.
                   at androidx.room.RoomTrackingLiveData$1.run(SourceFile:10)
@@ -1730,6 +1741,9 @@ public class Log {
 
         if (ex instanceof MailConnectException &&
                 ex.getCause() instanceof SocketTimeoutException)
+            ex = new Throwable("No response received from email server", ex);
+
+        if (ex.getMessage() != null && ex.getMessage().contains("Read timed out"))
             ex = new Throwable("No response received from email server", ex);
 
         if (ex instanceof MessagingException &&
@@ -2907,6 +2921,31 @@ public class Log {
                     }
                     size += write(os, "\r\n");
                 }
+
+                List<File> files = new ArrayList<>();
+                try {
+                    files.addAll(Helper.listFiles(context.getFilesDir(), MIN_FILE_SIZE));
+                } catch (Throwable ex) {
+                    size += write(os, String.format("%s\r\n", ex));
+                }
+                try {
+                    files.addAll(Helper.listFiles(context.getCacheDir(), MIN_FILE_SIZE));
+                } catch (Throwable ex) {
+                    size += write(os, String.format("%s\r\n", ex));
+                }
+
+                Collections.sort(files, new Comparator<File>() {
+                    @Override
+                    public int compare(File f1, File f2) {
+                        return -Long.compare(f1.length(), f2.length());
+                    }
+                });
+
+                for (int i = 0; i < Math.min(100, files.size()); i++)
+                    size += write(os, String.format("%d %s %s\r\n", i + 1,
+                            Helper.humanReadableByteCount(files.get(i).length()),
+                            files.get(i).getAbsoluteFile()));
+                size += write(os, "\r\n");
 
                 size += write(os, String.format("Configuration: %s\r\n\r\n",
                         context.getResources().getConfiguration()));

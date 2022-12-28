@@ -1637,6 +1637,7 @@ public class HtmlHelper {
         //   xmlns="http://www.w3.org/TR/REC-html40">
 
         // <o:p>&nbsp;</o:p></span>
+        // <w:Sdt DocPart="0C3EDB8F875B40C899499DE56A431990" ...
 
         // Default XHTML namespace: http://www.w3.org/1999/xhtml
         // https://developer.mozilla.org/en-US/docs/Related/IMSC/Namespaces
@@ -1659,7 +1660,7 @@ public class HtmlHelper {
             String tag = e.tagName();
             if (tag.contains(":")) {
                 boolean show = (ns == null || tag.startsWith(ns) ||
-                        tag.startsWith("html:") || tag.startsWith("body:"));
+                        tag.startsWith("html:") || tag.startsWith("body:") || tag.startsWith("w:"));
                 if (display_hidden || show) {
                     String[] nstag = tag.split(":");
                     String t = nstag[nstag.length > 1 ? 1 : 0];
@@ -1674,9 +1675,9 @@ public class HtmlHelper {
                     }
                 } else {
                     e.remove();
-                    Log.i("Removed tag=" + tag);
+                    Log.i("Removed tag=" + tag + " ns=" + ns + " content=" + e.text());
                 }
-            } else if (!"html".equals(tag) && !"body".equals(tag)) {
+            } else if (!"html".equals(tag) && !"body".equals(tag) && !"w".equals(tag)) {
                 String xmlns = e.attr("xmlns").toLowerCase(Locale.ROOT);
                 if (!TextUtils.isEmpty(xmlns) && !xmlns.contains(W3NS)) {
                     if (display_hidden) {
@@ -1684,7 +1685,7 @@ public class HtmlHelper {
                         e.attr("style", mergeStyles(style, "text-decoration:line-through;"));
                     } else {
                         e.remove();
-                        Log.i("Removed tag=" + tag + " xmlns=" + xmlns);
+                        Log.i("Removed tag=" + tag + " ns=" + ns + " xmlns=" + xmlns + " content=" + e.text());
                     }
                 }
             }
@@ -2959,37 +2960,32 @@ public class HtmlHelper {
         return ssb;
     }
 
-    static Document highlightSearched(Context context, Document document, String query) {
-        int color = Helper.resolveColor(context, R.attr.colorHighlight);
-        query = Normalizer.normalize(query, Normalizer.Form.NFKD)
-                .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+    static void highlightSearched(Context context, Document document, String query) {
+        try {
+            int color = Helper.resolveColor(context, R.attr.colorHighlight);
 
-        // TODO: fix highlighting pre processed text
+            StringBuilder sb = new StringBuilder();
+            for (String word : query.trim().split("\\s+")) {
+                if (word.startsWith("+") || word.startsWith("-"))
+                    continue;
+                for (String w : Fts4DbHelper.breakText(word).split("\\s+")) {
+                    if (sb.length() > 0)
+                        sb.append("\\s*");
+                    sb.append(Pattern.quote(w));
+                }
+            }
+            sb.insert(0, ".*?\\b(");
+            sb.append(")\\b.*?");
 
-        List<String> word = new ArrayList<>();
-        List<String> plus = new ArrayList<>();
-        for (String w : query.trim().split("\\s+"))
-            if (w.length() > 1 && (w.startsWith("+") || w.startsWith("-"))) {
-                if (w.startsWith("+"))
-                    plus.add(w.substring(1));
-            } else
-                word.add(w);
+            Pattern p = Pattern.compile(sb.toString(), Pattern.DOTALL);
 
-        int flags = Pattern.DOTALL | Pattern.CASE_INSENSITIVE;
-        List<Pattern> pat = new ArrayList<>();
-        pat.add(Pattern.compile(".*?\\b(" + TextUtils.join("\\s+", word) + ")\\b.*?", flags));
-        for (String w : plus)
-            pat.add(Pattern.compile(".*?\\b(" + w + ")\\b.*?", flags));
-
-        for (Pattern p : pat)
             NodeTraversor.traverse(new NodeVisitor() {
                 @Override
                 public void head(Node node, int depth) {
                     if (node instanceof TextNode)
                         try {
                             TextNode tnode = (TextNode) node;
-                            String text = Normalizer.normalize(tnode.getWholeText(), Normalizer.Form.NFKD)
-                                    .replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+                            String text = Fts4DbHelper.preprocessText(tnode.getWholeText());
 
                             Matcher result = p.matcher(text);
 
@@ -3029,8 +3025,9 @@ public class HtmlHelper {
                 public void tail(Node node, int depth) {
                 }
             }, document);
-
-        return document;
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     static Document markText(Document document) {

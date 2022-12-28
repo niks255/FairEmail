@@ -209,6 +209,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
         put("Черновики", new TypeScore(EntityFolder.DRAFTS, 100));
         put("Bozze", new TypeScore(EntityFolder.DRAFTS, 100));
         put("Szkice lokalne", new TypeScore(EntityFolder.DRAFTS, 100)); // Polish
+        put("Wersje robocze", new TypeScore(EntityFolder.DRAFTS, 100)); // Polish
 
         put("trash", new TypeScore(EntityFolder.TRASH, 100));
         put("Deleted", new TypeScore(EntityFolder.TRASH, 100));
@@ -230,12 +231,14 @@ public class EntityFolder extends EntityOrder implements Serializable {
         put("Cestino", new TypeScore(EntityFolder.JUNK, 100));
         put("Indesiderata", new TypeScore(EntityFolder.JUNK, 100));
         put("indésirable", new TypeScore(EntityFolder.JUNK, 100));
+        put("Wiadomości-śmieci", new TypeScore(EntityFolder.JUNK, 100)); // Polish
 
         put("sent", new TypeScore(EntityFolder.SENT, 100));
         put("Gesendet", new TypeScore(EntityFolder.SENT, 100));
         put("envoyé", new TypeScore(EntityFolder.SENT, 100));
         put("Отправленные", new TypeScore(EntityFolder.SENT, 100));
         put("Inviata", new TypeScore(EntityFolder.SENT, 100));
+        put("wysłane", new TypeScore(EntityFolder.SENT, 100)); // Polish
     }};
 
     static final int DEFAULT_SYNC = 7; // days
@@ -309,6 +312,25 @@ public class EntityFolder extends EntityOrder implements Serializable {
             unified = true;
             notify = true;
         }
+    }
+
+    void inheritFrom(EntityFolder parent) {
+        if (parent == null)
+            return;
+        if (!EntityFolder.USER.equals(parent.type))
+            return;
+
+        this.synchronize = parent.synchronize;
+        this.poll = parent.poll;
+        this.poll_factor = parent.poll_factor;
+        this.download = parent.download;
+        this.auto_classify_source = parent.auto_classify_source;
+        this.auto_classify_target = parent.auto_classify_target;
+        this.sync_days = parent.sync_days;
+        this.keep_days = parent.keep_days;
+        this.unified = parent.unified;
+        this.navigation = parent.navigation;
+        this.notify = parent.notify;
     }
 
     static boolean shouldPoll(String type) {

@@ -263,6 +263,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean week;
     private boolean cards;
     private boolean shadow_unread;
+    private boolean shadow_border;
     private boolean shadow_highlight;
     private boolean threading;
     private boolean threading_unread;
@@ -333,9 +334,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private NumberFormat NF = NumberFormat.getNumberInstance();
     private DateFormat TF;
     private DateFormat DTF;
-
-    private static final ExecutorService executor =
-            Helper.getBackgroundExecutor(2, "differ");
 
     private static final int MAX_RECIPIENTS_COMPACT = 3;
     private static final int MAX_RECIPIENTS_NORMAL = 7;
@@ -619,7 +617,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     Uri uri = Uri.parse(image[0].getSource());
                                     if (UriHelper.isHyperLink(uri)) {
                                         ripple(event);
-                                        if (onOpenLink(uri, null, false))
+                                        if (onOpenLink(uri, null, EntityFolder.JUNK.equals(message.folderType)))
                                             return true;
                                     }
                                 }
@@ -638,7 +636,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     title = null;
 
                                 ripple(event);
-                                if (onOpenLink(uri, title, false))
+                                if (onOpenLink(uri, title, EntityFolder.JUNK.equals(message.folderType)))
                                     return true;
                             }
 
@@ -649,7 +647,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     return true;
 
                                 ripple(event);
-                                onOpenImage(message.id, image[0].getSource());
+                                onOpenImage(message.id, image[0].getSource(), EntityFolder.JUNK.equals(message.folderType));
                                 return true;
                             }
 
@@ -1828,7 +1826,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void bindSeen(TupleMessageEx message) {
-            if (cards && shadow_unread) {
+            if (cards && shadow_unread && shadow_border) {
                 boolean shadow = (message.unseen > 0);
                 int color = (shadow
                         ? ColorUtils.setAlphaComponent(shadow_highlight ? colorUnreadHighlight : colorAccent, 127)
@@ -1904,9 +1902,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean split = (viewType != ViewType.THREAD && properties.getValue("split", message.id));
 
             int color = Color.TRANSPARENT;
-            if (cards && shadow_unread && message.unseen > 0)
-                color = ColorUtils.setAlphaComponent(colorCardBackground, 192);
-            else if (split)
+            if (cards && shadow_unread && message.unseen > 0) {
+                if (shadow_border)
+                    color = ColorUtils.setAlphaComponent(colorCardBackground, 192);
+                else {
+                    int fg = (shadow_highlight ? colorUnreadHighlight : colorAccent);
+                    color = ColorUtils.blendARGB(colorCardBackground, fg, 0.125f);
+                }
+            } else if (split)
                 color = ColorUtils.setAlphaComponent(textColorHighlightInverse, 127);
             else if (flags_background && flagged && !expanded)
                 color = ColorUtils.setAlphaComponent(mcolor, 127);
@@ -2792,7 +2795,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         return false;
 
                                     Uri uri = Uri.parse(url);
-                                    return ViewHolder.this.onOpenLink(uri, null, false);
+                                    return ViewHolder.this.onOpenLink(uri, null, EntityFolder.JUNK.equals(message.folderType));
                                 }
                             });
                     webView.setImages(show_images, inline);
@@ -3048,13 +3051,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                         return document.html();
                     } else {
+                        HtmlHelper.autoLink(document);
+
                         if (message.ui_found && found && !TextUtils.isEmpty(searched))
                             HtmlHelper.highlightSearched(context, document, searched);
 
                         // Cleanup message
                         document = HtmlHelper.sanitizeView(context, document, show_images);
-
-                        HtmlHelper.autoLink(document);
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                             args.putParcelable("actions", getConversationActions(message, document, context));
@@ -5414,7 +5417,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private void onActionUnsubscribe(TupleMessageEx message) {
             Uri uri = Uri.parse(message.unsubscribe);
-            onOpenLink(uri, context.getString(R.string.title_legend_show_unsubscribe), true);
+            onOpenLink(uri,
+                    context.getString(R.string.title_legend_show_unsubscribe),
+                    EntityFolder.JUNK.equals(message.folderType));
         }
 
         private void onActionDecrypt(TupleMessageEx message, boolean auto) {
@@ -5684,9 +5689,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             message.accountProtocol != EntityAccount.TYPE_IMAP);
 
             int i = (message.importance == null ? EntityMessage.PRIORITIY_NORMAL : message.importance);
-            popupMenu.getMenu().findItem(R.id.menu_set_importance_low).setEnabled(!EntityMessage.PRIORITIY_LOW.equals(i));
-            popupMenu.getMenu().findItem(R.id.menu_set_importance_normal).setEnabled(!EntityMessage.PRIORITIY_NORMAL.equals(i));
-            popupMenu.getMenu().findItem(R.id.menu_set_importance_high).setEnabled(!EntityMessage.PRIORITIY_HIGH.equals(i));
+            boolean can = (message.uid != null || message.accountProtocol == EntityAccount.TYPE_POP);
+            popupMenu.getMenu().findItem(R.id.menu_set_importance_low).setEnabled(can && !EntityMessage.PRIORITIY_LOW.equals(i));
+            popupMenu.getMenu().findItem(R.id.menu_set_importance_normal).setEnabled(can && !EntityMessage.PRIORITIY_NORMAL.equals(i));
+            popupMenu.getMenu().findItem(R.id.menu_set_importance_high).setEnabled(can && !EntityMessage.PRIORITIY_HIGH.equals(i));
 
             popupMenu.getMenu().findItem(R.id.menu_move_to)
                     .setEnabled(message.uid != null && !message.folderReadOnly)
@@ -5873,7 +5879,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private boolean onOpenLink(Uri uri, String title, boolean always_confirm) {
-            Log.i("Opening uri=" + uri + " title=" + title);
+            Log.i("Opening uri=" + uri + " title=" + title + " always confirm=" + always_confirm);
             uri = Uri.parse(uri.toString().replaceAll("\\s+", ""));
 
             if (ProtectedContent.isProtectedContent(uri)) {
@@ -5958,7 +5964,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     "/activate/".equals(uri.getPath()));
         }
 
-        private void onOpenImage(long id, @NonNull String source) {
+        private void onOpenImage(long id, @NonNull String source, boolean always_confirm) {
             Log.i("Viewing image source=" + source);
 
             Uri uri = Uri.parse(source);
@@ -5993,10 +5999,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     }
                 }.execute(context, owner, args, "view:cid");
 
-            else if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))
-                onOpenLink(uri, null, false);
+            else if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)) {
+                onOpenLink(uri, null, always_confirm);
 
-            else if ("data".equals(scheme))
+            } else if ("data".equals(scheme))
                 new SimpleTask<File>() {
                     @Override
                     protected File onExecute(Context context, Bundle args) throws IOException {
@@ -6151,6 +6157,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             args.putInt("color", message.color == null ? Color.TRANSPARENT : message.color);
             args.putString("title", context.getString(R.string.title_flag_color));
             args.putBoolean("reset", true);
+            args.putInt("faq", 187);
 
             FragmentDialogColor fragment = new FragmentDialogColor();
             fragment.setArguments(args);
@@ -7324,6 +7331,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.week = prefs.getBoolean("date_week", false);
         this.cards = prefs.getBoolean("cards", true);
         this.shadow_unread = prefs.getBoolean("shadow_unread", false);
+        this.shadow_border = prefs.getBoolean("shadow_border", true);
         this.shadow_highlight = prefs.getBoolean("shadow_highlight", false);
         this.threading = prefs.getBoolean("threading", true);
         this.threading_unread = threading && prefs.getBoolean("threading_unread", false);
@@ -7803,7 +7811,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         };
 
         AsyncDifferConfig<TupleMessageEx> config = new AsyncDifferConfig.Builder<>(callback)
-                .setBackgroundThreadExecutor(executor)
+                .setBackgroundThreadExecutor(Helper.getBackgroundExecutor(0, 2, 3, "differ"))
                 .build();
         this.differ = new AsyncPagedListDiffer<>(new AdapterListUpdateCallback(this), config);
         this.differ.addPagedListListener(new AsyncPagedListDiffer.PagedListListener<TupleMessageEx>() {
@@ -8385,7 +8393,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             return null;
 
                         List<EntityMessage> messages =
-                                db.message().getMessagesBySimilarity(message.account, message.id, message.msgid);
+                                db.message().getMessagesBySimilarity(message.account, message.id, message.msgid, message.hash);
                         if (messages == null)
                             return null;
 

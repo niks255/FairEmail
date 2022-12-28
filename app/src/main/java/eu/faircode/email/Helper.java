@@ -161,7 +161,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -178,6 +177,7 @@ public class Helper {
 
     static final float LOW_LIGHT = 0.6f;
 
+    static final int OPERATION_WORKERS = 3;
     static final int WAKELOCK_MAX = 30 * 60 * 1000; // milliseconds
     static final int BUFFER_SIZE = 8192; // Same as in Files class
     static final long MIN_REQUIRED_SPACE = 100 * 1000L * 1000L;
@@ -245,40 +245,94 @@ public class Helper {
             "wsc", "wsf", "wsh"
     ));
 
-    private static final ExecutorService executor = getBackgroundExecutor(1, "helper");
+    private static ExecutorService sSerialExecutor = null;
+    private static ExecutorService sParallelExecutor = null;
+    private static ExecutorService sSerialTaskExecutor = null;
+    private static ExecutorService sDownloadExecutor = null;
+
+    private static int sOperationIndex = 0;
+    private static final ExecutorService[] sOperationExecutor = new ExecutorService[OPERATION_WORKERS];
+
+    static ExecutorService getSerialExecutor() {
+        if (sSerialExecutor == null)
+            sSerialExecutor = getBackgroundExecutor(1, "serial");
+        return sSerialExecutor;
+    }
+
+    static ExecutorService getParallelExecutor() {
+        if (sParallelExecutor == null)
+            sParallelExecutor = getBackgroundExecutor(0, "parallel");
+        return sParallelExecutor;
+    }
+
+    static ExecutorService getSerialTaskExecutor() {
+        if (sSerialTaskExecutor == null)
+            sSerialTaskExecutor = getBackgroundExecutor(1, "task");
+        return sSerialTaskExecutor;
+    }
+
+    static ExecutorService getDownloadTaskExecutor() {
+        if (sDownloadExecutor == null)
+            sDownloadExecutor = getBackgroundExecutor(0, 0, 3, "download");
+        return sDownloadExecutor;
+    }
+
+    static ExecutorService getOperationExecutor() {
+        synchronized (sOperationExecutor) {
+            if (sOperationExecutor[sOperationIndex] == null)
+                sOperationExecutor[sOperationIndex] = getBackgroundExecutor(1, "operation");
+            ExecutorService result = sOperationExecutor[sOperationIndex];
+            sOperationIndex = (sOperationIndex + 1) % sOperationExecutor.length;
+            return result;
+        }
+    }
 
     static ExecutorService getBackgroundExecutor(int threads, final String name) {
+        return getBackgroundExecutor(threads == 0 ? -1 : threads, threads, 3, name);
+    }
+
+    static ExecutorService getBackgroundExecutor(int min, int max, int keepalive, final String name) {
         ThreadFactory factory = new ThreadFactory() {
             private final AtomicInteger threadId = new AtomicInteger();
 
             @Override
             public Thread newThread(@NonNull Runnable runnable) {
-                Thread thread = new Thread(runnable);
-                thread.setName("FairEmail_bg_" + name + "_" + threadId.getAndIncrement());
-                thread.setPriority(THREAD_PRIORITY_BACKGROUND);
-                return thread;
+                int delay = 1;
+                while (true)
+                    try {
+                        Thread thread = new Thread(runnable);
+                        thread.setName("FairEmail_bg_" + name + "_" + threadId.getAndIncrement());
+                        thread.setPriority(THREAD_PRIORITY_BACKGROUND);
+                        return thread;
+                    } catch (OutOfMemoryError ex) {
+                        Log.w(ex);
+                        try {
+                            Thread.sleep(delay * 1000L);
+                        } catch (InterruptedException ignored) {
+                        }
+                        delay *= 2;
+                        if (delay > 7)
+                            throw ex;
+                    }
             }
         };
 
-        if (threads == 0) {
+        if (max == 0) {
             // java.lang.OutOfMemoryError: pthread_create (1040KB stack) failed: Try again
             // 1040 KB native stack size / 32 KB thread stack size ~ 32 threads
             int processors = Runtime.getRuntime().availableProcessors(); // Modern devices: 8
-            threads = processors * (BuildConfig.DEBUG ? 8 : 4);
-        }
-
-        if (threads == 0)
             return new ThreadPoolExecutorEx(
                     name,
-                    0, Integer.MAX_VALUE,
-                    60L, TimeUnit.SECONDS,
-                    new SynchronousQueue<Runnable>(),
+                    min < 0 ? Math.max(2, processors / 2 + 1) : min,
+                    Math.max(8, processors * 2) + 1,
+                    keepalive, TimeUnit.SECONDS,
+                    new LinkedBlockingQueue<Runnable>(),
                     factory);
-        else if (threads == 1)
+        } else if (max == 1)
             return new ThreadPoolExecutorEx(
                     name,
-                    threads, threads,
-                    0L, TimeUnit.MILLISECONDS,
+                    min, max,
+                    keepalive, TimeUnit.SECONDS,
                     new PriorityBlockingQueue<Runnable>(10, new PriorityComparator()),
                     factory) {
                 private final AtomicLong sequenceId = new AtomicLong();
@@ -297,8 +351,8 @@ public class Helper {
         else
             return new ThreadPoolExecutorEx(
                     name,
-                    threads, threads,
-                    0L, TimeUnit.MILLISECONDS,
+                    min, max,
+                    keepalive, TimeUnit.SECONDS,
                     new LinkedBlockingQueue<Runnable>(),
                     factory);
     }
@@ -396,8 +450,13 @@ public class Helper {
     }
 
     static class PriorityRunnable implements Runnable {
+        private long group;
         private int priority;
         private long order;
+
+        long getGroup() {
+            return this.group;
+        }
 
         int getPriority() {
             return this.priority;
@@ -407,7 +466,8 @@ public class Helper {
             return this.order;
         }
 
-        PriorityRunnable(int priority, long order) {
+        PriorityRunnable(long group, int priority, long order) {
+            this.group = group;
             this.priority = priority;
             this.order = order;
         }
@@ -1207,7 +1267,7 @@ public class Helper {
 
             return intent;
         } else {
-            if (Helper.hasValidFingerprint(context))
+            if (Helper.hasValidFingerprint(context) || true)
                 return new Intent(Intent.ACTION_VIEW, getSupportUri(context, reference));
             else
                 return new Intent(Intent.ACTION_VIEW, Uri.parse(XDA_URI));
@@ -2447,15 +2507,21 @@ public class Helper {
     }
 
     static List<File> listFiles(File dir) {
-        List<File> result = new ArrayList<>();
-        File[] files = dir.listFiles();
-        if (files != null)
-            for (File file : files)
-                if (file.isDirectory())
-                    result.addAll(listFiles(file));
-                else
-                    result.add(file);
-        return result;
+        return listFiles(dir, null);
+    }
+
+    static List<File> listFiles(File dir, Long minSize) {
+        List<File> files = new ArrayList<>();
+        if (dir != null) {
+            File[] listed = dir.listFiles();
+            if (listed != null)
+                for (File file : listed)
+                    if (file.isDirectory())
+                        files.addAll(listFiles(file, minSize));
+                    else if (minSize == null || file.length() > minSize)
+                        files.add(file);
+        }
+        return files;
     }
 
     static long getAvailableStorageSpace() {
@@ -2696,7 +2762,7 @@ public class Helper {
                             ? R.string.title_setup_biometrics_disable
                             : R.string.title_setup_biometrics_enable));
 
-                    final BiometricPrompt prompt = new BiometricPrompt(activity, executor,
+                    final BiometricPrompt prompt = new BiometricPrompt(activity, Helper.getParallelExecutor(),
                             new BiometricPrompt.AuthenticationCallback() {
                                 private int fails = 0;
 

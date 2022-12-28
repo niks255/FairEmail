@@ -243,7 +243,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
@@ -350,6 +349,8 @@ public class FragmentMessages extends FragmentBase
     private boolean swipenav;
     private boolean seekbar;
     private boolean actionbar;
+    private int actionbar_delete_id;
+    private int actionbar_archive_id;
     private boolean actionbar_color;
     private boolean autoexpand;
     private boolean autoclose;
@@ -447,8 +448,6 @@ public class FragmentMessages extends FragmentBase
             "time", "unread", "starred", "priority"
     ));
 
-    private static final ExecutorService executor = Helper.getBackgroundExecutor(1, "messages");
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -491,6 +490,9 @@ public class FragmentMessages extends FragmentBase
                 args.getBoolean("force_threading"));
         seekbar = prefs.getBoolean("seekbar", false);
         actionbar = prefs.getBoolean("actionbar", true);
+        boolean actionbar_swap = prefs.getBoolean("actionbar_swap", false);
+        actionbar_delete_id = (actionbar_swap ? R.id.action_archive : R.id.action_delete);
+        actionbar_archive_id = (actionbar_swap ? R.id.action_delete : R.id.action_archive);
         actionbar_color = prefs.getBoolean("actionbar_color", false);
         autoexpand = prefs.getBoolean("autoexpand", true);
         autoclose = prefs.getBoolean("autoclose", true);
@@ -686,9 +688,7 @@ public class FragmentMessages extends FragmentBase
 
         rvMessage.setHasFixedSize(false);
 
-        int threads = prefs.getInt("query_threads", DB.DEFAULT_QUERY_THREADS);
-        if (threads >= 4)
-            rvMessage.setItemViewCacheSize(ITEM_CACHE_SIZE);
+        rvMessage.setItemViewCacheSize(ITEM_CACHE_SIZE);
         //rvMessage.getRecycledViewPool().setMaxRecycledViews(0, 10); // Default 5
 
         final LinearLayoutManager llm = new LinearLayoutManager(getContext()) {
@@ -1274,7 +1274,7 @@ public class FragmentMessages extends FragmentBase
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 ActionData data = (ActionData) bottom_navigation.getTag();
                 int itemId = menuItem.getItemId();
-                if (itemId == R.id.action_delete) {
+                if (itemId == actionbar_delete_id) {
                     if (data.delete)
                         onActionDelete();
                     else
@@ -1283,7 +1283,7 @@ public class FragmentMessages extends FragmentBase
                 } else if (itemId == R.id.action_snooze) {
                     onActionSnooze();
                     return true;
-                } else if (itemId == R.id.action_archive) {
+                } else if (itemId == actionbar_archive_id) {
                     onActionMove(EntityFolder.ARCHIVE);
                     return true;
                 } else if (itemId == R.id.action_prev) {
@@ -3114,6 +3114,7 @@ public class FragmentMessages extends FragmentBase
                                 args.putInt("color", message.color == null ? Color.TRANSPARENT : message.color);
                                 args.putString("title", getString(R.string.title_flag_color));
                                 args.putBoolean("reset", true);
+                                args.putInt("faq", 187);
 
                                 FragmentDialogColor fragment = new FragmentDialogColor();
                                 fragment.setArguments(args);
@@ -3397,6 +3398,10 @@ public class FragmentMessages extends FragmentBase
                     }
                 }
 
+                boolean canRaw = (message.uid != null ||
+                        (EntityFolder.INBOX.equals(message.folderType) &&
+                                message.accountProtocol == EntityAccount.TYPE_POP));
+
                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), anchor);
                 popupMenu.inflate(R.menu.popup_reply);
                 popupMenu.getMenu().findItem(R.id.menu_reply_to_all).setVisible(recipients.length > 0);
@@ -3415,9 +3420,7 @@ public class FragmentMessages extends FragmentBase
 
                 popupMenu.getMenu().findItem(R.id.menu_reply_to_all).setEnabled(message.content);
                 popupMenu.getMenu().findItem(R.id.menu_forward).setEnabled(message.content);
-                popupMenu.getMenu().findItem(R.id.menu_forward_raw)
-                        .setEnabled(message.uid != null)
-                        .setVisible(Boolean.TRUE.equals(message.raw) || message.accountProtocol == EntityAccount.TYPE_IMAP);
+                popupMenu.getMenu().findItem(R.id.menu_forward_raw).setEnabled(canRaw);
                 popupMenu.getMenu().findItem(R.id.menu_editasnew).setEnabled(message.content);
                 popupMenu.getMenu().findItem(R.id.menu_reply_answer).setEnabled(message.content);
 
@@ -4057,6 +4060,7 @@ public class FragmentMessages extends FragmentBase
         args.putString("title", getString(R.string.title_flag_color));
         args.putBoolean("reset", true);
         args.putBoolean("clear", clear);
+        args.putInt("faq", 187);
 
         FragmentDialogColor fragment = new FragmentDialogColor();
         fragment.setArguments(args);
@@ -5032,7 +5036,7 @@ public class FragmentMessages extends FragmentBase
         cal.set(Calendar.MILLISECOND, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.DAY_OF_MONTH, 30);
         cal.set(Calendar.MONTH, Calendar.MAY);
         cal.set(Calendar.YEAR, 2022);
@@ -5118,7 +5122,7 @@ public class FragmentMessages extends FragmentBase
         cal.set(Calendar.MILLISECOND, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.MONTH, Calendar.OCTOBER);
         cal.set(Calendar.YEAR, 2022);
@@ -5573,6 +5577,8 @@ public class FragmentMessages extends FragmentBase
 
     private void onMenuSaveSearch() {
         Bundle args = new Bundle();
+        args.putLong("account", account);
+        args.putLong("folder", folder);
         args.putSerializable("criteria", criteria);
 
         FragmentDialogSaveSearch fragment = new FragmentDialogSaveSearch();
@@ -5986,6 +5992,9 @@ public class FragmentMessages extends FragmentBase
 
                 DB db = DB.getInstance(context);
 
+                EntityAccount account = db.account().getAccount(args.getLong("account"));
+                EntityFolder folder = db.folder().getFolder(args.getLong("folder"));
+
                 EntitySearch search = null;
                 if (criteria.id != null)
                     search = db.search().getSearch(criteria.id);
@@ -5994,10 +6003,12 @@ public class FragmentMessages extends FragmentBase
 
                 int order = args.getInt("order");
 
+                search.account_uuid = (account == null ? null : account.uuid);
+                search.folder_name = (folder == null ? null : folder.name);
                 search.name = args.getString("name");
                 search.order = (order < 0 ? null : order);
                 search.color = args.getInt("color", Color.TRANSPARENT);
-                search.data = criteria.toJson().toString();
+                search.data = criteria.toJsonData().toString();
 
                 if (search.color == Color.TRANSPARENT)
                     search.color = null;
@@ -6344,7 +6355,7 @@ public class FragmentMessages extends FragmentBase
                 protected void onException(Bundle args, Throwable ex) {
                     Log.unexpectedError(getParentFragmentManager(), ex);
                 }
-            }.setExecutor(executor).setId("messages:" + FragmentMessages.this.hashCode()).execute(this, args, "quickactions");
+            }.serial().setId("messages:" + FragmentMessages.this.hashCode()).execute(this, args, "quickactions");
         } else {
             fabMore.hide();
             tvSelectedCount.setVisibility(View.GONE);
@@ -6882,20 +6893,26 @@ public class FragmentMessages extends FragmentBase
 
                     bottom_navigation.setTag(data);
 
-                    bottom_navigation.getMenu().findItem(R.id.action_delete).setIcon(
-                            data.forever ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24);
-                    bottom_navigation.getMenu().findItem(R.id.action_delete).setVisible(data.trashable);
-                    bottom_navigation.getMenu().findItem(R.id.action_snooze).setVisible(data.snoozable);
-                    bottom_navigation.getMenu().findItem(R.id.action_archive).setVisible(data.archivable);
+                    bottom_navigation.getMenu().findItem(actionbar_delete_id)
+                            .setIcon(data.forever ? R.drawable.twotone_delete_forever_24 : R.drawable.twotone_delete_24)
+                            .setTitle(data.forever ? R.string.title_delete_permanently : R.string.title_trash)
+                            .setVisible(data.trashable);
+                    bottom_navigation.getMenu().findItem(R.id.action_snooze)
+                            .setVisible(data.snoozable);
+                    bottom_navigation.getMenu().findItem(actionbar_archive_id)
+                            .setIcon(R.drawable.twotone_archive_24)
+                            .setTitle(R.string.title_archive)
+                            .setVisible(data.archivable);
                     bottom_navigation.setVisibility(View.VISIBLE);
 
-                    bottom_navigation.findViewById(R.id.action_delete).setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            onActionDelete();
-                            return true;
-                        }
-                    });
+                    bottom_navigation.findViewById(actionbar_delete_id)
+                            .setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    onActionDelete();
+                                    return true;
+                                }
+                            });
                 }
 
                 @Override
@@ -6985,7 +7002,7 @@ public class FragmentMessages extends FragmentBase
                     if (account.protocol != EntityAccount.TYPE_IMAP) {
                         if (account.auto_seen)
                             EntityOperation.queue(context, message, EntityOperation.SEEN, true);
-                    } else {
+                    } else if (message.uid != null) {
                         if (account.auto_seen)
                             EntityOperation.queue(context, message, EntityOperation.SEEN, true);
 
@@ -7685,10 +7702,10 @@ public class FragmentMessages extends FragmentBase
                     !bottom_navigation.isEnabled() ||
                     bottom_navigation.getVisibility() != View.VISIBLE)
                 return false;
-            MenuItem archive = bottom_navigation.getMenu().findItem(R.id.action_archive);
+            MenuItem archive = bottom_navigation.getMenu().findItem(actionbar_archive_id);
             if (archive == null || !archive.isVisible() || !archive.isEnabled())
                 return false;
-            bottom_navigation.getMenu().performIdentifierAction(R.id.action_archive, 0);
+            bottom_navigation.getMenu().performIdentifierAction(actionbar_archive_id, 0);
             return true;
         }
 
@@ -7697,10 +7714,10 @@ public class FragmentMessages extends FragmentBase
                     !bottom_navigation.isEnabled() ||
                     bottom_navigation.getVisibility() != View.VISIBLE)
                 return false;
-            MenuItem delete = bottom_navigation.getMenu().findItem(R.id.action_delete);
+            MenuItem delete = bottom_navigation.getMenu().findItem(actionbar_delete_id);
             if (delete == null || !delete.isVisible() || !delete.isEnabled())
                 return false;
-            bottom_navigation.getMenu().performIdentifierAction(R.id.action_delete, 0);
+            bottom_navigation.getMenu().performIdentifierAction(actionbar_delete_id, 0);
             return true;
         }
 
@@ -8506,7 +8523,7 @@ public class FragmentMessages extends FragmentBase
                 } else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
-        }.setExecutor(executor).execute(this, args, "decrypt:pgp");
+        }.serial().execute(this, args, "decrypt:pgp");
     }
 
     private void onSmime(Bundle args) {
@@ -9163,7 +9180,7 @@ public class FragmentMessages extends FragmentBase
                     }
                 return trace;
             }
-        }.setExecutor(executor).execute(this, args, "decrypt:s/mime");
+        }.serial().execute(this, args, "decrypt:s/mime");
     }
 
     private static void checkPep(EntityMessage message, List<EntityAttachment> remotes, Context context) {
@@ -9746,8 +9763,6 @@ public class FragmentMessages extends FragmentBase
         args.putBoolean("print_html_images", print_html_images);
 
         new SimpleTask<String[]>() {
-            private final ExecutorService executor = Helper.getBackgroundExecutor(0, "print");
-
             @Override
             protected String[] onExecute(Context context, Bundle args) throws IOException {
                 long id = args.getLong("id");
@@ -9805,7 +9820,7 @@ public class FragmentMessages extends FragmentBase
                             continue;
                         }
 
-                        futures.add(executor.submit(new Callable<Void>() {
+                        futures.add(Helper.getDownloadTaskExecutor().submit(new Callable<Void>() {
                             @Override
                             public Void call() throws Exception {
                                 try (OutputStream os = new FileOutputStream(out)) {
@@ -10098,7 +10113,7 @@ public class FragmentMessages extends FragmentBase
             return;
 
         DB db = DB.getInstance(context);
-        db.getQueryExecutor().execute(new Runnable() {
+        Helper.getParallelExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 try {

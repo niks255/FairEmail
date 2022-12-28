@@ -101,12 +101,6 @@ public class ContactInfo {
     private static Map<String, Lookup> emailLookup = new ConcurrentHashMap<>();
     private static final Map<String, ContactInfo> emailContactInfo = new HashMap<>();
 
-    private static final ExecutorService executorLookup =
-            Helper.getBackgroundExecutor(1, "contact");
-
-    private static final ExecutorService executorFavicon =
-            Helper.getBackgroundExecutor(0, "favicon");
-
     private static final int GENERATED_ICON_SIZE = 48; // dp
     private static final int FAVICON_ICON_SIZE = 64; // dp
     private static final int FAVICON_CONNECT_TIMEOUT = 5 * 1000; // milliseconds
@@ -207,7 +201,7 @@ public class ContactInfo {
 
         for (String type : new String[]{"favicons", "generated"}) {
             final File dir = new File(context.getFilesDir(), type);
-            executorFavicon.submit(new Runnable() {
+            Helper.getParallelExecutor().submit(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -381,7 +375,7 @@ public class ContactInfo {
                         List<Future<Favicon>> futures = new ArrayList<>();
 
                         if (bimi)
-                            futures.add(executorFavicon.submit(new Callable<Favicon>() {
+                            futures.add(Helper.getDownloadTaskExecutor().submit(new Callable<Favicon>() {
                                 @Override
                                 public Favicon call() throws Exception {
                                     Pair<Bitmap, Boolean> bimi =
@@ -391,9 +385,9 @@ public class ContactInfo {
                             }));
 
                         if (gravatars)
-                            futures.add(executorFavicon.submit(Avatar.getGravatar(email, scaleToPixels, context)));
+                            futures.add(Helper.getDownloadTaskExecutor().submit(Avatar.getGravatar(email, scaleToPixels, context)));
                         if (libravatars)
-                            futures.add(executorFavicon.submit(Avatar.getLibravatar(email, scaleToPixels, context)));
+                            futures.add(Helper.getDownloadTaskExecutor().submit(Avatar.getLibravatar(email, scaleToPixels, context)));
 
                         if (favicons) {
                             String host = domain;
@@ -402,7 +396,7 @@ public class ContactInfo {
                             while (host.indexOf('.') > 0) {
                                 final URL base = new URL("https://" + host);
 
-                                futures.add(executorFavicon.submit(new Callable<Favicon>() {
+                                futures.add(Helper.getDownloadTaskExecutor().submit(new Callable<Favicon>() {
                                     @Override
                                     public Favicon call() throws Exception {
                                         return parseFavicon(base, scaleToPixels, context);
@@ -420,7 +414,7 @@ public class ContactInfo {
                                 final URL base = new URL("https://" + host);
 
                                 for (String name : FIXED_FAVICONS)
-                                    futures.add(executorFavicon.submit(new Callable<Favicon>() {
+                                    futures.add(Helper.getDownloadTaskExecutor().submit(new Callable<Favicon>() {
                                         @Override
                                         public Favicon call() throws Exception {
                                             return getFavicon(new URL(base, name), null, scaleToPixels, context);
@@ -739,7 +733,6 @@ public class ContactInfo {
         for (int i = 0; i < imgs.size(); i++)
             Log.i("Favicon #" + getOrder(host, imgs.get(i)) + " " + i + "=" + imgs.get(i) + " @" + base);
 
-        List<Future<Pair<Favicon, URL>>> futures = new ArrayList<>();
         for (Element img : imgs) {
             String rel = img.attr("rel").trim().toLowerCase(Locale.ROOT);
             if (REL_EXCLUDE.contains(rel)) // dns-prefetch: gmx.net
@@ -751,20 +744,11 @@ public class ContactInfo {
             if (TextUtils.isEmpty(favicon))
                 continue;
 
-            final URL url = new URL(base, favicon);
-            futures.add(executorFavicon.submit(new Callable<Pair<Favicon, URL>>() {
-                @Override
-                public Pair<Favicon, URL> call() throws Exception {
-                    return new Pair(getFavicon(url, img.attr("type"), scaleToPixels, context), url);
-                }
-            }));
-        }
-
-        for (Future<Pair<Favicon, URL>> future : futures)
             try {
-                Pair<Favicon, URL> result = future.get();
-                Log.i("Using favicon=" + result.second);
-                return result.first;
+                URL url = new URL(base, favicon);
+                Favicon f = getFavicon(url, img.attr("type"), scaleToPixels, context);
+                Log.i("Using favicon=" + url);
+                return f;
             } catch (Throwable ex) {
                 if (ex.getCause() instanceof FileNotFoundException ||
                         ex.getCause() instanceof CertPathValidatorException)
@@ -772,6 +756,7 @@ public class ContactInfo {
                 else
                     Log.e(ex);
             }
+        }
 
         return null;
     }
@@ -901,7 +886,7 @@ public class ContactInfo {
                 @Override
                 public void onChange(boolean selfChange, Uri uri) {
                     Log.i("Contact changed uri=" + uri);
-                    executorLookup.submit(new Runnable() {
+                    Helper.getSerialExecutor().submit(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -914,7 +899,7 @@ public class ContactInfo {
                 }
             };
 
-            executorLookup.submit(new Runnable() {
+            Helper.getSerialExecutor().submit(new Runnable() {
                 @Override
                 public void run() {
                     try {

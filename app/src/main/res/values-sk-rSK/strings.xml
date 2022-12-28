@@ -745,7 +745,6 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="compressed">Obsah komprimovaných súborov (%1$s) S viac než %2$s súbormi alebo so súbormi väčšími než %3$s nebude zobrazený</string>
     <string name="title_advanced_parse_classes_hint">Zobrazí správy s vyššou presnosťou, no s určitým oneskorením</string>
     <string name="title_advanced_restore_on_launch_hint">Obnoví posledný stav aplikácie po opätovnom spustení cez ikonu launcheru do %1$d minút</string>
-    <string name="title_advanced_language_detection_hint">Podpora detekcie jazyka závisí od výrobcu zariadenia</string>
     <string name="title_advanced_autoexpand_hint">Automaticky otvoriť správu ak konverzácia obsahuje len jednu</string>
     <string name="title_advanced_expandall_hint">Tlačidlo odpovedať nebude zobrazené, keď je rozbalených viac správ, pretože nie je jasné, na ktorú správu chcete odpovedať</string>
     <string name="title_advanced_autoseen_hint">Automatické označovanie správ ako prečítaných po rozbalení môžete zakázať cez pokročilé nastavenia každého účtu zvlášť</string>
@@ -784,6 +783,7 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_advanced_cleanup_hint">Odstráni všetky dočasné súbory</string>
     <string name="title_advanced_never_favorite">Nikdy nepovažovať za obľúbený</string>
     <string name="title_advanced_edit_name">Zmeniť meno</string>
+    <string name="title_create_folder_name">Názov priečinka</string>
     <string name="title_advanced_swipe_actions">Nastaviť akcie pri potiahnutí</string>
     <string name="title_advanced_swipe_actions_hint">Nastaví akcie pri potiahnutí do strán pre všetky IMAP účty</string>
     <string name="title_advanced_swipe_sensitivity">Citlivosť potiahnutia do strán</string>
@@ -1074,7 +1074,7 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_auto_confirm">Automaticky potvrdiť po niekoľkých sekundách</string>
     <string name="title_buttons">Vybrať tlačidlá</string>
     <string name="title_buttons_hint">Skutočne dostupné akcie závisia od typu a nastavenia účtu</string>
-    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Hľadať podobné správy</string>
+    <string name="title_button_search_similar">Hľadať podobné správy</string>
     <string name="title_button_search_text">Hľadať v texte správy</string>
     <string name="title_configure_buttons">Nastaviť tlačidlá &#8230;</string>
     <string name="title_quick_actions">Vybrať akcie</string>

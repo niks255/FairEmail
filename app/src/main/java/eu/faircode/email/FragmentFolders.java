@@ -1157,7 +1157,7 @@ public class FragmentFolders extends FragmentBase {
 
                 DB db = DB.getInstance(context);
 
-                List<EntityRule> rules = db.rule().getEnabledRules(fid);
+                List<EntityRule> rules = db.rule().getEnabledRules(fid, false);
                 if (rules == null)
                     return 0;
                 EntityLog.log(context, "Executing rules count=" + rules.size());
@@ -1180,7 +1180,7 @@ public class FragmentFolders extends FragmentBase {
                         db.beginTransaction();
 
                         EntityMessage message = db.message().getMessage(mid);
-                        if (message == null)
+                        if (message == null || message.ui_hide)
                             continue;
 
                         EntityLog.log(context, "Executing rules message=" + message.id);

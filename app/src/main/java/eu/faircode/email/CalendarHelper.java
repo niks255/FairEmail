@@ -33,8 +33,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 import biweekly.ICalVersion;
+import biweekly.ICalendar;
 import biweekly.component.VEvent;
-import biweekly.io.TimezoneInfo;
 import biweekly.io.WriteContext;
 import biweekly.io.scribe.property.RecurrenceRuleScribe;
 import biweekly.parameter.ParticipationStatus;
@@ -43,7 +43,7 @@ import biweekly.property.RecurrenceRule;
 import biweekly.util.ICalDate;
 
 public class CalendarHelper {
-    static void insert(Context context, TimezoneInfo tz, VEvent event,
+    static void insert(Context context, ICalendar icalendar, VEvent event,
                        String selectedAccount, String selectedName, EntityMessage message) {
         String summary = (event.getSummary() == null ? null : event.getSummary().getValue());
         String description = (event.getDescription() == null ? null : event.getDescription().getValue());
@@ -56,7 +56,7 @@ public class CalendarHelper {
         RecurrenceRule recurrence = event.getRecurrenceRule();
         if (recurrence != null) {
             RecurrenceRuleScribe scribe = new RecurrenceRuleScribe();
-            WriteContext wcontext = new WriteContext(ICalVersion.V2_0, tz, null);
+            WriteContext wcontext = new WriteContext(ICalVersion.V2_0, icalendar.getTimezoneInfo(), null);
             rrule = scribe.writeText(recurrence, wcontext);
         }
 
@@ -84,8 +84,10 @@ public class CalendarHelper {
             if (cursor.moveToNext()) {
                 // https://developer.android.com/guide/topics/providers/calendar-provider#add-event
                 // https://developer.android.com/reference/android/provider/CalendarContract.EventsColumns
+                long calId = cursor.getLong(0);
+
                 ContentValues values = new ContentValues();
-                values.put(CalendarContract.Events.CALENDAR_ID, cursor.getLong(0));
+                values.put(CalendarContract.Events.CALENDAR_ID, calId);
                 if (!TextUtils.isEmpty(uid))
                     values.put(CalendarContract.Events.UID_2445, uid);
                 values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
@@ -104,11 +106,65 @@ public class CalendarHelper {
                 Uri uri = resolver.insert(CalendarContract.Events.CONTENT_URI, values);
                 long eventId = Long.parseLong(uri.getLastPathSegment());
                 EntityLog.log(context, EntityLog.Type.General, message, "Inserted event" +
-                        " id=" + eventId +
+                        " id=" + calId + ":" + eventId +
                         " uid=" + uid +
+                        " tz=" + TimeZone.getDefault().getID() +
                         " start=" + new Date(start.getTime()) +
                         " end=" + new Date(end.getTime()) +
-                        " summary=" + summary);
+                        " rrule=" + rrule +
+                        " summary=" + summary +
+                        " location=" + location);
+
+                for (Attendee a : event.getAttendees())
+                    try {
+                        String email = a.getEmail();
+                        String name = a.getCommonName();
+                        String role = (a.getRole() == null ? null : a.getRole().getValue());
+                        String level = (a.getParticipationLevel() == null ? null
+                                : a.getParticipationLevel().getValue(icalendar.getVersion()));
+                        String status = (a.getParticipationStatus() == null ? null : a.getParticipationStatus().getValue());
+
+                        ContentValues avalues = new ContentValues();
+
+                        if (!TextUtils.isEmpty(email))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_EMAIL, email);
+
+                        if (!TextUtils.isEmpty(name))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_NAME, name);
+
+                        if ("ORGANIZER".equals(role))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_RELATIONSHIP, CalendarContract.Attendees.RELATIONSHIP_ORGANIZER);
+                        else if ("ATTENDEE".equals(role))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_RELATIONSHIP, CalendarContract.Attendees.RELATIONSHIP_ATTENDEE);
+
+                        if ("REQUIRE".equals(level) || "REQ-PARTICIPANT".equals(level))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_TYPE, CalendarContract.Attendees.TYPE_REQUIRED);
+                        else if ("REQUEST".equals(level) || "OPT-PARTICIPANT".equals(level))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_TYPE, CalendarContract.Attendees.TYPE_OPTIONAL);
+
+                        if ("ACCEPTED".equals(status) || "CONFIRMED".equals(status))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_STATUS, CalendarContract.Attendees.ATTENDEE_STATUS_ACCEPTED);
+                        else if ("DECLINED".equals(status))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_STATUS, CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED);
+                        else if ("TENTATIVE".equals(status))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_STATUS, CalendarContract.Attendees.ATTENDEE_STATUS_TENTATIVE);
+                        else if ("NEEDS-ACTION".equals(status))
+                            avalues.put(CalendarContract.Attendees.ATTENDEE_STATUS, CalendarContract.Attendees.ATTENDEE_STATUS_NONE);
+
+                        avalues.put(CalendarContract.Attendees.EVENT_ID, eventId);
+
+                        Uri auri = resolver.insert(CalendarContract.Attendees.CONTENT_URI, avalues);
+                        long attendeeId = Long.parseLong(auri.getLastPathSegment());
+                        EntityLog.log(context, EntityLog.Type.General, message, "Inserted attendee" +
+                                " id=" + eventId + ":" + attendeeId +
+                                " email=" + email +
+                                " name=" + name +
+                                " role=" + role +
+                                " level=" + level +
+                                " status=" + status);
+                    } catch (Throwable ex) {
+                        Log.w(ex);
+                    }
             }
         }
     }

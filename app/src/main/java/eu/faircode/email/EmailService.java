@@ -117,8 +117,6 @@ public class EmailService implements AutoCloseable {
     private ServiceAuthenticator authenticator;
     private RingBuffer<String> breadcrumbs;
 
-    private ExecutorService executor = Helper.getBackgroundExecutor(0, "mail");
-
     static final int PURPOSE_CHECK = 1;
     static final int PURPOSE_USE = 2;
     static final int PURPOSE_SEARCH = 3;
@@ -206,8 +204,8 @@ public class EmailService implements AutoCloseable {
                 " apop=" + auth_apop +
                 " use_top=" + use_top);
 
-        properties.put("mail.event.scope", "folder");
-        properties.put("mail.event.executor", executor);
+        //properties.put("mail.event.scope", "folder");
+        //properties.put("mail.event.executor", executor);
 
         if (!auth_plain)
             properties.put("mail." + protocol + ".auth.plain.disable", "true");
@@ -522,6 +520,34 @@ public class EmailService implements AutoCloseable {
             } else
                 throw ex;
         } catch (MessagingException ex) {
+            /*
+                javax.mail.MessagingException: FY1 BAD Command Error. 10;
+                  nested exception is:
+                    com.sun.mail.iap.BadCommandException: FY1 BAD Command Error. 10
+                javax.mail.MessagingException: FY1 BAD Command Error. 10;
+                  nested exception is:
+                    com.sun.mail.iap.BadCommandException: FY1 BAD Command Error. 10
+                    at com.sun.mail.imap.IMAPStore.protocolConnect(SourceFile:40)
+                    at javax.mail.Service.connect(SourceFile:31)
+                    at eu.faircode.email.EmailService._connect(SourceFile:31)
+                    at eu.faircode.email.EmailService.connect(SourceFile:99)
+                    at eu.faircode.email.EmailService.connect(SourceFile:40)
+                    at eu.faircode.email.EmailService.connect(SourceFile:4)
+                    at eu.faircode.email.ServiceSynchronize.monitorAccount(SourceFile:40)
+                    at eu.faircode.email.ServiceSynchronize.access$1100(SourceFile:1)
+                    at eu.faircode.email.ServiceSynchronize$4$2.run(SourceFile:1)
+                    at java.lang.Thread.run(Thread.java:919)
+                Caused by: com.sun.mail.iap.BadCommandException: FY1 BAD Command Error. 10
+                    at com.sun.mail.iap.Protocol.handleResult(SourceFile:7)
+                    at com.sun.mail.imap.protocol.IMAPProtocol.handleLoginResult(SourceFile:4)
+                    at com.sun.mail.imap.protocol.IMAPProtocol.authoauth2(SourceFile:36)
+                    at com.sun.mail.imap.IMAPStore.authenticate(SourceFile:24)
+                    at com.sun.mail.imap.IMAPStore.login(SourceFile:22)
+                    at com.sun.mail.imap.IMAPStore.protocolConnect(SourceFile:24)
+             */
+            if (ex.getMessage() != null && ex.getMessage().contains("Command Error. 10"))
+                throw new AuthenticationFailedException(context.getString(R.string.title_service_error10), ex);
+
             if (purpose == PURPOSE_CHECK) {
                 if (port == 995 && !("pop3".equals(protocol) || "pop3s".equals(protocol)))
                     throw new MessagingException(context.getString(R.string.title_service_port), ex);

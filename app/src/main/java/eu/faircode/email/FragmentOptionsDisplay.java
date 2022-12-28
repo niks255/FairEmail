@@ -76,6 +76,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swBeige;
     private SwitchCompat swTabularBackground;
     private SwitchCompat swShadow;
+    private SwitchCompat swShadowBorder;
     private SwitchCompat swShadowHighlight;
     private SwitchCompat swTabularDividers;
     private SwitchCompat swPortrait2;
@@ -98,6 +99,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swIndentation;
     private SwitchCompat swSeekbar;
     private SwitchCompat swActionbar;
+    private SwitchCompat swActionbarSwap;
     private SwitchCompat swActionbarColor;
 
     private SwitchCompat swHighlightUnread;
@@ -192,10 +194,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private final static String[] RESET_OPTIONS = new String[]{
             "theme", "startup",
             "date", "date_week", "date_fixed", "date_bold", "group_category",
-            "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_highlight", "dividers",
+            "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_border", "shadow_highlight", "dividers",
             "portrait2", "portrait2c", "landscape", "close_pane", "column_width",
             "nav_options", "nav_categories", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
-            "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_color",
+            "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_swap", "actionbar_color",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
             "avatars", "bimi", "gravatars", "libravatars", "favicons", "favicons_partial", "generated_icons", "identicons",
             "circular", "saturation", "brightness", "threshold",
@@ -237,6 +239,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swBeige = view.findViewById(R.id.swBeige);
         swTabularBackground = view.findViewById(R.id.swTabularCardBackground);
         swShadow = view.findViewById(R.id.swShadow);
+        swShadowBorder = view.findViewById(R.id.swShadowBorder);
         swShadowHighlight = view.findViewById(R.id.swShadowHighlight);
         swTabularDividers = view.findViewById(R.id.swTabularDividers);
         swPortrait2 = view.findViewById(R.id.swPortrait2);
@@ -259,6 +262,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swIndentation = view.findViewById(R.id.swIndentation);
         swSeekbar = view.findViewById(R.id.swSeekbar);
         swActionbar = view.findViewById(R.id.swActionbar);
+        swActionbarSwap = view.findViewById(R.id.swActionbarSwap);
         swActionbarColor = view.findViewById(R.id.swActionbarColor);
 
         swHighlightUnread = view.findViewById(R.id.swHighlightUnread);
@@ -448,6 +452,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
                 swBeige.setEnabled(checked);
                 swTabularBackground.setEnabled(!checked);
                 swShadow.setEnabled(checked);
+                swShadowBorder.setEnabled(swShadow.isEnabled() && checked);
                 swShadowHighlight.setEnabled(swShadow.isEnabled() && checked);
                 swTabularDividers.setEnabled(!checked);
                 swIndentation.setEnabled(checked);
@@ -473,7 +478,15 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("shadow_unread", checked).apply();
+                swShadowBorder.setEnabled(swShadow.isEnabled() && checked);
                 swShadowHighlight.setEnabled(swShadow.isEnabled() && checked);
+            }
+        });
+
+        swShadowBorder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("shadow_border", checked).apply();
             }
         });
 
@@ -647,7 +660,15 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("actionbar", checked).apply();
+                swActionbarSwap.setEnabled(checked);
                 swActionbarColor.setEnabled(checked);
+            }
+        });
+
+        swActionbarSwap.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("actionbar_swap", checked).apply();
             }
         });
 
@@ -1368,10 +1389,12 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swBeige.setChecked(prefs.getBoolean("beige", true));
         swTabularBackground.setChecked(prefs.getBoolean("tabular_card_bg", false));
         swShadow.setChecked(prefs.getBoolean("shadow_unread", false));
+        swShadowBorder.setChecked(prefs.getBoolean("shadow_border", true));
         swShadowHighlight.setChecked(prefs.getBoolean("shadow_highlight", false));
         swBeige.setEnabled(swCards.isChecked());
         swTabularBackground.setEnabled(!swCards.isChecked());
         swShadow.setEnabled(swCards.isChecked());
+        swShadowBorder.setEnabled(swShadow.isEnabled() && swShadow.isChecked());
         swShadowHighlight.setEnabled(swShadow.isEnabled() && swShadow.isChecked());
         swTabularDividers.setChecked(prefs.getBoolean("dividers", true));
         swTabularDividers.setEnabled(!swCards.isChecked());
@@ -1400,6 +1423,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swIndentation.setEnabled(swCards.isChecked() && swThreading.isChecked());
         swSeekbar.setChecked(prefs.getBoolean("seekbar", false));
         swActionbar.setChecked(prefs.getBoolean("actionbar", true));
+        swActionbarSwap.setChecked(prefs.getBoolean("actionbar_swap", false));
+        swActionbarSwap.setEnabled(swActionbar.isChecked());
         swActionbarColor.setChecked(prefs.getBoolean("actionbar_color", false));
         swActionbarColor.setEnabled(swActionbar.isChecked());
 

@@ -79,13 +79,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Semaphore;
 
 class ImageHelper {
-    private static final ExecutorService executor_1 =
-            Helper.getBackgroundExecutor(1, "image_1");
-    private static final ExecutorService executor_n =
-            Helper.getBackgroundExecutor(0, "image_n");
-
     static final int DOWNLOAD_TIMEOUT = 15; // seconds
     private static final int MAX_PROBE = 128 * 1024; // bytes
     private static final int SLOW_CONNECTION = 2 * 1024; // Kbps
@@ -475,9 +471,10 @@ class ImageHelper {
             lld.setLevel(1);
 
             Integer kbps = ConnectionHelper.getLinkDownstreamBandwidthKbps(context);
-            ExecutorService executor = (kbps != null && kbps < SLOW_CONNECTION ? executor_1 : executor_n);
+            boolean slow = (kbps != null && kbps < SLOW_CONNECTION);
+            Semaphore semaphore = new Semaphore(1);
 
-            executor.submit(new Runnable() {
+            Helper.getDownloadTaskExecutor().submit(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -490,7 +487,16 @@ class ImageHelper {
                         }
 
                         // Download image
-                        Drawable d = downloadImage(context, id, source, null);
+                        Drawable d;
+                        try {
+                            if (slow)
+                                semaphore.acquire();
+                            d = downloadImage(context, id, source, null);
+                        } finally {
+                            if (slow)
+                                semaphore.release();
+                        }
+
                         fitDrawable(d, aw, ah, scale, view);
                         post(d, source);
                     } catch (Throwable ex) {

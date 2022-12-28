@@ -40,6 +40,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -63,7 +64,7 @@ public class ActivitySignature extends ActivityBase {
     private TextView tvHtmlRemark;
     private EditTextCompose etText;
     private ImageButton ibFull;
-    private BottomNavigationView style_bar;
+    private HorizontalScrollView style_bar;
     private BottomNavigationView bottom_navigation;
 
     private boolean loaded = false;
@@ -103,6 +104,8 @@ public class ActivitySignature extends ActivityBase {
             }
         });
 
+        etText.addTextChangedListener(StyleHelper.getTextWatcher(etText));
+
         etText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -123,6 +126,8 @@ public class ActivitySignature extends ActivityBase {
             }
         });
 
+        StyleHelper.wire(this, view, etText);
+
         ibFull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,19 +143,15 @@ public class ActivitySignature extends ActivityBase {
             }
         });
 
-        style_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                return onActionStyle(item.getItemId());
-            }
-        });
-
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.action_insert_image) {
                     insertImage();
+                    return true;
+                } else if (itemId == R.id.action_insert_link) {
+                    insertLink();
                     return true;
                 } else if (itemId == R.id.action_delete) {
                     delete();
@@ -385,18 +386,11 @@ public class ActivitySignature extends ActivityBase {
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
-    private boolean onActionStyle(int action) {
-        Log.i("Style action=" + action);
-
-        if (action == R.id.menu_link) {
-            FragmentDialogInsertLink fragment = new FragmentDialogInsertLink();
-            fragment.setArguments(FragmentDialogInsertLink.getArguments(etText));
-            fragment.setTargetActivity(this, REQUEST_LINK);
-            fragment.show(getSupportFragmentManager(), "signature:link");
-
-            return true;
-        } else
-            return StyleHelper.apply(action, ActivitySignature.this, findViewById(action), etText);
+    private void insertLink() {
+        FragmentDialogInsertLink fragment = new FragmentDialogInsertLink();
+        fragment.setArguments(FragmentDialogInsertLink.getArguments(etText));
+        fragment.setTargetActivity(this, REQUEST_LINK);
+        fragment.show(getSupportFragmentManager(), "signature:link");
     }
 
     private void onImageSelected(Uri uri) {

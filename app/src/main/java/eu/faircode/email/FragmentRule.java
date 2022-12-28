@@ -76,7 +76,9 @@ import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 public class FragmentRule extends FragmentBase {
@@ -88,6 +90,8 @@ public class FragmentRule extends FragmentBase {
     private EditText etName;
     private EditText etOrder;
     private CheckBox cbEnabled;
+    private CheckBox cbDaily;
+    private EditText etAge;
     private CheckBox cbStop;
 
     private EditText etSender;
@@ -106,6 +110,7 @@ public class FragmentRule extends FragmentBase {
     private EditText etMimeType;
 
     private EditText etHeader;
+    private ImageButton ibHeader;
     private CheckBox cbHeader;
 
     private EditText etBody;
@@ -165,6 +170,7 @@ public class FragmentRule extends FragmentBase {
     private ContentLoadingProgressBar pbWait;
 
     private Group grpReady;
+    private Group grpAge;
     private Group grpSnooze;
     private Group grpFlag;
     private Group grpImportance;
@@ -208,6 +214,27 @@ public class FragmentRule extends FragmentBase {
     private final static int REQUEST_DATE_BEFORE = 12;
     private final static int REQUEST_FOLDER = 13;
 
+    private static final List<String> HEADER_CONDITIONS = Collections.unmodifiableList(Arrays.asList(
+            "$$seen$",
+            "$$answered$",
+            "$$flagged$",
+            "$$deleted$",
+            "$$tls$",
+            "$$dkim$",
+            "$$spf$",
+            "$$dmarc$",
+            "$$mx$",
+            "$$blocklist$",
+            "$$replydomain$",
+            "$$nofrom$",
+            "$$multifrom$",
+            "$$automatic$",
+            "$$lowpriority$",
+            "$$highpriority$",
+            "$$signed$",
+            "$$encrypted$"
+    ));
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -244,6 +271,8 @@ public class FragmentRule extends FragmentBase {
         etName = view.findViewById(R.id.etName);
         etOrder = view.findViewById(R.id.etOrder);
         cbEnabled = view.findViewById(R.id.cbEnabled);
+        cbDaily = view.findViewById(R.id.cbDaily);
+        etAge = view.findViewById(R.id.etAge);
         cbStop = view.findViewById(R.id.cbStop);
 
         etSender = view.findViewById(R.id.etSender);
@@ -262,6 +291,7 @@ public class FragmentRule extends FragmentBase {
         etMimeType = view.findViewById(R.id.etMimeType);
 
         etHeader = view.findViewById(R.id.etHeader);
+        ibHeader = view.findViewById(R.id.ibHeader);
         cbHeader = view.findViewById(R.id.cbHeader);
 
         etBody = view.findViewById(R.id.etBody);
@@ -322,6 +352,7 @@ public class FragmentRule extends FragmentBase {
         pbWait = view.findViewById(R.id.pbWait);
 
         grpReady = view.findViewById(R.id.grpReady);
+        grpAge = view.findViewById(R.id.grpAge);
         grpSnooze = view.findViewById(R.id.grpSnooze);
         grpFlag = view.findViewById(R.id.grpFlag);
         grpImportance = view.findViewById(R.id.grpImportance);
@@ -334,6 +365,13 @@ public class FragmentRule extends FragmentBase {
         grpAutomation = view.findViewById(R.id.grpAutomation);
         grpDelete = view.findViewById(R.id.grpDelete);
         grpLocalOnly = view.findViewById(R.id.grpLocalOnly);
+
+        cbDaily.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                grpAge.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            }
+        });
 
         ibSender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -366,6 +404,26 @@ public class FragmentRule extends FragmentBase {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 etMimeType.setEnabled(isChecked);
+            }
+        });
+
+        ibHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(v.getContext(), getViewLifecycleOwner(), v);
+
+                for (int i = 0; i < HEADER_CONDITIONS.size(); i++)
+                    popupMenu.getMenu().add(Menu.NONE, i + 1, i + 1, HEADER_CONDITIONS.get(i));
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        etHeader.setText(item.getTitle());
+                        return true;
+                    }
+                });
+
+                popupMenu.show();
             }
         });
 
@@ -619,6 +677,7 @@ public class FragmentRule extends FragmentBase {
                 args.putInt("color", btnColor.getColor());
                 args.putString("title", getString(R.string.title_flag_color));
                 args.putBoolean("reset", true);
+                args.putInt("faq", 187);
 
                 FragmentDialogColor fragment = new FragmentDialogColor();
                 fragment.setArguments(args);
@@ -731,6 +790,7 @@ public class FragmentRule extends FragmentBase {
         tvFolder.setText(null);
         bottom_navigation.setVisibility(View.GONE);
         grpReady.setVisibility(View.GONE);
+        grpAge.setVisibility(View.GONE);
         grpSnooze.setVisibility(View.GONE);
         grpFlag.setVisibility(View.GONE);
         grpImportance.setVisibility(View.GONE);
@@ -1086,6 +1146,7 @@ public class FragmentRule extends FragmentBase {
                         JSONObject jcondition = (rule == null ? new JSONObject() : new JSONObject(rule.condition));
                         JSONObject jaction = (rule == null ? new JSONObject() : new JSONObject(rule.action));
 
+                        JSONObject jgeneral = jcondition.optJSONObject("general");
                         JSONObject jsender = jcondition.optJSONObject("sender");
                         JSONObject jrecipient = jcondition.optJSONObject("recipient");
                         JSONObject jsubject = jcondition.optJSONObject("subject");
@@ -1097,6 +1158,8 @@ public class FragmentRule extends FragmentBase {
                         etName.setText(rule == null ? args.getString("subject") : rule.name);
                         etOrder.setText(rule == null ? null : Integer.toString(rule.order));
                         cbEnabled.setChecked(rule == null || rule.enabled);
+                        cbDaily.setChecked(rule != null && rule.daily);
+                        etAge.setText(jgeneral == null ? null : Integer.toString(jgeneral.optInt("age")));
                         cbStop.setChecked(rule != null && rule.stop);
 
                         etSender.setText(jsender == null ? args.getString("sender") : jsender.getString("value"));
@@ -1248,6 +1311,7 @@ public class FragmentRule extends FragmentBase {
                     Log.e(ex);
                 } finally {
                     grpReady.setVisibility(View.VISIBLE);
+                    grpAge.setVisibility(cbDaily.isChecked() ? View.VISIBLE : View.GONE);
                     if (id < 0)
                         bottom_navigation.getMenu().removeItem(R.id.action_delete);
                     bottom_navigation.setVisibility(View.VISIBLE);
@@ -1294,6 +1358,7 @@ public class FragmentRule extends FragmentBase {
 
             Bundle args = new Bundle();
             args.putLong("folder", folder);
+            args.putBoolean("daily", cbDaily.isChecked());
             args.putString("condition", jcondition.toString());
             args.putString("action", jaction.toString());
 
@@ -1319,6 +1384,7 @@ public class FragmentRule extends FragmentBase {
             args.putString("name", etName.getText().toString());
             args.putString("order", etOrder.getText().toString());
             args.putBoolean("enabled", cbEnabled.isChecked());
+            args.putBoolean("daily", cbDaily.isChecked());
             args.putBoolean("stop", cbStop.isChecked());
             args.putString("condition", getCondition().toString());
             args.putString("action", getAction().toString());
@@ -1341,6 +1407,7 @@ public class FragmentRule extends FragmentBase {
                     String name = args.getString("name");
                     String order = args.getString("order");
                     boolean enabled = args.getBoolean("enabled");
+                    boolean daily = args.getBoolean("daily");
                     boolean stop = args.getBoolean("stop");
                     String condition = args.getString("condition");
                     String action = args.getString("action");
@@ -1377,6 +1444,7 @@ public class FragmentRule extends FragmentBase {
                         rule.name = name;
                         rule.order = Integer.parseInt(order);
                         rule.enabled = enabled;
+                        rule.daily = daily;
                         rule.stop = stop;
                         rule.condition = condition;
                         rule.action = action;
@@ -1388,6 +1456,7 @@ public class FragmentRule extends FragmentBase {
                         rule.name = name;
                         rule.order = Integer.parseInt(order);
                         rule.enabled = enabled;
+                        rule.daily = daily;
                         rule.stop = stop;
                         rule.condition = condition;
                         rule.action = action;
@@ -1419,6 +1488,18 @@ public class FragmentRule extends FragmentBase {
 
     private JSONObject getCondition() throws JSONException {
         JSONObject jcondition = new JSONObject();
+
+        JSONObject jgeneral = new JSONObject();
+
+        String age = etAge.getText().toString().trim();
+        if (!TextUtils.isEmpty(age) && TextUtils.isDigitsOnly(age))
+            try {
+                jgeneral.put("age", Integer.parseInt(age));
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+
+        jcondition.put("general", jgeneral);
 
         String sender = etSender.getText().toString();
         boolean known = cbKnownSender.isChecked();
@@ -1634,6 +1715,7 @@ public class FragmentRule extends FragmentBase {
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             long folder = getArguments().getLong("folder");
+            boolean daily = getArguments().getBoolean("daily");
             String condition = getArguments().getString("condition");
             String action = getArguments().getString("action");
 
@@ -1656,6 +1738,7 @@ public class FragmentRule extends FragmentBase {
 
             final Bundle args = new Bundle();
             args.putLong("folder", folder);
+            args.putBoolean("daily", daily);
             args.putString("condition", condition);
             args.putString("action", action);
 
@@ -1681,6 +1764,7 @@ public class FragmentRule extends FragmentBase {
                         protected Integer onExecute(Context context, Bundle args) throws Throwable {
                             EntityRule rule = new EntityRule();
                             rule.folder = args.getLong("folder");
+                            rule.daily = args.getBoolean("daily");
                             rule.condition = args.getString("condition");
                             rule.action = args.getString("action");
 
@@ -1694,7 +1778,7 @@ public class FragmentRule extends FragmentBase {
                                     db.beginTransaction();
 
                                     EntityMessage message = db.message().getMessage(mid);
-                                    if (message == null)
+                                    if (message == null || message.ui_hide)
                                         continue;
 
                                     if (rule.matches(context, message, null, null))
@@ -1744,6 +1828,7 @@ public class FragmentRule extends FragmentBase {
                 protected List<EntityMessage> onExecute(Context context, Bundle args) throws Throwable {
                     EntityRule rule = new EntityRule();
                     rule.folder = args.getLong("folder");
+                    rule.daily = args.getBoolean("daily");
                     rule.condition = args.getString("condition");
                     rule.action = args.getString("action");
                     rule.validate(context);

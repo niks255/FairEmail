@@ -44,6 +44,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,7 +72,7 @@ public class FragmentAnswer extends FragmentBase {
     private CheckBox cbExternal;
     private ViewButtonColor btnColor;
     private EditTextCompose etText;
-    private BottomNavigationView style_bar;
+    private HorizontalScrollView style_bar;
     private BottomNavigationView bottom_navigation;
     private ContentLoadingProgressBar pbWait;
     private Group grpReady;
@@ -157,12 +159,9 @@ public class FragmentAnswer extends FragmentBase {
             }
         });
 
-        style_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                return onActionStyle(item.getItemId());
-            }
-        });
+        etText.addTextChangedListener(StyleHelper.getTextWatcher(etText));
+
+        StyleHelper.wire(getViewLifecycleOwner(), view, etText);
 
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -170,6 +169,9 @@ public class FragmentAnswer extends FragmentBase {
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.action_insert_image) {
                     onInsertImage();
+                    return true;
+                } else if (itemId == R.id.action_insert_link) {
+                    onInsertLink();
                     return true;
                 } else if (itemId == R.id.action_delete) {
                     onActionDelete();
@@ -303,6 +305,18 @@ public class FragmentAnswer extends FragmentBase {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.menu_placeholder_firstname).setVisible(BuildConfig.DEBUG);
         menu.findItem(R.id.menu_placeholder_lastname).setVisible(BuildConfig.DEBUG);
+
+        bottom_navigation.findViewById(R.id.action_save).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (LanguageTool.isEnabled(v.getContext())) {
+                    onLanguageTool();
+                    return true;
+                } else
+                    return false;
+            }
+        });
+
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -371,6 +385,13 @@ public class FragmentAnswer extends FragmentBase {
         intent.setType("image/*");
         Helper.openAdvanced(intent);
         startActivityForResult(intent, REQUEST_IMAGE);
+    }
+
+    private void onInsertLink() {
+        FragmentDialogInsertLink fragment = new FragmentDialogInsertLink();
+        fragment.setArguments(FragmentDialogInsertLink.getArguments(etText));
+        fragment.setTargetFragment(this, REQUEST_LINK);
+        fragment.show(getParentFragmentManager(), "answer:link");
     }
 
     private void onActionDelete() {
@@ -590,17 +611,54 @@ public class FragmentAnswer extends FragmentBase {
         }.execute(this, args, "answer:delete");
     }
 
-    private boolean onActionStyle(int action) {
-        Log.i("Style action=" + action);
+    private void onLanguageTool() {
+        etText.clearComposingText();
 
-        if (action == R.id.menu_link) {
-            FragmentDialogInsertLink fragment = new FragmentDialogInsertLink();
-            fragment.setArguments(FragmentDialogInsertLink.getArguments(etText));
-            fragment.setTargetFragment(this, REQUEST_LINK);
-            fragment.show(getParentFragmentManager(), "answer:link");
+        Bundle args = new Bundle();
+        args.putCharSequence("text", etText.getText());
 
-            return true;
-        } else
-            return StyleHelper.apply(action, getViewLifecycleOwner(), view.findViewById(action), etText);
+        new SimpleTask<List<LanguageTool.Suggestion>>() {
+            private Toast toast = null;
+
+            @Override
+            protected void onPreExecute(Bundle args) {
+                toast = ToastEx.makeText(getContext(), R.string.title_suggestions_check, Toast.LENGTH_LONG);
+                toast.show();
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                if (toast != null)
+                    toast.cancel();
+            }
+
+            @Override
+            protected List<LanguageTool.Suggestion> onExecute(Context context, Bundle args) throws Throwable {
+                CharSequence text = args.getCharSequence("text").toString();
+                return LanguageTool.getSuggestions(context, text);
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, List<LanguageTool.Suggestion> suggestions) {
+                LanguageTool.applySuggestions(etText, 0, etText.length(), suggestions);
+
+                if (suggestions == null || suggestions.size() == 0)
+                    ToastEx.makeText(getContext(), R.string.title_suggestions_none, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onDestroyed(Bundle args) {
+                if (toast != null) {
+                    toast.cancel();
+                    toast = null;
+                }
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Throwable exex = new Throwable("LanguageTool", ex);
+                Log.unexpectedError(getParentFragmentManager(), exex, false);
+            }
+        }.execute(this, args, "answer:lt");
     }
 }

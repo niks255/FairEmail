@@ -704,7 +704,6 @@
     <string name="compressed">Nội dung các tệp đã nén (%1$s) có nhiều hơn %2$s tệp hoặc có tệp lớn hơn %3$s sẽ không được hiện</string>
     <string name="title_advanced_parse_classes_hint">Cái này sẽ hiển thị thư chính xác hơn, nhưng có thể có độ trễ</string>
     <string name="title_advanced_restore_on_launch_hint">Khôi phục trạng thái ứng dụng khi khởi động lại bằng biểu tượng trên launcher trong vòng %1$d phút</string>
-    <string name="title_advanced_language_detection_hint">Việc hỗ trợ dò tìm ngôn ngữ phụ thuộc vào nhà sản xuất thiết bị</string>
     <string name="title_advanced_autoexpand_hint">Tự động mở thư khi chỉ cỏ một thư hoặc một thư chưa đọc trong một cuộc hội thoại</string>
     <string name="title_advanced_expandall_hint">Nút trả lời sẽ không được hiện khi nhiều thư được mở rộng vì không rõ là nút đó áp dụng cho thư nào</string>
     <string name="title_advanced_autoseen_hint">Việc tự động đánh dấu thư là đã đọc khi mở rộng có thể được tắt trong cài đặt tài khoản nâng cao của mỗi tài khoản</string>
@@ -743,6 +742,7 @@
     <string name="title_advanced_cleanup_hint">Cái này sẽ xóa tất cả tệp tạm</string>
     <string name="title_advanced_never_favorite">Không bao giờ yêu thích</string>
     <string name="title_advanced_edit_name">Chỉnh sửa tên</string>
+    <string name="title_create_folder_name">Tên thư mục</string>
     <string name="title_advanced_swipe_actions">Đặt các hành động vuốt</string>
     <string name="title_advanced_swipe_actions_hint">Cái này sẽ đặt hành động vuốt trái và phải cho tất cả tài khoản IMAP</string>
     <string name="title_advanced_swipe_sensitivity">Độ nhạy vuốt trái/phải</string>
@@ -1032,7 +1032,7 @@
     <string name="title_auto_confirm">Tự động xác nhận sau vài giây</string>
     <string name="title_buttons">Chọn các nút</string>
     <string name="title_buttons_hint">Các hành động thực sự có sẵn còn tuỳ vào loại tài khoản và thiết lập tài khoản</string>
-    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Tìm kiếm các thư tương tự</string>
+    <string name="title_button_search_similar">Tìm kiếm các thư tương tự</string>
     <string name="title_button_search_text">Tìm kiếm trong văn bản thư</string>
     <string name="title_configure_buttons">Thiết lập các nút &#8230;</string>
     <string name="title_quick_actions">Chọn hành động</string>

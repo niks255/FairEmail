@@ -718,7 +718,6 @@
     <string name="title_advanced_inline_hint">As imaxes en liña son as que están incluídas na mensaxe</string>
     <string name="compressed">Non se mostrarań os contenidos de ficheiros comprimidos (%1$s) con máis de %2$s ficheiros ou con ficheiros máis grandes que %3$s</string>
     <string name="title_advanced_parse_classes_hint">Esto fará máis precisa a mostra das mensaxes, pero posiblemente cun atraso</string>
-    <string name="title_advanced_language_detection_hint">A detección da linguaxe depende do fabricante do dispositivo</string>
     <string name="title_advanced_autoexpand_hint">Abrir automaticamente unha mensaxe cando é a única ou é a única mensaxe non lida nunha conversa</string>
     <string name="title_advanced_expandall_hint">O botón de resposta non se mostra cando estean expandidas varias mensaxes porque non se sabería a que mensaxe se aplicaría</string>
     <string name="title_advanced_autoseen_hint">A marca automática de mensaxes como lidas ao seren expandidas pódese desactivar na configuración avanzada das contas</string>
@@ -755,6 +754,7 @@
     <string name="title_advanced_cleanup_hint">Isto eliminará todos os ficheiros temporais</string>
     <string name="title_advanced_never_favorite">Nunca favorito</string>
     <string name="title_advanced_edit_name">Editar nome</string>
+    <string name="title_create_folder_name">Nome do cartafol</string>
     <string name="title_advanced_swipe_actions">Axustar accións ao esvarar</string>
     <string name="title_advanced_swipe_actions_hint">Isto axustará o esvarar á esquerda e á dereita para todas as contas IMAP</string>
     <string name="title_advanced_swipe_sensitivity">Sensibilidade ao esvarar á esquerda/dereita</string>
@@ -1030,7 +1030,7 @@
     <string name="title_auto_confirm">Confirmar automaticamente despois duns segundos</string>
     <string name="title_buttons">Botóns de selección</string>
     <string name="title_buttons_hint">As accións dispoñibles na realidade dependen do tipo de conta e da configuración</string>
-    <string name="title_button_search_similar" comment="title_button_search_similar&#10;Title for option to search for similar emails">Atopar mensaxes similares</string>
+    <string name="title_button_search_similar">Atopar mensaxes similares</string>
     <string name="title_button_search_text">Buscar no texto da mensaxe</string>
     <string name="title_configure_buttons">Configurar botóns &#8230;</string>
     <string name="title_quick_actions_snooze">Adiar</string>
@@ -1202,7 +1202,6 @@
     <string name="title_save_drafts">Gardar os borradores no servidor</string>
     <string name="title_send_dialog">Mostrar opcións de envío</string>
     <string name="title_image_dialog">Mostrar opcións de imaxe</string>
-    <string name="title_block_toolbar">Ferramentas de bloque de texto</string>
     <string name="title_media_toolbar">Barra de audiovisuais</string>
     <string name="title_manage_local_contacts">Xestionar os contactos locais</string>
     <string name="title_insert_contact_group">Inserir grupo de contacto</string>

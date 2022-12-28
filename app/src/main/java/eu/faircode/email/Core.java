@@ -1774,7 +1774,7 @@ class Core {
 
             SyncStats stats = new SyncStats();
             boolean download = db.folder().getFolderDownload(folder.id);
-            List<EntityRule> rules = db.rule().getEnabledRules(folder.id);
+            List<EntityRule> rules = db.rule().getEnabledRules(folder.id, false);
 
             FetchProfile fp = new FetchProfile();
             fp.add(UIDFolder.FetchProfileItem.UID); // To check if message exists
@@ -2383,7 +2383,9 @@ class Core {
                     // Prefix folder with namespace
                     try {
                         Folder[] ns = istore.getPersonalNamespaces();
-                        if (ns != null && ns.length == 1) {
+                        Folder[] sh = istore.getSharedNamespaces();
+                        if (ns != null && ns.length == 1 &&
+                                !(sync_shared_folders && sh != null && sh.length > 0)) {
                             String n = ns[0].getFullName();
                             // Typically "" or "INBOX"
                             if (!TextUtils.isEmpty(n)) {
@@ -2761,19 +2763,8 @@ class Core {
                         folder.setProperties();
                         folder.setSpecials(account);
 
-                        if (selectable && parent != null && EntityFolder.USER.equals(parent.type)) {
-                            folder.synchronize = parent.synchronize;
-                            folder.poll = parent.poll;
-                            folder.poll_factor = parent.poll_factor;
-                            folder.download = parent.download;
-                            folder.auto_classify_source = parent.auto_classify_source;
-                            folder.auto_classify_target = parent.auto_classify_target;
-                            folder.sync_days = parent.sync_days;
-                            folder.keep_days = parent.keep_days;
-                            folder.unified = parent.unified;
-                            folder.navigation = parent.navigation;
-                            folder.notify = parent.notify;
-                        }
+                        if (selectable)
+                            folder.inheritFrom(parent);
 
                         folder.id = db.folder().insertFolder(folder);
                         Log.i(folder.name + " added type=" + folder.type + " sync=" + folder.synchronize);
@@ -2980,32 +2971,53 @@ class Core {
 
     private static void onPurgeFolder(Context context, EntityFolder folder) {
         // POP3
-        DB db = DB.getInstance(context);
-        try {
-            db.beginTransaction();
+        int count = 0;
+        int purged = 0;
+        do {
+            if (count > 0) {
+                try {
+                    Thread.sleep(YIELD_DURATION);
+                } catch (InterruptedException ignored) {
+                }
+            }
 
-            int purged = db.message().deleteHiddenMessages(folder.id);
-            Log.i(folder.name + " purge count=" + purged);
+            DB db = DB.getInstance(context);
+            try {
+                db.beginTransaction();
+                count = db.message().deleteHiddenMessages(folder.id, 100);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
 
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
+            purged += count;
+            Log.i(folder.name + " purge count=" + count + "/" + purged);
+        } while (count > 0);
     }
 
     private static void onRule(Context context, JSONArray jargs, EntityMessage message) throws JSONException, MessagingException {
-        // Download message body
+        // Deferred rule (download headers, body, etc)
         DB db = DB.getInstance(context);
 
         long id = jargs.getLong(0);
-        EntityRule rule = db.rule().getRule(id);
-        if (rule == null)
-            throw new IllegalArgumentException("Rule not found id=" + id);
+        if (id < 0) {
+            List<EntityRule> rules = db.rule().getEnabledRules(message.folder, true);
+            for (EntityRule rule : rules)
+                if (rule.matches(context, message, null, null)) {
+                    rule.execute(context, message);
+                    if (rule.stop)
+                        break;
+                }
+        } else {
+            EntityRule rule = db.rule().getRule(id);
+            if (rule == null)
+                throw new IllegalArgumentException("Rule not found id=" + id);
 
-        if (!message.content)
-            throw new IllegalArgumentException("Message without content id=" + rule.id + ":" + rule.name);
+            if (!message.content)
+                throw new IllegalArgumentException("Message without content id=" + rule.id + ":" + rule.name);
 
-        rule.execute(context, message);
+            rule.execute(context, message);
+        }
     }
 
     private static void onDownload(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws MessagingException, IOException, JSONException {
@@ -3044,7 +3056,7 @@ class Core {
             return;
         }
 
-        List<EntityRule> rules = db.rule().getEnabledRules(folder.id);
+        List<EntityRule> rules = db.rule().getEnabledRules(folder.id, false);
 
         try {
             db.folder().setFolderSyncState(folder.id, "syncing");
@@ -3937,7 +3949,7 @@ class Core {
                         Log.i(folder.name + " delete local uid=" + uid + " count=" + count);
                     }
 
-                    List<EntityRule> rules = db.rule().getEnabledRules(folder.id);
+                    List<EntityRule> rules = db.rule().getEnabledRules(folder.id, false);
 
                     fp.add(FetchProfile.Item.ENVELOPE);
                     //fp.add(FetchProfile.Item.FLAGS);
@@ -4823,7 +4835,7 @@ class Core {
         }
 
         if (syncSimilar && account.isGmail())
-            for (EntityMessage similar : db.message().getMessagesBySimilarity(message.account, message.id, message.msgid)) {
+            for (EntityMessage similar : db.message().getMessagesBySimilarity(message.account, message.id, message.msgid, message.hash)) {
                 if (similar.recent != message.recent) {
                     Log.i(folder.name + " Synchronize similar id=" + similar.id + " recent=" + message.recent);
                     db.message().setMessageRecent(similar.id, message.recent);

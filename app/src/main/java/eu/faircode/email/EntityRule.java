@@ -57,7 +57,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
 import java.util.regex.Pattern;
 
 import javax.mail.Address;
@@ -93,6 +92,8 @@ public class EntityRule {
     public int order;
     @NonNull
     public boolean enabled;
+    @NonNull
+    public boolean daily;
     @NonNull
     public boolean stop;
     @NonNull
@@ -130,8 +131,6 @@ public class EntityRule {
     private static final String JSOUP_PREFIX = "jsoup:";
     private static final long SEND_DELAY = 5000L; // milliseconds
 
-    private static final ExecutorService executor = Helper.getBackgroundExecutor(1, "rule");
-
     static boolean needsHeaders(EntityMessage message, List<EntityRule> rules) {
         return needs(rules, "header");
     }
@@ -158,6 +157,21 @@ public class EntityRule {
     boolean matches(Context context, EntityMessage message, List<Header> headers, String html) throws MessagingException {
         try {
             JSONObject jcondition = new JSONObject(condition);
+
+            // general
+            if (this.daily) {
+                JSONObject jgeneral = jcondition.optJSONObject("general");
+                if (jgeneral != null) {
+                    int age = jgeneral.optInt("age");
+                    if (age > 0) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTimeInMillis(message.received);
+                        cal.add(Calendar.DAY_OF_MONTH, age);
+                        if (cal.getTimeInMillis() > new Date().getTime())
+                            return false;
+                    }
+                }
+            }
 
             // Sender
             JSONObject jsender = jcondition.optJSONObject("sender");
@@ -456,10 +470,10 @@ public class EntityRule {
 
         if (matched)
             EntityLog.log(context, EntityLog.Type.Rules, message,
-                    "Rule=" + name + ":" + order + " matched " +
+                    "Rule=" + name + "@" + order + " matched " +
                             " needle=" + needle + " haystack=" + haystack + " regex=" + regex);
         else
-            Log.i("Rule=" + name + ":" + order + " matched=" + matched +
+            Log.i("Rule=" + name + "@" + order + " matched=" + matched +
                     " needle=" + needle + " haystack=" + haystack + " regex=" + regex);
         return matched;
     }
@@ -476,7 +490,8 @@ public class EntityRule {
     private boolean _execute(Context context, EntityMessage message) throws JSONException, IllegalArgumentException {
         JSONObject jaction = new JSONObject(action);
         int type = jaction.getInt("type");
-        EntityLog.log(context, EntityLog.Type.Rules, message, "Executing rule=" + type + ":" + name);
+        EntityLog.log(context, EntityLog.Type.Rules, message,
+                "Executing rule=" + type + ":" + this.name + "@" + this.order);
 
         switch (type) {
             case TYPE_NOOP:
@@ -760,7 +775,7 @@ public class EntityRule {
             return true;
         }
 
-        executor.submit(new Runnable() {
+        Helper.getSerialExecutor().submit(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -825,17 +840,19 @@ public class EntityRule {
         Address[] from = new InternetAddress[]{new InternetAddress(identity.email, identity.name, StandardCharsets.UTF_8.name())};
 
         // Prevent loop
-        List<EntityMessage> messages = db.message().getMessagesByThread(
-                message.account, message.thread, null, null);
-        for (EntityMessage threaded : messages)
-            if (!threaded.id.equals(message.id) &&
-                    MessageHelper.equal(threaded.from, from)) {
-                EntityLog.log(context, EntityLog.Type.Rules, message,
-                        "Answer loop" +
-                                " name=" + answer.name +
-                                " from=" + MessageHelper.formatAddresses(from));
-                return;
-            }
+        if (isReply) {
+            List<EntityMessage> messages = db.message().getMessagesByThread(
+                    message.account, message.thread, null, null);
+            for (EntityMessage threaded : messages)
+                if (!threaded.id.equals(message.id) &&
+                        MessageHelper.equal(threaded.from, from)) {
+                    EntityLog.log(context, EntityLog.Type.Rules, message,
+                            "Answer loop" +
+                                    " name=" + answer.name +
+                                    " from=" + MessageHelper.formatAddresses(from));
+                    return;
+                }
+        }
 
         EntityMessage reply = new EntityMessage();
         reply.account = message.account;
@@ -980,7 +997,7 @@ public class EntityRule {
             return true;
         }
 
-        executor.submit(new Runnable() {
+        Helper.getSerialExecutor().submit(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -1259,6 +1276,7 @@ public class EntityRule {
                     this.name.equals(other.name) &&
                     this.order == other.order &&
                     this.enabled == other.enabled &&
+                    this.daily == other.daily &&
                     this.stop == other.stop &&
                     this.condition.equals(other.condition) &&
                     this.action.equals(other.action) &&
@@ -1310,6 +1328,7 @@ public class EntityRule {
         json.put("name", name);
         json.put("order", order);
         json.put("enabled", enabled);
+        json.put("daily", daily);
         json.put("stop", stop);
         json.put("condition", condition);
         json.put("action", action);
@@ -1326,6 +1345,7 @@ public class EntityRule {
         rule.name = json.getString("name");
         rule.order = json.getInt("order");
         rule.enabled = json.getBoolean("enabled");
+        rule.daily = json.optBoolean("daily");
         rule.stop = json.getBoolean("stop");
         rule.condition = json.getString("condition");
         rule.action = json.getString("action");
