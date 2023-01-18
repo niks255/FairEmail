@@ -187,7 +187,8 @@
     </provider>
     <provider
         name="Outlook"
-        description="Outlook"
+        debug="true"
+        description="Outlook/Office 365 (alt)"
         enabled="false"
         id="outlook"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
@@ -204,11 +205,10 @@
             host="smtp.office365.com"
             port="587"
             starttls="true" />
-        <!--pop
+        <pop
             host="outlook.office365.com"
             port="995"
-            starttls="false" /-->
-        <!-- https://outlook.office.com/POP.AccessAsUser.All -->
+            starttls="false" />
         <oauth
             askAccount="true"
             authorizationEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize"
@@ -217,7 +217,7 @@
             privacy="https://privacy.microsoft.com/privacystatement"
             prompt="login"
             redirectUri="msauth.eu.faircode.email://auth"
-            scopes="openid,email,offline_access,https://outlook.office.com/IMAP.AccessAsUser.All,https://outlook.office.com/SMTP.Send"
+            scopes="profile,openid,email,offline_access,https://outlook.office.com/IMAP.AccessAsUser.All,https://outlook.office.com/SMTP.Send,https://outlook.office.com/POP.AccessAsUser.All"
             tokenEndpoint="https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
             tokenScopes="true" />
     </provider>
@@ -691,6 +691,7 @@
     </provider>
     <provider
         name="Zoho"
+        documentation="You might need to use &lt;a href=&quot;https://help.zoho.com/portal/en/kb/bigin/channels/email/articles/generate-an-app-specific-password&quot;&gt;an app password&lt;/a&gt;."
         domain="zoho\\.com"
         link="https://www.zoho.com/mail/help/imap-access.html"
         maxtls="1.2">
@@ -705,6 +706,7 @@
     </provider>
     <provider
         name="Zoho EU"
+        documentation="You might need to use &lt;a href=&quot;https://help.zoho.com/portal/en/kb/bigin/channels/email/articles/generate-an-app-specific-password&quot;&gt;an app password&lt;/a&gt;."
         domain="zohomail\\.eu"
         link="https://www.zoho.eu/mail/help/imap-access.html"
         maxtls="1.2">
@@ -719,6 +721,7 @@
     </provider>
     <provider
         name="Zoho AU"
+        documentation="You might need to use &lt;a href=&quot;https://help.zoho.com/portal/en/kb/bigin/channels/email/articles/generate-an-app-specific-password&quot;&gt;an app password&lt;/a&gt;."
         domain="zohomail\\.com\\.au"
         maxtls="1.2">
         <imap
@@ -1826,6 +1829,32 @@
             port="465"
             starttls="false" />
     </provider>
+    <provider
+        name="Plusnet/force9"
+        domain=".*\\.force9\\.co\\.uk"
+        link="https://www.plus.net/help/email-guides/how-to-set-up-plusnet-email/">
+        <imap
+            host="imap.force9.net"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="relay.force9.net"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Plusnet/free"
+        domain=".*\\.free-online\\.net"
+        link="https://www.plus.net/help/email-guides/how-to-set-up-plusnet-email/">
+        <imap
+            host="imap.free-online.net"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="relay.free-online.net"
+            port="465"
+            starttls="false" />
+    </provider>
     <provider name="Netbeat">
         <imap
             host="mail.netbeat.de"
@@ -1915,5 +1944,18 @@
             host="mail.minuskel.de"
             port="587"
             starttls="true" />
+    </provider>
+    <provider
+        name="Drie.at"
+        domain="drei\\.at"
+        link="https://www.drei.at/de/info/support/e-mail-einstellungen/">
+        <imap
+            host="imap.drei.at"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.drei.at"
+            port="465"
+            starttls="false" />
     </provider>
 </providers>

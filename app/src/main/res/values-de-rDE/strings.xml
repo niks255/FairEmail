@@ -18,6 +18,7 @@
     <string name="channel_notification">Neue E-Mail</string>
     <string name="channel_progress">Fortschritt</string>
     <string name="channel_update">Aktualisierungen</string>
+    <string name="channel_announcements">Ankündigungen</string>
     <string name="channel_warning">Warnungen</string>
     <string name="channel_error">Fehler</string>
     <string name="channel_alert">Serverbenachrichtigungen</string>
@@ -177,6 +178,7 @@
     <string name="title_setup_gmail_rationale">Bitte erteilen Sie die Berechtigung, ein Konto auszuwählen und Ihren Namen zu lesen</string>
     <string name="title_setup_gmail_permissions">Google wird Sie um Erlaubnis bitten, alle Ihre E-Mails zu lesen, zu verfassen, zu senden und dauerhaft zu löschen. FairEmail löscht niemals Ihre Nachrichten ohne Ihre ausdrückliche Zustimmung.</string>
     <string name="title_setup_gmail_login">Wenn Chrome bei einem Konto angemeldet ist, kann ein neues Konto nur über Android hinzugefügt werden. Dies kann umgangen werden, indem Sie sich über die Chrome-Synchronisierungseinstellungen bei Chrome abmelden.</string>
+    <string name="title_setup_gmail_max">Im Falle der Fehlermeldung „Du bist bei der maximalen Anzahl an Konten angemeldet“, müssen Sie den Browser von allen Google-Konten abmelden.</string>
     <string name="title_setup_gmail_on_device">Warum muss ich ein Konto auf dem Gerät auswählen?</string>
     <string name="title_setup_gmail_password">Ich möchte ein Gmail-Konto mit einem eigenen App-Passwort anstatt über das geräteinterne Google-Konto autorisieren</string>
     <string name="title_setup_office_auth">Der Fehler »AUTHENTICATE failed« kann dadurch verursacht werden, dass IMAP/SMTP vom Systemverwalter deaktiviert wurde</string>
@@ -244,7 +246,7 @@
         Das Passwort wird benötigt, um die Einstellungen erneut zu importieren. Bitte vergessen Sie es daher nicht!
     </string>
     <string name="title_setup_export_do">Die Exportdatei enthält alle Einstellungen und Daten, aber keine Nachrichten und keine in Signaturen eingebettete Grafiken.</string>
-    <string name="title_setup_import_do">Importierte Konten werden hinzugefügt, ohne vorhandene zu überschreiben</string>
+    <string name="title_setup_scroll">Die Eingabedialoge können rollbar sein!</string>
     <string name="title_setup_password">Passwort</string>
     <string name="title_setup_password_chars">Passwort enthält Steuer- oder Leerzeichen</string>
     <string name="title_setup_password_repeat">Passwort erneut eingeben</string>
@@ -320,6 +322,7 @@
     <string name="title_advanced_section_encryption">Verschlüsselung</string>
     <string name="title_advanced_section_notifications">Benachrichtigungen</string>
     <string name="title_advanced_section_misc">Verschiedenes</string>
+    <string name="title_advanced_section_backup">Sicherung</string>
     <string name="title_advanced_default">Alle Optionen haben häufig verwendete Standardwerte, die für die Verwendung der App nicht geändert werden müssen</string>
     <string name="title_advanced_receive">Nachrichten für alle Konten empfangen</string>
     <string name="title_advanced_when">Wann</string>
@@ -385,7 +388,8 @@
     <string name="title_advanced_reply_move">Beim Antworten auf eine Nachricht die Antwort im selben Ordner speichern</string>
     <string name="title_advanced_reply_move_inbox">Auch für Nachrichten im Posteingang</string>
     <string name="title_advanced_auto_link">Links automatisch erstellen</string>
-    <string name="title_advanced_plain_only">Standardmäßig nur als unformatierten Text senden</string>
+    <string name="title_advanced_plain_only">Standardmäßig nur einfachen Text senden</string>
+    <string name="title_advanced_plain_only_reply">Nur beim Antworten auf eine Nur-Textnachricht automatisch Nur-Text verwenden</string>
     <string name="title_advanced_flow">Format fließend für unformatierten Text</string>
     <string name="title_advanced_usenet_signature">Usenet-Signaturkonvention</string>
     <string name="title_advanced_remove_signatures">Erkannte Signaturen entfernen</string>
@@ -417,6 +421,7 @@
     <string name="title_advanced_caption_message">Nachricht</string>
     <string name="title_advanced_caption_message_header">Nachrichtenkopfzeilen</string>
     <string name="title_advanced_caption_message_body">Nachrichtentext</string>
+    <string name="title_advanced_caption_file">Datei</string>
     <string name="title_advanced_portrait">Hochformat</string>
     <string name="title_advanced_landscape">Querformat</string>
     <string name="title_advanced_two_row">Zwei Zeilen verwenden</string>
@@ -424,6 +429,7 @@
     <string name="title_advanced_min_screen_size">Minimale Bildschirmgröße zum Teilen des Bildschirms</string>
     <string name="title_advanced_close_pane">Zeile oder Spalte beim Schließen einer Unterhaltung einklappen</string>
     <string name="title_advanced_column_width">Spaltenbreite/Zeilenhöhe der Nachricht: %1$s %%</string>
+    <string name="title_advanced_hide_toolbar">Obere Symbolleiste beim Rollen von Nachrichten ausblenden</string>
     <string name="title_advanced_nav_options">Navigationsmenü-Optionen anzeigen</string>
     <string name="title_advanced_nav_categories">Kontokategorien im Navigationsmenü anzeigen</string>
     <string name="title_advanced_nav_pin">Navigationsmenü anheften</string>
@@ -548,6 +554,7 @@
     <string name="title_advanced_undo">Anzeigedauer von »Rückgängig«</string>
     <string name="title_advanced_quick_filter">Unaufdringliche Schnellfiltersymbole anzeigen</string>
     <string name="title_advanced_quick_scroll">Unaufdringliche Symbole für schnellen Bildlauf nach oben oder unten anzeigen</string>
+    <string name="title_advanced_quick_actions">Schnellaktionen anzeigen, sobald Nachrichten ausgewählt sind</string>
     <string name="title_advanced_folder_nav">Von einer Nachrichtenliste immer zur Ordnerliste zurückkehren</string>
     <string name="title_advanced_autoread">Nachrichten beim Verschieben automatisch als gelesen kennzeichnen</string>
     <string name="title_advanced_star_snoozed">Zurückgestellte Nachrichten automatisch kennzeichnen</string>
@@ -617,6 +624,7 @@
     <string name="title_advanced_disconnect_auto_update">Listen wöchentlich automatisch aktualisieren</string>
     <string name="title_advanced_disconnect_links">Listen verwenden, um vor Nachverfolgungslinks zu warnen</string>
     <string name="title_advanced_disconnect_images">Listen zur Erkennung von Nachverfolgungsbildern verwenden</string>
+    <string name="title_advanced_clear_all_hint">Dadurch werden alle App-Daten von Ihrem Gerät gelöscht, einschließlich konfigurierter E-Mail-Konten, Nachrichten, Einstellungen und aller gesammelten Daten.</string>
     <string name="title_advanced_mnemonic">Daten aus der Ferne löschen</string>
     <string name="title_advanced_mnemonic_hint">Jede E-Mail mit den folgenden Wörtern in der Betreffzeile wird automatisch und sofort die App-Daten auf diesem Gerät löschen</string>
     <string name="title_advanced_clear_all">App-Daten löschen</string>
@@ -666,6 +674,7 @@
     <string name="title_advanced_check_weekly">Wöchentlich statt täglich prüfen</string>
     <string name="title_advanced_beta">Testversionen bei BitBucket suchen</string>
     <string name="title_advanced_changelog">Änderungsprotokoll nach Aktualisierungen anzeigen</string>
+    <string name="title_advanced_announcements">Auf Ankündigungen prüfen</string>
     <string name="title_advanced_experiments">Experimentelle Funktionen ausprobieren</string>
     <string name="title_advanced_crash_reports">Fehlerberichte senden</string>
     <string name="title_advanced_cleanup_attachments">Anhänge aus alten Nachrichten löschen</string>
@@ -735,7 +744,7 @@
     <string name="title_advanced_preview_issue">Scrollen kann aufgrund eines Fehlers in einigen Android-Versionen langsam sein, wenn die Anzahl der Zeilen mehr als eine ist</string>
     <string name="title_advanced_overview_mode_hint">Dies kann zu sehr kleinen Schriften führen</string>
     <string name="title_advanced_override_width_hint">Dies kann nicht nur dazu führen, dass die Nachrichten schmaler werden, sondern auch ungewohnt aussehen.</string>
-    <string name="title_advanced_monospaced_pre_hint">Reintext-Nachrichten werden als vorformatiert betrachtet</string>
+    <string name="title_advanced_monospaced_pre_hint">Nachrichten aus einfachem Text werden als vorformatiert betrachtet</string>
     <string name="title_advanced_placeholders_hint">Das gilt nur für umformatierte Nachrichten</string>
     <string name="title_advanced_inline_hint">Eingebettete Grafiken sind Grafiken, die innerhalb der Nachricht enthalten sind</string>
     <string name="compressed">Der Inhalt von komprimierten Dateien (%1$s) mit mehr als %2$s Dateien oder mit Dateien größer als %3$s wird nicht angezeigt</string>
@@ -976,7 +985,6 @@
     <string name="title_edit_account_color">Farbe des Kontos ändern</string>
     <string name="title_hide_folder">Ordner ausblenden</string>
     <string name="title_hide_seen_folder">Ordner ausblenden, wenn alle Nachrichten gelesen wurden</string>
-    <string name="title_hide_seen_folder_hint">Nur in der auf dem Startbildschirm angezeigten Ordnerliste</string>
     <string name="title_unified_folder">Im Sammeleingang anzeigen</string>
     <string name="title_navigation_folder">Im Navigationsmenü anzeigen</string>
     <string name="title_navigation_folder_hide">Im Navigationsmenü ausblenden</string>
@@ -1084,6 +1092,7 @@
     <string name="title_quick_actions">Aktionen auswählen</string>
     <string name="title_quick_actions_hint">Es werden bis zu %1$d Aktionen angezeigt</string>
     <string name="title_quick_actions_low">Geringe Wichtigkeit</string>
+    <string name="title_quick_actions_normal">Normale Bedeutung</string>
     <string name="title_quick_actions_high">Hohe Wichtigkeit</string>
     <string name="title_quick_actions_snooze">Später lesen</string>
     <string name="title_quick_actions_clear">Auswahl nach Aktion löschen</string>
@@ -1336,7 +1345,7 @@
     <string name="title_resync">Neu synchronisieren</string>
     <string name="title_charset">Zeichenkodierung</string>
     <string name="title_charset_auto">Automatisch</string>
-    <string name="title_alternative_text">Unformatierten Text laden</string>
+    <string name="title_alternative_text">Einfachen Text laden</string>
     <string name="title_alternative_html">HTML laden</string>
     <string name="title_no_openpgp">OpenKeychain wurde nicht gefunden</string>
     <string name="title_user_interaction">Übertragung zu OpenKeychain</string>
@@ -1489,7 +1498,7 @@
     <string name="title_rule_order">Reihenfolge</string>
     <string name="title_rule_enabled">Aktiviert</string>
     <string name="title_rule_daily">Nur 1x täglich ausführen</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Nachrichten älter als (Tage)</string>
+    <string name="title_rule_age">Nachrichten älter als (Tage)</string>
     <string name="title_rule_stop">Regeln nach der Ausführung dieser Regel beenden</string>
     <string name="title_rule_sender">Absender enthält</string>
     <string name="title_rule_sender_known">Absender ist in den Kontakten</string>
@@ -1607,7 +1616,7 @@
     <string name="title_legend_browsed">Gesehen oder gesucht</string>
     <string name="title_legend_answered">Wurde beantwortet</string>
     <string name="title_legend_forwarded">Wurde weitergeleitet</string>
-    <string name="title_legend_plain_only">Ist eine Reintext-Nachricht</string>
+    <string name="title_legend_plain_only">Ist nur einfacher Text</string>
     <string name="title_legend_receipt">Bestätigung wurde angefordert</string>
     <string name="title_legend_auto_submitted">Wurde automatisch gesendet</string>
     <string name="title_legend_attachment">Anhang vorhanden</string>
@@ -1708,7 +1717,7 @@
     <string name="title_yes">Ja</string>
     <string name="title_no">Nein</string>
     <string name="title_later">Später</string>
-    <string name="title_paste_plain">Als Text einfügen</string>
+    <string name="title_paste_plain">Als einfachen Text einfügen</string>
     <string name="title_undo">Rückgängig</string>
     <string name="title_redo">Wiederherstellen</string>
     <string name="title_insert_line">Linie einfügen</string>
@@ -1811,6 +1820,7 @@ Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwind
     <string name="title_widget_padding">Abstand zwischen den Texten</string>
     <string name="title_widget_separator_lines">Trennlinien anzeigen</string>
     <string name="title_widget_semi_transparent">Halbtransparenter Hintergrund</string>
+    <string name="title_widget_count_top">Anzahl ungelesener am oberen Rand anzeigen</string>
     <string name="title_widget_avatars">Kontaktavatare anzeigen</string>
     <string name="title_widget_refresh">Schaltfläche „Nachrichten aktualisieren“ anzeigen</string>
     <string name="title_widget_compose">Schaltfläche „Neue Nachricht verfassen” anzeigen</string>

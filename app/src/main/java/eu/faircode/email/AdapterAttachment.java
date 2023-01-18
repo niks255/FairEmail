@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
@@ -45,7 +45,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ShareCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -299,13 +298,9 @@ public class AdapterAttachment extends RecyclerView.Adapter<AdapterAttachment.Vi
 
         private boolean onShare(final EntityAttachment attachment) {
             try {
-                File file = attachment.getFile(context);
-                Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
-                // TODO: consider using getUriForFile(..., displayName)
-
                 new ShareCompat.IntentBuilder(context)
                         .setType(attachment.getMimeType())
-                        .addStream(uri)
+                        .addStream(attachment.getUri(context))
                         .setChooserTitle(R.string.title_select_app)
                         .startChooser();
 

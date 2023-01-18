@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Activity;
@@ -57,6 +57,8 @@ import java.util.Map;
 public class ApplicationEx extends Application
         implements androidx.work.Configuration.Provider, SharedPreferences.OnSharedPreferenceChangeListener {
     private Thread.UncaughtExceptionHandler prev = null;
+
+    private static final Object lock = new Object();
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -672,6 +674,9 @@ public class ApplicationEx extends Application
         } else if (version < 2016) {
             if (!prefs.contains("reset_snooze"))
                 editor.putBoolean("reset_snooze", false);
+        } else if (version < 2029) {
+            if (!prefs.contains("plain_only_reply"))
+                editor.putBoolean("plain_only_reply", true);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)
@@ -865,7 +870,9 @@ public class ApplicationEx extends Application
 
     synchronized static Handler getMainHandler() {
         if (handler == null)
-            handler = new Handler(Looper.getMainLooper());
+            synchronized (lock) {
+                handler = new Handler(Looper.getMainLooper());
+            }
         return handler;
     }
 }

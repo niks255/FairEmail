@@ -2,9 +2,72 @@
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/CHANGELOG.md)
 
+For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
+
+### [Quetecsaurus](https://en.wikipedia.org/wiki/Quetecsaurus)
+
+### 1.2030 - 2023-01-14
+
+* Added backup settings tab page
+* Added option to disable quick actions
+* Improved performance
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.2029 - 2023-01-09
+
+* Added auto hiding top toolbar when scrolling messages (can be turned off in the display settings)
+* Added option to disable automatically plain text only when replying to a plain text only message
+* Added option to show unread count badge at the top of the unread count widget
+* Added option for normal importance quick action
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### [Pelecanimimus](https://en.wikipedia.org/wiki/Pelecanimimus)
 
-For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
+### 1.2028 - 2023-01-06
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2027 - 2023-01-04
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2026 - 2023-01-02
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2025 - 2023-01-01
+
+* Happy New Year / Frohes neues Jahr / Bonne Année
+* Small improvements and minor bug fixes
+
+### 1.2024 - 2022-12-31
+
+* Small improvements and minor bug fixes
+
+### 1.2023 - 2022-12-30
+
+* Restored the bugfix and declared that the app is sending email addresses to third-parties in the Play Store data safety form when it is not :-(
+
+### 1.2022 - 2022-12-30
+
+* Reverted a bugfix to comply with Play Store policies
+* Small improvements and minor bug fixes
+
+### 1.2021 - 2022-12-30
+
+* Disabled BIMI for the Play Store version
+* Small improvements and minor bug fixes
+
+### 1.2020 - 2022-12-30
+
+* Fixed opening the app in some circumstances
+* Small improvements and minor bug fixes
 
 ### 1.2019 - 2022-12-28
 

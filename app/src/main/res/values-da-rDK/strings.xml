@@ -18,6 +18,7 @@
     <string name="channel_notification">E-mail</string>
     <string name="channel_progress">Status</string>
     <string name="channel_update">Opdateringer</string>
+    <string name="channel_announcements">Bekendtgørelser</string>
     <string name="channel_warning">Advarsler</string>
     <string name="channel_error">Fejl</string>
     <string name="channel_alert">Serveradvarsler</string>
@@ -176,6 +177,7 @@
     <string name="title_setup_gmail_rationale">Giv tilladelser til at vælge en konto og læse dit navn</string>
     <string name="title_setup_gmail_permissions">Google vil beder om tilladelse til at læse, komponere, sende samt permanent slette alle din e-mails. FairEmail sletter aldrig dine beskeder uden dit samtykke.</string>
     <string name="title_setup_gmail_login">Er Chrome logget ind på en konto, kan en ny konto kun tilføjes via Android. Dette kan undgås ved at logge ud af Chrome via dens synkindstillinger.</string>
+    <string name="title_setup_gmail_max">I tilfælde af fejlmeddelelsen \"Du er logget ind på det maksimale antal konti\", skal der logges ud på alle Google-konti i browseren.</string>
     <string name="title_setup_gmail_on_device">Hvorfor skal der vælges en enhedsbaseret konto?</string>
     <string name="title_setup_gmail_password">Jeg ønsker at godkende en konto med en adgangskode i stedet for en enhedskonto</string>
     <string name="title_setup_office_auth">Fejlen \'GODKENDELSE mislykkedes\' kan skyldes, at IMAP/SMTP er deaktiveret af systemadministratoren</string>
@@ -243,7 +245,7 @@
         Adgangskoden kræves for at importere indstillingerne igen, så glem den ikke!
     </string>
     <string name="title_setup_export_do">Eksportfilen vil indeholde alle indstillinger og data, men hverken meddelelser eller signaturrefererede billeder</string>
-    <string name="title_setup_import_do">Importerede konti tilføjes uden at overskrive eksisterende ditto</string>
+    <string name="title_setup_scroll">Inputdialogerne kan muligvis rulles!</string>
     <string name="title_setup_password">Adgangskode</string>
     <string name="title_setup_password_chars">Adgangskode indeholder kontrol- eller mellemrumstegn</string>
     <string name="title_setup_password_repeat">Gentag adgangskode</string>
@@ -320,6 +322,7 @@
     <string name="title_advanced_section_encryption">Kryptering</string>
     <string name="title_advanced_section_notifications">Notifikationer</string>
     <string name="title_advanced_section_misc">Diverse</string>
+    <string name="title_advanced_section_backup">Sikkerhedskopiering</string>
     <string name="title_advanced_default">Alle indstillinger har alm. anvendte standardværdier uden behov for ændringer for brug af appen</string>
     <string name="title_advanced_receive">Modtag beskeder til alle konti</string>
     <string name="title_advanced_when">Når</string>
@@ -386,6 +389,7 @@
     <string name="title_advanced_reply_move_inbox">Også for beskeder i indbakken</string>
     <string name="title_advanced_auto_link">Opret links automatisk</string>
     <string name="title_advanced_plain_only">Send kun simpel tekst som standard</string>
+    <string name="title_advanced_plain_only_reply">Brug automatisk ren tekst ved besvarelse af en ren tekst besked</string>
     <string name="title_advanced_flow">\'format flowed\' til simpel tekst</string>
     <string name="title_advanced_usenet_signature">Usenet-signaturkonvention</string>
     <string name="title_advanced_remove_signatures">Fjern genkedte signaturer</string>
@@ -417,6 +421,7 @@
     <string name="title_advanced_caption_message">Besked</string>
     <string name="title_advanced_caption_message_header">Beskedoverskrift</string>
     <string name="title_advanced_caption_message_body">Beskedtekst</string>
+    <string name="title_advanced_caption_file">Fil</string>
     <string name="title_advanced_portrait">Stående tilstand</string>
     <string name="title_advanced_landscape">Liggende tilstand</string>
     <string name="title_advanced_two_row">Brug to rækker</string>
@@ -424,6 +429,7 @@
     <string name="title_advanced_min_screen_size">Minimumsskærmstørrelse for opsplitning af skærmen</string>
     <string name="title_advanced_close_pane">Skjul række eller kolonne, når en samtale lukkes</string>
     <string name="title_advanced_column_width">Beskedkolonnebredde/-rækkehøjde: %1$s %%</string>
+    <string name="title_advanced_hide_toolbar">Skjul øverste værktøjsbjælke ved rulning gennem beskeder</string>
     <string name="title_advanced_nav_options">Vis navigeringsmenuindstillinger</string>
     <string name="title_advanced_nav_categories">Vis kontokategorier i navigeringsmenuen</string>
     <string name="title_advanced_nav_pin">Fastgør navigeringsmenu</string>
@@ -548,6 +554,7 @@
     <string name="title_advanced_undo">Fortryd timeout</string>
     <string name="title_advanced_quick_filter">Vis ikke-påtrængende hurtige filterikoner</string>
     <string name="title_advanced_quick_scroll">Vis ikke-påtrængende hurtige rul op/ned ikoner</string>
+    <string name="title_advanced_quick_actions">Vis hurtige handlinger, når beskeder markeres</string>
     <string name="title_advanced_folder_nav">Returnér altid til mappelisten fra en beskedliste</string>
     <string name="title_advanced_autoread">Auto-markér beskeder som læst, når de flyttes</string>
     <string name="title_advanced_star_snoozed">Auto-tilføj stjerne på udsatte beskeder</string>
@@ -617,6 +624,7 @@
     <string name="title_advanced_disconnect_auto_update">Opdatér automatisk lister ugentligt</string>
     <string name="title_advanced_disconnect_links">Benyt lister til at advare om sporingslinks</string>
     <string name="title_advanced_disconnect_images">Benyt lister til at genkende sporingsbilleder</string>
+    <string name="title_advanced_clear_all_hint">Dette sletter alle app-data fra enheden, herunder opsatte e-mailkonti, beskeder, indstillinger og alle indsamlede data.</string>
     <string name="title_advanced_mnemonic">Fjernsletning af data</string>
     <string name="title_advanced_mnemonic_hint">Modtagelse af en e-mail indeholdende nedenstående ord i emnefeltet vil øjeblikkeligt udløse sletning alle app-data på denne enhed</string>
     <string name="title_advanced_clear_all">Slet app-data</string>
@@ -667,6 +675,7 @@
     <string name="title_advanced_check_weekly">Tjek ugentligt i stedet for dagligt</string>
     <string name="title_advanced_beta">Tjek for testversioner på BitBucket</string>
     <string name="title_advanced_changelog">Vis ændringslog efter opdatering</string>
+    <string name="title_advanced_announcements">Se efter nye bekendtgørelser</string>
     <string name="title_advanced_experiments">Prøv eksperimentelle funktioner</string>
     <string name="title_advanced_crash_reports">Send fejlrapporter</string>
     <string name="title_advanced_cleanup_attachments">Slet gamle beskeders vedhæftninger</string>
@@ -977,7 +986,6 @@
     <string name="title_edit_account_color">Redigér kontofarve</string>
     <string name="title_hide_folder">Skjul mappe</string>
     <string name="title_hide_seen_folder">Skjul, hvis alle beskeder er læst</string>
-    <string name="title_hide_seen_folder_hint">Kun i mappelisten, der vises på startskærmen</string>
     <string name="title_unified_folder">Vis i samlet indbakke</string>
     <string name="title_navigation_folder">Vis i navigationsmenu</string>
     <string name="title_navigation_folder_hide">Skjul i navigeringsmenuen</string>
@@ -1087,6 +1095,7 @@
     <string name="title_quick_actions">Vælg handlinger</string>
     <string name="title_quick_actions_hint">Maksimalt %1$d handlinger vises</string>
     <string name="title_quick_actions_low">Lav vigtighed</string>
+    <string name="title_quick_actions_normal">Normal vigtighed</string>
     <string name="title_quick_actions_high">Høj vigtighed</string>
     <string name="title_quick_actions_snooze">Udsæt</string>
     <string name="title_quick_actions_clear">Ryd valg efter handling</string>
@@ -1493,7 +1502,7 @@
     <string name="title_rule_order">Rækkefølge</string>
     <string name="title_rule_enabled">Aktiveret</string>
     <string name="title_rule_daily">Kør kun dagligt</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Beskeder ældre end (dage)</string>
+    <string name="title_rule_age">Beskeder ældre end (dage)</string>
     <string name="title_rule_stop">Stop afvikling af regler efter eksekvering af denne regel</string>
     <string name="title_rule_sender">Afsender indeholder</string>
     <string name="title_rule_sender_known">Afsender er en kontakt</string>
@@ -1815,6 +1824,7 @@
     <string name="title_widget_padding">Polstringsstørrelse</string>
     <string name="title_widget_separator_lines">Vis separatorlinjer</string>
     <string name="title_widget_semi_transparent">Halvgennemsigtig baggrund</string>
+    <string name="title_widget_count_top">Vis antallet af ulæste øverst</string>
     <string name="title_widget_avatars">Vis kontaktavatarer</string>
     <string name="title_widget_refresh">Vis Opfrisk beskeder-knap</string>
     <string name="title_widget_compose">Vis Skriv ny besked-knap</string>

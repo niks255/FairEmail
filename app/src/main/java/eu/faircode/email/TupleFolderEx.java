@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Notification;
@@ -62,6 +62,10 @@ public class TupleFolderEx extends EntityFolder implements Serializable {
     public List<TupleFolderEx> child_refs;
     @Ignore
     public int childs_unseen = 0;
+
+    boolean isHidden() {
+        return (this.hide_seen && this.unseen + this.childs_unseen == 0);
+    }
 
     @Override
     public boolean equals(Object obj) {

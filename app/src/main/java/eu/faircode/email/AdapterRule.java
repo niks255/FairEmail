@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -374,14 +374,17 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                             if (rule == null)
                                 return 0;
 
-                            JSONObject jcondition = new JSONObject(rule.condition);
-                            JSONObject jheader = jcondition.optJSONObject("header");
-                            if (jheader != null)
-                                throw new IllegalArgumentException(context.getString(R.string.title_rule_no_headers));
-
                             List<Long> ids = db.message().getMessageIdsByFolder(rule.folder);
                             if (ids == null)
                                 return 0;
+
+                            // Check header conditions
+                            for (long mid : ids) {
+                                EntityMessage message = db.message().getMessage(mid);
+                                if (message == null || message.ui_hide)
+                                    continue;
+                                rule.matches(context, message, null, null);
+                            }
 
                             int applied = 0;
                             for (long mid : ids)

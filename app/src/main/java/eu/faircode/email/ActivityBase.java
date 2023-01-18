@@ -16,10 +16,11 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -42,6 +43,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -830,6 +832,54 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
                 return false;
         }
         return super.shouldUpRecreateTask(targetIntent);
+    }
+
+    public boolean abShowing = true;
+    public ValueAnimator abAnimator = null;
+
+    public boolean isActionBarShown() {
+        return abShowing;
+    }
+
+    public void showActionBar(boolean show) {
+        ViewGroup abv = findViewById(R.id.action_bar);
+        if (abv == null) {
+            ActionBar ab = getSupportActionBar();
+            if (ab == null)
+                return;
+            if (show)
+                ab.show();
+            else
+                ab.hide();
+        } else {
+            if (abShowing == show)
+                return;
+            abShowing = show;
+
+            int height = Helper.getActionBarHeight(this);
+            int current = abv.getLayoutParams().height;
+            int target = (show ? height : 0);
+            if (abAnimator == null) {
+                abAnimator = ValueAnimator.ofInt(current, target);
+                abAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator anim) {
+                        try {
+                            abv.getLayoutParams().height = (Integer) anim.getAnimatedValue();
+                            abv.requestLayout();
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
+                    }
+                });
+            } else {
+                abAnimator.cancel();
+                abAnimator.setIntValues(current, target);
+            }
+
+            abAnimator.setDuration(250L * Math.abs(current - target) / height);
+            abAnimator.start();
+        }
     }
 
     Handler getMainHandler() {

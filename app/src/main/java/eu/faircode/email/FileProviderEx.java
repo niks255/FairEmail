@@ -16,14 +16,23 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
+import android.net.Uri;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
 public class FileProviderEx extends FileProvider {
     // https://android-review.googlesource.com/c/platform/frameworks/support/+/1978527
     public FileProviderEx() {
         super(R.xml.fileprovider_paths);
+    }
+
+    @Override
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        throw new UnsupportedOperationException("No external updates");
     }
 }

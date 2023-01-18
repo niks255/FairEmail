@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">FairEmail</string>
-    <string name="app_copyright" translatable="false">Copyright &#x24B8; 2018–2022 by M. Bokhorst</string>
+    <string name="app_copyright" translatable="false">Copyright &#x24B8; 2018–2023 by M. Bokhorst</string>
     <string name="app_search">FairEmail search</string>
     <string name="app_answer" translatable="false">FairEmail template</string>
     <string name="app_changelog">Changelog</string>
@@ -22,6 +22,7 @@
     <string name="channel_notification">Email</string>
     <string name="channel_progress">Progress</string>
     <string name="channel_update">Updates</string>
+    <string name="channel_announcements">Announcements</string>
     <string name="channel_warning">Warnings</string>
     <string name="channel_error">Errors</string>
     <string name="channel_alert">Server alerts</string>
@@ -224,6 +225,7 @@
     <string name="title_setup_gmail_rationale">Please grant permissions to select an account and read your name</string>
     <string name="title_setup_gmail_permissions">Google will ask for permissions to read, compose, send and permanently delete all your email. FairEmail will never delete your messages without your explicit consent.</string>
     <string name="title_setup_gmail_login">If Chrome is signed in to an account, a new account can only be added through Android. This can be avoided by logging out of Chrome via the Chrome sync settings.</string>
+    <string name="title_setup_gmail_max">In case of the error message \"You\'re signed in to the maximum number of accounts\", you need to log out the browser from all Google accounts.</string>
     <string name="title_setup_gmail_on_device">Why do I need to select an on-device account?</string>
     <string name="title_setup_gmail_password">I want to authorize an account with a password instead of an on-device account</string>
     <string name="title_setup_office_auth">The error \'AUTHENTICATE failed\' can be caused by IMAP/SMTP being disabled by the system administrator</string>
@@ -294,7 +296,7 @@
         The password is required to import the settings again, so please don\'t forget it!
     </string>
     <string name="title_setup_export_do">The export file will contain all settings and data, but no messages and no images referenced in signatures</string>
-    <string name="title_setup_import_do">Imported accounts will be added without overwriting any existing ones</string>
+    <string name="title_setup_scroll">The input dialogs may be scrollable!</string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">Password contains control or whitespace characters</string>
     <string name="title_setup_password_repeat">Repeat password</string>
@@ -388,6 +390,7 @@
     <string name="title_advanced_section_encryption">Encryption</string>
     <string name="title_advanced_section_notifications">Notifications</string>
     <string name="title_advanced_section_misc">Miscellaneous</string>
+    <string name="title_advanced_section_backup">Backup</string>
 
     <string name="title_advanced_default">All options have commonly used standard values, which don\'t need to be changed to use the app</string>
 
@@ -460,6 +463,7 @@
 
     <string name="title_advanced_auto_link">Automatically create links</string>
     <string name="title_advanced_plain_only">Send plain text only by default</string>
+    <string name="title_advanced_plain_only_reply">Automatically plain text only when replying to a plain text only message</string>
     <string name="title_advanced_flow">\'format flowed\' for plain text</string>
     <string name="title_advanced_usenet_signature">Follow Usenet signature convention</string>
     <string name="title_advanced_remove_signatures">Remove recognized signatures</string>
@@ -496,6 +500,8 @@
     <string name="title_advanced_caption_message">Message</string>
     <string name="title_advanced_caption_message_header">Message header</string>
     <string name="title_advanced_caption_message_body">Message body</string>
+    <string name="title_advanced_caption_file">File</string>
+    <string name="title_advanced_caption_cloud" translatable="false">Cloud</string>
     <string name="title_advanced_caption_debug" translatable="false">Debug</string>
 
     <string name="title_advanced_portrait">Portrait mode</string>
@@ -505,6 +511,7 @@
     <string name="title_advanced_min_screen_size">Minimum screen size for splitting the screen</string>
     <string name="title_advanced_close_pane">Collapse row or column when closing a conversation</string>
     <string name="title_advanced_column_width">Message column width / row height: %1$s %%</string>
+    <string name="title_advanced_hide_toolbar">Hide top toolbar when scrolling messages</string>
     <string name="title_advanced_nav_options">Show navigation menu options</string>
     <string name="title_advanced_nav_categories">Show account categories in the navigation menu</string>
     <string name="title_advanced_nav_pin">Pin navigation menu</string>
@@ -635,6 +642,7 @@
     <string name="title_advanced_undo">Undo timeout</string>
     <string name="title_advanced_quick_filter">Show non-obtrusive quick filter icons</string>
     <string name="title_advanced_quick_scroll">Show non-obtrusive quick scroll up/down icons</string>
+    <string name="title_advanced_quick_actions">Show quick actions when messages are selected</string>
     <string name="title_advanced_folder_nav">Always go back to the folder list from a message list</string>
     <string name="title_advanced_autoread">Automatically mark messages read on moving messages</string>
     <string name="title_advanced_star_snoozed">Automatically add star on snoozing messages</string>
@@ -715,6 +723,7 @@
     <string name="title_advanced_disconnect_auto_update">Automatically update lists weekly</string>
     <string name="title_advanced_disconnect_links">Use lists to warn about tracking links</string>
     <string name="title_advanced_disconnect_images">Use lists to recognize tracking images</string>
+    <string name="title_advanced_clear_all_hint">This will delete all app data from your device, including configured email accounts, messages, settings, and any collected data.</string>
     <string name="title_advanced_mnemonic">Delete data remotely</string>
     <string name="title_advanced_mnemonic_hint">Any email received with the below words in the subject line will automatically and immediately delete the app data</string>
     <string name="title_advanced_clear_all">Delete the app data</string>
@@ -775,6 +784,7 @@
     <string name="title_advanced_check_weekly">Check weekly instead of daily</string>
     <string name="title_advanced_beta">Check for test versions on BitBucket</string>
     <string name="title_advanced_changelog">Show changelog after update</string>
+    <string name="title_advanced_announcements">Check for announcements</string>
     <string name="title_advanced_experiments">Try experimental features</string>
     <string name="title_advanced_crash_reports">Send error reports</string>
     <string name="title_advanced_canary" translatable="false">Leak canary</string>
@@ -813,6 +823,7 @@
     <string name="title_advanced_fake_dark" translatable="false">Fake dark</string>
     <string name="title_advanced_show_recent" translatable="false">Show recent flag</string>
     <string name="title_advanced_modseq" translatable="false">MODSEQ</string>
+    <string name="title_advanced_preamble" translatable="false">Preamble</string>
     <string name="title_advanced_uid" translatable="false">UID command</string>
     <string name="title_advanced_expunge" translatable="false">AUTO EXPUNGE</string>
     <string name="title_advanced_uid_expunge" translatable="false">UID EXPUNGE</string>
@@ -961,6 +972,18 @@
     <string name="title_advanced_cleanup_attachments_hint">When manually cleaning, this will remove attachments from messages that are no longer synchronized</string>
     <string name="title_advanced_cleanup_hint">This will delete all temporary files</string>
     <string name="title_advanced_keywords_hint" translatable="false">Space separated</string>
+
+    <string name="title_advanced_cloud_security" translatable="false">All data is encrypted end-to-end and the cloud server will never see the username, password and data</string>
+    <string name="title_advanced_cloud_login" translatable="false">Login</string>
+    <string name="title_advanced_cloud_register" translatable="false">Logging in for the first time will automatically create an account</string>
+    <string name="title_advanced_cloud_invalid" translatable="false">Invalid username or password</string>
+    <string name="title_advanced_cloud_accounts" translatable="false">Sync accounts</string>
+    <string name="title_advanced_cloud_blocked_senders" translatable="false">Sync blocked senders</string>
+    <string name="title_advanced_cloud_filter_rules" translatable="false">Sync filter rules</string>
+    <string name="title_advanced_cloud_last_sync" translatable="false">Last sync: %1$s</string>
+    <string name="title_advanced_cloud_update" translatable="false">Update settings</string>
+    <string name="title_advanced_cloud_logout" translatable="false">Logout</string>
+    <string name="title_advanced_cloud_wipe" translatable="false">Wipe cloud data on logout</string>
 
     <string name="title_advanced_never_favorite">Never favorite</string>
     <string name="title_advanced_edit_name">Edit name</string>
@@ -1178,7 +1201,7 @@
     <string name="title_edit_account_color">Edit account color</string>
     <string name="title_hide_folder">Hide folder</string>
     <string name="title_hide_seen_folder">Hide folder if all messages are read</string>
-    <string name="title_hide_seen_folder_hint">Only in the folder list shown on the start screen</string>
+    <string name="title_hide_seen_folder_hint">Only in the account and unified folder list</string>
     <string name="title_unified_folder">Show in unified inbox</string>
     <string name="title_navigation_folder">Show in navigation menu</string>
     <string name="title_navigation_folder_hide">Hide in navigation menu</string>
@@ -1298,6 +1321,7 @@
     <string name="title_quick_actions">Select actions</string>
     <string name="title_quick_actions_hint">Up to %1$d actions will be shown</string>
     <string name="title_quick_actions_low">Low importance</string>
+    <string name="title_quick_actions_normal">Normal importance</string>
     <string name="title_quick_actions_high">High importance</string>
     <string name="title_quick_actions_snooze">Snooze</string>
     <string name="title_quick_actions_clear">Clear selection after action</string>
@@ -2098,6 +2122,7 @@
     <string name="title_widget_padding">Padding size</string>
     <string name="title_widget_separator_lines">Show separator lines</string>
     <string name="title_widget_semi_transparent">Semi transparent background</string>
+    <string name="title_widget_count_top">Show unread count at the top</string>
     <string name="title_widget_avatars">Show contact avatars</string>
     <string name="title_widget_refresh">Show refresh messages button</string>
     <string name="title_widget_compose">Show compose new message button</string>

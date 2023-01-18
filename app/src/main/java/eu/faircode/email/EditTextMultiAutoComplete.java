@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -336,7 +336,7 @@ public class EditTextMultiAutoComplete extends AppCompatMultiAutoCompleteTextVie
                                     Integer has = encryption.get(email);
                                     if (has == null) {
                                         final List<Address> recipient = Arrays.asList(new Address[]{parsed[0]});
-                                        Helper.getParallelExecutor().submit(new Runnable() {
+                                        Helper.getUIExecutor().submit(new Runnable() {
                                             @Override
                                             public void run() {
                                                 try {

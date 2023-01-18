@@ -18,6 +18,7 @@
     <string name="channel_notification">电子邮件</string>
     <string name="channel_progress">进度</string>
     <string name="channel_update">更新</string>
+    <string name="channel_announcements">公告</string>
     <string name="channel_warning">警告</string>
     <string name="channel_error">错误</string>
     <string name="channel_alert">服务器警告</string>
@@ -163,6 +164,7 @@
     <string name="title_setup_gmail_rationale">请授予权限来选择一个账户并读取您的姓名</string>
     <string name="title_setup_gmail_permissions">Google 会请求读取、撰写、发送和永久删除您的所有电子邮件的权限。相比之下，未经您的明确同意，FairEmail 永远不会删除您的邮件。</string>
     <string name="title_setup_gmail_login">如果 Chrome 登录到 Google 账户，那么只能通过 Android 添加一个新账户。 通过 Chrome 同步设置退出 Chrome 账户登录可以避免这种情况。</string>
+    <string name="title_setup_gmail_max">如果碰到错误消息“您登录的账户数已达上限”， 您需要从浏览器退出登录所有 Google 账户。</string>
     <string name="title_setup_gmail_on_device">为什么我需要选择设备上账户？</string>
     <string name="title_setup_gmail_password">我想使用密码而不是设备上的帐户进行授权</string>
     <string name="title_setup_office_auth">“认证失败”的错误可能是由于 IMAP/SMTP 被系统管理员禁用导致的</string>
@@ -230,7 +232,7 @@
         导入时将需要密码，所以请不要忘记！
     </string>
     <string name="title_setup_export_do">导出文件将包含所有的设置和数据，但是不含邮件，也不含签名中引用的图像</string>
-    <string name="title_setup_import_do">导入的账户不会覆盖任何现有的账户</string>
+    <string name="title_setup_scroll">输入对话框可以滚动！</string>
     <string name="title_setup_password">密码</string>
     <string name="title_setup_password_chars">密码包含控制字符或空格字符</string>
     <string name="title_setup_password_repeat">再次输入密码</string>
@@ -306,6 +308,7 @@
     <string name="title_advanced_section_encryption">加密</string>
     <string name="title_advanced_section_notifications">通知</string>
     <string name="title_advanced_section_misc">杂项</string>
+    <string name="title_advanced_section_backup">备份</string>
     <string name="title_advanced_default">所有选项均具有常用的标准值，无需做出更改即可使用</string>
     <string name="title_advanced_receive">接收所有账户的消息</string>
     <string name="title_advanced_when">何时</string>
@@ -372,6 +375,7 @@
     <string name="title_advanced_reply_move_inbox">也适用于收件箱中的消息</string>
     <string name="title_advanced_auto_link">自动创建链接</string>
     <string name="title_advanced_plain_only">默认仅发送纯文本</string>
+    <string name="title_advanced_plain_only_reply">仅在回复纯文本消息时自动使用纯文本</string>
     <string name="title_advanced_flow">纯文本中采用可流动换行格式（format=flowed）</string>
     <string name="title_advanced_usenet_signature">Usenet签名公约（RFC3676）</string>
     <string name="title_advanced_remove_signatures">移除公认的签名</string>
@@ -403,6 +407,7 @@
     <string name="title_advanced_caption_message">消息</string>
     <string name="title_advanced_caption_message_header">邮件标头</string>
     <string name="title_advanced_caption_message_body">消息正文</string>
+    <string name="title_advanced_caption_file">文件</string>
     <string name="title_advanced_portrait">竖屏模式</string>
     <string name="title_advanced_landscape">横屏模式</string>
     <string name="title_advanced_two_row">使用两行</string>
@@ -410,6 +415,7 @@
     <string name="title_advanced_min_screen_size">分屏下的最小屏幕尺寸</string>
     <string name="title_advanced_close_pane">关闭会话时收起行或列</string>
     <string name="title_advanced_column_width">邮件列宽/行高：%1$s %%</string>
+    <string name="title_advanced_hide_toolbar">滚动消息时隐藏顶部工具栏</string>
     <string name="title_advanced_nav_options">显示导航菜单选项</string>
     <string name="title_advanced_nav_categories">在导航菜单中显示账户类别</string>
     <string name="title_advanced_nav_pin">固定导航菜单</string>
@@ -534,6 +540,7 @@
     <string name="title_advanced_undo">撤回超时</string>
     <string name="title_advanced_quick_filter">显示不显眼的快速过滤图标</string>
     <string name="title_advanced_quick_scroll">显示不显眼的快速上/下滚动图标</string>
+    <string name="title_advanced_quick_actions">选中消息时显示快速操作</string>
     <string name="title_advanced_folder_nav">始终从邮件列表返回文件夹列表</string>
     <string name="title_advanced_autoread">移动消息时自动标为已读</string>
     <string name="title_advanced_star_snoozed">自动给打盹消息添加星标</string>
@@ -603,6 +610,7 @@
     <string name="title_advanced_disconnect_auto_update">每周自动更新列表</string>
     <string name="title_advanced_disconnect_links">使用该列表来警告跟踪链接</string>
     <string name="title_advanced_disconnect_images">使用该列表来识别追踪用途的图像</string>
+    <string name="title_advanced_clear_all_hint">这将从您的设备中删除所有应用数据，包括已配置的电子邮件帐户、消息、设置和任何收集的数据。</string>
     <string name="title_advanced_mnemonic">远程删除数据</string>
     <string name="title_advanced_mnemonic_hint">如果收到任何标题行含有以下文字的电子邮件，应用程序数据将立即被自动删除</string>
     <string name="title_advanced_clear_all">删除应用数据</string>
@@ -652,6 +660,7 @@
     <string name="title_advanced_check_weekly">每周而不是每天检查</string>
     <string name="title_advanced_beta">检查 BitBucket 上的测试版</string>
     <string name="title_advanced_changelog">更新后显示更新日志</string>
+    <string name="title_advanced_announcements">接收公告</string>
     <string name="title_advanced_experiments">尝试实验性功能</string>
     <string name="title_advanced_crash_reports">发送错误报告</string>
     <string name="title_advanced_cleanup_attachments">删除旧消息的附件</string>
@@ -961,7 +970,6 @@
     <string name="title_edit_account_color">编辑账户颜色</string>
     <string name="title_hide_folder">隐藏文件夹</string>
     <string name="title_hide_seen_folder">隐藏所有邮件都已读的文件夹</string>
-    <string name="title_hide_seen_folder_hint">仅在开始屏幕上显示的文件夹列表</string>
     <string name="title_unified_folder">在聚合收件箱中显示</string>
     <string name="title_navigation_folder">在导航菜单中显示</string>
     <string name="title_navigation_folder_hide">在导航菜单中隐藏</string>
@@ -1069,6 +1077,7 @@
     <string name="title_quick_actions">选择操作</string>
     <string name="title_quick_actions_hint">最多将显示 %1$d 项操作</string>
     <string name="title_quick_actions_low">低重要性</string>
+    <string name="title_quick_actions_normal">一般重要</string>
     <string name="title_quick_actions_high">高重要性</string>
     <string name="title_quick_actions_snooze">打盹</string>
     <string name="title_quick_actions_clear">操作后清除选择</string>
@@ -1473,7 +1482,7 @@
     <string name="title_rule_order">顺序</string>
     <string name="title_rule_enabled">启用</string>
     <string name="title_rule_daily">每天运行 (而非每次接收邮件时)</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">超过(天) 的信息</string>
+    <string name="title_rule_age">超过(天) 的信息</string>
     <string name="title_rule_stop">执行此规则后停止处理规则</string>
     <string name="title_rule_sender">发件人包含</string>
     <string name="title_rule_sender_known">发件人是联系人</string>
@@ -1794,6 +1803,7 @@
     <string name="title_widget_padding">内边距尺寸</string>
     <string name="title_widget_separator_lines">显示分隔符行</string>
     <string name="title_widget_semi_transparent">半透明背景</string>
+    <string name="title_widget_count_top">在顶部显示未读计数</string>
     <string name="title_widget_avatars">显示联系人头像</string>
     <string name="title_widget_refresh">显示刷新消息按钮</string>
     <string name="title_widget_compose">显示新建邮件按钮</string>

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -122,11 +122,16 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private boolean isInCar = false;
     private boolean isOptimizing = false;
 
-    private boolean foreground = false;
+    private MutableLiveData<Boolean> foreground = new MutableLiveData<>();
     private final Map<Long, Core.State> coreStates = new Hashtable<>();
     private final MutableLiveData<ConnectionHelper.NetworkState> liveNetworkState = new MutableLiveData<>();
     private final MutableLiveData<List<TupleAccountState>> liveAccountState = new MutableLiveData<>();
     private final MediatorState liveAccountNetworkState = new MediatorState();
+
+    private static final ExecutorService executorService =
+            Helper.getBackgroundExecutor(1, "sync");
+    private static final ExecutorService executorNotify =
+            Helper.getBackgroundExecutor(1, "notify");
 
     private static final long BACKUP_DELAY = 30 * 1000L; // milliseconds
     private static final long PURGE_DELAY = 30 * 1000L; // milliseconds
@@ -373,7 +378,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 }
                                 if (current.canRun(ServiceSynchronize.this)) {
                                     event = true;
-                                    start(current, current.accountState.isEnabled(current.enabled) || sync, force);
+                                    boolean dosync = (sync ||
+                                            current.accountState.isEnabled(current.enabled) ||
+                                            !prev.accountState.equals(current.accountState)); // Token refreshed
+                                    start(current, dosync, force);
                                 }
                             } else if (current.canRun(ServiceSynchronize.this) &&
                                     state != null && !state.isAlive()) {
@@ -464,7 +472,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
 
             private void init(final TupleAccountNetworkState accountNetworkState) {
-                Helper.getSerialExecutor().submit(new RunnableEx("state#init") {
+                executorService.submit(new RunnableEx("state#init") {
                     @Override
                     public void delegate() {
                         long start = new Date().getTime();
@@ -523,7 +531,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 }, "sync.account." + accountNetworkState.accountState.id);
                 coreStates.put(accountNetworkState.accountState.id, astate);
 
-                Helper.getSerialExecutor().submit(new RunnableEx("state#start") {
+                executorService.submit(new RunnableEx("state#start") {
                     @Override
                     public void delegate() {
                         long start = new Date().getTime();
@@ -564,7 +572,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Scheduling,
                         "Service stop=" + accountNetworkState);
 
-                Helper.getSerialExecutor().submit(new RunnableEx("state#stop") {
+                executorService.submit(new RunnableEx("state#stop") {
                     @Override
                     public void delegate() {
                         long start = new Date().getTime();
@@ -602,7 +610,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Scheduling,
                         "Service delete=" + accountNetworkState);
 
-                Helper.getSerialExecutor().submit(new RunnableEx("state#delete") {
+                executorService.submit(new RunnableEx("state#delete") {
                     @Override
                     public void delegate() {
                         long start = new Date().getTime();
@@ -629,7 +637,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
 
             private void quit(final Integer eventId) {
-                Helper.getSerialExecutor().submit(new RunnableEx("state#quit") {
+                executorService.submit(new RunnableEx("state#quit") {
                     @Override
                     public void delegate() {
                         long start = new Date().getTime();
@@ -688,7 +696,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             private final Runnable backup = new RunnableEx("state#backup") {
                 @Override
                 public void delegate() {
-                    Helper.getSerialExecutor().submit(new RunnableEx("state#backup#exec") {
+                    executorService.submit(new RunnableEx("state#backup#exec") {
                         @Override
                         public void delegate() {
                             long start = new Date().getTime();
@@ -807,6 +815,18 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             }
         });
 
+        foreground.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean foreground) {
+                Log.i("Observed foreground=" + foreground);
+                boolean fg = Boolean.TRUE.equals(foreground);
+                if (!fg && (isInCall || isInCar))
+                    mowner.stop();
+                else
+                    mowner.start();
+            }
+        });
+
         MediaPlayerHelper.liveInCall(this, this, new MediaPlayerHelper.IInCall() {
             @Override
             public void onChanged(boolean inCall) {
@@ -814,7 +834,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Debug,
                         "In call=" + inCall + " suppress=" + suppress);
                 isInCall = (inCall && suppress);
-                if (isInCall || isInCar)
+                boolean fg = Boolean.TRUE.equals(foreground.getValue());
+                if (!fg && (isInCall || isInCar))
                     mowner.stop();
                 else
                     mowner.start();
@@ -830,7 +851,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Debug,
                         "Projection=" + projection + " state=" + connectionState + " suppress=" + suppress);
                 isInCar = (projection && suppress);
-                if (isInCall || isInCar)
+                boolean fg = Boolean.TRUE.equals(foreground.getValue());
+                if (!fg && (isInCall || isInCar))
                     mowner.stop();
                 else
                     mowner.start();
@@ -840,11 +862,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         mutableUnseenNotify.observe(mowner, new Observer<List<TupleMessageEx>>() {
             @Override
             public void onChanged(final List<TupleMessageEx> messages) {
-                Helper.getSerialExecutor().submit(new RunnableEx("mutableUnseenNotify") {
+                executorNotify.submit(new RunnableEx("mutableUnseenNotify") {
                     @Override
                     public void delegate() {
                         try {
-                            Core.notifyMessages(ServiceSynchronize.this, messages, notificationData, foreground);
+                            boolean fg = Boolean.TRUE.equals(foreground.getValue());
+                            Core.notifyMessages(ServiceSynchronize.this, messages, notificationData, fg);
                         } catch (SecurityException ex) {
                             Log.w(ex);
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSynchronize.this);
@@ -1321,9 +1344,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     private void onState(Intent intent) {
-        foreground = intent.getBooleanExtra("foreground", false);
+        boolean fg = intent.getBooleanExtra("foreground", false);
+        foreground.postValue(fg);
         for (Core.State state : coreStates.values())
-            state.setForeground(foreground);
+            state.setForeground(fg);
     }
 
     private void onPoll(Intent intent) {

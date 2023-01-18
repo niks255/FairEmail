@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -59,6 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -98,6 +99,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     private IBoundaryCallbackMessages intf;
 
     private State state;
+
+    private static ExecutorService executor = Helper.getBackgroundExecutor(1, "boundary");
 
     private static final int SEARCH_LIMIT_DEVICE = 1000;
 
@@ -149,7 +152,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
     }
 
     void retry() {
-        Helper.getSerialExecutor().submit(new Runnable() {
+        executor.submit(new Runnable() {
             @Override
             public void run() {
                 close(state, true);
@@ -166,7 +169,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         state.queued.incrementAndGet();
         Log.i("Boundary queued +" + state.queued.get());
 
-        Helper.getSerialExecutor().submit(new Runnable() {
+        executor.submit(new Runnable() {
             @Override
             public void run() {
                 Helper.gc();
@@ -284,7 +287,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 word.add(plus.get(0));
         }
 
-        if (criteria.fts && word.size() > 0) {
+        if (criteria.fts && word.size() > 0 && !criteria.in_headers && !criteria.in_html) {
             if (state.ids == null) {
                 SQLiteDatabase sdb = Fts4DbHelper.getInstance(context);
                 state.ids = Fts4DbHelper.match(sdb, account, folder, exclude, criteria, TextUtils.join(" ", word));
@@ -820,19 +823,25 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         }
 
         if (criteria.in_headers) {
-            if (contains(message.headers, criteria.query, partial, false))
+            if (message.headers != null && message.headers.contains(criteria.query))
                 return true;
         }
 
-        if (criteria.in_message)
+        if (criteria.in_html || criteria.in_message)
             try {
                 File file = EntityMessage.getFile(context, message.id);
                 if (file.exists()) {
                     String html = Helper.readText(file);
-                    if (contains(html, criteria.query, partial, true)) {
-                        String text = HtmlHelper.getFullText(html);
-                        if (contains(text, criteria.query, partial, false))
+                    if (criteria.in_html) {
+                        if (html.contains(criteria.query))
                             return true;
+                    }
+                    if (criteria.in_message) {
+                        if (contains(html, criteria.query, partial, true)) {
+                            String text = HtmlHelper.getFullText(html);
+                            if (contains(text, criteria.query, partial, false))
+                                return true;
+                        }
                     }
                 }
             } catch (IOException ex) {
@@ -893,7 +902,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         this.intf = null;
         Log.i("Boundary destroy");
 
-        Helper.getSerialExecutor().submit(new Runnable() {
+        executor.submit(new Runnable() {
             @Override
             public void run() {
                 close(state, true);
@@ -1225,6 +1234,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             if (obj instanceof SearchCriteria) {
                 SearchCriteria other = (SearchCriteria) obj;
                 return (Objects.equals(this.query, other.query) &&
+                        this.fts == other.fts &&
                         this.in_senders == other.in_senders &&
                         this.in_recipients == other.in_recipients &&
                         this.in_subject == other.in_subject &&

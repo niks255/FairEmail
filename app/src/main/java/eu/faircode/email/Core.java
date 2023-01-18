@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -439,6 +439,10 @@ class Core {
 
                                 case EntityOperation.RAW:
                                     onRaw(context, jargs, folder, message, (POP3Store) istore, (POP3Folder) ifolder);
+                                    break;
+
+                                case EntityOperation.BODY:
+                                    onBody(context, jargs, folder, message, (POP3Folder) ifolder, (POP3Store) istore);
                                     break;
 
                                 case EntityOperation.ATTACHMENT:
@@ -2126,7 +2130,7 @@ class Core {
 
     private static void onBody(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, IOException {
         boolean plain_text = jargs.optBoolean(0);
-        String charset = jargs.optString(1, null);
+        String charset = (jargs.isNull(1) ? null : jargs.optString(1, null));
 
         if (message.uid == null)
             throw new IllegalArgumentException("uid missing");
@@ -2198,6 +2202,36 @@ class Core {
 
         if (attachment.size != null)
             EntityLog.log(context, "Operation attachment size=" + attachment.size);
+    }
+
+    private static void onBody(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, POP3Folder ifolder, POP3Store istore) throws MessagingException, IOException {
+        if (!EntityFolder.INBOX.equals(folder.type))
+            throw new IllegalArgumentException("Not INBOX");
+
+        Map<EntityMessage, Message> map = findMessages(context, folder, Arrays.asList(message), istore, ifolder);
+        if (map.size() == 0)
+            throw new MessageRemovedException("Message not found");
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean download_plain = prefs.getBoolean("download_plain", false);
+
+        MessageHelper helper = new MessageHelper((MimeMessage) map.entrySet().iterator().next().getValue(), context);
+        MessageHelper.MessageParts parts = helper.getMessageParts();
+
+        String body = parts.getHtml(context, download_plain);
+        File file = message.getFile(context);
+        Helper.writeText(file, body);
+        String text = HtmlHelper.getFullText(body);
+        message.preview = HtmlHelper.getPreview(text);
+        message.language = HtmlHelper.getLanguage(context, message.subject, text);
+
+        DB db = DB.getInstance(context);
+        db.message().setMessageContent(message.id,
+                true,
+                message.language,
+                parts.isPlainOnly(download_plain),
+                message.preview,
+                parts.getWarnings(message.warning));
     }
 
     private static void onAttachment(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, POP3Folder ifolder, POP3Store istore) throws JSONException, MessagingException, IOException {
@@ -4542,7 +4576,7 @@ class Core {
                                 if (replied != null)
                                     all.addAll(replied);
                             }
-                            if (r.refid != null) {
+                            if (r.refid != null && !r.refid.equals(message.inreplyto)) {
                                 List<EntityMessage> refs = db.message().getMessagesByMsgId(folder.account, r.refid);
                                 if (refs != null)
                                     all.addAll(refs);
@@ -4555,8 +4589,10 @@ class Core {
                                         map.put(f.id, f);
                                 }
 
-                            for (EntityFolder f : map.values())
-                                EntityOperation.queue(context, f, EntityOperation.REPORT, message.inreplyto, label);
+                            for (String msgid : new String[]{message.inreplyto, r.refid})
+                                if (msgid != null)
+                                    for (EntityFolder f : map.values())
+                                        EntityOperation.queue(context, f, EntityOperation.REPORT, msgid, label);
                         }
                     }
                 } catch (Throwable ex) {

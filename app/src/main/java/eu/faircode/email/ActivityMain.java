@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.app.ActivityOptions;
@@ -41,6 +41,7 @@ import androidx.preference.PreferenceManager;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class ActivityMain extends ActivityBase implements FragmentManager.OnBackStackChangedListener, SharedPreferences.OnSharedPreferenceChangeListener {
     static final int RESTORE_STATE_INTERVAL = 3; // minutes
@@ -48,6 +49,9 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
     private static final long SPLASH_DELAY = 1500L; // milliseconds
     private static final long SERVICE_START_DELAY = 5 * 1000L; // milliseconds
     private static final long IGNORE_STORAGE_SPACE = 24 * 60 * 60 * 1000L; // milliseconds
+
+    private static final ExecutorService executor =
+            Helper.getBackgroundExecutor(1, "main");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +171,7 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
                 protected void onException(Bundle args, Throwable ex) {
                     // Ignored
                 }
-            }.execute(this, args, "message:linked");
+            }.setExecutor(executor).execute(this, args, "message:linked");
 
             return;
         }
@@ -337,7 +341,7 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
                             })
                             .show();
                 }
-            };
+            }.setExecutor(executor);
 
             if (Helper.shouldAuthenticate(this, false))
                 Helper.authenticate(ActivityMain.this, ActivityMain.this, null,
@@ -398,10 +402,9 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
             }
 
             // Default disable landscape columns for small screens
-            if (!config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_NORMAL)) {
+            if (!config.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_NORMAL))
                 editor.putBoolean("landscape", false);
-                editor.putBoolean("landscape3", false);
-            }
+            editor.putBoolean("landscape3", false);
 
             // Default send bubbles off when accessibility enabled
             if (Helper.isAccessibilityEnabled(this))

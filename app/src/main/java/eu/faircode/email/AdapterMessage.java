@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -260,7 +260,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private float textSize;
 
     private boolean date;
-    private boolean week;
+    private boolean date_week;
+    private boolean date_fixed;
     private boolean cards;
     private boolean shadow_unread;
     private boolean shadow_border;
@@ -334,6 +335,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private NumberFormat NF = NumberFormat.getNumberInstance();
     private DateFormat TF;
     private DateFormat DTF;
+
+    private static final ExecutorService executorDiffer =
+            Helper.getBackgroundExecutor(0, "differ");
+    private static final ExecutorService executorAvatar =
+            Helper.getBackgroundExecutor(0, "avatar");
 
     private static final int MAX_RECIPIENTS_COMPACT = 3;
     private static final int MAX_RECIPIENTS_NORMAL = 7;
@@ -1404,7 +1410,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     message.totalSize != null && ("size".equals(sort) || "attachments".equals(sort))
                             ? View.VISIBLE : View.GONE);
             SpannableStringBuilder time = new SpannableStringBuilderEx(
-                    (date && !week) && FragmentMessages.SORT_DATE_HEADER.contains(sort)
+                    ((date || date_fixed) && !date_week) && FragmentMessages.SORT_DATE_HEADER.contains(sort)
                             ? TF.format(message.received)
                             : Helper.getRelativeTimeSpanString(context, message.received));
             if (show_recent && message.recent)
@@ -1605,7 +1611,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     protected void onException(Bundle args, Throwable ex) {
                         Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                     }
-                }.setLog(false);
+                }.setExecutor(executorAvatar).setLog(false);
                 taskContactInfo.execute(context, owner, aargs, "message:avatar");
             } else
                 bindContactInfo(message, info, addresses);
@@ -3966,11 +3972,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ArrayList<Uri> result = new ArrayList<>();
                     for (EntityAttachment attachment : attachments)
                         if (attachment.available &&
-                                attachment.isAttachment() && attachment.isImage()) {
-                            File file = attachment.getFile(context);
-                            Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
-                            result.add(uri);
-                        }
+                                attachment.isAttachment() && attachment.isImage())
+                            result.add(attachment.getUri(context));
 
                     return result;
                 }
@@ -4140,12 +4143,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 } else if (id == R.id.ibSearch) {
                     onSearchContact(message, false);
                 } else if (id == R.id.ibTranslate) {
-                    if (DeepL.canTranslate(context))
-                        onActionTranslate(message);
-                    else {
-                        DeepL.FragmentDialogDeepL fragment = new DeepL.FragmentDialogDeepL();
-                        fragment.show(parentFragment.getParentFragmentManager(), "deepl:configure");
-                    }
+                    onActionTranslate(message);
                 } else if (id == R.id.ibFullScreen)
                     onActionOpenFull(message);
                 else if (id == R.id.ibForceLight) {
@@ -5320,10 +5318,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (attachment == null)
                         return;
 
-                    File file = attachment.getFile(context);
-                    Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
                     context.startActivity(new Intent(context, ActivityAMP.class)
-                            .setData(uri)
+                            .setData(attachment.getUri(context))
                             .putExtra("id", attachment.message));
                 }
 
@@ -5880,7 +5876,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private boolean onOpenLink(Uri uri, String title, boolean always_confirm) {
             Log.i("Opening uri=" + uri + " title=" + title + " always confirm=" + always_confirm);
-            uri = Uri.parse(uri.toString().replaceAll("\\s+", ""));
+            uri = Uri.parse(uri.toString().trim().replaceAll("\\s+", "+"));
 
             if (ProtectedContent.isProtectedContent(uri)) {
                 Bundle args = new Bundle();
@@ -6496,12 +6492,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionTranslate(TupleMessageEx message) {
-            Bundle args = new Bundle();
-            args.putLong("id", message.id);
+            if (DeepL.canTranslate(context)) {
+                Bundle args = new Bundle();
+                args.putLong("id", message.id);
 
-            FragmentDialogTranslate fragment = new FragmentDialogTranslate();
-            fragment.setArguments(args);
-            fragment.show(parentFragment.getParentFragmentManager(), "message:translate");
+                FragmentDialogTranslate fragment = new FragmentDialogTranslate();
+                fragment.setArguments(args);
+                fragment.show(parentFragment.getParentFragmentManager(), "message:translate");
+            } else {
+                DeepL.FragmentDialogDeepL fragment = new DeepL.FragmentDialogDeepL();
+                fragment.show(parentFragment.getParentFragmentManager(), "deepl:configure");
+            }
         }
 
         private void onActionForceLight(TupleMessageEx message) {
@@ -7328,7 +7329,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         boolean generated = prefs.getBoolean("generated_icons", true);
 
         this.date = prefs.getBoolean("date", true);
-        this.week = prefs.getBoolean("date_week", false);
+        this.date_week = prefs.getBoolean("date_week", false);
+        this.date_fixed = (!date && prefs.getBoolean("date_fixed", false));
         this.cards = prefs.getBoolean("cards", true);
         this.shadow_unread = prefs.getBoolean("shadow_unread", false);
         this.shadow_border = prefs.getBoolean("shadow_border", true);
@@ -7811,7 +7813,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         };
 
         AsyncDifferConfig<TupleMessageEx> config = new AsyncDifferConfig.Builder<>(callback)
-                .setBackgroundThreadExecutor(Helper.getBackgroundExecutor(0, 2, 3, "differ"))
+                .setBackgroundThreadExecutor(executorDiffer)
                 .build();
         this.differ = new AsyncPagedListDiffer<>(new AdapterListUpdateCallback(this), config);
         this.differ.addPagedListListener(new AsyncPagedListDiffer.PagedListListener<TupleMessageEx>() {

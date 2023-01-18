@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Activity;
@@ -147,6 +147,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swBeta;
     private TextView tvBitBucketPrivacy;
     private SwitchCompat swChangelog;
+    private SwitchCompat swAnnouncements;
+    private TextView tvAnnouncementsPrivacy;
     private SwitchCompat swCrashReports;
     private TextView tvUuid;
     private Button btnReset;
@@ -196,6 +198,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swFakeDark;
     private SwitchCompat swShowRecent;
     private SwitchCompat swModSeq;
+    private SwitchCompat swPreamble;
     private SwitchCompat swUid;
     private SwitchCompat swExpunge;
     private SwitchCompat swUidExpunge;
@@ -239,6 +242,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private Group grpSend;
     private Group grpUpdates;
     private Group grpBitbucket;
+    private Group grpAnnouncements;
     private Group grpTest;
     private CardView cardDebug;
 
@@ -255,7 +259,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "deepl_enabled",
             "vt_enabled", "vt_apikey",
             "send_enabled", "send_host",
-            "updates", "weekly", "beta", "show_changelog",
+            "updates", "weekly", "beta", "show_changelog", "announcements",
             "crash_reports", "cleanup_attachments",
             "watchdog", "experiments", "main_log", "main_log_memory", "protocol", "log_level", "debug", "leak_canary",
             "test1", "test2", "test3", "test4", "test5",
@@ -264,7 +268,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "chunk_size", "thread_range", "undo_manager",
             "browser_zoom", "fake_dark",
             "show_recent",
-            "use_modseq", "uid_command", "perform_expunge", "uid_expunge",
+            "use_modseq", "preamble", "uid_command", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", "use_top",
             "keep_alive_poll", "empty_pool", "idle_done", "fast_fetch", "logarithmic_backoff",
             "exact_alarms", "infra", "dkim_verify", "dup_msgids", "global_keywords", "test_iab"
@@ -292,7 +296,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "gmail_checked", "outlook_checked",
             "redmi_note",
             "accept_space", "accept_unsupported",
-            "junk_hint"
+            "junk_hint",
+            "last_update_check", "last_announcement_check"
     };
 
     @Override
@@ -362,6 +367,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swBeta = view.findViewById(R.id.swBeta);
         tvBitBucketPrivacy = view.findViewById(R.id.tvBitBucketPrivacy);
         swChangelog = view.findViewById(R.id.swChangelog);
+        swAnnouncements = view.findViewById(R.id.swAnnouncements);
+        tvAnnouncementsPrivacy = view.findViewById(R.id.tvAnnouncementsPrivacy);
         swCrashReports = view.findViewById(R.id.swCrashReports);
         tvUuid = view.findViewById(R.id.tvUuid);
         btnReset = view.findViewById(R.id.btnReset);
@@ -411,6 +418,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swFakeDark = view.findViewById(R.id.swFakeDark);
         swShowRecent = view.findViewById(R.id.swShowRecent);
         swModSeq = view.findViewById(R.id.swModSeq);
+        swPreamble = view.findViewById(R.id.swPreamble);
         swUid = view.findViewById(R.id.swUid);
         swExpunge = view.findViewById(R.id.swExpunge);
         swUidExpunge = view.findViewById(R.id.swUidExpunge);
@@ -454,6 +462,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         grpSend = view.findViewById(R.id.grpSend);
         grpUpdates = view.findViewById(R.id.grpUpdates);
         grpBitbucket = view.findViewById(R.id.grpBitbucket);
+        grpAnnouncements = view.findViewById(R.id.grpAnnouncements);
         grpTest = view.findViewById(R.id.grpTest);
         cardDebug = view.findViewById(R.id.cardDebug);
 
@@ -913,6 +922,21 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("show_changelog", checked).apply();
+            }
+        });
+
+        swAnnouncements.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("announcements", checked).apply();
+            }
+        });
+
+        tvAnnouncementsPrivacy.getPaint().setUnderlineText(true);
+        tvAnnouncementsPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(Helper.GITHUB_PRIVACY_URI), true);
             }
         });
 
@@ -1421,6 +1445,14 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swPreamble.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("preamble", checked).apply();
+                System.setProperty("fairemail.preamble", Boolean.toString(checked));
+            }
+        });
+
         swUid.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1599,7 +1631,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         btnGC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.gc();
+                Helper.gc(true);
                 DB.shrinkMemory(v.getContext());
             }
         });
@@ -1899,6 +1931,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext()))
                 ? View.GONE : View.VISIBLE);
         grpBitbucket.setVisibility(View.GONE);
+        grpAnnouncements.setVisibility(!BuildConfig.DEBUG &&
+                (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext()))
+                ? View.GONE : View.VISIBLE);
         grpTest.setVisibility(BuildConfig.TEST_RELEASE ? View.VISIBLE : View.GONE);
 
         setLastCleanup(prefs.getLong("last_cleanup", -1));
@@ -2030,12 +2065,16 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         SharedPreferences.Editor editor = prefs.edit();
 
                         if (cbGeneral.isChecked())
-                            for (String option : RESET_QUESTIONS)
-                                editor.remove(option);
+                            for (String key : RESET_QUESTIONS)
+                                if (prefs.contains(key)) {
+                                    Log.i("Removing option=" + key);
+                                    editor.remove(key);
+                                }
 
                         for (String key : prefs.getAll().keySet())
                             if ((!BuildConfig.DEBUG &&
                                     key.startsWith("translated_") && cbGeneral.isChecked()) ||
+                                    (key.startsWith("announcement.") && cbGeneral.isChecked()) ||
                                     (key.endsWith(".show_full") && cbFull.isChecked()) ||
                                     (key.endsWith(".show_images") && cbImages.isChecked()) ||
                                     (key.endsWith(".confirm_link") && cbLinks.isChecked())) {
@@ -2154,6 +2193,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swBeta.setChecked(prefs.getBoolean("beta", false));
         swBeta.setEnabled(swUpdates.isChecked());
         swChangelog.setChecked(prefs.getBoolean("show_changelog", !BuildConfig.PLAY_STORE_RELEASE));
+        swAnnouncements.setChecked(prefs.getBoolean("announcements", true));
         swExperiments.setChecked(prefs.getBoolean("experiments", false));
         swCrashReports.setChecked(prefs.getBoolean("crash_reports", false));
         tvUuid.setText(prefs.getString("uuid", null));
@@ -2208,6 +2248,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swFakeDark.setChecked(prefs.getBoolean("fake_dark", false));
         swShowRecent.setChecked(prefs.getBoolean("show_recent", false));
         swModSeq.setChecked(prefs.getBoolean("use_modseq", true));
+        swPreamble.setChecked(prefs.getBoolean("preamble", false));
         swUid.setChecked(prefs.getBoolean("uid_command", false));
         swExpunge.setChecked(prefs.getBoolean("perform_expunge", true));
         swUidExpunge.setChecked(prefs.getBoolean("uid_expunge", false));

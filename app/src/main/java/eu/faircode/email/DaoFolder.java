@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import androidx.lifecycle.LiveData;
@@ -410,6 +410,9 @@ public interface DaoFolder {
 
     @Query("UPDATE folder SET download = :download WHERE id = :id AND NOT (download IS :download)")
     int setFolderDownload(long id, boolean download);
+
+    @Query("UPDATE folder SET hide = :hide WHERE id = :id AND NOT (hide IS :hide)")
+    int setFolderHide(long id, boolean hide);
 
     @Query("UPDATE folder" +
             " SET auto_classify_source = :source, auto_classify_target = :target" +

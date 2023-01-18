@@ -2561,8 +2561,8 @@ Since version 1.2018 there is a rule option to run rules daily on messages older
 
 The following rule conditions are available:
 
-* Sender contains or sender is contact
-* Recipient contains
+* Sender (from, reply-to) contains or sender is contact
+* Recipient (to, cc, bcc) contains
 * Subject contains
 * Has attachments (optional of specific type)
 * Header contains
@@ -2638,11 +2638,16 @@ This will be more reliable than forwarding because forwarded messages might be c
 A *move* action can optionally create subfolders (since version 1.1966) to move messages to, for which you can use the following placeholders:
 
 ```
+$day$ (since version 1.2030)
 $week$
 $month$
 $year$
 $domain$
+$group$ (since version 1.2030)
 ```
+
+$group$ will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only.
+Note that the Android contact provider isn't very fast, so using this placeholder can slow down fetching messages.
 
 <br />
 
@@ -3598,14 +3603,14 @@ First of all, a purchase will be available on all devices logged into the same G
 You can select the account in the Play store app by tapping on the avatar at the top right.
 
 Google manages all purchases, so as a developer I have little control over purchases.
-So, basically the only thing I can do, is give some advice:
+So, basically, the only thing I can do, is suggest some things:
 
 * Make sure you have an active, working internet connection, and turn off any VPN based app because it might prevent the Play store from checking purchases
 * Make sure you are logged in with the right Google account and that there is nothing wrong with your Google account
 * Make sure you installed FairEmail via the right Google account if you configured multiple Google accounts on your device (you might need to reinstall the app)
 * Make sure the Play store app is up to date, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
 * Open the Play store app and wait at least a minute to give it time to synchronize with the Google servers
-* Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases; sometimes it help to tap the *buy* button
+* Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases; sometimes it helps to tap the *buy* button
 
 You can also try to clear the cache of the Play store app via the Android apps settings.
 Restarting the device might be necessary to let the Play store recognize the purchase correctly.
@@ -3625,7 +3630,9 @@ Note that:
 
 Please [see here](https://support.google.com/googleplay/answer/4646404) about how to add, remove, or edit your Google Play payment method.
 
-If you cannot solve the problem with the purchase, you will have to contact Google about it.
+If you cannot restore a purchase,
+please contact me via [this contact form](https://contact.faircode.eu/?product=fairemailsupport),
+mentioning the email address of the Google account used for the purchase.
 
 <br />
 
@@ -3699,13 +3706,14 @@ because this could result in grouping unrelated messages and would be at the exp
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq123)
 
 If FairEmail cannot connect to an email server to synchronize messages,
-for example if the internet connection is bad or a firewall or a VPN is blocking the connection,
+for example, if the internet connection is bad or a firewall or a VPN is blocking or aborting the connection,
 FairEmail will retry one time after waiting 8 seconds while keeping the device awake (=use battery power).
 If this fails, FairEmail will schedule an alarm to retry after 5, 15, 30 and eventually every 60 minutes and let the device sleep (=no battery usage).
 
 By temporarily enabling debug mode in the miscellaneous settings, you can disable this logarithmic back-off scheme (since version 1.1855).
 This will result in using a linear back-off scheme, which means that after each successive failure the waiting time will be
 increased by 1 minute the first 5 minutes and thereafter by 5 minutes up to 60 minutes.
+This might increase the battery usage significantly!
 
 Note that [Android doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby)
 does not allow to wake the device earlier than after 15 minutes when doze mode is active.
@@ -4060,6 +4068,8 @@ The confusing Microsoft specific server error *User is authenticated but not con
 * There were too many login attempts in a too short time, for example by using multiple email clients at the same time
 * The wrong account was selected in the Microsoft account selector, for example an account with a different email address or a personal instead of a business account
 * An ad blocker or DNS changer is being used
+* Devices in another time zone are connected to the same account
+* A security policy is blocking the login, for example because only specific network connections are allowed
 * There is a problem with the Exchange server license: it might be expired or for another server edition
 * An alias email address is being used as username instead of the primary email address
 * An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain\SharedMailboxAlias*
@@ -4183,7 +4193,7 @@ Voice notes will automatically be attached.
 
 Account:
 
-* Version 1.1927-: enable *Separate notifications* in the advanced account settings
+* ~~Version 1.1927-: enable *Separate notifications* in the advanced account settings~~
 * Version 1.1927+: long press the account in the account list and select *Create notification channel*
 * Long press the account in the account list and select *Edit notification channel* to change the notification sound
 

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.app.ActivityManager;
@@ -174,6 +174,7 @@ public class Log {
     private static final long MAX_LOG_SIZE = 8 * 1024 * 1024L;
     private static final int MAX_CRASH_REPORTS = (BuildConfig.TEST_RELEASE ? 50 : 5);
     private static final long MIN_FILE_SIZE = 1024 * 1024L;
+    private static final long MIN_ZIP_SIZE = 2 * 1024 * 1024L;
     private static final String TAG = "fairemail";
 
     // https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html
@@ -520,6 +521,7 @@ public class Log {
                         event.addMetadata("extra", "memory_available", getAvailableMb());
                         event.addMetadata("extra", "native_allocated", Debug.getNativeHeapAllocatedSize() / 1024L / 1024L);
                         event.addMetadata("extra", "native_size", Debug.getNativeHeapSize() / 1024L / 1024L);
+                        event.addMetadata("extra", "classifier_size", MessageClassifier.getSize(context));
 
                         Boolean ignoringOptimizations = Helper.isIgnoringOptimizations(context);
                         event.addMetadata("extra", "optimizing", (ignoringOptimizations != null && !ignoringOptimizations));
@@ -1954,7 +1956,8 @@ public class Log {
                 Helper.hasPlayStore(context) ? "s" : "",
                 BuildConfig.DEBUG ? "d" : "",
                 ActivityBilling.isPro(context) ? "+" : "-"));
-        sb.append(String.format("Package: %s\r\n", BuildConfig.APPLICATION_ID));
+        sb.append(String.format("Package: %s uid: %d\r\n",
+                BuildConfig.APPLICATION_ID, android.os.Process.myUid()));
         sb.append(String.format("Android: %s (SDK device=%d target=%d)\r\n",
                 Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Helper.getTargetSdk(context)));
 
@@ -1970,6 +1973,18 @@ public class Log {
         sb.append(String.format("Last cleanup: %s\r\n", new Date(last_cleanup)));
         sb.append(String.format("Now: %s\r\n", new Date()));
         sb.append(String.format("Zone: %s\r\n", TimeZone.getDefault().getID()));
+
+        String language = prefs.getString("language", null);
+        sb.append(String.format("Locale: def=%s lang=%s\r\n",
+                Locale.getDefault(), language));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            sb.append(String.format("System: %s\r\n",
+                    Resources.getSystem().getConfiguration().locale));
+        else {
+            LocaleList ll = Resources.getSystem().getConfiguration().getLocales();
+            for (int i = 0; i < ll.size(); i++)
+                sb.append(String.format("System: %s\r\n", ll.get(i)));
+        }
 
         sb.append("\r\n");
 
@@ -1993,9 +2008,6 @@ public class Log {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             sb.append(String.format("SoC: %s/%s\r\n", Build.SOC_MANUFACTURER, Build.SOC_MODEL));
         sb.append(String.format("OS version: %s\r\n", osVersion));
-        sb.append(String.format("uid: %d\r\n", android.os.Process.myUid()));
-        sb.append(String.format("Log main: %b protocol: %b debug: %b build: %b\r\n",
-                main_log, protocol, Log.isDebugLogLevel(), BuildConfig.DEBUG));
         sb.append("\r\n");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -2022,27 +2034,22 @@ public class Log {
             }
         }
 
+        sb.append(String.format("Log main: %b protocol: %b debug: %b build: %b\r\n",
+                main_log, protocol, Log.isDebugLogLevel(), BuildConfig.DEBUG));
+
         int[] contacts = ContactInfo.getStats();
         sb.append(String.format("Contact lookup: %d cached: %d\r\n",
                 contacts[0], contacts[1]));
-
-        String language = prefs.getString("language", null);
-        sb.append(String.format("Locale: def=%s lang=%s\r\n",
-                Locale.getDefault(), language));
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
-            sb.append(String.format("System: %s\r\n",
-                    Resources.getSystem().getConfiguration().locale));
-        else {
-            LocaleList ll = Resources.getSystem().getConfiguration().getLocales();
-            for (int i = 0; i < ll.size(); i++)
-                sb.append(String.format("System: %s\r\n", ll.get(i)));
-        }
 
         String charset = MimeUtility.getDefaultJavaCharset();
         sb.append(String.format("Default charset: %s/%s\r\n", charset, MimeUtility.mimeCharset(charset)));
 
         sb.append("Transliterate: ")
                 .append(TextHelper.canTransliterate())
+                .append("\r\n");
+
+        sb.append("Classifier: ")
+                .append(Helper.humanReadableByteCount(MessageClassifier.getSize(context)))
                 .append("\r\n");
 
         sb.append("\r\n");
@@ -2235,7 +2242,11 @@ public class Log {
                     Object value = settings.get(key);
                     if ("wipe_mnemonic".equals(key) && value != null)
                         value = "[redacted]";
-                    if (key != null && key.startsWith("oauth."))
+                    else if ("cloud_user".equals(key) && value != null)
+                        value = "[redacted]";
+                    else if ("cloud_password".equals(key) && value != null)
+                        value = "[redacted]";
+                    else if (key != null && key.startsWith("oauth."))
                         value = "[redacted]";
                     size += write(os, key + "=" + value + "\r\n");
                 }
@@ -2631,7 +2642,7 @@ public class Log {
             }
 
             db.attachment().setDownloaded(attachment.id, size);
-            if (!BuildConfig.DEBUG)
+            if (!BuildConfig.DEBUG && size > MIN_ZIP_SIZE)
                 attachment.zip(context);
         } catch (Throwable ex) {
             Log.e(ex);
@@ -2741,7 +2752,7 @@ public class Log {
                 }
 
                 db.attachment().setDownloaded(attachment.id, size);
-                if (!BuildConfig.DEBUG)
+                if (!BuildConfig.DEBUG && size > MIN_ZIP_SIZE)
                     attachment.zip(context);
             } finally {
                 if (proc != null)

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.Manifest;
@@ -75,7 +75,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 import javax.mail.Address;
@@ -257,11 +256,21 @@ public class ContactInfo {
         ContactInfo info = new ContactInfo();
         info.email = address.getAddress();
 
+        // Maximum file name length: 255
+        // Maximum email address length: 320 (<local part = 64> @ <domain part = 255>)
+        final String ekey;
+        if (TextUtils.isEmpty(info.email))
+            ekey = null;
+        else
+            ekey = (info.email.length() > 255
+                    ? info.email.substring(0, 255)
+                    : info.email).toLowerCase(Locale.ROOT);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean avatars = prefs.getBoolean("avatars", true);
         boolean prefer_contact = prefs.getBoolean("prefer_contact", false);
         boolean distinguish_contacts = prefs.getBoolean("distinguish_contacts", false);
-        boolean bimi = prefs.getBoolean("bimi", false);
+        boolean bimi = (prefs.getBoolean("bimi", false) && !BuildConfig.PLAY_STORE_RELEASE);
         boolean gravatars = (prefs.getBoolean("gravatars", false) && !BuildConfig.PLAY_STORE_RELEASE);
         boolean libravatars = (prefs.getBoolean("libravatars", false) && !BuildConfig.PLAY_STORE_RELEASE);
         boolean favicons = prefs.getBoolean("favicons", false);
@@ -332,7 +341,6 @@ public class ContactInfo {
                     }
 
                 final String domain = d.toLowerCase(Locale.ROOT);
-                final String email = info.email.toLowerCase(Locale.ROOT);
 
                 File dir = Helper.ensureExists(new File(context.getFilesDir(), "favicons"));
 
@@ -340,12 +348,12 @@ public class ContactInfo {
                     // check cache
                     File[] files = null;
                     if (gravatars) {
-                        File f = new File(dir, email + ".gravatar");
+                        File f = new File(dir, ekey + ".gravatar");
                         if (f.exists())
                             files = new File[]{f};
                     }
                     if (files == null && libravatars) {
-                        File f = new File(dir, email + ".libravatar");
+                        File f = new File(dir, ekey + ".libravatar");
                         if (f.exists())
                             files = new File[]{f};
                     }
@@ -357,6 +365,7 @@ public class ContactInfo {
                             }
                         });
                     if (files != null && files.length == 1) {
+                        files[0].setLastModified(new Date().getTime());
                         if (files[0].length() == 0)
                             Log.i("Avatar blacklisted cache" + files[0].getName());
                         else {
@@ -384,10 +393,13 @@ public class ContactInfo {
                                 }
                             }));
 
+                        String email = info.email.toLowerCase(Locale.ROOT);
                         if (gravatars)
-                            futures.add(Helper.getDownloadTaskExecutor().submit(Avatar.getGravatar(email, scaleToPixels, context)));
+                            futures.add(Helper.getDownloadTaskExecutor()
+                                    .submit(Avatar.getGravatar(email, scaleToPixels, context)));
                         if (libravatars)
-                            futures.add(Helper.getDownloadTaskExecutor().submit(Avatar.getLibravatar(email, scaleToPixels, context)));
+                            futures.add(Helper.getDownloadTaskExecutor()
+                                    .submit(Avatar.getLibravatar(email, scaleToPixels, context)));
 
                         if (favicons) {
                             String host = domain;
@@ -466,7 +478,7 @@ public class ContactInfo {
 
                         // Add to cache
                         File output = new File(dir,
-                                (info.isEmailBased() ? email : domain) +
+                                (info.isEmailBased() ? ekey : domain) +
                                         "." + info.type +
                                         (info.verified ? "_verified" : ""));
                         try (OutputStream os = new BufferedOutputStream(new FileOutputStream(output))) {
@@ -507,11 +519,12 @@ public class ContactInfo {
             File[] files = dir.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File file, String name) {
-                    return name.startsWith(info.email);
+                    return name.startsWith(ekey);
                 }
             });
             if (files != null && files.length == 1) {
                 Log.i("Generated from cache=" + files[0].getName());
+                files[0].setLastModified(new Date().getTime());
                 info.bitmap = BitmapFactory.decodeFile(files[0].getAbsolutePath());
                 info.type = Helper.getExtension(files[0].getName());
             } else {
@@ -528,7 +541,7 @@ public class ContactInfo {
                 }
 
                 // Add to cache
-                File output = new File(dir, info.email + "." + info.type);
+                File output = new File(dir, ekey + "." + info.type);
                 try (OutputStream os = new BufferedOutputStream(new FileOutputStream(output))) {
                     info.bitmap.compress(Bitmap.CompressFormat.PNG, 90, os);
                 } catch (IOException ex) {

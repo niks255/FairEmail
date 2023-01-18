@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.ActionBar.DISPLAY_SHOW_CUSTOM;
@@ -104,6 +104,20 @@ public class FragmentBase extends Fragment {
             return ((ActivityBase) activity).getSupportActionBar();
         else
             return null;
+    }
+
+    protected boolean isActionBarShown() {
+        FragmentActivity activity = getActivity();
+        if (activity instanceof ActivityBase)
+            return ((ActivityBase) activity).isActionBarShown();
+        else
+            return false;
+    }
+
+    protected void showActionBar(boolean show) {
+        FragmentActivity activity = getActivity();
+        if (activity instanceof ActivityBase)
+            ((ActivityBase) activity).showActionBar(show);
     }
 
     protected void setCount(String count) {

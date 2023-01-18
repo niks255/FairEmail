@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -32,18 +32,19 @@ public class VirusTotal {
     static final String URI_PRIVACY = "";
 
     static String getUrl(File file) {
-        return null;
+        throw new IllegalArgumentException("VirusTotal");
     }
 
     static Bundle lookup(Context context, File file, String apiKey) {
-        return null;
+        throw new IllegalArgumentException("VirusTotal");
     }
 
     static String upload(Context context, File file, String apiKey) {
-        return null;
+        throw new IllegalArgumentException("VirusTotal");
     }
 
     static void waitForAnalysis(Context context, String id, String apiKey) {
+        throw new IllegalArgumentException("VirusTotal");
     }
 
     public static class ScanResult implements Parcelable {

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -247,7 +247,8 @@ public class Helper {
 
     private static ExecutorService sSerialExecutor = null;
     private static ExecutorService sParallelExecutor = null;
-    private static ExecutorService sSerialTaskExecutor = null;
+    private static ExecutorService sUIExecutor = null;
+    private static ExecutorService sMediaExecutor = null;
     private static ExecutorService sDownloadExecutor = null;
 
     private static int sOperationIndex = 0;
@@ -265,15 +266,21 @@ public class Helper {
         return sParallelExecutor;
     }
 
-    static ExecutorService getSerialTaskExecutor() {
-        if (sSerialTaskExecutor == null)
-            sSerialTaskExecutor = getBackgroundExecutor(1, "task");
-        return sSerialTaskExecutor;
+    static ExecutorService getUIExecutor() {
+        if (sUIExecutor == null)
+            sUIExecutor = getBackgroundExecutor(0, "UI");
+        return sUIExecutor;
+    }
+
+    static ExecutorService getMediaTaskExecutor() {
+        if (sMediaExecutor == null)
+            sMediaExecutor = getBackgroundExecutor(1, "media");
+        return sMediaExecutor;
     }
 
     static ExecutorService getDownloadTaskExecutor() {
         if (sDownloadExecutor == null)
-            sDownloadExecutor = getBackgroundExecutor(0, 0, 3, "download");
+            sDownloadExecutor = getBackgroundExecutor(0, "download");
         return sDownloadExecutor;
     }
 
@@ -288,10 +295,6 @@ public class Helper {
     }
 
     static ExecutorService getBackgroundExecutor(int threads, final String name) {
-        return getBackgroundExecutor(threads == 0 ? -1 : threads, threads, 3, name);
-    }
-
-    static ExecutorService getBackgroundExecutor(int min, int max, int keepalive, final String name) {
         ThreadFactory factory = new ThreadFactory() {
             private final AtomicInteger threadId = new AtomicInteger();
 
@@ -317,22 +320,23 @@ public class Helper {
             }
         };
 
-        if (max == 0) {
+        if (threads == 0) {
             // java.lang.OutOfMemoryError: pthread_create (1040KB stack) failed: Try again
             // 1040 KB native stack size / 32 KB thread stack size ~ 32 threads
             int processors = Runtime.getRuntime().availableProcessors(); // Modern devices: 8
+            threads = Math.max(8, processors * 2) + 1;
             return new ThreadPoolExecutorEx(
                     name,
-                    min < 0 ? Math.max(2, processors / 2 + 1) : min,
-                    Math.max(8, processors * 2) + 1,
-                    keepalive, TimeUnit.SECONDS,
+                    threads,
+                    threads,
+                    3, TimeUnit.SECONDS,
                     new LinkedBlockingQueue<Runnable>(),
                     factory);
-        } else if (max == 1)
+        } else if (threads == 1)
             return new ThreadPoolExecutorEx(
                     name,
-                    min, max,
-                    keepalive, TimeUnit.SECONDS,
+                    threads, threads,
+                    3, TimeUnit.SECONDS,
                     new PriorityBlockingQueue<Runnable>(10, new PriorityComparator()),
                     factory) {
                 private final AtomicLong sequenceId = new AtomicLong();
@@ -351,8 +355,8 @@ public class Helper {
         else
             return new ThreadPoolExecutorEx(
                     name,
-                    min, max,
-                    keepalive, TimeUnit.SECONDS,
+                    threads, threads,
+                    3, TimeUnit.SECONDS,
                     new LinkedBlockingQueue<Runnable>(),
                     factory);
     }
@@ -367,6 +371,8 @@ public class Helper {
                 BlockingQueue<Runnable> workQueue,
                 ThreadFactory threadFactory) {
             super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
+            if (keepAliveTime != 0)
+                allowCoreThreadTimeOut(true);
             this.name = name;
         }
 
@@ -876,14 +882,19 @@ public class Helper {
 
     // View
 
+    static Integer actionBarHeight = null;
+
     static int getActionBarHeight(Context context) {
-        int actionBarHeight;
-        TypedValue tv = new TypedValue();
-        if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            DisplayMetrics dm = context.getResources().getDisplayMetrics();
-            return TypedValue.complexToDimensionPixelSize(tv.data, dm);
-        } else
-            return Helper.dp2pixels(context, 56);
+        if (actionBarHeight == null) {
+            TypedValue tv = new TypedValue();
+            if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+                DisplayMetrics dm = context.getResources().getDisplayMetrics();
+                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, dm);
+            } else
+                actionBarHeight = Helper.dp2pixels(context, 56);
+        }
+
+        return actionBarHeight;
     }
 
     static int getBottomNavigationHeight(Context context) {
@@ -2762,7 +2773,7 @@ public class Helper {
                             ? R.string.title_setup_biometrics_disable
                             : R.string.title_setup_biometrics_enable));
 
-                    final BiometricPrompt prompt = new BiometricPrompt(activity, Helper.getParallelExecutor(),
+                    final BiometricPrompt prompt = new BiometricPrompt(activity, Helper.getUIExecutor(),
                             new BiometricPrompt.AuthenticationCallback() {
                                 private int fails = 0;
 
@@ -3092,7 +3103,11 @@ public class Helper {
     // Miscellaneous
 
     static void gc() {
-        if (BuildConfig.DEBUG) {
+        gc(false);
+    }
+
+    static void gc(boolean force) {
+        if (force || BuildConfig.DEBUG) {
             Runtime.getRuntime().gc();
             try {
                 Thread.sleep(50);

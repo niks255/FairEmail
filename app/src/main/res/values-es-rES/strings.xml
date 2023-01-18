@@ -176,6 +176,7 @@
     <string name="title_setup_gmail_rationale">Por favor, conceda permisos para seleccionar una cuenta y leer su nombre</string>
     <string name="title_setup_gmail_permissions">Google solicitará permisos para leer, redactar, enviar y eliminar permanentemente todo su correo electrónico. FairEmail nunca eliminará sus mensajes sin su consentimiento explícito.</string>
     <string name="title_setup_gmail_login">Si Chrome ha iniciado sesión en una cuenta, sólo se puede añadir una nueva cuenta a través de Android. Esto se puede evitar desconectando Chrome a través de los ajustes de sincronización de Chrome.</string>
+    <string name="title_setup_gmail_max">En el caso del mensaje de error \"Has iniciado sesión con el número máximo de cuentas\", tú necesitas cerrar sesión en el navegador de todas las cuentas de Google.</string>
     <string name="title_setup_gmail_on_device">¿Por qué necesito seleccionar una cuenta del dispositivo?</string>
     <string name="title_setup_gmail_password">Quiero autorizar una cuenta con una contraseña en lugar de una cuenta en el dispositivo</string>
     <string name="title_setup_office_auth">El error \'AUTHENTICATE failed\' puede ser causado por IMAP/SMTP desactivado por el administrador de sistemas</string>
@@ -243,7 +244,6 @@
         La contraseña es necesaria para importar la configuración de nuevo, ¡así que por favor no la olvide!
     </string>
     <string name="title_setup_export_do">El archivo de exportación contendrá todos los ajustes y datos, pero no hay mensajes ni imágenes referenciadas en las firmas</string>
-    <string name="title_setup_import_do">Las cuentas importadas serán añadidas sin sobreescribir las existentes</string>
     <string name="title_setup_password">Contraseña</string>
     <string name="title_setup_password_chars">La contraseña contiene caracteres de control o espacios en blanco</string>
     <string name="title_setup_password_repeat">Confirmar contraseña</string>
@@ -319,6 +319,7 @@
     <string name="title_advanced_section_encryption">Cifrado</string>
     <string name="title_advanced_section_notifications">Notificaciones</string>
     <string name="title_advanced_section_misc">Misceláneas</string>
+    <string name="title_advanced_section_backup">Copia de seguridad</string>
     <string name="title_advanced_default">Todas las opciones tienen valores estándar comúnmente utilizados, que no necesitan ser cambiados para usar la aplicación</string>
     <string name="title_advanced_receive">Recibir mensajes para todas las cuentas</string>
     <string name="title_advanced_when">Cuando</string>
@@ -385,6 +386,7 @@
     <string name="title_advanced_reply_move_inbox">También para mensajes en la bandeja de entrada</string>
     <string name="title_advanced_auto_link">Crear enlaces automáticamente</string>
     <string name="title_advanced_plain_only">Enviar sólo texto plano por defecto</string>
+    <string name="title_advanced_plain_only_reply">Texto plano automático sólo cuando se responde a un mensaje de texto plano</string>
     <string name="title_advanced_flow">\'format flowed\' para texto plano</string>
     <string name="title_advanced_usenet_signature">Convención de firma Usenet</string>
     <string name="title_advanced_remove_signatures">Eliminar firmas reconocidas</string>
@@ -423,6 +425,7 @@
     <string name="title_advanced_min_screen_size">Tamaño mínimo de pantalla para dividir la pantalla</string>
     <string name="title_advanced_close_pane">Colapsar fila o columna al cerrar una conversación</string>
     <string name="title_advanced_column_width">Ancho de columna de mensaje / altura de fila: %1$s %%</string>
+    <string name="title_advanced_hide_toolbar">Ocultar barra de herramientas superior al desplazar mensajes</string>
     <string name="title_advanced_nav_options">Mostrar opciones de menú de navegación</string>
     <string name="title_advanced_nav_categories">Mostrar categorías de cuentas en el menú de navegación</string>
     <string name="title_advanced_nav_pin">Fijar menú de navegación</string>
@@ -547,6 +550,7 @@
     <string name="title_advanced_undo">Tiempo de espera para deshacer</string>
     <string name="title_advanced_quick_filter">Mostrar iconos no intrusivos para filtro rápido</string>
     <string name="title_advanced_quick_scroll">Mostrar iconos rápidos de arriba/abajo no intrusivos</string>
+    <string name="title_advanced_quick_actions">Mostrar acciones rápidas cuando mensajes están seleccionados</string>
     <string name="title_advanced_folder_nav">Siempre volver a la lista de carpetas de una lista de mensajes</string>
     <string name="title_advanced_autoread">Marcar mensaje como leído automáticamente al moverlo</string>
     <string name="title_advanced_star_snoozed">Destacar automáticamente al posponer mensajes</string>
@@ -616,6 +620,7 @@
     <string name="title_advanced_disconnect_auto_update">Actualizar las listas automáticamente en forma semanal</string>
     <string name="title_advanced_disconnect_links">Usar listas para advertir sobre enlaces de seguimiento</string>
     <string name="title_advanced_disconnect_images">Usar listas para reconocer imágenes de rastreo</string>
+    <string name="title_advanced_clear_all_hint">Esto eliminará todos los datos de la aplicación de tu dispositivo, incluyendo cuentas de correo electrónico configuradas, mensajes, ajustes y cualquier dato recopilado.</string>
     <string name="title_advanced_mnemonic">Eliminar datos de forma remota</string>
     <string name="title_advanced_mnemonic_hint">Cualquier correo electrónico recibido con las siguientes palabras en la línea de asunto borrará automática e inmediatamente los datos de la aplicación</string>
     <string name="title_advanced_clear_all">Borrar los datos de la aplicación</string>
@@ -975,7 +980,6 @@
     <string name="title_edit_account_color">Editar color de cuenta</string>
     <string name="title_hide_folder">Ocultar carpeta</string>
     <string name="title_hide_seen_folder">Ocultar carpeta si todos los mensajes son leídos</string>
-    <string name="title_hide_seen_folder_hint">Sólo en la lista de carpetas mostrada en la pantalla de inicio</string>
     <string name="title_unified_folder">Mostrar en bandeja de entrada unificada</string>
     <string name="title_navigation_folder">Mostrar en el menú de navegación</string>
     <string name="title_navigation_folder_hide">Ocultar en el menú de navegación</string>
@@ -1084,6 +1088,7 @@
     <string name="title_quick_actions">Seleccionar acciones</string>
     <string name="title_quick_actions_hint">Se mostrarán hasta %1$d acciones</string>
     <string name="title_quick_actions_low">Baja importancia</string>
+    <string name="title_quick_actions_normal">Importancia normal</string>
     <string name="title_quick_actions_high">Alta importancia</string>
     <string name="title_quick_actions_snooze">Posponer</string>
     <string name="title_quick_actions_clear">Borrar selección después de la acción</string>
@@ -1487,7 +1492,7 @@
     <string name="title_rule_order">Orden</string>
     <string name="title_rule_enabled">Activada</string>
     <string name="title_rule_daily">Ejecutar diariamente (solamente)</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Mensajes de más de (días)</string>
+    <string name="title_rule_age">Mensajes de más de (días)</string>
     <string name="title_rule_stop">Detener procesamiento de reglas después de ejecutar esta regla</string>
     <string name="title_rule_sender">Remitente contiene</string>
     <string name="title_rule_sender_known">El remitente es un contacto</string>
@@ -1809,6 +1814,7 @@
     <string name="title_widget_padding">Tamaño de margen interno</string>
     <string name="title_widget_separator_lines">Mostrar líneas separadoras</string>
     <string name="title_widget_semi_transparent">Fondo semi transparente</string>
+    <string name="title_widget_count_top">Mostrar cantidad de no leídos en la parte superior</string>
     <string name="title_widget_avatars">Mostrar avatares de contactos</string>
     <string name="title_widget_refresh">Mostrar botón de actualizar mensajes</string>
     <string name="title_widget_compose">Mostrar botón de redactar nuevo mensaje</string>

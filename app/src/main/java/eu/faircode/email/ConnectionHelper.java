@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.accounts.AccountsException;
@@ -336,6 +336,14 @@ public class ConnectionHelper {
             return metered;
         }
 
+        Network[] networks = cm.getAllNetworks();
+        if (networks != null && networks.length == 1) {
+            // Standalone VPN
+            boolean metered = cm.isActiveNetworkMetered();
+            Log.i("isMetered: active VPN metered=" + metered);
+            return metered;
+        }
+
         // VPN: evaluate underlying networks
         Integer transport = null;
         if (caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
@@ -344,7 +352,6 @@ public class ConnectionHelper {
             transport = NetworkCapabilities.TRANSPORT_WIFI;
 
         boolean underlying = false;
-        Network[] networks = cm.getAllNetworks();
         for (Network network : networks) {
             caps = cm.getNetworkCapabilities(network);
             if (caps == null) {

@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
 
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
@@ -61,13 +62,13 @@ import javax.mail.internet.InternetAddress;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 260,
+        version = 261,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -121,9 +122,12 @@ public abstract class DB extends RoomDatabase {
 
     static final String DB_NAME = "fairemail";
     static final int DEFAULT_QUERY_THREADS = 4; // AndroidX default thread count: 4
-    static final int DEFAULT_CACHE_SIZE = 10; // percentage of memory class
+    static final int DEFAULT_CACHE_SIZE = 20; // percentage of memory class
     private static final int DB_JOURNAL_SIZE_LIMIT = 1048576; // requery/sqlite-android default
     private static final int DB_CHECKPOINT = 1000; // requery/sqlite-android default
+
+    private static ExecutorService executor =
+            Helper.getBackgroundExecutor(0, "db");
 
     private static final String[] DB_TABLES = new String[]{
             "identity", "account", "folder", "message", "attachment", "operation", "contact", "certificate", "answer", "rule", "search", "log"};
@@ -405,7 +409,7 @@ public abstract class DB extends RoomDatabase {
                 .databaseBuilder(context, DB.class, DB_NAME)
                 //.openHelperFactory(new RequerySQLiteOpenHelperFactory())
                 //.setQueryExecutor()
-                .setTransactionExecutor(Helper.getBackgroundExecutor(1, 4, 3, "db"))
+                .setTransactionExecutor(executor)
                 .setJournalMode(wal ? JournalMode.WRITE_AHEAD_LOGGING : JournalMode.TRUNCATE) // using the latest sqlite
                 .addCallback(new Callback() {
                     @Override
@@ -2621,6 +2625,17 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `rule` ADD COLUMN `daily` INTEGER NOT NULL DEFAULT 0");
+                    }
+                }).addMigrations(new Migration(260, 261) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        String startup = prefs.getString("startup", "unified");
+                        if ("folders".equals(startup))
+                            db.execSQL("UPDATE `folder` SET `hide_seen` = 0 WHERE `unified` = 0");
+                        else
+                            db.execSQL("UPDATE `folder` SET `hide_seen` = 0");
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

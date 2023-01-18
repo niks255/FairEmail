@@ -3,9 +3,9 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2019 }
+def getVersionCode = { -> return 2030 }
 def getRevision = { -> return "a" }
-def getReleaseName = { -> return "Pelecanimimus" }
+def getReleaseName = { -> return "Quetecsaurus" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
 
 def keystoreProperties = new Properties()
@@ -170,6 +170,8 @@ android {
             buildConfigField "String", "GITHUB_LATEST_URI", "\"https://github.com/niks255/FairEmail/releases\""
             buildConfigField "String", "BITBUCKET_DOWNLOADS_API", "\"https://api.bitbucket.org/2.0/repositories/M66B/fairemail-test/downloads\""
             buildConfigField "String", "BITBUCKET_DOWNLOADS_URI", "\"https://bitbucket.org/M66B/fairemail-test/downloads/\""
+            buildConfigField "String", "ANNOUNCEMENT_URI", "\"https://gist.githubusercontent.com/M66B/d544192ca56224839d6ba0f2f6314c1f/raw/\""
+            buildConfigField "String", "CLOUD_URI", "\"https://api.fairemail.net/sync\""
             buildConfigField "String", "TX_URI", localProperties.getProperty("paypal.uri", "\"\"")
             buildConfigField "String", "GPA_URI", localProperties.getProperty("gpa.uri", "\"\"")
             buildConfigField "String", "INFO_URI", localProperties.getProperty("info.uri", "\"\"")
@@ -188,6 +190,8 @@ android {
             buildConfigField "String", "GITHUB_LATEST_URI", "\"https://github.com/M66B/FairEmail/releases\""
             buildConfigField "String", "BITBUCKET_DOWNLOADS_API", "\"https://api.bitbucket.org/2.0/repositories/M66B/fairemail-test/downloads\""
             buildConfigField "String", "BITBUCKET_DOWNLOADS_URI", "\"https://bitbucket.org/M66B/fairemail-test/downloads/\""
+            buildConfigField "String", "ANNOUNCEMENT_URI", "\"https://gist.githubusercontent.com/M66B/d544192ca56224839d6ba0f2f6314c1f/raw/\""
+            buildConfigField "String", "CLOUD_URI", "\"https://api.fairemail.net/sync\""
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
@@ -207,6 +211,8 @@ android {
             buildConfigField "String", "GITHUB_LATEST_URI", "\"\""
             buildConfigField "String", "BITBUCKET_DOWNLOADS_API", "\"\""
             buildConfigField "String", "BITBUCKET_DOWNLOADS_URI", "\"\""
+            buildConfigField "String", "ANNOUNCEMENT_URI", "\"\""
+            buildConfigField "String", "CLOUD_URI", "\"\""
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
@@ -226,6 +232,8 @@ android {
             buildConfigField "String", "GITHUB_LATEST_URI", "\"\""
             buildConfigField "String", "BITBUCKET_DOWNLOADS_API", "\"\""
             buildConfigField "String", "BITBUCKET_DOWNLOADS_URI", "\"\""
+            buildConfigField "String", "ANNOUNCEMENT_URI", "\"\""
+            buildConfigField "String", "CLOUD_URI", "\"\""
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
@@ -350,27 +358,27 @@ configurations.all {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    def startup_version = "1.1.1" // 1.2.0-alpha01
+    def startup_version = "1.1.1" // 1.2.0-alpha02
     def annotation_version_experimental = "1.3.0"
-    def core_version = "1.9.0"
-    def appcompat_version = "1.6.0-rc01" // 1.7.0-alpha01
-    def emoji_version = "1.2.0"
-    def activity_version = "1.6.1" // 1.7.0-alpha01
+    def core_version = "1.9.0" // 1.10.0-alpha01
+    def appcompat_version = "1.6.0" // 1.7.0-alpha01
+    def emoji_version = "1.2.0" // 1.3.0-alpha01
+    def activity_version = "1.6.1" // 1.7.0-alpha03
     def fragment_version = "1.5.5" // 1.6.0-alpha04
     def windows_version = "1.0.0" // 1.1.0-alpha04
-    def webkit_version = "1.6.0-beta01"
+    def webkit_version = "1.6.0-rc01"
     def recyclerview_version = "1.3.0-rc01"
     def coordinatorlayout_version = "1.2.0"
     def constraintlayout_version = "2.1.4" // 2.2.0-alpha05
     def material_version = "1.7.0"
-    def browser_version = "1.4.0" // 1.5.0-alpha02
+    def browser_version = "1.4.0" // 1.5.0-beta01
     def lbm_version = "1.1.0"
     def swiperefresh_version = "1.2.0-alpha01"
     def documentfile_version = "1.1.0-alpha01"
-    def lifecycle_version = "2.5.1" // 2.6.0-alpha03
+    def lifecycle_version = "2.5.1" // 2.6.0-alpha04
     def lifecycle_extensions_version = "2.2.0"
-    def room_version = "2.4.3" // 2.5.0-rc01
-    def sqlite_version = "2.3.0-rc01"
+    def room_version = "2.4.3" // 2.5.0
+    def sqlite_version = "2.3.0"
     def requery_version = "3.39.2"
     def paging_version = "2.1.2" //  3.2.0-alpha03
     def preference_version = "1.2.0"
@@ -462,10 +470,12 @@ dependencies {
     // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-runtime
     // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-livedata
     // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-livedata-core
+    // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-viewmodel-savedstate
     // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-compiler
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-core:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-extensions

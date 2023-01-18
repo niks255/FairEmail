@@ -18,6 +18,7 @@
     <string name="channel_notification">E-mail</string>
     <string name="channel_progress">Avanzamento</string>
     <string name="channel_update">Aggiornamenti</string>
+    <string name="channel_announcements">Annunci</string>
     <string name="channel_warning">Avvisi</string>
     <string name="channel_error">Errori</string>
     <string name="channel_alert">Avvisi server</string>
@@ -243,7 +244,7 @@
         La password è necessaria per re-importare le impostazioni, sei quindi pregato di non dimenticarla!
     </string>
     <string name="title_setup_export_do">Il file d\'esportazione conterrà tutte le impostazioni e i dati, ma nessun messaggio e nessun\'immagine riferita nelle firme</string>
-    <string name="title_setup_import_do">I profili importati saranno aggiunti senza sovrascriverne alcuno esistente</string>
+    <string name="title_setup_scroll">Le finestre di dialogo d\'input possono essere scorrevoli!</string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">La password contiene caratteri di controllo o spazi vuoti</string>
     <string name="title_setup_password_repeat">Ripeti password</string>
@@ -320,6 +321,7 @@
     <string name="title_advanced_section_encryption">Crittografia</string>
     <string name="title_advanced_section_notifications">Notifiche</string>
     <string name="title_advanced_section_misc">Varie</string>
+    <string name="title_advanced_section_backup">Backup</string>
     <string name="title_advanced_default">Tutte le opzioni hanno comunemente usato valori standard, che non devono esser cambiati per usare l\'app</string>
     <string name="title_advanced_receive">Ricevi i messaggi per tutti i profili</string>
     <string name="title_advanced_when">Quando</string>
@@ -386,6 +388,7 @@
     <string name="title_advanced_reply_move_inbox">Anche per i messaggi nella posta in arrivo</string>
     <string name="title_advanced_auto_link">Crea automaticamente i link</string>
     <string name="title_advanced_plain_only">Invia testo semplice di default</string>
+    <string name="title_advanced_plain_only_reply">Testo semplice automatico solo alla risposta a un messaggio in testo semplice solo</string>
     <string name="title_advanced_flow">\'format flowed\' per il testo semplice</string>
     <string name="title_advanced_usenet_signature">Segue la convenzione di firma di Usenet</string>
     <string name="title_advanced_remove_signatures">Rimuovi le firme riconosciute</string>
@@ -417,6 +420,7 @@
     <string name="title_advanced_caption_message">Messaggio</string>
     <string name="title_advanced_caption_message_header">Intestazione del messaggio</string>
     <string name="title_advanced_caption_message_body">Corpo del messaggio</string>
+    <string name="title_advanced_caption_file">File</string>
     <string name="title_advanced_portrait">Modalità Ritratto</string>
     <string name="title_advanced_landscape">Modalità Paesaggio</string>
     <string name="title_advanced_two_row">Usa due righe</string>
@@ -424,6 +428,7 @@
     <string name="title_advanced_min_screen_size">Dimensione minima dello schermo per la sua divisione</string>
     <string name="title_advanced_close_pane">Comprimi riga o colonna chiudendo una conversazione</string>
     <string name="title_advanced_column_width">Larghezza colonna/altezza riga del messaggio: %1$s %%</string>
+    <string name="title_advanced_hide_toolbar">Nascondi la barra degli strumenti superiore scorrendo i messaggi</string>
     <string name="title_advanced_nav_options">Mostra le opzioni del menu di navigazione</string>
     <string name="title_advanced_nav_categories">Mostra le categorie di profili nel menu di navigazione</string>
     <string name="title_advanced_nav_pin">Fissa il menu di navigazione</string>
@@ -548,6 +553,7 @@
     <string name="title_advanced_undo">Annulla timeout</string>
     <string name="title_advanced_quick_filter">Mostra icone rapide del filtro non vistose</string>
     <string name="title_advanced_quick_scroll">Mostra icone di scorrimento rapido in su/giù non vistose</string>
+    <string name="title_advanced_quick_actions">Mostra azioni rapide quando messaggi sono selezionati</string>
     <string name="title_advanced_folder_nav">Torna sempre all\'elenco delle cartelle da un elenco di messaggi</string>
     <string name="title_advanced_autoread">Contrassegna automaticamente i messaggi come letti allo spostamento</string>
     <string name="title_advanced_star_snoozed">Aggiungi automaticamente la stella posticipando i messaggi</string>
@@ -667,6 +673,7 @@
     <string name="title_advanced_check_weekly">Controlla settimanalmente invece che giornalmente</string>
     <string name="title_advanced_beta">Verifica la presenza delle versioni di prova su BitBucket</string>
     <string name="title_advanced_changelog">Mostra il changelog dopo l\'aggiornamento</string>
+    <string name="title_advanced_announcements">Controlla gli annunci</string>
     <string name="title_advanced_experiments">Prova le funzionalità sperimentali</string>
     <string name="title_advanced_crash_reports">Invia rapporti d\'errore</string>
     <string name="title_advanced_cleanup_attachments">Elimina gli allegati dei vecchi messaggi</string>
@@ -977,7 +984,6 @@
     <string name="title_edit_account_color">Modifica colore del profilo</string>
     <string name="title_hide_folder">Nascondi cartella</string>
     <string name="title_hide_seen_folder">Nascondi la cartella se tutti i messaggi sono letti</string>
-    <string name="title_hide_seen_folder_hint">Solo nell\'elenco delle cartelle mostrato nella schermata iniziale</string>
     <string name="title_unified_folder">Mostra nella posta in arrivo unificata</string>
     <string name="title_navigation_folder">Mostra nel menu di navigazione</string>
     <string name="title_navigation_folder_hide">Nascondi nel menu di navigazione</string>
@@ -1087,6 +1093,7 @@
     <string name="title_quick_actions">Seleziona azioni</string>
     <string name="title_quick_actions_hint">Sarranno mostrate fino a %1$d azioni</string>
     <string name="title_quick_actions_low">Importanza bassa</string>
+    <string name="title_quick_actions_normal">Importanza normale</string>
     <string name="title_quick_actions_high">Importanza elevata</string>
     <string name="title_quick_actions_snooze">Posticipa</string>
     <string name="title_quick_actions_clear">Annulla la selezione dopo un\'azione</string>
@@ -1493,7 +1500,7 @@
     <string name="title_rule_order">Ordine</string>
     <string name="title_rule_enabled">Abilitato</string>
     <string name="title_rule_daily">Esegui giornalmente (solo)</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Messaggi precedenti a (giorni)</string>
+    <string name="title_rule_age">Messaggi precedenti a (giorni)</string>
     <string name="title_rule_stop">Ferma l\'elaborazione delle regole dopo l\'esecuzione di questa regola</string>
     <string name="title_rule_sender">Il mittente contiene</string>
     <string name="title_rule_sender_known">Il mittente è un contatto</string>
@@ -1816,6 +1823,7 @@
     <string name="title_widget_padding">Dimensione del rientro</string>
     <string name="title_widget_separator_lines">Mostra linee di separazione</string>
     <string name="title_widget_semi_transparent">Sfondo semitrasparente</string>
+    <string name="title_widget_count_top">Mostra il conteggio non letto in cima</string>
     <string name="title_widget_avatars">Mostra gli avatar del contatto</string>
     <string name="title_widget_refresh">Mostra il pulsante ricarica messaggi</string>
     <string name="title_widget_compose">Mostra il pulsante componi nuovo messaggio</string>

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -125,6 +125,7 @@ public class FragmentOAuth extends FragmentBase {
     private TextView tvConfiguring;
     private TextView tvGmailHint;
     private TextView tvGmailLoginHint;
+    private TextView tvGmailLoginMax;
 
     private TextView tvError;
     private TextView tvOfficeAuthHint;
@@ -180,6 +181,7 @@ public class FragmentOAuth extends FragmentBase {
         tvConfiguring = view.findViewById(R.id.tvConfiguring);
         tvGmailHint = view.findViewById(R.id.tvGmailHint);
         tvGmailLoginHint = view.findViewById(R.id.tvGmailLoginHint);
+        tvGmailLoginMax = view.findViewById(R.id.tvGmailLoginMax);
 
         tvError = view.findViewById(R.id.tvError);
         tvOfficeAuthHint = view.findViewById(R.id.tvOfficeAuthHint);
@@ -271,6 +273,7 @@ public class FragmentOAuth extends FragmentBase {
         tvConfiguring.setVisibility(View.GONE);
         tvGmailHint.setVisibility("gmail".equals(id) ? View.VISIBLE : View.GONE);
         tvGmailLoginHint.setVisibility("gmail".equals(id) ? View.VISIBLE : View.GONE);
+        tvGmailLoginMax.setVisibility("gmail".equals(id) ? View.VISIBLE : View.GONE);
         hideError();
 
         etName.setText(personal);
@@ -341,6 +344,8 @@ public class FragmentOAuth extends FragmentBase {
             btnOAuth.setEnabled(false);
             pbOAuth.setVisibility(View.VISIBLE);
             hideError();
+
+            Log.breadcrumb("onAuthorize", "id", id);
 
             final Context context = getContext();
             PackageManager pm = context.getPackageManager();
@@ -493,6 +498,8 @@ public class FragmentOAuth extends FragmentBase {
             cbRecent.setEnabled(true);
             cbUpdate.setEnabled(true);
 
+            Log.breadcrumb("onHandleOAuth", "id", id);
+
             AuthorizationResponse auth = AuthorizationResponse.fromIntent(data);
             if (auth == null) {
                 AuthorizationException ex = AuthorizationException.fromIntent(data);
@@ -570,6 +577,8 @@ public class FragmentOAuth extends FragmentBase {
     }
 
     private void onOAuthorized(String accessToken, String idToken, AuthState state) {
+        Log.breadcrumb("onOAuthorized", "id", id);
+
         if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
             return;
 

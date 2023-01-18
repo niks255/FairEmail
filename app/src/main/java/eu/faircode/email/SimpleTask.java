@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.annotation.SuppressLint;
@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
 // This simple task is simple to use, but it is also simple to cause bugs that can easily lead to crashes
 // Make sure to not access any member in any outer scope from onExecute
@@ -70,6 +71,12 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
     @SuppressLint("StaticFieldLeak")
     private static Context themedContext = null;
     private static final List<SimpleTask> tasks = new ArrayList<>();
+
+    private static final ExecutorService serialExecutor =
+            Helper.getBackgroundExecutor(1, "tasks/serial");
+
+    private static final ExecutorService globalExecutor =
+            Helper.getBackgroundExecutor(0, "tasks/global");
 
     private static final int REPORT_AFTER = 15 * 60 * 1000; // milliseconds
 
@@ -108,7 +115,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
     }
 
     public SimpleTask<T> serial() {
-        return setExecutor(Helper.getSerialTaskExecutor());
+        return setExecutor(serialExecutor);
     }
 
     @NonNull
@@ -127,7 +134,7 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
         if (localExecutor != null)
             return localExecutor;
 
-        return Helper.getParallelExecutor();
+        return globalExecutor;
     }
 
     @NonNull
@@ -352,6 +359,16 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
     }
 
     void cancel(Context context) {
+        try {
+            ExecutorService executor = getExecutor(context);
+            if (executor instanceof ThreadPoolExecutor && future instanceof Runnable) {
+                boolean removed = ((ThreadPoolExecutor) executor).remove((Runnable) future);
+                Log.i("Remove task=" + name + " removed=" + removed);
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+
         if (future != null && future.cancel(false)) {
             Log.i("Cancelled task=" + name);
             cleanup(context);
@@ -408,7 +425,8 @@ public abstract class SimpleTask<T> implements LifecycleObserver {
             @Override
             public void run() {
                 try {
-                    onProgress(status, data);
+                    if (!destroyed)
+                        onProgress(status, data);
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }

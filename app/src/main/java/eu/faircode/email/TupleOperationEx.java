@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import androidx.annotation.NonNull;
@@ -30,6 +30,7 @@ public class TupleOperationEx extends EntityOperation {
     public int priority;
     public String accountName;
     public String folderName;
+    public String folderType;
     public boolean synchronize;
 
     @Override
@@ -40,9 +41,22 @@ public class TupleOperationEx extends EntityOperation {
                     this.priority == other.priority &&
                     Objects.equals(this.accountName, other.accountName) &&
                     Objects.equals(this.folderName, other.folderName) &&
+                    Objects.equals(this.folderType, other.folderType) &&
                     this.synchronize == other.synchronize);
         } else
             return false;
+    }
+
+    int getPriority(boolean offline) {
+        int priority = this.priority;
+
+        if (offline)
+            priority += 20; // connect folder is expensive
+
+        if (!EntityFolder.INBOX.equals(folderType)) // prioritize inbox
+            priority += 100;
+
+        return priority;
     }
 
     PartitionKey getPartitionKey(boolean offline) {
@@ -50,14 +64,10 @@ public class TupleOperationEx extends EntityOperation {
 
         key.folder = this.folder;
         key.order = this.id;
+        key.priority = this.getPriority(offline);
 
-        if (offline) {
-            // open/close folder is expensive
-            key.priority = this.priority + 10;
+        if (offline)
             return key;
-        }
-
-        key.priority = this.priority;
 
         if (ADD.equals(name) ||
                 DELETE.equals(name))

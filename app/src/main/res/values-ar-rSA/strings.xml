@@ -18,6 +18,7 @@
     <string name="channel_notification">البريد</string>
     <string name="channel_progress">التقدم</string>
     <string name="channel_update">التحديثات</string>
+    <string name="channel_announcements">إعلانات</string>
     <string name="channel_warning">التحذيرات</string>
     <string name="channel_error">الأخطاء</string>
     <string name="channel_alert">تنبيهات الخادم</string>
@@ -204,6 +205,7 @@
     <string name="title_setup_gmail_rationale">الرجاء منح الصلاحيات لتحديد الحساب وقراءة اسمك</string>
     <string name="title_setup_gmail_permissions">جوجل سوف تطلب موافقتك لقراءة, تأليف, أرسال وحذف نهائي لكل الرسائل. فيرميل لن يمسح رسائلك ابدا بدون موافقتك.</string>
     <string name="title_setup_gmail_login">إذا تم تسجيل الدخول بحساب جوجل في متصفح كروم، يمكن إضافة حساب جديد فقط من خلال أندرويد. يمكن تجنب هذا عن طريق تسجيل الخروج من حساب جوجل في متصفح كروم عن طريق إعدادات مزامنة كروم.</string>
+    <string name="title_setup_gmail_max">في حالة ظهور رسالة الخطأ \"لقد قمت بتسجيل الدخول إلى الحد الأقصى لعدد الحسابات\"، فأنت بحاجة إلى تسجيل الخروج من المتصفح من جميع حسابات غوغل.</string>
     <string name="title_setup_gmail_on_device">لماذا أحتاج إلى اختيار حساب على الجهاز؟</string>
     <string name="title_setup_gmail_password">أريد تخويل حساب بكلمة مرور بدلا من حساب على الجهاز</string>
     <string name="title_setup_office_auth">يمكن أن يكون سبب الخطأ \"فشل المصادقة\" هو عدم تمكين IMAP/SMTP بواسطة مسؤول النظام</string>
@@ -271,7 +273,6 @@
         كلمة المرور مطلوبة لاستيراد الإعدادات مرة أخرى، لذا يرجى عدم نسيانها!
     </string>
     <string name="title_setup_export_do">سيحتوي ملف التصدير على جميع الإعدادات والبيانات، ولكن لا توجد رسائل ولا صور مشار إليها في التوقيعات</string>
-    <string name="title_setup_import_do">سيتم إضافة الحسابات المستوردة دون الكتابة فوق أي حسابات موجودة</string>
     <string name="title_setup_password">الكلمة السرية</string>
     <string name="title_setup_password_chars">تحتوي كلمة المرور على أحرف تحكم أو مسافات بيضاء</string>
     <string name="title_setup_password_repeat">أعد كتابة الكلمة السرية</string>
@@ -348,6 +349,7 @@
     <string name="title_advanced_section_encryption">التشفير</string>
     <string name="title_advanced_section_notifications">الاشعارات</string>
     <string name="title_advanced_section_misc">خيارات متنوعة</string>
+    <string name="title_advanced_section_backup">النسخة الاحتياطية</string>
     <string name="title_advanced_default">جميع الخيارات تستخدم قيم قياسية شائعة، التي لا تحتاج إلى تغييرها لاستخدام التطبيق</string>
     <string name="title_advanced_receive">تلقي الرسائل لجميع الحسابات</string>
     <string name="title_advanced_when">متى</string>
@@ -355,11 +357,13 @@
     <string name="title_advanced_advanced">الإعدادات المتقدمة</string>
     <string name="title_advanced_send_reminders">إظهار التذكيرات</string>
     <string name="title_advanced_compose_color">لون النص الافتراضي</string>
+    <string name="title_advanced_plain_only_reply">تلقائياً نص عادي فقط عند الرد على رسالة نص عادي فقط</string>
     <string name="title_advanced_metered">استخدام اتصالات أجهزة الاستنشاق</string>
     <string name="title_advanced_caption_general">الاعدادات العامة</string>
     <string name="title_advanced_caption_list">قائمة</string>
     <string name="title_advanced_caption_conversation">المحادثة</string>
     <string name="title_advanced_caption_message">رسالة</string>
+    <string name="title_advanced_hide_toolbar">إخفاء شريط الأدوات العلوي عند تصفح الرسائل</string>
     <string name="title_advanced_cards_shadow_border">إظهار الحدود</string>
     <string name="title_advanced_date_header">تجميع بحسب التاريخ</string>
     <string name="title_advanced_date_bold">إظهار التاريخ بخط سميك</string>
@@ -386,8 +390,10 @@
     <string name="title_advanced_light">استخدم الإشعار الضوئي</string>
     <string name="title_advanced_sound">إختر نغمة التنبيه</string>
     <string name="title_advanced_generic_user_agent">استخدام اعدادات المستخدم العامة في المتصفح</string>
+    <string name="title_advanced_clear_all_hint">سيؤدي هذا إلى حذف جميع بيانات التطبيق من جهازك، بما في ذلك حسابات البريد الإلكتروني والرسائل والإعدادات التي تم تكوينها وأي بيانات تم جمعها.</string>
     <string name="title_advanced_encrypt_default">تشفير بشكل افتراضي</string>
     <string name="title_advanced_language_system">النظام</string>
+    <string name="title_advanced_announcements">التحقق من وجود إعلانات</string>
     <string name="title_advanced_crash_reports">إرسال تقارير الأخطاء</string>
     <string name="title_advanced_cleanup">تنظيف</string>
     <string name="title_advanced_debug">وضع التصحيح</string>
@@ -409,6 +415,7 @@
     <string name="title_provider">مزود الخدمة</string>
     <string name="title_custom">مُخصّص</string>
     <string name="title_host">اسم المضيف</string>
+    <string name="title_encryption">التشفير</string>
     <string name="title_allow_insecure">السماح بالاتصالات غير الآمنة</string>
     <string name="title_port">رقم المَنفَذ</string>
     <string name="title_user">اسم المستخدم</string>
@@ -480,6 +487,7 @@
     <string name="title_add_keyword">إضافة كلمة مفتاحية</string>
     <string name="title_download_all">تنزيل الكل</string>
     <string name="title_save_all">حفظ الكل</string>
+    <string name="title_quick_actions_normal">أهمية عادية</string>
     <string name="title_trash">سلة المهملات</string>
     <string name="title_delete">حذف</string>
     <string name="title_more">المزيد</string>
@@ -516,6 +524,7 @@
     <string name="title_save">حفظ</string>
     <string name="title_send">إرسال</string>
     <string name="title_send_at">أرسِلها في &#8230;</string>
+    <string name="title_send_encryption">التشفير</string>
     <string name="title_style_bold">غليظ</string>
     <string name="title_style_italic">مائل</string>
     <string name="title_style_size">الحجم</string>
@@ -578,7 +587,7 @@
     <string name="title_rule_order">الترتيب</string>
     <string name="title_rule_enabled">تم تفعيله</string>
     <string name="title_rule_daily">تشغيل يومي (فقط)</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">الرسائل الأقدم من (بالأيام)</string>
+    <string name="title_rule_age">الرسائل الأقدم من (بالأيام)</string>
     <string name="title_rule_sender">المُرسِل يحتوي على</string>
     <string name="title_rule_subject">عنوان الرسالة يحتوي على</string>
     <string name="title_rule_header">الرأسية تحتوي على</string>
@@ -687,6 +696,7 @@
     <string name="title_widget_folder">المجلد</string>
     <string name="title_widget_font_size">حجم النص</string>
     <string name="title_widget_semi_transparent">خلفية شبه شفافة</string>
+    <string name="title_widget_count_top">إظهار العدد غير المقروء في الأعلى</string>
     <string name="title_widget_background">لون الخلفية</string>
     <!-- Thunderbird -->
     <string name="title_keyword_label4">للانجاز</string>

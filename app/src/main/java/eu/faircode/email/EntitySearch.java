@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import androidx.annotation.NonNull;
@@ -82,7 +82,8 @@ public class EntitySearch {
     public boolean equals(Object obj) {
         if (obj instanceof EntitySearch) {
             EntitySearch other = (EntitySearch) obj;
-            return (this.id.equals(other.id) &&
+            return (Objects.equals(this.account_uuid, other.account_uuid) &&
+                    Objects.equals(this.folder_name, other.folder_name) &&
                     this.name.equals(other.name) &&
                     Objects.equals(this.order, other.order) &&
                     Objects.equals(this.color, other.color) &&

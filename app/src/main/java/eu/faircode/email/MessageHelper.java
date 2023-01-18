@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.system.OsConstants.ENOSPC;
@@ -261,7 +261,7 @@ public class MessageHelper {
 
         // https://docs.oracle.com/javaee/6/api/javax/mail/internet/MimeMultipart.html
         System.setProperty("mail.mime.multipart.ignoremissingboundaryparameter", "true"); // default true, javax.mail.internet.ParseException: In parameter list
-        System.setProperty("mail.mime.multipart.ignoreexistingboundaryparameter", "true"); // default false
+        System.setProperty("mail.mime.multipart.ignoreexistingboundaryparameter", "false"); // default false
         System.setProperty("mail.mime.multipart.ignoremissingendboundary", "true"); // default true
         System.setProperty("mail.mime.multipart.allowempty", "true"); // default false
         System.setProperty("mail.mime.contentdisposition.strict", "false"); // default true
@@ -273,7 +273,9 @@ public class MessageHelper {
         //System.setProperty("mail.imap.parse.debug", "true");
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean preamble = prefs.getBoolean("preamble", false);
         boolean uid_command = prefs.getBoolean("uid_command", false);
+        System.setProperty("fairemail.preamble", Boolean.toString(preamble));
         System.setProperty("fairemail.uid_command", Boolean.toString(uid_command));
     }
 
@@ -3159,7 +3161,7 @@ public class MessageHelper {
         }
 
         String getHtml(Context context, boolean plain_text, String override) throws MessagingException, IOException {
-            if (text.size() == 0) {
+            if (text.size() + extra.size() == 0) {
                 Log.i("No body part");
                 return null;
             }
@@ -3194,6 +3196,16 @@ public class MessageHelper {
                 if (size > MAX_MESSAGE_SIZE && size != Integer.MAX_VALUE) {
                     warnings.add(context.getString(R.string.title_insufficient_memory, size));
                     return null;
+                }
+
+                if (Boolean.parseBoolean(System.getProperty("fairemail.preamble"))) {
+                    String preamble = h.contentType.getParameter("preamble");
+                    if (Boolean.parseBoolean(preamble)) {
+                        String text = ((MimeMultipart) h.part.getContent()).getPreamble();
+                        String html = "<h1>Preamble</h1><div x-plain=\"true\">" + HtmlHelper.formatPlainText(text) + "</div>";
+                        sb.append(html);
+                        continue;
+                    }
                 }
 
                 // Check character set
@@ -3933,16 +3945,13 @@ public class MessageHelper {
                 ICalendar icalendar = Biweekly.parse(file).first();
 
                 Method method = icalendar.getMethod();
-                if (method == null)
-                    return;
-
                 VEvent event = icalendar.getEvents().get(0);
 
                 // https://www.rfc-editor.org/rfc/rfc5546#section-3.2
-                if (method.isRequest() || method.isCancel())
+                if (method == null || method.isRequest() || method.isCancel())
                     CalendarHelper.delete(context, event, message);
 
-                if (method.isRequest()) {
+                if (method == null || method.isRequest()) {
                     String selectedAccount;
                     String selectedName;
                     try {
@@ -4463,6 +4472,16 @@ public class MessageHelper {
                             Log.w(ex);
                             parts.warnings.add(Log.formatThrowable(ex, false));
                         }
+
+                    if (multipart instanceof MimeMultipart &&
+                            Boolean.parseBoolean(System.getProperty("fairemail.preamble"))) {
+                        String preamble = ((MimeMultipart) multipart).getPreamble();
+                        if (!TextUtils.isEmpty(preamble)) {
+                            ContentType plain = new ContentType("text/plain; preamble=\"true\"");
+                            parts.extra.add(new PartHolder(part, plain));
+                        }
+                    }
+
                     return;
                 } else {
                     String msg = "Expected multipart/* got " + content.getClass().getName();
@@ -5177,6 +5196,10 @@ public class MessageHelper {
                                 break;
                             case "Diagnostic-Code":
                                 this.diagnostic = value;
+                                break;
+                            case "X-Original-Message-ID":
+                                // GMail
+                                this.refid = value;
                                 break;
                         }
                     } else if (isDispositionNotification(type)) {

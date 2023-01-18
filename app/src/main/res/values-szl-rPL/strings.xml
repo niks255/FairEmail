@@ -18,6 +18,7 @@
     <string name="channel_notification">E-mail</string>
     <string name="channel_progress">Postęp</string>
     <string name="channel_update">Aktualizacje</string>
+    <string name="channel_announcements">Zapowiedzi</string>
     <string name="channel_warning">Ostrzeżenia</string>
     <string name="channel_error">Błędy</string>
     <string name="channel_alert">Komunikaty serwera</string>
@@ -202,6 +203,7 @@
     <string name="title_setup_gmail_rationale">Przyznaj uprawnienia, aby wybrać konto i odczytać twoje imię</string>
     <string name="title_setup_gmail_permissions">Google poprosi o uprawnienia do odczytu, tworzenia, wysyłania i trwałego usuwania wszystkich wiadomości e-mail. FairEmail nigdy nie usunie twoich wiadomości bez Twojej wyraźnej zgody.</string>
     <string name="title_setup_gmail_login">Jeśli Chrome jest zalogowany do konta, nowe konto można dodać tylko przez Androida. Można tego uniknąć wylogowując się z Chrome poprzez ustawienia synchronizacji Chrome.</string>
+    <string name="title_setup_gmail_max">W przypadku komunikatu o błędzie \"Zalogowano się do maksymalnej liczby kont\", musisz wylogować się przeglądarką ze wszystkich kont Google.</string>
     <string name="title_setup_gmail_on_device">Dlaczego muszę wybrać konto na urządzeniu?</string>
     <string name="title_setup_gmail_password">Chcę autoryzować konto za pomocą hasła zamiast konta na urządzeniu</string>
     <string name="title_setup_office_auth">Błąd \"AUTHENTICATE failed\" może być spowodowany wyłączeniem protokołu IMAP/SMTP przez administratora systemu</string>
@@ -269,7 +271,7 @@
          Hasło jest wymagane do ponownego zaimportowania ustawień, więc nie zapomnij go!
     </string>
     <string name="title_setup_export_do">Plik będzie zawierał wszystkie ustawienia i dane, bez żadnych komunikatów i obrazów w odniesieniu do podpisów</string>
-    <string name="title_setup_import_do">Zaimportowane konta zostaną dodane bez nadpisywania istniejących</string>
+    <string name="title_setup_scroll">Okna dialogowe mogą być przewiane!</string>
     <string name="title_setup_password">Hasło</string>
     <string name="title_setup_password_chars">Hasło zawiera znaki kontrolne lub znaki spacji</string>
     <string name="title_setup_password_repeat">Powtórz hasło</string>
@@ -345,6 +347,7 @@
     <string name="title_advanced_section_encryption">Szyfrowanie</string>
     <string name="title_advanced_section_notifications">Powiadomienia</string>
     <string name="title_advanced_section_misc">Różne</string>
+    <string name="title_advanced_section_backup">Kopia zapasowa</string>
     <string name="title_advanced_default">Wszystkie opcje mają powszechnie używane wartości standardowe, które nie muszą być zmieniane, aby używać aplikacji</string>
     <string name="title_advanced_receive">Odbierz wiadomości ze wszystkich kont</string>
     <string name="title_advanced_when">Kiedy</string>
@@ -411,6 +414,7 @@
     <string name="title_advanced_reply_move_inbox">Również dla wiadomości w skrzynce odbiorczej</string>
     <string name="title_advanced_auto_link">Automatycznie utwórz linki</string>
     <string name="title_advanced_plain_only">Domyślnie wysyłaj czystym tekstem</string>
+    <string name="title_advanced_plain_only_reply">Automatycznie używaj zwykłego tekstu tylko przy odpowiadaniu na wiadomość ze zwykłym tekstem</string>
     <string name="title_advanced_flow">\'format flowed\' dla zwykłego tekstu</string>
     <string name="title_advanced_usenet_signature">Konwencja podpisu Usenet</string>
     <string name="title_advanced_remove_signatures">Usuń rozpoznane podpisy</string>
@@ -442,6 +446,7 @@
     <string name="title_advanced_caption_message">Wiadomość</string>
     <string name="title_advanced_caption_message_header">Nagłówek wiadomości</string>
     <string name="title_advanced_caption_message_body">Treść wiadomości</string>
+    <string name="title_advanced_caption_file">Plik</string>
     <string name="title_advanced_portrait">Orientacja pionowa</string>
     <string name="title_advanced_landscape">Orientacja pozioma</string>
     <string name="title_advanced_two_row">Dwa wiersze</string>
@@ -449,6 +454,7 @@
     <string name="title_advanced_min_screen_size">Minimalny rozmiar ekranu dla podziału ekranu</string>
     <string name="title_advanced_close_pane">Zwiń wiersz lub kolumnę podczas zamykania rozmowy</string>
     <string name="title_advanced_column_width">Szerokość kolumny wiadomości / wysokość wiersza: %1$s %%</string>
+    <string name="title_advanced_hide_toolbar">Ukryj górny pasek narzędzi podczas przewijania wiadomości</string>
     <string name="title_advanced_nav_options">Pokaż opcje menu nawigacji</string>
     <string name="title_advanced_nav_categories">Pokaż kategorie kont w menu nawigacji</string>
     <string name="title_advanced_nav_pin">Przypnij menu nawigacji</string>
@@ -573,6 +579,7 @@
     <string name="title_advanced_undo">Ustaw limit czasu dla \"Cofnij\"</string>
     <string name="title_advanced_quick_filter">Pokaż nienatarczywe ikony szybkiego filtrowania</string>
     <string name="title_advanced_quick_scroll">Pokaż nienatarczywe ikony szybkiego przewijania w górę/w dół</string>
+    <string name="title_advanced_quick_actions">Pokaż szybkie akcje po wybraniu wiadomości</string>
     <string name="title_advanced_folder_nav">Zawsze wracaj do listy folderów z listy wiadomości</string>
     <string name="title_advanced_autoread">Automatycznie oznacz wiadomość jako przeczytaną przy przenoszeniu</string>
     <string name="title_advanced_star_snoozed">Automatycznie dodawaj gwiazdkę przy usypianiu wiadomości</string>
@@ -642,6 +649,7 @@
     <string name="title_advanced_disconnect_auto_update">Automatycznie aktualizuj listy co tydzień</string>
     <string name="title_advanced_disconnect_links">Użyj list do rozpoznawania linków śledzących</string>
     <string name="title_advanced_disconnect_images">Użyj list do rozpoznawania obrazów śledzących</string>
+    <string name="title_advanced_clear_all_hint">Spowoduje to usunięcie wszystkich danych aplikacji z urządzenia, w tym skonfigurowanych kont e-mail, wiadomości, ustawień i wszystkich zebranych danych.</string>
     <string name="title_advanced_mnemonic">Usuń dane zdalnie</string>
     <string name="title_advanced_mnemonic_hint">Każda otrzymana wiadomość e-mail z poniższymi słowami w temacie, automatycznie i natychmiast usunie dane aplikacji</string>
     <string name="title_advanced_clear_all">Usuń dane aplikacji</string>
@@ -691,6 +699,7 @@
     <string name="title_advanced_check_weekly">Sprawdzaj co tydzień zamiast codziennie</string>
     <string name="title_advanced_beta">Sprawdź wersję testową na BitBucket</string>
     <string name="title_advanced_changelog">Pokaż listę zmian po aktualizacji</string>
+    <string name="title_advanced_announcements">Sprawdź zapowiedzi</string>
     <string name="title_advanced_experiments">Wypróbuj funkcje eksperymentalne</string>
     <string name="title_advanced_crash_reports">Wyślij raport o błędach</string>
     <string name="title_advanced_cleanup_attachments">Usuń załączniki starych wiadomości</string>
@@ -1001,7 +1010,6 @@
     <string name="title_edit_account_color">Edytuj kolor konta</string>
     <string name="title_hide_folder">Ukryj folder</string>
     <string name="title_hide_seen_folder">Ukryj folder, jeśli wszystkie wiadomości zostały przeczytane</string>
-    <string name="title_hide_seen_folder_hint">Tylko na liście folderów wyświetlanej na ekranie startowym</string>
     <string name="title_unified_folder">Pokaż we wspólnej skrzynce</string>
     <string name="title_navigation_folder">Pokaż w menu nawigacji</string>
     <string name="title_navigation_folder_hide">Ukryj w menu nawigacji</string>
@@ -1110,6 +1118,7 @@
     <string name="title_quick_actions">Wybierz działania</string>
     <string name="title_quick_actions_hint">Do %1$d działań zostanie wyświetlonych</string>
     <string name="title_quick_actions_low">Niskie znaczenie</string>
+    <string name="title_quick_actions_normal">Zwykła ważność</string>
     <string name="title_quick_actions_high">Wysokie znaczenie</string>
     <string name="title_quick_actions_snooze">Odłóż</string>
     <string name="title_quick_actions_clear">Wyczyść zaznaczenie po akcji</string>
@@ -1515,7 +1524,7 @@
     <string name="title_rule_order">Kolejność</string>
     <string name="title_rule_enabled">Włączone</string>
     <string name="title_rule_daily">Uruchom codziennie (tylko)</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Wiadomości starsze niż (dni)</string>
+    <string name="title_rule_age">Wiadomości starsze niż (dni)</string>
     <string name="title_rule_stop">Zatrzymaj przetwarzanie reguł po uruchomieniu tej reguły</string>
     <string name="title_rule_sender">Nadawca zawiera</string>
     <string name="title_rule_sender_known">Nadawca jest kontaktem</string>
@@ -1836,6 +1845,7 @@
     <string name="title_widget_padding">Rozmiar wypełnienia</string>
     <string name="title_widget_separator_lines">Pokaż linie rozdzielające</string>
     <string name="title_widget_semi_transparent">Półprzezroczyste tło</string>
+    <string name="title_widget_count_top">Pokaż ilość nieprzeczytanych na górze</string>
     <string name="title_widget_avatars">Pokaż awatary kontaktu</string>
     <string name="title_widget_refresh">Pokaż przycisk odświeżania wiadomości</string>
     <string name="title_widget_compose">Pokaż przycisk tworzenia nowej wiadomości</string>

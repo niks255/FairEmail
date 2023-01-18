@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_FIRST_USER;
@@ -306,6 +306,7 @@ public class FragmentMessages extends FragmentBase
     private ImageButton ibBatchFlag;
     private ImageButton ibBatchFlagColor;
     private ImageButton ibLowImportance;
+    private ImageButton ibNormalImportance;
     private ImageButton ibHighImportance;
     private ImageButton ibInbox;
     private ImageButton ibArchive;
@@ -338,6 +339,7 @@ public class FragmentMessages extends FragmentBase
 
     private WebView printWebView = null;
 
+    private boolean hide_toolbar;
     private boolean cards;
     private boolean dividers;
     private boolean category;
@@ -358,6 +360,7 @@ public class FragmentMessages extends FragmentBase
     private boolean quick_scroll;
     private boolean addresses;
     private boolean swipe_reply;
+    private boolean quick_actions;
 
     private int colorPrimary;
     private int colorAccent;
@@ -478,7 +481,7 @@ public class FragmentMessages extends FragmentBase
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        swipenav = prefs.getBoolean("swipenav", true);
+        hide_toolbar = prefs.getBoolean("hide_toolbar", true);
         cards = prefs.getBoolean("cards", true);
         dividers = prefs.getBoolean("dividers", true);
         category = prefs.getBoolean("group_category", false);
@@ -488,6 +491,7 @@ public class FragmentMessages extends FragmentBase
         date_bold = prefs.getBoolean("date_bold", false);
         threading = (prefs.getBoolean("threading", true) ||
                 args.getBoolean("force_threading"));
+        swipenav = prefs.getBoolean("swipenav", true);
         seekbar = prefs.getBoolean("seekbar", false);
         actionbar = prefs.getBoolean("actionbar", true);
         boolean actionbar_swap = prefs.getBoolean("actionbar_swap", false);
@@ -500,6 +504,7 @@ public class FragmentMessages extends FragmentBase
         quick_scroll = prefs.getBoolean("quick_scroll", true);
         addresses = prefs.getBoolean("addresses", false);
         swipe_reply = prefs.getBoolean("swipe_reply", false);
+        quick_actions = prefs.getBoolean("quick_actions", true);
 
         colorPrimary = Helper.resolveColor(getContext(), R.attr.colorPrimary);
         colorAccent = Helper.resolveColor(getContext(), R.attr.colorAccent);
@@ -601,6 +606,7 @@ public class FragmentMessages extends FragmentBase
         ibBatchFlag = view.findViewById(R.id.ibBatchFlag);
         ibBatchFlagColor = view.findViewById(R.id.ibBatchFlagColor);
         ibLowImportance = view.findViewById(R.id.ibLowImportance);
+        ibNormalImportance = view.findViewById(R.id.ibNormalImportance);
         ibHighImportance = view.findViewById(R.id.ibHighImportance);
         ibInbox = view.findViewById(R.id.ibInbox);
         ibArchive = view.findViewById(R.id.ibArchive);
@@ -765,6 +771,21 @@ public class FragmentMessages extends FragmentBase
                      */
                     Log.w(ex);
                 }
+            }
+
+            @Override
+            public void onLayoutCompleted(RecyclerView.State state) {
+                super.onLayoutCompleted(state);
+                if (!isActionBarShown())
+                    try {
+                        int range = computeVerticalScrollRange(state);
+                        int extend = computeVerticalScrollExtent(state);
+                        boolean canScrollVertical = (range > extend);
+                        if (!canScrollVertical) // anymore
+                            showActionBar(true);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
             }
 
             @Override
@@ -1105,6 +1126,8 @@ public class FragmentMessages extends FragmentBase
         });
 
         rvMessage.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private boolean show = true;
+
             @Override
             public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
                 if (dy != 0) {
@@ -1115,6 +1138,20 @@ public class FragmentMessages extends FragmentBase
                         updateExpanded();
                     }
                 }
+
+                if (hide_toolbar && dy != 0)
+                    try {
+                        show = (dy < 0 || rv.computeVerticalScrollOffset() == 0);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                        show = true;
+                    }
+            }
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView rv, int newState) {
+                if (hide_toolbar && newState != RecyclerView.SCROLL_STATE_DRAGGING)
+                    showActionBar(show);
             }
         });
 
@@ -1491,6 +1528,14 @@ public class FragmentMessages extends FragmentBase
             public void onClick(View v) {
                 boolean more_clear = prefs.getBoolean("more_clear", true);
                 onActionSetImportanceSelection(EntityMessage.PRIORITIY_LOW, more_clear);
+            }
+        });
+
+        ibNormalImportance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean more_clear = prefs.getBoolean("more_clear", true);
+                onActionSetImportanceSelection(EntityMessage.PRIORITIY_NORMAL, more_clear);
             }
         });
 
@@ -6232,130 +6277,139 @@ public class FragmentMessages extends FragmentBase
                 tvSelectedCount.setCompoundDrawablesRelative(null, null, null, null);
             tvSelectedCount.setVisibility(View.VISIBLE);
 
-            Bundle args = new Bundle();
-            args.putLongArray("ids", selection);
-            args.putBoolean("threading", threading);
+            if (quick_actions) {
+                Bundle args = new Bundle();
+                args.putLongArray("ids", selection);
+                args.putBoolean("threading", threading);
 
-            new SimpleTask<MoreResult>() {
-                @Override
-                protected MoreResult onExecute(Context context, Bundle args) {
-                    long[] ids = args.getLongArray("ids");
-                    boolean threading = args.getBoolean("threading");
-                    return MoreResult.get(context, ids, threading, true);
-                }
-
-                @Override
-                protected void onExecuted(Bundle args, MoreResult result) {
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean more_seen = prefs.getBoolean("more_seen", true);
-                    boolean more_unseen = prefs.getBoolean("more_unseen", false);
-                    boolean more_snooze = prefs.getBoolean("more_snooze", false);
-                    boolean more_hide = prefs.getBoolean("more_hide", false);
-                    boolean more_flag = prefs.getBoolean("more_flag", false);
-                    boolean more_flag_color = prefs.getBoolean("more_flag_color", false);
-                    boolean more_importance_high = prefs.getBoolean("more_importance_high", false);
-                    boolean more_importance_low = prefs.getBoolean("more_importance_low", false);
-                    boolean more_inbox = prefs.getBoolean("more_inbox", true);
-                    boolean more_archive = prefs.getBoolean("more_archive", true);
-                    boolean more_junk = prefs.getBoolean("more_junk", true);
-                    boolean more_trash = prefs.getBoolean("more_trash", true);
-                    boolean more_delete = prefs.getBoolean("more_delete", false);
-                    boolean more_move = prefs.getBoolean("more_move", true);
-
-                    boolean inTrash = EntityFolder.TRASH.equals(type);
-                    boolean inJunk = EntityFolder.JUNK.equals(type);
-
-                    int count = 0;
-
-                    boolean move = (more_move && count < MAX_QUICK_ACTIONS && result.canMove());
-                    if (move)
-                        count++;
-
-                    boolean delete = (more_delete && count < MAX_QUICK_ACTIONS && result.canDelete());
-                    if (delete)
-                        count++;
-
-                    boolean trash = (more_trash && count < MAX_QUICK_ACTIONS && result.canTrash());
-                    if (trash)
-                        count++;
-
-                    if (!delete && !trash && (inTrash || inJunk) &&
-                            more_trash && count < MAX_QUICK_ACTIONS && result.canDelete()) {
-                        delete = true;
-                        count++;
+                new SimpleTask<MoreResult>() {
+                    @Override
+                    protected MoreResult onExecute(Context context, Bundle args) {
+                        long[] ids = args.getLongArray("ids");
+                        boolean threading = args.getBoolean("threading");
+                        return MoreResult.get(context, ids, threading, true);
                     }
 
-                    boolean junk = (more_junk && count < MAX_QUICK_ACTIONS && result.canJunk());
-                    if (junk)
-                        count++;
+                    @Override
+                    protected void onExecuted(Bundle args, MoreResult result) {
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        boolean more_seen = prefs.getBoolean("more_seen", true);
+                        boolean more_unseen = prefs.getBoolean("more_unseen", false);
+                        boolean more_snooze = prefs.getBoolean("more_snooze", false);
+                        boolean more_hide = prefs.getBoolean("more_hide", false);
+                        boolean more_flag = prefs.getBoolean("more_flag", false);
+                        boolean more_flag_color = prefs.getBoolean("more_flag_color", false);
+                        boolean more_importance_high = prefs.getBoolean("more_importance_high", false);
+                        boolean more_importance_normal = prefs.getBoolean("more_importance_normal", false);
+                        boolean more_importance_low = prefs.getBoolean("more_importance_low", false);
+                        boolean more_inbox = prefs.getBoolean("more_inbox", true);
+                        boolean more_archive = prefs.getBoolean("more_archive", true);
+                        boolean more_junk = prefs.getBoolean("more_junk", true);
+                        boolean more_trash = prefs.getBoolean("more_trash", true);
+                        boolean more_delete = prefs.getBoolean("more_delete", false);
+                        boolean more_move = prefs.getBoolean("more_move", true);
 
-                    boolean archive = (more_archive && count < MAX_QUICK_ACTIONS && result.canArchive());
-                    if (archive)
-                        count++;
+                        boolean inTrash = EntityFolder.TRASH.equals(type);
+                        boolean inJunk = EntityFolder.JUNK.equals(type);
 
-                    boolean inbox = (more_inbox && count < MAX_QUICK_ACTIONS && result.canInbox());
-                    if (inbox)
-                        count++;
+                        int count = 0;
 
-                    boolean importance_high = (more_importance_high && count < MAX_QUICK_ACTIONS &&
-                            !EntityMessage.PRIORITIY_HIGH.equals(result.importance));
-                    if (importance_high)
-                        count++;
+                        boolean move = (more_move && count < MAX_QUICK_ACTIONS && result.canMove());
+                        if (move)
+                            count++;
 
-                    boolean importance_low = (more_importance_low && count < MAX_QUICK_ACTIONS &&
-                            !EntityMessage.PRIORITIY_LOW.equals(result.importance));
-                    if (importance_low)
-                        count++;
+                        boolean delete = (more_delete && count < MAX_QUICK_ACTIONS && result.canDelete());
+                        if (delete)
+                            count++;
 
-                    boolean flag = (more_flag && count < MAX_QUICK_ACTIONS && result.unflagged);
-                    if (flag)
-                        count++;
+                        boolean trash = (more_trash && count < MAX_QUICK_ACTIONS && result.canTrash());
+                        if (trash)
+                            count++;
 
-                    boolean flag_color = (more_flag_color && count < MAX_QUICK_ACTIONS && (result.unflagged || result.flagged));
-                    if (flag_color)
-                        count++;
+                        if (!delete && !trash && (inTrash || inJunk) &&
+                                more_trash && count < MAX_QUICK_ACTIONS && result.canDelete()) {
+                            delete = true;
+                            count++;
+                        }
 
-                    boolean hide = (more_hide && count < MAX_QUICK_ACTIONS && result.visible);
-                    if (hide)
-                        count++;
+                        boolean junk = (more_junk && count < MAX_QUICK_ACTIONS && result.canJunk());
+                        if (junk)
+                            count++;
 
-                    boolean snooze = (more_snooze && count < MAX_QUICK_ACTIONS);
-                    if (snooze)
-                        count++;
+                        boolean archive = (more_archive && count < MAX_QUICK_ACTIONS && result.canArchive());
+                        if (archive)
+                            count++;
 
-                    boolean unseen = (more_unseen && count < MAX_QUICK_ACTIONS && result.seen);
-                    if (unseen)
-                        count++;
+                        boolean inbox = ((more_inbox || (more_junk && inJunk)) && count < MAX_QUICK_ACTIONS && result.canInbox());
+                        if (inbox)
+                            count++;
 
-                    boolean seen = (more_seen && count < MAX_QUICK_ACTIONS && result.unseen);
-                    if (seen)
-                        count++;
+                        boolean importance_high = (more_importance_high && count < MAX_QUICK_ACTIONS &&
+                                !EntityMessage.PRIORITIY_HIGH.equals(result.importance));
+                        if (importance_high)
+                            count++;
 
-                    ibInbox.setImageResource(inJunk ? R.drawable.twotone_report_off_24 : R.drawable.twotone_inbox_24);
+                        boolean importance_normal = (more_importance_normal && count < MAX_QUICK_ACTIONS &&
+                                !EntityMessage.PRIORITIY_NORMAL.equals(result.importance));
+                        if (importance_normal)
+                            count++;
 
-                    ibBatchSeen.setVisibility(seen ? View.VISIBLE : View.GONE);
-                    ibBatchUnseen.setVisibility(unseen ? View.VISIBLE : View.GONE);
-                    ibBatchSnooze.setVisibility(snooze ? View.VISIBLE : View.GONE);
-                    ibBatchHide.setVisibility(hide ? View.VISIBLE : View.GONE);
-                    ibBatchFlag.setVisibility(flag ? View.VISIBLE : View.GONE);
-                    ibBatchFlagColor.setVisibility(flag_color ? View.VISIBLE : View.GONE);
-                    ibLowImportance.setVisibility(importance_low ? View.VISIBLE : View.GONE);
-                    ibHighImportance.setVisibility(importance_high ? View.VISIBLE : View.GONE);
-                    ibInbox.setVisibility(inbox ? View.VISIBLE : View.GONE);
-                    ibArchive.setVisibility(archive ? View.VISIBLE : View.GONE);
-                    ibJunk.setVisibility(junk ? View.VISIBLE : View.GONE);
-                    ibTrash.setVisibility(trash ? View.VISIBLE : View.GONE);
-                    ibDelete.setVisibility(delete ? View.VISIBLE : View.GONE);
-                    ibMove.setVisibility(move ? View.VISIBLE : View.GONE);
-                    cardMore.setTag(fabMore.isOrWillBeShown() ? result : null);
-                    cardMore.setVisibility(fabMore.isOrWillBeShown() ? View.VISIBLE : View.GONE);
-                }
+                        boolean importance_low = (more_importance_low && count < MAX_QUICK_ACTIONS &&
+                                !EntityMessage.PRIORITIY_LOW.equals(result.importance));
+                        if (importance_low)
+                            count++;
 
-                @Override
-                protected void onException(Bundle args, Throwable ex) {
-                    Log.unexpectedError(getParentFragmentManager(), ex);
-                }
-            }.serial().setId("messages:" + FragmentMessages.this.hashCode()).execute(this, args, "quickactions");
+                        boolean flag = (more_flag && count < MAX_QUICK_ACTIONS && result.unflagged);
+                        if (flag)
+                            count++;
+
+                        boolean flag_color = (more_flag_color && count < MAX_QUICK_ACTIONS && (result.unflagged || result.flagged));
+                        if (flag_color)
+                            count++;
+
+                        boolean hide = (more_hide && count < MAX_QUICK_ACTIONS && result.visible);
+                        if (hide)
+                            count++;
+
+                        boolean snooze = (more_snooze && count < MAX_QUICK_ACTIONS);
+                        if (snooze)
+                            count++;
+
+                        boolean unseen = (more_unseen && count < MAX_QUICK_ACTIONS && result.seen);
+                        if (unseen)
+                            count++;
+
+                        boolean seen = (more_seen && count < MAX_QUICK_ACTIONS && result.unseen);
+                        if (seen)
+                            count++;
+
+                        ibInbox.setImageResource(inJunk ? R.drawable.twotone_report_off_24 : R.drawable.twotone_inbox_24);
+
+                        ibBatchSeen.setVisibility(seen ? View.VISIBLE : View.GONE);
+                        ibBatchUnseen.setVisibility(unseen ? View.VISIBLE : View.GONE);
+                        ibBatchSnooze.setVisibility(snooze ? View.VISIBLE : View.GONE);
+                        ibBatchHide.setVisibility(hide ? View.VISIBLE : View.GONE);
+                        ibBatchFlag.setVisibility(flag ? View.VISIBLE : View.GONE);
+                        ibBatchFlagColor.setVisibility(flag_color ? View.VISIBLE : View.GONE);
+                        ibLowImportance.setVisibility(importance_low ? View.VISIBLE : View.GONE);
+                        ibNormalImportance.setVisibility(importance_normal ? View.VISIBLE : View.GONE);
+                        ibHighImportance.setVisibility(importance_high ? View.VISIBLE : View.GONE);
+                        ibInbox.setVisibility(inbox ? View.VISIBLE : View.GONE);
+                        ibArchive.setVisibility(archive ? View.VISIBLE : View.GONE);
+                        ibJunk.setVisibility(junk ? View.VISIBLE : View.GONE);
+                        ibTrash.setVisibility(trash ? View.VISIBLE : View.GONE);
+                        ibDelete.setVisibility(delete ? View.VISIBLE : View.GONE);
+                        ibMove.setVisibility(move ? View.VISIBLE : View.GONE);
+                        cardMore.setTag(fabMore.isOrWillBeShown() ? result : null);
+                        cardMore.setVisibility(fabMore.isOrWillBeShown() ? View.VISIBLE : View.GONE);
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(getParentFragmentManager(), ex);
+                    }
+                }.serial().setId("messages:" + FragmentMessages.this.hashCode()).execute(this, args, "quickactions");
+            }
         } else {
             fabMore.hide();
             tvSelectedCount.setVisibility(View.GONE);
@@ -6420,13 +6474,14 @@ public class FragmentMessages extends FragmentBase
         @Override
         public void onLoading() {
             loading = true;
-            initialized = true;
             updateListState("Loading", SimpleTask.getCount(), adapter == null ? 0 : adapter.getItemCount());
         }
 
         @Override
         public void onLoaded(int found) {
             loading = false;
+            if (viewType == AdapterMessage.ViewType.SEARCH)
+                initialized = true;
             updateListState("Loaded found=" + found, SimpleTask.getCount(), adapter == null ? 0 : adapter.getItemCount() + found);
         }
 
@@ -6536,7 +6591,7 @@ public class FragmentMessages extends FragmentBase
                 (filter_unknown && !EntityFolder.isOutgoing(type)) ||
                 (language_detection && !TextUtils.isEmpty(filter_language) && !outbox));
 
-        boolean none = (items == 0 && !loading && initialized);
+        boolean none = (items == 0 && initialized);
         boolean filtered = (filter_active && viewType != AdapterMessage.ViewType.SEARCH);
 
         pbWait.setVisibility(loading || tasks > 0 ? View.VISIBLE : View.GONE);
@@ -7002,10 +7057,11 @@ public class FragmentMessages extends FragmentBase
                     if (account.protocol != EntityAccount.TYPE_IMAP) {
                         if (account.auto_seen)
                             EntityOperation.queue(context, message, EntityOperation.SEEN, true);
+                        if (!message.content)
+                            EntityOperation.queue(context, message, EntityOperation.BODY);
                     } else if (message.uid != null) {
                         if (account.auto_seen)
                             EntityOperation.queue(context, message, EntityOperation.SEEN, true);
-
                         if (!message.content)
                             EntityOperation.queue(context, message, EntityOperation.BODY);
                     }
@@ -10113,7 +10169,7 @@ public class FragmentMessages extends FragmentBase
             return;
 
         DB db = DB.getInstance(context);
-        Helper.getParallelExecutor().execute(new Runnable() {
+        Helper.getUIExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -10915,6 +10971,7 @@ public class FragmentMessages extends FragmentBase
             final CheckBox cbFlag = dview.findViewById(R.id.cbFlag);
             final CheckBox cbFlagColor = dview.findViewById(R.id.cbFlagColor);
             final CheckBox cbImportanceLow = dview.findViewById(R.id.cbImportanceLow);
+            final CheckBox cbImportanceNormal = dview.findViewById(R.id.cbImportanceNormal);
             final CheckBox cbImportanceHigh = dview.findViewById(R.id.cbImportanceHigh);
             final CheckBox cbInbox = dview.findViewById(R.id.cbInbox);
             final CheckBox cbArchive = dview.findViewById(R.id.cbArchive);
@@ -10932,6 +10989,7 @@ public class FragmentMessages extends FragmentBase
             cbFlag.setChecked(prefs.getBoolean("more_flag", false));
             cbFlagColor.setChecked(prefs.getBoolean("more_flag_color", false));
             cbImportanceLow.setChecked(prefs.getBoolean("more_importance_low", false));
+            cbImportanceNormal.setChecked(prefs.getBoolean("more_importance_normal", false));
             cbImportanceHigh.setChecked(prefs.getBoolean("more_importance_high", false));
             cbInbox.setChecked(prefs.getBoolean("more_inbox", true));
             cbArchive.setChecked(prefs.getBoolean("more_archive", true));
@@ -10954,6 +11012,7 @@ public class FragmentMessages extends FragmentBase
                             editor.putBoolean("more_flag", cbFlag.isChecked());
                             editor.putBoolean("more_flag_color", cbFlagColor.isChecked());
                             editor.putBoolean("more_importance_low", cbImportanceLow.isChecked());
+                            editor.putBoolean("more_importance_normal", cbImportanceNormal.isChecked());
                             editor.putBoolean("more_importance_high", cbImportanceHigh.isChecked());
                             editor.putBoolean("more_inbox", cbInbox.isChecked());
                             editor.putBoolean("more_archive", cbArchive.isChecked());

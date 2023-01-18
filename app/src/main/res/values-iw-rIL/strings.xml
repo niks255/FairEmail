@@ -18,6 +18,7 @@
     <string name="channel_notification">דוא״ל</string>
     <string name="channel_progress">התקדמות</string>
     <string name="channel_update">עדכונים</string>
+    <string name="channel_announcements">הכרזות</string>
     <string name="channel_warning">אזהרות</string>
     <string name="channel_error">שגיאות</string>
     <string name="channel_alert">התראות שרת</string>
@@ -202,6 +203,7 @@
     <string name="title_setup_gmail_rationale">נא להרשות לבחור חשבון ולקרוא את שמך</string>
     <string name="title_setup_gmail_permissions">Google יבקש לקרוא, לכתוב, לשלוח, ולמחוק את כל ההודעות שלך לצמיתות. Fairmail לעולם לא ימחק ללא הסכמתך המפורשת.</string>
     <string name="title_setup_gmail_login">אם נכנסת לחשבון ב־Chrome אפשר להוסיף חשבון חדש רק דרך Android. אפשר להימנע מזה על ידי יציאה מהחשבון ב־Chrome דרך הגדרות הסנכרון של Chrome.</string>
+    <string name="title_setup_gmail_max">אם מופיעה הודעת השגיאה „נכנסת לכמות המרבית של חשבונות”, יש להוציא את הדפדפן מכל חשבונות Google.</string>
     <string name="title_setup_gmail_on_device">מדוע עלי לבחור בחשבון שכבר מחובר במכשיר?</string>
     <string name="title_setup_gmail_password">ארצה לאמת חשבון עם סיסמה במקום חשבון פנימי במכשיר</string>
     <string name="title_setup_office_auth">השגיאה ‚AUTHENTICATE נכשל’ עלולה להיגרם עקב IMAP/SMTP שהושבתו על ידי הנהלת המערכת</string>
@@ -269,7 +271,7 @@
         בסיסמה יש להשתמש כדי לייבא את ההגדרות שוב, עדיף לא לשכוח אותה!
     </string>
     <string name="title_setup_export_do">הקובץ המיוצא יכיל את כל ההגדרות והנתונים אך לא הודעות ולא תמונות שיש אליהן הפניה בחתימות</string>
-    <string name="title_setup_import_do">חשבונות מיובאים יתווספו מבלי לדרוס חשבונות קיימים</string>
+    <string name="title_setup_scroll">חלוניות הקלט אינן נגללות!</string>
     <string name="title_setup_password">סיסמה</string>
     <string name="title_setup_password_chars">הסיסמה מכילה תווי בקרה או רווחים</string>
     <string name="title_setup_password_repeat">חזרה על הסיסמה</string>
@@ -346,6 +348,7 @@
     <string name="title_advanced_section_encryption">הצפנה</string>
     <string name="title_advanced_section_notifications">התראות</string>
     <string name="title_advanced_section_misc">שונות</string>
+    <string name="title_advanced_section_backup">גיבוי</string>
     <string name="title_advanced_default">כל האפשרויות מוגדרות לפי ערכים מקובלים, כך שאין צורך לשנות דבר כדי להשתמש ביישומון</string>
     <string name="title_advanced_receive">קבלת הודעות מכול החשבונות</string>
     <string name="title_advanced_when">מתי</string>
@@ -412,6 +415,7 @@
     <string name="title_advanced_reply_move_inbox">גם להודעות בדואר הנכנס</string>
     <string name="title_advanced_auto_link">ליצור קישורים אוטומטית</string>
     <string name="title_advanced_plain_only">לשלוח טקסט פשוט בלבד כבררת מחדל</string>
+    <string name="title_advanced_plain_only_reply">להפוך לטקסט פשוט אוטומטית בעת שליחת תגובה להודעה שהיא בטקסט פשוט בלבד</string>
     <string name="title_advanced_flow">‚שורות תחומות’ לטקסט פשוט</string>
     <string name="title_advanced_usenet_signature">לעקוב אחר מוסכמת החתימות של Usenet</string>
     <string name="title_advanced_remove_signatures">הסרת חתימות מזוהות</string>
@@ -443,6 +447,7 @@
     <string name="title_advanced_caption_message">הודעה</string>
     <string name="title_advanced_caption_message_header">כותרת ההודעה</string>
     <string name="title_advanced_caption_message_body">גוף ההודעה</string>
+    <string name="title_advanced_caption_file">קובץ</string>
     <string name="title_advanced_portrait">מצב אנכי</string>
     <string name="title_advanced_landscape">מצב אופקי</string>
     <string name="title_advanced_two_row">להשתמש בשתי שורות</string>
@@ -450,6 +455,7 @@
     <string name="title_advanced_min_screen_size">גודל המסך המזערי לפיצול המסך</string>
     <string name="title_advanced_close_pane">לצמצם שורה או עמודה בעת סגירת דיון</string>
     <string name="title_advanced_column_width">רוחב עמודה / גובה שורה של הודעה: %1$s %%</string>
+    <string name="title_advanced_hide_toolbar">להסתיר את סרגל הכלים בעת גלילה בין הודעות</string>
     <string name="title_advanced_nav_options">הצגת אפשרויות תפריט הניווט</string>
     <string name="title_advanced_nav_categories">להציג את קטגוריות החשבונות בתפריט הניווט</string>
     <string name="title_advanced_nav_pin">נעיצת תפריט הניווט</string>
@@ -574,6 +580,7 @@
     <string name="title_advanced_undo">תום זמן לביטול</string>
     <string name="title_advanced_quick_filter">הצגת סמלי מסננים מהירים שאינם בולטים</string>
     <string name="title_advanced_quick_scroll">הצגת סמלי גלילה מהירה מעלה/מטה שאינם בולטים</string>
+    <string name="title_advanced_quick_actions">להציג פעולות חטופות עם בחירת הודעות</string>
     <string name="title_advanced_folder_nav">תמיד לחזור אחורה לרשימת התיקיות מרשימת ההודעות</string>
     <string name="title_advanced_autoread">לסמן הודעות כנקראו אוטומטית בהעברתן</string>
     <string name="title_advanced_star_snoozed">להוסיף כוכב על הודעות מושהות אוטומטית</string>
@@ -643,6 +650,7 @@
     <string name="title_advanced_disconnect_auto_update">לעדכן את הרשימות אוטומטית כל שבוע</string>
     <string name="title_advanced_disconnect_links">להשתמש ברשימות כדי להזהיר על קישורי מעקב</string>
     <string name="title_advanced_disconnect_images">להשתמש ברשימות כדי לזהות תמונות מעקב</string>
+    <string name="title_advanced_clear_all_hint">פעולה זו תמחק את כל נתוני היישומון מהמכשיר שלך, כולל את כתובות הדוא״ל המוגדרות, ההודעות, ההגדרות וכל מיני נתונים אחרים שנאספו.</string>
     <string name="title_advanced_mnemonic">מחיקת הנתונים בצד המרוחק</string>
     <string name="title_advanced_mnemonic_hint">כל הודעה שהתקבלה עם המילים שלהלן כחלק מהנושא ימחקו את נתוני היישומון אוטומטית ומיידית</string>
     <string name="title_advanced_clear_all">מחיקת נתוני היישומון</string>
@@ -693,6 +701,7 @@
     <string name="title_advanced_check_weekly">לבדוק שבועית במקום יומית</string>
     <string name="title_advanced_beta">איתור גרסאות בדיקה ב־BitBucket</string>
     <string name="title_advanced_changelog">הצגת יומן השינויים לאחר עדכון</string>
+    <string name="title_advanced_announcements">בדיקת הכרזות</string>
     <string name="title_advanced_experiments">התנסות ביכולות נסיוניות</string>
     <string name="title_advanced_crash_reports">שליחת דוחות שגיאה</string>
     <string name="title_advanced_cleanup_attachments">מחיקת קבצים מצורפים להודעות ישנות</string>
@@ -1002,7 +1011,6 @@
     <string name="title_edit_account_color">עריכת צבע חשבון</string>
     <string name="title_hide_folder">הסתרת תיקייה</string>
     <string name="title_hide_seen_folder">להסתיר את התיקייה אם כל ההודעות נקראו</string>
-    <string name="title_hide_seen_folder_hint">רק ברשימת התיקיות שמופיעה במסך הפתיחה</string>
     <string name="title_unified_folder">הצגה בדואר נכנס מאוחד</string>
     <string name="title_navigation_folder">הצגה בתפריט הניווט</string>
     <string name="title_navigation_folder_hide">הסתרה בתפריט הניווט</string>
@@ -1112,6 +1120,7 @@
     <string name="title_quick_actions">בחירת פעולות</string>
     <string name="title_quick_actions_hint">יופיעו עד %1$d פעולות</string>
     <string name="title_quick_actions_low">חשיבות נמוכה</string>
+    <string name="title_quick_actions_normal">חשיבות רגילה</string>
     <string name="title_quick_actions_high">חשיבות גבוהה</string>
     <string name="title_quick_actions_snooze">השהיה</string>
     <string name="title_quick_actions_clear">פינוי הבחירה לאחר פעולה</string>
@@ -1518,7 +1527,7 @@
     <string name="title_rule_order">סדר</string>
     <string name="title_rule_enabled">פעיל</string>
     <string name="title_rule_daily">להריץ יומית (בלבד)</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">הודעות מלפני (ימים)</string>
+    <string name="title_rule_age">הודעות מלפני (ימים)</string>
     <string name="title_rule_stop">להפסיק לעבד כללים אחרי הפעלת הכלל הזה</string>
     <string name="title_rule_sender">המוען מכיל</string>
     <string name="title_rule_sender_known">המוען באנשי הקשר</string>
@@ -1841,6 +1850,7 @@
     <string name="title_widget_padding">גודל ריפוד</string>
     <string name="title_widget_separator_lines">הצגת קווים מפרידים</string>
     <string name="title_widget_semi_transparent">רקע שקוף למחצה</string>
+    <string name="title_widget_count_top">להציג מניין הודעות שלא נקראו למעלה</string>
     <string name="title_widget_avatars">הצגת תמונות אנשי קשר</string>
     <string name="title_widget_refresh">הצגת כפתור רענון הודעות</string>
     <string name="title_widget_compose">הצגת כפתור כתיבת הודעה חדשה</string>

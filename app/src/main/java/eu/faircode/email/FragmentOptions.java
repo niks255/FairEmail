@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -78,7 +78,8 @@ public class FragmentOptions extends FragmentBase {
             R.layout.fragment_options_privacy,
             R.layout.fragment_options_encryption,
             R.layout.fragment_options_notifications,
-            R.layout.fragment_options_misc
+            R.layout.fragment_options_misc,
+            R.layout.fragment_options_backup
     };
 
     static final int[] PAGE_TITLES = {
@@ -91,7 +92,8 @@ public class FragmentOptions extends FragmentBase {
             R.string.title_advanced_section_privacy,
             R.string.title_advanced_section_encryption,
             R.string.title_advanced_section_notifications,
-            R.string.title_advanced_section_misc
+            R.string.title_advanced_section_misc,
+            R.string.title_advanced_section_backup
     };
 
     static final int[] PAGE_ICONS = {
@@ -104,7 +106,8 @@ public class FragmentOptions extends FragmentBase {
             R.drawable.twotone_account_circle_24,
             R.drawable.twotone_lock_24,
             R.drawable.twotone_notifications_24,
-            R.drawable.twotone_more_24
+            R.drawable.twotone_more_24,
+            R.drawable.twotone_save_alt_24
     };
 
     static final List<String> TAB_LABELS = Collections.unmodifiableList(Arrays.asList(
@@ -117,7 +120,8 @@ public class FragmentOptions extends FragmentBase {
             "privacy",
             "encryption",
             "notifications",
-            "misc"
+            "misc",
+            "backup"
     ));
 
     static String[] OPTIONS_RESTART = new String[]{
@@ -131,7 +135,7 @@ public class FragmentOptions extends FragmentBase {
             "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_border", "shadow_highlight", "dividers",
             "portrait2", "portrait2c", "portrait_min_size", "landscape", "landscape_min_size",
             "column_width",
-            "nav_categories", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
+            "hide_toolbar", "nav_categories", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
             "indentation", "date", "date_week", "date_fixed", "date_bold", "threading", "threading_unread",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
             "avatars", "bimi", "favicons", "generated_icons", "identicons", "circular", "saturation", "brightness", "threshold",
@@ -149,7 +153,7 @@ public class FragmentOptions extends FragmentBase {
             "autoscroll", "swipenav", "reversed", "swipe_close", "swipe_move", "autoexpand", "autoclose", "onclose",
             "swipe_reply",
             "language_detection",
-            "quick_filter", "quick_scroll",
+            "quick_filter", "quick_scroll", "quick_actions",
             "experiments", "debug", "log_level", "test1", "test2", "test3", "test4", "test5",
             "webview_legacy", "browser_zoom", "fake_dark",
             "show_recent",
@@ -506,6 +510,8 @@ public class FragmentOptions extends FragmentBase {
                     return new FragmentOptionsNotifications();
                 case 9:
                     return new FragmentOptionsMisc();
+                case 10:
+                    return new FragmentOptionsBackup();
                 default:
                     throw new IllegalArgumentException();
             }

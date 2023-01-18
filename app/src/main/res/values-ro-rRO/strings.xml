@@ -18,6 +18,7 @@
     <string name="channel_notification">E-mail</string>
     <string name="channel_progress">Progres</string>
     <string name="channel_update">Actualizări</string>
+    <string name="channel_announcements">Anunţuri</string>
     <string name="channel_warning">Atenționări</string>
     <string name="channel_error">Erori</string>
     <string name="channel_alert">Alerte server</string>
@@ -189,6 +190,7 @@
     <string name="title_setup_gmail_rationale">Vă rugăm să acordați permisiunea de a selecta un cont și a vă citi numele</string>
     <string name="title_setup_gmail_permissions">Google va cere permisiunea de a citi, compune, trimite și șterge în mod permanent mesajele dumneavoastră. de email. FairEmail nu vă va șterge niciodată mesajele fără consimțământul dumneavoastră explicit.</string>
     <string name="title_setup_gmail_login">Dacă Chrome este conectat la un cont, un nou cont poate fi adăugat doar prin Android. Acest lucru poate fi evitat prin deconectarea de la Chrome prin intermediul setărilor de sincronizare Chrome.</string>
+    <string name="title_setup_gmail_max">În cazul în care apare mesajul de eroare \"V-ați conectat la numărul maxim de conturi\", trebuie să vă deconectați din browser de la toate conturile Google.</string>
     <string name="title_setup_gmail_on_device">De ce trebuie să selectez un cont pe dispozitiv?</string>
     <string name="title_setup_gmail_password">Vreau să autorizez un cont cu o parolă în loc de un cont pe dispozitiv</string>
     <string name="title_setup_office_auth">Eroarea \'Autentificare eșuată\' poate fi cauzată de dezactivarea administrativă a IMAP/SMTP</string>
@@ -256,7 +258,7 @@
         Parola este necesară pentru a importa din nou setările, așa că vă rugăm să nu o uitați!
     </string>
     <string name="title_setup_export_do">Fișierul de export va conține toate setările și datele, dar nu și mesajele și nici imaginile la care se face referire în semnături</string>
-    <string name="title_setup_import_do">Conturile importate vor fi adăugate fără a suprascrie pe cele existente</string>
+    <string name="title_setup_scroll">Dialogurile de intrare pot fi derulate!</string>
     <string name="title_setup_password">Parolă</string>
     <string name="title_setup_password_chars">Parola conține caractere nule sau de control</string>
     <string name="title_setup_password_repeat">Repetă parola</string>
@@ -332,6 +334,7 @@
     <string name="title_advanced_section_encryption">Criptare</string>
     <string name="title_advanced_section_notifications">Notificări</string>
     <string name="title_advanced_section_misc">Diverse</string>
+    <string name="title_advanced_section_backup">Copie de siguranță</string>
     <string name="title_advanced_default">Toate opțiunile au valori standard utilizate în mod obișnuit, care nu trebuie modificate pentru a utiliza aplicația</string>
     <string name="title_advanced_receive">Primește mesaje pentru toate conturile</string>
     <string name="title_advanced_when">Când</string>
@@ -398,6 +401,7 @@
     <string name="title_advanced_reply_move_inbox">De asemenea, pentru mesajele din inbox</string>
     <string name="title_advanced_auto_link">Creează automat adrese</string>
     <string name="title_advanced_plain_only">Trimite implicit ca text simplu</string>
+    <string name="title_advanced_plain_only_reply">Setează automat text simplu doar când se răspunde la un mesaj cu text simplu</string>
     <string name="title_advanced_flow">\'format fluent\' pentru text simplu</string>
     <string name="title_advanced_usenet_signature">Semnatură conform Usenet</string>
     <string name="title_advanced_remove_signatures">Elimină semnăturile cunoscute</string>
@@ -429,6 +433,7 @@
     <string name="title_advanced_caption_message">Mesaj</string>
     <string name="title_advanced_caption_message_header">Antet mesaj</string>
     <string name="title_advanced_caption_message_body">Corp mesaj</string>
+    <string name="title_advanced_caption_file">Fişier</string>
     <string name="title_advanced_portrait">Modul portret</string>
     <string name="title_advanced_landscape">Mod peisaj</string>
     <string name="title_advanced_two_row">Utilizați două rânduri</string>
@@ -436,6 +441,7 @@
     <string name="title_advanced_min_screen_size">Dimensiunea minimă a ecranului pentru împărțirea ecranului</string>
     <string name="title_advanced_close_pane">Restrângerea unui rând sau a unei coloane la închiderea unei conversații</string>
     <string name="title_advanced_column_width">Lățimea coloanei mesajului / înălțimea rândului: %1$s %%</string>
+    <string name="title_advanced_hide_toolbar">Ascunde bara de instrumente de sus la derularea mesajelor</string>
     <string name="title_advanced_nav_options">Afișați opțiunile din meniul de navigare</string>
     <string name="title_advanced_nav_categories">Afișați categoriile de conturi în meniul de navigare</string>
     <string name="title_advanced_nav_pin">Meniul de navigare Pin</string>
@@ -560,6 +566,7 @@
     <string name="title_advanced_undo">Expirare anulare</string>
     <string name="title_advanced_quick_filter">Arată iconițele de filtrare rapidă</string>
     <string name="title_advanced_quick_scroll">Arată iconițele de derulare sus/jos rapidă</string>
+    <string name="title_advanced_quick_actions">Arată acțiuni rapide atunci când mesajele sunt selectate</string>
     <string name="title_advanced_folder_nav">Reveniți întotdeauna la lista de dosare dintr-o listă de mesaje</string>
     <string name="title_advanced_autoread">Marchează automat mesajele mutate ca citite</string>
     <string name="title_advanced_star_snoozed">Adaugă automat stea la mesajele amânate</string>
@@ -629,6 +636,7 @@
     <string name="title_advanced_disconnect_auto_update">Actualizați automat listele săptămânal</string>
     <string name="title_advanced_disconnect_links">Folosește liste pentru a avertiza despre adrese de urmărire</string>
     <string name="title_advanced_disconnect_images">Folosește listele pentru a recunoaște imaginile de urmărire</string>
+    <string name="title_advanced_clear_all_hint">Această acțiune va șterge toate datele aplicației de pe dispozitiv, inclusiv conturile de e-mail configurate, mesajele, setările și orice date colectate.</string>
     <string name="title_advanced_mnemonic">Ștergeți datele de la distanță</string>
     <string name="title_advanced_mnemonic_hint">Orice e-mail primit cu cuvintele de mai jos în linia de subiect va șterge automat și imediat datele aplicației</string>
     <string name="title_advanced_clear_all">Ștergeți datele aplicației</string>
@@ -678,6 +686,7 @@
     <string name="title_advanced_check_weekly">Verifică săptămânal în loc de zilnic</string>
     <string name="title_advanced_beta">Verificați pentru versiuni de testare pe BitBucket</string>
     <string name="title_advanced_changelog">Afișați lista de modificări după actualizare</string>
+    <string name="title_advanced_announcements">Caută anunțuri</string>
     <string name="title_advanced_experiments">Încercați funcţii experimentale</string>
     <string name="title_advanced_crash_reports">Trimite rapoarte de eroare</string>
     <string name="title_advanced_cleanup_attachments">Ştergeţi ataşamentele mesajelor vechi</string>
@@ -988,7 +997,6 @@
     <string name="title_edit_account_color">Editare culoare cont</string>
     <string name="title_hide_folder">Ascunde dosar</string>
     <string name="title_hide_seen_folder">Ascundeți folderul dacă toate mesajele sunt citite</string>
-    <string name="title_hide_seen_folder_hint">Numai în lista de dosare afișată pe ecranul de pornire</string>
     <string name="title_unified_folder">Arată în căsuța poștală comună</string>
     <string name="title_navigation_folder">Arată în meniul de navigație</string>
     <string name="title_navigation_folder_hide">Ascundeți în meniul de navigare</string>
@@ -1097,6 +1105,7 @@
     <string name="title_quick_actions">Selectați acțiuni</string>
     <string name="title_quick_actions_hint">Vor fi afișate până la %1$d acțiuni</string>
     <string name="title_quick_actions_low">Importanță redusă</string>
+    <string name="title_quick_actions_normal">Importanță normală</string>
     <string name="title_quick_actions_high">Importanță ridicată</string>
     <string name="title_quick_actions_snooze">Amână</string>
     <string name="title_quick_actions_clear">Ștergeți selecția după acțiune</string>
@@ -1501,7 +1510,7 @@
     <string name="title_rule_order">Ordine</string>
     <string name="title_rule_enabled">Activată</string>
     <string name="title_rule_daily">Rulează zilnic (doar)</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Mesaje mai vechi decât (zile)</string>
+    <string name="title_rule_age">Mesaje mai vechi decât (zile)</string>
     <string name="title_rule_stop">Oprește procesarea regulilor după ce se execută acesta</string>
     <string name="title_rule_sender">Expeditorul conține</string>
     <string name="title_rule_sender_known">Expeditorul este un contact</string>
@@ -1823,6 +1832,7 @@
     <string name="title_widget_padding">Mărime spațiu liber</string>
     <string name="title_widget_separator_lines">Arată liniile separatoare</string>
     <string name="title_widget_semi_transparent">Fundal semi transparent</string>
+    <string name="title_widget_count_top">Arată numărul de necitite în partea de sus</string>
     <string name="title_widget_avatars">Afișați avatarele de contact</string>
     <string name="title_widget_refresh">Buton de afișare a mesajelor de reîmprospătare</string>
     <string name="title_widget_compose">Afișați butonul de redactare a unui mesaj nou</string>

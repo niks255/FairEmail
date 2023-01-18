@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
@@ -235,6 +235,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
                 if (value != current) {
                     adapterView.setTag(value);
                     prefs.edit().putInt("poll_interval", value).apply();
+                    if (value == 0)
+                        prefs.edit().remove("auto_optimize").apply();
                     tvPollBattery.setVisibility(value > 0 && value < 15 ? View.VISIBLE : View.GONE);
                     grpExempted.setVisibility(value == 0 ? View.GONE : View.VISIBLE);
                 }

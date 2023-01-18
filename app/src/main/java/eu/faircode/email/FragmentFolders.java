@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -74,7 +74,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -124,6 +123,7 @@ public class FragmentFolders extends FragmentBase {
     private boolean primary;
     private boolean show_hidden = false;
     private boolean show_flagged = false;
+    private boolean hide_toolbar = false;
     private String searching = null;
     private AdapterFolder adapter;
 
@@ -155,6 +155,7 @@ public class FragmentFolders extends FragmentBase {
         compact = prefs.getBoolean("compact_folders", true);
         show_hidden = false; // prefs.getBoolean("hidden_folders", false);
         show_flagged = prefs.getBoolean("flagged_folders", false);
+        hide_toolbar = prefs.getBoolean("hide_toolbar", true);
 
         if (BuildConfig.DEBUG) {
             ViewModelSelected selectedModel =
@@ -217,7 +218,22 @@ public class FragmentFolders extends FragmentBase {
         });
 
         rvFolder.setHasFixedSize(false);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        LinearLayoutManager llm = new LinearLayoutManager(getContext()) {
+            @Override
+            public void onLayoutCompleted(RecyclerView.State state) {
+                super.onLayoutCompleted(state);
+                if (!isActionBarShown())
+                    try {
+                        int range = computeVerticalScrollRange(state);
+                        int extend = computeVerticalScrollExtent(state);
+                        boolean canScrollVertical = (range > extend);
+                        if (!canScrollVertical) // anymore
+                            showActionBar(true);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+            }
+        };
         rvFolder.setLayoutManager(llm);
 
         if (!cards && dividers) {
@@ -307,6 +323,27 @@ public class FragmentFolders extends FragmentBase {
             };
             rvFolder.addItemDecoration(categoryDecorator);
         }
+
+        rvFolder.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private boolean show = true;
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
+                if (hide_toolbar && dy != 0)
+                    try {
+                        show = (dy < 0 || rv.computeVerticalScrollOffset() == 0);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                        show = true;
+                    }
+            }
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView rv, int newState) {
+                if (hide_toolbar && newState != RecyclerView.SCROLL_STATE_DRAGGING)
+                    showActionBar(show);
+            }
+        });
 
         adapter = new AdapterFolder(this, account, unified, primary, compact, show_hidden, show_flagged, null);
         rvFolder.setAdapter(adapter);
@@ -1157,22 +1194,25 @@ public class FragmentFolders extends FragmentBase {
 
                 DB db = DB.getInstance(context);
 
-                List<EntityRule> rules = db.rule().getEnabledRules(fid, false);
+                List<EntityRule> rules = db.rule().getEnabledRules(fid, null);
                 if (rules == null)
                     return 0;
                 EntityLog.log(context, "Executing rules count=" + rules.size());
 
-                for (EntityRule rule : rules) {
-                    JSONObject jcondition = new JSONObject(rule.condition);
-                    JSONObject jheader = jcondition.optJSONObject("header");
-                    if (jheader != null)
-                        throw new IllegalArgumentException(context.getString(R.string.title_rule_no_headers));
-                }
-
                 List<Long> ids = db.message().getMessageIdsByFolder(fid);
                 if (ids == null)
                     return 0;
+
                 EntityLog.log(context, "Executing rules messages=" + ids.size());
+
+                // Check header conditions
+                for (long mid : ids) {
+                    EntityMessage message = db.message().getMessage(mid);
+                    if (message == null || message.ui_hide)
+                        continue;
+                    for (EntityRule rule : rules)
+                        rule.matches(context, message, null, null);
+                }
 
                 int applied = 0;
                 for (long mid : ids)

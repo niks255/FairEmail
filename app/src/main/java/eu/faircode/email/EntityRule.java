@@ -16,17 +16,21 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.room.ForeignKey.CASCADE;
 
+import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -234,6 +238,8 @@ public class EntityRule {
                     recipients.addAll(Arrays.asList(message.to));
                 if (message.cc != null)
                     recipients.addAll(Arrays.asList(message.cc));
+                if (message.bcc != null)
+                    recipients.addAll(Arrays.asList(message.bcc));
                 for (Address recipient : recipients) {
                     InternetAddress ia = (InternetAddress) recipient;
                     String personal = ia.getPersonal();
@@ -656,10 +662,12 @@ public class EntityRule {
             String year = String.format(Locale.ROOT, "%04d", calendar.get(Calendar.YEAR));
             String month = String.format(Locale.ROOT, "%02d", calendar.get(Calendar.MONTH) + 1);
             String week = String.format(Locale.ROOT, "%02d", calendar.get(Calendar.WEEK_OF_YEAR));
+            String day = String.format(Locale.ROOT, "%02d", calendar.get(Calendar.DAY_OF_MONTH));
 
             create = create.replace("$year$", year);
             create = create.replace("$month$", month);
             create = create.replace("$week$", week);
+            create = create.replace("$day$", day);
 
             String domain = null;
             if (message.from != null &&
@@ -669,6 +677,79 @@ public class EntityRule {
                 domain = UriHelper.getEmailDomain(from.getAddress());
             }
             create = create.replace("$domain$", domain == null ? "" : domain);
+
+            if (create.contains("$group$")) {
+                EntityContact local = null;
+                if (message.from != null && message.from.length == 1) {
+                    String email = ((InternetAddress) message.from[0]).getAddress();
+                    if (!TextUtils.isEmpty(email))
+                        local = db.contact().getContact(message.account, EntityContact.TYPE_FROM, email);
+                }
+
+                if (local != null && !TextUtils.isEmpty(local.group)) {
+                    Log.i(this.name + " local group=" + local.group);
+                    create = create.replace("$group$", local.group);
+                } else {
+                    if (!Helper.hasPermission(context, Manifest.permission.READ_CONTACTS))
+                        return false;
+                    Log.i(this.name + " lookup=" + message.avatar);
+                    if (message.avatar == null)
+                        return false;
+
+                    ContentResolver resolver = context.getContentResolver();
+                    try (Cursor contact = resolver.query(Uri.parse(message.avatar),
+                            new String[]{ContactsContract.Contacts._ID}, null, null, null)) {
+                        Log.i(this.name + " contacts=" + contact.getCount());
+                        if (!contact.moveToNext())
+                            return false;
+
+                        long contactId = contact.getLong(0);
+                        Log.i(this.name + " contactId=" + contactId);
+
+                        try (Cursor membership = resolver.query(ContactsContract.Data.CONTENT_URI,
+                                new String[]{ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID},
+                                ContactsContract.Data.MIMETYPE + "= ? AND " +
+                                        ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID + "= ?",
+                                new String[]{
+                                        ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE,
+                                        Long.toString((contactId))
+                                },
+                                null)) {
+                            Log.i(this.name + " membership=" + membership.getCount());
+
+                            int count = 0;
+                            String groupName = null;
+                            while (membership.moveToNext()) {
+                                long groupId = membership.getLong(0);
+                                try (Cursor groups = resolver.query(ContactsContract.Groups.CONTENT_URI,
+                                        new String[]{
+                                                ContactsContract.Groups.TITLE,
+                                                ContactsContract.Groups.AUTO_ADD,
+                                                ContactsContract.Groups.GROUP_VISIBLE,
+                                        },
+                                        ContactsContract.Groups._ID + " = ?",
+                                        new String[]{Long.toString(groupId)},
+                                        ContactsContract.Groups.TITLE)) {
+                                    while (groups.moveToNext()) {
+                                        groupName = groups.getString(0);
+                                        int auto_add = groups.getInt(1);
+                                        int visible = groups.getInt(2);
+                                        if (auto_add == 0)
+                                            count++;
+                                        Log.i(this.name + " membership groupId=" + groupId +
+                                                " name=" + groupName + " auto_add=" + auto_add + " visible=" + visible);
+                                    }
+                                }
+                            }
+                            Log.i(this.name + " name=" + groupName + " count=" + count);
+                            if (count == 1)
+                                create = create.replace("$group$", groupName);
+                            else
+                                return false;
+                        }
+                    }
+                }
+            }
 
             String name = folder.name + (folder.separator == null ? "" : folder.separator) + create;
             EntityFolder created = db.folder().getFolderByName(folder.account, name);
@@ -997,7 +1078,7 @@ public class EntityRule {
             return true;
         }
 
-        Helper.getSerialExecutor().submit(new Runnable() {
+        Helper.getMediaTaskExecutor().submit(new Runnable() {
             @Override
             public void run() {
                 try {

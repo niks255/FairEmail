@@ -16,12 +16,10 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
-
-import org.apache.poi.ss.formula.eval.NotImplementedException;
 
 import java.util.concurrent.Callable;
 
@@ -33,7 +31,7 @@ public class Avatar {
         return new Callable<ContactInfo.Favicon>() {
             @Override
             public ContactInfo.Favicon call() throws Exception {
-                throw new NotImplementedException("Gravatar");
+                throw new IllegalArgumentException("Gravatar");
             }
         };
     }
@@ -42,7 +40,7 @@ public class Avatar {
         return new Callable<ContactInfo.Favicon>() {
             @Override
             public ContactInfo.Favicon call() throws Exception {
-                throw new NotImplementedException("Libravatar");
+                throw new IllegalArgumentException("Libravatar");
             }
         };
     }

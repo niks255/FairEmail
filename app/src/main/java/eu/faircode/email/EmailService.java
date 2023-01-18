@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_GMAIL;
@@ -73,7 +73,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
 import java.util.regex.Pattern;
 
 import javax.mail.AuthenticationFailedException;
@@ -494,10 +493,20 @@ public class EmailService implements AutoCloseable {
                         Log.e(ex1);
                     else
                         Log.e(new Throwable(ex1.getMessage() + " error=" + cause.getMessage(), ex1));
+
                     String msg = ex.getMessage();
                     if (auth == AUTH_TYPE_GMAIL &&
                             msg != null && msg.endsWith("Invalid credentials (Failure)"))
-                        msg += "; " + context.getString(R.string.title_service_token);
+                        msg += "\n" + context.getString(R.string.title_service_token);
+
+                    Throwable c = ex1;
+                    while (c != null) {
+                        String m = c.getMessage();
+                        if (!TextUtils.isEmpty(m))
+                            msg += "\n" + m;
+                        c = c.getCause();
+                    }
+
                     throw new AuthenticationFailedException(
                             context.getString(R.string.title_service_auth, msg),
                             ex.getNextException());

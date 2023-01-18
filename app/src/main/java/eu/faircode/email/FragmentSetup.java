@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -282,12 +282,16 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
             @Override
             public void onClick(View v) {
                 final Context context = getContext();
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.DEBUG);
+
                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), btnQuick);
                 Menu menu = popupMenu.getMenu();
 
                 Resources res = context.getResources();
                 String pkg = context.getPackageName();
-                List<EmailProvider> providers = EmailProvider.getProviders(context);
+                List<EmailProvider> providers = EmailProvider.getProviders(context, debug);
 
                 int order = 1;
 
@@ -596,7 +600,10 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
         cbAlways.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton v, boolean isChecked) {
-                prefs.edit().putInt("poll_interval", isChecked ? 0 : EntityAccount.DEFAULT_POLL_INTERVAL).apply();
+                int value = (isChecked ? 0 : EntityAccount.DEFAULT_POLL_INTERVAL);
+                prefs.edit().putInt("poll_interval", value).apply();
+                if (value == 0)
+                    prefs.edit().remove("auto_optimize").apply();
             }
         });
 

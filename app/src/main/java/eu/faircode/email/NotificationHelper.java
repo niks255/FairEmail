@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2022 by Marcel Bokhorst (M66B)
+    Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Notification;
@@ -106,14 +106,22 @@ class NotificationHelper {
         progress.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         nm.createNotificationChannel(progress);
 
-        // Update
         if (!Helper.isPlayStoreInstall()) {
+            // Update
             NotificationChannel update = new NotificationChannel(
                     "update", context.getString(R.string.channel_update),
                     NotificationManager.IMPORTANCE_HIGH);
             update.setSound(null, Notification.AUDIO_ATTRIBUTES_DEFAULT);
             update.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             nm.createNotificationChannel(update);
+
+            // Announcements
+            NotificationChannel announcements = new NotificationChannel(
+                    "announcements", context.getString(R.string.channel_announcements),
+                    NotificationManager.IMPORTANCE_HIGH);
+            announcements.setSound(null, Notification.AUDIO_ATTRIBUTES_DEFAULT);
+            announcements.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            nm.createNotificationChannel(announcements);
         }
 
         // Warnings

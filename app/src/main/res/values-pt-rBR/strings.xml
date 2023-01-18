@@ -18,6 +18,7 @@
     <string name="channel_notification">E-mail</string>
     <string name="channel_progress">Progresso</string>
     <string name="channel_update">Atualizações</string>
+    <string name="channel_announcements">Avisos</string>
     <string name="channel_warning">Avisos</string>
     <string name="channel_error">Erros</string>
     <string name="channel_alert">Alertas do servidor</string>
@@ -176,6 +177,7 @@
     <string name="title_setup_gmail_rationale">Por favor, conceda permissão para selecionar uma conta e ler seu nome</string>
     <string name="title_setup_gmail_permissions">Google pedirá permissão para ler, compor, enviar e excluir permanentemente todo seu e-mail. O FairEmail nunca apagará suas mensagens sem o seu consentimento explícito.</string>
     <string name="title_setup_gmail_login">Se o Chrome estiver conectado a uma conta, uma nova conta só poderá ser adicionada através do Android. Isso pode ser evitado saindo do Chrome através das configurações de sincronização do Chrome.</string>
+    <string name="title_setup_gmail_max">No caso da mensagem de erro \"Você está conectado ao número máximo de contas\", você precisa sair no navegador de todas as contas do Google.</string>
     <string name="title_setup_gmail_on_device">Por que eu preciso selecionar uma conta no dispositivo?</string>
     <string name="title_setup_gmail_password">Eu quero autorizar uma conta com uma senha ao invés de uma conta no dispositivo</string>
     <string name="title_setup_office_auth">O erro \'Falha de Autenticação\' pode ser causadado por desativação do IMAP/SMTP pelo administrador do sistema</string>
@@ -243,7 +245,7 @@
         A senha é necessária para importar as configurações novamente, então não se esqueça!
     </string>
     <string name="title_setup_export_do">O arquivo exportado conterá todas as configurações e dados, mas nenhuma mensagem e nenhuma imagem referenciada nas assinaturas</string>
-    <string name="title_setup_import_do">As contas importadas serão adicionadas sem sobrescrever as existentes</string>
+    <string name="title_setup_scroll">Os diálogos de entrada podem ser roláveis!</string>
     <string name="title_setup_password">Senha</string>
     <string name="title_setup_password_chars">A senha contém caracteres de controle ou espaço em branco</string>
     <string name="title_setup_password_repeat">Repita a senha</string>
@@ -319,6 +321,7 @@
     <string name="title_advanced_section_encryption">Criptografia</string>
     <string name="title_advanced_section_notifications">Notificações</string>
     <string name="title_advanced_section_misc">Diversos</string>
+    <string name="title_advanced_section_backup">Backup</string>
     <string name="title_advanced_default">Todas as opções normalmente tem usado valores padrão, que não precisam ser alteradas para o uso do aplicativo</string>
     <string name="title_advanced_receive">Receber mensagens para todas as contas</string>
     <string name="title_advanced_when">Quando</string>
@@ -385,6 +388,7 @@
     <string name="title_advanced_reply_move_inbox">Também para mensagens na caixa de entrada</string>
     <string name="title_advanced_auto_link">Criar links automaticamente</string>
     <string name="title_advanced_plain_only">Enviar texto simples por padrão</string>
+    <string name="title_advanced_plain_only_reply">Texto sem formatação automaticamente somente ao responder a uma mensagem somente com texto sem formatação</string>
     <string name="title_advanced_flow">Usar \'formato fluído\' para texto simples</string>
     <string name="title_advanced_usenet_signature">Convenção de assinatura do Usenet</string>
     <string name="title_advanced_remove_signatures">Remover assinaturas reconhecidas</string>
@@ -416,6 +420,7 @@
     <string name="title_advanced_caption_message">Mensagem</string>
     <string name="title_advanced_caption_message_header">Cabeçalho da mensagem</string>
     <string name="title_advanced_caption_message_body">Corpo da mensagem</string>
+    <string name="title_advanced_caption_file">Arquivo</string>
     <string name="title_advanced_portrait">Modo Retrato</string>
     <string name="title_advanced_landscape">Modo paisagem</string>
     <string name="title_advanced_two_row">Use duas linhas</string>
@@ -423,6 +428,7 @@
     <string name="title_advanced_min_screen_size">Tamanho mínimo da tela para dividir a tela</string>
     <string name="title_advanced_close_pane">Recolher linha ou coluna ao fechar uma conversa</string>
     <string name="title_advanced_column_width">Largura da coluna da mensagem / altura da linha: %1$s %%</string>
+    <string name="title_advanced_hide_toolbar">Ocultar a barra de ferramentas superior ao rolar as mensagens</string>
     <string name="title_advanced_nav_options">Mostrar opções de menu de navegação</string>
     <string name="title_advanced_nav_categories">Mostrar categorias de conta no menu de navegação</string>
     <string name="title_advanced_nav_pin">Fixar menu de navegação</string>
@@ -547,6 +553,7 @@
     <string name="title_advanced_undo">Desfazer timeout</string>
     <string name="title_advanced_quick_filter">Mostrar ícones de filtro rápido não obtrusivos</string>
     <string name="title_advanced_quick_scroll">Mostrar ícones de rolagem rápida não obtrusiva para cima/baixo</string>
+    <string name="title_advanced_quick_actions">Mostrar ações rápidas quando as mensagens forem selecionadas</string>
     <string name="title_advanced_folder_nav">Sempre voltar para lista de pastas de uma lista de mensagens</string>
     <string name="title_advanced_autoread">Marcar mensagens como lidas automaticamente ao movê-las</string>
     <string name="title_advanced_star_snoozed">Adicionar estrela automaticamente ao adiar mensagens</string>
@@ -616,6 +623,7 @@
     <string name="title_advanced_disconnect_auto_update">Atualizar automaticamente e semanalmente as listas</string>
     <string name="title_advanced_disconnect_links">Use listas para avisar sobre links de rastreamento</string>
     <string name="title_advanced_disconnect_images">Usar listas para reconhecer imagens de rastreamento</string>
+    <string name="title_advanced_clear_all_hint">Isso excluirá todos os dados do aplicativo do seu dispositivo, incluindo contas de e-mail configuradas, mensagens, configurações e quaisquer dados coletados.</string>
     <string name="title_advanced_mnemonic">Excluir dados remotamente</string>
     <string name="title_advanced_mnemonic_hint">Qualquer email recebido com as palavras abaixo no campo assunto, irá automaticamente e imediatamente excluída dos dados do aplicativo</string>
     <string name="title_advanced_clear_all">Excluir dados do aplicativo</string>
@@ -665,6 +673,7 @@
     <string name="title_advanced_check_weekly">Verificar semanalmente ao invés de diariamente</string>
     <string name="title_advanced_beta">Checar por versões de teste no BitBucket</string>
     <string name="title_advanced_changelog">Mostrar mudanças depois da atualização</string>
+    <string name="title_advanced_announcements">Verificar se há avisos</string>
     <string name="title_advanced_experiments">Experimente recursos experimentais</string>
     <string name="title_advanced_crash_reports">Enviar relatórios de erro</string>
     <string name="title_advanced_cleanup_attachments">Apagar anexos de mensagens antigas</string>
@@ -975,7 +984,6 @@
     <string name="title_edit_account_color">Editar cor da conta</string>
     <string name="title_hide_folder">Ocultar pasta</string>
     <string name="title_hide_seen_folder">Ocultar pasta se todas as mensagens estiverem lidas</string>
-    <string name="title_hide_seen_folder_hint">Somente na lista de pastas mostrada na tela inicial</string>
     <string name="title_unified_folder">Mostrar na caixa de entrada unificada</string>
     <string name="title_navigation_folder">Mostrar no menu de navegação</string>
     <string name="title_navigation_folder_hide">Ocultar no menu de navegação</string>
@@ -1084,6 +1092,7 @@
     <string name="title_quick_actions">Selecionar ações</string>
     <string name="title_quick_actions_hint">Até %1$d ações serão mostradas</string>
     <string name="title_quick_actions_low">Importância baixa</string>
+    <string name="title_quick_actions_normal">Importância normal</string>
     <string name="title_quick_actions_high">Importância alta</string>
     <string name="title_quick_actions_snooze">Soneca</string>
     <string name="title_quick_actions_clear">Limpar seleção após ação</string>
@@ -1489,7 +1498,7 @@
     <string name="title_rule_order">Ordenar</string>
     <string name="title_rule_enabled">Ativado</string>
     <string name="title_rule_daily">Executar diariamente (somente)</string>
-    <string name="title_rule_age" comment="title_rule_age&#10;Title for age condition for daily execution of rules">Mensagens mais antigos (dias)</string>
+    <string name="title_rule_age">Mensagens mais antigos (dias)</string>
     <string name="title_rule_stop">Parar o processamento de regras após a execução desta regra</string>
     <string name="title_rule_sender">Remetente contém</string>
     <string name="title_rule_sender_known">Remetente é um contato</string>
@@ -1811,6 +1820,7 @@
     <string name="title_widget_padding">Tamanho do preenchimento</string>
     <string name="title_widget_separator_lines">Mostrar linhas separadoras</string>
     <string name="title_widget_semi_transparent">Fundo semi-transparente</string>
+    <string name="title_widget_count_top">Mostrar contagem de não lida na parte superior</string>
     <string name="title_widget_avatars">Mostrar avatares dos contatos</string>
     <string name="title_widget_refresh">Mostrar botão para atualizar mensagens</string>
     <string name="title_widget_compose">Mostrar botão compor nova mensagem</string>
