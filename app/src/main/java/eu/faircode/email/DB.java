@@ -68,7 +68,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 261,
+        version = 265,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -139,6 +139,7 @@ public abstract class DB extends RoomDatabase {
             "cache_size", "cache_spill",
             "soft_heap_limit", "hard_heap_limit", "mmap_size",
             "foreign_keys", "auto_vacuum",
+            "recursive_triggers",
             "compile_options"
     ));
 
@@ -267,35 +268,42 @@ public abstract class DB extends RoomDatabase {
     }
 
     static void createEmergencyBackup(Context context) {
-        Log.i("Creating emergency backup");
-        try {
-            DB db = DB.getInstance(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean emergency_file = prefs.getBoolean("emergency_file", true);
 
-            JSONArray jaccounts = new JSONArray();
-            List<EntityAccount> accounts = db.account().getAccounts();
-            for (EntityAccount account : accounts) {
-                JSONObject jaccount = account.toJSON();
+        File emergency = new File(context.getFilesDir(), "emergency.json");
 
-                JSONArray jfolders = new JSONArray();
-                List<EntityFolder> folders = db.folder().getFolders(account.id, false, true);
-                for (EntityFolder folder : folders)
-                    jfolders.put(folder.toJSON());
-                jaccount.put("folders", jfolders);
+        if (emergency_file) {
+            Log.i("Creating emergency backup");
+            try {
+                DB db = DB.getInstance(context);
 
-                JSONArray jidentities = new JSONArray();
-                List<EntityIdentity> identities = db.identity().getIdentities(account.id);
-                for (EntityIdentity identity : identities)
-                    jidentities.put(identity.toJSON());
-                jaccount.put("identities", jidentities);
+                JSONArray jaccounts = new JSONArray();
+                List<EntityAccount> accounts = db.account().getAccounts();
+                for (EntityAccount account : accounts) {
+                    JSONObject jaccount = account.toJSON();
 
-                jaccounts.put(jaccount);
+                    JSONArray jfolders = new JSONArray();
+                    List<EntityFolder> folders = db.folder().getFolders(account.id, false, true);
+                    for (EntityFolder folder : folders)
+                        jfolders.put(folder.toJSON());
+                    jaccount.put("folders", jfolders);
+
+                    JSONArray jidentities = new JSONArray();
+                    List<EntityIdentity> identities = db.identity().getIdentities(account.id);
+                    for (EntityIdentity identity : identities)
+                        jidentities.put(identity.toJSON());
+                    jaccount.put("identities", jidentities);
+
+                    jaccounts.put(jaccount);
+                }
+
+                Helper.writeText(emergency, jaccounts.toString(2));
+            } catch (Throwable ex) {
+                Log.e(ex);
             }
-
-            File emergency = new File(context.getFilesDir(), "emergency.json");
-            Helper.writeText(emergency, jaccounts.toString(2));
-        } catch (Throwable ex) {
-            Log.e(ex);
-        }
+        } else
+            emergency.delete();
     }
 
     private static void checkEmergencyBackup(Context context) {
@@ -463,6 +471,11 @@ public abstract class DB extends RoomDatabase {
                             cursor.moveToNext(); // required
                         }
 
+                        Log.i("Set PRAGMA recursive_triggers=off");
+                        try (Cursor cursor = db.query("PRAGMA recursive_triggers=off;")) {
+                            cursor.moveToNext(); // required
+                        }
+
                         // https://www.sqlite.org/pragma.html
                         for (String pragma : DB_PRAGMAS)
                             if (!"compile_options".equals(pragma) || BuildConfig.DEBUG)
@@ -476,9 +489,12 @@ public abstract class DB extends RoomDatabase {
                                         Log.i("Get PRAGMA " + pragma + "=<?>");
                                 }
 
-                        if (BuildConfig.DEBUG && false) {
+                        if (BuildConfig.DEBUG) {
                             db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
                             db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
+
+                            db.execSQL("DROP TRIGGER IF EXISTS `account_update`");
+                            db.execSQL("DROP TRIGGER IF EXISTS `identity_update`");
                         }
 
                         createTriggers(db);
@@ -539,6 +555,37 @@ public abstract class DB extends RoomDatabase {
                 "  WHERE message.id = OLD.message" +
                 "  AND OLD.encryption IS NULL" +
                 "  AND NOT ((OLD.disposition = 'inline' OR (OLD.related IS NOT 0 AND OLD.cid IS NOT NULL)) AND OLD.type IN (" + images + "));" +
+                " END");
+
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS account_update" +
+                " AFTER UPDATE ON account" +
+                " BEGIN" +
+                "  UPDATE account SET last_modified = strftime('%s') * 1000" +
+                "  WHERE OLD.id = NEW.id" +
+                "  AND OLD.last_modified = NEW.last_modified" +
+                "  AND (NEW.auth_type = " + AUTH_TYPE_PASSWORD + " OR OLD.password = NEW.password)" +
+                "  AND OLD.keep_alive_ok IS NEW.keep_alive_ok" +
+                "  AND OLD.keep_alive_failed IS NEW.keep_alive_failed" +
+                "  AND OLD.keep_alive_succeeded IS NEW.keep_alive_succeeded" +
+                "  AND OLD.quota_usage IS NEW.quota_usage" +
+                "  AND OLD.thread IS NEW.thread" +
+                "  AND OLD.state IS NEW.state" +
+                "  AND OLD.warning IS NEW.warning" +
+                "  AND OLD.error IS NEW.error" +
+                "  AND OLD.last_connected IS NEW.last_connected" +
+                "  AND OLD.backoff_until IS NEW.backoff_until;" +
+                " END");
+
+        db.execSQL("CREATE TRIGGER IF NOT EXISTS identity_update" +
+                " AFTER UPDATE ON identity" +
+                " BEGIN" +
+                "  UPDATE identity SET last_modified = strftime('%s') * 1000" +
+                "  WHERE OLD.id = NEW.id" +
+                "  AND OLD.last_modified = NEW.last_modified" +
+                "  AND OLD.state IS NEW.state" +
+                "  AND OLD.error IS NEW.error" +
+                "  AND OLD.last_connected IS NEW.last_connected" +
+                "  AND (NEW.auth_type = " + AUTH_TYPE_PASSWORD + " OR OLD.password = NEW.password);" +
                 " END");
     }
 
@@ -2636,6 +2683,39 @@ public abstract class DB extends RoomDatabase {
                             db.execSQL("UPDATE `folder` SET `hide_seen` = 0 WHERE `unified` = 0");
                         else
                             db.execSQL("UPDATE `folder` SET `hide_seen` = 0");
+                    }
+                }).addMigrations(new Migration(262, 261) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                    }
+                }).addMigrations(new Migration(261, 262) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `folder` ADD COLUMN `subtype` TEXT");
+                    }
+                }).addMigrations(new Migration(262, 263) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `account` ADD COLUMN `last_modified` INTEGER");
+                        db.execSQL("ALTER TABLE `identity` ADD COLUMN `last_modified` INTEGER");
+                        createTriggers(db);
+                    }
+                }).addMigrations(new Migration(263, 264) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `account` ADD COLUMN `raw_fetch` INTEGER NOT NULL DEFAULT 0");
+                        createTriggers(db);
+                    }
+                }).addMigrations(new Migration(264, 265) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `identity` ADD COLUMN `reply_extra_name` INTEGER NOT NULL DEFAULT 0");
+                        createTriggers(db);
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

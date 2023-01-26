@@ -6,6 +6,26 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Quetecsaurus](https://en.wikipedia.org/wiki/Quetecsaurus)
 
+### 1.2032 - 2023-01-26
+
+* Added local POP3 operations to reduce the number of account connections
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.2031 - 2023-01-24
+
+* Added [cloud sync](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq189) to synchronize accounts across devices
+* Added "*Don't ask again*" for mailto links
+* Added inserting image links
+* Added menu item to check HTML syntax of a signature
+* Added option to disable last sync time in the navigation menu
+* Added option to disable automatically blocking spam senders
+* Added option to configure default answer button action
+* Added option to automatically close conversations on sending messages
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.2030 - 2023-01-14
 
 * Added backup settings tab page

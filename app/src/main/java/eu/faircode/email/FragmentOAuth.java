@@ -440,7 +440,7 @@ public class FragmentOAuth extends FragmentBase {
 
             String clientId = provider.oauth.clientId;
             Uri redirectUri = Uri.parse(provider.oauth.redirectUri);
-            if ("gmail".equals(id) && BuildConfig.DEBUG) {
+            if ("gmail".equals(id) && BuildConfig.DEBUG && false) {
                 clientId = "803253368361-hr8kelm53hqodj7c6brdjeb2ctn5jg3p.apps.googleusercontent.com";
                 redirectUri = Uri.parse("eu.faircode.email.debug:/");
             }
@@ -889,6 +889,7 @@ public class FragmentOAuth extends FragmentBase {
                         account.keep_alive_noop = provider.noop;
 
                         account.partial_fetch = provider.partial;
+                        account.raw_fetch = provider.raw;
 
                         if (pop)
                             account.max_messages = EntityAccount.DEFAULT_MAX_MESSAGES;

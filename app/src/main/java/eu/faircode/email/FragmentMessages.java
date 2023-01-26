@@ -243,6 +243,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
@@ -388,6 +389,7 @@ public class FragmentMessages extends FragmentBase
     private Long next = null;
     private Long closeId = null;
     private int autoCloseCount = 0;
+    private int lastSentCount = 0;
     private boolean autoExpanded = true;
     private Long lastSync = null;
 
@@ -405,6 +407,9 @@ public class FragmentMessages extends FragmentBase
     final private LongSparseArray<TupleAccountSwipes> accountSwipes = new LongSparseArray<>();
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
+
+    private static final ExecutorService executor =
+            Helper.getBackgroundExecutor(1, "more");
 
     private static final int MAX_MORE = 100; // messages
     private static final int MAX_SEND_RAW = 50; // messages
@@ -481,7 +486,7 @@ public class FragmentMessages extends FragmentBase
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        hide_toolbar = prefs.getBoolean("hide_toolbar", true);
+        hide_toolbar = prefs.getBoolean("hide_toolbar", !BuildConfig.PLAY_STORE_RELEASE);
         cards = prefs.getBoolean("cards", true);
         dividers = prefs.getBoolean("dividers", true);
         category = prefs.getBoolean("group_category", false);
@@ -968,10 +973,16 @@ public class FragmentMessages extends FragmentBase
                 if (pos > 0) {
                     Calendar cal0 = Calendar.getInstance();
                     Calendar cal1 = Calendar.getInstance();
+                    cal0.setMinimalDaysInFirstWeek(4); // ISO 8601
+                    cal1.setMinimalDaysInFirstWeek(4); // ISO 8601
+                    cal0.setFirstDayOfWeek(Calendar.MONDAY);
+                    cal1.setFirstDayOfWeek(Calendar.MONDAY);
                     cal0.setTimeInMillis(prev.received);
                     cal1.setTimeInMillis(message.received);
                     int year0 = cal0.get(Calendar.YEAR);
                     int year1 = cal1.get(Calendar.YEAR);
+                    if (date_week && year0 - 1 == year1)
+                        year0--;
                     int day0 = cal0.get(date_week ? Calendar.WEEK_OF_YEAR : Calendar.DAY_OF_YEAR);
                     int day1 = cal1.get(date_week ? Calendar.WEEK_OF_YEAR : Calendar.DAY_OF_YEAR);
                     if (year0 == year1 && day0 == day1)
@@ -1050,8 +1061,10 @@ public class FragmentMessages extends FragmentBase
                 StringBuilder sb = new StringBuilder();
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(time);
+                cal.setMinimalDaysInFirstWeek(4);
+                cal.setFirstDayOfWeek(Calendar.MONDAY);
                 sb.append(cal.get(Calendar.YEAR)).append("-W").append(cal.get(Calendar.WEEK_OF_YEAR));
-                cal.set(Calendar.DAY_OF_WEEK, 1);
+                cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
                 sb.append(' ').append(Helper.getDateInstance(context).format(cal.getTimeInMillis()));
                 return sb.toString();
             }
@@ -3348,17 +3361,14 @@ public class FragmentMessages extends FragmentBase
             if (message == null)
                 return;
 
-            if (long_press && message.content) {
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                String answer_action = prefs.getString("answer_action", "reply");
-                if ("reply".equals(answer_action) ||
-                        "reply_all".equals(answer_action) ||
-                        "list".equals(answer_action))
-                    onMenuReply(message, answer_action, selected);
-                else
-                    onMenuReply(message, answer_action);
-            } else
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String action = prefs.getString(
+                    long_press ? "answer_action" : "answer_single",
+                    long_press ? "reply" : "menu");
+            if ("menu".equals(action) || !message.content)
                 onReply(message, selected, fabReply);
+            else
+                onMenuReply(message, action);
         }
     }
 
@@ -3561,6 +3571,10 @@ public class FragmentMessages extends FragmentBase
         final Context context = getContext();
         if (context == null)
             return;
+        if (!"reply".equals(action) &&
+                !"reply_all".equals(action) &&
+                !"list".equals(action))
+            selected = null;
         Intent reply = new Intent(context, ActivityCompose.class)
                 .putExtra("action", action)
                 .putExtra("reference", message.id)
@@ -4576,6 +4590,7 @@ public class FragmentMessages extends FragmentBase
         outState.putBoolean("fair:reset", reset);
         outState.putBoolean("fair:autoExpanded", autoExpanded);
         outState.putInt("fair:autoCloseCount", autoCloseCount);
+        outState.putInt("fair:lastSentCount", lastSentCount);
 
         outState.putStringArray("fair:values", values.keySet().toArray(new String[0]));
         for (String name : values.keySet())
@@ -4602,6 +4617,7 @@ public class FragmentMessages extends FragmentBase
             reset = savedInstanceState.getBoolean("fair:reset");
             autoExpanded = savedInstanceState.getBoolean("fair:autoExpanded");
             autoCloseCount = savedInstanceState.getInt("fair:autoCloseCount");
+            lastSentCount = savedInstanceState.getInt("fair:lastSentCount");
 
             for (String name : savedInstanceState.getStringArray("fair:values"))
                 if (!"selected".equals(name)) {
@@ -6408,7 +6424,7 @@ public class FragmentMessages extends FragmentBase
                     protected void onException(Bundle args, Throwable ex) {
                         Log.unexpectedError(getParentFragmentManager(), ex);
                     }
-                }.serial().setId("messages:" + FragmentMessages.this.hashCode()).execute(this, args, "quickactions");
+                }.setExecutor(executor).setId("messages:" + FragmentMessages.this.hashCode()).execute(this, args, "quickactions");
             }
         } else {
             fabMore.hide();
@@ -6656,8 +6672,25 @@ public class FragmentMessages extends FragmentBase
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean expand_first = prefs.getBoolean("expand_first", true);
         boolean expand_all = prefs.getBoolean("expand_all", false);
+        boolean autoclose_send = prefs.getBoolean("autoclose_send", false);
         long download = prefs.getInt("download", MessageHelper.DEFAULT_DOWNLOAD_SIZE);
         boolean dup_msgids = prefs.getBoolean("dup_msgids", false);
+
+        if (autoclose_send) {
+            int sent = 0;
+            for (TupleMessageEx message : messages)
+                if (message != null &&
+                        (EntityFolder.OUTBOX.equals(message.folderType) ||
+                                EntityFolder.SENT.equals(message.folderType)))
+                    sent++;
+
+            if (lastSentCount > 0 && sent > lastSentCount) {
+                finish();
+                return true;
+            }
+
+            lastSentCount = sent;
+        }
 
         // Mark duplicates
         Map<String, List<TupleMessageEx>> duplicates = new HashMap<>();

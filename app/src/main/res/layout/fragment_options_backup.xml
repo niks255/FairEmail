@@ -111,6 +111,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvEncrypted" />
 
+                <TextView
+                    android:id="@+id/tvExportPro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_pro_feature"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorLink"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnExport" />
+
                 <Button
                     android:id="@+id/btnImport"
                     style="?android:attr/buttonStyleSmall"
@@ -121,7 +132,7 @@
                     android:drawablePadding="6dp"
                     android:text="@string/title_setup_import"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnExport" />
+                    app:layout_constraintTop_toBottomOf="@id/tvExportPro" />
 
                 <TextView
                     android:id="@+id/tvScroll"
@@ -168,20 +179,40 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <ImageButton
+                    android:id="@+id/ibCloudInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/title_info"
+                    android:tooltipText="@string/title_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCloud"
+                    app:srcCompat="@drawable/twotone_info_24" />
+
                 <TextView
                     android:id="@+id/tvCloudInfo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:drawableEnd="@drawable/twotone_info_24"
-                    android:drawablePadding="6dp"
+                    android:text="@string/title_advanced_cloud_info"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ibCloudInfo" />
+
+                <TextView
+                    android:id="@+id/tvCloudSecurity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
                     android:text="@string/title_advanced_cloud_security"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textStyle="italic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvCloud" />
+                    app:layout_constraintTop_toBottomOf="@id/tvCloudInfo" />
 
                 <TextView
                     android:id="@+id/tvCloudPro"
@@ -192,7 +223,19 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="?android:attr/textColorLink"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvCloudInfo" />
+                    app:layout_constraintTop_toBottomOf="@id/tvCloudSecurity" />
+
+                <TextView
+                    android:id="@+id/tvCloudExperimental"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_experimental"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="?attr/colorWarning"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCloudPro" />
 
                 <TextView
                     android:id="@+id/tvUser"
@@ -203,7 +246,7 @@
                     android:text="@string/title_user"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvCloudPro" />
+                    app:layout_constraintTop_toBottomOf="@id/tvCloudExperimental" />
 
                 <eu.faircode.email.EditTextPlain
                     android:id="@+id/etUser"
@@ -244,6 +287,18 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/tvPasswordRemark"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/title_advanced_cloud_password_remark"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tilPassword" />
+
                 <Button
                     android:id="@+id/btnLogin"
                     style="?android:attr/buttonStyleSmall"
@@ -255,7 +310,7 @@
                     android:tag="disable"
                     android:text="@string/title_advanced_cloud_login"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tilPassword" />
+                    app:layout_constraintTop_toBottomOf="@id/tvPasswordRemark" />
 
                 <TextView
                     android:id="@+id/tvRegister"
@@ -273,39 +328,74 @@
                     android:id="@+id/tvLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="12dp"
                     android:text="username"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvRegister" />
 
-                <CheckBox
-                    android:id="@+id/cbAccounts"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/tvActivateRemark"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="@string/title_advanced_cloud_accounts"
+                    android:text="@string/title_advanced_cloud_activate_remark"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvLogin" />
 
-                <CheckBox
-                    android:id="@+id/cbBlockedSenders"
+                <Button
+                    android:id="@+id/btnActivate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="@string/title_advanced_cloud_blocked_senders"
+                    android:backgroundTint="?attr/colorInfoBackground"
+                    android:drawableEnd="@drawable/twotone_redeem_24"
+                    android:drawablePadding="6dp"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="12dp"
+                    android:tag="disable"
+                    android:text="@string/title_advanced_cloud_activate"
+                    android:textColor="?attr/colorInfoForeground"
+                    android:textStyle="bold"
+                    app:drawableTint="?attr/colorInfoForeground"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cbAccounts" />
+                    app:layout_constraintTop_toBottomOf="@id/tvActivateRemark" />
+
+                <TextView
+                    android:id="@+id/tvAccountRemark"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_cloud_account_remark"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnActivate" />
 
                 <CheckBox
-                    android:id="@+id/cbFilterRules"
+                    android:id="@+id/cbSend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="@string/title_advanced_cloud_filter_rules"
+                    android:tag="disable"
+                    android:text="@string/title_advanced_cloud_send"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cbBlockedSenders" />
+                    app:layout_constraintTop_toBottomOf="@id/tvAccountRemark" />
+
+                <CheckBox
+                    android:id="@+id/cbReceive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:tag="disable"
+                    android:text="@string/title_advanced_cloud_receive"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cbSend" />
 
                 <ImageButton
                     android:id="@+id/ibSync"
@@ -313,7 +403,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/cbFilterRules"
+                    app:layout_constraintTop_toBottomOf="@id/cbReceive"
                     app:srcCompat="@drawable/twotone_compare_arrows_24" />
 
                 <TextView
@@ -355,14 +445,23 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:constraint_referenced_ids="
-                        tvUser,etUser,tvPassword,tilPassword,btnLogin,tvRegister" />
+                        tvUser,etUser,tvPassword,tilPassword,tvPasswordRemark,
+                        btnLogin,tvRegister" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/grpActivate"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="
+                        btnActivate,tvActivateRemark" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/grpLogout"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:constraint_referenced_ids="
-                        tvLogin,cbAccounts,cbBlockedSenders,cbFilterRules,
+                        tvLogin,tvAccountRemark,
+                        cbSend,cbReceive,
                         ibSync,tvLastSync,
                         btnLogout,cbDelete" />
             </androidx.constraintlayout.widget.ConstraintLayout>

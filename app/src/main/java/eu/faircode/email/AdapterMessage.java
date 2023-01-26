@@ -1409,10 +1409,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvSize.setVisibility(
                     message.totalSize != null && ("size".equals(sort) || "attachments".equals(sort))
                             ? View.VISIBLE : View.GONE);
-            SpannableStringBuilder time = new SpannableStringBuilderEx(
-                    ((date || date_fixed) && !date_week) && FragmentMessages.SORT_DATE_HEADER.contains(sort)
-                            ? TF.format(message.received)
-                            : Helper.getRelativeTimeSpanString(context, message.received));
+            SpannableStringBuilder time;
+            if (date_week)
+                time = new SpannableStringBuilderEx(Helper.getRelativeDateSpanString(context, message.received));
+            else
+                time = new SpannableStringBuilderEx(
+                        (date || date_fixed) && FragmentMessages.SORT_DATE_HEADER.contains(sort)
+                                ? TF.format(message.received)
+                                : Helper.getRelativeTimeSpanString(context, message.received));
             if (show_recent && message.recent)
                 time.setSpan(new UnderlineSpan(), 0, time.length(), 0);
             tvTime.setText(time);
@@ -4968,7 +4972,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onToggleMessage(TupleMessageEx message) {
-            if (EntityFolder.DRAFTS.equals(message.folderType) &&
+            if (EntityFolder.DRAFTS.equals(message.folderType) && message.visible == 1 &&
                     !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt) &&
                     !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt))
                 context.startActivity(
@@ -5933,10 +5937,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 String scheme = guri.getScheme();
                 String host = guri.getHost();
 
+                String chost = FragmentDialogOpenLink.getConfirmHost(uri);
                 boolean sanitize_links = prefs.getBoolean("sanitize_links", false);
-                boolean confirm_link =
-                        !"https".equalsIgnoreCase(scheme) || TextUtils.isEmpty(host) ||
-                                prefs.getBoolean(host + ".confirm_link", true);
+                boolean confirm_link = (chost != null && prefs.getBoolean(chost + ".confirm_link", true));
                 if (always_confirm || sanitize_links || (confirm_links && confirm_link)) {
                     Bundle args = new Bundle();
                     args.putParcelable("uri", uri);
@@ -7978,8 +7981,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         if (email == null)
             return;
 
-        email = MessageHelper.addExtra(email, extra);
-        ((InternetAddress) addresses[0]).setAddress(email);
+        Pair<String, String> p = MessageHelper.getExtra(email, extra);
+
+        if (p.first != null)
+            try {
+                ((InternetAddress) addresses[0]).setPersonal(p.first);
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+
+        if (p.second != null)
+            ((InternetAddress) addresses[0]).setAddress(p.second);
     }
 
     PagedList<TupleMessageEx> getCurrentList() {

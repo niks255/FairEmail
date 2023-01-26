@@ -387,6 +387,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(186) How can I let the app auto store iCalendar invitations?](#user-content-faq186)
 * [(187) Are colored stars synchronized across devices?](#user-content-faq187)
 * [(188) Why is Google backup disabled?](#user-content-faq188)
+* [(189) What is cloud sync?](#user-content-faq189)
 
 [I have another question.](#user-content-get-support)
 
@@ -818,8 +819,9 @@ Note that you can copy an identity by long pressing it.
 Alternatively, you can enable *Allow editing sender address* in the advanced settings of an existing identity to edit the username when composing a new message,
 if your provider allows this. Considering the email address test@example.org you can use these special username formats:
 
-* Username *+extra* will result in the email address *test+extra@example.org*
-* Username *@extra* will result in the email address *test@extra.example.org*
+* "*+extra*" will result in the email address "*test+extra@example.org*"
+* "*@extra*" will result in the email address "*test@extra.example.org*"
+* "*Some name, username*" will result in the email address "*Some name, &lt;username@example.org&gt;*" (since version 1.2032)
 
 FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.
 
@@ -1264,6 +1266,7 @@ Possible causes of messages not being synchronized (sent or received) are:
 * The number of days to synchronize message for is set too low
 * There is no usable internet connection
 * The email server is temporarily not available
+* Battery optimizations were not disable via setup step 3
 * Android stopped the synchronization service
 * A memory management app stopped the synchronization service
 
@@ -1273,8 +1276,10 @@ If there are any error messages, please see [this FAQ](#user-content-faq22).
 
 On some devices, where there are lots of applications competing for memory, Android may stop the synchronization service as a last resort.
 
-Some Android versions stop apps and services too aggressively.
-See [this dedicated website](https://dontkillmyapp.com/) and [this Android issue](https://issuetracker.google.com/issues/122098785) for more information.
+Some Android versions, especially those of Samsung, OnePlus, Huawei and Xiaomi, stop apps and services too aggressively.
+See [this dedicated website](https://dontkillmyapp.com/) "*Don't kill my app*" for solutions,
+and [this Android issue](https://issuetracker.google.com/issues/122098785) (requires logging in with a Google account) for more information.
+
 If you have a Doogee device, please [see here](https://android.stackexchange.com/questions/214639/background-apps-get-killed-by-something-other-than-battery-optimization).
 
 Disabling battery optimizations (setup step 3) reduces the chance Android will stop the synchronization service.
@@ -1661,15 +1666,15 @@ please [contact me](https://contact.faircode.eu/?product=fairemailsupport).
 
 External image:
 
-![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png)
+<img alt="External image" src="https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png" width="48" height="48" />
 
 Embedded image:
 
-![Embedded image](https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png)
+<img alt="Embedded image" src="https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png" width="48" height="48" />
 
 Broken image:
 
-![Broken image](https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png)
+<img alt="Broken image" src="https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png" width="48" height="48" />
 
 Note that downloading external images from a remote server can be used to record you did see a message, which you likely don't want if the message is spam or malicious.
 
@@ -2301,11 +2306,11 @@ so it is better to resize images with an image editor first.
 
 The email icon in the folder list can be open (outlined) or closed (solid):
 
-![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png)
+<img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png" width="48" height="48" />
 
 Message bodies and attachments are not downloaded by default.
 
-![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_email_black_48dp.png)
+<img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_email_black_48dp.png" width="48" height="48" />
 
 Message bodies and attachments are downloaded by default.
 
@@ -2789,6 +2794,8 @@ This means that messages with multiple labels will be shown multiple times as we
 A lot of knowledge and experience is required to successfully develop an app for a specific platform,
 which is why I develop apps for Android only.
 
+You can install FairEmail on recent Windows versions, though, see [here](#user-content-faq185), and also on ChromeOS via the Play Store.
+
 <br />
 
 <a name="faq76"></a>
@@ -2971,7 +2978,7 @@ The BBC article '[Spy pixels in emails have become endemic](https://www.bbc.com/
 
 FairEmail will in most cases automatically recognize tracking images and replace them by this icon:
 
-![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png)
+<img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png" width="48" height="48" />
 
 Automatic recognition of tracking images can be disabled in the privacy settings.
 
@@ -4174,7 +4181,7 @@ Note that trashing a message will permanently remove it from the server and that
 
 To record voice notes you can press this icon in the bottom action bar of the message composer:
 
-![External image](https://github.com/M66B/FairEmail/blob/master/images/baseline_record_voice_over_black_48dp.png)
+<img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_record_voice_over_black_48dp.png" width="48" height="48" />
 
 This requires a compatible audio recorder app to be installed.
 In particular [this common intent](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION)
@@ -4238,7 +4245,7 @@ Sometimes the server received date/time is incorrect,
 mostly because messages were incorrectly imported from another server and sometimes due to a bug in the email server.
 
 In these rare cases, it is possible to let FairEmail use either the date/time from the *Date* header (sent time) or from the *Received* header as a workaround.
-This can be changed in the advanced account settings: Settings, tap Manual setup, tap Accounts, tap account, tap Advanced.
+This can be changed in the advanced account settings: go to the Settings, tap *Manual setup and account options*, tap *Accounts*, tap the account, tap *Advanced*.
 
 This will not change the time of already synchronized messages.
 To solve this, long press the folder(s) in the folder list and select *Delete local messages* and *Synchronize now*.
@@ -5158,6 +5165,40 @@ from [automatically being sent to Google](https://developer.android.com/guide/to
 Unfortunately, it is not possible to enable cloud backup for other backup software without enabling Google backup.
 
 <br />
+
+<a name="faq189"></a>
+**(189) What is cloud sync?**
+
+Cloud sync is meant to synchronize configuration data across devices.
+It can be used to restore configuration data onto a new device too.
+
+Cloud sync is based on a cloud account.
+You can register/login by entering a username and a password and using the *Login* button.
+
+A cloud sync account needs to be activated, which is to prevent misusing the cloud sync server.
+To activate a cloud sync account, use the *Activate* button to send an email to a special email address.
+The email needs to come from an address used to activate the pro features before.
+You'll receive an email in response indicating whether the activation was succesful or not.
+
+The app will automatically synchronize once a day around 1:30 AM, provided there is an internet connection,
+otherwise synchronization will be postponed until after an internet connection becomes available.
+You can also manually synchronize with the opposite arrows button.
+
+Synchronization will currently add and update enabled accounts and identities only,
+but on the roadmap is synchronizing blocked senders and filter rules too.
+
+Updating includes enabling/disabling accounts and identities.
+
+Existing accounts or identities will never be deleted
+
+Please note that accounts are only considered the same if they are cloud synced and never if the same account is configured on different devices.
+
+All data is [end-to-end encrypted](https://en.wikipedia.org/wiki/End-to-end_encryption),
+which means that the cloud server can't see the data contents.
+The used encryption method is [AES-GCM-SIV](https://en.wikipedia.org/wiki/AES-GCM-SIV)
+using a 256 bit key derived from the username and password with [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) using SHA256 and 310,000 iterations.
+
+Cloud sync is an experimental feature. It is not available for the Play Store version of the app, yet.
 
 <h2><a name="get-support"></a>Get support</h2>
 

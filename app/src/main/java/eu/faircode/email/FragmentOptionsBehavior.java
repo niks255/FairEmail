@@ -91,15 +91,17 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     private TextView tvOnClose;
     private Spinner spOnClose;
     private SwitchCompat swAutoCloseUnseen;
+    private SwitchCompat swAutoCloseSend;
     private SwitchCompat swCollapseMarked;
     private Spinner spUndoTimeout;
     private SwitchCompat swCollapseMultiple;
     private SwitchCompat swAutoRead;
-    private SwitchCompat swFlagSnoozed;
     private SwitchCompat swAutoUnflag;
-    private SwitchCompat swAutoImportant;
     private SwitchCompat swResetImportance;
+    private SwitchCompat swFlagSnoozed;
+    private SwitchCompat swAutoImportant;
     private SwitchCompat swResetSnooze;
+    private SwitchCompat swAutoBlockSender;
     private SwitchCompat swSwipeReply;
 
     final static int MAX_SWIPE_SENSITIVITY = 10;
@@ -111,9 +113,9 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             "pull", "autoscroll", "quick_filter", "quick_scroll", "quick_actions", "swipe_sensitivity", "foldernav",
             "doubletap", "swipenav", "volumenav", "reversed", "swipe_close", "swipe_move",
             "autoexpand", "expand_first", "expand_all", "expand_one", "collapse_multiple",
-            "autoclose", "onclose", "autoclose_unseen", "collapse_marked",
+            "autoclose", "onclose", "autoclose_unseen", "autoclose_send", "collapse_marked",
             "undo_timeout",
-            "autoread", "flag_snoozed", "autounflag", "auto_important", "reset_importance", "reset_snooze",
+            "autoread", "flag_snoozed", "autounflag", "auto_important", "reset_importance", "reset_snooze", "auto_block_sender",
             "swipe_reply"
     };
 
@@ -161,14 +163,16 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         tvOnClose = view.findViewById(R.id.tvOnClose);
         spOnClose = view.findViewById(R.id.spOnClose);
         swAutoCloseUnseen = view.findViewById(R.id.swAutoCloseUnseen);
+        swAutoCloseSend = view.findViewById(R.id.swAutoCloseSend);
         swCollapseMarked = view.findViewById(R.id.swCollapseMarked);
         spUndoTimeout = view.findViewById(R.id.spUndoTimeout);
         swAutoRead = view.findViewById(R.id.swAutoRead);
-        swFlagSnoozed = view.findViewById(R.id.swFlagSnoozed);
         swAutoUnflag = view.findViewById(R.id.swAutoUnflag);
-        swAutoImportant = view.findViewById(R.id.swAutoImportant);
         swResetImportance = view.findViewById(R.id.swResetImportance);
+        swFlagSnoozed = view.findViewById(R.id.swFlagSnoozed);
+        swAutoImportant = view.findViewById(R.id.swAutoImportant);
         swResetSnooze = view.findViewById(R.id.swResetSnooze);
+        swAutoBlockSender = view.findViewById(R.id.swAutoBlockSender);
         swSwipeReply = view.findViewById(R.id.swSwipeReply);
 
         setOptions();
@@ -451,6 +455,13 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
+        swAutoCloseSend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("autoclose_send", checked).apply();
+            }
+        });
+
         swCollapseMarked.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -479,24 +490,10 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
-        swFlagSnoozed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("flag_snoozed", checked).apply();
-            }
-        });
-
         swAutoUnflag.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("autounflag", checked).apply();
-            }
-        });
-
-        swAutoImportant.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("auto_important", checked).apply();
             }
         });
 
@@ -507,6 +504,20 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
+        swFlagSnoozed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("flag_snoozed", checked).apply();
+            }
+        });
+
+        swAutoImportant.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("auto_important", checked).apply();
+            }
+        });
+
         swResetSnooze.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -514,6 +525,12 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
+        swAutoBlockSender.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("auto_block_sender", checked).apply();
+            }
+        });
 
         swSwipeReply.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -619,6 +636,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         spOnClose.setEnabled(!swAutoClose.isChecked());
 
         swAutoCloseUnseen.setChecked(prefs.getBoolean("autoclose_unseen", false));
+        swAutoCloseSend.setChecked(prefs.getBoolean("autoclose_send", false));
         swCollapseMarked.setChecked(prefs.getBoolean("collapse_marked", true));
 
         int undo_timeout = prefs.getInt("undo_timeout", 5000);
@@ -630,11 +648,12 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
 
         swAutoRead.setChecked(prefs.getBoolean("autoread", false));
-        swFlagSnoozed.setChecked(prefs.getBoolean("flag_snoozed", false));
         swAutoUnflag.setChecked(prefs.getBoolean("autounflag", false));
-        swAutoImportant.setChecked(prefs.getBoolean("auto_important", false));
         swResetImportance.setChecked(prefs.getBoolean("reset_importance", false));
+        swFlagSnoozed.setChecked(prefs.getBoolean("flag_snoozed", false));
+        swAutoImportant.setChecked(prefs.getBoolean("auto_important", false));
         swResetSnooze.setChecked(prefs.getBoolean("reset_snooze", true));
+        swAutoBlockSender.setChecked(prefs.getBoolean("auto_block_sender", true));
         swSwipeReply.setChecked(prefs.getBoolean("swipe_reply", false));
     }
 

@@ -420,6 +420,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                         context, account.getProtocol(), account.realm, account.encryption, account.insecure, account.unicode,
                         EmailService.PURPOSE_SEARCH, debug || BuildConfig.DEBUG);
                 state.iservice.setPartialFetch(account.partial_fetch);
+                state.iservice.setRawFetch(account.raw_fetch);
                 state.iservice.setIgnoreBodyStructureSize(account.ignore_size);
                 state.iservice.connect(account);
 
@@ -837,6 +838,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                             return true;
                     }
                     if (criteria.in_message) {
+                        // This won't match <p>An <b>example</b><p> when searching for "An example"
                         if (contains(html, criteria.query, partial, true)) {
                             String text = HtmlHelper.getFullText(html);
                             if (contains(text, criteria.query, partial, false))

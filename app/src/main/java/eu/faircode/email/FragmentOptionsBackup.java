@@ -37,13 +37,13 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.OperationCanceledException;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.util.Base64;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -78,24 +78,18 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -108,34 +102,33 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.net.ssl.HttpsURLConnection;
 
 public class FragmentOptionsBackup extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private View view;
     private ImageButton ibHelp;
     private Button btnExport;
+    private TextView tvExportPro;
     private Button btnImport;
     private CardView cardCloud;
-    private TextView tvCloudInfo;
+    private ImageButton ibCloudInfo;
     private TextView tvCloudPro;
     private EditText etUser;
     private TextInputLayout tilPassword;
     private Button btnLogin;
     private TextView tvLogin;
-    private CheckBox cbAccounts;
-    private CheckBox cbBlockedSenders;
-    private CheckBox cbFilterRules;
+    private Button btnActivate;
+    private CheckBox cbSend;
+    private CheckBox cbReceive;
     private ImageButton ibSync;
     private TextView tvLastSync;
     private Button btnLogout;
     private CheckBox cbDelete;
     private Group grpLogin;
+    private Group grpActivate;
     private Group grpLogout;
 
     private DateFormat DTF;
@@ -144,8 +137,6 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
     private static final int REQUEST_IMPORT_SELECT = 2;
     private static final int REQUEST_EXPORT_HANDLE = 3;
     private static final int REQUEST_IMPORT_HANDLE = 4;
-
-    private static final int CLOUD_TIMEOUT = 10 * 1000; // timeout
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -164,22 +155,24 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
 
         ibHelp = view.findViewById(R.id.ibHelp);
         btnExport = view.findViewById(R.id.btnExport);
+        tvExportPro = view.findViewById(R.id.tvExportPro);
         btnImport = view.findViewById(R.id.btnImport);
         cardCloud = view.findViewById(R.id.cardCloud);
-        tvCloudInfo = view.findViewById(R.id.tvCloudInfo);
+        ibCloudInfo = view.findViewById(R.id.ibCloudInfo);
         tvCloudPro = view.findViewById(R.id.tvCloudPro);
         etUser = view.findViewById(R.id.etUser);
         tilPassword = view.findViewById(R.id.tilPassword);
         btnLogin = view.findViewById(R.id.btnLogin);
         tvLogin = view.findViewById(R.id.tvLogin);
-        cbAccounts = view.findViewById(R.id.cbAccounts);
-        cbBlockedSenders = view.findViewById(R.id.cbBlockedSenders);
-        cbFilterRules = view.findViewById(R.id.cbFilterRules);
+        btnActivate = view.findViewById(R.id.btnActivate);
+        cbSend = view.findViewById(R.id.cbSend);
+        cbReceive = view.findViewById(R.id.cbReceive);
         ibSync = view.findViewById(R.id.ibSync);
         tvLastSync = view.findViewById(R.id.tvLastSync);
         btnLogout = view.findViewById(R.id.btnLogout);
         cbDelete = view.findViewById(R.id.cbDelete);
         grpLogin = view.findViewById(R.id.grpLogin);
+        grpActivate = view.findViewById(R.id.grpActivate);
         grpLogout = view.findViewById(R.id.grpLogout);
 
         // Wire controls
@@ -193,10 +186,10 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
             }
         });
 
-        tvCloudInfo.setOnClickListener(new View.OnClickListener() {
+        ibCloudInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.viewFAQ(v.getContext(), 999);
+                Helper.viewFAQ(v.getContext(), 189);
             }
         });
 
@@ -221,24 +214,10 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
             }
         });
 
-        cbAccounts.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnActivate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                prefs.edit().putBoolean("cloud_sync_accounts", isChecked).apply();
-            }
-        });
-
-        cbBlockedSenders.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                prefs.edit().putBoolean("cloud_sync_blocked_senders", isChecked).apply();
-            }
-        });
-
-        cbFilterRules.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                prefs.edit().putBoolean("cloud_sync_filter_rules", isChecked).apply();
+            public void onClick(View v) {
+                onCloudActivate();
             }
         });
 
@@ -246,6 +225,20 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
             @Override
             public void onClick(View v) {
                 onCloudSync();
+            }
+        });
+
+        cbSend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                prefs.edit().putBoolean("cloud_send", isChecked).apply();
+            }
+        });
+
+        cbReceive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                prefs.edit().putBoolean("cloud_receive", isChecked).apply();
             }
         });
 
@@ -258,17 +251,15 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
 
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
-        cardCloud.setVisibility(
-                BuildConfig.DEBUG &&
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                        !TextUtils.isEmpty(BuildConfig.CLOUD_URI)
-                        ? View.VISIBLE : View.GONE);
+        Helper.linkPro(tvExportPro);
+        cardCloud.setVisibility(!TextUtils.isEmpty(BuildConfig.CLOUD_URI)
+                ? View.VISIBLE : View.GONE);
         Helper.linkPro(tvCloudPro);
 
+        cbSend.setChecked(prefs.getBoolean("cloud_send", true));
+        cbReceive.setChecked(prefs.getBoolean("cloud_receive", false));
+
         prefs.registerOnSharedPreferenceChangeListener(this);
-        cbAccounts.setChecked(prefs.getBoolean("cloud_sync_accounts", true));
-        cbBlockedSenders.setChecked(prefs.getBoolean("cloud_sync_blocked_senders", true));
-        cbFilterRules.setChecked(prefs.getBoolean("cloud_sync_filter_rules", true));
         onSharedPreferenceChanged(prefs, null);
 
         return view;
@@ -284,10 +275,15 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (key == null ||
                 "cloud_user".equals(key) ||
-                "cloud_password".equals(key)) {
+                "cloud_password".equals(key) ||
+                "cloud_activated".equals(key) ||
+                "cloud_busy".equals(key) ||
+                "cloud_last_sync".equals(key)) {
             String user = prefs.getString("cloud_user", null);
             String password = prefs.getString("cloud_password", null);
             boolean auth = !(TextUtils.isEmpty(user) || TextUtils.isEmpty(password));
+            boolean activated = prefs.getBoolean("cloud_activated", false);
+            boolean busy = prefs.getBoolean("cloud_busy", false);
             long last_sync = prefs.getLong("cloud_last_sync", 0);
 
             etUser.setText(user);
@@ -297,6 +293,7 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                     last_sync == 0 ? "-" : DTF.format(last_sync)));
             cbDelete.setChecked(false);
             grpLogin.setVisibility(auth ? View.GONE : View.VISIBLE);
+            grpActivate.setVisibility(auth && !activated && !busy ? View.VISIBLE : View.GONE);
             grpLogout.setVisibility(auth ? View.VISIBLE : View.GONE);
         }
     }
@@ -1483,14 +1480,15 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
         return intent;
     }
 
-    private void onCloudSync() {
-        Bundle args = new Bundle();
-        cloud(args);
-    }
-
     private void onCloudLogin() {
+        final Context context = getContext();
         String username = etUser.getText().toString().trim();
         String password = tilPassword.getEditText().getText().toString();
+
+        if (!ActivityBilling.isPro(context)) {
+            context.startActivity(new Intent(context, ActivityBilling.class));
+            return;
+        }
 
         if (TextUtils.isEmpty(username)) {
             etUser.requestFocus();
@@ -1502,158 +1500,114 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
             return;
         }
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit()
                 .putString("cloud_user", username)
                 .putString("cloud_password", password)
                 .apply();
 
         Bundle args = new Bundle();
+        args.putString("command", "login");
+        cloud(args);
+    }
+
+    private void onCloudActivate() {
+        try {
+            final Context context = getContext();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            String user = prefs.getString("cloud_user", null);
+
+            Intent intent = new Intent(Intent.ACTION_SEND)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .setType("text/plain")
+                    .putExtra(Intent.EXTRA_EMAIL, new String[]{BuildConfig.CLOUD_EMAIL})
+                    .putExtra(Intent.EXTRA_SUBJECT, CloudSync.getCloudUser(user))
+                    .putExtra(Intent.EXTRA_TEXT, "Activate");
+            startActivity(intent);
+        } catch (Throwable ex) {
+            Log.unexpectedError(getParentFragmentManager(), ex);
+        }
+    }
+
+    private void onCloudSync() {
+        Bundle args = new Bundle();
+        args.putString("command", "sync");
         cloud(args);
     }
 
     private void onCloudLogout() {
+        boolean wipe = cbDelete.isChecked();
         Bundle args = new Bundle();
-        args.putBoolean("logout", true);
-        args.putBoolean("wipe", cbDelete.isChecked());
+        args.putString("command", wipe ? "wipe" : "logout");
         cloud(args);
     }
 
     private void cloud(Bundle args) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        args.putString("user", prefs.getString("cloud_user", null));
-        args.putString("password", prefs.getString("cloud_password", null));
-
-        new SimpleTask<String>() {
+        new SimpleTask<Void>() {
             @Override
             protected void onPreExecute(Bundle args) {
+                prefs.edit().putBoolean("cloud_busy", true).apply();
                 Helper.setViewsEnabled(cardCloud, false);
             }
 
             @Override
             protected void onPostExecute(Bundle args) {
+                prefs.edit().putBoolean("cloud_busy", false).apply();
                 Helper.setViewsEnabled(cardCloud, true);
-            }
-
-            @Override
-            protected String onExecute(Context context, Bundle args) throws Throwable {
-                String user = args.getString("user");
-                String password = args.getString("password");
-                boolean wipe = args.getBoolean("wipe");
-
-                byte[] salt = MessageDigest.getInstance("SHA256").digest(user.getBytes());
-                byte[] huser = MessageDigest.getInstance("SHA256").digest(salt);
-                byte[] userid = Arrays.copyOfRange(huser, 0, 8);
-                String cloudUser = Base64.encodeToString(userid, Base64.NO_PADDING | Base64.NO_WRAP);
-
-                Pair<byte[], byte[]> key = getKeyPair(salt, password);
-                String cloudPassword = Base64.encodeToString(key.first, Base64.NO_PADDING | Base64.NO_WRAP);
-
-                JSONObject jroot = new JSONObject();
-                jroot.put("version", 1);
-                jroot.put("command", wipe ? "wipe" : "login");
-                jroot.put("username", cloudUser);
-                jroot.put("password", cloudPassword);
-                jroot.put("debug", BuildConfig.DEBUG);
-
-                if (false) {
-                    JSONArray jwrite = new JSONArray();
-
-                    JSONObject jkv1 = new JSONObject();
-                    jkv1.put("key", transform("key1", key.second, true));
-                    jkv1.put("value", transform("value1", key.second, true));
-                    jwrite.put(jkv1);
-
-                    JSONObject jkv2 = new JSONObject();
-                    jkv2.put("key", transform("key2", key.second, true));
-                    jkv2.put("value", null);
-                    jwrite.put(jkv2);
-
-                    jroot.put("command", "write");
-                    jroot.put("items", jwrite);
-                }
-
-                if (false) {
-                    JSONArray jread = new JSONArray();
-                    jread.put(transform("key1", key.second, true));
-                    jroot.put("command", "read");
-                    jroot.put("items", jread);
-                }
-
-                String request = jroot.toString();
-                Log.i("Cloud request=" + request);
-
-                URL url = new URL(BuildConfig.CLOUD_URI);
-                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoInput(true);
-                connection.setDoOutput(true);
-                connection.setReadTimeout(CLOUD_TIMEOUT);
-                connection.setConnectTimeout(CLOUD_TIMEOUT);
-                ConnectionHelper.setUserAgent(context, connection);
-                connection.setRequestProperty("Accept", "application/json");
-                connection.setRequestProperty("Content-Length", Integer.toString(request.length()));
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.connect();
-
-                try {
-                    connection.getOutputStream().write(request.getBytes());
-
-                    int status = connection.getResponseCode();
-                    if (status != HttpsURLConnection.HTTP_OK) {
-                        String error = "Error " + status + ": " + connection.getResponseMessage();
-                        String detail = Helper.readStream(connection.getErrorStream());
-                        Log.w("Cloud error=" + error + " detail=" + detail);
-                        JSONObject jerror = new JSONObject(detail);
-                        if (status == HttpsURLConnection.HTTP_FORBIDDEN)
-                            throw new SecurityException(jerror.optString("error"));
-                        else
-                            throw new IOException(error + " " + jerror);
-                    }
-
-                    String response = Helper.readStream(connection.getInputStream());
-                    Log.i("Cloud response=" + response);
-                    JSONObject jresponse = new JSONObject(response);
-                    if (jresponse.has("items")) {
-                        JSONArray jitems = jresponse.getJSONArray("items");
-                        for (int i = 0; i < jitems.length(); i++) {
-                            JSONObject jitem = jitems.getJSONObject(i);
-                            String k = transform(jitem.optString("key"), key.second, false);
-                            String v = transform(jitem.optString("value"), key.second, false);
-                            Log.i("Cloud item " + k + "=" + v);
-                        }
-                    }
-                    return jresponse.optString("status");
-                } finally {
-                    connection.disconnect();
-                }
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, String status) {
-                if ("ok".equals(status) && !args.getBoolean("logout"))
-                    prefs.edit()
-                            .putString("cloud_user", args.getString("user"))
-                            .putString("cloud_password", args.getString("password"))
-                            .apply();
-                else
-                    prefs.edit()
-                            .remove("cloud_user")
-                            .remove("cloud_password")
-                            .apply();
 
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-                        view.scrollTo(0, cardCloud.getTop());
+                        view.scrollTo(0, cardCloud.getBottom());
                     }
                 });
+
+                WorkerSync.init(getContext());
+            }
+
+            @Override
+            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                String command = args.getString("command");
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+                try {
+                    CloudSync.execute(context, command, true);
+                } catch (SecurityException ex) {
+                    prefs.edit().remove("cloud_password").apply();
+                    throw ex;
+                } finally {
+                    if ("logout".equals(command) || "wipe".equals(command)) {
+                        prefs.edit()
+                                .remove("cloud_revision")
+                                .remove("cloud_user")
+                                .remove("cloud_password")
+                                .remove("cloud_activated")
+                                .remove("cloud_last_sync")
+                                .apply();
+
+                        File dir = Helper.ensureExists(new File(context.getFilesDir(), "syncdata"));
+                        File[] files = dir.listFiles();
+                        if (files != null)
+                            for (File file : files)
+                                Log.i("Cloud delete " + file + "=" + file.delete());
+                    }
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                prefs.edit().putBoolean("cloud_activated", true).apply();
             }
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof SecurityException) {
+                if (ex instanceof OperationCanceledException)
+                    prefs.edit().putBoolean("cloud_activated", false).apply();
+                else if (ex instanceof SecurityException) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                             .setIcon(R.drawable.twotone_warning_24)
                             .setTitle(getString(R.string.title_advanced_cloud_invalid))
@@ -1666,37 +1620,6 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(FragmentOptionsBackup.this, args, "cloud");
-    }
-
-    private static Pair<byte[], byte[]> getKeyPair(byte[] salt, String password)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
-        // https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
-        KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 310000, 2 * 256);
-        SecretKey secret = keyFactory.generateSecret(keySpec);
-
-        byte[] encoded = secret.getEncoded();
-        int half = encoded.length / 2;
-        return new Pair<>(
-                Arrays.copyOfRange(encoded, 0, half),
-                Arrays.copyOfRange(encoded, half, half + half));
-    }
-
-    private String transform(String value, byte[] key, boolean encrypt)
-            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        SecretKeySpec secret = new SecretKeySpec(key, "AES");
-        Cipher cipher = Cipher.getInstance("AES/GCM-SIV/NoPadding");
-        IvParameterSpec ivSpec = new IvParameterSpec(new byte[12]);
-        cipher.init(encrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE, secret, ivSpec);
-        //cipher.updateAAD(ByteBuffer.allocate(4).putInt(0).array());
-        if (encrypt) {
-            byte[] encrypted = cipher.doFinal(value.getBytes());
-            return Base64.encodeToString(encrypted, Base64.NO_PADDING | Base64.NO_WRAP);
-        } else {
-            byte[] encrypted = Base64.decode(value, Base64.NO_PADDING | Base64.NO_WRAP);
-            byte[] decrypted = cipher.doFinal(encrypted);
-            return new String(decrypted);
-        }
     }
 
     public static class FragmentDialogExport extends FragmentDialogBase {

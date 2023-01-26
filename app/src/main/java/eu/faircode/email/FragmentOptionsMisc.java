@@ -80,6 +80,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
+import androidx.work.WorkManager;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -177,6 +178,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private Button btnDaily;
     private SwitchCompat swAutostart;
     private SwitchCompat swHwAccel;
+    private SwitchCompat swEmergency;
     private SwitchCompat swWorkManager;
     private SwitchCompat swExternalStorage;
     private TextView tvExternalStorageFolder;
@@ -263,7 +265,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "crash_reports", "cleanup_attachments",
             "watchdog", "experiments", "main_log", "main_log_memory", "protocol", "log_level", "debug", "leak_canary",
             "test1", "test2", "test3", "test4", "test5",
-            "work_manager", // "external_storage",
+            "emergency_file", "work_manager", // "external_storage",
             "sqlite_integrity_check", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_auto_vacuum", "sqlite_sync_extra", "sqlite_cache",
             "chunk_size", "thread_range", "undo_manager",
             "browser_zoom", "fake_dark",
@@ -397,6 +399,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         btnDaily = view.findViewById(R.id.btnDaily);
         swAutostart = view.findViewById(R.id.swAutostart);
         swHwAccel = view.findViewById(R.id.swHwAccel);
+        swEmergency = view.findViewById(R.id.swEmergency);
         swWorkManager = view.findViewById(R.id.swWorkManager);
         swExternalStorage = view.findViewById(R.id.swExternalStorage);
         tvExternalStorageFolder = view.findViewById(R.id.tvExternalStorageFolder);
@@ -1202,7 +1205,14 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swHwAccel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                prefs.edit().putBoolean("hw_accel", isChecked).commit();
+                prefs.edit().putBoolean("hw_accel", isChecked).apply();
+            }
+        });
+
+        swEmergency.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton v, boolean checked) {
+                prefs.edit().putBoolean("emergency_file", checked).apply();
             }
         });
 
@@ -2112,6 +2122,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             protected Void onExecute(Context context, Bundle args) {
                 WorkerCleanup.cleanup(context, true);
+                WorkManager.getInstance(context).pruneWork();
                 return null;
             }
 
@@ -2215,6 +2226,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         swAutostart.setChecked(Helper.isComponentEnabled(getContext(), ReceiverAutoStart.class));
         swHwAccel.setChecked(prefs.getBoolean("hw_accel", true));
+        swEmergency.setChecked(prefs.getBoolean("emergency_file", true));
         swWorkManager.setChecked(prefs.getBoolean("work_manager", true));
         swExternalStorage.setChecked(prefs.getBoolean("external_storage", false));
 

@@ -71,14 +71,14 @@ public class WorkerAutoUpdate extends Worker {
                                 .setConstraints(new Constraints.Builder()
                                         .setRequiredNetworkType(NetworkType.CONNECTED).build());
                 WorkManager.getInstance(context)
-                        .enqueueUniquePeriodicWork(getName(), ExistingPeriodicWorkPolicy.KEEP, builder.build());
+                        .enqueueUniquePeriodicWork(getName(), ExistingPeriodicWorkPolicy.UPDATE, builder.build());
                 Log.i("Queued " + getName());
             } else {
                 Log.i("Cancelling " + getName());
                 WorkManager.getInstance(context).cancelUniqueWork(getName());
                 Log.i("Cancelled " + getName());
             }
-        } catch (IllegalStateException ex) {
+        } catch (Throwable ex) {
             // https://issuetracker.google.com/issues/138465476
             Log.w(ex);
         }

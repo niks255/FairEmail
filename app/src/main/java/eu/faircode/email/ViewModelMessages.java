@@ -245,7 +245,8 @@ public class ViewModelMessages extends ViewModel {
         if (viewType == AdapterMessage.ViewType.UNIFIED)
             models.remove(AdapterMessage.ViewType.FOLDER);
 
-        if (viewType != AdapterMessage.ViewType.SEARCH)
+        if (viewType != AdapterMessage.ViewType.SEARCH &&
+                viewType != AdapterMessage.ViewType.THREAD)
             models.remove(AdapterMessage.ViewType.SEARCH);
 
         if (viewType != AdapterMessage.ViewType.THREAD) {
@@ -436,7 +437,7 @@ public class ViewModelMessages extends ViewModel {
                         Log.i("Observe previous/next fallback=" + result);
                         return result;
                     }
-                }.execute(context, owner, args, "model:fallback");
+                }.setExecutor(executor).execute(context, owner, args, "model:fallback");
             }
         });
     }

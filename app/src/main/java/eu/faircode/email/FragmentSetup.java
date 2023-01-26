@@ -113,6 +113,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
     private Button btnDoze;
     private TextView tvDoze12;
     private TextView tvDozeWhy;
+    private TextView tvKilling;
 
     private Button btnBackgroundRestricted;
     private Button btnDataSaver;
@@ -200,6 +201,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
         btnDoze = view.findViewById(R.id.btnDoze);
         tvDoze12 = view.findViewById(R.id.tvDoze12);
         tvDozeWhy = view.findViewById(R.id.tvDozeWhy);
+        tvKilling = view.findViewById(R.id.tvKilling);
 
         btnBackgroundRestricted = view.findViewById(R.id.btnBackgroundRestricted);
         btnDataSaver = view.findViewById(R.id.btnDataSaver);
@@ -588,6 +590,15 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
             }
         });
 
+        tvKilling.setPaintFlags(tvKilling.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvKilling.setVisibility(Helper.isAggressivelyKilling() ? View.VISIBLE : View.GONE);
+        tvKilling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(Helper.DONTKILL_URI), true);
+            }
+        });
+
         tvStamina.setPaintFlags(tvStamina.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvStamina.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -811,7 +822,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if ("poll_interval".equals(key))
+        if ("poll_interval".equals(key) && cbAlways != null)
             cbAlways.setChecked(ServiceSynchronize.getPollInterval(getContext()) == 0);
     }
 

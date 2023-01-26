@@ -55,6 +55,7 @@ import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.preference.PreferenceManager;
 
+import org.github.DetectHtml;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -484,22 +485,34 @@ public class EditTextCompose extends FixedEditText {
                 ClipData.Item item = cbm.getPrimaryClip().getItemAt(0);
 
                 final String html;
-                String h = item.getHtmlText();
+                String h = null;
+                if (raw) {
+                    CharSequence text = item.getText();
+                    if (text != null && DetectHtml.isHtml(text.toString())) {
+                        Log.i("Paste: raw HTML");
+                        h = text.toString();
+                    }
+                }
+                if (h == null)
+                    h = item.getHtmlText();
                 if (h == null) {
                     CharSequence text = item.getText();
                     if (text == null)
                         return false;
+                    Log.i("Paste: using plain text");
                     html = "<div>" + HtmlHelper.formatPlainText(text.toString(), false) + "</div>";
-                } else
+                } else {
+                    Log.i("Paste: using HTML");
                     html = h;
+                }
 
                 Helper.getUIExecutor().submit(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            SpannableStringBuilder ssb = (raw)
+                            SpannableStringBuilder ssb = (raw
                                     ? new SpannableStringBuilderEx(html)
-                                    : getSpanned(context, html);
+                                    : getSpanned(context, html));
 
                             EditTextCompose.this.post(new Runnable() {
                                 @Override

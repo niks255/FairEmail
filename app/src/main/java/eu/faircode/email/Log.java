@@ -32,6 +32,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.UriPermission;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -88,6 +89,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import androidx.webkit.WebViewCompat;
 import androidx.webkit.WebViewFeature;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+import androidx.work.WorkQuery;
 
 import com.bugsnag.android.BreadcrumbType;
 import com.bugsnag.android.Bugsnag;
@@ -2858,6 +2862,21 @@ public class Log {
             File file = attachment.getFile(context);
             try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
                 try {
+                    List<UriPermission> uperms = context.getContentResolver().getPersistedUriPermissions();
+                    if (uperms != null)
+                        for (UriPermission uperm : uperms) {
+                            size += write(os, String.format("%s r=%b w=%b %s\r\n",
+                                    uperm.getUri().toString(),
+                                    uperm.isReadPermission(),
+                                    uperm.isWritePermission(),
+                                    new Date(uperm.getPersistedTime())));
+                        }
+                } catch (Throwable ex) {
+                    size += write(os, String.format("%s\r\n", ex));
+                }
+                size += write(os, "\r\n");
+
+                try {
                     PackageInfo pi = context.getPackageManager()
                             .getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_PERMISSIONS);
                     for (int i = 0; i < pi.requestedPermissions.length; i++)
@@ -2899,6 +2918,24 @@ public class Log {
                     TupleFtsStats stats = db.message().getFts();
                     size += write(os, String.format("fts: %d/%d %s\r\n", stats.fts, stats.total,
                             Helper.humanReadableByteCount(Fts4DbHelper.size(context))));
+                } catch (Throwable ex) {
+                    size += write(os, String.format("%s\r\n", ex));
+                }
+
+                size += write(os, "\r\n");
+
+                try {
+                    List<WorkInfo> works = WorkManager
+                            .getInstance(context)
+                            .getWorkInfos(WorkQuery.fromStates(
+                                    WorkInfo.State.ENQUEUED,
+                                    WorkInfo.State.BLOCKED,
+                                    WorkInfo.State.RUNNING))
+                            .get();
+                    for (WorkInfo work : works) {
+                        size += write(os, String.format("Work: %s\r\n",
+                                work.toString()));
+                    }
                 } catch (Throwable ex) {
                     size += write(os, String.format("%s\r\n", ex));
                 }

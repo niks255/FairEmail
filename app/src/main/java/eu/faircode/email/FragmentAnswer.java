@@ -551,16 +551,18 @@ public class FragmentAnswer extends FragmentBase {
             NoStreamException.check(uri, getContext());
 
             getContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (!Helper.isPersisted(getContext(), uri, true, false))
+                throw new IllegalStateException("No permission granted to access selected image " + uri);
 
             int start = etText.getSelectionStart();
             SpannableStringBuilder ssb = new SpannableStringBuilderEx(etText.getText());
-            ssb.insert(start, " \uFFFC"); // Object replacement character
+            ssb.insert(start, "\n\uFFFC\n"); // Object replacement character
             String source = uri.toString();
             Drawable d = ImageHelper.decodeImage(getContext(), -1, source, true, 0, 1.0f, etText);
             ImageSpan is = new ImageSpan(d, source);
             ssb.setSpan(is, start + 1, start + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             etText.setText(ssb);
-            etText.setSelection(start + 2);
+            etText.setSelection(start + 3);
         } catch (NoStreamException ex) {
             ex.report(getActivity());
         } catch (Throwable ex) {
@@ -570,11 +572,12 @@ public class FragmentAnswer extends FragmentBase {
 
     private void onLinkSelected(Bundle args) {
         String link = args.getString("link");
+        boolean image = args.getBoolean("image");
         int start = args.getInt("start");
         int end = args.getInt("end");
         String title = args.getString("title");
         etText.setSelection(start, end);
-        StyleHelper.apply(R.id.menu_link, getViewLifecycleOwner(), null, etText, link, title);
+        StyleHelper.apply(R.id.menu_link, getViewLifecycleOwner(), null, etText, -1L, 0, link, image, title);
     }
 
     private void onDelete() {

@@ -300,6 +300,11 @@ public interface DaoAccount {
     @Query("UPDATE account SET capability_uidl = :uidl WHERE id = :id AND NOT (capability_uidl IS :uidl)")
     int setAccountUidl(long id, Boolean uidl);
 
+    @Query("UPDATE account" +
+            " SET last_modified = :last_modified" +
+            " WHERE id = :id")
+    int setAccountLastModified(long id, Long last_modified);
+
     @Query("DELETE FROM account WHERE id = :id")
     int deleteAccount(long id);
 }

@@ -201,6 +201,7 @@
     <string name="title_setup_doze_remark">更可靠地后台收发电子邮件</string>
     <string name="title_setup_doze_explanation">应禁用针对本应用的电池优化，以确保后台消息的可靠发送和接收。</string>
     <string name="title_setup_doze_hint">虽然这听起来自相矛盾，但对本应用而言关闭电池优化将减少电池用量</string>
+    <string name="title_setup_doze_aggressively">此设备可能会停止同步服务</string>
     <string name="title_setup_doze_why">为什么要禁用电池优化？</string>
     <string name="title_setup_doze_instructions">请在下一页面中，将“未优化”切换为 \"所有应用\"，然后下拉找到本应用，并选择\"不优化\"</string>
     <string name="title_setup_doze_battery">太耗电？</string>
@@ -349,6 +350,7 @@
     <string name="title_advanced_send_reminders">显示提醒</string>
     <string name="title_advanced_send_delayed">延迟发送消息</string>
     <string name="title_advanced_attach_new">将共享文件添加到新草稿</string>
+    <string name="title_advanced_answer_default">短按回复按钮动作：</string>
     <string name="title_advanced_answer_action">长按回复按钮动作：</string>
     <string name="title_advanced_send_pending">显示不显眼的“延迟发送”图标（页面左下角）</string>
     <string name="title_advanced_auto_save_paragraph">在每一段后自动保存草稿</string>
@@ -421,6 +423,7 @@
     <string name="title_advanced_nav_pin">固定导航菜单</string>
     <string name="title_advanced_nav_hide_title">隐藏导航菜单选项？</string>
     <string name="title_advanced_nav_hide_message">您可以在显示设置中再次启用选项</string>
+    <string name="title_advanced_nav_last_sync">在导航菜单中显示上次同步时间</string>
     <string name="title_advanced_nav_message_count">在导航菜单中显示本地存储消息的数量</string>
     <string name="title_advanced_nav_unseen_drafts">在导航菜单中显示未读草稿的数量</string>
     <string name="title_advanced_nav_pinned_count">在固定导航菜单中显示未读邮件的数量</string>
@@ -534,6 +537,7 @@
     <string name="title_advanced_expand_one">每次仅展开一个消息</string>
     <string name="title_advanced_collapse_multiple">按返回时折叠会话中的多条消息</string>
     <string name="title_advanced_autoclose">自动关闭对话</string>
+    <string name="title_advanced_autoclose_send">发送消息后自动关闭对话</string>
     <string name="title_advanced_onclose">关闭对话时</string>
     <string name="title_advanced_autoclose_unread">将消息标记为已读时关闭会话</string>
     <string name="title_advanced_collapse_marked">自动折叠手动标记为已读或未读的邮件</string>
@@ -543,11 +547,12 @@
     <string name="title_advanced_quick_actions">选中消息时显示快速操作</string>
     <string name="title_advanced_folder_nav">始终从邮件列表返回文件夹列表</string>
     <string name="title_advanced_autoread">移动消息时自动标为已读</string>
-    <string name="title_advanced_star_snoozed">自动给打盹消息添加星标</string>
     <string name="title_advanced_autounstar">移动消息时自动移除星标</string>
-    <string name="title_advanced_auto_important">自动标注星标消息为重要</string>
     <string name="title_advanced_reset_importance">在移动消息时重置其重要性</string>
+    <string name="title_advanced_star_snoozed">自动给打盹消息添加星标</string>
+    <string name="title_advanced_auto_important">自动标注星标消息为重要</string>
     <string name="title_advanced_cancel_snooze">移动消息时取消延后</string>
+    <string name="title_advanced_auto_block_sender">报告垃圾邮件时自动屏蔽发件人</string>
     <string name="title_advanced_swipe_reply">右滑展开的邮件进行回复</string>
     <string name="title_advanced_default_snooze">默认打盹/延迟时间</string>
     <string name="title_advanced_notifications">管理通知</string>
@@ -787,6 +792,7 @@
     <string name="title_identity_color_hint">身份颜色优先于文件夹和账户颜色</string>
     <string name="title_advanced_sender">允许编辑发件人地址</string>
     <string name="title_advanced_sender_name">修改发件人地址后使用名称</string>
+    <string name="title_advanced_reply_name" comment="title_advanced_reply_name&#10;Title for option to copy your name from a received message when replying (when it is different from that in the identity)">复制收到邮件中的人名</string>
     <string name="title_advanced_sender_regex">用正则表达式来匹配收到的邮箱地址的用户名</string>
     <string name="title_identity_reply_to">回复给该地址</string>
     <string name="title_identity_internal">内部域名(逗号分隔)</string>
@@ -807,6 +813,7 @@
     <string name="title_account_interval_hint">刷新连接推送消息的频率或检查新消息的频率</string>
     <string name="title_account_noop_hint">这将更加主动地刷新连接，但也会消耗更多电量</string>
     <string name="title_account_partial_fetch_hint">仅在空消息或损坏的附件时禁用此功能</string>
+    <string name="title_account_raw_fetch_hint">启用此功能会增加耗电和数据使用量</string>
     <string name="title_color">颜色</string>
     <string name="title_calendar">日历</string>
     <string name="title_background">背景</string>
@@ -886,6 +893,7 @@
     <string name="title_account_delete">确定永久删除这个账户吗？</string>
     <string name="title_identity_delete">确定永久删除这个身份吗？</string>
     <string name="title_edit_html">以HTML格式编辑</string>
+    <string name="title_check_html">检查 HTML</string>
     <string name="title_import_file">导入文件</string>
     <string name="title_sign_key">签名密钥：%1$s</string>
     <string name="title_last_connected">上次连接%1$s前</string>
@@ -970,6 +978,7 @@
     <string name="title_edit_account_color">编辑账户颜色</string>
     <string name="title_hide_folder">隐藏文件夹</string>
     <string name="title_hide_seen_folder">隐藏所有邮件都已读的文件夹</string>
+    <string name="title_hide_seen_folder_hint">仅在账户和统一文件夹列表</string>
     <string name="title_unified_folder">在聚合收件箱中显示</string>
     <string name="title_navigation_folder">在导航菜单中显示</string>
     <string name="title_navigation_folder_hide">在导航菜单中隐藏</string>
@@ -1111,6 +1120,7 @@
     <string name="title_reply_receipt">发送已读回执</string>
     <string name="title_reply_hard_bounce">发送“硬退信”通知</string>
     <string name="title_reply_template">使用模板回复</string>
+    <string name="title_reply_menu">显示选择菜单</string>
     <string name="title_move_undo">正移动到 %1$s(%2$d)</string>
     <string name="title_authentication_failed">%1$s 验证失败</string>
     <string name="title_on_blocklist">关于垃圾邮件拦截列表</string>
@@ -1242,6 +1252,7 @@
     <string name="title_style_clear">清除格式</string>
     <string name="title_style_link">插入链接</string>
     <string name="title_style_link_address">地址</string>
+    <string name="title_style_link_image">插入为图像</string>
     <string name="title_style_link_title">标题</string>
     <string name="title_style_link_metadata">获取标题</string>
     <string name="title_style_link_metadata_remark">这将获取输入地址的标题</string>

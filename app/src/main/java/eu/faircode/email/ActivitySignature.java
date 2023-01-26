@@ -52,8 +52,12 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.ParseError;
+import org.jsoup.parser.ParseErrorList;
+import org.jsoup.parser.Parser;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -114,7 +118,8 @@ public class ActivitySignature extends ActivityBase {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (loaded) {
+                if (loaded &&
+                        !(start == 0 && before == s.length() && count == s.length())) {
                     dirty = true;
                     saved = null;
                 }
@@ -248,6 +253,7 @@ public class ActivitySignature extends ActivityBase {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.menu_edit_html).setChecked(etText.isRaw());
+        menu.findItem(R.id.menu_check_html).setVisible(etText.isRaw());
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -261,6 +267,9 @@ public class ActivitySignature extends ActivityBase {
             item.setChecked(!item.isChecked());
             html(item.isChecked());
             return true;
+        } else if (itemId == R.id.menu_check_html) {
+            onMenuCheckHtml();
+            return true;
         } else if (itemId == R.id.menu_import_file) {
             onMenuSelectFile();
             return true;
@@ -270,6 +279,29 @@ public class ActivitySignature extends ActivityBase {
 
     private void onMenuHelp() {
         Helper.viewFAQ(this, 57);
+    }
+
+    private void onMenuCheckHtml() {
+        Parser parser = Parser.htmlParser().setTrackErrors(20);
+        Jsoup.parse(etText.getText().toString(), "", parser);
+        ParseErrorList errors = parser.getErrors();
+        SpannableStringBuilderEx ssb = new SpannableStringBuilderEx();
+        ssb.append("Errors: ")
+                .append(Integer.toString(errors.size()))
+                .append("\n\n");
+        for (ParseError error : errors)
+            ssb.append("At ")
+                    .append(error.getCursorPos())
+                    .append(' ')
+                    .append(error.getErrorMessage())
+                    .append("\n\n");
+
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.twotone_bug_report_24)
+                .setTitle(R.string.title_check_html)
+                .setMessage(ssb)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 
     private void onMenuSelectFile() {
@@ -398,19 +430,21 @@ public class ActivitySignature extends ActivityBase {
             NoStreamException.check(uri, this);
 
             getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (!Helper.isPersisted(this, uri, true, false))
+                throw new IllegalStateException("No permission granted to access selected image " + uri);
 
             int start = etText.getSelectionStart();
             if (etText.isRaw())
                 etText.getText().insert(start, "<img src=\"" + Html.escapeHtml(uri.toString()) + "\" />");
             else {
                 SpannableStringBuilder ssb = new SpannableStringBuilderEx(etText.getText());
-                ssb.insert(start, " \uFFFC"); // Object replacement character
+                ssb.insert(start, "\n\uFFFC\n"); // Object replacement character
                 String source = uri.toString();
                 Drawable d = ImageHelper.decodeImage(this, -1, source, true, 0, 1.0f, etText);
                 ImageSpan is = new ImageSpan(d, source);
                 ssb.setSpan(is, start + 1, start + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 etText.setText(ssb);
-                etText.setSelection(start + 2);
+                etText.setSelection(start + 3);
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 boolean signature_images_hint = prefs.getBoolean("signature_images_hint", false);
@@ -468,10 +502,11 @@ public class ActivitySignature extends ActivityBase {
 
     private void onLinkSelected(Bundle args) {
         String link = args.getString("link");
+        boolean image = args.getBoolean("image");
         int start = args.getInt("start");
         int end = args.getInt("end");
         String title = args.getString("title");
         etText.setSelection(start, end);
-        StyleHelper.apply(R.id.menu_link, this, null, etText, link, title);
+        StyleHelper.apply(R.id.menu_link, this, null, etText, -1L, 0, link, image, title);
     }
 }

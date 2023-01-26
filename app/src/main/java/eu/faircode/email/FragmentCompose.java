@@ -355,6 +355,9 @@ public class FragmentCompose extends FragmentBase {
         lt_enabled = LanguageTool.isEnabled(context);
         lt_auto = LanguageTool.isAuto(context);
 
+        if (compose_color != Color.TRANSPARENT && Helper.isDarkTheme(context))
+            compose_color = HtmlHelper.adjustLuminance(compose_color, true, HtmlHelper.MIN_LUMINANCE_COMPOSE);
+
         setTitle(R.string.page_compose);
         setSubtitle(getResources().getQuantityString(R.plurals.page_message, 1));
     }
@@ -1240,6 +1243,7 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
+        ibCcBcc.setImageLevel(cc_bcc ? 0 : 1);
         grpAddresses.setVisibility(cc_bcc ? View.VISIBLE : View.GONE);
 
         ibRemoveAttachments.setVisibility(View.GONE);
@@ -1952,6 +1956,7 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onMenuAddresses() {
+        ibCcBcc.setImageLevel(grpAddresses.getVisibility() == View.GONE ? 0 : 1);
         grpAddresses.setVisibility(grpAddresses.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
 
         getMainHandler().post(new Runnable() {
@@ -3038,7 +3043,7 @@ public class FragmentCompose extends FragmentBase {
                 snackbar.show();
             } else {
                 File dir = Helper.ensureExists(new File(context.getFilesDir(), "photo"));
-                File file = new File(dir, working + ".jpg");
+                File file = new File(dir, working + "_" + new Date().getTime() + ".jpg");
                 try {
                     photoURI = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -4058,8 +4063,10 @@ public class FragmentCompose extends FragmentBase {
 
     private void onContactGroupSelected(Bundle args) {
         final int target = args.getInt("target");
-        if (target > 0)
+        if (target > 0) {
+            ibCcBcc.setImageLevel(0);
             grpAddresses.setVisibility(View.VISIBLE);
+        }
 
         args.putString("to", etTo.getText().toString().trim());
         args.putString("cc", etCc.getText().toString().trim());
@@ -4241,11 +4248,12 @@ public class FragmentCompose extends FragmentBase {
 
     private void onLinkSelected(Bundle args) {
         String link = args.getString("link");
+        boolean image = args.getBoolean("image");
         int start = args.getInt("start");
         int end = args.getInt("end");
         String title = args.getString("title");
         etBody.setSelection(start, end);
-        StyleHelper.apply(R.id.menu_link, getViewLifecycleOwner(), null, etBody, link, title);
+        StyleHelper.apply(R.id.menu_link, getViewLifecycleOwner(), null, etBody, working, zoom, link, image, title);
     }
 
     private void onActionDiscardConfirmed() {
@@ -4925,11 +4933,11 @@ public class FragmentCompose extends FragmentBase {
                                     data.draft.to = (ref.reply == null || ref.reply.length == 0 ? ref.from : ref.reply);
                                 }
 
-                                Address preferred = null;
                                 if (ref.identity != null) {
                                     EntityIdentity recognized = db.identity().getIdentity(ref.identity);
                                     EntityLog.log(context, "Recognized=" + (recognized == null ? null : recognized.email));
 
+                                    Address preferred = null;
                                     if (recognized != null) {
                                         Address same = null;
                                         Address similar = null;
@@ -4937,6 +4945,8 @@ public class FragmentCompose extends FragmentBase {
                                         List<Address> addresses = new ArrayList<>();
                                         if (data.draft.from != null)
                                             addresses.addAll(Arrays.asList(data.draft.from));
+                                        if (data.draft.to != null)
+                                            addresses.addAll(Arrays.asList(data.draft.to));
                                         if (ref.cc != null)
                                             addresses.addAll(Arrays.asList(ref.cc));
                                         if (ref.bcc != null)
@@ -4967,15 +4977,24 @@ public class FragmentCompose extends FragmentBase {
 
                                         preferred = (same == null ? similar : same);
                                     }
+
+                                    if (preferred != null) {
+                                        String from = ((InternetAddress) preferred).getAddress();
+                                        String name = ((InternetAddress) preferred).getPersonal();
+                                        EntityLog.log(context, "Preferred=" + name + " <" + from + ">");
+                                        if (TextUtils.isEmpty(from) || from.equals(recognized.email))
+                                            from = null;
+                                        if (!recognized.reply_extra_name ||
+                                                TextUtils.isEmpty(name) || name.equals(recognized.name))
+                                            name = null;
+                                        String username = UriHelper.getEmailUser(from);
+                                        String extra = (name == null ? "" : name + ", ") +
+                                                (username == null ? "" : username);
+                                        data.draft.extra = (TextUtils.isEmpty(extra) ? null : extra);
+                                    } else
+                                        EntityLog.log(context, "Preferred=null");
                                 } else
                                     EntityLog.log(context, "Recognized=null");
-
-                                if (preferred != null) {
-                                    String from = ((InternetAddress) preferred).getAddress();
-                                    EntityLog.log(context, "Preferred=" + from);
-                                    data.draft.extra = UriHelper.getEmailUser(from);
-                                } else
-                                    EntityLog.log(context, "Preferred=null");
                             }
 
                             if ("reply_all".equals(action))
@@ -5547,8 +5566,10 @@ public class FragmentCompose extends FragmentBase {
             grpHeader.setVisibility(View.VISIBLE);
             if ("reply_all".equals(action) ||
                     (data.draft.cc != null && data.draft.cc.length > 0) ||
-                    (data.draft.bcc != null && data.draft.bcc.length > 0))
+                    (data.draft.bcc != null && data.draft.bcc.length > 0)) {
+                ibCcBcc.setImageLevel(0);
                 grpAddresses.setVisibility(View.VISIBLE);
+            }
             ibCcBcc.setVisibility(View.VISIBLE);
 
             bottom_navigation.getMenu().findItem(R.id.action_undo).setVisible(data.draft.revision > 1);

@@ -20,6 +20,7 @@ package eu.faircode.email;
 */
 
 import android.Manifest;
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.ActivityManager;
 import android.content.ComponentName;
@@ -80,6 +81,8 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     private boolean visible;
     private boolean contacts;
     private List<IKeyPressedListener> keyPressedListeners = new ArrayList<>();
+
+    private static final long ACTIONBAR_ANIMATION_DURATION = 250L;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -343,7 +346,53 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
 
     @Override
     protected void onStop() {
-        super.onStop();
+        try {
+            super.onStop();
+        } catch (Throwable ex) {
+            Log.e(ex);
+            /*
+                Exception java.lang.RuntimeException:
+                  at android.app.ActivityThread.callActivityOnStop (ActivityThread.java:4178)
+                  at android.app.ActivityThread.performStopActivityInner (ActivityThread.java:4148)
+                  at android.app.ActivityThread.handleStopActivity (ActivityThread.java:4223)
+                  at android.app.servertransaction.StopActivityItem.execute (StopActivityItem.java:41)
+                  at android.app.servertransaction.TransactionExecutor.executeLifecycleState (TransactionExecutor.java:145)
+                  at android.app.servertransaction.TransactionExecutor.execute (TransactionExecutor.java:70)
+                  at android.app.ActivityThread$H.handleMessage (ActivityThread.java:1823)
+                  at android.os.Handler.dispatchMessage (Handler.java:107)
+                  at android.os.Looper.loop (Looper.java:198)
+                  at android.app.ActivityThread.main (ActivityThread.java:6729)
+                  at java.lang.reflect.Method.invoke (Method.java)
+                  at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run (RuntimeInit.java:493)
+                  at com.android.internal.os.ZygoteInit.main (ZygoteInit.java:876)
+                Caused by java.lang.RuntimeException: Failed to call observer method
+                  at androidx.lifecycle.ClassesInfoCache$MethodReference.invokeCallback (ClassesInfoCache.java:232)
+                  at androidx.lifecycle.ClassesInfoCache$CallbackInfo.invokeMethodsForEvent (ClassesInfoCache.java:199)
+                  at androidx.lifecycle.ClassesInfoCache$CallbackInfo.invokeCallbacks (ClassesInfoCache.java:191)
+                  at androidx.lifecycle.ReflectiveGenericLifecycleObserver.onStateChanged (ReflectiveGenericLifecycleObserver.java:40)
+                  at androidx.lifecycle.LifecycleRegistry$ObserverWithState.dispatchEvent (LifecycleRegistry.java:360)
+                  at androidx.lifecycle.LifecycleRegistry.backwardPass (LifecycleRegistry.java:290)
+                  at androidx.lifecycle.LifecycleRegistry.sync (LifecycleRegistry.java:308)
+                  at androidx.lifecycle.LifecycleRegistry.moveToState (LifecycleRegistry.java:151)
+                  at androidx.lifecycle.LifecycleRegistry.setCurrentState (LifecycleRegistry.java:121)
+                  at androidx.fragment.app.FragmentViewLifecycleOwner.setCurrentState (FragmentViewLifecycleOwner.java:89)
+                  at androidx.fragment.app.FragmentActivity.markState (FragmentActivity.java:781)
+                  at androidx.fragment.app.FragmentActivity.markFragmentsCreated (FragmentActivity.java:764)
+                  at androidx.fragment.app.FragmentActivity.onStop (FragmentActivity.java:372)
+                  at androidx.appcompat.app.AppCompatActivity.onStop (AppCompatActivity.java:257)
+                  at eu.faircode.email.ActivityBase.onStop (ActivityBase.java:344)
+                  at eu.faircode.email.ActivityView.onStop (ActivityView.java:1064)
+                  at android.app.Instrumentation.callActivityOnStop (Instrumentation.java:1433)
+                  at android.app.Activity.performStop (Activity.java:7367)
+                  at android.app.ActivityThread.callActivityOnStop (ActivityThread.java:4170)
+                Caused by java.lang.NullPointerException:
+                  at androidx.activity.OnBackPressedDispatcher$OnBackPressedCancellable.cancel (OnBackPressedDispatcher.java:273)
+                  at androidx.activity.OnBackPressedCallback.remove (OnBackPressedCallback.java:101)
+                  at eu.faircode.email.FragmentBase$3.onAny (FragmentBase.java:478)
+                  at java.lang.reflect.Method.invoke (Method.java)
+                  at androidx.lifecycle.ClassesInfoCache$MethodReference.invokeCallback (ClassesInfoCache.java:222)
+             */
+        }
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         if (pm != null && !pm.isInteractive()) {
@@ -843,43 +892,69 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
 
     public void showActionBar(boolean show) {
         ViewGroup abv = findViewById(R.id.action_bar);
-        if (abv == null) {
-            ActionBar ab = getSupportActionBar();
-            if (ab == null)
-                return;
-            if (show)
-                ab.show();
-            else
-                ab.hide();
-        } else {
-            if (abShowing == show)
-                return;
-            abShowing = show;
+        if (abv == null)
+            return;
 
-            int height = Helper.getActionBarHeight(this);
-            int current = abv.getLayoutParams().height;
-            int target = (show ? height : 0);
-            if (abAnimator == null) {
-                abAnimator = ValueAnimator.ofInt(current, target);
-                abAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator anim) {
-                        try {
-                            abv.getLayoutParams().height = (Integer) anim.getAnimatedValue();
-                            abv.requestLayout();
-                        } catch (Throwable ex) {
-                            Log.e(ex);
-                        }
+        if (abShowing == show)
+            return;
+        abShowing = show;
+
+        int height = Helper.getActionBarHeight(this);
+        int current = abv.getLayoutParams().height;
+        int target = (show ? height : 0);
+        Log.i("ActionBar height=" + current + "..." + target);
+
+
+        if (abAnimator != null)
+            abAnimator.cancel();
+
+        abAnimator = ValueAnimator.ofInt(current, target);
+
+        abAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator anim) {
+                try {
+                    Integer v = (Integer) anim.getAnimatedValue();
+                    Log.i("ActionBar height=" + v);
+                    ViewGroup.LayoutParams lparam = abv.getLayoutParams();
+                    if (lparam.height == v)
+                        Log.i("ActionBar ---");
+                    else {
+                        lparam.height = v;
+                        abv.requestLayout();
                     }
-                });
-            } else {
-                abAnimator.cancel();
-                abAnimator.setIntValues(current, target);
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+            }
+        });
+
+        abAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(@NonNull Animator animation) {
+                Log.i("ActionBar start");
             }
 
-            abAnimator.setDuration(250L * Math.abs(current - target) / height);
-            abAnimator.start();
-        }
+            @Override
+            public void onAnimationEnd(@NonNull Animator animation) {
+                Log.i("ActionBar end");
+                abAnimator = null;
+            }
+
+            @Override
+            public void onAnimationCancel(@NonNull Animator animation) {
+                Log.i("ActionBar cancel");
+                abAnimator = null;
+            }
+
+            @Override
+            public void onAnimationRepeat(@NonNull Animator animation) {
+                Log.i("ActionBar repeat");
+            }
+        });
+
+        abAnimator.setDuration(ACTIONBAR_ANIMATION_DURATION * Math.abs(current - target) / height);
+        abAnimator.start();
     }
 
     Handler getMainHandler() {
