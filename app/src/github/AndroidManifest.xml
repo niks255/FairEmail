@@ -16,9 +16,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-
-    <uses-permission android:name="com.android.vending.BILLING" />
-
+<!--
+    <uses-permission android:name="com.android.vending.BILLING" /> 
+-->
     <!-- OAuth -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission
