@@ -6,6 +6,56 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Quetecsaurus](https://en.wikipedia.org/wiki/Quetecsaurus)
 
+### 1.2040 - 2023-01-31
+
+* Reverted message text preview layout change
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2039 - 2023-01-31
+
+* Fixed upgrading from older versions
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2038 - 2023-01-30
+
+* Showing person icon for contacts without avatars
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2037 - 2023-01-29
+
+* Fixed archiving of sent messages
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2036 - 2023-01-29
+
+* Fixed folder item layout
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2035 - 2023-01-28
+
+* Added option to disable trashing sent messages when trashing a conversation
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2034 - 2023-01-27
+
+* Fixed sending attachments with POP3
+* Added styling settings with an option to keep the selection
+* Added option to select default folder (behavior settings)
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2033 - 2023-01-26
+
+* Fixed incorrect folder state icons
+* Small improvements and minor bug fixes
+* Updated translations
+
 ### 1.2032 - 2023-01-26
 
 * Added local POP3 operations to reduce the number of account connections

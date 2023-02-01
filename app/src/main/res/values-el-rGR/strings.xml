@@ -214,6 +214,7 @@
     <string name="title_setup_doze_remark">Για αξιόπιστη αποστολή και λήψη μηνυμάτων στο παρασκήνιο</string>
     <string name="title_setup_doze_explanation">Οι βελτιστοποιήσεις μπαταρίας θα πρέπει να απενεργοποιηθούν για την εφαρμογή, ώστε να διασφαλιστεί η αξιόπιστη αποστολή και λήψη μηνυμάτων στο παρασκήνιο</string>
     <string name="title_setup_doze_hint">Αν και μπορεί να ακούγεται αντιφατικό, η απενεργοποίηση των βελτιστοποιήσεων μπαταρίας για αυτήν την εφαρμογή, θα έχει ως αποτέλεσμα μικρότερη χρήση μπαταρίας</string>
+    <string name="title_setup_doze_aggressively">Αυτή η συσκευή ενδέχεται να σταματήσει την υπηρεσία συγχρονισμού</string>
     <string name="title_setup_doze_why">Γιατί θα ήταν καλό να απενεργοποιηθούν οι βελτιστοποιήσεις μπαταρίας;</string>
     <string name="title_setup_doze_instructions">Στο επόμενο παράθυρο διαλόγου του Android αλλάζετε το \"Μη βελτιστοποιημένες\" σε \"Όλες οι εφαρμογές\", επιλέγετε αυτήν την εφαρμογή και επιλέγετε \"Να μην γίνεται βελτιστοποίηση\"</string>
     <string name="title_setup_doze_battery">Η μπαταρία χρησιμοποιείται παραπάνω από το κανονικό;</string>
@@ -246,6 +247,7 @@
     </string>
     <string name="title_setup_export_do">Το αρχείο εξαγωγής θα περιέχει όλες τις ρυθμίσεις και τα δεδομένα, αλλά όχι μηνύματα, ούτε και εικόνες ενσωματωμένες σε υπογραφές</string>
     <string name="title_setup_scroll">Οι διάλογοι εισόδου μπορεί να είναι με κύλιση!</string>
+    <string name="title_setup_backup">Πώς δημιουργούνται αντίγραφα ασφαλείας των μηνυμάτων;</string>
     <string name="title_setup_password">Κωδικός πρόσβασης</string>
     <string name="title_setup_password_chars">Ο κωδικός πρόσβασης περιέχει χαρακτήρες ελέγχου ή διαστήματα</string>
     <string name="title_setup_password_repeat">Επανάληψη κωδικού πρόσβασης</string>
@@ -561,12 +563,14 @@
     <string name="title_advanced_autoread">Αυτόματη σήμανση των μηνυμάτων ως αναγνωσμένων κατά τη μετακίνησή τους</string>
     <string name="title_advanced_autounstar">Αυτόματη αφαίρεση των αστεριών από τα μηνύματα κατά τη μετακίνησή τους</string>
     <string name="title_advanced_reset_importance">Επαναφορά του βαθμού σημαντικότητας κατά τη μετακίνηση των μηνυμάτων</string>
+    <string name="title_advanced_thread_sent_trash" comment="title_advanced_thread_sent_trash&#10;Title for option to disable trashing sent messages when trashing a conversation">Όταν διαγράφεται μια συζήτηση, να διαγράφονται επίσης και τα απεσταλμένα μηνύματα</string>
     <string name="title_advanced_star_snoozed">Αυτόματη προσθήκη αστεριού στα υπό αναβολή μηνύματα</string>
     <string name="title_advanced_auto_important">Να επισημαίνονται αυτόματα ως σημαντικά τα μηνύματα με αστέρια</string>
     <string name="title_advanced_cancel_snooze">Ακύρωση αναβολής κατά τη μετακίνηση μηνυμάτων</string>
     <string name="title_advanced_auto_block_sender">Αυτόματος αποκλεισμός του αποστολέα κατά την αναφορά μηνύματος ως ανεπιθύμητου</string>
     <string name="title_advanced_swipe_reply">Σύρετε προς τα δεξιά τα αναπτυγμένα μηνύματα για να απαντήσετε</string>
     <string name="title_advanced_default_snooze">Προεπιλεγμένος χρόνος αναβολής/καθυστέρησης</string>
+    <string name="title_advanced_default_folder">Επιλογή προεπιλεγμένου φακέλου</string>
     <string name="title_advanced_notifications">Διαχείριση ειδοποιήσεων</string>
     <string name="title_advanced_notifications_default">Προεπιλεγμένο κανάλι</string>
     <string name="title_advanced_notifications_service">Κανάλι παρακολούθησης</string>
@@ -750,6 +754,9 @@
     <string name="title_advanced_inline_hint">Οι ένθετες εικόνες είναι οι εικόνες που περιλαμβάνονται στο μήνυμα</string>
     <string name="compressed">Τα περιεχόμενα των συμπιεσμένων αρχείων (%1$s) με περισσότερα από %2$s αρχεία ή με αρχεία μεγαλύτερα από %3$s δεν θα προβάλλονται</string>
     <string name="title_advanced_parse_classes_hint">Η προβολή των εικόνων θα είναι πιο ακριβής αλλά με ενδεχόμενη καθυστέρηση</string>
+    <string name="title_advanced_default_folder_hint">        Το Android ενδέχεται να ζητήσει άδεια πρόσβασης στον επιλεγμένο φάκελο, παρόλο που η εφαρμογή δεν το χρειάζεται.
+        Μπορείτε να ακυρώσετε τον διάλογο επιλογής για να επαναφέρετε τον προεπιλεγμένο φάκελο (συνήθως τον φάκελο \"Λήψεις\").
+    </string>
     <string name="title_advanced_restore_on_launch_hint">Επαναφέρεται η τελευταία κατάσταση της εφαρμογής, εφόσον γίνεται επανεκκίνηση εντός %1$d λεπτών μέσω του εικονιδίου εκκίνησης</string>
     <string name="title_advanced_autoexpand_hint">Αυτόματο άνοιγμα του μηνύματος όταν υπάρχει μόνον ένα μήνυμα ή μόνον ένα μη αναγνωσμένο μήνυμα σε μία συζήτηση</string>
     <string name="title_advanced_expandall_hint">Το κουμπί απάντησης δεν θα εμφανίζεται όταν έχουν αναπτυχθεί πολλαπλά μηνύματα, καθώς τότε δεν είναι σαφές σε ποιο μήνυμα ακριβώς αφορά το κουμπί</string>
@@ -802,6 +809,7 @@
     <string name="title_identity_color_hint">Τα χρώματα των ταυτοτήτων έχουν προτεραιότητα έναντι των χρωμάτων των φακέλων και των λογαριασμών</string>
     <string name="title_advanced_sender">Να επιτρέπεται η τροποποίηση της διεύθυνσης του αποστολέα</string>
     <string name="title_advanced_sender_name">Χρήση ονόματος όταν η διεύθυνση αποστολέα έχει τροποποιηθεί</string>
+    <string name="title_advanced_reply_name">Αντιγραφή του ονόματος από το ληφθέν μήνυμα</string>
     <string name="title_advanced_sender_regex">Να ταιριάξει η κανονική έκφραση (Regex) με το όνομα χρήστη εισερχομένων μηνυμάτων</string>
     <string name="title_identity_reply_to">Απάντηση στη διεύθυνση αυτή</string>
     <string name="title_identity_internal">Εσωτερικά ονόματα τομέα (χωρισμένα με κόμμα)</string>
@@ -1261,6 +1269,7 @@
     <string name="title_style_protected">Προστατευόμενο περιεχόμενο</string>
     <string name="title_style_protect_size">Πολύ μεγάλο κείμενο</string>
     <string name="title_style_clear">Εκκαθάριση μορφοποίησης</string>
+    <string name="title_style_setting_keep_selection">Διατήρηση επιλογής</string>
     <string name="title_style_link">Εισαγωγή συνδέσμου</string>
     <string name="title_style_link_address">Διεύθυνση</string>
     <string name="title_style_link_image">Εισαγωγή ως εικόνα</string>

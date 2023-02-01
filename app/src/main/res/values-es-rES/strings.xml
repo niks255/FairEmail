@@ -247,6 +247,7 @@
     </string>
     <string name="title_setup_export_do">El archivo de exportación contendrá todos los ajustes y datos, pero no hay mensajes ni imágenes referenciadas en las firmas</string>
     <string name="title_setup_scroll">¡Los diálogos de entrada pueden ser desplazables!</string>
+    <string name="title_setup_backup">¿Cómo hacer una copia de seguridad de los mensajes?</string>
     <string name="title_setup_password">Contraseña</string>
     <string name="title_setup_password_chars">La contraseña contiene caracteres de control o espacios en blanco</string>
     <string name="title_setup_password_repeat">Confirmar contraseña</string>
@@ -562,12 +563,14 @@
     <string name="title_advanced_autoread">Marcar mensaje como leído automáticamente al moverlo</string>
     <string name="title_advanced_autounstar">Eliminar automáticamente la estrella de los mensajes al ser movidos</string>
     <string name="title_advanced_reset_importance">Restablecer importancia al mover mensajes</string>
+    <string name="title_advanced_thread_sent_trash" comment="title_advanced_thread_sent_trash&#10;Title for option to disable trashing sent messages when trashing a conversation">Al eliminar una conversación, también eliminar mensajes enviados</string>
     <string name="title_advanced_star_snoozed">Destacar automáticamente al posponer mensajes</string>
     <string name="title_advanced_auto_important">Hacer que los mensajes destacados sean importantes automáticamente</string>
     <string name="title_advanced_cancel_snooze">Cancelar posponer al mover mensajes</string>
     <string name="title_advanced_auto_block_sender">Bloquear automáticamente al remitente al reportar como spam</string>
     <string name="title_advanced_swipe_reply">Deslice los mensajes expandidos a la derecha para responder</string>
     <string name="title_advanced_default_snooze">Tiempo de posponer/retraso por defecto</string>
+    <string name="title_advanced_default_folder">Seleccionar carpeta por defecto</string>
     <string name="title_advanced_notifications">Administrar notificaciones</string>
     <string name="title_advanced_notifications_default">Canal por defecto</string>
     <string name="title_advanced_notifications_service">Canal de monitoreo</string>
@@ -753,6 +756,9 @@
     <string name="title_advanced_inline_hint">Las imágenes embebidas son imágenes incluídas en el mensaje</string>
     <string name="compressed">El cotenido de archivos comprimidos (%1$s) con más de %2$s archivos o archivos de más de %3$s no se mostrarán</string>
     <string name="title_advanced_parse_classes_hint">Esto mostrará los mensajes con mayor precisión, pero posiblemente con un retraso</string>
+    <string name="title_advanced_default_folder_hint">        Puede que Android solicite permiso para acceder a la carpeta seleccionada, aunque la aplicación no lo necesite.
+        Puede cancelar el diálogo de selección para restaurar la carpeta predeterminada (por lo general la carpeta \'Descargas\').
+    </string>
     <string name="title_advanced_restore_on_launch_hint">Restaurar el último estado de la aplicación cuando se reinicie mediante el icono del lanzador dentro de los %1$d minutos</string>
     <string name="title_advanced_autoexpand_hint">Abrir mensaje automáticamente cuando haya solo un mensaje o uno no leído en una conversación</string>
     <string name="title_advanced_expandall_hint">El botón de respuesta no se mostrará cuando se expandan varios mensajes porque no está claro a qué mensaje aplica el botón</string>
@@ -805,6 +811,7 @@
     <string name="title_identity_color_hint">Los colores de indentidad tienen prioridad sobre los colores de carpeta y cuenta</string>
     <string name="title_advanced_sender">Permitir editar dirección del remitente</string>
     <string name="title_advanced_sender_name">Usar nombre cuando la dirección del remitente ha sido editada</string>
+    <string name="title_advanced_reply_name">Copiar el nombre del mensaje recibido</string>
     <string name="title_advanced_sender_regex">Expresión regular que coincida con el nombre de usuario de las direcciones de correo entrantes</string>
     <string name="title_identity_reply_to">Responder a la dirección</string>
     <string name="title_identity_internal">Nombres de dominio internos (separados por comas)</string>
@@ -1264,6 +1271,7 @@
     <string name="title_style_protected">Contenido protegido</string>
     <string name="title_style_protect_size">Texto demasiado largo</string>
     <string name="title_style_clear">Quitar formato</string>
+    <string name="title_style_setting_keep_selection">Mantener selección</string>
     <string name="title_style_link">Insertar enlace</string>
     <string name="title_style_link_address">Dirección</string>
     <string name="title_style_link_image">Insertar como una imagen</string>

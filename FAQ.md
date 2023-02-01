@@ -1230,6 +1230,11 @@ See [here](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-f
 
 Please see [this FAQ](#user-content-faq139) for possible causes of the error *... User is authenticated but not connected ...*.
 
+For unknown reasons, some Outlook/Hotmail accounts cannot send messages
+because of the server error '*535 5.7.3 Authentication unsuccessful*'.
+This can be resolved by authenticating the account with an (app) password (see above) instead of with OAuth.
+You should use the "*Other provider*" wizard instead of "*Outlook / Office 365 (OAuth)*" in this case.
+
 For setting up an Office 365 account, please see [this FAQ](#user-content-faq156).
 
 <br />
@@ -1802,10 +1807,16 @@ to match **the username** of an email address (the part before the @ sign).
 Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
 Since version 1.1640 it is possible to match the full email address with a regex, which can be useful for matching alias domain names.
 
-If you like to match a catch-all email address, this regex is mostly okay:
+If you want to match a catch-all email address, this regex is usually fine, provided all usernames for the domain are yours:
 
 ```
 .*
+```
+
+If you want to *not* match specific addresses, you can use something like this:
+
+```
+^(?!marcel$|johanna$).*
 ```
 
 If you like to match the special purpose email addresses abc@example.com and xyx@example.com
@@ -4339,20 +4350,20 @@ Unfortunately, there exists no intent to delete existing calendar events.
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq151)
 
-An email client is meant to read and write messages, not to backup and restore messages.
-Note that breaking or losing your device, means losing your messages!
-
+An email client is meant to read and write messages, not to back up and restore messages.
+In other words, an email client is a viewer for messages on an email server, and not a backup tool.
 Instead, the email provider/server is responsible for backups.
 
 If you want to make a backup yourself, you could use a tool like [imapsync](https://imapsync.lamiral.info/).
 
 Since version 1.1556 it is possible to export all messages of a POP3 folder in mbox format according to [RFC4155](https://www.ietf.org/rfc/rfc4155.txt),
-which might be useful to save sent messages if the email server doesn't.
+which might be useful to backup sent messages if the email server doesn't (which is risky because breaking or losing your device, means losing your sent messages!).
+For this, please long press on the folder in the folder list of an account (tap on the account name in the navigation menu).
 
-If you want to import an mbox file to an existing email account,
-you can use Thunderbird on a desktop computer and the [ImportExportTools](https://addons.thunderbird.net/nl/thunderbird/addon/importexporttools/) add-on.
+If you want to import an mbox file into an existing email account,
+you can use Thunderbird on a desktop computer and the [ImportExportTools NG](https://addons.thunderbird.net/de/thunderbird/addon/importexporttools-ng/) add-on.
 
-Note that in case of IMAP all messages on your device are also on the email server.
+Note that in case of IMAP, all messages on your device are also on the email server.
 
 <br />
 

@@ -298,6 +298,7 @@
     </string>
     <string name="title_setup_export_do">The export file will contain all settings and data, but no messages and no images referenced in signatures</string>
     <string name="title_setup_scroll">The input dialogs may be scrollable!</string>
+    <string name="title_setup_backup">How to back up messages?</string>
     <string name="title_setup_password">Password</string>
     <string name="title_setup_password_chars">Password contains control or whitespace characters</string>
     <string name="title_setup_password_repeat">Repeat password</string>
@@ -651,12 +652,14 @@
     <string name="title_advanced_autoread">Automatically mark messages read on moving messages</string>
     <string name="title_advanced_autounstar">Automatically remove stars from messages on moving messages</string>
     <string name="title_advanced_reset_importance">Reset importance on moving messages</string>
+    <string name="title_advanced_thread_sent_trash">When trashing a conversation, also trash sent messages</string>
     <string name="title_advanced_star_snoozed">Automatically add star on snoozing messages</string>
     <string name="title_advanced_auto_important">Automatically make starred messages important</string>
     <string name="title_advanced_cancel_snooze">Cancel snooze on moving messages</string>
     <string name="title_advanced_auto_block_sender">Automatically block the sender when reporting spam</string>
     <string name="title_advanced_swipe_reply">Swipe expanded messages to the right to reply</string>
     <string name="title_advanced_default_snooze">Default snooze/delay time</string>
+    <string name="title_advanced_default_folder">Select default folder</string>
 
     <string name="title_advanced_notifications">Manage notifications</string>
     <string name="title_advanced_notifications_default">Default channel</string>
@@ -937,6 +940,10 @@
     <string name="compressed">The contents of compressed files (%1$s) with more than %2$s files or with files larger than %3$s will not be shown</string>
     <string name="title_advanced_parse_classes_hint">This will more accurately display messages, but possibly with a delay</string>
 
+    <string name="title_advanced_default_folder_hint">
+        Android may ask for permission to access the selected folder, even though the app doesn\'t need it.
+        You can cancel the selection dialog to restore the default folder (usually the \'Download\' folder).
+    </string>
     <string name="title_advanced_restore_on_launch_hint">Restore last app state when restarted via the launcher icon within %1$d minutes</string>
     <string name="title_advanced_autoexpand_hint">Automatically open message when there is just one message or just one unread message in a conversation</string>
     <string name="title_advanced_expandall_hint">The answer button will not be shown when multiple messages are expanded because it is unclear which message the button applies to</string>
@@ -1537,6 +1544,8 @@
     <string name="title_style_protected">Protected content</string>
     <string name="title_style_protect_size">Text too long</string>
     <string name="title_style_clear">Clear formatting</string>
+    <string name="title_style_setting_keep_selection">Keep selection</string>
+
     <string name="title_style_link">Insert link</string>
     <string name="title_style_link_address">Address</string>
     <string name="title_style_link_image">Insert as an image</string>

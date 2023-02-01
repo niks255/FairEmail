@@ -260,6 +260,7 @@
     </string>
     <string name="title_setup_export_do">Izvozna datoteka sadržavat će sve postavke i podatke, ali ne i poruke ni slike koje su referencirane u potpisima</string>
     <string name="title_setup_scroll">Dijalozi s inputom mogu se skrolati!</string>
+    <string name="title_setup_backup">Kako napraviti sigurnosnu kopiju poruka?</string>
     <string name="title_setup_password">Lozinka</string>
     <string name="title_setup_password_chars">Lozinka sadrži znakove ili prazna polja</string>
     <string name="title_setup_password_repeat">Ponovite lozinku</string>
@@ -576,12 +577,14 @@
     <string name="title_advanced_autoread">Automatski označi poruke kao pročitane pri premještanju istih</string>
     <string name="title_advanced_autounstar">Automatski ukloni zvjezdicu s poruka pri premještanju istih</string>
     <string name="title_advanced_reset_importance">Resetuj važnost pri premještanju poruka</string>
+    <string name="title_advanced_thread_sent_trash" comment="title_advanced_thread_sent_trash&#10;Title for option to disable trashing sent messages when trashing a conversation">Pri brisanju konverzacije, također izbriši i poslane poruke</string>
     <string name="title_advanced_star_snoozed">Automatski dodaj zvjezdicu za odložene poruke</string>
     <string name="title_advanced_auto_important">Automatski označi poruke sa zvjezdicom kao važne</string>
     <string name="title_advanced_cancel_snooze">Otkaži odgađanje pri premještanju poruka</string>
     <string name="title_advanced_auto_block_sender">Automatski blokiraj pošiljaoca kada se prijavljuje spam</string>
     <string name="title_advanced_swipe_reply">Prstom prevucite proširene poruke na desno za odgovor</string>
     <string name="title_advanced_default_snooze">Zadano vrijeme odlaganja/odgađanja</string>
+    <string name="title_advanced_default_folder">Izaberite zadani folder</string>
     <string name="title_advanced_notifications">Upravljaj obavještenjima</string>
     <string name="title_advanced_notifications_default">Zadani kanal</string>
     <string name="title_advanced_notifications_service">Kanal monitoringa</string>
@@ -767,6 +770,9 @@
     <string name="title_advanced_inline_hint">Poravnate slike su slike unutar tijela poruke</string>
     <string name="compressed">Sadržaj kompresovanih datoteka (%1$s) sa više od %2$s datoteke(a) ili sa datotekama većim od %3$s neće se prikazivati</string>
     <string name="title_advanced_parse_classes_hint">Ovo će preciznije prikazivati poruke, ali vjerovatno sa kašnjenjem</string>
+    <string name="title_advanced_default_folder_hint">        Android može tražiti dozvole za pristup izabranom folderu, iako to aplikacija ne traži.
+        Možete otkazati dijaloški okvir selekcije za vraćanje zadanog foldera (obično je to folder preuzimanja tj. \'Download\' folder).
+    </string>
     <string name="title_advanced_restore_on_launch_hint">Vrati posljednje stanje aplikacije kada se ona ponovo pokrene dodirom na ikonicu početnog ekrana unutar %1$d minute(a)</string>
     <string name="title_advanced_autoexpand_hint">Automatski otvori poruku kada se u konverzaciji nalazi samo jedna poruka ili samo jedna nepročitana poruka</string>
     <string name="title_advanced_expandall_hint">Dugme za odgovor neće se prikazivati kada se prošire višestruke poruke, jer nije jasno na koju od poruka se odnosi to dugme</string>
@@ -819,6 +825,7 @@
     <string name="title_identity_color_hint">Boje identiteta su preče od boja foldera i računa</string>
     <string name="title_advanced_sender">Dopusti uređivanje adrese pošiljaoca</string>
     <string name="title_advanced_sender_name">Koristi ime kada je adresa pošiljaoca uređena</string>
+    <string name="title_advanced_reply_name">Kopiraj lično ime iz primljene poruke</string>
     <string name="title_advanced_sender_regex">Regularni izrazi za podudaranje korisničkog imena dolaznih e-mail adresa</string>
     <string name="title_identity_reply_to">Odgovori na adresu</string>
     <string name="title_identity_internal">Interni nazivi domena (razdvojeni zarezima)</string>
@@ -1281,6 +1288,7 @@
     <string name="title_style_protected">Zaštićeni sadržaj</string>
     <string name="title_style_protect_size">Tekst predug</string>
     <string name="title_style_clear">Očisti formatiranje</string>
+    <string name="title_style_setting_keep_selection">Zadrži selektovano</string>
     <string name="title_style_link">Ubaci link</string>
     <string name="title_style_link_address">Adresa</string>
     <string name="title_style_link_image">Umetnite kao sliku</string>

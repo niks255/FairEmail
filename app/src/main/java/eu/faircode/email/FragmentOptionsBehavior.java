@@ -19,11 +19,15 @@ package eu.faircode.email;
     Copyright 2018-2023 by Marcel Bokhorst (M66B)
 */
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -98,14 +102,19 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     private SwitchCompat swAutoRead;
     private SwitchCompat swAutoUnflag;
     private SwitchCompat swResetImportance;
+    private SwitchCompat swThreadSentTrash;
     private SwitchCompat swFlagSnoozed;
     private SwitchCompat swAutoImportant;
     private SwitchCompat swResetSnooze;
     private SwitchCompat swAutoBlockSender;
     private SwitchCompat swSwipeReply;
+    private Button btnDefaultFolder;
+    private TextView tvDefaultFolder;
 
     final static int MAX_SWIPE_SENSITIVITY = 10;
     final static int DEFAULT_SWIPE_SENSITIVITY = 7;
+
+    final static int REQUEST_DEFAULT_FOLDER = 1;
 
     private final static String[] RESET_OPTIONS = new String[]{
             "restore_on_launch", "sync_on_launch", "double_back", "conversation_actions", "conversation_actions_replies", "language_detection",
@@ -115,8 +124,8 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             "autoexpand", "expand_first", "expand_all", "expand_one", "collapse_multiple",
             "autoclose", "onclose", "autoclose_unseen", "autoclose_send", "collapse_marked",
             "undo_timeout",
-            "autoread", "flag_snoozed", "autounflag", "auto_important", "reset_importance", "reset_snooze", "auto_block_sender",
-            "swipe_reply"
+            "autoread", "flag_snoozed", "autounflag", "auto_important", "reset_importance", "thread_sent_trash",
+            "reset_snooze", "auto_block_sender", "swipe_reply", "default_folder"
     };
 
     @Override
@@ -169,11 +178,14 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         swAutoRead = view.findViewById(R.id.swAutoRead);
         swAutoUnflag = view.findViewById(R.id.swAutoUnflag);
         swResetImportance = view.findViewById(R.id.swResetImportance);
+        swThreadSentTrash = view.findViewById(R.id.swThreadSentTrash);
         swFlagSnoozed = view.findViewById(R.id.swFlagSnoozed);
         swAutoImportant = view.findViewById(R.id.swAutoImportant);
         swResetSnooze = view.findViewById(R.id.swResetSnooze);
         swAutoBlockSender = view.findViewById(R.id.swAutoBlockSender);
         swSwipeReply = view.findViewById(R.id.swSwipeReply);
+        btnDefaultFolder = view.findViewById(R.id.btnDefaultFolder);
+        tvDefaultFolder = view.findViewById(R.id.tvDefaultFolder);
 
         setOptions();
 
@@ -504,6 +516,13 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
+        swThreadSentTrash.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("thread_sent_trash", checked).apply();
+            }
+        });
+
         swFlagSnoozed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -539,6 +558,18 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
+        Intent tree = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        Helper.openAdvanced(getContext(), tree);
+        PackageManager pm = getContext().getPackageManager();
+        btnDefaultFolder.setEnabled(tree.resolveActivity(pm) != null &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O);
+        btnDefaultFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(Helper.getChooser(getContext(), tree), REQUEST_DEFAULT_FOLDER);
+            }
+        });
+
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
 
@@ -551,6 +582,24 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     public void onDestroyView() {
         PreferenceManager.getDefaultSharedPreferences(getContext()).unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroyView();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try {
+            switch (requestCode) {
+                case REQUEST_DEFAULT_FOLDER:
+                    if (resultCode == RESULT_OK && data != null)
+                        onDefaultFolder(data.getData());
+                    else
+                        onDefaultFolder(null);
+                    break;
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     @Override
@@ -650,11 +699,22 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         swAutoRead.setChecked(prefs.getBoolean("autoread", false));
         swAutoUnflag.setChecked(prefs.getBoolean("autounflag", false));
         swResetImportance.setChecked(prefs.getBoolean("reset_importance", false));
+        swThreadSentTrash.setChecked(prefs.getBoolean("thread_sent_trash", true));
+
         swFlagSnoozed.setChecked(prefs.getBoolean("flag_snoozed", false));
         swAutoImportant.setChecked(prefs.getBoolean("auto_important", false));
         swResetSnooze.setChecked(prefs.getBoolean("reset_snooze", true));
         swAutoBlockSender.setChecked(prefs.getBoolean("auto_block_sender", true));
         swSwipeReply.setChecked(prefs.getBoolean("swipe_reply", false));
+        tvDefaultFolder.setText(prefs.getString("default_folder", null));
+    }
+
+    private void onDefaultFolder(Uri uri) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if (uri == null)
+            prefs.edit().remove("default_folder").apply();
+        else
+            prefs.edit().putString("default_folder", uri.toString()).apply();
     }
 
     public static class FragmentDialogSwipes extends FragmentDialogBase {

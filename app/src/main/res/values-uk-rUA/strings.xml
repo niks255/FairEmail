@@ -274,6 +274,7 @@
     </string>
     <string name="title_setup_export_do">Файл експорту буде містити всі налаштування і дані, але ніяких повідомлень і зображень, на які посилаються в підписах</string>
     <string name="title_setup_scroll">Діалоги для введення можуть бути прокручуванні!</string>
+    <string name="title_setup_backup">Як створити резервну копію повідомлень?</string>
     <string name="title_setup_password">Пароль</string>
     <string name="title_setup_password_chars">Пароль містить елементи керування або пробіли</string>
     <string name="title_setup_password_repeat">Повторіть пароль</string>
@@ -595,6 +596,7 @@
     <string name="title_advanced_auto_block_sender">Автоматично блокувати відправника при інформуванні про спам</string>
     <string name="title_advanced_swipe_reply">Проведіть по розкритому повідомленню праворуч для відповіді</string>
     <string name="title_advanced_default_snooze">Час повторного нагадування за замовчуванням</string>
+    <string name="title_advanced_default_folder">Виберіть теку за замовчуванням</string>
     <string name="title_advanced_notifications">Керування сповіщеннями</string>
     <string name="title_advanced_notifications_default">Канал за замовчуванням</string>
     <string name="title_advanced_notifications_service">Моніторинг каналу</string>
@@ -779,6 +781,9 @@
     <string name="title_advanced_inline_hint">Вбудовані зображення включені в повідомлення</string>
     <string name="compressed">Вміст стиснутих файлів (%1$s) із кількістю файлів більшою за %2$s, або з файлами більшими за %3$s, небуде показаний</string>
     <string name="title_advanced_parse_classes_hint">Можливо, це буде більш точно відображати повідомлення, але, можливо, з затримкою</string>
+    <string name="title_advanced_default_folder_hint">        Android може попросити дозвіл на доступ до вибраної теки, навіть якщо застосунку це не потрібно.
+        Ви можете скасувати діалогове вікно вибору для відновлення стандартної теки (зазвичай для \"Завантаження“).
+    </string>
     <string name="title_advanced_restore_on_launch_hint">Відновлювати останній стан програми після перезапуску через іконку лаунчера протягом %1$d хвилин</string>
     <string name="title_advanced_autoexpand_hint">Автоматично відкривати повідомлення, коли є тільки одне повідомлення або тільки одне непрочитане повідомлення в розмові</string>
     <string name="title_advanced_expandall_hint">Кнопка відповіді не відображатиметься, коли буде розгорнуто кілька повідомлень, тому що не зрозуміло, до котрого з них вона має бути застосовна</string>
@@ -831,7 +836,7 @@
     <string name="title_identity_color_hint">Кольори ідентифікації мають пріоритет над кольорами теки та облікового запису</string>
     <string name="title_advanced_sender">Дозволити редагування адреси відправника</string>
     <string name="title_advanced_sender_name">Використовувати ім\'я, коли адресу відправника було відредаговано</string>
-    <string name="title_advanced_reply_name" comment="title_advanced_reply_name&#10;Title for option to copy your name from a received message when replying (when it is different from that in the identity)">Скопіювати ім\'я з отриманого повідомлення</string>
+    <string name="title_advanced_reply_name">Скопіювати ім\'я з отриманого повідомлення</string>
     <string name="title_advanced_sender_regex">Регулярний вираз, що застосовується до імені користувача з вхідних адрес електронної пошти</string>
     <string name="title_identity_reply_to">Відповісти на адресу</string>
     <string name="title_identity_internal">Внутрішні доменні імена (розділені комами)</string>
@@ -1292,6 +1297,7 @@
     <string name="title_style_protected">Захищений вміст</string>
     <string name="title_style_protect_size">Задовгий текст</string>
     <string name="title_style_clear">Очистити форматування</string>
+    <string name="title_style_setting_keep_selection">Залишити вибір</string>
     <string name="title_style_link">Вставити посилання</string>
     <string name="title_style_link_address">Адреса</string>
     <string name="title_style_link_image">Вставити як зображення</string>

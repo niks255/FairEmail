@@ -29,6 +29,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -97,6 +98,8 @@ public class ContactInfo {
 
     static final int FAVICON_READ_BYTES = 50 * 1024;
 
+    private static final Object lock = new Object();
+    private static ContactInfo anonymous = null;
     private static Map<String, Lookup> emailLookup = new ConcurrentHashMap<>();
     private static final Map<String, ContactInfo> emailContactInfo = new HashMap<>();
 
@@ -226,14 +229,27 @@ public class ContactInfo {
     }
 
     private static ContactInfo[] get(Context context, long account, String folderType, String selector, Address[] addresses, boolean cacheOnly) {
-        if (addresses == null || addresses.length == 0)
-            return new ContactInfo[]{new ContactInfo()};
+        if (addresses == null || addresses.length == 0) {
+            ContactInfo anonymous = getAnonymous(context);
+            return new ContactInfo[]{anonymous == null ? new ContactInfo() : anonymous};
+        }
 
         ContactInfo[] result = new ContactInfo[addresses.length];
         for (int i = 0; i < addresses.length; i++) {
             result[i] = _get(context, account, folderType, selector, (InternetAddress) addresses[i], cacheOnly);
-            if (result[i] == null)
-                return null;
+            if (result[i] == null) {
+                if (cacheOnly)
+                    return null;
+                ContactInfo anonymous = getAnonymous(context);
+                if (anonymous == null)
+                    return null;
+                result[i] = anonymous;
+            } else if (result[i].bitmap == null) {
+                if (!cacheOnly) {
+                    ContactInfo anonymous = getAnonymous(context);
+                    result[i].bitmap = (anonymous == null ? null : anonymous.bitmap);
+                }
+            }
         }
 
         return result;
@@ -514,12 +530,15 @@ public class ContactInfo {
 
         // Generated
         boolean identicon = false;
-        if (info.bitmap == null && generated && !TextUtils.isEmpty(info.email)) {
+        String name = address.getPersonal();
+        String tag = (TextUtils.isEmpty(info.email) ? name : info.email);
+        String etag = (TextUtils.isEmpty(info.email) ? Helper.sanitizeFilename(name + "@name") : ekey);
+        if (info.bitmap == null && generated && !TextUtils.isEmpty(tag)) {
             File dir = Helper.ensureExists(new File(context.getFilesDir(), "generated"));
             File[] files = dir.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File file, String name) {
-                    return name.startsWith(ekey);
+                    return name.startsWith(etag);
                 }
             });
             if (files != null && files.length == 1) {
@@ -532,16 +551,16 @@ public class ContactInfo {
                 if (identicons) {
                     identicon = true;
                     info.bitmap = ImageHelper.generateIdenticon(
-                            info.email, dp, 5, context);
+                            tag, dp, 5, context);
                     info.type = "identicon";
                 } else {
                     info.bitmap = ImageHelper.generateLetterIcon(
-                            info.email, address.getPersonal(), dp, context);
+                            tag, address.getPersonal(), dp, context);
                     info.type = "letter";
                 }
 
                 // Add to cache
-                File output = new File(dir, ekey + "." + info.type);
+                File output = new File(dir, etag + "." + info.type);
                 try (OutputStream os = new BufferedOutputStream(new FileOutputStream(output))) {
                     info.bitmap.compress(Bitmap.CompressFormat.PNG, 90, os);
                 } catch (IOException ex) {
@@ -572,6 +591,35 @@ public class ContactInfo {
 
         info.time = new Date().getTime();
         return info;
+    }
+
+    private static ContactInfo getAnonymous(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean avatars = prefs.getBoolean("avatars", true);
+        boolean bimi = (prefs.getBoolean("bimi", false) && !BuildConfig.PLAY_STORE_RELEASE);
+        boolean gravatars = (prefs.getBoolean("gravatars", false) && !BuildConfig.PLAY_STORE_RELEASE);
+        boolean libravatars = (prefs.getBoolean("libravatars", false) && !BuildConfig.PLAY_STORE_RELEASE);
+        boolean favicons = prefs.getBoolean("favicons", false);
+        boolean generated = prefs.getBoolean("generated_icons", true);
+        boolean identicons = prefs.getBoolean("identicons", false);
+        if (avatars || bimi || gravatars || libravatars || favicons || generated || identicons) {
+            synchronized (lock) {
+                if (anonymous == null) {
+                    Drawable d = context.getDrawable(R.drawable.twotone_person_24);
+                    Bitmap bitmap = Bitmap.createBitmap(d.getIntrinsicWidth(), d.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap);
+                    d.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                    d.setTint(Helper.resolveColor(context, R.attr.colorSeparator));
+                    d.draw(canvas);
+
+                    anonymous = new ContactInfo();
+                    anonymous.bitmap = bitmap;
+                }
+                return anonymous;
+            }
+        }
+
+        return null;
     }
 
     private static Favicon parseFavicon(URL base, int scaleToPixels, Context context) throws IOException {

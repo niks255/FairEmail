@@ -131,6 +131,7 @@
     <string name="title_setup_export_remark">        ଯେହେତୁ ସେଟିଂସ୍ ଫାଇଲ୍ ସମସ୍ତ ସେଟିଂସ୍ ଏବଂ ଆକାଉଣ୍ଟ୍ ସୂଚନା ଧାରଣ କରେ, ଏହା ଏକ ପାସ୍‍ୱାର୍ଡ଼ ସହିତ ଏନକ୍ରିପ୍ଟ ହୋଇଛି।
         ସେଟିଂସ୍ ପୁଣି ଆମଦାନୀ କରିବାକୁ ପାସ୍‍ୱାର୍ଡ଼ ଆବଶ୍ୟକ, ତେଣୁ ଦୟାକରି ଏହାକୁ ଭୁଲନ୍ତୁ ନାହିଁ!
     </string>
+    <string name="title_setup_backup">ଵାର୍ତ୍ତାଗୁଡ଼ିକର ବ୍ୟାକଅପ୍ କିପରି ନେବେ?</string>
     <string name="title_setup_password">ପାସ୍‍ୱାର୍ଡ଼</string>
     <string name="title_setup_password_repeat">ପାସ୍‍ୱାର୍ଡ଼ ପୁନରାବୃତ୍ତି କରନ୍ତୁ</string>
     <string name="title_setup_password_missing">ପାସ୍‍ୱାର୍ଡ଼ ନିଖୋଜ</string>
@@ -337,6 +338,7 @@
     <string name="title_identity_email">ଆପଣଙ୍କ ଇମେଲ୍ ଠିକଣା</string>
     <string name="title_identity_tenant_hint">ଅଧିକାଂଶ ସ୍ଥିତିରେ ଏହି କ୍ଷେତ୍ର ଖାଲି ରହିବା ଉଚିତ୍</string>
     <string name="title_advanced_sender">ପ୍ରେରକଙ୍କ ଠିକଣା ସମ୍ପାଦନ କରିବା ଅନୁମତି ଦେବା</string>
+    <string name="title_advanced_reply_name">ପ୍ରାପ୍ତ ହୋଇଥିବା ଵାର୍ତ୍ତାରୁ ନାମ କପି କରିନେବା</string>
     <string name="title_identity_unicode_remark">ଅଧିକାଂଶ ସର୍ଵର୍ ଏହାକୁ ସମର୍ଥନ କରନ୍ତି ନାହିଁ</string>
     <string name="title_identity_max_size">ସର୍ବାଧିକ ବାର୍ତ୍ତା ଆକାର (MB)</string>
     <string name="title_identity_receipt">ଡିଫଲ୍ଟ ଭାଵେ ଵିତରଣ/ପଠନ ପାଉତି ଅନୁରୋଧ କରିବା</string>

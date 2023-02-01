@@ -113,6 +113,7 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
     private Button btnExport;
     private TextView tvExportPro;
     private Button btnImport;
+    private TextView tvBackupMessages;
     private CardView cardCloud;
     private ImageButton ibCloudInfo;
     private TextView tvCloudPro;
@@ -157,6 +158,7 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
         btnExport = view.findViewById(R.id.btnExport);
         tvExportPro = view.findViewById(R.id.tvExportPro);
         btnImport = view.findViewById(R.id.btnImport);
+        tvBackupMessages = view.findViewById(R.id.tvBackupMessages);
         cardCloud = view.findViewById(R.id.cardCloud);
         ibCloudInfo = view.findViewById(R.id.ibCloudInfo);
         tvCloudPro = view.findViewById(R.id.tvCloudPro);
@@ -207,6 +209,15 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
             }
         });
 
+        tvBackupMessages.getPaint().setUnderlineText(true);
+        tvBackupMessages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 151);
+            }
+        });
+
+        btnLogin.setEnabled(!BuildConfig.PLAY_STORE_RELEASE || ActivityBilling.isPro(getContext()));
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -252,7 +263,8 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
         Helper.linkPro(tvExportPro);
-        cardCloud.setVisibility(!TextUtils.isEmpty(BuildConfig.CLOUD_URI)
+        cardCloud.setVisibility(!BuildConfig.PLAY_STORE_RELEASE &&
+                !TextUtils.isEmpty(BuildConfig.CLOUD_URI)
                 ? View.VISIBLE : View.GONE);
         Helper.linkPro(tvCloudPro);
 
@@ -339,12 +351,12 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
 
     private void onExportSelect() {
         startActivityForResult(
-                Helper.getChooser(getContext(), getIntentExport()), REQUEST_EXPORT_HANDLE);
+                Helper.getChooser(getContext(), getIntentExport(getContext())), REQUEST_EXPORT_HANDLE);
     }
 
     private void onImportSelect() {
         startActivityForResult(
-                Helper.getChooser(getContext(), getIntentImport()), REQUEST_IMPORT_HANDLE);
+                Helper.getChooser(getContext(), getIntentImport(getContext())), REQUEST_IMPORT_HANDLE);
     }
 
     private void handleExport(Intent data) {
@@ -1102,6 +1114,8 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
 
                             if ("pro".equals(key) && !BuildConfig.DEBUG)
                                 continue;
+                            if ("iab_json".equals(key) || "iab_signature".equals(key))
+                                continue;
 
                             if ("accept_unsupported".equals(key))
                                 continue;
@@ -1110,6 +1124,9 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                                 continue;
 
                             if ("alert_once".equals(key) && !Helper.isXiaomi())
+                                continue;
+
+                            if ("default_folder".equals(key))
                                 continue;
 
                             if ("background_service".equals(key) &&
@@ -1444,10 +1461,11 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
     }
 
     private void askPassword(final boolean export) {
-        Intent intent = (export ? getIntentExport() : getIntentImport());
-        PackageManager pm = getContext().getPackageManager();
+        final Context context = getContext();
+        Intent intent = (export ? getIntentExport(context) : getIntentImport(context));
+        PackageManager pm = context.getPackageManager();
         if (intent.resolveActivity(pm) == null) { //  // system/GET_CONTENT whitelisted
-            ToastEx.makeText(getContext(), R.string.title_no_saf, Toast.LENGTH_LONG).show();
+            ToastEx.makeText(context, R.string.title_no_saf, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -1461,18 +1479,18 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
         }
     }
 
-    private static Intent getIntentExport() {
+    private static Intent getIntentExport(Context context) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_TITLE, "fairemail_" +
                 new SimpleDateFormat("yyyyMMdd").format(new Date().getTime()) + ".backup");
-        Helper.openAdvanced(intent);
+        Helper.openAdvanced(context, intent);
         return intent;
     }
 
-    private static Intent getIntentImport() {
+    private static Intent getIntentImport(Context context) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

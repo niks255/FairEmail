@@ -68,7 +68,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 265,
+        version = 266,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -489,13 +489,8 @@ public abstract class DB extends RoomDatabase {
                                         Log.i("Get PRAGMA " + pragma + "=<?>");
                                 }
 
-                        if (BuildConfig.DEBUG) {
-                            db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
-                            db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
-
-                            db.execSQL("DROP TRIGGER IF EXISTS `account_update`");
-                            db.execSQL("DROP TRIGGER IF EXISTS `identity_update`");
-                        }
+                        if (BuildConfig.DEBUG && false)
+                            dropTriggers(db);
 
                         createTriggers(db);
                     }
@@ -526,6 +521,14 @@ public abstract class DB extends RoomDatabase {
             Log.e(ex);
             return null;
         }
+    }
+
+    private static void dropTriggers(@NonNull SupportSQLiteDatabase db) {
+        db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
+        db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
+
+        db.execSQL("DROP TRIGGER IF EXISTS `account_update`");
+        db.execSQL("DROP TRIGGER IF EXISTS `identity_update`");
     }
 
     private static void createTriggers(@NonNull SupportSQLiteDatabase db) {
@@ -2381,7 +2384,7 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_insert`");
                         db.execSQL("DROP TRIGGER IF EXISTS `attachment_delete`");
-                        createTriggers(db);
+                        //createTriggers(db);
                     }
                 }).addMigrations(new Migration(227, 228) {
                     @Override
@@ -2701,20 +2704,28 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `account` ADD COLUMN `last_modified` INTEGER");
                         db.execSQL("ALTER TABLE `identity` ADD COLUMN `last_modified` INTEGER");
-                        createTriggers(db);
+                        //createTriggers(db);
                     }
                 }).addMigrations(new Migration(263, 264) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `account` ADD COLUMN `raw_fetch` INTEGER NOT NULL DEFAULT 0");
-                        createTriggers(db);
+                        //createTriggers(db);
                     }
                 }).addMigrations(new Migration(264, 265) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `identity` ADD COLUMN `reply_extra_name` INTEGER NOT NULL DEFAULT 0");
+                        //createTriggers(db);
+                    }
+                }).addMigrations(new Migration(265, 266) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("CREATE INDEX `index_message_replying` ON `message` (`replying`)");
+                        db.execSQL("CREATE INDEX `index_message_forwarding` ON `message` (`forwarding`)");
                         createTriggers(db);
                     }
                 }).addMigrations(new Migration(998, 999) {
