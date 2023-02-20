@@ -20,7 +20,6 @@ package eu.faircode.email;
 */
 
 import static android.app.Activity.RESULT_OK;
-import static com.google.android.material.textfield.TextInputLayout.END_ICON_NONE;
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE;
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_OAUTH;
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
@@ -69,7 +68,6 @@ import java.io.FileNotFoundException;
 import java.net.UnknownHostException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -527,7 +525,6 @@ public class FragmentIdentity extends FragmentBase {
         btnAutoConfig.setEnabled(false);
         pbAutoConfig.setVisibility(View.GONE);
         cbInsecure.setVisibility(View.GONE);
-        tilPassword.setEndIconMode(id < 0 || Helper.isSecure(getContext()) ? END_ICON_PASSWORD_TOGGLE : END_ICON_NONE);
 
         btnAdvanced.setVisibility(View.GONE);
 
@@ -564,9 +561,52 @@ public class FragmentIdentity extends FragmentBase {
         etRealm.setText(account.realm);
         cbTrust.setChecked(false);
 
+        setAuth(auth);
+    }
+
+    private void setAuth(int auth) {
         etUser.setEnabled(auth == AUTH_TYPE_PASSWORD);
         tilPassword.getEditText().setEnabled(auth == AUTH_TYPE_PASSWORD);
         btnCertificate.setEnabled(auth == AUTH_TYPE_PASSWORD);
+
+        tilPassword.setEndIconMode(TextInputLayout.END_ICON_NONE);
+        tilPassword.setEndIconMode(auth == AUTH_TYPE_PASSWORD ? END_ICON_PASSWORD_TOGGLE : TextInputLayout.END_ICON_CUSTOM);
+
+        if (auth == AUTH_TYPE_PASSWORD)
+            Helper.setupPasswordToggle(getActivity(), tilPassword);
+        else {
+            tilPassword.setEndIconDrawable(R.drawable.twotone_edit_24);
+
+            tilPassword.setEndIconOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(view.getContext(), FragmentIdentity.this, view);
+
+                    popupMenu.getMenu().add(Menu.NONE, R.string.title_account_auth_password, 1, R.string.title_account_auth_password);
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            int id = item.getItemId();
+                            if (id == R.string.title_account_auth_password) {
+                                onPassword();
+                                return true;
+                            } else
+                                return false;
+                        }
+
+                        private void onPassword() {
+                            FragmentIdentity.this.auth = AUTH_TYPE_PASSWORD;
+                            setAuth(AUTH_TYPE_PASSWORD);
+                            tilPassword.getEditText().setText(null);
+                            tilPassword.requestFocus();
+                        }
+                    });
+
+                    popupMenu.show();
+                }
+            });
+        }
     }
 
     private void setProvider(EmailProvider provider) {
@@ -714,11 +754,7 @@ public class FragmentIdentity extends FragmentBase {
                 saving = false;
                 invalidateOptionsMenu();
                 Helper.setViewsEnabled(view, true);
-                if (auth != AUTH_TYPE_PASSWORD) {
-                    etUser.setEnabled(false);
-                    tilPassword.getEditText().setEnabled(false);
-                    btnCertificate.setEnabled(false);
-                }
+                setAuth(auth); // Disable user/password again
                 pbSave.setVisibility(View.GONE);
             }
 
@@ -1240,45 +1276,7 @@ public class FragmentIdentity extends FragmentBase {
                 }
 
                 Helper.setViewsEnabled(view, true);
-
-                if (auth != AUTH_TYPE_PASSWORD) {
-                    etUser.setEnabled(false);
-                    tilPassword.getEditText().setEnabled(false);
-                    btnCertificate.setEnabled(false);
-
-                    tilPassword.setEndIconDrawable(R.drawable.twotone_edit_24);
-                    tilPassword.setEndIconOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), FragmentIdentity.this, view);
-
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_account_auth_password, 1, R.string.title_account_auth_password);
-
-                            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                @Override
-                                public boolean onMenuItemClick(MenuItem item) {
-                                    int id = item.getItemId();
-                                    if (id == R.string.title_account_auth_password) {
-                                        onPassword();
-                                        return true;
-                                    } else
-                                        return false;
-                                }
-
-                                private void onPassword() {
-                                    auth = AUTH_TYPE_PASSWORD;
-                                    etUser.setEnabled(true);
-                                    tilPassword.getEditText().setText(null);
-                                    tilPassword.getEditText().setEnabled(true);
-                                    tilPassword.setEndIconMode(END_ICON_PASSWORD_TOGGLE);
-                                    tilPassword.requestFocus();
-                                }
-                            });
-
-                            popupMenu.show();
-                        }
-                    });
-                }
+                setAuth(auth);
 
                 cbPrimary.setEnabled(cbSynchronize.isChecked());
                 cbSenderExtraName.setEnabled(cbSenderExtra.isChecked());

@@ -54,7 +54,8 @@
 
         <intent>
             <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="http" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
         </intent>
 
         <intent>
@@ -111,6 +112,7 @@
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="${largeHeap}"
         android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
         android:resizeableActivity="true"
@@ -144,6 +146,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleInstance"
+            android:resizeableActivity="true"
             android:theme="@style/Theme.AppCompat.Translucent">
 
             <meta-data
@@ -190,6 +193,7 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:parentActivityName=".ActivityMain"
+            android:resizeableActivity="true"
             android:taskAffinity="${applicationId}.SETUP" />
 
         <activity
@@ -197,11 +201,13 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:parentActivityName=".ActivitySetup"
+            android:resizeableActivity="true"
             android:taskAffinity="${applicationId}.SETUP" />
 
         <activity
             android:name=".ActivityWidget"
-            android:exported="true">
+            android:exported="true"
+            android:resizeableActivity="true">
 
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -210,7 +216,8 @@
 
         <activity
             android:name=".ActivityWidgetSync"
-            android:exported="true">
+            android:exported="true"
+            android:resizeableActivity="true">
 
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -219,7 +226,8 @@
 
         <activity
             android:name=".ActivityWidgetUnified"
-            android:exported="true">
+            android:exported="true"
+            android:resizeableActivity="true">
 
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -230,7 +238,8 @@
             android:name=".ActivityView"
             android:exported="false"
             android:launchMode="singleTask"
-            android:parentActivityName=".ActivityMain" />
+            android:parentActivityName=".ActivityMain"
+            android:resizeableActivity="true" />
 
         <activity
             android:name=".ActivitySearch"
@@ -240,6 +249,7 @@
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_search"
             android:launchMode="singleTask"
+            android:resizeableActivity="true"
             android:theme="@style/Theme.AppCompat.Translucent">
 
             <intent-filter>
@@ -265,7 +275,8 @@
             android:exported="true"
             android:icon="@drawable/twotone_reply_24"
             android:label="@string/app_answer"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:resizeableActivity="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
@@ -280,7 +291,8 @@
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:parentActivityName=".ActivityView">
+            android:parentActivityName=".ActivityView"
+            android:resizeableActivity="true">
             <meta-data
                 android:name="android.service.chooser.chooser_target_service"
                 android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
@@ -313,12 +325,14 @@
             android:name=".ActivityClear"
             android:excludeFromRecents="true"
             android:exported="false"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:resizeableActivity="true" />
 
         <activity
             android:name=".ActivityError"
             android:exported="false"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:resizeableActivity="true" />
 
         <activity
             android:name=".ActivityEML"
@@ -326,7 +340,8 @@
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:resizeableActivity="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -362,7 +377,8 @@
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:resizeableActivity="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -384,7 +400,8 @@
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:resizeableActivity="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -404,7 +421,8 @@
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:resizeableActivity="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -424,6 +442,7 @@
             android:exported="false"
             android:icon="@mipmap/ic_launcher"
             android:launchMode="singleTask"
+            android:resizeableActivity="true"
             android:taskAffinity="${applicationId}.BILLING" />
 
         <!-- https://developer.android.com/training/permissions/explaining-access -->
@@ -436,6 +455,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
+            android:resizeableActivity="true"
             android:theme="@style/Theme.AppCompat.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
@@ -448,6 +468,7 @@
         <activity
             android:name="net.openid.appauth.RedirectUriReceiverActivity"
             android:exported="true"
+            android:resizeableActivity="true"
             android:taskAffinity="${applicationId}.SETUP"
             tools:node="replace">
             <intent-filter android:autoVerify="true">
@@ -480,6 +501,18 @@
                     android:host="auth"
                     android:scheme="msauth.${namespace}" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="${namespace}"
+                    android:path="/xSLzBBuLJunOQPB89rtzM54FXx4="
+                    android:scheme="msauth" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -487,6 +520,7 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboard|keyboardHidden"
             android:exported="false"
             android:launchMode="singleTask"
+            android:resizeableActivity="true"
             android:taskAffinity="${applicationId}.SETUP"
             android:theme="@style/Theme.AppCompat.Translucent.NoTitleBar"
             tools:node="replace" />

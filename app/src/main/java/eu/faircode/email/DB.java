@@ -68,7 +68,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 266,
+        version = 270,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -2427,6 +2427,7 @@ public abstract class DB extends RoomDatabase {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
+                        dropTriggers(db);
                         db.execSQL("UPDATE account" +
                                 " SET max_messages = MAX(max_messages, MIN(max_messages * 4," +
                                 "   (SELECT COUNT(*) FROM folder" +
@@ -2728,6 +2729,31 @@ public abstract class DB extends RoomDatabase {
                         db.execSQL("CREATE INDEX `index_message_forwarding` ON `message` (`forwarding`)");
                         createTriggers(db);
                     }
+                }).addMigrations(new Migration(266, 267) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        // Do nothing
+                    }
+                }).addMigrations(new Migration(267, 268) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `folder` ADD COLUMN `count_unread` INTEGER NOT NULL DEFAULT 1");
+                    }
+                }).addMigrations(new Migration(268, 269) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `signedby` TEXT");
+                    }
+                }).addMigrations(new Migration(269, 270) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("UPDATE account SET partial_fetch = 1" +
+                                " WHERE host = 'imap.mail.yahoo.com' OR host = 'imap.aol.com'");
+                    }
                 }).addMigrations(new Migration(998, 999) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
@@ -2833,11 +2859,47 @@ public abstract class DB extends RoomDatabase {
     public void endTransaction() {
         try {
             super.endTransaction();
-        } catch (IllegalStateException ex) {
-            if ("Cannot perform this operation because there is no current transaction.".equals(ex.getMessage()))
-                Log.w(ex);
-            else
+        } catch (Throwable ex) {
+            String msg = ex.getMessage();
+            if (TextUtils.isEmpty(msg))
                 throw ex;
+
+            if (msg.contains("no current transaction")) {
+                // java.lang.IllegalStateException: Cannot perform this operation because there is no current transaction.
+                Log.w(ex);
+                return;
+            }
+
+            if (msg.contains("no transaction is active")) {
+                // Moto e⁶ plus - Android 9
+                /*
+                    android.database.sqlite.SQLiteException: cannot rollback - no transaction is active (code 1 SQLITE_ERROR)
+                            at android.database.sqlite.SQLiteConnection.nativeExecute(SQLiteConnection.java:-2)
+                            at android.database.sqlite.SQLiteConnection.execute(SQLiteConnection.java:569)
+                            at android.database.sqlite.SQLiteSession.endTransactionUnchecked(SQLiteSession.java:439)
+                            at android.database.sqlite.SQLiteSession.endTransaction(SQLiteSession.java:401)
+                            at android.database.sqlite.SQLiteDatabase.endTransaction(SQLiteDatabase.java:566)
+                            at androidx.sqlite.db.framework.FrameworkSQLiteDatabase.endTransaction(FrameworkSQLiteDatabase:75)
+                            at androidx.room.RoomDatabase.internalEndTransaction(RoomDatabase:594)
+                            at androidx.room.RoomDatabase.endTransaction(RoomDatabase:584)
+                            at eu.faircode.email.DB.endTransaction(DB:2842)
+                            at androidx.room.paging.LimitOffsetDataSource.loadInitial(LimitOffsetDataSource:181)
+                            at androidx.paging.PositionalDataSource.dispatchLoadInitial(PositionalDataSource:286)
+                            at androidx.paging.TiledPagedList.<init>(TiledPagedList:107)
+                            at androidx.paging.PagedList.create(PagedList:229)
+                            at androidx.paging.PagedList$Builder.build(PagedList:388)
+                            at androidx.paging.LivePagedListBuilder$1.compute(LivePagedListBuilder:206)
+                            at androidx.paging.LivePagedListBuilder$1.compute(LivePagedListBuilder:171)
+                            at androidx.lifecycle.ComputableLiveData$2.run(ComputableLiveData:110)
+                            at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+                            at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+                            at java.lang.Thread.run(Thread.java:764)
+                 */
+                Log.w(ex);
+                return;
+            }
+
+            throw ex;
         }
     }
 

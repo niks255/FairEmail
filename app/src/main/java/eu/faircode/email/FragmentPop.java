@@ -20,7 +20,6 @@ package eu.faircode.email;
 */
 
 import static android.app.Activity.RESULT_OK;
-import static com.google.android.material.textfield.TextInputLayout.END_ICON_NONE;
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE;
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 
@@ -320,7 +319,11 @@ public class FragmentPop extends FragmentBase {
         // Initialize
         Helper.setViewsEnabled(view, false);
 
-        tilPassword.setEndIconMode(id < 0 || Helper.isSecure(getContext()) ? END_ICON_PASSWORD_TOGGLE : END_ICON_NONE);
+        if (id < 0)
+            tilPassword.setEndIconMode(END_ICON_PASSWORD_TOGGLE);
+        else
+            Helper.setupPasswordToggle(getActivity(), tilPassword);
+
         pbSave.setVisibility(View.GONE);
         grpError.setVisibility(View.GONE);
 
@@ -442,6 +445,8 @@ public class FragmentPop extends FragmentBase {
                 if (TextUtils.isEmpty(interval))
                     interval = Integer.toString(EntityAccount.DEFAULT_POLL_INTERVAL);
                 Integer max_messages = (TextUtils.isEmpty(max) ? null : Integer.parseInt(max));
+                if (max_messages != null && max_messages == 0)
+                    max_messages = null;
                 int poll_interval = Math.max(1, Integer.parseInt(interval));
 
                 if (TextUtils.isEmpty(name))
@@ -790,11 +795,10 @@ public class FragmentPop extends FragmentBase {
                     cbLeaveDeleted.setChecked(account == null ? true : account.leave_deleted);
                     cbLeaveDevice.setChecked(account == null ? false : account.leave_on_device);
 
-                    if (account != null && account.max_messages == null)
-                        etMax.setText(null);
+                    if (account != null && account.max_messages != null)
+                        etMax.setText(Integer.toString(account.max_messages));
                     else
-                        etMax.setText(Integer.toString(account == null
-                                ? EntityAccount.DEFAULT_MAX_MESSAGES : account.max_messages));
+                        etMax.setText(null);
 
                     etInterval.setText(account == null ? "" : Long.toString(account.poll_interval));
                     cbUnmetered.setChecked(jcondition.optBoolean("unmetered"));

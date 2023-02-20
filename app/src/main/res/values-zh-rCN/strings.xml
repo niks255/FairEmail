@@ -168,6 +168,7 @@
     <string name="title_setup_gmail_on_device">为什么我需要选择设备上账户？</string>
     <string name="title_setup_gmail_password">我想使用密码而不是设备上的帐户进行授权</string>
     <string name="title_setup_office_auth">“认证失败”的错误可能是由于 IMAP/SMTP 被系统管理员禁用导致的</string>
+    <string name="title_setup_office_auth_5_7_3">请尝试\'其他提供商\'快速设置向导。</string>
     <string name="title_setup_oauth_rationale">授权访问您的 %1$s 账户</string>
     <string name="title_setup_oauth_update">重新授权现有账户（否则请新建账户）</string>
     <string name="title_setup_oauth_updated">账户授权已更新</string>
@@ -430,6 +431,7 @@
     <string name="title_advanced_nav_pinned_count">在固定导航菜单中显示未读邮件的数量</string>
     <string name="title_advanced_startup">在启动屏幕上显示</string>
     <string name="title_advanced_cards">使用卡片样式而非表单样式 (即主页会话间有间隔)</string>
+    <string name="title_advanced_category">账户类别可以通过主设置屏幕在高级账户选项中配置</string>
     <string name="title_advanced_cards_beige">使用卡牌风格时使用米色背景(仅适用于浅色主题)</string>
     <string name="title_advanced_tabular_background">使用表格样式时，使用卡片颜色作为背景色</string>
     <string name="title_advanced_cards_shadow">使用卡片样式时对未读消息显示阴影</string>
@@ -550,7 +552,7 @@
     <string name="title_advanced_autoread">移动消息时自动标为已读</string>
     <string name="title_advanced_autounstar">移动消息时自动移除星标</string>
     <string name="title_advanced_reset_importance">在移动消息时重置其重要性</string>
-    <string name="title_advanced_thread_sent_trash" comment="title_advanced_thread_sent_trash&#10;Title for option to disable trashing sent messages when trashing a conversation">回收对话时，同时回收发送的消息</string>
+    <string name="title_advanced_thread_sent_trash">回收对话时，同时回收发送的消息</string>
     <string name="title_advanced_star_snoozed">自动给打盹消息添加星标</string>
     <string name="title_advanced_auto_important">自动标注星标消息为重要</string>
     <string name="title_advanced_cancel_snooze">移动消息时取消延后</string>
@@ -559,11 +561,14 @@
     <string name="title_advanced_default_snooze">默认打盹/延迟时间</string>
     <string name="title_advanced_default_folder">选择默认文件夹</string>
     <string name="title_advanced_notifications">管理通知</string>
+    <string name="title_advanced_notifications_delete">删除通知通道</string>
     <string name="title_advanced_notifications_default">默认频道</string>
     <string name="title_advanced_notifications_service">监控频道</string>
     <string name="title_advanced_notifications_newest_first">最新通知显示在前</string>
     <string name="title_advanced_badge">在启动器图标上显示新消息数目</string>
     <string name="title_advanced_unseen_ignored">让新消息数量匹配通知数量</string>
+    <string name="title_advanced_notify_grouping">通知分组</string>
+    <string name="title_advanced_notify_private">设备被锁定时保持通知私密</string>
     <string name="title_advanced_notify_background">仅在处于后台时显示通知</string>
     <string name="title_advanced_notify_known">仅显示联系人通知</string>
     <string name="title_advanced_notify_suppress_in_call">通话时延迟通知</string>
@@ -1351,12 +1356,15 @@
     <string name="title_alternative_text">加载纯文本</string>
     <string name="title_alternative_html">加载 HTML</string>
     <string name="title_no_openpgp">OpenKeychain 未找到</string>
+    <string name="title_no_openpgp_remark">PGP 端到端加密需要先进行配置</string>
     <string name="title_user_interaction">正传输到 OpenKeychain</string>
     <string name="title_padlock">使用挂锁解密消息</string>
     <string name="title_signed_data">验证签名以显示消息文本</string>
     <string name="title_not_encrypted">消息未签名或加密</string>
     <string name="title_no_sign_key">未选择签名密钥</string>
     <string name="title_reset_sign_key">重置签名密钥</string>
+    <string name="title_reset_selected_keys">重置选中的密钥</string>
+    <string name="title_reset_selected_keys_hint">可以用于新证书等。</string>
     <string name="title_signature_none">消息未签名</string>
     <string name="title_signature_valid">消息签名有效</string>
     <string name="title_signature_valid_from">消息签名有效： %1$s</string>
@@ -1515,6 +1523,7 @@
     <string name="title_rule_time_after">接收时间晚于</string>
     <string name="title_rule_time_before">接收时间早于</string>
     <string name="title_rule_time_rel">相对时间间隔 (收信)</string>
+    <string name="title_rule_time_every_day">每天</string>
     <string name="title_rule_regex">正则表达式</string>
     <string name="title_rule_and">AND</string>
     <string name="title_rule_action">操作</string>

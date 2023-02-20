@@ -82,6 +82,7 @@ public class EmailProvider implements Parcelable {
     public String description;
     public boolean debug;
     public boolean enabled;
+    public boolean alt;
     public List<String> domain;
     public List<String> mx;
     public int order;
@@ -216,6 +217,8 @@ public class EmailProvider implements Parcelable {
     private static List<EmailProvider> parseProfiles(XmlPullParser xml) {
         List<EmailProvider> result = null;
 
+        String lang = Locale.getDefault().getLanguage();
+
         try {
             EmailProvider provider = null;
             int eventType = xml.getEventType();
@@ -235,6 +238,7 @@ public class EmailProvider implements Parcelable {
 
                         provider.debug = getAttributeBooleanValue(xml, "debug", false);
                         provider.enabled = getAttributeBooleanValue(xml, "enabled", true);
+                        provider.alt = getAttributeBooleanValue(xml, "alt", false);
 
                         String domain = xml.getAttributeValue(null, "domain");
                         if (domain != null)
@@ -254,7 +258,9 @@ public class EmailProvider implements Parcelable {
                         provider.maxtls = xml.getAttributeValue(null, "maxtls");
                         provider.link = xml.getAttributeValue(null, "link");
 
-                        String documentation = xml.getAttributeValue(null, "documentation");
+                        String documentation = xml.getAttributeValue(null, "documentation." + lang);
+                        if (documentation == null)
+                            documentation = xml.getAttributeValue(null, "documentation");
                         if (documentation != null)
                             provider.documentation = new StringBuilder(documentation);
 
@@ -380,11 +386,10 @@ public class EmailProvider implements Parcelable {
     }
 
     @NonNull
-    static List<EmailProvider> fromEmail(Context context, String email, Discover discover, IDiscovery intf) throws IOException {
-        int at = email.indexOf('@');
-        String domain = (at < 0 ? email : email.substring(at + 1));
-        if (at < 0)
-            email = "someone@" + domain;
+    static List<EmailProvider> fromEmail(Context context, String _email, Discover discover, IDiscovery intf) throws IOException {
+        int at = _email.indexOf('@');
+        String domain = (at < 0 ? _email : _email.substring(at + 1));
+        String email = (at < 0 ? "someone@" + domain : _email);
 
         if (TextUtils.isEmpty(domain))
             throw new UnknownHostException(context.getString(R.string.title_setup_no_settings, domain));
@@ -558,16 +563,17 @@ public class EmailProvider implements Parcelable {
         Collections.sort(candidates, new Comparator<EmailProvider>() {
             @Override
             public int compare(EmailProvider p1, EmailProvider p2) {
-                return -Integer.compare(p1.getScore(), p2.getScore());
+                return -Integer.compare(p1.getScore(email), p2.getScore(email));
             }
         });
 
         // Log candidates
         for (EmailProvider candidate : candidates)
             EntityLog.log(context, "Candidate" +
-                    " score=" + candidate.getScore() +
+                    " score=" + candidate.getScore(email) +
                     " imap=" + candidate.imap +
-                    " smtp=" + candidate.smtp);
+                    " smtp=" + candidate.smtp +
+                    " user=" + candidate.username);
 
         // Remove duplicates
         List<EmailProvider> result = new ArrayList<>();
@@ -1057,10 +1063,11 @@ public class EmailProvider implements Parcelable {
         }
     };
 
-    private int getScore() {
+    private int getScore(String email) {
         if (imap == null || smtp == null)
             return -1;
-        return imap.score + smtp.score;
+        return imap.score + smtp.score +
+                (TextUtils.isEmpty(username) || username.equalsIgnoreCase(email) ? 0 : 100);
     }
 
     @Override
@@ -1095,6 +1102,7 @@ public class EmailProvider implements Parcelable {
         //     +2 trusted host
         //     +1 trusted DNS name
         //  20 from autoconfig
+        //     +100 with username
         //  50 from DNS
         // 100 from profile
 

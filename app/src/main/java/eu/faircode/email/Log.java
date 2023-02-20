@@ -85,6 +85,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import androidx.webkit.WebViewCompat;
@@ -1854,6 +1855,33 @@ public class Log {
         return draft;
     }
 
+    static void unexpectedError(Fragment fragment, Throwable ex) {
+        unexpectedError(fragment, ex, true);
+    }
+
+    static void unexpectedError(Fragment fragment, Throwable ex, boolean report) {
+        try {
+            unexpectedError(fragment.getParentFragmentManager(), ex, report);
+        } catch (Throwable exex) {
+            Log.w(exex);
+            /*
+                Exception java.lang.IllegalStateException:
+                  at androidx.fragment.app.Fragment.getParentFragmentManager (Fragment.java:1107)
+                  at eu.faircode.email.FragmentDialogForwardRaw.send (FragmentDialogForwardRaw.java:307)
+                  at eu.faircode.email.FragmentDialogForwardRaw.access$200 (FragmentDialogForwardRaw.java:56)
+                  at eu.faircode.email.FragmentDialogForwardRaw$4.onClick (FragmentDialogForwardRaw.java:239)
+                  at androidx.appcompat.app.AlertController$ButtonHandler.handleMessage (AlertController.java:167)
+                  at android.os.Handler.dispatchMessage (Handler.java:106)
+                  at android.os.Looper.loopOnce (Looper.java:210)
+                  at android.os.Looper.loop (Looper.java:299)
+                  at android.app.ActivityThread.main (ActivityThread.java:8168)
+                  at java.lang.reflect.Method.invoke (Method.java)
+                  at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run (RuntimeInit.java:556)
+                  at com.android.internal.os.ZygoteInit.main (ZygoteInit.java:1037)
+             */
+        }
+    }
+
     static void unexpectedError(FragmentManager manager, Throwable ex) {
         unexpectedError(manager, ex, true);
     }
@@ -2068,11 +2096,21 @@ public class Log {
                     Helper.formatDuration(running), Helper.formatDuration(cpu), util));
         }
 
+        Boolean largeHeap;
+        try {
+            ApplicationInfo info = pm.getApplicationInfo(context.getPackageName(), 0);
+            largeHeap = (info.flags & ApplicationInfo.FLAG_LARGE_HEAP) != 0;
+        } catch (Throwable ex) {
+            largeHeap = null;
+        }
+
         ActivityManager am = Helper.getSystemService(context, ActivityManager.class);
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         am.getMemoryInfo(mi);
-        sb.append(String.format("Memory class: %d/%d MB Total: %s\r\n",
-                am.getMemoryClass(), am.getLargeMemoryClass(), Helper.humanReadableByteCount(mi.totalMem)));
+        sb.append(String.format("Memory class: %d/%d Large: %s MB Total: %s\r\n",
+                am.getMemoryClass(), am.getLargeMemoryClass(),
+                largeHeap == null ? "?" : Boolean.toString(largeHeap),
+                Helper.humanReadableByteCount(mi.totalMem)));
 
         long storage_available = Helper.getAvailableStorageSpace();
         long storage_total = Helper.getTotalStorageSpace();
@@ -2250,6 +2288,8 @@ public class Log {
                         value = "[redacted]";
                     else if ("cloud_password".equals(key) && value != null)
                         value = "[redacted]";
+                    else if ("pin".equals(key) && value != null)
+                        value = "[redacted]";
                     else if (key != null && key.startsWith("oauth."))
                         value = "[redacted]";
                     size += write(os, key + "=" + value + "\r\n");
@@ -2390,6 +2430,7 @@ public class Log {
 
                         size += write(os, account.name + (account.primary ? "*" : "") +
                                 " " + (account.protocol == EntityAccount.TYPE_IMAP ? "IMAP" : "POP") + "/" + account.auth_type +
+                                (account.provider == null ? "" : " [" + account.provider + "]") +
                                 " " + account.host + ":" + account.port + "/" + account.encryption +
                                 " sync=" + account.synchronize +
                                 " exempted=" + account.poll_exempted +
@@ -2445,8 +2486,9 @@ public class Log {
                         for (EntityIdentity identity : identities)
                             if (identity.synchronize) {
                                 size += write(os, account.name + "/" + identity.name + (identity.primary ? "*" : "") + " " +
-                                        identity.display + " " + identity.email + " " +
+                                        identity.display + " " + identity.email +
                                         (identity.self ? "" : " !self") +
+                                        (identity.provider == null ? "" : " [" + identity.provider + "]") +
                                         (TextUtils.isEmpty(identity.sender_extra_regex) ? "" : " regex=" + identity.sender_extra_regex) +
                                         (!identity.sender_extra ? "" : " edit" +
                                                 (identity.sender_extra_name ? "+name" : "-name") +
@@ -2502,6 +2544,9 @@ public class Log {
                                 jfolder.put("selectable", folder.selectable);
                                 jfolder.put("inferiors", folder.inferiors);
                                 jfolder.put("auto_add", folder.auto_add);
+                                jfolder.put("tbc", Boolean.TRUE.equals(folder.tbc));
+                                jfolder.put("rename", folder.rename);
+                                jfolder.put("tbd", Boolean.TRUE.equals(folder.tbd));
                                 jfolder.put("operations", db.operation().getOperationCount(folder.id, null));
                                 jfolder.put("error", folder.error);
                                 if (folder.last_sync != null)

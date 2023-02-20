@@ -611,9 +611,9 @@ public class FragmentCompose extends FragmentBase {
 
         etBody.setInputContentListener(new EditTextCompose.IInputContentListener() {
             @Override
-            public void onInputContent(Uri uri) {
+            public void onInputContent(Uri uri, String type) {
                 Log.i("Received input uri=" + uri);
-                onAddAttachment(Arrays.asList(uri), true, 0, false, false);
+                onAddAttachment(Arrays.asList(uri), type == null ? null : new String[]{type}, true, 0, false, false);
             }
         });
 
@@ -670,7 +670,7 @@ public class FragmentCompose extends FragmentBase {
                     char b = text.charAt(index - 1);
 
                     save = (auto_save_paragraph && c == '\n' && b != '\n') ||
-                            (auto_save_dot && Helper.isDot(c) && !Helper.isDot(b));
+                            (auto_save_dot && Helper.isEndChar(c) && !Helper.isEndChar(b));
                     if (save)
                         Log.i("Save=" + index);
 
@@ -1807,23 +1807,23 @@ public class FragmentCompose extends FragmentBase {
         int colorActionForeground = Helper.resolveColor(actionBarContext, android.R.attr.textColorPrimary);
 
         View v = menu.findItem(R.id.menu_encrypt).getActionView();
-        ImageButton ib = v.findViewById(R.id.button);
+        ImageButton ibEncrypt = v.findViewById(R.id.button);
         TextView tv = v.findViewById(R.id.text);
 
         v.setAlpha(state == State.LOADED && !dsn ? 1f : Helper.LOW_LIGHT);
-        ib.setEnabled(state == State.LOADED && !dsn);
+        ibEncrypt.setEnabled(state == State.LOADED && !dsn);
 
         if (EntityMessage.PGP_SIGNONLY.equals(encrypt) || EntityMessage.SMIME_SIGNONLY.equals(encrypt)) {
-            ib.setImageResource(R.drawable.twotone_gesture_24);
-            ib.setImageTintList(ColorStateList.valueOf(colorActionForeground));
+            ibEncrypt.setImageResource(R.drawable.twotone_gesture_24);
+            ibEncrypt.setImageTintList(ColorStateList.valueOf(colorActionForeground));
             tv.setText(EntityMessage.PGP_SIGNONLY.equals(encrypt) ? "P" : "S");
         } else if (EntityMessage.PGP_SIGNENCRYPT.equals(encrypt) || EntityMessage.SMIME_SIGNENCRYPT.equals(encrypt)) {
-            ib.setImageResource(R.drawable.twotone_lock_24);
-            ib.setImageTintList(ColorStateList.valueOf(colorEncrypt));
+            ibEncrypt.setImageResource(R.drawable.twotone_lock_24);
+            ibEncrypt.setImageTintList(ColorStateList.valueOf(colorEncrypt));
             tv.setText(EntityMessage.PGP_SIGNENCRYPT.equals(encrypt) ? "P" : "S");
         } else {
-            ib.setImageResource(R.drawable.twotone_lock_open_24);
-            ib.setImageTintList(ColorStateList.valueOf(colorActionForeground));
+            ibEncrypt.setImageResource(R.drawable.twotone_lock_open_24);
+            ibEncrypt.setImageTintList(ColorStateList.valueOf(colorActionForeground));
             tv.setText(null);
         }
 
@@ -1975,6 +1975,23 @@ public class FragmentCompose extends FragmentBase {
     private void onMenuEncrypt() {
         EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
         if (identity == null || identity.encrypt == 0) {
+            final Context context = getContext();
+            if (!Helper.isOpenKeychainInstalled(context)) {
+                new AlertDialog.Builder(context)
+                        .setIcon(R.drawable.twotone_lock_24)
+                        .setTitle(R.string.title_no_openpgp)
+                        .setMessage(R.string.title_no_openpgp_remark)
+                        .setPositiveButton(R.string.title_info, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Helper.viewFAQ(context, 12);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
+                return;
+            }
+
             if (EntityMessage.ENCRYPT_NONE.equals(encrypt) || encrypt == null)
                 encrypt = EntityMessage.PGP_SIGNENCRYPT;
             else if (EntityMessage.PGP_SIGNENCRYPT.equals(encrypt))
@@ -2785,7 +2802,7 @@ public class FragmentCompose extends FragmentBase {
                             .setGestureInsetBottomIgnored(true).show();
                 else {
                     Log.e(ex);
-                    Log.unexpectedError(getParentFragmentManager(), ex);
+                    Log.unexpectedError(FragmentCompose.this, ex);
                 }
             }
         }
@@ -2828,7 +2845,7 @@ public class FragmentCompose extends FragmentBase {
                 case REQUEST_ATTACHMENT:
                 case REQUEST_RECORD_AUDIO:
                     if (resultCode == RESULT_OK && data != null)
-                        onAddAttachment(getUris(data), false, 0, false, false);
+                        onAddAttachment(getUris(data), null, false, 0, false, false);
                     break;
                 case REQUEST_OPENPGP:
                     if (resultCode == RESULT_OK && data != null)
@@ -3086,15 +3103,16 @@ public class FragmentCompose extends FragmentBase {
         boolean resize_images = prefs.getBoolean("resize_images", true);
         boolean privacy_images = prefs.getBoolean("privacy_images", false);
         int resize = prefs.getInt("resize", FragmentCompose.REDUCED_IMAGE_SIZE);
-        onAddAttachment(uri, add_inline, resize_images ? resize : 0, privacy_images, focus);
+        onAddAttachment(uri, null, add_inline, resize_images ? resize : 0, privacy_images, focus);
     }
 
-    private void onAddAttachment(List<Uri> uris, boolean image, int resize, boolean privacy, boolean focus) {
+    private void onAddAttachment(List<Uri> uris, String[] types, boolean image, int resize, boolean privacy, boolean focus) {
         etBody.clearComposingText();
 
         Bundle args = new Bundle();
         args.putLong("id", working);
         args.putParcelableArrayList("uris", new ArrayList<>(uris));
+        args.putStringArray("types", types);
         args.putBoolean("image", image);
         args.putInt("resize", resize);
         args.putInt("zoom", zoom);
@@ -3108,6 +3126,7 @@ public class FragmentCompose extends FragmentBase {
             protected Spanned onExecute(Context context, Bundle args) throws IOException {
                 final long id = args.getLong("id");
                 List<Uri> uris = args.getParcelableArrayList("uris");
+                String[] types = args.getStringArray("types");
                 boolean image = args.getBoolean("image");
                 int resize = args.getInt("resize");
                 int zoom = args.getInt("zoom");
@@ -3121,8 +3140,11 @@ public class FragmentCompose extends FragmentBase {
                 if (start > s.length())
                     start = s.length();
 
-                for (Uri uri : uris) {
-                    EntityAttachment attachment = addAttachment(context, id, uri, image, resize, privacy);
+                for (int i = 0; i < uris.size(); i++) {
+                    Uri uri = uris.get(i);
+                    String type = (types != null && i < types.length ? types[i] : null);
+
+                    EntityAttachment attachment = addAttachment(context, id, uri, type, image, resize, privacy);
                     if (attachment == null)
                         continue;
                     if (!image)
@@ -3240,7 +3262,7 @@ public class FragmentCompose extends FragmentBase {
                         if (info.isImage())
                             images.add(uri);
                         else
-                            addAttachment(context, id, uri, false, 0, false);
+                            addAttachment(context, id, uri, null, false, 0, false);
                     } catch (IOException ex) {
                         Log.e(ex);
                     }
@@ -4361,7 +4383,7 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private static EntityAttachment addAttachment(
-            Context context, long id, Uri uri, boolean image, int resize, boolean privacy) throws IOException {
+            Context context, long id, Uri uri, String type, boolean image, int resize, boolean privacy) throws IOException {
         Log.w("Add attachment uri=" + uri + " image=" + image + " resize=" + resize + " privacy=" + privacy);
 
         NoStreamException.check(uri, context);
@@ -4370,13 +4392,16 @@ public class FragmentCompose extends FragmentBase {
         UriInfo info = getInfo(uri, context);
 
         EntityLog.log(context, "Add attachment" +
-                " uri=" + uri + " image=" + image + " resize=" + resize + " privacy=" + privacy +
+                " uri=" + uri + " type=" + type + " image=" + image + " resize=" + resize + " privacy=" + privacy +
                 " name=" + info.name + " type=" + info.type + " size=" + info.size);
 
+        if (type == null)
+            type = info.type;
+
         String ext = Helper.getExtension(info.name);
-        if (info.name != null && ext == null && info.type != null) {
+        if (info.name != null && ext == null && type != null) {
             String guessed = MimeTypeMap.getSingleton()
-                    .getExtensionFromMimeType(info.type.toLowerCase(Locale.ROOT));
+                    .getExtensionFromMimeType(type.toLowerCase(Locale.ROOT));
             if (!TextUtils.isEmpty(guessed)) {
                 ext = guessed;
                 info.name += '.' + ext;
@@ -4399,7 +4424,7 @@ public class FragmentCompose extends FragmentBase {
                 attachment.name = "img" + attachment.sequence + (ext == null ? "" : "." + ext);
             else
                 attachment.name = info.name;
-            attachment.type = info.type;
+            attachment.type = type;
             attachment.disposition = (image ? Part.INLINE : Part.ATTACHMENT);
             attachment.size = info.size;
             attachment.progress = 0;
@@ -5321,8 +5346,10 @@ public class FragmentCompose extends FragmentBase {
                         attachment.progress = null;
                         attachment.available = true;
                         attachment.id = db.attachment().insertAttachment(attachment);
+
                         File file = attachment.getFile(context);
-                        ics.renameTo(file);
+                        Helper.copy(ics, file);
+                        ics.delete();
 
                         ICalendar icalendar = Biweekly.parse(file).first();
                         VEvent event = icalendar.getEvents().get(0);
@@ -5346,7 +5373,7 @@ public class FragmentCompose extends FragmentBase {
                                 if (info.isImage())
                                     images.add(uri);
                                 else
-                                    addAttachment(context, data.draft.id, uri, false, 0, false);
+                                    addAttachment(context, data.draft.id, uri, null, false, 0, false);
                             } catch (IOException ex) {
                                 Log.e(ex);
                             }
@@ -5851,7 +5878,7 @@ public class FragmentCompose extends FragmentBase {
             if (ex instanceof SecurityException)
                 ex = new Throwable(getString(R.string.title_no_permissions), ex);
 
-            Log.unexpectedError(getParentFragmentManager(), ex,
+            Log.unexpectedError(FragmentCompose.this, ex,
                     !(ex instanceof IOException || ex.getCause() instanceof IOException));
                     /*
                         java.lang.IllegalStateException: java.io.IOException: Failed to redact /storage/emulated/0/Download/97203830-piston-vecteur-icône-simple-symbole-plat-sur-fond-blanc.jpg
@@ -6322,14 +6349,6 @@ public class FragmentCompose extends FragmentBase {
                                 args.putString("address_error", ex.getMessage());
                             }
 
-                            try {
-                                checkMx(ato, context);
-                                checkMx(acc, context);
-                                checkMx(abcc, context);
-                            } catch (UnknownHostException ex) {
-                                args.putString("mx_error", ex.getMessage());
-                            }
-
                             if (draft.to == null && draft.cc == null && draft.bcc == null &&
                                     (identity == null || (identity.cc == null && identity.bcc == null)))
                                 args.putBoolean("remind_to", true);
@@ -6553,6 +6572,22 @@ public class FragmentCompose extends FragmentBase {
             } finally {
                 db.endTransaction();
             }
+
+            if (action == R.id.action_check)
+                try {
+                    InternetAddress[] ato = MessageHelper.dedup(MessageHelper.parseAddresses(context, to));
+                    InternetAddress[] acc = MessageHelper.dedup(MessageHelper.parseAddresses(context, cc));
+                    InternetAddress[] abcc = MessageHelper.dedup(MessageHelper.parseAddresses(context, bcc));
+
+                    try {
+                        checkMx(ato, context);
+                        checkMx(acc, context);
+                        checkMx(abcc, context);
+                    } catch (UnknownHostException ex) {
+                        args.putString("mx_error", ex.getMessage());
+                    }
+                } catch (Throwable ignored) {
+                }
 
             args.putBoolean("dirty", dirty);
             if (dirty)

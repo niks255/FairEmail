@@ -207,6 +207,7 @@
     <string name="title_setup_gmail_on_device">Zakaj moram izbrati sistemski račun?</string>
     <string name="title_setup_gmail_password">Račun želim odobriti z geslom namesto z računom v napravi.</string>
     <string name="title_setup_office_auth">Napaka \'OVERITEV je spodletela\' se lahko pojavi, če je skrbnik sistema onemogočil IMAP/SMTP.</string>
+    <string name="title_setup_office_auth_5_7_3">Poizkusite s čarovnikom za hitro nastavitev z možnostjo \'Drugi ponudnik\'.</string>
     <string name="title_setup_oauth_rationale">Odobrite dostop do računa %1$s.</string>
     <string name="title_setup_oauth_update">Ponovno odobri obstoječi račun (drugače ustvari novega)</string>
     <string name="title_setup_oauth_updated">Odobritev računa je bila posodobljena.</string>
@@ -469,6 +470,7 @@
     <string name="title_advanced_nav_pinned_count">Prikaži število neprebranih sporočil v pripetem meniju za krmarjenje</string>
     <string name="title_advanced_startup">Ob zagonu prikaži</string>
     <string name="title_advanced_cards">Uporabi kartice namesto seznama</string>
+    <string name="title_advanced_category">Kategorijo računa lahko nastavite v naprednih nastavitvah, ki jih najdete v glavnih nastavitvah.</string>
     <string name="title_advanced_cards_beige">Uporabi sivo-rjavo ozadje ob uporabi kartičnega sloga (samo svetle teme)</string>
     <string name="title_advanced_tabular_background">Uporabi barvo kartic kot ozadje ob uporabi sloga z zavihki</string>
     <string name="title_advanced_cards_shadow">Uporabi senčenje za neprebrana sporočila ob uporabi kartičnega sloga</string>
@@ -589,7 +591,7 @@
     <string name="title_advanced_autoread">Ob premikanju sporočil samodejno označi sporočila kot prebrana</string>
     <string name="title_advanced_autounstar">Ob premikanju sporočil samodejno odstrani zvezdice</string>
     <string name="title_advanced_reset_importance">Ponastavi pomembnost ob premikanju sporočil</string>
-    <string name="title_advanced_thread_sent_trash" comment="title_advanced_thread_sent_trash&#10;Title for option to disable trashing sent messages when trashing a conversation">Ko izbrišem pogovor, izbriši tudi poslana sporočila</string>
+    <string name="title_advanced_thread_sent_trash">Ko izbrišem pogovor, izbriši tudi poslana sporočila</string>
     <string name="title_advanced_star_snoozed">Ob dremežu sporočil samodejno dodaj zvezdico</string>
     <string name="title_advanced_auto_important">Samodejno naredi sporočila, označena z zvezdico, pomembna</string>
     <string name="title_advanced_cancel_snooze">Prekliči dremež ob premikanju sporočil</string>
@@ -598,11 +600,14 @@
     <string name="title_advanced_default_snooze">Privzeti čas dremeža/zakasnitve</string>
     <string name="title_advanced_default_folder">Izberi privzeto mapo</string>
     <string name="title_advanced_notifications">Upravljaj z obvestili</string>
+    <string name="title_advanced_notifications_delete">Izbriši kanale za obvestila</string>
     <string name="title_advanced_notifications_default">Privzeti kanal</string>
     <string name="title_advanced_notifications_service">Nazdorni kanal</string>
     <string name="title_advanced_notifications_newest_first">Najprej prikaži novejša obvestila</string>
     <string name="title_advanced_badge">Ikono zaganjalnika prikaži s številom novih sporočil</string>
     <string name="title_advanced_unseen_ignored">Število novih sporočil naj se ujema s številom obvestil</string>
+    <string name="title_advanced_notify_grouping">Skupine obvestil</string>
+    <string name="title_advanced_notify_private">Obdrži obvestila zasebna, ko je naprava zaklenjena</string>
     <string name="title_advanced_notify_background">Prikaži obvestila samo, ko se program izvaja v ozadju</string>
     <string name="title_advanced_notify_known">Prikaži obvestila samo za stike</string>
     <string name="title_advanced_notify_suppress_in_call">Zakasni obvestila med klicem</string>
@@ -1392,12 +1397,15 @@
     <string name="title_alternative_text">Naloži golo besedilo</string>
     <string name="title_alternative_html">Naloži HTML</string>
     <string name="title_no_openpgp">OpenKeychain ni bil najden.</string>
+    <string name="title_no_openpgp_remark">Najprej je treba nastaviti šifriranje PGP</string>
     <string name="title_user_interaction">Prenašanje v OpenKeychain</string>
     <string name="title_padlock">Uporabi ključavnico za odšifriranje besedila</string>
     <string name="title_signed_data">Preveri podpis za prikaz besedila sporočila.</string>
     <string name="title_not_encrypted">Sporočilo ni podpisano ali šifrirano.</string>
     <string name="title_no_sign_key">Podpisni ključ ni bil izbran.</string>
     <string name="title_reset_sign_key">Ponastavi podpisni ključ</string>
+    <string name="title_reset_selected_keys">Ponastavi izbrane ključe</string>
+    <string name="title_reset_selected_keys_hint">Uporabi se lahko npr. v primeru novih potrdil.</string>
     <string name="title_signature_none">Sporočilo ni podpisano.</string>
     <string name="title_signature_valid">Podpis sporočila je veljaven.</string>
     <string name="title_signature_valid_from">Podpis sporočila je veljaven: %1$s.</string>
@@ -1556,6 +1564,7 @@
     <string name="title_rule_time_after">Prejeto po</string>
     <string name="title_rule_time_before">Prejeto pred</string>
     <string name="title_rule_time_rel">Relativni (prejeti) čas med</string>
+    <string name="title_rule_time_every_day">Vsak dan</string>
     <string name="title_rule_regex">Reg. izraz</string>
     <string name="title_rule_and">IN</string>
     <string name="title_rule_action">Dejanje</string>

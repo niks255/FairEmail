@@ -54,6 +54,7 @@ For authorizing:
 * Apple iCloud, see [question 148](#user-content-faq148) ([German](https://support.apple.com/de-de/HT204397))
 * Free.fr, see [question 157](#user-content-faq157)
 * Posteo: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) ([German](https://posteo.de/hilfe/zusaetzlichen-postfachschutz-deaktivieren)) isn't enabled
+* Posteo: not that there is [no spam folder](https://posteo.de/en/help/how-does-the-posteo-spam-filter-work) ([German](https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter))
 * Web.de: please check if [IMAP is enabled](https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html)
 * Web.de: with two factor authentication you'll need to use [an app password](https://web.de/email/sicherheit/zwei-faktor-authentifizierung/)
 * GMX: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html)). Reportedly, you need to do this on a desktop computer.
@@ -209,7 +210,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(6) How can I login to Gmail / G suite?](#user-content-faq6)
 * [(7) Why are sent messages not appearing (directly) in the sent folder?](#user-content-faq7)
 * [(8) Can I use a Microsoft Exchange account?](#user-content-faq8)
-* [(9) What are identities / how do I add an alias?](#user-content-faq9)
+* [(9) What are identities / how do I add an alias / configure a default CC or BCC address?](#user-content-faq9)
 * [~~(11) Why is POP not supported?~~](#user-content-faq11)
 * [~~(10) What does 'UIDPLUS not supported' mean?~~](#user-content-faq10)
 * [(12) How does encryption/decryption work?](#user-content-faq12)
@@ -259,7 +260,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(57) Can I use HTML in signatures?](#user-content-faq57)
 * [(58) What does an open/closed email icon mean?](#user-content-faq58)
 * [(59) Can original messages be opened in the browser?](#user-content-faq59)
-* [(60) Did you known ...?](#user-content-faq60)
+* [(60) Did you know ...?](#user-content-faq60)
 * [(61) Why are some messages shown dimmed?](#user-content-faq61)
 * [(62) Which authentication methods are supported?](#user-content-faq62)
 * [(63) How are images resized for displaying on screens?](#user-content-faq63)
@@ -804,7 +805,7 @@ Please see [this FAQ](#user-content-faq111) about OAuth support.
 <br />
 
 <a name="faq9"></a>
-**(9) What are identities / how do I add an alias?**
+**(9) What are identities / how do I add an alias / configure a default CC or BCC address?**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq9)
 
@@ -814,7 +815,7 @@ Some providers allow you to have multiple aliases.
 You can configure these by setting the email address field of an additional identity to the alias address
 and setting the user name field to your main email address.
 
-Note that you can copy an identity by long pressing it.
+Note that you can copy an identity by long pressing it in the list of identities (via *Manual setup and account options* in the main settings page).
 
 Alternatively, you can enable *Allow editing sender address* in the advanced settings of an existing identity to edit the username when composing a new message,
 if your provider allows this. Considering the email address test@example.org you can use these special username formats:
@@ -822,6 +823,8 @@ if your provider allows this. Considering the email address test@example.org you
 * "*+extra*" will result in the email address "*test+extra@example.org*"
 * "*@extra*" will result in the email address "*test@extra.example.org*"
 * "*Some name, username*" will result in the email address "*Some name, &lt;username@example.org&gt;*" (since version 1.2032)
+
+You can configure a default CC or BCC address in the advanced identity settings.
 
 FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.
 
@@ -1829,7 +1832,11 @@ and like to have a fallback email address main@example.com as well, you could do
 You can test a regex [here](https://regexr.com/).
 
 Matched identities can be used to color code messages.
+
 The identity color takes precedence over the folder and account color.
+This means that the color of the color stripe will be determined by first checking if there is a color set for the 'via' (matched) identity,
+and after that if there is a color set for the folder containing the message, and finally if there is a color set for the account the message belongs to.
+
 Setting identity colors is a pro feature.
 
 <br />
@@ -4162,7 +4169,7 @@ by long pressing the sent folder in the folder list and enabling *Show in unifie
 This way all messages can stay where they belong, while allowing to see both incoming and outgoing messages at one place.
 
 If this is not an option, you can [create a rule](#user-content-faq71) to automatically move sent messages to the inbox
-or set a default CC/BCC address in the advanced identity settings (via the manual setup in the main setup screen) to send yourself a copy.
+or set a default CC or BCC address in the advanced identity settings (via the manual setup in the main setup screen) to send yourself a copy.
 
 <br />
 
@@ -5151,6 +5158,9 @@ New invitations will be stored automatically as *tentative*, with no alarms and 
 If you accept or decline an invitation, the status will be updated accordingly, after the accept/decline message has been sent successfully.
 Received updates and cancellations will be processed as well.
 
+Please make sure synchronizing calendars is enabled in the Android account settings
+if you want to synchronize events to other devices.
+
 This feature is available since version 1.1996.
 
 This feature is not available in the Play store version of the app due to the permissions required.
@@ -5239,6 +5249,9 @@ Requested features should:
 The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc).
 All displayed things should be useful in one or another way and should be carefully positioned for easy usage.
 Fonts, sizes, colors, etc should be material design whenever possible.
+
+There are requests daily to change the appearance in this or that way, but the problem is that these requests are more often than not conflicting.
+To prevent making other people unhappy, changes in the appearance always need to clearly and objectively contribute to the usability of the app to be considered.
 
 A feature will be considered useful to most people if more than 0.1% of the users request a feature, which in practice means about 500 people.
 

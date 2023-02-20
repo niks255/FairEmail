@@ -891,9 +891,6 @@ public class FragmentOAuth extends FragmentBase {
                         account.partial_fetch = provider.partial;
                         account.raw_fetch = provider.raw;
 
-                        if (pop)
-                            account.max_messages = EntityAccount.DEFAULT_MAX_MESSAGES;
-
                         account.created = new Date().getTime();
                         account.last_connected = account.created;
 
@@ -1023,8 +1020,14 @@ public class FragmentOAuth extends FragmentBase {
         grpError.setVisibility(View.VISIBLE);
 
         if (EntityAccount.isOutlook(id)) {
-            if (ex instanceof AuthenticationFailedException)
+            if (ex instanceof AuthenticationFailedException) {
+                if (ex.getMessage() != null &&
+                        ex.getMessage().contains("535 5.7.3 Authentication unsuccessful"))
+                    tvOfficeAuthHint.setText(R.string.title_setup_office_auth_5_7_3);
+                else
+                    tvOfficeAuthHint.setText(R.string.title_setup_office_auth);
                 tvOfficeAuthHint.setVisibility(View.VISIBLE);
+            }
         }
 
         EmailProvider provider;
@@ -1035,7 +1038,7 @@ public class FragmentOAuth extends FragmentBase {
             provider = null;
         }
 
-        btnHelp.setVisibility((provider != null && provider.link != null ? View.VISIBLE : View.GONE));
+        btnHelp.setVisibility(provider != null && provider.link != null ? View.VISIBLE : View.GONE);
 
         etName.setEnabled(true);
         etEmail.setEnabled(true);

@@ -6,6 +6,33 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Quetecsaurus](https://en.wikipedia.org/wiki/Quetecsaurus)
 
+### 1.2045 - 2023-02-18
+
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
+
+### 1.2043 - 2023-02-05
+
+* Small improvements and minor bug fixes
+* Updated material design library
+* Updated translations
+
+### 1.2042 - 2023-02-03
+
+* Fixed confirming non-https links
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2041 - 2023-02-02
+
+* Added collapsing block quotes again
+* Added biometric authentication to show passwords
+* Added every day to rule relative time condition
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated translations
+
 ### 1.2040 - 2023-01-31
 
 * Reverted message text preview layout change

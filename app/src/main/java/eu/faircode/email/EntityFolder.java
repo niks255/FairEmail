@@ -120,6 +120,8 @@ public class EntityFolder extends EntityOrder implements Serializable {
     @NonNull
     public Boolean navigation = false;
     @NonNull
+    public Boolean count_unread = true;
+    @NonNull
     public Boolean notify = false;
 
     public Integer total; // messages on server
@@ -327,8 +329,8 @@ public class EntityFolder extends EntityOrder implements Serializable {
         this.poll = parent.poll;
         this.poll_factor = parent.poll_factor;
         this.download = parent.download;
-        this.auto_classify_source = parent.auto_classify_source;
-        this.auto_classify_target = parent.auto_classify_target;
+        //this.auto_classify_source = parent.auto_classify_source;
+        //this.auto_classify_target = parent.auto_classify_target;
         this.sync_days = parent.sync_days;
         this.keep_days = parent.keep_days;
         //this.unified = parent.unified;
@@ -467,7 +469,9 @@ public class EntityFolder extends EntityOrder implements Serializable {
 
     String getDisplayName(Context context, EntityFolder parent) {
         String n = name;
-        if (parent != null && name.startsWith(parent.name))
+        if (parent != null &&
+                n.startsWith(parent.name) &&
+                n.length() > parent.name.length() + 1)
             n = n.substring(parent.name.length() + 1);
         return (display == null ? localizeName(context, n) : display);
     }

@@ -1420,7 +1420,7 @@ class Core {
         if (target == null)
             throw new FolderNotFoundException();
         if (folder.id.equals(target.id))
-            throw new IllegalArgumentException("self");
+            throw new IllegalArgumentException("self type=" + folder.type + "/" + target.type);
         if (!target.selectable)
             throw new IllegalArgumentException("not selectable type=" + target.type);
 
@@ -2295,7 +2295,9 @@ class Core {
 
                     EntityLog.log(context, folder.name + " creating");
                     Folder ifolder = istore.getFolder(folder.name);
-                    if (!ifolder.exists())
+                    if (ifolder.exists())
+                        EntityLog.log(context, folder.name + " already exists on server");
+                    else
                         try {
                             ((IMAPFolder) ifolder).doCommand(new IMAPFolder.ProtocolCommand() {
                                 @Override
@@ -2357,16 +2359,29 @@ class Core {
                     EntityLog.log(context, folder.name + " deleting server");
                     Folder ifolder = istore.getFolder(folder.name);
                     if (ifolder.exists()) {
-                        ifolder.setSubscribed(false);
-                        ifolder.delete(false);
-                    }
-                    EntityLog.log(context, folder.name + " deleting device");
-                    db.folder().deleteFolder(folder.id);
+                        try {
+                            ifolder.setSubscribed(false);
+                            ((IMAPFolder) ifolder).doCommand(new IMAPFolder.ProtocolCommand() {
+                                @Override
+                                public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                                    protocol.delete(folder.name);
+                                    return null;
+                                }
+                            });
+                            EntityLog.log(context, folder.name + " deleting device");
+                            db.folder().deleteFolder(folder.id);
+                        } catch (MessagingException ex) {
+                            Log.w(ex);
+                            EntityLog.log(context, folder.name + " deletion " +
+                                    ex + "\n" + android.util.Log.getStackTraceString(ex));
+                            db.account().setAccountError(account.id, Log.formatThrowable(ex));
+                        }
+                    } else
+                        EntityLog.log(context, folder.name + " does not exist on server anymore");
                 } finally {
                     db.folder().resetFolderTbd(folder.id);
                     sync_folders = true;
                 }
-                EntityLog.log(context, folder.name + " deleted");
 
             } else {
                 if (EntityFolder.DRAFTS.equals(folder.type))
@@ -2933,6 +2948,7 @@ class Core {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean sync_quick_pop = prefs.getBoolean("sync_quick_pop", true);
         boolean notify_known = prefs.getBoolean("notify_known", false);
+        boolean native_dkim = prefs.getBoolean("native_dkim", false);
         boolean download_eml = prefs.getBoolean("download_eml", false);
         boolean download_plain = prefs.getBoolean("download_plain", false);
         boolean check_blocklist = prefs.getBoolean("check_blocklist", false);
@@ -2976,13 +2992,15 @@ class Core {
 
             // Get messages
             Message[] imessages = ifolder.getMessages();
+
             List<TupleUidl> ids = db.message().getUidls(folder.id);
             int max = (account.max_messages == null
                     ? imessages.length
-                    : Math.min(imessages.length, account.max_messages));
+                    : Math.min(imessages.length, Math.abs(account.max_messages)));
+            boolean reversed = (account.max_messages != null && account.max_messages < 0);
 
             boolean sync = true;
-            if (sync_quick_pop && !force &&
+            if (!hasUidl && sync_quick_pop && !force &&
                     imessages.length > 0 && folder.last_sync_count != null &&
                     imessages.length == folder.last_sync_count) {
                 // Check if last message known as new messages indicator
@@ -3001,6 +3019,7 @@ class Core {
                     " device=" + ids.size() +
                     " server=" + imessages.length +
                     " max=" + max + "/" + account.max_messages +
+                    " reversed=" + reversed +
                     " last=" + folder.last_sync_count +
                     " sync=" + sync +
                     " uidl=" + hasUidl);
@@ -3009,15 +3028,18 @@ class Core {
                 // Index IDs
                 Map<String, TupleUidl> uidlTuple = new HashMap<>();
                 for (TupleUidl id : ids) {
-                    if (id.uidl != null && id.msgid != null)
+                    if (id.uidl != null && id.msgid != null) {
+                        if (uidlTuple.containsKey(id.uidl))
+                            Log.w(account.name + " POP duplicate uidl/msgid=" + id.uidl + "/" + id.msgid);
                         uidlTuple.put(id.uidl, id);
+                    }
                 }
 
                 Map<String, TupleUidl> msgIdTuple = new HashMap<>();
                 for (TupleUidl id : ids)
                     if (id.msgid != null) {
                         if (msgIdTuple.containsKey(id.msgid))
-                            Log.w(account.name + " POP duplicate msgid=" + id.msgid);
+                            Log.w(account.name + " POP duplicate msgid/uidl=" + id.msgid + "/" + id.uidl);
                         msgIdTuple.put(id.msgid, id);
                     }
 
@@ -3070,7 +3092,7 @@ class Core {
                 }
 
                 boolean _new = true;
-                for (int i = imessages.length - 1; i >= imessages.length - max; i--) {
+                for (int i = reversed ? 0 : imessages.length - 1; reversed ? i < max : i >= imessages.length - max; i += reversed ? 1 : -1) {
                     state.ensureRunning("Sync/POP3");
 
                     Message imessage = imessages[i];
@@ -3105,7 +3127,9 @@ class Core {
 
                         TupleUidl tuple = (hasUidl ? uidlTuple.get(uidl) : msgIdTuple.get(msgid));
                         if (tuple != null) {
-                            _new = false;
+                            if (account.max_messages != null)
+                                _new = false;
+
                             Log.i(account.name + " POP having " +
                                     msgid + "=" + msgIdTuple.containsKey(msgid) + "/" +
                                     uidl + "=" + uidlTuple.containsKey(uidl));
@@ -3136,11 +3160,7 @@ class Core {
                         }
 
                         Long sent = helper.getSent();
-                        Long received = helper.getReceivedHeader(helper.getResent());
-                        if (received == null)
-                            received = sent;
-                        if (received == null)
-                            received = 0L;
+                        long received = helper.getPOP3Received();
 
                         boolean seen = (received <= account.created);
                         EntityLog.log(context, account.name + " POP sync=" + uidl + "/" + msgid +
@@ -3166,10 +3186,14 @@ class Core {
                         message.receipt_request = helper.getReceiptRequested();
                         message.receipt_to = helper.getReceiptTo();
                         message.bimi_selector = helper.getBimiSelector();
+
+                        if (native_dkim && !BuildConfig.PLAY_STORE_RELEASE) {
+                            List<String> signers = helper.verifyDKIM(context);
+                            message.signedby = (signers.size() == 0 ? null : TextUtils.join(",", signers));
+                        }
+
                         message.tls = helper.getTLS();
                         message.dkim = MessageHelper.getAuthentication("dkim", authentication);
-                        if (BuildConfig.DEBUG)
-                            helper.verifyDKIM(context);
                         if (Boolean.TRUE.equals(message.dkim))
                             message.dkim = helper.checkDKIMRequirements();
                         message.spf = MessageHelper.getAuthentication("spf", authentication);
@@ -3385,8 +3409,8 @@ class Core {
             }
 
             if (account.max_messages != null && !account.leave_on_device) {
-                int hidden = db.message().setMessagesUiHide(folder.id, account.max_messages);
-                int deleted = db.message().deleteMessagesKeep(folder.id, account.max_messages + 100);
+                int hidden = db.message().setMessagesUiHide(folder.id, Math.abs(account.max_messages));
+                int deleted = db.message().deleteMessagesKeep(folder.id, Math.abs(account.max_messages) + 100);
                 EntityLog.log(context, account.name + " POP" +
                         " cleanup max=" + account.max_messages + "" +
                         " hidden=" + hidden + " deleted=" + deleted);
@@ -4078,6 +4102,7 @@ class Core {
         boolean download_headers = prefs.getBoolean("download_headers", false);
         boolean download_plain = prefs.getBoolean("download_plain", false);
         boolean notify_known = prefs.getBoolean("notify_known", false);
+        boolean native_dkim = prefs.getBoolean("native_dkim", false);
         boolean experiments = prefs.getBoolean("experiments", false);
         boolean pro = ActivityBilling.isPro(context);
 
@@ -4257,10 +4282,14 @@ class Core {
             message.receipt_request = helper.getReceiptRequested();
             message.receipt_to = helper.getReceiptTo();
             message.bimi_selector = helper.getBimiSelector();
+
+            if (native_dkim && !BuildConfig.PLAY_STORE_RELEASE) {
+                List<String> signers = helper.verifyDKIM(context);
+                message.signedby = (signers.size() == 0 ? null : TextUtils.join(",", signers));
+            }
+
             message.tls = helper.getTLS();
             message.dkim = MessageHelper.getAuthentication("dkim", authentication);
-            if (BuildConfig.DEBUG)
-                helper.verifyDKIM(context);
             if (Boolean.TRUE.equals(message.dkim))
                 message.dkim = helper.checkDKIMRequirements();
             message.spf = MessageHelper.getAuthentication("spf", authentication);
@@ -4514,6 +4543,11 @@ class Core {
             } finally {
                 db.endTransaction();
             }
+
+            if (BuildConfig.DEBUG &&
+                    message.signedby == null &&
+                    Boolean.TRUE.equals(message.dkim))
+                EntityOperation.queue(context, message, EntityOperation.FLAG, true, android.graphics.Color.RED);
 
             try {
                 EntityContact.received(context, account, folder, message);
@@ -5380,6 +5414,8 @@ class Core {
         boolean pro = ActivityBilling.isPro(context);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean notify_grouping = prefs.getBoolean("notify_grouping", true);
+        boolean notify_private = prefs.getBoolean("notify_private", true);
         boolean notify_newest_first = prefs.getBoolean("notify_newest_first", false);
         MessageHelper.AddressFormat email_format = MessageHelper.getAddressFormat(context);
         boolean prefer_contact = prefs.getBoolean("prefer_contact", false);
@@ -5436,7 +5472,8 @@ class Core {
         }
 
         // Summary notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || notify_summary) {
+        if (notify_summary ||
+                (notify_grouping && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)) {
             // Build pending intents
             Intent content;
             if (group < 0) {
@@ -5520,10 +5557,12 @@ class Core {
 
             // Subtext should not be set, to show number of new messages
 
-            Notification pub = builder.build();
-            builder
-                    .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-                    .setPublicVersion(pub);
+            if (notify_private) {
+                Notification pub = builder.build();
+                builder
+                        .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                        .setPublicVersion(pub);
+            }
 
             if (notify_preview)
                 if (redacted)
@@ -5618,7 +5657,9 @@ class Core {
                             .setDeleteIntent(piIgnore)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                             .setCategory(NotificationCompat.CATEGORY_EMAIL)
-                            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                            .setVisibility(notify_private
+                                    ? NotificationCompat.VISIBILITY_PRIVATE
+                                    : NotificationCompat.VISIBILITY_PUBLIC)
                             .setOnlyAlertOnce(alert_once)
                             .setAllowSystemGeneratedContextualActions(false);
 
@@ -5664,7 +5705,7 @@ class Core {
                 mbuilder.setStyle(messagingStyle);
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            if (notify_grouping && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 mbuilder
                         .setGroup(Long.toString(group))
                         .setGroupSummary(false)

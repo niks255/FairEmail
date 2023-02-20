@@ -2643,42 +2643,6 @@ public class HtmlHelper {
         return result.value;
     }
 
-    static void collapseQuotes(Document document) {
-        document.body().filter(new NodeFilter() {
-            private int level = 0;
-
-            @Override
-            public FilterResult head(Node node, int depth) {
-                if (level > 0)
-                    return FilterResult.REMOVE;
-
-                if (node instanceof Element) {
-                    Element element = (Element) node;
-                    if ("blockquote".equals(element.tagName()) && hasBorder(element)) {
-                        Element prev = element.previousElementSibling();
-                        if (prev != null &&
-                                "blockquote".equals(prev.tagName()) && hasBorder(prev))
-                            return FilterResult.REMOVE;
-                        else {
-                            level++;
-                            element.html("&#8230;");
-                        }
-                    }
-                }
-
-                return FilterResult.CONTINUE;
-            }
-
-            @Override
-            public FilterResult tail(Node node, int depth) {
-                if ("blockquote".equals(node.nodeName()))
-                    level--;
-
-                return FilterResult.CONTINUE;
-            }
-        });
-    }
-
     static void removeSignatures(Document d) {
         d.body().filter(new NodeFilter() {
             private boolean remove = false;
@@ -2842,7 +2806,7 @@ public class HtmlHelper {
     }
 
     static Spanned highlightHeaders(Context context, String headers, boolean blocklist) {
-        SpannableStringBuilder ssb = new SpannableStringBuilderEx(headers);
+        SpannableStringBuilder ssb = new SpannableStringBuilderEx(headers.replaceAll("\\t", " "));
         int textColorLink = Helper.resolveColor(context, android.R.attr.textColorLink);
         int colorVerified = Helper.resolveColor(context, R.attr.colorVerified);
         int colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
@@ -3000,8 +2964,9 @@ public class HtmlHelper {
                                 Element span = document.createElement("span");
                                 span.attr("style", mergeStyles(
                                         span.attr("style"),
-                                        "font-size:larger; background-color:" + encodeWebColor(color)
-                                ));
+                                        "font-size:larger !important;" +
+                                                "font-weight:bold !important;" +
+                                                "background-color:" + encodeWebColor(color) + " !important"));
                                 span.text(tnode.getWholeText().length() == text.length()
                                         ? tnode.getWholeText().substring(start, end)
                                         : text.substring(start, end));

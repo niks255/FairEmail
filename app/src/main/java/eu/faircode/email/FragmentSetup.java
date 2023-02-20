@@ -283,7 +283,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
         btnQuick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Context context = getContext();
+                final Context context = v.getContext();
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.DEBUG);
@@ -291,14 +291,21 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                 PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), btnQuick);
                 Menu menu = popupMenu.getMenu();
 
-                Resources res = context.getResources();
-                String pkg = context.getPackageName();
                 List<EmailProvider> providers = EmailProvider.getProviders(context, debug);
 
                 int order = 1;
 
+                // OAuth
+                order = getMenuItems(menu, context, providers, order, false);
+
+                menu.add(Menu.NONE, R.string.title_setup_other, order++, R.string.title_setup_other)
+                        .setIcon(R.drawable.twotone_auto_fix_high_24);
+
                 // Gmail / account manager
                 {
+                    Resources res = context.getResources();
+                    String pkg = context.getPackageName();
+
                     String gmail = getString(R.string.title_setup_android, getString(R.string.title_setup_gmail));
                     SpannableString ss = new SpannableString(gmail);
                     ss.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ss.length(), 0);
@@ -308,41 +315,11 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                         item.setIcon(resid);
                 }
 
-                // OAuth
-                for (EmailProvider provider : providers)
-                    if (provider.oauth != null &&
-                            provider.oauth.enabled &&
-                            !TextUtils.isEmpty(provider.oauth.clientId)) {
-                        String title = getString(R.string.title_setup_oauth, provider.description);
-                        MenuItem item = menu
-                                .add(Menu.FIRST, -1, order++, title)
-                                .setIntent(new Intent(ActivitySetup.ACTION_QUICK_OAUTH)
-                                        .putExtra("id", provider.id)
-                                        .putExtra("name", provider.description)
-                                        .putExtra("privacy", provider.oauth.privacy)
-                                        .putExtra("askAccount", provider.oauth.askAccount)
-                                        .putExtra("askTenant", provider.oauth.askTenant())
-                                        .putExtra("pop", provider.pop != null));
-                        // https://developers.google.com/identity/branding-guidelines
-                        int resid = res.getIdentifier("provider_" + provider.id, "drawable", pkg);
-                        if (resid != 0)
-                            item.setIcon(resid);
-                    }
-
-                menu.add(Menu.NONE, R.string.title_setup_other, order++, R.string.title_setup_other)
-                        .setIcon(R.drawable.twotone_auto_fix_high_24);
-
-                menu.add(Menu.NONE, R.string.title_setup_classic, order++, R.string.title_setup_classic)
-                        .setIcon(R.drawable.twotone_settings_24)
-                        .setVisible(false);
+                order = getMenuItems(menu, context, providers, order, true);
 
                 SpannableString ss = new SpannableString(getString(R.string.title_setup_pop3));
                 ss.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ss.length(), 0);
-                menu.add(Menu.NONE, R.string.title_setup_pop3, order++, ss);
-
-                menu.add(Menu.NONE, R.string.menu_faq, order++, R.string.menu_faq)
-                        .setIcon(R.drawable.twotone_support_24)
-                        .setVisible(false);
+                menu.add(Menu.FIRST, R.string.title_setup_pop3, order++, ss);
 
                 popupMenu.insertIcons(context);
 
@@ -371,8 +348,10 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                                         .setNegativeButton(android.R.string.cancel, null)
                                         .show();
                             return true;
-                        } else if (itemId == R.string.title_setup_other) {
-                            lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_SETUP));
+                        } else if (itemId == R.string.title_setup_other ||
+                                itemId == R.string.title_setup_outlook) {
+                            lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_SETUP)
+                                    .putExtra("title", itemId));
                             return true;
                         } else if (itemId == R.string.title_setup_classic) {
                             ibManual.setPressed(true);
@@ -422,6 +401,40 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                 });
 
                 popupMenu.show();
+            }
+
+            private int getMenuItems(Menu menu, Context context, List<EmailProvider> providers, int order, boolean alt) {
+                Resources res = context.getResources();
+                String pkg = context.getPackageName();
+
+                for (EmailProvider provider : providers)
+                    if (provider.oauth != null &&
+                            provider.oauth.enabled &&
+                            !TextUtils.isEmpty(provider.oauth.clientId) &&
+                            provider.alt == alt) {
+                        String title = getString(R.string.title_setup_oauth, provider.description);
+                        SpannableString ss = new SpannableString(title);
+                        if (provider.alt)
+                            ss.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ss.length(), 0);
+                        MenuItem item = menu
+                                .add(alt ? Menu.FIRST : Menu.NONE, -1, order++, ss)
+                                .setIntent(new Intent(ActivitySetup.ACTION_QUICK_OAUTH)
+                                        .putExtra("id", provider.id)
+                                        .putExtra("name", provider.description)
+                                        .putExtra("privacy", provider.oauth.privacy)
+                                        .putExtra("askAccount", provider.oauth.askAccount)
+                                        .putExtra("askTenant", provider.oauth.askTenant())
+                                        .putExtra("pop", provider.pop != null));
+                        // https://developers.google.com/identity/branding-guidelines
+                        int resid = res.getIdentifier("provider_" + provider.id, "drawable", pkg);
+                        if (resid != 0)
+                            item.setIcon(resid);
+
+                        if ("office365pcke".equals(provider.id))
+                            menu.add(alt ? Menu.FIRST : Menu.NONE, R.string.title_setup_outlook, order++, R.string.title_setup_outlook);
+                    }
+
+                return order;
             }
         });
 

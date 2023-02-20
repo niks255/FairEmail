@@ -214,8 +214,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swEmptyPool;
     private SwitchCompat swIdleDone;
     private SwitchCompat swFastFetch;
+    private TextView tvMaxBackoff;
+    private SeekBar sbMaxBackOff;
     private SwitchCompat swLogarithmicBackoff;
     private SwitchCompat swExactAlarms;
+    private SwitchCompat swNativeDkim;
     private SwitchCompat swInfra;
     private SwitchCompat swDupMsgId;
     private EditText etKeywords;
@@ -272,8 +275,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "show_recent",
             "use_modseq", "preamble", "uid_command", "perform_expunge", "uid_expunge",
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", "use_top",
-            "keep_alive_poll", "empty_pool", "idle_done", "fast_fetch", "logarithmic_backoff",
-            "exact_alarms", "infra", "dkim_verify", "dup_msgids", "global_keywords", "test_iab"
+            "keep_alive_poll", "empty_pool", "idle_done", "fast_fetch",
+            "max_backoff_power", "logarithmic_backoff",
+            "exact_alarms", "native_dkim", "infra", "dkim_verify", "dup_msgids", "global_keywords", "test_iab"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -435,8 +439,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swEmptyPool = view.findViewById(R.id.swEmptyPool);
         swIdleDone = view.findViewById(R.id.swIdleDone);
         swFastFetch = view.findViewById(R.id.swFastFetch);
+        tvMaxBackoff = view.findViewById(R.id.tvMaxBackoff);
+        sbMaxBackOff = view.findViewById(R.id.sbMaxBackOff);
         swLogarithmicBackoff = view.findViewById(R.id.swLogarithmicBackoff);
         swExactAlarms = view.findViewById(R.id.swExactAlarms);
+        swNativeDkim = view.findViewById(R.id.swNativeDkim);
         swInfra = view.findViewById(R.id.swInfra);
         swDupMsgId = view.findViewById(R.id.swDupMsgId);
         etKeywords = view.findViewById(R.id.etKeywords);
@@ -1558,6 +1565,23 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        sbMaxBackOff.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                prefs.edit().putInt("max_backoff_power", progress).apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+        });
+
         swLogarithmicBackoff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1569,6 +1593,14 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("exact_alarms", checked).apply();
+            }
+        });
+
+        swNativeDkim.setEnabled(!BuildConfig.PLAY_STORE_RELEASE);
+        swNativeDkim.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("native_dkim", checked).apply();
             }
         });
 
@@ -1941,8 +1973,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext()))
                 ? View.GONE : View.VISIBLE);
         grpBitbucket.setVisibility(View.GONE);
-        grpAnnouncements.setVisibility(!BuildConfig.DEBUG &&
-                (Helper.isPlayStoreInstall() || !Helper.hasValidFingerprint(getContext()))
+        grpAnnouncements.setVisibility(TextUtils.isEmpty(BuildConfig.ANNOUNCEMENT_URI)
                 ? View.GONE : View.VISIBLE);
         grpTest.setVisibility(BuildConfig.TEST_RELEASE ? View.VISIBLE : View.GONE);
 
@@ -2274,8 +2305,15 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swEmptyPool.setChecked(prefs.getBoolean("empty_pool", true));
         swIdleDone.setChecked(prefs.getBoolean("idle_done", true));
         swFastFetch.setChecked(prefs.getBoolean("fast_fetch", false));
+
+        int max_backoff_power = prefs.getInt("max_backoff_power", ServiceSynchronize.DEFAULT_BACKOFF_POWER - 3);
+        int max_backoff = (int) Math.pow(2, max_backoff_power + 3);
+        tvMaxBackoff.setText(getString(R.string.title_advanced_max_backoff, max_backoff));
+        sbMaxBackOff.setProgress(max_backoff_power);
+
         swLogarithmicBackoff.setChecked(prefs.getBoolean("logarithmic_backoff", true));
         swExactAlarms.setChecked(prefs.getBoolean("exact_alarms", true));
+        swNativeDkim.setChecked(prefs.getBoolean("native_dkim", false));
         swInfra.setChecked(prefs.getBoolean("infra", false));
         swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
         etKeywords.setText(prefs.getString("global_keywords", null));

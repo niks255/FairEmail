@@ -181,6 +181,7 @@
     <string name="title_setup_gmail_on_device">Niyə bir cihaz hesabı seçməliyəm?</string>
     <string name="title_setup_gmail_password">Cihazdakı bir hesabın əvəzinə parollu bir hesaba səlahiyyət vermək istəyirəm</string>
     <string name="title_setup_office_auth">\'AUTHENTICATE failed\' xətası, sistem administratorunun IMAP/SMTP-ni sıradan çıxartdığı üçün baş verə bilər</string>
+    <string name="title_setup_office_auth_5_7_3">Zəhmət olmasa \"Digər provayder\" cəld quraşdırma sehrbazını sınayın.</string>
     <string name="title_setup_oauth_rationale">%1$s hesabınıza müraciət üçün səlahiyyət verin</string>
     <string name="title_setup_oauth_update">Mövcud bir hesaba yenidən səlahiyyət verin (əks halda yeni bir hesab yaradın)</string>
     <string name="title_setup_oauth_updated">Hesab səlahiyyətləndirmə güncəlləndi</string>
@@ -444,6 +445,7 @@
     <string name="title_advanced_nav_pinned_count">Sancaqlanmış naviqasiya menyusunda oxunmamış mesajların sayını göstər</string>
     <string name="title_advanced_startup">Başlanğıc ekranında göstər</string>
     <string name="title_advanced_cards">Cədvəl stili əvəzinə kart stilini istifadə et</string>
+    <string name="title_advanced_category">Hesab kateqoriyası, əsas tənzimləmələr ekranı vasitəsilə qabaqcıl hesab seçimlərində konfiqurasiya edilə bilər</string>
     <string name="title_advanced_cards_beige">Kart stilini istifadə edəndə bej arxaplan istifadə et (yalnız açıq temalar)</string>
     <string name="title_advanced_tabular_background">Cədvəl stili istifadə edəndə kart rəngini arxaplan rəngi kimi istifadə et</string>
     <string name="title_advanced_cards_shadow">Kart stilini istifadə edəndə oxunmamış mesajlar üçün kölgə istifadə et</string>
@@ -564,7 +566,7 @@
     <string name="title_advanced_autoread">Mesajları köçürəndə mesajları avtomatik oxundu kimi işarələ</string>
     <string name="title_advanced_autounstar">Mesajları köçürəndə ulduzları mesajlardan avtomatik çıxart</string>
     <string name="title_advanced_reset_importance">Mesajları köçürəndə vacibliyi sıfırla</string>
-    <string name="title_advanced_thread_sent_trash" comment="title_advanced_thread_sent_trash&#10;Title for option to disable trashing sent messages when trashing a conversation">Bir danışıq tullantı qutusuna atılanda, göndərilən mesajlarda tullantı qutusuna atılacaq</string>
+    <string name="title_advanced_thread_sent_trash">Bir danışıq tullantı qutusuna atılanda, göndərilən mesajlarda tullantı qutusuna atılacaq</string>
     <string name="title_advanced_star_snoozed">Mesajları ertələyəndə avtomatik ulduz əlavə et</string>
     <string name="title_advanced_auto_important">Ulduzlu mesajları avtomatik olaraq vacib et</string>
     <string name="title_advanced_cancel_snooze">Hərəkətli mesajlarda ertələməni ləğv et</string>
@@ -573,11 +575,14 @@
     <string name="title_advanced_default_snooze">İlkin ertələmə/gecikmə vaxtı</string>
     <string name="title_advanced_default_folder">İlkin qovluğu seçin</string>
     <string name="title_advanced_notifications">Bildirişləri idarə et</string>
+    <string name="title_advanced_notifications_delete">Bildiriş kanallarını sil</string>
     <string name="title_advanced_notifications_default">İlkin kanal</string>
     <string name="title_advanced_notifications_service">Müşahidə kanalı</string>
     <string name="title_advanced_notifications_newest_first">Əvvəlcə ən yeni bildirişləri göstər</string>
     <string name="title_advanced_badge">Başladıcı nişanını yeni mesaj sayı ilə göstər</string>
     <string name="title_advanced_unseen_ignored">Yeni mesajların sayı ilə bildiriş sayının uyğun gəlməsinə icazə ver</string>
+    <string name="title_advanced_notify_grouping">Bildirişləri qruplaşdır</string>
+    <string name="title_advanced_notify_private">Cihaz kilidli ikən bildirişləri gizli saxla</string>
     <string name="title_advanced_notify_background">Bildirişləri yalnız arxaplanda olanda göstər</string>
     <string name="title_advanced_notify_known">Yalnız əlaqələr üçün bildirişləri göstər</string>
     <string name="title_advanced_notify_suppress_in_call">Zəng əsnasında bildirişləri gecikdirmə</string>
@@ -1370,12 +1375,15 @@
     <string name="title_alternative_text">Düz mətni yüklə</string>
     <string name="title_alternative_html">HTML-i yüklə</string>
     <string name="title_no_openpgp">OpenKeychain tapılmadı</string>
+    <string name="title_no_openpgp_remark">Əvvəlcə \"PGB bir ucdan digərinə qədər şifrələmə\" konfiqurasiya edilməlidir</string>
     <string name="title_user_interaction">\"OpenKeychain\"ə köçürülür</string>
     <string name="title_padlock">Mesajın şifrəsini açmaq üçün asma kilid istifadə et</string>
     <string name="title_signed_data">Mesaj mətnini göstərmək üçün imzanı təsdiqlə</string>
     <string name="title_not_encrypted">Mesaj imzalı və ya şifrələnmiş deyil</string>
     <string name="title_no_sign_key">Heç bir imza açarı seçilmədi</string>
     <string name="title_reset_sign_key">İmza açarını sıfırla</string>
+    <string name="title_reset_selected_keys">Seçilmiş açarları sıfırla</string>
+    <string name="title_reset_selected_keys_hint">Yeni sertifikatlar və sair hallarda istifadə edilə bilər</string>
     <string name="title_signature_none">Mesaj imzalı deyil</string>
     <string name="title_signature_valid">Mesaj imzası yararlıdır</string>
     <string name="title_signature_valid_from">Mesaj imzası yararlıdır: %1$s</string>
@@ -1534,6 +1542,7 @@
     <string name="title_rule_time_after">Alınandan sonra</string>
     <string name="title_rule_time_before">Alınmazdan əvvəl</string>
     <string name="title_rule_time_rel">Qarşılıqlı vaxt (alınan) aralığı</string>
+    <string name="title_rule_time_every_day">Hər gün</string>
     <string name="title_rule_regex">Müntəzəm ifadə</string>
     <string name="title_rule_and">VƏ</string>
     <string name="title_rule_action">Əməliyyat</string>

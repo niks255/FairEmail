@@ -22,6 +22,9 @@ package eu.faircode.email;
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
 
+import static com.google.android.material.textfield.TextInputLayout.END_ICON_NONE;
+import static com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -73,6 +76,8 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.TransformationMethod;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -125,6 +130,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.openintents.openpgp.util.OpenPgpApi;
 
@@ -197,7 +203,7 @@ public class Helper {
     static final String PRIVACY_URI = "https://github.com/M66B/FairEmail/blob/master/PRIVACY.md";
     static final String TUTORIALS_URI = "https://github.com/M66B/FairEmail/tree/master/tutorials#main";
     static final String XDA_URI = "https://forum.xda-developers.com/showthread.php?t=3824168";
-    static final String SUPPORT_URI = "https://contact.faircode.eu/";
+    static final String SUPPORT_URI = "https://contact.faircode.eu/?product=fairemailsupport";
     static final String TEST_URI = "https://play.google.com/apps/testing/" + BuildConfig.APPLICATION_ID;
     static final String BIMI_PRIVACY_URI = "https://datatracker.ietf.org/doc/html/draft-brotman-ietf-bimi-guidance-03#section-7.4";
     static final String LT_PRIVACY_URI = "https://languagetool.org/legal/privacy";
@@ -254,9 +260,6 @@ public class Helper {
     private static ExecutorService sMediaExecutor = null;
     private static ExecutorService sDownloadExecutor = null;
 
-    private static int sOperationIndex = 0;
-    private static final ExecutorService[] sOperationExecutor = new ExecutorService[OPERATION_WORKERS];
-
     static ExecutorService getSerialExecutor() {
         if (sSerialExecutor == null)
             sSerialExecutor = getBackgroundExecutor(1, "serial");
@@ -285,16 +288,6 @@ public class Helper {
         if (sDownloadExecutor == null)
             sDownloadExecutor = getBackgroundExecutor(0, "download");
         return sDownloadExecutor;
-    }
-
-    static ExecutorService getOperationExecutor() {
-        synchronized (sOperationExecutor) {
-            if (sOperationExecutor[sOperationIndex] == null)
-                sOperationExecutor[sOperationIndex] = getBackgroundExecutor(1, "operation");
-            ExecutorService result = sOperationExecutor[sOperationIndex];
-            sOperationIndex = (sOperationIndex + 1) % sOperationExecutor.length;
-            return result;
-        }
     }
 
     static ExecutorService getBackgroundExecutor(int threads, final String name) {
@@ -1230,7 +1223,6 @@ public class Helper {
 
         return Uri.parse(SUPPORT_URI)
                 .buildUpon()
-                .appendQueryParameter("product", "fairemailsupport")
                 .appendQueryParameter("version", BuildConfig.VERSION_NAME + BuildConfig.REVISION)
                 .appendQueryParameter("locale", slocale.toString())
                 .appendQueryParameter("language", language == null ? "" : language)
@@ -2337,8 +2329,12 @@ public class Helper {
         };
     }
 
-    static boolean isDot(char c) {
-        return (c == '.' /* Latin */ || c == '。' /* Chinese */);
+    static boolean isEndChar(char c) {
+        return (c == '.' /* Latin */ ||
+                c == '。' /* Chinese */ ||
+                c == ',' ||
+                c == ':' || c == ';' ||
+                c == '?' || c == '!');
     }
 
     static String trim(String value, String chars) {
@@ -2725,14 +2721,13 @@ public class Helper {
     }
 
     static boolean canAuthenticate(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String pin = prefs.getString("pin", null);
-        if (!TextUtils.isEmpty(pin))
-            return true;
-
         try {
             BiometricManager bm = BiometricManager.from(context);
-            return (bm.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS);
+            if (bm.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS)
+                return true;
+            if (bm.canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS)
+                return true;
+            return false;
         } catch (Throwable ex) {
             /*
                 java.lang.SecurityException: eu.faircode.email from uid 10377 not allowed to perform USE_FINGERPRINT
@@ -2802,13 +2797,14 @@ public class Helper {
                     BiometricPrompt.PromptInfo.Builder info = new BiometricPrompt.PromptInfo.Builder()
                             .setTitle(activity.getString(enabled == null ? R.string.app_name : R.string.title_setup_biometrics));
 
-                    KeyguardManager kgm = (KeyguardManager) activity.getSystemService(Context.KEYGUARD_SERVICE);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && kgm != null && kgm.isDeviceSecure())
-                        info.setDeviceCredentialAllowed(true);
+                    BiometricManager bm = BiometricManager.from(activity);
+                    int authenticators = BiometricManager.Authenticators.BIOMETRIC_WEAK;
+                    if (bm.canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS)
+                        authenticators |= BiometricManager.Authenticators.DEVICE_CREDENTIAL;
                     else
                         info.setNegativeButtonText(activity.getString(android.R.string.cancel));
-
-                    info.setConfirmationRequired(false);
+                    info.setAllowedAuthenticators(authenticators)
+                            .setConfirmationRequired(false);
 
                     info.setSubtitle(activity.getString(enabled == null ? R.string.title_setup_biometrics_unlock
                             : enabled
@@ -2821,18 +2817,18 @@ public class Helper {
 
                                 @Override
                                 public void onAuthenticationError(final int errorCode, @NonNull final CharSequence errString) {
-                                    if (isCancelled(errorCode) || errorCode == BiometricPrompt.ERROR_UNABLE_TO_PROCESS)
+                                    if (isBioCancelled(errorCode) || errorCode == BiometricPrompt.ERROR_UNABLE_TO_PROCESS)
                                         Log.w("Authenticate biometric error " + errorCode + ": " + errString);
                                     else
                                         Log.e("Authenticate biometric error " + errorCode + ": " + errString);
 
-                                    if (isHardwareFailure(errorCode)) {
+                                    if (isBioHardwareFailure(errorCode)) {
                                         prefs.edit().remove("biometrics").apply();
                                         ApplicationEx.getMainHandler().post(authenticated);
                                         return;
                                     }
 
-                                    if (!isCancelled(errorCode))
+                                    if (!isBioCancelled(errorCode))
                                         ApplicationEx.getMainHandler().post(new RunnableEx("auth:error") {
                                             @Override
                                             public void delegate() {
@@ -2857,19 +2853,6 @@ public class Helper {
                                     Log.w("Authenticate biometric failed");
                                     if (++fails >= 3)
                                         ApplicationEx.getMainHandler().post(cancelled);
-                                }
-
-                                private boolean isCancelled(int errorCode) {
-                                    return (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
-                                            errorCode == BiometricPrompt.ERROR_CANCELED ||
-                                            errorCode == BiometricPrompt.ERROR_USER_CANCELED);
-                                }
-
-                                private boolean isHardwareFailure(int errorCode) {
-                                    return (errorCode == BiometricPrompt.ERROR_HW_UNAVAILABLE ||
-                                            errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS || // No fingerprints enrolled.
-                                            errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT ||
-                                            errorCode == BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL);
                                 }
                             });
 
@@ -3034,6 +3017,80 @@ public class Helper {
         Log.i("Authenticate clear");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.edit().remove("last_authentication").apply();
+    }
+
+    static void setupPasswordToggle(FragmentActivity activity, TextInputLayout tilPassword) {
+        boolean can = canAuthenticate(activity);
+        boolean secure = isSecure(activity);
+
+        tilPassword.setEndIconMode(can || secure ? END_ICON_PASSWORD_TOGGLE : END_ICON_NONE);
+        tilPassword.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TransformationMethod tm = tilPassword.getEditText().getTransformationMethod();
+                if (tm == null)
+                    tilPassword.getEditText().setTransformationMethod(PasswordTransformationMethod.getInstance());
+                else {
+                    if (can) {
+                        BiometricPrompt.PromptInfo.Builder info = new BiometricPrompt.PromptInfo.Builder()
+                                .setTitle(activity.getString(R.string.title_setup_biometrics))
+                                .setSubtitle(activity.getString(R.string.title_password));
+
+                        BiometricManager bm = BiometricManager.from(activity);
+                        int authenticators = BiometricManager.Authenticators.BIOMETRIC_WEAK;
+                        if (bm.canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS)
+                            authenticators |= BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+                        else
+                            info.setNegativeButtonText(activity.getString(android.R.string.cancel));
+                        info.setAllowedAuthenticators(authenticators)
+                                .setConfirmationRequired(false);
+
+                        BiometricPrompt prompt = new BiometricPrompt(activity, Helper.getUIExecutor(),
+                                new BiometricPrompt.AuthenticationCallback() {
+                                    @Override
+                                    public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                                        tilPassword.post(new RunnableEx("tilPassword") {
+                                            @Override
+                                            protected void delegate() {
+                                                tilPassword.getEditText().setTransformationMethod(null);
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                                        tilPassword.post(new RunnableEx("tilPassword") {
+                                            @Override
+                                            protected void delegate() {
+                                                if (isBioCancelled(errorCode))
+                                                    return;
+                                                else if (isBioHardwareFailure(errorCode))
+                                                    tilPassword.getEditText().setTransformationMethod(null);
+                                                else
+                                                    ToastEx.makeText(activity, "Error " + errorCode + ": " + errString, Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
+                                });
+                        prompt.authenticate(info.build());
+                    } else if (secure)
+                        tilPassword.getEditText().setTransformationMethod(null);
+                }
+            }
+        });
+    }
+
+    private static boolean isBioCancelled(int errorCode) {
+        return (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
+                errorCode == BiometricPrompt.ERROR_CANCELED ||
+                errorCode == BiometricPrompt.ERROR_USER_CANCELED);
+    }
+
+    private static boolean isBioHardwareFailure(int errorCode) {
+        return (errorCode == BiometricPrompt.ERROR_HW_UNAVAILABLE ||
+                errorCode == BiometricPrompt.ERROR_NO_BIOMETRICS || // No fingerprints enrolled.
+                errorCode == BiometricPrompt.ERROR_HW_NOT_PRESENT ||
+                errorCode == BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL);
     }
 
     static void selectKeyAlias(final Activity activity, final LifecycleOwner owner, final String alias, final IKeyAlias intf) {
