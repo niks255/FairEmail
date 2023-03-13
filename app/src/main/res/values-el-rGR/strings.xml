@@ -343,6 +343,7 @@
     <string name="title_advanced_sync_folders">Συγχρονισμός της λίστας φακέλων</string>
     <string name="title_advanced_sync_folders_poll">Ενεργός συγχρονισμός της λίστας φακέλων</string>
     <string name="title_advanced_sync_shared_folders">Συγχρονισμός της λίστας κοινών φακέλων</string>
+    <string name="title_advanced_sync_added">Ενεργοποίηση συγχρονισμού για τους νέους φακέλους χρήστη</string>
     <string name="title_advanced_subscriptions">Διαχείριση συνδρομών σε φακέλους</string>
     <string name="title_advanced_check_authentication">Έλεγχος ταυτοποίησης μηνύματος</string>
     <string name="title_advanced_check_tls">Έλεγχος της ασφάλειας επιπέδου μεταφοράς (Transport Layer Security - TLS)</string>
@@ -570,6 +571,7 @@
     <string name="title_advanced_auto_important">Να επισημαίνονται αυτόματα ως σημαντικά τα μηνύματα με αστέρια</string>
     <string name="title_advanced_cancel_snooze">Ακύρωση αναβολής κατά τη μετακίνηση μηνυμάτων</string>
     <string name="title_advanced_auto_block_sender">Αυτόματος αποκλεισμός του αποστολέα κατά την αναφορά μηνύματος ως ανεπιθύμητου</string>
+    <string name="title_advanced_auto_hide_answer">Αυτόματη απόκρυψη του κουμπιού απάντησης κατά την κύλιση</string>
     <string name="title_advanced_swipe_reply">Σύρετε προς τα δεξιά τα αναπτυγμένα μηνύματα για να απαντήσετε</string>
     <string name="title_advanced_default_snooze">Προεπιλεγμένος χρόνος αναβολής/καθυστέρησης</string>
     <string name="title_advanced_default_folder">Επιλογή προεπιλεγμένου φακέλου</string>
@@ -724,7 +726,7 @@
     <string name="title_advanced_auto_identity_hint">Με αυτό θα επιλέγεται η τελευταία ταυτότητα που έχει χρησιμοποιηθεί κατά την επιλογή ενός παραλήπτη για νέα μηνύματα</string>
     <string name="title_advanced_send_reminders_hint">Να προβάλλεται μια προειδοποίηση όταν το κείμενο του μηνύματος ή το θέμα είναι κενό ή όταν φαίνεται πως ένα συνημμένο λείπει</string>
     <string name="title_advanced_reply_move_hint">Ο διακομιστής ηλ. ταχυδρομείου ενδέχεται να προσθέτει ακόμα τα μηνύματα στον φάκελο απεσταλμένων</string>
-    <string name="title_advanced_compose_color_hint" comment="title_advanced_compose_color_hint&#10;Help text for button to select default color for messages to be sent">Πολύ ανοικτά ή πολύ σκούρα χρώματα θα έχουν ως αποτέλεσμα δυσανάγνωστα μηνύματα για τους παραλήπτες</string>
+    <string name="title_advanced_compose_color_hint">Πολύ ανοικτά ή πολύ σκούρα χρώματα θα έχουν ως αποτέλεσμα δυσανάγνωστα μηνύματα για τους παραλήπτες</string>
     <string name="title_advanced_usenet_hint">Να παρεμβάλλεται ένα \'-- \' ανάμεσα στο κείμενο και την υπογραφή</string>
     <string name="title_advanced_remove_signature_hint">Αυτό μπορεί να επιφέρει την απαλοιφή είτε υπερβολικά λίγου είτε υπερβολικά πολύ κειμένου</string>
     <string name="title_advanced_metered_hint">Οι συνδέσεις με ογκοχρέωση είναι, γενικά, οι κινητές συνδέσεις διαδικτύου ή τα επί πληρωμή σημεία Wi-Fi</string>
@@ -875,7 +877,7 @@
     <string name="title_leave_deleted">Να παραμένουν τα διεγραμμένα μηνύματα στον διακομιστή</string>
     <string name="title_leave_on_device">Να παραμένουν τα μηνύματα στη συσκευή</string>
     <string name="title_max_messages">Μέγιστος αριθμός μηνυμάτων για κατέβασμα (κενό για όλα)</string>
-    <string name="title_max_messages_remark" comment="title_max_messages_remark&#10;Help text for POP3 maximum message count">        Εισάγετε έναν θετικό αριθμό για να κατεβάσετε τα μηνύματα στο τέλος (το πιο συνηθισμένο)
+    <string name="title_max_messages_remark">        Εισάγετε έναν θετικό αριθμό για να κατεβάσετε τα μηνύματα στο τέλος (το πιο συνηθισμένο)
         και έναν αρνητικό αριθμό για να κατεβάσετε τα μηνύματα στην αρχή (το λιγότερο συνηθισμένο)
     </string>
     <string name="title_keep_poll_interval">Χρονικό διάστημα μεταξύ συγχρονισμών (λεπτά)</string>
@@ -1217,7 +1219,7 @@
     </string>
     <string name="title_compose">Σύνταξη</string>
     <string name="title_submitter">Στάλθηκε από:</string>
-    <string name="title_signed_by" comment="title_signed_by&#10;Title for who takes responsibility for a message (=DKIM signer)">Υπογεγραμμένο από:</string>
+    <string name="title_signed_by">Υπογεγραμμένο από:</string>
     <string name="title_delivered_to">Παραδόθηκε σε:</string>
     <string name="title_from">Από:</string>
     <string name="title_to">Προς:</string>
@@ -1457,6 +1459,9 @@
     <string name="title_sort_on_attachments">Συνημμένα</string>
     <string name="title_sort_on_hidden">Κρυφό</string>
     <string name="title_sort_ascending">Πρώτα τα παλαιότερα</string>
+    <string name="title_sort_on_order">Σειρά</string>
+    <string name="title_sort_on_applied">Φορές που εφαρμόστηκε</string>
+    <string name="title_sort_on_last_applied">Τελευταία εφαρμογή</string>
     <string name="title_filter">Φιλτράρισμα (αποκλεισμός)</string>
     <string name="title_filter_seen">Αναγνωσμένα</string>
     <string name="title_filter_unflagged">Χωρίς αστέρι</string>
@@ -1714,7 +1719,10 @@
     <string name="title_hint_support">Αν έχετε μία ερώτηση ή ένα πρόβλημα, παρακαλώ χρησιμοποιήστε το μενού \"Υποστήριξη\" για να λάβετε βοήθεια</string>
     <string name="title_hint_message_actions">Σάρωση αριστερά για απορρίμματα• σάρωση δεξιά για αρχειοθέτηση (αν είναι διαθέσιμη)• μπορείτε να ρυθμίσετε τις ενέργειες σάρωσης στις ρυθμίσεις του λογαριασμού</string>
     <string name="title_hint_message_selection">Πατήστε παρατεταμένα σε ένα μήνυμα για να αρχίσετε να επιλέγετε πολλαπλά μηνύματα. Συνεχίστε το πάτημα και σύρετε προς τα πάνω ή κάτω για να επιλέξετε περισσότερα μηνύματα</string>
-    <string name="title_hint_message_junk">Τα μηνύματα αυτά βρίσκονται στον φάκελο ανεπιθύμητων του διακομιστή ηλ. ταχυδρομείου. Προφανώς, η εφαρμογή δεν μπορεί να εμποδίσει την αποστολή ανεπιθύμητων μηνυμάτων προς εσάς.</string>
+    <string name="title_hint_message_junk">        Ένας πελάτης ταχυδρομείου προβάλλει, ουσιαστικά, τα μηνύματα ενός διακομιστή ταχυδρομείου.
+        Ένας διακομιστής ταχυδρομείου είναι υπεύθυνος για το φιλτράρισμα ανεπιθύμητων μηνυμάτων, όχι ένας πελάτης ταχυδρομείου.
+        Αν λαμβάνετε πολλά ανεπιθύμητα μηνύματα, παρακαλούμε, επικοινωνήστε με τον πάροχο του ταχυδρομείου σας και μην κατηγορείτε την εφαρμογή!
+    </string>
     <string name="title_hint_important">Σημαντικό</string>
     <string name="title_hint_sync">Το κατέβασμα των μηνυμάτων μπορεί να διαρκέσει κάποιο διάστημα, ανάλογα με την ταχύτητα του παρόχου, της σύνδεσης, της συσκευής και τον αριθμό των μηνυμάτων. Ενόσω κατεβαίνουν τα μηνύματα, η εφαρμογή ίσως να ανταποκρίνεται πιο αργά.</string>
     <string name="title_hint_sync_note">Από προεπιλογή, δεν θα κατέβουν όλα τα μηνύματα, για περιορισμό αποθηκευτικού χώρου και χρήσης μπαταρίας και δεδομένων. Μπορείτε να αλλάξετε αυτή τη ρύθμιση, με παρατεταμένο πάτημα πάνω σε έναν φάκελο στη λίστα φακέλων και επιλέγοντας «Συγχρονισμός περισσοτέρων».</string>
@@ -1779,7 +1787,11 @@
     <string name="title_via">Μέσω: %1$s</string>
     <string name="title_1hour">1 ώρα</string>
     <string name="title_1day">1 ημέρα</string>
-    <string name="title_1week">1 εβδομάδα</string>
+    <string name="title_more_overflow">Περισσότερα &#8230;</string>
+    <string name="title_today_at">Σήμερα στις/στη %1$s</string>
+    <string name="title_tomorrow_at">Αύριο στις/στη %1$s</string>
+    <string name="title_day_at_time">%1$s στο %2$s</string>
+    <string name="title_next_week">Αυτήν την ώρα την επόμενη εβδομάδα</string>
     <string name="title_now">Τώρα</string>
     <string name="title_after">Μετά από %1$s</string>
     <string name="title_reset">Επαναφορά</string>

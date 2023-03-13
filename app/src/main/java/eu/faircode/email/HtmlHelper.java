@@ -567,6 +567,8 @@ public class HtmlHelper {
             safelist.addTags("center").addAttributes(":all", "align");
         if (!view)
             safelist.addProtocols("img", "src", "content");
+        if (BuildConfig.DEBUG)
+            safelist.addAttributes(":all", "x-computed");
 
         final Document document = new Cleaner(safelist).clean(parsed);
 
@@ -981,7 +983,7 @@ public class HtmlHelper {
                             // https://developer.mozilla.org/en-US/docs/Web/CSS/margin
                             // https://developer.mozilla.org/en-US/docs/Web/CSS/padding
                             if (element.isBlock()) {
-                                Float[] p = new Float[4];
+                                Float[] p = new Float[4]; // top, right, bottom, left
 
                                 String[] v = value.split(" ");
                                 for (int i = 0; i < v.length && i < p.length; i++)
@@ -992,7 +994,11 @@ public class HtmlHelper {
                                     p[2] = p[0];
                                     p[3] = p[0];
                                 } else if (v.length == 2) {
+                                    // top and bottom, left and right
                                     p[2] = p[0];
+                                    p[3] = p[1];
+                                } else if (v.length == 3) {
+                                    // top, right and left, bottom
                                     p[3] = p[1];
                                 }
 
@@ -1109,15 +1115,16 @@ public class HtmlHelper {
         // Paragraphs
         for (Element p : document.select("p")) {
             p.tagName("div");
-            if (p.childNodeSize() != 0) {
-                if (p.childNodeSize() == 1) {
-                    Node lonely = p.childNode(0);
-                    if (lonely instanceof TextNode &&
-                            "\u00a0".equals(((TextNode) lonely).getWholeText()))
-                        continue;
-                }
+
+            Element last = p.lastElementChild();
+            if (last != null && "br".equals(last.tagName()))
+                last.remove();
+
+            if (TextUtils.isEmpty(p.text())) {
+                p.attr("x-line-before", "false");
+                p.attr("x-line-after", "true");
+            } else
                 p.attr("x-paragraph", "true");
-            }
         }
 
         // Short inline quotes
@@ -1757,14 +1764,14 @@ public class HtmlHelper {
                                 ElementSelectorImpl eselector = (ElementSelectorImpl) selector;
                                 if (tag == null
                                         ? eselector.getLocalName() == null
-                                        : tag.equals(eselector.getLocalName()))
+                                        : tag.equalsIgnoreCase(eselector.getLocalName()))
                                     style = mergeStyles(style, srule.getStyle().getCssText());
                                 break;
                             case Selector.SAC_CONDITIONAL_SELECTOR:
                                 ConditionalSelectorImpl cselector = (ConditionalSelectorImpl) selector;
                                 if (cselector.getCondition().getConditionType() == SAC_CLASS_CONDITION) {
                                     ClassConditionImpl ccondition = (ClassConditionImpl) cselector.getCondition();
-                                    if (clazz.equals(ccondition.getValue()))
+                                    if (clazz.equalsIgnoreCase(ccondition.getValue()))
                                         style = mergeStyles(style, srule.getStyle().getCssText());
                                 }
                                 break;
@@ -1866,7 +1873,7 @@ public class HtmlHelper {
             }
 
         for (String key : baseParams.keySet())
-            if (!STYLE_NO_INHERIT.contains(key))
+            if (!STYLE_NO_INHERIT.contains(key) || element)
                 result.put(key, baseParams.get(key));
 
         return TextUtils.join(";", result.values());

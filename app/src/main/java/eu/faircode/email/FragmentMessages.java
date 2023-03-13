@@ -361,6 +361,7 @@ public class FragmentMessages extends FragmentBase
     private String onclose;
     private boolean quick_scroll;
     private boolean addresses;
+    private boolean auto_hide_answer;
     private boolean swipe_reply;
     private boolean quick_actions;
 
@@ -485,6 +486,8 @@ public class FragmentMessages extends FragmentBase
         if (folder > 0 && thread == null && type == null && criteria == null)
             Log.e("Messages for folder without type");
 
+        accessibility = Helper.isAccessibilityEnabled(getContext());
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         hide_toolbar = prefs.getBoolean("hide_toolbar", !BuildConfig.PLAY_STORE_RELEASE);
@@ -510,6 +513,7 @@ public class FragmentMessages extends FragmentBase
         onclose = (autoclose ? null : prefs.getString("onclose", null));
         quick_scroll = prefs.getBoolean("quick_scroll", true);
         addresses = prefs.getBoolean("addresses", false);
+        auto_hide_answer = prefs.getBoolean("auto_hide_answer", !accessibility);
         swipe_reply = prefs.getBoolean("swipe_reply", false);
         quick_actions = prefs.getBoolean("quick_actions", true);
 
@@ -517,8 +521,6 @@ public class FragmentMessages extends FragmentBase
         colorAccent = Helper.resolveColor(getContext(), R.attr.colorAccent);
         colorSeparator = Helper.resolveColor(getContext(), R.attr.colorSeparator);
         colorWarning = Helper.resolveColor(getContext(), R.attr.colorWarning);
-
-        accessibility = Helper.isAccessibilityEnabled(getContext());
 
         if (criteria == null)
             if (thread == null) {
@@ -2182,6 +2184,15 @@ public class FragmentMessages extends FragmentBase
                     else
                         llm.scrollToPositionWithOffset(pos, -child.getPaddingTop());
 
+                    View wvBody = child.findViewById(R.id.wvBody);
+                    if (wvBody instanceof WebView) {
+                        if (bottom) {
+                            int ch = ((WebView) wvBody).getContentHeight();
+                            wvBody.scrollTo(0, Helper.dp2pixels(wvBody.getContext(), ch));
+                        } else
+                            wvBody.scrollTo(0, 0);
+                    }
+
                     break;
                 }
             }
@@ -3299,6 +3310,9 @@ public class FragmentMessages extends FragmentBase
                         EntityAccount sourceAccount = db.account().getAccount(message.account);
                         if (sourceAccount == null)
                             return result;
+                        EntityFolder baseFolder = db.folder().getFolder(message.folder);
+                        if (baseFolder == null)
+                            return result;
 
                         EntityFolder targetFolder = db.folder().getFolder(tid);
                         if (targetFolder == null)
@@ -3311,7 +3325,8 @@ public class FragmentMessages extends FragmentBase
                         List<EntityMessage> messages = db.message().getMessagesByThread(
                                 message.account, message.thread,
                                 threading && thread ? null : id,
-                                EntityFolder.TRASH.equals(targetFolder.type) ? null : message.folder);
+                                !EntityFolder.DRAFTS.equals(baseFolder.type) &&
+                                        EntityFolder.TRASH.equals(targetFolder.type) ? null : message.folder);
                         for (EntityMessage threaded : messages) {
                             EntityFolder sourceFolder = db.folder().getFolder(threaded.folder);
                             if (sourceFolder == null ||
@@ -3485,7 +3500,7 @@ public class FragmentMessages extends FragmentBase
                 if (data.answers != null) {
                     int order = 100;
                     for (EntityAnswer answer : data.answers) {
-                        SpannableStringBuilder ssb = new SpannableStringBuilder(answer.name);
+                        SpannableStringBuilder ssb = new SpannableStringBuilderEx(answer.name);
 
                         if (answer.color != null) {
                             int first = answer.name.codePointAt(0);
@@ -7033,7 +7048,7 @@ public class FragmentMessages extends FragmentBase
             return;
 
         int expanded = (values.containsKey("expanded") ? values.get("expanded").size() : 0);
-        if (scrolling && !accessibility)
+        if (auto_hide_answer && scrolling && !accessibility)
             fabReply.hide();
         else {
             if (expanded == 1) {
@@ -10273,7 +10288,7 @@ public class FragmentMessages extends FragmentBase
 
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("search");
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     static void searchContact(Context context, LifecycleOwner owner, FragmentManager fm, long message, boolean sender_only) {

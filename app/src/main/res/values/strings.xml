@@ -217,7 +217,6 @@
     <string name="title_setup_oauth" translatable="false">%1$s (OAuth)</string>
     <string name="title_setup_android" translatable="false">%1$s (Android)</string>
     <string name="title_setup_google_sign_in">Sign in with Google</string>
-    <string name="title_setup_outlook" translatable="false">Outlook/Hotmail/Live</string>
     <string name="title_setup_other">Other provider</string>
     <string name="title_setup_inbound">Incoming email only (email cannot be sent!)</string>
     <string name="title_setup_pop3">POP3 account</string>
@@ -416,6 +415,7 @@
     <string name="title_advanced_sync_folders">Synchronize folder list</string>
     <string name="title_advanced_sync_folders_poll">Actively synchronize folder list</string>
     <string name="title_advanced_sync_shared_folders">Synchronize shared folder lists</string>
+    <string name="title_advanced_sync_added">Enable synchronization for new user folders</string>
     <string name="title_advanced_subscriptions">Manage folder subscriptions</string>
     <string name="title_advanced_check_authentication">Check message authentication</string>
     <string name="title_advanced_check_tls">Check transport layer security (TLS)</string>
@@ -660,6 +660,7 @@
     <string name="title_advanced_auto_important">Automatically make starred messages important</string>
     <string name="title_advanced_cancel_snooze">Cancel snooze on moving messages</string>
     <string name="title_advanced_auto_block_sender">Automatically block the sender when reporting spam</string>
+    <string name="title_advanced_auto_hide_answer">Automatically hide the answer button when scrolling</string>
     <string name="title_advanced_swipe_reply">Swipe expanded messages to the right to reply</string>
     <string name="title_advanced_default_snooze">Default snooze/delay time</string>
     <string name="title_advanced_default_folder">Select default folder</string>
@@ -791,7 +792,8 @@
     <string name="title_advanced_lt_key">API key (optional)</string>
     <string name="title_advanced_deepl">DeepL integration</string>
     <string name="title_advanced_virus_total">VirusTotal integration</string>
-    <string name="title_advanced_send" translatable="false">Send integration</string>
+    <string name="title_advanced_send">\'Send\' integration</string>
+    <string name="title_advanced_openai">OpenAI (ChatGPT) integration</string>
     <string name="title_advanced_sdcard">I want to use an sdcard</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_updates">Check for GitHub updates</string>
@@ -1111,6 +1113,7 @@
     <string name="title_primary_identity">Primary (default identity)</string>
     <string name="title_self_identity">Remove email address when replying</string>
     <string name="title_leave_on_server">Leave messages on server</string>
+    <string name="title_client_delete">Actively delete messages after downloading</string>
     <string name="title_leave_deleted">Leave deleted messages on server</string>
     <string name="title_leave_on_device">Leave messages on device</string>
     <string name="title_max_messages">Maximum number of messages to download (blank for all)</string>
@@ -1337,6 +1340,8 @@
     <string name="title_full_screen">Full screen</string>
     <string name="title_force_light">Force light theme</string>
     <string name="title_share">Share</string>
+    <string name="title_share_link" translatable="false">Share link</string>
+    <string name="title_share_link_open" translatable="false">Open message</string>
     <string name="title_zip" translatable="false">ZIP</string>
     <string name="title_event">Add to calendar</string>
     <string name="title_pin">Add shortcut</string>
@@ -1596,6 +1601,7 @@
     <string name="title_create_template">Create template</string>
     <string name="title_select_default_identity">Select default address</string>
     <string name="title_translate">Translate</string>
+    <string name="title_openai" translatable="false">OpenAI (ChatGPT)</string>
     <string name="title_translate_configure">Configure &#8230;</string>
     <string name="title_translate_key">Enter key</string>
     <string name="title_translating">Translating &#8230;</string>
@@ -1753,6 +1759,10 @@
     <string name="title_sort_on_attachments">Attachments</string>
     <string name="title_sort_on_hidden">Hidden</string>
     <string name="title_sort_ascending">Oldest first</string>
+
+    <string name="title_sort_on_order">Order</string>
+    <string name="title_sort_on_applied">Applied count</string>
+    <string name="title_sort_on_last_applied">Last applied</string>
 
     <string name="title_filter">Filter out</string>
     <string name="title_filter_seen">Read</string>
@@ -2036,7 +2046,11 @@
     <string name="title_hint_support">If you have a question or a problem, please use the support menu to get help</string>
     <string name="title_hint_message_actions">Swipe left to trash; Swipe right to archive (if available); The swipe actions can be configured in the account settings</string>
     <string name="title_hint_message_selection">Long press a message to start selecting multiple messages; Hold and swipe up or down to select more messages</string>
-    <string name="title_hint_message_junk">These messages are in the spam folder of the email server. Obviously, the app cannot prevent spam messages from being sent to you.</string>
+    <string name="title_hint_message_junk">
+        An email client basically displays messages on an email server.
+        An email server is responsible for filtering spam, not an email client.
+        If you receive a lot of spam, please contact your email provider and don\'t blame the app!
+    </string>
     <string name="title_hint_important">Important</string>
     <string name="title_hint_sync">Downloading messages can take some time, depending on the speed of the provider, internet connection, the device and on the number of messages. While downloading messages the app might respond slower.</string>
     <string name="title_hint_sync_note">By default, not all messages will be downloaded to limit storage space and battery and data usage. You can change this by long pressing a folder in the folder list and selecting \'Synchronize more\'.</string>
@@ -2103,7 +2117,11 @@
     <string name="title_via">Via: %1$s</string>
     <string name="title_1hour">1 hour</string>
     <string name="title_1day">1 day</string>
-    <string name="title_1week">1 week</string>
+    <string name="title_more_overflow">More &#8230;</string>
+    <string name="title_today_at">Today at %1$s</string>
+    <string name="title_tomorrow_at">Tomorrow at %1$s</string>
+    <string name="title_day_at_time">%1$s at %2$s</string>
+    <string name="title_next_week">This time next week</string>
     <string name="title_now">Now</string>
     <string name="title_after">After %1$s</string>
     <string name="title_reset">Reset</string>

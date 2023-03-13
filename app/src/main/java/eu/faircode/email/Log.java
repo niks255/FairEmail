@@ -38,6 +38,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
+import android.content.pm.verify.domain.DomainVerificationManager;
+import android.content.pm.verify.domain.DomainVerificationUserState;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -108,6 +110,9 @@ import com.sun.mail.iap.ConnectionException;
 import com.sun.mail.iap.ProtocolException;
 import com.sun.mail.util.FolderClosedIOException;
 import com.sun.mail.util.MailConnectException;
+
+import net.openid.appauth.AuthState;
+import net.openid.appauth.TokenResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -665,7 +670,7 @@ public class Log {
                         else if (element instanceof Spanned)
                             elements[i] = "<redacted>";
                         else
-                            elements[i] = (element == null ? "<null>" : printableString(element.toString()));
+                            elements[i] = (element == null ? "<null>" : Helper.getPrintableString(element.toString()));
                     }
                     value = TextUtils.join(",", elements);
                     if (length > 10)
@@ -726,22 +731,6 @@ public class Log {
         }
 
         return result;
-    }
-
-    static String printableString(String value) {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < value.length(); i++) {
-            char kar = value.charAt(i);
-            if (kar == '\n')
-                result.append('|');
-            else if (kar == ' ')
-                result.append('_');
-            else if (!Helper.isPrintableChar(kar))
-                result.append('{').append(Integer.toHexString(kar)).append('}');
-            else
-                result.append(kar);
-        }
-        return result.toString();
     }
 
     static void logMemory(Context context, String message) {
@@ -2073,6 +2062,8 @@ public class Log {
         sb.append(String.format("Contact lookup: %d cached: %d\r\n",
                 contacts[0], contacts[1]));
 
+        sb.append(String.format("Accessibility: %b\r\n", Helper.isAccessibilityEnabled(context)));
+
         String charset = MimeUtility.getDefaultJavaCharset();
         sb.append(String.format("Default charset: %s/%s\r\n", charset, MimeUtility.mimeCharset(charset)));
 
@@ -2367,6 +2358,18 @@ public class Log {
                     filter = nm.getCurrentInterruptionFilter();
                 }
 
+                StringBuilder filters = new StringBuilder();
+                StringBuilder sorts = new StringBuilder();
+                for (String key : prefs.getAll().keySet())
+                    if (key.startsWith("filter_")) {
+                        Object value = prefs.getAll().get(key);
+                        if (Boolean.TRUE.equals(value))
+                            filters.append(' ').append(key.substring(7)).append('=').append(value);
+                    } else if (key.startsWith("sort_")) {
+                        Object value = prefs.getAll().get(key);
+                        sorts.append(' ').append(key).append('=').append(value);
+                    }
+
                 size += write(os, "enabled=" + enabled + (enabled ? "" : " !!!") +
                         " interval=" + pollInterval + "\r\n" +
                         "metered=" + metered + (metered ? "" : " !!!") +
@@ -2387,7 +2390,8 @@ public class Log {
                         " messages=" + db.message().countTotal() +
                         " rules=" + db.rule().countTotal() +
                         " ops=" + db.operation().getOperationCount() +
-                        " outbox=" + db.message().countOutbox() +
+                        " outbox=" + db.message().countOutbox() + "\r\n" +
+                        "filter " + filters + " " + sorts +
                         "\r\n\r\n");
 
                 if (schedule) {
@@ -2406,6 +2410,43 @@ public class Log {
 
                     size += write(os, "\r\n");
                 }
+
+                for (EntityAccount account : accounts)
+                    if (account.synchronize)
+                        try {
+                            String info = null;
+                            if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_OAUTH ||
+                                    account.auth_type == ServiceAuthenticator.AUTH_TYPE_GRAPH)
+                                info = getTokenInfo(account.password, account.auth_type);
+                            size += write(os, String.format("%s %s\r\n", account.name, info));
+
+                            List<EntityIdentity> identities = db.identity().getSynchronizingIdentities(account.id);
+                            for (EntityIdentity identity : identities)
+                                if (identity.auth_type == ServiceAuthenticator.AUTH_TYPE_OAUTH ||
+                                        identity.auth_type == ServiceAuthenticator.AUTH_TYPE_GRAPH)
+                                    size += write(os, String.format("- %s %s\r\n",
+                                            identity.name, getTokenInfo(identity.password, identity.auth_type)));
+                        } catch (Throwable ex) {
+                            size += write(os, ex.toString() + "\r\n");
+                        }
+
+                size += write(os, "\r\n");
+
+                Map<Long, EntityFolder> unified = new HashMap<>();
+                for (EntityFolder folder : db.folder().getFoldersByType(EntityFolder.INBOX))
+                    unified.put(folder.id, folder);
+                for (EntityFolder folder : db.folder().getFoldersUnified(null, false))
+                    unified.put(folder.id, folder);
+
+                for (Long fid : unified.keySet()) {
+                    EntityFolder folder = unified.get(fid);
+                    EntityAccount account = db.account().getAccount(folder.account);
+                    size += write(os, String.format("%s/%s:%s sync=%b unified=%b\r\n",
+                            (account == null ? null : account.name),
+                            folder.name, folder.type, folder.synchronize, folder.unified));
+                }
+
+                size += write(os, "\r\n");
 
                 for (EntityAccount account : accounts) {
                     if (account.synchronize) {
@@ -2429,14 +2470,15 @@ public class Log {
                         }
 
                         size += write(os, account.name + (account.primary ? "*" : "") +
-                                " " + (account.protocol == EntityAccount.TYPE_IMAP ? "IMAP" : "POP") + "/" + account.auth_type +
-                                (account.provider == null ? "" : " [" + account.provider + "]") +
+                                " " + (account.protocol == EntityAccount.TYPE_IMAP ? "IMAP" : "POP") +
+                                " [" + (account.provider == null ? "" : account.provider) +
+                                ":" + ServiceAuthenticator.getAuthTypeName(account.auth_type) + "]" +
                                 " " + account.host + ":" + account.port + "/" + account.encryption +
                                 " sync=" + account.synchronize +
                                 " exempted=" + account.poll_exempted +
                                 " poll=" + account.poll_interval +
                                 " ondemand=" + account.ondemand +
-                                " msgs=" + content + "/" + messages +
+                                " msgs=" + content + "/" + messages + " max=" + account.max_messages +
                                 " ops=" + db.operation().getOperationCount(account.id) +
                                 " schedule=" + (!ignore_schedule) + (ignore_schedule ? " !!!" : "") +
                                 " unmetered=" + unmetered + (unmetered ? " !!!" : "") +
@@ -2450,6 +2492,7 @@ public class Log {
                         for (TupleFolderEx folder : folders)
                             if (folder.synchronize) {
                                 int unseen = db.message().countUnseen(folder.id);
+                                int hidden = db.message().countHidden(folder.id);
                                 int notifying = db.message().countNotifying(folder.id);
                                 size += write(os, "- " + folder.name + " " +
                                         folder.type + (folder.inherited_type == null ? "" : "/" + folder.inherited_type) +
@@ -2459,7 +2502,7 @@ public class Log {
                                         " days=" + folder.sync_days + "/" + folder.keep_days +
                                         " msgs=" + folder.content + "/" + folder.messages + "/" + folder.total +
                                         " ops=" + db.operation().getOperationCount(folder.id, null) +
-                                        " unseen=" + unseen + " notifying=" + notifying +
+                                        " unseen=" + unseen + " hidden=" + hidden + " notifying=" + notifying +
                                         " " + folder.state +
                                         (folder.last_sync == null ? "" : " " + dtf.format(folder.last_sync)) +
                                         "\r\n");
@@ -2488,7 +2531,8 @@ public class Log {
                                 size += write(os, account.name + "/" + identity.name + (identity.primary ? "*" : "") + " " +
                                         identity.display + " " + identity.email +
                                         (identity.self ? "" : " !self") +
-                                        (identity.provider == null ? "" : " [" + identity.provider + "]") +
+                                        " [" + (identity.provider == null ? "" : identity.provider) +
+                                        ":" + ServiceAuthenticator.getAuthTypeName(identity.auth_type) + "]" +
                                         (TextUtils.isEmpty(identity.sender_extra_regex) ? "" : " regex=" + identity.sender_extra_regex) +
                                         (!identity.sender_extra ? "" : " edit" +
                                                 (identity.sender_extra_name ? "+name" : "-name") +
@@ -2974,6 +3018,27 @@ public class Log {
 
                 size += write(os, "\r\n");
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    try {
+                        DomainVerificationManager dvm = Helper.getSystemService(context, DomainVerificationManager.class);
+                        DomainVerificationUserState userState = dvm.getDomainVerificationUserState(context.getPackageName());
+                        Map<String, Integer> hostToStateMap = userState.getHostToStateMap();
+                        for (String key : hostToStateMap.keySet()) {
+                            Integer stateValue = hostToStateMap.get(key);
+                            if (stateValue == DomainVerificationUserState.DOMAIN_STATE_VERIFIED)
+                                size += write(os, String.format("Verified: %s\r\n", key));
+                            else if (stateValue == DomainVerificationUserState.DOMAIN_STATE_SELECTED)
+                                size += write(os, String.format("selected: %s\r\n", key));
+                            else
+                                size += write(os, String.format("Unverified: %s (%d)\r\n", key,
+                                        stateValue == null ? -1 : stateValue));
+                        }
+                    } catch (Throwable ex) {
+                        size += write(os, String.format("%s\r\n", ex));
+                    }
+                    size += write(os, "\r\n");
+                }
+
                 try {
                     List<WorkInfo> works = WorkManager
                             .getInstance(context)
@@ -3161,6 +3226,19 @@ public class Log {
         Helper.copy(source, target);
 
         db.attachment().setDownloaded(attachment.id, target.length());
+    }
+
+    static String getTokenInfo(String password, int auth_type) throws JSONException {
+        AuthState authState = AuthState.jsonDeserialize(password);
+        Long expiration = authState.getAccessTokenExpirationTime();
+        TokenResponse t = authState.getLastTokenResponse();
+        Set<String> scopeSet = (t == null ? null : t.getScopeSet());
+        String[] scopes = (scopeSet == null ? new String[0] : scopeSet.toArray(new String[0]));
+        return String.format("%s expire=%s need=%b %s",
+                ServiceAuthenticator.getAuthTypeName(auth_type),
+                (expiration == null ? null : new Date(expiration)),
+                authState.getNeedsTokenRefresh(),
+                TextUtils.join(",", scopes));
     }
 
     static SpannableStringBuilder getCiphers() {

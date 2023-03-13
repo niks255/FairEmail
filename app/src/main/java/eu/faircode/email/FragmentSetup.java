@@ -296,7 +296,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                 int order = 1;
 
                 // OAuth
-                order = getMenuItems(menu, context, providers, order, false);
+                order = getMenuItems(menu, context, providers, order, false, debug);
 
                 menu.add(Menu.NONE, R.string.title_setup_other, order++, R.string.title_setup_other)
                         .setIcon(R.drawable.twotone_auto_fix_high_24);
@@ -315,7 +315,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                         item.setIcon(resid);
                 }
 
-                order = getMenuItems(menu, context, providers, order, true);
+                order = getMenuItems(menu, context, providers, order, true, debug);
 
                 SpannableString ss = new SpannableString(getString(R.string.title_setup_pop3));
                 ss.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ss.length(), 0);
@@ -348,8 +348,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                                         .setNegativeButton(android.R.string.cancel, null)
                                         .show();
                             return true;
-                        } else if (itemId == R.string.title_setup_other ||
-                                itemId == R.string.title_setup_outlook) {
+                        } else if (itemId == R.string.title_setup_other) {
                             lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_SETUP)
                                     .putExtra("title", itemId));
                             return true;
@@ -403,13 +402,13 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                 popupMenu.show();
             }
 
-            private int getMenuItems(Menu menu, Context context, List<EmailProvider> providers, int order, boolean alt) {
+            private int getMenuItems(Menu menu, Context context, List<EmailProvider> providers, int order, boolean alt, boolean debug) {
                 Resources res = context.getResources();
                 String pkg = context.getPackageName();
 
                 for (EmailProvider provider : providers)
                     if (provider.oauth != null &&
-                            provider.oauth.enabled &&
+                            (provider.oauth.enabled || (provider.debug && debug)) &&
                             !TextUtils.isEmpty(provider.oauth.clientId) &&
                             provider.alt == alt) {
                         String title = getString(R.string.title_setup_oauth, provider.description);
@@ -429,9 +428,6 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                         int resid = res.getIdentifier("provider_" + provider.id, "drawable", pkg);
                         if (resid != 0)
                             item.setIcon(resid);
-
-                        if ("office365pcke".equals(provider.id))
-                            menu.add(alt ? Menu.FIRST : Menu.NONE, R.string.title_setup_outlook, order++, R.string.title_setup_outlook);
                     }
 
                 return order;

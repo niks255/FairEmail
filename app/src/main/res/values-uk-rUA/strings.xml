@@ -370,6 +370,7 @@
     <string name="title_advanced_sync_folders">Синхронізувати список тек</string>
     <string name="title_advanced_sync_folders_poll">Активна синхронізація списку тек</string>
     <string name="title_advanced_sync_shared_folders">Синхронізувати спільний список тек</string>
+    <string name="title_advanced_sync_added">Увімкнути синхронізацію для нових тек користувача</string>
     <string name="title_advanced_subscriptions">Керувати підписками тек</string>
     <string name="title_advanced_check_authentication">Перевірка автентичності повідомлення</string>
     <string name="title_advanced_check_tls">Перевірте безпеку транспортного рівня (TLS)</string>
@@ -597,6 +598,7 @@
     <string name="title_advanced_auto_important">Автоматично робити важливими повідомлення відмічені як обрані</string>
     <string name="title_advanced_cancel_snooze">Відмінити паузу при переміщенні повідомлень</string>
     <string name="title_advanced_auto_block_sender">Автоматично блокувати відправника при інформуванні про спам</string>
+    <string name="title_advanced_auto_hide_answer">Автоматично приховувати кнопку відповіді при прокручуванні</string>
     <string name="title_advanced_swipe_reply">Проведіть по розкритому повідомленню праворуч для відповіді</string>
     <string name="title_advanced_default_snooze">Час повторного нагадування за замовчуванням</string>
     <string name="title_advanced_default_folder">Виберіть теку за замовчуванням</string>
@@ -752,7 +754,7 @@
     <string name="title_advanced_auto_identity_hint">Це може обрати останню ідентифікацію, коли використовувалася для одержувача нових повідомлень</string>
     <string name="title_advanced_send_reminders_hint">Показувати попередження, коли відсутній текст повідомлення або тема пуста або якщо вкладення може бути відсутнє</string>
     <string name="title_advanced_reply_move_hint">Сервер електронної пошти може все ще додати повідомлення до теки надісланих повідомлень</string>
-    <string name="title_advanced_compose_color_hint" comment="title_advanced_compose_color_hint&#10;Help text for button to select default color for messages to be sent">Використання дуже світлих або дуже темних кольорів може призвести до того, що отримувач не зможе прочитати ваше повідомлення</string>
+    <string name="title_advanced_compose_color_hint">Використання дуже світлих або дуже темних кольорів може призвести до того, що отримувач не зможе прочитати ваше повідомлення</string>
     <string name="title_advanced_usenet_hint">Вставити \'-- \' між текстом і підписом</string>
     <string name="title_advanced_remove_signature_hint">Це може призвести до замалого або занадто багатого видалянню тексту</string>
     <string name="title_advanced_metered_hint">Лімітовані підключення - це загалом, мобільне підключення або платні Wi-Fi точки доступу</string>
@@ -903,7 +905,7 @@
     <string name="title_leave_deleted">Залишати видалені повідомлення на сервері</string>
     <string name="title_leave_on_device">Залишати повідомлення на пристрої</string>
     <string name="title_max_messages">Максимальна кількість повідомлень для завантаження (якщо порожньо то всі)</string>
-    <string name="title_max_messages_remark" comment="title_max_messages_remark&#10;Help text for POP3 maximum message count">Задайте додатнє число для завантаження останніх повідомлень (використовується зазвичай)
+    <string name="title_max_messages_remark">Задайте додатнє число для завантаження останніх повідомлень (використовується зазвичай)
         або від\'ємне для завантаженя перших повідомлень (використовується рідко)
     </string>
     <string name="title_keep_poll_interval">Інтервал опитування (хвилини)</string>
@@ -1246,7 +1248,7 @@
     </string>
     <string name="title_compose">Написати листа</string>
     <string name="title_submitter">Надіслав:</string>
-    <string name="title_signed_by" comment="title_signed_by&#10;Title for who takes responsibility for a message (=DKIM signer)">Підписано:</string>
+    <string name="title_signed_by">Підписано:</string>
     <string name="title_delivered_to">Доставлено:</string>
     <string name="title_from">Від:</string>
     <string name="title_to">До:</string>
@@ -1486,6 +1488,9 @@
     <string name="title_sort_on_attachments">Вкладеннями</string>
     <string name="title_sort_on_hidden">Приховані</string>
     <string name="title_sort_ascending">Спочатку старіші</string>
+    <string name="title_sort_on_order">Порядок</string>
+    <string name="title_sort_on_applied">Лічильник застосувань</string>
+    <string name="title_sort_on_last_applied">Востаннє застосовано</string>
     <string name="title_filter">Відфільтрувати</string>
     <string name="title_filter_seen">Прочитано</string>
     <string name="title_filter_unflagged">Не обране</string>
@@ -1743,7 +1748,9 @@
     <string name="title_hint_support">Якщо у вас є питання або проблема, будь ласка, використовуйте меню підтримки для отримання допомоги</string>
     <string name="title_hint_message_actions">Гортайте ліворуч до кошика; проведіть праворуч щоб архівувати (якщо доступно); ці дії можна налаштувати в налаштуваннях облікового запису</string>
     <string name="title_hint_message_selection">Довго натисніть на повідомлення, щоб почати вибирати кілька повідомлень; Натиснувши потягніть вгору або вниз, щоб обрати більше повідомлень</string>
-    <string name="title_hint_message_junk">Ці повідомлення знаходяться в теці зі спамом на сервері електронної пошти. Очевидно, що додаток не може запобігти доставлення спам-повідомлень Вам.</string>
+    <string name="title_hint_message_junk">Поштовий клієнт лише відображає повідомлення, які наявні на поштовому сервері.
+За фільтрацію спаму відповідає саме сервер, а не клієнт.
+Якщо ви отримуєте багато спаму, зверніться до служби підтримки вашого поштового сервісу і не звинувачуйте додаток!    </string>
     <string name="title_hint_important">Важливо</string>
     <string name="title_hint_sync">Завантаження повідомлень може зайняти деякий час, в залежності від пристрою, швидкості провайдера, інтернет-з\'єднання та кількості повідомлень. При завантаженні повідомлень, додаток може реагувати повільніше.</string>
     <string name="title_hint_sync_note">За замовчуванням, не всі повідомлення будуть завантажені щоб обмежити об\'єм використаної пам\'яті, а також використання акумулятора. Це можна змінити, довго натискаючи на теку в списку тек і вибравши \"Синхронізувати більше\".</string>
@@ -1808,7 +1815,11 @@
     <string name="title_via">Через: %1$s</string>
     <string name="title_1hour">1 година</string>
     <string name="title_1day">1 день</string>
-    <string name="title_1week">1 тиждень</string>
+    <string name="title_more_overflow">Більше &#8230;</string>
+    <string name="title_today_at">Сьогодні о %1$s</string>
+    <string name="title_tomorrow_at">Завтра о %1$s</string>
+    <string name="title_day_at_time">%1$s о %2$s</string>
+    <string name="title_next_week">У цей час наступного тижня</string>
     <string name="title_now">Зараз</string>
     <string name="title_after">Після %1$s</string>
     <string name="title_reset">Скинути</string>

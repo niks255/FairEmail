@@ -351,7 +351,6 @@ public class ApplicationEx extends Application
             EntityLog.log(context, "Upgrading from " + version + " to " + BuildConfig.VERSION_CODE);
 
         SharedPreferences.Editor editor = prefs.edit();
-        editor.remove("max_backoff_power");
 
         if (version < BuildConfig.VERSION_CODE)
             editor.remove("crash_report_count");
@@ -679,7 +678,8 @@ public class ApplicationEx extends Application
         } else if (version < 2029) {
             if (!prefs.contains("plain_only_reply"))
                 editor.putBoolean("plain_only_reply", true);
-        }
+        } else if (version < 2046)
+            editor.remove("message_junk");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)
             editor.remove("background_service");

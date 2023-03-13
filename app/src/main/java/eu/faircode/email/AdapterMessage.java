@@ -58,6 +58,7 @@ import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -322,7 +323,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
     private boolean gotoTop = false;
     private Integer gotoPos = null;
-    private boolean firstClick = false;
     private AsyncPagedListDiffer<TupleMessageEx> differ;
     private Map<Long, Integer> keyPosition = new HashMap<>();
     private Map<Integer, Long> positionKey = new HashMap<>();
@@ -1481,8 +1481,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvFolder.setText(outbox ? message.identityEmail : message.accountName);
             else if (viewType == ViewType.THREAD || viewType == ViewType.SEARCH)
                 tvFolder.setText(message.getFolderName(context));
-            else
-                tvFolder.setText(message.accountName + "/" + message.getFolderName(context));
+            else {
+                SpannableStringBuilder ssb = new SpannableStringBuilderEx();
+                ssb.append(message.accountName);
+                if (message.accountColor != null)
+                    ssb.setSpan(new ForegroundColorSpan(message.accountColor), 0, ssb.length(), 0);
+                ssb.append('/');
+                int s = ssb.length();
+                ssb.append(message.getFolderName(context));
+                if (message.folderColor != null)
+                    ssb.setSpan(new ForegroundColorSpan(message.folderColor), s, ssb.length(), 0);
+                tvFolder.setText(ssb);
+            }
 
             tvFolder.setVisibility(compact && viewType != ViewType.THREAD ? View.GONE : View.VISIBLE);
 
@@ -2499,10 +2509,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     message.signedby != null &&
                     message.from != null &&
                     message.from.length == 1) {
+                // https://dmarcly.com/blog/what-is-dmarc-identifier-alignment-domain-alignment
                 String domain = UriHelper.getEmailDomain(((InternetAddress) message.from[0]).getAddress());
                 if (domain != null)
                     for (String signer : message.signedby.split(","))
-                        if (signer.equals(domain)) {
+                        if (Objects.equals(
+                                UriHelper.getRootDomain(context, signer),
+                                UriHelper.getRootDomain(context, domain))) {
                             known_signer = true;
                             break;
                         }
@@ -3233,7 +3246,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             !EntityFolder.OUTBOX.equals(message.folderType)
                             ? View.VISIBLE : View.GONE);
 
-                    boolean reformatted_hint = prefs.getBoolean("reformatted_hint", true);
+                    boolean reformatted_hint = prefs.getBoolean("reformatted_hint", hasWebView);
                     tvReformatted.setVisibility(reformatted_hint ? View.VISIBLE : View.GONE);
 
                     boolean signed_data = args.getBoolean("signed_data");
@@ -4326,13 +4339,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return;
                     }
 
-                    firstClick = !firstClick;
+                    boolean firstClick = !properties.getValue("firstClick", message.id);
+                    properties.setValue("firstClick", message.id, firstClick);
                     if (firstClick) {
                         ApplicationEx.getMainHandler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                boolean firstClick = properties.getValue("firstClick", message.id);
                                 if (firstClick) {
-                                    firstClick = false;
+                                    properties.setValue("firstClick", message.id, false);
                                     lbm.sendBroadcast(viewThread);
                                     properties.setValue("selected", message.id, true);
                                 }
@@ -4803,6 +4818,25 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onHelp(TupleMessageEx message) {
+            if (message.error != null &&
+                    message.error.contains("535 5.7.3 Authentication unsuccessful")) {
+                Intent intent = new Intent(context, ActivityError.class);
+                intent.setAction("535:" + message.identity);
+                intent.putExtra("title", "535 5.7.3 Authentication unsuccessful");
+                intent.putExtra("message", message.error);
+                intent.putExtra("provider", "outlookgraph");
+                intent.putExtra("account", message.account);
+                intent.putExtra("protocol", message.accountProtocol);
+                intent.putExtra("identity", message.identity);
+                intent.putExtra("authorize", true);
+                intent.putExtra("personal", message.identityName);
+                intent.putExtra("address", message.identityEmail);
+                intent.putExtra("faq", 14);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                return;
+            }
+
             PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibError);
 
             int order = 0;
@@ -5807,6 +5841,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_force_light).setChecked(force_light);
 
             popupMenu.getMenu().findItem(R.id.menu_share).setEnabled(message.content);
+            popupMenu.getMenu().findItem(R.id.menu_share_link).setVisible(BuildConfig.DEBUG);
             popupMenu.getMenu().findItem(R.id.menu_pin).setVisible(pin);
             popupMenu.getMenu().findItem(R.id.menu_event).setEnabled(message.content);
             popupMenu.getMenu().findItem(R.id.menu_print).setEnabled(hasWebView && message.content);
@@ -5913,6 +5948,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return true;
                     } else if (itemId == R.id.menu_share) {
                         onMenuShare(message, false);
+                        return true;
+                    } else if (itemId == R.id.menu_share_link) {
+                        onMenuShareLink(message);
                         return true;
                     } else if (itemId == R.id.menu_pin) {
                         onMenuPin(message);
@@ -6777,6 +6815,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }.execute(context, owner, args, "message:share");
         }
 
+        private void onMenuShareLink(TupleMessageEx message) {
+            String link = message.getLink();
+            String title = context.getString(R.string.title_share_link_open);
+            String html = "<a href=\"" + link + "\">" + Html.escapeHtml(title) + "<a/>";
+
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, link);
+            intent.putExtra(Intent.EXTRA_HTML_TEXT, html);
+            context.startActivity(intent);
+        }
+
         private void onMenuPin(TupleMessageEx message) {
             View view = LayoutInflater.from(context).inflate(R.layout.dialog_shortcut_label, null);
             EditText etLabel = view.findViewById(R.id.etLabel);
@@ -6944,6 +6995,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 sheets);
                         if (!TextUtils.isEmpty(computed))
                             element.attr("x-computed", computed);
+                    }
+
+                    if (BuildConfig.DEBUG) {
+                        d = HtmlHelper.sanitizeView(context, d, false);
+                        d.outputSettings().prettyPrint(true).outline(true).indentAmount(1);
                     }
 
                     File dir = Helper.ensureExists(new File(context.getFilesDir(), "shared"));
@@ -7192,6 +7248,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             context.getString(expanded ? R.string.title_accessibility_collapse : R.string.title_accessibility_expand)));
                 ibExpander.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
 
+                info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibAnswer,
+                        context.getString(R.string.title_reply)));
+
+                info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibArchive,
+                        context.getString(R.string.title_archive)));
+
+                info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibTrash,
+                        context.getString(R.string.title_trash)));
+
                 if (ibAvatar.getVisibility() == View.VISIBLE && ibAvatar.isEnabled())
                     info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibAvatar,
                             context.getString(R.string.title_accessibility_view_contact)));
@@ -7230,6 +7295,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 if (action == R.id.ibExpander) {
                     onToggleMessage(message);
+                    return true;
+                } else if (action == R.id.ibAnswer) {
+                    onActionAnswer(message, view);
+                    return true;
+                } else if (action == R.id.ibArchive) {
+                    onActionArchive(message);
+                    return true;
+                } else if (action == R.id.ibTrash) {
+                    onActionTrash(message, false);
                     return true;
                 } else if (action == R.id.ibAvatar) {
                     onViewContact(message);

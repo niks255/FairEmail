@@ -2253,9 +2253,11 @@ class Core {
         boolean sync_folders = prefs.getBoolean("sync_folders", true);
         boolean sync_folders_poll = prefs.getBoolean("sync_folders_poll", false);
         boolean sync_shared_folders = prefs.getBoolean("sync_shared_folders", false);
+        boolean sync_added_folders = prefs.getBoolean("sync_added_folders", false);
         Log.i(account.name + " sync folders=" + sync_folders +
                 " poll=" + sync_folders_poll +
                 " shared=" + sync_shared_folders +
+                " added=" + sync_added_folders +
                 " keep_alive=" + keep_alive +
                 " force=" + force);
 
@@ -2268,9 +2270,12 @@ class Core {
 
         // Get folder names
         boolean drafts = false;
+        boolean user = false;
         Map<String, EntityFolder> local = new HashMap<>();
         List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
         for (EntityFolder folder : folders) {
+            if (EntityFolder.USER.equals(folder.type))
+                user = true;
             if (folder.tbc != null) {
                 try {
                     // Prefix folder with namespace
@@ -2675,6 +2680,8 @@ class Core {
 
                         if (selectable)
                             folder.inheritFrom(parent);
+                        if (user && sync_added_folders && EntityFolder.USER.equals(type))
+                            folder.synchronize = true;
 
                         folder.id = db.folder().insertFolder(folder);
                         Log.i(folder.name + " added type=" + folder.type + " sync=" + folder.synchronize);
@@ -3028,7 +3035,7 @@ class Core {
                 // Index IDs
                 Map<String, TupleUidl> uidlTuple = new HashMap<>();
                 for (TupleUidl id : ids) {
-                    if (id.uidl != null && id.msgid != null) {
+                    if (id.uidl != null) {
                         if (uidlTuple.containsKey(id.uidl))
                             Log.w(account.name + " POP duplicate uidl/msgid=" + id.uidl + "/" + id.msgid);
                         uidlTuple.put(id.uidl, id);
@@ -3130,7 +3137,7 @@ class Core {
                             if (account.max_messages != null)
                                 _new = false;
 
-                            Log.i(account.name + " POP having " +
+                            Log.i(account.name + " POP having index=" + i + " " +
                                     msgid + "=" + msgIdTuple.containsKey(msgid) + "/" +
                                     uidl + "=" + uidlTuple.containsKey(uidl));
 
@@ -3163,7 +3170,7 @@ class Core {
                         long received = helper.getPOP3Received();
 
                         boolean seen = (received <= account.created);
-                        EntityLog.log(context, account.name + " POP sync=" + uidl + "/" + msgid +
+                        EntityLog.log(context, account.name + " POP index=" + i + " sync=" + uidl + "/" + msgid +
                                 " new=" + _new + " seen=" + seen);
 
                         String[] authentication = helper.getAuthentication();
@@ -3278,7 +3285,7 @@ class Core {
                             if (Boolean.TRUE.equals(message.blocklist)) {
                                 EntityLog.log(context, account.name + " POP blocklist=" +
                                         MessageHelper.formatAddresses(message.from));
-                                continue;
+                                message.ui_hide = true;
                             }
                         }
 
@@ -3302,7 +3309,7 @@ class Core {
                                 EntityLog.log(context, account.name + " POP blocked=" +
                                         MessageHelper.formatAddresses(message.from));
 
-                                continue;
+                                message.ui_hide = true;
                             }
                         }
 
@@ -3370,6 +3377,9 @@ class Core {
                             } catch (Throwable ex) {
                                 Log.w(ex);
                             }
+
+                        if (!account.leave_on_server && account.client_delete)
+                            imessage.setFlag(Flags.Flag.DELETED, true);
 
                         EntityContact.received(context, account, folder, message);
                     } catch (FolderClosedException ex) {
@@ -4874,8 +4884,6 @@ class Core {
     }
 
     private static EntityIdentity matchIdentity(Context context, EntityFolder folder, EntityMessage message) {
-        DB db = DB.getInstance(context);
-
         if (EntityFolder.DRAFTS.equals(folder.type))
             return null;
 
@@ -4939,19 +4947,20 @@ class Core {
 
         if (account.protocol == EntityAccount.TYPE_IMAP && folder.read_only)
             return;
-        if (!ActivityBilling.isPro(context))
-            return;
+
+        boolean pro = ActivityBilling.isPro(context);
 
         DB db = DB.getInstance(context);
         try {
             boolean executed = false;
-            for (EntityRule rule : rules)
-                if (rule.matches(context, message, headers, html)) {
-                    rule.execute(context, message);
-                    executed = true;
-                    if (rule.stop)
-                        break;
-                }
+            if (pro)
+                for (EntityRule rule : rules)
+                    if (rule.matches(context, message, headers, html)) {
+                        rule.execute(context, message);
+                        executed = true;
+                        if (rule.stop)
+                            break;
+                    }
 
             if (EntityFolder.INBOX.equals(folder.type))
                 if (message.from != null) {

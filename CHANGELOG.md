@@ -4,7 +4,51 @@
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
+### [Rahonavis](https://en.wikipedia.org/wiki/Rahonavis)
+
+### 1.2052 - 2023-03-08
+
+* Added experimental [OpenAI (ChatGPT) integration](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq190)
+* Small improvements and minor bug fixes
+
 ### [Quetecsaurus](https://en.wikipedia.org/wiki/Quetecsaurus)
+
+### 1.2051 - 2023-03-05
+
+* Fixed changing auth type
+* Small improvements and minor bug fixes
+
+### 1.2050 - 2023-03-05
+
+* Fixed updating Microsoft Graph tokens
+* Small improvements and minor bug fixes
+
+### 1.2049 - 2023-03-04
+
+* Fixed refreshing Microsoft Graph tokens
+
+### 1.2048 - 2023-03-04
+
+* Fixed 'Other provider' setup wizard
+
+### 1.2047 - 2023-03-04
+
+* Fixed authenticating Yahoo/AOL accounts
+* Small improvements and minor bug fixes
+* Updated translations
+
+### 1.2046 - 2023-03-04
+
+* Added sort options for filter rules
+* Added option to disable auto hiding of answer button
+* Added option to auto enable sync of new folders
+* Added presets for snooze / delayed send
+* Added account/folder colors to account/folder name in message header
+* Added scrolling of original message when using up/down buttons
+* Added Korean and Norwegian to DeepL
+* Small improvements and minor bug fixes
+* Updated AndroidX
+* Updated translations
 
 ### 1.2045 - 2023-02-18
 

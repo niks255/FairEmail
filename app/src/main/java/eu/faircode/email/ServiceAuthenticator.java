@@ -24,6 +24,7 @@ import static eu.faircode.email.GmailState.TYPE_GOOGLE;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
@@ -41,6 +42,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +63,7 @@ public class ServiceAuthenticator extends Authenticator {
     static final int AUTH_TYPE_PASSWORD = 1;
     static final int AUTH_TYPE_GMAIL = 2;
     static final int AUTH_TYPE_OAUTH = 3;
+    static final int AUTH_TYPE_GRAPH = 4;
 
     static final long MIN_REFRESH_INTERVAL = 15 * 60 * 1000L;
     static final long MIN_FORCE_REFRESH_INTERVAL = 15 * 60 * 1000L;
@@ -116,7 +120,7 @@ public class ServiceAuthenticator extends Authenticator {
             return authState.getAccessToken();
         } else if (auth == AUTH_TYPE_OAUTH && provider != null) {
             AuthState authState = AuthState.jsonDeserialize(password);
-            OAuthRefresh(context, provider, user, authState, forceRefresh);
+            OAuthRefresh(context, provider, auth, user, authState, forceRefresh);
             Long expiration = authState.getAccessTokenExpirationTime();
             if (expiration != null)
                 EntityLog.log(context, user + " token expiration=" + new Date(expiration));
@@ -152,7 +156,7 @@ public class ServiceAuthenticator extends Authenticator {
         void onPasswordChanged(Context context, String newPassword);
     }
 
-    private static void OAuthRefresh(Context context, String id, String user, AuthState authState, boolean forceRefresh)
+    static void OAuthRefresh(Context context, String id, int auth_type, String user, AuthState authState, boolean forceRefresh)
             throws MessagingException {
         try {
             long now = new Date().getTime();
@@ -167,22 +171,30 @@ public class ServiceAuthenticator extends Authenticator {
             if (needsRefresh)
                 authState.setNeedsTokenRefresh(true);
 
-            EntityLog.log(context, EntityLog.Type.General, "Token user=" + id + ":" + user +
+            EntityLog.log(context, EntityLog.Type.General, "Token" +
+                    " provider=" + id + ":" + getAuthTypeName(auth_type) +
+                    " user" + user +
                     " expiration=" + (expiration == null ? null : new Date(expiration)) +
                     " need=" + needsRefresh + "/" + authState.getNeedsTokenRefresh() +
                     " force=" + forceRefresh);
 
             ClientAuthentication clientAuth;
             EmailProvider provider = EmailProvider.getProvider(context, id);
-            if (provider.oauth.clientSecret == null)
+            EmailProvider.OAuth oauth = (auth_type == AUTH_TYPE_GRAPH ? provider.graph : provider.oauth);
+
+            if (oauth.clientSecret == null)
                 clientAuth = NoClientAuthentication.INSTANCE;
             else
-                clientAuth = new ClientSecretPost(provider.oauth.clientSecret);
+                clientAuth = new ClientSecretPost(oauth.clientSecret);
 
             ErrorHolder holder = new ErrorHolder();
             Semaphore semaphore = new Semaphore(0);
 
-            Log.i("OAuth refresh user=" + id + ":" + user);
+            Map<String, String> params = new LinkedHashMap<>();
+            if (oauth.tokenScopes)
+                params.put("scope", TextUtils.join(" ", oauth.scopes));
+
+            Log.i("OAuth refresh provider=" + id + ":" + getAuthTypeName(auth_type) + " user=" + user);
             AppAuthConfiguration config = new AppAuthConfiguration.Builder()
                     .setBrowserMatcher(new BrowserMatcher() {
                         @Override
@@ -195,6 +207,7 @@ public class ServiceAuthenticator extends Authenticator {
             authState.performActionWithFreshTokens(
                     authService,
                     clientAuth,
+                    //params,
                     new AuthState.AuthStateAction() {
                         @Override
                         public void execute(String accessToken, String idToken, AuthorizationException error) {
@@ -209,18 +222,31 @@ public class ServiceAuthenticator extends Authenticator {
 
             authService.dispose();
 
-            Log.i("OAuth refreshed user=" + id + ":" + user);
-
-            if (holder.error != null) {
+            if (holder.error == null)
+                Log.i("OAuth refreshed provider=" + id + ":" + getAuthTypeName(auth_type) + " user=" + user);
+            else {
                 Log.e(new Throwable("Token refresh failed" +
-                        " id=" + id +
+                        " provider=" + id + ":" + getAuthTypeName(auth_type) +
                         " error=" + holder.error.getMessage(),
                         holder.error));
                 throw holder.error;
             }
         } catch (Exception ex) {
-            throw new MessagingException("OAuth refresh id=" + id, ex);
+            throw new MessagingException("OAuth refresh provider=" + id + ":" + getAuthTypeName(auth_type), ex);
         }
+    }
+
+    static String getAuthTypeName(int auth_type) {
+        if (auth_type == AUTH_TYPE_PASSWORD)
+            return "password";
+        else if (auth_type == AUTH_TYPE_GMAIL)
+            return "gmail";
+        else if (auth_type == AUTH_TYPE_OAUTH)
+            return "oauth";
+        else if (auth_type == AUTH_TYPE_GRAPH)
+            return "graph";
+        else
+            return "?" + auth_type;
     }
 
     static String getAuthTokenType(String type) {

@@ -21,7 +21,6 @@ package eu.faircode.email;
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
-
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_NONE;
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE;
 
@@ -1953,6 +1952,22 @@ public class Helper {
         return !Character.isISOControl(c);
     }
     // https://issuetracker.google.com/issues/37054851
+
+    static String getPrintableString(String value) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < value.length(); i++) {
+            char kar = value.charAt(i);
+            if (kar == '\n')
+                result.append('|');
+            else if (kar == ' ')
+                result.append('_');
+            else if (!Helper.isPrintableChar(kar) || kar == '\u00a0')
+                result.append('{').append(Integer.toHexString(kar)).append('}');
+            else
+                result.append(kar);
+        }
+        return result.toString();
+    }
 
     static DateFormat getTimeInstance(Context context) {
         return getTimeInstance(context, SimpleDateFormat.MEDIUM);

@@ -299,6 +299,7 @@ public class FragmentCompose extends FragmentBase {
     private List<EntityAttachment> last_attachments = null;
     private boolean saved = false;
     private String subject = null;
+    private boolean chatting = false;
 
     private Uri photoURI = null;
 
@@ -1721,6 +1722,18 @@ public class FragmentCompose extends FragmentBase {
 
         LayoutInflater infl = LayoutInflater.from(context);
 
+        ImageButton ibOpenAi = (ImageButton) infl.inflate(R.layout.action_button, null);
+        ibOpenAi.setId(View.generateViewId());
+        ibOpenAi.setImageResource(R.drawable.twotone_smart_toy_24);
+        ibOpenAi.setContentDescription(getString(R.string.title_openai));
+        ibOpenAi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onOpenAi();
+            }
+        });
+        menu.findItem(R.id.menu_openai).setActionView(ibOpenAi);
+
         View v = infl.inflate(R.layout.action_button_text, null);
         v.setId(View.generateViewId());
         ImageButton ib = v.findViewById(R.id.button);
@@ -1749,7 +1762,7 @@ public class FragmentCompose extends FragmentBase {
         ImageButton ibTranslate = (ImageButton) infl.inflate(R.layout.action_button, null);
         ibTranslate.setId(View.generateViewId());
         ibTranslate.setImageResource(R.drawable.twotone_translate_24);
-        ib.setContentDescription(getString(R.string.title_translate));
+        ibTranslate.setContentDescription(getString(R.string.title_translate));
         ibTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1784,6 +1797,9 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_encrypt).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_translate).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_translate).setVisible(DeepL.isAvailable(context));
+        menu.findItem(R.id.menu_openai).setEnabled(state == State.LOADED && !chatting);
+        ((ImageButton) menu.findItem(R.id.menu_openai).getActionView()).setEnabled(!chatting);
+        menu.findItem(R.id.menu_openai).setVisible(OpenAI.isAvailable(context));
         menu.findItem(R.id.menu_zoom).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_style).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_media).setEnabled(state == State.LOADED);
@@ -1975,23 +1991,6 @@ public class FragmentCompose extends FragmentBase {
     private void onMenuEncrypt() {
         EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
         if (identity == null || identity.encrypt == 0) {
-            final Context context = getContext();
-            if (!Helper.isOpenKeychainInstalled(context)) {
-                new AlertDialog.Builder(context)
-                        .setIcon(R.drawable.twotone_lock_24)
-                        .setTitle(R.string.title_no_openpgp)
-                        .setMessage(R.string.title_no_openpgp_remark)
-                        .setPositiveButton(R.string.title_info, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Helper.viewFAQ(context, 12);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
-                return;
-            }
-
             if (EntityMessage.ENCRYPT_NONE.equals(encrypt) || encrypt == null)
                 encrypt = EntityMessage.PGP_SIGNENCRYPT;
             else if (EntityMessage.PGP_SIGNENCRYPT.equals(encrypt))
@@ -2005,6 +2004,51 @@ public class FragmentCompose extends FragmentBase {
                 encrypt = EntityMessage.SMIME_SIGNONLY;
             else
                 encrypt = EntityMessage.ENCRYPT_NONE;
+        }
+
+        final Context context = getContext();
+        if ((EntityMessage.PGP_SIGNONLY.equals(encrypt) ||
+                EntityMessage.PGP_SIGNENCRYPT.equals(encrypt))
+                && !Helper.isOpenKeychainInstalled(context)) {
+            encrypt = EntityMessage.ENCRYPT_NONE;
+
+            new AlertDialog.Builder(context)
+                    .setIcon(R.drawable.twotone_lock_24)
+                    .setTitle(R.string.title_no_openpgp)
+                    .setMessage(R.string.title_no_openpgp_remark)
+                    .setPositiveButton(R.string.title_info, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Helper.viewFAQ(context, 12);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setNeutralButton(R.string.title_reset, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new SimpleTask<Void>() {
+                                @Override
+                                protected Void onExecute(Context context, Bundle args) throws Throwable {
+                                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                                    prefs.edit()
+                                            .remove("sign_default")
+                                            .remove("encrypt_default")
+                                            .apply();
+
+                                    DB db = DB.getInstance(context);
+                                    db.identity().resetIdentityPGP();
+
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onException(Bundle args, Throwable ex) {
+                                    Log.unexpectedError(getParentFragmentManager(), ex);
+                                }
+                            }.execute(FragmentCompose.this, new Bundle(), "encrypt: fix");
+                        }
+                    })
+                    .show();
         }
 
         invalidateOptionsMenu();
@@ -2335,6 +2379,113 @@ public class FragmentCompose extends FragmentBase {
         fragment.setArguments(new Bundle());
         fragment.setTargetFragment(this, REQUEST_SELECT_IDENTITY);
         fragment.show(getParentFragmentManager(), "select:identity");
+    }
+
+    private void onOpenAi() {
+        int start = etBody.getSelectionStart();
+        int end = etBody.getSelectionEnd();
+        boolean selection = (start >= 0 && end > start);
+        Editable edit = etBody.getText();
+        String body = (selection ? edit.subSequence(start, end) : edit).toString().trim();
+
+        Bundle args = new Bundle();
+        args.putLong("id", working);
+        args.putString("body", body);
+        args.putBoolean("selection", selection);
+
+        new SimpleTask<OpenAI.Message[]>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                chatting = true;
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                chatting = false;
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            protected OpenAI.Message[] onExecute(Context context, Bundle args) throws Throwable {
+                long id = args.getLong("id");
+                String body = args.getString("body");
+                boolean selection = args.getBoolean("selection");
+
+                DB db = DB.getInstance(context);
+                EntityMessage draft = db.message().getMessage(id);
+                if (draft == null)
+                    return null;
+
+                List<EntityMessage> inreplyto;
+                if (selection || TextUtils.isEmpty(draft.inreplyto))
+                    inreplyto = new ArrayList<>();
+                else
+                    inreplyto = db.message().getMessagesByMsgId(draft.account, draft.inreplyto);
+
+                List<OpenAI.Message> result = new ArrayList<>();
+                //messages.add(new OpenAI.Message("system", "You are a helpful assistant."));
+
+                if (inreplyto.size() > 0 && inreplyto.get(0).content) {
+                    Document parsed = JsoupEx.parse(inreplyto.get(0).getFile(context));
+                    Document document = HtmlHelper.sanitizeView(context, parsed, false);
+                    Spanned spanned = HtmlHelper.fromDocument(context, document, null, null);
+                    String[] paragraphs = spanned.toString().split("[\\r\\n]+");
+
+                    int i = 0;
+                    StringBuilder sb = new StringBuilder();
+                    while (i < paragraphs.length &&
+                            sb.length() + paragraphs[i].length() + 1 < 1000)
+                        sb.append(paragraphs[i++]).append('\n');
+
+                    String role = (MessageHelper.equalEmail(draft.from, inreplyto.get(0).from) ? "assistant" : "user");
+                    result.add(new OpenAI.Message(role, sb.toString()));
+                }
+
+                if (!TextUtils.isEmpty(body))
+                    result.add(new OpenAI.Message("assistant", body));
+
+                if (result.size() == 0)
+                    return null;
+
+                return OpenAI.completeChat(context, result.toArray(new OpenAI.Message[0]), 1);
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, OpenAI.Message[] messages) {
+                if (messages == null || messages.length == 0)
+                    return;
+
+                String text = messages[0].getContent()
+                        .replaceAll("^\\n+", "").replaceAll("\\n+$", "");
+
+                Editable edit = etBody.getText();
+                int start = etBody.getSelectionStart();
+                int end = etBody.getSelectionEnd();
+
+                int index;
+                if (etBody.hasSelection()) {
+                    edit.delete(start, end);
+                    index = start;
+                } else
+                    index = end;
+
+                if (index < 0)
+                    index = 0;
+                if (index > 0 && edit.charAt(index - 1) != '\n')
+                    edit.insert(index++, "\n");
+
+                edit.insert(index, text + "\n");
+                etBody.setSelection(index + text.length() + 1);
+
+                StyleHelper.markAsInserted(edit, index, index + text.length() + 1);
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "openai");
     }
 
     private void onTranslate(View anchor) {
@@ -4533,7 +4684,12 @@ public class FragmentCompose extends FragmentBase {
 
                     exif.setAttribute(ExifInterface.TAG_XMP, null);
                     exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, null);
+                    //exif.setAttribute(ExifInterface.TAG_MAKE, null);
+                    //exif.setAttribute(ExifInterface.TAG_MODEL, null);
+                    //exif.setAttribute(ExifInterface.TAG_SOFTWARE, null);
                     exif.setAttribute(ExifInterface.TAG_ARTIST, null);
+                    exif.setAttribute(ExifInterface.TAG_COPYRIGHT, null);
+                    exif.setAttribute(ExifInterface.TAG_USER_COMMENT, null);
                     exif.setAttribute(ExifInterface.TAG_IMAGE_UNIQUE_ID, null);
                     exif.setAttribute(ExifInterface.TAG_CAMERA_OWNER_NAME, null);
                     exif.setAttribute(ExifInterface.TAG_BODY_SERIAL_NUMBER, null);
@@ -7431,6 +7587,7 @@ public class FragmentCompose extends FragmentBase {
             final ViewGroup dview = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_image, null);
             final ImageView ivType = dview.findViewById(R.id.ivType);
             final RadioGroup rgAction = dview.findViewById(R.id.rgAction);
+            final ImageButton ibSettings = dview.findViewById(R.id.ibSettings);
             final CheckBox cbResize = dview.findViewById(R.id.cbResize);
             final ImageButton ibResize = dview.findViewById(R.id.ibResize);
             final Spinner spResize = dview.findViewById(R.id.spResize);
@@ -7458,6 +7615,17 @@ public class FragmentCompose extends FragmentBase {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
                     prefs.edit().putBoolean("add_inline", checkedId == R.id.rbInline).apply();
+                }
+            });
+
+            // https://developer.android.com/reference/android/provider/MediaStore#ACTION_PICK_IMAGES_SETTINGS
+            PackageManager pm = getContext().getPackageManager();
+            Intent settings = new Intent(MediaStore.ACTION_PICK_IMAGES_SETTINGS);
+            ibSettings.setVisibility(settings.resolveActivity(pm) == null ? View.GONE : View.VISIBLE);
+            ibSettings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.getContext().startActivity(settings);
                 }
             });
 

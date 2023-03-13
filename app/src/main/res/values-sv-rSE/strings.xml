@@ -336,6 +336,7 @@
     <string name="title_advanced_sync_folders">Synkronisera mapplistan</string>
     <string name="title_advanced_sync_folders_poll">Synkronisera mapplistan aktivt</string>
     <string name="title_advanced_sync_shared_folders">Synkronisera delade mapplistor</string>
+    <string name="title_advanced_sync_added">Aktivera synkronisering för nya användarmappar</string>
     <string name="title_advanced_subscriptions">Hantera mapprenumerationer</string>
     <string name="title_advanced_check_authentication">Kontrollera meddelandeautentisering</string>
     <string name="title_advanced_check_tls">Kontrollera transportskiktssäkerhet (TLS)</string>
@@ -563,6 +564,7 @@
     <string name="title_advanced_auto_important">Gör automatiskt stjärnmärkta meddelanden viktiga</string>
     <string name="title_advanced_cancel_snooze">Avbryt snooze när meddelanden flyttas</string>
     <string name="title_advanced_auto_block_sender">Blockera avsändaren automatiskt vid rapportering av skräppost</string>
+    <string name="title_advanced_auto_hide_answer">Dölj svarsknappen automatiskt när du skrollar</string>
     <string name="title_advanced_swipe_reply">Svep expanderade meddelanden till höger för att svara</string>
     <string name="title_advanced_default_snooze">Standardlängd på slumra</string>
     <string name="title_advanced_default_folder">Välj standardmapp</string>
@@ -719,7 +721,7 @@
     <string name="title_advanced_auto_identity_hint">Detta kommer att välja den senaste identiteten som använts när du väljer en mottagare för nya meddelanden</string>
     <string name="title_advanced_send_reminders_hint">Visa en varning när meddelandetexten eller ämnet är tomt eller när en bilaga kanske saknas</string>
     <string name="title_advanced_reply_move_hint">E-postservern kan fortfarande lägga till meddelanden till skickade mail mappen</string>
-    <string name="title_advanced_compose_color_hint" comment="title_advanced_compose_color_hint&#10;Help text for button to select default color for messages to be sent">Mycket ljusa eller mycket mörka färger kommer att resultera i oläsliga meddelanden på mottagarsidan</string>
+    <string name="title_advanced_compose_color_hint">Mycket ljusa eller mycket mörka färger kommer att resultera i oläsliga meddelanden på mottagarsidan</string>
     <string name="title_advanced_usenet_hint">Infoga \'-- \' mellan texten och signaturen</string>
     <string name="title_advanced_remove_signature_hint">Detta kan leda till att för lite eller för mycket text tas bort</string>
     <string name="title_advanced_metered_hint">Uppmätta anslutningar är generellt mobila anslutningar eller betalda Wi-Fi-hotspots</string>
@@ -870,8 +872,8 @@
     <string name="title_leave_deleted">Lämna raderade meddelanden på servern</string>
     <string name="title_leave_on_device">Spara meddelanden på enheten</string>
     <string name="title_max_messages">Maximalt antal meddelanden att ladda ner (lämna tomt för alla)</string>
-    <string name="title_max_messages_remark" comment="title_max_messages_remark&#10;Help text for POP3 maximum message count">        Ange ett positivt värde för att ladda ner meddelandena i slutet (vanligast)
-        or ett negativt värde för att ladda ner meddelandena i början (minst vanligast)
+    <string name="title_max_messages_remark">        Ange ett positivt värde för att ladda ner meddelandena i slutet (vanligast)
+        och ett negativt värde för att ladda ner meddelandena i början (minst vanligast)
     </string>
     <string name="title_keep_poll_interval">Avsökningsintervall (minuter)</string>
     <string name="title_keep_alive_interval">Håll-levande-intervall (minuter)</string>
@@ -1212,7 +1214,7 @@
     </string>
     <string name="title_compose">Skriv</string>
     <string name="title_submitter">Skickad av:</string>
-    <string name="title_signed_by" comment="title_signed_by&#10;Title for who takes responsibility for a message (=DKIM signer)">Signerat av:</string>
+    <string name="title_signed_by">Signerat av:</string>
     <string name="title_delivered_to">Levererad till:</string>
     <string name="title_from">Från:</string>
     <string name="title_to">Till:</string>
@@ -1452,6 +1454,9 @@
     <string name="title_sort_on_attachments">Bilagor</string>
     <string name="title_sort_on_hidden">Dold</string>
     <string name="title_sort_ascending">Äldst först</string>
+    <string name="title_sort_on_order">Ordning</string>
+    <string name="title_sort_on_applied">Tillämpat antal</string>
+    <string name="title_sort_on_last_applied">Senast tillämpad</string>
     <string name="title_filter">Filtrera bort</string>
     <string name="title_filter_seen">Läst</string>
     <string name="title_filter_unflagged">Utan stjärnmärkning</string>
@@ -1709,7 +1714,10 @@
     <string name="title_hint_support">Om du har en fråga eller ett problem, vänligen använd supportmenyn för att få hjälp</string>
     <string name="title_hint_message_actions">Dra åt vänster för att kasta; Svep åt höger för att arkivera (om tillgängligt); Svepåtgärderna kan konfigureras i kontoinställningarna</string>
     <string name="title_hint_message_selection">Långt tryck på ett meddelande för att börja välja flera meddelanden; håll och svep uppåt eller nedåt för att välja fler meddelanden</string>
-    <string name="title_hint_message_junk">Dessa meddelanden finns i e-postserverns skräppostmapp. Appen kan naturligtvis inte förhindra att skräppostmeddelanden skickas till dig.</string>
+    <string name="title_hint_message_junk">        En e-postklient visar i princip meddelanden på en e-postserver.
+        En e-postserver är ansvarig för att filtrera skräppost, inte en e-postklient.
+        Om du får mycket skräppost, kontakta din e-postleverantör och skyll inte på appen!
+    </string>
     <string name="title_hint_important">Viktigt</string>
     <string name="title_hint_sync">Hämtning av meddelanden kan ta lite tid, beroende på leverantörens hastighet, internetanslutning och enhet och på antalet meddelanden. När du hämtar meddelanden kan appen svara långsammare.</string>
     <string name="title_hint_sync_note">Som standard laddas inte alla meddelanden ner för att begränsa lagringsutrymme och batteri- och dataanvändning. Du kan ändra detta genom att länge trycka på en mapp i mapplistan och välja \"Synkronisera mer\".</string>
@@ -1773,7 +1781,11 @@
     <string name="title_via">Via: %1$s</string>
     <string name="title_1hour">1 timme</string>
     <string name="title_1day">1 dag</string>
-    <string name="title_1week">1 vecka</string>
+    <string name="title_more_overflow">Mer &#8230;</string>
+    <string name="title_today_at">Idag %1$s</string>
+    <string name="title_tomorrow_at">Imorgon kl. %1$s</string>
+    <string name="title_day_at_time">%1$s kl. %2$s</string>
+    <string name="title_next_week">Denna tid nästa vecka</string>
     <string name="title_now">Nu</string>
     <string name="title_after">Efter %1$s</string>
     <string name="title_reset">Återställ</string>

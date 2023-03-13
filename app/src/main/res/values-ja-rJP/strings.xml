@@ -331,6 +331,7 @@
     <string name="title_advanced_sync_folders">フォルダーリストを同期</string>
     <string name="title_advanced_sync_folders_poll">フォルダーリストをアクティブに同期</string>
     <string name="title_advanced_sync_shared_folders">共有フォルダーリストを同期</string>
+    <string name="title_advanced_sync_added">新しいユーザーフォルダーの同期を有効にする</string>
     <string name="title_advanced_subscriptions">購読したフォルダーの管理</string>
     <string name="title_advanced_check_authentication">メッセージ認証を確認</string>
     <string name="title_advanced_check_tls">Transport Layer Security (TLS) を確認</string>
@@ -714,7 +715,7 @@
     <string name="title_advanced_auto_identity_hint">新規メッセージにメールを送信するとき、最後に使用したユーザー ID を選択します</string>
     <string name="title_advanced_send_reminders_hint">本文または件名が空の場合、またはファイルの添付に失敗した可能性がある場合に警告を表示します</string>
     <string name="title_advanced_reply_move_hint">メールサーバーはこの設定を無視してメッセージを送信済みフォルダーに追加できます</string>
-    <string name="title_advanced_compose_color_hint" comment="title_advanced_compose_color_hint&#10;Help text for button to select default color for messages to be sent">極端に明るいまたは暗い色を設定すると、受信者がメッセージを判読できなくなることがあります</string>
+    <string name="title_advanced_compose_color_hint">極端に明るいまたは暗い色を設定すると、受信者がメッセージを判読できなくなることがあります</string>
     <string name="title_advanced_usenet_hint">テキストと署名の間に「--」を挿入します</string>
     <string name="title_advanced_remove_signature_hint">一部のテキストが削除されなかったり、テキストが削除されすぎたりする可能性があります</string>
     <string name="title_advanced_metered_hint">一般にモバイルネットワークまたは有料 Wi-Fi ホットスポットが従量制課金接続に該当します</string>
@@ -865,7 +866,7 @@
     <string name="title_leave_deleted">削除したメッセージをサーバーに残す</string>
     <string name="title_leave_on_device">デバイスにメッセージを残す</string>
     <string name="title_max_messages">ダウンロードするメッセージの最大数 (空白にするとすべてダウンロードします)</string>
-    <string name="title_max_messages_remark" comment="title_max_messages_remark&#10;Help text for POP3 maximum message count">        正の数を入力すると、最後からメッセージをダウンロードします (推奨)
+    <string name="title_max_messages_remark">        正の数を入力すると、最後からメッセージをダウンロードします (推奨)
         負の数を入力すると、最初からメッセージをダウンロードします (一般的でない)
     </string>
     <string name="title_keep_poll_interval">ポーリング間隔 (分)</string>
@@ -1210,7 +1211,7 @@
     </string>
     <string name="title_compose">作成</string>
     <string name="title_submitter">送信元:</string>
-    <string name="title_signed_by" comment="title_signed_by&#10;Title for who takes responsibility for a message (=DKIM signer)">署名者:</string>
+    <string name="title_signed_by">署名者:</string>
     <string name="title_delivered_to">配信先:</string>
     <string name="title_from">差出人:</string>
     <string name="title_to">宛先:</string>
@@ -1450,6 +1451,9 @@
     <string name="title_sort_on_attachments">添付ファイル</string>
     <string name="title_sort_on_hidden">非表示のメッセージ</string>
     <string name="title_sort_ascending">古い順から</string>
+    <string name="title_sort_on_order">順番</string>
+    <string name="title_sort_on_applied">適用回数</string>
+    <string name="title_sort_on_last_applied">最終適用</string>
     <string name="title_filter">除外する</string>
     <string name="title_filter_seen">既読</string>
     <string name="title_filter_unflagged">スターなし</string>
@@ -1707,7 +1711,6 @@
     <string name="title_hint_support">質問や問題がある場合はサポートメニューを使用してヘルプにアクセスしてください</string>
     <string name="title_hint_message_actions">左にスワイプしてゴミ箱に移動し、右にスワイプしてアーカイブ (利用可能な場合) します。スワイプ操作はアカウント設定で変更できます</string>
     <string name="title_hint_message_selection">メッセージを長押しして、複数のメッセージを選択します。そのまま上または下にスワイプすると、まとめてメッセージを選択できます</string>
-    <string name="title_hint_message_junk">これらのメッセージはメールサーバーの迷惑メールフォルダーにあります。アプリでは迷惑メールが送信されることを防ぐことはできません。</string>
     <string name="title_hint_important">重要</string>
     <string name="title_hint_sync">プロバイダーの速度、インターネットの接続状況、デバイスの性能およびメッセージの数によりメッセージのダウンロードに時間がかかる場合があります。メッセージのダウンロード中はアプリの応答が遅くなることがあります</string>
     <string name="title_hint_sync_note">デフォルトでは、ストレージ容量とバッテリーとデータ使用量を制限するためにすべてのメッセージがダウンロードされるわけではありません。フォルダーリスト内のフォルダーを長押しし、「さらにメッセージを取得」を選択することで変更できます。</string>
@@ -1772,7 +1775,6 @@
     <string name="title_via">経由: %1$s</string>
     <string name="title_1hour">1 時間</string>
     <string name="title_1day">1 日</string>
-    <string name="title_1week">1 週間</string>
     <string name="title_now">現在</string>
     <string name="title_after">%1$s 後</string>
     <string name="title_reset">リセット</string>

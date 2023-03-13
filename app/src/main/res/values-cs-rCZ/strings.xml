@@ -370,6 +370,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_sync_folders">Synchronizovat seznam složek</string>
     <string name="title_advanced_sync_folders_poll">Aktivně synchronizovat seznam složek</string>
     <string name="title_advanced_sync_shared_folders">Synchronizovat seznamy sdílených složek</string>
+    <string name="title_advanced_sync_added">Povolit synchronizaci pro nové uživatelské složky</string>
     <string name="title_advanced_subscriptions">Spravovat odběry složek</string>
     <string name="title_advanced_check_authentication">Zkontrolovat ověření zprávy</string>
     <string name="title_advanced_check_tls">Kontrolovat Transport Layer Security (TLS)</string>
@@ -597,6 +598,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_auto_important">Automaticky činit zprávy s hvězdičkou důležitými</string>
     <string name="title_advanced_cancel_snooze">Zrušit odložení při přesunu zpráv</string>
     <string name="title_advanced_auto_block_sender">Automaticky zablokovat odesílatele při hlášení spamu</string>
+    <string name="title_advanced_auto_hide_answer">Automaticky skrýt tlačítko odpovědi při posouvání</string>
     <string name="title_advanced_swipe_reply">Přejeďte rozbalené zprávy doprava pro odpověď</string>
     <string name="title_advanced_default_snooze">Výchozí doba odložení/zpoždění</string>
     <string name="title_advanced_default_folder">Vybrat výchozí složku</string>
@@ -753,7 +755,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_auto_identity_hint">Toto zvolí poslední identitu použitou při výběru příjemce pro nové zprávy</string>
     <string name="title_advanced_send_reminders_hint">Zobrazí upozornění, je-li text zprávy či předmět prázdný nebo chybí-li pravděpodobně příloha</string>
     <string name="title_advanced_reply_move_hint">E-mailový server stále může zprávy ukládat i do složky odeslané</string>
-    <string name="title_advanced_compose_color_hint" comment="title_advanced_compose_color_hint&#10;Help text for button to select default color for messages to be sent">Velmi světlá nebo tmavá barva povede k nečitelným zprávám na straně příjemců</string>
+    <string name="title_advanced_compose_color_hint">Velmi světlá nebo tmavá barva povede k nečitelným zprávám na straně příjemců</string>
     <string name="title_advanced_usenet_hint">Vložit „-- “ mezi text a podpis</string>
     <string name="title_advanced_remove_signature_hint">To může vést k odstranění příliš malého nebo příliš velkého textu</string>
     <string name="title_advanced_metered_hint">Účtovaná připojení jsou obecně mobilní připojení nebo placené Wi-Fi hotspoty</string>
@@ -904,7 +906,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_leave_deleted">Ponechat smazané zprávy na serveru</string>
     <string name="title_leave_on_device">Ponechat zprávy v zařízení</string>
     <string name="title_max_messages">Maximální počet zpráv ke stažení (prázdné pro všechny)</string>
-    <string name="title_max_messages_remark" comment="title_max_messages_remark&#10;Help text for POP3 maximum message count">        Zadejte kladné číslo ke stažení zpráv na konci (nejvíce běžné)
+    <string name="title_max_messages_remark">        Zadejte kladné číslo ke stažení zpráv na konci (nejvíce běžné)
         a záporné číslo ke stažení zpráv na začátku (nejméně běžné)
     </string>
     <string name="title_keep_poll_interval">Interval dotazování (minuty)</string>
@@ -1246,7 +1248,7 @@ v prohlížeči ze všech Google účtů.</string>
     </string>
     <string name="title_compose">Napsat zprávu</string>
     <string name="title_submitter">Odeslal:</string>
-    <string name="title_signed_by" comment="title_signed_by&#10;Title for who takes responsibility for a message (=DKIM signer)">Podepsáno:</string>
+    <string name="title_signed_by">Podepsáno:</string>
     <string name="title_delivered_to">Doručeno na:</string>
     <string name="title_from">Od:</string>
     <string name="title_to">Komu:</string>
@@ -1486,6 +1488,9 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_sort_on_attachments">Přílohy</string>
     <string name="title_sort_on_hidden">Skryto</string>
     <string name="title_sort_ascending">Od nejstarších</string>
+    <string name="title_sort_on_order">Pořadí</string>
+    <string name="title_sort_on_applied">Použitý počet</string>
+    <string name="title_sort_on_last_applied">Naposledy použito</string>
     <string name="title_filter">Odfiltrovat</string>
     <string name="title_filter_seen">Přečteno</string>
     <string name="title_filter_unflagged">Bez hvězdičky</string>
@@ -1743,7 +1748,10 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_hint_support">Máte-li dotaz nebo problém, použijte prosím menu podpory pro získání pomoci</string>
     <string name="title_hint_message_actions">Tažením doleva hodit do koše; Tažením doprava archivovat (je-li k dispozici); Akce tažením lze změnit v nastavení účtu</string>
     <string name="title_hint_message_selection">Dlouhým podržením zprávy zahájíte násobný výběr zpráv; Držte a táhněte nahoru či dolů pro výběr více zpráv</string>
-    <string name="title_hint_message_junk">Tyto zprávy jsou ve složce nevyžádané pošty na e-mailovém serveru. Aplikace samozřejmě nemůže zabránit odesílání nevyžádaných zpráv.</string>
+    <string name="title_hint_message_junk">        Emailový klient v podstatě zobrazuje zprávy na e-mailovém serveru.
+        E-mailový server je zodpovědný za filtrování nevyžádané pošty, nikoli e-mailový klient.
+        Pokud obdržíte spoustu nevyžádané pošty, prosím kontaktujte svého poskytovatele e-mailu a neobviňujte aplikaci!
+    </string>
     <string name="title_hint_important">Důležité</string>
     <string name="title_hint_sync">Stažení zpráv může nějakou dobu trvat, v závislosti na rychlosti poskytovatele, internetového připojení a zařízení a na počtu zpráv. V průběhu stahování může aplikace reagovat pomaleji.</string>
     <string name="title_hint_sync_note">Ve výchozím nastavení nebudou stahovány všechny zprávy, aby se omezilo zabrané místo v úložišti, využití baterie a dat. Můžete to změnit dlouhým podržením složky v seznamu složek a zvolením \'Synchronizovat více\'.</string>
@@ -1808,7 +1816,11 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_via">Přes: %1$s</string>
     <string name="title_1hour">1 hodina</string>
     <string name="title_1day">1 den</string>
-    <string name="title_1week">1 týden</string>
+    <string name="title_more_overflow">Více&#8230;</string>
+    <string name="title_today_at">Dnes v %1$s</string>
+    <string name="title_tomorrow_at">Zítra v %1$s</string>
+    <string name="title_day_at_time">%1$s v %2$s</string>
+    <string name="title_next_week">Příští týden v samý čas</string>
     <string name="title_now">Nyní</string>
     <string name="title_after">Po %1$s</string>
     <string name="title_reset">Obnovit</string>

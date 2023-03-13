@@ -107,9 +107,12 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     private SwitchCompat swAutoImportant;
     private SwitchCompat swResetSnooze;
     private SwitchCompat swAutoBlockSender;
+    private SwitchCompat swAutoHideAnswer;
     private SwitchCompat swSwipeReply;
     private Button btnDefaultFolder;
     private TextView tvDefaultFolder;
+
+    private boolean accessibility;
 
     final static int MAX_SWIPE_SENSITIVITY = 10;
     final static int DEFAULT_SWIPE_SENSITIVITY = 7;
@@ -125,7 +128,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             "autoclose", "onclose", "autoclose_unseen", "autoclose_send", "collapse_marked",
             "undo_timeout",
             "autoread", "flag_snoozed", "autounflag", "auto_important", "reset_importance", "thread_sent_trash",
-            "reset_snooze", "auto_block_sender", "swipe_reply", "default_folder"
+            "reset_snooze", "auto_block_sender", "auto_hide_answer", "swipe_reply", "default_folder"
     };
 
     @Override
@@ -183,9 +186,12 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         swAutoImportant = view.findViewById(R.id.swAutoImportant);
         swResetSnooze = view.findViewById(R.id.swResetSnooze);
         swAutoBlockSender = view.findViewById(R.id.swAutoBlockSender);
+        swAutoHideAnswer = view.findViewById(R.id.swAutoHideAnswer);
         swSwipeReply = view.findViewById(R.id.swSwipeReply);
         btnDefaultFolder = view.findViewById(R.id.btnDefaultFolder);
         tvDefaultFolder = view.findViewById(R.id.tvDefaultFolder);
+
+        accessibility = Helper.isAccessibilityEnabled(getContext());
 
         setOptions();
 
@@ -551,6 +557,13 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
+        swAutoHideAnswer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("auto_hide_answer", checked).apply();
+            }
+        });
+
         swSwipeReply.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -705,6 +718,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         swAutoImportant.setChecked(prefs.getBoolean("auto_important", false));
         swResetSnooze.setChecked(prefs.getBoolean("reset_snooze", true));
         swAutoBlockSender.setChecked(prefs.getBoolean("auto_block_sender", true));
+        swAutoHideAnswer.setChecked(prefs.getBoolean("auto_hide_answer", !accessibility));
         swSwipeReply.setChecked(prefs.getBoolean("swipe_reply", false));
         tvDefaultFolder.setText(prefs.getString("default_folder", null));
     }
