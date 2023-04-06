@@ -941,6 +941,7 @@
     <string name="title_sort_on_attachments">Прикачени файлове</string>
     <string name="title_sort_on_hidden">Скрито</string>
     <string name="title_sort_ascending">Първо най-старите</string>
+    <string name="title_sort_on_name">Име</string>
     <string name="title_sort_on_order">Подреждане</string>
     <string name="title_filter">Филтрирай по</string>
     <string name="title_filter_seen">Прочетени</string>
@@ -985,7 +986,8 @@
     <string name="title_rule_snooze">Отложи</string>
     <string name="title_rule_flag">Добави звезда</string>
     <string name="title_rule_importance">Задайте важност</string>
-    <string name="title_rule_keyword">Добави ключова дума</string>
+    <string name="title_rule_keyword_add">Добавяне</string>
+    <string name="title_rule_keyword_delete">Изтриване</string>
     <string name="title_rule_move">Премести</string>
     <string name="title_rule_copy">Копирай (етикет)</string>
     <string name="title_rule_answer">Отговор/препращане</string>
@@ -1418,6 +1420,7 @@
     <string-array name="encryptNames">
         <item>Няма</item>
         <item>PGP само подписване</item>
+        <item>PGP encrypt-only</item>
         <item>PGP подписване+криптиране</item>
         <item>S/MIME само подписване</item>
         <item>S/MIME подписване+криптиране</item>

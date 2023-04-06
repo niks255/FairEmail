@@ -358,6 +358,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_optimize">Automaticky optimalizovat</string>
     <string name="title_advanced_always">Neustále přijímat zprávy pro tyto účty</string>
     <string name="title_advanced_schedule">Plán</string>
+    <string name="title_advanced_schedule_workdays">Pracovní dny</string>
+    <string name="title_advanced_schedule_weekend">Víkend</string>
     <string name="title_advanced_advanced">Pokročilé</string>
     <string name="title_advanced_quick_sync">Rychlá synchronizace</string>
     <string name="title_advanced_no_date">Zprávy bez data</string>
@@ -392,14 +394,18 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_send_chips">Zobrazit bubliny s kontakty</string>
     <string name="title_advanced_send_reminders">Zobrazit připomínky</string>
     <string name="title_advanced_send_delayed">Pozdržet odesílání zpráv</string>
-    <string name="title_advanced_attach_new">Přidat sdílené soubory do nového konceptu</string>
+    <string name="title_advanced_attach_new">Vytvořit nový koncept zprávy pro sdílené adresy a soubory</string>
+    <string name="title_advanced_answer_caption">Nastavení tlačítka pro odpověď</string>
     <string name="title_advanced_answer_default">Krátkým stisknutím tlačítka odpovědi:</string>
     <string name="title_advanced_answer_action">Dlouhým stisknutím tlačítka odpovědi:</string>
+    <string name="title_advanced_answer_hint">Akce tlačítka odpovědi lze také nakonfigurovat na kartě nastavení odesílání</string>
+    <string name="title_advanced_answer_warning">Ne všechny akce jsou možné bez výběrového menu!</string>
     <string name="title_advanced_send_pending">Zobrazit neobtěžující ikonu zpožděného odeslání</string>
     <string name="title_advanced_auto_save_paragraph">Automaticky uložit koncept po každém odstavci</string>
     <string name="title_advanced_auto_save_dot">Automaticky uložit koncept po každé větě</string>
     <string name="title_advanced_compose_color">Výchozí barva textu</string>
     <string name="title_advanced_compose_font">Výchozí písmo</string>
+    <string name="title_advanced_compose_monospaced">Použít neproporcionální písmo pro zprávy v prostém textu</string>
     <string name="title_advanced_auto_identity">Automaticky vybrat identitu pro nové zprávy</string>
     <string name="title_advanced_prefix_once">Při odpovídání nebo přeposílání přidat do předmětu pouze jednu předponu</string>
     <string name="title_advanced_prefix_count">Přidat počet do prefixu odpovědi</string>
@@ -453,6 +459,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_caption_message_header">Hlavička zprávy</string>
     <string name="title_advanced_caption_message_body">Tělo zprávy</string>
     <string name="title_advanced_caption_file">Soubor</string>
+    <string name="title_advanced_caption_integrations">Integrace</string>
     <string name="title_advanced_portrait">Režim na výšku</string>
     <string name="title_advanced_landscape">Režim na šířku</string>
     <string name="title_advanced_two_row">Použít dva řádky</string>
@@ -523,6 +530,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_preview">Zobrazit náhled zprávy</string>
     <string name="title_advanced_preview_italic">Zobrazit náhled zprávy kurzívou</string>
     <string name="title_advanced_preview_lines">Počet řádků náhledu</string>
+    <string name="title_advanced_align_header">Vertikálně zarovnat klíčová slova, náhled textu a poznámky</string>
     <string name="title_advanced_addresses">Automaticky zobrazit detaily adresy</string>
     <string name="title_advanced_unzip">Zobrazit obsah komprimovaných příloh</string>
     <string name="title_advanced_attachments_alt">Zobrazit přílohy pod textem zprávy</string>
@@ -709,6 +717,11 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_lt_key">API klíč (volitelné)</string>
     <string name="title_advanced_deepl">DeepL integrace</string>
     <string name="title_advanced_virus_total">Integrace VirusTotal</string>
+    <string name="title_advanced_send">Integrace \'Send\'</string>
+    <string name="title_advanced_openai">Integrace s OpenAI (ChatGPT)</string>
+    <string name="title_advanced_openai_model">Model</string>
+    <string name="title_advanced_openai_temperature">Teplota: %1$s</string>
+    <string name="title_advanced_openai_moderation">Moderování obsahu</string>
     <string name="title_advanced_sdcard">Chci použít Sd kartu</string>
     <string name="title_advanced_watchdog">Pravidelně kontrolovat, zda je FairEmail stále aktivní</string>
     <string name="title_advanced_updates">Kontrolovat aktualizace na GitHubu</string>
@@ -756,6 +769,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_send_reminders_hint">Zobrazí upozornění, je-li text zprávy či předmět prázdný nebo chybí-li pravděpodobně příloha</string>
     <string name="title_advanced_reply_move_hint">E-mailový server stále může zprávy ukládat i do složky odeslané</string>
     <string name="title_advanced_compose_color_hint">Velmi světlá nebo tmavá barva povede k nečitelným zprávám na straně příjemců</string>
+    <string name="title_advanced_attach_new_hint">V opačném případě přidat sdílené adresy nebo soubory do aktuálního konceptu zprávy</string>
     <string name="title_advanced_usenet_hint">Vložit „-- “ mezi text a podpis</string>
     <string name="title_advanced_remove_signature_hint">To může vést k odstranění příliš malého nebo příliš velkého textu</string>
     <string name="title_advanced_metered_hint">Účtovaná připojení jsou obecně mobilní připojení nebo placené Wi-Fi hotspoty</string>
@@ -802,6 +816,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_sender_hint">Většina poskytovatelů nepovoluje pozměněné adresy odesílatele</string>
     <string name="title_advanced_bcc_hint">Adresa nebude zobrazena, ale bude přidána při odesílání</string>
     <string name="title_advanced_internal_hint">Při odesílání na jinou doménu se zobrazí varování</string>
+    <string name="title_advanced_uri" comment="title_advanced_uri&#10;Remark for button to link contact to identity">Údaje vybraného kontaktu se použijí pro přílohy vCard</string>
     <string name="title_advanced_e2e_encryption">Možnosti end-to-end šifrování</string>
     <string name="title_advanced_display_harmful_hint">Zákazem této volby můžete uškodit svému soukromí</string>
     <string name="title_advanced_display_hidden_hint">Může mít za následek neobvykle vypadající a zdvojené texty</string>
@@ -850,6 +865,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_sender_regex">Reg. výraz odpovídající uživ. jménu příchozích e-mailových adres</string>
     <string name="title_identity_reply_to">Odpověď na adresu</string>
     <string name="title_identity_internal">Názvy interních domén (oddělené čárkou)</string>
+    <string name="title_identity_uri">Propojit kontakt</string>
     <string name="title_identity_unicode">Povolit UTF-8 v záhlaví zprávy</string>
     <string name="title_identity_unicode_remark">Většina serverů toto nepodporuje</string>
     <string name="title_identity_octetmime">Povolit 8BITMIME</string>
@@ -903,6 +919,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_primary_identity">Hlavní (výchozí identita)</string>
     <string name="title_self_identity">Odebrat e-mailovou adresu při odpovědi</string>
     <string name="title_leave_on_server">Ponechat zprávy na serveru</string>
+    <string name="title_client_delete">Aktivně odstranit zprávy po stažení</string>
     <string name="title_leave_deleted">Ponechat smazané zprávy na serveru</string>
     <string name="title_leave_on_device">Ponechat zprávy v zařízení</string>
     <string name="title_max_messages">Maximální počet zpráv ke stažení (prázdné pro všechny)</string>
@@ -1488,6 +1505,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_sort_on_attachments">Přílohy</string>
     <string name="title_sort_on_hidden">Skryto</string>
     <string name="title_sort_ascending">Od nejstarších</string>
+    <string name="title_sort_on_name">Název</string>
     <string name="title_sort_on_order">Pořadí</string>
     <string name="title_sort_on_applied">Použitý počet</string>
     <string name="title_sort_on_last_applied">Naposledy použito</string>
@@ -1546,7 +1564,9 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_rule_snooze">Odložit</string>
     <string name="title_rule_flag">Přidat hvězdičku</string>
     <string name="title_rule_importance">Nastavit důležitost</string>
-    <string name="title_rule_keyword">Přidat klíčové slovo</string>
+    <string name="title_rule_keyword">Klíčové slovo</string>
+    <string name="title_rule_keyword_add">Přidat</string>
+    <string name="title_rule_keyword_delete">Odstranit</string>
     <string name="title_rule_move">Přesunout</string>
     <string name="title_rule_copy">Kopírovat (štítek)</string>
     <string name="title_rule_answer">Odpovědět/přeposlat</string>
@@ -1891,6 +1911,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_widget_separator_lines">Použít oddělovací čáry</string>
     <string name="title_widget_semi_transparent">Poloprůhledné pozadí</string>
     <string name="title_widget_count_top">Zobrazit počet nepřečtených zpráv v horní části</string>
+    <string name="title_widget_subject_lines">Maximální počet řádků předmětu</string>
     <string name="title_widget_avatars">Zobrazit avatary kontaktů</string>
     <string name="title_widget_refresh">Zobrazit tlačítko pro obnovení zpráv</string>
     <string name="title_widget_compose">Zobrazit tlačítko pro vytvoření nové zprávy</string>
@@ -2051,6 +2072,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string-array name="encryptNames">
         <item>Žádný</item>
         <item>PGP pouze podpis</item>
+        <item>Pouze šifrování PGP</item>
         <item>PGP podpis+šifrovat</item>
         <item>S/MIME pouze podpis</item>
         <item>S/MIME podpis+šifrovat</item>

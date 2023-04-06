@@ -319,7 +319,6 @@
     <string name="title_advanced_send_chips">Erakutsi helbideen bonboiloak</string>
     <string name="title_advanced_send_reminders">Erakutsi oroigarriak</string>
     <string name="title_advanced_send_delayed">Atzeratu mezuen bidalketa</string>
-    <string name="title_advanced_attach_new">Gehitu partekatutako fitxategiak zirriborro berri batera</string>
     <string name="title_advanced_compose_font">Tipografia lehenetsia</string>
     <string name="title_advanced_prefix_once">Jarri aurrizkia mintzagaiari behin bakarrik erantzun edo birbidaltzean</string>
     <string name="title_advanced_prefix_count">Gehitu kontua erantzunaren aurrizkian</string>
@@ -1134,6 +1133,7 @@
     <string name="title_sort_on_attachments">Eranskinak</string>
     <string name="title_sort_on_hidden">Ezkutuan</string>
     <string name="title_sort_ascending">Zaharrena lehena</string>
+    <string name="title_sort_on_name">Izena</string>
     <string name="title_sort_on_order">Ordena</string>
     <string name="title_filter">Iragazi</string>
     <string name="title_filter_seen">Irakurrita</string>
@@ -1180,7 +1180,8 @@
     <string name="title_rule_snooze">Atzeratu</string>
     <string name="title_rule_flag">Gehitu izarra</string>
     <string name="title_rule_importance">Ezarri garrantzia</string>
-    <string name="title_rule_keyword">Gehitu gako-hitza</string>
+    <string name="title_rule_keyword_add">Gehitu</string>
+    <string name="title_rule_keyword_delete">Ezabatu</string>
     <string name="title_rule_move">Eraman</string>
     <string name="title_rule_copy">Kopiatu (etiketa)</string>
     <string name="title_rule_answer">Erantzun/birbidali</string>
@@ -1632,6 +1633,7 @@
     <string-array name="encryptNames">
         <item>Bat ere ez</item>
         <item>PGP sinadura soilik</item>
+        <item>PGP encrypt-only</item>
         <item>PGP sinadura eta zifratzea</item>
         <item>S/MIME sinadura soilik</item>
         <item>S/MIME sinadura eta zifratzea</item>

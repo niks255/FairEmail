@@ -24,13 +24,17 @@ import static com.google.android.material.textfield.TextInputLayout.END_ICON_PAS
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_OAUTH;
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 
+import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -120,6 +124,9 @@ public class FragmentIdentity extends FragmentBase {
     private EditText etCc;
     private EditText etBcc;
     private EditText etInternal;
+    private Button btnUri;
+    private TextView tvUriInfo;
+    private TextView tvUriPro;
     private CheckBox cbSignDefault;
     private CheckBox cbEncryptDefault;
     private CheckBox cbUnicode;
@@ -153,6 +160,7 @@ public class FragmentIdentity extends FragmentBase {
     private static final int REQUEST_SAVE = 2;
     private static final int REQUEST_DELETE = 3;
     private static final int REQUEST_SIGNATURE = 4;
+    private static final int REQUEST_URI = 5;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -220,6 +228,9 @@ public class FragmentIdentity extends FragmentBase {
         etCc = view.findViewById(R.id.etCc);
         etBcc = view.findViewById(R.id.etBcc);
         etInternal = view.findViewById(R.id.etInternal);
+        btnUri = view.findViewById(R.id.btnUri);
+        tvUriInfo = view.findViewById(R.id.tvUriInfo);
+        tvUriPro = view.findViewById(R.id.tvUriPro);
         cbSignDefault = view.findViewById(R.id.cbSignDefault);
         cbEncryptDefault = view.findViewById(R.id.cbEncryptDefault);
         cbUnicode = view.findViewById(R.id.cbUnicode);
@@ -481,6 +492,17 @@ public class FragmentIdentity extends FragmentBase {
             }
         });
 
+        btnUri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                pick.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivityForResult(Helper.getChooser(getContext(), pick), REQUEST_URI);
+            }
+        });
+
+        Helper.linkPro(tvUriPro);
+
         cbEncryptDefault.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -710,6 +732,7 @@ public class FragmentIdentity extends FragmentBase {
         args.putString("cc", etCc.getText().toString().trim());
         args.putString("bcc", etBcc.getText().toString().trim());
         args.putString("internal", etInternal.getText().toString().replaceAll(" ", ""));
+        args.putString("uri", (String) btnUri.getTag());
         args.putBoolean("sign_default", cbSignDefault.isChecked());
         args.putBoolean("encrypt_default", cbEncryptDefault.isChecked());
         args.putBoolean("unicode", cbUnicode.isChecked());
@@ -794,6 +817,7 @@ public class FragmentIdentity extends FragmentBase {
                 String cc = args.getString("cc");
                 String bcc = args.getString("bcc");
                 String internal = args.getString("internal");
+                String uri = args.getString("uri");
                 boolean sign_default = args.getBoolean("sign_default");
                 boolean encrypt_default = args.getBoolean("encrypt_default");
                 boolean unicode = args.getBoolean("unicode");
@@ -855,6 +879,9 @@ public class FragmentIdentity extends FragmentBase {
 
                 if (TextUtils.isEmpty(internal))
                     internal = null;
+
+                if (TextUtils.isEmpty(uri))
+                    uri = null;
 
                 if (TextUtils.isEmpty(display))
                     display = null;
@@ -948,6 +975,8 @@ public class FragmentIdentity extends FragmentBase {
                     if (!Objects.equals(identity.bcc, bcc))
                         return true;
                     if (!Objects.equals(identity.internal, internal))
+                        return true;
+                    if (!Objects.equals(identity.uri, uri))
                         return true;
                     if (!Objects.equals(identity.sign_default, sign_default))
                         return true;
@@ -1052,6 +1081,7 @@ public class FragmentIdentity extends FragmentBase {
                     identity.cc = cc;
                     identity.bcc = bcc;
                     identity.internal = internal;
+                    identity.uri = uri;
                     identity.sign_default = sign_default;
                     identity.encrypt_default = encrypt_default;
                     identity.unicode = unicode;
@@ -1157,6 +1187,7 @@ public class FragmentIdentity extends FragmentBase {
         outState.putInt("fair:auth", auth);
         outState.putString("fair:authprovider", provider);
         outState.putString("fair:html", signature);
+        outState.putString("fair:uri", (String) btnUri.getTag());
         super.onSaveInstanceState(outState);
     }
 
@@ -1238,6 +1269,8 @@ public class FragmentIdentity extends FragmentBase {
                     etCc.setText(identity == null ? null : identity.cc);
                     etBcc.setText(identity == null ? null : identity.bcc);
                     etInternal.setText(identity == null ? null : identity.internal);
+                    btnUri.setTag(identity == null ? null : identity.uri);
+                    tvUriInfo.setText(identity == null ? null : getUriInfo(identity.uri));
                     cbSignDefault.setChecked(identity != null && identity.sign_default);
                     cbEncryptDefault.setChecked(identity != null && identity.encrypt_default);
                     cbUnicode.setChecked(identity != null && identity.unicode);
@@ -1273,6 +1306,7 @@ public class FragmentIdentity extends FragmentBase {
                     provider = savedInstanceState.getString("fair:authprovider");
                     if (signature == null)
                         signature = savedInstanceState.getString("fair:html");
+                    btnUri.setTag(savedInstanceState.getString("fair:uri"));
                 }
 
                 Helper.setViewsEnabled(view, true);
@@ -1444,6 +1478,9 @@ public class FragmentIdentity extends FragmentBase {
                     if (resultCode == RESULT_OK && data != null)
                         onHtml(data.getExtras());
                     break;
+                case REQUEST_URI:
+                    onPickUri(resultCode == RESULT_OK ? data : null);
+                    break;
             }
         } catch (Throwable ex) {
             Log.e(ex);
@@ -1487,5 +1524,34 @@ public class FragmentIdentity extends FragmentBase {
 
     private void onHtml(Bundle args) {
         signature = args.getString("html");
+    }
+
+    private void onPickUri(Intent intent) {
+        Uri uri = (intent == null ? null : intent.getData());
+        btnUri.setTag(uri == null ? null : uri.toString());
+        tvUriInfo.setText(uri == null ? null : getUriInfo(uri.toString()));
+    }
+
+    private String getUriInfo(String uri) {
+        if (uri == null)
+            return null;
+        if (!hasPermission(Manifest.permission.READ_CONTACTS))
+            return null;
+
+        try {
+            ContentResolver resolver = getContext().getContentResolver();
+            try (Cursor cursor = resolver.query(Uri.parse(uri),
+                    new String[]{
+                            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
+                    },
+                    null, null, null)) {
+                if (cursor.moveToNext())
+                    return cursor.getString(0);
+            }
+        } catch (Throwable ex) {
+            Log.w(ex);
+        }
+
+        return uri;
     }
 }

@@ -350,7 +350,6 @@
     <string name="title_advanced_send_chips">Mostrar enderezos en globos</string>
     <string name="title_advanced_send_reminders">Mostrar recordatorios</string>
     <string name="title_advanced_send_delayed">Adiar o envío de mensaxes</string>
-    <string name="title_advanced_attach_new">Engadir arquivos compartidos a un novo borrador</string>
     <string name="title_advanced_answer_action">Unha pulsación longa no botón de resposta fará:</string>
     <string name="title_advanced_send_pending">Mostrar iconas non obstruíntes de envíos adiados</string>
     <string name="title_advanced_auto_save_paragraph">Gardar automaticamente un borrador despois de cada parágrafo</string>
@@ -1347,6 +1346,7 @@
     <string name="title_sort_on_attachments">Con anexos</string>
     <string name="title_sort_on_hidden">Agochado</string>
     <string name="title_sort_ascending">Máis antigos primeiro</string>
+    <string name="title_sort_on_name">Nome</string>
     <string name="title_sort_on_order">Orde</string>
     <string name="title_filter">Sen coincidencia nos filtros</string>
     <string name="title_filter_seen">Lido</string>
@@ -1403,7 +1403,8 @@
     <string name="title_rule_snooze">Adiar</string>
     <string name="title_rule_flag">Engadir estrela</string>
     <string name="title_rule_importance">Definir importancia</string>
-    <string name="title_rule_keyword">Engadir palabras chave</string>
+    <string name="title_rule_keyword_add">Engadir</string>
+    <string name="title_rule_keyword_delete">Eliminar</string>
     <string name="title_rule_move">Mover</string>
     <string name="title_rule_copy">Copiar (etiqueta)</string>
     <string name="title_rule_answer">Responder/reenviar</string>
@@ -1892,6 +1893,7 @@
     <string-array name="encryptNames">
         <item>Ningún</item>
         <item>Só sinatura PGP</item>
+        <item>PGP encrypt-only</item>
         <item>Sinatura e cifrado PGP</item>
         <item>Só sinatura S/MIME</item>
         <item>Cifrado e asinado S/MIME</item>

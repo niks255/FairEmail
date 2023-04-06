@@ -332,6 +332,8 @@
     <string name="title_advanced_optimize">Avto-optimallaşdırma</string>
     <string name="title_advanced_always">Bu hesablar üçün mesajları həmişə al</string>
     <string name="title_advanced_schedule">Cədvəl</string>
+    <string name="title_advanced_schedule_workdays">İş günləri</string>
+    <string name="title_advanced_schedule_weekend">Həftəsonu</string>
     <string name="title_advanced_advanced">Qabaqcıl</string>
     <string name="title_advanced_quick_sync">Cəld sinxronlaşdırma</string>
     <string name="title_advanced_no_date">Tarixsiz mesajlar</string>
@@ -366,14 +368,18 @@
     <string name="title_advanced_send_chips">Ünvan şarlarını göstər</string>
     <string name="title_advanced_send_reminders">Xatırladıcıları göstər</string>
     <string name="title_advanced_send_delayed">Göndərilən mesajların gecikməsi</string>
-    <string name="title_advanced_attach_new">Yeni bir qaralamaya paylaşılan faylları əlavə edin</string>
+    <string name="title_advanced_attach_new">Paylaşılan ünvanlar və fayllar üçün yeni bir qaralama mesajı yaradın</string>
+    <string name="title_advanced_answer_caption">Cavab düyməsi tənzimləmələri</string>
     <string name="title_advanced_answer_default">Cavab düyməsinə qısa basanda:</string>
     <string name="title_advanced_answer_action">Cavab düyməsinə uzun basanda:</string>
+    <string name="title_advanced_answer_hint">Cavab düyməsi əməliyyatları, göndərmə tənzimləmələri vərəq səhifəsində də konfiqurasiya edilə bilər</string>
+    <string name="title_advanced_answer_warning">Bir seçim menyusu olmadan bütün əməliyyatlar mümkün deyil!</string>
     <string name="title_advanced_send_pending">Narahat edici olmayan gecikməli göndərmə nişanını göstər</string>
     <string name="title_advanced_auto_save_paragraph">Qaralamanı hər paraqrafdan sonra avtomatik saxla</string>
     <string name="title_advanced_auto_save_dot">Cümləni hər paraqrafdan sonra avtomatik saxla</string>
     <string name="title_advanced_compose_color">İlkin mətn rəngi</string>
     <string name="title_advanced_compose_font">İlkin şrift</string>
+    <string name="title_advanced_compose_monospaced">Düz mətn mesajları üçün tək boşluqlu şrifti istifadə edin</string>
     <string name="title_advanced_auto_identity">Yeni mesajlar üçün kimlikləri avtomatik seç</string>
     <string name="title_advanced_prefix_once">Mövzunu yalnız bir dəfə cavablayarkən və ya yönləndirərkən prefiks</string>
     <string name="title_advanced_prefix_count">Prefiksi cavablandırmaq üçün sayğac əlavə et</string>
@@ -427,6 +433,7 @@
     <string name="title_advanced_caption_message_header">Mesaj başlığı</string>
     <string name="title_advanced_caption_message_body">Mesaj gövdəsi</string>
     <string name="title_advanced_caption_file">Fayl</string>
+    <string name="title_advanced_caption_integrations">İnteqrasiyalar</string>
     <string name="title_advanced_portrait">Şaquli rejim</string>
     <string name="title_advanced_landscape">Üfüqi rejim</string>
     <string name="title_advanced_two_row">İki sətir istifadə et</string>
@@ -497,6 +504,7 @@
     <string name="title_advanced_preview">Mesaj önbaxışını göstər</string>
     <string name="title_advanced_preview_italic">Mesaj önbaxışını \"italic\" göstər</string>
     <string name="title_advanced_preview_lines">Önbaxış sətir sayı</string>
+    <string name="title_advanced_align_header">Açar sözləri, önbaxış mətnlərini və qeydləri şaquli hizala</string>
     <string name="title_advanced_addresses">Ünvan təfsilatlarını ilkin olaraq göstər</string>
     <string name="title_advanced_unzip">Sıxışdırılmış qoşmaların məzmunlarını göstər</string>
     <string name="title_advanced_attachments_alt">Mesaj mətnindən sonra qoşmaları göstər</string>
@@ -684,6 +692,11 @@
     <string name="title_advanced_lt_key">API açarı (ixtiyari)</string>
     <string name="title_advanced_deepl">DeepL inteqrasiyası</string>
     <string name="title_advanced_virus_total">VirusTotal inteqrasiyası</string>
+    <string name="title_advanced_send">\'Send\' inteqrasiyası</string>
+    <string name="title_advanced_openai">OpenAI (ChatGPT) inteqrasiyası</string>
+    <string name="title_advanced_openai_model">Model</string>
+    <string name="title_advanced_openai_temperature">Hərarət: %1$s</string>
+    <string name="title_advanced_openai_moderation">Məzmun moderasiyası</string>
     <string name="title_advanced_sdcard">SD kart istifadə etmək istəyirəm</string>
     <string name="title_advanced_watchdog">Mütəmadi olaraq \"FairEmail\"in aktivliyini yoxla</string>
     <string name="title_advanced_updates">GitHub güncəlləmələrini yoxla</string>
@@ -730,6 +743,7 @@
     <string name="title_advanced_send_reminders_hint">Mesaj mətni və ya mövzu boş olanda və ya bir qoşma əskik olanda bir xəbərdarlıq göstər</string>
     <string name="title_advanced_reply_move_hint">E-poçt serveri, mesajları yenə də göndərilən mesaj qovluğuna əlavə edə bilər</string>
     <string name="title_advanced_compose_color_hint">Çox açıq və ya çox tünd rənglər, alıcının mesajları oxuya bilməməsi ilə nəticələnir</string>
+    <string name="title_advanced_attach_new_hint">Əks halda, paylaşılan ünvanları və ya faylları hazırkı qaralama mesajına əlavə edin</string>
     <string name="title_advanced_usenet_hint">Mətn və imza arasına \'-- \' əlavə et</string>
     <string name="title_advanced_remove_signature_hint">Bu, həddindən az və ya çox mətnin silinməsinə səbəb ola bilər</string>
     <string name="title_advanced_metered_hint">Ümumiyyətlə ölçülmüş bağlantılar, mobil və ya ödənişli Wi-Fi bağlantılarıdır</string>
@@ -776,6 +790,7 @@
     <string name="title_advanced_sender_hint">Əksər provayderlər göndərən ünvanını dəyişdirməyə icazə vermir</string>
     <string name="title_advanced_bcc_hint">Ünvan göstərilməyəcək, ancaq göndərişə əlavə ediləcək</string>
     <string name="title_advanced_internal_hint">Başqa bir domenə göndəriləndə bir xəbərdarlıq olacaq</string>
+    <string name="title_advanced_uri" comment="title_advanced_uri&#10;Remark for button to link contact to identity">Seçilmiş kontaktın detalları vCard qoşmaları üçün istifadə olunacaq</string>
     <string name="title_advanced_e2e_encryption">Bir ucdan digər uca kimi şifrələmə üçün seçimlər</string>
     <string name="title_advanced_display_harmful_hint">Bu seçimi sıradan çıxartmaq, gizliliyiniz üçün zərərli ola bilər</string>
     <string name="title_advanced_display_hidden_hint">Bu, qəribə görünən və təkrarlanan mətnlərə səbəb ola bilər</string>
@@ -824,6 +839,7 @@
     <string name="title_advanced_sender_regex">Gələn e-poçt ünvanlarının istifadəçi adını uyğunlaşdırmaq üçün normal ifadə</string>
     <string name="title_identity_reply_to">Cavablama ünvanı</string>
     <string name="title_identity_internal">Daxili domen adları (vergüllə ayrılan)</string>
+    <string name="title_identity_uri">Kontaktı əlaqələndir</string>
     <string name="title_identity_unicode">Mesaj başlığında \"UTF-8\"ə icazə ver</string>
     <string name="title_identity_unicode_remark">Əksər server bunu dəstəkləmir</string>
     <string name="title_identity_octetmime">8BITMIME-ə icazə ver</string>
@@ -877,6 +893,7 @@
     <string name="title_primary_identity">Üstünlük verilən (ilkin kimlik)</string>
     <string name="title_self_identity">Cavablayanda e-poçt ünvanınızı çıxardın</string>
     <string name="title_leave_on_server">Mesajları serverdə burax</string>
+    <string name="title_client_delete">Endirdikdən sonra mesajları aktiv olaraq silin</string>
     <string name="title_leave_deleted">Silənən mesajları serverdə burax</string>
     <string name="title_leave_on_device">Mesajları cihazda burax</string>
     <string name="title_max_messages">Endiriləcək mesajların maksimum sayı (hamısı üçün boş)</string>
@@ -1465,6 +1482,7 @@
     <string name="title_sort_on_attachments">Qoşmalar</string>
     <string name="title_sort_on_hidden">Gizli</string>
     <string name="title_sort_ascending">Birinci köhnə</string>
+    <string name="title_sort_on_name">Ad</string>
     <string name="title_sort_on_order">Sıralama</string>
     <string name="title_sort_on_applied">Tətbiq edilən say</string>
     <string name="title_sort_on_last_applied">Son tətbiq edilmə</string>
@@ -1523,7 +1541,9 @@
     <string name="title_rule_snooze">Ertələ</string>
     <string name="title_rule_flag">Ulduz əlavə et</string>
     <string name="title_rule_importance">Vacibliyi tənzimlə</string>
-    <string name="title_rule_keyword">Açar söz əlavə et</string>
+    <string name="title_rule_keyword">Açar söz</string>
+    <string name="title_rule_keyword_add">Əlavə et</string>
+    <string name="title_rule_keyword_delete">Sil</string>
     <string name="title_rule_move">Köçürt</string>
     <string name="title_rule_copy">Kopyala (etiket)</string>
     <string name="title_rule_answer">Cavabla/yönləndir</string>
@@ -1869,6 +1889,7 @@
     <string name="title_widget_separator_lines">Ayırıcı xəttləri göstər</string>
     <string name="title_widget_semi_transparent">Yarışəffaf arxaplan</string>
     <string name="title_widget_count_top">Oxunmamış sayını üstdə göstər</string>
+    <string name="title_widget_subject_lines">Mövzu sətrinin maksimum sayı</string>
     <string name="title_widget_avatars">Əlaqə avatarlarını göstər</string>
     <string name="title_widget_refresh">Mesajları təzələ düyməsini göstər</string>
     <string name="title_widget_compose">Yeni mesaj yarat düyməsini göstər</string>
@@ -2020,9 +2041,10 @@
     <string-array name="encryptNames">
         <item>Heç biri</item>
         <item>PGP yalnız imza</item>
-        <item>PGP imza+şifrə</item>
+        <item>PGP yalnız şifrələmə</item>
+        <item>PGP imza+şifrələmə</item>
         <item>S/MIME yalnız imza</item>
-        <item>S/MIME imza+şifrə</item>
+        <item>S/MIME imza+şifrələmə</item>
     </string-array>
     <string-array name="sizeNames">
         <item>0 B</item>

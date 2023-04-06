@@ -358,6 +358,8 @@
     <string name="title_advanced_optimize">מיטוב אוטומטית</string>
     <string name="title_advanced_always">תמיד לקבל הודעות מהחשבונות האלו</string>
     <string name="title_advanced_schedule">לוח זמנים</string>
+    <string name="title_advanced_schedule_workdays">ימי השבוע</string>
+    <string name="title_advanced_schedule_weekend">סוף השבוע</string>
     <string name="title_advanced_advanced">מתקדם</string>
     <string name="title_advanced_quick_sync">סנכרון מהיר</string>
     <string name="title_advanced_no_date">הודעות ללא תאריך</string>
@@ -392,14 +394,18 @@
     <string name="title_advanced_send_chips">הצגת בועיות כתובות</string>
     <string name="title_advanced_send_reminders">הצגת תזכורות</string>
     <string name="title_advanced_send_delayed">השהיית שליחת הודעות</string>
-    <string name="title_advanced_attach_new">הוספת קבצים משותפים לטיוטה חדשה</string>
+    <string name="title_advanced_attach_new">יצירת הודעת טיוטה לכתובות וקבצים משותפים</string>
+    <string name="title_advanced_answer_caption">הגדרות כפתור מענה</string>
     <string name="title_advanced_answer_default">לחיצה קצרה על כפתור המענה:</string>
     <string name="title_advanced_answer_action">לחיצה ארוכה על כפתור המענה:</string>
+    <string name="title_advanced_answer_hint">ניתן להגדיר את פעולות כפתור המענה בעמוד לשונית הגדרות השליחה</string>
+    <string name="title_advanced_answer_warning">לא כל הפעולות אפשריות ללא תפריט בחירה!</string>
     <string name="title_advanced_send_pending">הצגת סמלי שליחה מושהית שאינם בולטים</string>
     <string name="title_advanced_auto_save_paragraph">לשמור טיוטה אוטומטית אחרי כל פרק</string>
     <string name="title_advanced_auto_save_dot">לשמור טיוטה אוטומטית אחרי כל משפט</string>
     <string name="title_advanced_compose_color">צבע טקסט כברירת מחדל</string>
     <string name="title_advanced_compose_font">גופן ברירת המחדל</string>
+    <string name="title_advanced_compose_monospaced">להשתמש בגופן ברוחב אחיד להודעות בטקסט פשוט</string>
     <string name="title_advanced_auto_identity">בחירת זהויות להודעות חדשות אוטומטית</string>
     <string name="title_advanced_prefix_once">ליצור קידומת לנושא רק פעם אחת במענה או העברה</string>
     <string name="title_advanced_prefix_count">הוספת מונה לקידומת תגובה</string>
@@ -453,6 +459,7 @@
     <string name="title_advanced_caption_message_header">כותרת ההודעה</string>
     <string name="title_advanced_caption_message_body">גוף ההודעה</string>
     <string name="title_advanced_caption_file">קובץ</string>
+    <string name="title_advanced_caption_integrations">שילובים</string>
     <string name="title_advanced_portrait">מצב אנכי</string>
     <string name="title_advanced_landscape">מצב אופקי</string>
     <string name="title_advanced_two_row">להשתמש בשתי שורות</string>
@@ -523,6 +530,7 @@
     <string name="title_advanced_preview">תצוגה מקדימה של הודעה</string>
     <string name="title_advanced_preview_italic">תצוגה מקדימה של ההודעה בכתב נטוי</string>
     <string name="title_advanced_preview_lines">מספר השורות בתצוגה המקדימה</string>
+    <string name="title_advanced_align_header">ליישר אנכית מילות מפתח, טקסט של תצוגה מקדימה ופתקיות</string>
     <string name="title_advanced_addresses">הרחבת פרטי הכתובת כברירת מחדל</string>
     <string name="title_advanced_unzip">הצגת תוכן הקבצים המצורפים הדחוסים</string>
     <string name="title_advanced_attachments_alt">הצגת הקבצים המצורפים אחרי טקסט ההודעה</string>
@@ -710,6 +718,11 @@
     <string name="title_advanced_lt_key">מפתח API (רשות)</string>
     <string name="title_advanced_deepl">שילוב של DeepL</string>
     <string name="title_advanced_virus_total">שילוב של VirusTotal</string>
+    <string name="title_advanced_send">שילוב מול ‚Send’</string>
+    <string name="title_advanced_openai">שילוב מול OpenAI (ChatGPT)</string>
+    <string name="title_advanced_openai_model">דגם</string>
+    <string name="title_advanced_openai_temperature">טמפרטורה: %1$s</string>
+    <string name="title_advanced_openai_moderation">ניהול תוכן</string>
     <string name="title_advanced_sdcard">ארצה להשתמש בכרטיס SD</string>
     <string name="title_advanced_watchdog">לבדוק מדי פעם אם FairEmail עדיין פעיל</string>
     <string name="title_advanced_updates">איתור עדכונים ב־GitHub</string>
@@ -756,6 +769,7 @@
     <string name="title_advanced_send_reminders_hint">להציג אזהרה כאשר טקסט ההודעה או הנושא ריקים או כאשר קובץ לא צורף לכאורה</string>
     <string name="title_advanced_reply_move_hint">שרת הדוא״ל עדיין יכול להוסיף את ההודעות לתיקיית ההודעות שנשלחו</string>
     <string name="title_advanced_compose_color_hint">צבעים בהירים או כהים מדי יובילו להודעות בלתי קריאות בצד המקבל</string>
+    <string name="title_advanced_attach_new_hint">אם לא, להוסיף כתובות או קבצים משותפים להודעת הטיוטה הנוכחית</string>
     <string name="title_advanced_usenet_hint">להוסיף ‚--’ בין הטקסט והחתימה</string>
     <string name="title_advanced_remove_signature_hint">יכול להוביל למעט מדי או יותר מדי טקסט שיוסר</string>
     <string name="title_advanced_metered_hint">חיבורים מוגבלים הם בדרך כלל חיבורים סלולריים או רשת אלחוטית בתשלום</string>
@@ -802,6 +816,7 @@
     <string name="title_advanced_sender_hint">רוב הספקים לא מאפשרים כתובות מוען שעברו שינוי</string>
     <string name="title_advanced_bcc_hint">הכתובת לא תופיע אך תתווסף בעת השליחה</string>
     <string name="title_advanced_internal_hint">תופיע אזהרה בעת שליחה לשם תחום אחר</string>
+    <string name="title_advanced_uri" comment="title_advanced_uri&#10;Remark for button to link contact to identity">פרטי הקשר הנבחרים ישמשו כקובצי vCard מצורפים</string>
     <string name="title_advanced_e2e_encryption">אפשרויות להצפנה מקצה לקצה</string>
     <string name="title_advanced_display_harmful_hint">השבתת האפשרות הזאת עלולה לפגוע בפרטיות שלך</string>
     <string name="title_advanced_display_hidden_hint">יכול להוביל לטקסטים שנראים מוזר או משוכפלים</string>
@@ -850,6 +865,7 @@
     <string name="title_advanced_sender_regex">ביטוי רגולרי ללכידת שם המשתמש של כתובות דוא״ל נכנסות</string>
     <string name="title_identity_reply_to">כתובת למענה</string>
     <string name="title_identity_internal">שמות תחום פנימיים (עם פסיקים מפרידים)</string>
+    <string name="title_identity_uri">קישור פרטי קשר</string>
     <string name="title_identity_unicode">לאפשר UTF-8 בכותרות הודעות</string>
     <string name="title_identity_unicode_remark">רוב השרתים לא תומכים בזה</string>
     <string name="title_identity_octetmime">לאפשר 8BITMIME</string>
@@ -903,6 +919,7 @@
     <string name="title_primary_identity">עיקרי (זהות בררת המחדל)</string>
     <string name="title_self_identity">הסרת כתובת הדוא״ל בעת מענה</string>
     <string name="title_leave_on_server">להשאיר הודעות על השרת</string>
+    <string name="title_client_delete">למחוק הודעות באופן פעיל לאחר ההורדה</string>
     <string name="title_leave_deleted">להשאיר הודעות שנמחקו על השרת</string>
     <string name="title_leave_on_device">להשאיר הודעות במכשיר</string>
     <string name="title_max_messages">מספר ההודעות המרבי להורדה (ריק בשביל כולן)</string>
@@ -1491,6 +1508,7 @@
     <string name="title_sort_on_attachments">קבצים מצורפים</string>
     <string name="title_sort_on_hidden">מוסתר</string>
     <string name="title_sort_ascending">הישנים בהתחלה</string>
+    <string name="title_sort_on_name">שם</string>
     <string name="title_sort_on_order">סדר</string>
     <string name="title_sort_on_applied">מניין החלה</string>
     <string name="title_sort_on_last_applied">החלה אחרונה</string>
@@ -1549,7 +1567,9 @@
     <string name="title_rule_snooze">השהיה</string>
     <string name="title_rule_flag">הוספת כוכב</string>
     <string name="title_rule_importance">הגדרת חשיבות</string>
-    <string name="title_rule_keyword">הוספת מילת מפתח</string>
+    <string name="title_rule_keyword">מילת מפתח</string>
+    <string name="title_rule_keyword_add">הוסף</string>
+    <string name="title_rule_keyword_delete">מחק</string>
     <string name="title_rule_move">העברה</string>
     <string name="title_rule_copy">עותק (תווית)</string>
     <string name="title_rule_answer">תגובה/העברה</string>
@@ -1895,6 +1915,7 @@
     <string name="title_widget_separator_lines">הצגת קווים מפרידים</string>
     <string name="title_widget_semi_transparent">רקע שקוף למחצה</string>
     <string name="title_widget_count_top">להציג מניין הודעות שלא נקראו למעלה</string>
+    <string name="title_widget_subject_lines">מספר שורות הנושא המרבי</string>
     <string name="title_widget_avatars">הצגת תמונות אנשי קשר</string>
     <string name="title_widget_refresh">הצגת כפתור רענון הודעות</string>
     <string name="title_widget_compose">הצגת כפתור כתיבת הודעה חדשה</string>
@@ -2048,6 +2069,7 @@
     <string-array name="encryptNames">
         <item>אין</item>
         <item>חתימה בלבד עם PGP</item>
+        <item>הצפנת PGP בלבד</item>
         <item>חתימה והצפנה עם PGP</item>
         <item>חתימה בלבד עם S/MIME</item>
         <item>חתימה והצפנה עם S/MIME</item>

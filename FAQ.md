@@ -181,7 +181,7 @@ The cause might be [changes in Android 7 Nougat](https://ericsink.com/entries/sq
 * &#x2714; ~~Pinch zoom~~
 * &#x2714; ~~More compact folder view~~
 * &#x2714; ~~Compose lists~~
-* &#x274C; ~~Compose tables~~ (the Android editor doesn't suppor tables)
+* &#x274C; ~~Compose tables~~ (the Android editor doesn't support tables)
 * &#x2714; ~~Pinch zoom text size~~
 * &#x2714; ~~Display GIFs~~
 * &#x2714; ~~Themes~~
@@ -420,6 +420,7 @@ The following Android permissions are **optional**:
 * *read the contents of your shared storage (SD card)* (READ_EXTERNAL_STORAGE): to accept files from other, outdated apps, see also [this FAQ](#user-content-faq49)
 * Android 5.1 Lollipop and before: *use accounts on the device* (USE_CREDENTIALS): to select an account when using the Gmail quick setup (not requested on later Android versions)
 * Android 5.1 Lollipop and before: *Read profile* (READ_PROFILE): to read your name when using the Gmail quick setup (not requested on later Android versions)
+* GitHub version only: *read and write calendar data* (READ_CALENDAR/WRITE_CALENDAR): to [auto-store invitations](#user-content-faq186)
 
 [Optional permissions](https://developer.android.com/training/permissions/requesting) are supported on Android 6 Marshmallow and later only.
 On earlier Android versions you will be asked to grant the permissions on installing FairEmail.
@@ -960,7 +961,7 @@ Signed-only or encrypted-only messages are not a good idea, please see here abou
 * [OpenPGP Considerations Part II](https://www.openkeychain.org/openpgp-considerations-part-ii)
 * [OpenPGP Considerations Part III Autocrypt](https://www.openkeychain.org/openpgp-considerations-part-iii-autocrypt)
 
-Signed-only messages are supported, encrypted-only messages are not supported.
+Signed-only messages are supported, and encrypted-only messages are supported since version 1.2053.
 
 Common errors:
 
@@ -2681,6 +2682,7 @@ You can enable downloading message headers in the connection settings and check 
 
 Some common header conditions (regex):
 
+* *.&ast;To:.&ast;undisclosed-recipients.&ast;*
 * *.&ast;Auto-Submitted:.&ast;* [RFC3834](https://tools.ietf.org/html/rfc3834)
 * *.&ast;List-Unsubscribe:.&ast;* [RFC3834](https://datatracker.ietf.org/doc/html/rfc2369)
 * *.&ast;Content-Type:.&ast;multipart/report.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
@@ -2717,6 +2719,7 @@ $$lowpriority$ (since version 1.1958)
 $$highpriority$ (since version 1.1958)
 $$signed$ (since version 1.1981)
 $$encrypted$ (since version 1.1981)
+$$aligned$ (since version 1.2049)
 ```
 
 Note that *regex* should be disabled and that there should be no white space.
@@ -2744,6 +2747,10 @@ The automation action will broadcast the intent *eu.faircode.email.AUTOMATION* w
 * *received* (ISO 8601 date/time)
 
 An app like Tasker can listen for this intent and perform some action.
+
+<br />
+
+You can long-press a rule in the list of rules to copy it, which can be useful if you need a rule with the same condition but a different action.
 
 <br />
 
@@ -3147,10 +3154,12 @@ Note that original messages are shown exactly as they are, which means also that
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq92)
 
 Spam filtering, verification of the [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail) signature
-and [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework) authorization is a task of email servers, not of an email client.
+and [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework) authorization is a task of email servers,
+not of an email client, which is basically a viewer for messages on an email server.
 Servers generally have more memory and computing power, so they are much better suited to this task than battery-powered devices.
-Also, you'll want spam filtered for all your email clients, possibly including web email, not just one email client.
-Moreover, email servers have access to information, like the IP address, etc of the connecting server, which an email client has no access to.
+Also, you'll want spam filtered for all your email clients, possibly including web email, not just for one email client on one device.
+Moreover, email servers have access to information, like the IP address, etc. of the connecting server, which an email client has no access to.
+Furthermore, an email server can inspect all messages of all email accounts, while an email client can inspect messages in your email account only.
 
 If you are receiving a significant amount of spam, the first thing you should do is consider switching to another email provider.
 Some email servers excell at filtering spam, and others are really bad at it.
@@ -4859,10 +4868,10 @@ Related questions:
 * The Play Store version does not support Android Auto, see [this FAQ](#user-content-faq165) for more information
 * The Play Store version does not support Amazon devices with Android 5 Lollipop because there are critical bugs in this Android version of Amazon
 * The Play Store version does not support Gravatars/Libravatars due to Play Store policies
-* The Play Store version does not support auto storing iCalendar invitations, see [this FAQ](#user-content-faq186) for more information
+* The Play Store version does not support auto-storing iCalendar invitations, see [this FAQ](#user-content-faq186) for more information
 * The Play Store version is released about once a month only because I am tired of 1-star ratings for *Too many updates*. If you want to receive more updates, you can join the [Play Store test program](https://play.google.com/apps/testing/eu.faircode.email).
 * The GitHub version will check for [updates on GitHub](https://github.com/M66B/FairEmail/releases) and is updated more frequently, but updates need to be installed manually
-* The GitHub version has some different links, some more options (like sharing the HTML of a message) and some different default values (more geared to advanced users)
+* The GitHub version has some different links, some more features and options, and some different default values (more geared to advanced users)
 * The GitHub version can be installed as an update over the Play store version, whereas the F-Droid build can't (see below for more details)
 * The F-Droid build does not support OAuth, see [this FAQ](#user-content-faq147) about why not
 * The F-Droid build does not include [Google Play Billing](https://developer.android.com/google/play/billing/integrate), so Play store purchases cannot be reused
@@ -4872,7 +4881,7 @@ The Play store and GitHub version are signed with the [same digital signature](h
 The F-Droid build is signed by the F-Droid organization with a different digital key.
 This means you can't update the F-Droid build with the Play store or GitHub version or the other way around without reinstalling.
 However, it is possible to install the GitHub version over the Play store version,
-and the Play store app will do the same, when auto updating isn't disabled for the app in the app description.
+and the Play store app will do the same, when auto-updating isn't disabled for the app in the app description.
 
 <br />
 
@@ -5155,7 +5164,7 @@ Amazon never responded to an issue reported about this.
 * Grant permissions via setup step 2 of the main settings screen
 * Select a calendar in the accounts settings under *Manual setup and account options* (you can use the *Reset* button to disable storing invitations)
 
-New invitations will be stored automatically as *tentative*, with no alarms and reminders set.
+New invitations, with both a start and end date, will be stored automatically as *tentative*, with no alarms and reminders set.
 If you accept or decline an invitation, the status will be updated accordingly, after the accept/decline message has been sent successfully.
 Received updates and cancellations will be processed as well.
 
@@ -5229,26 +5238,43 @@ Cloud sync is an experimental feature. It is not available for the Play Store ve
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq180)
 
+OpenAI can only be used if configured and enabled, and the app does not use third-party libraries to avoid tracking when OpenAI is not used.
+
 **Setup**
 
 * Create an account [here](https://platform.openai.com/signup)
-* Create an APIkey [here](https://platform.openai.com/account/api-keys)
-* Copy the APIkey and paste it in the corresponding field of the miscellaneous settings tab page
+* Create an API key [here](https://platform.openai.com/account/api-keys)
+* Copy the API key and paste it in the corresponding field of the miscellaneous-settings tab page
 * Enable the OpenAI switch
+
+<br>
 
 **Usage**
 
 Tap on the robot button in the top action bar of the message editor.
 The text in the message editor (if any) and the first part of the message being replied to (if any)
 will be used for [chat completion](https://platform.openai.com/docs/guides/chat/introduction).
-If text is selected in the message editor, only the selected text will be used.
+If text is selected in the message editor, only the selected text will be used, and it will be replaced by the answer.
 A maximum of 1,000 characters of the message being replied to will be used to avoid exceeding the token limit.
 
 For example: create a new draft and enter the text "*How far is the sun?*", and tap on the robot button in the top action bar.
 
-OpenAI isn't very fast, so be patient.
+<br>
 
-This feature is experimental and available in the GitHub version only and requires version 1.2052 or later.
+OpenAI isn't very fast, so be patient. Sometimes a timeout error occurs because the app is not receiving a response from OpenAI.
+
+You can select the [model](https://platform.openai.com/docs/models/overview),
+configure the [temperature](https://platform.openai.com/docs/api-reference/chat/create#chat/create-temperature)
+and enable [moderation](https://platform.openai.com/docs/api-reference/moderations) in the miscellaneous-settings tab page.
+
+If you have access to GPT-4, you can change the model name to [gpt-4](https://platform.openai.com/docs/models/gpt-4) in the miscellaneous-settings tab page.
+There is currently a [waitlist](https://openai.com/waitlist/gpt-4-api) for API GPT-4 access.
+
+Please read the [privacy policy](https://openai.com/policies/privacy-policy) of OpenAI,
+and perhaps [this article](https://katedowninglaw.com/2023/03/10/openais-massive-data-grab/)
+and [this article](https://www.ncsc.gov.uk/blog-post/chatgpt-and-large-language-models-whats-the-risk) too.
+
+This feature is experimental and available in the GitHub version only and requires version 1.2053 or later.
 
 <br>
 

@@ -344,7 +344,6 @@
     <string name="title_advanced_send_chips">Prikaži oblačiće adresa</string>
     <string name="title_advanced_send_reminders">Prikaži podsjetnike</string>
     <string name="title_advanced_send_delayed">Odgoda slanja poruka</string>
-    <string name="title_advanced_attach_new">Dodaj dijeljene datoteke u novu skicu</string>
     <string name="title_advanced_answer_action">Dugi pritisak na dugme za odgovor će:</string>
     <string name="title_advanced_send_pending">Prikaži nenametljivu ikonu odgođenog slanja</string>
     <string name="title_advanced_auto_save_paragraph">Automatski spremi skicu nakon svakog odlomka</string>
@@ -1338,6 +1337,7 @@
     <string name="title_sort_on_attachments">Prilozi</string>
     <string name="title_sort_on_hidden">Skriveno</string>
     <string name="title_sort_ascending">Prvo najstarije</string>
+    <string name="title_sort_on_name">Ime</string>
     <string name="title_sort_on_order">Redoslijed</string>
     <string name="title_filter">Filtrirati</string>
     <string name="title_filter_seen">Pročitaj</string>
@@ -1391,7 +1391,8 @@
     <string name="title_rule_snooze">Utišaj</string>
     <string name="title_rule_flag">Dodaj zvjezdicu</string>
     <string name="title_rule_importance">Postavi važnost</string>
-    <string name="title_rule_keyword">Dodaj ključnu riječ</string>
+    <string name="title_rule_keyword_add">Dodaj</string>
+    <string name="title_rule_keyword_delete">Izbriši</string>
     <string name="title_rule_move">Premjesti</string>
     <string name="title_rule_copy">Kopiraj (oznaka)</string>
     <string name="title_rule_answer">Odgovori/proslijedi</string>
@@ -1869,6 +1870,7 @@
     <string-array name="encryptNames">
         <item>Nijedan</item>
         <item>PGP samo za potpis</item>
+        <item>PGP encrypt-only</item>
         <item>PGP potpis + šifriranje</item>
         <item>S/MIME samo za potpis</item>
         <item>S/MIME potpis + šifriranje</item>

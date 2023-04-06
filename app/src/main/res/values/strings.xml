@@ -402,6 +402,8 @@
     <string name="title_advanced_optimize">Automatically optimize</string>
     <string name="title_advanced_always">Always receive messages for these accounts</string>
     <string name="title_advanced_schedule">Schedule</string>
+    <string name="title_advanced_schedule_workdays">Workdays</string>
+    <string name="title_advanced_schedule_weekend">Weekend</string>
     <string name="title_advanced_advanced">Advanced</string>
     <string name="title_advanced_quick_sync">Quick sync</string>
     <string name="title_advanced_no_date">Messages without date</string>
@@ -438,15 +440,19 @@
     <string name="title_advanced_send_chips">Show address bubbles</string>
     <string name="title_advanced_send_reminders">Show reminders</string>
     <string name="title_advanced_send_delayed">Delay sending messages</string>
-    <string name="title_advanced_attach_new">Add shared files to a new draft</string>
+    <string name="title_advanced_attach_new">Create a new draft message for shared addresses and files</string>
+    <string name="title_advanced_answer_caption">Answer button settings</string>
     <string name="title_advanced_answer_default">Short pressing on the answer button will:</string>
     <string name="title_advanced_answer_action">Long pressing on the answer button will:</string>
+    <string name="title_advanced_answer_hint">The answer button actions can also be configured in the send settings tab page</string>
+    <string name="title_advanced_answer_warning">Not all actions are possible without a selection menu!</string>
     <string name="title_advanced_send_pending">Show non-obtrusive send delayed icon</string>
 
     <string name="title_advanced_auto_save_paragraph">Automatically save a draft after every paragraph</string>
     <string name="title_advanced_auto_save_dot">Automatically save a draft after every sentence</string>
     <string name="title_advanced_compose_color">Default text color</string>
     <string name="title_advanced_compose_font">Default font</string>
+    <string name="title_advanced_compose_monospaced">Use monospaced font for plain text messages</string>
     <string name="title_advanced_auto_identity">Automatically select identities for new messages</string>
     <string name="title_advanced_prefix_once">Prefix subject only once on replying or forwarding</string>
     <string name="title_advanced_prefix_count">Add count to reply prefix</string>
@@ -507,6 +513,7 @@
     <string name="title_advanced_caption_message_body">Message body</string>
     <string name="title_advanced_caption_file">File</string>
     <string name="title_advanced_caption_cloud" translatable="false">Cloud</string>
+    <string name="title_advanced_caption_integrations">Integrations</string>
     <string name="title_advanced_caption_debug" translatable="false">Debug</string>
 
     <string name="title_advanced_portrait">Portrait mode</string>
@@ -584,6 +591,7 @@
     <string name="title_advanced_preview">Show message preview</string>
     <string name="title_advanced_preview_italic">Show message preview in italics</string>
     <string name="title_advanced_preview_lines">Number of preview lines</string>
+    <string name="title_advanced_align_header">Vertically align keywords, preview text, and notes</string>
     <string name="title_advanced_addresses">Expand address details by default</string>
     <string name="title_advanced_unzip">Show contents of compressed attachments</string>
     <string name="title_advanced_attachments_alt">Show attachments after the message text</string>
@@ -794,6 +802,9 @@
     <string name="title_advanced_virus_total">VirusTotal integration</string>
     <string name="title_advanced_send">\'Send\' integration</string>
     <string name="title_advanced_openai">OpenAI (ChatGPT) integration</string>
+    <string name="title_advanced_openai_model">Model</string>
+    <string name="title_advanced_openai_temperature">Temperature: %1$s</string>
+    <string name="title_advanced_openai_moderation">Content moderation</string>
     <string name="title_advanced_sdcard">I want to use an sdcard</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_updates">Check for GitHub updates</string>
@@ -860,6 +871,7 @@
     <string name="title_advanced_empty_pool" translatable="false">Empty connection pool</string>
     <string name="title_advanced_exact_alarms" translatable="false">Use exact timers</string>
     <string name="title_advanced_native_dkim" translatable="false">Native DKIM verification</string>
+    <string name="title_advanced_native_arc" translatable="false">Native ARC verification</string>
     <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
     <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
     <string name="title_advanced_global_keywords" translatable="false">Global keywords</string>
@@ -912,6 +924,7 @@
     <string name="title_advanced_send_reminders_hint">Show a warning when the message text or the subject is empty or when an attachment might be missing</string>
     <string name="title_advanced_reply_move_hint">The email server could still add the messages to the sent message folder</string>
     <string name="title_advanced_compose_color_hint">Very light or very dark colors will result in illegible messages on the recipients\' side</string>
+    <string name="title_advanced_attach_new_hint">Otherwise, add shared addresses or files to the current draft message</string>
     <string name="title_advanced_usenet_hint">Insert \'-- \' between the text and the signature</string>
     <string name="title_advanced_remove_signature_hint">This can result in too little or too much text being removed</string>
 
@@ -963,6 +976,7 @@
     <string name="title_advanced_sender_hint">Most providers do not allow modified sender addresses</string>
     <string name="title_advanced_bcc_hint">The address won\'t be shown, but will be added on sending</string>
     <string name="title_advanced_internal_hint">There will be a warning when sending to another domain</string>
+    <string name="title_advanced_uri">The details of the selected contact will be used for vCard attachments</string>
     <string name="title_advanced_e2e_encryption">Options for end-to-end encryption</string>
 
     <string name="title_advanced_display_harmful_hint">Disabling this option might be harmful to your privacy</string>
@@ -1055,6 +1069,7 @@
     <string name="title_advanced_sender_regex">Regex to match username of incoming email addresses</string>
     <string name="title_identity_reply_to">Reply to address</string>
     <string name="title_identity_internal">Internal domain names (comma separated)</string>
+    <string name="title_identity_uri">Link contact</string>
     <string name="title_identity_unicode">Allow UTF-8 in message headers</string>
     <string name="title_identity_unicode_remark">Most servers do not support this</string>
     <string name="title_identity_octetmime">Allow 8BITMIME</string>
@@ -1560,6 +1575,7 @@
     <string name="title_style_superscript">Superscript</string>
     <string name="title_style_strikethrough">Strikethrough</string>
     <string name="title_style_code" translatable="false">Code</string>
+    <string name="title_style_reverse" translatable="false">Reverse</string>
     <string name="title_style_protect">Password protect</string>
     <string name="title_style_protected">Protected content</string>
     <string name="title_style_protect_size">Text too long</string>
@@ -1760,6 +1776,7 @@
     <string name="title_sort_on_hidden">Hidden</string>
     <string name="title_sort_ascending">Oldest first</string>
 
+    <string name="title_sort_on_name">Name</string>
     <string name="title_sort_on_order">Order</string>
     <string name="title_sort_on_applied">Applied count</string>
     <string name="title_sort_on_last_applied">Last applied</string>
@@ -1804,6 +1821,7 @@
     <string name="title_answer_caption">Edit template</string>
     <string name="title_answer_reply">Reply template</string>
     <string name="title_answer_name">Template name</string>
+    <string name="title_answer_label" translatable="false">Template label</string>
     <string name="title_answer_group">Template group (optional)</string>
     <string name="title_answer_standard">Default</string>
     <string name="title_answer_favorite">Favorite</string>
@@ -1828,7 +1846,9 @@
     <string name="title_rule_snooze">Snooze</string>
     <string name="title_rule_flag">Add star</string>
     <string name="title_rule_importance">Set importance</string>
-    <string name="title_rule_keyword">Add keyword</string>
+    <string name="title_rule_keyword">Keyword</string>
+    <string name="title_rule_keyword_add">Add</string>
+    <string name="title_rule_keyword_delete">Delete</string>
     <string name="title_rule_move">Move</string>
     <string name="title_rule_copy">Copy (label)</string>
     <string name="title_rule_answer">Reply/forward</string>
@@ -2204,6 +2224,7 @@
     <string name="title_widget_separator_lines">Show separator lines</string>
     <string name="title_widget_semi_transparent">Semi transparent background</string>
     <string name="title_widget_count_top">Show unread count at the top</string>
+    <string name="title_widget_subject_lines">Maximum number of subject lines</string>
     <string name="title_widget_avatars">Show contact avatars</string>
     <string name="title_widget_refresh">Show refresh messages button</string>
     <string name="title_widget_compose">Show compose new message button</string>
@@ -2488,6 +2509,7 @@
     <string-array name="encryptNames">
         <item>None</item>
         <item>PGP sign-only</item>
+        <item>PGP encrypt-only</item>
         <item>PGP sign+encrypt</item>
         <item>S/MIME sign-only</item>
         <item>S/MIME sign+encrypt</item>
@@ -2496,6 +2518,7 @@
     <integer-array name="encryptValues" translatable="false">
         <item>0</item>
         <item>2</item>
+        <item>5</item>
         <item>1</item>
         <item>4</item>
         <item>3</item>
@@ -2598,6 +2621,7 @@
         <item>forward</item>
         <item>resend</item>
         <item>editasnew</item>
+        <item>move</item>
         <item>menu</item>
     </string-array>
 
@@ -2608,6 +2632,7 @@
         <item>@string/title_forward</item>
         <item>@string/title_resend</item>
         <item>@string/title_editasnew</item>
+        <item>@string/title_move</item>
         <item>@string/title_reply_menu</item>
     </string-array>
 

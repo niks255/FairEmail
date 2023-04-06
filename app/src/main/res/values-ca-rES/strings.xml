@@ -948,6 +948,7 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="title_sort_on_attachments">Adjunts</string>
     <string name="title_sort_on_hidden">Ocults</string>
     <string name="title_sort_ascending">El més antic primer</string>
+    <string name="title_sort_on_name">Nom</string>
     <string name="title_sort_on_order">Ordre</string>
     <string name="title_filter">Filtrar per</string>
     <string name="title_filter_seen">Llegir</string>
@@ -986,7 +987,8 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="title_rule_snooze">Posposa</string>
     <string name="title_rule_flag">Afegeix a destacats</string>
     <string name="title_rule_importance">Estableix la importància</string>
-    <string name="title_rule_keyword">Afegeix paraula clau</string>
+    <string name="title_rule_keyword_add">Afegir</string>
+    <string name="title_rule_keyword_delete">Eliminar</string>
     <string name="title_rule_move">Mou</string>
     <string name="title_rule_copy">Copia (etiqueta)</string>
     <string name="title_rule_tts">Text a veu</string>
@@ -1367,6 +1369,7 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string-array name="encryptNames">
         <item>Cap</item>
         <item>Només signar PGP</item>
+        <item>PGP encrypt-only</item>
         <item>Signar i xifrar PGP</item>
         <item>Només signar S/MIME</item>
         <item>Signar i xifrar S/MIME</item>

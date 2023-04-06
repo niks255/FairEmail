@@ -23,11 +23,16 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.text.TextUtils;
 
+import androidx.preference.PreferenceManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -35,6 +40,8 @@ import java.util.TimeZone;
 import biweekly.ICalVersion;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
+import biweekly.io.TimezoneAssignment;
+import biweekly.io.TimezoneInfo;
 import biweekly.io.WriteContext;
 import biweekly.io.scribe.property.RecurrenceRuleScribe;
 import biweekly.parameter.ParticipationStatus;
@@ -43,8 +50,63 @@ import biweekly.property.RecurrenceRule;
 import biweekly.util.ICalDate;
 
 public class CalendarHelper {
-    static void insert(Context context, ICalendar icalendar, VEvent event,
+    static boolean isWeekend(Context context, Calendar calendar) {
+        return isWeekend(context, calendar.get(Calendar.DAY_OF_WEEK));
+    }
+
+    static boolean isWeekend(Context context, int aday) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String weekend = prefs.getString("weekend", Calendar.SATURDAY + "," + Calendar.SUNDAY);
+        for (String day : weekend.split(","))
+            if (!TextUtils.isEmpty(day) && aday == Integer.parseInt(day))
+                return true;
+        return false;
+    }
+
+    static String formatHour(Context context, int minutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, minutes / 60);
+        cal.set(Calendar.MINUTE, minutes % 60);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return Helper.getTimeInstance(context, SimpleDateFormat.SHORT).format(cal.getTime());
+    }
+
+    static Long exists(Context context, String selectedAccount, String selectedName, String uid) {
+        ContentResolver resolver = context.getContentResolver();
+        try (Cursor cursor = resolver.query(CalendarContract.Events.CONTENT_URI,
+                new String[]{CalendarContract.Events._ID},
+                CalendarContract.Calendars.ACCOUNT_NAME + " = ?" +
+                        " AND " + (selectedName == null
+                        ? "(" + CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " IS NULL" +
+                        " OR " + CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " = ''" +
+                        " OR " + CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " = ?)"
+                        : CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " = ?") +
+                        " AND " + CalendarContract.Events.UID_2445 + " = ?",
+                selectedName == null
+                        ? new String[]{selectedAccount, selectedAccount, uid}
+                        : new String[]{selectedAccount, selectedName, uid},
+                null)) {
+            if (cursor.moveToNext())
+                return cursor.getLong(0);
+            else
+                return null;
+        }
+    }
+
+    static Long insert(Context context, ICalendar icalendar, VEvent event, int status,
                        String selectedAccount, String selectedName, EntityMessage message) {
+        String uid = (event.getUid() == null ? null : event.getUid().getValue());
+        if (!TextUtils.isEmpty(uid)) {
+            Long existId = exists(context, selectedAccount, selectedName, uid);
+            if (existId != null) {
+                EntityLog.log(context, EntityLog.Type.General, message, "Event exists uid=" + uid + " id=" + existId);
+                return existId;
+            }
+        }
+
+        String organizer = (event.getOrganizer() == null ? null : event.getOrganizer().getEmail());
+
         String summary = (event.getSummary() == null ? null : event.getSummary().getValue());
         String description = (event.getDescription() == null ? null : event.getDescription().getValue());
         String location = (event.getLocation() == null ? null : event.getLocation().getValue());
@@ -60,21 +122,24 @@ public class CalendarHelper {
             rrule = scribe.writeText(recurrence, wcontext);
         }
 
-        String uid = (event.getUid() == null ? null : event.getUid().getValue());
-
-        if (TextUtils.isEmpty(uid) || start == null || end == null)
-            return;
+        if (start == null || end == null) {
+            EntityLog.log(context, EntityLog.Type.General, message,
+                    "Event start=" + start + " end=" + end);
+            return null;
+        }
 
         ContentResolver resolver = context.getContentResolver();
         try (Cursor cursor = resolver.query(CalendarContract.Calendars.CONTENT_URI,
                 new String[]{CalendarContract.Calendars._ID},
-                CalendarContract.Calendars.VISIBLE + " <> 0 AND " +
-                        CalendarContract.Calendars.ACCOUNT_NAME + " = ?" +
-                        (selectedName == null
-                                ? ""
-                                : " AND " + CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " = ?"),
+                CalendarContract.Calendars.VISIBLE + " <> 0" +
+                        " AND " + CalendarContract.Calendars.ACCOUNT_NAME + " = ?" +
+                        " AND " + (selectedName == null
+                        ? "(" + CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " IS NULL" +
+                        " OR " + CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " = ''" +
+                        " OR " + CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " = ?)"
+                        : CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " = ?"),
                 selectedName == null
-                        ? new String[]{selectedAccount}
+                        ? new String[]{selectedAccount, selectedAccount}
                         : new String[]{selectedAccount, selectedName},
                 null)) {
             if (cursor.getCount() == 0)
@@ -90,30 +155,43 @@ public class CalendarHelper {
                 values.put(CalendarContract.Events.CALENDAR_ID, calId);
                 if (!TextUtils.isEmpty(uid))
                     values.put(CalendarContract.Events.UID_2445, uid);
-                values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
+                if (!TextUtils.isEmpty(organizer))
+                    values.put(CalendarContract.Events.ORGANIZER, organizer);
+
+                // Assume one time zone
+                TimezoneInfo tzinfo = icalendar.getTimezoneInfo();
+                TimezoneAssignment tza = (tzinfo == null ? null : tzinfo.getTimezone(event.getDateStart()));
+                TimeZone tz = (tza == null ? null : tza.getTimeZone());
+                if (tz != null)
+                    values.put(CalendarContract.Events.EVENT_TIMEZONE, tz.getID());
+
                 values.put(CalendarContract.Events.DTSTART, start.getTime());
                 values.put(CalendarContract.Events.DTEND, end.getTime());
+
                 if (rrule != null)
                     values.put(CalendarContract.Events.RRULE, rrule);
+
                 if (!TextUtils.isEmpty(summary))
                     values.put(CalendarContract.Events.TITLE, summary);
                 if (!TextUtils.isEmpty(description))
                     values.put(CalendarContract.Events.DESCRIPTION, description);
                 if (!TextUtils.isEmpty(location))
                     values.put(CalendarContract.Events.EVENT_LOCATION, location);
-                values.put(CalendarContract.Events.STATUS, CalendarContract.Events.STATUS_TENTATIVE);
+                values.put(CalendarContract.Events.STATUS, status);
 
                 Uri uri = resolver.insert(CalendarContract.Events.CONTENT_URI, values);
                 long eventId = Long.parseLong(uri.getLastPathSegment());
                 EntityLog.log(context, EntityLog.Type.General, message, "Inserted event" +
                         " id=" + calId + ":" + eventId +
                         " uid=" + uid +
-                        " tz=" + TimeZone.getDefault().getID() +
+                        " organizer=" + organizer +
+                        " tz=" + (tz == null ? null : tz.getID()) +
                         " start=" + new Date(start.getTime()) +
                         " end=" + new Date(end.getTime()) +
                         " rrule=" + rrule +
                         " summary=" + summary +
-                        " location=" + location);
+                        " location=" + location +
+                        " status=" + status);
 
                 for (Attendee a : event.getAttendees())
                     try {
@@ -122,7 +200,7 @@ public class CalendarHelper {
                         String role = (a.getRole() == null ? null : a.getRole().getValue());
                         String level = (a.getParticipationLevel() == null ? null
                                 : a.getParticipationLevel().getValue(icalendar.getVersion()));
-                        String status = (a.getParticipationStatus() == null ? null : a.getParticipationStatus().getValue());
+                        String pstatus = (a.getParticipationStatus() == null ? null : a.getParticipationStatus().getValue());
 
                         ContentValues avalues = new ContentValues();
 
@@ -142,13 +220,13 @@ public class CalendarHelper {
                         else if ("REQUEST".equals(level) || "OPT-PARTICIPANT".equals(level))
                             avalues.put(CalendarContract.Attendees.ATTENDEE_TYPE, CalendarContract.Attendees.TYPE_OPTIONAL);
 
-                        if ("ACCEPTED".equals(status) || "CONFIRMED".equals(status))
+                        if ("ACCEPTED".equals(pstatus) || "CONFIRMED".equals(pstatus))
                             avalues.put(CalendarContract.Attendees.ATTENDEE_STATUS, CalendarContract.Attendees.ATTENDEE_STATUS_ACCEPTED);
-                        else if ("DECLINED".equals(status))
+                        else if ("DECLINED".equals(pstatus))
                             avalues.put(CalendarContract.Attendees.ATTENDEE_STATUS, CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED);
-                        else if ("TENTATIVE".equals(status))
+                        else if ("TENTATIVE".equals(pstatus))
                             avalues.put(CalendarContract.Attendees.ATTENDEE_STATUS, CalendarContract.Attendees.ATTENDEE_STATUS_TENTATIVE);
-                        else if ("NEEDS-ACTION".equals(status))
+                        else if ("NEEDS-ACTION".equals(pstatus))
                             avalues.put(CalendarContract.Attendees.ATTENDEE_STATUS, CalendarContract.Attendees.ATTENDEE_STATUS_NONE);
 
                         avalues.put(CalendarContract.Attendees.EVENT_ID, eventId);
@@ -161,12 +239,16 @@ public class CalendarHelper {
                                 " name=" + name +
                                 " role=" + role +
                                 " level=" + level +
-                                " status=" + status);
+                                " status=" + pstatus);
                     } catch (Throwable ex) {
                         Log.w(ex);
                     }
+
+                return eventId;
             }
         }
+
+        return null;
     }
 
     static void update(Context context, VEvent event, EntityMessage message) {

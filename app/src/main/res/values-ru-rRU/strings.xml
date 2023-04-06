@@ -357,6 +357,8 @@
     <string name="title_advanced_optimize">Автоматическая оптимизация</string>
     <string name="title_advanced_always">Непрерывно получать сообщения с этих учётных записей</string>
     <string name="title_advanced_schedule">Расписание</string>
+    <string name="title_advanced_schedule_workdays">Будни</string>
+    <string name="title_advanced_schedule_weekend">Выходные</string>
     <string name="title_advanced_advanced">Дополнительно</string>
     <string name="title_advanced_quick_sync">Быстрая синхронизация</string>
     <string name="title_advanced_no_date">Сообщения без даты</string>
@@ -391,14 +393,18 @@
     <string name="title_advanced_send_chips">Показывать пузыри адреса</string>
     <string name="title_advanced_send_reminders">Показывать напоминания</string>
     <string name="title_advanced_send_delayed">Задержка отправки сообщений</string>
-    <string name="title_advanced_attach_new">Создавать новый черновик для файлов, которыми поделились</string>
+    <string name="title_advanced_attach_new">Создавать новый черновик сообщения для общих адресов и файлов</string>
+    <string name="title_advanced_answer_caption">Настройки кнопок ответа</string>
     <string name="title_advanced_answer_default">Короткое нажатие на кнопку ответа:</string>
     <string name="title_advanced_answer_action">Долгое нажатие на кнопку ответа:</string>
+    <string name="title_advanced_answer_hint">Действия кнопок ответа также могут быть настроены на вкладке настроек \"Отправка\"</string>
+    <string name="title_advanced_answer_warning">Не все действия возможны без меню выбора!</string>
     <string name="title_advanced_send_pending">Показывать ненавязчивый значок задержки отправки</string>
     <string name="title_advanced_auto_save_paragraph">Автоматически сохранять черновик после каждого абзаца</string>
     <string name="title_advanced_auto_save_dot">Автоматически сохранять черновик после каждого предложения</string>
     <string name="title_advanced_compose_color">Цвет текста по умолчанию</string>
     <string name="title_advanced_compose_font">Шрифт по умолчанию</string>
+    <string name="title_advanced_compose_monospaced">Использовать моноширинный шрифт для простого текста</string>
     <string name="title_advanced_auto_identity">Автоматически выбирать идентификаторы для новых сообщений</string>
     <string name="title_advanced_prefix_once">Добавлять только один префикс перед темой при ответе или пересылке</string>
     <string name="title_advanced_prefix_count">Добавлять счётчик в префикс ответа</string>
@@ -452,6 +458,7 @@
     <string name="title_advanced_caption_message_header">Заголовок сообщения</string>
     <string name="title_advanced_caption_message_body">Текст сообщения</string>
     <string name="title_advanced_caption_file">Файл</string>
+    <string name="title_advanced_caption_integrations">Интеграции</string>
     <string name="title_advanced_portrait">Портретный режим</string>
     <string name="title_advanced_landscape">Альбомный режим</string>
     <string name="title_advanced_two_row">Использовать две строки</string>
@@ -522,6 +529,7 @@
     <string name="title_advanced_preview">Показывать предпросмотр сообщения</string>
     <string name="title_advanced_preview_italic">Показывать предпросмотр сообщения курсивом</string>
     <string name="title_advanced_preview_lines">Количество строк предпросмотра</string>
+    <string name="title_advanced_align_header">Вертикальное выравнивание ключевых слов, предпросмотра текста и заметок</string>
     <string name="title_advanced_addresses">По умолчанию показывать подробную информацию об адресах</string>
     <string name="title_advanced_unzip">Показывать содержимое сжатых вложений</string>
     <string name="title_advanced_attachments_alt">Показывать вложения после текста сообщения</string>
@@ -709,6 +717,11 @@
     <string name="title_advanced_lt_key">Ключ API (необязательно)</string>
     <string name="title_advanced_deepl">Интеграция с DeepL</string>
     <string name="title_advanced_virus_total">Интеграция с VirusTotal</string>
+    <string name="title_advanced_send">Интеграция с Send</string>
+    <string name="title_advanced_openai">Интеграция с OpenAI (ChatGPT)</string>
+    <string name="title_advanced_openai_model">Модель</string>
+    <string name="title_advanced_openai_temperature">Температура: %1$s</string>
+    <string name="title_advanced_openai_moderation">Модерация содержания</string>
     <string name="title_advanced_sdcard">Я хочу использовать SD-карту</string>
     <string name="title_advanced_watchdog">Регулярно проверять, активен ли FairEmail</string>
     <string name="title_advanced_updates">Проверять обновления на GitHub</string>
@@ -756,6 +769,7 @@
     <string name="title_advanced_send_reminders_hint">Показывать предупреждение, если отсутствует текст сообщения, тема или, возможно, отсутствует вложение</string>
     <string name="title_advanced_reply_move_hint">Сервер электронной почты всё ещё может добавлять сообщения в папку отправленных</string>
     <string name="title_advanced_compose_color_hint">Очень светлые или очень тёмные цвета сделают сообщение неразборчивым для получателя</string>
+    <string name="title_advanced_attach_new_hint">В противном случае общие адреса или файлы добавляются к текущему черновику</string>
     <string name="title_advanced_usenet_hint">Вставлять \"-- \" между текстом и подписью</string>
     <string name="title_advanced_remove_signature_hint">Может привести к слишком маленькому или большому убиранию текста</string>
     <string name="title_advanced_metered_hint">Лимитированные подключения — это обычно мобильные сети или платные Wi-Fi</string>
@@ -802,6 +816,7 @@
     <string name="title_advanced_sender_hint">Большинство провайдеров не разрешают изменять адреса отправителей</string>
     <string name="title_advanced_bcc_hint">Адрес не будет показан, но будет добавлен при отправке</string>
     <string name="title_advanced_internal_hint">Будет предупреждение при отправке на другой домен</string>
+    <string name="title_advanced_uri" comment="title_advanced_uri&#10;Remark for button to link contact to identity">Данные выбранного контакта будут использоваться для вложений vCard</string>
     <string name="title_advanced_e2e_encryption">Настройки сквозного шифрования</string>
     <string name="title_advanced_display_harmful_hint">Отключение может навредить вашей конфиденциальности</string>
     <string name="title_advanced_display_hidden_hint">Может вызвать странное отображение и дублирование текста</string>
@@ -850,6 +865,7 @@
     <string name="title_advanced_sender_regex">Регулярное выражение для имени в адресе входящей электронной почты</string>
     <string name="title_identity_reply_to">Обратный адрес</string>
     <string name="title_identity_internal">Внутренние доменные имена (через запятую)</string>
+    <string name="title_identity_uri">Связать контакт</string>
     <string name="title_identity_unicode">Использовать UTF-8 в заголовках сообщений</string>
     <string name="title_identity_unicode_remark">Большинство серверов это не поддерживают</string>
     <string name="title_identity_octetmime">Использовать 8BITMIME</string>
@@ -903,6 +919,7 @@
     <string name="title_primary_identity">Основной (идентификатор по умолчанию)</string>
     <string name="title_self_identity">Удалять адрес электронной почты при ответе</string>
     <string name="title_leave_on_server">Оставлять сообщения на сервере</string>
+    <string name="title_client_delete">Активно удалять сообщения после загрузки</string>
     <string name="title_leave_deleted">Оставлять удалённые сообщения на сервере</string>
     <string name="title_leave_on_device">Оставлять сообщения на устройстве</string>
     <string name="title_max_messages">Максимальное количество загружаемых сообщений (пусто для всех)</string>
@@ -1490,6 +1507,7 @@
     <string name="title_sort_on_attachments">Вложения</string>
     <string name="title_sort_on_hidden">Скрытые</string>
     <string name="title_sort_ascending">Сначала старые</string>
+    <string name="title_sort_on_name">Имя</string>
     <string name="title_sort_on_order">Порядок</string>
     <string name="title_sort_on_applied">Количество применений</string>
     <string name="title_sort_on_last_applied">Последнее применение</string>
@@ -1548,7 +1566,9 @@
     <string name="title_rule_snooze">Отложить</string>
     <string name="title_rule_flag">В избранное</string>
     <string name="title_rule_importance">Установить важность</string>
-    <string name="title_rule_keyword">Добавить ключ (слово)</string>
+    <string name="title_rule_keyword">Ключевое слово</string>
+    <string name="title_rule_keyword_add">Добавить</string>
+    <string name="title_rule_keyword_delete">Удалить</string>
     <string name="title_rule_move">Переместить</string>
     <string name="title_rule_copy">Копировать (пометить)</string>
     <string name="title_rule_answer">Ответить/переслать</string>
@@ -1894,6 +1914,7 @@
     <string name="title_widget_separator_lines">Показывать разделительные линии</string>
     <string name="title_widget_semi_transparent">Полупрозрачный фон</string>
     <string name="title_widget_count_top">Показывать количество непрочитанных вверху</string>
+    <string name="title_widget_subject_lines">Максимальное число строк темы</string>
     <string name="title_widget_avatars">Показывать аватары контактов</string>
     <string name="title_widget_refresh">Показать кнопку обновления сообщений</string>
     <string name="title_widget_compose">Показать кнопку создания нового сообщения</string>
@@ -2054,6 +2075,7 @@
     <string-array name="encryptNames">
         <item>Ничего</item>
         <item>Только подпись PGP</item>
+        <item>Только шифрование PGP</item>
         <item>Подпись+шифрование PGP</item>
         <item>Только подпись S/MIME</item>
         <item>Подпись+шифрование S/MIME</item>

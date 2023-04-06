@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -35,15 +36,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public class OpenAI {
-    static final String URI_ENDPOINT = "https://api.openai.com/";
-    static final String URI_PRIVACY = "https://openai.com/policies/privacy-policy";
-
+    private static final int MAX_OPENAI_LEN = 1000; // characters
     private static final int TIMEOUT = 30; // seconds
 
     static boolean isAvailable(Context context) {
-        if (BuildConfig.PLAY_STORE_RELEASE)
+        if (TextUtils.isEmpty(BuildConfig.OPENAI_ENDPOINT))
             return false;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -53,10 +56,77 @@ public class OpenAI {
         return (enabled && !TextUtils.isEmpty(apikey));
     }
 
-    static Message[] completeChat(Context context, Message[] messages, int n) throws JSONException, IOException {
+    static Pair<Double, Double> getGrants(Context context) throws JSONException, IOException {
+        // dashboard/billing/credit_grants
+        // {
+        //  "object": "credit_summary",
+        //  "total_granted": <float>,
+        //  "total_used": <float>,
+        //  "total_available": <float>,
+        //  "grants": {
+        //    "object": "list",
+        //    "data": [
+        //      {
+        //        "object": "credit_grant",
+        //        "id": "<guid>>",
+        //        "grant_amount": <float>,
+        //        "used_amount": <float>>,
+        //        "effective_at": <unixtime>,
+        //        "expires_at": <unixtime>
+        //      }
+        //    ]
+        //  }
+        //}
+
+        JSONObject grants = call(context, "GET", "dashboard/billing/credit_grants", null);
+        return new Pair<>(
+                grants.getDouble("total_used"),
+                grants.getDouble("total_granted"));
+    }
+
+    static void checkModeration(Context context, String text) throws JSONException, IOException {
+        // https://platform.openai.com/docs/api-reference/moderations/create
+        JSONObject jrequest = new JSONObject();
+        jrequest.put("input", text);
+        JSONObject jresponse = call(context, "POST", "v1/moderations", jrequest);
+        JSONArray jresults = jresponse.getJSONArray("results");
+        for (int i = 0; i < jresults.length(); i++) {
+            JSONObject jresult = jresults.getJSONObject(i);
+            if (jresult.getBoolean("flagged")) {
+                List<String> violations = new ArrayList<>();
+                JSONObject jcategories = jresult.getJSONObject("categories");
+                JSONObject jcategory_scores = jresult.getJSONObject("category_scores");
+                Iterator<String> keys = jcategories.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    Object value = jcategories.get(key);
+                    if (Boolean.TRUE.equals(value)) {
+                        Double score = (jcategories.has(key) ? jcategory_scores.getDouble(key) : null);
+                        violations.add(key + (score == null ? "" : ":" + Math.round(score * 100) + "%"));
+                    }
+                }
+                throw new IllegalArgumentException(TextUtils.join(", ", violations));
+            }
+        }
+    }
+
+    static double[] getEmbedding(Context context, String text, String model) throws JSONException, IOException {
+        // https://platform.openai.com/docs/api-reference/embeddings
+        JSONObject jrequest = new JSONObject();
+        jrequest.put("input", text);
+        jrequest.put("model", model == null ? "text-embedding-ada-002" : model);
+        JSONObject jresponse = call(context, "POST", "v1/embeddings", jrequest);
+        JSONObject jdata = jresponse.getJSONArray("data").getJSONObject(0);
+        JSONArray jembedding = jdata.getJSONArray("embedding");
+        double[] result = new double[jembedding.length()];
+        for (int i = 0; i < jembedding.length(); i++)
+            result[i] = jembedding.getDouble(i);
+        return result;
+    }
+
+    static Message[] completeChat(Context context, String model, Message[] messages, Float temperature, int n) throws JSONException, IOException {
         // https://platform.openai.com/docs/guides/chat/introduction
         // https://platform.openai.com/docs/api-reference/chat/create
-
         JSONArray jmessages = new JSONArray();
         for (Message message : messages) {
             JSONObject jmessage = new JSONObject();
@@ -66,10 +136,12 @@ public class OpenAI {
         }
 
         JSONObject jquestion = new JSONObject();
-        jquestion.put("model", "gpt-3.5-turbo");
+        jquestion.put("model", model);
         jquestion.put("messages", jmessages);
+        if (temperature != null)
+            jquestion.put("temperature", temperature);
         jquestion.put("n", n);
-        JSONObject jresponse = call(context, "v1/chat/completions", jquestion);
+        JSONObject jresponse = call(context, "POST", "v1/chat/completions", jquestion);
 
         JSONArray jchoices = jresponse.getJSONArray("choices");
         Message[] choices = new Message[jchoices.length()];
@@ -82,21 +154,20 @@ public class OpenAI {
         return choices;
     }
 
-    private static JSONObject call(Context context, String method, JSONObject args) throws JSONException, IOException {
+    private static JSONObject call(Context context, String method, String path, JSONObject args) throws JSONException, IOException {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String apikey = prefs.getString("openai_apikey", null);
 
         // https://platform.openai.com/docs/api-reference/introduction
-        Uri uri = Uri.parse(URI_ENDPOINT).buildUpon().appendEncodedPath(method).build();
+        Uri uri = Uri.parse(BuildConfig.OPENAI_ENDPOINT).buildUpon().appendEncodedPath(path).build();
         Log.i("OpenAI uri=" + uri);
 
-        String json = args.toString();
-        Log.i("OpenAI request=" + json);
+        long start = new Date().getTime();
 
         URL url = new URL(uri.toString());
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setDoOutput(true);
+        connection.setRequestMethod(method);
+        connection.setDoOutput(args != null);
         connection.setDoInput(true);
         connection.setReadTimeout(TIMEOUT * 1000);
         connection.setConnectTimeout(TIMEOUT * 1000);
@@ -107,16 +178,41 @@ public class OpenAI {
         connection.connect();
 
         try {
-            connection.getOutputStream().write(json.getBytes());
+            if (args != null) {
+                String json = args.toString();
+                Log.i("OpenAI request=" + json);
+                connection.getOutputStream().write(json.getBytes());
+            }
 
             int status = connection.getResponseCode();
             if (status != HttpURLConnection.HTTP_OK) {
                 // https://platform.openai.com/docs/guides/error-codes/api-errors
                 String error = "Error " + status + ": " + connection.getResponseMessage();
                 try {
+                    // HTTP 429
+                    // {
+                    //    "error": {
+                    //        "message": "You exceeded your current quota, please check your plan and billing details.",
+                    //        "type": "insufficient_quota",
+                    //        "param": null,
+                    //        "code": null
+                    //    }
+                    //}
                     InputStream is = connection.getErrorStream();
-                    if (is != null)
-                        error += "\n" + Helper.readStream(is);
+                    if (is != null) {
+                        String err = Helper.readStream(is);
+                        if (BuildConfig.DEBUG)
+                            error += "\n" + err;
+                        else {
+                            Log.w(new Throwable(err));
+                            try {
+                                JSONObject jerror = new JSONObject(err).getJSONObject("error");
+                                error += "\n" + jerror.getString("type") + ": " + jerror.getString("message");
+                            } catch (JSONException ignored) {
+                                error += "\n" + err;
+                            }
+                        }
+                    }
                 } catch (Throwable ex) {
                     Log.w(ex);
                 }
@@ -129,7 +225,25 @@ public class OpenAI {
             return new JSONObject(response);
         } finally {
             connection.disconnect();
+            long elapsed = new Date().getTime() - start;
+            Log.i("OpenAI elapsed=" + (elapsed / 1000f));
         }
+    }
+
+    static String truncateParagraphs(@NonNull String text) {
+        return truncateParagraphs(text, MAX_OPENAI_LEN);
+    }
+
+    static String truncateParagraphs(@NonNull String text, int maxlen) {
+        String[] paragraphs = text.split("[\\r\\n]+");
+
+        int i = 0;
+        StringBuilder sb = new StringBuilder();
+        while (i < paragraphs.length &&
+                sb.length() + paragraphs[i].length() + 1 < maxlen)
+            sb.append(paragraphs[i++]).append('\n');
+
+        return sb.toString();
     }
 
     static class Message {
@@ -153,6 +267,28 @@ public class OpenAI {
         @Override
         public String toString() {
             return this.role + ": " + this.content;
+        }
+    }
+
+    static class Embedding {
+        public static double getSimilarity(double[] v1, double[] v2) {
+            if (v1.length != v2.length)
+                throw new IllegalArgumentException("Invalid vector length=" + v1.length + "/" + v2.length);
+            double dotProduct = dotProduct(v1, v2);
+            double magV1 = magnitude(v1);
+            double magV2 = magnitude(v2);
+            return dotProduct / (magV1 * magV2);
+        }
+
+        private static double dotProduct(double[] v1, double[] v2) {
+            float val = 0;
+            for (int i = 0; i <= v1.length - 1; i++)
+                val += v1[i] * v2[i];
+            return val;
+        }
+
+        private static double magnitude(double[] v) {
+            return Math.sqrt(dotProduct(v, v));
         }
     }
 }

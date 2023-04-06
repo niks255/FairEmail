@@ -4,7 +4,65 @@
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
+### [Saltopus](https://en.wikipedia.org/wiki/Saltopus)
+
+### 1.2060 - 2023-04-01
+
+* Added draft message printing
+* Added copy filter rule to another account/folder
+* Added linking contacts to identities to attach vCards
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### [Rahonavis](https://en.wikipedia.org/wiki/Rahonavis)
+
+### 1.2059 - 2023-03-24
+
+* Fixed all reported bugs
+
+### 1.2058 - 2023-03-22
+
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2057 - 2023-03-19
+
+* Added an option to use the monospaced font when writing a plain text only messages
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2056 - 2023-03-17
+
+* Fixed decoding of subject in some cases
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2055 - 2023-03-16
+
+* Added option to configure the number of widget subject lines
+* Added remembering last used folder for contacts
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2054 - 2023-03-14
+
+* Added rule action option to delete keywords
+* Small improvements and minor bug fixes
+* Updated build tools (NDK)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2053 - 2023-03-13
+
+* Added PGP encrypt-only
+* Added weekend scheduling (receive-settings tab page)
+* Added reply template sorting options
+* Added display option to vertically align keywords, preview, and notes
+* Improved [OpenAI (ChatGPT) integration](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq190)
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
 
 ### 1.2052 - 2023-03-08
 

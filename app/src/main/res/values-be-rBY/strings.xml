@@ -359,6 +359,8 @@
     <string name="title_advanced_optimize">Аўтаматычная аптымізацыя</string>
     <string name="title_advanced_always">Заўсёды атрымліваць паведамленні для гэтых уліковых запісаў</string>
     <string name="title_advanced_schedule">Расклад</string>
+    <string name="title_advanced_schedule_workdays">Будні</string>
+    <string name="title_advanced_schedule_weekend">Выхадныя</string>
     <string name="title_advanced_advanced">Дадаткова</string>
     <string name="title_advanced_quick_sync">Хуткая сінхранізацыя</string>
     <string name="title_advanced_no_date">Паведамленні без даты</string>
@@ -393,14 +395,18 @@
     <string name="title_advanced_send_chips">Паказаць карткі адрасоў</string>
     <string name="title_advanced_send_reminders">Паказваць напаміны</string>
     <string name="title_advanced_send_delayed">Затрымка адпраўкі паведамленняў</string>
-    <string name="title_advanced_attach_new">Дадаваць файлы, якімі вы падзяліліся, у новы чарнавік</string>
+    <string name="title_advanced_attach_new">Ствараць новы чарнавік паведамлення для абагуленых адрасоў і файлаў</string>
+    <string name="title_advanced_answer_caption">Налады кнопкі адказу</string>
     <string name="title_advanced_answer_default">Кароткае націсканне на кнопку адказу выкліча:</string>
     <string name="title_advanced_answer_action">Доўгае націсканне на кнопку адказу выкліча:</string>
+    <string name="title_advanced_answer_hint">Дзеянні для кнопкі адказу таксама можна наладзіць на ўкладцы налад адпраўкі</string>
+    <string name="title_advanced_answer_warning">Некаторыя дзеянні будуць працаваць толькі з меню выбару!</string>
     <string name="title_advanced_send_pending">Паказваць непрыкметны значок затрымкі адпраўкі</string>
     <string name="title_advanced_auto_save_paragraph">Аўтаматычна захоўваць чарнавік пасля заканчэння кожнага абзаца</string>
     <string name="title_advanced_auto_save_dot">Аўтаматычна захоўваць чарнавік пасля заканчэння кожнага сказа</string>
     <string name="title_advanced_compose_color">Колер тэксту па змаўчанні</string>
     <string name="title_advanced_compose_font">Шрыфт па змаўчанні</string>
+    <string name="title_advanced_compose_monospaced">Выкарыстоўваць шрыфт аднолькавай шырыні для звычайных тэкставых паведамленняў</string>
     <string name="title_advanced_auto_identity">Аўтаматычна выбіраць ідэнтыфікатары для новых паведамленняў</string>
     <string name="title_advanced_prefix_once">Пры адказе або перасылцы ўстаўляць прэфікс тэмы толькі адзін раз</string>
     <string name="title_advanced_prefix_count">Дадаваць лічыльнік да прэфікса адказу</string>
@@ -454,6 +460,7 @@
     <string name="title_advanced_caption_message_header">Загаловак паведамлення</string>
     <string name="title_advanced_caption_message_body">Змест паведамлення</string>
     <string name="title_advanced_caption_file">Файл</string>
+    <string name="title_advanced_caption_integrations">Інтэграцыі</string>
     <string name="title_advanced_portrait">Партрэтны рэжым</string>
     <string name="title_advanced_landscape">Ландшафтны рэжым</string>
     <string name="title_advanced_two_row">Выкарыстоўваць два радкі</string>
@@ -524,6 +531,7 @@
     <string name="title_advanced_preview">Паказаць папярэдні выгляд паведамлення</string>
     <string name="title_advanced_preview_italic">Паказаць папярэдні выгляд паведамлення курсівам</string>
     <string name="title_advanced_preview_lines">Колькасць радкоў для папярэдняга прагляду</string>
+    <string name="title_advanced_align_header">Вертыкальнае выраўноўванне ключавых слоў, папярэдні прагляд тэксту і нататак</string>
     <string name="title_advanced_addresses">Разгортваць звесткі аб адрасе па змаўчанні</string>
     <string name="title_advanced_unzip">Паказваць змест сціснутых укладанняў</string>
     <string name="title_advanced_attachments_alt">Паказваць укладанні пасля тэксту паведамлення</string>
@@ -711,6 +719,11 @@
     <string name="title_advanced_lt_key">Ключ API (неабавязкова)</string>
     <string name="title_advanced_deepl">Інтэграцыя з DeepL</string>
     <string name="title_advanced_virus_total">Інтэграцыя з VirusTotal</string>
+    <string name="title_advanced_send">Інтэграцыя з \'Send\'</string>
+    <string name="title_advanced_openai">Інтэграцыя з OpenAI (ChatGPT)</string>
+    <string name="title_advanced_openai_model">Мадэль</string>
+    <string name="title_advanced_openai_temperature">Тэмпература: %1$s</string>
+    <string name="title_advanced_openai_moderation">Мадэрацыя зместу</string>
     <string name="title_advanced_sdcard">Я хачу выкарыстоўваць карту памяці</string>
     <string name="title_advanced_watchdog">Перыядычна правяраць актыўнасць FairEmail</string>
     <string name="title_advanced_updates">Праверыць наяўнасць абнаўленняў на GitHub</string>
@@ -757,6 +770,7 @@
     <string name="title_advanced_send_reminders_hint">Паказваць папярэджанне, калі тэкст або тэма паведамлення пустыя або калі існуе верагоднасць адсутнасці ўкладання</string>
     <string name="title_advanced_reply_move_hint">Сервер электроннай пошты ўсё яшчэ можа дадаваць паведамленні ў папку адпраўленых паведамленняў</string>
     <string name="title_advanced_compose_color_hint">Вельмі светлыя або вельмі цёмныя колеры зробяць паведамленні нечытэльнымі для атрымальнікаў</string>
+    <string name="title_advanced_attach_new_hint">У адваротным выпадку дадаваць абагуленыя адрасы або файлы ў бягучы чарнавік паведамлення</string>
     <string name="title_advanced_usenet_hint">Устаўляць \'—\' паміж тэкстам і подпісам</string>
     <string name="title_advanced_remove_signature_hint">Гэта можа прывесці да таго, што будзе выдаляцца занадта малая або занадта вялікая частка тэксту</string>
     <string name="title_advanced_metered_hint">Лімітаваныя злучэнні — гэта злучэнні з выкарыстаннем мабільных даных або платныя кропкі доступу Wi-Fi</string>
@@ -905,6 +919,7 @@
     <string name="title_primary_identity">Асноўны (ідэнтыфікатар па змаўчанні)</string>
     <string name="title_self_identity">Выдаляць адрас электроннай пошты пры адказе</string>
     <string name="title_leave_on_server">Пакідаць паведамленні на серверы</string>
+    <string name="title_client_delete">Актыўна выдаляць паведамленні пасля загрузкі</string>
     <string name="title_leave_deleted">Пакідаць выдаленыя паведамленні на серверы</string>
     <string name="title_leave_on_device">Пакідаць паведамленні на прыладзе</string>
     <string name="title_max_messages">Максімальная колькасць паведамленняў для загрузкі (калі пуста, то для ўсіх)</string>
@@ -1494,6 +1509,7 @@
     <string name="title_sort_on_attachments">Укладанняў</string>
     <string name="title_sort_on_hidden">Стану адлюстравання</string>
     <string name="title_sort_ascending">Спачатку старыя</string>
+    <string name="title_sort_on_name">Імя</string>
     <string name="title_sort_on_order">Парадак</string>
     <string name="title_sort_on_applied">Колькасці ўжыванняў</string>
     <string name="title_sort_on_last_applied">Апошняга ўжывання</string>
@@ -1552,7 +1568,9 @@
     <string name="title_rule_snooze">Адкласці</string>
     <string name="title_rule_flag">Да пазначаных</string>
     <string name="title_rule_importance">Задаць важнасць</string>
-    <string name="title_rule_keyword">Дадаць ключавое слова</string>
+    <string name="title_rule_keyword">Ключавое слова</string>
+    <string name="title_rule_keyword_add">Дадаць</string>
+    <string name="title_rule_keyword_delete">Выдаліць</string>
     <string name="title_rule_move">Перамясціць</string>
     <string name="title_rule_copy">Капіраваць (ярлык)</string>
     <string name="title_rule_answer">Адказаць/пераслаць</string>
@@ -1898,6 +1916,7 @@
     <string name="title_widget_separator_lines">Паказаць раздзяляльныя лініі</string>
     <string name="title_widget_semi_transparent">Напаўпразрысты фон</string>
     <string name="title_widget_count_top">Паказваць колькасць непрачытаных паведамленняў уверсе</string>
+    <string name="title_widget_subject_lines">Максімальная колькасць радкоў у тэме</string>
     <string name="title_widget_avatars">Паказваць аватары кантактаў</string>
     <string name="title_widget_refresh">Паказваць кнопку абнаўлення паведамленняў</string>
     <string name="title_widget_compose">Паказаць кнопку для стварэння новага паведамлення</string>
@@ -2051,6 +2070,7 @@
     <string-array name="encryptNames">
         <item>Нічога</item>
         <item>Толькі подпіс PGP</item>
+        <item>Толькі шыфраванне PGP</item>
         <item>Подпіс PGP+шыфраванне</item>
         <item>Толькі подпіс S/MIME</item>
         <item>Попіс+шыфраванне S/MIME</item>

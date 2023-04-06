@@ -1008,15 +1008,9 @@ public class HtmlHelper {
                                     p[0] = null;
 
                                 if (p[0] != null)
-                                    if (p[0] == 0)
-                                        element.attr("x-line-before", "false");
-                                    else if (p[0] > 0.5)
-                                        element.attr("x-line-before", "true");
+                                    element.attr("x-line-before", Boolean.toString(p[0] > 0.5));
                                 if (p[2] != null)
-                                    if (p[2] == 0)
-                                        element.attr("x-line-after", "false");
-                                    else if (p[2] > 0.5)
-                                        element.attr("x-line-after", "true");
+                                    element.attr("x-line-after", Boolean.toString(p[2] > 0.5));
                             }
                             break;
 
@@ -1402,7 +1396,6 @@ public class HtmlHelper {
             // Remove spacer, etc
             if (!show_images && !(inline_images && isInline) &&
                     TextUtils.isEmpty(img.attr("x-tracking"))) {
-                Log.i("Removing small image");
                 Integer width = Helper.parseInt(img.attr("width").trim());
                 Integer height = Helper.parseInt(img.attr("height").trim());
                 if (width != null && height != null) {
@@ -1413,6 +1406,7 @@ public class HtmlHelper {
                 }
                 if ((width != null && width <= SMALL_IMAGE_SIZE) ||
                         (height != null && height <= SMALL_IMAGE_SIZE)) {
+                    Log.i("Removing small image src=" + src);
                     img.remove();
                     continue;
                 }
@@ -1440,10 +1434,11 @@ public class HtmlHelper {
                             alt = context.getString(R.string.title_image_link);
                     }
                     if (!TextUtils.isEmpty(alt)) {
-                        Element span = document.createElement("span")
+                        Element a = document.createElement("a")
+                                .attr("href", src)
                                 .text("[" + alt + "]")
                                 .attr("x-font-size-abs", Integer.toString(textSizeSmall));
-                        img.appendChild(span);
+                        img.appendChild(a);
                     }
                 } else if (!TextUtils.isEmpty(alt)) {
                     Element a = document.createElement("a")
@@ -2764,22 +2759,6 @@ public class HtmlHelper {
                 }
         }
 
-        // https://tools.ietf.org/html/rfc3676#section-4.5
-        for (QuoteSpan span : ssb.getSpans(0, ssb.length(), QuoteSpan.class)) {
-            int start = ssb.getSpanStart(span);
-            int end = ssb.getSpanEnd(span);
-
-            for (int i = end - 2; i >= start; i--)
-                if (ssb.charAt(i) == '\n')
-                    if (i + 1 < ssb.length() && ssb.charAt(i + 1) == '>')
-                        ssb.insert(i + 1, ">");
-                    else
-                        ssb.insert(i + 1, "> ");
-
-            if (start < ssb.length())
-                ssb.insert(start, ssb.charAt(start) == '>' ? ">" : "> ");
-        }
-
         for (BulletSpan span : ssb.getSpans(0, ssb.length(), BulletSpan.class)) {
             int start = ssb.getSpanStart(span);
             if (span instanceof NumberSpan) {
@@ -2807,6 +2786,22 @@ public class HtmlHelper {
             int start = ssb.getSpanStart(span);
             int end = ssb.getSpanEnd(span);
             ssb.replace(start, end, LINE);
+        }
+
+        // https://tools.ietf.org/html/rfc3676#section-4.5
+        for (QuoteSpan span : ssb.getSpans(0, ssb.length(), QuoteSpan.class)) {
+            int start = ssb.getSpanStart(span);
+            int end = ssb.getSpanEnd(span);
+
+            for (int i = end - 2; i >= start; i--)
+                if (ssb.charAt(i) == '\n')
+                    if (i + 1 < ssb.length() && ssb.charAt(i + 1) == '>')
+                        ssb.insert(i + 1, ">");
+                    else
+                        ssb.insert(i + 1, "> ");
+
+            if (start < ssb.length())
+                ssb.insert(start, ssb.charAt(start) == '>' ? ">" : "> ");
         }
 
         return ssb.toString();

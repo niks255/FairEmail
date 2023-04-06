@@ -344,6 +344,8 @@
     <string name="title_advanced_optimize">Optimizare automată</string>
     <string name="title_advanced_always">Primiți întotdeauna mesaje pentru aceste conturi</string>
     <string name="title_advanced_schedule">Programat</string>
+    <string name="title_advanced_schedule_workdays">Zile de muncă</string>
+    <string name="title_advanced_schedule_weekend">Sfârșit de săptămână</string>
     <string name="title_advanced_advanced">Avansate</string>
     <string name="title_advanced_quick_sync">Sincronizare rapidă</string>
     <string name="title_advanced_no_date">Mesaje fără dată</string>
@@ -378,14 +380,18 @@
     <string name="title_advanced_send_chips">Afișați bule de adrese</string>
     <string name="title_advanced_send_reminders">Arată mementouri</string>
     <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
-    <string name="title_advanced_attach_new">Adăugați fișierele partajate la o nouă ciornă</string>
+    <string name="title_advanced_attach_new">Creați un mesaj ciornă nou pentru adresele și fișierele partajate</string>
+    <string name="title_advanced_answer_caption">Setări buton de răspuns</string>
     <string name="title_advanced_answer_default">Apăsarea scurtă pe butonul de răspuns va:</string>
     <string name="title_advanced_answer_action">Apăsarea îndelungată a butonului de răspuns va:</string>
+    <string name="title_advanced_answer_hint">Acțiunile butonului de răspuns pot fi, de asemenea, configurate în pagina filei Setări de trimitere</string>
+    <string name="title_advanced_answer_warning">Nu toate acțiunile sunt posibile fără un meniu de selecție!</string>
     <string name="title_advanced_send_pending">Arată pictograma neobstructivă de trimitere întârziată</string>
     <string name="title_advanced_auto_save_paragraph">Salvați automat un draft după fiecare paragraf</string>
     <string name="title_advanced_auto_save_dot">Salvați automat un proiect după fiecare propoziție</string>
     <string name="title_advanced_compose_color">Culoare implicită text</string>
     <string name="title_advanced_compose_font">Font prestabilit</string>
+    <string name="title_advanced_compose_monospaced">Folosește font monospațiat pentru mesaje text simple</string>
     <string name="title_advanced_auto_identity">Selectarea automată a identităților pentru mesajele noi</string>
     <string name="title_advanced_prefix_once">Adaugă prefix la subiect o singură dată pentru răspuns sau redirecționare</string>
     <string name="title_advanced_prefix_count">Adăugați numărul la prefixul de răspuns</string>
@@ -439,6 +445,7 @@
     <string name="title_advanced_caption_message_header">Antet mesaj</string>
     <string name="title_advanced_caption_message_body">Corp mesaj</string>
     <string name="title_advanced_caption_file">Fişier</string>
+    <string name="title_advanced_caption_integrations">Integrări</string>
     <string name="title_advanced_portrait">Modul portret</string>
     <string name="title_advanced_landscape">Mod peisaj</string>
     <string name="title_advanced_two_row">Utilizați două rânduri</string>
@@ -509,6 +516,7 @@
     <string name="title_advanced_preview">Arată previzualizare mesaj</string>
     <string name="title_advanced_preview_italic">Arată previzualizare mesaj cu aldin</string>
     <string name="title_advanced_preview_lines">Numărul de linii de previzualizat</string>
+    <string name="title_advanced_align_header">Aliniază vertical cuvintele-cheie, previzualizare text și note</string>
     <string name="title_advanced_addresses">Implicit arată detaliile adreselor</string>
     <string name="title_advanced_unzip">Afișați conținutul atașamentelor comprimate</string>
     <string name="title_advanced_attachments_alt">Arată atașamentele după textul mesajului</string>
@@ -695,6 +703,11 @@
     <string name="title_advanced_lt_key">Cheie API (opțional)</string>
     <string name="title_advanced_deepl">Integrare DeepL</string>
     <string name="title_advanced_virus_total">Integrare VirusTotal</string>
+    <string name="title_advanced_send">Integrarea \'Trimite\'</string>
+    <string name="title_advanced_openai">Integrarea OpenAI (ChatGPT)</string>
+    <string name="title_advanced_openai_model">Model</string>
+    <string name="title_advanced_openai_temperature">Temperatura: %1$s</string>
+    <string name="title_advanced_openai_moderation">Moderarea conținutului</string>
     <string name="title_advanced_sdcard">Vreau să folosesc un sdcard</string>
     <string name="title_advanced_watchdog">Verifică periodic dacă FairEmail este încă activ</string>
     <string name="title_advanced_updates">Verificați dacă există actualizări pe Github</string>
@@ -742,6 +755,7 @@
     <string name="title_advanced_send_reminders_hint">Arată o avertizare atunci când textul mesajului sau subiectul e gol sau când atașamentul s-ar putea să lipsească</string>
     <string name="title_advanced_reply_move_hint">Serverul de e-mail ar putea adăuga mesajele la folderul de mesaje trimise</string>
     <string name="title_advanced_compose_color_hint">Culorile foarte deschise sau foarte închise vor avea ca rezultat mesaje ilizibile pe partea destinatarilor</string>
+    <string name="title_advanced_attach_new_hint">În caz contrar, adăugați adrese sau fișiere partajate la proiectul de mesaj curent</string>
     <string name="title_advanced_usenet_hint">Inserează \'-- \' între text și semnătură</string>
     <string name="title_advanced_remove_signature_hint">Acest lucru poate duce la eliminarea unui text prea scurt sau prea mare</string>
     <string name="title_advanced_metered_hint">Conexiunile contorizate sunt în general cele mobile sau punctele de acces Wi-Fi cu plată</string>
@@ -788,6 +802,7 @@
     <string name="title_advanced_sender_hint">Majoritatea furnizorilor nu permit modificarea adresei expeditorului</string>
     <string name="title_advanced_bcc_hint">Adresa nu va fi afișată, dar va fi adăugată la trimitere</string>
     <string name="title_advanced_internal_hint">Va exista un avertisment la trimiterea către un alt domeniu</string>
+    <string name="title_advanced_uri" comment="title_advanced_uri&#10;Remark for button to link contact to identity">Detaliile contactului selectat vor fi folosite pentru atașamentele vCard</string>
     <string name="title_advanced_e2e_encryption">Opțiuni pentru criptarea end-to-end</string>
     <string name="title_advanced_display_harmful_hint">Dezactivarea poate fi dăunătoare pentru intimitatea dumneavoastră</string>
     <string name="title_advanced_display_hidden_hint">Se poate ca rezultatul să arate ciudat și textul să fie dublat</string>
@@ -836,6 +851,7 @@
     <string name="title_advanced_sender_regex">Regex pentru a potrivi numele de utilizator al adreselor de e-mail primite</string>
     <string name="title_identity_reply_to">Răspuns la adresa</string>
     <string name="title_identity_internal">Nume de domenii interne (separate prin virgulă)</string>
+    <string name="title_identity_uri">Asociați contact</string>
     <string name="title_identity_unicode">Permite UTF-8 în antetul mesajelor</string>
     <string name="title_identity_unicode_remark">Majoritatea serverelor nu acceptă acest lucru</string>
     <string name="title_identity_octetmime">Permite 8BITMIMIME</string>
@@ -889,6 +905,7 @@
     <string name="title_primary_identity">Primară (identitatea implicită)</string>
     <string name="title_self_identity">Eliminați adresa de e-mail atunci când răspundeți</string>
     <string name="title_leave_on_server">Păstrează mesajele pe server</string>
+    <string name="title_client_delete">Ștergeți activ mesajele după descărcare</string>
     <string name="title_leave_deleted">Păstrează pe server mesajele șterse</string>
     <string name="title_leave_on_device">Păstrează mesajele pe dispozitiv</string>
     <string name="title_max_messages">Numărul maxim de mesaje de descărcat (liber pentru toate)</string>
@@ -1474,6 +1491,7 @@
     <string name="title_sort_on_attachments">Atașamente</string>
     <string name="title_sort_on_hidden">Ascuns</string>
     <string name="title_sort_ascending">Întâi cele mai vechi</string>
+    <string name="title_sort_on_name">Nume</string>
     <string name="title_sort_on_order">Ordine</string>
     <string name="title_sort_on_applied">Număr de rezultate</string>
     <string name="title_sort_on_last_applied">Ultima aplicatie</string>
@@ -1532,7 +1550,9 @@
     <string name="title_rule_snooze">Amână</string>
     <string name="title_rule_flag">Adaugă stea</string>
     <string name="title_rule_importance">Setare importanță</string>
-    <string name="title_rule_keyword">Adăugă cuvânt cheie</string>
+    <string name="title_rule_keyword">Cuvânt cheie</string>
+    <string name="title_rule_keyword_add">Adaugă</string>
+    <string name="title_rule_keyword_delete">Şterge</string>
     <string name="title_rule_move">Mută</string>
     <string name="title_rule_copy">Copiere (etichetă)</string>
     <string name="title_rule_answer">Răspunde/redirecționare</string>
@@ -1877,6 +1897,7 @@
     <string name="title_widget_separator_lines">Arată liniile separatoare</string>
     <string name="title_widget_semi_transparent">Fundal semi transparent</string>
     <string name="title_widget_count_top">Arată numărul de necitite în partea de sus</string>
+    <string name="title_widget_subject_lines">Numărul maxim de linii de subiect</string>
     <string name="title_widget_avatars">Afișați avatarele de contact</string>
     <string name="title_widget_refresh">Buton de afișare a mesajelor de reîmprospătare</string>
     <string name="title_widget_compose">Afișați butonul de redactare a unui mesaj nou</string>
@@ -2036,6 +2057,7 @@
     <string-array name="encryptNames">
         <item>Fără</item>
         <item>Doar semnare PGP</item>
+        <item>Doar PGP</item>
         <item>Semnare+criptare PGP</item>
         <item>Doar semnare S/MIME</item>
         <item>Semnare+criptare S/MIME</item>

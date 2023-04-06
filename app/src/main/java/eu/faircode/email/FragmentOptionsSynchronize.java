@@ -24,6 +24,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -56,7 +57,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -66,6 +66,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private View view;
     private ImageButton ibHelp;
     private SwitchCompat swEnabled;
+    private Button btnBlockedSenders;
+
     private SwitchCompat swOptimize;
     private ImageButton ibOptimizeInfo;
     private Spinner spPollInterval;
@@ -75,10 +77,12 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private TextView tvSchedulePro;
     private TextView tvScheduleStart;
     private TextView tvScheduleEnd;
+    private TextView tvScheduleStartWeekend;
+    private TextView tvScheduleEndWeekend;
+    private ImageButton ibWeekend;
     private CheckBox[] cbDay;
     private TextView tvScheduleIgnore;
     private ImageButton ibSchedules;
-    private Button btnBlockedSenders;
 
     private SwitchCompat swQuickSyncImap;
     private SwitchCompat swQuickSyncPop;
@@ -114,8 +118,12 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
 
     private AdapterAccountExempted adapter;
 
+    private int textColorTertiary;
+    private int colorAccent;
+
     private final static String[] RESET_OPTIONS = new String[]{
-            "enabled", "poll_interval", "auto_optimize", "schedule", "schedule_start", "schedule_end",
+            "enabled", "poll_interval", "auto_optimize",
+            "schedule", "schedule_start", "schedule_end", "schedule_start_weekend", "schedule_end_weekend", "weekend",
             "sync_quick_imap", "sync_quick_pop",
             "sync_nodate", "sync_unseen", "sync_flagged", "delete_unseen", "sync_kept",
             "gmail_thread_id", "outlook_thread_id", "subject_threading",
@@ -124,6 +132,15 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             "check_blocklist", "use_blocklist", "use_blocklist_pop",
             "tune_keep_alive"
     };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        final Context context = getContext();
+        this.textColorTertiary = Helper.resolveColor(context, android.R.attr.textColorTertiary);
+        this.colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
+    }
 
     @Override
     @Nullable
@@ -137,6 +154,8 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
 
         ibHelp = view.findViewById(R.id.ibHelp);
         swEnabled = view.findViewById(R.id.swEnabled);
+        btnBlockedSenders = view.findViewById(R.id.btnBlockedSenders);
+
         swOptimize = view.findViewById(R.id.swOptimize);
         ibOptimizeInfo = view.findViewById(R.id.ibOptimizeInfo);
         spPollInterval = view.findViewById(R.id.spPollInterval);
@@ -147,6 +166,9 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         tvSchedulePro = view.findViewById(R.id.tvSchedulePro);
         tvScheduleStart = view.findViewById(R.id.tvScheduleStart);
         tvScheduleEnd = view.findViewById(R.id.tvScheduleEnd);
+        tvScheduleStartWeekend = view.findViewById(R.id.tvScheduleStartWeekend);
+        tvScheduleEndWeekend = view.findViewById(R.id.tvScheduleEndWeekend);
+        ibWeekend = view.findViewById(R.id.ibWeekend);
         cbDay = new CheckBox[]{
                 view.findViewById(R.id.cbDay0),
                 view.findViewById(R.id.cbDay1),
@@ -158,7 +180,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         };
         tvScheduleIgnore = view.findViewById(R.id.tvScheduleIgnore);
         ibSchedules = view.findViewById(R.id.ibSchedules);
-        btnBlockedSenders = view.findViewById(R.id.btnBlockedSenders);
 
         swQuickSyncImap = view.findViewById(R.id.swQuickSyncImap);
         swQuickSyncPop = view.findViewById(R.id.swQuickSyncPop);
@@ -209,6 +230,15 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("enabled", checked).apply();
                 WorkerDailyRules.init(compoundButton.getContext());
+            }
+        });
+
+        btnBlockedSenders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
+                lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_MANAGE_LOCAL_CONTACTS)
+                        .putExtra("junk", true));
             }
         });
 
@@ -268,27 +298,24 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
 
         Helper.linkPro(tvSchedulePro);
 
-        tvScheduleStart.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener onSchedule = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle args = new Bundle();
-                args.putBoolean("start", true);
-                DialogFragment timePicker = new TimePickerFragment();
-                timePicker.setArguments(args);
-                timePicker.show(getParentFragmentManager(), "timePicker");
-            }
-        });
+                int id = v.getId();
 
-        tvScheduleEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 Bundle args = new Bundle();
-                args.putBoolean("start", false);
+                args.putBoolean("start", id == R.id.tvScheduleStart || id == R.id.tvScheduleStartWeekend);
+                args.putBoolean("weekend", id == R.id.tvScheduleStartWeekend || id == R.id.tvScheduleEndWeekend);
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.setArguments(args);
                 timePicker.show(getParentFragmentManager(), "timePicker");
             }
-        });
+        };
+
+        tvScheduleStart.setOnClickListener(onSchedule);
+        tvScheduleEnd.setOnClickListener(onSchedule);
+        tvScheduleStartWeekend.setOnClickListener(onSchedule);
+        tvScheduleEndWeekend.setOnClickListener(onSchedule);
 
         String[] daynames = new DateFormatSymbols().getWeekdays();
         for (int i = 0; i < 7; i++) {
@@ -302,6 +329,14 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             });
         }
 
+        ibWeekend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentDialogWeekend fragment = new FragmentDialogWeekend();
+                fragment.show(getParentFragmentManager(), "weekend");
+            }
+        });
+
         tvScheduleIgnore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -314,15 +349,6 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             @Override
             public void onClick(View v) {
                 Helper.viewFAQ(v.getContext(), 78);
-            }
-        });
-
-        btnBlockedSenders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(getContext());
-                lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_MANAGE_LOCAL_CONTACTS)
-                        .putExtra("junk", true));
             }
         });
 
@@ -571,13 +597,14 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         if (view == null || getContext() == null)
             return;
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean pro = ActivityBilling.isPro(getContext());
+        final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean pro = ActivityBilling.isPro(context);
 
         swEnabled.setChecked(prefs.getBoolean("enabled", true));
         swOptimize.setChecked(prefs.getBoolean("auto_optimize", false));
 
-        int pollInterval = ServiceSynchronize.getPollInterval(getContext());
+        int pollInterval = ServiceSynchronize.getPollInterval(context);
         int[] pollIntervalValues = getResources().getIntArray(R.array.pollIntervalValues);
         for (int pos = 0; pos < pollIntervalValues.length; pos++)
             if (pollIntervalValues[pos] == pollInterval) {
@@ -591,10 +618,22 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
 
         swSchedule.setChecked(prefs.getBoolean("schedule", false) && pro);
         swSchedule.setEnabled(pro);
-        tvScheduleStart.setText(formatHour(getContext(), prefs.getInt("schedule_start", 0)));
-        tvScheduleEnd.setText(formatHour(getContext(), prefs.getInt("schedule_end", 0)));
-        for (int i = 0; i < 7; i++)
+
+        int schedule_start = prefs.getInt("schedule_start", 0);
+        int schedule_end = prefs.getInt("schedule_end", 0);
+        int schedule_start_weekend = prefs.getInt("schedule_start_weekend", schedule_start);
+        int schedule_end_weekend = prefs.getInt("schedule_end_weekend", schedule_end);
+        tvScheduleStart.setText(CalendarHelper.formatHour(context, schedule_start));
+        tvScheduleEnd.setText(CalendarHelper.formatHour(context, schedule_end));
+        tvScheduleStartWeekend.setText(CalendarHelper.formatHour(context, schedule_start_weekend));
+        tvScheduleEndWeekend.setText(CalendarHelper.formatHour(context, schedule_end_weekend));
+
+        for (int i = 0; i < 7; i++) {
+            boolean weekend = CalendarHelper.isWeekend(context, i + 1);
+            cbDay[i].setTypeface(weekend ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+            cbDay[i].setTextColor(weekend ? colorAccent : textColorTertiary);
             cbDay[i].setChecked(prefs.getBoolean("schedule_day" + i, true));
+        }
 
         swQuickSyncImap.setChecked(prefs.getBoolean("sync_quick_imap", false));
         swQuickSyncPop.setChecked(prefs.getBoolean("sync_quick_pop", true));
@@ -628,24 +667,13 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
         rvBlocklist.setAlpha(swCheckBlocklist.isChecked() ? 1.0f : Helper.LOW_LIGHT);
     }
 
-    private String formatHour(Context context, int minutes) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, minutes / 60);
-        cal.set(Calendar.MINUTE, minutes % 60);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return Helper.getTimeInstance(context, SimpleDateFormat.SHORT).format(cal.getTime());
-    }
-
     public static class TimePickerFragment extends FragmentDialogBase implements TimePickerDialog.OnTimeSetListener {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            Bundle args = getArguments();
-            boolean start = args.getBoolean("start");
-
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            int minutes = prefs.getInt("schedule_" + (start ? "start" : "end"), 0);
+            final Context context = getContext();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            int minutes = prefs.getInt(getKey(), 0);
 
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.HOUR_OF_DAY, minutes / 60);
@@ -653,21 +681,23 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
 
-            return new TimePickerDialog(getContext(), this,
+            return new TimePickerDialog(context, this,
                     cal.get(Calendar.HOUR_OF_DAY),
                     cal.get(Calendar.MINUTE),
-                    DateFormat.is24HourFormat(getContext()));
+                    DateFormat.is24HourFormat(context));
         }
 
         public void onTimeSet(TimePicker view, int hour, int minute) {
-            Bundle args = getArguments();
-            boolean start = args.getBoolean("start");
-
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("schedule_" + (start ? "start" : "end"), hour * 60 + minute);
-            editor.putBoolean("schedule", true);
-            editor.apply();
+            editor.putInt(getKey(), hour * 60 + minute).putBoolean("schedule", true).apply();
+        }
+
+        private String getKey() {
+            Bundle args = getArguments();
+            boolean start = args.getBoolean("start");
+            boolean weekend = args.getBoolean("weekend");
+            return "schedule" + (start ? "_start" : "_end") + (weekend ? "_weekend" : "");
         }
     }
 

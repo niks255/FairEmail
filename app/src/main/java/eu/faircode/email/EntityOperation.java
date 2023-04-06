@@ -47,6 +47,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.mail.internet.InternetAddress;
+
 @Entity(
         tableName = EntityOperation.TABLE_NAME,
         foreignKeys = {
@@ -229,6 +231,16 @@ public class EntityOperation {
                 EntityFolder target = db.folder().getFolder(jargs.getLong(0));
                 if (source == null || target == null || source.id.equals(target.id))
                     return;
+
+                if (message.from != null && message.from.length == 1 &&
+                        EntityFolder.USER.equals(target.type)) {
+                    String email = ((InternetAddress) message.from[0]).getAddress();
+                    if (!TextUtils.isEmpty(email)) {
+                        EntityContact contact = db.contact().getContact(target.account, EntityContact.TYPE_FROM, email);
+                        if (contact != null)
+                            db.contact().setContactFolder(contact.id, target.id);
+                    }
+                }
 
                 if (EntityFolder.JUNK.equals(target.type) &&
                         Objects.equals(source.account, target.account)) {
@@ -727,7 +739,7 @@ public class EntityOperation {
                     break;
                 }
 
-        int count = db.operation().deleteOperation(fid, SYNC);
+        int count = db.operation().deleteOperations(fid, SYNC);
 
         Map<String, String> crumb = new HashMap<>();
         crumb.put("folder", Long.toString(fid));
@@ -764,7 +776,7 @@ public class EntityOperation {
         }
 
         if (force)
-            db.operation().deleteOperation(fid, SYNC);
+            db.operation().deleteOperations(fid, SYNC);
 
         // TODO: replace sync parameters?
         if (db.operation().getOperationCount(fid, SYNC) == 0) {
@@ -832,6 +844,15 @@ public class EntityOperation {
             if (MOVE.equals(name) || DELETE.equals(name))
                 db.message().setMessageUiHide(message, false);
 
+            if (MOVE.equals(name))
+                try {
+                    JSONArray jargs = new JSONArray(args);
+                    long target = jargs.getLong(0);
+                    db.operation().deleteOperations(target, PURGE);
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+
             if (SEEN.equals(name)) {
                 EntityMessage m = db.message().getMessage(message);
                 if (m != null) {
@@ -864,7 +885,7 @@ public class EntityOperation {
         }
 
         if (MOVE.equals(name)) {
-            int count = db.operation().deleteOperation(folder, PURGE);
+            int count = db.operation().deleteOperations(folder, PURGE);
             if (count > 0)
                 sync(context, folder, false);
         }

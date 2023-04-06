@@ -2186,10 +2186,9 @@ public class Log {
                 WebViewEx.isFeatureSupported(context, WebViewFeature.ALGORITHMIC_DARKENING)));
         try {
             PackageInfo pkg = WebViewCompat.getCurrentWebViewPackage(context);
-            sb.append(String.format("WebView %d/%s %s\r\n",
+            sb.append(String.format("WebView %d/%s\r\n",
                     pkg == null ? -1 : pkg.versionCode,
-                    pkg == null ? null : pkg.versionName,
-                    pkg == null || pkg.versionCode / 100000 < 5304 ? "!!!" : ""));
+                    pkg == null ? null : pkg.versionName));
         } catch (Throwable ex) {
             sb.append(ex).append("\r\n");
         }
@@ -2341,8 +2340,13 @@ public class Log {
 
                 String ds = ConnectionHelper.getDataSaving(context);
                 boolean vpn = ConnectionHelper.vpnActive(context);
-                boolean ng = Helper.isInstalled(context, "eu.faircode.netguard");
-                boolean tc = Helper.isInstalled(context, "net.kollnig.missioncontrol");
+                boolean ng = false;
+                try {
+                    PackageManager pm = context.getPackageManager();
+                    pm.getPackageInfo("eu.faircode.netguard", 0);
+                    ng = true;
+                } catch (Throwable ignored) {
+                }
 
                 Integer bucket = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
@@ -2375,7 +2379,7 @@ public class Log {
                         "metered=" + metered + (metered ? "" : " !!!") +
                         " saving=" + ds + ("enabled".equals(ds) ? " !!!" : "") +
                         " vpn=" + vpn + (vpn ? " !!!" : "") +
-                        " ng=" + ng + " tc=" + tc + "\r\n" +
+                        " ng=" + ng + "\r\n" +
                         "optimizing=" + (ignoring == null ? null : !ignoring) + (Boolean.FALSE.equals(ignoring) ? " !!!" : "") +
                         " bucket=" + (bucket == null ? null :
                         Helper.getStandbyBucketName(bucket) +
@@ -2397,15 +2401,21 @@ public class Log {
                 if (schedule) {
                     int minuteStart = prefs.getInt("schedule_start", 0);
                     int minuteEnd = prefs.getInt("schedule_end", 0);
+                    int minuteStartWeekend = prefs.getInt("schedule_start_weekend", 0);
+                    int minuteEndWeekend = prefs.getInt("schedule_end_weekend", 0);
 
-                    size += write(os, "schedule " +
-                            (minuteStart / 60) + ":" + (minuteStart % 60) + "..." +
-                            (minuteEnd / 60) + ":" + (minuteEnd % 60) + "\r\n");
+                    size += write(os, String.format("schedule %s...%s weekend %s...%s\r\n",
+                            CalendarHelper.formatHour(context, minuteStart),
+                            CalendarHelper.formatHour(context, minuteEnd),
+                            CalendarHelper.formatHour(context, minuteStartWeekend),
+                            CalendarHelper.formatHour(context, minuteEndWeekend)));
 
                     String[] daynames = new DateFormatSymbols().getWeekdays();
                     for (int i = 0; i < 7; i++) {
                         boolean day = prefs.getBoolean("schedule_day" + i, true);
-                        size += write(os, "schedule " + daynames[i + 1] + "=" + day + "\r\n");
+                        boolean weekend = CalendarHelper.isWeekend(context, i + 1);
+                        size += write(os, String.format("schedule %s=%b %s\r\n",
+                                daynames[i + 1], day, weekend ? "weekend" : ""));
                     }
 
                     size += write(os, "\r\n");
@@ -2414,7 +2424,7 @@ public class Log {
                 for (EntityAccount account : accounts)
                     if (account.synchronize)
                         try {
-                            String info = null;
+                            String info = "pwd";
                             if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_OAUTH ||
                                     account.auth_type == ServiceAuthenticator.AUTH_TYPE_GRAPH)
                                 info = getTokenInfo(account.password, account.auth_type);
@@ -2688,11 +2698,30 @@ public class Log {
                 size += write(os, "Connected=" + state.isConnected() + "\r\n");
                 size += write(os, "Suitable=" + state.isSuitable() + "\r\n");
                 size += write(os, "Unmetered=" + state.isUnmetered() + "\r\n");
-                size += write(os, "Roaming=" + state.isRoaming() + "\r\n\r\n");
+                size += write(os, "Roaming=" + state.isRoaming() + "\r\n");
+                size += write(os, "\r\n");
 
                 size += write(os, "VPN active=" + ConnectionHelper.vpnActive(context) + "\r\n");
                 size += write(os, "Data saving=" + ConnectionHelper.isDataSaving(context) + "\r\n");
                 size += write(os, "Airplane=" + ConnectionHelper.airplaneMode(context) + "\r\n");
+                size += write(os, "\r\n");
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean metered = prefs.getBoolean("metered", true);
+                boolean roaming = prefs.getBoolean("roaming", true);
+                boolean rlah = prefs.getBoolean("rlah", true);
+                boolean standalone_vpn = prefs.getBoolean("standalone_vpn", false);
+                boolean require_validated = prefs.getBoolean("require_validated", false);
+                boolean require_validated_captive = prefs.getBoolean("require_validated_captive", true);
+                boolean vpn_only = prefs.getBoolean("vpn_only", false);
+
+                size += write(os, "metered=" + metered + (metered ? "" : " !!!") + "\r\n");
+                size += write(os, "roaming=" + roaming + (roaming ? "" : " !!!") + "\r\n");
+                size += write(os, "rlah=" + rlah + (rlah ? "" : " !!!") + "\r\n");
+                size += write(os, "standalone_vpn=" + standalone_vpn + (standalone_vpn ? " !!!" : "") + "\r\n");
+                size += write(os, "validated=" + require_validated + (require_validated ? " !!!" : "") + "\r\n");
+                size += write(os, "validated/captive=" + require_validated_captive + (require_validated_captive ? "" : " !!!") + "\r\n");
+                size += write(os, "vpn_only=" + vpn_only + (vpn_only ? " !!!" : "") + "\r\n");
 
                 size += write(os, "\r\n");
                 size += write(os, getCiphers().toString());
@@ -2725,9 +2754,10 @@ public class Log {
                 DateFormat TF = Helper.getTimeInstance(context);
 
                 for (EntityLog entry : db.log().getLogs(from, null)) {
-                    size += write(os, String.format("%s [%d:%d:%d:%d] %s\r\n",
+                    size += write(os, String.format("%s [%d:%d:%d:%d:%d] %s\r\n",
                             TF.format(entry.time),
                             entry.type.ordinal(),
+                            (entry.thread == null ? 0 : entry.thread),
                             (entry.account == null ? 0 : entry.account),
                             (entry.folder == null ? 0 : entry.folder),
                             (entry.message == null ? 0 : entry.message),

@@ -362,7 +362,6 @@
     <string name="title_advanced_send_chips">Näytä osoitteet kehyksissä</string>
     <string name="title_advanced_send_reminders">Näytä muistutukset</string>
     <string name="title_advanced_send_delayed">Viivästä viestien lähetystä</string>
-    <string name="title_advanced_attach_new">Lisää jaetut tiedostot uuteen luonnokseen</string>
     <string name="title_advanced_answer_default">Vastausnapin lyhyesti painamisen toiminto:</string>
     <string name="title_advanced_answer_action">Vastauspainikkeen pitkän painalluksen toiminto:</string>
     <string name="title_advanced_send_pending">Näytä huomaamaton viivästetyn lähetyksen kuvake</string>
@@ -1445,6 +1444,7 @@
     <string name="title_sort_on_attachments">Liitteet</string>
     <string name="title_sort_on_hidden">Piilotettu</string>
     <string name="title_sort_ascending">Vanhin ensin</string>
+    <string name="title_sort_on_name">Nimi</string>
     <string name="title_sort_on_order">Järjestys</string>
     <string name="title_filter">Suodata pois</string>
     <string name="title_filter_seen">Luettu</string>
@@ -1501,7 +1501,8 @@
     <string name="title_rule_snooze">Torkuta</string>
     <string name="title_rule_flag">Lisää tähti</string>
     <string name="title_rule_importance">Aseta oma tärkeysjärjestys</string>
-    <string name="title_rule_keyword">Lisää avainsana</string>
+    <string name="title_rule_keyword_add">Lisää</string>
+    <string name="title_rule_keyword_delete">Poista</string>
     <string name="title_rule_move">Siirrä</string>
     <string name="title_rule_copy">Kopioi (lisää tunniste)</string>
     <string name="title_rule_answer">Vastaa/lähetä edelleen</string>
@@ -1995,6 +1996,7 @@
     <string-array name="encryptNames">
         <item>Ei mitään</item>
         <item>PGP allekirjoita ainoastaan</item>
+        <item>PGP encrypt-only</item>
         <item>PGP allekirjoita+salaa</item>
         <item>S/MIME allekirjoita ainoastaan</item>
         <item>S/MIME allekirjoita+salaa</item>

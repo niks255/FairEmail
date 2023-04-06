@@ -212,6 +212,7 @@
     <string name="title_advanced_check_authentication">ଵାର୍ତ୍ତା ପ୍ରାମାଣିକରଣ ଯାଞ୍ଚ</string>
     <string name="title_advanced_keyboard_no_fullscreen">ପୂର୍ଣ୍ଣସ୍କ୍ରିନ୍ କୀବୋର୍ଡ୍ ପ୍ରତିରୋଧ କରନ୍ତୁ</string>
     <string name="title_advanced_suggest_names">ନା‍ଁ ଓ ଇମେଲ୍ ଠିକଣା ଵ୍ୟଵହାର କରିବା</string>
+    <string name="title_advanced_answer_caption">ଉତ୍ତର ବଟନ ସେଟିଂସ୍</string>
     <string name="title_advanced_answer_default">ଉତ୍ତର ବଟନ୍ ଉପରେ ହ୍ରସ୍ୱ ପ୍ରେସ୍ କଲେ:</string>
     <string name="title_advanced_answer_action">ଉତ୍ତର ବଟନ୍ ଉପରେ ଦୀର୍ଘ ପ୍ରେସ୍ କଲେ:</string>
     <string name="title_advanced_compose_font">ଡିଫଲ୍ଟ ଫଣ୍ଟ</string>
@@ -245,6 +246,7 @@
     <string name="title_advanced_tabular_dividers">ଟାବୁଲାର୍ ଶୈଳୀ ଵ୍ୟଵହାର କଲାଵେଳେ ଵିଭାଜକ ରେଖା ଵ୍ୟଵହାର କରିବା</string>
     <string name="title_advanced_date_header">ତାରିଖ ଅନୁଯାୟୀ ଗୋଷ୍ଠୀ ପ୍ରସ୍ତୁତ କରନ୍ତୁ</string>
     <string name="title_advanced_color_stripe_wide">ପ୍ରଶସ୍ତ ରଙ୍ଗ ଷ୍ଟ୍ରାଇପ୍ ଵ୍ୟଵହାର କରିବା</string>
+    <string name="title_advanced_avatars">ସମ୍ପର୍କର ଫଟୋସବୁ ଦେଖାଇବା</string>
     <string name="title_advanced_gravatars">ଗ୍ରାଵତାରସବୁ ଦେଖାଇବା</string>
     <string name="title_advanced_libravatars">ଲିବ୍ରାଵତାରସବୁ ଦେଖାଇବା</string>
     <string name="title_advanced_favicons_partial">ୱେବ୍ ପୃଷ୍ଠାର କେବଳ ପ୍ରଥମ %1$s ସ୍କେନ୍ କରନ୍ତୁ</string>
@@ -310,6 +312,7 @@
     <string name="title_advanced_language">ଭାଷା</string>
     <string name="title_advanced_language_system">ସିଷ୍ଟମ୍</string>
     <string name="title_advanced_deepl">DeepL ଏକୀକରଣ</string>
+    <string name="title_advanced_openai_temperature">ତାପମାତ୍ରା: %1$s</string>
     <string name="title_advanced_sdcard">ମୁଁ ଏକ SDcard ଵ୍ୟଵହାର କରିବାକୁ ଚାହୁଁଛି</string>
     <string name="title_advanced_updates">GitHub ଅପଡେଟସ୍ ପାଇଁ ଯାଞ୍ଚ କରନ୍ତୁ</string>
     <string name="title_advanced_check_weekly">ଦୈନିକ ବଦଳରେ ସାପ୍ତାହିକ ଯାଞ୍ଚ କରନ୍ତୁ</string>
@@ -346,6 +349,7 @@
     <string name="title_identity_tenant_hint">ଅଧିକାଂଶ ସ୍ଥିତିରେ ଏହି କ୍ଷେତ୍ର ଖାଲି ରହିବା ଉଚିତ୍</string>
     <string name="title_advanced_sender">ପ୍ରେରକଙ୍କ ଠିକଣା ସମ୍ପାଦନ କରିବା ଅନୁମତି ଦେବା</string>
     <string name="title_advanced_reply_name">ପ୍ରାପ୍ତ ହୋଇଥିବା ଵାର୍ତ୍ତାରୁ ନାମ କପି କରିନେବା</string>
+    <string name="title_identity_uri">ସମ୍ପର୍କକୁ ଲିଙ୍କ୍ କରିବା</string>
     <string name="title_identity_unicode_remark">ଅଧିକାଂଶ ସର୍ଵର୍ ଏହାକୁ ସମର୍ଥନ କରନ୍ତି ନାହିଁ</string>
     <string name="title_identity_max_size">ସର୍ବାଧିକ ବାର୍ତ୍ତା ଆକାର (MB)</string>
     <string name="title_identity_receipt">ଡିଫଲ୍ଟ ଭାଵେ ଵିତରଣ/ପଠନ ପାଉତି ଅନୁରୋଧ କରିବା</string>
@@ -380,6 +384,7 @@
     <string name="title_primary_identity">ପ୍ରାଥମିକ (ଡିଫଲ୍ଟ ପରିଚୟ)</string>
     <string name="title_self_identity">ପ୍ରତ୍ୟୁତ୍ତର ଦେଲାଵେଳେ ଇମେଲ୍ ଠିକଣା କାଢ଼ିଦେବା</string>
     <string name="title_leave_on_server">ସର୍ଵରରେ ଵାର୍ତ୍ତା ଛାଡ଼ିବା</string>
+    <string name="title_client_delete">ଡାଉନଲୋଡ୍ କରିବା ପରେ ସକ୍ରିୟ ଭାଵେ ଵାର୍ତ୍ତା ଵିଲୋପ କରିବା</string>
     <string name="title_leave_deleted">ଵିଲୋପିତ ଵାର୍ତ୍ତାଗୁଡ଼ିକୁ ସର୍ଵରରେ ଛାଡ଼ିବା</string>
     <string name="title_leave_on_device">ଡିଵାଇସରେ ଵାର୍ତ୍ତା ଛାଡ଼ିବା</string>
     <string name="title_check">ଯାଞ୍ଚ କର</string>
@@ -416,6 +421,8 @@
     <string name="title_expunge_remark">ଏହା ବିଲୋପ ପାଇଁ ଚିହ୍ନିତ ସମସ୍ତ ବାର୍ତ୍ତାକୁ ସବୁଦିନ ପାଇଁ ବିଲୋପ କରିବ</string>
     <string name="title_empty_trash">ଆବର୍ଜନା ପାତ୍ର ଖାଲି କରନ୍ତୁ</string>
     <string name="title_edit_properties">ଗୁଣଧର୍ମ ସମ୍ପାଦନା</string>
+    <string name="title_insert_contact">ସମ୍ପର୍କ ଯୋଡ଼ନ୍ତୁ</string>
+    <string name="title_edit_contact">ସମ୍ପର୍କ ସମ୍ପାଦନା</string>
     <string name="title_contact_email">ଇମେଲ୍</string>
     <string name="title_contact_name">ନାମ</string>
     <string name="title_contact_group">ଗୋଷ୍ଠୀ</string>
@@ -601,6 +608,7 @@
     <string name="title_sort_on_size">ଆକାର</string>
     <string name="title_sort_on_attachments">ସଂଲଗ୍ନକରଣ</string>
     <string name="title_sort_on_hidden">ଲୁକ୍କାୟିତ</string>
+    <string name="title_sort_on_name">ନାମ</string>
     <string name="title_sort_on_order">କ୍ରମ</string>
     <string name="title_sort_on_applied">ପ୍ରୟୋଗ ଗଣନା</string>
     <string name="title_sort_on_last_applied">ଗତ ପ୍ରୟୋଗ</string>
@@ -638,6 +646,8 @@
     <string name="title_rule_snooze">ସ୍ନୁଜ୍</string>
     <string name="title_rule_flag">ତାରା ଲଗାନ୍ତୁ</string>
     <string name="title_rule_importance">ଗୁରୁତ୍ୱ ସ୍ଥିର କରିବା</string>
+    <string name="title_rule_keyword_add">ଯୋଡ଼ନ୍ତୁ</string>
+    <string name="title_rule_keyword_delete">ବିଲୋପ</string>
     <string name="title_rule_move">ଘୁଞ୍ଚାନ୍ତୁ</string>
     <string name="title_rule_tts">ପାଠ୍ୟ ରୁ କଥନ</string>
     <string name="title_rule_automation">ସ୍ୱଚାଳନ</string>
@@ -646,6 +656,7 @@
     <string name="title_rule_name">ନାମ</string>
     <string name="title_rule_order">କ୍ରମ</string>
     <string name="title_rule_enabled">ସକ୍ଷମ ହୋଇଛି</string>
+    <string name="title_rule_sender_known">ପ୍ରେରକ ଜଣେ ସମ୍ପର୍କ ଅଟନ୍ତି</string>
     <string name="title_rule_body">ପାଠ୍ୟ ଧାରଣ କରେ</string>
     <string name="title_rule_body_remark">ଏହି ସର୍ତ୍ତ ଵ୍ୟଵହାର କରିବା ଦ୍ୱାରା ସର୍ଵଦା ଵାର୍ତ୍ତାର ପାଠ୍ୟ ଡାଉନଲୋଡ୍ ହେବ, ଯାହା ଵାର୍ତ୍ତା ତାଲିକାର ସିଙ୍କ୍ରୋନାଇଜେଶନ୍ ମନ୍ଥର କରିପାରେ</string>
     <string name="title_rule_time_every_day">ପ୍ରତିଦିନ</string>
@@ -684,6 +695,7 @@
     <string name="title_legend_sensitivity_private">ଘରୋଇ ଅଟେ</string>
     <string name="title_legend_sensitivity_confidential">ଗୋପନୀୟ ଅଟେ</string>
     <string name="title_legend_receipt">ପାଉତି ଅନୁରୋଧ କରାଯାଇଥିଲା</string>
+    <string name="title_legend_contacts">ସମ୍ପର୍କ ପରିଚାଳନା</string>
     <string name="title_legend_open_external">ଆପ୍ ବାହାରେ ଖୋଲନ୍ତୁ</string>
     <string name="title_legend_cc">CC/BCC ଦେଖାଅ</string>
     <string name="title_legend_link">ଲିଙ୍କ୍ ସନ୍ନିଵେଶ କର</string>
@@ -760,6 +772,7 @@
     <string name="title_accessibility_flagged">ତାରାଙ୍କିତ</string>
     <string name="title_accessibility_collapse">ସଙ୍କୋଚନ</string>
     <string name="title_accessibility_expand">ପ୍ରସାରଣ</string>
+    <string name="title_accessibility_view_contact">ସମ୍ପର୍କ ଦେଖନ୍ତୁ</string>
     <string name="title_accessibility_view_help">ସହାୟତା ଦେଖନ୍ତୁ</string>
     <string name="title_accessibility_edit">ସମ୍ପାଦନ</string>
     <string name="title_accessibility_attachment">ସଂଲଗ୍ନକରଣ</string>
@@ -870,6 +883,7 @@
     <string-array name="encryptNames">
         <item>କିଛି ନୁହେଁ</item>
         <item>PGP sign-only</item>
+        <item>PGP encrypt-only</item>
         <item>PGP sign+encrypt</item>
         <item>S/MIME sign-only</item>
         <item>S/MIME sign+encrypt</item>

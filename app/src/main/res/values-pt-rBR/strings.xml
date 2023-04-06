@@ -331,6 +331,8 @@
     <string name="title_advanced_optimize">Otimizar automaticamente</string>
     <string name="title_advanced_always">Sempre receber mensagens para estas contas</string>
     <string name="title_advanced_schedule">Programar</string>
+    <string name="title_advanced_schedule_workdays">Dias úteis</string>
+    <string name="title_advanced_schedule_weekend">Fim de Semana</string>
     <string name="title_advanced_advanced">Avançado</string>
     <string name="title_advanced_quick_sync">Sincronização rápida</string>
     <string name="title_advanced_no_date">Mensagens sem data</string>
@@ -365,14 +367,18 @@
     <string name="title_advanced_send_chips">Mostrar endereço em bolhas</string>
     <string name="title_advanced_send_reminders">Mostrar lembretes</string>
     <string name="title_advanced_send_delayed">Atraso ao enviar mensagens</string>
-    <string name="title_advanced_attach_new">Adicionar arquivos compartilhados a um novo rascunho</string>
+    <string name="title_advanced_attach_new">Criar um novo rascunho de mensagem para endereços e arquivos compartilhados</string>
+    <string name="title_advanced_answer_caption">Configurações do botão de resposta</string>
     <string name="title_advanced_answer_default">Pressionar brevemente o botão de resposta irá:</string>
     <string name="title_advanced_answer_action">Pressionar longamente o botão de resposta irá:</string>
+    <string name="title_advanced_answer_hint">As ações do botão de resposta também podem ser configuradas na página da aba de configurações de envio</string>
+    <string name="title_advanced_answer_warning">Nem todas as ações são possíveis sem um menu de seleção!</string>
     <string name="title_advanced_send_pending">Mostrar ícones de filtro rápido não obtrusivos</string>
     <string name="title_advanced_auto_save_paragraph">Salvar automaticamente um rascunho após cada parágrafo</string>
     <string name="title_advanced_auto_save_dot">Salvar automaticamente um rascunho após cada frase</string>
     <string name="title_advanced_compose_color">Cor de texto padrão</string>
     <string name="title_advanced_compose_font">Fonte padrão</string>
+    <string name="title_advanced_compose_monospaced">Usar fonte mono espaçada para mensagens de texto simples</string>
     <string name="title_advanced_auto_identity">Selecionar automaticamente identidades para novas mensagens</string>
     <string name="title_advanced_prefix_once">Prefixo de assunto apenas uma vez na resposta ou encaminhamento</string>
     <string name="title_advanced_prefix_count">Adicionar contagem ao prefixo de resposta</string>
@@ -426,6 +432,7 @@
     <string name="title_advanced_caption_message_header">Cabeçalho da mensagem</string>
     <string name="title_advanced_caption_message_body">Corpo da mensagem</string>
     <string name="title_advanced_caption_file">Arquivo</string>
+    <string name="title_advanced_caption_integrations">Integrações</string>
     <string name="title_advanced_portrait">Modo Retrato</string>
     <string name="title_advanced_landscape">Modo paisagem</string>
     <string name="title_advanced_two_row">Use duas linhas</string>
@@ -496,6 +503,7 @@
     <string name="title_advanced_preview">Mostrar pré-visualização da mensagem</string>
     <string name="title_advanced_preview_italic">Mostrar visualização de mensagem em itálicos</string>
     <string name="title_advanced_preview_lines">Número de linhas de visualização</string>
+    <string name="title_advanced_align_header">Alinhar verticalmente as palavras-chave, pré-visualizar texto e notas</string>
     <string name="title_advanced_addresses">Mostrar detalhes do endereço por padrão</string>
     <string name="title_advanced_unzip">Mostrar conteúdo de anexos compactados</string>
     <string name="title_advanced_attachments_alt">Mostrar anexos após o texto da mensagem</string>
@@ -682,6 +690,11 @@
     <string name="title_advanced_lt_key">Chave da API (opcional)</string>
     <string name="title_advanced_deepl">Integração DeepL</string>
     <string name="title_advanced_virus_total">Integração com VirusTotal</string>
+    <string name="title_advanced_send">Integração com \'Send\'</string>
+    <string name="title_advanced_openai">Integração com OpenAI (ChatGPT)</string>
+    <string name="title_advanced_openai_model">Modelo</string>
+    <string name="title_advanced_openai_temperature">Temperatura: %1$s</string>
+    <string name="title_advanced_openai_moderation">Moderação de conteúdo</string>
     <string name="title_advanced_sdcard">Eu quero usar um sdcard</string>
     <string name="title_advanced_watchdog">Verifique periodicamente se o FairEmail ainda está ativo</string>
     <string name="title_advanced_updates">Buscar atualizações</string>
@@ -729,6 +742,7 @@
     <string name="title_advanced_send_reminders_hint">Mostrar um aviso quando o texto da mensagem ou o assunto estiver vazio ou quando um anexo puder estar ausente</string>
     <string name="title_advanced_reply_move_hint">O servidor de e-mail ainda pode adicionar as mensagens à pasta de mensagens enviadas</string>
     <string name="title_advanced_compose_color_hint">Cores muito claras ou muito escuras resultarão em mensagens ilegíveis do lado dos destinatários</string>
+    <string name="title_advanced_attach_new_hint">Caso contrário, adicione endereços ou arquivos compartilhados à mensagem de rascunho atual</string>
     <string name="title_advanced_usenet_hint">Inserir \'-- \' entre o texto e a assinatura</string>
     <string name="title_advanced_remove_signature_hint">Isso pode resultar em muito pouco ou muito texto sendo removido</string>
     <string name="title_advanced_metered_hint">Conexões limitadas são geralmente conexões móveis ou hotspots Wi-Fi pagos</string>
@@ -775,6 +789,7 @@
     <string name="title_advanced_sender_hint">A maioria dos provedores não permite endereços de remetente modificados</string>
     <string name="title_advanced_bcc_hint">O endereço não será mostrado, mas será adicionado no envio</string>
     <string name="title_advanced_internal_hint">Haverá um aviso quando for enviar para outro domínio</string>
+    <string name="title_advanced_uri" comment="title_advanced_uri&#10;Remark for button to link contact to identity">Os detalhes do contato selecionado serão usados ​​para anexos vCard</string>
     <string name="title_advanced_e2e_encryption">Opções para criptografia de ponta a ponta</string>
     <string name="title_advanced_display_harmful_hint">Desativar esta opção pode prejudicar sua privacidade</string>
     <string name="title_advanced_display_hidden_hint">Isso pode resultar em textos estranhos e duplos</string>
@@ -823,6 +838,7 @@
     <string name="title_advanced_sender_regex">Regex para corresponder ao nome de usuário de endereços de e-mail recebidos</string>
     <string name="title_identity_reply_to">Resposta para o endereço</string>
     <string name="title_identity_internal">Nomes de domínio internos (separados por vírgula)</string>
+    <string name="title_identity_uri">Link de contato</string>
     <string name="title_identity_unicode">Permitir UTF-8 nos cabeçalhos da mensagem</string>
     <string name="title_identity_unicode_remark">A maioria dos servidores não suporta isso</string>
     <string name="title_identity_octetmime">Permitir 8BITMIME</string>
@@ -876,6 +892,7 @@
     <string name="title_primary_identity">Primária (identidade padrão)</string>
     <string name="title_self_identity">Remover endereço de e-mail quando responder</string>
     <string name="title_leave_on_server">Deixar mensagens no servidor</string>
+    <string name="title_client_delete">Excluir mensagens ativamente após o baixá-las</string>
     <string name="title_leave_deleted">Deixar as mensagens apagadas no servidor</string>
     <string name="title_leave_on_device">Deixar mensagens no dispositivo</string>
     <string name="title_max_messages">Número máximo de mensagens para baixar (em branco para todas)</string>
@@ -1462,6 +1479,7 @@
     <string name="title_sort_on_attachments">Anexos</string>
     <string name="title_sort_on_hidden">Oculto</string>
     <string name="title_sort_ascending">Antigos primeiro</string>
+    <string name="title_sort_on_name">Nome</string>
     <string name="title_sort_on_order">Ordenar</string>
     <string name="title_sort_on_applied">Número de aplicadas</string>
     <string name="title_sort_on_last_applied">Última aplicada</string>
@@ -1520,7 +1538,9 @@
     <string name="title_rule_snooze">Soneca</string>
     <string name="title_rule_flag">Adicionar estrela</string>
     <string name="title_rule_importance">Definir a importância</string>
-    <string name="title_rule_keyword">Adicionar palavra-chave</string>
+    <string name="title_rule_keyword">Palavra-chave</string>
+    <string name="title_rule_keyword_add">Adicionar</string>
+    <string name="title_rule_keyword_delete">Deletar</string>
     <string name="title_rule_move">Mover</string>
     <string name="title_rule_copy">Copiar (etiqueta)</string>
     <string name="title_rule_answer">Responder/encaminhar</string>
@@ -1865,6 +1885,7 @@
     <string name="title_widget_separator_lines">Mostrar linhas separadoras</string>
     <string name="title_widget_semi_transparent">Fundo semi-transparente</string>
     <string name="title_widget_count_top">Mostrar contagem de não lida na parte superior</string>
+    <string name="title_widget_subject_lines">Número máximo de linhas para o assunto</string>
     <string name="title_widget_avatars">Mostrar avatares dos contatos</string>
     <string name="title_widget_refresh">Mostrar botão para atualizar mensagens</string>
     <string name="title_widget_compose">Mostrar botão compor nova mensagem</string>
@@ -2023,6 +2044,7 @@
     <string-array name="encryptNames">
         <item>Nenhum</item>
         <item>Assinante PGP</item>
+        <item>Criptografias PGP</item>
         <item>Assinaturas PGP + criptografias</item>
         <item>Assinante S/MIME</item>
         <item>Assinaturas S/MIME + criptografias</item>

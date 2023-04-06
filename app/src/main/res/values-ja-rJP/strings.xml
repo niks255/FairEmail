@@ -319,6 +319,8 @@
     <string name="title_advanced_optimize">自動最適化</string>
     <string name="title_advanced_always">これらのアカウントのメッセージを常に受信</string>
     <string name="title_advanced_schedule">スケジュール</string>
+    <string name="title_advanced_schedule_workdays">平日</string>
+    <string name="title_advanced_schedule_weekend">週末</string>
     <string name="title_advanced_advanced">詳細</string>
     <string name="title_advanced_quick_sync">クイック同期</string>
     <string name="title_advanced_no_date">日付のないメッセージ</string>
@@ -353,14 +355,18 @@
     <string name="title_advanced_send_chips">アドレスバルーンを表示</string>
     <string name="title_advanced_send_reminders">リマインダーを表示</string>
     <string name="title_advanced_send_delayed">メッセージ送信を遅延させる</string>
-    <string name="title_advanced_attach_new">共有されたファイルを返信の下書きに追加</string>
+    <string name="title_advanced_attach_new">アドレスやファイルをアプリに共有したとき、新しい下書きを作成</string>
+    <string name="title_advanced_answer_caption">返信ボタン設定</string>
     <string name="title_advanced_answer_default">返信ボタンを短く押したときのアクション:</string>
     <string name="title_advanced_answer_action">返信ボタンを長押ししたときのアクション:</string>
+    <string name="title_advanced_answer_hint">返信ボタンのアクションは、設定の送信タブからも変更できます</string>
+    <string name="title_advanced_answer_warning">選択メニューを表示しないと、選択できないメニューが発生します！</string>
     <string name="title_advanced_send_pending">目立たない送信遅延アイコンを表示</string>
     <string name="title_advanced_auto_save_paragraph">段落ごとに下書きを自動で保存</string>
     <string name="title_advanced_auto_save_dot">文ごとに下書きを自動で保存</string>
     <string name="title_advanced_compose_color">デフォルトの文字色</string>
     <string name="title_advanced_compose_font">デフォルトのフォント</string>
+    <string name="title_advanced_compose_monospaced">プレーンテキストメッセージに等幅フォントを使用</string>
     <string name="title_advanced_auto_identity">メッセージを新規作成するとき、ユーザー ID を自動で選択</string>
     <string name="title_advanced_prefix_once">返信/転送のプレフィックスを 1 つだけにする</string>
     <string name="title_advanced_prefix_count">返信のプレフィックスにカウントを追加</string>
@@ -414,6 +420,7 @@
     <string name="title_advanced_caption_message_header">見出し</string>
     <string name="title_advanced_caption_message_body">本文</string>
     <string name="title_advanced_caption_file">ファイル</string>
+    <string name="title_advanced_caption_integrations">統合</string>
     <string name="title_advanced_portrait">ポートレートモード (縦画面)</string>
     <string name="title_advanced_landscape">ランドスケープモード (横画面)</string>
     <string name="title_advanced_two_row">2 行に分割</string>
@@ -484,6 +491,7 @@
     <string name="title_advanced_preview">メッセージプレビューを表示</string>
     <string name="title_advanced_preview_italic">斜体でメッセージプレビューを表示</string>
     <string name="title_advanced_preview_lines">プレビューの行数</string>
+    <string name="title_advanced_align_header">キーワード、プレビューテキスト、メモを垂直方向に揃える</string>
     <string name="title_advanced_addresses">デフォルトでアドレスの詳細を展開</string>
     <string name="title_advanced_unzip">圧縮された添付ファイルの内容を表示</string>
     <string name="title_advanced_attachments_alt">本文の後に添付ファイルを表示</string>
@@ -559,6 +567,7 @@
     <string name="title_advanced_auto_important">スター付きメッセージを自動で重要にマーク</string>
     <string name="title_advanced_cancel_snooze">メッセージを移動するときスヌーズをキャンセル</string>
     <string name="title_advanced_auto_block_sender">メッセージを迷惑メールとして報告したとき、差出人を自動でブロック</string>
+    <string name="title_advanced_auto_hide_answer">スクロール時に返信ボタンを隠す</string>
     <string name="title_advanced_swipe_reply">展開したメッセージを右にスワイプして返信</string>
     <string name="title_advanced_default_snooze">デフォルトのスヌーズ/遅延時間</string>
     <string name="title_advanced_default_folder">デフォルトのフォルダーを選択</string>
@@ -670,10 +679,15 @@
     <string name="title_advanced_lt_key">API キー (オプション)</string>
     <string name="title_advanced_deepl">DeepL を統合</string>
     <string name="title_advanced_virus_total">VirusTotal を統合</string>
+    <string name="title_advanced_send">Send を統合</string>
+    <string name="title_advanced_openai">OpenAI (ChatGPT) を統合</string>
+    <string name="title_advanced_openai_model">モデル</string>
+    <string name="title_advanced_openai_temperature">温度 (Temperature): %1$s</string>
+    <string name="title_advanced_openai_moderation">コンテンツモデレーション</string>
     <string name="title_advanced_sdcard">SD カードを使用できますか？</string>
     <string name="title_advanced_watchdog">FairEmail がアクティブか定期的に確認</string>
-    <string name="title_advanced_updates">GitHub のアップデートを確認</string>
-    <string name="title_advanced_check_weekly">アップデートの確認頻度を毎日から毎週へ変更</string>
+    <string name="title_advanced_updates">GitHub で更新を確認</string>
+    <string name="title_advanced_check_weekly">更新の確認頻度を毎日から毎週へ変更</string>
     <string name="title_advanced_beta">BitBucket でテスト版を確認</string>
     <string name="title_advanced_changelog">更新後に更新履歴を表示</string>
     <string name="title_advanced_announcements">お知らせを確認</string>
@@ -716,6 +730,7 @@
     <string name="title_advanced_send_reminders_hint">本文または件名が空の場合、またはファイルの添付に失敗した可能性がある場合に警告を表示します</string>
     <string name="title_advanced_reply_move_hint">メールサーバーはこの設定を無視してメッセージを送信済みフォルダーに追加できます</string>
     <string name="title_advanced_compose_color_hint">極端に明るいまたは暗い色を設定すると、受信者がメッセージを判読できなくなることがあります</string>
+    <string name="title_advanced_attach_new_hint">OFF にすると、作成中の下書きメッセージに共有されたアドレスやファイルを追加します</string>
     <string name="title_advanced_usenet_hint">テキストと署名の間に「--」を挿入します</string>
     <string name="title_advanced_remove_signature_hint">一部のテキストが削除されなかったり、テキストが削除されすぎたりする可能性があります</string>
     <string name="title_advanced_metered_hint">一般にモバイルネットワークまたは有料 Wi-Fi ホットスポットが従量制課金接続に該当します</string>
@@ -863,6 +878,7 @@
     <string name="title_primary_identity">プライマリー (デフォルトのユーザー ID)</string>
     <string name="title_self_identity">返信するときにメールアドレスを削除</string>
     <string name="title_leave_on_server">サーバーにメッセージを残す</string>
+    <string name="title_client_delete">ダウンロードしたメッセージをアクティブに削除</string>
     <string name="title_leave_deleted">削除したメッセージをサーバーに残す</string>
     <string name="title_leave_on_device">デバイスにメッセージを残す</string>
     <string name="title_max_messages">ダウンロードするメッセージの最大数 (空白にするとすべてダウンロードします)</string>
@@ -903,7 +919,7 @@
     <string name="title_identity_required">メールを送信するにはユーザー ID が必要です</string>
     <string name="title_drafts_required">メールを送信するには下書きフォルダーが必要です</string>
     <string name="title_drafts_select">メールを送信するには、アカウント設定で下書きフォルダーを選択する必要があります</string>
-    <string name="title_account_auth_update">認証をアップデート</string>
+    <string name="title_account_auth_update">認証を更新</string>
     <string name="title_account_auth_password">パスワード認証に変更する</string>
     <string name="title_change_password">パスワードを変更</string>
     <string name="title_delete_account">アカウントを削除</string>
@@ -1451,6 +1467,7 @@
     <string name="title_sort_on_attachments">添付ファイル</string>
     <string name="title_sort_on_hidden">非表示のメッセージ</string>
     <string name="title_sort_ascending">古い順から</string>
+    <string name="title_sort_on_name">名前</string>
     <string name="title_sort_on_order">順番</string>
     <string name="title_sort_on_applied">適用回数</string>
     <string name="title_sort_on_last_applied">最終適用</string>
@@ -1509,7 +1526,9 @@
     <string name="title_rule_snooze">スヌーズ</string>
     <string name="title_rule_flag">スターを付ける</string>
     <string name="title_rule_importance">重要度を設定</string>
-    <string name="title_rule_keyword">キーワードを追加</string>
+    <string name="title_rule_keyword">キーワード</string>
+    <string name="title_rule_keyword_add">追加</string>
+    <string name="title_rule_keyword_delete">削除</string>
     <string name="title_rule_move">移動</string>
     <string name="title_rule_copy">コピー (ラベル)</string>
     <string name="title_rule_answer">返信/転送</string>
@@ -1711,6 +1730,10 @@
     <string name="title_hint_support">質問や問題がある場合はサポートメニューを使用してヘルプにアクセスしてください</string>
     <string name="title_hint_message_actions">左にスワイプしてゴミ箱に移動し、右にスワイプしてアーカイブ (利用可能な場合) します。スワイプ操作はアカウント設定で変更できます</string>
     <string name="title_hint_message_selection">メッセージを長押しして、複数のメッセージを選択します。そのまま上または下にスワイプすると、まとめてメッセージを選択できます</string>
+    <string name="title_hint_message_junk">        メールクライアントは、基本的にメールサーバーにあるメッセージをそのまま表示しています。
+        メールクライアントではなく、メールサーバーが迷惑メールをフィルターする責任を負っています。
+        もし迷惑メールの量が多い場合はアプリを非難するのではなく、あなたのメールプロバイダーに連絡してください。
+    </string>
     <string name="title_hint_important">重要</string>
     <string name="title_hint_sync">プロバイダーの速度、インターネットの接続状況、デバイスの性能およびメッセージの数によりメッセージのダウンロードに時間がかかる場合があります。メッセージのダウンロード中はアプリの応答が遅くなることがあります</string>
     <string name="title_hint_sync_note">デフォルトでは、ストレージ容量とバッテリーとデータ使用量を制限するためにすべてのメッセージがダウンロードされるわけではありません。フォルダーリスト内のフォルダーを長押しし、「さらにメッセージを取得」を選択することで変更できます。</string>
@@ -1736,8 +1759,8 @@
     <string name="title_default_apps">デフォルトのアプリ</string>
     <string name="title_reset_open">デフォルトのアプリを設定またはクリア</string>
     <string name="title_select_app">アプリを選択</string>
-    <string name="title_updated">バージョン %1$s へアップデートできます</string>
-    <string name="title_no_update">利用可能なアップデートはありません</string>
+    <string name="title_updated">バージョン %1$s へ更新できます</string>
+    <string name="title_no_update">利用できる更新はありません</string>
     <string name="title_issue">質問や問題がありますか？</string>
     <string name="title_yes">はい</string>
     <string name="title_no">いいえ</string>
@@ -1775,6 +1798,11 @@
     <string name="title_via">経由: %1$s</string>
     <string name="title_1hour">1 時間</string>
     <string name="title_1day">1 日</string>
+    <string name="title_more_overflow">その他&#8230;</string>
+    <string name="title_today_at">今日の %1$s</string>
+    <string name="title_tomorrow_at">明日の %1$s</string>
+    <string name="title_day_at_time">%1$s の %2$s</string>
+    <string name="title_next_week">来週のこの時間</string>
     <string name="title_now">現在</string>
     <string name="title_after">%1$s 後</string>
     <string name="title_reset">リセット</string>
@@ -1846,6 +1874,7 @@
     <string name="title_widget_separator_lines">区切り線を表示</string>
     <string name="title_widget_semi_transparent">半透明の背景</string>
     <string name="title_widget_count_top">未読件数を上部に表示</string>
+    <string name="title_widget_subject_lines">件名の最大行数</string>
     <string name="title_widget_avatars">連絡先のアバターを表示</string>
     <string name="title_widget_refresh">メッセージ更新ボタンを表示</string>
     <string name="title_widget_compose">メッセージ新規作成ボタンを表示</string>
@@ -2003,6 +2032,7 @@
     <string-array name="encryptNames">
         <item>なし</item>
         <item>PGP 電子署名のみ</item>
+        <item>PGP 暗号化のみ</item>
         <item>PGP 電子署名 + 暗号化</item>
         <item>S/MIME 電子署名のみ</item>
         <item>S/MIME 電子署名 + 暗号化</item>

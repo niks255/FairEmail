@@ -331,6 +331,8 @@
     <string name="title_advanced_optimize">Αυτόματη βελτιστοποίηση</string>
     <string name="title_advanced_always">Να λαμβάνονται πάντα τα μηνύματα για αυτούς τους λογαριασμούς</string>
     <string name="title_advanced_schedule">Χρονοδιάγραμμα</string>
+    <string name="title_advanced_schedule_workdays">Εργάσιμες ημέρες</string>
+    <string name="title_advanced_schedule_weekend">Σαββατοκύριακο</string>
     <string name="title_advanced_advanced">Για προχωρημένους</string>
     <string name="title_advanced_quick_sync">Γρήγορος συγχρονισμός</string>
     <string name="title_advanced_no_date">Μηνύματα χωρίς ημερομηνία</string>
@@ -365,14 +367,18 @@
     <string name="title_advanced_send_chips">Προβολή διευθύνσεων μέσα σε φυσαλίδες</string>
     <string name="title_advanced_send_reminders">Εμφάνιση υπενθυμίσεων</string>
     <string name="title_advanced_send_delayed">Καθυστέρηση αποστολής μηνυμάτων</string>
-    <string name="title_advanced_attach_new">Προσθήκη κοινόχρηστων αρχείων σε ένα νέο πρόχειρο</string>
+    <string name="title_advanced_attach_new">Δημιουργία νέου προσχεδίου μηνύματος για κοινόχρηστες διευθύνσεις και αρχεία</string>
+    <string name="title_advanced_answer_caption">Ρυθμίσεις κουμπιού απάντησης</string>
     <string name="title_advanced_answer_default">Το σύντομο πάτημα στο κουμπί απάντησης θα:</string>
     <string name="title_advanced_answer_action">Το παρατεταμένο πάτημα στο κουμπί απάντησης θα:</string>
+    <string name="title_advanced_answer_hint">Οι ενέργειες του κουμπιού απάντησης μπορούν επίσης να ρυθμιστούν στην καρτέλα των ρυθμίσεων αποστολής</string>
+    <string name="title_advanced_answer_warning">Δεν είναι δυνατές όλες οι ενέργειες χωρίς ένα μενού επιλογών!</string>
     <string name="title_advanced_send_pending">Προβολή διακριτικού εικονιδίου για απεσταλμένα με χρονοκαθυστέρηση</string>
     <string name="title_advanced_auto_save_paragraph">Αυτόματη αποθήκευση ενός προχείρου μετά από κάθε παράγραφο</string>
     <string name="title_advanced_auto_save_dot">Αυτόματη αποθήκευση ενός προχείρου μετά από κάθε πρόταση</string>
     <string name="title_advanced_compose_color">Προεπιλεγμένο χρώμα κειμένου</string>
     <string name="title_advanced_compose_font">Προεπιλεγμένη γραμματοσειρά</string>
+    <string name="title_advanced_compose_monospaced">Χρήση γραμματοσειράς σταθερού πλάτους για μηνύματα με απλό κείμενο</string>
     <string name="title_advanced_auto_identity">Αυτόματη επιλογή ταυτοτήτων για νέα μηνύματα</string>
     <string name="title_advanced_prefix_once">Μόνο ένα πρόθεμα κατά την απάντηση ή προώθηση μηνύματος</string>
     <string name="title_advanced_prefix_count">Προσθήκη μετρητή στο πρόθεμα απάντησης</string>
@@ -426,6 +432,7 @@
     <string name="title_advanced_caption_message_header">Κεφαλίδα μηνύματος</string>
     <string name="title_advanced_caption_message_body">Σώμα μηνύματος</string>
     <string name="title_advanced_caption_file">Αρχείο</string>
+    <string name="title_advanced_caption_integrations">Ενσωματώσεις</string>
     <string name="title_advanced_portrait">Κατακόρυφος προσανατολισμός</string>
     <string name="title_advanced_landscape">Οριζόντιος προσανατολισμός</string>
     <string name="title_advanced_two_row">Χρήση δύο γραμμών</string>
@@ -496,6 +503,7 @@
     <string name="title_advanced_preview">Να προβάλλεται προεπισκόπηση μηνύματος</string>
     <string name="title_advanced_preview_italic">Να προβάλλεται η προεπισκόπηση μηνύματος σε πλάγια γραφή</string>
     <string name="title_advanced_preview_lines">Αριθμός των γραμμών της προεπισκόπησης</string>
+    <string name="title_advanced_align_header">Κατακόρυφη στοίχιση λέξεων-κλειδιών, προεπισκόπησης κειμένου και σημειώσεων</string>
     <string name="title_advanced_addresses">Να αναπτύσσονται οι λεπτομέρειες της διεύθυνσης από προεπιλογή</string>
     <string name="title_advanced_unzip">Να προβάλλονται τα περιεχόμενα των συμπιεσμένων συνημμένων</string>
     <string name="title_advanced_attachments_alt">Να προβάλλονται τα συνημμένα μετά το κείμενο του μηνύματος</string>
@@ -681,6 +689,11 @@
     <string name="title_advanced_lt_key">Κλειδί API (προαιρετικό)</string>
     <string name="title_advanced_deepl">Ενσωμάτωση DeepL</string>
     <string name="title_advanced_virus_total">Ενσωμάτωση του VirusTotal</string>
+    <string name="title_advanced_send">Ενσωμάτωση \"Send\"</string>
+    <string name="title_advanced_openai">Ενσωμάτωση OpenAI (ChatGPT)</string>
+    <string name="title_advanced_openai_model">Μοντέλο</string>
+    <string name="title_advanced_openai_temperature">Θερμοκρασία: %1$s</string>
+    <string name="title_advanced_openai_moderation">Έλεγχος περιεχομένου</string>
     <string name="title_advanced_sdcard">Θέλω να χρησιμοποιήσω μια κάρτα SD</string>
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
     <string name="title_advanced_updates">Έλεγχος για ενημερώσεις στο GitHub</string>
@@ -727,6 +740,7 @@
     <string name="title_advanced_send_reminders_hint">Να προβάλλεται μια προειδοποίηση όταν το κείμενο του μηνύματος ή το θέμα είναι κενό ή όταν φαίνεται πως ένα συνημμένο λείπει</string>
     <string name="title_advanced_reply_move_hint">Ο διακομιστής ηλ. ταχυδρομείου ενδέχεται να προσθέτει ακόμα τα μηνύματα στον φάκελο απεσταλμένων</string>
     <string name="title_advanced_compose_color_hint">Πολύ ανοικτά ή πολύ σκούρα χρώματα θα έχουν ως αποτέλεσμα δυσανάγνωστα μηνύματα για τους παραλήπτες</string>
+    <string name="title_advanced_attach_new_hint">Διαφορετικά, προσθήκη κοινόχρηστων διευθύνσεων ή αρχείων στο τρέχον προσχέδιο μηνύματος</string>
     <string name="title_advanced_usenet_hint">Να παρεμβάλλεται ένα \'-- \' ανάμεσα στο κείμενο και την υπογραφή</string>
     <string name="title_advanced_remove_signature_hint">Αυτό μπορεί να επιφέρει την απαλοιφή είτε υπερβολικά λίγου είτε υπερβολικά πολύ κειμένου</string>
     <string name="title_advanced_metered_hint">Οι συνδέσεις με ογκοχρέωση είναι, γενικά, οι κινητές συνδέσεις διαδικτύου ή τα επί πληρωμή σημεία Wi-Fi</string>
@@ -773,6 +787,7 @@
     <string name="title_advanced_sender_hint">Οι περισσότεροι πάροχοι δεν επιτρέπουν τροποποιημένες διευθύνσεις αποστολέων</string>
     <string name="title_advanced_bcc_hint">Η διεύθυνση δεν θα προβληθεί αλλά θα προστεθεί κατά την αποστολή</string>
     <string name="title_advanced_internal_hint">Θα υπάρξει μια προειδοποίηση κατά την αποστολή προς άλλον τομέα</string>
+    <string name="title_advanced_uri" comment="title_advanced_uri&#10;Remark for button to link contact to identity">Οι λεπτομέρειες της επιλεγμένης επαφής θα χρησιμοποιηθούν για τα συνημμένα vCard</string>
     <string name="title_advanced_e2e_encryption">Επιλογές για από άκρο σε άκρο κρυπτογράφηση</string>
     <string name="title_advanced_display_harmful_hint">Η απενεργοποίηση αυτής της επιλογής μπορεί να θέσει σε κίνδυνο τα προσωπικά σας δεδομένα</string>
     <string name="title_advanced_display_hidden_hint">Ενδέχεται να προκαλέσει προβλήματα προβολής ή διπλά κείμενα</string>
@@ -821,6 +836,7 @@
     <string name="title_advanced_sender_regex">Να ταιριάξει η κανονική έκφραση (Regex) με το όνομα χρήστη εισερχομένων μηνυμάτων</string>
     <string name="title_identity_reply_to">Απάντηση στη διεύθυνση αυτή</string>
     <string name="title_identity_internal">Εσωτερικά ονόματα τομέα (χωρισμένα με κόμμα)</string>
+    <string name="title_identity_uri">Σύνδεση επαφής</string>
     <string name="title_identity_unicode">Να επιτρέπεται UTF-8 σε κεφαλίδες μηνυμάτων</string>
     <string name="title_identity_unicode_remark">Οι περισσότεροι διακομιστές δεν το υποστηρίζουν</string>
     <string name="title_identity_octetmime">Να επιτρέπεται 8BITMIME</string>
@@ -874,6 +890,7 @@
     <string name="title_primary_identity">Κύρια (προεπιλεγμένη ταυτότητα)</string>
     <string name="title_self_identity">Αφαίρεση διεύθυνσης ηλ. ταχυδρομείου κατά την απάντηση</string>
     <string name="title_leave_on_server">Να παραμένουν τα μηνύματα στον διακομιστή</string>
+    <string name="title_client_delete">Ενεργή διαγραφή μηνυμάτων μετά το κατέβασμα</string>
     <string name="title_leave_deleted">Να παραμένουν τα διεγραμμένα μηνύματα στον διακομιστή</string>
     <string name="title_leave_on_device">Να παραμένουν τα μηνύματα στη συσκευή</string>
     <string name="title_max_messages">Μέγιστος αριθμός μηνυμάτων για κατέβασμα (κενό για όλα)</string>
@@ -1459,6 +1476,7 @@
     <string name="title_sort_on_attachments">Συνημμένα</string>
     <string name="title_sort_on_hidden">Κρυφό</string>
     <string name="title_sort_ascending">Πρώτα τα παλαιότερα</string>
+    <string name="title_sort_on_name">Όνομα</string>
     <string name="title_sort_on_order">Σειρά</string>
     <string name="title_sort_on_applied">Φορές που εφαρμόστηκε</string>
     <string name="title_sort_on_last_applied">Τελευταία εφαρμογή</string>
@@ -1517,7 +1535,9 @@
     <string name="title_rule_snooze">Αναβολή</string>
     <string name="title_rule_flag">Προσθήκη αστεριού</string>
     <string name="title_rule_importance">Ορισμός σημαντικότητας</string>
-    <string name="title_rule_keyword">Προσθήκη λέξης-κλειδιού</string>
+    <string name="title_rule_keyword">Λέξη-κλειδί</string>
+    <string name="title_rule_keyword_add">Προσθήκη</string>
+    <string name="title_rule_keyword_delete">Διαγραφή</string>
     <string name="title_rule_move">Μετακίνηση</string>
     <string name="title_rule_copy">Αντιγραφή (ετικέτα)</string>
     <string name="title_rule_answer">Απάντηση/Προώθηση</string>
@@ -1862,6 +1882,7 @@
     <string name="title_widget_separator_lines">Προβολή διαχωριστικών γραμμών</string>
     <string name="title_widget_semi_transparent">Ημιδιαφανές φόντο</string>
     <string name="title_widget_count_top">Προβολή του αριθμού των μη αναγνωσμένων στην κορυφή</string>
+    <string name="title_widget_subject_lines">Μέγιστος αριθμός γραμμών θέματος</string>
     <string name="title_widget_avatars">Προβολή άβαταρ των επαφών</string>
     <string name="title_widget_refresh">Προβολή κουμπιού ανανέωσης μηνυμάτων</string>
     <string name="title_widget_compose">Να εμφανίζεται το κουμπί σύνταξης νέου μηνύματος</string>
@@ -2020,6 +2041,7 @@
     <string-array name="encryptNames">
         <item>Καμία</item>
         <item>Υπογραφή PGP μόνο</item>
+        <item>Κρυπτογράφηση PGP μόνο</item>
         <item>Υπογραφή και κρυπτογράφηση PGP</item>
         <item>Υπογραφή S/MIME μόνο</item>
         <item>Υπογραφή + κρυπτογράφηση S/MIME</item>

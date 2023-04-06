@@ -2073,8 +2073,8 @@ class Core {
             throw new IllegalArgumentException("Not INBOX");
 
         Map<EntityMessage, Message> map = findMessages(context, folder, Arrays.asList(message), istore, ifolder);
-        if (map.size() == 0)
-            throw new MessageRemovedException("Message not found");
+        if (map.get(message) == null)
+            throw new IllegalArgumentException("Message not found msgid=" + message.msgid);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean download_plain = prefs.getBoolean("download_plain", false);
@@ -2114,8 +2114,8 @@ class Core {
             return;
 
         Map<EntityMessage, Message> map = findMessages(context, folder, Arrays.asList(message), istore, ifolder);
-        if (map.size() == 0)
-            throw new MessageRemovedException("Message not found");
+        if (map.get(message) == null)
+            throw new IllegalArgumentException("Message not found msgid=" + message.msgid);
 
         MessageHelper helper = new MessageHelper((MimeMessage) map.entrySet().iterator().next().getValue(), context);
         MessageHelper.MessageParts parts = helper.getMessageParts();
@@ -3201,8 +3201,10 @@ class Core {
 
                         message.tls = helper.getTLS();
                         message.dkim = MessageHelper.getAuthentication("dkim", authentication);
-                        if (Boolean.TRUE.equals(message.dkim))
-                            message.dkim = helper.checkDKIMRequirements();
+                        if (Boolean.TRUE.equals(message.dkim) &&
+                                native_dkim && !BuildConfig.PLAY_STORE_RELEASE &&
+                                TextUtils.isEmpty(message.signedby))
+                            message.dkim = false;
                         message.spf = MessageHelper.getAuthentication("spf", authentication);
                         if (message.spf == null && helper.getSPF())
                             message.spf = true;
@@ -4300,8 +4302,10 @@ class Core {
 
             message.tls = helper.getTLS();
             message.dkim = MessageHelper.getAuthentication("dkim", authentication);
-            if (Boolean.TRUE.equals(message.dkim))
-                message.dkim = helper.checkDKIMRequirements();
+            if (Boolean.TRUE.equals(message.dkim) &&
+                    native_dkim && !BuildConfig.PLAY_STORE_RELEASE &&
+                    TextUtils.isEmpty(message.signedby))
+                message.dkim = false;
             message.spf = MessageHelper.getAuthentication("spf", authentication);
             if (message.spf == null && helper.getSPF())
                 message.spf = true;
@@ -4553,11 +4557,6 @@ class Core {
             } finally {
                 db.endTransaction();
             }
-
-            if (BuildConfig.DEBUG &&
-                    message.signedby == null &&
-                    Boolean.TRUE.equals(message.dkim))
-                EntityOperation.queue(context, message, EntityOperation.FLAG, true, android.graphics.Color.RED);
 
             try {
                 EntityContact.received(context, account, folder, message);
@@ -5291,6 +5290,11 @@ class Core {
                     remove.remove(id);
                     Log.i("Notify existing=" + id);
                 } else {
+                    EntityMessage msg = db.message().getMessage(message.id);
+                    if (msg == null || msg.ui_ignored) {
+                        Log.i("Notify skip id=" + message.id + " msg=" + (msg != null));
+                        continue;
+                    }
                     boolean existing = remove.contains(-id);
                     if (existing) {
                         if (message.content && notify_preview) {
@@ -5866,6 +5870,7 @@ class Core {
                     message.from != null && message.from.length > 0 &&
                     db.folder().getOutbox() != null) {
                 Intent reply = new Intent(context, ServiceUI.class)
+                        .setPackage(BuildConfig.APPLICATION_ID)
                         .setAction("reply:" + message.id)
                         .putExtra("group", group);
                 PendingIntent piReply = PendingIntentCompat.getService(

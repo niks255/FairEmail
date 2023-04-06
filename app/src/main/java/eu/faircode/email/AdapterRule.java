@@ -199,7 +199,8 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
 
                     setAction(getAction(type), value);
                 } else if (type == EntityRule.TYPE_KEYWORD) {
-                    setAction(getAction(type), jaction.optString("keyword"));
+                    boolean set = jaction.optBoolean("set", true);
+                    setAction(getAction(type), (set ? "+" : "-") + jaction.optString("keyword"));
                 } else if (type == EntityRule.TYPE_ANSWER) {
                     to = jaction.optString("to");
                     if (!TextUtils.isEmpty(to)) {
@@ -467,21 +468,21 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                     args.putLongArray("disabled", new long[]{rule.folder});
                     args.putLong("rule", rule.id);
 
-                    FragmentDialogFolder fragment = new FragmentDialogFolder();
+                    FragmentDialogSelectFolder fragment = new FragmentDialogSelectFolder();
                     fragment.setArguments(args);
                     fragment.setTargetFragment(parentFragment, FragmentRules.REQUEST_MOVE);
                     fragment.show(parentFragment.getParentFragmentManager(), "rule:move");
                 }
 
                 private void onActionCopy() {
-                    LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
-                    lbm.sendBroadcast(
-                            new Intent(ActivityView.ACTION_EDIT_RULE)
-                                    .putExtra("id", rule.id)
-                                    .putExtra("account", rule.account)
-                                    .putExtra("folder", rule.folder)
-                                    .putExtra("protocol", protocol)
-                                    .putExtra("copy", true));
+                    Bundle args = new Bundle();
+                    args.putLong("rule", rule.id);
+                    args.putInt("type", protocol); // account selector
+
+                    FragmentDialogSelectAccount fragment = new FragmentDialogSelectAccount();
+                    fragment.setArguments(args);
+                    fragment.setTargetFragment(parentFragment, FragmentRules.REQUEST_RULE_COPY_ACCOUNT);
+                    fragment.show(parentFragment.getParentFragmentManager(), "rule:copy:account");
                 }
             });
 
