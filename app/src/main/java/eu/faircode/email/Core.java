@@ -2917,24 +2917,27 @@ class Core {
         // Deferred rule (download headers, body, etc)
         DB db = DB.getInstance(context);
 
-        long id = jargs.getLong(0);
-        if (id < 0) {
-            List<EntityRule> rules = db.rule().getEnabledRules(message.folder, true);
-            for (EntityRule rule : rules)
-                if (rule.matches(context, message, null, null)) {
-                    rule.execute(context, message);
-                    if (rule.stop)
-                        break;
-                }
-        } else {
-            EntityRule rule = db.rule().getRule(id);
-            if (rule == null)
-                throw new IllegalArgumentException("Rule not found id=" + id);
+        try {
+            db.beginTransaction();
 
-            if (!message.content)
-                throw new IllegalArgumentException("Message without content id=" + rule.id + ":" + rule.name);
+            long id = jargs.getLong(0);
+            if (id < 0) {
+                List<EntityRule> rules = db.rule().getEnabledRules(message.folder, true);
+                EntityRule.run(context, rules, message, null, null);
+            } else {
+                EntityRule rule = db.rule().getRule(id);
+                if (rule == null)
+                    throw new IllegalArgumentException("Rule not found id=" + id);
 
-            rule.execute(context, message);
+                if (!message.content)
+                    throw new IllegalArgumentException("Message without content id=" + rule.id + ":" + rule.name);
+
+                rule.execute(context, message);
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
     }
 
@@ -3011,7 +3014,7 @@ class Core {
                     imessages.length > 0 && folder.last_sync_count != null &&
                     imessages.length == folder.last_sync_count) {
                 // Check if last message known as new messages indicator
-                MessageHelper helper = new MessageHelper((MimeMessage) imessages[imessages.length - 1], context);
+                MessageHelper helper = new MessageHelper((MimeMessage) imessages[reversed ? 0 : imessages.length - 1], context);
                 String msgid = helper.getPOP3MessageID();
                 if (msgid != null) {
                     int count = db.message().countMessageByMsgId(folder.id, msgid, true);
@@ -3022,9 +3025,33 @@ class Core {
                 }
             }
 
+            // Index IDs
+            int flagged = 0;
+            Map<String, TupleUidl> uidlTuple = new HashMap<>();
+            Map<String, TupleUidl> msgIdTuple = new HashMap<>();
+            for (TupleUidl id : ids) {
+                if (id.ui_flagged && !id.ui_hide)
+                    flagged++;
+
+                if (id.uidl != null) {
+                    if (uidlTuple.containsKey(id.uidl))
+                        Log.w(account.name + " POP duplicate uidl/msgid=" + id.uidl + "/" + id.msgid);
+                    uidlTuple.put(id.uidl, id);
+                }
+
+                if (id.msgid != null) {
+                    if (msgIdTuple.containsKey(id.msgid))
+                        Log.w(account.name + " POP duplicate msgid/uidl=" + id.msgid + "/" + id.uidl);
+                    msgIdTuple.put(id.msgid, id);
+                }
+            }
+
+            max = Math.min(max + flagged, imessages.length);
+
             EntityLog.log(context, account.name + " POP" +
                     " device=" + ids.size() +
                     " server=" + imessages.length +
+                    " flagged=" + flagged +
                     " max=" + max + "/" + account.max_messages +
                     " reversed=" + reversed +
                     " last=" + folder.last_sync_count +
@@ -3032,24 +3059,6 @@ class Core {
                     " uidl=" + hasUidl);
 
             if (sync) {
-                // Index IDs
-                Map<String, TupleUidl> uidlTuple = new HashMap<>();
-                for (TupleUidl id : ids) {
-                    if (id.uidl != null) {
-                        if (uidlTuple.containsKey(id.uidl))
-                            Log.w(account.name + " POP duplicate uidl/msgid=" + id.uidl + "/" + id.msgid);
-                        uidlTuple.put(id.uidl, id);
-                    }
-                }
-
-                Map<String, TupleUidl> msgIdTuple = new HashMap<>();
-                for (TupleUidl id : ids)
-                    if (id.msgid != null) {
-                        if (msgIdTuple.containsKey(id.msgid))
-                            Log.w(account.name + " POP duplicate msgid/uidl=" + id.msgid + "/" + id.uidl);
-                        msgIdTuple.put(id.msgid, id);
-                    }
-
                 // Fetch UIDLs
                 if (hasUidl) {
                     FetchProfile ifetch = new FetchProfile();
@@ -3424,8 +3433,9 @@ class Core {
                 int hidden = db.message().setMessagesUiHide(folder.id, Math.abs(account.max_messages));
                 int deleted = db.message().deleteMessagesKeep(folder.id, Math.abs(account.max_messages) + 100);
                 EntityLog.log(context, account.name + " POP" +
-                        " cleanup max=" + account.max_messages + "" +
-                        " hidden=" + hidden + " deleted=" + deleted);
+                        " cleanup max=" + account.max_messages +
+                        " hidden=" + hidden +
+                        " deleted=" + deleted);
             }
 
             folder.last_sync_count = imessages.length;
@@ -4952,14 +4962,10 @@ class Core {
         DB db = DB.getInstance(context);
         try {
             boolean executed = false;
-            if (pro)
-                for (EntityRule rule : rules)
-                    if (rule.matches(context, message, headers, html)) {
-                        rule.execute(context, message);
-                        executed = true;
-                        if (rule.stop)
-                            break;
-                    }
+            if (pro) {
+                int applied = EntityRule.run(context, rules, message, headers, html);
+                executed = (applied > 0);
+            }
 
             if (EntityFolder.INBOX.equals(folder.type))
                 if (message.from != null) {
@@ -5257,6 +5263,13 @@ class Core {
                         " ignored=" + message.ui_ignored +
                         " hide=" + message.ui_hide);
             else {
+                // Prevent reappearing notifications
+                EntityMessage msg = db.message().getMessage(message.id);
+                if (msg == null || msg.ui_ignored) {
+                    Log.i("Notify skip id=" + message.id + " msg=" + (msg != null));
+                    continue;
+                }
+
                 Integer current = newMessages.get(group);
                 newMessages.put(group, current == null ? 1 : current + 1);
 
@@ -5290,11 +5303,6 @@ class Core {
                     remove.remove(id);
                     Log.i("Notify existing=" + id);
                 } else {
-                    EntityMessage msg = db.message().getMessage(message.id);
-                    if (msg == null || msg.ui_ignored) {
-                        Log.i("Notify skip id=" + message.id + " msg=" + (msg != null));
-                        continue;
-                    }
                     boolean existing = remove.contains(-id);
                     if (existing) {
                         if (message.content && notify_preview) {
@@ -5323,10 +5331,15 @@ class Core {
                 continue;
             }
 
+            boolean summary = (notify_summary ||
+                    (group != 0 &&
+                            groupMessages.get(group).size() > 0 &&
+                            groupMessages.get(group).get(0).accountSummary));
+
             // Build notifications
             List<NotificationCompat.Builder> notifications = getNotificationUnseen(context,
                     group, groupMessages.get(group),
-                    notify_summary, current - prev, current,
+                    summary, current - prev, current,
                     redacted);
 
             Log.i("Notify group=" + group +
@@ -5365,7 +5378,7 @@ class Core {
                 if ((id == 0 && !prev.equals(current)) || add.contains(id)) {
                     // https://developer.android.com/training/wearables/notifications/bridger#non-bridged
                     if (id == 0) {
-                        if (!notify_summary)
+                        if (!summary)
                             builder.setLocalOnly(true);
                     } else {
                         if (wearable_preview ? id < 0 : update.contains(id))
@@ -5528,6 +5541,9 @@ class Core {
                                     ? NotificationCompat.CATEGORY_EMAIL : NotificationCompat.CATEGORY_STATUS)
                             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                             .setAllowSystemGeneratedContextualActions(false);
+
+            if (group != 0 && messages.size() > 0)
+                builder.setSubText(messages.get(0).accountName);
 
             if (notify_summary) {
                 builder.setOnlyAlertOnce(new_messages <= 0);

@@ -247,6 +247,7 @@
     <string name="title_setup_done">Gotovo</string>
     <string name="title_setup_still">Još treba uraditi</string>
     <string name="title_setup_error">Greška</string>
+    <string name="title_setup_manual_setup">Ručno postavljanje</string>
     <string name="title_setup_pop">Koristi POP3 (nije preporučeno)</string>
     <string name="title_setup_recent">Koristi \'recent\' za višestruke e-mail klijente</string>
     <string name="title_setup_configuring">Podešavanje računa &#8230;</string>
@@ -803,7 +804,7 @@
     <string name="title_advanced_sender_hint">Većina provajdera ne dopušta modifikovane adrese pošiljaoca</string>
     <string name="title_advanced_bcc_hint">Adresa se neće prikazivati, ali će biti dodana tokom slanja</string>
     <string name="title_advanced_internal_hint">Pojavit će se upozorenje tokom slanja na drugu domenu</string>
-    <string name="title_advanced_uri" comment="title_advanced_uri&#10;Remark for button to link contact to identity">Detalji izabranog kontakta koristit če se za vCard priloge</string>
+    <string name="title_advanced_uri">Detalji izabranog kontakta koristit če se za vCard priloge</string>
     <string name="title_advanced_e2e_encryption">Opcija za E2E (end-to-end) šifriranje</string>
     <string name="title_advanced_display_harmful_hint">Isključivanje ove opcije može biti štetno po vašu privatnost</string>
     <string name="title_advanced_display_hidden_hint">Ovo može rezultirati u čudnom izgledu i duplim tekstovima</string>
@@ -1464,6 +1465,7 @@
     <string name="title_search_with_size">Poruke veličine preko</string>
     <string name="title_search_in_trash">U otpadu</string>
     <string name="title_search_in_junk">U spamu</string>
+    <string name="title_search_with_range">Raspon datuma</string>
     <string name="title_search_with_before">Prije</string>
     <string name="title_search_with_after">Poslije</string>
     <string name="title_search_device_first">Prvo traži na uređaju</string>
@@ -1567,11 +1569,13 @@
     <string name="title_rule_caption">Uredi pravilo</string>
     <string name="title_rule_title">Pravilo se primjenjuje na</string>
     <string name="title_rule_name">Naziv</string>
+    <string name="title_rule_group">Grupa</string>
     <string name="title_rule_order">Redoslijed</string>
     <string name="title_rule_enabled">Uključeno</string>
     <string name="title_rule_daily">Pokreni dnevno</string>
     <string name="title_rule_age">Poruke starije od (dana)</string>
     <string name="title_rule_stop">Zaustavi obradu pravila nakon izvršavanja ovog pravila</string>
+    <string name="title_rule_stop_remark">Ako je pravilo dio neke grupe, zaustavit će se obrada svih pravila ove grupe</string>
     <string name="title_rule_sender">Pošiljalac sadrži</string>
     <string name="title_rule_sender_known">Pošiljalac je u kontaktima</string>
     <string name="title_rule_recipient">Primalac sadrži</string>

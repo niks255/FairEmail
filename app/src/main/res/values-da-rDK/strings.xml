@@ -234,6 +234,7 @@
     <string name="title_setup_done">Udført</string>
     <string name="title_setup_still">Resterer stadig</string>
     <string name="title_setup_error">Fejl</string>
+    <string name="title_setup_manual_setup">Manuel opsætning</string>
     <string name="title_setup_pop">Brug POP3 (anbefales ikke)</string>
     <string name="title_setup_recent">Brug \'recent\' for flere e-mailklienter</string>
     <string name="title_setup_configuring">Opsætter konto &#8230;</string>
@@ -1448,6 +1449,7 @@
     <string name="title_search_with_size">Beskedstørrelse over</string>
     <string name="title_search_in_trash">I papirkurven</string>
     <string name="title_search_in_junk">I Spam</string>
+    <string name="title_search_with_range">Datointerval</string>
     <string name="title_search_with_before">Før</string>
     <string name="title_search_with_after">Efter</string>
     <string name="title_search_device_first">Søg på enhed først</string>
@@ -1551,11 +1553,13 @@
     <string name="title_rule_caption">Redigér regel</string>
     <string name="title_rule_title">Regel gælder for</string>
     <string name="title_rule_name">Navn</string>
+    <string name="title_rule_group">Gruppe</string>
     <string name="title_rule_order">Rækkefølge</string>
     <string name="title_rule_enabled">Aktiveret</string>
     <string name="title_rule_daily">Kør kun dagligt</string>
     <string name="title_rule_age">Beskeder ældre end (dage)</string>
     <string name="title_rule_stop">Stop afvikling af regler efter eksekvering af denne regel</string>
+    <string name="title_rule_stop_remark">Er reglen er en del af en gruppe, stoppes behandlingen af alle regler i denne gruppe</string>
     <string name="title_rule_sender">Afsender indeholder</string>
     <string name="title_rule_sender_known">Afsender er en kontakt</string>
     <string name="title_rule_recipient">Modtager indeholder</string>

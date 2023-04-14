@@ -6,6 +6,30 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Saltopus](https://en.wikipedia.org/wiki/Saltopus)
 
+### 1.2063 - 2023-04-13
+
+* Fixed sending via Outlook graph in some cases
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2062 - 2023-04-12
+
+* Fixed importing settings
+* Added advanced account option for summary only notifications
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2061 - 2023-04-10
+
+* Added filter rule groups (stop processing per group)
+* Added executing of filter rules by automation apps, see [the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq71)
+* Improved auto-discovery via DNS SRV records
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Material Components](https://github.com/material-components/material-components-android)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2060 - 2023-04-01
 
 * Added draft message printing

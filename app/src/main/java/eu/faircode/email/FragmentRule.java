@@ -43,6 +43,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -86,6 +87,7 @@ public class FragmentRule extends FragmentBase {
 
     private TextView tvFolder;
     private EditText etName;
+    private AutoCompleteTextView etGroup;
     private EditText etOrder;
     private CheckBox cbEnabled;
     private CheckBox cbDaily;
@@ -184,6 +186,7 @@ public class FragmentRule extends FragmentBase {
     private Group grpDelete;
     private Group grpLocalOnly;
 
+    private ArrayAdapter<String> adapterGroup;
     private ArrayAdapter<String> adapterDay;
     private ArrayAdapter<Action> adapterAction;
     private ArrayAdapter<EntityIdentity> adapterIdentity;
@@ -268,6 +271,7 @@ public class FragmentRule extends FragmentBase {
 
         tvFolder = view.findViewById(R.id.tvFolder);
         etName = view.findViewById(R.id.etName);
+        etGroup = view.findViewById(R.id.etGroup);
         etOrder = view.findViewById(R.id.etOrder);
         cbEnabled = view.findViewById(R.id.cbEnabled);
         cbDaily = view.findViewById(R.id.cbDaily);
@@ -366,6 +370,10 @@ public class FragmentRule extends FragmentBase {
         grpAutomation = view.findViewById(R.id.grpAutomation);
         grpDelete = view.findViewById(R.id.grpDelete);
         grpLocalOnly = view.findViewById(R.id.grpLocalOnly);
+
+        adapterGroup = new ArrayAdapter<>(getContext(), R.layout.spinner_item1_dropdown, android.R.id.text1);
+        etGroup.setThreshold(1);
+        etGroup.setAdapter(adapterGroup);
 
         cbDaily.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -837,6 +845,7 @@ public class FragmentRule extends FragmentBase {
                 DB db = DB.getInstance(context);
                 data.account = db.account().getAccount(aid);
                 data.folder = db.folder().getFolder(fid);
+                data.groups = db.rule().getGroups();
                 data.identities = db.identity().getSynchronizingIdentities(aid);
                 data.answers = db.answer().getAnswers(false);
 
@@ -848,6 +857,9 @@ public class FragmentRule extends FragmentBase {
                 tvFolder.setText(String.format("%s:%s",
                         data.account == null ? "" : data.account.name,
                         data.folder.getDisplayName(getContext())));
+
+                adapterGroup.clear();
+                adapterGroup.addAll(data.groups);
 
                 adapterIdentity.clear();
                 adapterIdentity.addAll(data.identities);
@@ -1168,6 +1180,7 @@ public class FragmentRule extends FragmentBase {
                         JSONObject jschedule = jcondition.optJSONObject("schedule");
 
                         etName.setText(rule == null ? args.getString("subject") : rule.name);
+                        etGroup.setText(rule == null ? null : rule.group);
                         etOrder.setText(rule == null ? null : Integer.toString(rule.order));
                         cbEnabled.setChecked(rule == null || rule.enabled);
                         cbDaily.setChecked(rule != null && rule.daily);
@@ -1403,6 +1416,7 @@ public class FragmentRule extends FragmentBase {
             args.putLong("id", id);
             args.putLong("folder", folder);
             args.putString("name", etName.getText().toString());
+            args.putString("group", etGroup.getText().toString().trim());
             args.putString("order", etOrder.getText().toString());
             args.putBoolean("enabled", cbEnabled.isChecked());
             args.putBoolean("daily", cbDaily.isChecked());
@@ -1426,6 +1440,7 @@ public class FragmentRule extends FragmentBase {
                     long id = args.getLong("id");
                     long folder = args.getLong("folder");
                     String name = args.getString("name");
+                    String group = args.getString("group");
                     String order = args.getString("order");
                     boolean enabled = args.getBoolean("enabled");
                     boolean daily = args.getBoolean("daily");
@@ -1435,6 +1450,9 @@ public class FragmentRule extends FragmentBase {
 
                     if (TextUtils.isEmpty(name))
                         throw new IllegalArgumentException(context.getString(R.string.title_rule_name_missing));
+
+                    if (TextUtils.isEmpty(group))
+                        group = null;
 
                     JSONObject jcondition = new JSONObject(condition);
                     JSONObject jsender = jcondition.optJSONObject("sender");
@@ -1463,6 +1481,7 @@ public class FragmentRule extends FragmentBase {
                         EntityRule rule = new EntityRule();
                         rule.folder = folder;
                         rule.name = name;
+                        rule.group = group;
                         rule.order = Integer.parseInt(order);
                         rule.enabled = enabled;
                         rule.daily = daily;
@@ -1475,6 +1494,7 @@ public class FragmentRule extends FragmentBase {
                         EntityRule rule = db.rule().getRule(id);
                         rule.folder = folder;
                         rule.name = name;
+                        rule.group = group;
                         rule.order = Integer.parseInt(order);
                         rule.enabled = enabled;
                         rule.daily = daily;
@@ -1682,6 +1702,7 @@ public class FragmentRule extends FragmentBase {
     private static class RefData {
         EntityAccount account;
         EntityFolder folder;
+        List<String> groups;
         List<EntityIdentity> identities;
         List<EntityAnswer> answers;
     }

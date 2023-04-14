@@ -234,6 +234,7 @@
     <string name="title_setup_done">Έγινε</string>
     <string name="title_setup_still">Απομένουν να γίνουν</string>
     <string name="title_setup_error">Σφάλμα</string>
+    <string name="title_setup_manual_setup">Χειροκίνητη ρύθμιση</string>
     <string name="title_setup_pop">Χρήση POP3 (δεν συνιστάται)</string>
     <string name="title_setup_recent">Χρήση \"recent\" για πολλαπλούς πελάτες ηλ. ταχυδρομείου</string>
     <string name="title_setup_configuring">Ρύθμιση λογαριασμού &#8230;</string>
@@ -787,7 +788,7 @@
     <string name="title_advanced_sender_hint">Οι περισσότεροι πάροχοι δεν επιτρέπουν τροποποιημένες διευθύνσεις αποστολέων</string>
     <string name="title_advanced_bcc_hint">Η διεύθυνση δεν θα προβληθεί αλλά θα προστεθεί κατά την αποστολή</string>
     <string name="title_advanced_internal_hint">Θα υπάρξει μια προειδοποίηση κατά την αποστολή προς άλλον τομέα</string>
-    <string name="title_advanced_uri" comment="title_advanced_uri&#10;Remark for button to link contact to identity">Οι λεπτομέρειες της επιλεγμένης επαφής θα χρησιμοποιηθούν για τα συνημμένα vCard</string>
+    <string name="title_advanced_uri">Οι λεπτομέρειες της επιλεγμένης επαφής θα χρησιμοποιηθούν για τα συνημμένα vCard</string>
     <string name="title_advanced_e2e_encryption">Επιλογές για από άκρο σε άκρο κρυπτογράφηση</string>
     <string name="title_advanced_display_harmful_hint">Η απενεργοποίηση αυτής της επιλογής μπορεί να θέσει σε κίνδυνο τα προσωπικά σας δεδομένα</string>
     <string name="title_advanced_display_hidden_hint">Ενδέχεται να προκαλέσει προβλήματα προβολής ή διπλά κείμενα</string>
@@ -1445,6 +1446,7 @@
     <string name="title_search_with_size">Μέγεθος μηνύματος μεγαλύτερο από</string>
     <string name="title_search_in_trash">Στον κάδο απορριμμάτων</string>
     <string name="title_search_in_junk">Στα Ανεπιθύμητα</string>
+    <string name="title_search_with_range">Χρονική περίοδος</string>
     <string name="title_search_with_before">Πριν από</string>
     <string name="title_search_with_after">Μετά από</string>
     <string name="title_search_device_first">Αναζήτηση πρώτα στη συσκευή</string>
@@ -1548,11 +1550,13 @@
     <string name="title_rule_caption">Επεξεργασία κανόνα</string>
     <string name="title_rule_title">Ο κανόνας εφαρμόζεται σε</string>
     <string name="title_rule_name">Όνομα</string>
+    <string name="title_rule_group">Ομάδα</string>
     <string name="title_rule_order">Σειρά</string>
     <string name="title_rule_enabled">Ενεργοποιημένος</string>
     <string name="title_rule_daily">Εκτέλεση μόνο μία φορά κάθε ημέρα</string>
     <string name="title_rule_age">Μηνύματα παλαιότερα από (ημέρες)</string>
     <string name="title_rule_stop">Διακοπή επεξεργασίας κανόνων μετά την εκτέλεση αυτού του κανόνα</string>
+    <string name="title_rule_stop_remark">Εάν ο κανόνας είναι μέρος μιας ομάδας, η επεξεργασία όλων των κανόνων αυτής της ομάδας θα διακοπεί</string>
     <string name="title_rule_sender">Ο αποστολέας περιέχει</string>
     <string name="title_rule_sender_known">Ο αποστολέας είναι μια επαφή</string>
     <string name="title_rule_recipient">Ο παραλήπτης περιέχει</string>

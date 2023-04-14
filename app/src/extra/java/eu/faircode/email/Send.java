@@ -116,8 +116,12 @@ public class Send {
             JSONObject jreply = new JSONObject(queue.remove(0));
             Log.i("Send reply=" + jreply);
 
-            if (jreply.has("error"))
-                throw new IOException("Error: " + jreply.getString("error"));
+            if (jreply.has("error")) {
+                String error = jreply.getString("error");
+                if ("400".equals(error))
+                    error += " - try lower limits";
+                throw new IOException("Error: " + error);
+            }
 
             result = jreply.getString("url") +
                     "#" + Base64.encodeToString(secret, Base64.URL_SAFE | Base64.NO_PADDING | Base64.NO_WRAP);
