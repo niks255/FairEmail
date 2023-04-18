@@ -2405,8 +2405,8 @@ public class Log {
                 if (schedule) {
                     int minuteStart = prefs.getInt("schedule_start", 0);
                     int minuteEnd = prefs.getInt("schedule_end", 0);
-                    int minuteStartWeekend = prefs.getInt("schedule_start_weekend", 0);
-                    int minuteEndWeekend = prefs.getInt("schedule_end_weekend", 0);
+                    int minuteStartWeekend = prefs.getInt("schedule_start_weekend", minuteStart);
+                    int minuteEndWeekend = prefs.getInt("schedule_end_weekend", minuteEnd);
 
                     size += write(os, String.format("schedule %s...%s weekend %s...%s\r\n",
                             CalendarHelper.formatHour(context, minuteStart),
@@ -2491,7 +2491,7 @@ public class Log {
                                 " sync=" + account.synchronize +
                                 " exempted=" + account.poll_exempted +
                                 " poll=" + account.poll_interval +
-                                " ondemand=" + account.ondemand +
+                                " ondemand=" + account.ondemand + (account.ondemand ? " !!!" : "") +
                                 " msgs=" + content + "/" + messages + " max=" + account.max_messages +
                                 " ops=" + db.operation().getOperationCount(account.id) +
                                 " schedule=" + (!ignore_schedule) + (ignore_schedule ? " !!!" : "") +

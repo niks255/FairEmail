@@ -1001,9 +1001,10 @@ public class HtmlHelper {
                                 else if (key.endsWith("bottom"))
                                     p[0] = null;
 
-                                if (p[0] != null)
+                                // Both margin and padding can be set
+                                if (p[0] != null && !"true".equals(element.attr("x-line-before")))
                                     element.attr("x-line-before", Boolean.toString(p[0] > 0.5));
-                                if (p[2] != null)
+                                if (p[2] != null && !"true".equals(element.attr("x-line-after")))
                                     element.attr("x-line-after", Boolean.toString(p[2] > 0.5));
                             }
                             break;
@@ -3267,6 +3268,7 @@ public class HtmlHelper {
                             ssb.append('\n');
 
                     if ("true".equals(element.attr("x-line-before")) &&
+                            !"true".equals(element.attr("x-paragraph")) &&
                             (prev == null || !"true".equals(prev.attr("x-line-after"))) &&
                             ssb.length() > 0 && ssb.charAt(ssb.length() - 1) == '\n')
                         ssb.append('\n');
@@ -3695,6 +3697,7 @@ public class HtmlHelper {
                             ssb.append('\n');
 
                     if ("true".equals(element.attr("x-line-after")) &&
+                            !"true".equals(element.attr("x-paragraph")) &&
                             ssb.length() > 0 && ssb.charAt(ssb.length() - 1) == '\n')
                         ssb.append('\n');
 
