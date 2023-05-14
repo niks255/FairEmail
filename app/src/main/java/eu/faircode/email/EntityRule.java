@@ -499,6 +499,14 @@ public class EntityRule {
                     return false;
             }
 
+            if (jcondition.has("younger")) {
+                int younger = jcondition.getInt("younger");
+                Calendar y = Calendar.getInstance();
+                y.add(Calendar.HOUR_OF_DAY, -younger);
+                if (message.received < y.getTimeInMillis())
+                    return false;
+            }
+
             // Safeguard
             if (jsender == null &&
                     jrecipient == null &&
@@ -507,7 +515,8 @@ public class EntityRule {
                     jheader == null &&
                     jbody == null &&
                     jdate == null &&
-                    jschedule == null)
+                    jschedule == null &&
+                    !jcondition.has("younger"))
                 return false;
         } catch (JSONException ex) {
             Log.e(ex);
@@ -680,6 +689,11 @@ public class EntityRule {
 
     private boolean onActionHide(Context context, EntityMessage message) {
         DB db = DB.getInstance(context);
+
+        EntityFolder folder = db.folder().getFolder(message.folder);
+        if (EntityFolder.DRAFTS.equals(folder.type))
+            return false;
+
         db.message().setMessageSnoozed(message.id, Long.MAX_VALUE);
         db.message().setMessageUiIgnored(message.id, true);
         EntityMessage.snooze(context, message.id, Long.MAX_VALUE);
@@ -1331,13 +1345,14 @@ public class EntityRule {
             String sender = ((InternetAddress) from).getAddress();
             String name = MessageHelper.formatAddresses(new Address[]{from});
 
-            if (TextUtils.isEmpty(sender) ||
-                    !Helper.EMAIL_ADDRESS.matcher(sender).matches())
+            if (TextUtils.isEmpty(sender))
                 continue;
 
             boolean regex = false;
             if (block_domain) {
                 String domain = UriHelper.getEmailDomain(sender);
+                if (domain != null)
+                    domain = domain.trim();
                 if (!TextUtils.isEmpty(domain) && !domains.contains(domain)) {
                     String parent = UriHelper.getParentDomain(context, domain);
                     if (parent != null)

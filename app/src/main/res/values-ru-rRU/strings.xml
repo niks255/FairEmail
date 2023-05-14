@@ -102,6 +102,7 @@
     <string name="title_block">Блокировать %1$s</string>
     <string name="title_block_sender">Блокировать отправителя</string>
     <string name="title_block_sender_domain">Блокировать домен \"%1$s\"</string>
+    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Блокировка означает автоматическое перемещение в папку спама</string>
     <string name="title_block_sender_hint">        Блокировка отправителя является бесплатной функцией.
         Блокировка домена отправителя использует фильтрующие правила, которые являются функцией pro.
     </string>
@@ -166,7 +167,7 @@
     <string name="title_list_identities">Идентификаторы</string>
     <string name="title_edit_account">Изменить учётную запись</string>
     <string name="title_edit_identity">Изменить идентификатор</string>
-    <string name="title_edit_folder">Редактировать папку</string>
+    <string name="title_edit_folder">Изменить папку</string>
     <string name="title_disable_gmail">Отключить приложение Gmail</string>
     <string name="title_setup">Настройки</string>
     <string name="title_setup_help">Справка</string>
@@ -608,6 +609,7 @@
     <string name="title_advanced_auto_block_sender">Автоматически блокировать отправителя при сообщении о спаме</string>
     <string name="title_advanced_auto_hide_answer">Автоматически скрывать кнопку ответа при прокрутке</string>
     <string name="title_advanced_swipe_reply">Жест вправо на раскрытом сообщении для ответа</string>
+    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">При перемещении диалога также перемещаются отправленные сообщения</string>
     <string name="title_advanced_default_snooze">Время повтора/задержки по умолчанию</string>
     <string name="title_advanced_default_folder">Выбрать папку по умолчанию</string>
     <string name="title_advanced_notifications">Настроить уведомления</string>
@@ -710,6 +712,7 @@
     <string name="title_advanced_classification">Классифицировать сообщения</string>
     <string name="title_advanced_class_min_chance">Минимальная вероятность класса: %1$s %%</string>
     <string name="title_advanced_class_min_difference">Минимальная разница между классами: %1$s %%</string>
+    <string name="title_advanced_show_filtered">Показывать значок фильтра при применении правил</string>
     <string name="title_advanced_language">Язык</string>
     <string name="title_advanced_language_system">Системный</string>
     <string name="title_advanced_lt">Интеграция с LanguageTool</string>
@@ -770,6 +773,7 @@
     <string name="title_advanced_send_reminders_hint">Показывать предупреждение, если отсутствует текст сообщения, тема или, возможно, отсутствует вложение</string>
     <string name="title_advanced_reply_move_hint">Сервер электронной почты всё ещё может добавлять сообщения в папку отправленных</string>
     <string name="title_advanced_compose_color_hint">Очень светлые или очень тёмные цвета сделают сообщение неразборчивым для получателя</string>
+    <string name="title_advanced_write_below_hint">Получатель может пропустить ваш ответ, например, при сокращении длинного сообщения</string>
     <string name="title_advanced_attach_new_hint">В противном случае общие адреса или файлы добавляются к текущему черновику</string>
     <string name="title_advanced_usenet_hint">Вставлять \"-- \" между текстом и подписью</string>
     <string name="title_advanced_remove_signature_hint">Может привести к слишком маленькому или большому убиранию текста</string>
@@ -1405,6 +1409,7 @@
     <string name="title_attachment_keywords">attached,attachment,attachments,included,вложение,вложения,вложении,приложено</string>
     <string name="title_attachment_reminder">Вы хотите добавить вложение?</string>
     <string name="title_attachment_warning">Потенциально опасно: %1$s</string>
+    <string name="title_attachment_filename">Некоторые почтовые клиенты не могут обрабатывать имена файлов длиной более 60 символов</string>
     <string name="title_plain_reminder">Всё форматирование будет утрачено</string>
     <string name="title_dsn_reminder">Жёсткие отказы наносят ущерб репутации электронной почты оригинального отправителя!</string>
     <string name="title_size_reminder">Сообщение (%1$s) больше, чем лимит сервера (%2$s)</string>
@@ -1602,6 +1607,7 @@
     <string name="title_rule_time_before">Получено до</string>
     <string name="title_rule_time_rel">Относительное время (получения) между</string>
     <string name="title_rule_time_every_day">Ежедневно</string>
+    <string name="title_rule_younger">Письма новее (час.)</string>
     <string name="title_rule_regex">Регулярное выражение</string>
     <string name="title_rule_and">И</string>
     <string name="title_rule_action">Действие</string>
@@ -1629,6 +1635,7 @@
     <string name="title_rule_keyword_missing">Ключевое слово отсутствует</string>
     <string name="title_rule_automation_hint">Это отправит цель \"%1$s\" с дополнениями \"%2$s\"</string>
     <string name="title_rule_delete_hint">Окончательное удаление является необратимым, поэтому убедитесь в корректности условий правила!</string>
+    <string name="title_rule_edit_group">Изменить группу&#8230;</string>
     <string name="title_rule_execute">Выполнить</string>
     <string name="title_rule_applied">Затронутые сообщения: %1$d</string>
     <string name="title_rule_check">Проверить</string>
@@ -1780,7 +1787,7 @@
     </string>
     <string name="title_hint_important">Важно</string>
     <string name="title_hint_sync">Загрузка сообщений может занять некоторое время в зависимости от скорости провайдера, интернет-соединения и устройства, а также от количества сообщений. Во время загрузки сообщений приложение может реагировать медленнее.</string>
-    <string name="title_hint_sync_note">По умолчанию, не все сообщения будут загружены для ограничения использования места в хранилище, заряда батареи и трафика. Это можно изменить, удерживая папку в списке папок и выбрав \"Синхронизировать ещё\".</string>
+    <string name="title_hint_sync_note">По умолчанию загружаются не все сообщения, чтобы ограничить использование памяти, батареи и передачи данных. Это поведение можно изменить долгим нажатием на папку в списке папок и выбрав \"Получить больше сообщений\".</string>
     <string name="title_hint_battery">Поскольку FairEmail по умолчанию всегда получает сообщения, Android считает его всё время активным. Поэтому может показаться, что FairEmail всегда использует батарею, хотя на самом деле это не так.</string>
     <string name="title_hint_reformat">По умолчанию FairEmail переформатирует сообщения по соображениям конфиденциальности и безопасности. Чтобы просмотреть исходное сообщение, нажмите значок \"полный экран\" над текстом сообщения.</string>
     <string name="title_hint_design">Дизайн преднамеренно не отвлекающий, но сохраняет высокую функциональность. Существует множество вариантов для настройки внешнего вида, но пожалуйста, поймите, что невозможно сделать всех полностью счастливыми одновременно.</string>

@@ -3503,7 +3503,32 @@ class Core {
 
             db.folder().setFolderSyncState(folder.id, "syncing");
 
-            String[] userFlags = ifolder.getPermanentFlags().getUserFlags();
+            Flags flags = ifolder.getPermanentFlags();
+
+            try {
+                List<String> f = new ArrayList<>();
+                if (flags != null) {
+                    if (flags.contains(Flags.Flag.ANSWERED))
+                        f.add("\\Answered");
+                    if (flags.contains(Flags.Flag.DELETED))
+                        f.add("\\Deleted");
+                    if (flags.contains(Flags.Flag.DRAFT))
+                        f.add("\\Draft");
+                    if (flags.contains(Flags.Flag.FLAGGED))
+                        f.add("\\Flagged");
+                    if (flags.contains(Flags.Flag.RECENT))
+                        f.add("\\Recent");
+                    if (flags.contains(Flags.Flag.SEEN))
+                        f.add("\\Seen");
+                    if (flags.contains(Flags.Flag.USER))
+                        f.add("\\*");
+                }
+                db.folder().setFolderFlags(folder.id, DB.Converters.fromStringArray(f.toArray(new String[0])));
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+
+            String[] userFlags = flags.getUserFlags();
             if (userFlags != null && userFlags.length > 0) {
                 List<String> keywords = new ArrayList<>(Arrays.asList(userFlags));
                 Collections.sort(keywords);
@@ -3619,7 +3644,6 @@ class Core {
                         : new ReceivedDateTerm(ComparisonTerm.GE, new Date(sync_time));
 
                 SearchTerm searchTerm = dateTerm;
-                Flags flags = ifolder.getPermanentFlags();
                 if (sync_nodate && !account.isOutlook())
                     searchTerm = new OrTerm(searchTerm, new ReceivedDateTerm(ComparisonTerm.LT, new Date(365 * 24 * 3600 * 1000L)));
                 if (sync_unseen && flags.contains(Flags.Flag.SEEN))
@@ -4691,7 +4715,7 @@ class Core {
 
             if (!Helper.equal(message.keywords, keywords) &&
                     !folder.read_only &&
-                    ifolder.getPermanentFlags().contains(Flags.Flag.USER)) {
+                    (ifolder.getPermanentFlags().contains(Flags.Flag.USER) || keywords.length > 0)) {
                 update = true;
                 message.keywords = keywords;
                 Log.i(folder.name + " updated id=" + message.id + " uid=" + message.uid +
@@ -5195,6 +5219,10 @@ class Core {
         boolean redacted = ((biometrics || !TextUtils.isEmpty(pin)) && !biometric_notify);
         if (redacted)
             notify_summary = true;
+        if (notify_screen_on &&
+                !(Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU ||
+                        Helper.hasPermission(context, "android.permission.TURN_SCREEN_ON")))
+            notify_screen_on = false;
 
         Log.i("Notify messages=" + messages.size() +
                 " biometrics=" + biometrics + "/" + biometric_notify +
@@ -6192,7 +6220,7 @@ class Core {
                 return false;
 
             semaphore.release();
-            yield();
+            microWait();
             return true;
         }
 
@@ -6237,7 +6265,7 @@ class Core {
 
             if (!backingoff) {
                 thread.interrupt();
-                yield();
+                microWait();
             }
         }
 
@@ -6252,7 +6280,7 @@ class Core {
             serial++;
         }
 
-        private void yield() {
+        private void microWait() {
             try {
                 // Give interrupted thread some time to acquire wake lock
                 Thread.sleep(YIELD_DURATION);

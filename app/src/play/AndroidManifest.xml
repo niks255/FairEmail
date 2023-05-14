@@ -562,6 +562,7 @@
                 <action android:name="${applicationId}.DISABLE" />
                 <action android:name="${applicationId}.INTERVAL" />
                 <action android:name="${applicationId}.RULE" />
+                <action android:name="${applicationId}.TEMPLATE" />
                 <action android:name="${applicationId}.DISCONNECT.ME" />
             </intent-filter>
         </service>
@@ -612,6 +613,11 @@
                 <action android:name="android.service.controls.ControlsProviderService" />
             </intent-filter>
         </service>
+
+        <service
+            android:name="WidgetUnifiedService"
+            android:exported="true"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <provider
             android:name=".FileProviderEx"
@@ -679,16 +685,12 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="WidgetUnifiedService"
-            android:exported="true"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-
         <receiver
             android:name=".ReceiverAutoStart"
             android:exported="true">
 
-            <intent-filter>
+            <!-- https://developer.android.com/guide/topics/manifest/intent-filter-element.html#priority -->
+            <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
 

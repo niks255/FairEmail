@@ -1938,6 +1938,10 @@ In these cases you might want to synchronize periodically, for example each hour
 Note that polling frequently (more than every 30-60 minutes) will likely use more battery power than synchronizing always
 because connecting to the server and comparing the local and remote messages are expensive operations.
 
+If you know that the connection (reception) is bad, it might be worthwhile to decrease the timeout value in the connection-settings tab page to 10–20 seconds,
+so that the app discovers earlier that no connection is possible,
+so that the mechanism as described in [this FAQ](#user-content-faq123) is used faster.
+
 [On some devices](https://dontkillmyapp.com/) it is necessary to *disable* battery optimizations (setup step 3) to keep connections to email servers open.
 In fact, leaving battery optimizations enabled can result in extra battery usage for all devices, even though this sounds contradictory!
 
@@ -1995,9 +1999,6 @@ an account will automatically be switched to periodically checking for new messa
 * The email server does not support push messages
 * The keep-alive interval is lower than 12 minutes
 
-In addition, the trash and spam folders will be automatically set to checking for new messages
-after three successive [too many simultaneous connections](#user-content-faq23) errors.
-
 <br />
 
 <a name="faq40"></a>
@@ -2021,6 +2022,9 @@ To reduce data usage, you could change these advanced receive settings:
 
 By default FairEmail does not download message texts and attachments larger than 256 KiB when there is a metered (mobile or paid Wi-Fi) internet connection.
 You can change this in the connection settings.
+
+You could enable to download only plain text only parts, but all messages will be without formatting (styling),
+and besides that, a plain text only part is not always sent, and worse, it is sometimes only a part of the message text, containing HTML and CCS.
 
 <br />
 
@@ -2213,7 +2217,9 @@ and within an account with special, system folders on top, followed by folders s
 Within each category the folders are sorted on (display) name.
 You can set the display name by long pressing a folder in the folder list and selecting *Edit properties*.
 
-The navigation (hamburger) menu item *Order folders* in the settings can be used to manually order the folders.
+The navigation (hamburger) menu item *Order folders* in the settings, or,
+alternatively, a button in the *Extra* section at the bottom of the main settings tab page,
+can be used to manually order the folders.
 
 <br />
 
@@ -2747,7 +2753,7 @@ Note that not all email servers support IMAP keywords.
 
 The automation action will broadcast the intent *eu.faircode.email.AUTOMATION* with the following string extras:
 
-* *name*
+* *rule*
 * *sender*
 * *subject*
 * *received* (ISO 8601 date/time)
@@ -2776,7 +2782,7 @@ Since version 1.2061 it is possible to execute rules with an automation app, lik
 
 
 ```
-(adb shell) am start-foreground-service -a eu.faircode.email.RULE --es account <account name> -e rule <unique rule name>
+(adb shell) am start-foreground-service -a eu.faircode.email.RULE --es account <account name> -es rule <unique rule name>
 ```
 
 Using rules is a pro feature.
@@ -3892,6 +3898,10 @@ Some companion apps ignore [local only](https://developer.android.com/training/w
 causing the summary notification (*nnn new messages*) to be bridged.
 Unfortunately, it is not possible to workaround this problem.
 
+Ongoing notifications shouldn't be bridged, but some companion apps bridge all notifications.
+This results in the "monitoring" status bar notification to be bridged.
+The workaround is to disable this notification, see [this FAQ](#user-content-faq2).
+
 <br />
 
 <a name="faq127"></a>
@@ -4421,6 +4431,8 @@ You might need to change [the Gmail IMAP settings](https://mail.google.com/mail/
 * When I mark a message in IMAP as deleted: Auto-Expunge off - Wait for the client to update the server.
 * When a message is marked as deleted and expunged from the last visible IMAP folder: Immediately delete the message forever
 
+<img alt="External image" src="https://github.com/M66B/FairEmail/blob/master/images/Gmail_IMAP_delete_settings.png" width="600" height="333" />
+
 Note that archived messages can be deleted only by moving them to the trash folder first.
 
 Some background: Gmail seems to have an additional message view for IMAP, which can be different from the main message view.
@@ -4898,6 +4910,9 @@ This means you can't update the F-Droid build with the Play store or GitHub vers
 However, it is possible to install the GitHub version over the Play store version,
 and the Play store app will do the same, when auto-updating isn't disabled for the app in the app description.
 
+The version in the [Play Store test program](https://play.google.com/apps/testing/eu.faircode.email) is more often updated,
+but not all GitHub releases will be released as Play Store test version.
+
 <br />
 
 <a name="faq174"></a>
@@ -5243,7 +5258,7 @@ Existing accounts or identities will never be deleted
 Please note that accounts are only considered the same if they are cloud synced and never if the same account is configured on different devices.
 
 All data is [end-to-end encrypted](https://en.wikipedia.org/wiki/End-to-end_encryption),
-which means that the cloud server can't see the data contents.
+which means that the cloud server, currently powered by AWS, can't see the data contents.
 The used encryption method is [AES-GCM-SIV](https://en.wikipedia.org/wiki/AES-GCM-SIV)
 using a 256 bit key derived from the username and password with [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) using SHA256 and 310,000 iterations.
 

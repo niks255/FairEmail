@@ -70,6 +70,7 @@ import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.TransactionTooLargeException;
 import android.os.ext.SdkExtensions;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -1780,7 +1781,7 @@ public class Log {
         }
     }
 
-    static EntityMessage getDebugInfo(Context context, int title, Throwable ex, String log) throws IOException, JSONException {
+    static EntityMessage getDebugInfo(Context context, String source, int title, Throwable ex, String log) throws IOException, JSONException {
         StringBuilder sb = new StringBuilder();
         sb.append(context.getString(title)).append("\n\n\n\n");
         sb.append(getAppInfo(context));
@@ -1813,7 +1814,8 @@ public class Log {
             draft.thread = draft.msgid;
             draft.to = new Address[]{myAddress()};
             draft.subject = context.getString(R.string.app_name) + " " +
-                    BuildConfig.VERSION_NAME + BuildConfig.REVISION + " debug info";
+                    BuildConfig.VERSION_NAME + BuildConfig.REVISION +
+                    " debug info - " + source;
             draft.received = new Date().getTime();
             draft.seen = true;
             draft.ui_seen = true;
@@ -1935,7 +1937,7 @@ public class Log {
                         new SimpleTask<Long>() {
                             @Override
                             protected Long onExecute(Context context, Bundle args) throws Throwable {
-                                return Log.getDebugInfo(context, R.string.title_unexpected_info_remark, ex, null).id;
+                                return Log.getDebugInfo(context, "report", R.string.title_unexpected_info_remark, ex, null).id;
                             }
 
                             @Override
@@ -2487,7 +2489,9 @@ public class Log {
                                 " " + (account.protocol == EntityAccount.TYPE_IMAP ? "IMAP" : "POP") +
                                 " [" + (account.provider == null ? "" : account.provider) +
                                 ":" + ServiceAuthenticator.getAuthTypeName(account.auth_type) + "]" +
-                                " " + account.host + ":" + account.port + "/" + account.encryption +
+                                " " + account.host + ":" + account.port + "/" +
+                                EmailService.getEncryptionName(account.encryption) +
+                                (account.insecure ? " !!!" : "") +
                                 " sync=" + account.synchronize +
                                 " exempted=" + account.poll_exempted +
                                 " poll=" + account.poll_interval +
@@ -2504,7 +2508,7 @@ public class Log {
                         if (folders.size() > 0)
                             Collections.sort(folders, folders.get(0).getComparator(context));
                         for (TupleFolderEx folder : folders)
-                            if (folder.synchronize) {
+                            if (folder.synchronize || account.protocol == EntityAccount.TYPE_POP) {
                                 int unseen = db.message().countUnseen(folder.id);
                                 int hidden = db.message().countHidden(folder.id);
                                 int notifying = db.message().countNotifying(folder.id);
@@ -2513,7 +2517,7 @@ public class Log {
                                         (folder.unified ? " unified" : "") +
                                         (folder.notify ? " notify" : "") +
                                         " poll=" + folder.poll + "/" + folder.poll_factor +
-                                        " days=" + folder.sync_days + "/" + folder.keep_days +
+                                        " days=" + getDays(folder.sync_days) + "/" + getDays(folder.keep_days) +
                                         " msgs=" + folder.content + "/" + folder.messages + "/" + folder.total +
                                         " ops=" + db.operation().getOperationCount(folder.id, null) +
                                         " unseen=" + unseen + " hidden=" + hidden + " notifying=" + notifying +
@@ -2551,7 +2555,9 @@ public class Log {
                                         (!identity.sender_extra ? "" : " edit" +
                                                 (identity.sender_extra_name ? "+name" : "-name") +
                                                 (identity.reply_extra_name ? "+copy" : "-copy")) +
-                                        " " + identity.host + ":" + identity.port + "/" + identity.encryption +
+                                        " " + identity.host + ":" + identity.port + "/" +
+                                        EmailService.getEncryptionName(identity.encryption) +
+                                        (identity.insecure ? " !!!" : "") +
                                         " ops=" + db.operation().getOperationCount(EntityOperation.SEND) +
                                         " " + identity.state +
                                         (identity.last_connected == null ? "" : " " + dtf.format(identity.last_connected)) +
@@ -2602,6 +2608,8 @@ public class Log {
                                 jfolder.put("selectable", folder.selectable);
                                 jfolder.put("inferiors", folder.inferiors);
                                 jfolder.put("auto_add", folder.auto_add);
+                                jfolder.put("flags", folder.flags == null ? null : TextUtils.join(",", folder.flags));
+                                jfolder.put("keywords", folder.keywords == null ? null : TextUtils.join(",", folder.keywords));
                                 jfolder.put("tbc", Boolean.TRUE.equals(folder.tbc));
                                 jfolder.put("rename", folder.rename);
                                 jfolder.put("tbd", Boolean.TRUE.equals(folder.tbd));
@@ -2635,6 +2643,13 @@ public class Log {
         } catch (Throwable ex) {
             Log.e(ex);
         }
+    }
+
+    private static String getDays(Integer days) {
+        if (days == null)
+            return "?";
+        else
+            return (days == Integer.MAX_VALUE ? "∞" : Integer.toString(days));
     }
 
     private static void attachNetworkInfo(Context context, long id, int sequence) {
@@ -2711,6 +2726,7 @@ public class Log {
                 size += write(os, "\r\n");
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                int timeout = prefs.getInt("timeout", EmailService.DEFAULT_CONNECT_TIMEOUT);
                 boolean metered = prefs.getBoolean("metered", true);
                 boolean roaming = prefs.getBoolean("roaming", true);
                 boolean rlah = prefs.getBoolean("rlah", true);
@@ -2719,6 +2735,7 @@ public class Log {
                 boolean require_validated_captive = prefs.getBoolean("require_validated_captive", true);
                 boolean vpn_only = prefs.getBoolean("vpn_only", false);
 
+                size += write(os, "timeout=" + timeout + "s" + (timeout == EmailService.DEFAULT_CONNECT_TIMEOUT ? "" : " !!!") + "\r\n");
                 size += write(os, "metered=" + metered + (metered ? "" : " !!!") + "\r\n");
                 size += write(os, "roaming=" + roaming + (roaming ? "" : " !!!") + "\r\n");
                 size += write(os, "rlah=" + rlah + (rlah ? "" : " !!!") + "\r\n");
@@ -3124,13 +3141,18 @@ public class Log {
 
                 size += write(os, "\r\n");
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    Map<Integer, Integer> exts = SdkExtensions.getAllExtensionVersions();
-                    for (Integer ext : exts.keySet())
-                        size += write(os, String.format("Extension %d / %d\r\n", ext, exts.get(ext)));
-                    if (exts.size() > 0)
-                        size += write(os, "\r\n");
-                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    try {
+                        Map<Integer, Integer> exts = SdkExtensions.getAllExtensionVersions();
+                        for (Integer ext : exts.keySet())
+                            size += write(os, String.format("Extension %d / %d\r\n", ext, exts.get(ext)));
+                        if (exts.size() > 0)
+                            size += write(os, "\r\n");
+
+                        size += write(os, String.format("Max. pick images: %d\r\n\r\n", MediaStore.getPickImagesMaxLimit()));
+                    } catch (Throwable ex) {
+                        size += write(os, String.format("%s\r\n", ex));
+                    }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     try {

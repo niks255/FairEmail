@@ -510,6 +510,8 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                         jsetting.put("type", "int");
                     else if (value instanceof Long)
                         jsetting.put("type", "long");
+                    else if (value instanceof Float)
+                        jsetting.put("type", "float");
                     else if (value instanceof String)
                         jsetting.put("type", "string");
                     else if (value != null) {
@@ -1170,6 +1172,9 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                                     else
                                         editor.putLong(key, (Long) value);
                                     break;
+                                case "float":
+                                    editor.putFloat(key, (Float) value);
+                                    break;
                                 case "string":
                                     editor.putString(key, (String) value);
                                     break;
@@ -1185,10 +1190,18 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                                             editor.putInt(key, i);
                                     } else if (value instanceof Long)
                                         editor.putLong(key, (Long) value);
+                                    else if (value instanceof Float || value instanceof Double)
+                                        editor.putFloat(key, (Float) value);
                                     else if (value instanceof String)
                                         editor.putString(key, (String) value);
-                                    else
-                                        throw new IllegalArgumentException("Unknown settings type key=" + key);
+                                    else {
+                                        String msg = "Unknown settings type" +
+                                                " key=" + key +
+                                                " value=" + value +
+                                                " type=" + (value == null ? null : value.getClass());
+                                        Log.e(msg);
+                                        postProgress(msg);
+                                    }
                             }
 
                             Log.i("Imported setting=" + key);

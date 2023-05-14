@@ -107,6 +107,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -227,6 +230,7 @@ public class FragmentCompose extends FragmentBase {
 
     private ViewGroup view;
     private View vwAnchorMenu;
+    private ScrollView scroll;
     private Spinner spIdentity;
     private EditText etExtra;
     private TextView tvDomain;
@@ -331,6 +335,8 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_SEND = 16;
     private static final int REQUEST_REMOVE_ATTACHMENTS = 17;
 
+    ActivityResultLauncher<PickVisualMediaRequest> pickImages;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -355,6 +361,16 @@ public class FragmentCompose extends FragmentBase {
 
         setTitle(R.string.page_compose);
         setSubtitle(getResources().getQuantityString(R.plurals.page_message, 1));
+
+        int max = (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                ? Integer.MAX_VALUE
+                : MediaStore.getPickImagesMaxLimit());
+
+        pickImages =
+                registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(max), uris -> {
+                    if (!uris.isEmpty())
+                        onAddImageFile(uris, false);
+                });
     }
 
     @Override
@@ -364,6 +380,7 @@ public class FragmentCompose extends FragmentBase {
 
         // Get controls
         vwAnchorMenu = view.findViewById(R.id.vwAnchorMenu);
+        scroll = view.findViewById(R.id.scroll);
         spIdentity = view.findViewById(R.id.spIdentity);
         etExtra = view.findViewById(R.id.etExtra);
         tvDomain = view.findViewById(R.id.tvDomain);
@@ -499,7 +516,7 @@ public class FragmentCompose extends FragmentBase {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus)
                     try {
-                        updateEncryption((EntityIdentity) spIdentity.getSelectedItem());
+                        updateEncryption((EntityIdentity) spIdentity.getSelectedItem(), false);
                     } catch (Throwable ex) {
                         Log.e(ex);
                     }
@@ -645,6 +662,7 @@ public class FragmentCompose extends FragmentBase {
         etBody.addTextChangedListener(new TextWatcher() {
             private boolean save = false;
             private Integer added = null;
+            private boolean inserted = false;
             private Pair<Integer, Integer> lt = null;
 
             @Override
@@ -673,6 +691,13 @@ public class FragmentCompose extends FragmentBase {
                         Log.i("Added=" + index);
                         added = index;
                     }
+                }
+
+                if (count - before > 1)
+                    inserted = true;
+                else if (count - before == 1) {
+                    char c = text.charAt(start + count - 1);
+                    inserted = Character.isWhitespace(c);
                 }
             }
 
@@ -712,6 +737,34 @@ public class FragmentCompose extends FragmentBase {
                         onLanguageTool(lt.first, lt.second, true);
                     } finally {
                         lt = null;
+                    }
+
+                // Auto scroll is broken on Android 14 beta
+                if (inserted)
+                    try {
+                        // Auto scroll is broken on Android 14 beta
+                        view.post(new RunnableEx("autoscroll") {
+                            private Rect rect = new Rect();
+
+                            @Override
+                            protected void delegate() {
+                                int pos = etBody.getSelectionEnd();
+                                if (pos < 0)
+                                    return;
+
+                                Layout layout = etBody.getLayout();
+                                int line = layout.getLineForOffset(pos);
+                                int y = layout.getLineTop(line + 1);
+
+                                etBody.getLocalVisibleRect(rect);
+                                if (y > rect.bottom)
+                                    scroll.scrollBy(0, y - rect.bottom);
+                            }
+                        });
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    } finally {
+                        inserted = false;
                     }
             }
         });
@@ -1329,13 +1382,14 @@ public class FragmentCompose extends FragmentBase {
         }.serial().execute(FragmentCompose.this, args, "compose:contact");
     }
 
-    private void updateEncryption(EntityIdentity identity) {
+    private void updateEncryption(EntityIdentity identity, boolean selected) {
         if (identity == null)
             return;
 
         Bundle args = new Bundle();
         args.putLong("id", working);
         args.putLong("identity", identity.id);
+        args.putBoolean("selected", selected);
         args.putString("to", etTo.getText().toString().trim());
         args.putString("cc", etCc.getText().toString().trim());
         args.putString("bcc", etBcc.getText().toString().trim());
@@ -1345,6 +1399,7 @@ public class FragmentCompose extends FragmentBase {
             protected Integer onExecute(Context context, Bundle args) {
                 long id = args.getLong("id");
                 long iid = args.getLong("identity");
+                boolean selected = args.getBoolean("selected");
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sign_default = prefs.getBoolean("sign_default", false);
@@ -1388,7 +1443,7 @@ public class FragmentCompose extends FragmentBase {
                     }
                 }
 
-                if (!encrypt_auto || draft.ui_encrypt == null) {
+                if (selected || draft.ui_encrypt == null) {
                     if (encrypt_default || identity.encrypt_default)
                         draft.ui_encrypt = (identity.encrypt == 0
                                 ? EntityMessage.PGP_SIGNENCRYPT
@@ -1397,7 +1452,7 @@ public class FragmentCompose extends FragmentBase {
                         draft.ui_encrypt = (identity.encrypt == 0
                                 ? EntityMessage.PGP_SIGNONLY
                                 : EntityMessage.SMIME_SIGNONLY);
-                    else
+                    else if (selected)
                         draft.ui_encrypt = null;
                 }
 
@@ -3379,17 +3434,15 @@ public class FragmentCompose extends FragmentBase {
                 }
             }
         } else {
+            // https://developer.android.com/training/data-storage/shared/photopicker#device-availability
             // https://developer.android.com/reference/android/provider/MediaStore#ACTION_PICK_IMAGES
-            // Android 12: cmd device_config put storage_native_boot picker_intent_enabled true
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean photo_picker = prefs.getBoolean("photo_picker", false);
-            Intent picker = new Intent(MediaStore.ACTION_PICK_IMAGES);
-            picker.setType("image/*");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                    photo_picker && picker.resolveActivity(pm) != null) {
+            if (photo_picker) {
                 Log.i("Using photo picker");
-                picker.putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, MediaStore.getPickImagesMaxLimit());
-                startActivityForResult(picker, REQUEST_IMAGE_FILE);
+                pickImages.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                        .build());
             } else {
                 Log.i("Using file picker");
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -4880,6 +4933,10 @@ public class FragmentCompose extends FragmentBase {
                 } catch (IOException ex) {
                     Log.i(ex);
                 }
+
+            // https://www.rfc-editor.org/rfc/rfc2231
+            if (attachment.name != null && attachment.name.length() > 60)
+                db.attachment().setWarning(attachment.id, context.getString(R.string.title_attachment_filename));
 
         } catch (Throwable ex) {
             // Reset progress on failure
@@ -7576,7 +7633,7 @@ public class FragmentCompose extends FragmentBase {
 
             if (!Objects.equals(spIdentity.getTag(), position)) {
                 spIdentity.setTag(position);
-                updateEncryption(identity);
+                updateEncryption(identity, true);
             }
         }
 
@@ -7590,7 +7647,7 @@ public class FragmentCompose extends FragmentBase {
 
             setBodyPadding();
 
-            updateEncryption(null);
+            updateEncryption(null, true);
         }
     };
 

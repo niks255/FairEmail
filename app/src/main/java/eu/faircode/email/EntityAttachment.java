@@ -226,6 +226,9 @@ public class EntityAttachment {
         if ("audio/mid".equals(type))
             return "audio/midi";
 
+        if ("audio-x/wav".equals(type))
+            return "audio/wav";
+
         // https://www.rfc-editor.org/rfc/rfc3555.txt
         if ("image/jpg".equals(type) || "video/jpeg".equals(type))
             return "image/jpeg";
@@ -348,8 +351,7 @@ public class EntityAttachment {
                 "application/x-zip-compressed".equals(type))
             return "application/zip"; //
 
-        if ("text/plain".equals(type) &&
-                ("ics".equals(extension) || "vcs".equals(extension)))
+        if ("ics".equals(extension) || "vcs".equals(extension))
             return "text/calendar";
 
         if ("text/plain".equals(type) && "ovpn".equals(extension))

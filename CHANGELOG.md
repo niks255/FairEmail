@@ -6,6 +6,38 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Saltopus](https://en.wikipedia.org/wiki/Saltopus)
 
+### 1.2069 - 2023-05-09
+
+* Added support for Surface Duo 2
+* Added auto scroll to message editor for Android 14
+* Improved swipe left/right sensitivity
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2068 - 2023-04-29
+
+* Fixed all reported bugs
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2067 - 2023-04-22
+
+* Fixed attaching files with a long name
+* Small improvements and minor bug fixes
+
+### 1.2066 - 2023-04-21
+
+* Fixed all reported bugs
+* Added younger than rule condition
+* Added option to show filter icon when rules were applied
+* Added warning for long attachment file names
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2065 - 2023-04-16
 
 * Fixed extra new lines

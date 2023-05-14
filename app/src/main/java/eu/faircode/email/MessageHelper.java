@@ -2891,9 +2891,9 @@ public class MessageHelper {
         }
 
         // (qmail nnn invoked by uid nnn); 1 Jan 2022 00:00:00 -0000
-        // by <host name> (Postfix, from userid nnn)
+        // Postfix: by <host name> (<name>, from userid nnn)
         if (header.matches(".*\\(qmail \\d+ invoked by uid \\d+\\).*") ||
-                header.matches(".*\\(Postfix, from userid \\d+\\).*")) {
+                header.matches(".*\\(.*, from userid \\d+\\).*")) {
             Log.i("--- phrase");
             return true;
         }
@@ -2942,7 +2942,7 @@ public class MessageHelper {
 
         // Check Microsoft front end transport (proxy)
         // https://social.technet.microsoft.com/wiki/contents/articles/50370.exchange-2016-what-is-the-front-end-transport-service-on-the-mailbox-role.aspx
-        if (kv.containsKey("via")) {
+        if (kv.containsKey("via") && false) {
             String via = kv.get("via").toString();
             if ("Frontend Transport".equals(via)) {
                 Log.i("--- frontend via=" + via);
@@ -4674,6 +4674,20 @@ public class MessageHelper {
                             if (bp.isMimeType("multipart/signed") || bp.isMimeType("multipart/encrypted")) {
                                 part = (MimePart) bp;
                                 break;
+                            } else if (bp.isMimeType("application/pgp-encrypted") && i + 1 < mp.getCount()) {
+                                // Workaround Outlook problem
+                                //  --_xxxoutlookfr_
+                                // Content-Type: text/plain; charset="us-ascii"
+                                //
+                                // --_xxxoutlookfr_
+                                // Content-Type: application/pgp-encrypted; name="ATT00001"
+                                // Content-Disposition: attachment; filename="ATT00001";
+                                //
+                                // --_xxxoutlookfr_
+                                // Content-Type: application/octet-stream; name="encrypted.asc"
+                                // Content-Disposition: attachment; filename="encrypted.asc";
+                                getMessageParts(part, mp.getBodyPart(i + 1), parts, EntityAttachment.PGP_MESSAGE);
+                                return parts;
                             }
                         }
                     } else {

@@ -280,7 +280,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     content_frame.setLayoutParams(lparam);
                 }
                 // https://docs.microsoft.com/en-us/dual-screen/android/duo-dimensions
-                content_separator.getLayoutParams().width = Helper.dp2pixels(this, 34);
+                int seam = (Helper.isSurfaceDuo2() ? 26 : 34);
+                content_separator.getLayoutParams().width = Helper.dp2pixels(this, seam);
             } else {
                 int column_width = prefs.getInt("column_width", 67);
                 ViewGroup.LayoutParams lparam = content_pane.getLayoutParams();
@@ -1481,7 +1482,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                                 sb.append(line).append("\r\n");
                         }
 
-                        return Log.getDebugInfo(context, R.string.title_crash_info_remark, null, sb.toString()).id;
+                        return Log.getDebugInfo(context, "crash", R.string.title_crash_info_remark, null, sb.toString()).id;
                     } finally {
                         file.delete();
                     }
@@ -2210,7 +2211,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
             @Override
             protected Long onExecute(Context context, Bundle args) throws IOException, JSONException {
-                return Log.getDebugInfo(context, R.string.title_debug_info_remark, null, null).id;
+                return Log.getDebugInfo(context, "main", R.string.title_debug_info_remark, null, null).id;
             }
 
             @Override
@@ -2322,8 +2323,10 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             if (unified && "unified".equals(startup)) {
                 getSupportFragmentManager().popBackStack("unified", 0);
                 return;
-            } else
+            } else {
+                getSupportFragmentManager().popBackStack("thread", FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 getSupportFragmentManager().popBackStack("messages", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean foldernav = prefs.getBoolean("foldernav", false);

@@ -82,6 +82,7 @@
     <string name="title_block">Blokér %1$s</string>
     <string name="title_block_sender">Blokér afsender</string>
     <string name="title_block_sender_domain">Blokér domænet \'%1$s\'</string>
+    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Blokering betyder automatisk flytning til Spam-mappen</string>
     <string name="title_block_sender_hint">        Afsenderblokering er en gratisfunktion.
         Afsenderdomæneblokering sker via filterregler og er en Pro-funktion.
     </string>
@@ -582,6 +583,7 @@
     <string name="title_advanced_auto_block_sender">Blokér automatisk afsenderen ved spamanmeldelse</string>
     <string name="title_advanced_auto_hide_answer">Skjul automatisk svarknappen når der scrolles</string>
     <string name="title_advanced_swipe_reply">Stryg udvidede beskeder til højre for at besvare</string>
+    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">Når en samtale flyttes, flyt også sendte beskeder</string>
     <string name="title_advanced_default_snooze">Standard slumre-/forsinkelsestid</string>
     <string name="title_advanced_default_folder">Vælg standardmappe</string>
     <string name="title_advanced_notifications">Håndtér notifikationer</string>
@@ -684,6 +686,7 @@
     <string name="title_advanced_classification">Klassificér beskeder</string>
     <string name="title_advanced_class_min_chance">Minimumsklassesandsynlighed: %1$s %%</string>
     <string name="title_advanced_class_min_difference">Minimumsklassedifferens: %1$s %%</string>
+    <string name="title_advanced_show_filtered">Vis et filterikon, når regler er anvendt</string>
     <string name="title_advanced_language">Sprog</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_lt">LanguageTool-integration</string>
@@ -744,6 +747,7 @@
     <string name="title_advanced_send_reminders_hint">Vis en advarsel, når beskedtekst eller emne er tomt, eller en vedhæftet fil muligvis mangler</string>
     <string name="title_advanced_reply_move_hint">E-mailserveren kan dog stadig føje beskederne til beskedafsendelsesmappen</string>
     <string name="title_advanced_compose_color_hint">Meget lyse eller mørke farver vil gøre meddelelser ulæselige for modtageren</string>
+    <string name="title_advanced_write_below_hint">En modtager kan gå glip af dit svar, når eksempelvis en længere besked afkortes</string>
     <string name="title_advanced_usenet_hint">Indsæt \'-- \' mellem teksten og signaturen</string>
     <string name="title_advanced_remove_signature_hint">Dette kan resultere i, at for lidt/meget tekst fjernes</string>
     <string name="title_advanced_metered_hint">Forbrugsbaserede forbindelser er typisk mobildataforbindelser eller betalte Wi-Fi hotspots</string>
@@ -1377,6 +1381,7 @@
     <string name="title_attachment_keywords">vedhæft,vedhæftet,vedhæftede,vedhæftning,vedhæftninger,vedhæftningen</string>
     <string name="title_attachment_reminder">Ville du tilføje en vedhæftning?</string>
     <string name="title_attachment_warning">Potentiel fare: %1$s</string>
+    <string name="title_attachment_filename">Visse andre e-mailklienter kan ikke håndtere filnavne på flere end 60 tegn</string>
     <string name="title_plain_reminder">Al formatering vil gå tabt</string>
     <string name="title_dsn_reminder">Hard bounces skader den oprindelige afsenders e-mailomdømme!</string>
     <string name="title_size_reminder">Besked (%1$s) større end servergrænsen (%2$s)</string>
@@ -1574,6 +1579,7 @@
     <string name="title_rule_time_before">Modtaget før</string>
     <string name="title_rule_time_rel">Absolut tid (modtaget) mellem</string>
     <string name="title_rule_time_every_day">Dagligt</string>
+    <string name="title_rule_younger">Beskeder nyere end (timer)</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">OG</string>
     <string name="title_rule_action">Handling</string>
@@ -1601,6 +1607,7 @@
     <string name="title_rule_keyword_missing">Nøgleord mangler</string>
     <string name="title_rule_automation_hint">Dette vil sende intent \'%1$s\' med ekstra \'%2$s\'</string>
     <string name="title_rule_delete_hint">Permanent sletning er irreversibel, så sørg for, at regelbetingelserne er korrekte!</string>
+    <string name="title_rule_edit_group">Redigér gruppe &#8230;</string>
     <string name="title_rule_execute">Eksekvér nu</string>
     <string name="title_rule_applied">Berørte beskeder: %1$d</string>
     <string name="title_rule_check">Tjek</string>
@@ -1752,7 +1759,7 @@
     </string>
     <string name="title_hint_important">Vigtigt</string>
     <string name="title_hint_sync">Download af beskeder kan tage noget tid afhængigt af hastigheden hos udbyderen, dataforbindelsen, enheden samt beskedantallet. Under besked-download kan app\'en muligvis reagerer langsommere.</string>
-    <string name="title_hint_sync_note">For at begrænse lagerplads- samt batteri- og dataforbrug, downloades ikke alle beskeder som standard. Dette kan ændres med at langt tryk på en mappe i mappelisten, vælg dernæst \'Synkronisér flere\'.</string>
+    <string name="title_hint_sync_note">For at begrænse lagerplads-, batteri- og dataforbrug downloades ikke alle beskeder som standard. Dette kan ændres med at langt tryk på en mappe i mappelisten, vælg dernæst \'Hent flere beskeder\'.</string>
     <string name="title_hint_battery">Da FairEmail som standard altid modtager beskeder, rapporterer Android FairEmail som altid aktiv. Det kan derfor se ud som om FairEmail altid forbruger batteristrøm, selvom dette faktisk ikke er tilfældet.</string>
     <string name="title_hint_reformat">Af fortrolighedshensyn og sikkerhedsårsager omformaterer FairEmail som standard beskeder. For at se den originale besked, tryk på ikonet \"fuldskærm\" over beskedteksten.</string>
     <string name="title_hint_design">Designet er bevidst ikke-distraherende, men holdt meget funktionel. Der er mange muligheder for at tilpasse udseende, men vær opmærksom på, at det er umuligt at gøre alle glade.</string>

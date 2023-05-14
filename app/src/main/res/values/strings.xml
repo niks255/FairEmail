@@ -104,6 +104,7 @@
     <string name="title_block">Block %1$s</string>
     <string name="title_block_sender">Block sender</string>
     <string name="title_block_sender_domain">Block domain \'%1$s\'</string>
+    <string name="title_block_sender_remark">Blocking means automatically moving to the spam folder</string>
     <string name="title_block_sender_hint">
         Blocking a sender is a free feature.
         Blocking a sender domain uses filter rules, which is a pro feature.
@@ -671,6 +672,7 @@
     <string name="title_advanced_auto_block_sender">Automatically block the sender when reporting spam</string>
     <string name="title_advanced_auto_hide_answer">Automatically hide the answer button when scrolling</string>
     <string name="title_advanced_swipe_reply">Swipe expanded messages to the right to reply</string>
+    <string name="title_advanced_move_thread_sent">When moving a conversation, also move sent messages</string>
     <string name="title_advanced_default_snooze">Default snooze/delay time</string>
     <string name="title_advanced_default_folder">Select default folder</string>
 
@@ -793,6 +795,7 @@
     <string name="title_advanced_classification">Classify messages</string>
     <string name="title_advanced_class_min_chance">Minimum class probability: %1$s %%</string>
     <string name="title_advanced_class_min_difference">Minimum class difference: %1$s %%</string>
+    <string name="title_advanced_show_filtered">Show a filter icon when rules were applied</string>
     <string name="title_advanced_language">Language</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_lt">LanguageTool integration</string>
@@ -925,6 +928,7 @@
     <string name="title_advanced_send_reminders_hint">Show a warning when the message text or the subject is empty or when an attachment might be missing</string>
     <string name="title_advanced_reply_move_hint">The email server could still add the messages to the sent message folder</string>
     <string name="title_advanced_compose_color_hint">Very light or very dark colors will result in illegible messages on the recipients\' side</string>
+    <string name="title_advanced_write_below_hint">A recipient might miss your reply, for example when a longer message is being truncated</string>
     <string name="title_advanced_attach_new_hint">Otherwise, add shared addresses or files to the current draft message</string>
     <string name="title_advanced_usenet_hint">Insert \'-- \' between the text and the signature</string>
     <string name="title_advanced_remove_signature_hint">This can result in too little or too much text being removed</string>
@@ -1662,6 +1666,7 @@
     <string name="title_attachment_keywords">attached,attachment,attachments,included</string>
     <string name="title_attachment_reminder">Did you intend to add an attachment?</string>
     <string name="title_attachment_warning">Potentially dangerous: %1$s</string>
+    <string name="title_attachment_filename">Some other email clients cannot handle file names longer than 60 characters</string>
     <string name="title_plain_reminder">All formatting will be lost</string>
     <string name="title_dsn_reminder">Hard bounces damage the email reputation of the original sender!</string>
     <string name="title_size_reminder">Message (%1$s) larger than server limit (%2$s)</string>
@@ -1884,6 +1889,7 @@
     <string name="title_rule_time_before">Received before</string>
     <string name="title_rule_time_rel">Relative time (received) between</string>
     <string name="title_rule_time_every_day">Every day</string>
+    <string name="title_rule_younger">Messages younger than (hours)</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">AND</string>
     <string name="title_rule_action">Action</string>

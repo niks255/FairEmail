@@ -941,7 +941,7 @@ public class Helper {
             else
                 return Intent.createChooser(intent, context.getString(R.string.title_select_app));
         } else
-            return intent;
+            return Intent.createChooser(intent, context.getString(R.string.title_select_app));
     }
 
     static void share(Context context, File file, String type, String name) {
@@ -1472,7 +1472,19 @@ public class Helper {
     }
 
     static boolean isSurfaceDuo() {
-        return ("Microsoft".equalsIgnoreCase(Build.MANUFACTURER) && "Surface Duo".equals(Build.MODEL));
+        return (isSurfaceDuo2() ||
+                ("Microsoft".equalsIgnoreCase(Build.MANUFACTURER) && "Surface Duo".equals(Build.MODEL)));
+    }
+
+    static boolean isSurfaceDuo2() {
+        /*
+            Brand: surface
+            Manufacturer: Microsoft
+            Model: Surface Duo 2
+            Product: duo2
+            Device: duo2
+         */
+        return ("Microsoft".equalsIgnoreCase(Build.MANUFACTURER) && "Surface Duo 2".equals(Build.MODEL));
     }
 
     static boolean isArc() {
@@ -2986,12 +2998,14 @@ public class Helper {
                         if (wait > PIN_FAILURE_DELAY_MAX)
                             wait = PIN_FAILURE_DELAY_MAX;
                         long delay = pin_failure_at + wait - new Date().getTime();
+                        etPin.setHint(getDateTimeInstance(activity).format(pin_failure_at + wait));
                         Log.i("PIN wait=" + wait + " delay=" + delay);
                         dview.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 try {
                                     etPin.setCompoundDrawables(null, null, null, null);
+                                    etPin.setHint(R.string.title_advanced_pin);
                                     etPin.setEnabled(true);
                                     etPin.requestFocus();
                                     showKeyboard(etPin);

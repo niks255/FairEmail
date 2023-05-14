@@ -82,6 +82,7 @@
     <string name="title_block">Αποκλεισμός %1$s</string>
     <string name="title_block_sender">Αποκλεισμός αποστολέα</string>
     <string name="title_block_sender_domain">Αποκλεισμός τομέα \'%1$s\'</string>
+    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Ο αποκλεισμός συνεπάγεται αυτόματη μετακίνηση στον φάκελο των Ανεπιθύμητων</string>
     <string name="title_block_sender_hint">        Ο αποκλεισμός ενός αποστολέα είναι μια δωρεάν δυνατότητα.
         Ο αποκλεισμός ενός τομέα αποστολέα χρησιμοποιεί κανόνες φιλτραρίσματος, κάτι που αποτελεί δυνατότητα της έκδοσης Pro.
     </string>
@@ -582,6 +583,7 @@
     <string name="title_advanced_auto_block_sender">Αυτόματος αποκλεισμός του αποστολέα κατά την αναφορά μηνύματος ως ανεπιθύμητου</string>
     <string name="title_advanced_auto_hide_answer">Αυτόματη απόκρυψη του κουμπιού απάντησης κατά την κύλιση</string>
     <string name="title_advanced_swipe_reply">Σύρετε προς τα δεξιά τα αναπτυγμένα μηνύματα για να απαντήσετε</string>
+    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">Κατά τη μετακίνηση μιας συζήτησης, να μετακινούνται επίσης και τα απεσταλμένα μηνύματα</string>
     <string name="title_advanced_default_snooze">Προεπιλεγμένος χρόνος αναβολής/καθυστέρησης</string>
     <string name="title_advanced_default_folder">Επιλογή προεπιλεγμένου φακέλου</string>
     <string name="title_advanced_notifications">Διαχείριση ειδοποιήσεων</string>
@@ -682,6 +684,7 @@
     <string name="title_advanced_classification">Ταξινόμηση μηνυμάτων</string>
     <string name="title_advanced_class_min_chance">Ελάχιστη πιθανότητα για ορισμένη ταξινόμηση: %1$s%%</string>
     <string name="title_advanced_class_min_difference">Ελάχιστη διαφορά για την επόμενη τάξη: %1$s%%</string>
+    <string name="title_advanced_show_filtered">Προβολή ενός εικονιδίου φίλτρου εφόσον έχουν εφαρμοστεί κανόνες</string>
     <string name="title_advanced_language">Γλώσσα</string>
     <string name="title_advanced_language_system">Σύστημα</string>
     <string name="title_advanced_lt">Ενσωμάτωση του LanguageTool</string>
@@ -741,6 +744,7 @@
     <string name="title_advanced_send_reminders_hint">Να προβάλλεται μια προειδοποίηση όταν το κείμενο του μηνύματος ή το θέμα είναι κενό ή όταν φαίνεται πως ένα συνημμένο λείπει</string>
     <string name="title_advanced_reply_move_hint">Ο διακομιστής ηλ. ταχυδρομείου ενδέχεται να προσθέτει ακόμα τα μηνύματα στον φάκελο απεσταλμένων</string>
     <string name="title_advanced_compose_color_hint">Πολύ ανοικτά ή πολύ σκούρα χρώματα θα έχουν ως αποτέλεσμα δυσανάγνωστα μηνύματα για τους παραλήπτες</string>
+    <string name="title_advanced_write_below_hint">Ένας παραλήπτης μπορεί να χάσει την απάντησή σας, για παράδειγμα, όταν ένα μακρύτερο μήνυμα περικόπτεται</string>
     <string name="title_advanced_attach_new_hint">Διαφορετικά, προσθήκη κοινόχρηστων διευθύνσεων ή αρχείων στο τρέχον προσχέδιο μηνύματος</string>
     <string name="title_advanced_usenet_hint">Να παρεμβάλλεται ένα \'-- \' ανάμεσα στο κείμενο και την υπογραφή</string>
     <string name="title_advanced_remove_signature_hint">Αυτό μπορεί να επιφέρει την απαλοιφή είτε υπερβολικά λίγου είτε υπερβολικά πολύ κειμένου</string>
@@ -1374,6 +1378,7 @@
     <string name="title_attachment_keywords">συνημμένο, συνημμένα, επισυνάπτω, επισυνάπτεται, επισυνάπονται, έγγραφο, έγγραφα, αρχείο, αρχεία, έντυπο, έντυπα, δικαιολογητικό, δικαιολογητικά, πιστοποιητικό, πιστοποιητικά, βιογραφικό, συνοδευτική επιστολή</string>
     <string name="title_attachment_reminder">Θα θέλατε να προσθέσετε ένα συνημμένο;</string>
     <string name="title_attachment_warning">Δυνητικά επικίνδυνο: %1$s</string>
+    <string name="title_attachment_filename">Κάποιοι άλλοι πελάτες ηλεκτρονικού ταχυδρομείου δεν μπορούν να χειριστούν ονόματα αρχείων άνω των 60 χαρακτήρων</string>
     <string name="title_plain_reminder">Όλη η μορφοποίηση θα χαθεί</string>
     <string name="title_dsn_reminder">Οι σκληρές αναπηδήσεις (hard bounces) βλάπτουν την αξιοπιστία της ηλ. διεύθυνσης του αρχικού αποστολέα!</string>
     <string name="title_size_reminder">Μήνυμα (%1$s) πιο μεγάλο από το όριο του διακομιστή (%2$s)</string>
@@ -1571,6 +1576,7 @@
     <string name="title_rule_time_before">Λήφθηκε πριν από</string>
     <string name="title_rule_time_rel">Σχετικός χρόνος (λήψης) μεταξύ</string>
     <string name="title_rule_time_every_day">Καθημερινά</string>
+    <string name="title_rule_younger">Μηνύματα νεότερα από (ώρες)</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">ΚΑΙ</string>
     <string name="title_rule_action">Ενέργεια</string>
@@ -1598,6 +1604,7 @@
     <string name="title_rule_keyword_missing">Λείπει λέξη-κλειδί</string>
     <string name="title_rule_automation_hint">Αυτό θα στείλει την πρόθεση %1$s μαζί με τα έξτρα %2$s</string>
     <string name="title_rule_delete_hint">Η οριστική διαγραφή είναι μη αναστρέψιμη, οπότε βεβαιωθείτε πως οι συνθήκες του κανόνα είναι σωστές!</string>
+    <string name="title_rule_edit_group">Επεξεργασία ομάδας &#8230;</string>
     <string name="title_rule_execute">Εκτέλεση τώρα</string>
     <string name="title_rule_applied">Μηνύματα που αφορά: %1$d</string>
     <string name="title_rule_check">Έλεγχος</string>
@@ -1749,7 +1756,7 @@
     </string>
     <string name="title_hint_important">Σημαντικό</string>
     <string name="title_hint_sync">Το κατέβασμα των μηνυμάτων μπορεί να διαρκέσει κάποιο διάστημα, ανάλογα με την ταχύτητα του παρόχου, της σύνδεσης, της συσκευής και τον αριθμό των μηνυμάτων. Ενόσω κατεβαίνουν τα μηνύματα, η εφαρμογή ίσως να ανταποκρίνεται πιο αργά.</string>
-    <string name="title_hint_sync_note">Από προεπιλογή, δεν θα κατέβουν όλα τα μηνύματα, για περιορισμό αποθηκευτικού χώρου και χρήσης μπαταρίας και δεδομένων. Μπορείτε να αλλάξετε αυτή τη ρύθμιση, με παρατεταμένο πάτημα πάνω σε έναν φάκελο στη λίστα φακέλων και επιλέγοντας «Συγχρονισμός περισσοτέρων».</string>
+    <string name="title_hint_sync_note">Από προεπιλογή δεν κατεβαίνουν όλα τα μηνύματα, προκειμένου να περιορίζεται η χρήση αποθηκευτικού χώρου, μπαταρίας και δεδομένων. Μπορείτε να αλλάξετε αυτή τη ρύθμιση με παρατεταμένο πάτημα πάνω σε έναν φάκελο στη λίστα φακέλων και επιλέγοντας \"Ανάκτηση περισσότερων μηνυμάτων\".</string>
     <string name="title_hint_battery">Καθότι το FairEmail πάντα λαμβάνει μηνύματα από προεπιλογή, το Android θα αναφέρει το FairEmail ως μονίμως ενεργό. Αυτό μπορεί να δώσει την εντύπωση ότι το FairEmail διαρκώς καταναλώνει μπαταρία, παρόλο που, στην πραγματικότητα, δεν συμβαίνει κάτι τέτοιο.</string>
     <string name="title_hint_reformat">Από προεπιλογή, το FairEmail αναμορφοποιεί τα μηνύματα για λόγους ιδιωτικότητας και ασφάλειας. Για να δείτε το αρχικό μήνυμα, πατήστε στο εικονίδιο \"πλήρης οθόνη\" πάνω από το κείμενο του μηνύματος.</string>
     <string name="title_hint_design">Ο σχεδιασμός είναι εστιασμένος στην αυξημένη λειτουργικότητα χωρίς περισπάσεις. Προσφέρονται πολλές επιλογές για εξατομικευμένη εμφάνιση αλλά, παρακαλούμε, λάβετε υπόψη πως είναι αδύνατο να μένουν οι πάντες πάντα ευχαριστημένοι.</string>

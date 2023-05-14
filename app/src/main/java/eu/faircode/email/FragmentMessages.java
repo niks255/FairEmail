@@ -239,6 +239,8 @@ import biweekly.Biweekly;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
 import me.everything.android.ui.overscroll.IOverScrollDecor;
+import me.everything.android.ui.overscroll.IOverScrollState;
+import me.everything.android.ui.overscroll.IOverScrollStateListener;
 import me.everything.android.ui.overscroll.IOverScrollUpdateListener;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
@@ -1361,6 +1363,7 @@ public class FragmentMessages extends FragmentBase
                 args.putString("thread", thread);
                 args.putLong("id", id);
                 args.putString("type", folderType);
+                args.putBoolean("thread_sent_trash", thread_sent_trash);
                 args.putBoolean("filter_archive", filter_archive);
 
                 new SimpleTask<ArrayList<MessageTarget>>() {
@@ -1370,6 +1373,7 @@ public class FragmentMessages extends FragmentBase
                         String thread = args.getString("thread");
                         long id = args.getLong("id");
                         String type = args.getString("type");
+                        boolean thread_sent_trash = args.getBoolean("thread_sent_trash");
                         boolean filter_archive = args.getBoolean("filter_archive");
 
                         ArrayList<MessageTarget> result = new ArrayList<>();
@@ -1395,7 +1399,8 @@ public class FragmentMessages extends FragmentBase
                                         (!filter_archive || !EntityFolder.ARCHIVE.equals(sourceFolder.type)) &&
                                         !EntityFolder.DRAFTS.equals(sourceFolder.type) && !EntityFolder.OUTBOX.equals(sourceFolder.type) &&
                                         !(EntityFolder.SENT.equals(sourceFolder.type) && EntityFolder.ARCHIVE.equals(targetFolder.type)) &&
-                                        !(EntityFolder.SENT.equals(sourceFolder.type) && EntityFolder.JUNK.equals(targetFolder.type)) && (!EntityFolder.SENT.equals(sourceFolder.type) || !EntityFolder.TRASH.equals(targetFolder.type) || thread_sent_trash) &&
+                                        !(EntityFolder.SENT.equals(sourceFolder.type) && EntityFolder.JUNK.equals(targetFolder.type)) &&
+                                        (!EntityFolder.SENT.equals(sourceFolder.type) || !EntityFolder.TRASH.equals(targetFolder.type) || thread_sent_trash) &&
                                         !EntityFolder.TRASH.equals(sourceFolder.type) && !EntityFolder.JUNK.equals(sourceFolder.type))
                                     result.add(new MessageTarget(context, threaded, account, sourceFolder, account, targetFolder));
                             }
@@ -1574,6 +1579,22 @@ public class FragmentMessages extends FragmentBase
             @Override
             public void onClick(View view) {
                 onActionMoveSelection(EntityFolder.INBOX, false);
+            }
+        });
+
+        ibInbox.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                MoreResult result = (MoreResult) cardMore.getTag();
+                if (result == null || !result.isJunk)
+                    return false;
+
+                if (result.hasPop && !result.hasImap)
+                    onActionBlockSender();
+                else if (!result.hasPop && result.hasImap)
+                    onActionJunkSelection();
+
+                return true;
             }
         });
 
@@ -2076,26 +2097,25 @@ public class FragmentMessages extends FragmentBase
                         DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK,
                         DEFAULT_DECELERATE_FACTOR
                 );
-                decor.setOverScrollUpdateListener(new IOverScrollUpdateListener() {
-                    private boolean triggered = false;
 
+                ObjectHolder<Boolean> otriggered = new ObjectHolder<>(false);
+
+                decor.setOverScrollUpdateListener(new IOverScrollUpdateListener() {
                     @Override
                     public void onOverScrollUpdate(IOverScrollDecor decor, int state, float offset) {
                         float height = decor.getView().getHeight();
                         if (height == 0)
                             return;
 
-                        if (offset == 0)
-                            triggered = false;
-                        else if (!triggered) {
+                        if (!otriggered.value) {
                             float dx = Math.abs(offset * DEFAULT_TOUCH_DRAG_MOVE_RATIO_FWD);
                             if (offset > 0 && dx > height / 4) {
-                                triggered = true;
+                                otriggered.value = true;
                                 handleAutoClose();
                             }
 
                             if (offset < 0 && dx > height / 8) {
-                                triggered = true;
+                                otriggered.value = true;
 
                                 Bundle args = new Bundle();
                                 args.putInt("icon", R.drawable.twotone_drive_file_move_24);
@@ -2112,6 +2132,15 @@ public class FragmentMessages extends FragmentBase
                                 fragment.show(getParentFragmentManager(), "overscroll:move");
                             }
                         }
+                    }
+                });
+
+                decor.setOverScrollStateListener(new IOverScrollStateListener() {
+                    @Override
+                    public void onOverScrollStateChange(IOverScrollDecor decor, int oldState, int newState) {
+                        // offset is unreliable
+                        if (newState == IOverScrollState.STATE_IDLE)
+                            otriggered.value = false;
                     }
                 });
             } catch (Throwable ex) {
@@ -2721,14 +2750,22 @@ public class FragmentMessages extends FragmentBase
 
         @Override
         public float getSwipeEscapeVelocity(float defaultValue) {
+            return super.getSwipeEscapeVelocity(defaultValue) * getSwipeSensitivityFactor();
+        }
+
+        @Override
+        public float getSwipeVelocityThreshold(float defaultValue) {
+            return super.getSwipeVelocityThreshold(defaultValue) * getSwipeSensitivityFactor();
+        }
+
+        private int getSwipeSensitivityFactor() {
             int swipe_sensitivity = FragmentOptionsBehavior.DEFAULT_SWIPE_SENSITIVITY;
             Context context = getContext();
             if (context != null) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 swipe_sensitivity = prefs.getInt("swipe_sensitivity", swipe_sensitivity);
             }
-            return super.getSwipeEscapeVelocity(defaultValue) *
-                    (FragmentOptionsBehavior.MAX_SWIPE_SENSITIVITY - swipe_sensitivity + 1);
+            return (FragmentOptionsBehavior.MAX_SWIPE_SENSITIVITY - swipe_sensitivity + 1);
         }
 
         @Override
@@ -4332,6 +4369,7 @@ public class FragmentMessages extends FragmentBase
         args.putString("type", type);
         args.putBoolean("block", block);
         args.putLongArray("ids", getSelection());
+        args.putBoolean("thread_sent_trash", thread_sent_trash);
         args.putBoolean("filter_archive", filter_archive);
 
         new SimpleTask<ArrayList<MessageTarget>>() {
@@ -4340,6 +4378,7 @@ public class FragmentMessages extends FragmentBase
                 String type = args.getString("type");
                 boolean block = args.getBoolean("block");
                 long[] ids = args.getLongArray("ids");
+                boolean thread_sent_trash = args.getBoolean("thread_sent_trash");
                 boolean filter_archive = args.getBoolean("filter_archive");
 
                 ArrayList<MessageTarget> result = new ArrayList<>();
@@ -4372,6 +4411,8 @@ public class FragmentMessages extends FragmentBase
                                     sourceFolder.id.equals(targetFolder.id))
                                 continue;
                             if (EntityFolder.TRASH.equals(targetFolder.type)) {
+                                if (EntityFolder.SENT.equals(sourceFolder.type) && !thread_sent_trash)
+                                    continue;
                                 if (EntityFolder.ARCHIVE.equals(sourceFolder.type) && filter_archive)
                                     continue;
                                 if (EntityFolder.JUNK.equals(sourceFolder.type) && !threaded.folder.equals(message.folder))
@@ -4503,6 +4544,9 @@ public class FragmentMessages extends FragmentBase
                 boolean filter_archive = args.getBoolean("filter_archive");
                 long tid = args.getLong("folder");
 
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean move_thread_sent = prefs.getBoolean("move_thread_sent", false);
+
                 ArrayList<MessageTarget> result = new ArrayList<>();
 
                 DB db = DB.getInstance(context);
@@ -4523,7 +4567,8 @@ public class FragmentMessages extends FragmentBase
                         EntityFolder sourceFolder = db.folder().getFolder(threaded.folder);
                         if (sourceFolder != null && !sourceFolder.read_only &&
                                 !targetFolder.id.equals(threaded.folder) &&
-                                !EntityFolder.isOutgoing(sourceFolder.type) &&
+                                (!EntityFolder.isOutgoing(sourceFolder.type) ||
+                                        (EntityFolder.SENT.equals(sourceFolder.type) && move_thread_sent)) &&
                                 (!filter_archive || !EntityFolder.ARCHIVE.equals(sourceFolder.type)))
                             result.add(new MessageTarget(context, threaded, account, sourceFolder, account, targetFolder));
                     }
