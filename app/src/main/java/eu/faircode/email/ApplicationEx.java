@@ -251,14 +251,14 @@ public class ApplicationEx extends Application
             // Legacy
             try {
                 WorkManager.getInstance(this).cancelUniqueWork("WorkerWatchdog");
+
+                WorkerAutoUpdate.init(this);
+                WorkerCleanup.init(this);
+                WorkerDailyRules.init(this);
+                WorkerSync.init(this);
             } catch (IllegalStateException ex) {
                 Log.e(ex);
             }
-
-            WorkerAutoUpdate.init(this);
-            WorkerCleanup.init(this);
-            WorkerDailyRules.init(this);
-            WorkerSync.init(this);
         }
 
         registerReceiver(onScreenOff, new IntentFilter(Intent.ACTION_SCREEN_OFF));
@@ -712,6 +712,14 @@ public class ApplicationEx extends Application
                                 .putBoolean("swipe_sensitivity_updated", true);
                 }
             }
+        } else if (version < 2075) {
+            for (String name : new String[]{"seen", "unflagged", "unknown", "snoozed", "deleted"})
+                if (prefs.contains("filter_" + name))
+                    for (String _type : new String[]{EntityFolder.ARCHIVE, EntityFolder.TRASH, EntityFolder.JUNK}) {
+                        String type = _type.toLowerCase(Locale.ROOT);
+                        if (!prefs.contains("filter_" + type + "_" + name))
+                            editor.putBoolean("filter_" + type + "_" + name, prefs.getBoolean("filter_" + name, false));
+                    }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_search">Поиск по FairEmail</string>
     <string name="shortcut_refresh">Atnaujinti</string>
     <string name="shortcut_setup">Nustatymai</string>
     <string name="title_junk_clear">Valyti</string>
@@ -31,6 +32,7 @@
     <string name="title_rule_keyword_add">Pridėti</string>
     <string name="title_rule_keyword_delete">Ištrinti</string>
     <string name="title_rule_enabled">Įjungta</string>
+    <string name="title_legend_not_junk">Raktas: title_legend_not_junk title_legend_not_junk Legenda „ne šlamštas“ piktogramos / mygtuko pavadinimas Failas: strings.xml</string>
     <string name="title_legend_delete">Ištrinti</string>
     <string name="title_add">Pridėti</string>
     <string name="title_enabled">Įjungta</string>

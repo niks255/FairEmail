@@ -26,8 +26,6 @@ import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 import static android.text.format.DateUtils.FORMAT_SHOW_WEEKDAY;
 import static android.view.KeyEvent.ACTION_DOWN;
 import static android.view.KeyEvent.ACTION_UP;
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_KEY_MISSING;
 import static org.openintents.openpgp.OpenPgpSignatureResult.RESULT_NO_SIGNATURE;
@@ -238,6 +236,7 @@ import javax.mail.internet.MimeMessage;
 import biweekly.Biweekly;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
+import biweekly.property.Status;
 import me.everything.android.ui.overscroll.IOverScrollDecor;
 import me.everything.android.ui.overscroll.IOverScrollState;
 import me.everything.android.ui.overscroll.IOverScrollStateListener;
@@ -3318,10 +3317,58 @@ public class FragmentMessages extends FragmentBase
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             boolean delete_asked = prefs.getBoolean("delete_asked", false);
+            final int undo_timeout = prefs.getInt("undo_timeout", 5000);
             if (delete_asked) {
-                Intent data = new Intent();
-                data.putExtra("args", args);
-                onActivityResult(REQUEST_MESSAGE_DELETE, RESULT_OK, data);
+                if (leave_deleted) {
+                    new SimpleTask<Void>() {
+                        @Override
+                        protected Void onExecute(Context context, Bundle args) {
+                            long id = args.getLong("id");
+
+                            long now = new Date().getTime();
+                            long busy = now + undo_timeout * 2;
+
+                            DB db = DB.getInstance(context);
+                            try {
+                                db.beginTransaction();
+
+                                db.message().setMessageUiBusy(id, busy);
+                                db.message().setMessageUiHide(id, true);
+                                db.message().setMessageFound(id, false);
+                                // Prevent new message notification on undo
+                                db.message().setMessageUiIgnored(id, true);
+
+                                db.setTransactionSuccessful();
+                            } finally {
+                                db.endTransaction();
+                            }
+                            return null;
+                        }
+
+                        @Override
+                        protected void onExecuted(Bundle args, Void v) {
+                            FragmentActivity activity = getActivity();
+                            if (!(activity instanceof ActivityView)) {
+                                Intent data = new Intent();
+                                data.putExtra("args", args);
+                                onActivityResult(REQUEST_MESSAGE_DELETE, RESULT_OK, data);
+                                return;
+                            }
+
+                            String title = getString(R.string.title_move_undo, getString(R.string.title_trash), 1);
+                            ((ActivityView) activity).undo(title, args, taskDeleteLeaveDo, taskDeleteLeaveUndo);
+                        }
+
+                        @Override
+                        protected void onException(Bundle args, Throwable ex) {
+                            Log.unexpectedError(getParentFragmentManager(), ex);
+                        }
+                    }.execute(FragmentMessages.this, args, "delete:leave");
+                } else {
+                    Intent data = new Intent();
+                    data.putExtra("args", args);
+                    onActivityResult(REQUEST_MESSAGE_DELETE, RESULT_OK, data);
+                }
                 return;
             }
 
@@ -3424,6 +3471,58 @@ public class FragmentMessages extends FragmentBase
         }
     };
 
+    private static final SimpleTask<Void> taskDeleteLeaveDo = new SimpleTask<Void>() {
+        @Override
+        protected Void onExecute(Context context, Bundle args) {
+            long id = args.getLong("id");
+            DB db = DB.getInstance(context);
+            try {
+                db.beginTransaction();
+
+                EntityMessage message = db.message().getMessage(id);
+                if (message == null)
+                    return null;
+
+                message.ui_busy = null;
+                db.message().setMessageUiBusy(message.id, message.ui_busy);
+                EntityOperation.queue(context, message, EntityOperation.DELETE);
+
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onException(Bundle args, Throwable ex) {
+        }
+    };
+
+    private static final SimpleTask<Void> taskDeleteLeaveUndo = new SimpleTask<Void>() {
+        @Override
+        protected Void onExecute(Context context, Bundle args) {
+            long id = args.getLong("id");
+
+            DB db = DB.getInstance(context);
+            try {
+                db.beginTransaction();
+
+                db.message().setMessageUiHide(id, false);
+                db.message().setMessageUiBusy(id, null);
+
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onException(Bundle args, Throwable ex) {
+        }
+    };
+
     private void onReply(boolean long_press) {
         if (values.containsKey("expanded") && values.get("expanded").size() > 0) {
             long id = values.get("expanded").get(0);
@@ -3440,9 +3539,8 @@ public class FragmentMessages extends FragmentBase
                     long_press ? "answer_action" : "answer_single",
                     long_press ? "reply" : "menu");
             if ("move".equals(action)) {
-                View child = rvMessage.getChildAt(pos);
-                if (child != null && child.isEnabled())
-                    child.findViewById(R.id.ibMove).performClick();
+                if (canMove(message))
+                    onMenuMove(message);
             } else if ("menu".equals(action) || !message.content)
                 onReply(message, selected, fabReply);
             else
@@ -3556,6 +3654,7 @@ public class FragmentMessages extends FragmentBase
                 popupMenu.getMenu().findItem(R.id.menu_forward_raw).setEnabled(canRaw);
                 popupMenu.getMenu().findItem(R.id.menu_editasnew).setEnabled(message.content);
                 popupMenu.getMenu().findItem(R.id.menu_reply_answer).setEnabled(message.content);
+                popupMenu.getMenu().findItem(R.id.menu_move_to).setEnabled(canMove(message));
 
                 if (data.answers != null) {
                     int order = 100;
@@ -3626,6 +3725,9 @@ public class FragmentMessages extends FragmentBase
                             return true;
                         } else if (itemId == R.id.menu_reply_answer) {
                             onMenuAnswer(message);
+                            return true;
+                        } else if (itemId == R.id.menu_move_to) {
+                            onMenuMove(message);
                             return true;
                         } else if (itemId == R.id.menu_settings) {
                             onMenuAnswerSettings();
@@ -3768,6 +3870,59 @@ public class FragmentMessages extends FragmentBase
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(getContext(), getViewLifecycleOwner(), new Bundle(), "message:answer");
+    }
+
+    private boolean canMove(TupleMessageEx message) {
+        boolean pop = (message.accountProtocol == EntityAccount.TYPE_POP);
+        boolean move = !(message.folderReadOnly || message.uid == null) ||
+                (pop && EntityFolder.TRASH.equals(message.folderType));
+        return move;
+    }
+
+    private void onMenuMove(TupleMessageEx message) {
+        if (message.accountProtocol == EntityAccount.TYPE_POP &&
+                EntityFolder.TRASH.equals(message.folderType) && !message.accountLeaveDeleted) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.account);
+
+            new SimpleTask<EntityFolder>() {
+                @Override
+                protected EntityFolder onExecute(Context context, Bundle args) {
+                    long id = args.getLong("id");
+
+                    DB db = DB.getInstance(context);
+                    return db.folder().getFolderByType(id, EntityFolder.INBOX);
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, EntityFolder inbox) {
+                    _onMenuMove(message, new long[]{message.folder, inbox == null ? -1L : inbox.id});
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                }
+            }.execute(this, args, "move:pop");
+        } else
+            _onMenuMove(message, new long[]{message.folder});
+    }
+
+    private void _onMenuMove(TupleMessageEx message, long[] disabled) {
+        Bundle args = new Bundle();
+        args.putInt("icon", R.drawable.twotone_drive_file_move_24);
+        args.putString("title", getString(R.string.title_move_to_folder));
+        args.putLong("account", message.account);
+        args.putLongArray("disabled", disabled);
+        args.putLong("message", message.id);
+        args.putBoolean("copy", false);
+        args.putBoolean("cancopy", true);
+        args.putBoolean("similar", false);
+
+        FragmentDialogSelectFolder fragment = new FragmentDialogSelectFolder();
+        fragment.setArguments(args);
+        fragment.setTargetFragment(this, REQUEST_MESSAGE_MOVE);
+        fragment.show(getParentFragmentManager(), "message:move");
     }
 
     private void onMenuAnswerSettings() {
@@ -5045,6 +5200,8 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkDoze() {
+        if (!BuildConfig.DEBUG)
+            return false;
         if (viewType != AdapterMessage.ViewType.UNIFIED)
             return false;
 
@@ -6886,7 +7043,7 @@ public class FragmentMessages extends FragmentBase
             // - single, non archived/trashed/sent message
             // - one unread, non archived/trashed/sent message in conversation
             // - sole message
-            if (autoexpand) {
+            if (autoexpand || (pinned && pinnedMessage != null)) {
                 TupleMessageEx expand = null;
                 if (finds > 0) {
                     if (finds == 1)
@@ -7592,7 +7749,16 @@ public class FragmentMessages extends FragmentBase
     }
 
     static String getFilter(Context context, String name, AdapterMessage.ViewType viewType, String type) {
-        return "filter_" + (EntityFolder.isOutgoing(type) ? "out_" : "") + name;
+        String filter;
+        if (EntityFolder.isOutgoing(type))
+            filter = "out_";
+        else if (EntityFolder.ARCHIVE.equals(type) ||
+                EntityFolder.TRASH.equals(type) ||
+                EntityFolder.JUNK.equals(type))
+            filter = type.toLowerCase(Locale.ROOT) + "_";
+        else
+            filter = "";
+        return "filter_" + filter + name;
     }
 
     private void lockMessage(long id) throws IOException {
@@ -8590,7 +8756,7 @@ public class FragmentMessages extends FragmentBase
                                             remote.sequence = index + 1;
                                             remote.id = db.attachment().insertAttachment(remote);
                                             try {
-                                                parts.downloadAttachment(context, index, remote);
+                                                parts.downloadAttachment(context, index, remote, null);
                                             } catch (Throwable ex) {
                                                 Log.e(ex);
                                             }
@@ -9301,7 +9467,7 @@ public class FragmentMessages extends FragmentBase
                         Log.i("s/mime attachment=" + remote);
 
                         try {
-                            parts.downloadAttachment(context, index, remote);
+                            parts.downloadAttachment(context, index, remote, null);
                         } catch (Throwable ex) {
                             Log.e(ex);
                         }
@@ -9677,7 +9843,6 @@ public class FragmentMessages extends FragmentBase
             @Override
             protected Long onExecute(Context context, Bundle args) throws Throwable {
                 long id = args.getLong("message");
-                int status = args.getInt("status");
                 String selectedAccount = args.getString("account");
                 String selectedName = args.getString("name");
 
@@ -9701,6 +9866,11 @@ public class FragmentMessages extends FragmentBase
 
                 ICalendar icalendar = Biweekly.parse(calendar.getFile(context)).first();
                 VEvent event = icalendar.getEvents().get(0);
+
+                int status = CalendarContract.Events.STATUS_TENTATIVE;
+                if (event.getStatus() != null &&
+                        Status.CONFIRMED.equals(event.getStatus().getValue()))
+                    status = CalendarContract.Events.STATUS_CONFIRMED;
 
                 return CalendarHelper.insert(context, icalendar, event, status,
                         selectedAccount, selectedName, message);

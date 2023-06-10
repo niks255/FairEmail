@@ -147,6 +147,7 @@ public class FragmentDialogForwardRaw extends FragmentDialogBase {
                             continue;
 
                         for (EntityMessage thread : messages) {
+                            EntityLog.log(context, "Fetching raw id=" + thread.id + " subject=" + thread.subject);
                             if (threads) {
                                 String hash = (message.hash == null ? message.msgid : message.hash);
                                 if (hashes.contains(hash))
@@ -287,10 +288,12 @@ public class FragmentDialogForwardRaw extends FragmentDialogBase {
 
     private void send(long account, long[] ids) {
         try {
+            final Context context = getContext();
             ArrayList<Uri> uris = new ArrayList<>();
             for (long id : ids) {
-                File file = EntityMessage.getRawFile(getContext(), id);
-                Uri uri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID, file);
+                EntityLog.log(context, "Sending raw id=" + id);
+                File file = EntityMessage.getRawFile(context, id);
+                Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
                 uris.add(uri);
             }
 

@@ -109,6 +109,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private View view;
     private ImageButton ibHelp;
     private SwitchCompat swPowerMenu;
+    private SwitchCompat swSendSelf;
     private SwitchCompat swExternalSearch;
     private SwitchCompat swSortAnswers;
     private SwitchCompat swExternalAnswer;
@@ -161,6 +162,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private ImageButton ibSend;
     private SwitchCompat swOpenAi;
     private TextView tvOpenAiPrivacy;
+    private EditText etOpenAi;
     private TextInputLayout tilOpenAi;
     private EditText etOpenAiModel;
     private TextView tvOpenAiTemperature;
@@ -186,6 +188,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swHwAccel;
     private Button btnRepair;
     private Button btnDaily;
+    private TextView tvLastDaily;
     private SwitchCompat swAutostart;
     private SwitchCompat swEmergency;
     private SwitchCompat swWorkManager;
@@ -204,6 +207,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvThreadRange;
     private SeekBar sbThreadRange;
     private ImageButton ibSqliteCache;
+    private SwitchCompat swAutoScroll;
     private SwitchCompat swUndoManager;
     private SwitchCompat swBrowserZoom;
     private SwitchCompat swFakeDark;
@@ -232,6 +236,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private EditText etNativeArcWhitelist;
     private SwitchCompat swInfra;
     private SwitchCompat swDupMsgId;
+    private SwitchCompat swThreadByRef;
     private EditText etKeywords;
     private SwitchCompat swTestIab;
     private Button btnImportProviders;
@@ -277,14 +282,15 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "deepl_enabled",
             "vt_enabled", "vt_apikey",
             "send_enabled", "send_host", "send_dlimit", "send_tlimit",
-            "openai_enabled", "openai_apikey", "openai_model", "openai_temperature", "openai_moderation",
+            "openai_enabled", "openai_uri", "openai_apikey", "openai_model", "openai_temperature", "openai_moderation",
             "updates", "weekly", "beta", "show_changelog", "announcements",
             "crash_reports", "cleanup_attachments",
             "watchdog", "experiments", "main_log", "main_log_memory", "protocol", "log_level", "debug", "leak_canary",
             "test1", "test2", "test3", "test4", "test5",
             "emergency_file", "work_manager", // "external_storage",
             "sqlite_integrity_check", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_auto_vacuum", "sqlite_sync_extra", "sqlite_cache",
-            "chunk_size", "thread_range", "undo_manager",
+            "chunk_size", "thread_range",
+            "autoscroll_editor", "undo_manager",
             "browser_zoom", "fake_dark",
             "show_recent",
             "use_modseq", "preamble", "uid_command", "perform_expunge", "uid_expunge",
@@ -293,7 +299,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "max_backoff_power", "logarithmic_backoff",
             "exact_alarms",
             "native_dkim", "native_arc", "native_arc_whitelist",
-            "infra", "dup_msgids", "global_keywords", "test_iab"
+            "infra", "dup_msgids", "thread_byref", "global_keywords", "test_iab"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -350,6 +356,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         ibHelp = view.findViewById(R.id.ibHelp);
         swPowerMenu = view.findViewById(R.id.swPowerMenu);
+        swSendSelf = view.findViewById(R.id.swSendSelf);
         swExternalSearch = view.findViewById(R.id.swExternalSearch);
         swSortAnswers = view.findViewById(R.id.swSortAnswers);
         swExternalAnswer = view.findViewById(R.id.swExternalAnswer);
@@ -402,6 +409,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         ibSend = view.findViewById(R.id.ibSend);
         swOpenAi = view.findViewById(R.id.swOpenAi);
         tvOpenAiPrivacy = view.findViewById(R.id.tvOpenAiPrivacy);
+        etOpenAi = view.findViewById(R.id.etOpenAi);
         tilOpenAi = view.findViewById(R.id.tilOpenAi);
         etOpenAiModel = view.findViewById(R.id.etOpenAiModel);
         tvOpenAiTemperature = view.findViewById(R.id.tvOpenAiTemperature);
@@ -427,6 +435,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swHwAccel = view.findViewById(R.id.swHwAccel);
         btnRepair = view.findViewById(R.id.btnRepair);
         btnDaily = view.findViewById(R.id.btnDaily);
+        tvLastDaily = view.findViewById(R.id.tvLastDaily);
         swAutostart = view.findViewById(R.id.swAutostart);
         swEmergency = view.findViewById(R.id.swEmergency);
         swWorkManager = view.findViewById(R.id.swWorkManager);
@@ -445,6 +454,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         sbChunkSize = view.findViewById(R.id.sbChunkSize);
         tvThreadRange = view.findViewById(R.id.tvThreadRange);
         sbThreadRange = view.findViewById(R.id.sbThreadRange);
+        swAutoScroll = view.findViewById(R.id.swAutoScroll);
         swUndoManager = view.findViewById(R.id.swUndoManager);
         swBrowserZoom = view.findViewById(R.id.swBrowserZoom);
         swFakeDark = view.findViewById(R.id.swFakeDark);
@@ -473,6 +483,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         etNativeArcWhitelist = view.findViewById(R.id.etNativeArcWhitelist);
         swInfra = view.findViewById(R.id.swInfra);
         swDupMsgId = view.findViewById(R.id.swDupMsgId);
+        swThreadByRef = view.findViewById(R.id.swThreadByRef);
         etKeywords = view.findViewById(R.id.etKeywords);
         swTestIab = view.findViewById(R.id.swTestIab);
         btnImportProviders = view.findViewById(R.id.btnImportProviders);
@@ -522,6 +533,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
                     Helper.enableComponent(getContext(), ServicePowerControl.class, checked);
+            }
+        });
+
+        swSendSelf.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                Helper.enableComponent(getContext(), ActivitySendSelf.class, checked);
             }
         });
 
@@ -1040,6 +1058,28 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        etOpenAi.setHint(BuildConfig.OPENAI_ENDPOINT);
+        etOpenAi.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String apikey = s.toString().trim();
+                if (TextUtils.isEmpty(apikey))
+                    prefs.edit().remove("openai_uri").apply();
+                else
+                    prefs.edit().putString("openai_uri", apikey).apply();
+            }
+        });
+
         tilOpenAi.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1542,6 +1582,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swAutoScroll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("autoscroll_editor", checked).apply();
+            }
+        });
+
         swUndoManager.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1758,6 +1805,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("dup_msgids", checked).apply();
+            }
+        });
+
+        swThreadByRef.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("thread_byref", checked).apply();
             }
         });
 
@@ -2122,6 +2176,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         setLastCleanup(prefs.getLong("last_cleanup", -1));
 
+        if (prefs.contains("last_daily"))
+            tvLastDaily.setText(new Date(prefs.getLong("last_daily", 0)).toString());
+        else
+            tvLastDaily.setText(("-"));
+
         File external = Helper.getExternalFilesDir(getContext());
         boolean emulated = (external != null && Environment.isExternalStorageEmulated(external));
         tvExternalStorageFolder.setText(
@@ -2204,11 +2263,15 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         if ("last_cleanup".equals(key))
             setLastCleanup(prefs.getLong(key, -1));
 
+        if ("last_daily".equals(key))
+            tvLastDaily.setText(new Date(prefs.getLong(key, 0)).toString());
+
         if ("lt_uri".equals(key) ||
                 "lt_user".equals(key) ||
                 "lt_key".equals(key) ||
                 "vt_apikey".equals(key) ||
                 "send_host".equals(key) ||
+                "openai_uri".equals(key) ||
                 "openai_apikey".equals(key) ||
                 "openai_model".equals(key))
             return;
@@ -2241,9 +2304,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         final Context context = getContext();
         View dview = LayoutInflater.from(context).inflate(R.layout.dialog_reset_questions, null);
         final CheckBox cbGeneral = dview.findViewById(R.id.cbGeneral);
-        final CheckBox cbFull = dview.findViewById(R.id.cbFull);
-        final CheckBox cbImages = dview.findViewById(R.id.cbImages);
         final CheckBox cbLinks = dview.findViewById(R.id.cbLinks);
+        final CheckBox cbFiles = dview.findViewById(R.id.cbFiles);
+        final CheckBox cbImages = dview.findViewById(R.id.cbImages);
+        final CheckBox cbFull = dview.findViewById(R.id.cbFull);
 
         new AlertDialog.Builder(context)
                 .setView(dview)
@@ -2265,11 +2329,12 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                     key.startsWith("translated_") && cbGeneral.isChecked()) ||
                                     key.startsWith("oauth.") ||
                                     (key.startsWith("announcement.") && cbGeneral.isChecked()) ||
-                                    (key.endsWith(".show_full") && cbFull.isChecked()) ||
-                                    (key.endsWith(".show_images") && cbImages.isChecked()) ||
                                     (key.endsWith(".confirm_link") && cbLinks.isChecked()) ||
                                     (key.endsWith(".link_view") && cbLinks.isChecked()) ||
-                                    (key.endsWith(".link_sanitize") && cbLinks.isChecked())) {
+                                    (key.endsWith(".link_sanitize") && cbLinks.isChecked()) ||
+                                    (key.endsWith(".confirm_files") && cbFiles.isChecked()) ||
+                                    (key.endsWith(".show_images") && cbImages.isChecked()) ||
+                                    (key.endsWith(".show_full") && cbFull.isChecked())) {
                                 Log.i("Removing option=" + key);
                                 editor.remove(key);
                             }
@@ -2304,13 +2369,18 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             protected Void onExecute(Context context, Bundle args) {
                 WorkerCleanup.cleanup(context, true);
-                WorkManager.getInstance(context).pruneWork();
                 return null;
             }
 
             @Override
             protected void onExecuted(Bundle args, Void data) {
-                ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+                final Context context = getContext();
+                WorkManager.getInstance(context).pruneWork();
+                WorkerAutoUpdate.init(context);
+                WorkerCleanup.init(context);
+                WorkerDailyRules.init(context);
+                WorkerSync.init(context);
+                ToastEx.makeText(context, R.string.title_completed, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -2336,6 +2406,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swSortAnswers.setChecked(prefs.getBoolean("sort_answers", false));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
                 swPowerMenu.setChecked(Helper.isComponentEnabled(getContext(), ServicePowerControl.class));
+            swSendSelf.setChecked(Helper.isComponentEnabled(getContext(), ActivitySendSelf.class));
             swExternalSearch.setChecked(Helper.isComponentEnabled(getContext(), ActivitySearch.class));
             swExternalAnswer.setChecked(Helper.isComponentEnabled(getContext(), ActivityAnswer.class));
             swShortcuts.setChecked(prefs.getBoolean("shortcuts", true));
@@ -2396,6 +2467,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swSend.setChecked(prefs.getBoolean("send_enabled", false));
             etSend.setText(prefs.getString("send_host", null));
             swOpenAi.setChecked(prefs.getBoolean("openai_enabled", false));
+            etOpenAi.setText(prefs.getString("openai_uri", null));
             tilOpenAi.getEditText().setText(prefs.getString("openai_apikey", null));
             etOpenAiModel.setText(prefs.getString("openai_model", null));
 
@@ -2448,6 +2520,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             tvThreadRange.setText(getString(R.string.title_advanced_thread_range, range));
             sbThreadRange.setProgress(thread_range);
 
+            swAutoScroll.setChecked(prefs.getBoolean("autoscroll_editor", false));
             swUndoManager.setChecked(prefs.getBoolean("undo_manager", false));
             swBrowserZoom.setChecked(prefs.getBoolean("browser_zoom", false));
             swFakeDark.setChecked(prefs.getBoolean("fake_dark", false));
@@ -2483,6 +2556,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             etNativeArcWhitelist.setText(prefs.getString("native_arc_whitelist", null));
             swInfra.setChecked(prefs.getBoolean("infra", false));
             swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
+            swThreadByRef.setChecked(prefs.getBoolean("thread_byref", true));
             etKeywords.setText(prefs.getString("global_keywords", null));
             swTestIab.setChecked(prefs.getBoolean("test_iab", false));
 

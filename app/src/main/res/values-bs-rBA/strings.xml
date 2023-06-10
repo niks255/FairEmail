@@ -92,7 +92,7 @@
     <string name="title_block">Blokiraj %1$s</string>
     <string name="title_block_sender">Blokiraj pošiljaoca</string>
     <string name="title_block_sender_domain">Blokiraj domenu \'%1$s\'</string>
-    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Blokiranje znači automatsko premještanje u spam folder</string>
+    <string name="title_block_sender_remark">Blokiranje znači automatsko premještanje u spam folder</string>
     <string name="title_block_sender_hint">        Blokiranje pošiljaoca je besplatna funkcionalnost.
         Blokiranje domene pošiljaoca koristi pravila filtriranja, što predstavlja pro funkcionalnost.
     </string>
@@ -316,9 +316,10 @@
     <string name="title_setup_defaults">Vrati zadane postavke</string>
     <string name="title_setup_reset_questions">Poništi pitanja</string>
     <string name="title_setup_reset_general">Opća pitanja</string>
-    <string name="title_setup_reset_full">Prikaži izvorne poruke</string>
-    <string name="title_setup_reset_images">Prikaži slike</string>
     <string name="title_setup_reset_links">Potvrdi linkove</string>
+    <string name="title_setup_reset_files">Pregled datoteka</string>
+    <string name="title_setup_reset_images">Prikaži slike</string>
+    <string name="title_setup_reset_full">Prikaži izvorne poruke</string>
     <string name="title_check_gmail_oauth">Vaši Gmail računi radit će nakon 30. maja 2022.</string>
     <string name="title_check_gmail_password">Neki od vaših Gmail računa prestat će raditi nakon 30. maja 2022.</string>
     <string name="title_check_outlook_oauth">Vaši Outlook računi će raditi nakon 1. oktobra 2022.</string>
@@ -405,6 +406,7 @@
     <string name="title_advanced_quote_reply">Citiraj tekst \"odgovorene poruke\"</string>
     <string name="title_advanced_limit_reply">Ograniči broj ugniježđenih citata</string>
     <string name="title_advanced_resize_reply">Promijeni veličinu slika u tekstu odgovora</string>
+    <string name="title_advanced_resize_paste">Promijeni veličinu zalijepljenih slika</string>
     <string name="title_advanced_signature_location">Mjesto potpisa</string>
     <string name="title_advanced_signature_new">Koristi potpis za nove poruke</string>
     <string name="title_advanced_signature_reply">Koristi potpis za odgovore</string>
@@ -455,6 +457,7 @@
     <string name="title_advanced_two_col">Koristi dvije kolone</string>
     <string name="title_advanced_min_screen_size">Minimalna veličina ekrana za podijeljeni ekran</string>
     <string name="title_advanced_close_pane">Suzi red ili kolonu pri zatvaranju konverzacije</string>
+    <string name="title_advanced_open_pane">Započni s dva reda ili dvije kolone</string>
     <string name="title_advanced_column_width">Širina kolone / visina reda poruka: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Sakrij gornju alatnu traku pri skrolanju poruka</string>
     <string name="title_advanced_nav_options">Prikaži opcije navigacijskog menija</string>
@@ -479,6 +482,7 @@
     <string name="title_advanced_date_week">Grupisanje prema sedmici umjesto danu</string>
     <string name="title_advanced_date_fixed">Prikaži na vrhu fiksno zaglavlje s datumom</string>
     <string name="title_advanced_date_bold">Prikaži datum podebljan</string>
+    <string name="title_advanced_date_time">Uvijek prikazuj i datum i vrijeme</string>
     <string name="title_advanced_threading">Nizanje konverzacija</string>
     <string name="title_advanced_threading_unread">Prikaži broj nepročitanih poruka u konverzacijama</string>
     <string name="title_advanced_indentation">Lijevo/desno poravnanje primljenih/poslanih poruka u konverzacijama</string>
@@ -597,7 +601,7 @@
     <string name="title_advanced_auto_block_sender">Automatski blokiraj pošiljaoca kada se prijavljuje spam</string>
     <string name="title_advanced_auto_hide_answer">Automatski sakrij dugme za odgovor prilikom pomjeranja</string>
     <string name="title_advanced_swipe_reply">Prstom prevucite proširene poruke na desno za odgovor</string>
-    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">Pri premještanju konverzacije, premjesti i poslane poruke</string>
+    <string name="title_advanced_move_thread_sent">Pri premještanju konverzacije, premjesti i poslane poruke</string>
     <string name="title_advanced_default_snooze">Zadano vrijeme odlaganja/odgađanja</string>
     <string name="title_advanced_default_folder">Izaberite zadani folder</string>
     <string name="title_advanced_notifications">Upravljaj obavještenjima</string>
@@ -641,6 +645,7 @@
     <string name="title_advanced_notifications_background">Koristi pozadinski servis za sinhronizaciju poruka</string>
     <string name="title_advanced_notifications_background_hint">Android može zaustaviti pozadinski servis bilo kada, ali on ne zahtijeva obavještenje na statusnoj traci</string>
     <string name="title_advanced_confirm_links">Potvrdi linkove na otvaranju</string>
+    <string name="title_advanced_confirm_files">Potvrda pregleda datoteka</string>
     <string name="title_advanced_sanitize_links">Ukloni parametre \'praćenja\' po default-u</string>
     <string name="title_advanced_sanitize_links_hint">Samo pri potvrđivanju linkova</string>
     <string name="title_advanced_check_links_dbl">Provjeri spisak blokiranja domena za sumnjive linkove</string>
@@ -915,6 +920,7 @@
     <string name="title_leave_deleted">Zadrži izbrisane poruke na serveru</string>
     <string name="title_leave_on_device">Zadrži poruke na uređaju</string>
     <string name="title_max_messages">Maksimalan broj poruka za preuzimanje (prazno za sve)</string>
+    <string name="title_max_messages_keep">Ovo je maksimalan broj poruka koje će se zadržati na uređaju</string>
     <string name="title_max_messages_remark">        Unesite pozitivan broj za preuzimanje poruka na kraju (najčešće)
         i negativan broj za preuzimanje poruka na početku (najrjeđe)
     </string>
@@ -1049,6 +1055,8 @@
     <string name="title_unified_folder">Prikaži u objedinjenom inboxu</string>
     <string name="title_navigation_folder">Prikaži u navigacijskom meniju</string>
     <string name="title_navigation_folder_hide">Sakrij u navigacijskom meniju</string>
+    <string name="title_unified_inbox_add">Dodaj u objedinjeni inbox</string>
+    <string name="title_unified_inbox_delete">Izbriši iz objedinjenog inbox-a</string>
     <string name="title_synchronize_folder">Sinhronizuj (primaj poruke)</string>
     <string name="title_poll_folder">Provjeri povremeno umjesto stalnog sinhroniziranja</string>
     <string name="title_poll_folder_remark">Većina e-mail servera dopušta trenutna obavještenja samo za određene foldere!</string>
@@ -1241,6 +1249,7 @@
     <string name="title_ask_show_image_hint">Slike koje su prepoznate kao \'one koje prate\' neće se prikazivati</string>
     <string name="title_ask_show_amp">Prikazati AMP varijantu poruke?</string>
     <string name="title_ask_show_amp_hint">AMP poruke su dizajnirane kao dinamične i interaktivne na internetu, i stoga po definiciji mogu Vas pratiti</string>
+    <string name="title_ask_view_file">Pregledati datoteku %1$s ?</string>
     <string name="title_ask_delete_local">Izbrisati lokalne poruke? Poruke će biti zadržane na udaljenom serveru.</string>
     <string name="title_ask_help">Pomozite u poboljšanju FairEmail-a</string>
     <string name="title_ask_reporting">Pošalji izvještaj o greški?</string>
@@ -1360,6 +1369,7 @@
     <string name="title_translating">Prevođenje &#8230;</string>
     <string name="title_translate_formal">Koristi formalni oblik</string>
     <string name="title_translate_small">Koristi mali font za izvorni tekst</string>
+    <string name="title_translate_replace">Zamijeni izvorni tekst prevedenim tekstom</string>
     <string name="title_translate_html">Zadrži formatiranje</string>
     <string name="title_translate_html_hint">Ovo će zauzimati više znakova</string>
     <string name="title_translate_usage">Iskorištenje: %1$s / %2$s (%3$d %%)</string>
@@ -1412,6 +1422,7 @@
     <string name="title_verify">Potvrdi</string>
     <string name="title_encrypt">Šifriraj</string>
     <string name="title_decrypt">Dešifriraj</string>
+    <string name="title_reset_message_questions">Poništi pitanja o linkovima</string>
     <string name="title_resync">Ponovo sinhronizuj</string>
     <string name="title_charset">Kodiranje</string>
     <string name="title_charset_auto">Automatski</string>
@@ -1735,6 +1746,7 @@
     <string name="title_legend_avatar">Avatar</string>
     <string name="title_legend_show_quotes">Prikaži citate</string>
     <string name="title_legend_show_junk">Tretiraj kao spam</string>
+    <string name="title_legend_not_junk">Ne tretiraj kao spam</string>
     <string name="title_legend_create_rule">Kreiraj pravilo</string>
     <string name="title_legend_show_unsubscribe">Otkaži pretplatu sa spiska</string>
     <string name="title_legend_show_images">Prikaži slike</string>

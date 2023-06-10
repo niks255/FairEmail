@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">Recherche FairEmail</string>
+    <string name="app_send_self" comment="app_send_self&#10;Title for additional Android share sheet target. This needs to be short!">Envoyer à soi-même</string>
     <string name="app_changelog">Journal des modifications</string>
     <string name="app_welcome">FairEmail est une application de messagerie à code source ouvert axée sur la confidentialité et la sécurité. C’est pourquoi certaines fonctionnalités peuvent être différentes de ce à quoi vous êtes habitué·e.</string>
     <string name="app_limitations">Par exemple, les messages sont reformatés par défaut pour supprimer tout élément dangereux ainsi qu\'améliorer la lisibilité et l\'ouverture des liens doit être confirmée pour des raisons de sécurité. Les deux options peuvent être désactivées si souhaité.</string>
@@ -82,7 +83,7 @@
     <string name="title_block">Bloquer %1$s</string>
     <string name="title_block_sender">Bloquer l\'expéditeur</string>
     <string name="title_block_sender_domain">Bloquer le domaine \'%1$s\'</string>
-    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Bloquer signifie déplacer automatiquement vers le dossier « Indésirables »</string>
+    <string name="title_block_sender_remark">Bloquer signifie déplacer automatiquement vers le dossier « Indésirables »</string>
     <string name="title_block_sender_hint">        Bloquer un expéditeur est une fonctionnalité gratuite.
         Bloquer un domaine expéditeur utilise une règle de filtrage qui est une fonctionnalité Pro.
     </string>
@@ -303,9 +304,10 @@
     <string name="title_setup_defaults">Rétablir les paramètres par défaut</string>
     <string name="title_setup_reset_questions">Réinitialiser les questions</string>
     <string name="title_setup_reset_general">Questions générales</string>
-    <string name="title_setup_reset_full">Afficher les messages originaux</string>
-    <string name="title_setup_reset_images">Afficher les images</string>
     <string name="title_setup_reset_links">Confirmer les liens</string>
+    <string name="title_setup_reset_files">Voir les fichiers</string>
+    <string name="title_setup_reset_images">Afficher les images</string>
+    <string name="title_setup_reset_full">Afficher les messages originaux</string>
     <string name="title_check_gmail_oauth">Vos comptes Gmail continueront de fonctionner après le 30 mai 2022</string>
     <string name="title_check_gmail_password">Certains de vos comptes Gmail peuvent cesser de fonctionner après le 30 mai 2022</string>
     <string name="title_check_outlook_oauth">Vos comptes Outlook continueront de fonctionner après le 1er octobre 2022</string>
@@ -392,6 +394,7 @@
     <string name="title_advanced_quote_reply">Citer le texte répondu</string>
     <string name="title_advanced_limit_reply">Limiter le nombre de citations imbriquées</string>
     <string name="title_advanced_resize_reply">Redimensionner les images dans le texte de la réponse</string>
+    <string name="title_advanced_resize_paste">Redimensionner les images collées</string>
     <string name="title_advanced_signature_location">Emplacement de la signature</string>
     <string name="title_advanced_signature_new">Utiliser la signature pour les nouveaux messages</string>
     <string name="title_advanced_signature_reply">Utiliser la signature lors de la réponse</string>
@@ -442,6 +445,7 @@
     <string name="title_advanced_two_col">Utiliser deux colonnes</string>
     <string name="title_advanced_min_screen_size">Taille minimale de l\'écran pour partager l\'écran</string>
     <string name="title_advanced_close_pane">Replier la ligne ou la colonne lors de la fermeture d\'une conversation</string>
+    <string name="title_advanced_open_pane">Commencer avec deux lignes ou deux colonnes</string>
     <string name="title_advanced_column_width">Largeur de colonne / hauteur de ligne du message: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Masquer la barre d\'outils du haut lors du défilement des messages</string>
     <string name="title_advanced_nav_options">Afficher les options du menu de navigation</string>
@@ -466,6 +470,7 @@
     <string name="title_advanced_date_week">Regrouper par semaine et non par jour</string>
     <string name="title_advanced_date_fixed">Afficher l\'en-tête de la date fixe en haut</string>
     <string name="title_advanced_date_bold">Afficher la date en gras</string>
+    <string name="title_advanced_date_time">Afficher toujours à la fois la date et l\'heure</string>
     <string name="title_advanced_threading">Afficher en mode conversation</string>
     <string name="title_advanced_threading_unread">Afficher le nombre de messages non lus dans les conversations</string>
     <string name="title_advanced_indentation">Mettre en retrait vers la gauche/droite les messages reçus/envoyés dans les conversations</string>
@@ -584,7 +589,7 @@
     <string name="title_advanced_auto_block_sender">Bloquer automatiquement l\'expéditeur lors du signalement de courrier indésirable</string>
     <string name="title_advanced_auto_hide_answer">Masquer automatiquement le bouton de réponse lors du défilement</string>
     <string name="title_advanced_swipe_reply">Balayer vers la droite les messages dépliés pour répondre</string>
-    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">Lors du déplacement d\'une conversation, déplacer également les messages envoyés</string>
+    <string name="title_advanced_move_thread_sent">Lors du déplacement d\'une conversation, déplacer également les messages envoyés</string>
     <string name="title_advanced_default_snooze">Durée de report par défaut</string>
     <string name="title_advanced_default_folder">Sélectionner le dossier par défaut</string>
     <string name="title_advanced_notifications">Gérer les notifications</string>
@@ -628,6 +633,7 @@
     <string name="title_advanced_notifications_background">Utiliser le service d\'arrière-plan pour synchroniser les messages</string>
     <string name="title_advanced_notifications_background_hint">Un service en arrière-plan peut être arrêté par Android à tout moment, mais ne nécessite pas de notification dans la barre d\'état</string>
     <string name="title_advanced_confirm_links">Confirmer l’ouverture des liens</string>
+    <string name="title_advanced_confirm_files">Confirmer la visualisation des fichiers</string>
     <string name="title_advanced_sanitize_links">Supprimer les paramètres de suivi par défaut</string>
     <string name="title_advanced_sanitize_links_hint">Seulement lors de la confirmation des liens</string>
     <string name="title_advanced_check_links_dbl">Rechercher les liens suspects dans des listes de blocage de domaines</string>
@@ -679,6 +685,7 @@
         Les clés et les certificats peuvent généralement être trouvés sous Avancé - Chiffrement et identifiants.
     </string>
     <string name="title_advanced_power_menu">Ajouter des actions au menu alimentation d\'Android</string>
+    <string name="title_advanced_send_self" comment="title_advanced_send_self&#10;Title for miscellaneous option to enable an additional Android share sheet target">Ajouter « Envoyer à soi-même » au menu de partage d\'Android</string>
     <string name="title_advanced_external_search">Autoriser les autres applications à rechercher dans les messages</string>
     <string name="title_advanced_sort_answers">Trier les modèles de réponse par fréquence d\'utilisation</string>
     <string name="title_advanced_shortcuts">Afficher les contacts fréquemment utilisés dans le menu « Partager » d’Android</string>
@@ -903,6 +910,7 @@
     <string name="title_leave_deleted">Laisser les messages supprimés sur le serveur</string>
     <string name="title_leave_on_device">Laisser les messages sur l’appareil</string>
     <string name="title_max_messages">Nombre maximum de messages à télécharger (laisser vide pour tous)</string>
+    <string name="title_max_messages_keep">Ceci est le nombre maximum de messages qui seront conservés sur l\'appareil</string>
     <string name="title_max_messages_remark">        Saisir un nombre positif pour télécharger les messages à la fin (le plus commun)
         et un nombre négatif pour télécharger les messages au début (le moins commun)
     </string>
@@ -1037,6 +1045,8 @@
     <string name="title_unified_folder">Afficher dans la boîte de réception unifiée</string>
     <string name="title_navigation_folder">Afficher dans le menu de navigation</string>
     <string name="title_navigation_folder_hide">Masquer dans le menu de navigation</string>
+    <string name="title_unified_inbox_add">Ajouter à la boîte de réception unifiée</string>
+    <string name="title_unified_inbox_delete">Supprimer de la boîte de réception unifiée</string>
     <string name="title_synchronize_folder">Synchroniser (recevoir les messages)</string>
     <string name="title_poll_folder">Vérifier périodiquement au lieu de synchroniser en continu</string>
     <string name="title_poll_folder_remark">La plupart des serveurs de messagerie autorisent les messages poussés pour un petit nombre de dossiers seulement!</string>
@@ -1229,6 +1239,7 @@
     <string name="title_ask_show_image_hint">Les images identifiées comme étant des images de pistage ne seront pas affichées</string>
     <string name="title_ask_show_amp">Afficher la variante AMP du message?</string>
     <string name="title_ask_show_amp_hint">Les messages AMP sont conçus pour être dynamiques, interagir avec Internet et peuvent donc par définition être utilisés pour vous pister</string>
+    <string name="title_ask_view_file">Voir le fichier %1$s?</string>
     <string name="title_ask_delete_local">Supprimer les messages locaux? Les messages resteront sur le serveur distant.</string>
     <string name="title_ask_help">Aider à l’amélioration de FairEmail</string>
     <string name="title_ask_reporting">Envoyer des rapports d’erreur?</string>
@@ -1348,6 +1359,7 @@
     <string name="title_translating">Traduction&#8230;</string>
     <string name="title_translate_formal">Utiliser un langage formel</string>
     <string name="title_translate_small">Utiliser une petite police de caractères pour le texte source</string>
+    <string name="title_translate_replace">Remplacer le texte source par le texte traduit</string>
     <string name="title_translate_html">Conserver la mise en forme</string>
     <string name="title_translate_html_hint">Ceci utilisera plus de caractères</string>
     <string name="title_translate_usage">Utilisation : %1$s / %2$s (%3$d %%)</string>
@@ -1723,6 +1735,7 @@
     <string name="title_legend_avatar">Avatar</string>
     <string name="title_legend_show_quotes">Afficher les citations</string>
     <string name="title_legend_show_junk">Traiter comme indésirable</string>
+    <string name="title_legend_not_junk">Traiter comme non indésirable</string>
     <string name="title_legend_create_rule">Créer une règle</string>
     <string name="title_legend_show_unsubscribe">Se désabonner de la liste</string>
     <string name="title_legend_show_images">Afficher les images</string>

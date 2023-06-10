@@ -1456,7 +1456,7 @@
     <provider
         name="Charter.net"
         appPassword="true"
-        domain="charter\\.net"
+        domain="bresnan\\.net,charter\\.net,spectrum\\.net"
         link="https://www.spectrum.net/support/internet/spectrum-email-server-settings/">
         <imap
             host="mobile.charter.net"
@@ -2074,6 +2074,32 @@
             starttls="false" />
         <smtp
             host="mail.greensta.de"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="BT internet"
+        domain="btinternet\\.com,btopenworld\\.com"
+        link="https://www.bt.com/help/email/manage-email-account/manual-settings/what-are-the-settings-for-outgoing-and-incoming-bt-email-servers">
+        <imap
+            host="mail.btinternet.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.btinternet.com"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="rediff email"
+        domain="rediff\\.com"
+        link="https://support.rediff.com/imap-settings-for-outlook/">
+        <imap
+            host="imap.rediffmailpro.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.rediffmailpro.com"
             port="465"
             starttls="false" />
     </provider>

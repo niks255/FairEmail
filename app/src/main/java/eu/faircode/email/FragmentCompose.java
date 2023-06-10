@@ -278,6 +278,7 @@ public class FragmentCompose extends FragmentBase {
     private ContentResolver resolver;
     private AdapterAttachment adapter;
 
+    private boolean autoscroll_editor;
     private int compose_color;
     private String compose_font;
     private boolean compose_monospaced;
@@ -344,6 +345,7 @@ public class FragmentCompose extends FragmentBase {
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
+        autoscroll_editor = prefs.getBoolean("autoscroll_editor", false);
         compose_color = prefs.getInt("compose_color", Color.TRANSPARENT);
         compose_font = prefs.getString("compose_font", "");
         compose_monospaced = prefs.getBoolean("compose_monospaced", false);
@@ -362,10 +364,7 @@ public class FragmentCompose extends FragmentBase {
         setTitle(R.string.page_compose);
         setSubtitle(getResources().getQuantityString(R.plurals.page_message, 1));
 
-        int max = (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-                ? Integer.MAX_VALUE
-                : MediaStore.getPickImagesMaxLimit());
-
+        int max = Helper.hasPhotoPicker() ? MediaStore.getPickImagesMaxLimit() : 20;
         pickImages =
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(max), uris -> {
                     if (!uris.isEmpty())
@@ -625,7 +624,15 @@ public class FragmentCompose extends FragmentBase {
             @Override
             public void onInputContent(Uri uri, String type) {
                 Log.i("Received input uri=" + uri);
-                onAddAttachment(Arrays.asList(uri), type == null ? null : new String[]{type}, true, 0, false, false);
+                boolean resize_paste = prefs.getBoolean("resize_paste", true);
+                int resize = prefs.getInt("resize", FragmentCompose.REDUCED_IMAGE_SIZE);
+                onAddAttachment(
+                        Arrays.asList(uri),
+                        type == null ? null : new String[]{type},
+                        true,
+                        resize_paste ? resize : 0,
+                        false,
+                        false);
             }
         });
 
@@ -693,11 +700,14 @@ public class FragmentCompose extends FragmentBase {
                     }
                 }
 
-                if (count - before > 1)
-                    inserted = true;
-                else if (count - before == 1) {
-                    char c = text.charAt(start + count - 1);
-                    inserted = Character.isWhitespace(c);
+                // Autoscroll was fixed by Android 14 beta 2
+                if (autoscroll_editor) {
+                    if (count - before > 1)
+                        inserted = true;
+                    else if (count - before == 1) {
+                        char c = text.charAt(start + count - 1);
+                        inserted = Character.isWhitespace(c);
+                    }
                 }
             }
 
@@ -2738,6 +2748,8 @@ public class FragmentCompose extends FragmentBase {
                             return;
 
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        boolean small = prefs.getBoolean("deepl_small", false);
+                        boolean replace = (!small && prefs.getBoolean("deepl_replace", false));
 
                         // Insert translated text
                         /*
@@ -2760,22 +2772,28 @@ public class FragmentCompose extends FragmentBase {
                              at android.text.SpannableStringBuilder.insert(SpannableStringBuilder.java:226)
                              at android.text.SpannableStringBuilder.insert(SpannableStringBuilder.java:38)
                          */
-                        int len = 2 + translation.translated_text.length();
-                        edit.insert(paragraph.second, translation.translated_text);
-                        edit.insert(paragraph.second, "\n\n");
-                        StyleHelper.markAsInserted(edit, paragraph.second, paragraph.second + len);
+                        int len = translation.translated_text.length();
 
+                        edit.insert(paragraph.second, translation.translated_text);
+
+                        if (!replace) {
+                            edit.insert(paragraph.second, "\n\n");
+                            len += 2;
+                        }
+
+                        StyleHelper.markAsInserted(edit, paragraph.second, paragraph.second + len);
                         etBody.setSelection(paragraph.second + len);
 
-                        boolean small = prefs.getBoolean("deepl_small", false);
                         if (small) {
                             RelativeSizeSpan[] spans = edit.getSpans(
                                     paragraph.first, paragraph.second, RelativeSizeSpan.class);
                             for (RelativeSizeSpan span : spans)
                                 edit.removeSpan(span);
-                            edit.setSpan(new RelativeSizeSpan(BuildConfig.DEBUG ? HtmlHelper.FONT_XSMALL : HtmlHelper.FONT_SMALL),
+                            edit.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL),
                                     paragraph.first, paragraph.second,
                                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        } else if (replace) {
+                            edit.delete(paragraph.first, paragraph.second);
                         }
 
                         // Updated frequency
@@ -3437,24 +3455,28 @@ public class FragmentCompose extends FragmentBase {
             // https://developer.android.com/training/data-storage/shared/photopicker#device-availability
             // https://developer.android.com/reference/android/provider/MediaStore#ACTION_PICK_IMAGES
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean photo_picker = prefs.getBoolean("photo_picker", false);
-            if (photo_picker) {
-                Log.i("Using photo picker");
-                pickImages.launch(new PickVisualMediaRequest.Builder()
-                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                        .build());
-            } else {
-                Log.i("Using file picker");
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.setType("image/*");
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                if (intent.resolveActivity(pm) == null) // GET_CONTENT whitelisted
-                    noStorageAccessFramework();
-                else
-                    startActivityForResult(Helper.getChooser(context, intent), REQUEST_IMAGE_FILE);
-            }
+            boolean photo_picker = prefs.getBoolean("photo_picker", true);
+            if (photo_picker)
+                try {
+                    Log.i("Using photo picker");
+                    pickImages.launch(new PickVisualMediaRequest.Builder()
+                            .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                            .build());
+                    return;
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+
+            Log.i("Using file picker");
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            if (intent.resolveActivity(pm) == null) // GET_CONTENT whitelisted
+                noStorageAccessFramework();
+            else
+                startActivityForResult(Helper.getChooser(context, intent), REQUEST_IMAGE_FILE);
         }
     }
 
@@ -4187,6 +4209,11 @@ public class FragmentCompose extends FragmentBase {
                 db.identity().setIdentitySignKeyAlias(identity.id, alias);
 
                 // Build content
+                File sinput = new File(tmp, draft.id + ".smime_sign");
+                try (FileOutputStream fos = new FileOutputStream(sinput)) {
+                    bpContent.writeTo(fos);
+                }
+
                 if (EntityMessage.SMIME_SIGNONLY.equals(type)) {
                     EntityAttachment cattachment = new EntityAttachment();
                     cattachment.message = draft.id;
@@ -4198,9 +4225,7 @@ public class FragmentCompose extends FragmentBase {
                     cattachment.id = db.attachment().insertAttachment(cattachment);
 
                     File content = cattachment.getFile(context);
-                    try (OutputStream os = new FileOutputStream(content)) {
-                        bpContent.writeTo(os);
-                    }
+                    Helper.copy(sinput, content);
 
                     db.attachment().setDownloaded(cattachment.id, content.length());
                 }
@@ -4233,11 +4258,6 @@ public class FragmentCompose extends FragmentBase {
                 SignerInfoGenerator signerInfoGenerator = new JcaSignerInfoGeneratorBuilder(digestCalculator)
                         .build(contentSigner, chain[0]);
                 cmsGenerator.addSignerInfoGenerator(signerInfoGenerator);
-
-                File sinput = new File(tmp, draft.id + ".smime_sign");
-                try (FileOutputStream fos = new FileOutputStream(sinput)) {
-                    bpContent.writeTo(fos);
-                }
 
                 CMSTypedData cmsData = new CMSProcessableFile(sinput);
                 CMSSignedData cmsSignedData = cmsGenerator.generate(cmsData);
@@ -5416,9 +5436,21 @@ public class FragmentCompose extends FragmentBase {
                                     EntityLog.log(context, "Recognized=null");
                             }
 
-                            if ("reply_all".equals(action))
-                                data.draft.cc = ref.getAllRecipients(data.identities, ref.account);
-                            else if ("dsn".equals(action)) {
+                            if ("reply_all".equals(action)) {
+                                List<Address> all = new ArrayList<>();
+                                for (Address recipient : ref.getAllRecipients(data.identities, ref.account)) {
+                                    boolean found = false;
+                                    if (data.draft.to != null)
+                                        for (Address t : data.draft.to)
+                                            if (MessageHelper.equalEmail(recipient, t)) {
+                                                found = true;
+                                                break;
+                                            }
+                                    if (!found)
+                                        all.add(recipient);
+                                }
+                                data.draft.cc = all.toArray(new Address[0]);
+                            } else if ("dsn".equals(action)) {
                                 data.draft.dsn = dsn;
                                 data.draft.receipt_request = false;
                             }
@@ -6212,6 +6244,7 @@ public class FragmentCompose extends FragmentBase {
 
                                     Intent thread = new Intent(v.getContext(), ActivityView.class);
                                     thread.setAction("thread:" + message.id);
+                                    // No group
                                     thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     thread.putExtra("account", message.account);
                                     thread.putExtra("folder", message.folder);
@@ -7702,7 +7735,7 @@ public class FragmentCompose extends FragmentBase {
                 result.type = dfile.getType();
                 result.size = dfile.length();
             }
-        } catch (SecurityException ex) {
+        } catch (Throwable ex) {
             Log.e(ex);
         }
 

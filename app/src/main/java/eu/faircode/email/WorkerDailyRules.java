@@ -33,6 +33,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -69,13 +70,20 @@ public class WorkerDailyRules extends Worker {
             for (EntityAccount account : accounts) {
                 List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
                 for (EntityFolder folder : folders) {
+                    EntityLog.log(context, "Executing daily rules for " + account.name + "/" + folder.name);
+
                     List<EntityRule> rules = db.rule().getEnabledRules(folder.id, true);
-                    if (rules.size() == 0)
+                    if (rules == null || rules.size() == 0)
                         continue;
+                    EntityLog.log(context, "Executing daily rules count=" + rules.size());
 
                     int count = 0;
-                    List<Long> mids = db.message().getMessageIdsByFolder(folder.id);
-                    for (long mid : mids)
+                    List<Long> ids = db.message().getMessageIdsByFolder(folder.id);
+                    if (ids == null || ids.size() == 0)
+                        continue;
+                    EntityLog.log(context, "Executing daily rules messages=" + ids.size());
+
+                    for (long mid : ids)
                         try {
                             db.beginTransaction();
 
@@ -90,20 +98,22 @@ public class WorkerDailyRules extends Worker {
 
                             if (needsHeaders && message.headers == null) {
                                 defer = true;
+                                EntityLog.log(context, "Deferring daily rules for headers message=" + message.id);
                                 EntityOperation.queue(context, message, EntityOperation.HEADERS);
                             }
 
                             if (needsBody && !message.content) {
                                 defer = true;
+                                EntityLog.log(context, "Deferring daily rules for body message=" + message.id);
                                 EntityOperation.queue(context, message, EntityOperation.BODY);
                             }
 
-                            if (defer) {
+                            if (defer)
                                 EntityOperation.queue(context, message, EntityOperation.RULE, -1L);
-                                continue;
+                            else {
+                                EntityLog.log(context, "Executing daily rules message=" + message.id);
+                                EntityRule.run(context, rules, message, null, null);
                             }
-
-                            EntityRule.run(context, rules, message, null, null);
 
                             db.setTransactionSuccessful();
                         } catch (Throwable ex) {
@@ -116,11 +126,15 @@ public class WorkerDailyRules extends Worker {
                             "Executed " + count + " daily rules for " + account.name + "/" + folder.name);
                 }
             }
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            prefs.edit().putLong("last_daily", new Date().getTime()).apply();
         } catch (Throwable ex) {
             Log.e(ex);
         } finally {
             semaphore.release();
             EntityLog.log(context, EntityLog.Type.Rules, "Completed daily rules");
+            ServiceSynchronize.eval(context, "daily");
         }
     }
 
@@ -140,17 +154,18 @@ public class WorkerDailyRules extends Worker {
                     cal.add(Calendar.DATE, 1);
                 delay = cal.getTimeInMillis() - now;
 
-                Log.i("Queuing " + getName() + " delay=" + (delay / (60 * 1000L)) + "m");
+                EntityLog.log(context, EntityLog.Type.Rules, "Queuing " + getName() + " delay=" + (delay / (60 * 1000L)) + "m");
+                WorkManager.getInstance(context).cancelUniqueWork(getName());
                 PeriodicWorkRequest.Builder builder =
                         new PeriodicWorkRequest.Builder(WorkerDailyRules.class, 1, TimeUnit.DAYS)
                                 .setInitialDelay(delay, TimeUnit.MILLISECONDS);
                 WorkManager.getInstance(context)
                         .enqueueUniquePeriodicWork(getName(), ExistingPeriodicWorkPolicy.UPDATE, builder.build());
-                Log.i("Queued " + getName());
+                EntityLog.log(context, EntityLog.Type.Rules, "Queued " + getName());
             } else {
-                Log.i("Cancelling " + getName());
+                EntityLog.log(context, EntityLog.Type.Rules, "Cancelling " + getName());
                 WorkManager.getInstance(context).cancelUniqueWork(getName());
-                Log.i("Cancelled " + getName());
+                EntityLog.log(context, EntityLog.Type.Rules, "Cancelled " + getName());
             }
         } catch (Throwable ex) {
             // https://issuetracker.google.com/issues/138465476

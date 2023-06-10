@@ -71,6 +71,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swDateWeek;
     private SwitchCompat swDateFixed;
     private SwitchCompat swDateBold;
+    private SwitchCompat swDateTime;
     private SwitchCompat swCategory;
     private SwitchCompat swCards;
     private SwitchCompat swBeige;
@@ -85,6 +86,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swLandscape;
     private Spinner spLandscapeMinSize;
     private SwitchCompat swClosePane;
+    private SwitchCompat swOpenPane;
     private TextView tvColumnWidth;
     private SeekBar sbColumnWidth;
     private SwitchCompat swHideToolbar;
@@ -197,9 +199,9 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
 
     private final static String[] RESET_OPTIONS = new String[]{
             "theme", "startup",
-            "date", "date_week", "date_fixed", "date_bold", "group_category",
+            "date", "date_week", "date_fixed", "date_bold", "date_time", "group_category",
             "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_border", "shadow_highlight", "dividers",
-            "portrait2", "portrait2c", "landscape", "close_pane", "column_width",
+            "portrait2", "portrait2c", "landscape", "close_pane", "open_pane", "column_width",
             "hide_toolbar", "nav_options", "nav_categories", "nav_last_sync", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
             "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_swap", "actionbar_color",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
@@ -238,6 +240,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swDateWeek = view.findViewById(R.id.swDateWeek);
         swDateFixed = view.findViewById(R.id.swDateFixed);
         swDateBold = view.findViewById(R.id.swDateBold);
+        swDateTime = view.findViewById(R.id.swDateTime);
         swCategory = view.findViewById(R.id.swCategory);
         swCards = view.findViewById(R.id.swCards);
         swBeige = view.findViewById(R.id.swBeige);
@@ -252,6 +255,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swLandscape = view.findViewById(R.id.swLandscape);
         spLandscapeMinSize = view.findViewById(R.id.spLandscapeMinSize);
         swClosePane = view.findViewById(R.id.swClosePane);
+        swOpenPane = view.findViewById(R.id.swOpenPane);
         tvColumnWidth = view.findViewById(R.id.tvColumnWidth);
         sbColumnWidth = view.findViewById(R.id.sbColumnWidth);
         swHideToolbar = view.findViewById(R.id.swHideToolbar);
@@ -443,6 +447,13 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
+        swDateTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("date_time", checked).apply();
+            }
+        });
+
         swCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -565,6 +576,14 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("close_pane", checked).apply();
+                swOpenPane.setEnabled(!checked);
+            }
+        });
+
+        swOpenPane.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("open_pane", checked).apply();
             }
         });
 
@@ -1415,6 +1434,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swDateFixed.setEnabled(!swDate.isChecked());
             swDateBold.setChecked(prefs.getBoolean("date_bold", false));
             swDateBold.setEnabled(swDate.isChecked() || swDateFixed.isChecked());
+            swDateTime.setChecked(prefs.getBoolean("date_time", false));
             swCategory.setChecked(prefs.getBoolean("group_category", false));
             swCards.setChecked(prefs.getBoolean("cards", true));
             swBeige.setChecked(prefs.getBoolean("beige", true));
@@ -1435,6 +1455,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swLandscape.setChecked(prefs.getBoolean("landscape", true));
             spLandscapeMinSize.setSelection(prefs.getInt("landscape_min_size", 0));
             swClosePane.setChecked(prefs.getBoolean("close_pane", !Helper.isSurfaceDuo()));
+            swOpenPane.setChecked(prefs.getBoolean("open_pane", false));
+            swOpenPane.setEnabled(!swClosePane.isChecked());
 
             int column_width = prefs.getInt("column_width", 67);
             tvColumnWidth.setText(getString(R.string.title_advanced_column_width, NF.format(column_width)));

@@ -82,7 +82,7 @@
     <string name="title_block">%1$s əngəllə</string>
     <string name="title_block_sender">Göndərəni əngəllə</string>
     <string name="title_block_sender_domain">\"%1$s\" domenini əngəllə</string>
-    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Əngəlləmə, avtomatik olaraq spam qovluğuna daşınması deməkdir</string>
+    <string name="title_block_sender_remark">Əngəlləmə, avtomatik olaraq spam qovluğuna daşınması deməkdir</string>
     <string name="title_block_sender_hint">        Göndərəni əngəlləmə ödənişsiz bir özəllikdir.
         Göndərən domenini əngəlləmə pro özəllik olan filtr qaydalarını istifadə edir.
     </string>
@@ -303,9 +303,10 @@
     <string name="title_setup_defaults">İlkin vəziyyətinə qaytar</string>
     <string name="title_setup_reset_questions">Sualları sıfırla</string>
     <string name="title_setup_reset_general">Ümumi suallar</string>
-    <string name="title_setup_reset_full">Orijinal mesajları göstər</string>
-    <string name="title_setup_reset_images">Təsvirləri göstər</string>
     <string name="title_setup_reset_links">Bağlantıları təsdiqlə</string>
+    <string name="title_setup_reset_files">Fayllara bax</string>
+    <string name="title_setup_reset_images">Təsvirləri göstər</string>
+    <string name="title_setup_reset_full">Orijinal mesajları göstər</string>
     <string name="title_check_gmail_oauth">Gmail hesablarınız 30 May 2022-ci il tarixindən sonra işləməyə davam edəcək</string>
     <string name="title_check_gmail_password">Bəzi Gmail hesablarınız 30 May 2022-ci il tarixindən işləməyi dayandıra bilər</string>
     <string name="title_check_outlook_oauth">Outlook hesablarınız 1 Oktyabr 2022-ci il tarixindən sonra işləməyə davam edəcək</string>
@@ -392,6 +393,7 @@
     <string name="title_advanced_quote_reply">Cavablanan mətndən sitat gətir</string>
     <string name="title_advanced_limit_reply">Gətirilən sitatların sayını məhdudlaşdır</string>
     <string name="title_advanced_resize_reply">Cavablanan mətndəki təsvirləri təkrar ölçüləndir</string>
+    <string name="title_advanced_resize_paste">Yapışdırılan təsvirlərin ölçüsünü dəyişdir</string>
     <string name="title_advanced_signature_location">İmza mövqeyi</string>
     <string name="title_advanced_signature_new">Yeni mesajlar üçün imza istifadə edin</string>
     <string name="title_advanced_signature_reply">Cavablayanda imza istifadə et</string>
@@ -442,6 +444,7 @@
     <string name="title_advanced_two_col">İki sütun istifadə et</string>
     <string name="title_advanced_min_screen_size">Ekranı bölmək üçün minimum ekran ölçüsü</string>
     <string name="title_advanced_close_pane">Bir danışığı bağlayarkən sətri və ya sütunu yığcamlaşdır</string>
+    <string name="title_advanced_open_pane">İki sətir və ya iki sütunla başlayın</string>
     <string name="title_advanced_column_width">Mesajın sütun eni / sətir hündürlüyü: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Mesajları sürüşdürərkən üstdəki alət sətrini gizlət</string>
     <string name="title_advanced_nav_options">Naviqasiya menyu seçimlərini göstər</string>
@@ -466,6 +469,7 @@
     <string name="title_advanced_date_week">Gün əvəzinə həftəyə görə qruplaşdır</string>
     <string name="title_advanced_date_fixed">Sabit tarix başlığını üstdə göstər</string>
     <string name="title_advanced_date_bold">Tarixi qalın göstər</string>
+    <string name="title_advanced_date_time">Tarixi və saatı həmişə göstər</string>
     <string name="title_advanced_threading">Əlaqəli danışıqlar</string>
     <string name="title_advanced_threading_unread">Danışıqda oxunmamış mesaj sayını göstər</string>
     <string name="title_advanced_indentation">Danışıqlarda alınan/göndərilən mesajların sol/sağ boşluğu</string>
@@ -584,7 +588,7 @@
     <string name="title_advanced_auto_block_sender">Spam bildirirkən göndərəni avtomatik əngəllə</string>
     <string name="title_advanced_auto_hide_answer">Sürüşdürərkən cavablandırma düyməsini avtomatik gizlət</string>
     <string name="title_advanced_swipe_reply">Genişləndirilmiş mesajları cavablandırmaq üçün sağa sürüşdür</string>
-    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">Bir danışıq daşınanda, göndərilmiş mesajlar da daşınır</string>
+    <string name="title_advanced_move_thread_sent">Bir danışıq daşınanda, göndərilmiş mesajlar da daşınır</string>
     <string name="title_advanced_default_snooze">İlkin ertələmə/gecikmə vaxtı</string>
     <string name="title_advanced_default_folder">İlkin qovluğu seçin</string>
     <string name="title_advanced_notifications">Bildirişləri idarə et</string>
@@ -628,6 +632,7 @@
     <string name="title_advanced_notifications_background">Mesajları sinxronlaşdırmaq üçün arxaplan xidməti istifadə et</string>
     <string name="title_advanced_notifications_background_hint">Bir arxaplan xidməti istənilən vaxt Android tərəfindən dayandırıla bilər, ancaq vəziyyət sətri bildirişini tələb etmir</string>
     <string name="title_advanced_confirm_links">Bağlantıların açılmasını təsdiqlə</string>
+    <string name="title_advanced_confirm_files">Fayllara baxışı təsdiqlə</string>
     <string name="title_advanced_sanitize_links">İzləmə parametrlərini ilkin olaraq çıxart</string>
     <string name="title_advanced_sanitize_links_hint">Yalnız keçidləri təsdiqləyərkən</string>
     <string name="title_advanced_check_links_dbl">Şübhəli bağlantılar üçün domen əngəlləmə siyahılarını yoxlayın</string>
@@ -902,6 +907,7 @@
     <string name="title_leave_deleted">Silənən mesajları serverdə burax</string>
     <string name="title_leave_on_device">Mesajları cihazda burax</string>
     <string name="title_max_messages">Endiriləcək mesajların maksimum sayı (hamısı üçün boş)</string>
+    <string name="title_max_messages_keep">Bu, cihazda saxlanılacaq maksimum mesaj sayıdır</string>
     <string name="title_max_messages_remark">        Mesajları sonda endirmək üçün müsbət bir ədəd daxil edin (ən geniş yayılmış)
         və mesajları başlanğıcda endirmək üçün mənfi bir ədəd daxil edin (ən az yayılmış)
     </string>
@@ -1036,6 +1042,8 @@
     <string name="title_unified_folder">Birləşmiş gələn qutusunda göstər</string>
     <string name="title_navigation_folder">Naviqasiya menyusunda göstər</string>
     <string name="title_navigation_folder_hide">Hərəkət menyusunda gizlət</string>
+    <string name="title_unified_inbox_add">Birləşmiş gələn qutusuna əlavə et</string>
+    <string name="title_unified_inbox_delete">Birləşmiş gələn qutusundan sil</string>
     <string name="title_synchronize_folder">Sinxronlaşdır (mesajları al)</string>
     <string name="title_poll_folder">Davamlı sinxronlaşdırma əvəzinə vaxtaşırı yoxlayın</string>
     <string name="title_poll_folder_remark">Əksər e-poçt serverləri, ani mesajlara yalnız bir neçə qovluq üçün icazə verir!</string>
@@ -1228,6 +1236,7 @@
     <string name="title_ask_show_image_hint">İzləmə təsvirləri kimi bilinən təsvirlər göstərilməyəcək</string>
     <string name="title_ask_show_amp">Mesajın AMP variantı göstərilsin?</string>
     <string name="title_ask_show_amp_hint">AMP mesajları dinamik olacaq və internet ilə qarşılıqlı əlaqədə olacaq formada dizayn edilib və buna görə də tərifə görə sizi izləmək üçün istifadə edilə bilər</string>
+    <string name="title_ask_view_file">%1$s faylına baxılsın?</string>
     <string name="title_ask_delete_local">Yerli mesajlar silinsin? Mesajlar uzaq serverdə qalacaq.</string>
     <string name="title_ask_help">\"FairEmail\"in təkmilləşdirilməsinə kömək edin</string>
     <string name="title_ask_reporting">Xəta hesabatları göndərilsin?</string>
@@ -1347,6 +1356,7 @@
     <string name="title_translating">Tərcümə edilir &#8230;</string>
     <string name="title_translate_formal">Rəsmi formu istifadə et</string>
     <string name="title_translate_small">Mənbə mətni üçün kiçik şrift istifadə et</string>
+    <string name="title_translate_replace">Mənbə mətni tərcümə edilmiş mətnlə əvəz et</string>
     <string name="title_translate_html">Formatlamanı qoru</string>
     <string name="title_translate_html_hint">Bu, daha çox simvolu istehlak edəcək</string>
     <string name="title_translate_usage">İstifadə: %1$s / %2$s (%3$d %%)</string>
@@ -1722,6 +1732,7 @@
     <string name="title_legend_avatar">Avatar</string>
     <string name="title_legend_show_quotes">Sitatları göstər</string>
     <string name="title_legend_show_junk">Spam hesab et</string>
+    <string name="title_legend_not_junk">Spam deyilmiş kimi davran</string>
     <string name="title_legend_create_rule">Qayda yarat</string>
     <string name="title_legend_show_unsubscribe">Siyahıdan çıx</string>
     <string name="title_legend_show_images">Təsvirləri göstər</string>

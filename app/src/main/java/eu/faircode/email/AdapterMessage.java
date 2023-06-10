@@ -261,6 +261,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean date;
     private boolean date_week;
     private boolean date_fixed;
+    private boolean date_time;
     private boolean cards;
     private boolean shadow_unread;
     private boolean shadow_border;
@@ -336,6 +337,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private NumberFormat NF = NumberFormat.getNumberInstance();
     private DateFormat TF;
     private DateFormat DTF;
+    private DateFormat DTFS;
 
     private static final ExecutorService executorDiffer =
             Helper.getBackgroundExecutor(0, "differ");
@@ -1419,7 +1421,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     message.totalSize != null && ("size".equals(sort) || "attachments".equals(sort))
                             ? View.VISIBLE : View.GONE);
             SpannableStringBuilder time;
-            if (date_week)
+            if (date_time)
+                time = new SpannableStringBuilderEx(DTFS.format(message.received));
+            else if (date_week)
                 time = new SpannableStringBuilderEx(Helper.getRelativeDateSpanString(context, message.received));
             else
                 time = new SpannableStringBuilderEx(
@@ -3711,12 +3715,35 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Helper.hasPermission(context, Manifest.permission.WRITE_CALENDAR)) {
                 Bundle args = new Bundle();
                 args.putLong("message", message.id);
-                args.putInt("status", CalendarContract.Events.STATUS_TENTATIVE);
+                args.putLong("account", message.account);
 
-                FragmentDialogCalendar fragment = new FragmentDialogCalendar();
-                fragment.setArguments(args);
-                fragment.setTargetFragment(parentFragment, FragmentMessages.REQUEST_CALENDAR);
-                fragment.show(parentFragment.getParentFragmentManager(), "insert:calendar");
+                new SimpleTask<String>() {
+                    @Override
+                    protected String onExecute(Context context, Bundle args) throws Throwable {
+                        long aid = args.getLong("account");
+
+                        DB db = DB.getInstance(context);
+                        EntityAccount account = db.account().getAccount(aid);
+                        return (account == null ? null : account.calendar);
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, String calendar) {
+                        args.putString("calendar", calendar);
+                        args.putBoolean("forevent", true);
+
+                        FragmentDialogCalendar fragment = new FragmentDialogCalendar();
+                        fragment.setArguments(args);
+                        fragment.setTargetFragment(parentFragment, FragmentMessages.REQUEST_CALENDAR);
+                        fragment.show(parentFragment.getParentFragmentManager(), "insert:calendar");
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                    }
+                }.execute(context, owner, args, "insert:calendar");
+
                 return;
             }
 
@@ -5261,12 +5288,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     froms.add(from);
                     int at = from.indexOf('@');
                     String domain = (at < 0 ? from : from.substring(at));
-                    domains.add(domain);
+                    if (!Objects.equals(from, domain))
+                        domains.add(domain);
                 }
                 cbNotAgainSender.setText(context.getString(R.string.title_no_ask_for_again,
                         TextUtils.join(", ", froms)));
                 cbNotAgainDomain.setText(context.getString(R.string.title_no_ask_for_again,
                         TextUtils.join(", ", domains)));
+                cbNotAgainDomain.setVisibility(domains.size() > 0 ? View.VISIBLE : View.GONE);
             }
 
             cbNotAgainDomain.setEnabled(false);
@@ -6012,6 +6041,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     } else if (itemId == R.id.menu_thread_info) {
                         onMenuThreadInfo(message);
                         return true;
+                    } else if (itemId == R.id.menu_reset_questions) {
+                        onMenuResetQuestions(message);
+                        return true;
                     } else if (itemId == R.id.menu_resync) {
                         onMenuResync(message);
                         return true;
@@ -6510,6 +6542,67 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             }.execute(context, owner, args, "message:resync");
 
+        }
+
+        private void onMenuResetQuestions(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+
+            new SimpleTask<Void>() {
+                @Override
+                protected Void onExecute(Context context, Bundle args) throws Throwable {
+                    long id = args.getLong("id");
+
+                    DB db = DB.getInstance(context);
+                    EntityMessage message = db.message().getMessage(id);
+                    if (message == null)
+                        return null;
+
+                    SharedPreferences.Editor editor = prefs.edit();
+
+                    List<EntityAttachment> attachments = db.attachment().getAttachments(id);
+                    if (attachments != null)
+                        for (EntityAttachment attachment : attachments) {
+                            String ext = Helper.getExtension(attachment.name);
+                            if (ext == null)
+                                continue;
+                            editor.remove(ext.toLowerCase(Locale.ROOT) + ".confirm_files");
+                        }
+
+                    if (message.content) {
+                        Document d = JsoupEx.parse(message.getFile(context));
+                        for (Element a : d.select("a")) {
+                            String href = a.attr("href");
+                            if (TextUtils.isEmpty(href))
+                                continue;
+
+                            Uri uri = Uri.parse(href);
+                            if (uri == null || !UriHelper.isHyperLink(uri))
+                                continue;
+
+                            String host = uri.getHost();
+                            if (TextUtils.isEmpty(host))
+                                continue;
+
+                            editor.remove(host + ".confirm_link");
+                        }
+                    }
+
+                    editor.apply();
+
+                    return null;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, Void data) {
+                    ToastEx.makeText(context, R.string.title_completed, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "reset");
         }
 
         private void onMenuResync(TupleMessageEx message) {
@@ -7550,6 +7643,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         this.TF = Helper.getTimeInstance(context, SimpleDateFormat.SHORT);
         this.DTF = Helper.getDateTimeInstance(context, SimpleDateFormat.LONG, SimpleDateFormat.LONG);
+        this.DTFS = Helper.getDateTimeInstance(context, SimpleDateFormat.SHORT, SimpleDateFormat.SHORT);
 
         ConnectionHelper.NetworkState state = ConnectionHelper.getNetworkState(context);
         this.suitable = state.isSuitable();
@@ -7595,6 +7689,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.date = prefs.getBoolean("date", true);
         this.date_week = prefs.getBoolean("date_week", false);
         this.date_fixed = (!date && prefs.getBoolean("date_fixed", false));
+        this.date_time = prefs.getBoolean("date_time", false);
         this.cards = prefs.getBoolean("cards", true);
         this.shadow_unread = prefs.getBoolean("shadow_unread", false);
         this.shadow_border = prefs.getBoolean("shadow_border", true);

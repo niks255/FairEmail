@@ -72,7 +72,7 @@
     <string name="title_block">%1$s をブロック</string>
     <string name="title_block_sender">差出人をブロック</string>
     <string name="title_block_sender_domain">ドメイン「%1$s」をブロック</string>
-    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">ブロックすると、自動で迷惑メールフォルダーに移動します</string>
+    <string name="title_block_sender_remark">ブロックすると、自動で迷惑メールフォルダーに移動します</string>
     <string name="title_block_sender_hint">        差出人のブロックは無料版の機能です。
         差出人のドメインをブロックするにはフィルタールールを使用します。これはプロ版の機能です。
     </string>
@@ -290,9 +290,9 @@
     <string name="title_setup_defaults">デフォルトに戻す</string>
     <string name="title_setup_reset_questions">確認表示をリセット</string>
     <string name="title_setup_reset_general">よくある質問</string>
-    <string name="title_setup_reset_full">元のメッセージの表示</string>
-    <string name="title_setup_reset_images">画像の表示</string>
     <string name="title_setup_reset_links">リンクを確認</string>
+    <string name="title_setup_reset_images">画像の表示</string>
+    <string name="title_setup_reset_full">元のメッセージの表示</string>
     <string name="title_check_gmail_oauth">あなたの Gmail アカウントは 2022 年 5 月 30 日以降も引き続き利用できます</string>
     <string name="title_check_gmail_password">あなたの Gmail アカウントの一部は 2022 年 5 月 30 日以降に停止される可能性があります</string>
     <string name="title_check_outlook_oauth">あなたの Outlook アカウントは 2022 年 10 月 1 日以降も引き続き利用できます</string>
@@ -379,6 +379,7 @@
     <string name="title_advanced_quote_reply">引用したテキストに引用符を付けて返信</string>
     <string name="title_advanced_limit_reply">入れ子になった引用の数を制限</string>
     <string name="title_advanced_resize_reply">引用した本文の画像をリサイズして返信</string>
+    <string name="title_advanced_resize_paste">貼り付けた画像のサイズを変更</string>
     <string name="title_advanced_signature_location">署名の位置</string>
     <string name="title_advanced_signature_new">新規メッセージに署名を使用</string>
     <string name="title_advanced_signature_reply">返信に署名を使用</string>
@@ -429,6 +430,7 @@
     <string name="title_advanced_two_col">2 列に分割</string>
     <string name="title_advanced_min_screen_size">画面を分割するときの最小画面サイズ</string>
     <string name="title_advanced_close_pane">会話を閉じるときに、行または列を閉じる</string>
+    <string name="title_advanced_open_pane">2 行または 2 列の表示から開始</string>
     <string name="title_advanced_column_width">本文の列の幅 / 行の高さ: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">メッセージをスクロールするとき上部ツールバーを隠す</string>
     <string name="title_advanced_nav_options">ナビゲーションメニューにオプションを表示</string>
@@ -453,6 +455,7 @@
     <string name="title_advanced_date_week">日付ではなく週でグループ化</string>
     <string name="title_advanced_date_fixed">日付を上部に固定表示</string>
     <string name="title_advanced_date_bold">日付を太字で表示</string>
+    <string name="title_advanced_date_time">日付と時間を常に表示</string>
     <string name="title_advanced_threading">会話スレッド</string>
     <string name="title_advanced_threading_unread">会話の中の未読メッセージの数を表示</string>
     <string name="title_advanced_indentation">会話の中の受信/送信メッセージの左/右インデント</string>
@@ -571,7 +574,7 @@
     <string name="title_advanced_auto_block_sender">メッセージを迷惑メールとして報告したとき、差出人を自動でブロック</string>
     <string name="title_advanced_auto_hide_answer">スクロール時に返信ボタンを隠す</string>
     <string name="title_advanced_swipe_reply">展開したメッセージを右にスワイプして返信</string>
-    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">会話を移動するとき、送信済みメッセージも移動</string>
+    <string name="title_advanced_move_thread_sent">会話を移動するとき、送信済みメッセージも移動</string>
     <string name="title_advanced_default_snooze">デフォルトのスヌーズ/遅延時間</string>
     <string name="title_advanced_default_folder">デフォルトのフォルダーを選択</string>
     <string name="title_advanced_notifications">通知を管理</string>
@@ -889,6 +892,7 @@
     <string name="title_leave_deleted">削除したメッセージをサーバーに残す</string>
     <string name="title_leave_on_device">デバイスにメッセージを残す</string>
     <string name="title_max_messages">ダウンロードするメッセージの最大数 (空白にするとすべてダウンロードします)</string>
+    <string name="title_max_messages_keep">これは、デバイスに保存されるメッセージの最大数です</string>
     <string name="title_max_messages_remark">        正の数を入力すると、最後からメッセージをダウンロードします (推奨)
         負の数を入力すると、最初からメッセージをダウンロードします (一般的でない)
     </string>
@@ -1023,6 +1027,8 @@
     <string name="title_unified_folder">統合受信トレイに表示</string>
     <string name="title_navigation_folder">ナビゲーションメニューに表示</string>
     <string name="title_navigation_folder_hide">ナビゲーションメニューから隠す</string>
+    <string name="title_unified_inbox_add">統合受信トレイに追加</string>
+    <string name="title_unified_inbox_delete">統合受信トレイから削除</string>
     <string name="title_synchronize_folder">同期 (メッセージを受信)</string>
     <string name="title_poll_folder">継続的な同期の代わりに定期的に確認</string>
     <string name="title_poll_folder_remark">ほとんどのメールサーバーでは、一部のフォルダーに対してのみプッシュメッセージを許可しています</string>
@@ -1334,6 +1340,7 @@
     <string name="title_translating">翻訳しています&#8230;</string>
     <string name="title_translate_formal">書き言葉を使用</string>
     <string name="title_translate_small">ソーステキストに小さなフォントを使用</string>
+    <string name="title_translate_replace">元テキストのを翻訳されたテキストに置き換える</string>
     <string name="title_translate_html">書式を維持</string>
     <string name="title_translate_html_hint">より多くの文字数を利用します</string>
     <string name="title_translate_usage">利用文字数: %1$s / %2$s (%3$d %%)</string>
@@ -1709,6 +1716,7 @@
     <string name="title_legend_avatar">アバター</string>
     <string name="title_legend_show_quotes">引用符を表示</string>
     <string name="title_legend_show_junk">迷惑メールとして扱う</string>
+    <string name="title_legend_not_junk">迷惑メールでないものして扱う</string>
     <string name="title_legend_create_rule">ルールを作成</string>
     <string name="title_legend_show_unsubscribe">リストから退会</string>
     <string name="title_legend_show_images">画像を表示</string>

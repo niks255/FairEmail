@@ -4,6 +4,50 @@
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
+### [Tratayenia](https://en.wikipedia.org/wiki/Tratayenia)
+
+### 1.2074 - 2023-06-08
+
+* Added option to add send-to-self to Android's share menu
+* Added separate filter settings for archive, trash and spam folder
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2074 - 2023-06-03
+
+* Fixed all reported bugs
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2073 - 2023-05-30
+
+* Added file viewing confirmation
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2072 - 2023-05-29
+
+* Fixed [badge count](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq106)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2071 - 2023-05-27
+
+* Fixed photo picker for some devices
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2070 - 2023-05-20
+
+* Added option to start with two columns/rows
+* Added option to show both date and time in message headers
+* Added option to replace source text by translated text
+* Added support for reminders in events
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### [Saltopus](https://en.wikipedia.org/wiki/Saltopus)
 
 ### 1.2069 - 2023-05-09

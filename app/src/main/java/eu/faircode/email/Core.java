@@ -494,7 +494,7 @@ class Core {
                                     break;
 
                                 case EntityOperation.RAW:
-                                    onRaw(context, jargs, folder, message, (IMAPFolder) ifolder);
+                                    onRaw(context, jargs, account, folder, message, (IMAPFolder) ifolder);
                                     break;
 
                                 case EntityOperation.BODY:
@@ -1935,7 +1935,7 @@ class Core {
         db.message().setMessageHeaders(message.id, helper.getHeaders());
     }
 
-    private static void onRaw(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, IOException, JSONException {
+    private static void onRaw(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, IOException, JSONException {
         // Download raw message
         DB db = DB.getInstance(context);
 
@@ -1944,10 +1944,23 @@ class Core {
             if (imessage == null)
                 throw new MessageRemovedException();
 
+            EntityLog.log(context, "Downloading raw id=" + message.id + " subject=" + message.subject);
             File file = message.getRawFile(context);
             try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
                 imessage.writeTo(os);
             }
+
+            Properties props = MessageHelper.getSessionProperties(account.unicode);
+            Session isession = Session.getInstance(props, null);
+
+            MessageHelper helper;
+            try (InputStream is = new FileInputStream(file)) {
+                helper = new MessageHelper(new MimeMessage(isession, is), context);
+            }
+
+            // Yahoo is returning incorrect messages
+            if (!Objects.equals(message.msgid, helper.getMessageID()))
+                throw new MessagingException("Incorrect msgid=" + message.msgid + "/" + helper.getMessageID());
 
             db.message().setMessageRaw(message.id, true);
         }
@@ -1993,7 +2006,10 @@ class Core {
     }
 
     private static void onBody(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, IOException {
-        boolean plain_text = jargs.optBoolean(0);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean download_plain = prefs.getBoolean("download_plain", false);
+
+        boolean plain_text = jargs.optBoolean(0, download_plain);
         String charset = (jargs.isNull(1) ? null : jargs.optString(1, null));
 
         if (message.uid == null)
@@ -2062,7 +2078,7 @@ class Core {
         MessageHelper.MessageParts parts = helper.getMessageParts();
 
         // Download attachment
-        parts.downloadAttachment(context, attachment);
+        parts.downloadAttachment(context, attachment, folder);
 
         if (attachment.size != null)
             EntityLog.log(context, "Operation attachment size=" + attachment.size);
@@ -2121,7 +2137,7 @@ class Core {
         MessageHelper.MessageParts parts = helper.getMessageParts();
 
         // Download attachment
-        parts.downloadAttachment(context, attachment);
+        parts.downloadAttachment(context, attachment, folder);
 
         if (attachment.size != null)
             EntityLog.log(context, "Operation attachment size=" + attachment.size);
@@ -2922,6 +2938,7 @@ class Core {
 
             long id = jargs.getLong(0);
             if (id < 0) {
+                EntityLog.log(context, "Executing deferred daily rules for message=" + message.id);
                 List<EntityRule> rules = db.rule().getEnabledRules(message.folder, true);
                 EntityRule.run(context, rules, message, null, null);
             } else {
@@ -3369,7 +3386,7 @@ class Core {
                         try {
                             for (EntityAttachment attachment : parts.getAttachments())
                                 if (attachment.subsequence == null)
-                                    parts.downloadAttachment(context, attachment);
+                                    parts.downloadAttachment(context, attachment, folder);
                         } catch (Throwable ex) {
                             Log.w(ex);
                         }
@@ -5138,7 +5155,7 @@ class Core {
                     if (state.getNetworkState().isUnmetered() ||
                             (attachment.size != null && attachment.size < maxSize))
                         try {
-                            parts.downloadAttachment(context, attachment);
+                            parts.downloadAttachment(context, attachment, folder);
                             if (stats != null && attachment.size != null)
                                 stats.attachments += attachment.size;
                         } catch (Throwable ex) {
@@ -5668,6 +5685,7 @@ class Core {
             // Build pending intents
             Intent thread = new Intent(context, ActivityView.class);
             thread.setAction("thread:" + message.id);
+            thread.putExtra("group", group);
             thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             thread.putExtra("account", message.account);
             thread.putExtra("folder", message.folder);

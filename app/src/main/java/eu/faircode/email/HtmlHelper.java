@@ -656,7 +656,7 @@ public class HtmlHelper {
             String style = processStyles(tag, clazz, null, sheets);
 
             // Element style
-            style = mergeElementStyles(style, element.attr("style"));
+            style = mergeStyles(style, element.attr("style"));
 
             if ("fairemail_debug_info".equals(clazz))
                 style = mergeStyles(style, "font-size: smaller");
@@ -769,7 +769,7 @@ public class HtmlHelper {
                                     // Special case:
                                     //   external draft: very dark/light font
                                     double lum = ColorUtils.calculateLuminance(color);
-                                    if (lum < 1 - MIN_LUMINANCE_COMPOSE || lum > MIN_LUMINANCE_COMPOSE)
+                                    if (dark ? lum < 1 - MIN_LUMINANCE_COMPOSE : lum > MIN_LUMINANCE_COMPOSE)
                                         color = null;
                                 }
 
@@ -1563,6 +1563,10 @@ public class HtmlHelper {
                                 end--;
                                 group = group.substring(0, group.length() - 1);
                             }
+                            if (end < text.length() && text.charAt(end) == '$') {
+                                end++;
+                                group += '$';
+                            }
 
                             boolean email = group.contains("@") && !group.contains(":");
                             Log.i("Web url=" + group + " " + start + "..." + end + "/" + text.length() +
@@ -1610,6 +1614,26 @@ public class HtmlHelper {
             public void tail(Node node, int depth) {
             }
         }, document);
+    }
+
+    static boolean embedYouTube(Document document) {
+        // https://developers.google.com/youtube/player_parameters
+        // Requires: setBlockNetworkLoads and setJavaScriptEnabled
+        boolean has = false;
+        for (Element a : document.select("a"))
+            if (a.attr("href").startsWith("https://www.youtube.com/embed/")) {
+                String link = a.attr("href");
+                a.tagName("iframe");
+                a.attr("id", link.substring(link.lastIndexOf("/") + 1));
+                a.attr("type", "text/html");
+                a.attr("src", link);
+                a.attr("frameborder", "0");
+                a.removeAttr("href");
+                if (a.text().equals(link))
+                    a.text("");
+                has = true;
+            }
+        return has;
     }
 
     static void guessSchemes(Document document) {
@@ -1755,14 +1779,14 @@ public class HtmlHelper {
                                 if (tag == null
                                         ? eselector.getLocalName() == null
                                         : tag.equalsIgnoreCase(eselector.getLocalName()))
-                                    style = mergeStyles(style, srule.getStyle().getCssText());
+                                    style = mergeStyles(style, srule.getStyle().getCssText(), false);
                                 break;
                             case Selector.SAC_CONDITIONAL_SELECTOR:
                                 ConditionalSelectorImpl cselector = (ConditionalSelectorImpl) selector;
                                 if (cselector.getCondition().getConditionType() == SAC_CLASS_CONDITION) {
                                     ClassConditionImpl ccondition = (ClassConditionImpl) cselector.getCondition();
                                     if (clazz.equalsIgnoreCase(ccondition.getValue()))
-                                        style = mergeStyles(style, srule.getStyle().getCssText());
+                                        style = mergeStyles(style, srule.getStyle().getCssText(), false);
                                 }
                                 break;
                         }
@@ -1796,10 +1820,6 @@ public class HtmlHelper {
     }
 
     static String mergeStyles(String base, String style) {
-        return mergeStyles(base, style, false);
-    }
-
-    static String mergeElementStyles(String base, String style) {
         return mergeStyles(base, style, true);
     }
 

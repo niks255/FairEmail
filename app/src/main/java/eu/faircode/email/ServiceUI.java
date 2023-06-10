@@ -157,6 +157,7 @@ public class ServiceUI extends IntentService {
                     break;
 
                 case "ignore":
+                    cancel(group, id);
                     onIgnore(id);
                     break;
 
@@ -184,6 +185,7 @@ public class ServiceUI extends IntentService {
             crumb.put("action", action);
             Log.breadcrumb("serviceui", crumb);
 
+            ServiceSynchronize.state(this, true);
             ServiceSynchronize.eval(this, "ui/" + action);
         } catch (Throwable ex) {
             Log.e(ex);
@@ -519,10 +521,11 @@ public class ServiceUI extends IntentService {
         }
     }
 
-    static void ignore(Context context, long id) {
+    static void ignore(Context context, long id, long group) {
         try {
             Intent ignore = new Intent(context, ServiceUI.class)
-                    .setAction("ignore:" + id);
+                    .setAction("ignore:" + id)
+                    .putExtra("group", group);
             context.startService(ignore);
         } catch (Throwable ex) {
             Log.e(ex);

@@ -143,3 +143,11 @@
 #Misc
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 -dontwarn edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+
+#Apache Commons Compress
+-keep class org.apache.commons.compress.archivers.zip.** {*;}
+-keep class org.apache.commons.compress.compressors.gzip.** {*;}
+
+#ShortcutBadger
+-keep class me.leolin.shortcutbadger.** {*;}
+-keepnames class me.leolin.shortcutbadger.** {*;}

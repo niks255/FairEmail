@@ -102,7 +102,7 @@
     <string name="title_block">חסימת %1$s</string>
     <string name="title_block_sender">חסימת השולח</string>
     <string name="title_block_sender_domain">חסימת שם התחום ‚%1$s’</string>
-    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">חסימה משמעה העברה אוטומטית לתיקיית הזבל</string>
+    <string name="title_block_sender_remark">חסימה משמעה העברה אוטומטית לתיקיית הזבל</string>
     <string name="title_block_sender_hint">        חסימת מען היא תכונה חינמית.
         חסימת שם תחום כמען משתמשת בכללי סינון, שזאת יכולת למנויי פרו.
     </string>
@@ -329,9 +329,10 @@
     <string name="title_setup_defaults">שחזור בררות מחדל</string>
     <string name="title_setup_reset_questions">איפוס שאלות</string>
     <string name="title_setup_reset_general">שאלות כלליות</string>
-    <string name="title_setup_reset_full">הצגת ההודעה המקורית</string>
-    <string name="title_setup_reset_images">הצגת תמונות</string>
     <string name="title_setup_reset_links">אישור קישורים</string>
+    <string name="title_setup_reset_files">צפייה בקבצים</string>
+    <string name="title_setup_reset_images">הצגת תמונות</string>
+    <string name="title_setup_reset_full">הצגת ההודעה המקורית</string>
     <string name="title_check_gmail_oauth">חשבונות ה־Gmail שלך ימשיכו לעבוד גם אחרי 30 במאי 2022</string>
     <string name="title_check_gmail_password">חלק מחשבונות ה־Gmail שלך כנראה יפסיקו לעבוד אחרי 30 במאי 2022</string>
     <string name="title_check_outlook_oauth">חשבונות ה־Outlook שלך ימשיכו לעבוד גם אחרי 1 באוקטובר 2022</string>
@@ -418,6 +419,7 @@
     <string name="title_advanced_quote_reply">ציטוט הטקסט לתגובה</string>
     <string name="title_advanced_limit_reply">הגבלת מספר הציטוטים המקוננים</string>
     <string name="title_advanced_resize_reply">שינוי גודל התמונות בטקסט התגובה</string>
+    <string name="title_advanced_resize_paste">שינוי גודל תמונה מודבקת</string>
     <string name="title_advanced_signature_location">מיקום החתימה</string>
     <string name="title_advanced_signature_new">להשתמש בחתימה להודעות חדשות</string>
     <string name="title_advanced_signature_reply">להשתמש בחתימה לתגובות</string>
@@ -468,6 +470,7 @@
     <string name="title_advanced_two_col">להשתמש בשתי עמודות</string>
     <string name="title_advanced_min_screen_size">גודל המסך המזערי לפיצול המסך</string>
     <string name="title_advanced_close_pane">לצמצם שורה או עמודה בעת סגירת דיון</string>
+    <string name="title_advanced_open_pane">התחלה עם שתי שורות או עמודות</string>
     <string name="title_advanced_column_width">רוחב עמודה / גובה שורה של הודעה: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">להסתיר את סרגל הכלים בעת גלילה בין הודעות</string>
     <string name="title_advanced_nav_options">הצגת אפשרויות תפריט הניווט</string>
@@ -492,6 +495,7 @@
     <string name="title_advanced_date_week">קיבוץ לפי שבוע במקום לפי יום</string>
     <string name="title_advanced_date_fixed">להציג כותרת תאריך מקובעת למעלה</string>
     <string name="title_advanced_date_bold">הצגת תאריך בהדגשה</string>
+    <string name="title_advanced_date_time">תמיד להציג גם את התאריך וגם את השעה</string>
     <string name="title_advanced_threading">דיונים בשרשור</string>
     <string name="title_advanced_threading_unread">הצגת מספר ההודעות שלא נקראו בדיונים</string>
     <string name="title_advanced_indentation">הזחה שמאלית/ימנית להודעות שהתקבלו/נשלחו בדיונים</string>
@@ -610,7 +614,7 @@
     <string name="title_advanced_auto_block_sender">לחסום את השולח אוטומטית בעת דיווח על ספאם</string>
     <string name="title_advanced_auto_hide_answer">להסתיר את כפתור המענה אוטומטית בעת הגלילה</string>
     <string name="title_advanced_swipe_reply">החלקת הודעות מורחבות לימין פותחת מענה</string>
-    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">בעת העברת דיון, להעביר גם את ההודעות שנשלחו</string>
+    <string name="title_advanced_move_thread_sent">בעת העברת דיון, להעביר גם את ההודעות שנשלחו</string>
     <string name="title_advanced_default_snooze">זמן בררת המחדל לדחיית/השהיית תזכורות</string>
     <string name="title_advanced_default_folder">בחירת תיקיית ברירת מחדל</string>
     <string name="title_advanced_notifications">ניהול התראות</string>
@@ -654,6 +658,7 @@
     <string name="title_advanced_notifications_background">להשתמש בשירות רקע לסנכרון הודעות</string>
     <string name="title_advanced_notifications_background_hint">שירות רקע יכול להיעצר על ידי Android בכל רגע נתון, אך אינו דורש התראה בשורת המצב</string>
     <string name="title_advanced_confirm_links">אישור פתיחת קישור</string>
+    <string name="title_advanced_confirm_files">אישור צפייה בקבצים</string>
     <string name="title_advanced_sanitize_links">הסרת משתני מעקב כברירת מחדל</string>
     <string name="title_advanced_sanitize_links_hint">רק בעת אישור קישורים</string>
     <string name="title_advanced_check_links_dbl">לבדוק קישורים חשודים מול רשימת שמות תחום חסומים</string>
@@ -928,6 +933,7 @@
     <string name="title_leave_deleted">להשאיר הודעות שנמחקו על השרת</string>
     <string name="title_leave_on_device">להשאיר הודעות במכשיר</string>
     <string name="title_max_messages">מספר ההודעות המרבי להורדה (ריק בשביל כולן)</string>
+    <string name="title_max_messages_keep">זה מספר ההודעות המרבי שיישמר במכשיר</string>
     <string name="title_max_messages_remark">        נא למלא מספר חיובי כדי להוריד את ההודעות בסוף (יותר נפוץ)
         ומספר שלילי כדי להוריד את ההודעות בהתחלה (פחות נפוץ)
     </string>
@@ -1062,6 +1068,8 @@
     <string name="title_unified_folder">הצגה בדואר נכנס מאוחד</string>
     <string name="title_navigation_folder">הצגה בתפריט הניווט</string>
     <string name="title_navigation_folder_hide">הסתרה בתפריט הניווט</string>
+    <string name="title_unified_inbox_add">הוספה לדואר הנכנס המאוחר</string>
+    <string name="title_unified_inbox_delete">מחיקה מהדואר הנכנס המאוחד</string>
     <string name="title_synchronize_folder">סנכרון (קבלת הודעות)</string>
     <string name="title_poll_folder">לבדוק תקופתיות במקום לסנכרן באופן רציף</string>
     <string name="title_poll_folder_remark">רוב שרתי הדוא״ל מאפשרים הודעות דחיפה למגוון מצומצם של תיקיות בלבד!</string>
@@ -1254,6 +1262,7 @@
     <string name="title_ask_show_image_hint">תמונות שמזוהות כתמונות מעקב לא תוצגנה</string>
     <string name="title_ask_show_amp">להציג תצורת AMP של ההודעה?</string>
     <string name="title_ask_show_amp_hint">הודעות AMP תוכננו להיות דינמיות ולתקשר מול האינטרנט ולכן בהתאם לתכנון במקור עשויות לעקוב אחריך</string>
+    <string name="title_ask_view_file">לצפות בקובץ %1$s?</string>
     <string name="title_ask_delete_local">למחוק הודעות מקומיות? ההודעות תישארנה על השרת המרוחק.</string>
     <string name="title_ask_help">סיוע בשיפור FairEmail</string>
     <string name="title_ask_reporting">לשלוח דוחות שגיאה?</string>
@@ -1373,6 +1382,7 @@
     <string name="title_translating">מתורגם&#8230;</string>
     <string name="title_translate_formal">להשתמש בשפה רשמית</string>
     <string name="title_translate_small">להשתמש בגופן קטן לטקסט המקור</string>
+    <string name="title_translate_replace">החלפת טקסט המקור בטקסט מתורגם</string>
     <string name="title_translate_html">שימור עיצוב</string>
     <string name="title_translate_html_hint">יצרוך יותר תווים</string>
     <string name="title_translate_usage">שימוש: %1$s / %2$s (%3$d %%)</string>
@@ -1748,6 +1758,7 @@
     <string name="title_legend_avatar">סמל ייצוגי</string>
     <string name="title_legend_show_quotes">הצגת ציטוטים</string>
     <string name="title_legend_show_junk">התנהגות כספאם</string>
+    <string name="title_legend_not_junk">להתייחס כלא ספאם</string>
     <string name="title_legend_create_rule">יצירת כלל</string>
     <string name="title_legend_show_unsubscribe">ביטול מינוי לרשימה</string>
     <string name="title_legend_show_images">הצגת תמונות</string>

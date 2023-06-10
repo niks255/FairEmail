@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">FairEmail</string>
     <string name="app_copyright" translatable="false">Copyright &#x24B8; 2018–2023 by M. Bokhorst</string>
     <string name="app_search">FairEmail search</string>
+    <string name="app_send_self">Send to self</string>
     <string name="app_answer" translatable="false">FairEmail template</string>
     <string name="app_changelog">Changelog</string>
     <string name="app_welcome">FairEmail is an open source email app focused on privacy and security. For this reason some features might work differently from what you are used to.</string>
@@ -365,9 +366,10 @@
 
     <string name="title_setup_reset_questions">Reset questions</string>
     <string name="title_setup_reset_general">General questions</string>
-    <string name="title_setup_reset_full">Show original messages</string>
-    <string name="title_setup_reset_images">Show images</string>
     <string name="title_setup_reset_links">Confirm links</string>
+    <string name="title_setup_reset_files">View files</string>
+    <string name="title_setup_reset_images">Show images</string>
+    <string name="title_setup_reset_full">Show original messages</string>
 
     <string name="title_check_gmail_oauth">Your Gmail accounts will continue to work after May 30, 2022</string>
     <string name="title_check_gmail_password">Some of your Gmail accounts may stop working after May 30, 2022</string>
@@ -465,6 +467,7 @@
     <string name="title_advanced_quote_reply">Quote replied text</string>
     <string name="title_advanced_limit_reply">Limit the number of nested quotes</string>
     <string name="title_advanced_resize_reply">Resize images in replied text</string>
+    <string name="title_advanced_resize_paste">Resize pasted images</string>
     <string name="title_advanced_signature_location">Signature position</string>
     <string name="title_advanced_signature_new">Use signature for new messages</string>
     <string name="title_advanced_signature_reply">Use signature when replying</string>
@@ -524,6 +527,7 @@
     <string name="title_advanced_two_col">Use two columns</string>
     <string name="title_advanced_min_screen_size">Minimum screen size for splitting the screen</string>
     <string name="title_advanced_close_pane">Collapse row or column when closing a conversation</string>
+    <string name="title_advanced_open_pane">Start with two rows or two columns</string>
     <string name="title_advanced_column_width">Message column width / row height: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Hide top toolbar when scrolling messages</string>
     <string name="title_advanced_nav_options">Show navigation menu options</string>
@@ -548,6 +552,7 @@
     <string name="title_advanced_date_week">Group by week instead of day</string>
     <string name="title_advanced_date_fixed">Show fixed date header at the top</string>
     <string name="title_advanced_date_bold">Show date in bold</string>
+    <string name="title_advanced_date_time">Always show both a date and a time</string>
     <string name="title_advanced_threading">Conversation threading</string>
     <string name="title_advanced_threading_unread">Show number of unread messages in conversations</string>
     <string name="title_advanced_indentation">Left/right indent received/sent messages in conversations</string>
@@ -725,6 +730,7 @@
     <string name="title_advanced_caption_smime" translatable="false">S/MIME</string>
 
     <string name="title_advanced_confirm_links">Confirm opening links</string>
+    <string name="title_advanced_confirm_files">Confirm viewing files</string>
     <string name="title_advanced_sanitize_links">Remove tracking parameters by default</string>
     <string name="title_advanced_sanitize_links_hint">Only when confirming links</string>
     <string name="title_advanced_check_links_dbl">Check domain block lists for suspicious links</string>
@@ -786,6 +792,7 @@
     <string name="title_advanced_aes_key_size" translatable="false">Max AES key size: %1$s</string>
 
     <string name="title_advanced_power_menu">Add actions to the Android power menu</string>
+    <string name="title_advanced_send_self">Add \'send to self\' to Android\'s share menu</string>
     <string name="title_advanced_external_search">Allow other apps to search in messages</string>
     <string name="title_advanced_sort_answers">Sort reply templates by frequency of use</string>
     <string name="title_advanced_external_answer" translatable="false">Provide reply templates to other apps</string>
@@ -850,6 +857,7 @@
     <string name="title_advanced_sqlite_cache" translatable="false">sqlite cache: %1$s %% - %2$s</string>
     <string name="title_advanced_chunk_size" translatable="false">Chunk size: %1$d</string>
     <string name="title_advanced_thread_range" translatable="false">Thread range: %1$d days</string>
+    <string name="title_advanced_auto_scroll" translatable="false">Auto scroll editor</string>
     <string name="title_advanced_undo_manager" translatable="false">Use Android\'s undo manager</string>
     <string name="title_advanced_browser_zoom" translatable="false">Use browser zoom</string>
     <string name="title_advanced_fake_dark" translatable="false">Fake dark</string>
@@ -878,6 +886,7 @@
     <string name="title_advanced_native_arc" translatable="false">Native ARC verification</string>
     <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
     <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
+    <string name="title_advanced_thread_by_ref" translatable="false">Thread by common reference</string>
     <string name="title_advanced_global_keywords" translatable="false">Global keywords</string>
     <string name="title_advanced_test_iab" translatable="false">Test IAB</string>
     <string name="title_advanced_import_providers" translatable="false">Import providers</string>
@@ -1137,6 +1146,7 @@
     <string name="title_leave_deleted">Leave deleted messages on server</string>
     <string name="title_leave_on_device">Leave messages on device</string>
     <string name="title_max_messages">Maximum number of messages to download (blank for all)</string>
+    <string name="title_max_messages_keep">This is the maximum number of messages that will be kept on the device</string>
     <string name="title_max_messages_remark">
         Enter a positive number to download the messages at the end (most common)
         and a negative number to download the messages at the beginning (least common)
@@ -1281,6 +1291,8 @@
     <string name="title_unified_folder">Show in unified inbox</string>
     <string name="title_navigation_folder">Show in navigation menu</string>
     <string name="title_navigation_folder_hide">Hide in navigation menu</string>
+    <string name="title_unified_inbox_add">Add to unified inbox</string>
+    <string name="title_unified_inbox_delete">Delete from unified inbox</string>
     <string name="title_synchronize_folder">Synchronize (receive messages)</string>
     <string name="title_poll_folder">Check periodically instead of continuous synchronize</string>
     <string name="title_poll_folder_remark">Most email servers allow push messages for a handful of folders only!</string>
@@ -1492,6 +1504,7 @@
     <string name="title_ask_show_image_hint">Images recognized as tracking images will not be shown</string>
     <string name="title_ask_show_amp">Show AMP variant of the message?</string>
     <string name="title_ask_show_amp_hint">AMP messages are designed to be dynamic and to interact with the internet and can therefore by definition used to track you</string>
+    <string name="title_ask_view_file">View file %1$s ?</string>
     <string name="title_ask_delete_local">Delete local messages? Messages will remain on the remote server.</string>
     <string name="title_ask_help">Help improve FairEmail</string>
     <string name="title_ask_reporting">Send error reports?</string>
@@ -1628,6 +1641,7 @@
     <string name="title_translating">Translating &#8230;</string>
     <string name="title_translate_formal">Use formal form</string>
     <string name="title_translate_small">Use a small font for the source text</string>
+    <string name="title_translate_replace">Replace source text by translated text</string>
     <string name="title_translate_html">Preserve formatting</string>
     <string name="title_translate_html_hint">This will consume more characters</string>
     <string name="title_translate_usage">Usage: %1$s / %2$s (%3$d %%)</string>
@@ -1683,6 +1697,7 @@
     <string name="title_encrypt">Encrypt</string>
     <string name="title_decrypt">Decrypt</string>
     <string name="title_thread_info" translatable="false">Thread info</string>
+    <string name="title_reset_message_questions">Reset link questions</string>
     <string name="title_resync">Resync</string>
     <string name="title_charset">Encoding</string>
     <string name="title_charset_auto">Automatic</string>
@@ -2041,6 +2056,7 @@
     <string name="title_legend_avatar">Avatar</string>
     <string name="title_legend_show_quotes">Show quotes</string>
     <string name="title_legend_show_junk">Treat as spam</string>
+    <string name="title_legend_not_junk">Treat as not spam</string>
     <string name="title_legend_create_rule">Create rule</string>
     <string name="title_legend_show_unsubscribe">Unsubscribe from list</string>
     <string name="title_legend_show_images">Show images</string>

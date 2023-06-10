@@ -87,6 +87,17 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swSendSelf"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/app_send_self"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swPowerMenu"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swExternalSearch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -94,7 +105,7 @@
                     android:text="@string/title_advanced_external_search"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swPowerMenu"
+                    app:layout_constraintTop_toBottomOf="@id/swSendSelf"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -967,6 +978,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvOpenAiHint" />
 
+                <EditText
+                    android:id="@+id/etOpenAi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:hint="https://api.openai.com/"
+                    android:inputType="textUri"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvOpenAiPrivacy" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilOpenAi"
                     android:layout_width="0dp"
@@ -976,7 +1000,7 @@
                     app:endIconMode="password_toggle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvOpenAiPrivacy">
+                    app:layout_constraintTop_toBottomOf="@+id/etOpenAi">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -1075,7 +1099,7 @@
                     android:id="@+id/grpOpenAi"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:constraint_referenced_ids="swOpenAi,tvOpenAiHint,tvOpenAiPrivacy,tilOpenAi,ibOpenAi,etOpenAiModel,tvOpenAiTemperature,sbOpenAiTemperature" />
+                    app:constraint_referenced_ids="swOpenAi,tvOpenAiHint,tvOpenAiPrivacy,etOpenAi,tilOpenAi,ibOpenAi,etOpenAiModel,tvOpenAiTemperature,sbOpenAiTemperature" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
@@ -1388,6 +1412,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnRepair" />
 
+                <TextView
+                    android:id="@+id/tvLastDaily"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="daily"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btnDaily" />
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swAutostart"
                     android:layout_width="0dp"
@@ -1397,7 +1431,7 @@
                     android:text="@string/title_advanced_autostart"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnDaily"
+                    app:layout_constraintTop_toBottomOf="@id/tvLastDaily"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -1623,6 +1657,17 @@
                     app:layout_constraintTop_toBottomOf="@id/tvThreadRange" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swAutoScroll"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_auto_scroll"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sbThreadRange"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swUndoManager"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -1630,7 +1675,7 @@
                     android:text="@string/title_advanced_undo_manager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sbThreadRange"
+                    app:layout_constraintTop_toBottomOf="@id/swAutoScroll"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -2197,6 +2242,17 @@
                     app:layout_constraintTop_toBottomOf="@id/tvDkimVerifyHint"
                     app:switchPadding="12dp" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swThreadByRef"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_thread_by_ref"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swDupMsgId"
+                    app:switchPadding="12dp" />
+
                 <EditText
                     android:id="@+id/etKeywords"
                     android:layout_width="0dp"
@@ -2207,7 +2263,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swDupMsgId" />
+                    app:layout_constraintTop_toBottomOf="@id/swThreadByRef" />
 
                 <TextView
                     android:id="@+id/tvKeywordsHint"

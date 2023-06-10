@@ -82,7 +82,7 @@
     <string name="title_block">Bloquear %1$s</string>
     <string name="title_block_sender">Bloquear Remetente</string>
     <string name="title_block_sender_domain">Bloquear domínio \'%1$s\'</string>
-    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Bloquear significa mover automaticamente para a pasta de spam</string>
+    <string name="title_block_sender_remark">Bloquear significa mover automaticamente para a pasta de spam</string>
     <string name="title_block_sender_hint">Bloquear um remetente é um recurso gratuito.
         O bloqueio de nomes de domínio dos remetentes utiliza regras de filtragem, o que é uma funcionalidade paga.
     </string>
@@ -305,9 +305,10 @@
     <string name="title_setup_defaults">Repor predefinições</string>
     <string name="title_setup_reset_questions">Repor perguntas</string>
     <string name="title_setup_reset_general">Perguntas gerais</string>
-    <string name="title_setup_reset_full">Mostrar mensagens originais</string>
-    <string name="title_setup_reset_images">Mostrar imagens</string>
     <string name="title_setup_reset_links">Confirmar hiperligações</string>
+    <string name="title_setup_reset_files">Ver ficheiros</string>
+    <string name="title_setup_reset_images">Mostrar imagens</string>
+    <string name="title_setup_reset_full">Mostrar mensagens originais</string>
     <string name="title_check_gmail_oauth">As suas contas de Gmail continuarão a funcionar após 30 de maio de 2022</string>
     <string name="title_check_gmail_password">Algumas das suas contas de Gmail podem parar de funcionar após 30 de maio de 2022</string>
     <string name="title_check_outlook_oauth">As suas contas do Outlook continuarão a funcionar após 1 de outubro de 2022</string>
@@ -393,6 +394,7 @@
     <string name="title_advanced_quote_reply">Citar texto respondido</string>
     <string name="title_advanced_limit_reply">Limitar o número de citações encadeadas</string>
     <string name="title_advanced_resize_reply">Redimensionar imagens no texto da resposta</string>
+    <string name="title_advanced_resize_paste">Redimensionar imagens coladas</string>
     <string name="title_advanced_signature_location">Posição da assinatura</string>
     <string name="title_advanced_signature_new">Usar assinatura em novas mensagens</string>
     <string name="title_advanced_signature_reply">Usar assinatura quando responder</string>
@@ -443,6 +445,7 @@
     <string name="title_advanced_two_col">Usar duas colunas</string>
     <string name="title_advanced_min_screen_size">Tamanho mínimo de ecrã para dividir</string>
     <string name="title_advanced_close_pane">Recolher linha ou coluna ao fechar uma conversa</string>
+    <string name="title_advanced_open_pane">Iniciar com duas linhas ou duas colunas</string>
     <string name="title_advanced_column_width">Largura / altura da linha da Mensagem: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Ocultar barra de ferramentas superior quando rolar as mensagens</string>
     <string name="title_advanced_nav_options">Mostrar opções do menu de navegação</string>
@@ -467,6 +470,7 @@
     <string name="title_advanced_date_week">Agrupar por semana em vez de dia</string>
     <string name="title_advanced_date_fixed">Mostrar cabeçalho de data fixo no topo</string>
     <string name="title_advanced_date_bold">Mostrar data em negrito</string>
+    <string name="title_advanced_date_time">Mostrar sempre tanto a data como a hora</string>
     <string name="title_advanced_threading">Encadeamento de conversas</string>
     <string name="title_advanced_threading_unread">Mostrar número de mensagens não lidas nas conversas</string>
     <string name="title_advanced_indentation">Indentação esquerda/direita para mensagens recebidas/enviadas em conversas</string>
@@ -585,7 +589,7 @@
     <string name="title_advanced_auto_block_sender">Bloquear automaticamente o remetente quando denunciar spam</string>
     <string name="title_advanced_auto_hide_answer">Ocultar automaticamente o botão de resposta ao rolar</string>
     <string name="title_advanced_swipe_reply">Deslizar para a direita para responder em mensagens expandidas</string>
-    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">Ao mover uma conversa, também mover mensagens enviadas</string>
+    <string name="title_advanced_move_thread_sent">Ao mover uma conversa, também mover mensagens enviadas</string>
     <string name="title_advanced_default_snooze">Tempo pré-definido de repetição/adiamento</string>
     <string name="title_advanced_default_folder">Selecione a pasta padrão</string>
     <string name="title_advanced_notifications">Gerir notificações</string>
@@ -629,6 +633,7 @@
     <string name="title_advanced_notifications_background">Use o serviço em segundo plano para sincronizar mensagens</string>
     <string name="title_advanced_notifications_background_hint">Um serviço em segundo plano pode ser interrompido pelo Android a qualquer momento, mas não requer uma notificação na barra de estado</string>
     <string name="title_advanced_confirm_links">Pedir confirmação ao abrir hiperligações</string>
+    <string name="title_advanced_confirm_files">Confirmar visualização de ficheiros</string>
     <string name="title_advanced_sanitize_links">Remover parâmetros de rastreamento por padrão</string>
     <string name="title_advanced_sanitize_links_hint">Somente quando confirmar links</string>
     <string name="title_advanced_check_links_dbl">Verificar listas de bloqueio de domínios para hiperligações suspeitas</string>
@@ -903,6 +908,7 @@
     <string name="title_leave_deleted">Deixar as mensagens eliminadas no servidor</string>
     <string name="title_leave_on_device">Deixar as mensagens no dispositivo</string>
     <string name="title_max_messages">Número máximo de mensagens a serem transferidas (espaço em branco para todas)</string>
+    <string name="title_max_messages_keep">Este é o número máximo de mensagens que serão mantidas no dispositivo</string>
     <string name="title_max_messages_remark">        Insira um número positivo para baixar as mensagens no final (mais comum)
         e um número negativo para baixar as mensagens no início (menos comum)
     </string>
@@ -1037,6 +1043,8 @@
     <string name="title_unified_folder">Mostrar na cx. entrada unificada</string>
     <string name="title_navigation_folder">Mostrar no menu de navegação</string>
     <string name="title_navigation_folder_hide">Ocultar no menu de navegação</string>
+    <string name="title_unified_inbox_add">Adicionar à caixa de entrada unificada</string>
+    <string name="title_unified_inbox_delete">Apagar da caixa de entrada unificada</string>
     <string name="title_synchronize_folder">Sincronizar (receber mensagens)</string>
     <string name="title_poll_folder">Verificar periodicamente em vez da sincronização contínua</string>
     <string name="title_poll_folder_remark">A maioria dos servidores de e-mail apenas permite mensagens push em determinadas pastas!</string>
@@ -1229,6 +1237,7 @@
     <string name="title_ask_show_image_hint">Imagens reconhecidas como imagens de monitorização não serão mostradas</string>
     <string name="title_ask_show_amp">Mostrar a variante AMP da mensagem?</string>
     <string name="title_ask_show_amp_hint">As mensagens AMP são concebidas para serem dinâmicas e para interagirem com a internet e, portanto, podem ser usadas por definição para o acompanhar</string>
+    <string name="title_ask_view_file">Ver ficheiro %1$s ?</string>
     <string name="title_ask_delete_local">Eliminar mensagens locais? As mensagens irão permanecer no servidor remoto.</string>
     <string name="title_ask_help">Ajude a melhorar o FairEmail</string>
     <string name="title_ask_reporting">Enviar relatórios de erro?</string>
@@ -1348,6 +1357,7 @@
     <string name="title_translating">A traduzir &#8230;</string>
     <string name="title_translate_formal">Utilizar o formulário formal</string>
     <string name="title_translate_small">Utilizar um tipo de letra pequeno para o texto original</string>
+    <string name="title_translate_replace">Substituir texto original por texto traduzido</string>
     <string name="title_translate_html">Guardar formatação</string>
     <string name="title_translate_html_hint">Esta opção consumirá mais caracteres</string>
     <string name="title_translate_usage">Utilização: %1$s / %2$s (%3$d %%)</string>
@@ -1400,6 +1410,7 @@
     <string name="title_verify">Verificar</string>
     <string name="title_encrypt">Cifrar</string>
     <string name="title_decrypt">Decifrar</string>
+    <string name="title_reset_message_questions">Repor perguntas de segurança</string>
     <string name="title_resync">Ressincronizar</string>
     <string name="title_charset">Codificação</string>
     <string name="title_charset_auto">Automático</string>
@@ -1723,6 +1734,7 @@
     <string name="title_legend_avatar">Imagem de Perfil</string>
     <string name="title_legend_show_quotes">Mostrar citações</string>
     <string name="title_legend_show_junk">Tratar como spam</string>
+    <string name="title_legend_not_junk">Tratar como não sendo spam</string>
     <string name="title_legend_create_rule">Criar regra</string>
     <string name="title_legend_show_unsubscribe">Cancelar subscrição desta lista</string>
     <string name="title_legend_show_images">Mostrar imagens</string>

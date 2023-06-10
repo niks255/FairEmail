@@ -220,7 +220,8 @@ public class MessageHelper {
             "no-reply",
             "donotreply",
             "do.not.reply",
-            "do-not-reply"
+            "do-not-reply",
+            "nicht.antworten"
     ));
 
     static final String FLAG_FORWARDED = "$Forwarded";
@@ -1872,7 +1873,12 @@ public class MessageHelper {
         }
 
         // Common reference
-        if (thread == null && refs.size() > 0) {
+        boolean thread_byref = prefs.getBoolean("thread_byref", true);
+        if (thread == null && refs.size() > 0 && thread_byref) {
+            // For example
+            //   Message-ID: <organization/project/pull/nnn/issue_event/xxx@github.com>
+            //   In-Reply-To: <organization/project/pull/nnn@github.com>
+            //   References: <organization/project/pull/nnn@github.com>
             String ref = refs.get(0);
             if (!Objects.equals(ref, msgid))
                 thread = account + ":" + ref;
@@ -2035,8 +2041,10 @@ public class MessageHelper {
                 return true;
 
             // Google
+            // Feedback-ID: nnnnnnn:user:proton
             header = imessage.getHeader("Feedback-ID", null);
-            if (header != null)
+            if (header != null &&
+                    !header.endsWith(":user:proton")) // How privacy-friendly is this anyway?
                 return true;
 
             header = imessage.getHeader("Precedence", null);
@@ -3339,7 +3347,7 @@ public class MessageHelper {
             MimeTextPart p1 = parts.get(p);
             MimeTextPart p2 = parts.get(p + 1);
             // https://bugzilla.mozilla.org/show_bug.cgi?id=1374149
-            if (!"__ISO-2022-JP__".equalsIgnoreCase(p1.charset) &&
+            if (!"ISO-2022-JP".equalsIgnoreCase(p1.charset) &&
                     p1.charset != null && p1.charset.equalsIgnoreCase(p2.charset) &&
                     p1.encoding != null && p1.encoding.equalsIgnoreCase(p2.encoding) &&
                     p1.text != null && !p1.text.endsWith("=")) {
@@ -3941,7 +3949,7 @@ public class MessageHelper {
             return null;
         }
 
-        void downloadAttachment(Context context, EntityAttachment local) throws IOException, MessagingException {
+        void downloadAttachment(Context context, EntityAttachment local, EntityFolder folder) throws IOException, MessagingException {
             List<EntityAttachment> remotes = getAttachments();
 
             // Some servers order attachments randomly
@@ -4003,10 +4011,10 @@ public class MessageHelper {
             if (index < 0)
                 throw new IllegalArgumentException("Attachment not found");
 
-            downloadAttachment(context, index, local);
+            downloadAttachment(context, index, local, folder);
         }
 
-        void downloadAttachment(Context context, int index, EntityAttachment local) throws MessagingException, IOException {
+        void downloadAttachment(Context context, int index, EntityAttachment local, EntityFolder folder) throws MessagingException, IOException {
             Log.i("downloading attachment id=" + local.id + " index=" + index + " " + local);
 
             // Get data
@@ -4064,20 +4072,22 @@ public class MessageHelper {
                     throw ex;
                 }
 
-                if ("message/rfc822".equals(local.type))
-                    decodeRfc822(context, local, 1);
+                if (folder == null || !EntityFolder.isOutgoing(folder.type)) {
+                    if ("message/rfc822".equals(local.type))
+                        decodeRfc822(context, local, 1);
 
-                else if ("text/calendar".equals(local.type) && ActivityBilling.isPro(context))
-                    decodeICalendar(context, local);
+                    else if ("text/calendar".equals(local.type) && ActivityBilling.isPro(context))
+                        decodeICalendar(context, local);
 
-                else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && local.isCompressed()) {
-                    decodeCompressed(context, local, 1);
+                    else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && local.isCompressed()) {
+                        decodeCompressed(context, local, 1);
 
-                } else if (Helper.isTnef(local.type, local.name))
-                    decodeTNEF(context, local, 1);
+                    } else if (Helper.isTnef(local.type, local.name))
+                        decodeTNEF(context, local, 1);
 
-                else if ("msg".equalsIgnoreCase(Helper.getExtension(local.name)))
-                    decodeOutlook(context, local, 1);
+                    else if ("msg".equalsIgnoreCase(Helper.getExtension(local.name)))
+                        decodeOutlook(context, local, 1);
+                }
             }
         }
 

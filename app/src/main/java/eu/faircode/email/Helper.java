@@ -62,6 +62,7 @@ import android.os.Looper;
 import android.os.Parcel;
 import android.os.PowerManager;
 import android.os.StatFs;
+import android.os.ext.SdkExtensions;
 import android.os.storage.StorageManager;
 import android.provider.Browser;
 import android.provider.DocumentsContract;
@@ -876,6 +877,12 @@ public class Helper {
         return ContextCompat.getSystemService(context.getApplicationContext(), type);
     }
 
+    static boolean hasPhotoPicker() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ||
+                (Build.VERSION.SDK_INT > Build.VERSION_CODES.R &&
+                        SdkExtensions.getExtensionVersion(Build.VERSION_CODES.R) >= 2));
+    }
+
     // View
 
     static Integer actionBarHeight = null;
@@ -1047,7 +1054,7 @@ public class Helper {
         String open_with_pkg = prefs.getString("open_with_pkg", null);
         boolean open_with_tabs = prefs.getBoolean("open_with_tabs", true);
 
-        Log.i("View=" + uri +
+        EntityLog.log(context, "View=" + uri +
                 " browse=" + browse +
                 " task=" + task +
                 " pkg=" + open_with_pkg + ":" + open_with_tabs +

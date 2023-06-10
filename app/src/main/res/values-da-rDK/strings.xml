@@ -82,7 +82,7 @@
     <string name="title_block">Blokér %1$s</string>
     <string name="title_block_sender">Blokér afsender</string>
     <string name="title_block_sender_domain">Blokér domænet \'%1$s\'</string>
-    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Blokering betyder automatisk flytning til Spam-mappen</string>
+    <string name="title_block_sender_remark">Blokering betyder automatisk flytning til Spam-mappen</string>
     <string name="title_block_sender_hint">        Afsenderblokering er en gratisfunktion.
         Afsenderdomæneblokering sker via filterregler og er en Pro-funktion.
     </string>
@@ -303,9 +303,10 @@
     <string name="title_setup_defaults">Gendan standardværdier</string>
     <string name="title_setup_reset_questions">Nulstil spørgsmål</string>
     <string name="title_setup_reset_general">Generelle spørgsmål</string>
-    <string name="title_setup_reset_full">Vis oprindelige beskeder</string>
-    <string name="title_setup_reset_images">Vis billeder</string>
     <string name="title_setup_reset_links">Bekræft links</string>
+    <string name="title_setup_reset_files">Vis filer</string>
+    <string name="title_setup_reset_images">Vis billeder</string>
+    <string name="title_setup_reset_full">Vis oprindelige beskeder</string>
     <string name="title_check_gmail_oauth">Gmail-konti vil fortsat fungere efter 3005-22</string>
     <string name="title_check_gmail_password">Visse Gmail-konti kan ophøre med at fungere efter 3005-22</string>
     <string name="title_check_outlook_oauth">Aktuelle Outlook-konti vil fortsat fungere efter 1. okt. 2022</string>
@@ -391,6 +392,7 @@
     <string name="title_advanced_quote_reply">Citat af svartekst</string>
     <string name="title_advanced_limit_reply">Begræns antallet af indlejrede citater</string>
     <string name="title_advanced_resize_reply">Skalér billedstørrelse i tekstsvaret</string>
+    <string name="title_advanced_resize_paste">Ændr størrelse på indsatte billeder</string>
     <string name="title_advanced_signature_location">Signaturposition</string>
     <string name="title_advanced_signature_new">Brug signatur til nye beskeder</string>
     <string name="title_advanced_signature_reply">Benyt signatur i svar</string>
@@ -441,6 +443,7 @@
     <string name="title_advanced_two_col">Brug to kolonner</string>
     <string name="title_advanced_min_screen_size">Minimumsskærmstørrelse for opsplitning af skærmen</string>
     <string name="title_advanced_close_pane">Skjul række eller kolonne, når en samtale lukkes</string>
+    <string name="title_advanced_open_pane">Start med to rækker eller kolonner</string>
     <string name="title_advanced_column_width">Beskedkolonnebredde/-rækkehøjde: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Skjul øverste værktøjsbjælke ved rulning gennem beskeder</string>
     <string name="title_advanced_nav_options">Vis navigeringsmenuindstillinger</string>
@@ -465,6 +468,7 @@
     <string name="title_advanced_date_week">Gruppér efter uge i stedet for dag</string>
     <string name="title_advanced_date_fixed">Vis fast datohoved øverst</string>
     <string name="title_advanced_date_bold">Vis dato med fed</string>
+    <string name="title_advanced_date_time">Vis altid både dato og klokkeslæt</string>
     <string name="title_advanced_threading">Samtaler i tråde</string>
     <string name="title_advanced_threading_unread">Vis antal ulæste beskeder i samtaler</string>
     <string name="title_advanced_indentation">Venstre-/-højreindryk modtagne/sendte beskeder i samtaler</string>
@@ -583,7 +587,7 @@
     <string name="title_advanced_auto_block_sender">Blokér automatisk afsenderen ved spamanmeldelse</string>
     <string name="title_advanced_auto_hide_answer">Skjul automatisk svarknappen når der scrolles</string>
     <string name="title_advanced_swipe_reply">Stryg udvidede beskeder til højre for at besvare</string>
-    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">Når en samtale flyttes, flyt også sendte beskeder</string>
+    <string name="title_advanced_move_thread_sent">Når en samtale flyttes, flyt også sendte beskeder</string>
     <string name="title_advanced_default_snooze">Standard slumre-/forsinkelsestid</string>
     <string name="title_advanced_default_folder">Vælg standardmappe</string>
     <string name="title_advanced_notifications">Håndtér notifikationer</string>
@@ -627,6 +631,7 @@
     <string name="title_advanced_notifications_background">Benyt baggrundstjeneste til beskedsynkronisering</string>
     <string name="title_advanced_notifications_background_hint">En baggrundstjeneste kan til enhver tid stoppes af Android, men behøver ingen statusbjælkenotifikation</string>
     <string name="title_advanced_confirm_links">Bekræft åbning af links</string>
+    <string name="title_advanced_confirm_files">Bekræft visning af filer</string>
     <string name="title_advanced_sanitize_links">Fjern som standard sporingsparametre</string>
     <string name="title_advanced_sanitize_links_hint">Kun ved linkbekræftelse</string>
     <string name="title_advanced_check_links_dbl">Tjek domæneblokeringslister for mistænkelige links</string>
@@ -899,6 +904,7 @@
     <string name="title_leave_deleted">Lad slettede beskeder forblive på serveren</string>
     <string name="title_leave_on_device">Lad beskeder forblive på enhed</string>
     <string name="title_max_messages">Maks. antal beskeder at downloade (tomt for samtlige)</string>
+    <string name="title_max_messages_keep">Dette er det maksimale antal besked, som gemmes på enheden</string>
     <string name="title_max_messages_remark">        Angiv et positivt tal for at downloade meddelelserne i slutningen (mest almindeligt)
         og et negativt tal for at downloade meddelelserne i begyndelsen
     </string>
@@ -1033,6 +1039,8 @@
     <string name="title_unified_folder">Vis i samlet indbakke</string>
     <string name="title_navigation_folder">Vis i navigationsmenu</string>
     <string name="title_navigation_folder_hide">Skjul i navigeringsmenuen</string>
+    <string name="title_unified_inbox_add">Vis i samlet indbakke</string>
+    <string name="title_unified_inbox_delete">Slet fra samlet indbakke</string>
     <string name="title_synchronize_folder">Synkronisér (modtag beskeder)</string>
     <string name="title_poll_folder">Tjek periodisk i stedet for kontinuerlig synkronisering</string>
     <string name="title_poll_folder_remark">De fleste e-mailservere tillader kun push-beskeder for en håndfuld mapper!</string>
@@ -1225,6 +1233,7 @@
     <string name="title_ask_show_image_hint">Billeder genkendt som sporingsbilleder, vises ikke</string>
     <string name="title_ask_show_amp">Vis AMP-variant af beskeden?</string>
     <string name="title_ask_show_amp_hint">AMP-beskeder er designet til at være dynamiske og interagere med Internet, og de kan derfor potentielt bruges til brugersporing</string>
+    <string name="title_ask_view_file">Vis fil %1$s?</string>
     <string name="title_ask_delete_local">Slet lokale beskeder? Beskeder forbliver på den eksterne server.</string>
     <string name="title_ask_help">Hjælp med at forbedre FairEmail</string>
     <string name="title_ask_reporting">Send fejlrapporter?</string>
@@ -1344,6 +1353,7 @@
     <string name="title_translating">Oversætter&#8230;</string>
     <string name="title_translate_formal">Brug formel form</string>
     <string name="title_translate_small">Benyt lille kildetekstskrifttype</string>
+    <string name="title_translate_replace">Erstat kildetekst ved oversat tekst</string>
     <string name="title_translate_html">Bevar formatering</string>
     <string name="title_translate_html_hint">Dette vil betyde et forøget antal tegn</string>
     <string name="title_translate_usage">Forbrug: %1$s/%2$s (%3$d %%)</string>
@@ -1719,6 +1729,7 @@
     <string name="title_legend_avatar">Avatar</string>
     <string name="title_legend_show_quotes">Vis citater</string>
     <string name="title_legend_show_junk">Håndtér som spam</string>
+    <string name="title_legend_not_junk">Håndtér som ikke-spam</string>
     <string name="title_legend_create_rule">Opret regel</string>
     <string name="title_legend_show_unsubscribe">Afabonnér fra liste</string>
     <string name="title_legend_show_images">Vis billeder</string>

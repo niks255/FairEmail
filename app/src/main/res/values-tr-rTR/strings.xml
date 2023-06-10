@@ -82,7 +82,7 @@
     <string name="title_block">Engelle: %1$s</string>
     <string name="title_block_sender">Göndereni engelle</string>
     <string name="title_block_sender_domain">\'%1$s\' alan adını engelle</string>
-    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Engelleme, otomatik olarak spam klasörüne taşıma anlamına gelir</string>
+    <string name="title_block_sender_remark">Engelleme, otomatik olarak spam klasörüne taşıma anlamına gelir</string>
     <string name="title_block_sender_hint">Bir göndereni engellemek ücretsiz bir özelliktir.
 Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurallarını kullanır.    </string>
     <string name="title_blocked_senders">Engellenmiş gönderenler</string>
@@ -302,9 +302,10 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_defaults">Öntanımlıları geri yükle</string>
     <string name="title_setup_reset_questions">Soruları sıfırla</string>
     <string name="title_setup_reset_general">Genel Sorular</string>
-    <string name="title_setup_reset_full">Orijinal mesajları göster</string>
-    <string name="title_setup_reset_images">Resimleri göster</string>
     <string name="title_setup_reset_links">Bağlantıları onaylayın</string>
+    <string name="title_setup_reset_files">Dosyaları görüntüle</string>
+    <string name="title_setup_reset_images">Resimleri göster</string>
+    <string name="title_setup_reset_full">Orijinal mesajları göster</string>
     <string name="title_check_gmail_oauth">Gmail hesaplarınız 30 Mayıs 2022\'den sonra çalışmaya devam edecek</string>
     <string name="title_check_gmail_password">Bazı Gmail hesaplarınız 30 Mayıs 2022\'den sonra çalışmayı durdurabilir</string>
     <string name="title_check_outlook_oauth">Outlook hesaplarınız 1 Ekim 2022\'den sonra çalışmaya devam edecek</string>
@@ -390,6 +391,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_quote_reply">Cevap metnini alıntıla</string>
     <string name="title_advanced_limit_reply">İç içe geçmiş tekliflerin sayısını sınırlayın</string>
     <string name="title_advanced_resize_reply">Yanıtlanan metindeki görselleri boyutlandır</string>
+    <string name="title_advanced_resize_paste">Yapıştırılan görüntüleri yeniden boyutlandır</string>
     <string name="title_advanced_signature_location">İmza konumu</string>
     <string name="title_advanced_signature_new">Yeni mesajlar için imzayı kullan</string>
     <string name="title_advanced_signature_reply">Yanıtlarken imza kullan</string>
@@ -440,6 +442,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_two_col">İki sütun kullan</string>
     <string name="title_advanced_min_screen_size">Ekranı bölmek için minimum ekran boyutu</string>
     <string name="title_advanced_close_pane">Bir konuşmayı kapatırken satırı veya sütunu daralt</string>
+    <string name="title_advanced_open_pane">İki satır veya iki sütunla başla</string>
     <string name="title_advanced_column_width">Mesaj sütun genişliği / satır yüksekliği: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Mesajları kaydırırken üstteki araç çubuğunu gizle</string>
     <string name="title_advanced_nav_options">Gezinme menüsü seçeneklerini göster</string>
@@ -464,6 +467,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_date_week">Gün yerine haftaya göre gruplandır</string>
     <string name="title_advanced_date_fixed">Sabit tarih başlığını üstte göster</string>
     <string name="title_advanced_date_bold">Tarihi kalın olarak göster</string>
+    <string name="title_advanced_date_time">Her zaman hem tarih hem de saat göster</string>
     <string name="title_advanced_threading">İletişim iş parçacığı</string>
     <string name="title_advanced_threading_unread">Sohbetlerde okunmamış mesajların sayısını göster</string>
     <string name="title_advanced_indentation">Sohbetlerde alınan/gönderilen mesajları sola/sağa girintile</string>
@@ -582,7 +586,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_auto_block_sender">Spam bildirirken göndereni otomatik olarak engelle</string>
     <string name="title_advanced_auto_hide_answer">Kaydırma sırasında yanıt düğmesini otomatik olarak gizle</string>
     <string name="title_advanced_swipe_reply">Genişletilmiş mesajları yanıtlamak için sağa kaydırın</string>
-    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">Bir görüşmeyi taşırken, gönderilen mesajları da taşıyın</string>
+    <string name="title_advanced_move_thread_sent">Bir görüşmeyi taşırken, gönderilen mesajları da taşıyın</string>
     <string name="title_advanced_default_snooze">Varsayılan erteleme/gecikme süresi</string>
     <string name="title_advanced_default_folder">Varsayılan klasörü seçin</string>
     <string name="title_advanced_notifications">Bildirimleri yönet</string>
@@ -626,6 +630,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_notifications_background">İletileri senkronize etmek için arka plan servisi kullan</string>
     <string name="title_advanced_notifications_background_hint">Bir arka plan servisi Android tarafından herhangi bir zamanda durdurulabilir, ama çalışmak için sabit bir bildirime ihtiyaç duymaz</string>
     <string name="title_advanced_confirm_links">Bağlantıları açmayı onayla</string>
+    <string name="title_advanced_confirm_files">Dosyaları görüntülemeyi onayla</string>
     <string name="title_advanced_sanitize_links">Varsayılan olarak izleme parametrelerini kaldırın</string>
     <string name="title_advanced_sanitize_links_hint">Sadece bağlantıları doğrularken</string>
     <string name="title_advanced_check_links_dbl">Şüpheli bağlantılar için alan engelleme listelerini kontrol edin</string>
@@ -900,6 +905,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_leave_deleted">Silinen mesajları sunucuda bırak</string>
     <string name="title_leave_on_device">Mesajları cihazda bırak</string>
     <string name="title_max_messages">İndirilecek mesajların maksimum sayısı (hepsi için boş)</string>
+    <string name="title_max_messages_keep">Bu, cihazda tutulacak maksimum mesaj sayısıdır</string>
     <string name="title_max_messages_remark">        Sondaki mesajları indirmek için pozitif bir sayı girin (en yaygın)
         ve başlangıçta mesajları indirmek için negatif bir sayı (en az yaygın olan)
     </string>
@@ -1034,6 +1040,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_unified_folder">Birleşik gelen kutusunda göster</string>
     <string name="title_navigation_folder">Gezinme menüsünde göster</string>
     <string name="title_navigation_folder_hide">Gezinme menüsünde gizle</string>
+    <string name="title_unified_inbox_add">Birleşik gelen kutusunda göster</string>
+    <string name="title_unified_inbox_delete">Birleşik gelen kutusundan sil</string>
     <string name="title_synchronize_folder">Senkronize et (iletileri al)</string>
     <string name="title_poll_folder">Sürekli senkronizasyon yerine belirli aralıklarla kontrol et</string>
     <string name="title_poll_folder_remark">Çoğu e-posta sunucusu push mesajlarına yalnızca birkaç klasör için izin verir!</string>
@@ -1224,6 +1232,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_ask_show_image_hint">İzleme resimleri olarak tanınan resimler gösterilmeyecektir</string>
     <string name="title_ask_show_amp">Mesajın AMP varyantı gösterilsin mi?</string>
     <string name="title_ask_show_amp_hint">AMP mesajları dinamik olacak ve internet ile etkileşime girecek şekilde tasarlanmıştır ve bu nedenle tanım gereği sizi izlemek için kullanılabilir</string>
+    <string name="title_ask_view_file">Dosyayı görüntüle %1$s ?</string>
     <string name="title_ask_delete_local">Yerel iletiler silinsin mi? İletiler uzak sunucuda kalacaktır.</string>
     <string name="title_ask_help">FairEmail\'in geliştirilmesine yardımcı olun</string>
     <string name="title_ask_reporting">Hata raporları gönderilsin mi?</string>
@@ -1342,6 +1351,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_translating">Tercüme ediliyor&#8230;</string>
     <string name="title_translate_formal">Resmi formu kullan</string>
     <string name="title_translate_small">Kaynak metin için küçük bir yazı tipi kullan</string>
+    <string name="title_translate_replace">Kaynak metni çevrilmiş metinle değiştir</string>
     <string name="title_translate_html">Biçimlendirmeyi koru</string>
     <string name="title_translate_html_hint">Bu daha fazla karakter tüketecek</string>
     <string name="title_translate_usage">Kullanım: %1$s/%2$s (%3$d %%)</string>
@@ -1716,6 +1726,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_legend_avatar">Profil resmi</string>
     <string name="title_legend_show_quotes">Alıntıları Göster</string>
     <string name="title_legend_show_junk">Spam olarak değerlendir</string>
+    <string name="title_legend_not_junk">Spam değil olarak değerlendir</string>
     <string name="title_legend_create_rule">Kural oluştur</string>
     <string name="title_legend_show_unsubscribe">Listeden Çık</string>
     <string name="title_legend_show_images">Resimleri göster</string>

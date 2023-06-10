@@ -390,6 +390,8 @@ Anything on this list is in random order and *might* be added in the near future
 * [(188) Why is Google backup disabled?](#user-content-faq188)
 * [(189) What is cloud sync?](#user-content-faq189)
 * [(190) How do I use OpenAI (ChatGPT)?](#user-content-faq190)
+* [(191) How do I download and keep older messages on my device?](#user-content-faq191)
+* [(192) How can I resolve 'Couldn't connect to host, port: ...; timeout ...;' ?](#user-content-faq192)
 
 [I have another question.](#user-content-get-support)
 
@@ -403,7 +405,7 @@ The following Android permissions are **required**:
 * *have full network access* (INTERNET): to send and receive via the internet
 * *view network connections* (ACCESS_NETWORK_STATE): to monitor connectivity changes (mobile data, WiFi)
 * *run at startup* (RECEIVE_BOOT_COMPLETED): to start sending and receiving on device start
-* *run foreground service* (FOREGROUND_SERVICE): to run a foreground service on Android 9 Pie and later, see also the next question
+* *run foreground service* (FOREGROUND_SERVICE/DATA_SYNC): to run a foreground service on Android 9 Pie and later, see also the next question
 * *schedule exact alarm* (SCHEDULE_EXACT_ALARM): to use exact alarm scheduling (Android 12 and later), for example to snooze messages
 * *prevent device from sleeping* (WAKE_LOCK): to keep the device awake while performing actions, like synchronization of messages
 * *use fingerprint hardware* (USE_FINGERPRINT) and *use biometric hardware* (USE_BIOMETRIC): to use biometric authentication (fingerprint, face unlock, etc)
@@ -1067,6 +1069,12 @@ How to extract a public key from a S/MIME certificate:
 openssl pkcs12 -in filename.pfx/p12 -clcerts -nokeys -out cert.pem
 ```
 
+You can verify the signature of a raw message file (EML file) like this:
+
+```
+openssl smime -verify <xxx.eml
+```
+
 You can decode S/MIME signatures, etc, [here](https://lapo.it/asn1js/).
 
 <br />
@@ -1493,6 +1501,7 @@ Please [see here](#user-content-faq41) for the error *... Handshake failed ...*.
 See [here](https://linux.die.net/man/3/connect) for what error codes like EHOSTUNREACH and ETIMEDOUT mean.
 
 The error *... connect failed: EACCES (Permission denied) ...* means that  *Restrict data usage* was disabled in the Android MIUI app settings for FairEmail.
+On Samsung, and possible other devices, also check: Android settings > Battery > Battery manager / Unmonitored apps.
 
 Possible causes are:
 
@@ -1738,9 +1747,12 @@ There are quick settings (settings tiles) available to:
 
 * globally enable/disable synchronization
 * show the number of new messages and marking them as seen (not read)
+* clear all app data
 
 Quick settings require Android 7.0 Nougat or later.
 The usage of settings tiles is explained [here](https://support.google.com/android/answer/9083864).
+
+Note that not all devices (manufacturers) support settings tiles, for example, Rephone doesn't.
 
 <br />
 
@@ -2592,7 +2604,7 @@ Since version 1.2061 rules can be part of a named group.
 Group names will be displayed in the list of rules.
 If a rule is part of a group, stop processing means stop processing the group.
 
-Since version 1.2018 there is a rule option to run rules daily on messages older than defined.
+Since version 1.2018 there is a rule option to run rules daily on messages (around 1:00am) older than xxx.
 
 The following rule conditions are available:
 
@@ -5038,6 +5050,14 @@ Templates can have the following options:
 * *Snippet*: template will be used as text fragment (since version 1.1857)
 * *Hide from menus*: template will be hidden (disabled)
 
+Since version 1.2068 it is possible to send a template message with an intent:
+
+```
+(adb shell) am start-foreground-service -a eu.faircode.email.TEMPLATE --es template <template name> --es identity <identity display name> --es to <email address> --es cc <email address> --es subject <subject>
+```
+
+**Important**: you need to configure a display name for the identity, and use this to identify the identity.
+
 <br />
 
 <a name="faq180"></a>
@@ -5215,6 +5235,8 @@ This is a pro feature.
 <a name="faq187"></a>
 **(187) Are colored stars synchronized across devices?**
 
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq187)
+
 Colored stars can't be stored on email servers because email protocols do not support this.
 In other words, the color of stars is stored on your device only, and won't be synchronized across devices.
 
@@ -5222,6 +5244,8 @@ In other words, the color of stars is stored on your device only, and won't be s
 
 <a name="faq188"></a>
 **(188) Why is Google backup disabled?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq188)
 
 Google backup is disabled to prevent privacy-sensitive information, like account credentials and email addresses,
 from [automatically being sent to Google](https://developer.android.com/guide/topics/data/autobackup).
@@ -5232,6 +5256,8 @@ Unfortunately, it is not possible to enable cloud backup for other backup softwa
 
 <a name="faq189"></a>
 **(189) What is cloud sync?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq189)
 
 Cloud sync is meant to synchronize configuration data across devices.
 It can be used to restore configuration data onto a new device too.
@@ -5269,7 +5295,7 @@ Cloud sync is an experimental feature. It is not available for the Play Store ve
 <a name="faq190"></a>
 **(190) How do I use OpenAI (ChatGPT)?**
 
-&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq180)
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq190)
 
 OpenAI can only be used if configured and enabled, and the app does not use third-party libraries to avoid tracking when OpenAI is not used.
 
@@ -5308,6 +5334,35 @@ and perhaps [this article](https://katedowninglaw.com/2023/03/10/openais-massive
 and [this article](https://www.ncsc.gov.uk/blog-post/chatgpt-and-large-language-models-whats-the-risk) too.
 
 This feature is experimental and available in the GitHub version only and requires version 1.2053 or later.
+
+<br>
+
+<a name="faq191"></a>
+**(191) How do I download and keep older messages on my device?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq191)
+
+You can download and keep older messages in the unified inbox folders by using *Fetch more messages* in the three-dots overflow menu of the start screen.
+For other folders, you can long press the folder in the folder list of the account (tap on the account name in the navigation menu = left side menu).
+Please read the remark in the confirmation dialog box.
+
+Note that starred (favorite) messages will be kept on your device "forever".
+
+Instead of downloading many messages to your device, consider [searching for messages on the email server](#user-content-faq13).
+
+<br>
+
+<a name="faq192"></a>
+**(192) How can I resolve 'Couldn't connect to host, port: ...; timeout ...;' ?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq192)
+
+This error message means that the app didn't receive a response from the email server.
+The email server might not be responding, for example because it is offline for maintenance, or the response might not arrive, for example due to internet connectivity issues.
+
+So, please check if your internet connection is working correctly. Also, try to switch to mobile data or Wi-Fi.
+
+If you are using a VPN, firewall, ad blocker, or similar, please try to disable it. Email servers often block connections via a VPN.
 
 <br>
 

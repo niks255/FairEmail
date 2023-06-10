@@ -102,7 +102,7 @@
     <string name="title_block">Блакіраваць %1$s</string>
     <string name="title_block_sender">Заблакіраваць адпраўніка</string>
     <string name="title_block_sender_domain">Блакіраваць дамен \'%1$s\'</string>
-    <string name="title_block_sender_remark" comment="title_block_sender_remark&#10;Remark for report-spam dialog box">Блакіраванне азначае аўтаматычнае перамяшчэнне ў папку са спамам</string>
+    <string name="title_block_sender_remark">Блакіраванне азначае аўтаматычнае перамяшчэнне ў папку са спамам</string>
     <string name="title_block_sender_hint">         Блакіраванне адпраўніка - бясплатная функцыя.
          Блакіроўка дамена адпраўніка выкарыстоўваюцца правілы фільтра, што з\'яўляецца функцыяй з прафесійнай версіі.
    </string>
@@ -330,9 +330,10 @@
     <string name="title_setup_defaults">Аднавіць значэнні па змаўчанні</string>
     <string name="title_setup_reset_questions">Скінуць адказы на пытанні</string>
     <string name="title_setup_reset_general">Агульныя пытанні</string>
-    <string name="title_setup_reset_full">Паказаць зыходныя паведамленні</string>
-    <string name="title_setup_reset_images">Паказваць выявы</string>
     <string name="title_setup_reset_links">Пацвярджаць спасылкі</string>
+    <string name="title_setup_reset_files">Праглядзець файлы</string>
+    <string name="title_setup_reset_images">Паказваць выявы</string>
+    <string name="title_setup_reset_full">Паказаць зыходныя паведамленні</string>
     <string name="title_check_gmail_oauth">Вашы ўліковыя запісы Gmail працягнуць працаваць пасля 30 мая 2022 г.</string>
     <string name="title_check_gmail_password">Некаторыя з вашых уліковых запісаў Gmail могуць перастаць працаваць пасля 30 мая 2022 г.</string>
     <string name="title_check_outlook_oauth">Вашы ўліковыя запісы Outlook працягнуць працаваць пасля 1 кастрычніка 2022 г.</string>
@@ -419,6 +420,7 @@
     <string name="title_advanced_quote_reply">Цытаваць тэкст пры адказе</string>
     <string name="title_advanced_limit_reply">Абмежаваць колькасць укладзеных цытат</string>
     <string name="title_advanced_resize_reply">Змяняць памер выяў у тэксце адказу</string>
+    <string name="title_advanced_resize_paste">Змяняць памер устаўленых выяў</string>
     <string name="title_advanced_signature_location">Размяшчэнне подпісу</string>
     <string name="title_advanced_signature_new">Выкарыстоўваць подпіс для новых паведамленняў</string>
     <string name="title_advanced_signature_reply">Выкарыстоўваць подпіс пры адказе</string>
@@ -469,6 +471,7 @@
     <string name="title_advanced_two_col">Выкарыстоўваць дзве калонкі</string>
     <string name="title_advanced_min_screen_size">Мінімальны памер экрана для падзелу</string>
     <string name="title_advanced_close_pane">Згортваць радок або слупок пры закрыцці размовы</string>
+    <string name="title_advanced_open_pane">Пачынаць з двух радкоў або двух слупкоў</string>
     <string name="title_advanced_column_width">Шырыня слупка паведамлення / вышыня радка: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Хаваць верхнюю панэль інструментаў пры пракручванні паведамленняў</string>
     <string name="title_advanced_nav_options">Паказваць опцыі меню навігацыі</string>
@@ -493,6 +496,7 @@
     <string name="title_advanced_date_week">Групаваць паводле тыдняў, а не паводле дзён</string>
     <string name="title_advanced_date_fixed">Паказваць фіксаваны загаловак з датай зверху</string>
     <string name="title_advanced_date_bold">Адлюстроўваць дату тлустым шрыфтам</string>
+    <string name="title_advanced_date_time">Заўсёды паказваць дату і час разам</string>
     <string name="title_advanced_threading">Ланцугі паведамленняў</string>
     <string name="title_advanced_threading_unread">Паказваць колькасць непрачытаных паведамленняў у размовах</string>
     <string name="title_advanced_indentation">Водступ злева/справа для атрыманых/адпраўленых паведамленняў у размовах</string>
@@ -611,7 +615,7 @@
     <string name="title_advanced_auto_block_sender">Аўтаматычна блакіраваць адпраўніка пры паведамленні пра спам</string>
     <string name="title_advanced_auto_hide_answer">Аўтаматычна хаваць кнопку адказу пры пракручванні</string>
     <string name="title_advanced_swipe_reply">Для адказу правядзіце пальцам управа па разгорнутым паведамленні</string>
-    <string name="title_advanced_move_thread_sent" comment="title_advanced_move_thread_sent&#10;Title for option in the behavior-settings tab page">Пры перамяшчэнні размовы таксама перамяшчаць адпраўленыя паведамленні</string>
+    <string name="title_advanced_move_thread_sent">Пры перамяшчэнні размовы таксама перамяшчаць адпраўленыя паведамленні</string>
     <string name="title_advanced_default_snooze">Час адкладання/затрымкі па змаўчанні</string>
     <string name="title_advanced_default_folder">Выбраць папку па змаўчанні</string>
     <string name="title_advanced_notifications">Кіраваць апавяшчэннямі</string>
@@ -655,6 +659,7 @@
     <string name="title_advanced_notifications_background">Выкарыстоўваць фонавую службу для сінхранізацыі паведамленняў</string>
     <string name="title_advanced_notifications_background_hint">Фонавая служба можа быць спынена Android у любы час і не патрабуе апавяшчэння ў радку стану</string>
     <string name="title_advanced_confirm_links">Пацвярджаць адкрыццё спасылак</string>
+    <string name="title_advanced_confirm_files">Пацвярджаць прагляд файлаў</string>
     <string name="title_advanced_sanitize_links">Выдаліць параметры адсочвання па змаўчанні</string>
     <string name="title_advanced_sanitize_links_hint">Толькі пры пацвярджэнні спасылак</string>
     <string name="title_advanced_check_links_dbl">Правяраць спісы блакіроўкі даменаў на наяўнасць падазроных спасылак</string>
@@ -930,6 +935,7 @@
     <string name="title_leave_deleted">Пакідаць выдаленыя паведамленні на серверы</string>
     <string name="title_leave_on_device">Пакідаць паведамленні на прыладзе</string>
     <string name="title_max_messages">Максімальная колькасць паведамленняў для загрузкі (калі пуста, то для ўсіх)</string>
+    <string name="title_max_messages_keep">Максімальная колькасць паведамленняў, якія будуць захоўвацца на прыладзе</string>
     <string name="title_max_messages_remark">        Увядзіце дадатны лік для загрузкі апошніх паведамленняў (найбольш распаўсюджана)
         або адмоўны лік для загрузкі першых паведамленняў (найменш распаўсюджана)
     </string>
@@ -1065,6 +1071,8 @@
     <string name="title_unified_folder">Паказаць у агульнай паштовай скрыні</string>
     <string name="title_navigation_folder">Паказваць у меню навігацыі</string>
     <string name="title_navigation_folder_hide">Схаваць у меню навігацыі</string>
+    <string name="title_unified_inbox_add">Дадаць у агульную паштовую скрыню</string>
+    <string name="title_unified_inbox_delete">Выдаліць з агульнай паштовай скрыні</string>
     <string name="title_synchronize_folder">Сінхранізаваць (атрымаць паведамленні)</string>
     <string name="title_poll_folder">Перыядычная праверка замест пастаяннай сінхранізацыі</string>
     <string name="title_poll_folder_remark">Большасць паштовых сервераў дазваляюць адпраўляць апавяшчэнні толькі для невялікай колькасці папак!</string>
@@ -1257,6 +1265,7 @@
     <string name="title_ask_show_image_hint">Выявы, распазнаныя як выявы з адсочваннем, не будуць адлюстроўвацца</string>
     <string name="title_ask_show_amp">Паказаць AMP-варыянт паведамлення?</string>
     <string name="title_ask_show_amp_hint">AMP-паведамленні распрацаваны для дынамічнага ўзаемадзеяння з сеткай, таму па вызначэнні могуць выкарыстоўвацца для сачэння за вамі</string>
+    <string name="title_ask_view_file">Праглядзець файл %1$s?</string>
     <string name="title_ask_delete_local">Выдаліць лакальныя паведамленні? Паведамленні застануцца на аддаленым серверы.</string>
     <string name="title_ask_help">Дапамажыце палепшыць FairEmail</string>
     <string name="title_ask_reporting">Адправіць справаздачы аб памылках?</string>
@@ -1376,6 +1385,7 @@
     <string name="title_translating">Пераклад &#8230;</string>
     <string name="title_translate_formal">Выкарыстоўваць афіцыйны стыль</string>
     <string name="title_translate_small">Выкарыстоўваць дробны шрыфт для зыходнага тэксту</string>
+    <string name="title_translate_replace">Замяняць зыходны тэкст на перакладзены</string>
     <string name="title_translate_html">Захоўваць фарматаванне</string>
     <string name="title_translate_html_hint">Будзе выкарыстоўвацца больш сімвалаў</string>
     <string name="title_translate_usage">Выкарыстанне: %1$s / %2$s (%3$d %%)</string>
@@ -1751,6 +1761,7 @@
     <string name="title_legend_avatar">Аватар</string>
     <string name="title_legend_show_quotes">Паказаць цытаты</string>
     <string name="title_legend_show_junk">Лічыць спамам</string>
+    <string name="title_legend_not_junk">Не лічыць спамам</string>
     <string name="title_legend_create_rule">Стварыць правіла</string>
     <string name="title_legend_show_unsubscribe">Адпісацца ад рассылкі</string>
     <string name="title_legend_show_images">Паказаць выявы</string>
