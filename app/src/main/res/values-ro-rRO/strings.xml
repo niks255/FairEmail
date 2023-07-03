@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">Căutare FairEmail</string>
+    <string name="app_send_self">Trimite-mi mie</string>
     <string name="app_changelog">Jurnal de modificări</string>
     <string name="app_welcome">FairEmail este o aplicație pentru e-mail, cu sursă deschisă, ce se concentrează pe confidențialitate și securitate. Din acest motiv se poate ca unele caracteristici să funcționeze diferit de cum erați obișnuiți.</string>
     <string name="app_limitations">De exemplu, mesajele sunt reformatate în mod implicit pentru a elimina elemente nesigure și pentru a îmbunătăți lizibilitatea, iar deschiderea de adrese trebuie confirmată pentru siguranță. Ambele pot fi dezactivate dacă nu se doreşte asta.</string>
@@ -225,6 +226,8 @@
     <string name="title_setup_permissions_notify_explanation">Permisiunile de notificare sunt necesare pentru a afișa notificări pentru mesaje noi în bara de stare</string>
     <string name="title_setup_permission_why">Ce permisiuni sunt necesare și de ce?</string>
     <string name="title_setup_permission_import_contacts">Cum pot importa contacte?</string>
+    <string name="title_setup_import_graph_contact">Contacte Outlook</string>
+    <string name="title_setup_import_graph_new">Contacte noi: %1$s</string>
     <string name="title_setup_doze">Dezactivează optimizarea bateriei</string>
     <string name="title_setup_doze_remark">Pentru a trimite și a primi e-mailuri în mod fiabil în fundal</string>
     <string name="title_setup_doze_explanation">Optimizările bateriei trebuie să fie dezactivate pentru aplicație pentru a asigura trimiterea și primirea sigură a mesajelor în fundal</string>
@@ -235,7 +238,7 @@
     <string name="title_setup_doze_battery">Utilizare intensă a bateriei?</string>
     <string name="title_setup_doze_stopped">Sincronizarea e oprită?</string>
     <string name="title_setup_doze_device">Acest lucru este probabil necesar pentru acest dispozitiv</string>
-    <string name="title_setup_alarm_12">Aplicația nu va funcționa</string>
+    <string name="title_setup_alarm_12">Aplicația nu va funcționa corect</string>
     <string name="title_setup_inexact">Alarme &amp; memento-urile sunt dezactivate</string>
     <string name="title_setup_background">Restricțiile de fundal sunt activate</string>
     <string name="title_setup_data">Economizorul de date este activat</string>
@@ -695,6 +698,7 @@
     <string name="title_advanced_manage_keys_hint">        Se va naviga la setările de securitate Android.        Cheile și certificatele pot fi găsite în general sub Avansate - Criptare și credențiale.
     </string>
     <string name="title_advanced_power_menu">Adăugați acțiuni în meniul de alimentare Android</string>
+    <string name="title_advanced_send_self">Adaugă \'trimite-mi mie\' în meniul de partajare Android</string>
     <string name="title_advanced_external_search">Permite altor aplicații să caute în mesaje</string>
     <string name="title_advanced_sort_answers">Sortați șabloanele de răspuns în funcție de frecvența de utilizare</string>
     <string name="title_advanced_shortcuts">Arată contactele utilizate frecvent în meniul de partajare Android</string>
@@ -844,6 +848,8 @@
     <string name="title_advanced_cleanup_hint">Se vor șterge toate fișierele temporare</string>
     <string name="title_advanced_never_favorite">Niciodată favorit</string>
     <string name="title_advanced_edit_name">Editare nume</string>
+    <string name="title_advanced_create_alias">Creează un alias</string>
+    <string name="title_advanced_create_alias_remark">În multe cazuri, trebuie verificată mai întâi o adresă alias prin intermediul site-ului internet al furnizorului de corespondență</string>
     <string name="title_create_folder">Creează dosar</string>
     <string name="title_create_folder_name">Nume dosar</string>
     <string name="title_create_folder_parent">Dosar părinte</string>
@@ -1185,6 +1191,10 @@
     <string name="title_move_to_account">Mută în %1$s &#8230;</string>
     <string name="title_report_spam">Tratează ca spam</string>
     <string name="title_delete_permanently">Șterge permanent</string>
+    <string name="title_delete_attachments">Ștergere atașamente</string>
+    <string name="title_delete_attachments_remark">        Pentru a șterge atașamentele, trebuie adăugat un mesaj nou şi trebuie şters mesajul vechi.
+        Deoarece acest lucru poate eșua, vechiul mesaj va fi mutat la gunoi.
+    </string>
     <string name="title_snooze">Amână &#8230;</string>
     <string name="title_archive">Arhivă</string>
     <string name="title_reply">Răspunde</string>
@@ -1418,6 +1428,7 @@
     <string name="title_verify">Verifică</string>
     <string name="title_encrypt">Criptare</string>
     <string name="title_decrypt">Decriptare</string>
+    <string name="title_reset_message_questions">Resetează întrebares pentru adrese</string>
     <string name="title_resync">Resincronizare</string>
     <string name="title_charset">Codificare</string>
     <string name="title_charset_auto">Automat</string>
@@ -1490,6 +1501,7 @@
     <string name="title_search_flag_size">dimensiune &gt; %1$s</string>
     <string name="title_search_device">Căutare pe dispozitiv</string>
     <string name="title_search_server">Căutare pe server</string>
+    <string name="title_search_server_wait">Aşteptare server</string>
     <string name="title_search_in">Căutare în</string>
     <string name="title_search_sender">Căutare expeditor</string>
     <string name="title_search_delete">Ștergeți căutarea salvată?</string>
@@ -1773,6 +1785,7 @@
     <string name="title_hint_folder_sync">Pentru a limita utilizarea bateriei şi a conexiunii, nu vor fi sincronizate în mod implicit toate dosarele si mesajele</string>
     <string name="title_hint_airplane">Modul Avion este activat</string>
     <string name="title_hint_notifications">Nu există permisiuni de notificare</string>
+    <string name="title_hint_battery_optimizations">Optimizările bateriei sunt încă activate</string>
     <string name="title_hint_support">Dacă aveți o întrebare sau o problemă, vă rugăm să utilizați meniul de suport tehnic pentru a obține ajutor</string>
     <string name="title_hint_message_actions">Glisați stânga pentru Gunoi sau dreapta pentru Arhivă (dacă este disponibilă). Acțiunile de glisare se pot configura în setările contului</string>
     <string name="title_hint_message_selection">Atingeți lung un mesaj pentru a începe selecția multiplă. Țineți și glisați sus sau jos pentru a selecta mai multe mesaje</string>
@@ -1900,6 +1913,8 @@
     <string name="title_debug_info">Depanare</string>
     <string name="title_debug_info_remark">Va rog sa descrieți problema și să indicați momentul când s-a produs:</string>
     <string name="title_crash_info_remark">Vă rugăm să descrieți ce făceați atunci când aplicația s-a oprit:</string>
+    <string name="title_debug_info_issue">Descrierea problemei (necesar)</string>
+    <string name="title_debug_info_contact">Recent am avut contact cu această problemă</string>
     <string name="title_unexpected_info_remark">Vă rugăm să descrieți ce faceți atunci când ați primit eroarea:</string>
     <string name="title_widget_title_count">Contor mesaje noi</string>
     <string name="title_widget_title_list">Listă mesaje</string>
@@ -1921,6 +1936,7 @@
     <string name="title_widget_count_top">Arată numărul de necitite în partea de sus</string>
     <string name="title_widget_subject_lines">Numărul maxim de linii de subiect</string>
     <string name="title_widget_avatars">Afișați avatarele de contact</string>
+    <string name="title_widget_account_name">Arată numele contului</string>
     <string name="title_widget_refresh">Buton de afișare a mesajelor de reîmprospătare</string>
     <string name="title_widget_compose">Afișați butonul de redactare a unui mesaj nou</string>
     <string name="title_widget_background">Culoare fundal</string>

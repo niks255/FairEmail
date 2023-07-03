@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">FairEmail-sökning</string>
-    <string name="app_send_self" comment="app_send_self&#10;Title for additional Android share sheet target. This needs to be short!">Skicka till dig själv</string>
+    <string name="app_send_self">Skicka till dig själv</string>
     <string name="app_changelog">Ändringslogg</string>
     <string name="app_welcome">FairEmail är en e-postapp baserad på öppen källkod som fokuserar på integritet och säkerhet. Av denna anledning kan vissa funktioner fungera annorlunda än vad du är van vid.</string>
     <string name="app_limitations">Till exempel omformas meddelanden som standard för att ta bort osäkra element och för att förbättra läsbarheten. Länkar måste även bekräftas innan de öppnas. Båda funktionerna kan inaktiveras om så önskas.</string>
@@ -213,6 +213,8 @@
     <string name="title_setup_permissions_notify_explanation">Aviseringsbehörigheter krävs för att visa aviseringar för nya meddelanden i statusfältet</string>
     <string name="title_setup_permission_why">Vilka behörigheter behövs och varför?</string>
     <string name="title_setup_permission_import_contacts">Hur kan jag importera kontakter?</string>
+    <string name="title_setup_import_graph_contact">Kontakter i Outlook</string>
+    <string name="title_setup_import_graph_new">Nya kontakter: %1$s</string>
     <string name="title_setup_doze">Inaktivera batterioptimeringar</string>
     <string name="title_setup_doze_remark">Att skicka och ta emot e-post tillförlitligt i bakgrunden</string>
     <string name="title_setup_doze_explanation">Batterioptimeringar bör inaktiveras för appen för att säkerställa tillförlitlig sändning och mottagning av meddelanden i bakgrunden</string>
@@ -223,7 +225,7 @@
     <string name="title_setup_doze_battery">Hög batterianvändning?</string>
     <string name="title_setup_doze_stopped">Slutade synkroniseringen?</string>
     <string name="title_setup_doze_device">Detta krävs förmodligen för denna enhet</string>
-    <string name="title_setup_alarm_12">Appen fungerar inte</string>
+    <string name="title_setup_alarm_12">Appen kommer inte att fungera korrekt</string>
     <string name="title_setup_inexact">Larm &amp; påminnelser är inaktiverade</string>
     <string name="title_setup_background">Balgrundsrestriktioner är aktiverat</string>
     <string name="title_setup_data">Datasparning är aktiverat</string>
@@ -553,6 +555,7 @@
     <string name="title_advanced_language_detection">Identifiera meddelandetextspråk</string>
     <string name="title_advanced_photo_picker">Använd Androids bildväljare</string>
     <string name="title_advanced_pull_refresh">Dra ner för att uppdatera</string>
+    <string name="title_advanced_pull_all">Synkronisera alla mappar</string>
     <string name="title_advanced_autoscroll">Bläddra till toppen vid mottagning av nya meddelanden</string>
     <string name="title_advanced_double_tap">Dubbeltryck för att markera meddelande läst/oläst</string>
     <string name="title_advanced_swipenav">Svep vänster/höger för att gå till nästa/föregående konversation</string>
@@ -607,7 +610,7 @@
     <string name="title_advanced_notify_preview_only">Visa endast aviseringar med förhandsvisningar</string>
     <string name="title_advanced_notify_actions">Aviseringsåtgärd</string>
     <string name="title_advanced_notify_action_trash">Papperskorg</string>
-    <string name="title_advanced_notify_action_delete">Ta bort</string>
+    <string name="title_advanced_notify_action_delete">Radera</string>
     <string name="title_advanced_notify_action_junk">Skräppost</string>
     <string name="title_advanced_notify_action_archive">Arkiv</string>
     <string name="title_advanced_notify_action_move">Flytta</string>
@@ -629,6 +632,7 @@
     <string name="title_advanced_notifications_background">Använd en bakgrundstjänst för att synkronisera meddelanden</string>
     <string name="title_advanced_notifications_background_hint">En bakgrundstjänst kan stoppas av Android när som helst, men kräver inte ett meddelande i statusfältet</string>
     <string name="title_advanced_confirm_links">Bekräfta att länkar öppnas</string>
+    <string name="title_advanced_confirm_files">Bekräfta visning av filer</string>
     <string name="title_advanced_sanitize_links">Ta bort spårningsparametrar som standard</string>
     <string name="title_advanced_sanitize_links_hint">Endast när du bekräftar länkar</string>
     <string name="title_advanced_check_links_dbl">Kontrollera domänblockeringslistor för misstänkta länkar</string>
@@ -679,7 +683,7 @@
     <string name="title_advanced_manage_keys_hint">        Detta kommer att navigera till Androids säkerhetsinställningar.        Nycklar och certifikat kan i allmänhet hittas under Avancerat - Kryptering och inloggningsuppgifter.
     </string>
     <string name="title_advanced_power_menu">Lägg till åtgärder i Androidmenyn för avstängning</string>
-    <string name="title_advanced_send_self" comment="title_advanced_send_self&#10;Title for miscellaneous option to enable an additional Android share sheet target">Lägg till \'skicka till sig själv\' till Androids delningsmeny</string>
+    <string name="title_advanced_send_self">Lägg till \'skicka till sig själv\' till Androids delningsmeny</string>
     <string name="title_advanced_external_search">Tillåt andra appar att söka i meddelanden</string>
     <string name="title_advanced_sort_answers">Sortera svarsmallar efter användningsfrekvens</string>
     <string name="title_advanced_shortcuts">Visa ofta använda kontakter i Android dela-menyn</string>
@@ -697,6 +701,8 @@
     <string name="title_advanced_lt_key">API-nyckel (frivilligt)</string>
     <string name="title_advanced_deepl">DeepL integration</string>
     <string name="title_advanced_virus_total">VirusTotal integration</string>
+    <string name="title_advanced_send">\'Skicka\'-integrering</string>
+    <string name="title_advanced_openai">OpenAI (ChatGPT)-integrering</string>
     <string name="title_advanced_openai_model">Modell</string>
     <string name="title_advanced_openai_temperature">Temperatur: %1$s</string>
     <string name="title_advanced_openai_moderation">Moderering av innehåll</string>
@@ -741,6 +747,7 @@
     <string name="title_advanced_lookup_mx_hint">Detta kommer att kontrollera om DNS MX-poster finns</string>
     <string name="title_advanced_sync_delay_hint">Detta kommer att sakta ner synkronisering av meddelanden</string>
     <string name="title_advanced_folder_nav_hint">Detta kommer alltid att återgå till mapplistan över det relaterade kontot från en meddelandelista</string>
+    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">När du drar ner listan med mappar eller konton</string>
     <string name="title_advanced_suggest_names_hint">Om inaktiverad, kommer endast e-postadresser att användas vid val av kontakter</string>
     <string name="title_advanced_suggest_local_hint">Förutom kontakter som tillhandahålls av Android. Kontaktdata lagras endast för nyligen skickade eller mottagna meddelanden när det aktiverat.</string>
     <string name="title_advanced_auto_identity_hint">Detta kommer att välja den senaste identiteten som använts när du väljer en mottagare för nya meddelanden</string>
@@ -827,6 +834,8 @@
     <string name="title_advanced_cleanup_hint">Detta tar bort alla temporära filer</string>
     <string name="title_advanced_never_favorite">Aldrig favorit</string>
     <string name="title_advanced_edit_name">Redigera namn</string>
+    <string name="title_advanced_create_alias">Skapa alias</string>
+    <string name="title_advanced_create_alias_remark">I många fall måste en aliasadress först verifieras via e-postleverantörens webbplats</string>
     <string name="title_create_folder">Skapa mapp</string>
     <string name="title_create_folder_name">Mappnamn</string>
     <string name="title_create_folder_parent">Överordnad mapp</string>
@@ -898,6 +907,7 @@
     <string name="title_primary_identity">Primär (standardidentitet)</string>
     <string name="title_self_identity">Ta bort e-postadresser vid svar</string>
     <string name="title_leave_on_server">Spara alla meddelanden på servern</string>
+    <string name="title_client_delete">Ta bort meddelandena aktivt efter hämtning</string>
     <string name="title_leave_deleted">Lämna raderade meddelanden på servern</string>
     <string name="title_leave_on_device">Spara meddelanden på enheten</string>
     <string name="title_max_messages">Maximalt antal meddelanden att ladda ner (lämna tomt för alla)</string>
@@ -1167,6 +1177,10 @@
     <string name="title_move_to_account">Flytta till %1$s &#8230;</string>
     <string name="title_report_spam">Behandla som skräppost</string>
     <string name="title_delete_permanently">Ta bort permanent</string>
+    <string name="title_delete_attachments">Radera bilagor</string>
+    <string name="title_delete_attachments_remark">        För att radera bifogade filer måste ett nytt meddelande läggas till och det gamla meddelandet raderas.
+        Eftersom detta kan misslyckas så flyttas det gamla meddelandet till soptunnan.
+    </string>
     <string name="title_snooze">Slumra &#8230;</string>
     <string name="title_archive">Arkivera</string>
     <string name="title_reply">Svara</string>
@@ -1229,6 +1243,7 @@
     <string name="title_ask_show_image_hint">Bilder som känns igen som spårningsbilder kommer inte att visas</string>
     <string name="title_ask_show_amp">Visa AMP-variant av meddelandet?</string>
     <string name="title_ask_show_amp_hint">AMP-meddelanden är utformade för att vara dynamiska och interagera med internet och kan därför per definition användas för att spåra dig</string>
+    <string name="title_ask_view_file">Visa filen %1$s ?</string>
     <string name="title_ask_delete_local">Ta bort lokala meddelanden? Meddelanden kommer att finnas kvar på fjärrservern.</string>
     <string name="title_ask_help">Hjälp till att förbättra FairEmail</string>
     <string name="title_ask_reporting">Skicka felrapporter?</string>
@@ -1472,6 +1487,7 @@
     <string name="title_search_flag_size">storlek &gt; %1$s</string>
     <string name="title_search_device">Sök på enheten</string>
     <string name="title_search_server">Sök på servern</string>
+    <string name="title_search_server_wait">Väntar på server</string>
     <string name="title_search_in">Sök i</string>
     <string name="title_search_sender">Sök efter avsändare</string>
     <string name="title_search_delete">Ta bort sparad sökning?</string>
@@ -1551,7 +1567,7 @@
     <string name="title_rule_importance">Sätt betydelsen</string>
     <string name="title_rule_keyword">Nyckelord</string>
     <string name="title_rule_keyword_add">Lägg till</string>
-    <string name="title_rule_keyword_delete">Ta bort</string>
+    <string name="title_rule_keyword_delete">Radera</string>
     <string name="title_rule_move">Flytta</string>
     <string name="title_rule_copy">Kopiera (etikett)</string>
     <string name="title_rule_answer">Svar/vidarebefordra</string>
@@ -1568,6 +1584,7 @@
     <string name="title_rule_daily">Kör dagligen (endast)</string>
     <string name="title_rule_age">Meddelanden äldre än (dagar)</string>
     <string name="title_rule_stop">Stoppa bearbetningsregler efter att ha utfört denna regel</string>
+    <string name="title_rule_stop_remark">Om regeln ingår som en del av en grupp så kommer behandlingen av alla regler i den här gruppen att stoppas</string>
     <string name="title_rule_sender">Avsändaren innehåller</string>
     <string name="title_rule_sender_known">Avsändaren är en kontakt</string>
     <string name="title_rule_recipient">Mottagare innehåller</string>
@@ -1754,6 +1771,7 @@
     <string name="title_hint_folder_sync">För att begränsa batteri- och nätverksanvändning synkroniseras inte alla mappar och inte alla meddelanden som standard</string>
     <string name="title_hint_airplane">Flygplansläge är på</string>
     <string name="title_hint_notifications">Inga aviseringsbehörigheter</string>
+    <string name="title_hint_battery_optimizations">Batterioptimeringar är fortfarande aktiverade</string>
     <string name="title_hint_support">Om du har en fråga eller ett problem, vänligen använd supportmenyn för att få hjälp</string>
     <string name="title_hint_message_actions">Dra åt vänster för att kasta; Svep åt höger för att arkivera (om tillgängligt); Svepåtgärderna kan konfigureras i kontoinställningarna</string>
     <string name="title_hint_message_selection">Långt tryck på ett meddelande för att börja välja flera meddelanden; håll och svep uppåt eller nedåt för att välja fler meddelanden</string>
@@ -1797,6 +1815,7 @@
     <string name="title_redo">Gör om</string>
     <string name="title_insert_line">Infoga rad</string>
     <string name="title_select_block">Välj block</string>
+    <string name="title_insert_brackets">Parantes</string>
     <string name="title_insert_quotes">Citera</string>
     <string name="title_lt_add">Lägg till ord</string>
     <string name="title_lt_delete">Ta bort ord</string>
@@ -1880,6 +1899,8 @@
     <string name="title_debug_info">Felsökningsinformation</string>
     <string name="title_debug_info_remark">Beskriv problemet och ange tidpunkten för problemet:</string>
     <string name="title_crash_info_remark">Beskriv vad du gjorde när appen kraschade:</string>
+    <string name="title_debug_info_issue">Beskrivning av problem (obligatoriskt)</string>
+    <string name="title_debug_info_contact">Vi hade nyligen kontakt om detta problem</string>
     <string name="title_unexpected_info_remark">Vänligen beskriv vad du gjorde när du fick felet:</string>
     <string name="title_widget_title_count">Antal nya meddelanden</string>
     <string name="title_widget_title_list">Meddelandelista</string>
@@ -1901,6 +1922,7 @@
     <string name="title_widget_count_top">Visa antalet olästa högst upp</string>
     <string name="title_widget_subject_lines">Maximalt antal ämnesrader</string>
     <string name="title_widget_avatars">Visa kontaktavatarer</string>
+    <string name="title_widget_account_name">Visa kontonamn</string>
     <string name="title_widget_refresh">Visa knappen för att uppdatera meddelanden</string>
     <string name="title_widget_compose">Visa knapp för nytt meddelande</string>
     <string name="title_widget_background">Bakgrundsfärg</string>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">Wyszukiwanie FairEmail</string>
+    <string name="app_send_self">Wyślij do siebie</string>
     <string name="app_changelog">Historia zmian</string>
     <string name="app_welcome">FairEmail to aplikacja e-mail o otwartym kodzie źródłowym, koncentrująca się na prywatności i bezpieczeństwie. Z tego powodu niektóre funkcje mogą działać inaczej niż to, do czego jesteś przyzwyczajony.</string>
     <string name="app_limitations">Przykładowo, wiadomości są domyślnie formatowane tak, aby usunąć niebezpieczne elementy i poprawić czytelność, a otwieranie linków musi zostać potwierdzone ze względów bezpieczeństwa. Obie funkcje mogą zostać wyłączone w opcjach.</string>
@@ -30,7 +31,7 @@
     <plurals name="page_conversation">
         <item quantity="one">Konwersacja</item>
         <item quantity="few">Konwersacje</item>
-        <item quantity="many">Rozmów</item>
+        <item quantity="many">Rozmowy</item>
         <item quantity="other">Konwersacji</item>
     </plurals>
     <plurals name="page_message">
@@ -238,6 +239,8 @@
     <string name="title_setup_permissions_notify_explanation">Uprawnienia dotyczące powiadomień są wymagane do wyświetlania powiadomień o nowych wiadomościach na pasku stanu</string>
     <string name="title_setup_permission_why">Jakie uprawnienia są potrzebne i dlaczego?</string>
     <string name="title_setup_permission_import_contacts">Jak mogę zaimportować kontakty?</string>
+    <string name="title_setup_import_graph_contact">Kontakty Outlook</string>
+    <string name="title_setup_import_graph_new">Nowe kontakty: %1$s</string>
     <string name="title_setup_doze">Wyłącz optymalizację baterii</string>
     <string name="title_setup_doze_remark">Niezawodne wysyłanie i odbieranie wiadomości e-mail w tle</string>
     <string name="title_setup_doze_explanation">Optymalizacja baterii powinna być wyłączona dla aplikacji, aby zapewnić niezawodne wysyłanie i odbieranie wiadomości w tle</string>
@@ -248,7 +251,7 @@
     <string name="title_setup_doze_battery">Wysokie użycie baterii?</string>
     <string name="title_setup_doze_stopped">Synchronizacja zatrzymana?</string>
     <string name="title_setup_doze_device">Prawdopodobnie jest to wymagane dla tego urządzenia</string>
-    <string name="title_setup_alarm_12">Aplikacja nie zadziała</string>
+    <string name="title_setup_alarm_12">Aplikacja nie będzie działać poprawnie</string>
     <string name="title_setup_inexact">Alarmy &amp; przypomnienia są wyłączone</string>
     <string name="title_setup_background">Ograniczenia w tle są włączone</string>
     <string name="title_setup_data">Oszczędzanie danych jest włączone</string>
@@ -581,6 +584,7 @@
     <string name="title_advanced_language_detection">Wykryj język tekstu wiadomości</string>
     <string name="title_advanced_photo_picker">Użyj selektora zdjęć z Androida</string>
     <string name="title_advanced_pull_refresh">Przeciągnij w dół, aby odświeżyć</string>
+    <string name="title_advanced_pull_all">Synchronizuj wszystkie foldery</string>
     <string name="title_advanced_autoscroll">Przewiń do góry po otrzymaniu nowych wiadomości</string>
     <string name="title_advanced_double_tap">Podwójne kliknięcie, aby oznaczyć odczytane/nieodczytane</string>
     <string name="title_advanced_swipenav">Przesuń w lewo/prawo, aby przejść do następnej/poprzedniej konwersacji</string>
@@ -708,6 +712,7 @@
     <string name="title_advanced_manage_keys_hint">        To przeniesie Cię do ustawień zabezpieczeń Androida.        Klucze i certyfikaty można znaleźć w Zaawansowane - Szyfrowanie i uwierzytelnianie.
     </string>
     <string name="title_advanced_power_menu">Dodaj akcje do menu zasilania Androida</string>
+    <string name="title_advanced_send_self">Dodaj \'wyślij do siebie\' do menu udostępniania w Androidzie</string>
     <string name="title_advanced_external_search">Zezwalaj innym aplikacjom na wyszukiwanie w wiadomościach</string>
     <string name="title_advanced_sort_answers">Sortuj szablony odpowiedzi według częstotliwości ich używania</string>
     <string name="title_advanced_shortcuts">Pokaż często używane kontakty w menu udostępniania Androida</string>
@@ -771,6 +776,7 @@
     <string name="title_advanced_lookup_mx_hint">To sprawdzi, czy istnieją rekordy MX DNS</string>
     <string name="title_advanced_sync_delay_hint">Wydłuży to synchronizację wiadomości</string>
     <string name="title_advanced_folder_nav_hint">Spowoduje to zawsze powrót z listy wiadomości do listy folderów powiązanego konta</string>
+    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">Przy rozwijaniu listy folderów lub kont</string>
     <string name="title_advanced_suggest_names_hint">Jeśli wyłączone, tylko adresy e-mail będą używane podczas wybierania kontaktów</string>
     <string name="title_advanced_suggest_local_hint">Oprócz kontaktów dostarczanych przez Androida. Dane kontaktowe będą przechowywane dla nowo wysłanych lub odebranych wiadomości tylko kiedy włączone.</string>
     <string name="title_advanced_auto_identity_hint">Spowoduje to wybranie ostatnio użytej tożsamości podczas wybierania odbiorcy dla nowych wiadomości</string>
@@ -857,6 +863,8 @@
     <string name="title_advanced_cleanup_hint">Spowoduje to usunięcie wszystkich plików tymczasowych</string>
     <string name="title_advanced_never_favorite">Nigdy ulubiony</string>
     <string name="title_advanced_edit_name">Zmień nazwę</string>
+    <string name="title_advanced_create_alias">Utwórz alias</string>
+    <string name="title_advanced_create_alias_remark">W wielu przypadkach adres aliasu musi być najpierw zweryfikowany za pomocą strony internetowej dostawcy poczty</string>
     <string name="title_create_folder">Utwórz folder</string>
     <string name="title_create_folder_name">Nazwa folderu</string>
     <string name="title_create_folder_parent">Folder nadrzędny</string>
@@ -1198,6 +1206,10 @@
     <string name="title_move_to_account">Przenieś do %1$s &#8230;</string>
     <string name="title_report_spam">Traktuj jako spam</string>
     <string name="title_delete_permanently">Usuń trwale</string>
+    <string name="title_delete_attachments">Usuń załączniki</string>
+    <string name="title_delete_attachments_remark">        Aby usunąć załączniki, nowa wiadomość musi zostać dodana i poprzednia wiadomość musi zostać usunięta.
+        Ponieważ to może stanowić kłopot, stara wiadomość zostanie przeniesiona do kosza.
+    </string>
     <string name="title_snooze">Odłóż &#8230;</string>
     <string name="title_archive">Archiwum</string>
     <string name="title_reply">Odpowiedz</string>
@@ -1431,6 +1443,7 @@
     <string name="title_verify">Potwierdź</string>
     <string name="title_encrypt">Zaszyfruj</string>
     <string name="title_decrypt">Odszyfruj</string>
+    <string name="title_reset_message_questions">Przywróć zapytania dotyczące otwierania linków</string>
     <string name="title_resync">Resynchronizuj</string>
     <string name="title_charset">Kodowanie znaków</string>
     <string name="title_charset_auto">Automatyczne</string>
@@ -1503,6 +1516,7 @@
     <string name="title_search_flag_size">rozmiar &gt; %1$s</string>
     <string name="title_search_device">Szukaj na urządzeniu</string>
     <string name="title_search_server">Szukaj na serwerze</string>
+    <string name="title_search_server_wait">Oczekiwanie na serwer</string>
     <string name="title_search_in">Szukaj w</string>
     <string name="title_search_sender">Szukaj nadawcy</string>
     <string name="title_search_delete">Usunąć zapisane wyszukiwanie?</string>
@@ -1787,6 +1801,7 @@
     <string name="title_hint_folder_sync">W celu ograniczenia użycia baterii i sieci nie wszystkie foldery i wiadomości będą domyślnie synchronizowane</string>
     <string name="title_hint_airplane">Tryb samolotowy jest włączony</string>
     <string name="title_hint_notifications">Brak uprawnień dla powiadomień</string>
+    <string name="title_hint_battery_optimizations">Optymalizacja baterii jest nadal włączona</string>
     <string name="title_hint_support">Jeśli masz pytanie lub problem, użyj menu Pomoc, aby uzyskać pomoc</string>
     <string name="title_hint_message_actions">Przesuń w lewo, aby wyrzucić do kosza; Przesuń w prawo, aby zarchiwizować (jeśli dostępne); Działania przeciągnięcia można skonfigurować w ustawieniach konta</string>
     <string name="title_hint_message_selection">Naciśnij długo wiadomość, aby rozpocząć wybieranie wielu wiadomości; Przytrzymaj i przeciągnij w górę lub w dół, aby wybrać więcej wiadomości</string>
@@ -1913,6 +1928,8 @@
     <string name="title_debug_info">Info debugowania</string>
     <string name="title_debug_info_remark">Opisz proszę problem i wskaż moment jego wystąpienia:</string>
     <string name="title_crash_info_remark">Opisz proszę, co robisz, w momencie awarii aplikacji:</string>
+    <string name="title_debug_info_issue">Opis problemu (wymagany)</string>
+    <string name="title_debug_info_contact">Ostatnio kontaktowaliśmy się w sprawie tego problemu</string>
     <string name="title_unexpected_info_remark">Opisz proszę, co robiłeś, w momencie awarii aplikacji:</string>
     <string name="title_widget_title_count">Liczba nowych wiadomości</string>
     <string name="title_widget_title_list">Lista wiadomości</string>
@@ -1934,6 +1951,7 @@
     <string name="title_widget_count_top">Pokaż ilość nieprzeczytanych na górze</string>
     <string name="title_widget_subject_lines">Maksymalna liczba wierszy tematu</string>
     <string name="title_widget_avatars">Pokaż awatary kontaktu</string>
+    <string name="title_widget_account_name">Pokaż nazwę konta</string>
     <string name="title_widget_refresh">Pokaż przycisk odświeżania wiadomości</string>
     <string name="title_widget_compose">Pokaż przycisk tworzenia nowej wiadomości</string>
     <string name="title_widget_background">Kolor tła</string>

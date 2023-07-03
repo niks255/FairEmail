@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -36,7 +35,6 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -88,7 +86,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -348,70 +345,30 @@ public class FragmentOAuth extends FragmentBase {
             EmailProvider provider = EmailProvider.getProvider(context, id);
             EmailProvider.OAuth oauth = (graph ? provider.graph : provider.oauth);
 
-            int flags = PackageManager.GET_RESOLVED_FILTER;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                flags |= PackageManager.MATCH_ALL;
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"));
-            List<ResolveInfo> ris = pm.queryIntentActivities(intent, flags);
-            EntityLog.log(context, "Browsers=" + (ris == null ? null : ris.size()));
-            if (ris != null)
-                for (ResolveInfo ri : ris) {
-                    Intent serviceIntent = new Intent();
-                    serviceIntent.setAction("android.support.customtabs.action.CustomTabsService");
-                    serviceIntent.setPackage(ri.activityInfo.packageName);
-                    boolean tabs = (pm.resolveService(serviceIntent, 0) != null);
+            AppAuthConfiguration.Builder appAuthConfig = new AppAuthConfiguration.Builder();
 
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("Browser=").append(ri.activityInfo.packageName);
-                    sb.append(" tabs=").append(tabs);
-                    sb.append(" view=").append(ri.filter.hasAction(Intent.ACTION_VIEW));
-                    sb.append(" browsable=").append(ri.filter.hasCategory(Intent.CATEGORY_BROWSABLE));
-                    sb.append(" authorities=").append(ri.filter.authoritiesIterator() != null);
-                    sb.append(" schemes=");
-
-                    boolean first = true;
-                    Iterator<String> schemeIter = ri.filter.schemesIterator();
-                    while (schemeIter.hasNext()) {
-                        String scheme = schemeIter.next();
-                        if (first)
-                            first = false;
-                        else
-                            sb.append(',');
-                        sb.append(scheme);
-                    }
-
-                    EntityLog.log(context, sb.toString());
-                }
-
-            AppAuthConfiguration appAuthConfig = new AppAuthConfiguration.Builder()
-                    .setBrowserMatcher(new BrowserMatcher() {
-                        // https://github.com/openid/AppAuth-Android/issues/116
-                        final BrowserMatcher SBROWSER = new VersionedBrowserMatcher(
-                                Browsers.SBrowser.PACKAGE_NAME,
-                                Browsers.SBrowser.SIGNATURE_SET,
-                                false,
-                                VersionRange.atMost("5.3"));
-                        final BrowserMatcher SBROWSER_TAB = new VersionedBrowserMatcher(
-                                Browsers.SBrowser.PACKAGE_NAME,
-                                Browsers.SBrowser.SIGNATURE_SET,
-                                true,
-                                VersionRange.atMost("5.3"));
-
-                        @Override
-                        public boolean matches(@NonNull BrowserDescriptor descriptor) {
-                            boolean accept = !(SBROWSER.matches(descriptor) || SBROWSER_TAB.matches(descriptor));
-                            EntityLog.log(context,
-                                    "Browser=" + descriptor.packageName +
-                                            ":" + descriptor.version +
-                                            " tabs=" + descriptor.useCustomTab + "" +
-                                            " accept=" + accept +
-                                            " provider=" + provider.id);
-                            return accept;
-                        }
-                    })
-                    .build();
-
-            AuthorizationService authService = new AuthorizationService(context, appAuthConfig);
+            AuthorizationService authService;
+            try {
+                appAuthConfig.setBrowserMatcher(getBrowserMatcher(context, true, provider));
+                authService = new AuthorizationService(context, appAuthConfig.build());
+            } catch (Throwable ex) {
+                /*
+                    Unihertz, works with Chrome
+                    java.lang.SecurityException: Not allowed to bind to service Intent { act=android.support.customtabs.action.CustomTabsService pkg=org.mozilla.focus }
+                        at android.app.ContextImpl.bindServiceCommon(ContextImpl.java:1985)
+                        at android.app.ContextImpl.bindService(ContextImpl.java:1897)
+                        at android.content.ContextWrapper.bindService(ContextWrapper.java:812)
+                        at android.content.ContextWrapper.bindService(ContextWrapper.java:812)
+                        at androidx.browser.customtabs.CustomTabsClient.bindCustomTabsService(SourceFile:26)
+                        at net.openid.appauth.browser.CustomTabManager.bind(SourceFile:27)
+                        at net.openid.appauth.AuthorizationService.<init>(SourceFile:12)
+                        at net.openid.appauth.AuthorizationService.<init>(SourceFile:4)
+                        at eu.faircode.email.FragmentOAuth.onAuthorize(SourceFile:431)
+                 */
+                Log.e(ex);
+                appAuthConfig.setBrowserMatcher(getBrowserMatcher(context, false, provider));
+                authService = new AuthorizationService(context, appAuthConfig.build());
+            }
 
             String authorizationEndpoint = oauth.authorizationEndpoint;
             String tokenEndpoint = oauth.tokenEndpoint;
@@ -484,6 +441,38 @@ public class FragmentOAuth extends FragmentBase {
         } catch (Throwable ex) {
             showError(ex);
         }
+    }
+
+    private BrowserMatcher getBrowserMatcher(Context context, boolean tabs, EmailProvider provider) {
+        return new BrowserMatcher() {
+            // https://github.com/openid/AppAuth-Android/issues/116
+            final BrowserMatcher SBROWSER = new VersionedBrowserMatcher(
+                    Browsers.SBrowser.PACKAGE_NAME,
+                    Browsers.SBrowser.SIGNATURE_SET,
+                    false,
+                    VersionRange.atMost("5.3"));
+            final BrowserMatcher SBROWSER_TAB = new VersionedBrowserMatcher(
+                    Browsers.SBrowser.PACKAGE_NAME,
+                    Browsers.SBrowser.SIGNATURE_SET,
+                    true,
+                    VersionRange.atMost("5.3"));
+
+            @Override
+            public boolean matches(@NonNull BrowserDescriptor descriptor) {
+                boolean accept = !(SBROWSER.matches(descriptor) || SBROWSER_TAB.matches(descriptor));
+
+                if (descriptor.useCustomTab && !tabs)
+                    accept = false;
+
+                EntityLog.log(context,
+                        "OAuth browser=" + descriptor.packageName +
+                                ":" + descriptor.version +
+                                " tabs=" + descriptor.useCustomTab + "/" + tabs +
+                                " accept=" + accept +
+                                " provider=" + provider.id);
+                return accept;
+            }
+        };
     }
 
     private void onHandleOAuth(@NonNull Intent data) {

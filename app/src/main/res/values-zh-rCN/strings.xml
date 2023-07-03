@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">FairEmail 搜索</string>
+    <string name="app_send_self">发送给自己</string>
     <string name="app_changelog">更新日志</string>
     <string name="app_welcome">FairEmail 是一款专注于隐私与安全的开源电子邮件应用。所以，某些功能的工作方式可能与您的习惯不同。</string>
     <string name="app_limitations">例如，默认情况下，消息将被重新格式化以移除不安全的元素并提高可读性；另外，为确保安全，打开链接前需要得到确认。当然如有需要，这两个选项都可以禁用</string>
@@ -199,6 +200,8 @@
     <string name="title_setup_permissions_notify_explanation">在状态栏显示新消息通知时需要通知权限</string>
     <string name="title_setup_permission_why">需要哪些权限以及原因？</string>
     <string name="title_setup_permission_import_contacts">如何导入联系人？</string>
+    <string name="title_setup_import_graph_contact">Outlook 联系人</string>
+    <string name="title_setup_import_graph_new">新联系人: %1$s</string>
     <string name="title_setup_doze">禁用电池优化</string>
     <string name="title_setup_doze_remark">更可靠地后台收发电子邮件</string>
     <string name="title_setup_doze_explanation">应禁用针对本应用的电池优化，以确保后台消息的可靠发送和接收。</string>
@@ -209,7 +212,7 @@
     <string name="title_setup_doze_battery">太耗电？</string>
     <string name="title_setup_doze_stopped">同步已停止？</string>
     <string name="title_setup_doze_device">对此设备来说，这可能是必需的</string>
-    <string name="title_setup_alarm_12">应用将无法工作</string>
+    <string name="title_setup_alarm_12">本应用将无法正常工作</string>
     <string name="title_setup_inexact">闹钟 &amp; 提醒已禁用</string>
     <string name="title_setup_background">已启用后台限制</string>
     <string name="title_setup_data">省流量模式已启用</string>
@@ -542,6 +545,7 @@
     <string name="title_advanced_language_detection">检测消息文本的语言</string>
     <string name="title_advanced_photo_picker">使用 Android 照片选择器</string>
     <string name="title_advanced_pull_refresh">下拉刷新</string>
+    <string name="title_advanced_pull_all">同步所有文件夹</string>
     <string name="title_advanced_autoscroll">在收到新消息时滚动至顶部</string>
     <string name="title_advanced_double_tap">双击标记消息已读/未读</string>
     <string name="title_advanced_swipenav">左右滑动切换邮件</string>
@@ -669,6 +673,7 @@
     <string name="title_advanced_manage_keys_hint">        这将打开Android安全设置页面        密钥和证书一般可以在 “高级—加密和凭证” 选项中找到
     </string>
     <string name="title_advanced_power_menu">添加操作到 Android 电源菜单</string>
+    <string name="title_advanced_send_self">将 \'发送给自己\' 添加到 Android 的共享菜单</string>
     <string name="title_advanced_external_search">允许其他应用搜索邮件</string>
     <string name="title_advanced_sort_answers">按使用频率对回复模板进行排序</string>
     <string name="title_advanced_shortcuts">在安卓共享菜单中显示常用联系人</string>
@@ -732,6 +737,7 @@
     <string name="title_advanced_lookup_mx_hint">这将检查 DNS MX 记录是否存在</string>
     <string name="title_advanced_sync_delay_hint">这将减缓同步消息的速度</string>
     <string name="title_advanced_folder_nav_hint">这将总是从邮件列表返回到相关帐户的文件夹列表</string>
+    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">下拉文件夹或账户列表时</string>
     <string name="title_advanced_suggest_names_hint">如果禁用，选择联系人时将只使用电子邮件地址</string>
     <string name="title_advanced_suggest_local_hint">这不包括 Android 提供的联系人。应用仅在此选项启用后存储新的接收或发送消息的联系人。</string>
     <string name="title_advanced_auto_identity_hint">这将选择上次使用的身份作为新邮件收件人</string>
@@ -818,6 +824,8 @@
     <string name="title_advanced_cleanup_hint">这将会删除所有的临时文件</string>
     <string name="title_advanced_never_favorite">永不收藏</string>
     <string name="title_advanced_edit_name">编辑名称</string>
+    <string name="title_advanced_create_alias">创建别名</string>
+    <string name="title_advanced_create_alias_remark">在许多情况下，别名地址必须首先通过邮件提供者的网站进行验证</string>
     <string name="title_create_folder">新建文件夹</string>
     <string name="title_create_folder_name">文件夹名</string>
     <string name="title_create_folder_parent">父文件夹</string>
@@ -1157,6 +1165,10 @@
     <string name="title_move_to_account">移动到 %1$s &#8230;</string>
     <string name="title_report_spam">视为垃圾邮件</string>
     <string name="title_delete_permanently">永久删除</string>
+    <string name="title_delete_attachments">删除附件</string>
+    <string name="title_delete_attachments_remark">        要删除附件， 必须添加新消息，且必须删掉旧消息。
+        因为这可能失败，旧消息将被移动到回收站。
+    </string>
     <string name="title_snooze">打盹 &#8230;</string>
     <string name="title_archive">存档</string>
     <string name="title_reply">回复</string>
@@ -1463,6 +1475,7 @@
     <string name="title_search_flag_size">大小 &gt; %1$s</string>
     <string name="title_search_device">在设备上搜索</string>
     <string name="title_search_server">在服务器上搜索</string>
+    <string name="title_search_server_wait">正在等待服务器</string>
     <string name="title_search_in">搜索范围</string>
     <string name="title_search_sender">搜索发件人</string>
     <string name="title_search_delete">删除已保存的搜索？</string>
@@ -1746,6 +1759,7 @@
     <string name="title_hint_folder_sync">为了降低电量和网络流量的消耗，默认不会同步全部的文件夹和消息</string>
     <string name="title_hint_airplane">飞行模式已开启</string>
     <string name="title_hint_notifications">无通知权限</string>
+    <string name="title_hint_battery_optimizations">电池优化仍已启用</string>
     <string name="title_hint_support">如果您要提问或有疑问，请使用支持选项获取帮助</string>
     <string name="title_hint_message_actions">向左滑移动到回收站；向右滑存档（如果支持） ；可在账户设置中配置滑动操作</string>
     <string name="title_hint_message_selection">长按进行多选；按住的同时并上下滑动可选择多个邮件</string>
@@ -1872,6 +1886,8 @@
     <string name="title_debug_info">调试信息</string>
     <string name="title_debug_info_remark">请描述问题及问题发生的时间：</string>
     <string name="title_crash_info_remark">请描述应用崩溃时您的操作</string>
+    <string name="title_debug_info_issue">问题描述(必填)</string>
+    <string name="title_debug_info_contact">别人最近因为这个问题联系过我们</string>
     <string name="title_unexpected_info_remark">请描述应用出错时您的操作:</string>
     <string name="title_widget_title_count">新消息计数</string>
     <string name="title_widget_title_list">消息列表</string>
@@ -1893,6 +1909,7 @@
     <string name="title_widget_count_top">在顶部显示未读计数</string>
     <string name="title_widget_subject_lines">最大主题行数</string>
     <string name="title_widget_avatars">显示联系人头像</string>
+    <string name="title_widget_account_name">显示账户名称</string>
     <string name="title_widget_refresh">显示刷新消息按钮</string>
     <string name="title_widget_compose">显示新建邮件按钮</string>
     <string name="title_widget_background">背景颜色</string>

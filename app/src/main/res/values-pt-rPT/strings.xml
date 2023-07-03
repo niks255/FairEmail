@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">Pesquisa do FairEmail</string>
+    <string name="app_send_self">Enviar para si</string>
     <string name="app_changelog">Registo de alterações</string>
     <string name="app_welcome">O FairEmail é uma aplicação de correio electrónico de código aberto focada na privacidade e na segurança. Por esta razão, algumas funções podem funcionar de forma diferente do que está acostumado.</string>
     <string name="app_limitations">Por exemplo, na configuração padrão as mensagens são reformatadas para remover elementos inseguros e melhorar a legibilidade, como a abertura de hiperligações precisa de ser confirmada por motivos de segurança. Ambas as opções podem ser desactivadas caso pretenda.</string>
@@ -212,6 +213,8 @@
     <string name="title_setup_permissions_notify_explanation">São necessárias permissões de notificação para mostrar notificações de novas mensagens na barra de estado</string>
     <string name="title_setup_permission_why">Que permissões são necessárias e porquê?</string>
     <string name="title_setup_permission_import_contacts">Como posso importar contactos?</string>
+    <string name="title_setup_import_graph_contact">Contatos do Outlook</string>
+    <string name="title_setup_import_graph_new">Novos contactos: %1$s</string>
     <string name="title_setup_doze">Desactivar optimização de bateria</string>
     <string name="title_setup_doze_remark">Enviar e receber e-mail de forma segura em segundo plano</string>
     <string name="title_setup_doze_explanation">As optimizações da bateria devem ser desactivadas para esta aplicação, para garantir o correcto envio/recepção das mensagens em segundo plano</string>
@@ -224,7 +227,7 @@
     <string name="title_setup_doze_battery">Utilização elevada de bateria?</string>
     <string name="title_setup_doze_stopped">A sincronização parou?</string>
     <string name="title_setup_doze_device">Isto é provavelmente necessário para este dispositivo</string>
-    <string name="title_setup_alarm_12">O app não funcionará</string>
+    <string name="title_setup_alarm_12">A aplicação não funcionará corretamente</string>
     <string name="title_setup_inexact">Alarmes &amp; lembretes são desativados</string>
     <string name="title_setup_background">Restrições de segundo plano estão activas</string>
     <string name="title_setup_data">A poupança de dados está ligada</string>
@@ -557,6 +560,7 @@
     <string name="title_advanced_language_detection">Detectar idioma do texto da mensagem</string>
     <string name="title_advanced_photo_picker">Use o seletor de fotos do Android</string>
     <string name="title_advanced_pull_refresh">Arrastar para baixo para atualizar</string>
+    <string name="title_advanced_pull_all">Sincronizar todas as pastas</string>
     <string name="title_advanced_autoscroll">Voltar ao topo quando recebe novas mensagens</string>
     <string name="title_advanced_double_tap">Toque duplo para marcar a mensagem como lida/não lida</string>
     <string name="title_advanced_swipenav">Deslize para a esquerda/direita para ir para próxima/anterior conversa</string>
@@ -685,6 +689,7 @@
         As chaves e os certificados geralmente podem ser encontrados em Dados biométricos e segurança > Outras definições de segurança.
     </string>
     <string name="title_advanced_power_menu">Adicionar às acções disponíveis no menu de encerramento</string>
+    <string name="title_advanced_send_self">Adicionar \'Enviar para si\' ao menu de partilha do Android</string>
     <string name="title_advanced_external_search">Permitir a pesquisa de mensagens por parte de aplicações externas</string>
     <string name="title_advanced_sort_answers">Ordenar modelos de respostas por frequência de utilização</string>
     <string name="title_advanced_shortcuts">Mostrar contactos usados com frequência no menu de partilha do Android</string>
@@ -747,6 +752,7 @@
     <string name="title_advanced_lookup_mx_hint">Faz a verificação se existem registos DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Isto atrasará a sincronização de mensagens</string>
     <string name="title_advanced_folder_nav_hint">Isto fará com que, ao pressionar \'voltar\' a partir da lista de mensagens, retorne sempre à lista de pastas da respectiva conta</string>
+    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">Ao puxar para baixo a lista de pastas ou contas</string>
     <string name="title_advanced_suggest_names_hint">Se desactivada, ao seleccionar um contacto apenas será utilizado o endereço de e-mail</string>
     <string name="title_advanced_suggest_local_hint">Em complemento aos contactos fornecidos pelo Android. Apenas só será guardada informação de contactos nas mensagens recém-enviadas ou recebidas caso esta função esteja activa.</string>
     <string name="title_advanced_auto_identity_hint">Isto selecionará a última identidade usada ao selecionar um destinatário para novas mensagens</string>
@@ -833,6 +839,8 @@
     <string name="title_advanced_cleanup_hint">Isto irá eliminar todos os ficheiros temporários</string>
     <string name="title_advanced_never_favorite">Nunca colocar como favorito</string>
     <string name="title_advanced_edit_name">Editar nome</string>
+    <string name="title_advanced_create_alias">Criar pseudónimo</string>
+    <string name="title_advanced_create_alias_remark">Em muitos casos, um endereço de pseudónimo deve ser primeiro verificado pelo site do provedor de correio</string>
     <string name="title_create_folder">Criar pasta</string>
     <string name="title_create_folder_name">Nome da pasta</string>
     <string name="title_create_folder_parent">Pasta principal</string>
@@ -1175,6 +1183,10 @@
     <string name="title_move_to_account">Mover para %1$s &#8230;</string>
     <string name="title_report_spam">Tratar como spam</string>
     <string name="title_delete_permanently">Eliminar permanentemente</string>
+    <string name="title_delete_attachments">Apagar anexos</string>
+    <string name="title_delete_attachments_remark">        Para apagar anexos, uma nova mensagem tem de ser adicionada e a mensagem antiga tem de ser apagada.
+        Como isso pode falhar, a mensagem antiga será movida para o lixo.
+    </string>
     <string name="title_snooze">Adiar &#8230;</string>
     <string name="title_archive">Arquivar</string>
     <string name="title_reply">Responder</string>
@@ -1483,6 +1495,7 @@
     <string name="title_search_flag_size">tamanho &gt; %1$s</string>
     <string name="title_search_device">Pesquisar no dispositivo</string>
     <string name="title_search_server">Pesquisar no servidor</string>
+    <string name="title_search_server_wait">Aguardando pelo servidor</string>
     <string name="title_search_in">Pesquisar em</string>
     <string name="title_search_sender">Pesquisar por remetente</string>
     <string name="title_search_delete">Eliminar a pesquisa guardada?</string>
@@ -1766,6 +1779,7 @@
     <string name="title_hint_folder_sync">Para limitar o uso de bateria e rede, por predefinição, nem todas as pastas e mensagens serão sincronizadas</string>
     <string name="title_hint_airplane">O modo de avião está ligado</string>
     <string name="title_hint_notifications">Sem permissão de notificação</string>
+    <string name="title_hint_battery_optimizations">Otimizações da bateria continuam ativadas</string>
     <string name="title_hint_support">Se tiver alguma questão ou um problema, por favor utilize o menu de suporte para obter ajuda</string>
     <string name="title_hint_message_actions">Deslize para a esquerda para o lixo; Deslize para a direita para o arquivo (se disponível); As acções de deslizar pode ser configuradas nas definições de conta</string>
     <string name="title_hint_message_selection">Seleccione mensagens ao tocar prolongadamente numa mensagem; Para seleccionar várias mensagens de seguida, toque sem soltar numa mensagem e deslize para cima ou para baixo</string>
@@ -1894,6 +1908,8 @@
     <string name="title_debug_info">Informação de depuração</string>
     <string name="title_debug_info_remark">Por favor, descreva o problema e indique quando ocorreu:</string>
     <string name="title_crash_info_remark">Por favor, descreva o que fazia quando a aplicação foi abaixo:</string>
+    <string name="title_debug_info_issue">Descrição do problema (obrigatório)</string>
+    <string name="title_debug_info_contact">Recentemente tivemos contacto sobre esse problema</string>
     <string name="title_unexpected_info_remark">Por favor, descreva o que fazia quando obteve o erro:</string>
     <string name="title_widget_title_count">Novo contador de mensagens</string>
     <string name="title_widget_title_list">Lista de mensagens</string>
@@ -1915,6 +1931,7 @@
     <string name="title_widget_count_top">Mostrar contagem não lida no topo</string>
     <string name="title_widget_subject_lines">Número máximo de linhas de assunto</string>
     <string name="title_widget_avatars">Mostrar avatares dos contactos</string>
+    <string name="title_widget_account_name">Mostrar nome da conta</string>
     <string name="title_widget_refresh">Mostrar botão para atualizar mensagens</string>
     <string name="title_widget_compose">Mostrar botão para compor nova mensagem</string>
     <string name="title_widget_background">Cor do fundo</string>

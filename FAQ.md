@@ -81,6 +81,7 @@ Related questions:
 * Change the swipe left/right target: (Main) Settings, tab page Behavior, Set swipe actions (*)
 * Change password: (Main) Settings, tap Manual setup, tap Accounts, tap account, change password
 * Set a signature: (Main) Settings, tap Manual setup, tap Identities, tap identity, Edit signature.
+* Set a default CC or BCC address: (Main) Settings, tap Manual setup, tap Identities, tap identity, tap Advanced.
 * Add CC and BCC addresses: tap the people's icon at the end of the subject
 * Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
 * Add a folder to the unified inbox: long press the folder in the folder list and tick *Show in unified inbox*
@@ -392,6 +393,8 @@ Anything on this list is in random order and *might* be added in the near future
 * [(190) How do I use OpenAI (ChatGPT)?](#user-content-faq190)
 * [(191) How do I download and keep older messages on my device?](#user-content-faq191)
 * [(192) How can I resolve 'Couldn't connect to host, port: ...; timeout ...;' ?](#user-content-faq192)
+* [(193) How can I import Outlook contacts?](#user-content-faq193)
+* [(194) How can I set up automatic deletion of old messages?](#user-content-faq194)
 
 [I have another question.](#user-content-get-support)
 
@@ -820,6 +823,8 @@ You can configure these by setting the email address field of an additional iden
 and setting the user name field to your main email address.
 
 Note that you can copy an identity by long pressing it in the list of identities (via *Manual setup and account options* in the main settings page).
+
+**In many cases, an alias address must first be verified via the website of the mail provider**
 
 Alternatively, you can enable *Allow editing sender address* in the advanced settings of an existing identity to edit the username when composing a new message,
 if your provider allows this. Considering the email address test@example.org you can use these special username formats:
@@ -3959,7 +3964,11 @@ so you cannot use FairEmail or any other email client to access Tildamail.
 
 **Criptext** uses a proprietary email protocol
 and [does not directly support IMAP](https://www.reddit.com/r/privacy/comments/chs82k/comment/ewrxxcn/),
-so you cannot use FairEmail or any other Android email client to access Criptext.
+so you cannot use FairEmail or any other email email client to access Criptext.
+
+**OnMail** uses a proprietary email protocol
+and [does not support IMAP](https://support.onmail.com/hc/en-us/articles/360048879012-How-do-I-connect-my-OnMail-address-to-a-third-party-email-app-),
+so you cannot use FairEmail or any other email client to access OnMail, except for one (but please read the privacy policy carefully).
 
 <br />
 
@@ -5250,7 +5259,14 @@ In other words, the color of stars is stored on your device only, and won't be s
 Google backup is disabled to prevent privacy-sensitive information, like account credentials and email addresses,
 from [automatically being sent to Google](https://developer.android.com/guide/topics/data/autobackup).
 
+In theory, there is client-side encryption, but there is no specification available about what this means.
+Moreover, many people do not trust Google.
+
 Unfortunately, it is not possible to enable cloud backup for other backup software without enabling Google backup.
+Whether Google backup is enabled needs to be specified in the app manifest. So, unfortunately, it isn't possible to add an option for this.
+
+As a replacement, you can back up and restore all settings, including the account settings and credentials, via the backup-settings tab page.
+This backup export uses a proper encryption method, [see here](#user-content-faq36).
 
 <br />
 
@@ -5360,9 +5376,55 @@ Instead of downloading many messages to your device, consider [searching for mes
 This error message means that the app didn't receive a response from the email server.
 The email server might not be responding, for example because it is offline for maintenance, or the response might not arrive, for example due to internet connectivity issues.
 
-So, please check if your internet connection is working correctly. Also, try to switch to mobile data or Wi-Fi.
+So, please check if your email provider didn't announce server maintenance, and if your internet connection is working correctly. Also, try to switch to mobile data or Wi-Fi.
 
-If you are using a VPN, firewall, ad blocker, or similar, please try to disable it. Email servers often block connections via a VPN.
+If you are using a VPN, firewall, ad blocker, or similar, please try to disable it, or make an exception for FairEmail. Email servers often block connections via a VPN.
+
+<br>
+
+<a name="faq193"></a>
+**(193) How can I import Outlook contacts?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq193)
+
+If there are one or more Outlook or Office 365 accounts configured,
+there will be a button in the main settings screen in setup step 2 to download Outlook contacts (since version 1.2076).
+After tapping on this button, you can select the account to download contacts for.
+Microsoft will ask for permission to read the contacts,
+and after granting this permission, the app will download the contacts with an email address into the local contacts' database.
+
+In the message editor, type the first few letters of the email address or name in any of the email address fields, and the downloaded addresses will be suggested.
+
+For privacy and security reasons, FairEmail doesn't have permissions to write into the Android address book, and also not to write in the address book of Outlook.
+This means that contacts can be downloaded as local contacts only, and can't be synchronized two ways.
+If you are looking to synchronize your Outlook contacts with the Android address book, you should look for a sync app in the Play Store which can do this.
+
+<br>
+
+<a name="faq194"></a>
+**(194) How can I set up automatic deletion of old messages?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https://github.com/M66B/FairEmail/blob/master/FAQ.md%23user-content-faq194)
+
+To set up automatic deletion of old messages:
+
+* Tap on the account name in the navigation menu (left side menu)
+* Long press the folder you want to set up auto deletion for, and select to edit the folder properties
+* Near the bottom of the properties screen, there is an option to enable auto deletion
+
+Messages in the trash and spam folder will be **permanently** deleted, and messages in other folders will be moved to the trash folder.
+
+Unread, starred and snoozed messages and messages younger than 24 hours will not be automatically deleted.
+You can enable auto deletion of unread messages in the receive-settings tab page (option *Delete old unread messages*).
+
+Note that it isn't a good idea to automatically delete recent messages, especially not for the spam folder because there might be legitimate messages in the spam folder.
+There is a button or menu item (depending on the screen size) in the top action bar/menu of the trash and spam folder to empty the folder.
+This way there is at least a visual check.
+
+Auto deletion will be done on a full sync only.
+For the inboxes, you can use *Force sync* in the three-dots overflow menu of the start screen.
+For other folders, you can long press the folder in the folder list of the account (*not* the navigation menu), and select *Synchronize now* in the pop-up menu.
+You can also pull down the messages list of any folder to sync it, and repeat this again within 30 seconds for a full sync.
 
 <br>
 

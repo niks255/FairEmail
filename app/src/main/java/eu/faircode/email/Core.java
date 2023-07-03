@@ -109,6 +109,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import javax.mail.Address;
+import javax.mail.BodyPart;
 import javax.mail.FetchProfile;
 import javax.mail.Flags;
 import javax.mail.Folder;
@@ -118,12 +119,15 @@ import javax.mail.Header;
 import javax.mail.Message;
 import javax.mail.MessageRemovedException;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.StoreClosedException;
 import javax.mail.UIDFolder;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.search.AndTerm;
 import javax.mail.search.ComparisonTerm;
@@ -135,7 +139,7 @@ import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 
-import me.leolin.shortcutbadger.ShortcutBadger;
+import me.leolin.shortcutbadger.ShortcutBadgerAlt;
 
 class Core {
     static final int DEFAULT_CHUNK_SIZE = 50;
@@ -503,6 +507,10 @@ class Core {
 
                                 case EntityOperation.ATTACHMENT:
                                     onAttachment(context, jargs, folder, message, op, (IMAPFolder) ifolder);
+                                    break;
+
+                                case EntityOperation.DETACH:
+                                    onDetach(context, jargs, account, folder, message, (IMAPStore) istore, (IMAPFolder) ifolder, state);
                                     break;
 
                                 case EntityOperation.EXISTS:
@@ -2084,6 +2092,101 @@ class Core {
             EntityLog.log(context, "Operation attachment size=" + attachment.size);
     }
 
+    private static void onDetach(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws JSONException, MessagingException, IOException {
+        DB db = DB.getInstance(context);
+
+        JSONArray jids = jargs.getJSONArray(0);
+        List<Long> ids = new ArrayList<>();
+        for (int i = 0; i < jids.length(); i++)
+            ids.add(jids.getLong(i));
+
+        if (message.uid == null)
+            throw new IllegalArgumentException("Delete attachments uid missing");
+
+        EntityFolder trash = db.folder().getFolderByType(message.account, EntityFolder.TRASH);
+
+        // Get message
+        Message imessage = ifolder.getMessageByUID(message.uid);
+        if (imessage == null)
+            throw new MessageRemovedException();
+
+        String msgid = EntityMessage.generateMessageId();
+        String ref = (TextUtils.isEmpty(message.references)
+                ? message.msgid
+                : message.references + " " + message.msgid);
+        MimeMessage icopy = new MimeMessageEx((MimeMessage) imessage, msgid);
+        icopy.addHeader("References", MessageHelper.limitReferences(ref));
+        MessageHelper helper = new MessageHelper(icopy, context);
+        MessageHelper.MessageParts parts = helper.getMessageParts();
+        List<MessageHelper.AttachmentPart> aparts = parts.getAttachmentParts();
+
+        List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
+        for (EntityAttachment attachment : attachments)
+            if (ids.contains(attachment.id)) {
+                Part apart = aparts.get(attachment.sequence - 1).part;
+                if (!deletePart(icopy, apart))
+                    throw new IllegalArgumentException("Attachment part not found");
+            }
+
+        ifolder.appendMessages(new Message[]{icopy});
+
+        Long uid = findUid(context, account, ifolder, msgid);
+        if (uid != null) {
+            JSONArray fargs = new JSONArray();
+            fargs.put(uid);
+            onFetch(context, fargs, folder, istore, ifolder, state);
+        }
+
+        if (trash == null) {
+            imessage.setFlag(Flags.Flag.DELETED, true);
+            expunge(context, ifolder, Arrays.asList(imessage));
+        } else {
+            EntityOperation.queue(context, message, EntityOperation.MOVE, trash.id);
+        }
+    }
+
+    static boolean deletePart(Part part, Part attachment) throws MessagingException, IOException {
+        boolean deleted = false;
+        if (part.isMimeType("multipart/*")) {
+            Multipart multipart = (Multipart) part.getContent();
+            for (int i = 0; i < multipart.getCount(); i++) {
+                Part child = multipart.getBodyPart(i);
+                if (child == attachment) {
+                    String fileName = child.getFileName();
+                    String contentType = child.getContentType();
+                    String disposition = child.getDisposition();
+
+                    if (fileName != null && !fileName.startsWith("deleted"))
+                        fileName = "deleted" + (TextUtils.isEmpty(fileName) ? "" : "_" + fileName);
+                    if (TextUtils.isEmpty(contentType))
+                        contentType = "application/octet-stream";
+                    if (TextUtils.isEmpty(disposition))
+                        disposition = Part.ATTACHMENT;
+
+                    multipart.removeBodyPart(i);
+
+                    BodyPart placeholderPart = new MimeBodyPart();
+                    placeholderPart.setContent("", contentType);
+                    placeholderPart.setFileName(fileName);
+                    placeholderPart.setDisposition(disposition);
+                    multipart.addBodyPart(placeholderPart);
+
+                    deleted = true;
+                } else {
+                    if (deletePart(child, attachment))
+                        deleted = true;
+                }
+            }
+        }
+
+        if (part instanceof MimeMessage)
+            ((MimeMessage) part).saveChanges();
+        else if (part instanceof Multipart)
+            part.setDataHandler(part.getDataHandler());
+
+        return deleted;
+    }
+
     private static void onBody(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, POP3Folder ifolder, POP3Store istore) throws MessagingException, IOException {
         if (!EntityFolder.INBOX.equals(folder.type))
             throw new IllegalArgumentException("Not INBOX");
@@ -2155,18 +2258,24 @@ class Core {
             throw new IllegalArgumentException("exists without msgid");
 
         // Search for message
-        Message[] imessages = ifolder.search(new MessageIDTerm(message.msgid));
-        if (imessages == null || imessages.length == 0)
-            try {
-                // Needed for Outlook
-                imessages = ifolder.search(
-                        new AndTerm(
-                                new SentDateTerm(ComparisonTerm.GE, new Date()),
-                                new HeaderTerm(MessageHelper.HEADER_CORRELATION_ID, message.msgid)));
-            } catch (Throwable ex) {
-                Log.e(ex);
-                // Seznam: Jakarta Mail Exception: java.io.IOException: Connection dropped by server?
-            }
+        Message[] imessages = (account.isOutlook())
+                ? ifolder.search(new HeaderTerm("X-Microsoft-Original-Message-ID", message.msgid))
+                : ifolder.search(new MessageIDTerm(message.msgid));
+
+        // Fallback
+        if (false)
+            if (imessages == null || imessages.length == 0)
+                try {
+                    // Needed for Outlook
+                    imessages = ifolder.search(
+                            new AndTerm(
+                                    new SentDateTerm(ComparisonTerm.GE, new Date()),
+                                    new HeaderTerm(MessageHelper.HEADER_CORRELATION_ID, message.msgid)));
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                    // iCloud: NO [UNAVAILABLE] Unexpected exception
+                    // Seznam: Jakarta Mail Exception: java.io.IOException: Connection dropped by server?
+                }
 
         // Some email servers are slow with adding sent messages
         if (retry)
@@ -3615,8 +3724,9 @@ class Core {
             Log.i(folder.name + " sync=" + new Date(sync_time) + " keep=" + new Date(keep_time));
 
             // Delete old local messages
+            long delete_time = new Date().getTime() - 3600 * 1000L;
             if (auto_delete) {
-                List<Long> tbds = db.message().getMessagesBefore(folder.id, sync_time, keep_time, delete_unseen);
+                List<Long> tbds = db.message().getMessagesBefore(folder.id, delete_time, keep_time, delete_unseen);
                 Log.i(folder.name + " local tbd=" + tbds.size());
                 EntityFolder trash = db.folder().getFolderByType(folder.account, EntityFolder.TRASH);
                 for (Long tbd : tbds) {
@@ -3629,7 +3739,7 @@ class Core {
                             EntityOperation.queue(context, message, EntityOperation.MOVE, trash.id);
                 }
             } else {
-                int old = db.message().deleteMessagesBefore(folder.id, sync_time, keep_time, delete_unseen);
+                int old = db.message().deleteMessagesBefore(folder.id, delete_time, keep_time, delete_unseen);
                 Log.i(folder.name + " local old=" + old);
             }
 
@@ -4937,6 +5047,10 @@ class Core {
         if (EntityFolder.DRAFTS.equals(folder.type))
             return null;
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int level = prefs.getInt("log_level", android.util.Log.INFO);
+        boolean log = (level <= android.util.Log.INFO || BuildConfig.DEBUG);
+
         List<Address> addresses = new ArrayList<>();
         if (folder.isOutgoing()) {
             if (message.from != null)
@@ -4965,19 +5079,45 @@ class Core {
         if (identities != null) {
             for (Address address : addresses)
                 for (EntityIdentity identity : identities)
-                    if (identity.sameAddress(address))
+                    if (identity.sameAddress(address)) {
+                        if (log)
+                            Log.i("Matched same" +
+                                    " identity=" + identity.email +
+                                    " address=" + ((InternetAddress) address).getAddress() +
+                                    " folder=" + folder.name);
                         return identity;
+                    }
 
             for (Address address : addresses)
                 for (EntityIdentity identity : identities)
-                    if (identity.similarAddress(address))
+                    if (identity.similarAddress(address)) {
+                        if (log)
+                            Log.i("Matched similar" +
+                                    " identity=" + identity.email +
+                                    " regex=" + identity.sender_extra_regex +
+                                    " address=" + ((InternetAddress) address).getAddress() +
+                                    " folder=" + folder.name);
                         return identity;
+                    }
 
             if (deliveredto != null)
                 for (EntityIdentity identity : identities)
-                    if (identity.sameAddress(deliveredto) || identity.similarAddress(deliveredto))
+                    if (identity.sameAddress(deliveredto) || identity.similarAddress(deliveredto)) {
+                        if (log)
+                            Log.i("Matched deliveredto" +
+                                    " identity=" + identity.email +
+                                    " regex=" + identity.sender_extra_regex +
+                                    " address=" + ((InternetAddress) deliveredto).getAddress() +
+                                    " folder=" + folder.name);
                         return identity;
+                    }
         }
+
+        if (log)
+            Log.i("Matched none" +
+                    " addresses=" + MessageHelper.formatAddresses(addresses.toArray(new Address[0])) +
+                    " deliveredto=" + (deliveredto == null ? null : ((InternetAddress) deliveredto).getAddress()) +
+                    " folder=" + folder.name);
 
         return null;
     }
@@ -5237,7 +5377,8 @@ class Core {
         if (redacted)
             notify_summary = true;
         if (notify_screen_on &&
-                !(Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU ||
+                !(BuildConfig.DEBUG ||
+                        Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU ||
                         Helper.hasPermission(context, "android.permission.TURN_SCREEN_ON")))
             notify_screen_on = false;
 
@@ -5445,7 +5586,7 @@ class Core {
                             nm.notify(tag, NotificationHelper.NOTIFICATION_TAGGED, notification);
                         // https://github.com/leolin310148/ShortcutBadger/wiki/Xiaomi-Device-Support
                         if (id == 0 && badge && Helper.isXiaomi())
-                            ShortcutBadger.applyNotification(context, notification, current);
+                            ShortcutBadgerAlt.applyNotification(context, notification, current);
                     } catch (Throwable ex) {
                         Log.w(ex);
                     }
@@ -5804,23 +5945,25 @@ class Core {
 
             if (notify_trash &&
                     perform_expunge &&
-                    message.accountProtocol == EntityAccount.TYPE_IMAP &&
-                    db.folder().getFolderByType(message.account, EntityFolder.TRASH) != null) {
-                Intent trash = new Intent(context, ServiceUI.class)
-                        .setAction("trash:" + message.id)
-                        .putExtra("group", group);
-                PendingIntent piTrash = PendingIntentCompat.getService(
-                        context, ServiceUI.PI_TRASH, trash, PendingIntent.FLAG_UPDATE_CURRENT);
-                NotificationCompat.Action.Builder actionTrash = new NotificationCompat.Action.Builder(
-                        R.drawable.twotone_delete_24,
-                        context.getString(R.string.title_advanced_notify_action_trash),
-                        piTrash)
-                        .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_DELETE)
-                        .setShowsUserInterface(false)
-                        .setAllowGeneratedReplies(false);
-                mbuilder.addAction(actionTrash.build());
+                    message.accountProtocol == EntityAccount.TYPE_IMAP) {
+                EntityFolder folder = db.folder().getFolderByType(message.account, EntityFolder.TRASH);
+                if (folder != null && !folder.id.equals(message.folder)) {
+                    Intent trash = new Intent(context, ServiceUI.class)
+                            .setAction("trash:" + message.id)
+                            .putExtra("group", group);
+                    PendingIntent piTrash = PendingIntentCompat.getService(
+                            context, ServiceUI.PI_TRASH, trash, PendingIntent.FLAG_UPDATE_CURRENT);
+                    NotificationCompat.Action.Builder actionTrash = new NotificationCompat.Action.Builder(
+                            R.drawable.twotone_delete_24,
+                            context.getString(R.string.title_advanced_notify_action_trash),
+                            piTrash)
+                            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_DELETE)
+                            .setShowsUserInterface(false)
+                            .setAllowGeneratedReplies(false);
+                    mbuilder.addAction(actionTrash.build());
 
-                wactions.add(actionTrash.build());
+                    wactions.add(actionTrash.build());
+                }
             }
 
             if (notify_trash &&
@@ -5844,42 +5987,46 @@ class Core {
             }
 
             if (notify_junk &&
-                    message.accountProtocol == EntityAccount.TYPE_IMAP &&
-                    db.folder().getFolderByType(message.account, EntityFolder.JUNK) != null) {
-                Intent junk = new Intent(context, ServiceUI.class)
-                        .setAction("junk:" + message.id)
-                        .putExtra("group", group);
-                PendingIntent piJunk = PendingIntentCompat.getService(
-                        context, ServiceUI.PI_JUNK, junk, PendingIntent.FLAG_UPDATE_CURRENT);
-                NotificationCompat.Action.Builder actionJunk = new NotificationCompat.Action.Builder(
-                        R.drawable.twotone_report_24,
-                        context.getString(R.string.title_advanced_notify_action_junk),
-                        piJunk)
-                        .setShowsUserInterface(false)
-                        .setAllowGeneratedReplies(false);
-                mbuilder.addAction(actionJunk.build());
+                    message.accountProtocol == EntityAccount.TYPE_IMAP) {
+                EntityFolder folder = db.folder().getFolderByType(message.account, EntityFolder.JUNK);
+                if (folder != null && !folder.id.equals(message.folder)) {
+                    Intent junk = new Intent(context, ServiceUI.class)
+                            .setAction("junk:" + message.id)
+                            .putExtra("group", group);
+                    PendingIntent piJunk = PendingIntentCompat.getService(
+                            context, ServiceUI.PI_JUNK, junk, PendingIntent.FLAG_UPDATE_CURRENT);
+                    NotificationCompat.Action.Builder actionJunk = new NotificationCompat.Action.Builder(
+                            R.drawable.twotone_report_24,
+                            context.getString(R.string.title_advanced_notify_action_junk),
+                            piJunk)
+                            .setShowsUserInterface(false)
+                            .setAllowGeneratedReplies(false);
+                    mbuilder.addAction(actionJunk.build());
 
-                wactions.add(actionJunk.build());
+                    wactions.add(actionJunk.build());
+                }
             }
 
             if (notify_archive &&
-                    message.accountProtocol == EntityAccount.TYPE_IMAP &&
-                    db.folder().getFolderByType(message.account, EntityFolder.ARCHIVE) != null) {
-                Intent archive = new Intent(context, ServiceUI.class)
-                        .setAction("archive:" + message.id)
-                        .putExtra("group", group);
-                PendingIntent piArchive = PendingIntentCompat.getService(
-                        context, ServiceUI.PI_ARCHIVE, archive, PendingIntent.FLAG_UPDATE_CURRENT);
-                NotificationCompat.Action.Builder actionArchive = new NotificationCompat.Action.Builder(
-                        R.drawable.twotone_archive_24,
-                        context.getString(R.string.title_advanced_notify_action_archive),
-                        piArchive)
-                        .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE)
-                        .setShowsUserInterface(false)
-                        .setAllowGeneratedReplies(false);
-                mbuilder.addAction(actionArchive.build());
+                    message.accountProtocol == EntityAccount.TYPE_IMAP) {
+                EntityFolder folder = db.folder().getFolderByType(message.account, EntityFolder.ARCHIVE);
+                if (folder != null && !folder.id.equals(message.folder)) {
+                    Intent archive = new Intent(context, ServiceUI.class)
+                            .setAction("archive:" + message.id)
+                            .putExtra("group", group);
+                    PendingIntent piArchive = PendingIntentCompat.getService(
+                            context, ServiceUI.PI_ARCHIVE, archive, PendingIntent.FLAG_UPDATE_CURRENT);
+                    NotificationCompat.Action.Builder actionArchive = new NotificationCompat.Action.Builder(
+                            R.drawable.twotone_archive_24,
+                            context.getString(R.string.title_advanced_notify_action_archive),
+                            piArchive)
+                            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_ARCHIVE)
+                            .setShowsUserInterface(false)
+                            .setAllowGeneratedReplies(false);
+                    mbuilder.addAction(actionArchive.build());
 
-                wactions.add(actionArchive.build());
+                    wactions.add(actionArchive.build());
+                }
             }
 
             if (notify_move &&
@@ -5887,7 +6034,7 @@ class Core {
                 EntityAccount account = db.account().getAccount(message.account);
                 if (account != null && account.move_to != null) {
                     EntityFolder folder = db.folder().getFolder(account.move_to);
-                    if (folder != null) {
+                    if (folder != null && !folder.id.equals(message.folder)) {
                         Intent move = new Intent(context, ServiceUI.class)
                                 .setAction("move:" + message.id)
                                 .putExtra("group", group);
@@ -5910,6 +6057,7 @@ class Core {
                 List<TupleIdentityEx> identities = db.identity().getComposableIdentities(message.account);
                 if (identities != null && identities.size() > 0) {
                     Intent reply = new Intent(context, ActivityCompose.class)
+                            .setAction("reply:" + message.id)
                             .putExtra("action", "reply")
                             .putExtra("reference", message.id)
                             .putExtra("group", group);

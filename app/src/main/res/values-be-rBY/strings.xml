@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">Пошук FairEmail</string>
+    <string name="app_send_self">Адправіць сабе</string>
     <string name="app_changelog">Журнал змяненняў</string>
     <string name="app_welcome">FairEmail - гэта праграма электроннай пошты з адкрытым зыходным кодам, арыентаваная на канфідэнцыяльнасць і бяспеку. Менавіта таму некаторыя функцыі могуць адрознівацца ад функцый, якія вы выкарыстоўваеце ў іншых падобных праграмах.</string>
     <string name="app_limitations">Напрыклад, для выдалення небяспечных элементаў і паляпшэння чытальнасці паведамленні падлягаюць фарматаванню, а адкрыццё спасылак для бяспекі патрабуе пацвярджэння. Пры жаданні гэта можна адключыць.</string>
@@ -104,7 +105,7 @@
     <string name="title_block_sender_domain">Блакіраваць дамен \'%1$s\'</string>
     <string name="title_block_sender_remark">Блакіраванне азначае аўтаматычнае перамяшчэнне ў папку са спамам</string>
     <string name="title_block_sender_hint">         Блакіраванне адпраўніка - бясплатная функцыя.
-         Блакіроўка дамена адпраўніка выкарыстоўваюцца правілы фільтра, што з\'яўляецца функцыяй з прафесійнай версіі.
+         Блакіроўка дамена адпраўніка выкарыстоўвае правілы фільтра, што з\'яўляецца функцыяй з прафесійнай версіі.
    </string>
     <string name="title_blocked_senders">Заблакіраваныя адпраўнікi</string>
     <plurals name="title_ask_block_sender">
@@ -238,6 +239,8 @@
     <string name="title_setup_permissions_notify_explanation">Дазволы на апавяшчэнні патрабуюцца для паказу апавяшчэнняў аб новых паведамленнях у радку стану</string>
     <string name="title_setup_permission_why">Якія дазволы патрэбны і навошта?</string>
     <string name="title_setup_permission_import_contacts">Як я магу імпартаваць кантакты?</string>
+    <string name="title_setup_import_graph_contact">Кантакты Outlook</string>
+    <string name="title_setup_import_graph_new">Новыя кантакты: %1$s</string>
     <string name="title_setup_doze">Адключыць аптымізацыю батарэі</string>
     <string name="title_setup_doze_remark">Для надзейнай адпраўкі і атрымання электроннай пошты ў фонавым рэжыме</string>
     <string name="title_setup_doze_explanation">Каб забяспечыць надзейную адпраўку і атрыманне паведамленняў у фонавым рэжыме, аптымізацыя батарэі для праграмы павінна быць адключана</string>
@@ -248,7 +251,7 @@
     <string name="title_setup_doze_battery">Высокае спажыванне зараду батарэі?</string>
     <string name="title_setup_doze_stopped">Спынілася сінхранізацыя?</string>
     <string name="title_setup_doze_device">Верагодна, гэта спатрэбіцца для вашай прылады</string>
-    <string name="title_setup_alarm_12">Праграма не працуе</string>
+    <string name="title_setup_alarm_12">Праграма працуе некарэктна</string>
     <string name="title_setup_inexact">Будзільнікі і напаміны адключаны</string>
     <string name="title_setup_background">Фонавыя абмежаванні ўключаны</string>
     <string name="title_setup_data">Эканомія даных уключана</string>
@@ -711,6 +714,7 @@
         Ключы і сертыфікаты звычайна можна знайсці ў раздзеле Дадаткова - Шыфраванне і ўліковыя даныя.
     </string>
     <string name="title_advanced_power_menu">Дадаць дзеянні ў меню сілкавання Android</string>
+    <string name="title_advanced_send_self">Дадаць опцыю \'адправіць сабе\' у меню абагульвання Android</string>
     <string name="title_advanced_external_search">Дазволіць іншым праграмам пошук у паведамленнях</string>
     <string name="title_advanced_sort_answers">Сартаваць шаблоны адказаў паводле частаты выкарыстання</string>
     <string name="title_advanced_shortcuts">Паказваць кантакты, якія часта выкарыстоўваюцца, у меню абагульвання Android</string>
@@ -860,6 +864,8 @@
     <string name="title_advanced_cleanup_hint">Гэта прывядзе да выдалення ўсіх часовых файлаў</string>
     <string name="title_advanced_never_favorite">Ніколі не пазначаць</string>
     <string name="title_advanced_edit_name">Перайменаваць</string>
+    <string name="title_advanced_create_alias">Стварыць псеўданім</string>
+    <string name="title_advanced_create_alias_remark">У большасці выпадкаў адрас псеўданіма мае быць папярэдне правераны на сайце паштовага правайдара</string>
     <string name="title_create_folder">Стварыць папку</string>
     <string name="title_create_folder_name">Назва папкі</string>
     <string name="title_create_folder_parent">Бацькоўская папка</string>
@@ -1203,6 +1209,10 @@
     <string name="title_move_to_account">Перамясціць у %1$s &#8230;</string>
     <string name="title_report_spam">Лічыць спамам</string>
     <string name="title_delete_permanently">Выдаліць назаўсёды</string>
+    <string name="title_delete_attachments">Выдаліць укладанні</string>
+    <string name="title_delete_attachments_remark">        Для выдалення ўкладанняў неабходна стварыць новае паведамленне, а старое - выдаліць.
+       Паколькі існуе верагоднасць збою, старое паведамленне будзе перамешчана ў сметніцу.
+    </string>
     <string name="title_snooze">Адкласці &#8230;</string>
     <string name="title_archive">Архіў</string>
     <string name="title_reply">Адказаць</string>
@@ -1438,6 +1448,7 @@
     <string name="title_verify">Праверыць</string>
     <string name="title_encrypt">Зашыфраваць</string>
     <string name="title_decrypt">Расшыфраваць</string>
+    <string name="title_reset_message_questions">Скінуць пацвярджэнне спасылак</string>
     <string name="title_resync">Сінхранізаваць паўторна</string>
     <string name="title_charset">Кадзіраванне</string>
     <string name="title_charset_auto">Аўтаматычна</string>
@@ -1510,6 +1521,7 @@
     <string name="title_search_flag_size">памер &gt; %1$s</string>
     <string name="title_search_device">Пошук на прыладзе</string>
     <string name="title_search_server">Пошук на серверы</string>
+    <string name="title_search_server_wait">Чаканне сервера</string>
     <string name="title_search_in">Шукаць у</string>
     <string name="title_search_sender">Шукаць адпраўніка</string>
     <string name="title_search_delete">Выдаліць захаваны пошук?</string>
@@ -1793,6 +1805,7 @@
     <string name="title_hint_folder_sync">Для абмежавання выкарыстання батарэі і сеткі, не ўсе папкі і не ўсе паведамленні будуць сінхранізаваны па змаўчанні</string>
     <string name="title_hint_airplane">Рэжым палёту ўключаны</string>
     <string name="title_hint_notifications">Няма дазволаў на апавяшчэнні</string>
+    <string name="title_hint_battery_optimizations">Аптцміўацыя батарэі ўсё яшчэ ўключана</string>
     <string name="title_hint_support">Калі ў вас ёсць пытанне або праблема, калі ласка, па дапамогу звяртайцеся праз меню падтрымкі</string>
     <string name="title_hint_message_actions">Для выдалення правядзіце пальцам улева; Для архівацыі (калі даступна) правядзіце пальцам управа; Жэсты можна наладзіць у наладах уліковага запісу</string>
     <string name="title_hint_message_selection">Для выбару некалькіх паведамленняў націсніце і на паведамленне і ўтрымлівайце, а затым правядзіце пальцам уверх або ўніз і выберыце неабходныя паведамленні</string>
@@ -1921,6 +1934,8 @@
     <string name="title_debug_info">Інфармацыя аб адладцы</string>
     <string name="title_debug_info_remark">Калі ласка, апішыце праблему і пазначце час узнікнення гэтай праблемы:</string>
     <string name="title_crash_info_remark">Калі ласка, апішыце, што вы рабілі, калі праграма выйшла з ладу:</string>
+    <string name="title_debug_info_issue">Апісанне праблемы (абавязкова)</string>
+    <string name="title_debug_info_contact">Мы нядаўна абмяркоўвалі гэту праблему</string>
     <string name="title_unexpected_info_remark">Калі ласка, апішыце, што вы рабілі, калі з\'явілася памылка:</string>
     <string name="title_widget_title_count">Колькасць новых паведамленняў</string>
     <string name="title_widget_title_list">Спіс паведамленняў</string>
@@ -1942,6 +1957,7 @@
     <string name="title_widget_count_top">Паказваць колькасць непрачытаных паведамленняў уверсе</string>
     <string name="title_widget_subject_lines">Максімальная колькасць радкоў у тэме</string>
     <string name="title_widget_avatars">Паказваць аватары кантактаў</string>
+    <string name="title_widget_account_name">Паказаць імя ўліковага запісу</string>
     <string name="title_widget_refresh">Паказваць кнопку абнаўлення паведамленняў</string>
     <string name="title_widget_compose">Паказаць кнопку для стварэння новага паведамлення</string>
     <string name="title_widget_background">Колер фону</string>

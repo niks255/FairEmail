@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">FairEmail arama</string>
+    <string name="app_send_self">Kendine gönder</string>
     <string name="app_changelog">Değişiklik günlüğü</string>
     <string name="app_welcome">FairEmail gizlilik ve güvenlik odaklı açık kaynaklı bir e-posta uygulamasıdır. Bu nedenle, bazı özellikler alışkın olduğunuzdan farklı şekilde çalışabilir.</string>
     <string name="app_limitations">Örneğin, güvenli olmayan öğeleri kaldırmak ve okunabilirliği artırmak için mesajlar varsayılan olarak yeniden biçimlendirilir ve güvenlik için bağlantıların açılması onaylanmalıdır. İstenirse ikisi de devre dışı bırakılabilir.</string>
@@ -211,6 +212,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_permissions_notify_explanation">Durum çubuğunda yeni mesajlarda bildirimleri göstermek için bildirim izinleri gerekir</string>
     <string name="title_setup_permission_why">Hangi izinler gerekli ve neden?</string>
     <string name="title_setup_permission_import_contacts">Kişileri nasıl içe aktarabilirim?</string>
+    <string name="title_setup_import_graph_contact">Outlook kişileri</string>
+    <string name="title_setup_import_graph_new">Yeni Kişiler: %1$s</string>
     <string name="title_setup_doze">Pil optimizasyonlarını devre dışı bırak</string>
     <string name="title_setup_doze_remark">Arka planda güvenilir bir şekilde e-posta göndermek ve almak için</string>
     <string name="title_setup_doze_explanation">Arka planda mesajların güvenilir bir şekilde gönderilmesini ve alınmasını sağlamak için uygulamanın pil optimizasyonları devre dışı bırakılmalıdır</string>
@@ -221,7 +224,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_doze_battery">Yüksek pil kullanımı?</string>
     <string name="title_setup_doze_stopped">Senkronizasyon durdu mu?</string>
     <string name="title_setup_doze_device">Bu muhtemelen bu cihaz için gereklidir</string>
-    <string name="title_setup_alarm_12">Uygulama çalışmayacak</string>
+    <string name="title_setup_alarm_12">Uygulama düzgün çalışmayacak</string>
     <string name="title_setup_inexact">Alarmlar &amp; hatırlatıcılar devre dışı bırakıldı</string>
     <string name="title_setup_background">Arka plan kısıtlamaları etkinleştirildi</string>
     <string name="title_setup_data">Veri koruyucu etkin</string>
@@ -681,6 +684,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_manage_keys_hint">        Android güvenlik seçeneklerini açar.        Anahtarlar ve sertifikalar genellikle Gelişmiş -&gt; Şifreleme ve altındaki menülerde bulunur.
     </string>
     <string name="title_advanced_power_menu">Android güç menüsüne eylemler ekle</string>
+    <string name="title_advanced_send_self">Android\'in paylaşım menüsüne \'kendine gönder\' özelliğini ekleyin</string>
     <string name="title_advanced_external_search">Diğer uygulamaların mesajlarda arama yapmasına izin ver</string>
     <string name="title_advanced_sort_answers">Yanıt şablonlarını kullanım sıklığına göre sırala</string>
     <string name="title_advanced_shortcuts">Sık kullanılan kişileri Android\'in paylaşma menüsünde göster</string>
@@ -830,6 +834,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_cleanup_hint">Bu bütün geçici dosyaları silecek</string>
     <string name="title_advanced_never_favorite">Asla sık kullanılan değil</string>
     <string name="title_advanced_edit_name">Adı düzenle</string>
+    <string name="title_advanced_create_alias">Takma isim oluştur</string>
+    <string name="title_advanced_create_alias_remark">Çoğu durumda, takma ismin ilk olarak mail sağlayıcısının web sayfası tarafından doğrulanması gerekir</string>
     <string name="title_create_folder">Klasör oluştur</string>
     <string name="title_create_folder_name">Klasör adı</string>
     <string name="title_create_folder_parent">Üst klasör</string>
@@ -1170,6 +1176,9 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_move_to_account">%1$s&#8230; taşı</string>
     <string name="title_report_spam">Spam olarak işaretle</string>
     <string name="title_delete_permanently">Kalıcı olarak sil</string>
+    <string name="title_delete_attachments">Ekleri sil</string>
+    <string name="title_delete_attachments_remark">Ekleri silmek için yeni bir mesaj eklenmeli ve eski mesaj silinmelidir.
+Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.    </string>
     <string name="title_snooze">Ertele &#8230;</string>
     <string name="title_archive">Arşivle</string>
     <string name="title_reply">Yanıtla</string>
@@ -1404,6 +1413,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_verify">Doğrulama</string>
     <string name="title_encrypt">Şifrele</string>
     <string name="title_decrypt">Şifreyi çöz</string>
+    <string name="title_reset_message_questions">Bağlantı sorularını sıfırla</string>
     <string name="title_resync">Tekrar senkronize et</string>
     <string name="title_charset">Metin kodlaması</string>
     <string name="title_charset_auto">Otomatik</string>
@@ -1475,6 +1485,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_search_flag_size">boyut &gt; %1$s</string>
     <string name="title_search_device">Cihazda ara</string>
     <string name="title_search_server">Sunucuda ara</string>
+    <string name="title_search_server_wait">Sunucu için bekleniyor</string>
     <string name="title_search_in">İçinde ara</string>
     <string name="title_search_sender">Göndereni ara</string>
     <string name="title_search_delete">Kayıtlı arama silinsin mi?</string>
@@ -1758,6 +1769,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_hint_folder_sync">Pil ve ağ kullanımını sınırlamak için tüm klasörler ve tüm mesajlar varsayılan olarak senkronize edilmeyecektir</string>
     <string name="title_hint_airplane">Uçak modu açık</string>
     <string name="title_hint_notifications">Bildirim izni yok</string>
+    <string name="title_hint_battery_optimizations">Pil optimizasyonu halen etkin</string>
     <string name="title_hint_support">Bir soru ya da bir probleminiz varsa, lütfen yardım almak için destek menüsünü kullanın</string>
     <string name="title_hint_message_actions">Çöp için sola kaydırın; Arşiv için sağa kaydırın (mevcut ise); Kaydırma eylemleri hesap ayarlarından yapılandırılabilir</string>
     <string name="title_hint_message_selection">Birden fazla ileti seçmeye başlamak için bir mesaja uzun basın; basılı tutarak ve yukarı veya aşağı kaydırın ve iletileri seçin</string>
@@ -1885,6 +1897,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_debug_info">Hata ayıklama bilgisi</string>
     <string name="title_debug_info_remark">Lütfen sorunu açıklayın ve sorunun zamanını belirtin:</string>
     <string name="title_crash_info_remark">Lütfen uygulama çöktüğü sırada ne yaptığınızı açıklayın:</string>
+    <string name="title_debug_info_issue">Sorun açıklaması (zorunlu)</string>
+    <string name="title_debug_info_contact">Bu sorun hakkında yakın zamanda haberleşmiştik</string>
     <string name="title_unexpected_info_remark">Lütfen hatayı aldığınızda ne yaptığınızı açıklayın:</string>
     <string name="title_widget_title_count">Yeni mesaj sayısı</string>
     <string name="title_widget_title_list">Mesaj listesi</string>
@@ -1906,6 +1920,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_widget_count_top">Okunmamış sayıyı en üstte göster</string>
     <string name="title_widget_subject_lines">Maksimum konu satırı sayısı</string>
     <string name="title_widget_avatars">Kişi avatarlarını göster</string>
+    <string name="title_widget_account_name">Hesap ismini göster</string>
     <string name="title_widget_refresh">Mesajları yenile düğmesini göster</string>
     <string name="title_widget_compose">Yeni mesaj oluştur düğmesini göster</string>
     <string name="title_widget_background">Arka plan rengi</string>

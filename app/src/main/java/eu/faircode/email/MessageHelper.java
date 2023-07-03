@@ -77,6 +77,7 @@ import org.simplejavamail.outlookmessageparser.model.OutlookFileAttachment;
 import org.simplejavamail.outlookmessageparser.model.OutlookMessage;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -84,6 +85,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -283,6 +285,7 @@ public class MessageHelper {
         System.setProperty("mail.mime.encodefilename", "false");
         System.setProperty("mail.mime.decodeparameters", "true");
         System.setProperty("mail.mime.encodeparameters", "true");
+        //System.setProperty("mail.mime.parameters.strict", "false");
         System.setProperty("mail.mime.allowutf8", "false"); // InternetAddress, (MimeBodyPart: session), MimeUtility
         System.setProperty("mail.mime.cachemultipart", "true");
 
@@ -372,19 +375,8 @@ public class MessageHelper {
             imessage.addHeader("Sensitivity", "Company-Confidential");
 
         // References
-        if (message.references != null) {
-            // https://tools.ietf.org/html/rfc5322#section-2.1.1
-            // Each line of characters MUST be no more than 998 characters ... , excluding the CRLF.
-            String references = message.references;
-            int maxlen = MAX_HEADER_LENGTH - "References: ".length();
-            int sp = references.indexOf(' ');
-            while (references.length() > maxlen && sp > 0) {
-                Log.i("Dropping reference=" + references.substring(0, sp));
-                references = references.substring(sp);
-                sp = references.indexOf(' ');
-            }
-            imessage.addHeader("References", references);
-        }
+        if (message.references != null)
+            imessage.addHeader("References", limitReferences(message.references));
 
         if (message.inreplyto != null)
             imessage.addHeader("In-Reply-To", message.inreplyto);
@@ -818,6 +810,17 @@ public class MessageHelper {
             name = null;
 
         return new InternetAddress(email, name, StandardCharsets.UTF_8.name());
+    }
+
+    static String limitReferences(String references) {
+        int maxlen = MAX_HEADER_LENGTH - "References: ".length();
+        int sp = references.indexOf(' ');
+        while (references.length() > maxlen && sp > 0) {
+            Log.i("Dropping reference=" + references.substring(0, sp));
+            references = references.substring(sp);
+            sp = references.indexOf(' ');
+        }
+        return references;
     }
 
     static Pair<String, String> getExtra(String email, String extra) {
@@ -4097,23 +4100,9 @@ public class MessageHelper {
             if (TextUtils.isEmpty(boundary))
                 throw new ParseException("Signed boundary missing");
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            apart.part.writeTo(bos);
-            String raw = new String(bos.toByteArray(), StandardCharsets.ISO_8859_1);
-            String[] parts = raw.split("\\r?\\n" + Pattern.quote("--" + boundary) + "\\r?\\n");
-            if (parts.length < 2)
-                throw new ParseException("Signed part missing");
-
-            // PGP: https://datatracker.ietf.org/doc/html/rfc3156#section-5
-            // S/MIME: https://datatracker.ietf.org/doc/html/rfc8551#section-3.1.1
-            String c = parts[1]
-                    .replaceAll("\\r?\\n", "\r\n"); // normalize new lines
-            if (EntityAttachment.PGP_CONTENT.equals(apart.encrypt))
-                c = c.replaceAll(" +$", ""); // trim trailing spaces
-
             File file = local.getFile(context);
-            try (OutputStream os = new FileOutputStream(file)) {
-                os.write(c.getBytes(StandardCharsets.ISO_8859_1));
+            try (OutputStream os = new BufferedOutputStream(new CanonicalizingStream(new FileOutputStream(file), boundary))) {
+                apart.part.writeTo(os);
             }
 
             DB db = DB.getInstance(context);
@@ -5040,6 +5029,8 @@ public class MessageHelper {
                     }
 
                 apart.attachment = new EntityAttachment();
+                if (part instanceof IMAPBodyPart)
+                    apart.attachment.section = ((IMAPBodyPart) part).getSectionId();
                 apart.attachment.disposition = apart.disposition;
                 apart.attachment.name = apart.filename;
                 apart.attachment.type = contentType.getBaseType().toLowerCase(Locale.ROOT);
@@ -5766,6 +5757,106 @@ public class MessageHelper {
 
         static boolean isFeedbackReport(String type) {
             return "message/feedback-report".equalsIgnoreCase(type);
+        }
+    }
+
+    static class CanonicalizingStream extends FilterOutputStream {
+        private OutputStream os;
+        private String boundary;
+
+        private int boundaries = 0;
+        private boolean carriage = false;
+        private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+        private static final byte[] CRLF = "\r\n".getBytes(StandardCharsets.ISO_8859_1);
+
+        // PGP: https://datatracker.ietf.org/doc/html/rfc3156#section-5
+        // S/MIME: https://datatracker.ietf.org/doc/html/rfc8551#section-3.1.1
+
+        public CanonicalizingStream(OutputStream out) {
+            super(out);
+            this.os = out;
+            this.boundary = null;
+        }
+
+        public CanonicalizingStream(OutputStream out, String boundary) {
+            super(out);
+            this.os = out;
+            this.boundary = "--" + boundary;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            this.write(new byte[]{(byte) b}, 0, 1);
+        }
+
+        @Override
+        public void write(byte[] b) throws IOException {
+            this.write(b, 0, b.length);
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            for (int i = off; i < off + len; i++) {
+                byte k = b[i];
+                if (k == '\r')
+                    carriage = true;
+                else {
+                    if (k == '\n') {
+                        if (writeBuffer())
+                            buffer.write(CRLF);
+                    } else {
+                        if (carriage) {
+                            if (writeBuffer())
+                                buffer.write(CRLF);
+                        }
+                        buffer.write(k);
+                    }
+                    carriage = false;
+                }
+            }
+        }
+
+        @Override
+        public void flush() throws IOException {
+            flushBuffer();
+            super.flush();
+        }
+
+        @Override
+        public void close() throws IOException {
+            flushBuffer();
+            super.close();
+        }
+
+        private boolean writeBuffer() throws IOException {
+            try {
+                String line = new String(buffer.toByteArray(), StandardCharsets.ISO_8859_1);
+
+                if (boundary != null) {
+                    if (boundary.equals(line.trim())) {
+                        boundaries++;
+                        return false;
+                    }
+                    if (boundaries != 1)
+                        return false;
+                }
+
+                line = line.replaceAll(" +$", "");
+
+                os.write(line.getBytes(StandardCharsets.ISO_8859_1));
+
+                return true;
+            } finally {
+                buffer.reset();
+            }
+        }
+
+        private void flushBuffer() throws IOException {
+            if (boundary != null && boundaries < 1)
+                throw new IOException("Signed part missing");
+            if (buffer.size() > 0)
+                writeBuffer();
         }
     }
 }

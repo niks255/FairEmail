@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">חיפוש ב־FairEmail</string>
+    <string name="app_send_self">שליחה לעצמי</string>
     <string name="app_changelog">יומן שינויים</string>
     <string name="app_welcome">FairEmail הוא יישומון בקוד פתוח שמתמקד בפרטיות ואבטחת מידע. משום כך, חלק מהיכולות כנראה תעבודנה אחרת ממה שהתרגלת.</string>
     <string name="app_limitations">למשל, הודעות מעוצבות מחדש כדי להסיר רכיבים חשודים ולשפר את היכולת לקרוא אותם, נוסף על כך, יש לאשר פתיחת קישורים לשיפור האבטחה. את שני אלו ניתן להשבית במידת הצורך.</string>
@@ -238,6 +239,8 @@
     <string name="title_setup_permissions_notify_explanation">נדרשות הרשאות להתראות כדי להציג התראות להודעות חדשות בשורת המצב</string>
     <string name="title_setup_permission_why">אילו הרשאות נחוצות ומדוע?</string>
     <string name="title_setup_permission_import_contacts">איך אפשר לייבא אנשי קשר?</string>
+    <string name="title_setup_import_graph_contact">אנשי קשר מ־Outlook</string>
+    <string name="title_setup_import_graph_new">אנשי קשר חדשים: %1$s</string>
     <string name="title_setup_doze">השבתת מיטובי סוללה</string>
     <string name="title_setup_doze_remark">כדי לשלוח ולקבל הודעות בצורה מהימנה ברקע</string>
     <string name="title_setup_doze_explanation">יש להשבית את מיטובי הסוללה עבור היישומון כדי לוודא ששליחת וקבלת הדוא״ל ברקע מהימנות</string>
@@ -248,7 +251,7 @@
     <string name="title_setup_doze_battery">שימוש גבוה בסוללה?</string>
     <string name="title_setup_doze_stopped">הסנכרון נפסק?</string>
     <string name="title_setup_doze_device">זה כנראה אילוץ של המכשיר הזה</string>
-    <string name="title_setup_alarm_12">היישומון לא יעבוד</string>
+    <string name="title_setup_alarm_12">היישומון לא יעבוד כראוי</string>
     <string name="title_setup_inexact">התראות ותזכורות מושבתות</string>
     <string name="title_setup_background">הגבלות רקע פעילות</string>
     <string name="title_setup_data">חיסכון בתעבורת נתונים פעיל</string>
@@ -582,6 +585,7 @@
     <string name="title_advanced_language_detection">זיהוי שפת טקסט ההודעה</string>
     <string name="title_advanced_photo_picker">להשתמש בבורר התמונות של Android</string>
     <string name="title_advanced_pull_refresh">לרענון - למשוך למטה</string>
+    <string name="title_advanced_pull_all">סנכרון כל התיקיות</string>
     <string name="title_advanced_autoscroll">יש לגלול למעלה כדי לקבל הודעות חדשות</string>
     <string name="title_advanced_double_tap">נגיעה כפולה תסמן הודעות כנקראו/לא נקראו</string>
     <string name="title_advanced_swipenav">החלקה שמאלה/ימינה כדי להתקדם/לחזור ברמת דיון</string>
@@ -710,6 +714,7 @@
         אפשר למצוא מפתחות ואישורים בדרך כלל תחת מתקדם - הצפנה ופרטי גישה.
     </string>
     <string name="title_advanced_power_menu">הוספת פעולות לתפריט הכיבוי של Android</string>
+    <string name="title_advanced_send_self">הוספת ‚שליחה לעצמי’ לתפריט השיתוף של Android</string>
     <string name="title_advanced_external_search">לאפשר ליישומונים אחרים לחפש בהודעות</string>
     <string name="title_advanced_sort_answers">סידור תבניות המענה לפי תדירות השימוש</string>
     <string name="title_advanced_shortcuts">הצגת אנשי קשר בשימוש תדיר בתפריט השיתוף של Android</string>
@@ -772,6 +777,7 @@
     <string name="title_advanced_lookup_mx_hint">יבדוק אם קיימות רשומות MX ב־DNS</string>
     <string name="title_advanced_sync_delay_hint">יאט סנכרון הודעות</string>
     <string name="title_advanced_folder_nav_hint">פקודה זו תמיד תחזיר את רשימת התיקיות של החשבון הקשור מרשימת הודעות</string>
+    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">במשיכת רשימת התיקיות או החשבונות למטה</string>
     <string name="title_advanced_suggest_names_hint">אם מושבת, אפשר יהיה להשתמש רק בכתובות דוא״ל בעת בחירת אנשי קשר</string>
     <string name="title_advanced_suggest_local_hint">בנוסף לאנשי הקשר שמסופקים על ידי Android. פרטי הקשר יאוחסנו להודעות חדשות שנשלחו או התקבלו כשהאפשרות פעילה.</string>
     <string name="title_advanced_auto_identity_hint">תיבחר הזהות האחרונה בה נעשה שימוש כאשר נבחר נמען להודעות חדשות</string>
@@ -858,6 +864,8 @@
     <string name="title_advanced_cleanup_hint">פעולה זו תמחק את כל הקבצים הזמניים</string>
     <string name="title_advanced_never_favorite">לעולם לא להציב במועדפים</string>
     <string name="title_advanced_edit_name">עריכת שם</string>
+    <string name="title_advanced_create_alias">יצירת כינוי</string>
+    <string name="title_advanced_create_alias_remark">במקרים רבים, יש לאמת כתובת כינוי דרך אתר ספק הדוא״ל תחילה</string>
     <string name="title_create_folder">יצירת תיקייה</string>
     <string name="title_create_folder_name">שם תיקייה</string>
     <string name="title_create_folder_parent">תיקיית הורה</string>
@@ -1200,6 +1208,10 @@
     <string name="title_move_to_account">העברה אל %1$s&#8230;</string>
     <string name="title_report_spam">התנהגות כספאם</string>
     <string name="title_delete_permanently">מחיקה לצמיתות</string>
+    <string name="title_delete_attachments">מחיקת קבצים מצורפים</string>
+    <string name="title_delete_attachments_remark">        כדי למחוק קבצים מצורף, יש להוסיף הודעה חדשה ולמחוק את ההודעה הישנה.
+        מאחר שזה עשוי להיכשל, ההודעה הישנה תועבר לאשפה.
+    </string>
     <string name="title_snooze">השהיה&#8230;</string>
     <string name="title_archive">ארכיון</string>
     <string name="title_reply">תגובה</string>
@@ -1435,6 +1447,7 @@
     <string name="title_verify">אימות</string>
     <string name="title_encrypt">הצפנה</string>
     <string name="title_decrypt">פענוח</string>
+    <string name="title_reset_message_questions">איפוס שאלות הקישור</string>
     <string name="title_resync">סנכרון מחדש</string>
     <string name="title_charset">הצפנה</string>
     <string name="title_charset_auto">אוטומטי</string>
@@ -1507,6 +1520,7 @@
     <string name="title_search_flag_size">גודל &gt; %1$s</string>
     <string name="title_search_device">חיפוש במכשיר</string>
     <string name="title_search_server">חיפוש בשרת</string>
+    <string name="title_search_server_wait">בהמתנה לשרת</string>
     <string name="title_search_in">חיפוש בתוך</string>
     <string name="title_search_sender">חיפוש מוען</string>
     <string name="title_search_delete">למחוק את החיפוש השמור?</string>
@@ -1790,6 +1804,7 @@
     <string name="title_hint_folder_sync">כדי להגביל שימוש בסוללה וברשת לא כל התיקיות ולא כל ההודעות יסונכרנו כבררת מחדל</string>
     <string name="title_hint_airplane">מצב טיסה מופעל</string>
     <string name="title_hint_notifications">אין הרשאות להתראות</string>
+    <string name="title_hint_battery_optimizations">מיטובי סוללה עדיין פעילים</string>
     <string name="title_hint_support">יש לך לך שאלה או טענה, נא להשתמש בתפריט התמיכה לקבלת עזרה</string>
     <string name="title_hint_message_actions">החלקה שמאלה לאשפה, החלקה ימינה לארעיון (אם זמין), ניתן להגדיר את פעולות ההחלקה בהגדרות החשבון</string>
     <string name="title_hint_message_selection">לחיצה ארוכה על הודעה מתחילה בחירה במגוון הודעות, יש להחזיק ולהחליק כלפי מעלה או מטה כדי לבחור הודעות נוספות</string>
@@ -1918,6 +1933,8 @@
     <string name="title_debug_info">פרטי ניפוי שגיאות</string>
     <string name="title_debug_info_remark">נא לתאר את התקלה ולציין את מועדה:</string>
     <string name="title_crash_info_remark">נא לתאר באנגלית מה עשית כשהיישומון קרס:</string>
+    <string name="title_debug_info_issue">תיאור התקלה (חובה)</string>
+    <string name="title_debug_info_contact">לאחרונה יצרנו קשר סביב הבעיה הזאת</string>
     <string name="title_unexpected_info_remark">נא לתאר באנגלית מה עשית כשהופיעה השגיאה:</string>
     <string name="title_widget_title_count">מונה הודעות חדשות</string>
     <string name="title_widget_title_list">רשימת הודעות</string>
@@ -1939,6 +1956,7 @@
     <string name="title_widget_count_top">להציג מניין הודעות שלא נקראו למעלה</string>
     <string name="title_widget_subject_lines">מספר שורות הנושא המרבי</string>
     <string name="title_widget_avatars">הצגת תמונות אנשי קשר</string>
+    <string name="title_widget_account_name">הצגת שם החשבון</string>
     <string name="title_widget_refresh">הצגת כפתור רענון הודעות</string>
     <string name="title_widget_compose">הצגת כפתור כתיבת הודעה חדשה</string>
     <string name="title_widget_background">צבע הרקע</string>

@@ -30,6 +30,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ActivityOptions;
 import android.app.ApplicationExitInfo;
 import android.app.KeyguardManager;
 import android.app.NotificationManager;
@@ -65,6 +66,7 @@ import android.os.StatFs;
 import android.os.ext.SdkExtensions;
 import android.os.storage.StorageManager;
 import android.provider.Browser;
+import android.provider.ContactsContract;
 import android.provider.DocumentsContract;
 import android.provider.Settings;
 import android.security.KeyChain;
@@ -131,8 +133,6 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-
-import org.openintents.openpgp.util.OpenPgpApi;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -683,27 +683,6 @@ public class Helper {
                 KeyguardManager kgm = Helper.getSystemService(context, KeyguardManager.class);
                 return (kgm != null && kgm.isDeviceSecure());
             }
-        } catch (Throwable ex) {
-            Log.e(ex);
-            return false;
-        }
-    }
-
-    static String getOpenKeychainPackage(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString("openpgp_provider", Helper.PGP_OPENKEYCHAIN_PACKAGE);
-    }
-
-    static boolean isOpenKeychainInstalled(Context context) {
-        String provider = getOpenKeychainPackage(context);
-
-        try {
-            PackageManager pm = context.getPackageManager();
-            Intent intent = new Intent(OpenPgpApi.SERVICE_INTENT_2);
-            intent.setPackage(provider);
-            List<ResolveInfo> ris = pm.queryIntentServices(intent, 0);
-
-            return (ris != null && ris.size() > 0);
         } catch (Throwable ex) {
             Log.e(ex);
             return false;
@@ -1466,6 +1445,10 @@ public class Helper {
         return "OPPO".equalsIgnoreCase(Build.MANUFACTURER);
     }
 
+    static boolean isVivo() {
+        return "vivo".equalsIgnoreCase(Build.MANUFACTURER);
+    }
+
     static boolean isRealme() {
         return "realme".equalsIgnoreCase(Build.MANUFACTURER);
     }
@@ -1476,6 +1459,10 @@ public class Helper {
 
     static boolean isSony() {
         return "sony".equalsIgnoreCase(Build.MANUFACTURER);
+    }
+
+    static boolean isUnihertz() {
+        return "Unihertz".equalsIgnoreCase(Build.MANUFACTURER);
     }
 
     static boolean isSurfaceDuo() {
@@ -1524,10 +1511,11 @@ public class Helper {
                 isWiko() ||
                 isLenovo() ||
                 isOppo() ||
-                // Vivo
+                isVivo() ||
                 isRealme() ||
                 isBlackview() ||
-                isSony());
+                isSony() ||
+                isUiThread());
     }
 
     static boolean isAggressivelyKilling() {
@@ -1677,7 +1665,7 @@ public class Helper {
         return layout.getOffsetForHorizontal(line, x);
     }
 
-    static String getRequestKey(Fragment fragment) {
+    static String getWho(Fragment fragment) {
         String who;
         try {
             Class<?> cls = fragment.getClass();
@@ -1685,16 +1673,18 @@ public class Helper {
                 cls = cls.getSuperclass();
             Field f = cls.getDeclaredField("mWho");
             f.setAccessible(true);
-            who = (String) f.get(fragment);
+            return (String) f.get(fragment);
         } catch (Throwable ex) {
             Log.w(ex);
             String we = fragment.toString();
             int pa = we.indexOf('(');
             int sp = we.indexOf(' ', pa);
-            who = we.substring(pa + 1, sp);
+            return we.substring(pa + 1, sp);
         }
+    }
 
-        return fragment.getClass().getName() + ":result:" + who;
+    static String getRequestKey(Fragment fragment) {
+        return fragment.getClass().getName() + ":result:" + getWho(fragment);
     }
 
     static void clearViews(Object instance) {
@@ -1755,6 +1745,14 @@ public class Helper {
         } catch (Throwable ex) {
             Log.e(ex);
         }
+    }
+
+    static Bundle getBackgroundActivityOptions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+            return null;
+        ActivityOptions options = ActivityOptions.makeBasic();
+        options.setPendingIntentBackgroundActivityLaunchAllowed(true);
+        return options.toBundle();
     }
 
     // Graphics
@@ -2273,6 +2271,8 @@ public class Helper {
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 try {
                     int order = 1000;
+                    menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_contact, order++,
+                            view.getContext().getString(R.string.title_insert_contact));
                     menu.add(Menu.CATEGORY_SECONDARY, R.string.title_select_block, order++,
                             view.getContext().getString(R.string.title_select_block));
                 } catch (Throwable ex) {
@@ -2284,6 +2284,15 @@ public class Helper {
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 try {
+                    String selected = getSelected();
+                    boolean email = (selected != null && Helper.EMAIL_ADDRESS.matcher(selected).matches());
+                    menu.findItem(R.string.title_insert_contact).setVisible(email);
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                    menu.findItem(R.string.title_insert_contact).setVisible(false);
+                }
+
+                try {
                     Pair<Integer, Integer> block = StyleHelper.getParagraph(view, true);
                     boolean ablock = (block != null &&
                             block.first == view.getSelectionStart() &&
@@ -2291,6 +2300,7 @@ public class Helper {
                     menu.findItem(R.string.title_select_block).setVisible(!ablock);
                 } catch (Throwable ex) {
                     Log.e(ex);
+                    menu.findItem(R.string.title_select_block).setVisible(false);
                 }
 
                 for (int i = 0; i < menu.size(); i++) {
@@ -2356,7 +2366,18 @@ public class Helper {
                 if (item.getGroupId() == Menu.CATEGORY_SECONDARY)
                     try {
                         int id = item.getItemId();
-                        if (id == R.string.title_select_block) {
+                        if (id == R.string.title_insert_contact) {
+                            String email = getSelected();
+                            String name = UriHelper.getEmailUser(email);
+
+                            Intent insert = new Intent();
+                            insert.putExtra(ContactsContract.Intents.Insert.EMAIL, email);
+                            if (!TextUtils.isEmpty(name))
+                                insert.putExtra(ContactsContract.Intents.Insert.NAME, name);
+                            insert.setAction(Intent.ACTION_INSERT);
+                            insert.setType(ContactsContract.Contacts.CONTENT_TYPE);
+                            view.getContext().startActivity(insert);
+                        } else if (id == R.string.title_select_block) {
                             Pair<Integer, Integer> block = StyleHelper.getParagraph(view, true);
                             if (block != null)
                                 android.text.Selection.setSelection((Spannable) view.getText(), block.first, block.second);
@@ -2370,6 +2391,12 @@ public class Helper {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
+            }
+
+            String getSelected() {
+                int start = view.getSelectionStart();
+                int end = view.getSelectionEnd();
+                return (start >= 0 && start < end ? view.getText().subSequence(start, end).toString() : null);
             }
         };
     }

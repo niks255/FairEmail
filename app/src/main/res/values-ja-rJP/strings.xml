@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">FairEmail 検索</string>
+    <string name="app_send_self">自分に送信</string>
     <string name="app_changelog">更新履歴</string>
     <string name="app_welcome">FairEmail はプライバシーとセキュリティを重視するオープンソースのメールアプリです。そのため、今までのメールアプリとは異なる動作をする場合があります。</string>
     <string name="app_limitations">例えば、メッセージから安全でない要素を削除し、読みやすくするために再フォーマットしたり、安全のためにリンクを開く前に確認画面を表示したりします。どちらも不要であれば無効にできます。</string>
@@ -199,6 +200,8 @@
     <string name="title_setup_permissions_notify_explanation">新着メッセージ通知をステータスバーに表示するには通知の権限が必要です</string>
     <string name="title_setup_permission_why">必要とする権限とその理由は何ですか？</string>
     <string name="title_setup_permission_import_contacts">連絡先をインポートするにはどうすればいいですか？</string>
+    <string name="title_setup_import_graph_contact">Outlook の連絡先</string>
+    <string name="title_setup_import_graph_new">新しい連絡先: %1$s</string>
     <string name="title_setup_doze">バッテリー最適化を無効にする</string>
     <string name="title_setup_doze_remark">バックグラウンドで確実にメールを送受信するには</string>
     <string name="title_setup_doze_explanation">バックグラウンドでのメッセージの送受信を確実に行うには、アプリのバッテリー最適化を無効にする必要があります</string>
@@ -209,7 +212,7 @@
     <string name="title_setup_doze_battery">バッテリー使用量が多いですか？</string>
     <string name="title_setup_doze_stopped">同期が停止しましたか？</string>
     <string name="title_setup_doze_device">このデバイスでは必要と思われます</string>
-    <string name="title_setup_alarm_12">このアプリは正しく動作しません</string>
+    <string name="title_setup_alarm_12">アプリは正しく動作しません</string>
     <string name="title_setup_inexact">アラームとリマインダーが無効です</string>
     <string name="title_setup_background">バックグラウンドでの制限が有効です</string>
     <string name="title_setup_data">データセーバーが有効です</string>
@@ -291,6 +294,7 @@
     <string name="title_setup_reset_questions">確認表示をリセット</string>
     <string name="title_setup_reset_general">よくある質問</string>
     <string name="title_setup_reset_links">リンクを確認</string>
+    <string name="title_setup_reset_files">ファイルを開く</string>
     <string name="title_setup_reset_images">画像の表示</string>
     <string name="title_setup_reset_full">元のメッセージの表示</string>
     <string name="title_check_gmail_oauth">あなたの Gmail アカウントは 2022 年 5 月 30 日以降も引き続き利用できます</string>
@@ -521,7 +525,7 @@
     <string name="title_advanced_button_extra">メッセージの下部に追加ボタンを表示</string>
     <string name="title_advanced_seekbar">ドットで相対的な会話の位置を表示</string>
     <string name="title_advanced_actionbar">会話アクションバーを表示</string>
-    <string name="title_advanced_actionbar_swap">ゴミ箱とアーカイブのボタンを入れ替え</string>
+    <string name="title_advanced_actionbar_swap">ごみ箱とアーカイブのボタンを入れ替え</string>
     <string name="title_advanced_actionbar_color">会話アクションバーの背景色としてアカウントの色を使用</string>
     <string name="title_advanced_category_header">アカウントのカテゴリーでグループ化</string>
     <string name="title_advanced_navbar_colorize">Android ナビゲーションバーに色を付ける</string>
@@ -567,7 +571,7 @@
     <string name="title_advanced_autoread">移動するメッセージを自動で既読にする</string>
     <string name="title_advanced_autounstar">移動するメッセージのスターを自動で取り消す</string>
     <string name="title_advanced_reset_importance">移動するメッセージの重要度をリセット</string>
-    <string name="title_advanced_thread_sent_trash">会話をゴミ箱に移動するとき、送信済みメッセージもゴミ箱に移動</string>
+    <string name="title_advanced_thread_sent_trash">会話をごみ箱に移動するとき、送信済みメッセージもごみ箱に移動</string>
     <string name="title_advanced_star_snoozed">スヌーズしたメッセージに自動でスターを付ける</string>
     <string name="title_advanced_auto_important">スター付きメッセージを自動で重要にマーク</string>
     <string name="title_advanced_cancel_snooze">メッセージを移動するときスヌーズをキャンセル</string>
@@ -595,7 +599,7 @@
     <string name="title_advanced_notify_preview_all">全文をプレビュー</string>
     <string name="title_advanced_notify_preview_only">プレビューテキストが準備できた通知のみ表示</string>
     <string name="title_advanced_notify_actions">通知アクション</string>
-    <string name="title_advanced_notify_action_trash">ゴミ箱</string>
+    <string name="title_advanced_notify_action_trash">ごみ箱</string>
     <string name="title_advanced_notify_action_delete">削除</string>
     <string name="title_advanced_notify_action_junk">迷惑メール</string>
     <string name="title_advanced_notify_action_archive">アーカイブ</string>
@@ -617,14 +621,15 @@
     <string name="title_advanced_notify_screen_on">画面を一時オンにして新着メッセージ通知を表示</string>
     <string name="title_advanced_notifications_background">メッセージの同期にバックグラウンドサービスを使用</string>
     <string name="title_advanced_notifications_background_hint">バックグラウンドサービスは Android によって停止される可能性がありますが、ステータスバーに通知が表示されなくなります</string>
-    <string name="title_advanced_confirm_links">リンクを開く前に確認</string>
+    <string name="title_advanced_confirm_links">リンクを開く前に確認を表示</string>
+    <string name="title_advanced_confirm_files">ファイルを開く前に確認を表示</string>
     <string name="title_advanced_sanitize_links">デフォルトでトラッキングパラメーターを削除</string>
     <string name="title_advanced_sanitize_links_hint">リンクを確認する場合のみ</string>
     <string name="title_advanced_check_links_dbl">不審なリンクがないかドメインブロックリストを確認</string>
     <string name="title_advanced_confirm_images">デフォルトで画像を表示しない</string>
-    <string name="title_advanced_ask_images">画像を表示する前に確認</string>
+    <string name="title_advanced_ask_images">画像を表示する前に確認を表示</string>
     <string name="title_advanced_confirm_html">デフォルトで再フォーマットされたメッセージを表示</string>
-    <string name="title_advanced_ask_html">元のメッセージを表示する前に確認</string>
+    <string name="title_advanced_ask_html">元のメッセージを表示する前に確認を表示</string>
     <string name="title_advanced_tracking">トラッキング画像の識別と無効化を試みる</string>
     <string name="title_advanced_hide_timezone">送信するメッセージにタイムゾーン情報を追加しない</string>
     <string name="title_advanced_client_id">アプリ名とバージョンをメールサーバーに送信</string>
@@ -669,6 +674,7 @@
         鍵と証明書は通常、［詳細設定］>［暗号化と認証情報］にあります。
     </string>
     <string name="title_advanced_power_menu">Android の電源メニューにアクションを追加</string>
+    <string name="title_advanced_send_self">Android の共有メニューに「自分に送信」を追加</string>
     <string name="title_advanced_external_search">他のアプリにメッセージの検索を許可</string>
     <string name="title_advanced_sort_answers">返信テンプレートを使用頻度で並べ替え</string>
     <string name="title_advanced_shortcuts">頻繁に使用する連絡先を Android 共有メニューに表示</string>
@@ -817,6 +823,8 @@
     <string name="title_advanced_cleanup_hint">すべての一時ファイルが削除されます</string>
     <string name="title_advanced_never_favorite">お気に入りに追加しない</string>
     <string name="title_advanced_edit_name">名前を編集</string>
+    <string name="title_advanced_create_alias">エイリアスを作成</string>
+    <string name="title_advanced_create_alias_remark">多くの場合、メールプロバイダーのウェブサイトでエイリアスを作成してからでないと利用できません。</string>
     <string name="title_create_folder">フォルダーを作成</string>
     <string name="title_create_folder_name">フォルダー名</string>
     <string name="title_create_folder_parent">親フォルダー</string>
@@ -976,7 +984,7 @@
     <string name="title_delete_browsed">閲覧/検索したメッセージを削除</string>
     <string name="title_expunge">完全削除</string>
     <string name="title_expunge_remark">削除マークのついたすべてのメッセージを完全に削除します</string>
-    <string name="title_empty_trash">ゴミ箱を空にする</string>
+    <string name="title_empty_trash">ごみ箱を空にする</string>
     <string name="title_empty_spam">迷惑メールを空にする</string>
     <string name="title_edit_properties">プロパティを編集</string>
     <string name="title_edit_rules">ルールを編集</string>
@@ -993,9 +1001,9 @@
     <string name="title_import_contacts">vCard をインポート</string>
     <string name="title_export_contacts">vCard をエクスポート</string>
     <string name="title_create_sub_folder">サブフォルダーを作成</string>
-    <string name="title_empty_trash_ask">すべてのゴミ箱のメッセージを完全に削除しますか？</string>
+    <string name="title_empty_trash_ask">すべてのごみ箱のメッセージを完全に削除しますか？</string>
     <string name="title_empty_spam_ask">すべての迷惑メールを完全に削除しますか？</string>
-    <string name="title_empty_trash_all_ask">すべてのアカウントのゴミ箱のメッセージを完全に削除しますか？</string>
+    <string name="title_empty_trash_all_ask">すべてのアカウントのごみ箱のメッセージを完全に削除しますか？</string>
     <string name="title_empty_spam_all_ask">すべてのアカウントの迷惑メールを完全に削除しますか？</string>
     <string name="title_empty_all">デバイスとサーバーの両方からのすべてのメッセージを削除します</string>
     <string name="title_delete_operation_title">削除操作</string>
@@ -1043,7 +1051,7 @@
     <string name="title_keep_all">すべてのメッセージを保持</string>
     <string name="title_poll_system">システムフォルダーの新着メッセージを定期的に確認するよう設定</string>
     <string name="title_poll_user">ユーザーフォルダーの新着メッセージを定期的に確認するよう設定</string>
-    <string name="title_auto_trash">古いメッセージを自動でゴミ箱へ移動</string>
+    <string name="title_auto_trash">古いメッセージを自動でごみ箱へ移動</string>
     <string name="title_auto_delete">古いメッセージを自動で完全削除</string>
     <string name="title_auto_delete_hint">古いメッセージとはデバイスに保持されなくなったメッセージのことです</string>
     <string name="title_auto_delete_archive_hint">アーカイブフォルダーからの削除は、メールサーバーによって許可されていない場合があります</string>
@@ -1060,7 +1068,7 @@
     <string name="title_folder_outbox">送信トレイ</string>
     <string name="title_folder_all">アーカイブ</string>
     <string name="title_folder_drafts">下書き</string>
-    <string name="title_folder_trash">ゴミ箱</string>
+    <string name="title_folder_trash">ごみ箱</string>
     <string name="title_folder_junk">迷惑メール</string>
     <string name="title_folder_sent">送信済み</string>
     <string name="title_folder_system">システム</string>
@@ -1073,7 +1081,7 @@
     <string name="title_no_messages">メッセージがありません</string>
     <string name="title_filters_active">1 つ以上のフィルターがアクティブです</string>
     <string name="title_duplicate_in">%1$s でメッセージが重複しています</string>
-    <string name="title_trashed_from">メッセージを %1$s からゴミ箱に移動しました</string>
+    <string name="title_trashed_from">メッセージを %1$s からごみ箱に移動しました</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -1139,7 +1147,7 @@
     <string name="title_quick_actions_high">重要度: 高</string>
     <string name="title_quick_actions_snooze">スヌーズする</string>
     <string name="title_quick_actions_clear">操作後に選択を解除</string>
-    <string name="title_trash">ゴミ箱</string>
+    <string name="title_trash">ごみ箱</string>
     <string name="title_copy">コピー&#8230;</string>
     <string name="title_copy_to">&#8230;にコピー</string>
     <string name="title_subscribe">購読</string>
@@ -1221,6 +1229,7 @@
     <string name="title_ask_show_image_hint">トラッキング画像として識別された画像は表示されません</string>
     <string name="title_ask_show_amp">AMP メッセージを表示しますか？</string>
     <string name="title_ask_show_amp_hint">AMP メッセージはインターネットを利用して動的に表示するため、必然的にトラッキングされます</string>
+    <string name="title_ask_view_file">ファイル %1$s を開きますか？</string>
     <string name="title_ask_delete_local">ローカルメッセージを削除しますか？ メッセージはリモートサーバーに残ります</string>
     <string name="title_ask_help">FairEmail の改善にご協力ください</string>
     <string name="title_ask_reporting">エラーレポートを送信しますか？</string>
@@ -1393,6 +1402,7 @@
     <string name="title_verify">検証</string>
     <string name="title_encrypt">暗号化</string>
     <string name="title_decrypt">復号</string>
+    <string name="title_reset_message_questions">リンクの確認をリセット</string>
     <string name="title_resync">再同期</string>
     <string name="title_charset">エンコーディング</string>
     <string name="title_charset_auto">自動</string>
@@ -1449,7 +1459,7 @@
     <string name="title_search_with_encrypted">暗号化されたメッセージ (デバイス上のみ検索)</string>
     <string name="title_search_with_attachments">添付ファイルのあるメッセージ (デバイス上のみ検索)</string>
     <string name="title_search_with_size">メッセージのサイズが次より大きい</string>
-    <string name="title_search_in_trash">ゴミ箱を検索</string>
+    <string name="title_search_in_trash">ごみ箱を検索</string>
     <string name="title_search_in_junk">迷惑メールを検索</string>
     <string name="title_search_with_range">日付の範囲</string>
     <string name="title_search_with_before">以前</string>
@@ -1465,6 +1475,7 @@
     <string name="title_search_flag_size">サイズ &gt; %1$s</string>
     <string name="title_search_device">デバイス上を検索</string>
     <string name="title_search_server">サーバーを検索</string>
+    <string name="title_search_server_wait">サーバーからの応答を待っています</string>
     <string name="title_search_in">検索場所</string>
     <string name="title_search_sender">差出人を検索</string>
     <string name="title_search_delete">保存した検索条件を削除しますか？</string>
@@ -1494,7 +1505,7 @@
     <string name="title_filter_hidden">非表示のメッセージ</string>
     <string name="title_filter_deleted">削除済み</string>
     <string name="title_filter_duplicates">重複</string>
-    <string name="title_filter_trash">ゴミ箱</string>
+    <string name="title_filter_trash">ごみ箱</string>
     <string name="title_compact">簡易表示</string>
     <string name="title_zoom">テキストサイズ</string>
     <string name="title_padding">余白のサイズ</string>
@@ -1651,7 +1662,7 @@
     <string name="title_legend_drafts">下書き</string>
     <string name="title_legend_sent">送信済み</string>
     <string name="title_legend_archive">アーカイブ</string>
-    <string name="title_legend_trash">ゴミ箱</string>
+    <string name="title_legend_trash">ごみ箱</string>
     <string name="title_legend_junk">迷惑メール</string>
     <string name="title_legend_primary">プライマリー</string>
     <string name="title_legend_subscribed">購読中</string>
@@ -1737,7 +1748,7 @@
     <string name="title_legend_enter">開く</string>
     <string name="title_legend_a">アーカイブ</string>
     <string name="title_legend_c">作成</string>
-    <string name="title_legend_d">ゴミ箱 (削除)</string>
+    <string name="title_legend_d">ごみ箱 (削除)</string>
     <string name="title_legend_m">メニュー (複数選択)</string>
     <string name="title_legend_n">次へ</string>
     <string name="title_legend_p">前へ</string>
@@ -1748,8 +1759,9 @@
     <string name="title_hint_folder_sync">バッテリーとネットワークの使用を抑えるためにデフォルトでは一部のフォルダーとメッセージのみ同期されます</string>
     <string name="title_hint_airplane">機内モードが ON です</string>
     <string name="title_hint_notifications">通知が許可されていません</string>
+    <string name="title_hint_battery_optimizations">まだ電池最適化が有効です</string>
     <string name="title_hint_support">質問や問題がある場合はサポートメニューを使用してヘルプにアクセスしてください</string>
-    <string name="title_hint_message_actions">左にスワイプしてゴミ箱に移動し、右にスワイプしてアーカイブ (利用可能な場合) します。スワイプ操作はアカウント設定で変更できます</string>
+    <string name="title_hint_message_actions">左にスワイプしてごみ箱に移動し、右にスワイプしてアーカイブ (利用可能な場合) します。スワイプ操作はアカウント設定で変更できます</string>
     <string name="title_hint_message_selection">メッセージを長押しして、複数のメッセージを選択します。そのまま上または下にスワイプすると、まとめてメッセージを選択できます</string>
     <string name="title_hint_message_junk">        メールクライアントは、基本的にメールサーバーにあるメッセージをそのまま表示しています。
         メールクライアントではなく、メールサーバーが迷惑メールをフィルターする責任を負っています。
@@ -1876,6 +1888,8 @@
     <string name="title_debug_info">デバッグ情報</string>
     <string name="title_debug_info_remark">(英語) 問題の詳細と発生日時を教えてください:</string>
     <string name="title_crash_info_remark">(英語) アプリがクラッシュしたときに何をしていたかを説明してください:</string>
+    <string name="title_debug_info_issue">問題の説明 (必須・英語で)</string>
+    <string name="title_debug_info_contact">最近、この問題について連絡がありました</string>
     <string name="title_unexpected_info_remark">(英語) エラーが発生したときに何をしていたか説明してください:</string>
     <string name="title_widget_title_count">新着メッセージ数</string>
     <string name="title_widget_title_list">メッセージリスト</string>

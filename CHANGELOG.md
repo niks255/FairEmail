@@ -4,9 +4,55 @@
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
+### [Ubirajara](https://en.wikipedia.org/wiki/Ubirajara_jubatus)
+
+### Next version
+
+* Fixed PGP and S/MIME signed messages in some cases
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2079 - 2023-06-30
+
+* Targeting Android 14
+* Added option to sync all folders (pull down to refresh account/folder list)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2078 - 2023-06-27
+
+* Added notes to message list widget
+* Added create alias dialog (long press identity)
+* Added option for larger count for new message count widget
+* Added deleting attachments (horizontal three-dots menu above the message text)
+* Added translating subject in message editor when it is focussed
+* Inheriting identity color from account color
+* Using selected font for reply header and signature too
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2077 - 2023-06-14
+
+* Fixed all reported bugs
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2076 - 2023-06-13
+
+* Android 14 compatibility
+* Added downloading Outlook contacts (main settings)
+* Added categories for [Disconnect's tracker protection lists](https://github.com/disconnectme/disconnect-tracking-protection) (privacy settings)
+* Updated build tools and libraries
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### [Tratayenia](https://en.wikipedia.org/wiki/Tratayenia)
 
-### 1.2074 - 2023-06-08
+### 1.2075 - 2023-06-08
 
 * Added option to add send-to-self to Android's share menu
 * Added separate filter settings for archive, trash and spam folder

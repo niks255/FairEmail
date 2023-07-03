@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">FairEmail axtarışı</string>
+    <string name="app_send_self">Özünə göndər</string>
     <string name="app_changelog">Dəyişiklik jurnalı</string>
     <string name="app_welcome">FairEmail, gizlilik və təhlükəsizliyə fokuslanmış bir açıq mənbəli e-poçt tətbiqidir. Buna görə də bəzi xüsusiyyətlər, istifadə etdiyinizdən fərqli şəkildə işləyə bilər.</string>
     <string name="app_limitations">Nümunə üçün, güvənli olmayan elementləri çıxartmaq və oxunaqlılığı artırmaq üçün mesajlar ilkin olaraq yenidən formatlanır və keçidlərin açılmasının güvənlik baxımından təsdiqlənməsi lazım olur. İstəsəniz, hər ikisini sıradan çıxarda bilərsiniz.</string>
@@ -212,6 +213,8 @@
     <string name="title_setup_permissions_notify_explanation">Bildiriş icazələri vəziyyət sətrində yeni mesajların bildirişlərini göstərmək üçün tələb olunur</string>
     <string name="title_setup_permission_why">Hansı icazələrə ehtiyac var və nə üçün?</string>
     <string name="title_setup_permission_import_contacts">Kontaktları necə daxilə köçürə bilərəm?</string>
+    <string name="title_setup_import_graph_contact">Outlook kontaktları</string>
+    <string name="title_setup_import_graph_new">Yeni kontaktlar: %1$s</string>
     <string name="title_setup_doze">Batareya optimallaşdırmasını sıradan çıxart</string>
     <string name="title_setup_doze_remark">Arxaplanda güvənli şəkildə e-poçt göndərmək və almaq üçün</string>
     <string name="title_setup_doze_explanation">Arxaplanda mesajların güvənlə göndərilməsi və alınmasını təmin etmək üçün tətbiqin batareya optimallaşdırması sıradan çıxarılmalıdır</string>
@@ -222,7 +225,7 @@
     <string name="title_setup_doze_battery">Yüksək batareya istifadəsi?</string>
     <string name="title_setup_doze_stopped">Sinxronlaşdırma dayandırılsın?</string>
     <string name="title_setup_doze_device">Bu, çox güman ki, bu cihaz üçün tələb olunur</string>
-    <string name="title_setup_alarm_12">Tətbiq işləmir</string>
+    <string name="title_setup_alarm_12">Tətbiq düzgün işləməyəcək</string>
     <string name="title_setup_inexact">Zəngli saatlar və xatırladıcılar sıradan çıxarıldı</string>
     <string name="title_setup_background">Arxaplan məhdudiyyətləri fəaldır</string>
     <string name="title_setup_data">Verilənlərə qənaət fəallaşdırıldı</string>
@@ -556,6 +559,7 @@
     <string name="title_advanced_language_detection">Mesaj mətninin dilini aşkarla</string>
     <string name="title_advanced_photo_picker">Android foto seçicini istifadə et</string>
     <string name="title_advanced_pull_refresh">Təzələmək üçün aşağı çək</string>
+    <string name="title_advanced_pull_all">Bütün qovluqları sinxronlaşdır</string>
     <string name="title_advanced_autoscroll">Yeni mesajları almaq üçün yuxarı sürüşdür</string>
     <string name="title_advanced_double_tap">Mesajı oxundu/oxunmadı kimi işarələmək üçün iki dəfə toxun</string>
     <string name="title_advanced_swipenav">Sonrakı/əvvəlki danışığa getmək üçün sola/sağa sürüşdürün</string>
@@ -684,6 +688,7 @@
         Açar və sertifikatlar adətən Qabaqcıl - Şifrələmə və kimlik məlumatları altında tapıla bilər.
     </string>
     <string name="title_advanced_power_menu">Android enerji menyusuna əməliyyat əlavə et</string>
+    <string name="title_advanced_send_self">Android-in paylaşma menyusuna \"özünə göndər\"i əlavə edin</string>
     <string name="title_advanced_external_search">Digər tətbiqlərin mesajlarda axtarış etməsinə icazə ver</string>
     <string name="title_advanced_sort_answers">Cavab şablonlarını istifadə tezliyinə görə sırala</string>
     <string name="title_advanced_shortcuts">Tez-tez istifadə olunan əlaqələri Android paylaşma menyusunda göstər</string>
@@ -746,6 +751,7 @@
     <string name="title_advanced_lookup_mx_hint">Bu, DNS MX qeydlərinin mövcudluğunu yoxlayacaq</string>
     <string name="title_advanced_sync_delay_hint">Bu, mesajların sinxronlaşdırılmasını yavaşlandırır</string>
     <string name="title_advanced_folder_nav_hint">Bu, hər zaman bir mesaj siyahısından əlaqəli hesabın qovluq siyahısına qayıdacaq</string>
+    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">Qovluqlar və ya hesablar siyahısını aşağı çəkəndə</string>
     <string name="title_advanced_suggest_names_hint">Əgər sıradan çıxarılsa, əlaqələr seçiləndə yalnız e-poçt ünvanları istifadə ediləcək</string>
     <string name="title_advanced_suggest_local_hint">Android tərəfindən təmin edilən əlaqələrə əlavə olaraq. Əlaqə verilənləri, yeni göndərilən və alınan mesajlar üçün yalnız fəal olanda saxlanılacaq.</string>
     <string name="title_advanced_auto_identity_hint">Bu, yeni mesajlar üçün bir alıcı seçərkən istifadə edilən son kimliyi seçəcək</string>
@@ -832,6 +838,8 @@
     <string name="title_advanced_cleanup_hint">Bu, bütün müvəqqəti faylları siləcək</string>
     <string name="title_advanced_never_favorite">Heç vaxt sevimlilər deyil</string>
     <string name="title_advanced_edit_name">Ada düzəliş et</string>
+    <string name="title_advanced_create_alias">Ləqəb yarat</string>
+    <string name="title_advanced_create_alias_remark">Bəzi hallarda, ləqəb ünvanı, poçt provayderinin vebsaytı vasitəsilə təsdiqlənməlidir</string>
     <string name="title_create_folder">Qovluq yarat</string>
     <string name="title_create_folder_name">Qovluq adı</string>
     <string name="title_create_folder_parent">Ana qovluq</string>
@@ -1174,6 +1182,10 @@
     <string name="title_move_to_account">%1$s &#8230; köçürt</string>
     <string name="title_report_spam">Spam hesab et</string>
     <string name="title_delete_permanently">Birdəfəlik sil</string>
+    <string name="title_delete_attachments">Qoşmaları sil</string>
+    <string name="title_delete_attachments_remark">        Qoşmaları silmək üçün, yeni bir mesaj əlavə edilməli və köhnə mesaj silinməlidir.
+        Bu uğursuz ola biləcəyi üçün köhnə mesaj tullantı qutusuna daşınacaq.
+    </string>
     <string name="title_snooze">Ertələ &#8230;</string>
     <string name="title_archive">Arxivlə</string>
     <string name="title_reply">Cavabla</string>
@@ -1409,6 +1421,7 @@
     <string name="title_verify">Təsdiq</string>
     <string name="title_encrypt">Şifrələ</string>
     <string name="title_decrypt">Şifrəni aç</string>
+    <string name="title_reset_message_questions">Keçid suallarını sıfırla</string>
     <string name="title_resync">Yenidən sinxronlaşdır</string>
     <string name="title_charset">Kodlaşdırma</string>
     <string name="title_charset_auto">Avtomatik</string>
@@ -1481,6 +1494,7 @@
     <string name="title_search_flag_size">həcm &gt; %1$s</string>
     <string name="title_search_device">Cihazda axtar</string>
     <string name="title_search_server">Serverdə axtar</string>
+    <string name="title_search_server_wait">Server gözlənilir</string>
     <string name="title_search_in">Axtar</string>
     <string name="title_search_sender">Göndərəni axtar</string>
     <string name="title_search_delete">Saxlanılmış axtarış silinsin?</string>
@@ -1764,6 +1778,7 @@
     <string name="title_hint_folder_sync">Batareya və şəbəkə istifadəsini məhdudlaşdırmaq üçün bütün qovluqlar və bütün mesajlar ilkin olaraq sinxronlaşdırılmayacaq</string>
     <string name="title_hint_airplane">Təyyarə rejimi açıqdır</string>
     <string name="title_hint_notifications">Bildiriş icazəsi yoxdur</string>
+    <string name="title_hint_battery_optimizations">Batareya optimallaşdırma hələ də fəaldır</string>
     <string name="title_hint_support">Sualınız və ya probleminiz varsa, zəhmət olmasa kömək almaq üçün dəstək menyusundan faydalanın</string>
     <string name="title_hint_message_actions">Tullantıya atmaq üçün sola sürüşdürün; (əgər varsa) arxivləmək üçün sağa; Sürüşdürmə əməliyyatları hesab tənzimləmələrindən konfiqurasiya edilə bilər</string>
     <string name="title_hint_message_selection">Bir neçə mesajı seçməyə başlamaq üçün bir mesaja uzun basın; daha çox mesaj seçmək üçün basıb yuxarı və ya aşağı sürüşdürün</string>
@@ -1892,6 +1907,8 @@
     <string name="title_debug_info">Sazlama məlumatı</string>
     <string name="title_debug_info_remark">Zəhmət olmasa probleminizi təsvir edin və problemin vaxtını göstərin:</string>
     <string name="title_crash_info_remark">Zəhmət olmasa tətbiq çökərkən tətbiqdə nə etdiyinizi təsvir edin:</string>
+    <string name="title_debug_info_issue">Problem açıqlaması (tələb olunur)</string>
+    <string name="title_debug_info_contact">Təzəlikcə bu problemlə bağlı əlaqə saxladıq</string>
     <string name="title_unexpected_info_remark">Zəhmət olmasa xəta alanda nə etdiyinizi izah edin:</string>
     <string name="title_widget_title_count">Yeni mesaj sayı</string>
     <string name="title_widget_title_list">Mesaj siyahısı</string>
@@ -1913,6 +1930,7 @@
     <string name="title_widget_count_top">Oxunmamış sayını üstdə göstər</string>
     <string name="title_widget_subject_lines">Mövzu sətrinin maksimum sayı</string>
     <string name="title_widget_avatars">Əlaqə avatarlarını göstər</string>
+    <string name="title_widget_account_name">Hesab adını göstər</string>
     <string name="title_widget_refresh">Mesajları təzələ düyməsini göstər</string>
     <string name="title_widget_compose">Yeni mesaj yarat düyməsini göstər</string>
     <string name="title_widget_background">Arxaplan rəngi</string>

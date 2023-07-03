@@ -664,8 +664,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             DynamicDrawableSpan[] ddss = buffer.getSpans(off, off, DynamicDrawableSpan.class);
                             if (ddss.length > 0) {
-                                int s = buffer.getSpanStart(ddss[0]);
-                                properties.setValue("quotes", message.id, buffer.charAt(s) != '0');
+                                int f = buffer.getSpanFlags(ddss[0]);
+                                properties.setValue("quotes", message.id, (f & Spanned.SPAN_USER) == 0);
                                 properties.setHeight(message.id, null);
                                 bindBody(message, false);
                                 return true;
@@ -3195,7 +3195,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 continue;
 
                             if (show_quotes) {
-                                ssb.insert(s - 1, "\n0");
+                                ssb.insert(s - 1, "\n ");
                                 ssb.setSpan(
                                         new DynamicDrawableSpan() {
                                             @Override
@@ -3203,12 +3203,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                                 return d;
                                             }
                                         },
-                                        s, s + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                        s, s + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE | Spanned.SPAN_USER);
                             } else {
                                 for (Object span : ssb.getSpans(s, e, Object.class))
                                     ssb.removeSpan(span);
                                 ssb.delete(s, e);
-                                ssb.insert(s - 1, "\n1");
+                                ssb.insert(s - 1, "\n ");
                                 ssb.setSpan(
                                         new DynamicDrawableSpan() {
                                             @Override
@@ -5132,11 +5132,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onInsertContact(String name, String email) {
-            if (TextUtils.isEmpty(name)) {
-                int at = email.indexOf('@');
-                if (at > 0)
-                    name = email.substring(0, at);
-            }
+            if (TextUtils.isEmpty(name))
+                name = UriHelper.getEmailUser(email);
 
             // https://developer.android.com/training/contacts-provider/modify-data
             Intent insert = new Intent();
@@ -5780,6 +5777,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 properties.move(message.id, EntityFolder.TRASH);
         }
 
+        private void onActionDeleteAttachments(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+
+            FragmentDialogDeleteAttachments fragment = new FragmentDialogDeleteAttachments();
+            fragment.setArguments(args);
+            fragment.show(parentFragment.getParentFragmentManager(), "attachments:delete");
+        }
+
         private void onActionDelete(TupleMessageEx message) {
             boolean leaveDeleted =
                     (message.accountProtocol == EntityAccount.TYPE_POP &&
@@ -5888,6 +5894,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     .setEnabled(message.uid != null && !message.folderReadOnly)
                     .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
 
+            popupMenu.getMenu().findItem(R.id.menu_delete_attachments)
+                    .setEnabled(message.uid != null && !message.folderReadOnly)
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP && !Helper.isPlayStoreInstall());
+
             popupMenu.getMenu().findItem(R.id.menu_delete)
                     .setEnabled(message.uid == null || !message.folderReadOnly)
                     .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
@@ -5983,6 +5993,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return true;
                     } else if (itemId == R.id.menu_copy_to) {
                         onActionMove(message, true);
+                        return true;
+                    } else if (itemId == R.id.menu_delete_attachments) {
+                        onActionDeleteAttachments(message);
                         return true;
                     } else if (itemId == R.id.menu_delete) {
                         onActionDelete(message);
@@ -7789,11 +7802,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("uid changed", next.id);
 
-                    // Download body when needed
-                    if (!next.content &&
-                            prev.uid == null && next.uid != null && // once only
-                            properties.getValue("expanded", next.id))
-                        EntityOperation.queue(context, next, EntityOperation.BODY);
+                    if (prev.uid == null && next.uid != null) { // once only
+                        // Mark seen when needed
+                        if (!Boolean.TRUE.equals(next.ui_seen) && next.accountAutoSeen)
+                            EntityOperation.queue(context, next, EntityOperation.SEEN, true);
+
+                        // Download body when needed
+                        if (!next.content && properties.getValue("expanded", next.id))
+                            EntityOperation.queue(context, next, EntityOperation.BODY);
+                    }
                 }
                 if (!Objects.equals(prev.msgid, next.msgid)) {
                     // debug info

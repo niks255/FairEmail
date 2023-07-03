@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">FairEmail zoeken</string>
-    <string name="app_send_self" comment="app_send_self&#10;Title for additional Android share sheet target. This needs to be short!">Stuur naar jezelf</string>
+    <string name="app_send_self">Stuur naar jezelf</string>
     <string name="app_changelog">Wijzigingsgeschiedenis</string>
     <string name="app_welcome">FairEmail is een open source e-mail app gericht op privacy en veiligheid. Om deze reden werken sommige functies mogelijk anders dan u gewend bent.</string>
     <string name="app_limitations">Berichten worden bijvoorbeeld standaard opnieuw opgemaakt om onveilige elementen te verwijderen en de leesbaarheid te verbeteren, en het openen van links moet voor de veiligheid worden bevestigd. Beide kunnen desgewenst uitgeschakeld worden.</string>
@@ -212,17 +212,19 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_permissions_notify_explanation">Machtigingen voor meldingen zijn vereist om meldingen voor nieuwe berichten in de statusbalk te tonen</string>
     <string name="title_setup_permission_why">Welke machtigingen zijn nodig en waarom?</string>
     <string name="title_setup_permission_import_contacts">Hoe kan ik contacten importeren?</string>
+    <string name="title_setup_import_graph_contact">Outlook contacten</string>
+    <string name="title_setup_import_graph_new">Nieuwe contacten: %1$s</string>
     <string name="title_setup_doze">Batterij-optimalisaties uitschakelen</string>
     <string name="title_setup_doze_remark">Voor het betrouwbaar verzenden en ontvangen van e-mail op de achtergrond</string>
-    <string name="title_setup_doze_explanation">Batterij optimalisaties moeten worden uitgeschakeld voor de app om zeker te zijn van het verzenden en ontvangen van berichten op de achtergrond</string>
-    <string name="title_setup_doze_hint">Hoewel dit tegenstrijdig kan klinken, zal het uitschakelen van accuoptimalisaties voor deze app resulteren in minder batterijverbruik</string>
+    <string name="title_setup_doze_explanation">Batterij-optimalisaties moeten worden uitgeschakeld voor de app om zeker te zijn van het verzenden en ontvangen van berichten op de achtergrond</string>
+    <string name="title_setup_doze_hint">Hoewel dit tegenstrijdig kan klinken, zal het uitschakelen van batterij-optimalisaties voor deze app resulteren in minder batterijverbruik</string>
     <string name="title_setup_doze_aggressively">Dit apparaat kan de synchronisatieservice stoppen</string>
-    <string name="title_setup_doze_why">Waarom moeten batterij optimalisaties worden uitgeschakeld?</string>
+    <string name="title_setup_doze_why">Waarom moeten batterij-optimalisaties worden uitgeschakeld?</string>
     <string name="title_setup_doze_instructions">In het volgende Android dialoogvenster wijzig \"Niet geoptimaliseerd\" naar \"Alle apps\", selecteer deze app en selecteer \"Niet optimaliseren\"</string>
     <string name="title_setup_doze_battery">Hoog accugebruik?</string>
     <string name="title_setup_doze_stopped">Sync gestopt?</string>
     <string name="title_setup_doze_device">Dit is waarschijnlijk nodig voor dit apparaat</string>
-    <string name="title_setup_alarm_12">De app zal niet werken</string>
+    <string name="title_setup_alarm_12">De app zal niet goed werken</string>
     <string name="title_setup_inexact">Alarmen &amp; herinneringen zijn uitgeschakeld</string>
     <string name="title_setup_background">Achtergrondbeperkingen zijn ingeschakeld</string>
     <string name="title_setup_data">Gegevensbesparing is ingeschakeld</string>
@@ -555,6 +557,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_language_detection">Detecteer de taal van de berichttekst</string>
     <string name="title_advanced_photo_picker">Gebruik de Android fotokiezer</string>
     <string name="title_advanced_pull_refresh">Omlaag schuiven om te verversen</string>
+    <string name="title_advanced_pull_all">Synchroniseer alle mappen</string>
     <string name="title_advanced_autoscroll">Scroll naar boven bij het ontvangen van nieuwe berichten</string>
     <string name="title_advanced_double_tap">Dubbel tik om bericht gelezen/ongelezen te markeren</string>
     <string name="title_advanced_swipenav">Veeg links/rechts om naar het volgende/vorige gesprek te gaan</string>
@@ -682,7 +685,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_manage_keys_hint">        Dit zal navigeren naar de Android-beveiligingsinstellingen.        Sleutels en certificaten kunnen over het algemeen worden gevonden onder Geavanceerd - Versleuteling en gegevens.
     </string>
     <string name="title_advanced_power_menu">Acties toevoegen aan het Android power menu</string>
-    <string name="title_advanced_send_self" comment="title_advanced_send_self&#10;Title for miscellaneous option to enable an additional Android share sheet target">Voeg \'Stuur naar jezelf\' toe aan het Android-deelmenu</string>
+    <string name="title_advanced_send_self">Voeg \'Stuur naar jezelf\' toe aan het Android-deelmenu</string>
     <string name="title_advanced_external_search">Andere apps mogen zoeken in berichten</string>
     <string name="title_advanced_sort_answers">Sorteer antwoordsjablonen op gebruiksfrequentie</string>
     <string name="title_advanced_shortcuts">Toon veelgebruikte contacten in het Android-deelmenu</string>
@@ -746,6 +749,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_lookup_mx_hint">Dit zal controleren of DNS MX records bestaan</string>
     <string name="title_advanced_sync_delay_hint">Dit zal de synchronisatie van berichten vertragen</string>
     <string name="title_advanced_folder_nav_hint">Dit keert altijd terug naar de mappenlijst van het gerelateerde account vanuit een berichtenlijst</string>
+    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">Bij het naar beneden trekken van de mappen of accountenlijst</string>
     <string name="title_advanced_suggest_names_hint">Indien uitgeschakeld, worden alleen e-mailadressen gebruikt bij het selecteren van contacten</string>
     <string name="title_advanced_suggest_local_hint">Naast contacten die door Android worden geleverd. Contactgegevens worden alleen opgeslagen voor nieuw verzonden of ontvangen berichten wanneer ingeschakeld.</string>
     <string name="title_advanced_auto_identity_hint">Dit zal de laatst gebruikte identiteit selecteren bij het selecteren van een ontvanger voor nieuwe berichten</string>
@@ -832,6 +836,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_cleanup_hint">Dit zal alle tijdelijke bestanden verwijderen</string>
     <string name="title_advanced_never_favorite">Nooit favoriet</string>
     <string name="title_advanced_edit_name">Naam wijzigen</string>
+    <string name="title_advanced_create_alias">Maak alias</string>
+    <string name="title_advanced_create_alias_remark">In veel gevallen moet een alias adres eerst worden geverifieerd via de website van de mailprovider</string>
     <string name="title_create_folder">Maak map</string>
     <string name="title_create_folder_name">Mapnaam</string>
     <string name="title_create_folder_parent">Bovenliggende map</string>
@@ -1172,6 +1178,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_move_to_account">Verplaats naar %1$s &#8230;</string>
     <string name="title_report_spam">Behandel als spam</string>
     <string name="title_delete_permanently">Definitief verwijderen</string>
+    <string name="title_delete_attachments">Verwijder bijlagen</string>
+    <string name="title_delete_attachments_remark">Om bijlagen te verwijderen, moet een nieuw bericht worden toegevoegd en moet het oude bericht worden verwijderd. Omdat dit kan mislukken, wordt het oude bericht verplaatst naar de prullenbak.</string>
     <string name="title_snooze">Sluimeren &#8230;</string>
     <string name="title_archive">Archiveren</string>
     <string name="title_reply">Beantwoorden</string>
@@ -1476,6 +1484,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_search_flag_size">grootte &gt; %1$s</string>
     <string name="title_search_device">Zoeken op apparaat</string>
     <string name="title_search_server">Zoek op server</string>
+    <string name="title_search_server_wait">Wachten op server</string>
     <string name="title_search_in">Zoeken in</string>
     <string name="title_search_sender">Zoek naar afzender</string>
     <string name="title_search_delete">Opgeslagen zoekopdracht verwijderen?</string>
@@ -1758,6 +1767,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_hint_folder_sync">Om het gebruik van de batterij en het netwerk te beperken, worden niet alle mappen en niet alle berichten standaard gesynchroniseerd</string>
     <string name="title_hint_airplane">Vliegtuigmodus is ingeschakeld</string>
     <string name="title_hint_notifications">Geen meldingsrechten</string>
+    <string name="title_hint_battery_optimizations">Batterij-optimalisaties nog steeds ingeschakeld</string>
     <string name="title_hint_support">Als u een vraag of een probleem heeft, gebruik dan het menu ondersteuning om hulp te krijgen</string>
     <string name="title_hint_message_actions">Veeg naar links om weg te gooien; Veeg naar rechts om te archiveren (indien beschikbaar); De veegacties kunnen worden geconfigureerd in de accountinstellingen</string>
     <string name="title_hint_message_selection">Druk lang op een bericht om meerdere berichten te selecteren; Hou vast en veeg omhoog of omlaag om meer berichten te selecteren</string>
@@ -1884,6 +1894,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_debug_info">Foutopsporing</string>
     <string name="title_debug_info_remark">Beschrijf alstublieft het probleem en de tijd van het probleem:</string>
     <string name="title_crash_info_remark">Beschrijf alstublieft wat u aan het doen was toen de app crashte:</string>
+    <string name="title_debug_info_issue">Probleembeschrijving (vereist)</string>
+    <string name="title_debug_info_contact">Onlangs hadden we contact over dit probleem</string>
     <string name="title_unexpected_info_remark">Beschrijf alstublieft wat u aan het doen was toen de foutmelding kwam:</string>
     <string name="title_widget_title_count">Aantal nieuwe berichten</string>
     <string name="title_widget_title_list">Berichtenlijst</string>
@@ -1905,6 +1917,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_widget_count_top">Toon aantal ongelezen bovenin</string>
     <string name="title_widget_subject_lines">Maximaal aantal onderwerpregels</string>
     <string name="title_widget_avatars">Toon avatars van contacten</string>
+    <string name="title_widget_account_name">Toon de accountnaam</string>
     <string name="title_widget_refresh">Toon knop voor het verversen van berichten</string>
     <string name="title_widget_compose">Toon knop voor het opstellen van een nieuw bericht</string>
     <string name="title_widget_background">Achtergrondkleur</string>

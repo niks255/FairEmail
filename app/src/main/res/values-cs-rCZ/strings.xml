@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">FairEmail vyhledávání</string>
-    <string name="app_send_self" comment="app_send_self&#10;Title for additional Android share sheet target. This needs to be short!">Poslat sobě</string>
+    <string name="app_send_self">Poslat sobě</string>
     <string name="app_changelog">Přehled změn</string>
     <string name="app_welcome">FairEmail je e-mailový klient s otevřeným zdrojovým kódem zaměřený na soukromí a bezpečnost. Z tohoto důvodu se některé funkce mohou chovat odlišně než jste zvyklí.</string>
     <string name="app_limitations">Například, zprávy jsou ve výchozím nastavení přeformátovány, aby byly odstraněny nezabezpečené prvky a zlepšila se čitelnost, a otevírání odkazů je pro bezpečnost potřeba potvrdit. Oboje lze v případě potřeby vypnout.</string>
@@ -240,6 +240,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_setup_permissions_notify_explanation">Pro zobrazení upozornění na nové zprávy ve stavovém řádku jsou vyžadována oprávnění</string>
     <string name="title_setup_permission_why">Jaká oprávnění jsou potřebná a proč?</string>
     <string name="title_setup_permission_import_contacts">Jak mohu importovat kontakty?</string>
+    <string name="title_setup_import_graph_contact">Outlook kontakty</string>
+    <string name="title_setup_import_graph_new">Nové kontakty: %1$s</string>
     <string name="title_setup_doze">Zakázat optimalizace výdrže baterie</string>
     <string name="title_setup_doze_remark">Chcete-li poslat a přijímat e-mail spolehlivě na pozadí</string>
     <string name="title_setup_doze_explanation">Optimalizace baterie by měly být pro aplikaci zakázány, aby bylo zajištěno spolehlivé odesílání a přijímání zpráv na pozadí</string>
@@ -250,7 +252,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_setup_doze_battery">Rychlé vybíjení baterie?</string>
     <string name="title_setup_doze_stopped">Synchronizace se zastavila?</string>
     <string name="title_setup_doze_device">Pravděpodobně vyžadováno pro toto zařízení</string>
-    <string name="title_setup_alarm_12">Aplikace nebude fungovat</string>
+    <string name="title_setup_alarm_12">Aplikace nebude fungovat správně</string>
     <string name="title_setup_inexact">Budíky &amp; připomenutí jsou zakázány</string>
     <string name="title_setup_background">Omezení na pozadí jsou povolena</string>
     <string name="title_setup_data">Spořič dat je zapnutý</string>
@@ -583,6 +585,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_language_detection">Rozpoznat jazyk textu zprávy</string>
     <string name="title_advanced_photo_picker">Použít nástroj výběru fotografií Android</string>
     <string name="title_advanced_pull_refresh">Aktualizovat tažením dolů</string>
+    <string name="title_advanced_pull_all">Synchronizovat všechny složky</string>
     <string name="title_advanced_autoscroll">Posun na začátek při příjmu nových zpráv</string>
     <string name="title_advanced_double_tap">Dvojstisk pro označení zprávy jako přečtené/nepřečtené</string>
     <string name="title_advanced_swipenav">Přejít na další/předešlou konverzaci tažením vlevo/vpravo</string>
@@ -710,7 +713,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_manage_keys_hint">        Otevře nastavení zabezpečení Androidu.        Klíče a certifikáty lze obecně najít pod Pokročilé - Šifrování a pověření.
     </string>
     <string name="title_advanced_power_menu">Přidat akce do menu napájení Androidu</string>
-    <string name="title_advanced_send_self" comment="title_advanced_send_self&#10;Title for miscellaneous option to enable an additional Android share sheet target">Přidat \'Poslat sobě\' do menu sdílení v Androidu</string>
+    <string name="title_advanced_send_self">Přidat \'Poslat sobě\' do menu sdílení v Androidu</string>
     <string name="title_advanced_external_search">Povolit ostatním aplikacím vyhledávat ve zprávách</string>
     <string name="title_advanced_sort_answers">Seřadit šablony odpovědí podle frekvence používání</string>
     <string name="title_advanced_shortcuts">Zobrazit často používané kontakty v nabídce sdílení Androidu</string>
@@ -774,6 +777,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_lookup_mx_hint">Ověří existenci DNS MX záznamů</string>
     <string name="title_advanced_sync_delay_hint">Zpomalí synchronizaci zpráv</string>
     <string name="title_advanced_folder_nav_hint">Toto vás vždy vrátí do seznamu složek příslušného účtu ze seznamu zpráv</string>
+    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">Při stahování seznamu složek nebo účtů</string>
     <string name="title_advanced_suggest_names_hint">Je-li vypnuto, budou při výběru kontaktů použity pouze e-mailové adresy</string>
     <string name="title_advanced_suggest_local_hint">Jako dodatek ke kontaktům poskytnutých Androidem. Je-li povoleno, kontaktní údaje budou ukládány pro nově odeslané či přijaté zprávy.</string>
     <string name="title_advanced_auto_identity_hint">Toto zvolí poslední identitu použitou při výběru příjemce pro nové zprávy</string>
@@ -860,6 +864,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_cleanup_hint">Smaže dočasné soubory</string>
     <string name="title_advanced_never_favorite">Nikdy oblíbený</string>
     <string name="title_advanced_edit_name">Upravit jméno</string>
+    <string name="title_advanced_create_alias">Vytvořit alias</string>
+    <string name="title_advanced_create_alias_remark">V mnoha případech musí být aliasová adresa nejdříve ověřena prostřednictvím webové stránky poskytovatele e-mailu</string>
     <string name="title_create_folder">Vytvořit složku</string>
     <string name="title_create_folder_name">Název složky</string>
     <string name="title_create_folder_parent">Nadřazená složka</string>
@@ -1201,6 +1207,10 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_move_to_account">Přesunout do %1$s &#8230;</string>
     <string name="title_report_spam">Považovat za nevyžádané</string>
     <string name="title_delete_permanently">Trvale smazat</string>
+    <string name="title_delete_attachments">Smazat přílohy</string>
+    <string name="title_delete_attachments_remark">        Pro odstranění příloh, musí být přidána nová zpráva a stará zpráva musí být odstraněna.
+        Vzhledem k tomu, že to může selhat, stará zpráva bude přesunuta do koše.
+    </string>
     <string name="title_snooze">Odložit &#8230;</string>
     <string name="title_archive">Archiv</string>
     <string name="title_reply">Odpovědět</string>
@@ -1507,6 +1517,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_search_flag_size">velikost &gt; %1$s</string>
     <string name="title_search_device">Hledat v zařízení</string>
     <string name="title_search_server">Hledat na serveru</string>
+    <string name="title_search_server_wait">Čekání na server</string>
     <string name="title_search_in">Hledat v</string>
     <string name="title_search_sender">Hledat odesílatele</string>
     <string name="title_search_delete">Smazat uložené vyhledávání?</string>
@@ -1790,6 +1801,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_hint_folder_sync">Pro omezení spotřeby baterie a dat nebudou ve výchozím stavu synchronizovány všechny zprávy ani složky</string>
     <string name="title_hint_airplane">Režim Letadlo je zapnutý</string>
     <string name="title_hint_notifications">Žádná oprávnění pro oznámení</string>
+    <string name="title_hint_battery_optimizations">Optimalizace baterie je stále povolena</string>
     <string name="title_hint_support">Máte-li dotaz nebo problém, použijte prosím menu podpory pro získání pomoci</string>
     <string name="title_hint_message_actions">Tažením doleva hodit do koše; Tažením doprava archivovat (je-li k dispozici); Akce tažením lze změnit v nastavení účtu</string>
     <string name="title_hint_message_selection">Dlouhým podržením zprávy zahájíte násobný výběr zpráv; Držte a táhněte nahoru či dolů pro výběr více zpráv</string>
@@ -1917,6 +1929,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_debug_info">Ladící informace</string>
     <string name="title_debug_info_remark">Prosím, popište problém a uveďte čas, kdy k němu došlo:</string>
     <string name="title_crash_info_remark">Popište prosím, co jste dělali, když došlo k pádu aplikace:</string>
+    <string name="title_debug_info_issue">Popis problému (povinné)</string>
+    <string name="title_debug_info_contact">Nedávno jsme měli kontakt o tomto problému</string>
     <string name="title_unexpected_info_remark">Popište prosím, co jste dělali, když došlo k chybě:</string>
     <string name="title_widget_title_count">Počet nových zpráv</string>
     <string name="title_widget_title_list">Seznam zpráv</string>
@@ -1938,6 +1952,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_widget_count_top">Zobrazit počet nepřečtených zpráv v horní části</string>
     <string name="title_widget_subject_lines">Maximální počet řádků předmětu</string>
     <string name="title_widget_avatars">Zobrazit avatary kontaktů</string>
+    <string name="title_widget_account_name">Zobrazit název účtu</string>
     <string name="title_widget_refresh">Zobrazit tlačítko pro obnovení zpráv</string>
     <string name="title_widget_compose">Zobrazit tlačítko pro vytvoření nové zprávy</string>
     <string name="title_widget_background">Barva pozadí</string>

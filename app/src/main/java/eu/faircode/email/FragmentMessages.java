@@ -250,6 +250,7 @@ public class FragmentMessages extends FragmentBase
     private SwipeRefreshLayoutEx swipeRefresh;
     private TextView tvAirplane;
     private TextView tvNotifications;
+    private TextView tvBatteryOptimizations;
     private TextView tvSupport;
     private ImageButton ibHintSupport;
     private ImageButton ibHintSwipe;
@@ -273,6 +274,7 @@ public class FragmentMessages extends FragmentBase
     private ContentLoadingProgressBar pbWait;
     private Group grpAirplane;
     private Group grpNotifications;
+    private Group grpBatteryOptimizations;
     private Group grpSupport;
     private Group grpHintSupport;
     private Group grpHintSwipe;
@@ -485,7 +487,8 @@ public class FragmentMessages extends FragmentBase
                 args.getBoolean("force_threading"));
         swipenav = prefs.getBoolean("swipenav", true);
         seekbar = prefs.getBoolean("seekbar", false);
-        thread_sent_trash = prefs.getBoolean("thread_sent_trash", true);
+        thread_sent_trash = (prefs.getBoolean("thread_sent_trash", true) &&
+                !EntityFolder.SENT.equals(type));
         actionbar = prefs.getBoolean("actionbar", true);
         boolean actionbar_swap = prefs.getBoolean("actionbar_swap", false);
         actionbar_delete_id = (actionbar_swap ? R.id.action_archive : R.id.action_delete);
@@ -554,6 +557,7 @@ public class FragmentMessages extends FragmentBase
         swipeRefresh = view.findViewById(R.id.swipeRefresh);
         tvAirplane = view.findViewById(R.id.tvAirplane);
         tvNotifications = view.findViewById(R.id.tvNotifications);
+        tvBatteryOptimizations = view.findViewById(R.id.tvBatteryOptimizations);
         tvSupport = view.findViewById(R.id.tvSupport);
         ibHintSupport = view.findViewById(R.id.ibHintSupport);
         ibHintSwipe = view.findViewById(R.id.ibHintSwipe);
@@ -578,6 +582,7 @@ public class FragmentMessages extends FragmentBase
         pbWait = view.findViewById(R.id.pbWait);
         grpAirplane = view.findViewById(R.id.grpAirplane);
         grpNotifications = view.findViewById(R.id.grpNotifications);
+        grpBatteryOptimizations = view.findViewById(R.id.grpBatteryOptimizations);
         grpSupport = view.findViewById(R.id.grpSupport);
         grpHintSupport = view.findViewById(R.id.grpHintSupport);
         grpHintSwipe = view.findViewById(R.id.grpHintSwipe);
@@ -636,6 +641,15 @@ public class FragmentMessages extends FragmentBase
         });
 
         tvNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ActivitySetup.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+        tvBatteryOptimizations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ActivitySetup.class)
@@ -1847,6 +1861,7 @@ public class FragmentMessages extends FragmentBase
         FragmentDialogTheme.setBackground(getContext(), view, false);
         grpAirplane.setVisibility(View.GONE);
         grpNotifications.setVisibility(View.GONE);
+        grpBatteryOptimizations.setVisibility(View.GONE);
         tvNoEmail.setVisibility(View.GONE);
         tvNoEmailHint.setVisibility(View.GONE);
         etSearch.setVisibility(View.GONE);
@@ -5039,6 +5054,8 @@ public class FragmentMessages extends FragmentBase
         lbm.registerReceiver(receiver, iff);
 
         final Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
         ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
@@ -5052,19 +5069,28 @@ public class FragmentMessages extends FragmentBase
                         hasPermission(Manifest.permission.POST_NOTIFICATIONS));
         grpNotifications.setVisibility(canNotify ? View.GONE : View.VISIBLE);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean isIgnoring = !Boolean.FALSE.equals(Helper.isIgnoringOptimizations(context));
+        //boolean canSchedule = AlarmManagerCompatEx.canScheduleExactAlarms(context);
+        boolean enabled = prefs.getBoolean("enabled", true);
+        boolean reminder = prefs.getBoolean("setup_reminder", true);
+        boolean targeting =
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU);
+        grpBatteryOptimizations.setVisibility(
+                !isIgnoring && enabled && reminder && targeting ? View.VISIBLE : View.GONE);
+
         boolean compact = prefs.getBoolean("compact", false);
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
         adapter.setCompact(compact);
         adapter.setZoom(zoom);
 
-        if (!checkRedmiNote())
-            if (!checkDoze())
+        if (true || !checkRedmiNote())
+            if (true || !checkDoze())
                 if (!checkReporting())
                     if (!checkReview())
                         if (!checkFingerprint())
                             if (!checkGmail())
-                                checkOutlook();
+                                if (!checkOutlook())
+                                    ;
 
         prefs.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(prefs, "pro");
@@ -5200,8 +5226,6 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkDoze() {
-        if (!BuildConfig.DEBUG)
-            return false;
         if (viewType != AdapterMessage.ViewType.UNIFIED)
             return false;
 
@@ -6861,16 +6885,19 @@ public class FragmentMessages extends FragmentBase
                 (language_detection && !TextUtils.isEmpty(filter_language) && !outbox));
 
         boolean none = (items == 0 && initialized);
+        boolean searching = (viewType == AdapterMessage.ViewType.SEARCH && server && (!initialized || loading) && items == 0);
         boolean filtered = (filter_active && viewType != AdapterMessage.ViewType.SEARCH);
 
         pbWait.setVisibility(loading || tasks > 0 ? View.VISIBLE : View.GONE);
-        tvNoEmail.setVisibility(none ? View.VISIBLE : View.GONE);
+        tvNoEmail.setText(searching ? R.string.title_search_server_wait : R.string.title_no_messages);
+        tvNoEmail.setVisibility(none || searching ? View.VISIBLE : View.GONE);
         tvNoEmailHint.setVisibility(none && filtered ? View.VISIBLE : View.GONE);
 
         if (BuildConfig.DEBUG)
             updateDebugInfo();
 
-        Log.i("List state reason=" + reason +
+        Log.i("List state who=" + Helper.getWho(this) + "" +
+                " reason=" + reason +
                 " tasks=" + tasks + " loading=" + loading +
                 " items=" + items + " initialized=" + initialized +
                 " wait=" + (pbWait.getVisibility() == View.VISIBLE) +
@@ -8858,7 +8885,8 @@ public class FragmentMessages extends FragmentBase
                         startIntentSenderForResult(
                                 pi.getIntentSender(),
                                 REQUEST_OPENPGP,
-                                null, 0, 0, 0, null);
+                                null, 0, 0, 0,
+                                Helper.getBackgroundActivityOptions());
                     } catch (IntentSender.SendIntentException ex) {
                         // Likely cancelled
                         Log.w(ex);

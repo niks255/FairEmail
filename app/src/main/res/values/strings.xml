@@ -261,6 +261,8 @@
     <string name="title_setup_permissions_notify_explanation">Notification permissions are required to show notifications for new messages in the status bar</string>
     <string name="title_setup_permission_why">Which permissions are needed and why?</string>
     <string name="title_setup_permission_import_contacts">How can I import contacts?</string>
+    <string name="title_setup_import_graph_contact">Outlook contacts</string>
+    <string name="title_setup_import_graph_new">New contacts: %1$s</string>
     <string name="title_setup_doze">Disable battery optimizations</string>
     <string name="title_setup_doze_remark">To send and receive email reliably in the background</string>
     <string name="title_setup_doze_explanation">Battery optimizations should be disabled for the app to ensure reliable sending and receiving of messages in the background</string>
@@ -271,7 +273,7 @@
     <string name="title_setup_doze_battery">High battery usage?</string>
     <string name="title_setup_doze_stopped">Sync stopped?</string>
     <string name="title_setup_doze_device">This is probably required for this device</string>
-    <string name="title_setup_alarm_12">The app won\'t work</string>
+    <string name="title_setup_alarm_12">The app won\'t work properly</string>
     <string name="title_setup_inexact">Alarms &amp; reminders are disabled</string>
     <string name="title_setup_background">Background restrictions are enabled</string>
     <string name="title_setup_data">Data saver is enabled</string>
@@ -645,6 +647,7 @@
     <string name="title_advanced_language_detection">Detect message text language</string>
     <string name="title_advanced_photo_picker">Use the Android photo picker</string>
     <string name="title_advanced_pull_refresh">Pull down to refresh</string>
+    <string name="title_advanced_pull_all">Synchronize all folders</string>
     <string name="title_advanced_autoscroll">Scroll to top on receiving new messages</string>
     <string name="title_advanced_double_tap">Double tap to mark message read/unread</string>
     <string name="title_advanced_swipenav">Swipe left/right to go to next/previous conversation</string>
@@ -861,6 +864,7 @@
     <string name="title_advanced_undo_manager" translatable="false">Use Android\'s undo manager</string>
     <string name="title_advanced_browser_zoom" translatable="false">Use browser zoom</string>
     <string name="title_advanced_fake_dark" translatable="false">Fake dark</string>
+    <string name="title_advanced_viewport_height" translatable="false">Viewport height</string>
     <string name="title_advanced_show_recent" translatable="false">Show recent flag</string>
     <string name="title_advanced_modseq" translatable="false">MODSEQ</string>
     <string name="title_advanced_preamble" translatable="false">Preamble</string>
@@ -930,6 +934,7 @@
     <string name="title_advanced_lookup_mx_hint">This will check if DNS MX records exist</string>
     <string name="title_advanced_sync_delay_hint">This will slow down synchronizing messages</string>
     <string name="title_advanced_folder_nav_hint">This will always return to the folder list of the related account from a message list</string>
+    <string name="title_advanced_pull_all_hint">When pulling down the folders or accounts list</string>
 
     <string name="title_advanced_suggest_names_hint">If disabled, only email addresses will be used when selecting contacts</string>
     <string name="title_advanced_suggest_local_hint">In addition to contacts provided by Android. Contact data will be stored for newly sent or received messages only when enabled.</string>
@@ -1062,6 +1067,8 @@
 
     <string name="title_advanced_never_favorite">Never favorite</string>
     <string name="title_advanced_edit_name">Edit name</string>
+    <string name="title_advanced_create_alias">Create alias</string>
+    <string name="title_advanced_create_alias_remark">In many cases, an alias address must first be verified via the website of the mail provider</string>
 
     <string name="title_create_folder">Create folder</string>
     <string name="title_create_folder_name">Folder name</string>
@@ -1437,6 +1444,11 @@
     <string name="title_move_to_account">Move to %1$s &#8230;</string>
     <string name="title_report_spam">Treat as spam</string>
     <string name="title_delete_permanently">Delete permanently</string>
+    <string name="title_delete_attachments">Delete attachments</string>
+    <string name="title_delete_attachments_remark">
+        To delete attachments, a new message must be added and the old message must be deleted.
+        Since this may fail, the old message will be moved to the trash.
+    </string>
     <string name="title_snooze">Snooze &#8230;</string>
     <string name="title_archive">Archive</string>
     <string name="title_reply">Reply</string>
@@ -1776,6 +1788,7 @@
 
     <string name="title_search_device">Search on device</string>
     <string name="title_search_server">Search on server</string>
+    <string name="title_search_server_wait">Waiting for server</string>
     <string name="title_search_in">Search in</string>
     <string name="title_search_sender">Search for sender</string>
 
@@ -2090,6 +2103,7 @@
     <string name="title_hint_folder_sync">To limit battery and network usage not all folders and not all messages will be synchronized by default</string>
     <string name="title_hint_airplane">Airplane mode is on</string>
     <string name="title_hint_notifications">No notification permissions</string>
+    <string name="title_hint_battery_optimizations">Battery optimizations still enabled</string>
     <string name="title_hint_support">If you have a question or a problem, please use the support menu to get help</string>
     <string name="title_hint_message_actions">Swipe left to trash; Swipe right to archive (if available); The swipe actions can be configured in the account settings</string>
     <string name="title_hint_message_selection">Long press a message to start selecting multiple messages; Hold and swipe up or down to select more messages</string>
@@ -2228,6 +2242,8 @@
     <string name="title_debug_info">Debug info</string>
     <string name="title_debug_info_remark">Please describe the problem and indicate the time of the problem:</string>
     <string name="title_crash_info_remark">Please describe what you were doing when the app crashed:</string>
+    <string name="title_debug_info_issue">Problem description (required)</string>
+    <string name="title_debug_info_contact">We recently had contact about this problem</string>
     <string name="title_unexpected_info_remark">Please describe what you were doing when you got the error:</string>
     <string name="title_issue_subject" translatable="false">FairEmail %1$s issue</string>
 
@@ -2253,6 +2269,7 @@
     <string name="title_widget_count_top">Show unread count at the top</string>
     <string name="title_widget_subject_lines">Maximum number of subject lines</string>
     <string name="title_widget_avatars">Show contact avatars</string>
+    <string name="title_widget_account_name">Show account name</string>
     <string name="title_widget_refresh">Show refresh messages button</string>
     <string name="title_widget_compose">Show compose new message button</string>
     <string name="title_widget_background">Background color</string>

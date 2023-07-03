@@ -28,8 +28,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.DoNotInline;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.VisibleForTesting;
 import androidx.car.app.connection.CarConnection.ConnectionType;
 import androidx.lifecycle.LiveData;
@@ -42,6 +45,7 @@ final class CarConnectionTypeLiveData extends LiveData<@ConnectionType Integer> 
     @VisibleForTesting
     static final String CAR_CONNECTION_AUTHORITY = "androidx.car.app.connection";
 
+    private static final String TAG_CONNECTION_TO_CAR = "fairemail";
     private static final int QUERY_TOKEN = 42;
     private static final Uri PROJECTION_HOST_URI = new Uri.Builder().scheme("content").authority(
             CAR_CONNECTION_AUTHORITY).build();
@@ -60,8 +64,15 @@ final class CarConnectionTypeLiveData extends LiveData<@ConnectionType Integer> 
 
     @Override
     public void onActive() {
-        mContext.registerReceiver(mBroadcastReceiver,
-                new IntentFilter(ACTION_CAR_CONNECTION_UPDATED));
+        // TODO(b/240576633): Replace this entire if-block with a call to
+        //  ContextCompat#registerReceiver once it's released in androidx.core
+        IntentFilter filter = new IntentFilter(ACTION_CAR_CONNECTION_UPDATED);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Api33Impl.registerExportedReceiver(mContext, mBroadcastReceiver, filter);
+        } else {
+            mContext.registerReceiver(mBroadcastReceiver, filter);
+        }
+
         queryForState();
     }
 
@@ -86,23 +97,23 @@ final class CarConnectionTypeLiveData extends LiveData<@ConnectionType Integer> 
         @Override
         protected void onQueryComplete(int token, Object cookie, Cursor response) {
             if (response == null) {
-                //Log.w(TAG_CONNECTION_TO_CAR, "Null response from content provider when checking "
-                //        + "connection to the car, treating as disconnected");
+                Log.w(TAG_CONNECTION_TO_CAR, "Null response from content provider when checking "
+                        + "connection to the car, treating as disconnected");
                 postValue(CarConnection.CONNECTION_TYPE_NOT_CONNECTED);
                 return;
             }
 
             int carConnectionTypeColumn = response.getColumnIndex(CAR_CONNECTION_STATE);
             if (carConnectionTypeColumn < 0) {
-                //Log.e(TAG_CONNECTION_TO_CAR, "Connection to car response is missing the "
-                //        + "connection type, treating as disconnected");
+                Log.e(TAG_CONNECTION_TO_CAR, "Connection to car response is missing the "
+                        + "connection type, treating as disconnected");
                 postValue(CarConnection.CONNECTION_TYPE_NOT_CONNECTED);
                 return;
             }
 
             if (!response.moveToNext()) {
-                //Log.e(TAG_CONNECTION_TO_CAR, "Connection to car response is empty, treating as "
-                //        + "disconnected");
+                Log.e(TAG_CONNECTION_TO_CAR, "Connection to car response is empty, treating as "
+                        + "disconnected");
                 postValue(CarConnection.CONNECTION_TYPE_NOT_CONNECTED);
                 return;
             }
@@ -115,6 +126,19 @@ final class CarConnectionTypeLiveData extends LiveData<@ConnectionType Integer> 
         @Override
         public void onReceive(Context context, Intent intent) {
             queryForState();
+        }
+    }
+
+    @RequiresApi(33)
+    static class Api33Impl {
+        private Api33Impl() {
+            // Not instantiable
+        }
+
+        @DoNotInline
+        static void registerExportedReceiver(Context context, BroadcastReceiver broadcastReceiver,
+                IntentFilter intentFilter) {
+            context.registerReceiver(broadcastReceiver, intentFilter, Context.RECEIVER_EXPORTED);
         }
     }
 }

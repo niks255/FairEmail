@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_search">FairEmail pretraga</string>
+    <string name="app_send_self">Pošalji sebi</string>
     <string name="app_changelog">Spisak izmjena</string>
     <string name="app_welcome">FairEmail je e-mail aplikacija otvorenog koda, s fokusom na privatnost i sigurnost. Zbog toga neke funkcionalnosti mogu raditi drugačije od onog što ste navikli.</string>
     <string name="app_limitations">Na primjer, poruke su preformatirane po zadanom režimu kako bi se uklonili nesigurni elementi i poboljšala čitljivost, te otvarali linkovi (hiperveze) koji se moraju potvrditi zbog sigurnosti. Te se mogućnosti mogu isključiti, ukoliko želite.</string>
@@ -225,6 +226,8 @@
     <string name="title_setup_permissions_notify_explanation">Dozvole obavještenja su neophodne za prikaz obavještenja o novim porukama na statusnoj traci</string>
     <string name="title_setup_permission_why">Koje dozvole su potrebne i zbog čega?</string>
     <string name="title_setup_permission_import_contacts">Kako da uvezem kontakte?</string>
+    <string name="title_setup_import_graph_contact">Outlook kontakti</string>
+    <string name="title_setup_import_graph_new">Novi kontakti: %1$s</string>
     <string name="title_setup_doze">Isključi optimizaciju baterije</string>
     <string name="title_setup_doze_remark">Za pouzdano slanje i primanje e-pošte u pozadini</string>
     <string name="title_setup_doze_explanation">Optimizacija baterije treba biti isključena za aplikaciju kako bi se osiguralo pouzdano slanjne i primanje poruka u pozadini</string>
@@ -235,7 +238,7 @@
     <string name="title_setup_doze_battery">Visoka potrošnja baterije?</string>
     <string name="title_setup_doze_stopped">Sinhronizacija zaustavljena?</string>
     <string name="title_setup_doze_device">Ovo je vjerovatno neophodno za ovaj uređaj</string>
-    <string name="title_setup_alarm_12">Aplikacija neće raditi</string>
+    <string name="title_setup_alarm_12">Aplikacija neće raditi propisno</string>
     <string name="title_setup_inexact">Alarmi &amp; podsjetnici su isključeni</string>
     <string name="title_setup_background">Pozadinska ograničenja su uključena</string>
     <string name="title_setup_data">Štednja podataka je uključena</string>
@@ -569,6 +572,7 @@
     <string name="title_advanced_language_detection">Otkrij jezik poruke</string>
     <string name="title_advanced_photo_picker">Koristi Androidov birač fotografija</string>
     <string name="title_advanced_pull_refresh">Povuci dolje za osvježavanje</string>
+    <string name="title_advanced_pull_all">Sinhronizuj sve foldere</string>
     <string name="title_advanced_autoscroll">Pomakni na vrh za prijem novih poruka</string>
     <string name="title_advanced_double_tap">Dupli dodir za markiranje poruke kao pročitana/nepročitana</string>
     <string name="title_advanced_swipenav">Prevuci prstom lijevo/desno za skok na sljedeću/prethodnu konverzaciju</string>
@@ -697,6 +701,7 @@
         Ključevi i certifikati mogu se pronaći u postavkama Napredno - Šifriranje i akreditivi.
     </string>
     <string name="title_advanced_power_menu">Dodaj radnje na Androidov meni za uključenje/gašenje</string>
+    <string name="title_advanced_send_self">Dodaj opciju \"pošalji sebi\" na Android meniju \"podijeli\"</string>
     <string name="title_advanced_external_search">Dopusti drugim aplikacijama da pretražuju u porukama</string>
     <string name="title_advanced_sort_answers">Sortiraj prijedloške za odgovore prema učestalosti korištenja</string>
     <string name="title_advanced_shortcuts">Prikaži često korištene kontakte u Android meniju za dijeljenje</string>
@@ -759,6 +764,7 @@
     <string name="title_advanced_lookup_mx_hint">Ovo će provjeriti da li postoje DNS MX zapisi</string>
     <string name="title_advanced_sync_delay_hint">Ovo će usporiti sinhronizaciju poruka</string>
     <string name="title_advanced_folder_nav_hint">Ovim će se uvijek vraćati sa spiska poruka na spisak foldera povezanog računa</string>
+    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">Kada se povlači preko spiska foldera ili računa</string>
     <string name="title_advanced_suggest_names_hint">Ako je isključeno, koristit će se samo e-mail adrese pri izboru kontakata</string>
     <string name="title_advanced_suggest_local_hint">Pored kontakata koje pruža Android. Kontaktni podaci bit će čuvani za nove poslane ili primljene poruke samo kada je opcija uključena.</string>
     <string name="title_advanced_auto_identity_hint">Ovim će se izabrati posljednji identitet korišten pri biranju primaoca novih poruka</string>
@@ -845,6 +851,8 @@
     <string name="title_advanced_cleanup_hint">Ovo će izbrisati sve privremene datoteke</string>
     <string name="title_advanced_never_favorite">Nikada omiljeni</string>
     <string name="title_advanced_edit_name">Uredi ime</string>
+    <string name="title_advanced_create_alias">Kreiraj pseudonim</string>
+    <string name="title_advanced_create_alias_remark">U mnogim slučajevima, pseudonimsku adresu prvo mora verifikovati mail provajder preko svog web sajta</string>
     <string name="title_create_folder">Kreiraj folder</string>
     <string name="title_create_folder_name">Naziv foldera</string>
     <string name="title_create_folder_parent">Matičani folder</string>
@@ -1187,6 +1195,10 @@
     <string name="title_move_to_account">Premjesti na %1$s &#8230;</string>
     <string name="title_report_spam">Tretiraj kao spam</string>
     <string name="title_delete_permanently">Trajno izbriši</string>
+    <string name="title_delete_attachments">Izbriši priloge</string>
+    <string name="title_delete_attachments_remark">        Da bi izbrisali priloge, prvo se mora dodati nova poruka, a staru treba izbrisati.
+        Obzirom da ovo možda ne uspije, stara poruka će biti premještena u smeće.
+    </string>
     <string name="title_snooze">Odgodi &#8230;</string>
     <string name="title_archive">Arhiv</string>
     <string name="title_reply">Odgovori</string>
@@ -1495,6 +1507,7 @@
     <string name="title_search_flag_size">Veličina &gt; %1$s</string>
     <string name="title_search_device">Traži na uređaju</string>
     <string name="title_search_server">Traži na serveru</string>
+    <string name="title_search_server_wait">Čekanje servera</string>
     <string name="title_search_in">Traži u</string>
     <string name="title_search_sender">Traži pošiljaoca</string>
     <string name="title_search_delete">Izbrisati sačuvanu pretragu?</string>
@@ -1778,6 +1791,7 @@
     <string name="title_hint_folder_sync">Da bi ograničili potrošnju baterije i podataka, po zadanom neće biti sinhronizirani svi folderi i poruke</string>
     <string name="title_hint_airplane">Način rada u avionu je uključen</string>
     <string name="title_hint_notifications">Nema dozvola za notifikacije</string>
+    <string name="title_hint_battery_optimizations">Optimizacije baterije su još uključene</string>
     <string name="title_hint_support">Ukoliko imate pitanje ili problem, molimo da koristite meni za podršku i pomoć</string>
     <string name="title_hint_message_actions">Prevucite lijevo za otpad; Prevucite desno za arhiviranje (ukoliko postoji); Radnje prevlačenja mogu se podesiti u postavkama računa</string>
     <string name="title_hint_message_selection">Dugim dodirom na poruku pokreće se višestruko označavanje poruka; Držite i prevlačite gore ili dolje za označavanje više poruka</string>
@@ -1906,6 +1920,8 @@
     <string name="title_debug_info">Info o otklanjanju grešaka</string>
     <string name="title_debug_info_remark">Molimo, opišite problem i navedite vrijeme kada se dogodio:</string>
     <string name="title_crash_info_remark">Molimo, opišite šta ste radili kada se aplikacija srušila:</string>
+    <string name="title_debug_info_issue">Opis problema (neophodno)</string>
+    <string name="title_debug_info_contact">Nedavno smo kontaktirani o ovom problemu</string>
     <string name="title_unexpected_info_remark">Molimo, opišite šta ste radili kada se pojavila greška:</string>
     <string name="title_widget_title_count">Brojač novih poruka</string>
     <string name="title_widget_title_list">Spisak poruka</string>
@@ -1927,6 +1943,7 @@
     <string name="title_widget_count_top">Prikaži nepročitane poruke na vrhu</string>
     <string name="title_widget_subject_lines">Maksimalan broj linija za predmete</string>
     <string name="title_widget_avatars">Prikaži avatare kontakata</string>
+    <string name="title_widget_account_name">Prikaži naziv računa</string>
     <string name="title_widget_refresh">Prikaži dugme za osvježavanje poruka</string>
     <string name="title_widget_compose">Prikaži dugme za pisanje nove poruke</string>
     <string name="title_widget_background">Boja pozadine</string>
