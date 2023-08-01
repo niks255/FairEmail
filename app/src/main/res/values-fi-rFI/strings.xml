@@ -519,7 +519,6 @@
     <string name="title_advanced_thumbnails">Näytä kuvien esikatselukuvat viestin tekstin jälkeen</string>
     <string name="title_advanced_message_text_zoom2">Viestien tekstin oletuszoomaus: %1$s %%</string>
     <string name="title_advanced_overview_mode">Zoomaa alkuperäiset viestit ruudulle sopivaksi</string>
-    <string name="title_advanced_override_width">Poista alkuperäisten viestien kiinteät leveydet</string>
     <string name="title_advanced_hyphenation">Käytä automaattista tavutusta</string>
     <string name="title_advanced_contrast">Käytä voimakasta kontrastia viestien tekstille</string>
     <string name="title_advanced_monospaced">Käytä tasavälistä kirjasinta oletuksena viestien tekstille</string>
@@ -558,6 +557,7 @@
     <string name="title_advanced_language_detection">Tunnista viestin tekstin kieli</string>
     <string name="title_advanced_photo_picker">Käytä Androidin valokuvanvalitsinta</string>
     <string name="title_advanced_pull_refresh">Päivitä vetämällä alas</string>
+    <string name="title_advanced_pull_all">Synkronoi kaikki kansiot</string>
     <string name="title_advanced_autoscroll">Vieritä ylös, kun uusi viesti saapuu</string>
     <string name="title_advanced_double_tap">Tuplanäpäytys merkitsee viestin luetuksi/lukemattomaksi</string>
     <string name="title_advanced_swipenav">Siirry seuraavaan/edelliseen keskusteluun pyyhkäisemällä vasemmalle/oikealle</string>
@@ -583,7 +583,6 @@
     <string name="title_advanced_autoread">Merkitse viestit luetuiksi siirrettäessä</string>
     <string name="title_advanced_autounstar">Poista tähti viestejä siirrettäessä</string>
     <string name="title_advanced_reset_importance">Palauta oma tärkeysjärjestys oletusasetukseen siirrettäessä</string>
-    <string name="title_advanced_thread_sent_trash">Siirrä roskakoriin myös lähetetyt viestit, kun keskustelu siirretään roskakoriin</string>
     <string name="title_advanced_star_snoozed">Lisää tähti torkutettaessa viestejä</string>
     <string name="title_advanced_auto_important">Merkitse tähdelliset viestit tärkeiksi</string>
     <string name="title_advanced_cancel_snooze">Peruuta torkku, kun viestejä siirrettään</string>
@@ -665,6 +664,7 @@
     <string name="title_advanced_sign_default">Allekirjoita oletuksena</string>
     <string name="title_advanced_encrypt_default">Salaa oletuksena</string>
     <string name="title_advanced_encrypt_auto">Salaa automaattisesti, kun kaikkien vastaanottajien avaimet ovat saatavilla</string>
+    <string name="title_advanced_auto_verify">Todenna allekirjoitetut viestit automaattisesti</string>
     <string name="title_advanced_auto_decrypt">Pura viestien salaus automaattisesti</string>
     <string name="title_advanced_auto_undo_decrypt">Kumoa salauksen purku, kun keskustelu suljetaan</string>
     <string name="title_advanced_openpgp">OpenPGP-palveluntarjoaja</string>
@@ -748,6 +748,7 @@
     <string name="title_advanced_lookup_mx_hint">Tämä tarkistaa löytyykö DNS MX-tietoja</string>
     <string name="title_advanced_sync_delay_hint">Tämä hidastaa viestien synkronointia</string>
     <string name="title_advanced_folder_nav_hint">Tämä palaa aina viestilistasta kyseisen tilin kansiolistaan</string>
+    <string name="title_advanced_pull_all_hint">Vetämällä alas kansio- tai tililistassa</string>
     <string name="title_advanced_suggest_names_hint">Jos poistettu käytöstä, yhteystietoja valittaessa käytetään vain sähköpostiosoitteita</string>
     <string name="title_advanced_suggest_local_hint">Androidin yhteystietojen lisäksi. Yhteystietoja tallennetaan uusista lähetetyistä ja vastaanotetuista viesteistä vain, jos asetus on päällä.</string>
     <string name="title_advanced_auto_identity_hint">Tämä valitsee viimeksi käytetyn identiteetin, kun valitaan uusien viestien vastaanottajaa</string>
@@ -785,7 +786,6 @@
     <string name="title_advanced_preview_lines_hint">Enintään %s merkkiä</string>
     <string name="title_advanced_preview_issue">Vierittäminen voi olla hidasta joissakin Android-versioissa olevan bugin takia, kun rivien lukumäärä on enemmän kuin yksi</string>
     <string name="title_advanced_overview_mode_hint">Tämä voi aiheuttaa hyvin pieniä kirjasimia</string>
-    <string name="title_advanced_override_width_hint">Tämä voi kaventaa viestejä, mutta myös näyttää oudolta</string>
     <string name="title_advanced_monospaced_pre_hint">Muotoilematonta tekstiä olevat viestit käsitellään valmiiksi muotoiltuina</string>
     <string name="title_advanced_placeholders_hint">Tämä koskee vain uudelleenmuotoiltuja viestejä</string>
     <string name="title_advanced_inline_hint">Tekstiin upotetut kuvat ovat viestin tekstin joukossa olevat kuvat</string>

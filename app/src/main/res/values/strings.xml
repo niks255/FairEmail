@@ -91,6 +91,11 @@
         <item quantity="other">Delete %1$d messages permanently?</item>
     </plurals>
 
+    <plurals name="title_attachments">
+        <item quantity="one">One attachment</item>
+        <item quantity="other">%1$d attachments</item>
+    </plurals>
+
     <plurals name="title_ask_spam">
         <item quantity="one">Treat %1$d message as spam?</item>
         <item quantity="other">Treat %1$d messages as spam?</item>
@@ -444,6 +449,7 @@
     <string name="title_advanced_suggest_frequently">Sort suggested addresses on frequency of use</string>
     <string name="title_advanced_alt_re_fwd">Alternative reply/forward prefix</string>
     <string name="title_advanced_send_chips">Show address bubbles</string>
+    <string name="title_advanced_send_nav_color">Use the identity color for the bottom action bar</string>
     <string name="title_advanced_send_reminders">Show reminders</string>
     <string name="title_advanced_send_delayed">Delay sending messages</string>
     <string name="title_advanced_attach_new">Create a new draft message for shared addresses and files</string>
@@ -602,12 +608,12 @@
     <string name="title_advanced_preview_lines">Number of preview lines</string>
     <string name="title_advanced_align_header">Vertically align keywords, preview text, and notes</string>
     <string name="title_advanced_addresses">Expand address details by default</string>
+    <string name="title_advanced_hide_attachments">Collapse attachments by default</string>
     <string name="title_advanced_unzip">Show contents of compressed attachments</string>
     <string name="title_advanced_attachments_alt">Show attachments after the message text</string>
     <string name="title_advanced_thumbnails">Show image thumbnails after the message text</string>
     <string name="title_advanced_message_text_zoom2">Default message text zoom: %1$s %%</string>
     <string name="title_advanced_overview_mode">Zoom original messages to fit the screen</string>
-    <string name="title_advanced_override_width">Disable fixed widths in original messages</string>
     <string name="title_advanced_hyphenation">Use automatic hyphenation</string>
     <string name="title_advanced_contrast">Use high contrast for message text</string>
     <string name="title_advanced_monospaced">Use monospaced font for message text by default</string>
@@ -673,13 +679,13 @@
     <string name="title_advanced_autoread">Automatically mark messages read on moving messages</string>
     <string name="title_advanced_autounstar">Automatically remove stars from messages on moving messages</string>
     <string name="title_advanced_reset_importance">Reset importance on moving messages</string>
-    <string name="title_advanced_thread_sent_trash">When trashing a conversation, also trash sent messages</string>
     <string name="title_advanced_star_snoozed">Automatically add star on snoozing messages</string>
     <string name="title_advanced_auto_important">Automatically make starred messages important</string>
     <string name="title_advanced_cancel_snooze">Cancel snooze on moving messages</string>
     <string name="title_advanced_auto_block_sender">Automatically block the sender when reporting spam</string>
     <string name="title_advanced_auto_hide_answer">Automatically hide the answer button when scrolling</string>
     <string name="title_advanced_swipe_reply">Swipe expanded messages to the right to reply</string>
+    <string name="title_advanced_move_thread_all">When moving a conversation, move all messages</string>
     <string name="title_advanced_move_thread_sent">When moving a conversation, also move sent messages</string>
     <string name="title_advanced_default_snooze">Default snooze/delay time</string>
     <string name="title_advanced_default_folder">Select default folder</string>
@@ -767,6 +773,7 @@
     <string name="title_advanced_sign_default">Sign by default</string>
     <string name="title_advanced_encrypt_default">Encrypt by default</string>
     <string name="title_advanced_encrypt_auto">Automatically encrypt when all recipients\' keys are available</string>
+    <string name="title_advanced_auto_verify">Automatically verify signed messages</string>
     <string name="title_advanced_auto_decrypt">Automatically decrypt messages</string>
     <string name="title_advanced_auto_undo_decrypt">Undo decryption on closing conversation</string>
 
@@ -889,8 +896,10 @@
     <string name="title_advanced_native_dkim" translatable="false">Native DKIM verification</string>
     <string name="title_advanced_native_arc" translatable="false">Native ARC verification</string>
     <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
+    <string name="title_advanced_tld_flags" translatable="false">Show TLD flags</string>
     <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
     <string name="title_advanced_thread_by_ref" translatable="false">Thread by common reference</string>
+    <string name="title_advanced_mdn" translatable="false">Process MDNs</string>
     <string name="title_advanced_global_keywords" translatable="false">Global keywords</string>
     <string name="title_advanced_test_iab" translatable="false">Test IAB</string>
     <string name="title_advanced_import_providers" translatable="false">Import providers</string>
@@ -976,7 +985,6 @@
     <string name="title_advanced_preview_lines_hint">Maximum %s characters in total</string>
     <string name="title_advanced_preview_issue">Scrolling can be slow due to a bug in some Android versions when the number of lines is more than one</string>
     <string name="title_advanced_overview_mode_hint">This can result in very small fonts</string>
-    <string name="title_advanced_override_width_hint">This can make messages narrower, but also look strange</string>
     <string name="title_advanced_monospaced_pre_hint">Plain text only messages will be considered as preformatted</string>
     <string name="title_advanced_placeholders_hint">This applies to reformatted messages only</string>
     <string name="title_advanced_inline_hint">Inline images are images included in the message</string>
@@ -1439,6 +1447,7 @@
     <string name="title_unsubscribe">Unsubscribe</string>
     <string name="title_message_rule">Create rule</string>
     <string name="title_no_junk">Not spam</string>
+    <string name="title_edit_subject">Edit subject &#8230;</string>
     <string name="title_move_to">Move to &#8230;</string>
     <string name="title_move_to_folder">Move to &#8230;</string>
     <string name="title_move_to_account">Move to %1$s &#8230;</string>
@@ -2243,6 +2252,7 @@
     <string name="title_debug_info_remark">Please describe the problem and indicate the time of the problem:</string>
     <string name="title_crash_info_remark">Please describe what you were doing when the app crashed:</string>
     <string name="title_debug_info_issue">Problem description (required)</string>
+    <string name="title_debug_info_issue_remark">Details, such as the estimated time of the problem, the exact error message, etc., are important</string>
     <string name="title_debug_info_contact">We recently had contact about this problem</string>
     <string name="title_unexpected_info_remark">Please describe what you were doing when you got the error:</string>
     <string name="title_issue_subject" translatable="false">FairEmail %1$s issue</string>
@@ -2270,6 +2280,7 @@
     <string name="title_widget_subject_lines">Maximum number of subject lines</string>
     <string name="title_widget_avatars">Show contact avatars</string>
     <string name="title_widget_account_name">Show account name</string>
+    <string name="title_widget_caption">Show title</string>
     <string name="title_widget_refresh">Show refresh messages button</string>
     <string name="title_widget_compose">Show compose new message button</string>
     <string name="title_widget_background">Background color</string>

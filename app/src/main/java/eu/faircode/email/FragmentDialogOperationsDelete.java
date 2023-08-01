@@ -123,6 +123,7 @@ public class FragmentDialogOperationsDelete extends FragmentDialogBase {
                                         addAll(ops, db.operation().getOperations(EntityOperation.DELETE));
                                         addAll(ops, db.operation().getOperations(EntityOperation.PURGE));
                                         addAll(ops, db.operation().getOperations(EntityOperation.EXPUNGE));
+                                        addAll(ops, db.operation().getOperations(EntityOperation.DETACH));
                                     }
 
                                     for (EntityOperation op : ops) {
@@ -141,6 +142,9 @@ public class FragmentDialogOperationsDelete extends FragmentDialogBase {
                                 } finally {
                                     db.endTransaction();
                                 }
+
+                                if (deleted > 0)
+                                    ServiceSynchronize.reload(context, null, true, "deleted operations");
 
                                 return deleted;
                             }

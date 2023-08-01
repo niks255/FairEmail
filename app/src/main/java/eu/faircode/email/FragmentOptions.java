@@ -145,14 +145,15 @@ public class FragmentOptions extends FragmentBase {
             "font_size_sender", "sender_ellipsize",
             "subject_top", "subject_italic", "highlight_subject", "font_size_subject", "subject_ellipsize",
             "keywords_header", "labels_header", "flags", "flags_background", "preview", "preview_italic", "preview_lines", "align_header",
-            "message_zoom", "overview_mode", "override_width", "addresses", "button_extra", "attachments_alt", "thumbnails",
+            "message_zoom", "overview_mode", "addresses", "button_extra", "attachments_alt", "thumbnails",
             "contrast", "hyphenation", "display_font", "monospaced_pre",
             "list_count", "bundled_fonts", "parse_classes",
             "background_color", "text_color", "text_size", "text_font", "text_align", "text_titles", "text_separators",
             "collapse_quotes", "image_placeholders", "inline_images",
             "seekbar", "actionbar", "actionbar_swap", "actionbar_color", "group_category",
             "autoscroll", "swipenav", "reversed", "swipe_close", "swipe_move", "autoexpand", "autoclose", "onclose",
-            "thread_sent_trash", "auto_hide_answer", "swipe_reply",
+            "auto_hide_answer", "swipe_reply",
+            "move_thread_all", "move_thread_sent",
             "language_detection",
             "quick_filter", "quick_scroll", "quick_actions",
             "experiments", "debug", "log_level", "test1", "test2", "test3", "test4", "test5",
@@ -240,7 +241,7 @@ public class FragmentOptions extends FragmentBase {
         tabLayout.setupWithViewPager(pager);
 
         final Context context = getContext();
-        int colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
+        int colorAccent = Helper.resolveColor(context, androidx.appcompat.R.attr.colorAccent);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             Drawable d = ContextCompat.getDrawable(context, PAGE_ICONS[i]);
             d.setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP);

@@ -2237,6 +2237,17 @@
                     app:srcCompat="@drawable/infra_zoho"
                     tools:ignore="MissingConstraints" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swTldFlags"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_tld_flags"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/flowInfra"
+                    app:switchPadding="12dp" />
+
                 <TextView
                     android:id="@+id/tvDkimVerifyHint"
                     android:layout_width="0dp"
@@ -2249,7 +2260,7 @@
                     android:textStyle="italic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/flowInfra" />
+                    app:layout_constraintTop_toBottomOf="@id/swTldFlags" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swDupMsgId"
@@ -2273,6 +2284,17 @@
                     app:layout_constraintTop_toBottomOf="@id/swDupMsgId"
                     app:switchPadding="12dp" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swMdn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_mdn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swThreadByRef"
+                    app:switchPadding="12dp" />
+
                 <EditText
                     android:id="@+id/etKeywords"
                     android:layout_width="0dp"
@@ -2283,7 +2305,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swThreadByRef" />
+                    app:layout_constraintTop_toBottomOf="@id/swMdn" />
 
                 <TextView
                     android:id="@+id/tvKeywordsHint"

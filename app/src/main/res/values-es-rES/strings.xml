@@ -71,6 +71,10 @@
         <item quantity="one">¿Eliminar %1$d mensaje permanentemente?</item>
         <item quantity="other">¿Eliminar %1$d mensajes permanentemente?</item>
     </plurals>
+    <plurals name="title_attachments">
+        <item quantity="one">Un archivo adjunto</item>
+        <item quantity="other">%1$d archivos adjuntos</item>
+    </plurals>
     <plurals name="title_ask_spam">
         <item quantity="one">¿Tratar %1$d mensaje como spam?</item>
         <item quantity="other">¿Tratar %1$d mensajes como spam?</item>
@@ -371,6 +375,7 @@
     <string name="title_advanced_suggest_frequently">Ordenar direcciones sugeridas por frecuencia de uso</string>
     <string name="title_advanced_alt_re_fwd">Prefijo alternativo de respuesta/reenvío</string>
     <string name="title_advanced_send_chips">Mostrar burbujas de dirección</string>
+    <string name="title_advanced_send_nav_color">Usar el color de identidad para la barra de acción inferior</string>
     <string name="title_advanced_send_reminders">Mostrar recordatorios</string>
     <string name="title_advanced_send_delayed">Diferir envío de mensajes</string>
     <string name="title_advanced_attach_new">Crear un nuevo borrador de mensajes para direcciones y archivos compartidos</string>
@@ -514,12 +519,12 @@
     <string name="title_advanced_preview_lines">Número de líneas de vista previa</string>
     <string name="title_advanced_align_header">Alinear palabras clave, textos de previsualización y notas verticalmente</string>
     <string name="title_advanced_addresses">Mostrar detalles de dirección por defecto</string>
+    <string name="title_advanced_hide_attachments">Colapsar archivos adjuntos por defecto</string>
     <string name="title_advanced_unzip">Mostrar contenido de adjuntos comprimidos</string>
     <string name="title_advanced_attachments_alt">Mostrar adjuntos después del texto del mensaje</string>
     <string name="title_advanced_thumbnails">Mostrar miniaturas de la imagen después del texto del mensaje</string>
     <string name="title_advanced_message_text_zoom2">Zoom por defecto del texto del mensaje: %1$s %%</string>
     <string name="title_advanced_overview_mode">Hacer zoom en mensajes originales para ajustarse a la pantalla</string>
-    <string name="title_advanced_override_width">Desactivar anchos fijos en los mensajes originales</string>
     <string name="title_advanced_hyphenation">Usar separación automática</string>
     <string name="title_advanced_contrast">Utilizar contraste alto para el texto del mensaje</string>
     <string name="title_advanced_monospaced">Usar fuente monoespaciada para el texto del mensaje por defecto</string>
@@ -584,13 +589,13 @@
     <string name="title_advanced_autoread">Marcar mensaje como leído automáticamente al moverlo</string>
     <string name="title_advanced_autounstar">Eliminar automáticamente la estrella de los mensajes al ser movidos</string>
     <string name="title_advanced_reset_importance">Restablecer importancia al mover mensajes</string>
-    <string name="title_advanced_thread_sent_trash">Al eliminar una conversación, también eliminar mensajes enviados</string>
     <string name="title_advanced_star_snoozed">Destacar automáticamente al posponer mensajes</string>
     <string name="title_advanced_auto_important">Hacer que los mensajes destacados sean importantes automáticamente</string>
     <string name="title_advanced_cancel_snooze">Cancelar posponer al mover mensajes</string>
     <string name="title_advanced_auto_block_sender">Bloquear automáticamente al remitente al reportar como spam</string>
     <string name="title_advanced_auto_hide_answer">Ocultar automáticamente el botón de respuesta al desplazarse</string>
     <string name="title_advanced_swipe_reply">Deslice los mensajes expandidos a la derecha para responder</string>
+    <string name="title_advanced_move_thread_all">Al mover una conversación, mover todos los mensajes</string>
     <string name="title_advanced_move_thread_sent">Al mover una conversación, también mover mensajes enviados</string>
     <string name="title_advanced_default_snooze">Tiempo de posponer/retraso por defecto</string>
     <string name="title_advanced_default_folder">Seleccionar carpeta por defecto</string>
@@ -666,6 +671,7 @@
     <string name="title_advanced_sign_default">Firmar por defecto</string>
     <string name="title_advanced_encrypt_default">Cifrar por defecto</string>
     <string name="title_advanced_encrypt_auto">Cifrar automáticamente cuando las claves de todos los destinatarios están disponibles</string>
+    <string name="title_advanced_auto_verify">Verificar automáticamente mensajes firmados</string>
     <string name="title_advanced_auto_decrypt">Descifrar automáticamente los mensajes</string>
     <string name="title_advanced_auto_undo_decrypt">Deshacer descifrado al cerrar la conversación</string>
     <string name="title_advanced_openpgp">Proveedor OpenPGP</string>
@@ -750,7 +756,7 @@
     <string name="title_advanced_lookup_mx_hint">Esto comprobará si existen registros DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Esto ralentizará la sincronización de mensajes</string>
     <string name="title_advanced_folder_nav_hint">Esto siempre volverá a la lista de carpetas de la cuenta relacionada desde una lista de mensajes</string>
-    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">Al tirar hacia abajo las carpetas o lista de cuentas</string>
+    <string name="title_advanced_pull_all_hint">Al tirar hacia abajo las carpetas o lista de cuentas</string>
     <string name="title_advanced_suggest_names_hint">Si está desactivado, sólo se usarán direcciones de correo electrónico al seleccionar contactos</string>
     <string name="title_advanced_suggest_local_hint">Además de los contactos proporcionados por Android, los datos de contactos se almacenarán para nuevos mensajes enviados o recibidos sólo cuando esté activado.</string>
     <string name="title_advanced_auto_identity_hint">Esto seleccionará la última identidad utilizada al seleccionar un destinatario para nuevos mensajes</string>
@@ -788,7 +794,6 @@
     <string name="title_advanced_preview_lines_hint">Máximo %s caracteres en total</string>
     <string name="title_advanced_preview_issue">El desplazamiento puede ser lento debido a un error en algunas versiones de Android cuando el número de líneas es más de una</string>
     <string name="title_advanced_overview_mode_hint">Esto puede resultar en fuentes muy pequeñas</string>
-    <string name="title_advanced_override_width_hint">Esto puede hacer que los mensajes sean más estrechos, pero también pueden verse extraños</string>
     <string name="title_advanced_monospaced_pre_hint">Los mensajes de texto plano se considerarán preformateados</string>
     <string name="title_advanced_placeholders_hint">Esto sólo se aplica a los mensajes reformateados</string>
     <string name="title_advanced_inline_hint">Las imágenes embebidas son imágenes incluídas en el mensaje</string>
@@ -1175,6 +1180,7 @@
     <string name="title_unsubscribe">Darse de baja</string>
     <string name="title_message_rule">Crear regla</string>
     <string name="title_no_junk">No es Spam</string>
+    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Editar asunto &#8230;</string>
     <string name="title_move_to">Mover a &#8230;</string>
     <string name="title_move_to_folder">Mover a &#8230;</string>
     <string name="title_move_to_account">Mover a %1$s &#8230;</string>
@@ -1902,6 +1908,7 @@
     <string name="title_debug_info_remark">Por favor describa el problema e indique el momento del mismo:</string>
     <string name="title_crash_info_remark">Por favor describa que estaba haciendo cuando la app falló:</string>
     <string name="title_debug_info_issue">Descripción del problema (Requerido)</string>
+    <string name="title_debug_info_issue_remark">Detalles, como el tiempo estimado del problema, el mensaje de error exacto, etc., son importantes</string>
     <string name="title_debug_info_contact">Recientemente hemos tenido contacto con este problema</string>
     <string name="title_unexpected_info_remark">Por favor describa lo que estaba haciendo cuando obtuvo el error:</string>
     <string name="title_widget_title_count">Recuento de mensajes</string>
@@ -1925,6 +1932,7 @@
     <string name="title_widget_subject_lines">Número máximo de líneas del asunto</string>
     <string name="title_widget_avatars">Mostrar avatares de contactos</string>
     <string name="title_widget_account_name">Mostrar el nombre de la cuenta</string>
+    <string name="title_widget_caption">Mostrar título</string>
     <string name="title_widget_refresh">Mostrar botón de actualizar mensajes</string>
     <string name="title_widget_compose">Mostrar botón de redactar nuevo mensaje</string>
     <string name="title_widget_background">Color de fondo</string>

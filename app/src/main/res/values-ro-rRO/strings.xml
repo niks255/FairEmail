@@ -80,6 +80,11 @@
         <item quantity="few">Ștergeți definitiv %1$d mesaje?</item>
         <item quantity="other">Ștergeți definitiv %1$d de mesaje?</item>
     </plurals>
+    <plurals name="title_attachments">
+        <item quantity="one">Un atașament</item>
+        <item quantity="few">%1$d atașamente</item>
+        <item quantity="other">%1$d de atașamente</item>
+    </plurals>
     <plurals name="title_ask_spam">
         <item quantity="one">Tratează %1$d mesaj ca spam?</item>
         <item quantity="few">Tratează %1$d mesaje ca spam?</item>
@@ -384,6 +389,7 @@
     <string name="title_advanced_suggest_frequently">Sortați adresele sugerate în funcție de frecvența de utilizare</string>
     <string name="title_advanced_alt_re_fwd">Prefix alternativ de răspuns/întârziere</string>
     <string name="title_advanced_send_chips">Afișați bule de adrese</string>
+    <string name="title_advanced_send_nav_color">Utilizați culoarea de identitate pentru bara de acțiune de jos</string>
     <string name="title_advanced_send_reminders">Arată mementouri</string>
     <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
     <string name="title_advanced_attach_new">Creați un mesaj ciornă nou pentru adresele și fișierele partajate</string>
@@ -527,12 +533,12 @@
     <string name="title_advanced_preview_lines">Numărul de linii de previzualizat</string>
     <string name="title_advanced_align_header">Aliniază vertical cuvintele-cheie, previzualizare text și note</string>
     <string name="title_advanced_addresses">Implicit arată detaliile adreselor</string>
+    <string name="title_advanced_hide_attachments">Restrânge implicit atașamentele</string>
     <string name="title_advanced_unzip">Afișați conținutul atașamentelor comprimate</string>
     <string name="title_advanced_attachments_alt">Arată atașamentele după textul mesajului</string>
     <string name="title_advanced_thumbnails">Arată miniaturile imaginilor după textul mesajului</string>
     <string name="title_advanced_message_text_zoom2">Zoom implicit al textului mesajului: %1$s %%</string>
     <string name="title_advanced_overview_mode">Măriți mesajele originale pentru a se potrivi cu ecranul</string>
-    <string name="title_advanced_override_width">Dezactivați lățimile fixe în mesajele originale</string>
     <string name="title_advanced_hyphenation">Folosește despărțirea în silabe automată</string>
     <string name="title_advanced_contrast">Folosește contrast ridicat pentru text</string>
     <string name="title_advanced_monospaced">Folosește implicit fontul proporțional pentru textul mesajului</string>
@@ -571,6 +577,7 @@
     <string name="title_advanced_language_detection">Detectează limba textului mesajului</string>
     <string name="title_advanced_photo_picker">Folosiți selectorul de fotografii Android</string>
     <string name="title_advanced_pull_refresh">Trageți în jos pentru a actualiza</string>
+    <string name="title_advanced_pull_all">Sincronizează toate dosarele</string>
     <string name="title_advanced_autoscroll">Derulează sus când se primește un mesaj nou</string>
     <string name="title_advanced_double_tap">Atingeți de două ori pentru a marca mesajul ca ne/citit</string>
     <string name="title_advanced_swipenav">Glisați stânga/dreapta pentru a merge la conversația următoare/anterioară</string>
@@ -596,13 +603,13 @@
     <string name="title_advanced_autoread">Marchează automat mesajele mutate ca citite</string>
     <string name="title_advanced_autounstar">Elimină automat steaua mesajelor mutate</string>
     <string name="title_advanced_reset_importance">Resetează importanța la mutarea mesajelor</string>
-    <string name="title_advanced_thread_sent_trash">Când se șterge o conversație, șterge de asemenea și mesajele trimise</string>
     <string name="title_advanced_star_snoozed">Adaugă automat stea la mesajele amânate</string>
     <string name="title_advanced_auto_important">Marcheză automat mesajele cu stea ca importante</string>
     <string name="title_advanced_cancel_snooze">Anulează amânarea la mutarea mesajelor</string>
     <string name="title_advanced_auto_block_sender">Blochează automat expeditorul când raportezi spam-ul</string>
     <string name="title_advanced_auto_hide_answer">Ascunde automat butonul de răspuns la derulare</string>
     <string name="title_advanced_swipe_reply">Glisați mesajele extinse spre dreapta pentru a răspunde</string>
+    <string name="title_advanced_move_thread_all">Când mutați o conversație, mutați toate mesajele</string>
     <string name="title_advanced_move_thread_sent">Atunci când mutați o conversație, mutați și mesajele trimise</string>
     <string name="title_advanced_default_snooze">Timpul implicit de amânare/prelungire</string>
     <string name="title_advanced_default_folder">Selectați directorul implicit</string>
@@ -678,6 +685,7 @@
     <string name="title_advanced_sign_default">Semnare în mod implicit</string>
     <string name="title_advanced_encrypt_default">Criptare în mod implicit</string>
     <string name="title_advanced_encrypt_auto">Criptează automat când sunt disponibile cheile tuturor destinatarilor</string>
+    <string name="title_advanced_auto_verify">Verifică automat mesajele semnate</string>
     <string name="title_advanced_auto_decrypt">Decriptează automat mesajele</string>
     <string name="title_advanced_auto_undo_decrypt">Anulează decriptarea la închiderea conversației</string>
     <string name="title_advanced_openpgp">Furnizor OpenPGP</string>
@@ -762,6 +770,7 @@
     <string name="title_advanced_lookup_mx_hint">Se verifică dacă există înregistrări DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Această opțiune va încetini viteza de sincronizare a mesajelor</string>
     <string name="title_advanced_folder_nav_hint">Se va reveni întotdeauna la lista de dosare a contului asociat dintr-o listă de mesaje</string>
+    <string name="title_advanced_pull_all_hint">La tragerea în jos a dosarelor sau a listei de conturi</string>
     <string name="title_advanced_suggest_names_hint">Dacă este dezactivată, numai adresele de e-mail vor fi folosite la selectarea contactelor</string>
     <string name="title_advanced_suggest_local_hint">Pe lângă contactele furnizate de Android. Datele contactelor vor fi memorate pentru mesajele nou trimise sau primite doar când este activată.</string>
     <string name="title_advanced_auto_identity_hint">Aceasta va selecta ultima identitate folosită la selectarea unui destinatar pentru mesaje noi</string>
@@ -799,7 +808,6 @@
     <string name="title_advanced_preview_lines_hint">Maxim %s caractere în total</string>
     <string name="title_advanced_preview_issue">Derularea poate fi lentă din cauza unei erori în unele versiuni de Android atunci când numărul de linii este mare</string>
     <string name="title_advanced_overview_mode_hint">Acest lucru poate duce la fonturi foarte mici</string>
-    <string name="title_advanced_override_width_hint">Acest lucru poate face ca mesajele să fie mai înguste, dar și să arate ciudat</string>
     <string name="title_advanced_monospaced_pre_hint">Mesajele care conțin doar text simplu vor fi considerate ca fiind preformatate</string>
     <string name="title_advanced_placeholders_hint">Acest lucru se aplică numai mesajelor reformatate</string>
     <string name="title_advanced_inline_hint">Imaginile integrate sunt cele include în mesaj</string>
@@ -1186,6 +1194,7 @@
     <string name="title_unsubscribe">Dezabonare</string>
     <string name="title_message_rule">Creare regulă</string>
     <string name="title_no_junk">Nu este spam</string>
+    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Editează subiectul &#8230;</string>
     <string name="title_move_to">Mută în &#8230;</string>
     <string name="title_move_to_folder">Mută în &#8230;</string>
     <string name="title_move_to_account">Mută în %1$s &#8230;</string>
@@ -1914,6 +1923,7 @@
     <string name="title_debug_info_remark">Va rog sa descrieți problema și să indicați momentul când s-a produs:</string>
     <string name="title_crash_info_remark">Vă rugăm să descrieți ce făceați atunci când aplicația s-a oprit:</string>
     <string name="title_debug_info_issue">Descrierea problemei (necesar)</string>
+    <string name="title_debug_info_issue_remark">Detaliile, cum ar fi momentul estimat al problemei, mesajul de eroare exact etc., sunt importante</string>
     <string name="title_debug_info_contact">Recent am avut contact cu această problemă</string>
     <string name="title_unexpected_info_remark">Vă rugăm să descrieți ce faceți atunci când ați primit eroarea:</string>
     <string name="title_widget_title_count">Contor mesaje noi</string>
@@ -1937,6 +1947,7 @@
     <string name="title_widget_subject_lines">Numărul maxim de linii de subiect</string>
     <string name="title_widget_avatars">Afișați avatarele de contact</string>
     <string name="title_widget_account_name">Arată numele contului</string>
+    <string name="title_widget_caption">Arată titlul</string>
     <string name="title_widget_refresh">Buton de afișare a mesajelor de reîmprospătare</string>
     <string name="title_widget_compose">Afișați butonul de redactare a unui mesaj nou</string>
     <string name="title_widget_background">Culoare fundal</string>

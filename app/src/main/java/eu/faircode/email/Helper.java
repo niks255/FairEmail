@@ -92,6 +92,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -864,6 +865,25 @@ public class Helper {
 
     // View
 
+    static void setStatusBarColor(Activity activity, Integer color) {
+        if (!BuildConfig.DEBUG)
+            return;
+        if (activity == null)
+            return;
+        Window window = activity.getWindow();
+        if (window == null)
+            return;
+
+        if (color == null) {
+            //window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(Helper.resolveColor(window.getContext(), androidx.appcompat.R.attr.colorPrimaryDark));
+        } else {
+            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(color);
+        }
+    }
+
     static Integer actionBarHeight = null;
 
     static int getActionBarHeight(Context context) {
@@ -1088,8 +1108,8 @@ public class Helper {
             }
         } else {
             boolean navbar_colorize = prefs.getBoolean("navbar_colorize", false);
-            int colorPrimary = resolveColor(context, R.attr.colorPrimary);
-            int colorPrimaryDark = resolveColor(context, R.attr.colorPrimaryDark);
+            int colorPrimary = resolveColor(context, androidx.appcompat.R.attr.colorPrimary);
+            int colorPrimaryDark = resolveColor(context, androidx.appcompat.R.attr.colorPrimaryDark);
 
             CustomTabColorSchemeParams.Builder schemes = new CustomTabColorSchemeParams.Builder()
                     .setToolbarColor(colorPrimary)
@@ -1772,13 +1792,13 @@ public class Helper {
         try {
             if (zoom == 0)
                 ta = context.obtainStyledAttributes(
-                        R.style.TextAppearance_AppCompat_Small, new int[]{android.R.attr.textSize});
+                        androidx.appcompat.R.style.TextAppearance_AppCompat_Small, new int[]{android.R.attr.textSize});
             else if (zoom == 2)
                 ta = context.obtainStyledAttributes(
-                        R.style.TextAppearance_AppCompat_Large, new int[]{android.R.attr.textSize});
+                        androidx.appcompat.R.style.TextAppearance_AppCompat_Large, new int[]{android.R.attr.textSize});
             else
                 ta = context.obtainStyledAttributes(
-                        R.style.TextAppearance_AppCompat_Medium, new int[]{android.R.attr.textSize});
+                        androidx.appcompat.R.style.TextAppearance_AppCompat_Medium, new int[]{android.R.attr.textSize});
             return ta.getDimension(0, 0);
         } finally {
             if (ta != null)
@@ -2576,6 +2596,18 @@ public class Helper {
         for (int len = is.read(buffer); len != -1; len = is.read(buffer))
             os.write(buffer, 0, len);
         return os.toByteArray();
+    }
+
+    public static String readLine(InputStream is, Charset charset) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        int b = is.read();
+        if (b < 0)
+            return null;
+        while (b >= 0 && b != '\n') {
+            bos.write(b);
+            b = is.read();
+        }
+        return new String(bos.toByteArray(), charset);
     }
 
     static void copy(File src, File dst) throws IOException {

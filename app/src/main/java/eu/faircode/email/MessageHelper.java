@@ -3800,7 +3800,7 @@ public class MessageHelper {
                             Log.w(ex);
                         }
 
-                        if (cs == null) {
+                        if (cs == null || StandardCharsets.ISO_8859_1.equals(cs)) {
                             // <meta charset="utf-8" />
                             // <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
                             String excerpt = result.substring(0, Math.min(MAX_META_EXCERPT, result.length()));
@@ -3826,20 +3826,21 @@ public class MessageHelper {
                                         if (StandardCharsets.US_ASCII.equals(c))
                                             break;
 
-                                        // Check if really UTF-8
-                                        if (StandardCharsets.UTF_8.equals(c) && !CharsetHelper.isUTF8(result)) {
-                                            Log.w("Charset meta=" + meta + " !isUTF8");
-                                            break;
-                                        }
-
                                         // 16 bits charsets cannot be converted to 8 bits
                                         if (CHARSET16.contains(c)) {
                                             Log.w("Charset meta=" + meta);
                                             break;
                                         }
 
+                                        // Check if really UTF-8
+                                        if (StandardCharsets.UTF_8.equals(c) && !CharsetHelper.isUTF8(result)) {
+                                            Log.w("Charset meta=" + meta + " !isUTF8");
+                                            break;
+                                        }
+
+                                        // Check if same as detected charset
                                         Charset detected = CharsetHelper.detect(result, c);
-                                        if (c.equals(detected))
+                                        if (c.equals(detected) && !StandardCharsets.ISO_8859_1.equals(cs))
                                             break;
 
                                         // Common detected/meta
@@ -4101,7 +4102,7 @@ public class MessageHelper {
                 throw new ParseException("Signed boundary missing");
 
             File file = local.getFile(context);
-            try (OutputStream os = new BufferedOutputStream(new CanonicalizingStream(new FileOutputStream(file), boundary))) {
+            try (OutputStream os = new BufferedOutputStream(new CanonicalizingStream(new FileOutputStream(file), apart.encrypt, boundary))) {
                 apart.part.writeTo(os);
             }
 
@@ -5241,19 +5242,27 @@ public class MessageHelper {
                 .replaceAll("[^\\p{ASCII}]", "");
     }
 
-    static String sanitizeEmail(String email) {
-        if (email == null)
-            return null;
+    static InternetAddress buildAddress(String email, String name, boolean suggest) {
+        try {
+            InternetAddress address = (email == null ? new InternetAddress() : new InternetAddress(email));
 
-        if (email.contains("<") && email.contains(">"))
-            try {
-                InternetAddress address = new InternetAddress(email);
-                return address.getAddress();
-            } catch (AddressException ex) {
-                Log.e(ex);
+            if (suggest && !TextUtils.isEmpty(name) &&
+                    TextUtils.isEmpty(address.getPersonal())) {
+                try {
+                    address.setPersonal(name, StandardCharsets.UTF_8.name());
+                } catch (UnsupportedEncodingException ex) {
+                    Log.i(ex);
+                }
             }
 
-        return email;
+            if (TextUtils.isEmpty(address.getAddress()) && TextUtils.isEmpty(address.getAddress()))
+                return null;
+
+            return address;
+        } catch (AddressException ex) {
+            Log.e(ex);
+            return null;
+        }
     }
 
     static String sanitizeName(String name) {
@@ -5762,6 +5771,7 @@ public class MessageHelper {
 
     static class CanonicalizingStream extends FilterOutputStream {
         private OutputStream os;
+        private int content;
         private String boundary;
 
         private int boundaries = 0;
@@ -5773,16 +5783,11 @@ public class MessageHelper {
         // PGP: https://datatracker.ietf.org/doc/html/rfc3156#section-5
         // S/MIME: https://datatracker.ietf.org/doc/html/rfc8551#section-3.1.1
 
-        public CanonicalizingStream(OutputStream out) {
+        public CanonicalizingStream(OutputStream out, int content, String boundary) {
             super(out);
             this.os = out;
-            this.boundary = null;
-        }
-
-        public CanonicalizingStream(OutputStream out, String boundary) {
-            super(out);
-            this.os = out;
-            this.boundary = "--" + boundary;
+            this.content = content;
+            this.boundary = (boundary == null ? null : "--" + boundary);
         }
 
         @Override
@@ -5842,7 +5847,8 @@ public class MessageHelper {
                         return false;
                 }
 
-                line = line.replaceAll(" +$", "");
+                if (EntityAttachment.PGP_CONTENT.equals(content) || boundary == null)
+                    line = line.replaceAll(" +$", "");
 
                 os.write(line.getBytes(StandardCharsets.ISO_8859_1));
 

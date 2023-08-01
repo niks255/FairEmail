@@ -62,6 +62,9 @@
     <plurals name="title_deleting_messages">
         <item quantity="other">永久删除 %1$d 则邮件？</item>
     </plurals>
+    <plurals name="title_attachments">
+        <item quantity="other">%1$d 个附件</item>
+    </plurals>
     <plurals name="title_ask_spam">
         <item quantity="other">将这 %1$d 则邮件标为垃圾邮件？</item>
     </plurals>
@@ -358,6 +361,7 @@
     <string name="title_advanced_suggest_frequently">按使用频率来排序建议地址</string>
     <string name="title_advanced_alt_re_fwd">替代回复/转发前缀</string>
     <string name="title_advanced_send_chips">卡片化显示地址</string>
+    <string name="title_advanced_send_nav_color">将身份颜色用于底部操作栏</string>
     <string name="title_advanced_send_reminders">显示提醒</string>
     <string name="title_advanced_send_delayed">延迟发送消息</string>
     <string name="title_advanced_attach_new">为共享地址和文件创建新的消息草稿</string>
@@ -501,12 +505,12 @@
     <string name="title_advanced_preview_lines">预览行数</string>
     <string name="title_advanced_align_header">垂直对齐关键词、预览文本和注释</string>
     <string name="title_advanced_addresses">默认展开地址详情</string>
+    <string name="title_advanced_hide_attachments">默认折叠附件</string>
     <string name="title_advanced_unzip">显示压缩附件的内容</string>
     <string name="title_advanced_attachments_alt">在消息文本后显示附件</string>
     <string name="title_advanced_thumbnails">在消息文本后显示图像缩略图</string>
     <string name="title_advanced_message_text_zoom2">默认消息文本缩放： %1$s %%</string>
     <string name="title_advanced_overview_mode">缩放原始消息以适应屏幕</string>
-    <string name="title_advanced_override_width">在原始消息中禁用固定宽度</string>
     <string name="title_advanced_hyphenation">使用自动连字符</string>
     <string name="title_advanced_contrast">对消息文本使用高对比度颜色</string>
     <string name="title_advanced_monospaced">消息文本默认使用等宽字体</string>
@@ -571,13 +575,13 @@
     <string name="title_advanced_autoread">移动消息时自动标为已读</string>
     <string name="title_advanced_autounstar">移动消息时自动移除星标</string>
     <string name="title_advanced_reset_importance">在移动消息时重置其重要性</string>
-    <string name="title_advanced_thread_sent_trash">回收对话时，同时回收发送的消息</string>
     <string name="title_advanced_star_snoozed">自动给打盹消息添加星标</string>
     <string name="title_advanced_auto_important">自动标注星标消息为重要</string>
     <string name="title_advanced_cancel_snooze">移动消息时取消延后</string>
     <string name="title_advanced_auto_block_sender">报告垃圾邮件时自动屏蔽发件人</string>
     <string name="title_advanced_auto_hide_answer">在滚动时自动隐藏回复按钮</string>
     <string name="title_advanced_swipe_reply">右滑展开的邮件进行回复</string>
+    <string name="title_advanced_move_thread_all">移动对话时，移动所有消息</string>
     <string name="title_advanced_move_thread_sent">移动会话时也移动已发送的邮件</string>
     <string name="title_advanced_default_snooze">默认打盹/延迟时间</string>
     <string name="title_advanced_default_folder">选择默认文件夹</string>
@@ -653,6 +657,7 @@
     <string name="title_advanced_sign_default">使用默认签名</string>
     <string name="title_advanced_encrypt_default">使用默认加密</string>
     <string name="title_advanced_encrypt_auto">当所有收件人的公钥可用时自动加密</string>
+    <string name="title_advanced_auto_verify">自动验证已签名消息</string>
     <string name="title_advanced_auto_decrypt">自动解密消息</string>
     <string name="title_advanced_auto_undo_decrypt">关闭对话时撤销解密</string>
     <string name="title_advanced_openpgp">OpenPGP 提供者</string>
@@ -737,7 +742,7 @@
     <string name="title_advanced_lookup_mx_hint">这将检查 DNS MX 记录是否存在</string>
     <string name="title_advanced_sync_delay_hint">这将减缓同步消息的速度</string>
     <string name="title_advanced_folder_nav_hint">这将总是从邮件列表返回到相关帐户的文件夹列表</string>
-    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">下拉文件夹或账户列表时</string>
+    <string name="title_advanced_pull_all_hint">下拉文件夹或账户列表时</string>
     <string name="title_advanced_suggest_names_hint">如果禁用，选择联系人时将只使用电子邮件地址</string>
     <string name="title_advanced_suggest_local_hint">这不包括 Android 提供的联系人。应用仅在此选项启用后存储新的接收或发送消息的联系人。</string>
     <string name="title_advanced_auto_identity_hint">这将选择上次使用的身份作为新邮件收件人</string>
@@ -775,7 +780,6 @@
     <string name="title_advanced_preview_lines_hint">总共最多 %s 个字符</string>
     <string name="title_advanced_preview_issue">由于某些Android版本中的错误，当行数大于一时，滚动可能会较慢</string>
     <string name="title_advanced_overview_mode_hint">这可能会产生非常小的字体</string>
-    <string name="title_advanced_override_width_hint">这可以使消息更窄，但看起来很奇怪。</string>
     <string name="title_advanced_monospaced_pre_hint">纯文本邮件将被视为已预格式化</string>
     <string name="title_advanced_placeholders_hint">这仅适用于重建格式的消息</string>
     <string name="title_advanced_inline_hint">内联图像是邮件中包含的图像</string>
@@ -1160,6 +1164,7 @@
     <string name="title_unsubscribe">取消订阅</string>
     <string name="title_message_rule">创建规则</string>
     <string name="title_no_junk">不是垃圾邮件</string>
+    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">编辑标题 &#8230;</string>
     <string name="title_move_to">移动到 &#8230;</string>
     <string name="title_move_to_folder">移动到 &#8230;</string>
     <string name="title_move_to_account">移动到 %1$s &#8230;</string>
@@ -1887,6 +1892,7 @@
     <string name="title_debug_info_remark">请描述问题及问题发生的时间：</string>
     <string name="title_crash_info_remark">请描述应用崩溃时您的操作</string>
     <string name="title_debug_info_issue">问题描述(必填)</string>
+    <string name="title_debug_info_issue_remark">详细信息，例如问题的估计时间、确切的错误信息等等都是重要的。</string>
     <string name="title_debug_info_contact">别人最近因为这个问题联系过我们</string>
     <string name="title_unexpected_info_remark">请描述应用出错时您的操作:</string>
     <string name="title_widget_title_count">新消息计数</string>
@@ -1910,6 +1916,7 @@
     <string name="title_widget_subject_lines">最大主题行数</string>
     <string name="title_widget_avatars">显示联系人头像</string>
     <string name="title_widget_account_name">显示账户名称</string>
+    <string name="title_widget_caption">显示标题</string>
     <string name="title_widget_refresh">显示刷新消息按钮</string>
     <string name="title_widget_compose">显示新建邮件按钮</string>
     <string name="title_widget_background">背景颜色</string>

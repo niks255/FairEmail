@@ -549,6 +549,7 @@ public class Log {
                         String theme = prefs.getString("theme", "blue_orange_system");
                         event.addMetadata("extra", "theme", theme);
                         event.addMetadata("extra", "package", BuildConfig.APPLICATION_ID);
+                        event.addMetadata("extra", "locale", Locale.getDefault().toString());
                     }
 
                     return should;
@@ -1790,9 +1791,11 @@ public class Log {
         StringBuilder sb = new StringBuilder();
         sb.append(context.getString(title)).append("\n\n");
         if (args != null) {
-            sb.append(args.getString("issue"));
-            if (args.getBoolean("contact"))
-                sb.append("\n\n").append("Prior contact");
+            sb.append(args.getString("issue")).append('\n');
+            if (args.containsKey("account"))
+                sb.append('\n').append("Account: ").append(args.getString("account"));
+            if (args.containsKey("contact"))
+                sb.append('\n').append("Prior contact: ").append(args.getBoolean("contact"));
         }
         sb.append("\n\n");
         sb.append(getAppInfo(context));
@@ -1824,9 +1827,7 @@ public class Log {
             draft.msgid = EntityMessage.generateMessageId();
             draft.thread = draft.msgid;
             draft.to = new Address[]{myAddress()};
-            draft.subject = context.getString(R.string.app_name) + " " +
-                    BuildConfig.VERSION_NAME + BuildConfig.REVISION +
-                    " debug info - " + source;
+            draft.subject = context.getString(R.string.app_name) + " " + getVersionInfo(context) + " debug info - " + source;
             draft.received = new Date().getTime();
             draft.seen = true;
             draft.ui_seen = true;
@@ -1973,6 +1974,16 @@ public class Log {
         }
     }
 
+    private static String getVersionInfo(Context context) {
+        return String.format("%s%s/%d%s%s%s\r\n",
+                BuildConfig.VERSION_NAME,
+                BuildConfig.REVISION,
+                Helper.hasValidFingerprint(context) ? 1 : 3,
+                BuildConfig.PLAY_STORE_RELEASE ? "p" : "",
+                BuildConfig.DEBUG ? "d" : "",
+                ActivityBilling.isPro(context) ? "+" : "-");
+    }
+
     private static StringBuilder getAppInfo(Context context) {
         StringBuilder sb = new StringBuilder();
 
@@ -1986,14 +1997,7 @@ public class Log {
         String installer = pm.getInstallerPackageName(BuildConfig.APPLICATION_ID);
 
         // Get version info
-        sb.append(String.format("%s %s/%d%s%s%s%s\r\n",
-                context.getString(R.string.app_name),
-                BuildConfig.VERSION_NAME + BuildConfig.REVISION,
-                Helper.hasValidFingerprint(context) ? 1 : 3,
-                BuildConfig.PLAY_STORE_RELEASE ? "p" : "",
-                Helper.hasPlayStore(context) ? "s" : "",
-                BuildConfig.DEBUG ? "d" : "",
-                ActivityBilling.isPro(context) ? "+" : "-"));
+        sb.append(String.format("%s %s\r\n", context.getString(R.string.app_name), getVersionInfo(context)));
         sb.append(String.format("Package: %s uid: %d\r\n",
                 BuildConfig.APPLICATION_ID, android.os.Process.myUid()));
         sb.append(String.format("Android: %s (SDK device=%d target=%d)\r\n",
@@ -2007,6 +2011,7 @@ public class Log {
 
         sb.append(String.format("Installer: %s\r\n", installer));
         sb.append(String.format("Installed: %s\r\n", new Date(Helper.getInstallTime(context))));
+        sb.append(String.format("Play Store: %s\r\n", Helper.hasPlayStore(context)));
         sb.append(String.format("Updated: %s\r\n", new Date(Helper.getUpdateTime(context))));
         sb.append(String.format("Last cleanup: %s\r\n", new Date(last_cleanup)));
         sb.append(String.format("Now: %s\r\n", new Date()));
@@ -2409,7 +2414,7 @@ public class Log {
                         Helper.getInterruptionFilter(filter) +
                                 (filter == NotificationManager.INTERRUPTION_FILTER_ALL ? "" : "!!!")) + "\r\n" +
                         "accounts=" + accounts.size() +
-                        " folders=" + db.folder().countTotal() +
+                        " folders=" + db.folder().countSync() + "/" + db.folder().countTotal() +
                         " messages=" + db.message().countTotal() +
                         " rules=" + db.rule().countTotal() +
                         " ops=" + db.operation().getOperationCount() +
@@ -2506,13 +2511,15 @@ public class Log {
                                 EmailService.getEncryptionName(account.encryption) +
                                 (account.insecure ? " !!!" : "") +
                                 " sync=" + account.synchronize +
-                                " exempted=" + account.poll_exempted +
+                                " exempted=" + account.poll_exempted + (pollInterval > 0 && account.poll_exempted ? " !!!" : "") +
                                 " poll=" + account.poll_interval +
                                 " ondemand=" + account.ondemand + (account.ondemand ? " !!!" : "") +
                                 " msgs=" + content + "/" + messages + " max=" + account.max_messages +
                                 " ops=" + db.operation().getOperationCount(account.id) +
                                 " schedule=" + (!ignore_schedule) + (ignore_schedule ? " !!!" : "") +
                                 " unmetered=" + unmetered + (unmetered ? " !!!" : "") +
+                                " quota=" + (account.quota_usage == null ? "-" : Helper.humanReadableByteCount(account.quota_usage)) +
+                                "/" + (account.quota_limit == null ? "-" : Helper.humanReadableByteCount(account.quota_limit)) +
                                 " " + account.state +
                                 (account.last_connected == null ? "" : " " + dtf.format(account.last_connected)) +
                                 (account.error == null ? "" : "\r\n" + account.error) +
@@ -2529,7 +2536,8 @@ public class Log {
                                         folder.type + (folder.inherited_type == null ? "" : "/" + folder.inherited_type) +
                                         (folder.unified ? " unified" : "") +
                                         (folder.notify ? " notify" : "") +
-                                        " poll=" + folder.poll + "/" + folder.poll_factor +
+                                        " poll=" + folder.poll + (folder.poll || EntityFolder.INBOX.equals(folder.type) ? "" : " !!! ") +
+                                        " factor=" + folder.poll_factor +
                                         " days=" + getDays(folder.sync_days) + "/" + getDays(folder.keep_days) +
                                         " msgs=" + folder.content + "/" + folder.messages + "/" + folder.total +
                                         " ops=" + db.operation().getOperationCount(folder.id, null) +
@@ -2572,6 +2580,7 @@ public class Log {
                                         EmailService.getEncryptionName(identity.encryption) +
                                         (identity.insecure ? " !!!" : "") +
                                         " ops=" + db.operation().getOperationCount(EntityOperation.SEND) +
+                                        " max=" + (identity.max_size == null ? "-" : Helper.humanReadableByteCount(identity.max_size)) +
                                         " " + identity.state +
                                         (identity.last_connected == null ? "" : " " + dtf.format(identity.last_connected)) +
                                         (identity.error == null ? "" : "\r\n" + identity.error) +
@@ -2808,6 +2817,14 @@ public class Log {
             try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
                 long from = new Date().getTime() - 24 * 3600 * 1000L;
                 DateFormat TF = Helper.getTimeInstance(context);
+
+                for (EntityLog entry : db.log().getLogs(from, null))
+                    if (entry.data != null && entry.data.contains("backoff="))
+                        size += write(os, String.format("%s %s\r\n",
+                                TF.format(entry.time),
+                                entry.data));
+
+                size += write(os, "\r\n");
 
                 for (EntityLog entry : db.log().getLogs(from, null)) {
                     size += write(os, String.format("%s [%d:%d:%d:%d:%d] %s\r\n",

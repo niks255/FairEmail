@@ -89,6 +89,12 @@
         <item quantity="many">למחוק %1$d הודעות לצמיתות?</item>
         <item quantity="other">למחוק %1$d הודעות לצמיתות?</item>
     </plurals>
+    <plurals name="title_attachments">
+        <item quantity="one">קובץ מצורף</item>
+        <item quantity="two">%1$d קבצים מצורפים</item>
+        <item quantity="many">%1$d קבצים מצורפים</item>
+        <item quantity="other">%1$d קבצים מצורפים</item>
+    </plurals>
     <plurals name="title_ask_spam">
         <item quantity="one">להתייחס אל ההודעה כספאם?</item>
         <item quantity="two">האם לסמן %1$d הודעות כדואר זבל?</item>
@@ -398,6 +404,7 @@
     <string name="title_advanced_suggest_frequently">סידור הכתובות המוצעות לפי תדירות השימוש</string>
     <string name="title_advanced_alt_re_fwd">קידומת חלופית לתגובה/העברה</string>
     <string name="title_advanced_send_chips">הצגת בועיות כתובות</string>
+    <string name="title_advanced_send_nav_color">להשתמש בצבע הזהות לסרגל הפעולות התחתון</string>
     <string name="title_advanced_send_reminders">הצגת תזכורות</string>
     <string name="title_advanced_send_delayed">השהיית שליחת הודעות</string>
     <string name="title_advanced_attach_new">יצירת הודעת טיוטה לכתובות וקבצים משותפים</string>
@@ -541,12 +548,12 @@
     <string name="title_advanced_preview_lines">מספר השורות בתצוגה המקדימה</string>
     <string name="title_advanced_align_header">ליישר אנכית מילות מפתח, טקסט של תצוגה מקדימה ופתקיות</string>
     <string name="title_advanced_addresses">הרחבת פרטי הכתובת כברירת מחדל</string>
+    <string name="title_advanced_hide_attachments">צמצום קבצים מצורפים כברירת מחדל</string>
     <string name="title_advanced_unzip">הצגת תוכן הקבצים המצורפים הדחוסים</string>
     <string name="title_advanced_attachments_alt">הצגת הקבצים המצורפים אחרי טקסט ההודעה</string>
     <string name="title_advanced_thumbnails">הצגת תמונות ממוזערות אחרי טקסט ההודעה</string>
     <string name="title_advanced_message_text_zoom2">תקריב טקסט ההודעות כבררת מחדל: %1$s %%</string>
     <string name="title_advanced_overview_mode">התאמת התקריב של ההודעות המקוריות לגודל המסך</string>
-    <string name="title_advanced_override_width">השבתת הגדרות רוחב קבועות בהודעות המקוריות</string>
     <string name="title_advanced_hyphenation">להשתמש במיקוף אוטומטי</string>
     <string name="title_advanced_contrast">להשתמש בניגודיות גבוהה לטקסט ההודעות</string>
     <string name="title_advanced_monospaced">להשתמש בגופן ברוחב אחיד לטקסט ההודעה כבררת מחדל</string>
@@ -611,13 +618,13 @@
     <string name="title_advanced_autoread">לסמן הודעות כנקראו אוטומטית בהעברתן</string>
     <string name="title_advanced_autounstar">להסיר כוכבים מהודעות אוטומטית בעת העברת הודעות</string>
     <string name="title_advanced_reset_importance">איפוס החשיבות בעת העברת הודעות</string>
-    <string name="title_advanced_thread_sent_trash">בעת השלכת דיון לאשפה, להשליך גם את ההודעות שנשלחו</string>
     <string name="title_advanced_star_snoozed">להוסיף כוכב על הודעות מושהות אוטומטית</string>
     <string name="title_advanced_auto_important">להפוך הודעות שסומנו בכוכב לחשובות אוטומטית</string>
     <string name="title_advanced_cancel_snooze">ביטול נודניק בעת העברת הודעות</string>
     <string name="title_advanced_auto_block_sender">לחסום את השולח אוטומטית בעת דיווח על ספאם</string>
     <string name="title_advanced_auto_hide_answer">להסתיר את כפתור המענה אוטומטית בעת הגלילה</string>
     <string name="title_advanced_swipe_reply">החלקת הודעות מורחבות לימין פותחת מענה</string>
+    <string name="title_advanced_move_thread_all">בעת העברת דיון, להעביר את כל ההודעות</string>
     <string name="title_advanced_move_thread_sent">בעת העברת דיון, להעביר גם את ההודעות שנשלחו</string>
     <string name="title_advanced_default_snooze">זמן בררת המחדל לדחיית/השהיית תזכורות</string>
     <string name="title_advanced_default_folder">בחירת תיקיית ברירת מחדל</string>
@@ -693,6 +700,7 @@
     <string name="title_advanced_sign_default">חתימה כבררת מחדל</string>
     <string name="title_advanced_encrypt_default">הצפנה כבררת מחדל</string>
     <string name="title_advanced_encrypt_auto">להצפין אוטומטית כשכל מפתחות הנמענים זמינים</string>
+    <string name="title_advanced_auto_verify">לאמת הודעות חתומות אוטומטית</string>
     <string name="title_advanced_auto_decrypt">פענוח הודעות אוטומטית</string>
     <string name="title_advanced_auto_undo_decrypt">להשתמש בפענוח עם סגירת דיון</string>
     <string name="title_advanced_openpgp">ספק OpenPGP</string>
@@ -777,7 +785,7 @@
     <string name="title_advanced_lookup_mx_hint">יבדוק אם קיימות רשומות MX ב־DNS</string>
     <string name="title_advanced_sync_delay_hint">יאט סנכרון הודעות</string>
     <string name="title_advanced_folder_nav_hint">פקודה זו תמיד תחזיר את רשימת התיקיות של החשבון הקשור מרשימת הודעות</string>
-    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">במשיכת רשימת התיקיות או החשבונות למטה</string>
+    <string name="title_advanced_pull_all_hint">במשיכת רשימת התיקיות או החשבונות למטה</string>
     <string name="title_advanced_suggest_names_hint">אם מושבת, אפשר יהיה להשתמש רק בכתובות דוא״ל בעת בחירת אנשי קשר</string>
     <string name="title_advanced_suggest_local_hint">בנוסף לאנשי הקשר שמסופקים על ידי Android. פרטי הקשר יאוחסנו להודעות חדשות שנשלחו או התקבלו כשהאפשרות פעילה.</string>
     <string name="title_advanced_auto_identity_hint">תיבחר הזהות האחרונה בה נעשה שימוש כאשר נבחר נמען להודעות חדשות</string>
@@ -815,7 +823,6 @@
     <string name="title_advanced_preview_lines_hint">%s תווים לכל היותר בסך הכול</string>
     <string name="title_advanced_preview_issue">גלילה עשויה להאט עקב תקלה בחלק מגרסאות ה־Android כשמספר השורות עולה על אחת</string>
     <string name="title_advanced_overview_mode_hint">יכול לגרום להקטנה מוגזמת של הגופנים</string>
-    <string name="title_advanced_override_width_hint">זה יכול להצר הודעות אבל גם להציג בצורה מוזרה</string>
     <string name="title_advanced_monospaced_pre_hint">הודעות בטקסט פשוט בלבד תיחשבנה שעוצבו מראש</string>
     <string name="title_advanced_placeholders_hint">חל על הודעות שעוצבו מחדש בלבד</string>
     <string name="title_advanced_inline_hint">תמונות מובנות הן תמונות שכלולות בהודעה</string>
@@ -1203,6 +1210,7 @@
     <string name="title_unsubscribe">ביטול מינוי</string>
     <string name="title_message_rule">יצירת כלל</string>
     <string name="title_no_junk">לא ספאם</string>
+    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">עריכת הנושא&#8230;</string>
     <string name="title_move_to">העברה אל&#8230;</string>
     <string name="title_move_to_folder">העברה אל&#8230;</string>
     <string name="title_move_to_account">העברה אל %1$s&#8230;</string>
@@ -1934,6 +1942,7 @@
     <string name="title_debug_info_remark">נא לתאר את התקלה ולציין את מועדה:</string>
     <string name="title_crash_info_remark">נא לתאר באנגלית מה עשית כשהיישומון קרס:</string>
     <string name="title_debug_info_issue">תיאור התקלה (חובה)</string>
+    <string name="title_debug_info_issue_remark">פרטים כגון זמן תקלה משוערך, הודעת השגיאה המדויקת וכו׳ הם חיוניים</string>
     <string name="title_debug_info_contact">לאחרונה יצרנו קשר סביב הבעיה הזאת</string>
     <string name="title_unexpected_info_remark">נא לתאר באנגלית מה עשית כשהופיעה השגיאה:</string>
     <string name="title_widget_title_count">מונה הודעות חדשות</string>
@@ -1957,6 +1966,7 @@
     <string name="title_widget_subject_lines">מספר שורות הנושא המרבי</string>
     <string name="title_widget_avatars">הצגת תמונות אנשי קשר</string>
     <string name="title_widget_account_name">הצגת שם החשבון</string>
+    <string name="title_widget_caption">הצגת כותרת</string>
     <string name="title_widget_refresh">הצגת כפתור רענון הודעות</string>
     <string name="title_widget_compose">הצגת כפתור כתיבת הודעה חדשה</string>
     <string name="title_widget_background">צבע הרקע</string>

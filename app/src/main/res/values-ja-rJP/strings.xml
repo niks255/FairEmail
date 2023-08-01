@@ -62,6 +62,9 @@
     <plurals name="title_deleting_messages">
         <item quantity="other">%1$d 件のメッセージを完全に削除しますか？</item>
     </plurals>
+    <plurals name="title_attachments">
+        <item quantity="other">添付ファイル %1$d 件</item>
+    </plurals>
     <plurals name="title_ask_spam">
         <item quantity="other">%1$d 件のメッセージを迷惑メールとして扱いますか？</item>
     </plurals>
@@ -359,6 +362,7 @@
     <string name="title_advanced_suggest_frequently">提案するアドレスを使用頻度で並べ替え</string>
     <string name="title_advanced_alt_re_fwd">返信/転送のプレフィックスを変更</string>
     <string name="title_advanced_send_chips">アドレスバルーンを表示</string>
+    <string name="title_advanced_send_nav_color">下部のボタンアクションバーを、ID の色にする</string>
     <string name="title_advanced_send_reminders">リマインダーを表示</string>
     <string name="title_advanced_send_delayed">メッセージ送信を遅延させる</string>
     <string name="title_advanced_attach_new">アドレスやファイルをアプリに共有したとき、新しい下書きを作成</string>
@@ -502,12 +506,12 @@
     <string name="title_advanced_preview_lines">プレビューの行数</string>
     <string name="title_advanced_align_header">キーワード、プレビューテキスト、メモを垂直方向に揃える</string>
     <string name="title_advanced_addresses">デフォルトでアドレスの詳細を展開</string>
+    <string name="title_advanced_hide_attachments">デフォルトで添付ファイルを折りたたむ</string>
     <string name="title_advanced_unzip">圧縮された添付ファイルの内容を表示</string>
     <string name="title_advanced_attachments_alt">本文の後に添付ファイルを表示</string>
     <string name="title_advanced_thumbnails">本文の後に画像サムネイルを表示</string>
     <string name="title_advanced_message_text_zoom2">デフォルトの本文のテキスト拡大率: %1$s %%</string>
     <string name="title_advanced_overview_mode">画面に合わせて元のメッセージを拡大</string>
-    <string name="title_advanced_override_width">元のメッセージの幅の固定を無効にする</string>
     <string name="title_advanced_hyphenation">自動ハイフンを使用</string>
     <string name="title_advanced_contrast">本文にハイコントラストテーマを使用</string>
     <string name="title_advanced_monospaced">デフォルトで本文に等幅フォントを使用</string>
@@ -546,6 +550,7 @@
     <string name="title_advanced_language_detection">メッセージの言語を検出</string>
     <string name="title_advanced_photo_picker">Android の写真選択ツールを使用</string>
     <string name="title_advanced_pull_refresh">プルダウンして更新</string>
+    <string name="title_advanced_pull_all">すべてのフォルダーを同期</string>
     <string name="title_advanced_autoscroll">新着メッセージを受信したら一番上にスクロール</string>
     <string name="title_advanced_double_tap">ダブルタップでメッセージを既読/未読にする</string>
     <string name="title_advanced_swipenav">左/右にスワイプして次/前の会話に移動</string>
@@ -571,13 +576,13 @@
     <string name="title_advanced_autoread">移動するメッセージを自動で既読にする</string>
     <string name="title_advanced_autounstar">移動するメッセージのスターを自動で取り消す</string>
     <string name="title_advanced_reset_importance">移動するメッセージの重要度をリセット</string>
-    <string name="title_advanced_thread_sent_trash">会話をごみ箱に移動するとき、送信済みメッセージもごみ箱に移動</string>
     <string name="title_advanced_star_snoozed">スヌーズしたメッセージに自動でスターを付ける</string>
     <string name="title_advanced_auto_important">スター付きメッセージを自動で重要にマーク</string>
     <string name="title_advanced_cancel_snooze">メッセージを移動するときスヌーズをキャンセル</string>
     <string name="title_advanced_auto_block_sender">メッセージを迷惑メールとして報告したとき、差出人を自動でブロック</string>
     <string name="title_advanced_auto_hide_answer">スクロール時に返信ボタンを隠す</string>
     <string name="title_advanced_swipe_reply">展開したメッセージを右にスワイプして返信</string>
+    <string name="title_advanced_move_thread_all">会話を移動するとき、すべてのメッセージを移動</string>
     <string name="title_advanced_move_thread_sent">会話を移動するとき、送信済みメッセージも移動</string>
     <string name="title_advanced_default_snooze">デフォルトのスヌーズ/遅延時間</string>
     <string name="title_advanced_default_folder">デフォルトのフォルダーを選択</string>
@@ -653,7 +658,8 @@
     <string name="title_advanced_sign_default">デフォルトで電子署名</string>
     <string name="title_advanced_encrypt_default">デフォルトで暗号化</string>
     <string name="title_advanced_encrypt_auto">すべての宛先の鍵が有効なときは自動で暗号化</string>
-    <string name="title_advanced_auto_decrypt">メッセージを自動復号</string>
+    <string name="title_advanced_auto_verify">電子署名されたメッセージを自動検証</string>
+    <string name="title_advanced_auto_decrypt">暗号化されたメッセージを自動復号</string>
     <string name="title_advanced_auto_undo_decrypt">会話の終了時に復号を元に戻す</string>
     <string name="title_advanced_openpgp">OpenPGP プロバイダー</string>
     <string name="title_advanced_autocrypt">Autocrypt を使用</string>
@@ -737,6 +743,7 @@
     <string name="title_advanced_lookup_mx_hint">DNS MX レコードが存在するかどうかを確認します</string>
     <string name="title_advanced_sync_delay_hint">メッセージの同期が遅くなります</string>
     <string name="title_advanced_folder_nav_hint">常にメッセージリストから関連するアカウントのフォルダーリストに戻ります</string>
+    <string name="title_advanced_pull_all_hint">フォルダーやアカウントの一覧をプルダウンしたとき</string>
     <string name="title_advanced_suggest_names_hint">無効にすると、連絡先を選択する際にメールアドレスのみが使用されます</string>
     <string name="title_advanced_suggest_local_hint">Android のローカル連絡先を追加します。有効にすると、新しく送受信されたメッセージの連絡先データが保存されます。</string>
     <string name="title_advanced_auto_identity_hint">新規メッセージにメールを送信するとき、最後に使用したユーザー ID を選択します</string>
@@ -774,7 +781,6 @@
     <string name="title_advanced_preview_lines_hint">合計 %s 文字</string>
     <string name="title_advanced_preview_issue">行が複数の場合、一部の Android バージョンのバグによりスクロールが遅くなる可能性があります</string>
     <string name="title_advanced_overview_mode_hint">フォントが非常に小さくなることがあります</string>
-    <string name="title_advanced_override_width_hint">メッセージを小さくすることができますが、おかしな見た目になることもあります</string>
     <string name="title_advanced_monospaced_pre_hint">プレーンテキストのみのメッセージは書式設定済みとみなされます</string>
     <string name="title_advanced_placeholders_hint">再フォーマットされたメッセージにのみ適用されます</string>
     <string name="title_advanced_inline_hint">インライン画像はメッセージに含まれる画像のことです</string>
@@ -1162,11 +1168,16 @@
     <string name="title_unsubscribe">購読解除</string>
     <string name="title_message_rule">ルールを作成</string>
     <string name="title_no_junk">迷惑メールでないと報告</string>
+    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">件名を編集&#8230;</string>
     <string name="title_move_to">&#8230;に移動</string>
     <string name="title_move_to_folder">&#8230;に移動</string>
     <string name="title_move_to_account">%1$s に移動&#8230;</string>
     <string name="title_report_spam">迷惑メールとして扱う</string>
     <string name="title_delete_permanently">完全に削除</string>
+    <string name="title_delete_attachments">添付ファイルを削除</string>
+    <string name="title_delete_attachments_remark">        添付ファイルを削除すると、新しいメッセージが追加されて、古いメッセージが削除されます。
+        失敗すると、古いメッセージはごみ箱に移動されます。
+    </string>
     <string name="title_snooze">スヌーズ&#8230;</string>
     <string name="title_archive">アーカイブ</string>
     <string name="title_reply">返信</string>
@@ -1889,6 +1900,7 @@
     <string name="title_debug_info_remark">(英語) 問題の詳細と発生日時を教えてください:</string>
     <string name="title_crash_info_remark">(英語) アプリがクラッシュしたときに何をしていたかを説明してください:</string>
     <string name="title_debug_info_issue">問題の説明 (必須・英語で)</string>
+    <string name="title_debug_info_issue_remark">デバッグには、問題発生の推定時刻や正確なエラーメッセージなどの詳細情報が重要です</string>
     <string name="title_debug_info_contact">最近、この問題について連絡がありました</string>
     <string name="title_unexpected_info_remark">(英語) エラーが発生したときに何をしていたか説明してください:</string>
     <string name="title_widget_title_count">新着メッセージ数</string>
@@ -1911,6 +1923,8 @@
     <string name="title_widget_count_top">未読件数を上部に表示</string>
     <string name="title_widget_subject_lines">件名の最大行数</string>
     <string name="title_widget_avatars">連絡先のアバターを表示</string>
+    <string name="title_widget_account_name">アカウント名を表示</string>
+    <string name="title_widget_caption">件名を表示</string>
     <string name="title_widget_refresh">メッセージ更新ボタンを表示</string>
     <string name="title_widget_compose">メッセージ新規作成ボタンを表示</string>
     <string name="title_widget_background">背景色</string>

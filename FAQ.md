@@ -119,7 +119,6 @@ Related questions:
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
 * A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
-* A [bug in Crowdin](https://crowdin.com/messages/536694) blocks updating FAQ.md (this text) for translation.
 * Search suggestions causes the keyboard losing focus on Android 12L.
 * [A bug](https://techcommunity.microsoft.com/t5/outlook/outlook-office-365-imap-idle-is-broken/m-p/3616242) in the Outlook IMAP server causes delayed new message notifications.
 
@@ -195,7 +194,8 @@ The cause might be [changes in Android 7 Nougat](https://ericsink.com/entries/sq
 * &#x2714; ~~Move notification action~~
 * &#x2714; ~~S/MIME support~~
 * &#x2714; ~~Search for settings~~
-* &#x2714; Many more ...
+* POP3 folders
+* Bottom action bar
 
 Anything on this list is in random order and *might* be added in the near future.
 
@@ -520,6 +520,7 @@ The low priority status bar notification shows the number of pending operations,
 * *raw*: download raw message
 * *body*: download message text
 * *attachment*: download attachment
+* *detach*: delete attachment
 * *sync*: synchronize local and remote messages
 * *subscribe*: subscribe to remote folder
 * *purge*: delete all messages from remote folder
@@ -819,10 +820,9 @@ Please see [this FAQ](#user-content-faq111) about OAuth support.
 Identities represent email addresses you are sending *from* via an email (SMTP) server.
 
 Some providers allow you to have multiple aliases.
-You can configure these by setting the email address field of an additional identity to the alias address
-and setting the user name field to your main email address.
-
-Note that you can copy an identity by long pressing it in the list of identities (via *Manual setup and account options* in the main settings page).
+The easiest way to create an alias is to copy the main identity, and change the email address and perhaps the (display) name. 
+You should not change the username!
+For this, please go to the settings via the navigation menu (left side menu), tap on *Manual setup and account options*, tap on *Identities*, long press the main identity, and select to copy it.
 
 **In many cases, an alias address must first be verified via the website of the mail provider**
 
@@ -1041,7 +1041,7 @@ Common errors:
 * *Private key does not match any encryption keys*: the selected key cannot be used to decrypt the message, probably because it is the incorrect key
 * *No private key*: no certificate was selected or no certificate was available in the Android keystore
 * *Memory allocation failed*: Android supports keys up to 4096 bits only (Android [issue 199605614](https://issuetracker.google.com/issues/199605614))
-* *message-digest attribute value does not match calculated value*: the signature doesn't match the message, possible because the message was changed.
+* *message-digest attribute value does not match calculated value*: the signature doesn't match the message, possibly because the message was changed, or because an incorrect or key was used
 
 In case the certificate chain is incorrect, you can tap on the little info button to show the all certificates.
 After the certificate details the issuer or "selfSign" is shown.
@@ -1397,6 +1397,10 @@ This might apply to notification sounds and vibrations too.
 
 Setting a light color before Android 8 is not supported and on Android 8 and later not possible.
 
+Some apps create a notification channel for each selectable color and let you (indirectly) select these channels when selecting a color.
+Since FairEmail uses notification channels for configurable notification properties for accounts, folders and senders ([see this FAQ](#user-content-faq145)),
+this is not a feasible solution for FairEmail because it would result in an unmanageable number of notification channels.
+
 <br />
 
 <a name="faq22"></a>
@@ -1678,7 +1682,7 @@ Alternatively, you might be able to enable the *Files* app again using the Andro
 Yes, you can translate the texts of FairEmail in your own language [on Crowdin](https://crowdin.com/project/open-source-email).
 Registration is free.
 
-If you would like your name or alias to be included in the list of contributors in *About* the app,
+If you would like a new language to be added, or your name or alias to be included in the list of contributors in *About* the app,
 please [contact me](https://contact.faircode.eu/?product=fairemailsupport).
 
 <br />
@@ -3465,8 +3469,8 @@ This feature depends on support of your launcher.
 FairEmail merely 'broadcasts' the number of unread messages using the ShortcutBadger library.
 If it doesn't work, this cannot be fixed by changes in FairEmail.
 
-If you are using Nova launcher and you want to show the number of notifications in the launcher icon (maximum 10), you'll need to enable
-*Notification access* in the Android *Special app access* settings for Nova launcher on recent Android versions.
+If you are using Nova launcher and you want to show the number of notifications in the launcher icon (maximum 10; imposed by Nova launcher),
+you'll need to enable *Notification access* in the Android *Special app access* settings for Nova launcher on recent Android versions.
 
 Some launchers display a dot or a '1' for [the monitoring notification](#user-content-faq2),
 despite FairEmail explicitly requesting not to show a *badge* for this notification.

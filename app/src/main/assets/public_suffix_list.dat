@@ -6719,7 +6719,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-07-01T15:13:06Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2023-07-28T15:13:22Z
 // This list is auto-generated, don't edit it manually.
 // aaa : 2015-02-26 American Automobile Association, Inc.
 aaa
@@ -8083,9 +8083,6 @@ hosting
 // hot : 2015-08-27 Amazon Registry Services, Inc.
 hot
 
-// hoteles : 2015-03-05 Travel Reservations SRL
-hoteles
-
 // hotels : 2016-04-07 Booking.com B.V.
 hotels
 
@@ -8827,9 +8824,6 @@ parts
 // party : 2014-09-11 Blue Sky Registry Limited
 party
 
-// passagens : 2015-03-05 Travel Reservations SRL
-passagens
-
 // pay : 2015-08-27 Amazon Registry Services, Inc.
 pay
 
@@ -9496,9 +9490,6 @@ tickets
 // tienda : 2013-11-14 Binky Moon, LLC
 tienda
 
-// tiffany : 2015-01-30 Tiffany and Company
-tiffany
-
 // tips : 2013-09-20 Binky Moon, LLC
 tips
 
@@ -9697,9 +9688,6 @@ voto
 // voyage : 2013-08-27 Binky Moon, LLC
 voyage
 
-// vuelos : 2015-03-05 Travel Reservations SRL
-vuelos
-
 // wales : 2014-05-08 Nominet UK
 wales
 
@@ -9865,10 +9853,10 @@ xin
 // xn--80aqecdr1a : 2015-10-21 Pontificium Consilium de Comunicationibus Socialibus (PCCS) (Pontifical Council for Social Communication)
 католик
 
-// xn--80asehdb : 2013-07-14 CORE Association
+// xn--80asehdb : 2023-07-14 CORE Association
 онлайн
 
-// xn--80aswg : 2013-07-14 CORE Association
+// xn--80aswg : 2023-07-14 CORE Association
 сайт
 
 // xn--8y0a063a : 2015-03-26 China United Network Communications Corporation Limited
@@ -10006,7 +9994,7 @@ xin
 // xn--mxtq1m : 2014-03-06 Net-Chinese Co., Ltd.
 政府
 
-// xn--ngbc5azd : 2013-07-13 International Domain Registry Pty. Ltd.
+// xn--ngbc5azd : 2023-07-13 International Domain Registry Pty. Ltd.
 شبكة
 
 // xn--ngbe9e0a : 2014-12-04 Kuwait Finance House
@@ -10057,7 +10045,7 @@ xin
 // xn--tiq49xqyj : 2015-10-21 Pontificium Consilium de Comunicationibus Socialibus (PCCS) (Pontifical Council for Social Communication)
 天主教
 
-// xn--unup4y : 2013-07-14 Binky Moon, LLC
+// xn--unup4y : 2023-07-14 Binky Moon, LLC
 游戏
 
 // xn--vermgensberater-ctb : 2014-06-23 Deutsche Vermögensberatung Aktiengesellschaft DVAG
@@ -12176,7 +12164,6 @@ iobb.net
 // Submitted by Ihor Kolodyuk <ik@jelastic.com>
 mel.cloudlets.com.au
 cloud.interhostsolutions.be
-users.scale.virtualcloud.com.br
 mycloud.by
 alp1.ae.flow.ch
 appengine.flow.ch
@@ -12200,9 +12187,7 @@ ch.trendhosting.cloud
 de.trendhosting.cloud
 jele.club
 amscompute.com
-clicketcloud.com
 dopaas.com
-hidora.com
 paas.hosted-by-previder.com
 rag-cloud.hosteur.com
 rag-cloud-ch.hosteur.com
@@ -13403,6 +13388,10 @@ myspreadshop.co.uk
 // Standard Library : https://stdlib.com
 // Submitted by Jacob Lee <jacob@stdlib.com>
 api.stdlib.com
+
+// Storipress : https://storipress.com
+// Submitted by Benno Liu <benno@storipress.com>
+storipress.app
 
 // Storj Labs Inc. : https://storj.io/
 // Submitted by Philip Hutchins <hostmaster@storj.io>

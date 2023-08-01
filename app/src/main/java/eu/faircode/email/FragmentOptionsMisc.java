@@ -236,8 +236,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swNativeArc;
     private EditText etNativeArcWhitelist;
     private SwitchCompat swInfra;
+    private SwitchCompat swTldFlags;
     private SwitchCompat swDupMsgId;
     private SwitchCompat swThreadByRef;
+    private SwitchCompat swMdn;
     private EditText etKeywords;
     private SwitchCompat swTestIab;
     private Button btnImportProviders;
@@ -300,7 +302,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "max_backoff_power", "logarithmic_backoff",
             "exact_alarms",
             "native_dkim", "native_arc", "native_arc_whitelist",
-            "infra", "dup_msgids", "thread_byref", "global_keywords", "test_iab"
+            "infra", "tld_flags", "dup_msgids", "thread_byref", "mdn", "global_keywords", "test_iab"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -484,8 +486,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swNativeArc = view.findViewById(R.id.swNativeArc);
         etNativeArcWhitelist = view.findViewById(R.id.etNativeArcWhitelist);
         swInfra = view.findViewById(R.id.swInfra);
+        swTldFlags = view.findViewById(R.id.swTldFlags);
         swDupMsgId = view.findViewById(R.id.swDupMsgId);
         swThreadByRef = view.findViewById(R.id.swThreadByRef);
+        swMdn = view.findViewById(R.id.swMdn);
         etKeywords = view.findViewById(R.id.etKeywords);
         swTestIab = view.findViewById(R.id.swTestIab);
         btnImportProviders = view.findViewById(R.id.btnImportProviders);
@@ -1824,6 +1828,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swTldFlags.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("tld_flags", checked).apply();
+            }
+        });
+
         swDupMsgId.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1835,6 +1846,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("thread_byref", checked).apply();
+            }
+        });
+
+        swMdn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("mdn", checked).apply();
             }
         });
 
@@ -2580,8 +2598,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             etNativeArcWhitelist.setEnabled(swNativeDkim.isEnabled() && swNativeDkim.isChecked());
             etNativeArcWhitelist.setText(prefs.getString("native_arc_whitelist", null));
             swInfra.setChecked(prefs.getBoolean("infra", false));
+            swTldFlags.setChecked(prefs.getBoolean("tld_flags", false));
             swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
             swThreadByRef.setChecked(prefs.getBoolean("thread_byref", true));
+            swMdn.setChecked(prefs.getBoolean("mdn", swExperiments.isChecked()));
             etKeywords.setText(prefs.getString("global_keywords", null));
             swTestIab.setChecked(prefs.getBoolean("test_iab", false));
 

@@ -89,6 +89,12 @@
         <item quantity="many">Видалити %1$d повідомлень безповоротно?</item>
         <item quantity="other">Видалити %1$d повідомлень безповоротно?</item>
     </plurals>
+    <plurals name="title_attachments">
+        <item quantity="one">Одне вкладення</item>
+        <item quantity="few">%1$d вкладення</item>
+        <item quantity="many">%1$d вкладень</item>
+        <item quantity="other">%1$d вкладень</item>
+    </plurals>
     <plurals name="title_ask_spam">
         <item quantity="one">Вважати %1$d повідомлення як спам?</item>
         <item quantity="few">Вважати %1$d повідомлень як спам?</item>
@@ -398,6 +404,7 @@
     <string name="title_advanced_suggest_frequently">Сортувати запропоновані адреси за частотою використання</string>
     <string name="title_advanced_alt_re_fwd">Альтернативний префікс для відповіді/пересилання</string>
     <string name="title_advanced_send_chips">Показати бульбашки адрес</string>
+    <string name="title_advanced_send_nav_color">Використовувати ідентичний колір для нижньої панелі інструментів</string>
     <string name="title_advanced_send_reminders">Показувати нагадування</string>
     <string name="title_advanced_send_delayed">Затримка надсилання повідомлень</string>
     <string name="title_advanced_attach_new">Створити чернетку нового повідомлення при поширенні адрес та файлів</string>
@@ -541,12 +548,12 @@
     <string name="title_advanced_preview_lines">Кількість рядків для попереднього перегляду</string>
     <string name="title_advanced_align_header">Вирівнювати по вертикалі, ключові слова, текст попереднього перегляду та примітки</string>
     <string name="title_advanced_addresses">Розгорнути деталі адреси за замовчуванням</string>
+    <string name="title_advanced_hide_attachments">Згорнути вкладення за замовчуванням</string>
     <string name="title_advanced_unzip">Показувати вміст стиснутих вкладень</string>
     <string name="title_advanced_attachments_alt">Показати вкладення після тексту повідомлення</string>
     <string name="title_advanced_thumbnails">Показувати ескізи зображень після повідомлення</string>
     <string name="title_advanced_message_text_zoom2">Масштаб тексту за замовчуванням: %1$s %%</string>
     <string name="title_advanced_overview_mode">Автоматичне масштабування оригінальних повідомлень</string>
-    <string name="title_advanced_override_width">Відключити фіксовані ширини в оригінальних повідомленнях</string>
     <string name="title_advanced_hyphenation">Використовувати автоматичну дефісацію</string>
     <string name="title_advanced_contrast">Використовувати високо-контрастний текст для повідомленнь</string>
     <string name="title_advanced_monospaced">Використовувати моноширинний шрифт для тексту повідомлень за замовчуванням</string>
@@ -611,13 +618,13 @@
     <string name="title_advanced_autoread">Автоматично відзначати повідомлення прочитаними при їх переміщенні</string>
     <string name="title_advanced_autounstar">Автоматично прибирати повідомлення з обраних при їх переміщенні</string>
     <string name="title_advanced_reset_importance">Скинути важливість повідомлення при його переміщені</string>
-    <string name="title_advanced_thread_sent_trash">Коли видаляються розмови, також видалити надіслані повідомлення</string>
     <string name="title_advanced_star_snoozed">Автоматично додавати відкладені повідомлення до обраних</string>
     <string name="title_advanced_auto_important">Автоматично робити важливими повідомлення відмічені як обрані</string>
     <string name="title_advanced_cancel_snooze">Відмінити паузу при переміщенні повідомлень</string>
     <string name="title_advanced_auto_block_sender">Автоматично блокувати відправника при інформуванні про спам</string>
     <string name="title_advanced_auto_hide_answer">Автоматично приховувати кнопку відповіді при прокручуванні</string>
     <string name="title_advanced_swipe_reply">Проведіть по розкритому повідомленню праворуч для відповіді</string>
+    <string name="title_advanced_move_thread_all">Під час переміщення розмови, потрібно також перемістити й всі повідомлення</string>
     <string name="title_advanced_move_thread_sent">Під час переміщення розмови, потрібно також перемістити й надіслане повідомлення</string>
     <string name="title_advanced_default_snooze">Час повторного нагадування за замовчуванням</string>
     <string name="title_advanced_default_folder">Виберіть теку за замовчуванням</string>
@@ -693,6 +700,7 @@
     <string name="title_advanced_sign_default">Підписати за замовчуванням</string>
     <string name="title_advanced_encrypt_default">Шифрувати за замовчуванням</string>
     <string name="title_advanced_encrypt_auto">Автоматично шифрувати при доступності всіх ключів одержувачів</string>
+    <string name="title_advanced_auto_verify">Автоматично підтверджувати підписані повідомлення</string>
     <string name="title_advanced_auto_decrypt">Автоматично розшифрувати повідомлення</string>
     <string name="title_advanced_auto_undo_decrypt">Скасувати дешифрування при закритті розмови</string>
     <string name="title_advanced_openpgp">OpenPGP додаток</string>
@@ -776,7 +784,7 @@
     <string name="title_advanced_lookup_mx_hint">Це перевірить, чи існують записи DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Це призведе до уповільнення синхронізації повідомлень</string>
     <string name="title_advanced_folder_nav_hint">Це завжди буде повертати до переліку тек що пов\'язані до облікового запису зі списку повідомлень</string>
-    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">При розгортанні списку тек або облікових записів</string>
+    <string name="title_advanced_pull_all_hint">При розгортанні списку тек або облікових записів</string>
     <string name="title_advanced_suggest_names_hint">Якщо вимкнено, використовуватимуться лише адреси електронної пошти при виборі контактів</string>
     <string name="title_advanced_suggest_local_hint">На додаток до контактів, що надаються Android. Будуть зберігатися дані про контакт для щойно надісланих або отриманих повідомлень лише тоді, коли увімкнено.</string>
     <string name="title_advanced_auto_identity_hint">Це може обрати останню ідентифікацію, коли використовувалася для одержувача нових повідомлень</string>
@@ -814,7 +822,6 @@
     <string name="title_advanced_preview_lines_hint">Максимум: %s символів</string>
     <string name="title_advanced_preview_issue">Прокручування може бути повільним через помилку у деяких версіях Android, коли кількість рядків більше одного</string>
     <string name="title_advanced_overview_mode_hint">Це може призвести до дуже малих шрифтів</string>
-    <string name="title_advanced_override_width_hint">Це може зробити повідомлення вужчими, але і воно може виглядати дивно</string>
     <string name="title_advanced_monospaced_pre_hint">Лише текстові повідомлення вважатимуться попередньо відформатованими</string>
     <string name="title_advanced_placeholders_hint">Це стосується лише для переформатованих повідомлень</string>
     <string name="title_advanced_inline_hint">Вбудовані зображення включені в повідомлення</string>
@@ -1202,6 +1209,7 @@
     <string name="title_unsubscribe">Відписатися</string>
     <string name="title_message_rule">Створити правило</string>
     <string name="title_no_junk">Не спам</string>
+    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Редагування теми &#8230;</string>
     <string name="title_move_to">Перемістити до &#8230;</string>
     <string name="title_move_to_folder">Перемістити до &#8230;</string>
     <string name="title_move_to_account">Перемістити в %1$s &#8230;</string>
@@ -1929,6 +1937,7 @@
     <string name="title_debug_info_remark">Опишіть проблему й зазначте момент її виникнення:</string>
     <string name="title_crash_info_remark">Будь ласка, опишіть, що ви робили, коли додаток зазнав краху:</string>
     <string name="title_debug_info_issue">Опис проблеми (обов\'язково)</string>
+    <string name="title_debug_info_issue_remark">Важливими є такі деталі, як приблизний час виникнення проблеми, точне повідомлення про помилку тощо</string>
     <string name="title_debug_info_contact">Нещодавно з нами зв\'язувались щодо цієї проблеми</string>
     <string name="title_unexpected_info_remark">Будь ласка, опишіть, що ви робили, коли додаток зазнав краху:</string>
     <string name="title_widget_title_count">Кількість нових повідомлень</string>
@@ -1952,6 +1961,7 @@
     <string name="title_widget_subject_lines">Максимальна кількість рядків в темі</string>
     <string name="title_widget_avatars">Показувати аватари контактів</string>
     <string name="title_widget_account_name">Показати ім\'я облікового запису</string>
+    <string name="title_widget_caption">Показувати заголовок</string>
     <string name="title_widget_refresh">Показувати кнопку оновлення повідомлень</string>
     <string name="title_widget_compose">Показати кнопку створення нового повідомлення</string>
     <string name="title_widget_background">Колір тла</string>

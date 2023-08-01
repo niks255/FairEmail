@@ -311,6 +311,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean authentication;
     private boolean authentication_indicator;
     private boolean infra;
+    private boolean tld_flags;
 
     private boolean autoclose_unseen;
     private boolean collapse_marked;
@@ -350,6 +351,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener,
             View.OnLongClickListener,
+            CompoundButton.OnCheckedChangeListener,
             View.OnLayoutChangeListener {
         private ViewCardOptional card;
         private View view;
@@ -446,6 +448,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private TextView tvNoInternetHeaders;
 
         private RecyclerView rvAttachment;
+        private View vSeparatorAttachments;
+        private ImageButton ibExpanderAttachments;
+        private TextView tvAttachments;
         private CheckBox cbInline;
         private ImageButton ibSaveAttachments;
         private ImageButton ibDownloadAttachments;
@@ -528,7 +533,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private Group grpAction;
         private Group grpCalendar;
         private Group grpCalendarResponse;
-        private Group grpAttachments;
         private Group grpImages;
 
         private AdapterAttachment adapterAttachment;
@@ -875,6 +879,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             adapterAttachment = new AdapterAttachment(parentFragment, true, properties);
             rvAttachment.setAdapter(adapterAttachment);
 
+            vSeparatorAttachments = attachments.findViewById(R.id.vSeparatorAttachments);
+            ibExpanderAttachments = attachments.findViewById(R.id.ibExpanderAttachments);
+            tvAttachments = attachments.findViewById(R.id.tvAttachments);
             cbInline = attachments.findViewById(R.id.cbInline);
             ibSaveAttachments = attachments.findViewById(R.id.ibSaveAttachments);
             ibDownloadAttachments = attachments.findViewById(R.id.ibDownloadAttachments);
@@ -962,7 +969,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             grpAction = vsBody.findViewById(R.id.grpAction);
             grpCalendar = vsBody.findViewById(R.id.grpCalendar);
             grpCalendarResponse = vsBody.findViewById(R.id.grpCalendarResponse);
-            grpAttachments = attachments.findViewById(R.id.grpAttachments);
             grpImages = vsBody.findViewById(R.id.grpImages);
 
             if (large_buttons) {
@@ -1043,6 +1049,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 ibCopyHeaders.setOnClickListener(this);
                 ibCloseHeaders.setOnClickListener(this);
+
+                ibExpanderAttachments.setOnClickListener(this);
+                cbInline.setOnCheckedChangeListener(this);
 
                 ibSaveAttachments.setOnClickListener(this);
                 ibDownloadAttachments.setOnClickListener(this);
@@ -1160,6 +1169,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 ibCopyHeaders.setOnClickListener(null);
                 ibCloseHeaders.setOnClickListener(null);
+
+                ibExpanderAttachments.setOnClickListener(null);
+                cbInline.setOnCheckedChangeListener(null);
 
                 ibSaveAttachments.setOnClickListener(null);
                 ibDownloadAttachments.setOnClickListener(null);
@@ -1412,8 +1424,24 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 : R.string.title_from_to,
                         formatAddresses(senders, format, maxRecipients),
                         formatAddresses(recipients, format, maxRecipients)));
-            } else
+            } else {
+                if (tld_flags && viewType == ViewType.THREAD) {
+                    Address[] a = (message.reply == null || message.reply.length == 0 ? message.from : message.reply);
+                    if (outgoing || a == null || a.length == 0)
+                        tvFrom.setCompoundDrawablesRelative(null, null, null, null);
+                    else {
+                        String email = ((InternetAddress) a[0]).getAddress();
+                        String domain = UriHelper.getEmailDomain(email);
+                        String tld = UriHelper.getTld(context, domain);
+                        int resid = context.getResources().getIdentifier(
+                                "flag_" + tld, "drawable", context.getPackageName());
+                        Drawable d = (resid > 0 ? context.getDrawable(resid) : null);
+                        tvFrom.setCompoundDrawablesRelativeWithIntrinsicBounds(d, null, null, null);
+                    }
+                }
+
                 tvFrom.setText(MessageHelper.formatAddresses(senders, format, false));
+            }
 
             tvFrom.setPaintFlags(tvFrom.getPaintFlags() & ~Paint.UNDERLINE_TEXT_FLAG);
             tvSize.setText(message.totalSize == null ? null : Helper.humanReadableByteCount(message.totalSize));
@@ -1691,7 +1719,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             grpAction.setVisibility(View.GONE);
             grpCalendar.setVisibility(View.GONE);
             grpCalendarResponse.setVisibility(View.GONE);
-            grpAttachments.setVisibility(View.GONE);
             grpImages.setVisibility(View.GONE);
 
             ivPlain.setVisibility(View.GONE);
@@ -1748,6 +1775,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             clearCalendar();
 
+            rvAttachment.setVisibility(View.GONE);
+            vSeparatorAttachments.setVisibility(View.GONE);
+            ibExpanderAttachments.setVisibility(View.GONE);
+            tvAttachments.setVisibility(View.GONE);
             cbInline.setVisibility(View.GONE);
             ibSaveAttachments.setVisibility(View.GONE);
             ibDownloadAttachments.setVisibility(View.GONE);
@@ -3098,10 +3129,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             HtmlHelper.highlightSearched(context, document, searched);
 
                         boolean overview_mode = prefs.getBoolean("overview_mode", false);
-                        boolean override_width = prefs.getBoolean("override_width", false);
                         HtmlHelper.setViewport(document, overview_mode);
-                        if (override_width)
-                            HtmlHelper.overrideWidth(document);
                         if (inline || show_images)
                             HtmlHelper.embedInlineImages(context, message.id, document, show_images);
 
@@ -3319,11 +3347,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     boolean auto_decrypt = prefs.getBoolean("auto_decrypt", false);
                     boolean auto_decrypted = properties.getValue("auto_decrypted", message.id);
+                    boolean auto_verify = prefs.getBoolean("auto_verify", false);
+                    boolean auto_verified = properties.getValue("auto_verified", message.id);
                     if (auto_decrypt && !auto_decrypted &&
                             (EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt) ||
                                     EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt))) {
                         properties.setValue("auto_decrypted", message.id, true);
-                        onActionDecrypt(message, true);
+                        onActionVerifyDecrypt(message, true);
+                    } else if (auto_verify && !auto_verified && !message.verified &&
+                            (EntityMessage.PGP_SIGNONLY.equals(message.encrypt) ||
+                                    EntityMessage.SMIME_SIGNONLY.equals(message.encrypt))) {
+                        properties.setValue("auto_verified", message.id, true);
+                        onActionVerifyDecrypt(message, true);
                     }
                 }
 
@@ -3482,8 +3517,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 attachments = new ArrayList<>();
             properties.setAttachments(message.id, attachments);
 
+            boolean hide_attachments = properties.getValue("hide_attachments", message.id);
             boolean show_inline = properties.getValue("inline", message.id);
-            Log.i("Show inline=" + show_inline);
+            Log.i("Hide attachments=" + hide_attachments + " Show inline=" + show_inline);
 
             int available = 0;
             int unavailable = 0;
@@ -3521,22 +3557,23 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     calendar = attachment;
             }
 
-            cbInline.setOnCheckedChangeListener(null);
+            rvAttachment.setVisibility(show.size() > 0 && !hide_attachments ? View.VISIBLE : View.GONE);
+
+            vSeparatorAttachments.setVisibility(attachments.size() > 0 ? View.VISIBLE : View.GONE);
+
+            tvAttachments.setText(context.getResources()
+                    .getQuantityString(R.plurals.title_attachments, attachments.size(), attachments.size()));
+            tvAttachments.setVisibility(attachments.size() > 0 && hide_attachments ? View.VISIBLE : View.GONE);
+
+            ibExpanderAttachments.setImageLevel(hide_attachments ? 1 /* more */ : 0 /* less */);
+            ibExpanderAttachments.setVisibility(attachments.size() > 0 ? View.VISIBLE : View.GONE);
+
             cbInline.setChecked(show_inline);
-            cbInline.setVisibility(has_inline ? View.VISIBLE : View.GONE);
+            cbInline.setVisibility(has_inline && !hide_attachments ? View.VISIBLE : View.GONE);
 
-            ibSaveAttachments.setVisibility(available > 1 && unavailable == 0 ? View.VISIBLE : View.GONE);
-            ibDownloadAttachments.setVisibility(downloadable > 1 && suitable ? View.VISIBLE : View.GONE);
-            tvNoInternetAttachments.setVisibility(downloading && !suitable ? View.VISIBLE : View.GONE);
-
-            cbInline.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    properties.setValue("inline", message.id, isChecked);
-                    cowner.restart();
-                    bindAttachments(message, properties.getAttachments(message.id), true);
-                }
-            });
+            ibSaveAttachments.setVisibility(available > 1 && unavailable == 0 && !hide_attachments ? View.VISIBLE : View.GONE);
+            ibDownloadAttachments.setVisibility(downloadable > 1 && suitable && !hide_attachments ? View.VISIBLE : View.GONE);
+            tvNoInternetAttachments.setVisibility(downloading && !suitable && !hide_attachments ? View.VISIBLE : View.GONE);
 
             rvAttachment.post(new Runnable() {
                 @Override
@@ -3548,8 +3585,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     }
                 }
             });
-
-            grpAttachments.setVisibility(show.size() > 0 ? View.VISIBLE : View.GONE);
 
             if (calendar != null && bind_extras)
                 bindCalendar(message, calendar);
@@ -4247,6 +4282,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     onCopyHeaders(message);
                 } else if (id == R.id.ibCloseHeaders) {
                     onMenuShowHeaders(message);
+                } else if (id == R.id.ibExpanderAttachments) {
+                    onExpandAttachments(message);
                 } else if (id == R.id.ibSaveAttachments) {
                     onSaveAttachments(message);
                 } else if (id == R.id.ibDownloadAttachments) {
@@ -4268,9 +4305,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         properties.setExpanded(message, false, false);
                         properties.setHeight(message.id, null);
                     } else
-                        onActionDecrypt(message, false);
+                        onActionVerifyDecrypt(message, false);
                 } else if (id == R.id.ibVerify) {
-                    onActionDecrypt(message, false);
+                    onActionVerifyDecrypt(message, false);
                 } else if (id == R.id.ibUndo) {
                     ActivityCompose.undoSend(message.id, context, owner, parentFragment.getParentFragmentManager());
                 } else if (id == R.id.ibAnswer) {
@@ -4512,9 +4549,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_fit_width, 2, R.string.title_fit_width)
                         .setCheckable(true)
                         .setChecked(prefs.getBoolean("overview_mode", false));
-                popupMenu.getMenu().add(Menu.NONE, R.string.title_disable_widths, 3, R.string.title_disable_widths)
-                        .setCheckable(true)
-                        .setChecked(prefs.getBoolean("override_width", false));
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_monospaced_pre, 4, R.string.title_monospaced_pre)
                         .setCheckable(true)
                         .setChecked(prefs.getBoolean("monospaced_pre", false));
@@ -4527,15 +4561,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             onActionOpenFull(message);
                             return true;
                         } else if (itemId == R.string.title_fit_width ||
-                                itemId == R.string.title_disable_widths ||
                                 itemId == R.string.title_monospaced_pre) {
                             boolean enabled = !item.isChecked();
                             item.setChecked(enabled);
 
                             if (itemId == R.string.title_fit_width)
                                 prefs.edit().putBoolean("overview_mode", enabled).apply();
-                            else if (itemId == R.string.title_disable_widths)
-                                prefs.edit().putBoolean("override_width", enabled).apply();
                             else if (itemId == R.string.title_monospaced_pre)
                                 prefs.edit().putBoolean("monospaced_pre", enabled).apply();
 
@@ -4577,6 +4608,18 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 return true;
             }
             return false;
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+            final TupleMessageEx message = getMessage();
+            if (message == null)
+                return;
+
+            int id = compoundButton.getId();
+            if (id == R.id.cbInline) {
+                onShowInlineAttachments(message, isChecked);
+            }
         }
 
         public boolean onKeyPressed(KeyEvent event) {
@@ -5219,6 +5262,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }.execute(context, owner, args, "message:attachment:download");
         }
 
+        private void onExpandAttachments(TupleMessageEx message) {
+            boolean hide_attachments = properties.getValue("hide_attachments", message.id);
+            properties.setValue("hide_attachments", message.id, !hide_attachments);
+            cowner.restart();
+            bindAttachments(message, properties.getAttachments(message.id), false);
+        }
+
+        private void onShowInlineAttachments(TupleMessageEx message, boolean isChecked) {
+            properties.setValue("inline", message.id, isChecked);
+            cowner.restart();
+            bindAttachments(message, properties.getAttachments(message.id), false);
+        }
+
         private void onSaveAttachments(TupleMessageEx message) {
             ((FragmentBase) parentFragment).onStoreAttachments(message.id);
         }
@@ -5604,13 +5660,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     EntityFolder.JUNK.equals(message.folderType));
         }
 
-        private void onActionDecrypt(TupleMessageEx message, boolean auto) {
+        private void onActionVerifyDecrypt(TupleMessageEx message, boolean auto) {
             boolean inline = properties.getValue("inline_encrypted", message.id);
             int encrypt = (message.encrypt == null || inline ? EntityMessage.PGP_SIGNENCRYPT /* Inline */ : message.encrypt);
 
             LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
             lbm.sendBroadcast(
-                    new Intent(FragmentMessages.ACTION_DECRYPT)
+                    new Intent(FragmentMessages.ACTION_VERIFYDECRYPT)
                             .putExtra("id", message.id)
                             .putExtra("auto", auto)
                             .putExtra("type", encrypt));
@@ -5663,6 +5719,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.execute(context, owner, args, "labels:fetch");
+        }
+
+        private void onActionEditSubject(TupleMessageEx message) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+            args.putString("subject", message.subject);
+
+            FragmentDialogEditSubject fragment = new FragmentDialogEditSubject();
+            fragment.setArguments(args);
+            fragment.setTargetFragment(parentFragment, FragmentMessages.REQUEST_EDIT_SUBJECT);
+            fragment.show(parentFragment.getParentFragmentManager(), "message:subject");
         }
 
         private void onActionMove(TupleMessageEx message, final boolean copy) {
@@ -5886,6 +5953,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_set_importance_normal).setEnabled(can && !EntityMessage.PRIORITIY_NORMAL.equals(i));
             popupMenu.getMenu().findItem(R.id.menu_set_importance_high).setEnabled(can && !EntityMessage.PRIORITIY_HIGH.equals(i));
 
+            popupMenu.getMenu().findItem(R.id.menu_edit_subject)
+                    .setEnabled(message.uid != null && !message.folderReadOnly)
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP && BuildConfig.DEBUG);
+
             popupMenu.getMenu().findItem(R.id.menu_move_to)
                     .setEnabled(message.uid != null && !message.folderReadOnly)
                     .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
@@ -5987,6 +6058,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return true;
                     } else if (itemId == R.id.menu_set_importance_high) {
                         onMenuSetImportance(message, EntityMessage.PRIORITIY_HIGH);
+                        return true;
+                    } else if (itemId == R.id.menu_edit_subject) {
+                        onActionEditSubject(message);
                         return true;
                     } else if (itemId == R.id.menu_move_to) {
                         onActionMove(message, false);
@@ -7171,10 +7245,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (BuildConfig.DEBUG) {
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                         boolean overview_mode = prefs.getBoolean("overview_mode", false);
-                        boolean override_width = prefs.getBoolean("override_width", false);
                         HtmlHelper.setViewport(d, overview_mode);
-                        if (override_width)
-                            HtmlHelper.overrideWidth(d);
                     }
 
                     d.head().prependElement("meta").attr("charset", "utf-8");
@@ -7665,7 +7736,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.colorCardBackground = Helper.resolveColor(context, R.attr.colorCardBackground);
         boolean color_stripe_wide = prefs.getBoolean("color_stripe_wide", false);
         this.colorStripeWidth = Helper.dp2pixels(context, color_stripe_wide ? 12 : 6);
-        this.colorAccent = Helper.resolveColor(context, R.attr.colorAccent);
+        this.colorAccent = Helper.resolveColor(context, androidx.appcompat.R.attr.colorAccent);
         this.textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
         this.textColorSecondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
         this.textColorTertiary = Helper.resolveColor(context, android.R.attr.textColorTertiary);
@@ -7682,9 +7753,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.colorVerified = Helper.resolveColor(context, R.attr.colorVerified);
         this.colorEncrypt = Helper.resolveColor(context, R.attr.colorEncrypt);
         this.colorSeparator = Helper.resolveColor(context, R.attr.colorSeparator);
-        this.colorError = Helper.resolveColor(context, R.attr.colorError);
+        this.colorError = Helper.resolveColor(context, androidx.appcompat.R.attr.colorError);
         this.colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
-        this.colorControlNormal = Helper.resolveColor(context, R.attr.colorControlNormal);
+        this.colorControlNormal = Helper.resolveColor(context, androidx.appcompat.R.attr.colorControlNormal);
 
         this.hasWebView = Helper.hasWebView(context);
         this.pin = Shortcuts.can(context);
@@ -7759,6 +7830,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.authentication = prefs.getBoolean("authentication", true);
         this.authentication_indicator = prefs.getBoolean("authentication_indicator", false);
         this.infra = prefs.getBoolean("infra", false);
+        this.tld_flags = prefs.getBoolean("tld_flags", false);
         this.language_detection = prefs.getBoolean("language_detection", false);
         this.autoclose_unseen = prefs.getBoolean("autoclose_unseen", false);
         this.collapse_marked = prefs.getBoolean("collapse_marked", true);

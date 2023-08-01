@@ -525,7 +525,6 @@
     <string name="title_advanced_thumbnails">Prikaži sličice za besedilom sporočila</string>
     <string name="title_advanced_message_text_zoom2">Privzeta povečava besedila sporočila: %1$s %%</string>
     <string name="title_advanced_overview_mode">Povečaj/pomanjšaj izvirna sporočila, da se prilegajo zaslonu</string>
-    <string name="title_advanced_override_width">Onemogoči stalne širine v izvirnih sporočilih</string>
     <string name="title_advanced_hyphenation">Uporabi samodejno dodajanje vezajev</string>
     <string name="title_advanced_contrast">Uporabi visoki kontrast za besedilo sporočila</string>
     <string name="title_advanced_monospaced">Privzeto uporabi pisavo s stalno širino za besedilo sporočila</string>
@@ -589,7 +588,6 @@
     <string name="title_advanced_autoread">Ob premikanju sporočil samodejno označi sporočila kot prebrana</string>
     <string name="title_advanced_autounstar">Ob premikanju sporočil samodejno odstrani zvezdice</string>
     <string name="title_advanced_reset_importance">Ponastavi pomembnost ob premikanju sporočil</string>
-    <string name="title_advanced_thread_sent_trash">Ko izbrišem pogovor, izbriši tudi poslana sporočila</string>
     <string name="title_advanced_star_snoozed">Ob dremežu sporočil samodejno dodaj zvezdico</string>
     <string name="title_advanced_auto_important">Samodejno naredi sporočila, označena z zvezdico, pomembna</string>
     <string name="title_advanced_cancel_snooze">Prekliči dremež ob premikanju sporočil</string>
@@ -778,7 +776,6 @@
     <string name="title_advanced_preview_lines_hint">Skupaj največ %s znakov.</string>
     <string name="title_advanced_preview_issue">Pomikanje je lahko počasno zaradi hrošča v nekaterih različicah Androida, kadar je število vrstic večje od ena.</string>
     <string name="title_advanced_overview_mode_hint">To se lahko povzroči majhne pisave.</string>
-    <string name="title_advanced_override_width_hint">To lahko zoža sporočila, kar je lahko videti čudno.</string>
     <string name="title_advanced_monospaced_pre_hint">Sporočila v golem besedilo se bodo smatrala kot predoblikovana.</string>
     <string name="title_advanced_placeholders_hint">To velja samo za predoblikovana sporočila.</string>
     <string name="title_advanced_inline_hint">Slike v besedilu so vključene v sporočilo.</string>

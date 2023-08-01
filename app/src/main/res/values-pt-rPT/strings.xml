@@ -71,6 +71,10 @@
         <item quantity="one">Eliminar permanentemente %1$d mensagem?</item>
         <item quantity="other">Eliminar permanentemente %1$d mensagens?</item>
     </plurals>
+    <plurals name="title_attachments">
+        <item quantity="one">Um anexo</item>
+        <item quantity="other">%1$d anexos</item>
+    </plurals>
     <plurals name="title_ask_spam">
         <item quantity="one">Definir %1$d mensagem como indesejada?</item>
         <item quantity="other">Definir %1$d mensagens como indesejadas?</item>
@@ -178,7 +182,7 @@
     <string name="title_setup_gmail_support">Autorizar contas do Google funcionará na Play Store e na versão GitHub apenas porque o Android verifica a assinatura da aplicação digital</string>
     <string name="title_setup_gmail_rationale">Por favor, conceda permissões para selecionar uma conta e ler o seu nome</string>
     <string name="title_setup_gmail_permissions">O Google pedirá permissões para ler, compor, enviar e eliminar permanentemente todos os seus e-mails. O FairEmail nunca apagará as suas mensagens sem o seu consentimento explícito.</string>
-    <string name="title_setup_gmail_login">Se o Chrome estiver ligado a uma conta, só pode adicionar uma nova através do Android. Evite esta situação, saindo do Chrome através das configurações de sincronização do mesmo.</string>
+    <string name="title_setup_gmail_login">Se o Chrome estiver ligado a uma conta, só é possível adicionar outra conta através do Android. Esta situação pode ser evitada, terminando a sessão nas definições de sincronização do Chrome.</string>
     <string name="title_setup_gmail_max">Caso receba a mensagem de erro \"Já atingiu o número máximo de contas permitido\", terá de terminar a sessão de todas as contas Google no navegador.</string>
     <string name="title_setup_gmail_on_device">Por que é que preciso selecionar uma conta no dispositivo?</string>
     <string name="title_setup_gmail_password">Quero autorizar uma conta com a palavra-passe ao invés da conta em utilização no dispositivo</string>
@@ -373,6 +377,7 @@
     <string name="title_advanced_suggest_frequently">Ordenar endereços sugeridos por frequência de uso</string>
     <string name="title_advanced_alt_re_fwd">Prefixo alternativo de resposta/encaminhamento</string>
     <string name="title_advanced_send_chips">Mostrar endereços separados em balões</string>
+    <string name="title_advanced_send_nav_color">Use a cor de identidade para a barra de ação inferior</string>
     <string name="title_advanced_send_reminders">Mostrar lembretes</string>
     <string name="title_advanced_send_delayed">Atrasar envio de mensagens</string>
     <string name="title_advanced_attach_new">Criar uma nova mensagem rascunho para endereços e arquivos partilhados</string>
@@ -516,12 +521,12 @@
     <string name="title_advanced_preview_lines">Número de linhas de pré-visualização</string>
     <string name="title_advanced_align_header">Alinhe verticalmente as palavras-chave, pré-visualizar texto e notas</string>
     <string name="title_advanced_addresses">Mostrar detalhes do endereço por pré-definição</string>
+    <string name="title_advanced_hide_attachments">Esconder anexos por padrão</string>
     <string name="title_advanced_unzip">Mostrar conteúdo de anexos comprimidos</string>
     <string name="title_advanced_attachments_alt">Mostrar anexos após o texto da mensagem</string>
     <string name="title_advanced_thumbnails">Mostrar miniaturas das imagens após o texto da mensagem</string>
     <string name="title_advanced_message_text_zoom2">Zoom padrão do texto da mensagem %1$s %%</string>
     <string name="title_advanced_overview_mode">Ampliar as mensagens originais para caber na tela</string>
-    <string name="title_advanced_override_width">Desativar largura fixa nas mensagens originais</string>
     <string name="title_advanced_hyphenation">Usar Hifenização Automática</string>
     <string name="title_advanced_contrast">Usar alto contraste para o texto da mensagem</string>
     <string name="title_advanced_monospaced">Usar a fonte monospaced para o texto da mensagem por padrão</string>
@@ -558,7 +563,7 @@
     <string name="title_advanced_conversation_actions">Sugerir ações (Android 10+)</string>
     <string name="title_advanced_conversation_actions_replies">Sugerir mensagens de resposta (Android 10+)</string>
     <string name="title_advanced_language_detection">Detectar idioma do texto da mensagem</string>
-    <string name="title_advanced_photo_picker">Use o seletor de fotos do Android</string>
+    <string name="title_advanced_photo_picker">Usar o selector de fotos do Android</string>
     <string name="title_advanced_pull_refresh">Arrastar para baixo para atualizar</string>
     <string name="title_advanced_pull_all">Sincronizar todas as pastas</string>
     <string name="title_advanced_autoscroll">Voltar ao topo quando recebe novas mensagens</string>
@@ -586,13 +591,13 @@
     <string name="title_advanced_autoread">Marcar mensagens como lidas automaticamente ao mover mensagens</string>
     <string name="title_advanced_autounstar">Remover estrelas automaticamente das mensagens ao mover mensagens</string>
     <string name="title_advanced_reset_importance">Reverter importância ao mover mensagens</string>
-    <string name="title_advanced_thread_sent_trash">Ao descartar uma conversa, também descartar mensagens enviadas</string>
     <string name="title_advanced_star_snoozed">Adicionar estrela automaticamente ao adiar mensagens</string>
     <string name="title_advanced_auto_important">Marcar automaticamente mensagens com estrela como importantes</string>
     <string name="title_advanced_cancel_snooze">Cancelar a função \'adiar\' ao mover mensagens</string>
     <string name="title_advanced_auto_block_sender">Bloquear automaticamente o remetente quando denunciar spam</string>
     <string name="title_advanced_auto_hide_answer">Ocultar automaticamente o botão de resposta ao rolar</string>
     <string name="title_advanced_swipe_reply">Deslizar para a direita para responder em mensagens expandidas</string>
+    <string name="title_advanced_move_thread_all">Ao mover uma conversa, mover todas as mensagens</string>
     <string name="title_advanced_move_thread_sent">Ao mover uma conversa, também mover mensagens enviadas</string>
     <string name="title_advanced_default_snooze">Tempo pré-definido de repetição/adiamento</string>
     <string name="title_advanced_default_folder">Selecione a pasta padrão</string>
@@ -668,6 +673,7 @@
     <string name="title_advanced_sign_default">Assinar por padrão</string>
     <string name="title_advanced_encrypt_default">Encriptar por padrão</string>
     <string name="title_advanced_encrypt_auto">Criptografar automaticamente quando as chaves de todos os destinatários estiverem disponíveis</string>
+    <string name="title_advanced_auto_verify">Verificar automaticamente mensagens assinadas</string>
     <string name="title_advanced_auto_decrypt">Desencriptar mensagens automaticamente</string>
     <string name="title_advanced_auto_undo_decrypt">Reverter a descodificação ao fechar conversas</string>
     <string name="title_advanced_openpgp">Provedor OpenPGP</string>
@@ -752,7 +758,7 @@
     <string name="title_advanced_lookup_mx_hint">Faz a verificação se existem registos DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Isto atrasará a sincronização de mensagens</string>
     <string name="title_advanced_folder_nav_hint">Isto fará com que, ao pressionar \'voltar\' a partir da lista de mensagens, retorne sempre à lista de pastas da respectiva conta</string>
-    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">Ao puxar para baixo a lista de pastas ou contas</string>
+    <string name="title_advanced_pull_all_hint">Ao puxar para baixo a lista de pastas ou contas</string>
     <string name="title_advanced_suggest_names_hint">Se desactivada, ao seleccionar um contacto apenas será utilizado o endereço de e-mail</string>
     <string name="title_advanced_suggest_local_hint">Em complemento aos contactos fornecidos pelo Android. Apenas só será guardada informação de contactos nas mensagens recém-enviadas ou recebidas caso esta função esteja activa.</string>
     <string name="title_advanced_auto_identity_hint">Isto selecionará a última identidade usada ao selecionar um destinatário para novas mensagens</string>
@@ -790,7 +796,6 @@
     <string name="title_advanced_preview_lines_hint">Máximo %s caracteres no total</string>
     <string name="title_advanced_preview_issue">O movimento de deslizar pode ser lento devido a um erro em algumas versões Android, quando o número de linhas é superior a uma</string>
     <string name="title_advanced_overview_mode_hint">Isto pode resultar em tipos de letra muito pequenos</string>
-    <string name="title_advanced_override_width_hint">Isto pode tornar as mensagens mais estreitas, mas também pode parecer estranho</string>
     <string name="title_advanced_monospaced_pre_hint">Mensagens de texto simples serão consideradas como pré-formatadas</string>
     <string name="title_advanced_placeholders_hint">Apenas se aplica a mensagens reformatadas</string>
     <string name="title_advanced_inline_hint">Imagens embutidas estão incluídas na mensagem</string>
@@ -1178,6 +1183,7 @@
     <string name="title_unsubscribe">Cancelar Subscrição</string>
     <string name="title_message_rule">Criar regra</string>
     <string name="title_no_junk">Não é spam</string>
+    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Editar assunto &#8230;</string>
     <string name="title_move_to">Mover para &#8230;</string>
     <string name="title_move_to_folder">Mover para &#8230;</string>
     <string name="title_move_to_account">Mover para %1$s &#8230;</string>
@@ -1495,7 +1501,7 @@
     <string name="title_search_flag_size">tamanho &gt; %1$s</string>
     <string name="title_search_device">Pesquisar no dispositivo</string>
     <string name="title_search_server">Pesquisar no servidor</string>
-    <string name="title_search_server_wait">Aguardando pelo servidor</string>
+    <string name="title_search_server_wait">A aguardar pelo servidor</string>
     <string name="title_search_in">Pesquisar em</string>
     <string name="title_search_sender">Pesquisar por remetente</string>
     <string name="title_search_delete">Eliminar a pesquisa guardada?</string>
@@ -1909,6 +1915,7 @@
     <string name="title_debug_info_remark">Por favor, descreva o problema e indique quando ocorreu:</string>
     <string name="title_crash_info_remark">Por favor, descreva o que fazia quando a aplicação foi abaixo:</string>
     <string name="title_debug_info_issue">Descrição do problema (obrigatório)</string>
+    <string name="title_debug_info_issue_remark">Detalhes, como o tempo estimado do problema, a mensagem de erro exata, etc., são importantes</string>
     <string name="title_debug_info_contact">Recentemente tivemos contacto sobre esse problema</string>
     <string name="title_unexpected_info_remark">Por favor, descreva o que fazia quando obteve o erro:</string>
     <string name="title_widget_title_count">Novo contador de mensagens</string>
@@ -1932,6 +1939,7 @@
     <string name="title_widget_subject_lines">Número máximo de linhas de assunto</string>
     <string name="title_widget_avatars">Mostrar avatares dos contactos</string>
     <string name="title_widget_account_name">Mostrar nome da conta</string>
+    <string name="title_widget_caption">Mostrar Título</string>
     <string name="title_widget_refresh">Mostrar botão para atualizar mensagens</string>
     <string name="title_widget_compose">Mostrar botão para compor nova mensagem</string>
     <string name="title_widget_background">Cor do fundo</string>

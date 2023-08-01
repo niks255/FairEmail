@@ -160,10 +160,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swAlignHeader;
 
     private SwitchCompat swAddresses;
+    private SwitchCompat swHideAttachments;
     private TextView tvMessageZoom;
     private SeekBar sbMessageZoom;
     private SwitchCompat swOverviewMode;
-    private SwitchCompat swOverrideWidth;
 
     private SwitchCompat swContrast;
     private SwitchCompat swHyphenation;
@@ -212,8 +212,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             "subject_top", "subject_italic", "highlight_subject", "font_size_subject", "subject_ellipsize",
             "keywords_header", "labels_header", "flags", "flags_background",
             "preview", "preview_italic", "preview_lines", "align_header",
-            "addresses",
-            "message_zoom", "overview_mode", "override_width",
+            "addresses", "hide_attachments",
+            "message_zoom", "overview_mode",
             "hyphenation", "display_font", "contrast", "monospaced_pre",
             "text_separators",
             "collapse_quotes", "image_placeholders", "inline_images", "button_extra",
@@ -328,10 +328,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         tvPreviewLinesHint = view.findViewById(R.id.tvPreviewLinesHint);
         swAlignHeader = view.findViewById(R.id.swAlignHeader);
         swAddresses = view.findViewById(R.id.swAddresses);
+        swHideAttachments = view.findViewById(R.id.swHideAttachments);
         tvMessageZoom = view.findViewById(R.id.tvMessageZoom);
         sbMessageZoom = view.findViewById(R.id.sbMessageZoom);
         swOverviewMode = view.findViewById(R.id.swOverviewMode);
-        swOverrideWidth = view.findViewById(R.id.swOverrideWidth);
         swContrast = view.findViewById(R.id.swContrast);
         swHyphenation = view.findViewById(R.id.swHyphenation);
         tvHyphenationHint = view.findViewById(R.id.tvHyphenationHint);
@@ -663,7 +663,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("navbar_colorize", checked).apply();
                 setNavigationBarColor(
-                        checked ? Helper.resolveColor(getContext(), R.attr.colorPrimaryDark) : Color.BLACK);
+                        checked ? Helper.resolveColor(getContext(), androidx.appcompat.R.attr.colorPrimaryDark) : Color.BLACK);
             }
         });
 
@@ -1147,6 +1147,13 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             }
         });
 
+        swHideAttachments.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("hide_attachments", checked).apply();
+            }
+        });
+
         sbMessageZoom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -1173,13 +1180,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("overview_mode", checked).apply();
-            }
-        });
-
-        swOverrideWidth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("override_width", checked).apply();
             }
         });
 
@@ -1572,6 +1572,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swAlignHeader.setChecked(prefs.getBoolean("align_header", false));
 
             swAddresses.setChecked(prefs.getBoolean("addresses", false));
+            swHideAttachments.setChecked(prefs.getBoolean("hide_attachments", false));
 
             int message_zoom = prefs.getInt("message_zoom", 100);
             tvMessageZoom.setText(getString(R.string.title_advanced_message_text_zoom2, NF.format(message_zoom)));
@@ -1579,7 +1580,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
                 sbMessageZoom.setProgress(message_zoom - 50);
 
             swOverviewMode.setChecked(prefs.getBoolean("overview_mode", false));
-            swOverrideWidth.setChecked(prefs.getBoolean("override_width", false));
 
             swContrast.setChecked(prefs.getBoolean("contrast", false));
             swHyphenation.setChecked(prefs.getBoolean("hyphenation", false));

@@ -71,6 +71,10 @@
         <item quantity="one">Eliminare permanentemente %1$d messaggio?</item>
         <item quantity="other">Eliminare permanentemente %1$d messaggi?</item>
     </plurals>
+    <plurals name="title_attachments">
+        <item quantity="one">Un allegato</item>
+        <item quantity="other">%1$d allegati</item>
+    </plurals>
     <plurals name="title_ask_spam">
         <item quantity="one">Trattare %1$d messaggio come spam?</item>
         <item quantity="other">Trattare %1$d messaggi come spam?</item>
@@ -372,6 +376,7 @@
     <string name="title_advanced_suggest_frequently">Ordina gli indirizzi suggeriti per frequenza d\'uso</string>
     <string name="title_advanced_alt_re_fwd">Prefisso alternativo di risposta/inoltro</string>
     <string name="title_advanced_send_chips">Mostra le bolle degli indirizzi</string>
+    <string name="title_advanced_send_nav_color">Utilizza il colore dell\'identità per la barra delle azioni inferiore</string>
     <string name="title_advanced_send_reminders">Mostra promemoria</string>
     <string name="title_advanced_send_delayed">Ritarda invio dei messaggi</string>
     <string name="title_advanced_attach_new">Crea un nuovo messaggio di bozza per indirizzi e file condivisi</string>
@@ -515,12 +520,12 @@
     <string name="title_advanced_preview_lines">Numero di righe d\'anteprima</string>
     <string name="title_advanced_align_header">Allinea verticalmente le parole chiave, il testo di anteprima e le note</string>
     <string name="title_advanced_addresses">Espandi i dettagli dell\'indirizzo di default</string>
+    <string name="title_advanced_hide_attachments">Comprimi gli allegati di default</string>
     <string name="title_advanced_unzip">Mostra i contenuti degli allegati compressi</string>
     <string name="title_advanced_attachments_alt">Mostra allegati dopo il testo del messaggio</string>
     <string name="title_advanced_thumbnails">Mostra miniature delle immagini dopo il testo del messaggio</string>
     <string name="title_advanced_message_text_zoom2">Ingrandimento predefinito del testo del messaggio %1$s%%</string>
     <string name="title_advanced_overview_mode">Ingrandisci i messaggi originali per adattarsi allo schermo</string>
-    <string name="title_advanced_override_width">Disabilita le larghezze fisse nei messaggi originali</string>
     <string name="title_advanced_hyphenation">Usa la sillabazione automatica</string>
     <string name="title_advanced_contrast">Usa il contrasto elevato per il testo del messaggio</string>
     <string name="title_advanced_monospaced">Usa di default caratteri monospaziati per il testo del messaggio</string>
@@ -585,13 +590,13 @@
     <string name="title_advanced_autoread">Contrassegna automaticamente i messaggi come letti allo spostamento</string>
     <string name="title_advanced_autounstar">Rimuovi automaticamente le stelle dai messaggi al loro spostamento</string>
     <string name="title_advanced_reset_importance">Ripristina l\'importanza allo spostamento dei messaggi</string>
-    <string name="title_advanced_thread_sent_trash">Cestinando una conversazionwe, elimina anche i messaggi inviati</string>
     <string name="title_advanced_star_snoozed">Aggiungi automaticamente la stella posticipando i messaggi</string>
     <string name="title_advanced_auto_important">Rendi automaticamente importanti i messaggi stellati</string>
     <string name="title_advanced_cancel_snooze">Annulla posticipazione allo spostamento dei messaggi</string>
     <string name="title_advanced_auto_block_sender">Blocca automaticamente il mittente alla segnalazione di spam</string>
     <string name="title_advanced_auto_hide_answer">Nascondi automaticamente il pulsante di risposta durante lo scorrimento</string>
     <string name="title_advanced_swipe_reply">Scorri verso destra i messaggi estesi per rispondere</string>
+    <string name="title_advanced_move_thread_all">Spostando una conversazione, sposta tutti i messaggi</string>
     <string name="title_advanced_move_thread_sent">Spostando una conversazione, sposta anche i messaggi inviati</string>
     <string name="title_advanced_default_snooze">Tempo di posticipazione/ritardo predefinito</string>
     <string name="title_advanced_default_folder">Seleziona la cartella predefinita</string>
@@ -667,6 +672,7 @@
     <string name="title_advanced_sign_default">Firma di default</string>
     <string name="title_advanced_encrypt_default">Crittografa di default</string>
     <string name="title_advanced_encrypt_auto">Crittografa automaticamente quando le chiavi di tutti i destinatari sono disponibili</string>
+    <string name="title_advanced_auto_verify">Verifica automaticamente i messaggi firmati</string>
     <string name="title_advanced_auto_decrypt">Decrittografa automaticamente i messaggi</string>
     <string name="title_advanced_auto_undo_decrypt">Annulla la decrittografia alla chiusura della conversazione</string>
     <string name="title_advanced_openpgp">Provider di OpenPGP</string>
@@ -752,7 +758,7 @@
     <string name="title_advanced_lookup_mx_hint">Questo verificherà se esistano i registri DNS MX</string>
     <string name="title_advanced_sync_delay_hint">Questo rallenterà la sincronizzazione dei messaggi</string>
     <string name="title_advanced_folder_nav_hint">Questo tornerà sempre all\'elenco delle cartelle del profilo correlato da un elenco di messaggi</string>
-    <string name="title_advanced_pull_all_hint" comment="title_advanced_pull_all_hint&#10;Remark for the option &amp;quot;Synchronize all folders&amp;quot; in the behavior settings tab page">Tirando giù l\'elenco di cartelle o profili</string>
+    <string name="title_advanced_pull_all_hint">Tirando giù l\'elenco di cartelle o profili</string>
     <string name="title_advanced_suggest_names_hint">Se disabilitato, solo gli indirizzi email saranno usati selezionando i contatti</string>
     <string name="title_advanced_suggest_local_hint">In aggiunta ai contatti forniti da Android. I dati di contatto saranno memorizzati per i messaggi appena inviati o ricevuti solo quando abilitato.</string>
     <string name="title_advanced_auto_identity_hint">Questo selezionerà l\'ultima identità usata selezionando un destinatario per i nuovi messaggi</string>
@@ -790,7 +796,6 @@
     <string name="title_advanced_preview_lines_hint">%s caratteri massimi in totale</string>
     <string name="title_advanced_preview_issue">Lo scorrimento può esser lento per un bug in alcune versioni di Android quando il numero di righe è maggiore di uno</string>
     <string name="title_advanced_overview_mode_hint">Questo può risultare in font molto piccoli</string>
-    <string name="title_advanced_override_width_hint">Questo può restringere i messaggi, ma anche sembrare strano</string>
     <string name="title_advanced_monospaced_pre_hint">I messaggi di solo testo semplice sarà considerati come preformattati</string>
     <string name="title_advanced_placeholders_hint">Questo si applica solo ai messaggi riformattati</string>
     <string name="title_advanced_inline_hint">Le immagini in linea sono immagini incluse nel messaggio</string>
@@ -1178,6 +1183,7 @@
     <string name="title_unsubscribe">Disiscriviti</string>
     <string name="title_message_rule">Crea una regola</string>
     <string name="title_no_junk">Non spam</string>
+    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Modifica l\'oggetto&#8230;</string>
     <string name="title_move_to">Sposta in&#8230;</string>
     <string name="title_move_to_folder">Sposta in&#8230;</string>
     <string name="title_move_to_account">Sposta in %1$s&#8230;</string>
@@ -1909,6 +1915,7 @@
     <string name="title_debug_info_remark">Sei pregato di descrivere il problema e indicare quando si è verificato:</string>
     <string name="title_crash_info_remark">Sei pregato di descrivere cosa stavi facendo quando l\'app si arrestata in modo anomalo:</string>
     <string name="title_debug_info_issue">Descrizione del problema (obbligatoria)</string>
+    <string name="title_debug_info_issue_remark">I dettagli, come il tempo stimato del problema, il messaggio d\'errore esatto, etc., sono importanti</string>
     <string name="title_debug_info_contact">Abbiamo recentemente appreso riguardo questo problema</string>
     <string name="title_unexpected_info_remark">Sei pregato di descrivere cosa stavi facendo quando hai ottenuto l\'errore:</string>
     <string name="title_widget_title_count">Conteggio nuovi messaggi</string>
@@ -1932,6 +1939,7 @@
     <string name="title_widget_subject_lines">Numero massimo di righe dell\'oggetto</string>
     <string name="title_widget_avatars">Mostra gli avatar del contatto</string>
     <string name="title_widget_account_name">Mostra il nome del profilo</string>
+    <string name="title_widget_caption">Mostra titolo</string>
     <string name="title_widget_refresh">Mostra il pulsante ricarica messaggi</string>
     <string name="title_widget_compose">Mostra il pulsante componi nuovo messaggio</string>
     <string name="title_widget_background">Colore di sfondo</string>
