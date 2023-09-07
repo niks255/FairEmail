@@ -6,6 +6,69 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Ubirajara](https://en.wikipedia.org/wiki/Ubirajara_jubatus)
 
+### 1.2097 - 2023-09-02
+
+* Added LanguageTool option to check every sentence
+* Added read/delivery receipt type selection to advanced identity settings
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2096 - 2023-08-31
+
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2095 - 2023-08-26
+
+* Added workaround for opening *audio/x-wav* attachments (not supported by all sound players)
+* Added batch enable/disable downloading of headers only for all child folders
+* Added notification to disable alarm sound initiated by filter rules
+* Improved CSS processing for reformatted message view
+* Restoring conversation thread on rotation changes from/to one/two rows/columns
+* Disabled Android app chooser by default because of a bug in MIUI
+* Fixed decoding of POP3 messages when *Content-Type* is missing due to truncated TOP headers
+* Fixed multi term search with non-alphanumeric characters
+* Fixed deleting of *message/rfc822* attachments (GitHub version only)
+* Fixed option to disable Android photo picker with a workaround
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2094 - 2023-08-14
+
+* Added rule action to add local notes
+* Removed a workaround for an Android issue that caused side effects
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2093 - 2023-08-14
+
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2092 - 2023-08-12
+
+* Replace [address element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address) by [geo](https://en.wikipedia.org/wiki/Geo_URI_scheme) link
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2091 - 2023-08-05
+
+* Fixed crash
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2090 - 2023-08-04
+
+* Small improvements and minor bug fixes
+* Updated [Bouncy Castle](https://www.bouncycastle.org/)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2089 - 2023-08-01
 
 * Fixed S/MIME encrypt+sign

@@ -126,6 +126,7 @@ import javax.mail.Store;
 import javax.mail.StoreClosedException;
 import javax.mail.UIDFolder;
 import javax.mail.internet.AddressException;
+import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -692,6 +693,7 @@ class Core {
                             // Move: NO APPEND processing failed.
                             // Move: NO Server Unavailable. 15
                             // Move: NO [CANNOT] Operation is not supported on mailbox
+                            // Move: NO [CANNOT] Can't save messages to this virtual mailbox (0.001 + 0.000 secs).
                             // Move: NO [ALREADYEXISTS] Mailbox already exists
                             // Copy: NO Client tried to access nonexistent namespace. (Mailbox name should probably be prefixed with: INBOX.) (n.nnn + n.nnn secs).
                             // Copy: NO Message not found
@@ -2169,6 +2171,15 @@ class Core {
 
                     multipart.removeBodyPart(i);
 
+                    try {
+                        // Can't upload empty message/rfc822
+                        ContentType ct = new ContentType(contentType);
+                        if ("message/rfc822".equalsIgnoreCase(ct.getBaseType()))
+                            contentType = "application/octet-stream";
+                    } catch (Throwable ex) {
+                        Log.w(ex);
+                    }
+
                     BodyPart placeholderPart = new MimeBodyPart();
                     placeholderPart.setContent("", contentType);
                     placeholderPart.setFileName(fileName);
@@ -2266,6 +2277,21 @@ class Core {
         Message[] imessages = ifolder.search(account.isOutlook()
                 ? new HeaderTerm(MessageHelper.HEADER_CORRELATION_ID, message.msgid)
                 : new MessageIDTerm(message.msgid));
+        EntityLog.log(context, folder.name + " exists" +
+                " retry=" + retry +
+                " host=" + account.host +
+                " outlook=" + account.isOutlook() +
+                " messages=" + (imessages == null ? null : imessages.length));
+
+        if (account.isOutlook() && (imessages == null || imessages.length == 0)) {
+            EntityLog.log(context, folder.name + " exists alt" +
+                    " retry=" + retry +
+                    " host=" + account.host +
+                    " outlook=" + account.isOutlook() +
+                    " messages=" + (imessages == null ? null : imessages.length));
+            imessages = ifolder.search(
+                    new HeaderTerm(MessageHelper.HEADER_MICROSOFT_ORIGINAL_MESSAGE_ID, message.msgid));
+        }
 
         // Searching for random header:
         //   iCloud: NO [UNAVAILABLE] Unexpected exception
@@ -2379,6 +2405,30 @@ class Core {
                 " added=" + sync_added_folders +
                 " keep_alive=" + keep_alive +
                 " force=" + force);
+
+        // Fix folder poll setting
+        boolean fixed = prefs.getBoolean("fixed_poll." + account.id, false);
+        if (!fixed &&
+                account.created != null &&
+                account.created > 1691193600 * 1000L /* 2023-08-05 00:00 */ &&
+                account.created < 1692223200 * 1000L /* 2023-05-17 00:00 */)
+            try {
+                int count = 0;
+                EntityFolder inbox = db.folder().getFolderByType(account.id, EntityFolder.INBOX);
+                List<EntityFolder> children = db.folder().getChildFolders(inbox.id);
+                for (EntityFolder child : children)
+                    if (!child.poll && EntityFolder.USER.equals(child.type)) {
+                        count++;
+                        db.folder().setFolderPoll(child.id, true);
+                        EntityLog.log(context, "Fixed poll=" + child.name + ":" + child.type);
+                    }
+                if (count > 0)
+                    Log.e("Fixed poll count=" + count);
+            } catch (Throwable ex) {
+                Log.e(ex);
+            } finally {
+                prefs.edit().putBoolean("fixed_poll." + account.id, true).apply();
+            }
 
         if (force)
             sync_folders = true;
@@ -3052,7 +3102,7 @@ class Core {
                 if (!message.content)
                     throw new IllegalArgumentException("Message without content id=" + rule.id + ":" + rule.name);
 
-                rule.execute(context, message);
+                rule.execute(context, message, null);
             }
 
             db.setTransactionSuccessful();
@@ -3358,18 +3408,8 @@ class Core {
                         message.receipt_request = helper.getReceiptRequested();
                         message.receipt_to = helper.getReceiptTo();
                         message.bimi_selector = helper.getBimiSelector();
-
-                        if (native_dkim && !BuildConfig.PLAY_STORE_RELEASE) {
-                            List<String> signers = helper.verifyDKIM(context);
-                            message.signedby = (signers.size() == 0 ? null : TextUtils.join(",", signers));
-                        }
-
                         message.tls = helper.getTLS();
                         message.dkim = MessageHelper.getAuthentication("dkim", authentication);
-                        if (Boolean.TRUE.equals(message.dkim) &&
-                                native_dkim && !BuildConfig.PLAY_STORE_RELEASE &&
-                                TextUtils.isEmpty(message.signedby))
-                            message.dkim = false;
                         message.spf = MessageHelper.getAuthentication("spf", authentication);
                         if (message.spf == null && helper.getSPF())
                             message.spf = true;
@@ -3418,6 +3458,24 @@ class Core {
 
                         if (MessageHelper.equalEmail(message.submitter, message.from))
                             message.submitter = null;
+
+                        if (native_dkim && !BuildConfig.PLAY_STORE_RELEASE) {
+                            List<String> signers = helper.verifyDKIM(context);
+                            message.signedby = (signers.size() == 0 ? null : TextUtils.join(",", signers));
+                            if (Boolean.TRUE.equals(message.dkim)) {
+                                if (signers.size() == 0)
+                                    message.dkim = false;
+                            } else {
+                                if (message.from != null)
+                                    for (Address from : message.from) {
+                                        String domain = UriHelper.getEmailDomain(((InternetAddress) from).getAddress());
+                                        if (domain != null && signers.contains(domain)) {
+                                            message.dkim = true;
+                                            break;
+                                        }
+                                    }
+                            }
+                        }
 
                         if (message.size == null && message.total != null)
                             message.size = message.total;
@@ -4354,6 +4412,16 @@ class Core {
             String msgid = helper.getMessageID();
             Log.i(folder.name + " searching for " + msgid);
             List<EntityMessage> dups = db.message().getMessagesByMsgId(folder.account, msgid);
+            if (dups.size() == 0 &&
+                    account.isOutlook() &&
+                    EntityFolder.SENT.equals(folder.type)) {
+                String originalId = imessage.getHeader(MessageHelper.HEADER_MICROSOFT_ORIGINAL_MESSAGE_ID, null);
+                if (originalId != null) {
+                    dups = db.message().getMessagesByMsgId(folder.account, originalId);
+                    EntityLog.log(context, folder.name + " found with original ID" +
+                            " msgid=" + msgid + " count=" + dups.size());
+                }
+            }
             for (EntityMessage dup : dups) {
                 EntityFolder dfolder = db.folder().getFolder(dup.folder);
                 Log.i(folder.name + " found as id=" + dup.id + "/" + dup.uid +
@@ -4486,18 +4554,8 @@ class Core {
             message.receipt_request = helper.getReceiptRequested();
             message.receipt_to = helper.getReceiptTo();
             message.bimi_selector = helper.getBimiSelector();
-
-            if (native_dkim && !BuildConfig.PLAY_STORE_RELEASE) {
-                List<String> signers = helper.verifyDKIM(context);
-                message.signedby = (signers.size() == 0 ? null : TextUtils.join(",", signers));
-            }
-
             message.tls = helper.getTLS();
             message.dkim = MessageHelper.getAuthentication("dkim", authentication);
-            if (Boolean.TRUE.equals(message.dkim) &&
-                    native_dkim && !BuildConfig.PLAY_STORE_RELEASE &&
-                    TextUtils.isEmpty(message.signedby))
-                message.dkim = false;
             message.spf = MessageHelper.getAuthentication("spf", authentication);
             if (message.spf == null && helper.getSPF())
                 message.spf = true;
@@ -4557,6 +4615,24 @@ class Core {
 
             if (MessageHelper.equalEmail(message.submitter, message.from))
                 message.submitter = null;
+
+            if (native_dkim && !BuildConfig.PLAY_STORE_RELEASE) {
+                List<String> signers = helper.verifyDKIM(context);
+                message.signedby = (signers.size() == 0 ? null : TextUtils.join(",", signers));
+                if (Boolean.TRUE.equals(message.dkim)) {
+                    if (signers.size() == 0)
+                        message.dkim = false;
+                } else {
+                    if (message.from != null)
+                        for (Address from : message.from) {
+                            String domain = UriHelper.getEmailDomain(((InternetAddress) from).getAddress());
+                            if (domain != null && signers.contains(domain)) {
+                                message.dkim = true;
+                                break;
+                            }
+                        }
+                }
+            }
 
             // Borrow reply name from sender name
             if (message.from != null && message.from.length == 1 &&
@@ -4769,6 +4845,7 @@ class Core {
 
                     if (body != null ||
                             (message.size != null && message.size < maxSize) ||
+                            account.isWpPl() ||
                             (MessageClassifier.isEnabled(context)) && folder.auto_classify_source)
                         try {
                             if (body == null)
@@ -5861,6 +5938,7 @@ class Core {
             thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             thread.putExtra("account", message.account);
             thread.putExtra("folder", message.folder);
+            thread.putExtra("type", message.folderType);
             thread.putExtra("thread", message.thread);
             thread.putExtra("filter_archive", !EntityFolder.ARCHIVE.equals(message.folderType));
             thread.putExtra("ignore", notify_remove);
@@ -6223,11 +6301,11 @@ class Core {
                 // Wearables
                 StringBuilder sb = new StringBuilder();
                 if (!TextUtils.isEmpty(message.subject))
-                    sb.append(TextHelper.transliterate(context, message.subject));
+                    sb.append(TextHelper.transliterateNotification(context, message.subject));
                 if (wearable_preview && !TextUtils.isEmpty(preview)) {
                     if (sb.length() > 0)
                         sb.append(" - ");
-                    sb.append(TextHelper.transliterate(context, preview));
+                    sb.append(TextHelper.transliterateNotification(context, preview));
                 }
                 if (sb.length() > 0)
                     mbuilder.setContentText(sb.toString());
@@ -6258,7 +6336,7 @@ class Core {
                 }
             } else {
                 if (!TextUtils.isEmpty(message.subject))
-                    mbuilder.setContentText(TextHelper.transliterate(context, message.subject));
+                    mbuilder.setContentText(TextHelper.transliterateNotification(context, message.subject));
             }
 
             if (info[0].hasPhoto())

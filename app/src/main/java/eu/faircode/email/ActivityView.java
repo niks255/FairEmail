@@ -715,6 +715,27 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             content_pane.setVisibility(duo || open_pane ? View.INVISIBLE : View.GONE);
         }
 
+        FragmentManager fm = getSupportFragmentManager();
+
+        int count = fm.getBackStackEntryCount();
+        if (count > 1 && "thread".equals(fm.getBackStackEntryAt(count - 1).getName())) {
+            Fragment fragment = fm.findFragmentByTag("thread");
+            if (fragment != null &&
+                    fragment.getId() == (content_pane == null ? R.id.content_pane : R.id.content_frame)) {
+                Log.i("Moving pane=" + (content_pane != null) + " fragment=" + fragment);
+                fm.popBackStack("thread", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                Fragment newFragment = Helper.recreateFragment(fragment, fm);
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(content_pane == null ? R.id.content_frame : R.id.content_pane, newFragment, "thread")
+                        .addToBackStack("thread");
+                ft.commit();
+                if (content_pane != null) {
+                    content_separator.setVisibility(View.VISIBLE);
+                    content_pane.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
         if (getSupportFragmentManager().getFragments().size() == 0 &&
                 !getIntent().hasExtra(Intent.EXTRA_PROCESS_TEXT))
             init();
@@ -1067,14 +1088,14 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     @Override
     protected void onStart() {
         super.onStart();
-        if (BuildConfig.DEBUG)
+        if (!Helper.isPlayStoreInstall())
             infoTracker.addWindowLayoutInfoListener(this, Runnable::run, layoutStateChangeCallback);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (BuildConfig.DEBUG)
+        if (!Helper.isPlayStoreInstall())
             infoTracker.removeWindowLayoutInfoListener(layoutStateChangeCallback);
     }
 
@@ -1987,11 +2008,33 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
             } else if (action.startsWith("thread")) {
                 long id = Long.parseLong(action.split(":", 2)[1]);
+                long account = intent.getLongExtra("account", -1);
+                long folder = intent.getLongExtra("folder", -1);
+                String type = intent.getStringExtra("type");
                 boolean ignore = intent.getBooleanExtra("ignore", false);
                 long group = intent.getLongExtra("group", -1L);
                 if (ignore)
                     ServiceUI.ignore(this, id, group);
                 intent.putExtra("id", id);
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ActivityView.this);
+                boolean notify_open_folder = prefs.getBoolean("notify_open_folder", false);
+                if (account > 0 && folder > 0 && !TextUtils.isEmpty(type) && notify_open_folder) {
+                    if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                        getSupportFragmentManager().popBackStack("messages", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                        Bundle args = new Bundle();
+                        args.putLong("account", account);
+                        args.putLong("folder", folder);
+                        args.putString("type", type);
+
+                        FragmentMessages fragment = new FragmentMessages();
+                        fragment.setArguments(args);
+
+                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("messages");
+                        fragmentTransaction.commit();
+                    }
+                }
                 onViewThread(intent);
 
             } else if (action.startsWith("widget")) {
@@ -2390,6 +2433,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             criteria.in_keywords = false;
             criteria.in_message = false;
             criteria.in_notes = false;
+            criteria.in_trash = false;
         }
 
         FragmentMessages.search(
@@ -2432,7 +2476,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         }
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(pane, fragment).addToBackStack("thread");
+        fragmentTransaction.replace(pane, fragment, "thread").addToBackStack("thread");
         fragmentTransaction.commit();
     }
 
@@ -2510,10 +2554,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private final Consumer<WindowLayoutInfo> layoutStateChangeCallback = new Consumer<WindowLayoutInfo>() {
         @Override
         public void accept(WindowLayoutInfo info) {
-            List<DisplayFeature> features = info.getDisplayFeatures();
-            Log.i("Display features=" + features.size());
-            for (DisplayFeature feature : features)
-                EntityLog.log(ActivityView.this, "Display feature bounds=" + feature.getBounds());
+            EntityLog.log(ActivityView.this, "Window layout=" + info);
         }
     };
 }

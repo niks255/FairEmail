@@ -105,6 +105,9 @@ public interface DaoIdentity {
     @Update
     void updateIdentity(EntityIdentity identity);
 
+    @Query("UPDATE identity SET uuid = :uuid WHERE id = :id AND NOT (uuid IS :uuid)")
+    int setIdentityUuid(long id, String uuid);
+
     @Query("UPDATE identity SET synchronize = :synchronize WHERE id = :id AND NOT (synchronize IS :synchronize)")
     int setIdentitySynchronize(long id, boolean synchronize);
 
@@ -134,10 +137,10 @@ public interface DaoIdentity {
     int setIdentityPassword(long account, String user, String password, Integer auth_type, int new_auth_type, String provider);
 
     @Query("UPDATE identity" +
-            " SET fingerprint = :fingerprint" +
+            " SET fingerprint = :fingerprint, insecure = :insecure" +
             " WHERE account = :account" +
             " AND NOT (fingerprint IS :fingerprint)")
-    int setIdentityFingerprint(long account, String fingerprint);
+    int setIdentityFingerprint(long account, String fingerprint, boolean insecure);
 
     @Query("UPDATE identity SET last_connected = :last_connected WHERE id = :id AND NOT (last_connected IS :last_connected)")
     int setIdentityConnected(long id, long last_connected);

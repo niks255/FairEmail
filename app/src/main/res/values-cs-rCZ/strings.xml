@@ -220,6 +220,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_setup_oauth_rationale">Autorizovat přístup k vašemu účtu %1$s</string>
     <string name="title_setup_oauth_update">Znovu autorizovat existující účet (jinak vytvořit nový účet)</string>
     <string name="title_setup_oauth_updated">Autorizace účtu byla aktualizována</string>
+    <string name="title_setup_oauth_brave">Při používání prohlížeče Brave musíte povolit v nastavení, aby se aplikace otevřela mimo prohlížeč</string>
     <string name="title_setup_oauth_authorize">Autorizovat</string>
     <string name="title_setup_select_account">Vybrat účet</string>
     <string name="title_setup_instructions">Pokyny pro nastavení</string>
@@ -519,6 +520,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_libravatars">Zobrazit Libravatary</string>
     <string name="title_advanced_favicons">Zobrazit ikony stránek</string>
     <string name="title_advanced_favicons_partial">Skenovat pouze prvních %1$s na webové stránce</string>
+    <string name="title_advanced_favicons_manifest">Skenovat manifest webové aplikace</string>
     <string name="title_advanced_generated_icons">Zobrazit generované ikony</string>
     <string name="title_advanced_identicons">Zobrazit identikony</string>
     <string name="title_advanced_circular">Zobrazit kulaté ikony</string>
@@ -553,6 +555,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_attachments_alt">Zobrazit přílohy pod textem zprávy</string>
     <string name="title_advanced_thumbnails">Zobrazit náhledy obrázků pod textem zprávy</string>
     <string name="title_advanced_message_text_zoom2">Výchozí zvětšení textu zprávy: %1$s %%</string>
+    <string name="title_advanced_editor_text_zoom">Změnit přiblížení textu zprávy také v editoru zpráv</string>
     <string name="title_advanced_overview_mode">Přizpůsobit zobrazení původních zpráv šířce obrazovky</string>
     <string name="title_advanced_hyphenation">Použít automatický rozdělovník</string>
     <string name="title_advanced_contrast">Použít vysoký kontrast pro text zprávy</string>
@@ -663,6 +666,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_wearable_preview">Do nositelného zařízení posílat pouze oznámení s náhledem zprávy</string>
     <string name="title_advanced_notify_messaging">Použít formát oznámení Androidu s polem pro rychlou odpověď</string>
     <string name="title_advanced_biometrics_notify">Zobrazit obsah oznámení při použití biometrického ověření</string>
+    <string name="title_advanced_notify_open_folder">Otevřít složku při otevírání nové zprávy</string>
     <string name="title_advanced_light">Použít oznamovací LED</string>
     <string name="title_advanced_sound">Vybrat zvuk oznámení</string>
     <string name="title_advanced_notify_screen_on">Krátce zapnout obrazovku při upozornění na nové zprávy</string>
@@ -1028,6 +1032,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_synchronize_batch_disable">Zakázat synchronizaci</string>
     <string name="title_notify_batch_enable">Povolit upozornění na nové zprávy</string>
     <string name="title_notify_batch_disable">Zakázat upozornění na nové zprávy</string>
+    <string name="title_download_batch_enable">Stáhnout texty a přílohy</string>
+    <string name="title_download_batch_disable">Stáhnout pouze hlavičky</string>
     <string name="title_delete_local">Smazat lokální zprávy</string>
     <string name="title_delete_browsed">Smazat prohlédnuté/vyhledané zprávy</string>
     <string name="title_expunge">Trvale smazat</string>
@@ -1209,7 +1215,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_unsubscribe">Odhlásit odběr</string>
     <string name="title_message_rule">Vytvořit pravidlo</string>
     <string name="title_no_junk">Není spam</string>
-    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Upravit předmět &#8230;</string>
+    <string name="title_edit_subject">Upravit předmět &#8230;</string>
     <string name="title_move_to">Přesunout do &#8230;</string>
     <string name="title_move_to_folder">Přesunout do &#8230;</string>
     <string name="title_move_to_account">Přesunout do %1$s &#8230;</string>
@@ -1377,6 +1383,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_add_image_privacy">Odebrat citlivé osobní údaje</string>
     <string name="title_add_image_privacy_remark">Zeměpisná poloha, sériová čísla, názvy souborů, apod.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixelů</string>
+    <string name="title_add_image_select_remark">Výběr fotografií pro Android již neprochází názvy souborů</string>
     <string name="title_add_image_select">Vybrat soubor</string>
     <string name="title_add_attachment">Přidat přílohu</string>
     <string name="title_attachment_file">Přiložit soubor</string>
@@ -1388,6 +1395,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_image_dialog">Zobrazit možnosti obrázku</string>
     <string name="title_style_toolbar">Panel formátování</string>
     <string name="title_media_toolbar">Panel médií</string>
+    <string name="title_manage_android_contacts">Spravovat kontakty systému Android</string>
     <string name="title_manage_local_contacts">Správa místních kontaktů</string>
     <string name="title_insert_contact_group">Vložit skupinu kontaktů</string>
     <string name="title_insert_template">Vložit šablonu</string>
@@ -1490,6 +1498,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_search_hint">Hledání se zpočátku zaměří na zprávy uložené ve vašem zařízení.
         Pro hledání i na serveru, stiskněte tlačítko „Hledat znovu“.
     </string>
+    <string name="title_search_hint_fts">Použití vyhledávacího indexu: pouze celá slova</string>
     <string name="title_search_index_hint">Vyhledávání přes vyhledávací index je rychlé, ale najde pouze celá slova.</string>
     <string name="title_search_text_hint">Hledání textu ve zprávách, při velkém počtu zpráv, nemusí fungovat na některých serverech</string>
     <string name="title_search_text_unsupported">\'%s\' znamená, že mailový server nepodporuje vyhledávání v textech zpráv</string>
@@ -1606,6 +1615,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_rule_keyword">Klíčové slovo</string>
     <string name="title_rule_keyword_add">Přidat</string>
     <string name="title_rule_keyword_delete">Odstranit</string>
+    <string name="title_rule_notes">Místní poznámky</string>
     <string name="title_rule_move">Přesunout</string>
     <string name="title_rule_copy">Kopírovat (štítek)</string>
     <string name="title_rule_answer">Odpovědět/přeposlat</string>
@@ -1664,6 +1674,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_rule_answer_missing">Chybí šablona</string>
     <string name="title_rule_keyword_missing">Chybí klíčové slovo</string>
     <string name="title_rule_automation_hint">Bude odesláno volání (intent) „%1$s“ s doplňujícími informacemi (extras) „%2$s“</string>
+    <string name="title_rule_notes_missing">Místní poznámky chybí</string>
     <string name="title_rule_delete_hint">Trvalé smazání je nevratné, takže se ujistěte, že jsou podmínky pravidla správné!</string>
     <string name="title_rule_edit_group">Upravit skupinu &#8230;</string>
     <string name="title_rule_execute">Provést nyní</string>
@@ -1684,6 +1695,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_rule_use_as_alarm">Použít jako budík</string>
     <string name="title_rule_alarm_hint">Toto ignoruje pravidla režimu \"Nerušit\"</string>
     <string name="title_rule_alarm_duration">Maximální doba trvání budíku (sekundy)</string>
+    <string name="title_rule_alarm_title">Budík</string>
+    <string name="title_rule_alarm_stop">Zastavit</string>
     <string name="title_legend_section_synchronize">Synchronizace</string>
     <string name="title_legend_section_folders">Složky</string>
     <string name="title_legend_section_messages">Zprávy</string>
@@ -1809,6 +1822,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_hint_folder_sync">Pro omezení spotřeby baterie a dat nebudou ve výchozím stavu synchronizovány všechny zprávy ani složky</string>
     <string name="title_hint_airplane">Režim Letadlo je zapnutý</string>
     <string name="title_hint_notifications">Žádná oprávnění pro oznámení</string>
+    <string name="title_hint_notifications_remark">Oprávnění k notifikacím jsou vyžadována také pro upozornění pro (účet). Upozornění pro nové zprávy mohou být vypnuta v nastavení.</string>
     <string name="title_hint_battery_optimizations">Optimalizace baterie je stále povolena</string>
     <string name="title_hint_support">Máte-li dotaz nebo problém, použijte prosím menu podpory pro získání pomoci</string>
     <string name="title_hint_message_actions">Tažením doleva hodit do koše; Tažením doprava archivovat (je-li k dispozici); Akce tažením lze změnit v nastavení účtu</string>

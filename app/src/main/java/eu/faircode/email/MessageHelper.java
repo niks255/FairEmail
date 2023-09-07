@@ -66,6 +66,9 @@ import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.UnsupportedZipFeatureException;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -174,14 +177,15 @@ public class MessageHelper {
     static final int SMALL_MESSAGE_SIZE = 192 * 1024; // bytes
     static final int DEFAULT_DOWNLOAD_SIZE = 4 * 1024 * 1024; // bytes
     static final String HEADER_CORRELATION_ID = "X-Correlation-ID";
+    static final String HEADER_MICROSOFT_ORIGINAL_MESSAGE_ID = "X-Microsoft-Original-Message-ID";
     static final int MAX_SUBJECT_AGE = 48; // hours
     static final int DEFAULT_THREAD_RANGE = 7; // 2^7 = 128 days
     static final int MAX_UNZIP_COUNT = 20;
     static final long MAX_UNZIP_SIZE = 1000 * 1000 * 1000L;
 
-    static final List<String> UNZIP_FORMATS = BuildConfig.PLAY_STORE_RELEASE
-            ? Collections.unmodifiableList(Arrays.asList("zip"))
-            : Collections.unmodifiableList(Arrays.asList("zip, gz, tar.gz"));
+    static final List<String> UNZIP_FORMATS = Collections.unmodifiableList(Arrays.asList(
+            "zip", "gz", "tar.gz"
+    ));
 
     static final List<String> RECEIVED_WORDS = Collections.unmodifiableList(Arrays.asList(
             "from", "by", "via", "with", "id", "for"
@@ -331,6 +335,9 @@ public class MessageHelper {
         boolean mutual = prefs.getBoolean("autocrypt_mutual", true);
         boolean encrypt_subject = prefs.getBoolean("encrypt_subject", false);
         boolean forward_new = prefs.getBoolean("forward_new", true);
+
+        if (identity != null && identity.receipt_type != null)
+            receipt_type = identity.receipt_type;
 
         Map<String, String> c = new HashMap<>();
         c.put("id", message.id == null ? null : Long.toString(message.id));
@@ -2152,9 +2159,13 @@ public class MessageHelper {
             if (val.length > 0) {
                 if ("fail".equals(val[0]))
                     result = false;
-                else if ("pass".equals(val[0]))
+                else if ("pass".equals(val[0])) {
+                    // https://www.rfc-editor.org/rfc/rfc7489#section-3.1.1
+                    if ("dkim".equals(type))
+                        return true;
                     if (result == null)
                         result = true;
+                }
             }
         }
 
@@ -2304,8 +2315,10 @@ public class MessageHelper {
         } else if ("rsa-sha256".equals(a)) {
             halgo = "SHA-256";
             salgo = "SHA256withRSA";
+        } else if ("ed25519-sha256".equals(a)) {
+            halgo = "SHA-256";
+            salgo = "Ed25519";
         } else {
-            // TODO: Ed25519
             Log.i("DKIM a=" + a);
             return null;
         }
@@ -2320,6 +2333,9 @@ public class MessageHelper {
 
             Log.i("DKIM got " + records[0].response);
             Map<String, String> dk = getKeyValues(records[0].response);
+            // DKIM version and key type are not always present
+            //  v=DKIM1; k=rsa; p=...
+            //  v=DKIM1; k=ed25519; p=...
 
             String canonic = kv.get("c");
             Log.i("DKIM canonicalization=" + canonic);
@@ -2447,10 +2463,32 @@ public class MessageHelper {
             String p = pubkey.replaceAll("\\s+", "");
             Log.i("DKIM pubkey=" + p);
 
-            X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(Base64.decode(p, Base64.DEFAULT));
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            String hash = kv.get("b");
+            if (hash == null)
+                return null;
+            String s = hash.replaceAll("\\s+", "");
+            Log.i("DKIM signature=" + s);
+
+            byte[] data = head.toString().getBytes();
+            byte[] key = Base64.decode(p, Base64.DEFAULT);
+            byte[] signature = Base64.decode(s, Base64.DEFAULT);
+
+            // https://datatracker.ietf.org/doc/html/rfc8463
+            if ("Ed25519".equals(salgo)) {
+                if (false) {
+                    // https://www.rfc-editor.org/rfc/rfc8037#page-9
+                    data = "eyJhbGciOiJFZERTQSJ9.RXhhbXBsZSBvZiBFZDI1NTE5IHNpZ25pbmc".getBytes(StandardCharsets.UTF_8);
+                    key = Base64.decode("11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo", Base64.URL_SAFE);
+                    signature = Base64.decode("hgyY0il_MGCjP0JzlnLWG1PPOt7-09PGcvMg3AIbQR6dWbhijcNR4ki4iylGjg5BhVsPt9g7sVvpAr_MuM0KAg", Base64.URL_SAFE);
+                }
+                data = MessageDigest.getInstance("SHA-256").digest(head.toString().getBytes());
+                key = new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519), key).getEncoded();
+            }
+
+            X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(key);
+            KeyFactory keyFactory = KeyFactory.getInstance("Ed25519".equals(salgo) ? "Ed25519" : "RSA");
             PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
-            Signature sig = Signature.getInstance(salgo); // a=
+            Signature sig = Signature.getInstance("Ed25519".equals(salgo) ? "EdDSA" : salgo); // a=
 
             // https://stackoverflow.com/a/43984402/1794097
             if (pubKey instanceof RSAPublicKey)
@@ -2463,19 +2501,12 @@ public class MessageHelper {
                     Log.e(ex);
                 }
 
-            String hash = kv.get("b");
-            if (hash == null)
-                return null;
-            String s = hash.replaceAll("\\s+", "");
-            Log.i("DKIM signature=" + s);
-
-            byte[] signature = Base64.decode(s, Base64.DEFAULT);
-
             sig.initVerify(pubKey);
-            sig.update(head.toString().getBytes());
+            sig.update(data);
 
             boolean verified = sig.verify(signature);
             Log.i("DKIM valid=" + verified +
+                    " algo=" + salgo +
                     " dns=" + dns +
                     " from=" + formatAddresses(getFrom()));
 
@@ -4973,7 +5004,7 @@ public class MessageHelper {
 
             String ct = contentType.getBaseType();
             if (("text/plain".equalsIgnoreCase(ct) || "text/html".equalsIgnoreCase(ct)) &&
-                    !Part.ATTACHMENT.equalsIgnoreCase(disposition) && TextUtils.isEmpty(filename) &&
+                    !Part.ATTACHMENT.equalsIgnoreCase(disposition) &&
                     (size <= MAX_MESSAGE_SIZE || size == Integer.MAX_VALUE)) {
                 parts.text.add(new PartHolder(part, contentType));
             } else {

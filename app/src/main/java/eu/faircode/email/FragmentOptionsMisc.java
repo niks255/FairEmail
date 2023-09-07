@@ -144,6 +144,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
     private SwitchCompat swLanguageTool;
     private TextView tvLanguageToolPrivacy;
+    private SwitchCompat swLanguageToolSentence;
     private SwitchCompat swLanguageToolAuto;
     private SwitchCompat swLanguageToolPicky;
     private EditText etLanguageTool;
@@ -224,6 +225,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAuthSasl;
     private SwitchCompat swAuthApop;
     private SwitchCompat swUseTop;
+    private SwitchCompat swForgetTop;
     private SwitchCompat swKeepAlivePoll;
     private SwitchCompat swEmptyPool;
     private SwitchCompat swIdleDone;
@@ -240,6 +242,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swDupMsgId;
     private SwitchCompat swThreadByRef;
     private SwitchCompat swMdn;
+    private SwitchCompat swAppChooser;
+    private SwitchCompat swDeleteConfirmation;
+    private SwitchCompat swDmarcViewer;
     private EditText etKeywords;
     private SwitchCompat swTestIab;
     private Button btnImportProviders;
@@ -281,7 +286,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "classification", "class_min_probability", "class_min_difference",
             "show_filtered",
             "language",
-            "lt_enabled", "lt_auto", "lt_picky", "lt_uri", "lt_user", "lt_key",
+            "lt_enabled", "lt_sentence", "lt_auto", "lt_picky", "lt_uri", "lt_user", "lt_key",
             "deepl_enabled",
             "vt_enabled", "vt_apikey",
             "send_enabled", "send_host", "send_dlimit", "send_tlimit",
@@ -297,12 +302,12 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "browser_zoom", "fake_dark",
             "show_recent",
             "use_modseq", "preamble", "uid_command", "perform_expunge", "uid_expunge",
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", "use_top",
+            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", "use_top", "forget_top",
             "keep_alive_poll", "empty_pool", "idle_done", "fast_fetch",
             "max_backoff_power", "logarithmic_backoff",
             "exact_alarms",
             "native_dkim", "native_arc", "native_arc_whitelist",
-            "infra", "tld_flags", "dup_msgids", "thread_byref", "mdn", "global_keywords", "test_iab"
+            "infra", "tld_flags", "dup_msgids", "thread_byref", "mdn", "app_chooser", "delete_confirmation", "global_keywords", "test_iab"
     };
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -328,7 +333,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "redmi_note",
             "accept_space", "accept_unsupported",
             "junk_hint",
-            "last_update_check", "last_announcement_check"
+            "last_update_check", "last_announcement_check",
+            "notifications_reminder"
     };
 
     @Override
@@ -394,6 +400,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         swLanguageTool = view.findViewById(R.id.swLanguageTool);
         tvLanguageToolPrivacy = view.findViewById(R.id.tvLanguageToolPrivacy);
+        swLanguageToolSentence = view.findViewById(R.id.swLanguageToolSentence);
         swLanguageToolAuto = view.findViewById(R.id.swLanguageToolAuto);
         swLanguageToolPicky = view.findViewById(R.id.swLanguageToolPicky);
         etLanguageTool = view.findViewById(R.id.etLanguageTool);
@@ -474,6 +481,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAuthSasl = view.findViewById(R.id.swAuthSasl);
         swAuthApop = view.findViewById(R.id.swAuthApop);
         swUseTop = view.findViewById(R.id.swUseTop);
+        swForgetTop = view.findViewById(R.id.swForgetTop);
         swKeepAlivePoll = view.findViewById(R.id.swKeepAlivePoll);
         swEmptyPool = view.findViewById(R.id.swEmptyPool);
         swIdleDone = view.findViewById(R.id.swIdleDone);
@@ -490,6 +498,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swDupMsgId = view.findViewById(R.id.swDupMsgId);
         swThreadByRef = view.findViewById(R.id.swThreadByRef);
         swMdn = view.findViewById(R.id.swMdn);
+        swAppChooser = view.findViewById(R.id.swAppChooser);
+        swDeleteConfirmation = view.findViewById(R.id.swDeleteConfirmation);
+        swDmarcViewer = view.findViewById(R.id.swDmarcViewer);
         etKeywords = view.findViewById(R.id.etKeywords);
         swTestIab = view.findViewById(R.id.swTestIab);
         btnImportProviders = view.findViewById(R.id.btnImportProviders);
@@ -849,6 +860,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("lt_enabled", checked).apply();
+                swLanguageToolSentence.setEnabled(checked);
                 swLanguageToolAuto.setEnabled(checked);
                 swLanguageToolPicky.setEnabled(checked);
             }
@@ -859,6 +871,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onClick(View v) {
                 Helper.view(v.getContext(), Uri.parse(Helper.LT_PRIVACY_URI), true);
+            }
+        });
+
+        swLanguageToolSentence.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("lt_sentence", checked).apply();
             }
         });
 
@@ -1617,6 +1636,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        etViewportHeight.setHint(Integer.toString(WebViewEx.DEFAULT_VIEWPORT_HEIGHT));
         etViewportHeight.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1631,7 +1651,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void afterTextChanged(Editable edit) {
                 try {
-                    prefs.edit().putInt("viewport_height", Integer.parseInt(edit.toString())).apply();
+                    String vh = edit.toString();
+                    if (TextUtils.isEmpty(vh))
+                        prefs.edit().remove("viewport_height").apply();
+                    else
+                        prefs.edit().putInt("viewport_height", Integer.parseInt(vh)).apply();
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
@@ -1725,6 +1749,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("use_top", checked).apply();
+            }
+        });
+
+        swForgetTop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("forget_top", checked).apply();
             }
         });
 
@@ -1853,6 +1884,27 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("mdn", checked).apply();
+            }
+        });
+
+        swAppChooser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("app_chooser", checked).apply();
+            }
+        });
+
+        swDeleteConfirmation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("delete_confirmation", checked).apply();
+            }
+        });
+
+        swDmarcViewer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                Helper.enableComponent(compoundButton.getContext(), ActivityDmarc.class, checked);
             }
         });
 
@@ -2496,6 +2548,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 spLanguage.setSelection(selected);
 
             swLanguageTool.setChecked(prefs.getBoolean("lt_enabled", false));
+            swLanguageToolSentence.setChecked(prefs.getBoolean("lt_sentence", false));
+            swLanguageToolSentence.setEnabled(swLanguageTool.isChecked());
             swLanguageToolAuto.setChecked(prefs.getBoolean("lt_auto", true));
             swLanguageToolAuto.setEnabled(swLanguageTool.isChecked());
             swLanguageToolPicky.setChecked(prefs.getBoolean("lt_picky", false));
@@ -2566,7 +2620,11 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swUndoManager.setChecked(prefs.getBoolean("undo_manager", false));
             swBrowserZoom.setChecked(prefs.getBoolean("browser_zoom", false));
             swFakeDark.setChecked(prefs.getBoolean("fake_dark", false));
-            etViewportHeight.setText(Integer.toString(prefs.getInt("viewport_height", 8000)));
+            if (prefs.contains("viewport_height")) {
+                int vh = prefs.getInt("viewport_height", WebViewEx.DEFAULT_VIEWPORT_HEIGHT);
+                etViewportHeight.setText(Integer.toString(vh));
+            } else
+                etViewportHeight.setText(null);
             swShowRecent.setChecked(prefs.getBoolean("show_recent", false));
             swModSeq.setChecked(prefs.getBoolean("use_modseq", true));
             swPreamble.setChecked(prefs.getBoolean("preamble", false));
@@ -2579,6 +2637,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swAuthSasl.setChecked(prefs.getBoolean("auth_sasl", true));
             swAuthApop.setChecked(prefs.getBoolean("auth_apop", false));
             swUseTop.setChecked(prefs.getBoolean("use_top", true));
+            swForgetTop.setChecked(prefs.getBoolean("forget_top", false));
             swKeepAlivePoll.setChecked(prefs.getBoolean("keep_alive_poll", false));
             swEmptyPool.setChecked(prefs.getBoolean("empty_pool", true));
             swIdleDone.setChecked(prefs.getBoolean("idle_done", true));
@@ -2602,6 +2661,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
             swThreadByRef.setChecked(prefs.getBoolean("thread_byref", true));
             swMdn.setChecked(prefs.getBoolean("mdn", swExperiments.isChecked()));
+            swAppChooser.setChecked(prefs.getBoolean("app_chooser", false));
+            swDeleteConfirmation.setChecked(prefs.getBoolean("delete_confirmation", true));
+            swDmarcViewer.setChecked(Helper.isComponentEnabled(getContext(), ActivityDmarc.class));
             etKeywords.setText(prefs.getString("global_keywords", null));
             swTestIab.setChecked(prefs.getBoolean("test_iab", false));
 

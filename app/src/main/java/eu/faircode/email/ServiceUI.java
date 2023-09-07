@@ -21,10 +21,12 @@ package eu.faircode.email;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.RemoteInput;
@@ -58,6 +60,7 @@ public class ServiceUI extends IntentService {
     static final int PI_SNOOZE = 10;
     static final int PI_IGNORED = 11;
     static final int PI_DELETE = 12;
+    static final int PI_ALARM = 13;
 
     public ServiceUI() {
         this(ServiceUI.class.getName());
@@ -175,6 +178,10 @@ public class ServiceUI extends IntentService {
 
                 case "exists":
                     // ignore
+                    break;
+
+                case "alarm":
+                    onAlarm(intent);
                     break;
 
                 default:
@@ -321,10 +328,18 @@ public class ServiceUI extends IntentService {
         if (outbox == null)
             throw new IllegalArgumentException("outbox not found");
 
+
+        ClipData clip = intent.getClipData();
+        Intent inner = (clip != null && clip.getItemCount() > 0 ? clip.getItemAt(0).getIntent() : null);
+
         Bundle results = RemoteInput.getResultsFromIntent(intent);
-        String body = results.getString("text");
-        if (body != null)
-            body = "<p>" + body.replaceAll("\\r?\\n", "<br>") + "</p>";
+        EntityLog.log(this, "Reply direct intent=" + intent +
+                " extras: " + TextUtils.join(" ", Log.getExtras(intent.getExtras())) +
+                " inner=" + inner + (inner == null ? "" : " extras: " + TextUtils.join(" ", Log.getExtras(inner.getExtras()))) +
+                " results: " + Log.getExtras(results));
+
+        Object obj = results.get("text");
+        String body = (obj == null ? null : "<p>" + obj.toString().replaceAll("\\r?\\n", "<br>") + "</p>");
 
         String text = HtmlHelper.getFullText(body);
         String language = HtmlHelper.getLanguage(this, ref.subject, text);
@@ -500,6 +515,10 @@ public class ServiceUI extends IntentService {
         long aid = intent.getLongExtra("account", -1L);
         long fid = intent.getLongExtra("folder", -1L);
         onSync(aid, fid, fid < 0);
+    }
+
+    private void onAlarm(Intent intent) {
+        MediaPlayerHelper.stop(this);
     }
 
     static void sync(Context context, Long account) {

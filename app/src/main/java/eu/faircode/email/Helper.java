@@ -28,6 +28,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
@@ -46,6 +47,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.UriPermission;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.ComponentInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -122,6 +124,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -146,6 +149,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -200,7 +204,6 @@ public class Helper {
     static final String PGP_BEGIN_MESSAGE = "-----BEGIN PGP MESSAGE-----";
     static final String PGP_END_MESSAGE = "-----END PGP MESSAGE-----";
 
-    static final String PACKAGE_CHROME = "com.android.chrome";
     static final String PACKAGE_WEBVIEW = "https://play.google.com/store/apps/details?id=com.google.android.webview";
     static final String PRIVACY_URI = "https://github.com/M66B/FairEmail/blob/master/PRIVACY.md";
     static final String TUTORIALS_URI = "https://github.com/M66B/FairEmail/tree/master/tutorials#main";
@@ -226,6 +229,8 @@ public class Helper {
     private static final String[] ROMAN_100 = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
     private static final String[] ROMAN_10 = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
     private static final String[] ROMAN_1 = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+
+    static final String REGEX_UUID = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 
     static final Pattern EMAIL_ADDRESS = Pattern.compile(
             "[\\S&&[^\"@]]{1,256}" +
@@ -704,6 +709,32 @@ public class Helper {
     static boolean isComponentEnabled(Context context, Class<?> clazz) {
         PackageManager pm = context.getPackageManager();
         int state = pm.getComponentEnabledSetting(new ComponentName(context, clazz));
+
+        if (state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) {
+            try {
+                PackageInfo pi = pm.getPackageInfo(context.getPackageName(),
+                        PackageManager.GET_ACTIVITIES |
+                                PackageManager.GET_RECEIVERS |
+                                PackageManager.GET_SERVICES |
+                                PackageManager.GET_PROVIDERS |
+                                PackageManager.GET_DISABLED_COMPONENTS);
+
+                List<ComponentInfo> components = new ArrayList<>();
+                if (pi.activities != null)
+                    Collections.addAll(components, pi.activities);
+                if (pi.services != null)
+                    Collections.addAll(components, pi.services);
+                if (pi.providers != null)
+                    Collections.addAll(components, pi.providers);
+
+                for (ComponentInfo component : components)
+                    if (component.name.equals(clazz.getName()))
+                        return component.isEnabled();
+            } catch (PackageManager.NameNotFoundException ex) {
+                Log.w(ex);
+            }
+        }
+
         return (state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
     }
 
@@ -940,14 +971,18 @@ public class Helper {
     }
 
     static Intent getChooser(Context context, Intent intent) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean app_chooser = prefs.getBoolean("app_chooser", false);
+        if (!app_chooser)
+            return intent;
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
             PackageManager pm = context.getPackageManager();
             if (pm.queryIntentActivities(intent, 0).size() == 1)
                 return intent;
-            else
-                return Intent.createChooser(intent, context.getString(R.string.title_select_app));
-        } else
-            return Intent.createChooser(intent, context.getString(R.string.title_select_app));
+        }
+
+        return Intent.createChooser(intent, context.getString(R.string.title_select_app));
     }
 
     static void share(Context context, File file, String type, String name) {
@@ -1167,11 +1202,34 @@ public class Helper {
             return false;
 
         try {
-            return CustomTabsClient.connectAndInitialize(context, PACKAGE_CHROME);
+            /*
+                E AndroidRuntime: FATAL EXCEPTION: main
+                E AndroidRuntime: Process: eu.faircode.email.debug, PID: 25922
+                E AndroidRuntime: java.lang.IllegalStateException: Custom Tabs Service connected before an applicationcontext has been provided.
+                E AndroidRuntime: 	at androidx.browser.customtabs.CustomTabsServiceConnection.onServiceConnected(CustomTabsServiceConnection.java:52)
+                E AndroidRuntime: 	at android.app.LoadedApk$ServiceDispatcher.doConnected(LoadedApk.java:2198)
+                E AndroidRuntime: 	at android.app.LoadedApk$ServiceDispatcher$RunConnection.run(LoadedApk.java:2231)
+                E AndroidRuntime: 	at android.os.Handler.handleCallback(Handler.java:958)
+                E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:99)
+                E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:205)
+                E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:294)
+                E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:8177)
+                E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+                E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+                E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+             */
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            String open_with_pkg = prefs.getString("open_with_pkg", null);
+            boolean open_with_tabs = prefs.getBoolean("open_with_tabs", true);
+            if (open_with_tabs && !TextUtils.isEmpty(open_with_pkg)) {
+                Log.i("Warming up " + open_with_pkg);
+                return CustomTabsClient.connectAndInitialize(context, open_with_pkg);
+            }
         } catch (Throwable ex) {
             Log.w(ex);
-            return false;
         }
+
+        return false;
     }
 
     static String getFAQLocale() {
@@ -1550,6 +1608,33 @@ public class Helper {
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S);
     }
 
+    static String getMIUIVersion() {
+        try {
+            Class<?> c = Class.forName("android.os.SystemProperties");
+            Method get = c.getMethod("get", String.class);
+            get.setAccessible(true);
+            String miui = (String) get.invoke(c, "ro.miui.ui.version.code");
+            return (TextUtils.isEmpty(miui) ? null : miui);
+        } catch (Throwable ex) {
+            Log.w(ex);
+            return null;
+        }
+    }
+
+    // 0=allowed, 1=denied
+    static Integer getMIUIAutostart(Context context) {
+        try {
+            @SuppressLint("PrivateApi")
+            Class<?> c = Class.forName("android.miui.AppOpsUtils");
+            Method m = c.getDeclaredMethod("getApplicationAutoStart", Context.class, String.class);
+            m.setAccessible(true);
+            return (Integer) m.invoke(null, context, context.getPackageName());
+        } catch (Throwable ex) {
+            Log.w(ex);
+            return null;
+        }
+    }
+
     static String getUiModeType(Context context) {
         try {
             UiModeManager uimm = Helper.getSystemService(context, UiModeManager.class);
@@ -1773,6 +1858,21 @@ public class Helper {
         ActivityOptions options = ActivityOptions.makeBasic();
         options.setPendingIntentBackgroundActivityLaunchAllowed(true);
         return options.toBundle();
+    }
+
+    static Fragment recreateFragment(Fragment fragment, FragmentManager fm) {
+        try {
+            Fragment.SavedState savedState = fm.saveFragmentInstanceState(fragment);
+            Bundle args = fragment.getArguments();
+
+            Fragment newFragment = fragment.getClass().newInstance();
+            newFragment.setInitialSavedState(savedState);
+            newFragment.setArguments(args);
+
+            return newFragment;
+        } catch (Throwable e) {
+            throw new RuntimeException("Cannot recreate fragment=" + fragment, e);
+        }
     }
 
     // Graphics
@@ -2065,24 +2165,30 @@ public class Helper {
     }
 
     static CharSequence getRelativeDateSpanString(Context context, long millis) {
-        Calendar cal0 = Calendar.getInstance();
-        Calendar cal1 = Calendar.getInstance();
-        cal0.setTimeInMillis(millis);
-        boolean thisMonth = (cal0.get(Calendar.MONTH) == cal1.get(Calendar.MONTH));
-        boolean thisYear = (cal0.get(Calendar.YEAR) == cal1.get(Calendar.YEAR));
-        String skeleton = (thisMonth && thisYear ? "MMM-d" : "Y-M-d");
-        String format = android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton);
-        return new SimpleDateFormat(format).format(millis);
+        return getRelativeTimeSpanString(context, millis, false, true);
     }
 
     static CharSequence getRelativeTimeSpanString(Context context, long millis) {
-        long now = System.currentTimeMillis();
-        long span = Math.abs(now - millis);
-        Time nowTime = new Time();
-        Time thenTime = new Time();
-        nowTime.set(now);
-        thenTime.set(millis);
-        if (span < DateUtils.DAY_IN_MILLIS && nowTime.weekDay == thenTime.weekDay)
+        return getRelativeTimeSpanString(context, millis, true, false);
+    }
+
+    static CharSequence getRelativeDateTimeSpanString(Context context, long millis) {
+        return getRelativeTimeSpanString(context, millis, true, true);
+    }
+
+    private static CharSequence getRelativeTimeSpanString(Context context, long millis, boolean withTime, boolean withDate) {
+        Calendar cal0 = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        cal0.setTimeInMillis(millis);
+
+        boolean thisYear = (cal0.get(Calendar.YEAR) == cal1.get(Calendar.YEAR));
+        boolean thisMonth = (cal0.get(Calendar.MONTH) == cal1.get(Calendar.MONTH));
+        boolean thisDay = (cal0.get(Calendar.DAY_OF_MONTH) == cal1.get(Calendar.DAY_OF_MONTH));
+        if (withDate) {
+            String skeleton = (thisMonth && thisYear ? "MMM-d" : "Y-M-d") + (withTime ? " Hm" : "");
+            String format = android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton);
+            return new SimpleDateFormat(format).format(millis);
+        } else if (thisYear && thisMonth && thisDay)
             return getTimeInstance(context, SimpleDateFormat.SHORT).format(millis);
         else
             return DateUtils.getRelativeTimeSpanString(context, millis);

@@ -191,6 +191,7 @@
     <string name="title_setup_oauth_rationale">Autorizar acceso a su cuenta %1$s</string>
     <string name="title_setup_oauth_update">Volver a autorizar una cuenta existente (de lo contrario crear una nueva cuenta)</string>
     <string name="title_setup_oauth_updated">Se ha actualizado la autorización de la cuenta</string>
+    <string name="title_setup_oauth_brave">Al usar el navegador Brave, debe activar la opción en la configuración de Brave para permitir que los enlaces de aplicaciones se abran en aplicaciones fuera de Brave</string>
     <string name="title_setup_oauth_authorize">Autorizar</string>
     <string name="title_setup_select_account">Seleccionar cuenta</string>
     <string name="title_setup_instructions">Instrucciones de configuración</string>
@@ -490,6 +491,7 @@
     <string name="title_advanced_libravatars">Mostrar Libravatars</string>
     <string name="title_advanced_favicons">Mostrar favicons</string>
     <string name="title_advanced_favicons_partial">Escanear solo los primeros %1$s de la página web</string>
+    <string name="title_advanced_favicons_manifest">Escanear manifiestos de aplicación web</string>
     <string name="title_advanced_generated_icons">Mostrar iconos generados</string>
     <string name="title_advanced_identicons">Mostrar identicons</string>
     <string name="title_advanced_circular">Mostrar iconos redondos</string>
@@ -524,6 +526,7 @@
     <string name="title_advanced_attachments_alt">Mostrar adjuntos después del texto del mensaje</string>
     <string name="title_advanced_thumbnails">Mostrar miniaturas de la imagen después del texto del mensaje</string>
     <string name="title_advanced_message_text_zoom2">Zoom por defecto del texto del mensaje: %1$s %%</string>
+    <string name="title_advanced_editor_text_zoom">Agrandar el texto del mensaje también en el editor de mensajes</string>
     <string name="title_advanced_overview_mode">Hacer zoom en mensajes originales para ajustarse a la pantalla</string>
     <string name="title_advanced_hyphenation">Usar separación automática</string>
     <string name="title_advanced_contrast">Utilizar contraste alto para el texto del mensaje</string>
@@ -634,6 +637,7 @@
     <string name="title_advanced_wearable_preview">Sólo enviar notificaciones con vista previa de mensaje a dispositivos wearables</string>
     <string name="title_advanced_notify_messaging">Usar formato de notificación \'estilo de mensajería\' de Android</string>
     <string name="title_advanced_biometrics_notify">Mostrar contenido de notificación al usar autenticación biométrica</string>
+    <string name="title_advanced_notify_open_folder">Abrir carpeta al abrir un nuevo mensaje</string>
     <string name="title_advanced_light">Usar luz de notificación</string>
     <string name="title_advanced_sound">Seleccionar sonido de notificación</string>
     <string name="title_advanced_notify_screen_on">Activar brevemente la pantalla para notificaciones de mensajes nuevos</string>
@@ -999,6 +1003,8 @@
     <string name="title_synchronize_batch_disable">Desactivar sincronización</string>
     <string name="title_notify_batch_enable">Activar notificaciones de mensajes nuevos</string>
     <string name="title_notify_batch_disable">Desactivar notificaciones de mensajes nuevos</string>
+    <string name="title_download_batch_enable">Descargar textos y archivos adjuntos</string>
+    <string name="title_download_batch_disable">Descargar solo encabezados</string>
     <string name="title_delete_local">Eliminar mensajes locales</string>
     <string name="title_delete_browsed">Eliminar mensajes explorados/buscados</string>
     <string name="title_expunge">Purgar</string>
@@ -1180,7 +1186,7 @@
     <string name="title_unsubscribe">Darse de baja</string>
     <string name="title_message_rule">Crear regla</string>
     <string name="title_no_junk">No es Spam</string>
-    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Editar asunto &#8230;</string>
+    <string name="title_edit_subject">Editar asunto &#8230;</string>
     <string name="title_move_to">Mover a &#8230;</string>
     <string name="title_move_to_folder">Mover a &#8230;</string>
     <string name="title_move_to_account">Mover a %1$s &#8230;</string>
@@ -1348,6 +1354,7 @@
     <string name="title_add_image_privacy">Eliminar datos de privacidad sensibles</string>
     <string name="title_add_image_privacy_remark">Ubicación geográfica, números de serie, nombres de archivos, etc</string>
     <string name="title_add_resize_pixels">&lt; %1$d píxeles</string>
+    <string name="title_add_image_select_remark">El selector de fotos de Android ya no pasa los nombres de archivo</string>
     <string name="title_add_image_select">Seleccionar archivo</string>
     <string name="title_add_attachment">Agregar adjunto</string>
     <string name="title_attachment_file">Adjuntar archivo</string>
@@ -1359,6 +1366,7 @@
     <string name="title_image_dialog">Mostrar opciones de imagen</string>
     <string name="title_style_toolbar">Barra de herramientas de estilo</string>
     <string name="title_media_toolbar">Barra de herramientas multimedia</string>
+    <string name="title_manage_android_contacts">Administrar contactos de Android</string>
     <string name="title_manage_local_contacts">Administrar contactos locales</string>
     <string name="title_insert_contact_group">Insertar grupo de contactos</string>
     <string name="title_insert_template">Insertar plantilla</string>
@@ -1460,6 +1468,7 @@
     <string name="title_search_for_hint">Ingrese texto</string>
     <string name="title_search_hint">        Inicialmente, la búsqueda se realiza en el dispositivo.        Para buscar también en el servidor, pulse el botón \'Buscar de nuevo\'.
     </string>
+    <string name="title_search_hint_fts">Usando el índice de búsqueda: sólo palabras completas</string>
     <string name="title_search_index_hint">Buscar a través del índice de búsqueda es rápido, pero sólo encontrará palabras completas.</string>
     <string name="title_search_text_hint">Buscar texto en mensajes puede no funcionar en algunos servidores cuando hay un gran número de mensajes</string>
     <string name="title_search_text_unsupported">\'%s\' significa que el servidor de correo no soporta la búsqueda en texto de mensajes</string>
@@ -1576,6 +1585,7 @@
     <string name="title_rule_keyword">Palabra clave</string>
     <string name="title_rule_keyword_add">Añadir</string>
     <string name="title_rule_keyword_delete">Eliminar</string>
+    <string name="title_rule_notes">Notas locales</string>
     <string name="title_rule_move">Mover</string>
     <string name="title_rule_copy">Copiar (etiqueta)</string>
     <string name="title_rule_answer">Responder/reenviar</string>
@@ -1634,6 +1644,7 @@
     <string name="title_rule_answer_missing">Plantilla faltante</string>
     <string name="title_rule_keyword_missing">Palabra clave faltante</string>
     <string name="title_rule_automation_hint">Esto enviará el intento \'%1$s\' con los extras \'%2$s\'</string>
+    <string name="title_rule_notes_missing">Notas locales faltantes</string>
     <string name="title_rule_delete_hint">La eliminación permanente es irreversible, ¡así que asegúrese de que las condiciones de la regla son correctas!</string>
     <string name="title_rule_edit_group">Editar grupo &#8230;</string>
     <string name="title_rule_execute">Ejecutar ahora</string>
@@ -1654,6 +1665,8 @@
     <string name="title_rule_use_as_alarm">Usar como alarma</string>
     <string name="title_rule_alarm_hint">Esto ignorará las reglas \"no molestar\"</string>
     <string name="title_rule_alarm_duration">Duración máxima de la alarma (segundos)</string>
+    <string name="title_rule_alarm_title">Alarma</string>
+    <string name="title_rule_alarm_stop">Parar</string>
     <string name="title_legend_section_synchronize">Sincronizar</string>
     <string name="title_legend_section_folders">Carpetas</string>
     <string name="title_legend_section_messages">Mensajes</string>
@@ -1779,6 +1792,7 @@
     <string name="title_hint_folder_sync">Para limitar el uso de batería y redes, no todas las carpetas y mensajes serán sincronizados por defecto</string>
     <string name="title_hint_airplane">El modo avión está activado</string>
     <string name="title_hint_notifications">Sin permisos de notificación</string>
+    <string name="title_hint_notifications_remark">Los permisos de notificación también son necesarios para las alertas (de cuenta). Las notificaciones de nuevos mensajes pueden desactivarse en la configuración.</string>
     <string name="title_hint_battery_optimizations">Optimizaciones de uso de batería habilitadas</string>
     <string name="title_hint_support">Si tiene una pregunta o problema, por favor use el menú de soporte para obtener ayuda</string>
     <string name="title_hint_message_actions">Desliza a la izquierda para enviar a la papelera; Desliza a la derecha para archivar (si está disponible); las acciones de deslizamiento pueden configurarse en la configuración de la cuenta</string>

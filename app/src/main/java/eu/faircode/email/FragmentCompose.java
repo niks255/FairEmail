@@ -292,6 +292,7 @@ public class FragmentCompose extends FragmentBase {
     private int zoom = 0;
     private boolean nav_color;
     private boolean lt_enabled;
+    private boolean lt_sentence;
     private boolean lt_auto;
 
     private long working = -1;
@@ -359,6 +360,7 @@ public class FragmentCompose extends FragmentBase {
         nav_color = prefs.getBoolean("send_nav_color", false);
 
         lt_enabled = LanguageTool.isEnabled(context);
+        lt_sentence = LanguageTool.isSentence(context);
         lt_auto = LanguageTool.isAuto(context);
 
         if (compose_color != Color.TRANSPARENT && Helper.isDarkTheme(context))
@@ -670,7 +672,7 @@ public class FragmentCompose extends FragmentBase {
         etBody.addTextChangedListener(StyleHelper.getTextWatcher(etBody));
 
         etBody.addTextChangedListener(new TextWatcher() {
-            private boolean save = false;
+            private Integer save = null;
             private Integer added = null;
             private boolean inserted = false;
             private Pair<Integer, Integer> lt = null;
@@ -692,10 +694,11 @@ public class FragmentCompose extends FragmentBase {
                     char c = text.charAt(index);
                     char b = text.charAt(index - 1);
 
-                    save = (auto_save_paragraph && c == '\n' && b != '\n') ||
-                            (auto_save_dot && Helper.isEndChar(c) && !Helper.isEndChar(b));
-                    if (save)
+                    if ((auto_save_paragraph && c == '\n' && b != '\n') ||
+                            (auto_save_dot && Helper.isEndChar(c) && !Helper.isEndChar(b))) {
                         Log.i("Save=" + index);
+                        save = index;
+                    }
 
                     if (c == '\n') {
                         Log.i("Added=" + index);
@@ -734,15 +737,30 @@ public class FragmentCompose extends FragmentBase {
                         added = null;
                     }
 
-                if (save)
+                if (save != null)
                     try {
+                        if (lt == null && lt_sentence) {
+                            int start = save;
+                            while (start > 0 &&
+                                    text.charAt(start - 1) != '\n' &&
+                                    !Helper.isEndChar(text.charAt(start - 1)))
+                                start--;
+                            while (start < save)
+                                if (Character.isWhitespace(text.charAt(start)))
+                                    start++;
+                                else
+                                    break;
+                            if (start < save)
+                                lt = new Pair<>(start, save + 1);
+                        }
+
                         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
                             Bundle extras = new Bundle();
                             extras.putBoolean("silent", true);
                             onAction(R.id.action_save, extras, "paragraph");
                         }
                     } finally {
-                        save = false;
+                        save = null;
                     }
 
                 if (lt != null)
@@ -1869,6 +1887,7 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_media).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_compact).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_contact_group).setEnabled(state == State.LOADED);
+        menu.findItem(R.id.menu_manage_android_contacts).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_manage_local_contacts).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_answer_insert).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_answer_create).setEnabled(state == State.LOADED);
@@ -2013,6 +2032,9 @@ public class FragmentCompose extends FragmentBase {
             return true;
         } else if (itemId == R.id.menu_contact_group) {
             onMenuContactGroup();
+            return true;
+        } else if (itemId == R.id.menu_manage_android_contacts) {
+            onMenuManageAndroidContacts();
             return true;
         } else if (itemId == R.id.menu_manage_local_contacts) {
             onMenuManageLocalContacts();
@@ -2174,7 +2196,8 @@ public class FragmentCompose extends FragmentBase {
     private void setZoom() {
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int message_zoom = prefs.getInt("message_zoom", 100);
+        boolean editor_zoom = prefs.getBoolean("editor_zoom", true);
+        int message_zoom = (editor_zoom ? prefs.getInt("message_zoom", 100) : 100);
         float textSize = Helper.getTextSize(context, zoom);
         if (textSize != 0) {
             etBody.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * message_zoom / 100f);
@@ -2265,6 +2288,11 @@ public class FragmentCompose extends FragmentBase {
 
     private void onMenuContactGroup() {
         onMenuContactGroup(view.findFocus());
+    }
+
+    private void onMenuManageAndroidContacts() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, ContactsContract.Contacts.CONTENT_URI);
+        startActivity(intent);
     }
 
     private void onMenuManageLocalContacts() {
@@ -3515,7 +3543,7 @@ public class FragmentCompose extends FragmentBase {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setType("image/*");
+            intent.setType("*/*");
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             if (intent.resolveActivity(pm) == null) // GET_CONTENT whitelisted
                 noStorageAccessFramework();
@@ -3574,7 +3602,7 @@ public class FragmentCompose extends FragmentBase {
                     EntityAttachment attachment = addAttachment(context, id, uri, type, image, resize, privacy);
                     if (attachment == null)
                         continue;
-                    if (!image)
+                    if (!image || !attachment.isImage())
                         continue;
 
                     File file = attachment.getFile(context);
@@ -5748,8 +5776,6 @@ public class FragmentCompose extends FragmentBase {
                             Element reply = document.createElement("div");
                             reply.attr("fairemail", "reference");
 
-                            reply.appendElement("br");
-
                             // Build reply header
                             boolean separate_reply = prefs.getBoolean("separate_reply", false);
                             boolean extended_reply = prefs.getBoolean("extended_reply", false);
@@ -6337,21 +6363,21 @@ public class FragmentCompose extends FragmentBase {
 
             boolean threading = prefs.getBoolean("threading", true);
             if (threading)
-                db.message().liveUnreadThread(data.draft.account, data.draft.thread).observe(getViewLifecycleOwner(), new Observer<List<EntityMessage>>() {
+                db.message().liveUnreadThread(data.draft.account, data.draft.thread).observe(getViewLifecycleOwner(), new Observer<List<Long>>() {
                     private int lastDiff = 0;
-                    private List<EntityMessage> base = null;
+                    private List<Long> base = null;
 
                     @Override
-                    public void onChanged(List<EntityMessage> messages) {
-                        if (messages == null)
+                    public void onChanged(List<Long> ids) {
+                        if (ids == null)
                             return;
 
                         if (base == null) {
-                            base = messages;
+                            base = ids;
                             return;
                         }
 
-                        int diff = (messages.size() - base.size());
+                        int diff = (ids.size() - base.size());
                         if (diff > lastDiff) {
                             lastDiff = diff;
                             String msg = getResources().getQuantityString(
@@ -6362,21 +6388,51 @@ public class FragmentCompose extends FragmentBase {
                             snackbar.setAction(R.string.title_show, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    EntityMessage message = messages.get(0);
-                                    boolean notify_remove = prefs.getBoolean("notify_remove", true);
+                                    Bundle args = new Bundle();
+                                    args.putLong("id", ids.get(0));
 
-                                    Intent thread = new Intent(v.getContext(), ActivityView.class);
-                                    thread.setAction("thread:" + message.id);
-                                    // No group
-                                    thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    thread.putExtra("account", message.account);
-                                    thread.putExtra("folder", message.folder);
-                                    thread.putExtra("thread", message.thread);
-                                    thread.putExtra("filter_archive", true);
-                                    thread.putExtra("ignore", notify_remove);
+                                    new SimpleTask<EntityMessage>() {
+                                        @Override
+                                        protected EntityMessage onExecute(Context context, Bundle args) throws Throwable {
+                                            long id = args.getLong("id");
 
-                                    v.getContext().startActivity(thread);
-                                    getActivity().finish();
+                                            DB db = DB.getInstance(context);
+                                            EntityMessage message = db.message().getMessage(id);
+                                            if (message != null) {
+                                                EntityFolder folder = db.folder().getFolder(message.id);
+                                                if (folder != null)
+                                                    args.putString("type", folder.type);
+                                            }
+
+                                            return message;
+                                        }
+
+                                        @Override
+                                        protected void onExecuted(Bundle args, EntityMessage message) {
+                                            boolean notify_remove = prefs.getBoolean("notify_remove", true);
+
+                                            String type = args.getString("type");
+
+                                            Intent thread = new Intent(v.getContext(), ActivityView.class);
+                                            thread.setAction("thread:" + message.id);
+                                            // No group
+                                            thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            thread.putExtra("account", message.account);
+                                            thread.putExtra("folder", message.folder);
+                                            thread.putExtra("type", type);
+                                            thread.putExtra("thread", message.thread);
+                                            thread.putExtra("filter_archive", !EntityFolder.ARCHIVE.equals(type));
+                                            thread.putExtra("ignore", notify_remove);
+
+                                            v.getContext().startActivity(thread);
+                                            getActivity().finish();
+                                        }
+
+                                        @Override
+                                        protected void onException(Bundle args, Throwable ex) {
+                                            Log.unexpectedError(getParentFragmentManager(), ex);
+                                        }
+                                    }.execute(FragmentCompose.this, args, "compose:unread");
                                 }
                             });
                             snackbar.show();
@@ -7587,7 +7643,7 @@ public class FragmentCompose extends FragmentBase {
                 if (postShow != null)
                     getMainHandler().post(postShow);
 
-                if (lt_auto)
+                if (lt_sentence || lt_auto)
                     onLanguageTool(0, etBody.length(), true);
             }
 
@@ -7860,12 +7916,16 @@ public class FragmentCompose extends FragmentBase {
     @NonNull
     private static UriInfo getInfo(Uri uri, Context context) {
         UriInfo result = new UriInfo();
+
+        // https://stackoverflow.com/questions/76094229/android-13-photo-video-picker-file-name-from-the-uri-is-garbage
+        DocumentFile dfile = null;
         try {
-            DocumentFile dfile = DocumentFile.fromSingleUri(context, uri);
+            dfile = DocumentFile.fromSingleUri(context, uri);
             if (dfile != null) {
                 result.name = dfile.getName();
                 result.type = dfile.getType();
                 result.size = dfile.length();
+                EntityLog.log(context, "UriInfo dfile " + result + " uri=" + uri);
             }
         } catch (Throwable ex) {
             Log.e(ex);
@@ -7880,7 +7940,7 @@ public class FragmentCompose extends FragmentBase {
             try {
                 new ContentType(result.type);
             } catch (ParseException ex) {
-                Log.w(ex);
+                Log.w(new Throwable(result.type, ex));
                 result.type = null;
             }
 
@@ -7893,6 +7953,8 @@ public class FragmentCompose extends FragmentBase {
         if (result.size != null && result.size <= 0)
             result.size = null;
 
+        EntityLog.log(context, "UriInfo result " + result + " uri=" + uri);
+
         return result;
     }
 
@@ -7903,6 +7965,12 @@ public class FragmentCompose extends FragmentBase {
 
         boolean isImage() {
             return ImageHelper.isImage(type);
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return "name=" + name + " type=" + type + " size=" + size;
         }
     }
 

@@ -177,6 +177,7 @@
     <string name="title_setup_oauth_rationale">%1$s アカウントへのアクセスを許可する</string>
     <string name="title_setup_oauth_update">設定済みのアカウントをもう一度認証する (設定されていない場合、新しいアカウントを作成)</string>
     <string name="title_setup_oauth_updated">アカウントの認証情報が更新されました</string>
+    <string name="title_setup_oauth_brave">Brave ブラウザを使用している場合、Brave の設定で「Brave外のアプリでアプリのリンクを開くことを許可」を有効にしてください</string>
     <string name="title_setup_oauth_authorize">認証</string>
     <string name="title_setup_select_account">アカウントを選択</string>
     <string name="title_setup_instructions">設定方法</string>
@@ -477,6 +478,7 @@
     <string name="title_advanced_libravatars">Libravatar を表示</string>
     <string name="title_advanced_favicons">ファビコンを表示</string>
     <string name="title_advanced_favicons_partial">ウェブページの最初の %1$s だけをスキャン</string>
+    <string name="title_advanced_favicons_manifest">ウェブアプリ マニフェストをスキャン</string>
     <string name="title_advanced_generated_icons">アイコンを生成して表示</string>
     <string name="title_advanced_identicons">Identicon を表示</string>
     <string name="title_advanced_circular">丸アイコンを表示</string>
@@ -511,6 +513,7 @@
     <string name="title_advanced_attachments_alt">本文の後に添付ファイルを表示</string>
     <string name="title_advanced_thumbnails">本文の後に画像サムネイルを表示</string>
     <string name="title_advanced_message_text_zoom2">デフォルトの本文のテキスト拡大率: %1$s %%</string>
+    <string name="title_advanced_editor_text_zoom">メッセージ編集画面でも、テキストにズーム</string>
     <string name="title_advanced_overview_mode">画面に合わせて元のメッセージを拡大</string>
     <string name="title_advanced_hyphenation">自動ハイフンを使用</string>
     <string name="title_advanced_contrast">本文にハイコントラストテーマを使用</string>
@@ -621,6 +624,7 @@
     <string name="title_advanced_wearable_preview">プレビュー付き通知のみウェアラブルに送信</string>
     <string name="title_advanced_notify_messaging">Android の「Messaging Style」の通知フォーマットを使用</string>
     <string name="title_advanced_biometrics_notify">生体認証の使用中も通知コンテンツを表示</string>
+    <string name="title_advanced_notify_open_folder">新しいメッセージを開くとき、フォルダーを開く</string>
     <string name="title_advanced_light">通知 LED を使用</string>
     <string name="title_advanced_sound">通知音を選択</string>
     <string name="title_advanced_notify_screen_on">画面を一時オンにして新着メッセージ通知を表示</string>
@@ -986,6 +990,8 @@
     <string name="title_synchronize_batch_disable">同期を無効にする</string>
     <string name="title_notify_batch_enable">新着メッセージの通知を有効にする</string>
     <string name="title_notify_batch_disable">新着メッセージの通知を無効にする</string>
+    <string name="title_download_batch_enable">本文と添付ファイルをダウンロード</string>
+    <string name="title_download_batch_disable">ヘッダーのみダウンロード</string>
     <string name="title_delete_local">ローカルのメッセージを削除</string>
     <string name="title_delete_browsed">閲覧/検索したメッセージを削除</string>
     <string name="title_expunge">完全削除</string>
@@ -1168,7 +1174,7 @@
     <string name="title_unsubscribe">購読解除</string>
     <string name="title_message_rule">ルールを作成</string>
     <string name="title_no_junk">迷惑メールでないと報告</string>
-    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">件名を編集&#8230;</string>
+    <string name="title_edit_subject">件名を編集&#8230;</string>
     <string name="title_move_to">&#8230;に移動</string>
     <string name="title_move_to_folder">&#8230;に移動</string>
     <string name="title_move_to_account">%1$s に移動&#8230;</string>
@@ -1338,6 +1344,7 @@
     <string name="title_add_image_privacy">プライバシーデータを削除</string>
     <string name="title_add_image_privacy_remark">位置情報、シリアル番号、ファイル名など</string>
     <string name="title_add_resize_pixels">&lt; %1$d ピクセル</string>
+    <string name="title_add_image_select_remark">Android 写真選択ツールは、ファイル名を取得できなくなりました</string>
     <string name="title_add_image_select">ファイルを選択</string>
     <string name="title_add_attachment">添付ファイルを追加</string>
     <string name="title_attachment_file">ファイルを添付</string>
@@ -1349,6 +1356,7 @@
     <string name="title_image_dialog">画像オプションを表示</string>
     <string name="title_style_toolbar">スタイルツールバー</string>
     <string name="title_media_toolbar">メディアツールバー</string>
+    <string name="title_manage_android_contacts">Android の連絡先を管理</string>
     <string name="title_manage_local_contacts">ローカルの連絡先を管理</string>
     <string name="title_insert_contact_group">連絡先グループを挿入</string>
     <string name="title_insert_template">テンプレートを挿入</string>
@@ -1451,6 +1459,7 @@
     <string name="title_search_hint">       はじめに、お使いのデバイスに保存されているメッセージを検索します。
         サーバーも検索するには「もう一度検索」ボタンをタップします
     </string>
+    <string name="title_search_hint_fts">検索インデックスを使用: 単語全体のみ検索</string>
     <string name="title_search_index_hint">検索インデックスを介した検索は高速ですが、単語全体しか検索されません。</string>
     <string name="title_search_text_hint">本文を検索しています。多数のメッセージがある場合、一部のサーバーで正しく動作しない可能性があります</string>
     <string name="title_search_text_unsupported">「%s」はメールサーバーが本文の検索に対応していないことを意味します</string>
@@ -1567,6 +1576,7 @@
     <string name="title_rule_keyword">キーワード</string>
     <string name="title_rule_keyword_add">追加</string>
     <string name="title_rule_keyword_delete">削除</string>
+    <string name="title_rule_notes">ローカルメモ</string>
     <string name="title_rule_move">移動</string>
     <string name="title_rule_copy">コピー (ラベル)</string>
     <string name="title_rule_answer">返信/転送</string>
@@ -1625,6 +1635,7 @@
     <string name="title_rule_answer_missing">テンプレートがありません</string>
     <string name="title_rule_keyword_missing">キーワードがありません</string>
     <string name="title_rule_automation_hint">インテント「%1$s」とエクストラ「%2$s」が送信されます</string>
+    <string name="title_rule_notes_missing">ローカルメモなし</string>
     <string name="title_rule_delete_hint">完全削除は取り消せませんので、ルール条件が正しいことを確認してください！</string>
     <string name="title_rule_edit_group">グループを編集&#8230;</string>
     <string name="title_rule_execute">今すぐ実行</string>
@@ -1645,6 +1656,8 @@
     <string name="title_rule_use_as_alarm">アラームに設定</string>
     <string name="title_rule_alarm_hint">サイレントモードを無視します</string>
     <string name="title_rule_alarm_duration">自動消音時間 (秒)</string>
+    <string name="title_rule_alarm_title">アラーム</string>
+    <string name="title_rule_alarm_stop">停止</string>
     <string name="title_legend_section_synchronize">同期</string>
     <string name="title_legend_section_folders">フォルダー</string>
     <string name="title_legend_section_messages">メッセージ</string>
@@ -1770,6 +1783,7 @@
     <string name="title_hint_folder_sync">バッテリーとネットワークの使用を抑えるためにデフォルトでは一部のフォルダーとメッセージのみ同期されます</string>
     <string name="title_hint_airplane">機内モードが ON です</string>
     <string name="title_hint_notifications">通知が許可されていません</string>
+    <string name="title_hint_notifications_remark">(アカウントの) アラートにも通知の権限が必要です。新着メッセージの通知は設定でオフにもできます。</string>
     <string name="title_hint_battery_optimizations">まだ電池最適化が有効です</string>
     <string name="title_hint_support">質問や問題がある場合はサポートメニューを使用してヘルプにアクセスしてください</string>
     <string name="title_hint_message_actions">左にスワイプしてごみ箱に移動し、右にスワイプしてアーカイブ (利用可能な場合) します。スワイプ操作はアカウント設定で変更できます</string>

@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2089 }
+def getVersionCode = { -> return 2097 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Ubirajara" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -105,6 +105,7 @@ android {
     }
     packagingOptions {
         jniLibs {
+            useLegacyPackaging = true // https://issuetracker.google.com/issues/127691101
             excludes += [
                     'org/apache/**'
             ]
@@ -192,6 +193,7 @@ android {
             buildConfigField "String", "TX_URI", localProperties.getProperty("paypal.uri", "\"\"")
             buildConfigField "String", "GPA_URI", localProperties.getProperty("gpa.uri", "\"\"")
             buildConfigField "String", "INFO_URI", localProperties.getProperty("info.uri", "\"\"")
+            buildConfigField "String", "BUGSNAG_URI", localProperties.getProperty("bugsnag.uri", "\"\"")
             buildConfigField "String", "DEV_DOMAIN", localProperties.getProperty("dev.domain", "\"\"")
             buildConfigField "String", "FDROID", "\"https://f-droid.org/packages/%s/\""
         }
@@ -217,6 +219,7 @@ android {
             buildConfigField "String", "TX_URI", localProperties.getProperty("paypal.uri", "\"\"")
             buildConfigField "String", "GPA_URI", localProperties.getProperty("gpa.uri", "\"\"")
             buildConfigField "String", "INFO_URI", localProperties.getProperty("info.uri", "\"\"")
+            buildConfigField "String", "BUGSNAG_URI", localProperties.getProperty("bugnsag.uri", "\"\"")
             buildConfigField "String", "DEV_DOMAIN", localProperties.getProperty("dev.domain", "\"\"")
             buildConfigField "String", "FDROID", "\"https://f-droid.org/packages/%s/\""
         }
@@ -242,6 +245,7 @@ android {
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
+            buildConfigField "String", "BUGSNAG_URI", "\"\""
             buildConfigField "String", "DEV_DOMAIN", "\"\""
             buildConfigField "String", "FDROID", "\"https://f-droid.org/packages/%s/\""
         }
@@ -268,6 +272,7 @@ android {
             buildConfigField "String", "TX_URI", "\"\""
             buildConfigField "String", "GPA_URI", "\"\""
             buildConfigField "String", "INFO_URI", "\"\""
+            buildConfigField "String", "BUGSNAG_URI", "\"\""
             buildConfigField "String", "DEV_DOMAIN", "\"\""
             buildConfigField "String", "FDROID", "\"\""
         }
@@ -377,6 +382,11 @@ task copyChangelog(type: Copy) {
 
 preBuild.dependsOn copyChangelog
 
+task updateFAQ(type: Exec) {
+    workingDir "${rootDir}"
+    commandLine 'sh', '-c', 'pandoc --standalone --metadata title="FAQ FairEmail"  FAQ.md -o index.html'
+}
+
 task downloadPSL(type: Download) {
     // https://github.com/michel-kraemer/gradle-download-task
     src "https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat"
@@ -450,29 +460,29 @@ dependencies {
 
     def startup_version = "1.1.1" // 1.2.0-alpha02
     def annotation_version_experimental = "1.3.1"
-    def core_version = "1.10.1" // 1.12.0-beta01
+    def core_version = "1.10.1" // 1.12.0-rc01
     def appcompat_version = "1.6.1" // 1.7.0-alpha03
-    def emoji_version = "1.3.0" // Version 1.4.0-rc01
+    def emoji_version = "1.4.0"
     def flatbuffers_version = "2.0.0"
-    def activity_version = "1.7.2" // 1.8.0-alpha06
-    def fragment_version = "1.6.1"
-    def windows_version = "1.0.0" // 1.2.0-beta01
-    def webkit_version = "1.7.0" // 1.8.0-beta01
+    def activity_version = "1.7.2" // 1.8.0-alpha07
+    def fragment_version = "1.6.1" // 1.7.0-alpha03
+    def windows_version = "1.2.0-beta01"
+    def webkit_version = "1.7.0" // 1.8.0-rc01
     def recyclerview_version = "1.3.1"
     def coordinatorlayout_version = "1.2.0"
-    def constraintlayout_version = "2.1.4" // 2.2.0-alpha11
+    def constraintlayout_version = "2.1.4" // 2.2.0-alpha12
     def material_version = "1.9.0" // 1.11.0-alpha01
-    def browser_version = "1.6.0-rc01"
+    def browser_version = "1.6.0"
     def lbm_version = "1.1.0"
     def swiperefresh_version = "1.2.0-alpha01"
     def documentfile_version = "1.1.0-alpha01"
     def lifecycle_version = "2.6.1" // 2.7.0-alpha01
     def lifecycle_extensions_version = "2.2.0"
-    def room_version = "2.4.3" // 2.5.2/2.6.0-alpha02
-    def sqlite_version = "2.3.1" // 2.4.0-alpha02
+    def room_version = "2.4.3" // 2.5.2/2.6.0-beta01
+    def sqlite_version = "2.3.1" // 2.4.0-beta01
     def requery_version = "3.39.2"
     def paging_version = "2.1.2" //  3.2.0
-    def preference_version = "1.2.0"
+    def preference_version = "1.2.1"
     def work_version = "2.8.1" // 2.9.0-alpha02
     def exif_version = "1.3.6"
     def biometric_version = "1.2.0-alpha05"
@@ -489,7 +499,7 @@ dependencies {
     def vcard_version = "0.11.3"
     def relinker_version = "1.4.5"
     def markwon_version = "4.6.2"
-    def bouncycastle_version = "1.71"
+    def bouncycastle_version = "1.76"
     def colorpicker_version = "0.0.15"
     def overscroll_version = "1.1.1"
     def appauth_version = "0.11.1"

@@ -1450,7 +1450,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             ? View.VISIBLE : View.GONE);
             SpannableStringBuilder time;
             if (date_time)
-                time = new SpannableStringBuilderEx(DTFS.format(message.received));
+                time = new SpannableStringBuilderEx(Helper.getRelativeDateTimeSpanString(context, message.received));
             else if (date_week)
                 time = new SpannableStringBuilderEx(Helper.getRelativeDateSpanString(context, message.received));
             else
@@ -2668,6 +2668,52 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvKeywordsEx.setVisibility(!show_addresses || keywords == null ? View.GONE : View.VISIBLE);
                 tvKeywordsEx.setText(keywords);
             }
+
+            view.post(new RunnableEx("setTextIsSelectable") {
+                @Override
+                public void delegate() {
+                    if (!owner.getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+                        return;
+
+                    tvSignedBy.setTextIsSelectable(false);
+                    tvSubmitter.setTextIsSelectable(false);
+                    tvDeliveredTo.setTextIsSelectable(false);
+                    tvFromEx.setTextIsSelectable(false);
+                    tvTo.setTextIsSelectable(false);
+                    tvReplyTo.setTextIsSelectable(false);
+                    tvCc.setTextIsSelectable(false);
+                    tvBcc.setTextIsSelectable(false);
+                    tvIdentity.setTextIsSelectable(false);
+                    tvSent.setTextIsSelectable(false);
+                    tvReceived.setTextIsSelectable(false);
+                    tvStored.setTextIsSelectable(false);
+                    tvSizeEx.setTextIsSelectable(false);
+                    tvLanguage.setTextIsSelectable(false);
+                    tvThread.setTextIsSelectable(false);
+                    tvSubject.setTextIsSelectable(false);
+                    tvFlags.setTextIsSelectable(false);
+                    tvKeywordsEx.setTextIsSelectable(false);
+
+                    tvSignedBy.setTextIsSelectable(tvSignedBy.getVisibility() == View.VISIBLE);
+                    tvSubmitter.setTextIsSelectable(tvSubmitter.getVisibility() == View.VISIBLE);
+                    tvDeliveredTo.setTextIsSelectable(tvDeliveredTo.getVisibility() == View.VISIBLE);
+                    tvFromEx.setTextIsSelectable(tvFromEx.getVisibility() == View.VISIBLE);
+                    tvTo.setTextIsSelectable(tvTo.getVisibility() == View.VISIBLE);
+                    tvReplyTo.setTextIsSelectable(tvReplyTo.getVisibility() == View.VISIBLE);
+                    tvCc.setTextIsSelectable(tvCc.getVisibility() == View.VISIBLE);
+                    tvBcc.setTextIsSelectable(tvBcc.getVisibility() == View.VISIBLE);
+                    tvIdentity.setTextIsSelectable(tvIdentity.getVisibility() == View.VISIBLE);
+                    tvSent.setTextIsSelectable(tvSent.getVisibility() == View.VISIBLE);
+                    tvReceived.setTextIsSelectable(tvReceived.getVisibility() == View.VISIBLE);
+                    tvStored.setTextIsSelectable(tvStored.getVisibility() == View.VISIBLE);
+                    tvSizeEx.setTextIsSelectable(tvSizeEx.getVisibility() == View.VISIBLE);
+                    tvLanguage.setTextIsSelectable(tvLanguage.getVisibility() == View.VISIBLE);
+                    tvThread.setTextIsSelectable(tvThread.getVisibility() == View.VISIBLE);
+                    tvSubject.setTextIsSelectable(tvSubjectEx.getVisibility() == View.VISIBLE);
+                    tvFlags.setTextIsSelectable(tvFlags.getVisibility() == View.VISIBLE);
+                    tvKeywordsEx.setTextIsSelectable(tvKeywordsEx.getVisibility() == View.VISIBLE && keywords_header);
+                }
+            });
         }
 
         private void bindHeaders(TupleMessageEx message, boolean scroll) {
@@ -2892,6 +2938,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                                     Uri uri = Uri.parse(url);
                                     return ViewHolder.this.onOpenLink(uri, null, EntityFolder.JUNK.equals(message.folderType));
+                                }
+
+                                @Override
+                                public void onUserInterAction() {
+                                    try {
+                                        Log.i("WebView user interaction");
+                                        parentFragment.getActivity().onUserInteraction();
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                    }
                                 }
                             });
                     webView.setImages(show_images, inline);
@@ -4574,6 +4630,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             properties.setHeight(message.id, null);
                             properties.setPosition(message.id, null, null);
 
+                            if (wvBody instanceof WebViewEx)
+                                ((WebViewEx) wvBody).clearCache();
+
                             if (itemId == R.string.title_fit_width && wvBody instanceof WebView)
                                 ((WebView) wvBody).getSettings().setLoadWithOverviewMode(enabled);
 
@@ -4932,8 +4991,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 intent.putExtra("provider", "outlookgraph");
                 intent.putExtra("account", message.account);
                 intent.putExtra("protocol", message.accountProtocol);
+                intent.putExtra("auth_type", ServiceAuthenticator.AUTH_TYPE_GRAPH);
                 intent.putExtra("identity", message.identity);
-                intent.putExtra("authorize", true);
                 intent.putExtra("personal", message.identityName);
                 intent.putExtra("address", message.identityEmail);
                 intent.putExtra("faq", 14);
@@ -6008,7 +6067,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_raw_send_thread).setEnabled(canRaw);
 
             popupMenu.getMenu().findItem(R.id.menu_thread_info)
-                    .setVisible(BuildConfig.TEST_RELEASE || BuildConfig.DEBUG || debug);
+                    .setVisible(BuildConfig.DEBUG || debug);
+            popupMenu.getMenu().findItem(R.id.menu_jsoup)
+                    .setVisible(BuildConfig.DEBUG || debug)
+                    .setEnabled(message.content);
 
             popupMenu.getMenu().findItem(R.id.menu_resync)
                     .setEnabled(message.uid != null ||
@@ -6127,6 +6189,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return true;
                     } else if (itemId == R.id.menu_thread_info) {
                         onMenuThreadInfo(message);
+                        return true;
+                    } else if (itemId == R.id.menu_jsoup) {
+                        onMenuJsoup(message);
                         return true;
                     } else if (itemId == R.id.menu_reset_questions) {
                         onMenuResetQuestions(message);
@@ -6251,9 +6316,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 boolean confirm_links = prefs.getBoolean("confirm_links", true);
 
                 String chost = FragmentDialogOpenLink.getConfirmHost(uri);
-                boolean sanitize_links = prefs.getBoolean("sanitize_links", false);
                 boolean confirm_link = (chost == null || prefs.getBoolean(chost + ".confirm_link", true));
-                if (always_confirm || sanitize_links || (confirm_links && confirm_link)) {
+                if (always_confirm || (confirm_links && confirm_link)) {
                     Bundle args = new Bundle();
                     args.putParcelable("uri", uri);
                     args.putString("title", title);
@@ -6628,7 +6692,73 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                 }
             }.execute(context, owner, args, "message:resync");
+        }
 
+        private void onMenuJsoup(TupleMessageEx message) {
+            if (!tvBody.hasSelection())
+                return;
+
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+            args.putString("selected",
+                    tvBody.getText().subSequence(tvBody.getSelectionStart(), tvBody.getSelectionEnd()).toString());
+
+            new SimpleTask<List<String>>() {
+                @Override
+                protected List<String> onExecute(Context context, Bundle args) throws IOException {
+                    long id = args.getLong("id");
+                    String selected = args.getString("selected");
+
+                    Map<String, EntityMessage> map = new HashMap<>();
+
+                    DB db = DB.getInstance(context);
+                    EntityMessage message = db.message().getMessage(id);
+                    if (message == null || !message.content)
+                        return null;
+
+                    Document d = JsoupEx.parse(message.getFile(context));
+
+                    List<String> result = new ArrayList<>();
+                    for (Element element : d.select(String.format("*:containsOwn(%s)", selected))) {
+                        List<String> path = new ArrayList<>();
+                        Element e = element;
+                        while (e != null && e.parent() != null /* skip #root */) {
+                            int index = 0;
+                            for (Element p : e.previousElementSiblings())
+                                if (Objects.equals(e.tagName(), p.tagName()))
+                                    index++;
+                            path.add(String.format("%s:eq(%d)", e.tagName(), index));
+                            e = e.parent();
+                        }
+                        Collections.reverse(path);
+                        result.add(TextUtils.join(" > ", path));
+                    }
+
+                    return result;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, List<String> jsoup) {
+                    if (jsoup != null && jsoup.size() > 0) {
+                        ClipboardManager clipboard = Helper.getSystemService(context, ClipboardManager.class);
+                        if (clipboard == null)
+                            return;
+
+                        ClipData clip = ClipData.newPlainText(
+                                context.getString(R.string.app_name),
+                                jsoup.get(0));
+                        clipboard.setPrimaryClip(clip);
+
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                            ToastEx.makeText(context, jsoup.get(0), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "message:jsoup");
         }
 
         private void onMenuResetQuestions(TupleMessageEx message) {

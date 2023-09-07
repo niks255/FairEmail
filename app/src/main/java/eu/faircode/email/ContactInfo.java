@@ -640,6 +640,7 @@ public class ContactInfo {
     private static Favicon parseFavicon(URL base, int scaleToPixels, Context context) throws IOException {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean favicons_partial = prefs.getBoolean("favicons_partial", true);
+        boolean favicons_manifest = prefs.getBoolean("favicons_manifest", false);
 
         Log.i("PARSE favicon " + base);
         HttpURLConnection connection = ConnectionHelper
@@ -681,7 +682,7 @@ public class ContactInfo {
         imgs.addAll(doc.head().select("meta[itemprop=image]"));
 
         // https://developer.mozilla.org/en-US/docs/Web/Manifest/icons
-        if (imgs.size() == 0 || BuildConfig.DEBUG)
+        if (imgs.size() == 0 || favicons_manifest)
             for (Element manifest : doc.head().select("link[rel=manifest]"))
                 try {
                     String href = manifest.attr("href");
@@ -711,12 +712,14 @@ public class ContactInfo {
                                 String src = jicon.optString("src");
                                 String sizes = jicon.optString("sizes", "");
                                 String type = jicon.optString("type", "");
+                                String purpose = jicon.optString("purpose", "");
                                 if (!TextUtils.isEmpty(src)) {
                                     Element img = doc.createElement("link")
                                             .attr("rel", "manifest")
                                             .attr("href", src)
                                             .attr("sizes", sizes)
-                                            .attr("type", type);
+                                            .attr("type", type)
+                                            .attr("purpose", purpose);
                                     imgs.add(img);
                                 }
                             }
@@ -848,6 +851,9 @@ public class ContactInfo {
                 .trim();
         String type = img.attr("type")
                 .trim();
+        String purpose = img.attr("purpose")
+                .toLowerCase(Locale.ROOT)
+                .trim();
 
         int order = 0;
         if ("link".equals(img.tagName()))
@@ -855,11 +861,14 @@ public class ContactInfo {
 
         boolean isIco = (href.endsWith(".ico") || "image/x-icon".equals(type));
         boolean isSvg = (href.endsWith(".svg") || "image/svg+xml".equals(type));
-        boolean isMask = ("mask-icon".equals(rel) || img.hasAttr("mask"));
+        boolean isMask = ("mask-icon".equals(rel) || img.hasAttr("mask") || purpose.contains("mask"));
+        boolean isMonochrome = purpose.contains("monochrome");
 
-        if (isMask)
+        if (isMask || isMonochrome)
             order = -10; // Safari: "mask-icon"
         else if ("icon".equals(rel) && !isIco)
+            order += 20;
+        else if ("manifest".equals(rel))
             order += 20;
         else if ("apple-touch-icon".equals(rel) ||
                 "apple-touch-icon-precomposed".equals(rel)) {
@@ -867,7 +876,7 @@ public class ContactInfo {
             if ("mailbox.org".equals(host))
                 order += 30;
             else
-                order += 10;
+                order += 20;
         }
 
         if (isIco)
@@ -923,7 +932,11 @@ public class ContactInfo {
                 throw new FileNotFoundException("decodeStream");
             if (bitmap.getWidth() <= 1 || bitmap.getHeight() <= 1)
                 throw new IOException("Too small");
+            Log.i("GOT favicon " + url);
             return new Favicon(bitmap, url.toString());
+        } catch (Throwable ex) {
+            Log.i("GET favicon " + url + " error=" + ex.getMessage());
+            throw ex;
         } finally {
             connection.disconnect();
         }

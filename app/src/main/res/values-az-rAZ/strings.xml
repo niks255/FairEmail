@@ -191,6 +191,7 @@
     <string name="title_setup_oauth_rationale">%1$s hesabınıza müraciət üçün səlahiyyət verin</string>
     <string name="title_setup_oauth_update">Mövcud bir hesaba yenidən səlahiyyət verin (əks halda yeni bir hesab yaradın)</string>
     <string name="title_setup_oauth_updated">Hesab səlahiyyətləndirmə güncəlləndi</string>
+    <string name="title_setup_oauth_brave">Brave brauzeri istifadə edərkən tətbiq keçidlərinin Brave xaricindəki tətbiqlərdə açılmasına icazə vermək üçün seçimi Brave-in tənzimləmələrində fəallaşdırmalısınız</string>
     <string name="title_setup_oauth_authorize">Səlahiyyət ver</string>
     <string name="title_setup_select_account">Hesab seç</string>
     <string name="title_setup_instructions">Quraşdırma təlimatları</string>
@@ -491,6 +492,7 @@
     <string name="title_advanced_libravatars">\"Libravatar\"ları göstər</string>
     <string name="title_advanced_favicons">\"Favicon\"ları göstər</string>
     <string name="title_advanced_favicons_partial">Veb səhifədəki yalnız ilk %1$s skan edilsin</string>
+    <string name="title_advanced_favicons_manifest">Veb tətbiq manifestlərini skan et</string>
     <string name="title_advanced_generated_icons">Yaradılmış nişanları göstər</string>
     <string name="title_advanced_identicons">Kimlikləri göstər</string>
     <string name="title_advanced_circular">Dairəvi nişanları göstər</string>
@@ -525,6 +527,7 @@
     <string name="title_advanced_attachments_alt">Mesaj mətnindən sonra qoşmaları göstər</string>
     <string name="title_advanced_thumbnails">Mesaj mətnindən sonra təsvir eskizlərini göstər</string>
     <string name="title_advanced_message_text_zoom2">İlkin mesajın mətn yaxınlaşdırması: %1$s %%</string>
+    <string name="title_advanced_editor_text_zoom">Mesajın mətnini redaktorda da yaxınlaşdır</string>
     <string name="title_advanced_overview_mode">Orijinal mesajı tam ekrana qədər yaxınlaşdır</string>
     <string name="title_advanced_hyphenation">Avto-defis istifadə et</string>
     <string name="title_advanced_contrast">Mesaj mətni üçün yüksək ziddiyyət istifadə et</string>
@@ -635,6 +638,7 @@
     <string name="title_advanced_wearable_preview">Yalnız mesaj önbaxışı olan bildirişləri geyinilə bilən cihazlara göndər</string>
     <string name="title_advanced_notify_messaging">Android \"mesajlaşma stili\" bildiriş formatını istifadə edin</string>
     <string name="title_advanced_biometrics_notify">Bildiriş məzmununu, biometrik kimlik təsdiqləmə istifadə edərkən göstər</string>
+    <string name="title_advanced_notify_open_folder">Yeni mesajı açdıqda qovluğu aç</string>
     <string name="title_advanced_light">Bildiriş işığını istifadə et</string>
     <string name="title_advanced_sound">Bildiriş səsini seç</string>
     <string name="title_advanced_notify_screen_on">Yeni mesaj bildirişləri üçün ekranı qısa aç</string>
@@ -1000,6 +1004,8 @@
     <string name="title_synchronize_batch_disable">Sinxronlaşdırmanı sıradan çıxart</string>
     <string name="title_notify_batch_enable">Yeni mesaj bildirişlərini fəallaşdır</string>
     <string name="title_notify_batch_disable">Yeni mesaj bildirişlərini sıradan çıxart</string>
+    <string name="title_download_batch_enable">Mətnləri və qoşmaları endir</string>
+    <string name="title_download_batch_disable">Yalnız başlıqları endir</string>
     <string name="title_delete_local">Yerli mesajları sil</string>
     <string name="title_delete_browsed">Nəzər yetirilmiş/axtarılmış mesajları sil</string>
     <string name="title_expunge">Birdəfəlik sil</string>
@@ -1182,7 +1188,7 @@
     <string name="title_unsubscribe">Abunəlikdən çıx</string>
     <string name="title_message_rule">Qayda yarat</string>
     <string name="title_no_junk">Spam deyil</string>
-    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Mövzuya düzəliş et &#8230;</string>
+    <string name="title_edit_subject">Mövzuya düzəliş et &#8230;</string>
     <string name="title_move_to">Köçürt &#8230;</string>
     <string name="title_move_to_folder">Köçürt &#8230;</string>
     <string name="title_move_to_account">%1$s &#8230; köçürt</string>
@@ -1352,6 +1358,7 @@
     <string name="title_add_image_privacy">Gizliliyiniz üçün həssas verilənləri silin</string>
     <string name="title_add_image_privacy_remark">Coğrafi yerləşmə, seriya nömrələri, fayl adları və s.</string>
     <string name="title_add_resize_pixels">&lt; %1$d piksel</string>
+    <string name="title_add_image_select_remark">Android foto seçici artıq fayl adlarını ötürmür</string>
     <string name="title_add_image_select">Fayl seç</string>
     <string name="title_add_attachment">Qoşma əlavə et</string>
     <string name="title_attachment_file">Fayl qoş</string>
@@ -1363,6 +1370,7 @@
     <string name="title_image_dialog">Təsvir seçimlərini göstər</string>
     <string name="title_style_toolbar">Stil alət sətri</string>
     <string name="title_media_toolbar">Media alət sətri</string>
+    <string name="title_manage_android_contacts">Android-in kontaktlarını idarə et</string>
     <string name="title_manage_local_contacts">Yerli əlaqələri idarə et</string>
     <string name="title_insert_contact_group">Əlaqə qrupuna daxil et</string>
     <string name="title_insert_template">Şablon əlavə et</string>
@@ -1465,6 +1473,7 @@
     <string name="title_search_hint">        Axtarış, ilk olaraq cihazda həyata keçirilir.
         Serverdə də axtarış etmək üçün \"yenidən axtar\" düyməsinə toxunun.
     </string>
+    <string name="title_search_hint_fts">Axtarış indekslərini istifadə et: yalnız tam sözlər</string>
     <string name="title_search_index_hint">Axtarış indeksi ilə axtarış sürətlidir, ancaq yalnız bütün sözləri tapır.</string>
     <string name="title_search_text_hint">Həddindən çox mesaj olanda, mesajlarda mətn axtarışı bəzi serverlərdə işləməyə bilər</string>
     <string name="title_search_text_unsupported">\'%s\', poçt serverinin mesaj mətnlərində axtarışı dəstəkləmədiyi mənasını verir</string>
@@ -1581,6 +1590,7 @@
     <string name="title_rule_keyword">Açar söz</string>
     <string name="title_rule_keyword_add">Əlavə et</string>
     <string name="title_rule_keyword_delete">Sil</string>
+    <string name="title_rule_notes">Yerli qeydlər</string>
     <string name="title_rule_move">Köçürt</string>
     <string name="title_rule_copy">Kopyala (etiket)</string>
     <string name="title_rule_answer">Cavabla/yönləndir</string>
@@ -1639,6 +1649,7 @@
     <string name="title_rule_answer_missing">Şablon əskikdir</string>
     <string name="title_rule_keyword_missing">Açar söz əskikdir</string>
     <string name="title_rule_automation_hint">Bu, \"%2$s\" əlavələri ilə \"%1$s\" hədəfini göndərəcək</string>
+    <string name="title_rule_notes_missing">Yerli qeydlər əskikdir</string>
     <string name="title_rule_delete_hint">Birdəfəlik silmə əməliyyatının geri dönüşü yoxdur, ona görə də qayda şərtlərinin doğru olduğuna əmin olun!</string>
     <string name="title_rule_edit_group">Qrupa düzəliş et &#8230;</string>
     <string name="title_rule_execute">İndi icra et</string>
@@ -1659,6 +1670,8 @@
     <string name="title_rule_use_as_alarm">Alarm kimi istifadə et</string>
     <string name="title_rule_alarm_hint">Bu, \"narahat etməyin\" qaydalarına əhəmiyyət verməyəcək</string>
     <string name="title_rule_alarm_duration">Maksimum alarm müddəti (saniyə)</string>
+    <string name="title_rule_alarm_title">Zəngli saat</string>
+    <string name="title_rule_alarm_stop">Dayandır</string>
     <string name="title_legend_section_synchronize">Sinxronlaşdırma</string>
     <string name="title_legend_section_folders">Qovluqlar</string>
     <string name="title_legend_section_messages">Mesaj</string>
@@ -1784,6 +1797,7 @@
     <string name="title_hint_folder_sync">Batareya və şəbəkə istifadəsini məhdudlaşdırmaq üçün bütün qovluqlar və bütün mesajlar ilkin olaraq sinxronlaşdırılmayacaq</string>
     <string name="title_hint_airplane">Təyyarə rejimi açıqdır</string>
     <string name="title_hint_notifications">Bildiriş icazəsi yoxdur</string>
+    <string name="title_hint_notifications_remark">(Hesab) xəbərdarlıqları üçün bildiriş icazələri tələb olunur. Yeni mesajlar üçün bildirişlər tənzimləmələrdən söndürülə bilər.</string>
     <string name="title_hint_battery_optimizations">Batareya optimallaşdırma hələ də fəaldır</string>
     <string name="title_hint_support">Sualınız və ya probleminiz varsa, zəhmət olmasa kömək almaq üçün dəstək menyusundan faydalanın</string>
     <string name="title_hint_message_actions">Tullantıya atmaq üçün sola sürüşdürün; (əgər varsa) arxivləmək üçün sağa; Sürüşdürmə əməliyyatları hesab tənzimləmələrindən konfiqurasiya edilə bilər</string>

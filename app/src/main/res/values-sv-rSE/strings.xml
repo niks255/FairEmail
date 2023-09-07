@@ -191,6 +191,7 @@
     <string name="title_setup_oauth_rationale">Auktorisera åtkomst till ditt %1$s konto</string>
     <string name="title_setup_oauth_update">Auktorisera ett befintligt konto igen (annars skapa ett nytt konto)</string>
     <string name="title_setup_oauth_updated">Kontoauktorisering har uppdaterats</string>
+    <string name="title_setup_oauth_brave">När du använder webbläsaren Brave så måste du aktivera alternativet i Braves inställningar för att tillåta att applänkar öppnas i appar utanför Brave</string>
     <string name="title_setup_oauth_authorize">Auktorisera</string>
     <string name="title_setup_select_account">Välj konto</string>
     <string name="title_setup_instructions">Inställningsinstruktioner</string>
@@ -487,6 +488,7 @@
     <string name="title_advanced_libravatars">Visa Libravatars</string>
     <string name="title_advanced_favicons">Visa favicons</string>
     <string name="title_advanced_favicons_partial">Skanna bara den första %1$s av webbsidan</string>
+    <string name="title_advanced_favicons_manifest">Skanna webbapp manifest efter favicon</string>
     <string name="title_advanced_generated_icons">Visa genererade ikoner</string>
     <string name="title_advanced_identicons">Visa identicons</string>
     <string name="title_advanced_circular">Visa runda ikoner</string>
@@ -521,6 +523,7 @@
     <string name="title_advanced_attachments_alt">Visa bilagor efter meddelandetexten</string>
     <string name="title_advanced_thumbnails">Visa miniatyrbilder efter meddelandetexten</string>
     <string name="title_advanced_message_text_zoom2">Standard meddelandetext zoom: %1$s %%</string>
+    <string name="title_advanced_editor_text_zoom">Zooma meddelandetext även i meddelanderedigeraren</string>
     <string name="title_advanced_overview_mode">Zooma originalmeddelanden för att passa skärmen</string>
     <string name="title_advanced_hyphenation">Använd automatisk avstavning</string>
     <string name="title_advanced_contrast">Använd hög kontrast för meddelandetext</string>
@@ -631,6 +634,7 @@
     <string name="title_advanced_wearable_preview">Skicka endast aviseringar med en förhandsgranskning av meddelanden till bärbara enheter</string>
     <string name="title_advanced_notify_messaging">Använd Android \'meddelandestil\' aviseringsformat</string>
     <string name="title_advanced_biometrics_notify">Visa aviseringsinnehåll när du använder biometrisk autentisering</string>
+    <string name="title_advanced_notify_open_folder">Öppna mappen när nytt meddelande öppnas</string>
     <string name="title_advanced_light">Använda aviseringslampan</string>
     <string name="title_advanced_sound">Välj aviseringsljud</string>
     <string name="title_advanced_notify_screen_on">Slå på skärmen en kort stund när det kommer nya meddelanden</string>
@@ -996,6 +1000,8 @@
     <string name="title_synchronize_batch_disable">Inaktivera synkronisering</string>
     <string name="title_notify_batch_enable">Aktivera aviseringar för nya meddelanden</string>
     <string name="title_notify_batch_disable">Inaktivera aviseringar för nya meddelanden</string>
+    <string name="title_download_batch_enable">Ladda ner texter och bilagor</string>
+    <string name="title_download_batch_disable">Hämta endast teknisk meddelandeinformation (hoppa över text och bilagor)</string>
     <string name="title_delete_local">Ta bort lokala meddelanden</string>
     <string name="title_delete_browsed">Ta bort bläddrade/sökta meddelanden</string>
     <string name="title_expunge">Radera permanent</string>
@@ -1177,7 +1183,7 @@
     <string name="title_unsubscribe">Avbryt prenumeration</string>
     <string name="title_message_rule">Skapa regel</string>
     <string name="title_no_junk">Inte skräppost</string>
-    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Redigera ämne &#8230;</string>
+    <string name="title_edit_subject">Redigera ämne &#8230;</string>
     <string name="title_move_to">Flytta till &#8230;</string>
     <string name="title_move_to_folder">Flytta till &#8230;</string>
     <string name="title_move_to_account">Flytta till %1$s &#8230;</string>
@@ -1345,6 +1351,7 @@
     <string name="title_add_image_privacy">Ta bort sekretesskänslig data</string>
     <string name="title_add_image_privacy_remark">Geografisk plats, serienummer, filnamn etc</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixlar</string>
+    <string name="title_add_image_select_remark">Androids fotoväljare skickar inte längre filnamn</string>
     <string name="title_add_image_select">Välj fil</string>
     <string name="title_add_attachment">Lägg till bilaga</string>
     <string name="title_attachment_file">Bifoga fil</string>
@@ -1356,6 +1363,7 @@
     <string name="title_image_dialog">Visa bildalternativ</string>
     <string name="title_style_toolbar">Stilmall verktygsfält</string>
     <string name="title_media_toolbar">Verktygsfält för media</string>
+    <string name="title_manage_android_contacts">Hantera Android-kontakter</string>
     <string name="title_manage_local_contacts">Hantera lokala kontakter</string>
     <string name="title_insert_contact_group">Infoga kontaktgrupp</string>
     <string name="title_insert_template">Infoga mall</string>
@@ -1458,6 +1466,7 @@
     <string name="title_search_hint">        Till en början görs sökningen på enheten.
         Tryck på knappen \"Sök igen\" för att söka på servern.
     </string>
+    <string name="title_search_hint_fts">Använd sökindex: endast hela ord</string>
     <string name="title_search_index_hint">Sökning via index är snabbt, men kommer bara att hitta hela ord.</string>
     <string name="title_search_text_hint">Sökning efter text i meddelanden, när det finns ett stort antal meddelanden, kanske inte fungerar på vissa servrar</string>
     <string name="title_search_text_unsupported">\'%s\' betyder att e-postservern inte stöder sökning i meddelandetexter</string>
@@ -1574,6 +1583,7 @@
     <string name="title_rule_keyword">Nyckelord</string>
     <string name="title_rule_keyword_add">Lägg till</string>
     <string name="title_rule_keyword_delete">Radera</string>
+    <string name="title_rule_notes">Lokala anteckningar</string>
     <string name="title_rule_move">Flytta</string>
     <string name="title_rule_copy">Kopiera (etikett)</string>
     <string name="title_rule_answer">Svar/vidarebefordra</string>
@@ -1632,6 +1642,7 @@
     <string name="title_rule_answer_missing">Mall saknas</string>
     <string name="title_rule_keyword_missing">Nyckelord saknas</string>
     <string name="title_rule_automation_hint">Detta kommer att skicka avsikten \'%1$s\' med extramaterial \'%2$s\'</string>
+    <string name="title_rule_notes_missing">Lokala anteckningar saknas</string>
     <string name="title_rule_delete_hint">Permanent borttagning är oåterkallelig, så se till att regelvillkoren är korrekta!</string>
     <string name="title_rule_edit_group">Redigera grupp &#8230;</string>
     <string name="title_rule_execute">Verkställ nu</string>
@@ -1652,6 +1663,8 @@
     <string name="title_rule_use_as_alarm">Använd som larm</string>
     <string name="title_rule_alarm_hint">Det här kommer att ignorera \"stör ej\"-reglerna</string>
     <string name="title_rule_alarm_duration">Maxtid för alarm (sekunder)</string>
+    <string name="title_rule_alarm_title">Alarm</string>
+    <string name="title_rule_alarm_stop">Inaktivera</string>
     <string name="title_legend_section_synchronize">Synkronisera</string>
     <string name="title_legend_section_folders">Mappar</string>
     <string name="title_legend_section_messages">Meddelanden</string>
@@ -1777,6 +1790,7 @@
     <string name="title_hint_folder_sync">För att begränsa batteri- och nätverksanvändning synkroniseras inte alla mappar och inte alla meddelanden som standard</string>
     <string name="title_hint_airplane">Flygplansläge är på</string>
     <string name="title_hint_notifications">Inga aviseringsbehörigheter</string>
+    <string name="title_hint_notifications_remark">Aviseringsbehörigheter krävs för (konto) varningar också. Aviseringar för nya meddelanden kan stängas av i inställningarna.</string>
     <string name="title_hint_battery_optimizations">Batterioptimeringar är fortfarande aktiverade</string>
     <string name="title_hint_support">Om du har en fråga eller ett problem, vänligen använd supportmenyn för att få hjälp</string>
     <string name="title_hint_message_actions">Dra åt vänster för att kasta; Svep åt höger för att arkivera (om tillgängligt); Svepåtgärderna kan konfigureras i kontoinställningarna</string>

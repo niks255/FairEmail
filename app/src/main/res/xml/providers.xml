@@ -1222,7 +1222,6 @@
     </provider>
     <provider
         name="Laposte.net"
-        documentation="19 avril 2022 La Posté a désactivé l'accès externe en raison de problèmes techniques. Veuillez consulter le site Web de La Poste pour plus d'informations."
         domain="laposte\\.net"
         link="https://www.laposte.fr/votre-vie-digitale/conseils-pratiques/configuration-webmail-laposte.net">
         <imap
@@ -2115,6 +2114,48 @@
             starttls="false" />
         <smtp
             host="smtp.virginmedia.com"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="TPG.com.au"
+        domain="tpg\\.com\\.au"
+        link="https://support.tpg.com.au/email-settings#toc_4">
+        <imap
+            host="mail.tpg.com.au"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.tpg.com.au"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Countermail"
+        appPassword="true"
+        documentation="Instead of a password you should use &lt;a href=&quot;https://support.countermail.com/kb/faq.php?id=14&quot;&gt;an IMAP-key&lt;/a&gt;"
+        domain="countermail\\.com"
+        link="https://support.countermail.com/kb/faq.php?id=14">
+        <imap
+            host="imap1.countermail.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="imap1.countermail.com"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="SoHosted"
+        domain="sohosted\\.com"
+        link="https://support.hoasted.com/article/235-e-mail-instellen-op-google-android"
+        mx=".*\\.sohosted\\.com">
+        <imap
+            host="hostingsecure.email"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="hostingsecure.email"
             port="465"
             starttls="false" />
     </provider>

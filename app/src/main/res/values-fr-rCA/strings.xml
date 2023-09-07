@@ -191,6 +191,7 @@
     <string name="title_setup_oauth_rationale">Autoriser l’accès à votre compte %1$s</string>
     <string name="title_setup_oauth_update">Autoriser à nouveau un compte existant (sinon créer un nouveau compte)</string>
     <string name="title_setup_oauth_updated">L\'autorisation du compte a été mise à jour</string>
+    <string name="title_setup_oauth_brave">Lorsque vous utilisez le navigateur Brave, vous devez activer l\'option dans les paramètres de Brave pour permettre l\'ouverture des liens des applications en dehors de Brave</string>
     <string name="title_setup_oauth_authorize">Autoriser</string>
     <string name="title_setup_select_account">Sélectionner un compte</string>
     <string name="title_setup_instructions">Instructions de configuration</string>
@@ -491,6 +492,7 @@
     <string name="title_advanced_libravatars">Afficher les Libravatars</string>
     <string name="title_advanced_favicons">Afficher l\'icône des sites web</string>
     <string name="title_advanced_favicons_partial">Inspecter uniquement les premiers %1$s de la page web</string>
+    <string name="title_advanced_favicons_manifest">Inspecter le manifeste des applications web</string>
     <string name="title_advanced_generated_icons">Afficher les icônes générées</string>
     <string name="title_advanced_identicons">Afficher les identicônes</string>
     <string name="title_advanced_circular">Afficher des icônes rondes</string>
@@ -525,6 +527,7 @@
     <string name="title_advanced_attachments_alt">Afficher les pièces jointes après le texte du message</string>
     <string name="title_advanced_thumbnails">Afficher les vignettes des images après le texte du message</string>
     <string name="title_advanced_message_text_zoom2">Zoom du texte du message par défaut : %1$s %%</string>
+    <string name="title_advanced_editor_text_zoom">Zoomer le texte du message également dans l\'éditeur de message</string>
     <string name="title_advanced_overview_mode">Zoomer sur les messages originaux pour les adapter à l\'écran</string>
     <string name="title_advanced_hyphenation">Utiliser la césure automatique</string>
     <string name="title_advanced_contrast">Utiliser un contraste élevé pour le texte du message</string>
@@ -635,6 +638,7 @@
     <string name="title_advanced_wearable_preview">Envoyer uniquement des notifications avec un aperçu de message aux appareils connectés</string>
     <string name="title_advanced_notify_messaging">Utiliser le format de notification Android « style message »</string>
     <string name="title_advanced_biometrics_notify">Afficher le contenu des notifications lors de l’utilisation de l’authentification biométrique</string>
+    <string name="title_advanced_notify_open_folder">Ouvrir le dossier lors de l\'ouverture d\'un nouveau message</string>
     <string name="title_advanced_light">Utiliser le voyant lumineux pour les notifications</string>
     <string name="title_advanced_sound">Sélectionner le son pour les notifications</string>
     <string name="title_advanced_notify_screen_on">Allumer brièvement l\'écran lors des nouvelles notifications de message</string>
@@ -669,6 +673,9 @@
     <string name="title_advanced_mnemonic_hint">Tout courriel reçu contenant les mots ci-dessous dans l\'objet supprimera automatiquement et immédiatement toutes les données de l\'application sur cet appareil</string>
     <string name="title_advanced_clear_all">Supprimer les données de l\'application</string>
     <string name="title_advanced_clear_all_remark">Les données de l\'application seront définitivement supprimées!</string>
+    <string name="title_advanced_default_encryption">        La méthode de chiffrement par défaut (PGP ou S/MIME) sera stockée pour chaque identité après avoir envoyé un message signé ou chiffré.
+        La méthode de chiffrement peut être sélectionnée avant l\'envoi dans la boîte de dialogue des options d\'envoi (appui long sur le bouton d\'envoi).
+    </string>
     <string name="title_advanced_sign_default">Signer par défaut</string>
     <string name="title_advanced_encrypt_default">Chiffrer par défaut</string>
     <string name="title_advanced_encrypt_auto">Chiffrer automatiquement lorsque toutes les clés des destinataires sont disponibles</string>
@@ -1001,6 +1008,8 @@
     <string name="title_synchronize_batch_disable">Désactiver la synchronisation</string>
     <string name="title_notify_batch_enable">Activer les notifications de nouveau message</string>
     <string name="title_notify_batch_disable">Désactiver les notifications de nouveau message</string>
+    <string name="title_download_batch_enable">Télécharger les textes et les pièces jointes</string>
+    <string name="title_download_batch_disable">Télécharger les en-têtes uniquement</string>
     <string name="title_delete_local">Supprimer les messages locaux</string>
     <string name="title_delete_browsed">Supprimer les messages consultés/recherchés</string>
     <string name="title_expunge">Effacer</string>
@@ -1183,7 +1192,7 @@
     <string name="title_unsubscribe">Se désabonner</string>
     <string name="title_message_rule">Créer une règle</string>
     <string name="title_no_junk">Non indésirable</string>
-    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Modifier l\'objet&#8230;</string>
+    <string name="title_edit_subject">Modifier l\'objet&#8230;</string>
     <string name="title_move_to">Déplacer vers&#8230;</string>
     <string name="title_move_to_folder">Déplacer vers&#8230;</string>
     <string name="title_move_to_account">Déplacer vers %1$s&#8230;</string>
@@ -1353,6 +1362,7 @@
     <string name="title_add_image_privacy">Supprimer les informations confidentielles sensibles</string>
     <string name="title_add_image_privacy_remark">Emplacement géographique, numéros de série, noms de fichiers, etc.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
+    <string name="title_add_image_select_remark">Le sélecteur de photos d\'Android ne transfère plus les noms de fichiers</string>
     <string name="title_add_image_select">Sélectionner un fichier</string>
     <string name="title_add_attachment">Ajouter une pièce jointe</string>
     <string name="title_attachment_file">Joindre un fichier</string>
@@ -1364,6 +1374,7 @@
     <string name="title_image_dialog">Afficher les options d’image</string>
     <string name="title_style_toolbar">Barre d\'outils de style</string>
     <string name="title_media_toolbar">Barre d’outils média</string>
+    <string name="title_manage_android_contacts">Gérer les contacts d\'Android</string>
     <string name="title_manage_local_contacts">Gérer les contacts locaux</string>
     <string name="title_insert_contact_group">Insérer un groupe de contacts</string>
     <string name="title_insert_template">Insérer un modèle</string>
@@ -1466,6 +1477,7 @@
     <string name="title_search_hint">        Initialement, la recherche est effectuée sur l\'appareil.
         Pour rechercher sur le serveur également, appuyez sur le bouton \'Rechercher à nouveau\'.
     </string>
+    <string name="title_search_hint_fts">Utilisation de l\'index de recherche : mots entiers uniquement</string>
     <string name="title_search_index_hint">La recherche via l’index de recherche est rapide mais elle ne trouve que des mots entiers.</string>
     <string name="title_search_text_hint">La recherche de texte dans les messages peut ne pas fonctionner sur certains serveurs lorsqu’il y a un grand nombre de messages</string>
     <string name="title_search_text_unsupported">\'%s\' signifie que le serveur de messagerie ne prend pas en charge la recherche dans les textes des messages</string>
@@ -1582,6 +1594,7 @@
     <string name="title_rule_keyword">Mot-clé</string>
     <string name="title_rule_keyword_add">Ajouter</string>
     <string name="title_rule_keyword_delete">Supprimer</string>
+    <string name="title_rule_notes">Notes locales</string>
     <string name="title_rule_move">Déplacer</string>
     <string name="title_rule_copy">Copier (étiquette)</string>
     <string name="title_rule_answer">Répondre/transférer</string>
@@ -1640,6 +1653,7 @@
     <string name="title_rule_answer_missing">Modèle manquant</string>
     <string name="title_rule_keyword_missing">Mot-clé manquant</string>
     <string name="title_rule_automation_hint">Ceci enverra l’intent \'%1$s\' avec les extras \'%2$s\'</string>
+    <string name="title_rule_notes_missing">Notes locales manquantes</string>
     <string name="title_rule_delete_hint">La suppression définitive est irréversible, assurez-vous donc que les conditions de la règle sont correctes!</string>
     <string name="title_rule_edit_group">Modifier le groupe&#8230;</string>
     <string name="title_rule_execute">Exécuter maintenant</string>
@@ -1660,6 +1674,8 @@
     <string name="title_rule_use_as_alarm">Utiliser en tant qu\'alarme</string>
     <string name="title_rule_alarm_hint">Ceci ignorera les règles « Ne pas déranger »</string>
     <string name="title_rule_alarm_duration">Durée maximale de l\'alarme (secondes)</string>
+    <string name="title_rule_alarm_title">Alarme</string>
+    <string name="title_rule_alarm_stop">Arrêter</string>
     <string name="title_legend_section_synchronize">Synchronisation</string>
     <string name="title_legend_section_folders">Dossiers</string>
     <string name="title_legend_section_messages">Messages</string>
@@ -1785,6 +1801,7 @@
     <string name="title_hint_folder_sync">Afin de limiter l’utilisation de la pile et du réseau, les dossiers et messages ne seront pas tous synchronisés par défaut</string>
     <string name="title_hint_airplane">Le mode avion est activé</string>
     <string name="title_hint_notifications">Aucune autorisation de notification</string>
+    <string name="title_hint_notifications_remark">Les autorisations de notification sont également obligatoires pour les alertes (comptes). Les notifications de nouveaux messages peuvent être désactivées dans les paramètres.</string>
     <string name="title_hint_battery_optimizations">Les optimisations de la pile sont toujours activées</string>
     <string name="title_hint_support">Si vous avez une question ou un problème, veuillez utiliser le menu « Assistance » pour obtenir de l’aide</string>
     <string name="title_hint_message_actions">Balayer vers la gauche pour mettre à la corbeille; balayer vers la droite pour archiver (si disponible); les actions de balayage peuvent être configurées dans les paramètres du compte</string>
@@ -1872,6 +1889,7 @@
     <string name="title_loading">Chargement&#8230;</string>
     <string name="title_fetching_again">Nouvelle récupération du message depuis le serveur</string>
     <string name="title_go_back">Retour</string>
+    <string name="title_global_default" comment="title_global_default&#10;Title for selection option to indicate to use the global setting, instead of a more specific setting">Utiliser le paramètre général</string>
     <string name="title_conversation_actions">Actions</string>
     <string name="title_conversation_action_reply">Répondre avec : \'%1$s\'</string>
     <string name="title_conversation_action_copy">Copier : \'%1$s\'</string>

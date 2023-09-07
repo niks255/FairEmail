@@ -120,22 +120,19 @@ public class EntityAttachment {
     boolean isCompressed() {
         if ("application/zip".equals(type))
             return true;
-        if ("application/gzip".equals(type) && !BuildConfig.PLAY_STORE_RELEASE)
+        if ("application/gzip".equals(type))
             return true;
 
         String extension = Helper.getExtension(name);
         if ("zip".equals(extension))
             return true;
-        if ("gz".equals(extension) && !BuildConfig.PLAY_STORE_RELEASE)
+        if ("gz".equals(extension))
             return true;
 
         return false;
     }
 
     boolean isGzip() {
-        if (BuildConfig.PLAY_STORE_RELEASE)
-            return false;
-
         if ("application/gzip".equals(type))
             return true;
 
@@ -231,7 +228,8 @@ public class EntityAttachment {
         if ("audio/mid".equals(type))
             return "audio/midi";
 
-        if ("audio-x/wav".equals(type))
+        if ("audio/x-wav".equals(type) ||
+                "audio-x/wav".equals(type))
             return "audio/wav";
 
         // https://www.rfc-editor.org/rfc/rfc3555.txt
@@ -320,6 +318,9 @@ public class EntityAttachment {
 
         if ("ogg".equals(extension))
             return "application/ogg";
+
+        if ("wav".equals(extension))
+            return "audio/wav";
 
         // Images
 

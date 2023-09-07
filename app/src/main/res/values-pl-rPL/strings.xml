@@ -219,6 +219,7 @@
     <string name="title_setup_oauth_rationale">Autoryzuj dostęp do Twojego konta %1$s</string>
     <string name="title_setup_oauth_update">Autoryzuj istniejące konto ponownie (w przeciwnym razie utwórz nowe konto)</string>
     <string name="title_setup_oauth_updated">Autoryzacja konta została zaktualizowana</string>
+    <string name="title_setup_oauth_brave">Podczas korzystania z przeglądarki Brave, musisz włączyć opcję w jej ustawieniach, aby umożliwić otwieranie linków w innych aplikacjach</string>
     <string name="title_setup_oauth_authorize">Autoryzuj</string>
     <string name="title_setup_select_account">Wybierz konto</string>
     <string name="title_setup_instructions">Instrukcja konfiguracji</string>
@@ -518,6 +519,7 @@
     <string name="title_advanced_libravatars">Pokaż Libravatary</string>
     <string name="title_advanced_favicons">Pokaż favikony</string>
     <string name="title_advanced_favicons_partial">Skanuj tylko pierwsze %1$s strony internetowej</string>
+    <string name="title_advanced_favicons_manifest">Skanuj manifesty aplikacji internetowych</string>
     <string name="title_advanced_generated_icons">Pokaż wygenerowane ikony</string>
     <string name="title_advanced_identicons">Pokaż ikony kontaktów</string>
     <string name="title_advanced_circular">Pokaż okrągłe ikony</string>
@@ -552,6 +554,7 @@
     <string name="title_advanced_attachments_alt">Pokaż załączniki za treścią wiadomości</string>
     <string name="title_advanced_thumbnails">Pokaż miniatury obrazów po tekście wiadomości</string>
     <string name="title_advanced_message_text_zoom2">Domyślne powiększenie tekstu wiadomości: %1$s %%</string>
+    <string name="title_advanced_editor_text_zoom">Powiększ tekst wiadomości również w edytorze wiadomości</string>
     <string name="title_advanced_overview_mode">Powiększ oryginalne wiadomości, aby dopasować je do ekranu</string>
     <string name="title_advanced_hyphenation">Użyj automatycznego dzielenia wyrazów</string>
     <string name="title_advanced_contrast">Użyj wysokiego kontrastu dla tekstu wiadomości</string>
@@ -662,6 +665,7 @@
     <string name="title_advanced_wearable_preview">Powiadomienia z podglądem wiadomości wysyłaj tylko do urządzeń do noszenia</string>
     <string name="title_advanced_notify_messaging">Użyj formatu powiadomień w stylu wiadomości systemu Android</string>
     <string name="title_advanced_biometrics_notify">Pokaż treść powiadomienia podczas korzystania z uwierzytelniania biometrycznego</string>
+    <string name="title_advanced_notify_open_folder">Otwórz folder podczas otwierania nowej wiadomości</string>
     <string name="title_advanced_light">Użyj diody powiadomień</string>
     <string name="title_advanced_sound">Wybierz dźwięk powiadomienia</string>
     <string name="title_advanced_notify_screen_on">Włącz ekran na chwilę, aby uzyskać powiadomienia o nowych wiadomościach</string>
@@ -696,6 +700,9 @@
     <string name="title_advanced_mnemonic_hint">Każda otrzymana wiadomość e-mail z poniższymi słowami w temacie, automatycznie i natychmiast usunie dane aplikacji</string>
     <string name="title_advanced_clear_all">Usuń dane aplikacji</string>
     <string name="title_advanced_clear_all_remark">Dane aplikacji zostaną nieodwracalnie usunięte!</string>
+    <string name="title_advanced_default_encryption">        Domyślna metoda szyfrowania (PGP lub S/MIME) będzie przechowywana dla każdej tożsamości po wysłaniu podpisanej lub zaszyfrowanej wiadomości.
+        Metoda szyfrowania może być wybrana przed wysłaniem w oknie dialogowym opcji wysyłania (przytrzymując przycisk wyślij).
+    </string>
     <string name="title_advanced_sign_default">Domyślnie podpisuj</string>
     <string name="title_advanced_encrypt_default">Domyślnie szyfruj</string>
     <string name="title_advanced_encrypt_auto">Automatycznie zaszyfruj, gdy wszystkie klucze odbiorców są dostępne</string>
@@ -1027,6 +1034,8 @@
     <string name="title_synchronize_batch_disable">Wyłącz synchronizację</string>
     <string name="title_notify_batch_enable">Włącz powiadomienia o nowej wiadomości</string>
     <string name="title_notify_batch_disable">Wyłącz powiadomienia o nowej wiadomości</string>
+    <string name="title_download_batch_enable">Pobieraj teksty i załączniki</string>
+    <string name="title_download_batch_disable">Pobieraj tylko nagłówki</string>
     <string name="title_delete_local">Usuń wiadomości lokalne</string>
     <string name="title_delete_browsed">Usuń przejrzane/przeszukane wiadomości</string>
     <string name="title_expunge">Usuń trwale</string>
@@ -1208,7 +1217,7 @@
     <string name="title_unsubscribe">Anuluj subskrypcję</string>
     <string name="title_message_rule">Utwórz regułę</string>
     <string name="title_no_junk">To nie jest spam</string>
-    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Edytuj temat &#8230;</string>
+    <string name="title_edit_subject">Edytuj temat &#8230;</string>
     <string name="title_move_to">Przenieś do &#8230;</string>
     <string name="title_move_to_folder">Przenieś do &#8230;</string>
     <string name="title_move_to_account">Przenieś do %1$s &#8230;</string>
@@ -1376,6 +1385,7 @@
     <string name="title_add_image_privacy">Usuń wrażliwe prywatne dane</string>
     <string name="title_add_image_privacy_remark">Lokalizacja geograficzna, numery seryjne, nazwy plików itp</string>
     <string name="title_add_resize_pixels">&lt; %1$d pikseli</string>
+    <string name="title_add_image_select_remark">Selektor zdjęć Androida nie przekazuje już nazw plików</string>
     <string name="title_add_image_select">Wybierz plik</string>
     <string name="title_add_attachment">Dodaj załącznik</string>
     <string name="title_attachment_file">Dołącz plik</string>
@@ -1387,6 +1397,7 @@
     <string name="title_image_dialog">Pokaż opcje obrazu</string>
     <string name="title_style_toolbar">Styl paska narzędzi</string>
     <string name="title_media_toolbar">Pasek mediów</string>
+    <string name="title_manage_android_contacts">Zarządzaj kontaktami Androida</string>
     <string name="title_manage_local_contacts">Zarządzaj kontaktami lokalnymi</string>
     <string name="title_insert_contact_group">Wstaw grupę kontaktów</string>
     <string name="title_insert_template">Wstaw szablon</string>
@@ -1489,6 +1500,7 @@
     <string name="title_search_hint">        Wyszukiwanie początkowo obejmie wiadomości zapisane na Twoim urządzeniu.
         Aby wyszukać również na serwerze, dotknij przycisku \'Szukaj ponownie\'.
     </string>
+    <string name="title_search_hint_fts">Używa indeksu wyszukiwania: tylko całe słowa</string>
     <string name="title_search_index_hint">Wyszukiwanie za pomocą indeksu wyszukiwania jest szybkie, ale znajduje tylko całe słowa.</string>
     <string name="title_search_text_hint">Wyszukiwanie tekstu w wiadomościach może nie działać na niektórych serwerach, gdy istnieje duża liczba wiadomości</string>
     <string name="title_search_text_unsupported">\'%s\' oznacza, że serwer pocztowy nie obsługuje wyszukiwania w tekstach wiadomości</string>
@@ -1606,6 +1618,7 @@
     <string name="title_rule_keyword">Słowo kluczowe</string>
     <string name="title_rule_keyword_add">Dodaj</string>
     <string name="title_rule_keyword_delete">Usuń</string>
+    <string name="title_rule_notes">Lokalne notatki</string>
     <string name="title_rule_move">Przenieś</string>
     <string name="title_rule_copy">Kopiuj (etykieta)</string>
     <string name="title_rule_answer">Odpowiedz/prześlij dalej</string>
@@ -1664,6 +1677,7 @@
     <string name="title_rule_answer_missing">Brak szablonu</string>
     <string name="title_rule_keyword_missing">Brak słowa kluczowego</string>
     <string name="title_rule_automation_hint">Zostanie wysłany zamiar (intent) \'%1$s\' z dodatkami (extras) \'%2$s\'</string>
+    <string name="title_rule_notes_missing">Brak notatek lokalnych</string>
     <string name="title_rule_delete_hint">Trwałe usunięcie jest nieodwracalne, więc upewnij się, że warunki reguły są poprawne!</string>
     <string name="title_rule_edit_group">Edytuj grupę &#8230;</string>
     <string name="title_rule_execute">Wykonaj teraz</string>
@@ -1684,6 +1698,8 @@
     <string name="title_rule_use_as_alarm">Użyj jako alarmu</string>
     <string name="title_rule_alarm_hint">To zignoruje zasady \"nie przeszkadzać\"</string>
     <string name="title_rule_alarm_duration">Maksymalny czas trwania alarmu (sekundy)</string>
+    <string name="title_rule_alarm_title">Alarm</string>
+    <string name="title_rule_alarm_stop">Stop</string>
     <string name="title_legend_section_synchronize">Synchronizuj</string>
     <string name="title_legend_section_folders">Foldery</string>
     <string name="title_legend_section_messages">Wiadomości</string>
@@ -1809,6 +1825,7 @@
     <string name="title_hint_folder_sync">W celu ograniczenia użycia baterii i sieci nie wszystkie foldery i wiadomości będą domyślnie synchronizowane</string>
     <string name="title_hint_airplane">Tryb samolotowy jest włączony</string>
     <string name="title_hint_notifications">Brak uprawnień dla powiadomień</string>
+    <string name="title_hint_notifications_remark">Uprawnienia powiadomień są również wymagane dla ostrzeżeń dotyczących konta. Powiadomienia dla nowych wiadomości mogą być wyłączone w ustawieniach.</string>
     <string name="title_hint_battery_optimizations">Optymalizacja baterii jest nadal włączona</string>
     <string name="title_hint_support">Jeśli masz pytanie lub problem, użyj menu Pomoc, aby uzyskać pomoc</string>
     <string name="title_hint_message_actions">Przesuń w lewo, aby wyrzucić do kosza; Przesuń w prawo, aby zarchiwizować (jeśli dostępne); Działania przeciągnięcia można skonfigurować w ustawieniach konta</string>
@@ -1896,6 +1913,7 @@
     <string name="title_loading">Ładowanie &#8230;</string>
     <string name="title_fetching_again">Ponowne pobieranie wiadomości z serwera</string>
     <string name="title_go_back">Powrót</string>
+    <string name="title_global_default" comment="title_global_default&#10;Title for selection option to indicate to use the global setting, instead of a more specific setting">Użyj ustawień globalnych</string>
     <string name="title_conversation_actions">Akcje</string>
     <string name="title_conversation_action_reply">Odpowiedz z \'%1$s\'</string>
     <string name="title_conversation_action_copy">Kopiuj: \'%1$s\'</string>

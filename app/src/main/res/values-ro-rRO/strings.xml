@@ -205,6 +205,7 @@
     <string name="title_setup_oauth_rationale">Autorizare acces la contul %1$s</string>
     <string name="title_setup_oauth_update">Autorizați din nou un cont existent (în caz contrar, creați un cont nou)</string>
     <string name="title_setup_oauth_updated">Autorizarea contului a fost actualizată</string>
+    <string name="title_setup_oauth_brave">Când folosiți browserul Brave, trebuie să activați opțiunea din setările Brave pentru a permite adreselor din aplicației să fie deschide de aplicații din afara Brave</string>
     <string name="title_setup_oauth_authorize">Autorizare</string>
     <string name="title_setup_select_account">Selectare cont</string>
     <string name="title_setup_instructions">Instrucțiuni de configurare</string>
@@ -504,6 +505,7 @@
     <string name="title_advanced_libravatars">Arată Libravatars</string>
     <string name="title_advanced_favicons">Arată iconițe siteuri</string>
     <string name="title_advanced_favicons_partial">Scanează numai primele %1$s din pagina web</string>
+    <string name="title_advanced_favicons_manifest">Scanarea manifestărilor aplicațiilor web</string>
     <string name="title_advanced_generated_icons">Arată pictograme cu literă</string>
     <string name="title_advanced_identicons">Arată pictograme generate pe baza identității</string>
     <string name="title_advanced_circular">Arată pictograme rotunde</string>
@@ -538,6 +540,7 @@
     <string name="title_advanced_attachments_alt">Arată atașamentele după textul mesajului</string>
     <string name="title_advanced_thumbnails">Arată miniaturile imaginilor după textul mesajului</string>
     <string name="title_advanced_message_text_zoom2">Zoom implicit al textului mesajului: %1$s %%</string>
+    <string name="title_advanced_editor_text_zoom">Măriți și textul mesajului în editorul de mesaje</string>
     <string name="title_advanced_overview_mode">Măriți mesajele originale pentru a se potrivi cu ecranul</string>
     <string name="title_advanced_hyphenation">Folosește despărțirea în silabe automată</string>
     <string name="title_advanced_contrast">Folosește contrast ridicat pentru text</string>
@@ -648,6 +651,7 @@
     <string name="title_advanced_wearable_preview">Trimite la portabile doar notificările cu previzualizare mesaj</string>
     <string name="title_advanced_notify_messaging">Utilizaţi formatul de notificare Android \'stil de mesaj\'</string>
     <string name="title_advanced_biometrics_notify">Arată conținutul notificării atunci când se utilizează autentificarea biometrică</string>
+    <string name="title_advanced_notify_open_folder">Deschide dosarul la deschiderea unui mesaj nou</string>
     <string name="title_advanced_light">Folosire LED de notificare</string>
     <string name="title_advanced_sound">Selectare sunet de notificare</string>
     <string name="title_advanced_notify_screen_on">Activați pentru scurt timp ecranul pentru notificări de mesaje noi</string>
@@ -1013,6 +1017,8 @@
     <string name="title_synchronize_batch_disable">Dezactivează sincronizarea</string>
     <string name="title_notify_batch_enable">Activați notificările de mesaje noi</string>
     <string name="title_notify_batch_disable">Dezactivarea notificărilor de mesaje noi</string>
+    <string name="title_download_batch_enable">Descarcă texte și atașamente</string>
+    <string name="title_download_batch_disable">Descarcă doar anteturi</string>
     <string name="title_delete_local">Șterge mesajul local</string>
     <string name="title_delete_browsed">Șterge mesajele răsfoite/căutate</string>
     <string name="title_expunge">Eliminați</string>
@@ -1194,7 +1200,7 @@
     <string name="title_unsubscribe">Dezabonare</string>
     <string name="title_message_rule">Creare regulă</string>
     <string name="title_no_junk">Nu este spam</string>
-    <string name="title_edit_subject" comment="title_edit_subject&#10;Title for menu item to edit the subject of a message">Editează subiectul &#8230;</string>
+    <string name="title_edit_subject">Editează subiectul &#8230;</string>
     <string name="title_move_to">Mută în &#8230;</string>
     <string name="title_move_to_folder">Mută în &#8230;</string>
     <string name="title_move_to_account">Mută în %1$s &#8230;</string>
@@ -1362,6 +1368,7 @@
     <string name="title_add_image_privacy">Elimină datele confidențiale</string>
     <string name="title_add_image_privacy_remark">Locație geografică, numere de serie, nume de fișiere etc</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixeli</string>
+    <string name="title_add_image_select_remark">Selectorul de fotografii Android nu mai expune numele fișierelor</string>
     <string name="title_add_image_select">Selectare fișier</string>
     <string name="title_add_attachment">Adaugă ataşament</string>
     <string name="title_attachment_file">Atașare fișier</string>
@@ -1373,6 +1380,7 @@
     <string name="title_image_dialog">Afișare opțiuni imagine</string>
     <string name="title_style_toolbar">Bara de stil</string>
     <string name="title_media_toolbar">Bară atașare</string>
+    <string name="title_manage_android_contacts">Gestionează contactele Android</string>
     <string name="title_manage_local_contacts">Gestionați contactele locale</string>
     <string name="title_insert_contact_group">Introduceți grup de contacte</string>
     <string name="title_insert_template">Introduceți șablon</string>
@@ -1475,6 +1483,7 @@
     <string name="title_search_hint">        Inițial, căutarea se efectuează pe dispozitiv.
         Pentru a căuta și pe server apăsați butonul \'căutare din nou\'.
     </string>
+    <string name="title_search_hint_fts">Folosind indexul căutării: doar cuvinte întregi</string>
     <string name="title_search_index_hint">Căutarea prin intermediul indexului de căutare este rapidă, dar găsește doar cuvinte întregi.</string>
     <string name="title_search_text_hint">Se caută text în mesaje, atunci când există un număr mare de mesaje, s-ar putea să nu funcționeze pe unele servere</string>
     <string name="title_search_text_unsupported">\'%s\' înseamnă că serverul de e-mail nu acceptă căutarea în textele mesajelor</string>
@@ -1591,6 +1600,7 @@
     <string name="title_rule_keyword">Cuvânt cheie</string>
     <string name="title_rule_keyword_add">Adaugă</string>
     <string name="title_rule_keyword_delete">Şterge</string>
+    <string name="title_rule_notes">Note locale</string>
     <string name="title_rule_move">Mută</string>
     <string name="title_rule_copy">Copiere (etichetă)</string>
     <string name="title_rule_answer">Răspunde/redirecționare</string>
@@ -1649,6 +1659,7 @@
     <string name="title_rule_answer_missing">Șablon lipsă</string>
     <string name="title_rule_keyword_missing">Lipsește cuvântul cheie</string>
     <string name="title_rule_automation_hint">Aceasta va trimite intenția \'%1$s\' și extra \'%2$s\'</string>
+    <string name="title_rule_notes_missing">Lipsesc notele locale</string>
     <string name="title_rule_delete_hint">Ștergerea permanentă este ireversibilă, așa că asigurați-vă că condițiile regulii sunt corecte!</string>
     <string name="title_rule_edit_group">Editează grupul &#8230;</string>
     <string name="title_rule_execute">Execută acum</string>
@@ -1669,6 +1680,8 @@
     <string name="title_rule_use_as_alarm">Utilizează ca alarmă</string>
     <string name="title_rule_alarm_hint">Acest lucru va ignora regulile \"nu deranjați\"</string>
     <string name="title_rule_alarm_duration">Durata maximă a alarmei (secunde)</string>
+    <string name="title_rule_alarm_title">Alarmă</string>
+    <string name="title_rule_alarm_stop">Oprire</string>
     <string name="title_legend_section_synchronize">Sincronizare</string>
     <string name="title_legend_section_folders">Dosare</string>
     <string name="title_legend_section_messages">Mesaje</string>
@@ -1794,6 +1807,7 @@
     <string name="title_hint_folder_sync">Pentru a limita utilizarea bateriei şi a conexiunii, nu vor fi sincronizate în mod implicit toate dosarele si mesajele</string>
     <string name="title_hint_airplane">Modul Avion este activat</string>
     <string name="title_hint_notifications">Nu există permisiuni de notificare</string>
+    <string name="title_hint_notifications_remark">Permisiunile de notificare sunt necesare și pentru alerte (cont). Notificările pentru mesaje noi pot fi dezactivate în setări.</string>
     <string name="title_hint_battery_optimizations">Optimizările bateriei sunt încă activate</string>
     <string name="title_hint_support">Dacă aveți o întrebare sau o problemă, vă rugăm să utilizați meniul de suport tehnic pentru a obține ajutor</string>
     <string name="title_hint_message_actions">Glisați stânga pentru Gunoi sau dreapta pentru Arhivă (dacă este disponibilă). Acțiunile de glisare se pot configura în setările contului</string>

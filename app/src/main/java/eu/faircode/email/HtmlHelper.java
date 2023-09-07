@@ -539,7 +539,7 @@ public class HtmlHelper {
             sheets = parseStyles(parsed.head().select("style"));
 
         Safelist safelist = Safelist.relaxed()
-                .addTags("hr", "abbr", "big", "font", "dfn", "del", "s", "tt", "mark")
+                .addTags("hr", "abbr", "big", "font", "dfn", "del", "s", "tt", "mark", "address")
                 .addAttributes(":all", "class")
                 .addAttributes(":all", "style")
                 .addAttributes("span", "dir")
@@ -572,6 +572,16 @@ public class HtmlHelper {
             safelist.addAttributes(":all", "x-computed");
 
         final Document document = new Cleaner(safelist).clean(parsed);
+
+        if (BuildConfig.DEBUG)
+            for (Element e : document.select("span:matchesOwn(^UUID: " + Helper.REGEX_UUID + ")")) {
+                String t = e.text();
+                int sp = t.indexOf(' ');
+                if (sp < 0)
+                    continue;
+                String uuid = t.substring(sp + 1);
+                e.html("UUID: <a href='" + BuildConfig.BUGSNAG_URI + uuid + "'>" + uuid + "</a>");
+            }
 
         // Remove tracking pixels
         if (disable_tracking)
@@ -695,9 +705,9 @@ public class HtmlHelper {
                             .trim()
                             .toLowerCase(Locale.ROOT);
                     String value = param.substring(colon + 1)
+                            .replace("!important", "")
                             .trim()
                             .toLowerCase(Locale.ROOT)
-                            .replace("!important", "")
                             .replaceAll("\\s+", " ");
                     kv.put(key, value);
                 }
@@ -1099,6 +1109,14 @@ public class HtmlHelper {
             hs.tagName("strong");
             hs.attr("x-line-after", "true");
         }
+
+        // Replace addresses by link
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address
+        // https://en.wikipedia.org/wiki/Geo_URI_scheme
+        for (Element address : document.select("address"))
+            if (address.select("a").size() == 0)
+                address.tagName("a")
+                        .attr("href", "geo:0,0?q=" + Uri.encode(address.text()));
 
         // Paragraphs
         for (Element p : document.select("p")) {
@@ -1530,82 +1548,91 @@ public class HtmlHelper {
                     }
 
                     Matcher matcher = pattern.matcher(text);
-                    if (matcher.find()) {
-                        Element span = document.createElement("span");
+                    if (matcher.find())
+                        try {
+                            Element span = document.createElement("span");
 
-                        int pos = 0;
-                        do {
-                            boolean linked = false;
-                            Node parent = tnode.parent();
-                            while (parent != null) {
-                                if ("a".equals(parent.nodeName())) {
-                                    linked = true;
-                                    break;
+                            int pos = 0;
+                            do {
+                                boolean linked = false;
+                                Node parent = tnode.parent();
+                                while (parent != null) {
+                                    if ("a".equals(parent.nodeName())) {
+                                        linked = true;
+                                        break;
+                                    }
+                                    parent = parent.parent();
                                 }
-                                parent = parent.parent();
-                            }
 
-                            String group = matcher.group();
-                            int start = matcher.start();
-                            int end = matcher.end();
+                                String group = matcher.group();
+                                int start = matcher.start();
+                                int end = matcher.end();
+                                if (start < pos || start > end) {
+                                    Log.e("Autolink pos=" + pos +
+                                            " start=" + start + " end=" + end +
+                                            " len=" + group.length() + "/" + text.length());
+                                    return;
+                                }
 
-                            // Workarounds
-                            if (group.endsWith(".")) {
-                                end--;
-                                group = group.substring(0, group.length() - 1);
-                            }
-                            if (group.startsWith("(")) {
-                                start++;
-                                group = group.substring(1);
-                            }
-                            if (group.endsWith(")")) {
-                                end--;
-                                group = group.substring(0, group.length() - 1);
-                            }
-                            if (end < text.length() && text.charAt(end) == '$') {
-                                end++;
-                                group += '$';
-                            }
+                                // Workarounds
+                                if (group.endsWith(".")) {
+                                    end--;
+                                    group = group.substring(0, group.length() - 1);
+                                }
+                                if (group.startsWith("(")) {
+                                    start++;
+                                    group = group.substring(1);
+                                }
+                                if (group.endsWith(")")) {
+                                    end--;
+                                    group = group.substring(0, group.length() - 1);
+                                }
+                                if (end < text.length() && text.charAt(end) == '$') {
+                                    end++;
+                                    group += '$';
+                                }
 
-                            boolean email = group.contains("@") && !group.contains(":");
-                            Log.i("Web url=" + group + " " + start + "..." + end + "/" + text.length() +
-                                    " linked=" + linked + " email=" + email + " count=" + links);
+                                boolean email = group.contains("@") && !group.contains(":");
+                                Log.i("Web url=" + group + " " + start + "..." + end + "/" + text.length() +
+                                        " linked=" + linked + " email=" + email + " count=" + links);
 
-                            if (linked)
-                                span.appendText(text.substring(pos, end));
-                            else {
-                                span.appendText(text.substring(pos, start));
-
-                                Element a = document.createElement("a");
-                                if (BuildConfig.DEBUG && GPA_PATTERN.matcher(group).matches())
-                                    a.attr("href", BuildConfig.GPA_URI + group);
+                                if (linked)
+                                    span.appendText(text.substring(pos, end));
                                 else {
-                                    String url = (email ? "mailto:" : "") + group;
-                                    if (outbound)
-                                        try {
-                                            Uri uri = UriHelper.guessScheme(Uri.parse(url));
-                                            a.attr("href", uri.toString());
-                                        } catch (Throwable ex) {
-                                            Log.e(ex);
+                                    span.appendText(text.substring(pos, start));
+
+                                    Element a = document.createElement("a");
+                                    if (BuildConfig.DEBUG && GPA_PATTERN.matcher(group).matches())
+                                        a.attr("href", BuildConfig.GPA_URI + group);
+                                    else {
+                                        String url = (email ? "mailto:" : "") + group;
+                                        if (outbound)
+                                            try {
+                                                Uri uri = UriHelper.guessScheme(Uri.parse(url));
+                                                a.attr("href", uri.toString());
+                                            } catch (Throwable ex) {
+                                                Log.e(ex);
+                                                a.attr("href", url);
+                                            }
+                                        else
                                             a.attr("href", url);
-                                        }
-                                    else
-                                        a.attr("href", url);
+                                    }
+                                    a.text(group);
+                                    span.appendChild(a);
+
+                                    links++;
                                 }
-                                a.text(group);
-                                span.appendChild(a);
 
-                                links++;
-                            }
+                                pos = end;
+                            } while (links < MAX_AUTO_LINK && matcher.find());
 
-                            pos = end;
-                        } while (links < MAX_AUTO_LINK && matcher.find());
+                            span.appendText(text.substring(pos));
 
-                        span.appendText(text.substring(pos));
-
-                        tnode.before(span);
-                        tnode.text("");
-                    }
+                            tnode.before(span);
+                            tnode.text("");
+                        } catch (Throwable ex) {
+                            Log.e(ex);
+                        }
                 }
             }
 
@@ -1781,11 +1808,18 @@ public class HtmlHelper {
                                     style = mergeStyles(style, srule.getStyle().getCssText(), false);
                                 break;
                             case Selector.SAC_CONDITIONAL_SELECTOR:
-                                ConditionalSelectorImpl cselector = (ConditionalSelectorImpl) selector;
-                                if (cselector.getCondition().getConditionType() == SAC_CLASS_CONDITION) {
-                                    ClassConditionImpl ccondition = (ClassConditionImpl) cselector.getCondition();
-                                    if (clazz.equalsIgnoreCase(ccondition.getValue()))
-                                        style = mergeStyles(style, srule.getStyle().getCssText(), false);
+                                if (!TextUtils.isEmpty(clazz)) {
+                                    ConditionalSelectorImpl cselector = (ConditionalSelectorImpl) selector;
+                                    if (cselector.getCondition().getConditionType() == SAC_CLASS_CONDITION) {
+                                        ClassConditionImpl ccondition = (ClassConditionImpl) cselector.getCondition();
+                                        String value = ccondition.getValue();
+                                        for (String cls : clazz.split("\\s+"))
+                                            if (cls.equalsIgnoreCase(value)) {
+                                                style = mergeStyles(style, srule.getStyle().getCssText(), false);
+                                                break;
+                                            }
+
+                                    }
                                 }
                                 break;
                         }
@@ -1808,9 +1842,8 @@ public class HtmlHelper {
         if (media instanceof MediaListImpl) {
             MediaListImpl _media = (MediaListImpl) media;
             for (int i = 0; i < _media.getLength(); i++) {
-                String query = _media.mediaQuery(i).getCssText(null);
-                if ("all".equals(query) ||
-                        "screen".equals(query) || "only screen".equals(query))
+                String type = _media.mediaQuery(i).getMedia();
+                if ("all".equals(type) || "screen".equals(type) || _media.mediaQuery(i).isNot())
                     return true;
             }
         } else
@@ -1881,9 +1914,12 @@ public class HtmlHelper {
                 baseParams.remove(key);
             }
 
-        for (String key : baseParams.keySet())
-            if (!STYLE_NO_INHERIT.contains(key) || element)
+        for (String key : baseParams.keySet()) {
+            String value = baseParams.get(key);
+            boolean important = (value != null && value.contains("!important"));
+            if (!STYLE_NO_INHERIT.contains(key) || element || important)
                 result.put(key, baseParams.get(key));
+        }
 
         return TextUtils.join(";", result.values());
     }

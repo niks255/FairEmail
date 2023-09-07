@@ -85,6 +85,7 @@ import android.view.Display;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -262,14 +263,14 @@ public class Log {
     }
 
     public static int i(String msg) {
-        if (level <= android.util.Log.INFO || BuildConfig.DEBUG)
+        if (level <= android.util.Log.INFO || BuildConfig.DEBUG || BuildConfig.TEST_RELEASE)
             return android.util.Log.i(TAG, msg);
         else
             return 0;
     }
 
     public static int i(String tag, String msg) {
-        if (level <= android.util.Log.INFO || BuildConfig.DEBUG)
+        if (level <= android.util.Log.INFO || BuildConfig.DEBUG || BuildConfig.TEST_RELEASE)
             return android.util.Log.i(tag, msg);
         else
             return 0;
@@ -679,7 +680,7 @@ public class Log {
                         if (element instanceof Long)
                             elements[i] = element + " (0x" + Long.toHexString((Long) element) + ")";
                         else if (element instanceof Spanned)
-                            elements[i] = "<redacted>";
+                            elements[i] = "(span:" + Helper.getPrintableString(element.toString()) + ")";
                         else
                             elements[i] = (element == null ? "<null>" : Helper.getPrintableString(element.toString()));
                     }
@@ -690,7 +691,7 @@ public class Log {
                 } else if (v instanceof Long)
                     value = v + " (0x" + Long.toHexString((Long) v) + ")";
                 else if (v instanceof Spanned)
-                    value = "<redacted>";
+                    value = "(span:" + Helper.getPrintableString(v.toString()) + ")";
                 else if (v instanceof Bundle)
                     value = "{" + TextUtils.join(" ", getExtras((Bundle) v)) + "}";
 
@@ -2003,15 +2004,21 @@ public class Log {
         sb.append(String.format("Android: %s (SDK device=%d target=%d)\r\n",
                 Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Helper.getTargetSdk(context)));
 
+        String miui = Helper.getMIUIVersion();
+        Integer autostart = (miui == null ? null : Helper.getMIUIAutostart(context));
+        sb.append(String.format("MIUI: %s autostart: %s\r\n",
+                miui == null ? "-" : miui,
+                autostart == null ? "?" : Boolean.toString(autostart == 0)));
+
         boolean reporting = prefs.getBoolean("crash_reports", false);
         if (reporting || BuildConfig.TEST_RELEASE) {
             String uuid = prefs.getString("uuid", null);
             sb.append(String.format("UUID: %s\r\n", uuid == null ? "-" : uuid));
         }
 
+        sb.append(String.format("Play Store: %s\r\n", Helper.hasPlayStore(context)));
         sb.append(String.format("Installer: %s\r\n", installer));
         sb.append(String.format("Installed: %s\r\n", new Date(Helper.getInstallTime(context))));
-        sb.append(String.format("Play Store: %s\r\n", Helper.hasPlayStore(context)));
         sb.append(String.format("Updated: %s\r\n", new Date(Helper.getUpdateTime(context))));
         sb.append(String.format("Last cleanup: %s\r\n", new Date(last_cleanup)));
         sb.append(String.format("Now: %s\r\n", new Date()));
@@ -2077,8 +2084,8 @@ public class Log {
             }
         }
 
-        sb.append(String.format("Log main: %b protocol: %b debug: %b build: %b\r\n",
-                main_log, protocol, Log.isDebugLogLevel(), BuildConfig.DEBUG));
+        sb.append(String.format("Log main: %b protocol: %b debug: %b build: %b test: %b\r\n",
+                main_log, protocol, Log.isDebugLogLevel(), BuildConfig.DEBUG, BuildConfig.TEST_RELEASE));
 
         int[] contacts = ContactInfo.getStats();
         sb.append(String.format("Contact lookup: %d cached: %d\r\n",
@@ -2412,7 +2419,7 @@ public class Log {
                         " auto_optimize=" + auto_optimize + (auto_optimize ? " !!!" : "") +
                         " notifications=" + (filter == null ? null :
                         Helper.getInterruptionFilter(filter) +
-                                (filter == NotificationManager.INTERRUPTION_FILTER_ALL ? "" : "!!!")) + "\r\n" +
+                                (filter == NotificationManager.INTERRUPTION_FILTER_ALL ? "" : " !!!")) + "\r\n" +
                         "accounts=" + accounts.size() +
                         " folders=" + db.folder().countSync() + "/" + db.folder().countTotal() +
                         " messages=" + db.message().countTotal() +
@@ -2492,6 +2499,8 @@ public class Log {
                             messages += folder.messages;
                         }
 
+                        int blocked = db.contact().countBlocked(account.id);
+
                         boolean unmetered = false;
                         boolean ignore_schedule = false;
                         try {
@@ -2503,7 +2512,7 @@ public class Log {
                         } catch (Throwable ignored) {
                         }
 
-                        size += write(os, account.name + (account.primary ? "*" : "") +
+                        size += write(os, account.id + ":" + account.name + (account.primary ? "*" : "") +
                                 " " + (account.protocol == EntityAccount.TYPE_IMAP ? "IMAP" : "POP") +
                                 " [" + (account.provider == null ? "" : account.provider) +
                                 ":" + ServiceAuthenticator.getAuthTypeName(account.auth_type) + "]" +
@@ -2515,6 +2524,7 @@ public class Log {
                                 " poll=" + account.poll_interval +
                                 " ondemand=" + account.ondemand + (account.ondemand ? " !!!" : "") +
                                 " msgs=" + content + "/" + messages + " max=" + account.max_messages +
+                                " blocked=" + blocked + (blocked == 0 ? "" : " !!!") +
                                 " ops=" + db.operation().getOperationCount(account.id) +
                                 " schedule=" + (!ignore_schedule) + (ignore_schedule ? " !!!" : "") +
                                 " unmetered=" + unmetered + (unmetered ? " !!!" : "") +
@@ -2532,10 +2542,11 @@ public class Log {
                                 int unseen = db.message().countUnseen(folder.id);
                                 int hidden = db.message().countHidden(folder.id);
                                 int notifying = db.message().countNotifying(folder.id);
-                                size += write(os, "- " + folder.name + " " +
+                                size += write(os, "- " + folder.id + ":" + folder.name + " " +
                                         folder.type + (folder.inherited_type == null ? "" : "/" + folder.inherited_type) +
                                         (folder.unified ? " unified" : "") +
                                         (folder.notify ? " notify" : "") +
+                                        (Boolean.TRUE.equals(folder.subscribed) ? " subscribed" : "") +
                                         " poll=" + folder.poll + (folder.poll || EntityFolder.INBOX.equals(folder.type) ? "" : " !!! ") +
                                         " factor=" + folder.poll_factor +
                                         " days=" + getDays(folder.sync_days) + "/" + getDays(folder.keep_days) +
@@ -3085,6 +3096,10 @@ public class Log {
             long size = 0;
             File file = attachment.getFile(context);
             try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                size += write(os, String.format("Photo picker=%b\r\n", Helper.hasPhotoPicker()));
+                size += write(os, String.format("Double tap timeout=%d\r\n", ViewConfiguration.getDoubleTapTimeout()));
+                size += write(os, String.format("Long press timeout=%d\r\n", ViewConfiguration.getLongPressTimeout()));
+
                 for (Class<?> cls : new Class[]{
                         ActivitySendSelf.class,
                         ActivitySearch.class,

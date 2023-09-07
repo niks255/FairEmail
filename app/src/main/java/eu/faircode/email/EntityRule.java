@@ -44,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -61,6 +62,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.mail.Address;
@@ -126,6 +128,7 @@ public class EntityRule {
     static final int TYPE_DELETE = 15;
     static final int TYPE_SOUND = 16;
     static final int TYPE_LOCAL_ONLY = 17;
+    static final int TYPE_NOTES = 18;
 
     static final String ACTION_AUTOMATION = BuildConfig.APPLICATION_ID + ".AUTOMATION";
     static final String EXTRA_RULE = "rule";
@@ -134,17 +137,26 @@ public class EntityRule {
     static final String EXTRA_SUBJECT = "subject";
     static final String EXTRA_RECEIVED = "received";
 
-    private static final String JSOUP_PREFIX = "jsoup:";
+    static final String JSOUP_PREFIX = "jsoup:";
     private static final long SEND_DELAY = 5000L; // milliseconds
+    private static final int MAX_NOTES_LENGTH = 512; // characters
 
     static boolean needsHeaders(EntityMessage message, List<EntityRule> rules) {
+        return needsHeaders(rules);
+    }
+
+    static boolean needsHeaders(List<EntityRule> rules) {
         return needs(rules, "header");
     }
 
     static boolean needsBody(EntityMessage message, List<EntityRule> rules) {
         if (message.encrypt != null && !EntityMessage.ENCRYPT_NONE.equals(message.encrypt))
             return false;
-        return needs(rules, "body");
+        return needsBody(rules);
+    }
+
+    static boolean needsBody(List<EntityRule> rules) {
+        return needs(rules, "body") || needs(rules, "notes_jsoup");
     }
 
     private static boolean needs(List<EntityRule> rules, String what) {
@@ -178,7 +190,7 @@ public class EntityRule {
             if (rule.group != null && stopped.contains(rule.group))
                 continue;
             if (rule.matches(context, message, headers, html)) {
-                if (rule.execute(context, message))
+                if (rule.execute(context, message, html))
                     applied++;
                 if (rule.stop)
                     if (rule.group == null)
@@ -553,8 +565,8 @@ public class EntityRule {
         return matched;
     }
 
-    boolean execute(Context context, EntityMessage message) throws JSONException {
-        boolean executed = _execute(context, message);
+    boolean execute(Context context, EntityMessage message, String html) throws JSONException {
+        boolean executed = _execute(context, message, html);
         if (this.id != null && executed) {
             DB db = DB.getInstance(context);
             db.rule().applyRule(id, new Date().getTime());
@@ -562,7 +574,7 @@ public class EntityRule {
         return executed;
     }
 
-    private boolean _execute(Context context, EntityMessage message) throws JSONException, IllegalArgumentException {
+    private boolean _execute(Context context, EntityMessage message, String html) throws JSONException, IllegalArgumentException {
         JSONObject jaction = new JSONObject(action);
         int type = jaction.getInt("type");
         EntityLog.log(context, EntityLog.Type.Rules, message,
@@ -603,6 +615,8 @@ public class EntityRule {
                 return onActionSound(context, message, jaction);
             case TYPE_LOCAL_ONLY:
                 return onActionLocalOnly(context, message, jaction);
+            case TYPE_NOTES:
+                return onActionNotes(context, message, jaction, html);
             default:
                 throw new IllegalArgumentException("Unknown rule type=" + type + " name=" + name);
         }
@@ -680,6 +694,11 @@ public class EntityRule {
             case TYPE_SOUND:
                 return;
             case TYPE_LOCAL_ONLY:
+                return;
+            case TYPE_NOTES:
+                String notes = jargs.optString("notes");
+                if (TextUtils.isEmpty(notes))
+                    throw new IllegalArgumentException(context.getString(R.string.title_rule_notes_missing));
                 return;
             default:
                 throw new IllegalArgumentException("Unknown rule type=" + type);
@@ -1313,6 +1332,61 @@ public class EntityRule {
 
         message.ui_local_only = true;
         db.message().setMessageUiLocalOnly(message.id, message.ui_local_only);
+
+        return true;
+    }
+
+    private boolean onActionNotes(Context context, EntityMessage message, JSONObject jargs, String html) throws JSONException {
+        String notes = jargs.getString("notes");
+        Integer color = (jargs.has("color") ? jargs.getInt("color") : null);
+
+        if (notes.startsWith(JSOUP_PREFIX)) {
+            if (html == null && message.content) {
+                File file = message.getFile(context);
+                try {
+                    html = Helper.readText(file);
+                } catch (IOException ex) {
+                    Log.e(ex);
+                }
+            }
+
+            if (html != null) {
+                Document d = JsoupEx.parse(html);
+                String selector = notes.substring(JSOUP_PREFIX.length());
+                String regex = null;
+                if (selector.endsWith(("}"))) {
+                    int b = selector.lastIndexOf('{');
+                    if (b > 0) {
+                        regex = selector.substring(b + 1, selector.length() - 1);
+                        selector = selector.substring(0, b);
+                    }
+                }
+
+                Element e = d.select(selector).first();
+                if (e == null) {
+                    notes = null;
+                    Log.w("Nothing selected Jsoup=" + selector);
+                } else {
+                    notes = e.ownText();
+                    if (!TextUtils.isEmpty(regex)) {
+                        Pattern p = Pattern.compile(regex);
+                        Matcher m = p.matcher(notes);
+                        if (m.matches() && m.groupCount() > 0)
+                            notes = m.group(1);
+                        else
+                            Log.w("Nothing selected regex=" + regex + " value=" + notes);
+                    }
+                }
+            }
+        }
+
+        if (TextUtils.isEmpty(notes))
+            notes = null;
+        else if (notes.length() > MAX_NOTES_LENGTH)
+            notes = notes.substring(0, MAX_NOTES_LENGTH);
+
+        DB db = DB.getInstance(context);
+        db.message().setMessageNotes(message.id, notes, color);
 
         return true;
     }

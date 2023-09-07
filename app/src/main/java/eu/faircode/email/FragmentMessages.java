@@ -102,6 +102,7 @@ import android.view.ScrollCaptureCallback;
 import android.view.ScrollCaptureSession;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -396,13 +397,13 @@ public class FragmentMessages extends FragmentBase
     final private LongSparseArray<TupleAccountSwipes> accountSwipes = new LongSparseArray<>();
 
     private NumberFormat NF = NumberFormat.getNumberInstance();
+    private final ObjectHolder<Boolean> showToolbar = new ObjectHolder<>(true);
 
     private static final ExecutorService executor =
             Helper.getBackgroundExecutor(1, "more");
 
     private static final int MAX_MORE = 100; // messages
     private static final int MAX_SEND_RAW = 50; // messages
-    private static final int SWIPE_DISABLE_SELECT_DURATION = 500; // milliseconds
     private static final float LUMINANCE_THRESHOLD = 0.7f;
     private static final int ITEM_CACHE_SIZE = 10; // Default: 2 items
 
@@ -647,9 +648,7 @@ public class FragmentMessages extends FragmentBase
         tvNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ActivitySetup.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                v.getContext().startActivity(intent);
+                new FragmentDialogNotifications().show(getParentFragmentManager(), "notifications");
             }
         });
 
@@ -1167,8 +1166,6 @@ public class FragmentMessages extends FragmentBase
         });
 
         rvMessage.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            private boolean show = true;
-
             @Override
             public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
                 if (dy != 0) {
@@ -1182,17 +1179,17 @@ public class FragmentMessages extends FragmentBase
 
                 if (hide_toolbar && dy != 0)
                     try {
-                        show = (dy < 0 || rv.computeVerticalScrollOffset() == 0);
+                        showToolbar.value = (dy < 0 || rv.computeVerticalScrollOffset() == 0);
                     } catch (Throwable ex) {
                         Log.e(ex);
-                        show = true;
+                        showToolbar.value = true;
                     }
             }
 
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView rv, int newState) {
                 if (hide_toolbar && newState != RecyclerView.SCROLL_STATE_DRAGGING)
-                    showActionBar(show);
+                    showActionBar(showToolbar.value);
             }
         });
 
@@ -1233,6 +1230,8 @@ public class FragmentMessages extends FragmentBase
         ibUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showToolbar.value = true;
+                showActionBar(true);
                 scrollToVisibleItem(llm, false);
             }
         });
@@ -2918,7 +2917,7 @@ public class FragmentMessages extends FragmentBase
                 if (isCurrentlyActive)
                     selectionPredicate.setEnabled(false);
                 else
-                    getMainHandler().postDelayed(enableSelection, SWIPE_DISABLE_SELECT_DURATION);
+                    getMainHandler().postDelayed(enableSelection, ViewConfiguration.getLongPressTimeout() + 100);
             }
 
             Context context = getContext();
@@ -4559,10 +4558,20 @@ public class FragmentMessages extends FragmentBase
                 aargs.putLongArray("ids", Helper.toLongArray(ids));
                 aargs.putBoolean("warning", true);
 
-                FragmentDialogAsk ask = new FragmentDialogAsk();
-                ask.setArguments(aargs);
-                ask.setTargetFragment(FragmentMessages.this, REQUEST_MESSAGES_DELETE);
-                ask.show(getParentFragmentManager(), "messages:delete");
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                boolean delete_confirmation = prefs.getBoolean("delete_confirmation", true);
+
+                if (delete_confirmation) {
+                    FragmentDialogAsk ask = new FragmentDialogAsk();
+                    ask.setArguments(aargs);
+                    ask.setTargetFragment(FragmentMessages.this, REQUEST_MESSAGES_DELETE);
+                    ask.show(getParentFragmentManager(), "messages:delete");
+                } else {
+                    Intent data = new Intent();
+                    data.putExtra("args", aargs);
+                    onActivityResult(REQUEST_MESSAGES_DELETE, RESULT_OK, data);
+                    return;
+                }
             }
 
             @Override
@@ -4911,7 +4920,9 @@ public class FragmentMessages extends FragmentBase
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                 boolean delete_asked = prefs.getBoolean("delete_asked", false);
-                if (leave_deleted && delete_asked) {
+                boolean delete_confirmation = prefs.getBoolean("delete_confirmation", true);
+
+                if (leave_deleted ? delete_asked : !delete_confirmation) {
                     Intent data = new Intent();
                     data.putExtra("args", aargs);
                     onActivityResult(REQUEST_MESSAGES_DELETE, RESULT_OK, data);
@@ -5145,11 +5156,6 @@ public class FragmentMessages extends FragmentBase
         updateAirplaneMode(ConnectionHelper.airplaneMode(context));
         context.registerReceiver(airplanemode, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
 
-        boolean canNotify =
-                (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-                        hasPermission(Manifest.permission.POST_NOTIFICATIONS));
-        grpNotifications.setVisibility(canNotify ? View.GONE : View.VISIBLE);
-
         boolean isIgnoring = !Boolean.FALSE.equals(Helper.isIgnoringOptimizations(context));
         //boolean canSchedule = AlarmManagerCompatEx.canScheduleExactAlarms(context);
         boolean enabled = prefs.getBoolean("enabled", true);
@@ -5174,6 +5180,7 @@ public class FragmentMessages extends FragmentBase
                                     ;
 
         prefs.registerOnSharedPreferenceChangeListener(this);
+        onSharedPreferenceChanged(prefs, "notifications_reminder");
         onSharedPreferenceChanged(prefs, "pro");
 
         if (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER) {
@@ -5229,6 +5236,16 @@ public class FragmentMessages extends FragmentBase
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        if (grpNotifications != null && "notifications_reminder".equals(key)) {
+            boolean canNotify =
+                    (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                            hasPermission(Manifest.permission.POST_NOTIFICATIONS));
+            if (canNotify)
+                prefs.edit().remove("notifications_reminder").apply();
+            boolean notifications_reminder = prefs.getBoolean("notifications_reminder", true);
+            grpNotifications.setVisibility(canNotify || !notifications_reminder ? View.GONE : View.VISIBLE);
+        }
+
         if (grpSupport != null &&
                 ("pro".equals(key) || "banner_hidden".equals(key))) {
             boolean pro = ActivityBilling.isPro(getContext());
@@ -6356,7 +6373,7 @@ public class FragmentMessages extends FragmentBase
         fragment.setArguments(args);
 
         FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("thread");
+        fragmentTransaction.replace(R.id.content_frame, fragment, "thread").addToBackStack("thread");
         fragmentTransaction.commit();
     }
 
@@ -7610,7 +7627,7 @@ public class FragmentMessages extends FragmentBase
                 int res = (pane ? R.id.content_pane : R.id.content_frame);
                 if (getActivity() != null && getActivity().findViewById(res) != null) {
                     FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(res, fragment).addToBackStack("thread");
+                    fragmentTransaction.replace(res, fragment, "thread").addToBackStack("thread");
                     fragmentTransaction.commit();
                 }
             }
@@ -10558,6 +10575,7 @@ public class FragmentMessages extends FragmentBase
         Boolean hasTrash;
         Boolean hasJunk;
         Boolean isInbox;
+        Boolean isSent;
         Boolean isArchive;
         Boolean isTrash;
         Boolean isJunk;
@@ -10588,7 +10606,7 @@ public class FragmentMessages extends FragmentBase
             if (read_only)
                 return false;
             return (hasJunk && !isJunk && !isDrafts) ||
-                    (hasPop && !hasImap);
+                    (hasPop && isInbox && !isSent && !hasImap);
         }
 
         boolean canTrash() {
@@ -10601,7 +10619,7 @@ public class FragmentMessages extends FragmentBase
         boolean canDelete() {
             if (read_only)
                 return false;
-            return (!hasPop || !Boolean.TRUE.equals(leave_deleted) || !isInbox);
+            return (!hasPop || !Boolean.TRUE.equals(leave_deleted) || (isTrash || isDrafts || isSent));
         }
 
         boolean canMove() {
@@ -10666,6 +10684,7 @@ public class FragmentMessages extends FragmentBase
                     isInbox = true;
 
                 result.isInbox = (result.isInbox == null ? isInbox : result.isInbox && isInbox);
+                result.isSent = (result.isSent == null ? isSent : result.isSent && isSent);
                 result.isArchive = (result.isArchive == null ? isArchive : result.isArchive && isArchive);
                 result.isTrash = (result.isTrash == null ? isTrash : result.isTrash && isTrash);
                 result.isJunk = (result.isJunk == null ? isJunk : result.isJunk && isJunk);
@@ -10742,6 +10761,7 @@ public class FragmentMessages extends FragmentBase
             }
 
             if (result.isInbox == null) result.isInbox = false;
+            if (result.isSent == null) result.isSent = false;
             if (result.isArchive == null) result.isArchive = false;
             if (result.isTrash == null) result.isTrash = false;
             if (result.isJunk == null) result.isJunk = false;
