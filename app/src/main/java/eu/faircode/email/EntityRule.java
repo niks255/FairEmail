@@ -44,7 +44,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -1006,11 +1005,7 @@ public class EntityRule {
                 throw new IllegalArgumentException("Rule template not found name=" + rule.name);
         }
 
-        EntityFolder outbox = db.folder().getOutbox();
-        if (outbox == null) {
-            outbox = EntityFolder.getOutbox();
-            outbox.id = db.folder().insertFolder(outbox);
-        }
+        EntityFolder outbox = EntityFolder.getOutbox(context);
 
         Address[] from = new InternetAddress[]{new InternetAddress(identity.email, identity.name, StandardCharsets.UTF_8.name())};
 

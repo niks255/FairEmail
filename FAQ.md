@@ -477,7 +477,7 @@ which will let Android display a status bar notification notifying you about pot
 The service can't be started without a notification and the app can't disable the notification either.
 However, you can disable the notification yourself, without side effects, via the notification settings of FairEmail:
 
-* Android 8 Oreo and later: tap the *Receive channel* button and disable the channel via the Android settings (this won't disable new message notifications)
+* Android 8 Oreo and later: tap the *Monitoring channel* button and disable the channel via the Android settings (this won't disable new message notifications)
 * Android 7 Nougat and before: enabled *Use background service to synchronize messages*, but be sure to read the remark below the setting first
 
 You can also switch to periodically synchronization of messages in the receive settings to remove the notification, but be aware that this might use more battery power.
@@ -493,7 +493,7 @@ and is needed to prevent Android from stopping the service when the device is sl
 ([doze mode](https://developer.android.com/training/monitoring-device-state/doze-standby)).
 
 Most, if not all, other email apps don't show a notification
-with as "side effect" that new messages are often not or late being reported and that messages are not or late being sent.
+with a "side effect" that new messages are often not or late being reported and that messages are not or late being sent.
 
 Some other email apps download all your messages to their servers first and push messages via
 [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) to your device.
@@ -794,6 +794,7 @@ Firstly, Exchange *protocol* (EWS) is not the same as Exchange *server* or Excha
 The Microsoft Exchange Web Services &trade; (EWS) protocol [is being phased out](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055).
 Microsoft stopped updating the EWS libraries [in 2016](https://github.com/OfficeDev/ews-java-api).
 So, it makes little sense to add this protocol anymore.
+Moreover, Microsoft announced that [EWS will be retired on October 1, 2026](https://techcommunity.microsoft.com/t5/exchange-team-blog/retirement-of-exchange-web-services-in-exchange-online/ba-p/3924440).
 
 You can use a Microsoft Exchange account if it is accessible via IMAP, which is almost always the case because all Exchange servers support the standard IMAP protocol.
 See [here](https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793) for more information.
@@ -1823,11 +1824,11 @@ Equal addresses have precedence over partially matching addresses, except for *d
 
 The matched address will be shown as *via* in the addresses section of received messages (between the message header and message text).
 
-Note that identities needs to be enabled to be able to be matched
+Note that identities need to be enabled to be able to be matched
 and that identities of other accounts will not be considered.
 
 Matching will be done only once on receiving a message, so changing the configuration will not change existing messages.
-You could clear local messages by long pressing a folder in the folder list and synchronize the messages again though.
+You could clear local messages by long pressing a folder in the folder list and synchronize the messages again, though.
 
 It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings
 to match **the username** of an email address (the part before the @ sign).
@@ -3490,6 +3491,9 @@ This feature depends on support of your launcher.
 FairEmail merely 'broadcasts' the number of unread messages using the ShortcutBadger library.
 If it doesn't work, this cannot be fixed by changes in FairEmail.
 
+An alternative is to use the unread messages count home screen widget.
+You can add this widget by long pressing on an empty place on the home screen.
+
 If you are using Nova launcher and you want to show the number of notifications in the launcher icon (maximum 10; imposed by Nova launcher),
 you'll need to enable *Notification access* in the Android *Special app access* settings for Nova launcher on recent Android versions.
 
@@ -5111,6 +5115,8 @@ Since version 1.1974 there is an option to check paragraphs after a new line.
 The suboption *Use formal form* can be enabled to let LanguageTool suggest more formal text (business, legal, etc).
 
 Since version 1.2000 you can configure a username and an API key to access the premium features.
+If you are looking for the API key, please [go here](https://languagetool.org/editor/settings/access-tokens).
+
 You can long press text to select a word, and add it to or remove it from the personal dictionary via the *copy/paste* pop-up menu.
 
 <br />

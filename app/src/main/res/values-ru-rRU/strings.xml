@@ -599,6 +599,7 @@
     <string name="title_advanced_double_tap">Двойное нажатие для отметки сообщений прочитанными/непрочитанными</string>
     <string name="title_advanced_swipenav">Смахивание влево/вправо для перехода к следующему/предыдущему диалогу</string>
     <string name="title_advanced_volumenav">Кнопки увеличения/уменьшения громкости для перехода к следующему/предыдущему диалогу</string>
+    <string name="title_advanced_up_down">Используйте стрелки вверх/вниз для перехода к следующему/предыдущему диалогу</string>
     <string name="title_advanced_reversed">Обратное направление навигации</string>
     <string name="title_advanced_swipe_close">Смахивание вниз, чтобы закрыть диалог</string>
     <string name="title_advanced_swipe_move">Смахивание вверх, чтобы переместить диалог</string>
@@ -729,7 +730,7 @@
     </string>
     <string name="title_advanced_power_menu">Добавить действия в меню питания Android</string>
     <string name="title_advanced_send_self">Добавить \"Отправить себе\" в меню Android</string>
-    <string name="title_advanced_external_search">Разрешать другим приложениям искать в сообщениях</string>
+    <string name="title_advanced_external_search">Добавить \"Поиск в FairEmail\" в меню выделенного текста Android</string>
     <string name="title_advanced_sort_answers">Сортировать шаблоны ответов по частоте использования</string>
     <string name="title_advanced_shortcuts">Показывать часто используемые контакты в меню \"Поделиться\" Android</string>
     <string name="title_advanced_fts">Создавать индекс поиска</string>
@@ -741,7 +742,10 @@
     <string name="title_advanced_language">Язык</string>
     <string name="title_advanced_language_system">Системный</string>
     <string name="title_advanced_lt">Интеграция с LanguageTool</string>
+    <string name="title_advanced_lt_sentence">Проверять каждое предложение</string>
     <string name="title_advanced_lt_auto">Проверять абзац после новой строки</string>
+    <string name="title_advanced_lt_highlight">Выделять проверяемый текст</string>
+    <string name="title_advanced_lt_description">Показывать всплывающее уведомление с описанием проблемы</string>
     <string name="title_advanced_lt_user">Пользователь (необязательно)</string>
     <string name="title_advanced_lt_key">Ключ API (необязательно)</string>
     <string name="title_advanced_deepl">Интеграция с DeepL</string>
@@ -898,6 +902,7 @@
     <string name="title_identity_reply_to">Обратный адрес</string>
     <string name="title_identity_internal">Внутренние доменные имена (через запятую)</string>
     <string name="title_identity_uri">Связать контакт</string>
+    <string name="title_identity_sensitivity">Чувствительность по умолчанию</string>
     <string name="title_identity_unicode">Использовать UTF-8 в заголовках сообщений</string>
     <string name="title_identity_unicode_remark">Большинство серверов это не поддерживают</string>
     <string name="title_identity_octetmime">Использовать 8BITMIME</string>
@@ -1413,6 +1418,7 @@
     <string name="title_translate_formal">Использовать формальный стиль</string>
     <string name="title_translate_small">Использовать мелкий шрифт для исходного текста</string>
     <string name="title_translate_replace">Заменять исходный текст переводом</string>
+    <string name="title_translate_highlight">Выделять переводимый текст</string>
     <string name="title_translate_html">Сохранять форматирование</string>
     <string name="title_translate_html_hint">Будет использоваться больше символов</string>
     <string name="title_translate_usage">Использование: %1$s / %2$s (%3$d %%)</string>
@@ -1915,7 +1921,8 @@
     <string name="title_loading">Загрузка&#8230;</string>
     <string name="title_fetching_again">Заново загружаем сообщения с сервера</string>
     <string name="title_go_back">Назад</string>
-    <string name="title_global_default" comment="title_global_default&#10;Title for selection option to indicate to use the global setting, instead of a more specific setting">Использовать общее значение по умолчанию</string>
+    <string name="title_global_default">Использовать общее значение по умолчанию</string>
+    <string name="title_not_existing">Этого сообщения больше нет на почтовом сервере</string>
     <string name="title_conversation_actions">Действия</string>
     <string name="title_conversation_action_reply">Ответить на: \"%1$s\"</string>
     <string name="title_conversation_action_copy">Копировать: \"%1$s\"</string>
@@ -1961,6 +1968,8 @@
     <string name="title_debug_info_issue">Описание проблемы (обязательно)</string>
     <string name="title_debug_info_issue_remark">Важны такие детали, как предполагаемое время возникновения проблемы, точное сообщение об ошибке и т.д.</string>
     <string name="title_debug_info_contact">Недавно мы общались по поводу этой проблемы</string>
+    <string name="title_debug_info_send">Отправлять сразу</string>
+    <string name="title_debug_info_send_remark">Обычно отладочная информация сначала сохраняется в виде черновика сообщения, так что вы можете проверить, что будет отправлено</string>
     <string name="title_unexpected_info_remark">Пожалуйста, опишите, что вы делали, когда получили ошибку:</string>
     <string name="title_widget_title_count">Количество новых сообщений</string>
     <string name="title_widget_title_list">Список сообщений</string>

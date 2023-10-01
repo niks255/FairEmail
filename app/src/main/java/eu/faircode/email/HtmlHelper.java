@@ -72,6 +72,7 @@ import androidx.preference.PreferenceManager;
 import com.steadystate.css.dom.CSSMediaRuleImpl;
 import com.steadystate.css.dom.CSSStyleRuleImpl;
 import com.steadystate.css.dom.MediaListImpl;
+import com.steadystate.css.dom.Property;
 import com.steadystate.css.parser.CSSOMParser;
 import com.steadystate.css.parser.SACParserCSS3;
 import com.steadystate.css.parser.selectors.ClassConditionImpl;
@@ -662,7 +663,7 @@ public class HtmlHelper {
             // Class style
             String tag = element.tagName();
             String clazz = element.className();
-            String style = processStyles(tag, clazz, null, sheets);
+            String style = processStyles(context, tag, clazz, null, sheets);
 
             // Element style
             style = mergeStyles(style, element.attr("style"));
@@ -1779,17 +1780,17 @@ public class HtmlHelper {
         return sheets;
     }
 
-    static String processStyles(String tag, String clazz, String style, List<CSSStyleSheet> sheets) {
+    static String processStyles(Context context, String tag, String clazz, String style, List<CSSStyleSheet> sheets) {
         for (CSSStyleSheet sheet : sheets)
-            if (isScreenMedia(sheet.getMedia())) {
-                style = processStyles(null, clazz, style, sheet.getCssRules(), Selector.SAC_ELEMENT_NODE_SELECTOR);
-                style = processStyles(tag, clazz, style, sheet.getCssRules(), Selector.SAC_ELEMENT_NODE_SELECTOR);
-                style = processStyles(tag, clazz, style, sheet.getCssRules(), Selector.SAC_CONDITIONAL_SELECTOR);
+            if (isScreenMedia(context, sheet.getMedia())) {
+                style = processStyles(context, null, clazz, style, sheet.getCssRules(), Selector.SAC_ELEMENT_NODE_SELECTOR);
+                style = processStyles(context, tag, clazz, style, sheet.getCssRules(), Selector.SAC_ELEMENT_NODE_SELECTOR);
+                style = processStyles(context, tag, clazz, style, sheet.getCssRules(), Selector.SAC_CONDITIONAL_SELECTOR);
             }
         return style;
     }
 
-    private static String processStyles(String tag, String clazz, String style, CSSRuleList rules, int stype) {
+    private static String processStyles(Context context, String tag, String clazz, String style, CSSRuleList rules, int stype) {
         for (int i = 0; rules != null && i < rules.getLength(); i++) {
             CSSRule rule = rules.item(i);
             switch (rule.getType()) {
@@ -1828,24 +1829,39 @@ public class HtmlHelper {
 
                 case CSSRule.MEDIA_RULE:
                     CSSMediaRuleImpl mrule = (CSSMediaRuleImpl) rule;
-                    if (isScreenMedia(mrule.getMedia()))
-                        style = processStyles(tag, clazz, style, mrule.getCssRules(), stype);
+                    if (isScreenMedia(context, mrule.getMedia()))
+                        style = processStyles(context, tag, clazz, style, mrule.getCssRules(), stype);
                     break;
             }
         }
         return style;
     }
 
-    private static boolean isScreenMedia(MediaList media) {
+    private static boolean isScreenMedia(Context context, MediaList media) {
         // https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries
         // https://developers.google.com/gmail/design/reference/supported_css#supported_types
         if (media instanceof MediaListImpl) {
             MediaListImpl _media = (MediaListImpl) media;
             for (int i = 0; i < _media.getLength(); i++) {
                 String type = _media.mediaQuery(i).getMedia();
-                if ("all".equals(type) || "screen".equals(type) || _media.mediaQuery(i).isNot())
-                    return true;
+
+                boolean hasMaxWidth = false;
+                List<Property> props = _media.mediaQuery(i).getProperties();
+                if (props != null)
+                    for (Property prop : props) {
+                        if ("max-width".equals(prop.getName()) ||
+                                "max-device-width".equals(prop.getName())) {
+                            hasMaxWidth = true;
+                            break;
+                        }
+                    }
+                if (!hasMaxWidth)
+                    if ("all".equals(type) || "screen".equals(type) || _media.mediaQuery(i).isNot()) {
+                        Log.i("Using media=" + media.getMediaText());
+                        return true;
+                    }
             }
+            Log.i("Not using media=" + media.getMediaText());
         } else
             Log.e("Media class=" + media.getClass().getName());
         return false;
@@ -2993,7 +3009,8 @@ public class HtmlHelper {
             sb.insert(0, ".*?\\b(");
             sb.append(")\\b.*?");
 
-            Pattern p = Pattern.compile(sb.toString(), Pattern.DOTALL);
+            // TODO: match für for fur
+            Pattern p = Pattern.compile(sb.toString(), Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 
             NodeTraversor.traverse(new NodeVisitor() {
                 @Override
@@ -3001,9 +3018,7 @@ public class HtmlHelper {
                     if (node instanceof TextNode)
                         try {
                             TextNode tnode = (TextNode) node;
-                            String whole = tnode.getWholeText();
-                            String text = Fts4DbHelper.preprocessText(whole);
-                            String ref = (whole.length() == text.length() ? whole : text);
+                            String text = tnode.getWholeText();
 
                             Matcher result = p.matcher(text);
 
@@ -3013,7 +3028,7 @@ public class HtmlHelper {
                                 int start = result.start(1);
                                 int end = result.end(1);
 
-                                holder.appendText(ref.substring(prev, start));
+                                holder.appendText(text.substring(prev, start));
 
                                 Element span = document.createElement("span");
                                 span.attr("style", mergeStyles(
@@ -3021,7 +3036,7 @@ public class HtmlHelper {
                                         "font-size:larger !important;" +
                                                 "font-weight:bold !important;" +
                                                 "background-color:" + encodeWebColor(color) + " !important"));
-                                span.text(ref.substring(start, end));
+                                span.text(text.substring(start, end));
                                 holder.appendChild(span);
 
                                 prev = end;
@@ -3031,7 +3046,7 @@ public class HtmlHelper {
                                 return;
 
                             if (prev < text.length())
-                                holder.appendText(ref.substring(prev));
+                                holder.appendText(text.substring(prev));
 
                             tnode.before(holder);
                             tnode.text("");

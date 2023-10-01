@@ -572,6 +572,7 @@
     <string name="title_advanced_double_tap">Tocca due volte per contrassegnare un messaggio come letto/non letto</string>
     <string name="title_advanced_swipenav">Scorri a sinistra/destra per andare alla conversazione successiva/precedente</string>
     <string name="title_advanced_volumenav">Alza/abbassa il volume per andare alla conversazione successiva/precedente</string>
+    <string name="title_advanced_up_down">Usa frecce su/giù per passare alla conversazione successiva/precedente</string>
     <string name="title_advanced_reversed">Inverti la direzione di navigazione</string>
     <string name="title_advanced_swipe_close">Scorri in giù per chiudere la conversazione</string>
     <string name="title_advanced_swipe_move">Scorri in su per spostare la conversazione</string>
@@ -702,7 +703,7 @@
     </string>
     <string name="title_advanced_power_menu">Aggiungi azioni al menù di spegnimento Android</string>
     <string name="title_advanced_send_self">Aggiungi \'Invia a te stesso\' al menu di condivisione di Android</string>
-    <string name="title_advanced_external_search">Consenti alle altre app di cercare tra i messaggi</string>
+    <string name="title_advanced_external_search">Aggiungi \'Ricerca di FairEmail\' al menu di selezione di testo Android</string>
     <string name="title_advanced_sort_answers">Ordina i modelli di risposta per frequenza d\'uso</string>
     <string name="title_advanced_shortcuts">Mostra i contatti usati frequentemente nel menu di condivisione di Android</string>
     <string name="title_advanced_fts">Crea indice di ricerca</string>
@@ -714,7 +715,10 @@
     <string name="title_advanced_language">Lingua</string>
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_lt">Integrazione di LanguageTool</string>
+    <string name="title_advanced_lt_sentence">Controlla ogni frase</string>
     <string name="title_advanced_lt_auto">Controlla il paragrafo dopo una nuova riga</string>
+    <string name="title_advanced_lt_highlight">Evidenzia il testo controllato</string>
+    <string name="title_advanced_lt_description">Mostra popup con descrizione del problema</string>
     <string name="title_advanced_lt_user">Nome utente (facoltativo)</string>
     <string name="title_advanced_lt_key">Chiave API (facoltativa)</string>
     <string name="title_advanced_deepl">Integrazione con DeepL</string>
@@ -871,6 +875,7 @@
     <string name="title_identity_reply_to">Rispondi all\'indirizzo</string>
     <string name="title_identity_internal">Nomi di dominio interni (separati da virgole)</string>
     <string name="title_identity_uri">Collega contatto</string>
+    <string name="title_identity_sensitivity">Sensibilità predefinita</string>
     <string name="title_identity_unicode">Consenti UTF-8 nelle intestazioni dei messaggi</string>
     <string name="title_identity_unicode_remark">Gran parte dei server non lo supportano</string>
     <string name="title_identity_octetmime">Consenti 8BITMIME</string>
@@ -1387,6 +1392,7 @@
     <string name="title_translate_formal">Usa il modulo formale</string>
     <string name="title_translate_small">Usa caratteri piccoli per il testo sorgente</string>
     <string name="title_translate_replace">Sostituire il testo sorgente con il testo tradotto</string>
+    <string name="title_translate_highlight">Evidenzia il testo tradotto</string>
     <string name="title_translate_html">Preserva formattazione</string>
     <string name="title_translate_html_hint">Questo consumerà più caratteri</string>
     <string name="title_translate_usage">Uso: %1$s / %2$s (%3$d %%)</string>
@@ -1889,7 +1895,8 @@
     <string name="title_loading">Caricamento&#8230;</string>
     <string name="title_fetching_again">Recuperando di nuovo il messaggio dal server</string>
     <string name="title_go_back">Torna indietro</string>
-    <string name="title_global_default" comment="title_global_default&#10;Title for selection option to indicate to use the global setting, instead of a more specific setting">Usa l\'impostazione generale</string>
+    <string name="title_global_default">Usa l\'impostazione generale</string>
+    <string name="title_not_existing">Questo messaggio non esiste più sul server email</string>
     <string name="title_conversation_actions">Azioni</string>
     <string name="title_conversation_action_reply">Rispondi con: \'%1$s\'</string>
     <string name="title_conversation_action_copy">Copia: \'%1$s\'</string>
@@ -1935,6 +1942,8 @@
     <string name="title_debug_info_issue">Descrizione del problema (obbligatoria)</string>
     <string name="title_debug_info_issue_remark">I dettagli, come il tempo stimato del problema, il messaggio d\'errore esatto, etc., sono importanti</string>
     <string name="title_debug_info_contact">Abbiamo recentemente appreso riguardo questo problema</string>
+    <string name="title_debug_info_send">Invia immediatamente</string>
+    <string name="title_debug_info_send_remark">Normalmente, le informazioni di debug saranno memorizzate come bozza di messaggio prima, in modo da poter controllare cosa verrà inviato</string>
     <string name="title_unexpected_info_remark">Sei pregato di descrivere cosa stavi facendo quando hai ottenuto l\'errore:</string>
     <string name="title_widget_title_count">Conteggio nuovi messaggi</string>
     <string name="title_widget_title_list">Elenco dei messaggi</string>

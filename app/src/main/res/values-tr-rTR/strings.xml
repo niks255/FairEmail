@@ -671,6 +671,9 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_mnemonic_hint">Konu satırında aşağıdaki kelimeleri içeren herhangi bir e-posta, uygulama verilerini otomatik olarak ve hemen siler</string>
     <string name="title_advanced_clear_all">Uygulama verilerini sil</string>
     <string name="title_advanced_clear_all_remark">Uygulama verileri geri alınamaz şekilde silinecek!</string>
+    <string name="title_advanced_default_encryption">        İmzalı veya şifreli bir mesaj gönderildikten sonra varsayılan şifreleme yöntemi (PGP veya S/MIME) kimlik başına saklanacaktır.
+        Şifreleme yöntemi, gönderme seçenekleri iletişim kutusunda göndermeden önce seçilebilir (gönder düğmesine uzun basın).
+    </string>
     <string name="title_advanced_sign_default">Varsayılan olarak imzala</string>
     <string name="title_advanced_encrypt_default">Varsayılan olarak şifrele</string>
     <string name="title_advanced_encrypt_auto">Tüm alıcıların anahtarları kullanılabilir olduğunda otomatik olarak şifrele</string>
@@ -696,7 +699,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     </string>
     <string name="title_advanced_power_menu">Android güç menüsüne eylemler ekle</string>
     <string name="title_advanced_send_self">Android\'in paylaşım menüsüne \'kendine gönder\' özelliğini ekleyin</string>
-    <string name="title_advanced_external_search">Diğer uygulamaların mesajlarda arama yapmasına izin ver</string>
+    <string name="title_advanced_external_search">Android metin seçim menüsüne \'FairEmail araması\'nı ekle</string>
     <string name="title_advanced_sort_answers">Yanıt şablonlarını kullanım sıklığına göre sırala</string>
     <string name="title_advanced_shortcuts">Sık kullanılan kişileri Android\'in paylaşma menüsünde göster</string>
     <string name="title_advanced_fts">Arama indeksini oluştur</string>
@@ -708,7 +711,10 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_language">Dil</string>
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_lt">Dil Aracı entegrasyonu</string>
+    <string name="title_advanced_lt_sentence">Her cümleyi kontrol et</string>
     <string name="title_advanced_lt_auto">Yeni bir satırdan sonra paragrafı kontrol et</string>
+    <string name="title_advanced_lt_highlight">Kontrol edilen metni vurgula</string>
+    <string name="title_advanced_lt_description">Sorun açıklamasını içeren açılır pencereyi göster</string>
     <string name="title_advanced_lt_user">Kullanıcı adı (isteğe bağlı)</string>
     <string name="title_advanced_lt_key">API anahtarı (isteğe bağlı)</string>
     <string name="title_advanced_deepl">DeepL entegrasyonu</string>
@@ -1377,6 +1383,7 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_translate_formal">Resmi formu kullan</string>
     <string name="title_translate_small">Kaynak metin için küçük bir yazı tipi kullan</string>
     <string name="title_translate_replace">Kaynak metni çevrilmiş metinle değiştir</string>
+    <string name="title_translate_highlight">Çevrilen metni vurgula</string>
     <string name="title_translate_html">Biçimlendirmeyi koru</string>
     <string name="title_translate_html_hint">Bu daha fazla karakter tüketecek</string>
     <string name="title_translate_usage">Kullanım: %1$s/%2$s (%3$d %%)</string>
@@ -1878,6 +1885,8 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_loading">Yükleniyor &#8230;</string>
     <string name="title_fetching_again">Mesaj sunucudan tekrar alınıyor</string>
     <string name="title_go_back">Geri dön</string>
+    <string name="title_global_default">Genel varsayılanı kullan</string>
+    <string name="title_not_existing">Bu mesaj artık posta sunucusunda mevcut değil</string>
     <string name="title_conversation_actions">Eylemler</string>
     <string name="title_conversation_action_reply">\'%1$s\' ile yanıtla</string>
     <string name="title_conversation_action_copy">Kopyala: \'%1$s\'</string>
@@ -1922,6 +1931,8 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_debug_info_issue">Sorun açıklaması (zorunlu)</string>
     <string name="title_debug_info_issue_remark">Sorunun tahmini süresi, tam hata mesajı vb. gibi ayrıntılar önemlidir</string>
     <string name="title_debug_info_contact">Bu sorun hakkında yakın zamanda haberleşmiştik</string>
+    <string name="title_debug_info_send">Hemen gönder</string>
+    <string name="title_debug_info_send_remark">Normalde hata ayıklama bilgisi önce taslak mesaj olarak saklanır, böylece ne gönderileceğini kontrol edebilirsiniz</string>
     <string name="title_unexpected_info_remark">Lütfen hatayı aldığınızda ne yaptığınızı açıklayın:</string>
     <string name="title_widget_title_count">Yeni mesaj sayısı</string>
     <string name="title_widget_title_list">Mesaj listesi</string>

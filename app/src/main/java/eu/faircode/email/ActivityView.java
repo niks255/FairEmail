@@ -77,7 +77,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.window.java.layout.WindowInfoTrackerCallbackAdapter;
-import androidx.window.layout.DisplayFeature;
 import androidx.window.layout.WindowInfoTracker;
 import androidx.window.layout.WindowLayoutInfo;
 
@@ -244,7 +243,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         int layout = (config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK);
         Log.i("Orientation=" + config.orientation + " layout=" + layout +
                 " portrait rows=" + portrait2 + " cols=" + portrait2c + " min=" + portrait_min_size +
-                " landscape cols=" + landscape + " min=" + landscape);
+                " landscape cols=" + landscape + " min=" + landscape_min_size);
         boolean duo = Helper.isSurfaceDuo();
         boolean close_pane = prefs.getBoolean("close_pane", !duo);
         boolean open_pane = (!close_pane && prefs.getBoolean("open_pane", false));
@@ -696,9 +695,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 ibExpanderExtra.setImageLevel(minimal ? 1 /* more */ : 0 /* less */);
                 rvMenuExtra.setVisibility(minimal ? View.GONE : View.VISIBLE);
                 if (!minimal)
-                    getMainHandler().post(new Runnable() {
+                    getMainHandler().post(new RunnableEx("fullScroll") {
                         @Override
-                        public void run() {
+                        public void delegate() {
                             drawerContainer.fullScroll(View.FOCUS_DOWN);
                         }
                     });
@@ -2271,15 +2270,49 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
             @Override
             protected Long onExecute(Context context, Bundle args) throws IOException, JSONException {
-                return Log.getDebugInfo(context, "main", R.string.title_debug_info_remark, null, null, args).id;
+                boolean send = args.getBoolean("send");
+
+                long id = Log.getDebugInfo(context, "main", R.string.title_debug_info_remark, null, null, args).id;
+
+                if (send) {
+                    DB db = DB.getInstance(context);
+                    try {
+                        db.beginTransaction();
+
+                        EntityMessage draft = db.message().getMessage(id);
+                        if (draft != null) {
+                            draft.folder = EntityFolder.getOutbox(context).id;
+                            db.message().updateMessage(draft);
+
+                            EntityOperation.queue(context, draft, EntityOperation.SEND);
+
+                            db.setTransactionSuccessful();
+
+                            args.putBoolean("sent", true);
+                            return null;
+                        }
+                    } finally {
+                        db.endTransaction();
+                    }
+                }
+
+                return id;
             }
 
             @Override
             protected void onExecuted(Bundle args, Long id) {
-                if (id != null)
-                    startActivity(new Intent(ActivityView.this, ActivityCompose.class)
-                            .putExtra("action", "edit")
-                            .putExtra("id", id));
+                boolean sent = args.getBoolean("sent");
+                if (sent) {
+                    ToastEx.makeText(ActivityView.this, R.string.title_debug_info_send, Toast.LENGTH_LONG).show();
+                    ServiceSend.start(ActivityView.this);
+                    return;
+                }
+
+                if (id == null)
+                    return;
+                startActivity(new Intent(ActivityView.this, ActivityCompose.class)
+                        .putExtra("action", "edit")
+                        .putExtra("id", id));
             }
 
             @Override
@@ -2447,8 +2480,16 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         if (lastSnackbar != null && lastSnackbar.isShown())
             lastSnackbar.dismiss();
 
-        if (!found && getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
-            getSupportFragmentManager().popBackStack("thread", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+            if (found) {
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                if (fragments.size() > 0) {
+                    Bundle args = fragments.get(fragments.size() - 1).getArguments();
+                    if (args != null && args.getBoolean("found"))
+                        getSupportFragmentManager().popBackStack();
+                }
+            } else
+                getSupportFragmentManager().popBackStack("thread", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         Bundle args = new Bundle();
         args.putLong("account", intent.getLongExtra("account", -1));

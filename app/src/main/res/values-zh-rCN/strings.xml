@@ -557,6 +557,7 @@
     <string name="title_advanced_double_tap">双击标记消息已读/未读</string>
     <string name="title_advanced_swipenav">左右滑动切换邮件</string>
     <string name="title_advanced_volumenav">音量上/下键切换邮件</string>
+    <string name="title_advanced_up_down">使用上/下键查看下一次/上一次对话</string>
     <string name="title_advanced_reversed">反转导航方向</string>
     <string name="title_advanced_swipe_close">向下滑动关闭对话</string>
     <string name="title_advanced_swipe_move">向上滑动以移动对话</string>
@@ -686,7 +687,7 @@
     </string>
     <string name="title_advanced_power_menu">添加操作到 Android 电源菜单</string>
     <string name="title_advanced_send_self">将 \'发送给自己\' 添加到 Android 的共享菜单</string>
-    <string name="title_advanced_external_search">允许其他应用搜索邮件</string>
+    <string name="title_advanced_external_search">将 \'FairEmail 搜索 \' 添加到 Android 文本选择菜单</string>
     <string name="title_advanced_sort_answers">按使用频率对回复模板进行排序</string>
     <string name="title_advanced_shortcuts">在安卓共享菜单中显示常用联系人</string>
     <string name="title_advanced_fts">创建搜索索引</string>
@@ -698,7 +699,10 @@
     <string name="title_advanced_language">界面语言</string>
     <string name="title_advanced_language_system">系统</string>
     <string name="title_advanced_lt">LanguageTool 集成</string>
+    <string name="title_advanced_lt_sentence">检查每个句子</string>
     <string name="title_advanced_lt_auto">换行后检查段落</string>
+    <string name="title_advanced_lt_highlight">突出显示正在检查的文本</string>
+    <string name="title_advanced_lt_description">显示问题描述的弹出窗口</string>
     <string name="title_advanced_lt_user">用户名 (选填)</string>
     <string name="title_advanced_lt_key">API 密钥 (选填)</string>
     <string name="title_advanced_deepl">DeepL 集成</string>
@@ -855,6 +859,7 @@
     <string name="title_identity_reply_to">回复给该地址</string>
     <string name="title_identity_internal">内部域名(逗号分隔)</string>
     <string name="title_identity_uri">关联联系人</string>
+    <string name="title_identity_sensitivity">默认灵敏度</string>
     <string name="title_identity_unicode">在消息头中允许 UTF-8</string>
     <string name="title_identity_unicode_remark">大多数服务器不支持这一功能</string>
     <string name="title_identity_octetmime">允许 8BITMIME</string>
@@ -1366,6 +1371,7 @@
     <string name="title_translate_formal">使用正式语言形式</string>
     <string name="title_translate_small">对源文本使用一个小字体</string>
     <string name="title_translate_replace">用翻译文本替换源文本</string>
+    <string name="title_translate_highlight">突出显示正在翻译的文本</string>
     <string name="title_translate_html">保留格式</string>
     <string name="title_translate_html_hint">这将耗费更多字符</string>
     <string name="title_translate_usage">用量： %1$s / %2$s (%3$d %%)</string>
@@ -1868,6 +1874,8 @@
     <string name="title_loading">&#8230;加载中</string>
     <string name="title_fetching_again">再次从服务器获取消息</string>
     <string name="title_go_back">返回</string>
+    <string name="title_global_default">使用全局默认设置</string>
+    <string name="title_not_existing">邮件服务器上不再存在此消息</string>
     <string name="title_conversation_actions">操作</string>
     <string name="title_conversation_action_reply">回复：\'%1$s\'</string>
     <string name="title_conversation_action_copy">复制: \'%1$s\'</string>
@@ -1911,6 +1919,8 @@
     <string name="title_debug_info_issue">问题描述(必填)</string>
     <string name="title_debug_info_issue_remark">详细信息，例如问题的估计时间、确切的错误信息等等都是重要的。</string>
     <string name="title_debug_info_contact">别人最近因为这个问题联系过我们</string>
+    <string name="title_debug_info_send">立即发送</string>
+    <string name="title_debug_info_send_remark">调试信息通常会先存储为草稿信息，所以您可以检查发送的内容</string>
     <string name="title_unexpected_info_remark">请描述应用出错时您的操作:</string>
     <string name="title_widget_title_count">新消息计数</string>
     <string name="title_widget_title_list">消息列表</string>

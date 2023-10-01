@@ -568,6 +568,7 @@
     <string name="title_advanced_double_tap">Dubbeltryck för att markera meddelande läst/oläst</string>
     <string name="title_advanced_swipenav">Svep vänster/höger för att gå till nästa/föregående konversation</string>
     <string name="title_advanced_volumenav">Använd volymknappen upp/ned för att gå till nästa/föregående konversation</string>
+    <string name="title_advanced_up_down">Använd upp-/nerpilar för nästa/föregående konversation</string>
     <string name="title_advanced_reversed">Omvänd navigeringsriktning</string>
     <string name="title_advanced_swipe_close">Svep nedåt för att stänga konversationen</string>
     <string name="title_advanced_swipe_move">Svep uppåt för att flytta konversation</string>
@@ -694,7 +695,7 @@
     </string>
     <string name="title_advanced_power_menu">Lägg till åtgärder i Androidmenyn för avstängning</string>
     <string name="title_advanced_send_self">Lägg till \'skicka till sig själv\' till Androids delningsmeny</string>
-    <string name="title_advanced_external_search">Tillåt andra appar att söka i meddelanden</string>
+    <string name="title_advanced_external_search">Lägg till \'FairEmail sök\' i Android texturvalsmenyn</string>
     <string name="title_advanced_sort_answers">Sortera svarsmallar efter användningsfrekvens</string>
     <string name="title_advanced_shortcuts">Visa ofta använda kontakter i Android dela-menyn</string>
     <string name="title_advanced_fts">Bygg sökindex</string>
@@ -706,7 +707,10 @@
     <string name="title_advanced_language">Språk</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_lt">Språkintegration för verktyg</string>
+    <string name="title_advanced_lt_sentence">Kontrollera varje mening</string>
     <string name="title_advanced_lt_auto">Kontrollera paragraf efter en ny rad</string>
+    <string name="title_advanced_lt_highlight">Markera texten som kontrolleras</string>
+    <string name="title_advanced_lt_description">Visa popup med problembeskrivning</string>
     <string name="title_advanced_lt_user">Användarnamn (frivilligt)</string>
     <string name="title_advanced_lt_key">API-nyckel (frivilligt)</string>
     <string name="title_advanced_deepl">DeepL integration</string>
@@ -863,6 +867,7 @@
     <string name="title_identity_reply_to">Svara till adress</string>
     <string name="title_identity_internal">Interna domännamn (kommaseparerade)</string>
     <string name="title_identity_uri">Koppla kontakt</string>
+    <string name="title_identity_sensitivity">Standardkänslighet</string>
     <string name="title_identity_unicode">Tillåt UTF-8 i meddelandehuvuden</string>
     <string name="title_identity_unicode_remark">De flesta servrar stöder inte detta</string>
     <string name="title_identity_octetmime">Tillåt 8BITMIME</string>
@@ -1376,6 +1381,7 @@
     <string name="title_translate_formal">Använd formell form</string>
     <string name="title_translate_small">Använd ett litet typsnitt för källtexten</string>
     <string name="title_translate_replace">Ersätt ursprunglig text med översatt text</string>
+    <string name="title_translate_highlight">Markera texten som översätts</string>
     <string name="title_translate_html">Behåll formatering</string>
     <string name="title_translate_html_hint">Detta kommer att använda fler tecken</string>
     <string name="title_translate_usage">Användning: %1$s / %2$s (%3$d %%)</string>
@@ -1878,6 +1884,8 @@
     <string name="title_loading">Läser in &#8230;</string>
     <string name="title_fetching_again">Hämtar meddelande igen från servern</string>
     <string name="title_go_back">Gå tillbaka</string>
+    <string name="title_global_default">Använd global standard</string>
+    <string name="title_not_existing">Detta meddelande finns inte längre på e-postservern</string>
     <string name="title_conversation_actions">Åtgärder</string>
     <string name="title_conversation_action_reply">Svara med: \'%1$s\'</string>
     <string name="title_conversation_action_copy">Kopiera: \'%1$s\'</string>
@@ -1922,6 +1930,8 @@
     <string name="title_debug_info_issue">Beskrivning av problem (obligatoriskt)</string>
     <string name="title_debug_info_issue_remark">Detaljer, såsom tiden då problemet inträffade, det exakta felmeddelandet, etc., är viktiga</string>
     <string name="title_debug_info_contact">Vi hade nyligen kontakt om detta problem</string>
+    <string name="title_debug_info_send">Skicka omedelbart</string>
+    <string name="title_debug_info_send_remark">Normalt kommer felsökningsinformationen att lagras som utkast först, så att du kan kontrollera vad som kommer att skickas</string>
     <string name="title_unexpected_info_remark">Vänligen beskriv vad du gjorde när du fick felet:</string>
     <string name="title_widget_title_count">Antal nya meddelanden</string>
     <string name="title_widget_title_list">Meddelandelista</string>

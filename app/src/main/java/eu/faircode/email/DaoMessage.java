@@ -652,9 +652,9 @@ public interface DaoMessage {
 
     @Query("SELECT uid FROM message" +
             " WHERE folder = :folder" +
-            " AND NOT ui_busy IS NULL" +
-            " AND ui_busy > :time" +
-            " AND NOT uid IS NULL")
+            " AND NOT uid IS NULL" +
+            " AND ((NOT ui_busy IS NULL AND ui_busy > :time)" +
+            " OR (EXISTS (SELECT * FROM operation WHERE operation.id = message.id)))")
     List<Long> getBusyUids(long folder, long time);
 
     @Query("SELECT id, uidl, msgid, ui_hide, ui_busy, ui_flagged FROM message" +
@@ -1008,7 +1008,7 @@ public interface DaoMessage {
             " AND (ui_seen OR :unseen)" +
             " AND NOT ui_flagged" +
             " AND stored < :sync_time" + // moved, browsed
-            " AND (ui_snoozed IS NULL OR ui_snoozed =" + Long.MAX_VALUE+")")
+            " AND (ui_snoozed IS NULL OR ui_snoozed =" + Long.MAX_VALUE + ")")
     List<Long> getMessagesBefore(long folder, long sync_time, long keep_time, boolean unseen);
 
     @Query("DELETE FROM message" +

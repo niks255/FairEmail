@@ -79,7 +79,6 @@ import android.text.Layout;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.text.format.Time;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
 import android.util.DisplayMetrics;
@@ -97,7 +96,6 @@ import android.view.ViewParent;
 import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -120,6 +118,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.view.SoftwareKeyboardControllerCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
@@ -188,10 +187,10 @@ public class Helper {
     private static Boolean hasWebView = null;
     private static Boolean hasPlayStore = null;
     private static Boolean hasValidFingerprint = null;
+    private static Boolean isSmartwatch = null;
 
     static final float LOW_LIGHT = 0.6f;
 
-    static final int OPERATION_WORKERS = 3;
     static final int WAKELOCK_MAX = 30 * 60 * 1000; // milliseconds
     static final int BUFFER_SIZE = 8192; // Same as in Files class
     static final long MIN_REQUIRED_SPACE = 100 * 1000L * 1000L;
@@ -199,6 +198,7 @@ public class Helper {
     static final int AUTH_AUTOLOCK_GRACE = 15; // seconds
     static final int PIN_FAILURE_DELAY = 3; // seconds
     static final long PIN_FAILURE_DELAY_MAX = 20 * 60 * 1000L; // milliseconds
+    static final float BNV_LUMINANCE_THRESHOLD = 0.7f;
 
     static final String PGP_OPENKEYCHAIN_PACKAGE = "org.sufficientlysecure.keychain";
     static final String PGP_BEGIN_MESSAGE = "-----BEGIN PGP MESSAGE-----";
@@ -612,7 +612,7 @@ public class Helper {
 
     static Boolean isIgnoringOptimizations(Context context) {
         try {
-            if (isArc())
+            if (isArc() || isWatch(context))
                 return true;
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
@@ -1564,6 +1564,25 @@ public class Helper {
         return (Build.DEVICE != null) && Build.DEVICE.matches(".+_cheets|cheets_.+");
     }
 
+    static boolean isWatch(Context context) {
+        if (isSmartwatch == null)
+            isSmartwatch = _isWatch(context);
+        return isSmartwatch;
+    }
+
+    private static boolean _isWatch(Context context) {
+        try {
+            UiModeManager uimm = Helper.getSystemService(context, UiModeManager.class);
+            if (uimm == null)
+                return false;
+            int uiModeType = uimm.getCurrentModeType();
+            return (uiModeType == Configuration.UI_MODE_TYPE_WATCH);
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
+    }
+
     static boolean isStaminaEnabled(Context context) {
         // https://dontkillmyapp.com/sony
         if (!isSony())
@@ -1601,7 +1620,9 @@ public class Helper {
                 isSamsung() ||
                 isOnePlus() ||
                 isHuawei() ||
-                isXiaomi());
+                isXiaomi() ||
+                isMeizu() ||
+                isAsus());
     }
 
     static boolean isAndroid12() {
@@ -1978,33 +1999,18 @@ public class Helper {
     }
 
     static void showKeyboard(final View view) {
-        final Context context = view.getContext();
-        InputMethodManager imm = Helper.getSystemService(context, InputMethodManager.class);
-        if (imm == null)
-            return;
-
-        view.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Log.i("showKeyboard view=" + view);
-                    imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-                } catch (Throwable ex) {
-                    Log.e(ex);
-                }
-            }
-        }, 250);
+        try {
+            Log.i("showKeyboard view=" + view);
+            new SoftwareKeyboardControllerCompat(view).show();
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     static void hideKeyboard(final View view) {
-        final Context context = view.getContext();
-        InputMethodManager imm = Helper.getSystemService(context, InputMethodManager.class);
-        if (imm == null)
-            return;
-
         try {
             Log.i("hideKeyboard view=" + view);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            new SoftwareKeyboardControllerCompat(view).hide();
         } catch (Throwable ex) {
             Log.e(ex);
         }
@@ -2185,9 +2191,17 @@ public class Helper {
         boolean thisMonth = (cal0.get(Calendar.MONTH) == cal1.get(Calendar.MONTH));
         boolean thisDay = (cal0.get(Calendar.DAY_OF_MONTH) == cal1.get(Calendar.DAY_OF_MONTH));
         if (withDate) {
-            String skeleton = (thisMonth && thisYear ? "MMM-d" : "Y-M-d") + (withTime ? " Hm" : "");
-            String format = android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton);
-            return new SimpleDateFormat(format).format(millis);
+            try {
+                String skeleton = (thisMonth && thisYear ? "MMM-d" : "yyyy-M-d") + (withTime ? " Hm" : "");
+                String format = android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton);
+                return new SimpleDateFormat(format).format(millis);
+            } catch (Throwable ex) {
+                Log.e(ex);
+                DateFormat df = (withTime
+                        ? getDateTimeInstance(context, SimpleDateFormat.SHORT, SimpleDateFormat.SHORT)
+                        : getDateInstance(context, SimpleDateFormat.SHORT));
+                return df.format(millis);
+            }
         } else if (thisYear && thisMonth && thisDay)
             return getTimeInstance(context, SimpleDateFormat.SHORT).format(millis);
         else
@@ -2528,10 +2542,13 @@ public class Helper {
     }
 
     static boolean isEndChar(char c) {
+        return (isSentenceChar(c) ||
+                c == ',' || c == ':' || c == ';');
+    }
+
+    static boolean isSentenceChar(char c) {
         return (c == '.' /* Latin */ ||
                 c == '。' /* Chinese */ ||
-                c == ',' ||
-                c == ':' || c == ';' ||
                 c == '?' || c == '!');
     }
 

@@ -404,7 +404,6 @@ public class FragmentMessages extends FragmentBase
 
     private static final int MAX_MORE = 100; // messages
     private static final int MAX_SEND_RAW = 50; // messages
-    private static final float LUMINANCE_THRESHOLD = 0.7f;
     private static final int ITEM_CACHE_SIZE = 10; // Default: 2 items
 
     private static final int REQUEST_RAW = 1;
@@ -1345,6 +1344,14 @@ public class FragmentMessages extends FragmentBase
                 // Do nothing
             }
         });
+
+        if (prefs.getBoolean("updown", false)) {
+            boolean reversed = prefs.getBoolean("reversed", false);
+            bottom_navigation.getMenu().findItem(R.id.action_prev)
+                    .setIcon(reversed ? R.drawable.baseline_arrow_upward_24 : R.drawable.baseline_arrow_downward_24);
+            bottom_navigation.getMenu().findItem(R.id.action_next)
+                    .setIcon(reversed ? R.drawable.baseline_arrow_downward_24 : R.drawable.baseline_arrow_upward_24);
+        }
 
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -5154,7 +5161,10 @@ public class FragmentMessages extends FragmentBase
         cm.registerNetworkCallback(builder.build(), networkCallback);
 
         updateAirplaneMode(ConnectionHelper.airplaneMode(context));
-        context.registerReceiver(airplanemode, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
+        ContextCompat.registerReceiver(context,
+                airplanemode,
+                new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED),
+                ContextCompat.RECEIVER_NOT_EXPORTED);
 
         boolean isIgnoring = !Boolean.FALSE.equals(Helper.isIgnoringOptimizations(context));
         //boolean canSchedule = AlarmManagerCompatEx.canScheduleExactAlarms(context);
@@ -7358,11 +7368,24 @@ public class FragmentMessages extends FragmentBase
                         int color = args.getInt("color");
                         bottom_navigation.setBackgroundColor(color);
 
+                        Integer itemColor = null;
                         float lum = (float) ColorUtils.calculateLuminance(color);
-                        if (lum > LUMINANCE_THRESHOLD)
-                            bottom_navigation.setItemIconTintList(ColorStateList.valueOf(Color.BLACK));
-                        else if ((1.0f - lum) > LUMINANCE_THRESHOLD)
-                            bottom_navigation.setItemIconTintList(ColorStateList.valueOf(Color.WHITE));
+                        if (lum > Helper.BNV_LUMINANCE_THRESHOLD)
+                            itemColor = Color.BLACK;
+                        else if ((1.0f - lum) > Helper.BNV_LUMINANCE_THRESHOLD)
+                            itemColor = Color.WHITE;
+
+                        if (itemColor != null)
+                            bottom_navigation.setItemIconTintList(new ColorStateList(
+                                    new int[][]{
+                                            new int[]{android.R.attr.state_enabled},
+                                            new int[]{}
+                                    },
+                                    new int[]{
+                                            itemColor,
+                                            Color.GRAY
+                                    }
+                            ));
                     }
 
                     bottom_navigation.setTag(data);

@@ -160,6 +160,7 @@ class Core {
     private static final long EXISTS_RETRY_DELAY = 20 * 1000L; // milliseconds
     private static final int FIND_RETRY_COUNT = 3; // times
     private static final long FIND_RETRY_DELAY = 5 * 1000L; // milliseconds
+    private static final int POP3_KEEP_EXTRA = 100; // messages
 
     private static final Map<Long, List<EntityIdentity>> accountIdentities = new HashMap<>();
 
@@ -2038,8 +2039,18 @@ class Core {
 
         // Get message
         Message imessage = ifolder.getMessageByUID(message.uid);
-        if (imessage == null)
-            throw new MessageRemovedException();
+        if (imessage == null) {
+            File file = message.getFile(context);
+            Helper.writeText(file, "");
+            db.message().setMessageContent(message.id,
+                    true,
+                    null,
+                    null,
+                    null,
+                    context.getString(R.string.title_not_existing));
+            return;
+            //throw new MessageRemovedException();
+        }
 
         MessageHelper helper = new MessageHelper((MimeMessage) imessage, context);
         MessageHelper.MessageParts parts = helper.getMessageParts();
@@ -2943,7 +2954,7 @@ class Core {
         for (String name : local.keySet()) {
             EntityFolder folder = local.get(name);
             if (EntityFolder.INBOX.equals(folder.type)) {
-                Log.e(account.host + " keep inbox");
+                Log.w(account.host + " keep inbox");
                 continue;
             }
             List<EntityFolder> childs = parentFolders.get(name);
@@ -3416,7 +3427,7 @@ class Core {
                         message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
                         message.smtp_from = helper.getMailFrom(authentication);
                         message.return_path = helper.getReturnPath();
-                        message.submitter = helper.getSender();
+                        message.submitter = helper.getSubmitter();
                         message.from = helper.getFrom();
                         message.to = helper.getTo();
                         message.cc = helper.getCc();
@@ -3644,8 +3655,10 @@ class Core {
             }
 
             if (account.max_messages != null && !account.leave_on_device) {
-                int hidden = db.message().setMessagesUiHide(folder.id, Math.abs(account.max_messages));
-                int deleted = db.message().deleteMessagesKeep(folder.id, Math.abs(account.max_messages) + 100);
+                int hidden = db.message().setMessagesUiHide(folder.id,
+                        Math.abs(account.max_messages) + flagged);
+                int deleted = db.message().deleteMessagesKeep(folder.id,
+                        Math.abs(account.max_messages) + flagged + POP3_KEEP_EXTRA);
                 EntityLog.log(context, account.name + " POP" +
                         " cleanup max=" + account.max_messages +
                         " hidden=" + hidden +
@@ -4463,7 +4476,7 @@ class Core {
                                 MimeMessage existing = (MimeMessage) ifolder.getMessageByUID(dup.uid);
                                 if (existing != null &&
                                         msgid.equals(existing.getHeader(MessageHelper.HEADER_CORRELATION_ID, null))) {
-                                    Log.e(folder.name + " late draft" +
+                                    Log.w(folder.name + " late draft" +
                                             " host=" + account.host + " uid=" + dup.uid + "<" + uid);
                                     existing.setFlag(Flags.Flag.DELETED, true);
                                     expunge(context, ifolder, Arrays.asList(existing));
@@ -4471,7 +4484,7 @@ class Core {
                                 }
                             } else if (dup.uid > uid) {
                                 if (msgid.equals(imessage.getHeader(MessageHelper.HEADER_CORRELATION_ID, null))) {
-                                    Log.e(folder.name + " late draft" +
+                                    Log.w(folder.name + " late draft" +
                                             " host=" + account.host + " uid=" + dup.uid + ">" + uid);
                                     imessage.setFlag(Flags.Flag.DELETED, true);
                                     expunge(context, ifolder, Arrays.asList(imessage));
@@ -4562,7 +4575,7 @@ class Core {
             message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
             message.smtp_from = helper.getMailFrom(authentication);
             message.return_path = helper.getReturnPath();
-            message.submitter = helper.getSender();
+            message.submitter = helper.getSubmitter();
             message.from = helper.getFrom();
             message.to = helper.getTo();
             message.cc = helper.getCc();
@@ -5760,6 +5773,8 @@ class Core {
         String sound = prefs.getString("sound", null);
         boolean alert_once = prefs.getBoolean("alert_once", true);
         boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
+        boolean delete_confirmation = prefs.getBoolean("delete_confirmation", true);
+
 
         // Get contact info
         Map<Long, Address[]> messageFrom = new HashMap<>();
@@ -5767,8 +5782,8 @@ class Core {
         for (int m = 0; m < messages.size() && m < MAX_NOTIFICATION_DISPLAY; m++) {
             TupleMessageEx message = messages.get(m);
             ContactInfo[] info = ContactInfo.get(context,
-                    message.account, message.folderType,
-                    message.bimi_selector, message.from);
+                    message.account, message.folderType, message.bimi_selector,
+                    message.isForwarder() ? message.submitter : message.from);
 
             Address[] modified = (message.from == null
                     ? new InternetAddress[0]
@@ -6073,10 +6088,9 @@ class Core {
 
                     wactions.add(actionTrash.build());
                 }
-            }
-
-            if (notify_trash &&
-                    ((message.accountProtocol == EntityAccount.TYPE_POP && message.accountLeaveDeleted) ||
+            } else if (notify_trash &&
+                    (!delete_confirmation ||
+                            (message.accountProtocol == EntityAccount.TYPE_POP && message.accountLeaveDeleted) ||
                             (message.accountProtocol == EntityAccount.TYPE_IMAP && !perform_expunge))) {
                 Intent delete = new Intent(context, ServiceUI.class)
                         .setAction("delete:" + message.id)

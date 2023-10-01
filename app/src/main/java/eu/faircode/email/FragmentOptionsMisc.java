@@ -136,6 +136,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvAnnouncementsPrivacy;
     private SwitchCompat swCrashReports;
     private TextView tvUuid;
+    private ImageButton ibCrashReports;
     private Button btnReset;
     private SwitchCompat swCleanupAttachments;
     private Button btnCleanup;
@@ -147,6 +148,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swLanguageToolSentence;
     private SwitchCompat swLanguageToolAuto;
     private SwitchCompat swLanguageToolPicky;
+    private SwitchCompat swLanguageToolHighlight;
+    private SwitchCompat swLanguageToolDescription;
     private EditText etLanguageTool;
     private EditText etLanguageToolUser;
     private TextInputLayout tilLanguageToolKey;
@@ -286,7 +289,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "classification", "class_min_probability", "class_min_difference",
             "show_filtered",
             "language",
-            "lt_enabled", "lt_sentence", "lt_auto", "lt_picky", "lt_uri", "lt_user", "lt_key",
+            "lt_enabled", "lt_sentence", "lt_auto", "lt_picky", "lt_highlight", "lt_description", "lt_uri", "lt_user", "lt_key",
             "deepl_enabled",
             "vt_enabled", "vt_apikey",
             "send_enabled", "send_host", "send_dlimit", "send_tlimit",
@@ -392,6 +395,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvAnnouncementsPrivacy = view.findViewById(R.id.tvAnnouncementsPrivacy);
         swCrashReports = view.findViewById(R.id.swCrashReports);
         tvUuid = view.findViewById(R.id.tvUuid);
+        ibCrashReports = view.findViewById(R.id.ibCrashReports);
         btnReset = view.findViewById(R.id.btnReset);
         swCleanupAttachments = view.findViewById(R.id.swCleanupAttachments);
         btnCleanup = view.findViewById(R.id.btnCleanup);
@@ -403,6 +407,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swLanguageToolSentence = view.findViewById(R.id.swLanguageToolSentence);
         swLanguageToolAuto = view.findViewById(R.id.swLanguageToolAuto);
         swLanguageToolPicky = view.findViewById(R.id.swLanguageToolPicky);
+        swLanguageToolHighlight = view.findViewById(R.id.swLanguageToolHighlight);
+        swLanguageToolDescription = view.findViewById(R.id.swLanguageToolDescription);
         etLanguageTool = view.findViewById(R.id.etLanguageTool);
         etLanguageToolUser = view.findViewById(R.id.etLanguageToolUser);
         tilLanguageToolKey = view.findViewById(R.id.tilLanguageToolKey);
@@ -827,6 +833,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        ibCrashReports.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 104);
+            }
+        });
+
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -863,6 +876,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 swLanguageToolSentence.setEnabled(checked);
                 swLanguageToolAuto.setEnabled(checked);
                 swLanguageToolPicky.setEnabled(checked);
+                swLanguageToolHighlight.setEnabled(checked);
+                swLanguageToolDescription.setEnabled(checked);
             }
         });
 
@@ -892,6 +907,20 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("lt_picky", checked).apply();
+            }
+        });
+
+        swLanguageToolHighlight.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("lt_highlight", checked).apply();
+            }
+        });
+
+        swLanguageToolDescription.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("lt_description", checked).apply();
             }
         });
 
@@ -1303,74 +1332,74 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         btnRepair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(view.getContext())
-                        .setIcon(R.drawable.twotone_bug_report_24)
-                        .setTitle(R.string.title_advanced_repair)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                new SimpleTask<Void>() {
-                                    @Override
-                                    protected void onPostExecute(Bundle args) {
-                                        prefs.edit().remove("debug").apply();
-                                    }
-
-                                    @Override
-                                    protected Void onExecute(Context context, Bundle args) throws Throwable {
-                                        DB db = DB.getInstance(context);
-
-                                        List<EntityAccount> accounts = db.account().getAccounts();
-                                        if (accounts == null)
-                                            return null;
-
-                                        for (EntityAccount account : accounts) {
-                                            if (account.protocol != EntityAccount.TYPE_IMAP)
-                                                continue;
-
-                                            List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
-                                            if (folders == null)
-                                                continue;
-
-                                            EntityFolder inbox = db.folder().getFolderByType(account.id, EntityFolder.INBOX);
-                                            for (EntityFolder folder : folders) {
-                                                if (inbox == null && "inbox".equalsIgnoreCase(folder.name))
-                                                    folder.type = EntityFolder.INBOX;
-
-                                                if (!EntityFolder.USER.equals(folder.type) &&
-                                                        !EntityFolder.SYSTEM.equals(folder.type)) {
-                                                    EntityLog.log(context, "Repairing " + account.name + ":" + folder.type);
-                                                    folder.setProperties();
-                                                    folder.setSpecials(account);
-                                                    db.folder().updateFolder(folder);
-                                                }
-                                            }
+                if (BuildConfig.DEBUG)
+                    new AlertDialog.Builder(view.getContext())
+                            .setIcon(R.drawable.twotone_bug_report_24)
+                            .setTitle(R.string.title_advanced_repair)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new SimpleTask<Void>() {
+                                        @Override
+                                        protected void onPostExecute(Bundle args) {
+                                            prefs.edit().remove("debug").apply();
                                         }
 
-                                        return null;
-                                    }
+                                        @Override
+                                        protected Void onExecute(Context context, Bundle args) throws Throwable {
+                                            DB db = DB.getInstance(context);
 
-                                    @Override
-                                    protected void onExecuted(Bundle args, Void data) {
-                                        ToastEx.makeText(v.getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
-                                        ServiceSynchronize.reload(v.getContext(), null, true, "repair");
-                                    }
+                                            List<EntityAccount> accounts = db.account().getAccounts();
+                                            if (accounts == null)
+                                                return null;
 
-                                    @Override
-                                    protected void onException(Bundle args, Throwable ex) {
-                                        Log.unexpectedError(getParentFragmentManager(), ex);
-                                    }
-                                }.execute(FragmentOptionsMisc.this, new Bundle(), "repair");
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing
-                            }
-                        })
-                        .show();
+                                            for (EntityAccount account : accounts) {
+                                                if (account.protocol != EntityAccount.TYPE_IMAP)
+                                                    continue;
+
+                                                List<EntityFolder> folders = db.folder().getFolders(account.id, false, false);
+                                                if (folders == null)
+                                                    continue;
+
+                                                EntityFolder inbox = db.folder().getFolderByType(account.id, EntityFolder.INBOX);
+                                                for (EntityFolder folder : folders) {
+                                                    if (inbox == null && "inbox".equalsIgnoreCase(folder.name))
+                                                        folder.type = EntityFolder.INBOX;
+
+                                                    if (!EntityFolder.USER.equals(folder.type) &&
+                                                            !EntityFolder.SYSTEM.equals(folder.type)) {
+                                                        EntityLog.log(context, "Repairing " + account.name + ":" + folder.type);
+                                                        folder.setProperties();
+                                                        folder.setSpecials(account);
+                                                        db.folder().updateFolder(folder);
+                                                    }
+                                                }
+                                            }
+
+                                            return null;
+                                        }
+
+                                        @Override
+                                        protected void onExecuted(Bundle args, Void data) {
+                                            ToastEx.makeText(v.getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+                                            ServiceSynchronize.reload(v.getContext(), null, true, "repair");
+                                        }
+
+                                        @Override
+                                        protected void onException(Bundle args, Throwable ex) {
+                                            Log.unexpectedError(getParentFragmentManager(), ex);
+                                        }
+                                    }.execute(FragmentOptionsMisc.this, new Bundle(), "repair");
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Do nothing
+                                }
+                            })
+                            .show();
             }
-
         });
 
         btnDaily.setOnClickListener(new View.OnClickListener() {
@@ -2376,8 +2405,16 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         if ("native_arc_whitelist".equals(key))
             return;
 
-        setOptions();
+        getMainHandler().removeCallbacks(update);
+        getMainHandler().postDelayed(update, FragmentOptions.DELAY_SETOPTIONS);
     }
+
+    private Runnable update = new RunnableEx("misc") {
+        @Override
+        protected void delegate() {
+            setOptions();
+        }
+    };
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -2554,6 +2591,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swLanguageToolAuto.setEnabled(swLanguageTool.isChecked());
             swLanguageToolPicky.setChecked(prefs.getBoolean("lt_picky", false));
             swLanguageToolPicky.setEnabled(swLanguageTool.isChecked());
+            swLanguageToolHighlight.setChecked(prefs.getBoolean("lt_highlight", !BuildConfig.PLAY_STORE_RELEASE));
+            swLanguageToolHighlight.setEnabled(swLanguageTool.isChecked());
+            swLanguageToolDescription.setChecked(prefs.getBoolean("lt_description", false));
+            swLanguageToolDescription.setEnabled(swLanguageTool.isChecked());
             etLanguageTool.setText(prefs.getString("lt_uri", null));
             etLanguageToolUser.setText(prefs.getString("lt_user", null));
             tilLanguageToolKey.getEditText().setText(prefs.getString("lt_key", null));

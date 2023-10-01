@@ -6,6 +6,14 @@ For support you can use the contact form.
 
 Ubirajara
 
+Next version
+
+* Added support for *text/markdown* message parts
+* Added support for *text/x-diff* and *text/x-patch* message parts
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated translations
+
 1.2097 - 2023-09-02
 
 * Added LanguageTool option to check every sentence

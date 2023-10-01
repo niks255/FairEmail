@@ -91,7 +91,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="@string/app_send_self"
+                    android:text="@string/title_advanced_send_self"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swPowerMenu"
@@ -231,6 +231,8 @@
                     android:id="@+id/ibClassification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
                     android:contentDescription="@string/title_info"
                     android:tooltipText="@string/title_info"
                     app:layout_constraintStart_toStartOf="parent"
@@ -473,9 +475,22 @@
                     android:text="UUID"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textIsSelectable="true"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swCrashReports" />
+
+                <ImageButton
+                    android:id="@+id/ibCrashReports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:contentDescription="@string/title_info"
+                    android:tooltipText="@string/title_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvUuid"
+                    app:srcCompat="@drawable/twotone_info_24" />
 
                 <Button
                     android:id="@+id/btnReset"
@@ -487,7 +502,7 @@
                     android:drawablePadding="6dp"
                     android:text="@string/title_setup_reset_questions"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvUuid" />
+                    app:layout_constraintTop_toBottomOf="@id/ibCrashReports" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swCleanupAttachments"
@@ -684,6 +699,30 @@
                     app:layout_constraintTop_toBottomOf="@id/swLanguageToolAuto"
                     app:switchPadding="12dp" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swLanguageToolHighlight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_lt_highlight"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swLanguageToolPicky"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swLanguageToolDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_lt_description"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swLanguageToolHighlight"
+                    app:switchPadding="12dp" />
+
                 <EditText
                     android:id="@+id/etLanguageTool"
                     android:layout_width="0dp"
@@ -694,7 +733,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swLanguageToolPicky" />
+                    app:layout_constraintTop_toBottomOf="@id/swLanguageToolDescription" />
 
                 <EditText
                     android:id="@+id/etLanguageToolUser"

@@ -573,6 +573,7 @@
     <string name="title_advanced_double_tap">Doppelt antippen, um eine Nachricht als gelesen bzw. ungelesen zu kennzeichnen</string>
     <string name="title_advanced_swipenav">Nach links/rechts wischen, um nächste/vorige Unterhaltung anzuzeigen</string>
     <string name="title_advanced_volumenav">Lautstärke hoch/runter, um zur nächsten/vorherigen Unterhaltung zu wechseln</string>
+    <string name="title_advanced_up_down">Pfeile nach oben/unten verwenden, um zur nächsten/vorherigen Unterhaltung zu wechseln</string>
     <string name="title_advanced_reversed">Navigationsrichtung umkehren</string>
     <string name="title_advanced_swipe_close">Zum Schließen der Unterhaltung nach unten wischen</string>
     <string name="title_advanced_swipe_move">Zum Verschieben der Unterhaltung nach oben wischen</string>
@@ -703,7 +704,7 @@
     </string>
     <string name="title_advanced_power_menu">Aktionen zum Android-Ein/Aus-Menü hinzufügen</string>
     <string name="title_advanced_send_self">»An mich senden« zum Android-Teilen-Menü hinzufügen</string>
-    <string name="title_advanced_external_search">Anderen Apps erlauben, in Nachrichten zu suchen</string>
+    <string name="title_advanced_external_search">»FairEmail-Suche« zum Android-Textauswahlmenü hinzufügen</string>
     <string name="title_advanced_sort_answers">Antwortvorlagen nach Verwendungshäufigkeit sortieren</string>
     <string name="title_advanced_shortcuts">Häufig verwendete Kontakte im Android-Teilen-Menü anzeigen</string>
     <string name="title_advanced_fts">Suchindex erstellen</string>
@@ -715,7 +716,10 @@
     <string name="title_advanced_language">Sprache</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_lt">LanguageTool-Integration</string>
+    <string name="title_advanced_lt_sentence">Jeden Satz prüfen</string>
     <string name="title_advanced_lt_auto">Absatz nach einer neuen Zeile prüfen</string>
+    <string name="title_advanced_lt_highlight">Den zu prüfenden Text hervorheben</string>
+    <string name="title_advanced_lt_description">Pop-up mit Problembeschreibung anzeigen</string>
     <string name="title_advanced_lt_user">Benutzername (optional)</string>
     <string name="title_advanced_lt_key">API-Schlüssel (optional)</string>
     <string name="title_advanced_deepl">DeepL-Integration</string>
@@ -756,7 +760,7 @@
     <string name="title_advanced_data_usage">Dies kann einen hohen Datenverbrauch verursachen!</string>
     <string name="title_advanced_deleted_unseen">Wenn deaktiviert, bleiben ungelesene Nachrichten dauerhaft auf dem Gerät erhalten</string>
     <string name="title_advanced_sync_kept_hint">Dies überträgt zusätzliche Daten und verbraucht zusätzliche Akkuladung, insbesondere wenn viele Nachrichten auf dem Gerät gespeichert sind</string>
-    <string name="title_advanced_gmail_thread_hint">Dies gilt nur für neu empfangene Nachrichten und kann bestehende Gruppen zerbrechen</string>
+    <string name="title_advanced_gmail_thread_hint">Das betrifft nur neu empfangene Nachrichten und kann bestehende Gruppen beschädigen</string>
     <string name="title_advanced_subject_threading_hint">Nur Nachrichten, die in den letzten %1$d Stunden empfangen wurden</string>
     <string name="title_advanced_sync_folders_hint">Das Deaktivieren dieser Funktion verringert den Daten- und Akkuverbrauch etwas, deaktiviert aber auch das Aktualisieren der Ordnerliste</string>
     <string name="title_advanced_poll_folders_hint">Synchronisiert die Ordnerliste regelmäßig und zusätzlich nach der Verbindung mit einem Konto</string>
@@ -847,7 +851,7 @@
     <string name="title_advanced_english_hint">Dadurch wird die App neu gestartet</string>
     <string name="title_advanced_experiments_hint">Liste der aktuellen experimentellen Funktionen</string>
     <string name="title_advanced_protocol_hint">Dadurch wird der Akku- und Speicherplatzverbrauch erheblich erhöht!</string>
-    <string name="title_advanced_debug_hint">Dadurch werden an verschiedenen Stellen unschöne Fehlersuchinformationen angezeigt</string>
+    <string name="title_advanced_debug_hint">Dadurch werden an verschiedenen Stellen unschöne Informationen zur Fehlerdiagnose angezeigt</string>
     <string name="title_advanced_cleanup_attachments_hint">Beim manuellen Bereinigen werden Anhänge von Nachrichten entfernt, die nicht mehr synchronisiert werden</string>
     <string name="title_advanced_cleanup_hint">Dies löscht alle temporären Dateien</string>
     <string name="title_advanced_never_favorite">Niemals favorisiert</string>
@@ -872,6 +876,7 @@
     <string name="title_identity_reply_to">Antwortadresse</string>
     <string name="title_identity_internal">Interne Domainnamen (durch Kommata getrennt)</string>
     <string name="title_identity_uri">Kontakt verknüpfen</string>
+    <string name="title_identity_sensitivity">Standardvertraulichkeit</string>
     <string name="title_identity_unicode">UTF-8 in Nachrichtenkopfzeilen zulassen</string>
     <string name="title_identity_unicode_remark">Die meisten Server unterstützen dies nicht</string>
     <string name="title_identity_octetmime">8BITMIME erlauben</string>
@@ -1388,6 +1393,7 @@
     <string name="title_translate_formal">Förmliche Anrede verwenden</string>
     <string name="title_translate_small">Kleine Schrift für den Originaltext verwenden</string>
     <string name="title_translate_replace">Originaltext durch übersetzten Text ersetzen</string>
+    <string name="title_translate_highlight">Den zu übersetzenden Text hervorheben</string>
     <string name="title_translate_html">Formatierung beibehalten</string>
     <string name="title_translate_html_hint">Dadurch sind mehr Zeichen erforderlich</string>
     <string name="title_translate_usage">Verwendung: %1$s / %2$s (%3$d %%)</string>
@@ -1481,7 +1487,7 @@
     <string name="title_search_hint_fts">Beim Verwenden des Suchindex: nur ganze Wörter</string>
     <string name="title_search_index_hint">Die Suche über den Suchindex ist sehr schnell, kann aber nur ganze Wörter finden.</string>
     <string name="title_search_text_hint">Das Suchen nach Text in Nachrichten funktioniert bei einer großen Anzahl von Nachrichten auf einigen Servern möglicherweise nicht</string>
-    <string name="title_search_text_unsupported">\'%s\' bedeutet, dass der Mail-Server die Suche in Nachrichtentexten nicht unterstützt</string>
+    <string name="title_search_text_unsupported">»%s« bedeutet, dass der E-Mail-Server die Suche in Nachrichtentexten nicht unterstützt</string>
     <string name="title_search_size_hint">Die Nachrichtensuche nach Größe funktioniert, bei einer großen Anzahl von Nachrichten, auf einigen Servern möglicherweise nicht</string>
     <string name="title_search_more">Weitere Optionen</string>
     <string name="title_search_use_index">Suchindex verwenden</string>
@@ -1723,7 +1729,7 @@
     <string name="title_legend_priority_low">Hat niedrige Priorität</string>
     <string name="title_legend_sensitivity_personal">Ist persönlich</string>
     <string name="title_legend_sensitivity_private">Ist privat</string>
-    <string name="title_legend_sensitivity_confidential">Ist Vertraulich</string>
+    <string name="title_legend_sensitivity_confidential">Ist vertraulich</string>
     <string name="title_legend_importance">Wichtig</string>
     <string name="title_legend_importance_low">Nicht wichtig</string>
     <string name="title_legend_signed">Signiert</string>
@@ -1890,7 +1896,8 @@
     <string name="title_loading">Wird geladen &#8230;</string>
     <string name="title_fetching_again">Nachricht wird erneut vom Server abgerufen</string>
     <string name="title_go_back">Zurück</string>
-    <string name="title_global_default" comment="title_global_default&#10;Title for selection option to indicate to use the global setting, instead of a more specific setting">Allgemeine Einstellung verwenden</string>
+    <string name="title_global_default">Voreinstellungen verwenden</string>
+    <string name="title_not_existing">Diese Nachricht ist auf dem E-Mail-Server nicht mehr vorhanden</string>
     <string name="title_conversation_actions">Aktionen</string>
     <string name="title_conversation_action_reply">Antworten mit: \'%1$s\'</string>
     <string name="title_conversation_action_copy">Kopieren: \'%1$s\'</string>
@@ -1930,12 +1937,15 @@
     <string name="title_rules_import">Regeln importieren</string>
     <string name="title_rules_delete_all">Alle Regeln löschen</string>
     <string name="title_rules_delete_all_confirm">Alle Regeln löschen?</string>
-    <string name="title_debug_info">Fehlersuchinformationen</string>
+    <string name="title_debug_info">Informationen zur Fehlerdiagnose</string>
     <string name="title_debug_info_remark">Bitte beschreiben Sie das Problem und zu welchem Zeitpunkt es aufgetreten ist:</string>
     <string name="title_crash_info_remark">Bitte beschreiben Sie, was Sie getan haben, während die App abgestürzt ist:</string>
     <string name="title_debug_info_issue">Problembeschreibung (erforderlich)</string>
     <string name="title_debug_info_issue_remark">Details wie die ungefähre Zeit des Problems, die genaue Fehlermeldung usw. sind wichtig</string>
     <string name="title_debug_info_contact">Wir hatten kürzlich Kontakt bezüglich dieses Problems</string>
+    <string name="title_debug_info_send">Sofort senden</string>
+    <string name="title_debug_info_send_remark">Standardmäßig werden die Informationen zur Fehlerdiagnose als Entwurf gespeichert, sodass Sie vorher überprüfen können, was übermittelt wird</string>
+    <string name="title_debug_info_question">Bitte verwenden Sie den Info-Button, wenn Sie nur eine Frage haben</string>
     <string name="title_unexpected_info_remark">Bitte beschreiben Sie, was Sie getan haben, als Sie den Fehler erhielten:</string>
     <string name="title_widget_title_count">Anzahl neuer Nachrichten</string>
     <string name="title_widget_title_list">Nachrichtenliste</string>

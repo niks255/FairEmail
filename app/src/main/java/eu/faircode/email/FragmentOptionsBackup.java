@@ -49,6 +49,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -284,6 +285,15 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                 "cloud_activated".equals(key) ||
                 "cloud_busy".equals(key) ||
                 "cloud_last_sync".equals(key)) {
+            getMainHandler().removeCallbacks(update);
+            getMainHandler().postDelayed(update, FragmentOptions.DELAY_SETOPTIONS);
+        }
+    }
+
+    private Runnable update = new RunnableEx("backup") {
+        @Override
+        protected void delegate() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             String user = prefs.getString("cloud_user", null);
             String password = prefs.getString("cloud_password", null);
             boolean auth = !(TextUtils.isEmpty(user) || TextUtils.isEmpty(password));
@@ -300,8 +310,9 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
             grpLogin.setVisibility(auth ? View.GONE : View.VISIBLE);
             grpActivate.setVisibility(auth && !activated && !busy ? View.VISIBLE : View.GONE);
             grpLogout.setVisibility(auth ? View.VISIBLE : View.GONE);
+
         }
-    }
+    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -651,6 +662,7 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
         final int colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
 
         View dview = LayoutInflater.from(context).inflate(R.layout.dialog_import_progress, null);
+        ProgressBar pbWait = dview.findViewById(R.id.pbWait);
         TextView tvLog = dview.findViewById(R.id.tvLog);
         tvLog.setText(null);
 
@@ -659,6 +671,7 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(dview)
                 .setPositiveButton(android.R.string.ok, null)
+                .setCancelable(false)
                 .setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
@@ -698,6 +711,11 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
             private SpannableStringBuilder ssb = new SpannableStringBuilderEx();
 
             @Override
+            protected void onPreExecute(Bundle args) {
+                pbWait.setVisibility(View.VISIBLE);
+            }
+
+            @Override
             protected void onProgress(CharSequence status, Bundle data) {
                 ssb.append(status).append("\n");
                 tvLog.setText(ssb);
@@ -705,6 +723,7 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
 
             @Override
             protected void onPostExecute(Bundle args) {
+                pbWait.setVisibility(View.GONE);
                 ok.setEnabled(true);
             }
 
@@ -729,6 +748,9 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                         " settings=" + import_settings);
 
                 NoStreamException.check(uri, context);
+
+                ServiceSynchronize.stop(context);
+                ServiceSend.stop(context);
 
                 StringBuilder data = new StringBuilder();
                 Log.i("Reading URI=" + uri);
@@ -1128,6 +1150,9 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                                 continue;
 
+                            if ("tcp_keep_alive".equals(key))
+                                continue;
+
                             // Prevent restart
                             if ("secure".equals(key) ||
                                     "load_emoji".equals(key) ||
@@ -1142,6 +1167,8 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                             }
 
                             if (key != null && key.startsWith("widget."))
+                                continue;
+                            if (key != null && key.startsWith("unset."))
                                 continue;
 
                             if ("external_search".equals(key)) {
@@ -1239,7 +1266,6 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                     db.endTransaction();
                 }
 
-                ServiceSynchronize.eval(context, "import");
                 Log.i("Imported data");
 
                 SpannableStringBuilder ssb = new SpannableStringBuilderEx();
@@ -1247,6 +1273,11 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                 ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, ssb.length(), 0);
                 postProgress(ssb, null);
                 return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                ServiceSynchronize.eval(context, "import");
             }
 
             @Override

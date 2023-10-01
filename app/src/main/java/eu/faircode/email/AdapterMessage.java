@@ -67,7 +67,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.method.ArrowKeyMovementMethod;
-import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -121,6 +120,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.text.method.LinkMovementMethodCompat;
 import androidx.core.view.MenuCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -852,7 +852,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvKeywordsEx = vsBody.findViewById(R.id.tvKeywordsEx);
 
             tvHeaders = vsBody.findViewById(R.id.tvHeaders);
-            tvHeaders.setMovementMethod(LinkMovementMethod.getInstance());
+            tvHeaders.setMovementMethod(LinkMovementMethodCompat.getInstance());
             ibCopyHeaders = vsBody.findViewById(R.id.ibCopyHeaders);
             ibCloseHeaders = vsBody.findViewById(R.id.ibCloseHeaders);
             pbHeaders = vsBody.findViewById(R.id.pbHeaders);
@@ -1260,7 +1260,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             message.folderUnified && EntityFolder.isOutgoing(message.folderType)) ||
                     EntityFolder.isOutgoing(message.folderInheritedType);
             String selector = (reverse ? null : message.bimi_selector);
-            Address[] addresses = (reverse ? message.to : message.from);
+            Address[] addresses = (reverse ? message.to : (message.isForwarder() ? message.submitter : message.from));
             Address[] senders = ContactInfo.fillIn(
                     reverse && !show_recipients ? message.to : message.senders, prefer_contact, only_contact);
             Address[] recipients = ContactInfo.fillIn(
@@ -1480,7 +1480,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             // Line 3
             int icon = (message.drafts > 0
                     ? R.drawable.twotone_edit_24
-                    : EntityFolder.getIcon(outgoing ? EntityFolder.SENT : message.folderType));
+                    : (outgoing ? R.drawable.twotone_send_24_80 : EntityFolder.getIcon(message.folderType)));
             ivType.setVisibility(message.drafts > 0 ||
                     (viewType == ViewType.UNIFIED && type == null && (!inbox || outgoing)) ||
                     (viewType == ViewType.FOLDER && outgoing && !EntityFolder.SENT.equals(message.folderType)) ||
@@ -2609,6 +2609,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 } catch (UnsupportedEncodingException ignored) {
                 }
 
+            tvIdentityTitle.setTextColor(message.identityColor == null ? textColorTertiary : message.identityColor);
             tvIdentityTitle.setVisibility(show_addresses && via != null ? View.VISIBLE : View.GONE);
             tvIdentity.setVisibility(show_addresses && via != null ? View.VISIBLE : View.GONE);
             tvIdentity.setText(via == null ? null : formatAddresses(new Address[]{via}, true));
@@ -2709,7 +2710,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvSizeEx.setTextIsSelectable(tvSizeEx.getVisibility() == View.VISIBLE);
                     tvLanguage.setTextIsSelectable(tvLanguage.getVisibility() == View.VISIBLE);
                     tvThread.setTextIsSelectable(tvThread.getVisibility() == View.VISIBLE);
-                    tvSubject.setTextIsSelectable(tvSubjectEx.getVisibility() == View.VISIBLE);
+                    tvSubjectEx.setTextIsSelectable(tvSubjectEx.getVisibility() == View.VISIBLE);
                     tvFlags.setTextIsSelectable(tvFlags.getVisibility() == View.VISIBLE);
                     tvKeywordsEx.setTextIsSelectable(tvKeywordsEx.getVisibility() == View.VISIBLE && keywords_header);
                 }
@@ -3506,7 +3507,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         onCopy();
                                         break;
                                     default:
-                                        raction.getActionIntent().send();
+                                        raction.getActionIntent().send(); // PendingIntentCompat.send()
                                 }
                             } catch (Throwable ex) {
                                 Log.e(ex);
@@ -4262,6 +4263,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (message.from != null)
                     for (Address from : message.from)
                         if (message.identityEmail.equalsIgnoreCase(((InternetAddress) from).getAddress()))
+                            return true;
+
+                if (message.submitter != null)
+                    for (Address submitter : message.submitter)
+                        if (message.identityEmail.equalsIgnoreCase(((InternetAddress) submitter).getAddress()))
                             return true;
 
                 return false;
@@ -7386,7 +7392,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     List<CSSStyleSheet> sheets =
                             HtmlHelper.parseStyles(d.head().select("style"));
                     for (Element element : d.select("*")) {
-                        String computed = HtmlHelper.processStyles(
+                        String computed = HtmlHelper.processStyles(context,
                                 element.tagName(),
                                 element.className(),
                                 element.attr("style"),

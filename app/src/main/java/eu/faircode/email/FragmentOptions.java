@@ -68,6 +68,8 @@ public class FragmentOptions extends FragmentBase {
     private String searching = null;
     private SuggestData data = null;
 
+    static final long DELAY_SETOPTIONS = 20; // ms
+
     private static final int[] TAB_PAGES = {
             R.layout.fragment_setup,
             R.layout.fragment_options_synchronize,
@@ -152,7 +154,7 @@ public class FragmentOptions extends FragmentBase {
             "background_color", "text_color", "text_size", "text_font", "text_align", "text_titles", "text_separators",
             "collapse_quotes", "image_placeholders", "inline_images",
             "seekbar", "actionbar", "actionbar_swap", "actionbar_color", "group_category",
-            "autoscroll", "swipenav", "reversed", "swipe_close", "swipe_move", "autoexpand", "autoclose", "onclose",
+            "autoscroll", "swipenav", "updown", "reversed", "swipe_close", "swipe_move", "autoexpand", "autoclose", "onclose",
             "auto_hide_answer", "swipe_reply",
             "move_thread_all", "move_thread_sent",
             "language_detection",
@@ -192,7 +194,8 @@ public class FragmentOptions extends FragmentBase {
 
             @Override
             public void onPageSelected(int position) {
-                if (position > 0) {
+                if (position > 0 && position < PAGE_TITLES.length &&
+                        PAGE_TITLES[position] != R.string.title_advanced_section_backup) {
                     final Context context = getContext();
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                     boolean setup_advanced = prefs.getBoolean("setup_advanced", false);
@@ -271,7 +274,8 @@ public class FragmentOptions extends FragmentBase {
         final MenuItem menuSearch = menu.findItem(R.id.menu_search);
         final SearchView searchView = (SearchView) menuSearch.getActionView();
 
-        searchView.setQueryHint(getString(R.string.title_search));
+        if (searchView != null)
+            searchView.setQueryHint(getString(R.string.title_search));
 
         final SearchView.OnSuggestionListener onSuggestionListener = new SearchView.OnSuggestionListener() {
             @Override

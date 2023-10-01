@@ -27,7 +27,6 @@ import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
-import android.net.TransportInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -299,48 +298,52 @@ public class ConnectionHelper {
         Log.i("isMetered: active caps=" + caps);
 
         if (caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)) {
+            // Active network is not a VPN
+
             if (!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
                 Log.i("isMetered: no internet");
                 return null;
             }
+
             boolean captive = caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
             if ((require_validated || (require_validated_captive && captive)) &&
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                     !caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
                 Log.i("isMetered: not validated captive=" + captive);
                 return null;
             }
-        }
 
-        if (!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)) {
-            Log.i("isMetered: active restricted");
-            return null;
-        }
+            if (!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)) {
+                Log.i("isMetered: active restricted");
+                return null;
+            }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
-                !caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) {
-            Log.i("isMetered: active background");
-            return null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
+                    !caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND)) {
+                Log.i("isMetered: active background");
+                return null;
+            }
         }
 
         if (vpn_only) {
             boolean vpn = vpnActive(context);
-            Log.i("VPN only vpn=" + vpn);
+            Log.i("isMetered: VPN only vpn=" + vpn);
             if (!vpn)
                 return null;
         }
 
-        if (standalone_vpn ||
-                caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)) {
+        if (caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)) {
             // NET_CAPABILITY_NOT_METERED is unreliable on older Android versions
             boolean metered = cm.isActiveNetworkMetered();
             Log.i("isMetered: active not VPN metered=" + metered);
             return metered;
         }
 
+        // Active network is a VPN
+
         Network[] networks = cm.getAllNetworks();
-        if (networks != null && networks.length == 1) {
-            // Standalone VPN
+        if (standalone_vpn && networks != null && networks.length == 1) {
+            // Internet not checked/validated
+            // Used for USB/Ethernet internet connection
             boolean metered = cm.isActiveNetworkMetered();
             Log.i("isMetered: active VPN metered=" + metered);
             return metered;
@@ -358,8 +361,20 @@ public class ConnectionHelper {
 
             Log.i("isMetered: underlying caps=" + caps);
 
+            if (!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)) {
+                Log.i("isMetered: underlying VPN");
+                continue;
+            }
+
             if (!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
                 Log.i("isMetered: underlying no internet");
+                continue;
+            }
+
+            boolean captive = caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_CAPTIVE_PORTAL);
+            if ((require_validated || (require_validated_captive && captive)) &&
+                    !caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+                Log.i("isMetered: underlying not validated captive=" + captive);
                 continue;
             }
 
@@ -374,24 +389,19 @@ public class ConnectionHelper {
                 continue;
             }
 
-            if (caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
-                Log.i("isMetered: underlying VPN transport");
-                continue;
-            }
+            underlying = true;
+            Log.i("isMetered: underlying is connected");
 
-            if (caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)) {
-                underlying = true;
-                Log.i("isMetered: underlying is connected");
-
-                if (caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)) {
-                    Log.i("isMetered: underlying is unmetered");
-                    return false;
-                }
+            if (caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)) {
+                Log.i("isMetered: underlying is unmetered");
+                return false;
             }
         }
 
-        if (!underlying)
+        if (!underlying) {
+            Log.i("isMetered: no underlying network");
             return null;
+        }
 
         // Assume metered
         Log.i("isMetered: underlying assume metered");
@@ -522,6 +532,10 @@ public class ConnectionHelper {
         ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
         if (cm == null)
             return false;
+
+        // The active network doesn't necessarily have VPN transport
+        //   active=... caps=[ Transports: WIFI Capabilities: ...&NOT_VPN&...
+        //   network=... caps=[ Transports: WIFI|VPN Capabilities: ...
 
         try {
             for (Network network : cm.getAllNetworks()) {

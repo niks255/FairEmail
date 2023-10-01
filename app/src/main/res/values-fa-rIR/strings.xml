@@ -452,6 +452,7 @@
     <string name="title_advanced_pull_all">همگام‌سازی همه پوشه‌ها</string>
     <string name="title_advanced_swipenav">کشیدن به چپ/راست برای رفتن به مکالمه بعدی/قبلی</string>
     <string name="title_advanced_volumenav">بالا/پایین بردن صدا برای رفتن به گفتگوی بعدی/قبلی</string>
+    <string name="title_advanced_up_down">استفاده از کلیدهای بالا و پایین برای رفتن به مکالمات بعدی و قبلی</string>
     <string name="title_advanced_autoexpand">بسط دادن خودکار پیام‌ها</string>
     <string name="title_advanced_expand_all">همه پیام‌ها را خودکار گسترش بده</string>
     <string name="title_advanced_autoclose">بستن خودکار مکالمات</string>
@@ -513,7 +514,6 @@
     <string name="title_advanced_ca">CA certificate های نصب شده</string>
     <string name="title_advanced_manage_keys_hint">        This will open to the Android security settings.        Keys and certificates can generally be found under Advanced - Encryption and credentials.
     </string>
-    <string name="title_advanced_external_search">اجازه به دیگر برنامه‌ها برای جستجو در پیام‌ها</string>
     <string name="title_advanced_sort_answers">قالب‌های پاسخ‌گویی را بر اساس تناوب استفاده از آنها مرتب کن</string>
     <string name="title_advanced_shortcuts">نمایش مخاطبین مکررا استفاده شده در فهرست اشتراک‌گذاری اندروید</string>
     <string name="title_advanced_fts">ساخت شاخص جستجو</string>
@@ -522,6 +522,7 @@
     <string name="title_advanced_language">زبان</string>
     <string name="title_advanced_language_system">سیستم</string>
     <string name="title_advanced_lt">یکپارچگی ابزارهای زبانی</string>
+    <string name="title_advanced_lt_description">نمایش پاپ‌آپ همراه با شرح مشکل</string>
     <string name="title_advanced_watchdog">بطور دوره ای بررسی کن که آیا FairEmail هنوز فعال است یا خیر</string>
     <string name="title_advanced_experiments">امتحان ویژگی‌های آزمایشی</string>
     <string name="title_advanced_crash_reports">ارسال گزارش‌های خطا</string>
@@ -573,6 +574,7 @@
     <string name="title_identity_email">آدرس ایمیل شما</string>
     <string name="title_advanced_sender">اجازه ویرایش آدرس فرستنده</string>
     <string name="title_identity_reply_to">پاسخ به آدرس</string>
+    <string name="title_identity_sensitivity">حساسیت پیش‌فرض</string>
     <string name="title_identity_unicode_remark">بیشتر سرور‌ها از این پشتیبانی نمی‌کنند</string>
     <string name="title_identity_octetmime">به 8BITMIME اجازه بده</string>
     <string name="title_identity_max_size">بیشترین اندازه پیام (MB)</string>
@@ -1246,6 +1248,7 @@
     <string name="title_snooze_now">تعویق</string>
     <string name="title_loading">درحال بارگذاری &#8230;</string>
     <string name="title_fetching_again">در حال واکشی دوباره پیام از سرور</string>
+    <string name="title_not_existing">این پیام دیگر روی سرور ایمیل وجود ندارد</string>
     <string name="title_conversation_actions">کنش‌ها</string>
     <string name="title_conversation_action_reply">پاسخ با: \'%1$s\'</string>
     <string name="title_conversation_action_copy">کپی: \'%1$s\'</string>
@@ -1277,6 +1280,7 @@
     <string name="title_crash_info_remark">لطفاً توضیح دهید که در هنگام کرش برنامه درحال انجام چه کاری بودید:</string>
     <string name="title_debug_info_issue">شرح مشکل (لازم)</string>
     <string name="title_debug_info_contact">پیشتر درباره این مشکل پیام دریافت کرده‌ایم</string>
+    <string name="title_debug_info_send">ارسال فوری</string>
     <string name="title_widget_title_count">شمار پیام جدید</string>
     <string name="title_widget_title_list">لیست پیام‌ها</string>
     <string name="title_power_menu_off">خاموش</string>

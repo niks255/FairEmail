@@ -34,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -54,9 +55,18 @@ public class FragmentDialogDebug extends FragmentDialogBase {
 
         final Context context = getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_debug, null);
+        final ImageButton ibInfo = view.findViewById(R.id.ibInfo);
         final EditText etIssue = view.findViewById(R.id.etIssue);
         final Spinner spAccount = view.findViewById(R.id.spAccount);
         final CheckBox cbContact = view.findViewById(R.id.cbContact);
+        final CheckBox cbSend = view.findViewById(R.id.cbSend);
+
+        ibInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.getContext().startActivity(Helper.getIntentIssue(v.getContext(), "debug"));
+            }
+        });
 
         final ArrayAdapter<EntityAccount> adapterAccount;
         etIssue.addTextChangedListener(new TextWatcher() {
@@ -131,6 +141,7 @@ public class FragmentDialogDebug extends FragmentDialogBase {
                         Bundle args = getArguments();
                         args.putString("issue", etIssue.getText().toString());
                         args.putBoolean("contact", cbContact.isChecked());
+                        args.putBoolean("send", cbSend.isChecked());
 
                         EntityAccount account = (EntityAccount) spAccount.getSelectedItem();
                         if (account != null)

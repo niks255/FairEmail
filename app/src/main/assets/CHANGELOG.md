@@ -4,7 +4,67 @@
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
-### [Ubirajara](https://en.wikipedia.org/wiki/Ubirajara_jubatus)
+### [Vallibonavenatrix](https://en.wikipedia.org/wiki/Vallibonavenatrix)
+
+### 1.2106 - 2023-09-27
+
+* Added option to use up/down arrows for next/previous conversation
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2105 - 2023-09-23
+
+* Added advanced identity option for default [sensitivity](https://datatracker.ietf.org/doc/html/rfc4021#section-2.1.55)
+* Ignoring maximum width [media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2104 - 2023-09-21
+
+* Improved SVG support
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2103 - 2023-09-18
+
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2102 - 2023-09-16
+
+* Fixed back navigation search
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2101 - 2023-09-15
+
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2100 - 2023-09-14
+
+* Fixed VPN only option
+* Added option for LanguageTool problem description popup
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2099 - 2023-09-13
+
+* Fixed POP3 sync issue
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2098 - 2023-09-12
+
+* Added support for *text/markdown* message parts
+* Added support for *text/x-diff* and *text/x-patch* message parts
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated [translations](https://crowdin.com/project/open-source-email)
 
 ### 1.2097 - 2023-09-02
 

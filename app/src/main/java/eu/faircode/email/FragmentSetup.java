@@ -903,11 +903,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                 try {
                     db.beginTransaction();
 
-                    EntityFolder outbox = db.folder().getOutbox();
-                    if (outbox == null) {
-                        outbox = EntityFolder.getOutbox();
-                        outbox.id = db.folder().insertFolder(outbox);
-                    }
+                    EntityFolder.getOutbox(context);
 
                     db.setTransactionSuccessful();
                 } finally {
@@ -1390,7 +1386,11 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
 
                                 taskGraph.execute(FragmentSetup.this, args, "graph:contacts");
                             } catch (Throwable ex) {
-                                Log.unexpectedError(getParentFragmentManager(), ex);
+                                try {
+                                    Log.unexpectedError(getParentFragmentManager(), ex);
+                                } catch (Throwable exex) {
+                                    Log.w(exex);
+                                }
                             }
                         }
                     });

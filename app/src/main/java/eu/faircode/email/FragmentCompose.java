@@ -118,6 +118,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
@@ -200,6 +201,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import javax.activation.DataHandler;
@@ -318,6 +322,7 @@ public class FragmentCompose extends FragmentBase {
     static final int REDUCED_IMAGE_SIZE = 1440; // pixels
     private static final int REDUCED_IMAGE_QUALITY = 90; // percent
     // http://regex.info/blog/lightroom-goodies/jpeg-quality
+    private static final int COPY_ATTACHMENT_TIMEOUT = 60; // seconds
 
     private static final int MAX_QUOTE_LEVEL = 5;
 
@@ -739,11 +744,13 @@ public class FragmentCompose extends FragmentBase {
 
                 if (save != null)
                     try {
-                        if (lt == null && lt_sentence) {
+                        if (lt == null && lt_sentence &&
+                                Helper.isSentenceChar(text.charAt(save))) {
                             int start = save;
                             while (start > 0 &&
                                     text.charAt(start - 1) != '\n' &&
-                                    !Helper.isEndChar(text.charAt(start - 1)))
+                                    !(Character.isWhitespace(text.charAt(start)) &&
+                                            Helper.isSentenceChar(text.charAt(start - 1))))
                                 start--;
                             while (start < save)
                                 if (Character.isWhitespace(text.charAt(start)))
@@ -1489,6 +1496,8 @@ public class FragmentCompose extends FragmentBase {
 
                 db.message().setMessageUiEncrypt(draft.id, draft.ui_encrypt);
 
+                db.message().setMessageSensitivity(draft.id, identity.sensitivity < 1 ? null : identity.sensitivity);
+
                 return draft.ui_encrypt;
             }
 
@@ -2000,7 +2009,10 @@ public class FragmentCompose extends FragmentBase {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_encrypt) {
+        if (itemId == android.R.id.home) {
+            onExit();
+            return true;
+        } else if (itemId == R.id.menu_encrypt) {
             onMenuEncrypt();
             return true;
         } else if (itemId == R.id.menu_translate) {
@@ -2476,8 +2488,11 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onMenuIdentitySelect() {
+        Bundle args = new Bundle();
+        args.putBoolean("add", true);
+
         FragmentDialogSelectIdentity fragment = new FragmentDialogSelectIdentity();
-        fragment.setArguments(new Bundle());
+        fragment.setArguments(args);
         fragment.setTargetFragment(this, REQUEST_SELECT_IDENTITY);
         fragment.show(getParentFragmentManager(), "select:identity");
     }
@@ -2754,6 +2769,8 @@ public class FragmentCompose extends FragmentBase {
 
                         @Override
                         protected void onExecuted(Bundle args, DeepL.Translation translation) {
+                            if (etSubject == null)
+                                return;
                             etSubject.setText(translation.translated_text);
                         }
 
@@ -2761,7 +2778,7 @@ public class FragmentCompose extends FragmentBase {
                         protected void onException(Bundle args, Throwable ex) {
                             Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
                         }
-                    }.serial().execute(FragmentCompose.this, args, "compose:translate");
+                    }.execute(FragmentCompose.this, args, "compose:translate");
                 } else {
                     final Pair<Integer, Integer> paragraph = StyleHelper.getParagraph(etBody);
                     if (paragraph == null)
@@ -2782,10 +2799,14 @@ public class FragmentCompose extends FragmentBase {
 
                         @Override
                         protected void onPreExecute(Bundle args) {
-                            int textColorHighlight = Helper.resolveColor(getContext(), android.R.attr.textColorHighlight);
-                            highlightSpan = new BackgroundColorSpan(textColorHighlight);
-                            etBody.getText().setSpan(highlightSpan, paragraph.first, paragraph.second,
-                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_COMPOSING);
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                            boolean deepl_highlight = prefs.getBoolean("deepl_highlight", true);
+                            if (deepl_highlight) {
+                                int textColorHighlight = Helper.resolveColor(getContext(), android.R.attr.textColorHighlight);
+                                highlightSpan = new BackgroundColorSpan(textColorHighlight);
+                                etBody.getText().setSpan(highlightSpan, paragraph.first, paragraph.second,
+                                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_COMPOSING);
+                            }
                             toast = ToastEx.makeText(context, R.string.title_translating, Toast.LENGTH_SHORT);
                             toast.show();
                         }
@@ -2884,7 +2905,7 @@ public class FragmentCompose extends FragmentBase {
                             etBody.setSelection(paragraph.second);
                             Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
                         }
-                    }.serial().execute(FragmentCompose.this, args, "compose:translate");
+                    }.execute(FragmentCompose.this, args, "compose:translate");
                 }
             }
         });
@@ -2907,7 +2928,9 @@ public class FragmentCompose extends FragmentBase {
             @Override
             protected void onPreExecute(Bundle args) {
                 if (silent) {
-                    if (!BuildConfig.PLAY_STORE_RELEASE) {
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    boolean lt_highlight = prefs.getBoolean("lt_highlight", !BuildConfig.PLAY_STORE_RELEASE);
+                    if (lt_highlight) {
                         int textColorHighlight = Helper.resolveColor(getContext(), android.R.attr.textColorHighlight);
                         highlightSpan = new BackgroundColorSpan(textColorHighlight);
                         etBody.getText().setSpan(highlightSpan, start, end,
@@ -2962,7 +2985,7 @@ public class FragmentCompose extends FragmentBase {
                     Log.unexpectedError(getParentFragmentManager(), exex, false);
                 }
             }
-        }.serial().execute(this, args, "compose:lt");
+        }.execute(this, args, "compose:lt");
     }
 
     private void onActionRecordAudio() {
@@ -4782,6 +4805,15 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void onSelectIdentity(Bundle args) {
+        long id = args.getLong("id");
+        if (id < 0) {
+            getContext().startActivity(new Intent(getContext(), ActivitySetup.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    .putExtra("manual", true)
+                    .putExtra("scroll", true));
+            return;
+        }
+
         new SimpleTask<EntityIdentity>() {
             @Override
             protected EntityIdentity onExecute(Context context, Bundle args) throws Throwable {
@@ -5007,8 +5039,25 @@ public class FragmentCompose extends FragmentBase {
                 if (is == null)
                     throw new FileNotFoundException(uri.toString());
 
+                final InputStream reader = is;
                 byte[] buffer = new byte[Helper.BUFFER_SIZE];
-                for (int len = is.read(buffer); len != -1; len = is.read(buffer)) {
+                Callable<Integer> readTask = new Callable<Integer>() {
+                    @Override
+                    public Integer call() throws Exception {
+                        return reader.read(buffer);
+                    }
+                };
+
+                while (true) {
+                    Future<Integer> future = Helper.getDownloadTaskExecutor().submit(readTask);
+                    int len = future.get(COPY_ATTACHMENT_TIMEOUT, TimeUnit.SECONDS);
+                    if (len == -1)
+                        break;
+                    if (len == 0) {
+                        Thread.sleep(500L);
+                        continue;
+                    }
+
                     size += len;
                     os.write(buffer, 0, len);
 
@@ -5423,6 +5472,8 @@ public class FragmentCompose extends FragmentBase {
                     if (receipt_default)
                         data.draft.receipt_request = true;
 
+                    data.draft.sensitivity = (selected.sensitivity < 1 ? null : selected.sensitivity);
+
                     Document document = Document.createShell("");
 
                     if (ref == null) {
@@ -5828,7 +5879,7 @@ public class FragmentCompose extends FragmentBase {
                             for (Element element : e.select("*")) {
                                 String tag = element.tagName();
                                 String clazz = element.attr("class");
-                                String style = HtmlHelper.processStyles(tag, clazz, null, sheets);
+                                String style = HtmlHelper.processStyles(context, tag, clazz, null, sheets);
                                 style = HtmlHelper.mergeStyles(style, element.attr("style"));
                                 if (!TextUtils.isEmpty(style))
                                     element.attr("style", style);
@@ -7119,12 +7170,7 @@ public class FragmentCompose extends FragmentBase {
                         }
 
                     } else if (action == R.id.action_send) {
-                        EntityFolder outbox = db.folder().getOutbox();
-                        if (outbox == null) {
-                            Log.w("Outbox missing");
-                            outbox = EntityFolder.getOutbox();
-                            outbox.id = db.folder().insertFolder(outbox);
-                        }
+                        EntityFolder outbox = EntityFolder.getOutbox(context);
 
                         // Delay sending message
                         if (draft.ui_snoozed == null && send_delayed != 0) {
@@ -7831,6 +7877,33 @@ public class FragmentCompose extends FragmentBase {
                 Integer color = (identity.color == null ? identity.accountColor : identity.color);
                 bottom_navigation.setBackgroundColor(color == null
                         ? Helper.resolveColor(context, androidx.appcompat.R.attr.colorPrimary) : color);
+
+                ColorStateList itemColor;
+                if (color == null)
+                    itemColor = ContextCompat.getColorStateList(context, R.color.action_foreground);
+                else {
+                    Integer icolor = null;
+                    float lum = (float) ColorUtils.calculateLuminance(color);
+                    if (lum > Helper.BNV_LUMINANCE_THRESHOLD)
+                        icolor = Color.BLACK;
+                    else if ((1.0f - lum) > Helper.BNV_LUMINANCE_THRESHOLD)
+                        icolor = Color.WHITE;
+                    if (icolor == null)
+                        itemColor = ContextCompat.getColorStateList(context, R.color.action_foreground);
+                    else
+                        itemColor = new ColorStateList(
+                                new int[][]{
+                                        new int[]{android.R.attr.state_enabled},
+                                        new int[]{}
+                                },
+                                new int[]{
+                                        icolor,
+                                        Color.GRAY
+                                }
+                        );
+                }
+                bottom_navigation.setItemIconTintList(itemColor);
+                bottom_navigation.setItemTextColor(itemColor);
             }
 
             Spanned signature = null;

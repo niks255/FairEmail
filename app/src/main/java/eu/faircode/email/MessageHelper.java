@@ -69,6 +69,8 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -374,6 +376,7 @@ public class MessageHelper {
         }
 
         // Sensitivity
+        // https://datatracker.ietf.org/doc/html/rfc4021#section-2.1.55
         if (EntityMessage.SENSITIVITY_PERSONAL.equals(message.sensitivity))
             imessage.addHeader("Sensitivity", "Personal");
         else if (EntityMessage.SENSITIVITY_PRIVATE.equals(message.sensitivity))
@@ -543,10 +546,13 @@ public class MessageHelper {
                 }
 
                 // https://tools.ietf.org/html/rfc3798
+                // https://en.wikipedia.org/wiki/Return_receipt
                 if (receipt_type == 0 || receipt_type == 2) {
                     // Read receipt
                     imessage.addHeader("Disposition-Notification-To", to);
                     imessage.addHeader("Read-Receipt-To", to);
+                    if (receipt_legacy)
+                        imessage.addHeader("Return-Receipt-To", to);
                     imessage.addHeader("X-Confirm-Reading-To", to);
                 }
             }
@@ -1267,8 +1273,10 @@ public class MessageHelper {
                             attachment.id = db.attachment().insertAttachment(attachment);
 
                             File file = attachment.getFile(context);
-                            try (VCardWriter writer = new VCardWriter(file, VCardVersion.V3_0)) {
-                                writer.write(vcard);
+                            try (OutputStream os = new FileOutputStream(file)) {
+                                try (VCardWriter writer = new VCardWriter(os, VCardVersion.V3_0)) {
+                                    writer.write(vcard);
+                                }
                             }
 
                             attachment.size = file.length();
@@ -2091,6 +2099,8 @@ public class MessageHelper {
         if (receipt == null || receipt.length == 0)
             receipt = getAddressHeader("Read-Receipt-To");
         if (receipt == null || receipt.length == 0)
+            receipt = getAddressHeader("Return-Receipt-To");
+        if (receipt == null || receipt.length == 0)
             receipt = getAddressHeader("X-Confirm-Reading-To");
         return receipt;
     }
@@ -2157,9 +2167,27 @@ public class MessageHelper {
                 continue;
             String[] val = v.split("\\s+");
             if (val.length > 0) {
-                if ("fail".equals(val[0]))
+                if ("fail".equals(val[0])) {
+                    if ("dmarc".equals(type)) {
+                        // dmarc=fail (p=NONE sp=NONE dis=NONE) header.from=example.com
+                        int s = v.indexOf('(');
+                        int e = v.indexOf(')');
+                        if (s > 0 && e > s) {
+                            Boolean none = null;
+                            for (String p : v.substring(s + 1, e).split("\\s+")) {
+                                String[] kv = p.split("=");
+                                // Without getting the DMARC DNS record, it isn't possible to check the sub/domain
+                                if (kv.length == 2 &&
+                                        ("p".equalsIgnoreCase(kv[0]) || "sp".equalsIgnoreCase(kv[0])) &&
+                                        "none".equalsIgnoreCase(kv[1]))
+                                    none = (none == null || none) && "none".equalsIgnoreCase(kv[1]);
+                            }
+                            if (none != null && none)
+                                continue; // neutral
+                        }
+                    }
                     result = false;
-                else if ("pass".equals(val[0])) {
+                } else if ("pass".equals(val[0])) {
                     // https://www.rfc-editor.org/rfc/rfc7489#section-3.1.1
                     if ("dkim".equals(type))
                         return true;
@@ -2637,11 +2665,24 @@ public class MessageHelper {
         return result.toArray(new Address[0]);
     }
 
-    Address[] getSender() throws MessagingException {
+    Address[] getSubmitter() throws MessagingException {
         Address[] sender = getAddressHeader("X-Google-Original-From");
         if (sender == null)
+            sender = getAddressHeader("Duck-Original-From");
+        if (sender == null)
+            sender = getAddressHeader("X-SimpleLogin-Original-From");
+        if (sender == null)
+            sender = getAddressHeader("X-AnonAddy-Original-From-Header");
+        if (sender == null)
             sender = getAddressHeader("Sender");
-
+        if (sender == null) {
+            Address[] from = getAddressHeader("From");
+            if (from != null && from.length == 1) {
+                String email = ((InternetAddress) from[0]).getAddress();
+                if (email != null && email.endsWith("@mozmail.com"))
+                    sender = getAddressHeader("Resent-From");
+            }
+        }
         return sender;
     }
 
@@ -3495,6 +3536,15 @@ public class MessageHelper {
             return "text/html".equalsIgnoreCase(contentType.getBaseType());
         }
 
+        boolean isMarkdown() {
+            return "text/markdown".equalsIgnoreCase(contentType.getBaseType());
+        }
+
+        boolean isPatch() {
+            return "text/x-diff".equalsIgnoreCase(contentType.getBaseType()) ||
+                    "text/x-patch".equalsIgnoreCase(contentType.getBaseType());
+        }
+
         boolean isReport() {
             String ct = contentType.getBaseType();
             return (Report.isDeliveryStatus(ct) ||
@@ -3901,6 +3951,21 @@ public class MessageHelper {
                         Helper.copy(h.part.getDataHandler().getInputStream(), bos);
                         result = bos.toString(override);
                     }
+                } else if (h.isMarkdown()) {
+                    try {
+                        Parser p = Parser.builder().build();
+                        org.commonmark.node.Node d = p.parse(result);
+                        HtmlRenderer r = HtmlRenderer.builder().build();
+                        result = r.render(d);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                        result = HtmlHelper.formatPlainText(Log.formatThrowable(ex));
+                    }
+                } else if (h.isPatch()) {
+                    result = "<hr>" +
+                            "<pre style=\"font-family: monospace; font-size:small;\">" +
+                            HtmlHelper.formatPlainText(result) +
+                            "</pre>";
                 } else if (h.isReport()) {
                     Report report = new Report(h.contentType.getBaseType(), result);
                     result = report.html;
@@ -4887,6 +4952,7 @@ public class MessageHelper {
                         !("mixed".equalsIgnoreCase(ct.getSubType()) ||
                                 "alternative".equalsIgnoreCase(ct.getSubType()) ||
                                 "related".equalsIgnoreCase(ct.getSubType()) ||
+                                "relative".equalsIgnoreCase(ct.getSubType()) || // typo?
                                 "report".equalsIgnoreCase(ct.getSubType()) ||
                                 "parallel".equalsIgnoreCase(ct.getSubType()) ||
                                 "digest".equalsIgnoreCase(ct.getSubType()) ||
@@ -5025,6 +5091,11 @@ public class MessageHelper {
                     if ("text/html".equalsIgnoreCase(ct))
                         filename += ".html";
                 }
+
+                if ("text/markdown".equalsIgnoreCase(ct) ||
+                        "text/x-diff".equalsIgnoreCase(ct) ||
+                        "text/x-patch".equalsIgnoreCase(ct))
+                    parts.extra.add(new PartHolder(part, contentType));
 
                 if (Report.isDeliveryStatus(ct) ||
                         Report.isDispositionNotification(ct) ||

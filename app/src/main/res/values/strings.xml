@@ -661,6 +661,7 @@
     <string name="title_advanced_double_tap">Double tap to mark message read/unread</string>
     <string name="title_advanced_swipenav">Swipe left/right to go to next/previous conversation</string>
     <string name="title_advanced_volumenav">Volume up/down to go to next/previous conversation</string>
+    <string name="title_advanced_up_down">Use up/down arrows for next/previous conversation</string>
     <string name="title_advanced_reversed">Reverse navigation direction</string>
     <string name="title_advanced_swipe_close">Swipe down to close conversation</string>
     <string name="title_advanced_swipe_move">Swipe up to move conversation</string>
@@ -811,7 +812,7 @@
 
     <string name="title_advanced_power_menu">Add actions to the Android power menu</string>
     <string name="title_advanced_send_self">Add \'send to self\' to Android\'s share menu</string>
-    <string name="title_advanced_external_search">Allow other apps to search in messages</string>
+    <string name="title_advanced_external_search">Add \'FairEmail search\' to Android text selection menu</string>
     <string name="title_advanced_sort_answers">Sort reply templates by frequency of use</string>
     <string name="title_advanced_external_answer" translatable="false">Provide reply templates to other apps</string>
     <string name="title_advanced_shortcuts">Show frequently used contacts in Android share menu</string>
@@ -826,6 +827,8 @@
     <string name="title_advanced_lt">LanguageTool integration</string>
     <string name="title_advanced_lt_sentence">Check every sentence</string>
     <string name="title_advanced_lt_auto">Check paragraph after a new line</string>
+    <string name="title_advanced_lt_highlight">Highlight the text being checked</string>
+    <string name="title_advanced_lt_description">Show popup with problem description</string>
     <string name="title_advanced_lt_user">Username (optional)</string>
     <string name="title_advanced_lt_key">API key (optional)</string>
     <string name="title_advanced_deepl">DeepL integration</string>
@@ -1113,6 +1116,7 @@
     <string name="title_identity_reply_to">Reply to address</string>
     <string name="title_identity_internal">Internal domain names (comma separated)</string>
     <string name="title_identity_uri">Link contact</string>
+    <string name="title_identity_sensitivity">Default sensitivity</string>
     <string name="title_identity_unicode">Allow UTF-8 in message headers</string>
     <string name="title_identity_unicode_remark">Most servers do not support this</string>
     <string name="title_identity_octetmime">Allow 8BITMIME</string>
@@ -1681,6 +1685,7 @@
     <string name="title_translate_formal">Use formal form</string>
     <string name="title_translate_small">Use a small font for the source text</string>
     <string name="title_translate_replace">Replace source text by translated text</string>
+    <string name="title_translate_highlight">Highlight the text being translated</string>
     <string name="title_translate_html">Preserve formatting</string>
     <string name="title_translate_html_hint">This will consume more characters</string>
     <string name="title_translate_usage">Usage: %1$s / %2$s (%3$d %%)</string>
@@ -2228,6 +2233,7 @@
     <string name="title_fetching_again">Fetching message again from the server</string>
     <string name="title_go_back">Go back</string>
     <string name="title_global_default">Use global default</string>
+    <string name="title_not_existing">This message no longer exists on the mail server</string>
 
     <string name="title_conversation_actions">Actions</string>
     <string name="title_conversation_action_reply">Reply with: \'%1$s\'</string>
@@ -2280,6 +2286,9 @@
     <string name="title_debug_info_issue">Problem description (required)</string>
     <string name="title_debug_info_issue_remark">Details, such as the estimated time of the problem, the exact error message, etc., are important</string>
     <string name="title_debug_info_contact">We recently had contact about this problem</string>
+    <string name="title_debug_info_send">Send immediately</string>
+    <string name="title_debug_info_send_remark">Normally, the debug info will be stored as draft message first, so you can check what will be sent</string>
+    <string name="title_debug_info_question">Please use the info button if you just have a question</string>
     <string name="title_unexpected_info_remark">Please describe what you were doing when you got the error:</string>
     <string name="title_issue_subject" translatable="false">FairEmail %1$s issue</string>
 

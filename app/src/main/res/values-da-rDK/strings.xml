@@ -572,6 +572,7 @@
     <string name="title_advanced_double_tap">Dobbelttryk for at markere besked læst/ulæst</string>
     <string name="title_advanced_swipenav">Stryg til venstre/højre for at gå til næste/forrige samtale</string>
     <string name="title_advanced_volumenav">Lydstyrke op/ned for at gå til næste/foregående samtale</string>
+    <string name="title_advanced_up_down">Brug op-/ned-pile for næste/foregående konversation</string>
     <string name="title_advanced_reversed">Omvendt navigeringsretning</string>
     <string name="title_advanced_swipe_close">Stryg nedad for at lukke samtale</string>
     <string name="title_advanced_swipe_move">Stryg opad for at flytte samtale</string>
@@ -673,6 +674,9 @@
     <string name="title_advanced_mnemonic_hint">Modtagelse af en e-mail indeholdende nedenstående ord i emnefeltet vil øjeblikkeligt udløse sletning alle app-data på denne enhed</string>
     <string name="title_advanced_clear_all">Slet app-data</string>
     <string name="title_advanced_clear_all_remark">Alle app-data slettes irreversibelt!</string>
+    <string name="title_advanced_default_encryption">        Standardkrypteringsmetoden (PGP eller S/MIME) gemmes pr. identitet efter afsendelse af en signeret eller krypteret besked.
+        Krypteringsmetoden kan vælges før afsendelse via dialogboksen send (langt tryk på knappen Send).
+    </string>
     <string name="title_advanced_sign_default">Signér som standard</string>
     <string name="title_advanced_encrypt_default">Kryptér som standard</string>
     <string name="title_advanced_encrypt_auto">Kryptér automatisk, når alle modtageres nøgler er tilgængelige</string>
@@ -699,7 +703,7 @@
     </string>
     <string name="title_advanced_power_menu">Føj handlinger til Androids Tænd/Sluk menu</string>
     <string name="title_advanced_send_self">Føj \'Send til dig selv\' til Androids delingsmenu</string>
-    <string name="title_advanced_external_search">Tillad andre apps at søge i beskeder</string>
+    <string name="title_advanced_external_search">Føj \'FairEmail-søgning\' til Androids tekstvalg menu</string>
     <string name="title_advanced_sort_answers">Sortér svarskabeloner efter anvendelsesfrekvens</string>
     <string name="title_advanced_shortcuts">Vis ofte anvendte kontakter i Android-delingsmenuen</string>
     <string name="title_advanced_fts">Opbyg søgeindeks</string>
@@ -711,7 +715,10 @@
     <string name="title_advanced_language">Sprog</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_lt">LanguageTool-integration</string>
+    <string name="title_advanced_lt_sentence">Tjek hver sætning</string>
     <string name="title_advanced_lt_auto">Tjek afsnit efter en ny linje</string>
+    <string name="title_advanced_lt_highlight">Fremhæv teksten, der markeres</string>
+    <string name="title_advanced_lt_description">Vis pop op med problembeskrivelse</string>
     <string name="title_advanced_lt_user">Brugernavn (valgfrit)</string>
     <string name="title_advanced_lt_key">API-nøgle (valgfri)</string>
     <string name="title_advanced_deepl">DeepL-integration</string>
@@ -868,6 +875,7 @@
     <string name="title_identity_reply_to">Svar til-adresse</string>
     <string name="title_identity_internal">Interne domænenavne (kommasepareret)</string>
     <string name="title_identity_uri">Link kontakt</string>
+    <string name="title_identity_sensitivity">Standard følsomhed</string>
     <string name="title_identity_unicode">Tillad UTF-8 i besked-headere</string>
     <string name="title_identity_unicode_remark">De fleste servere understøtter ikke dette</string>
     <string name="title_identity_octetmime">Tillad 8BITMIME</string>
@@ -1384,6 +1392,7 @@
     <string name="title_translate_formal">Brug formel form</string>
     <string name="title_translate_small">Benyt lille kildetekstskrifttype</string>
     <string name="title_translate_replace">Erstat kildetekst ved oversat tekst</string>
+    <string name="title_translate_highlight">Fremhæv teksten, der oversættes</string>
     <string name="title_translate_html">Bevar formatering</string>
     <string name="title_translate_html_hint">Dette vil betyde et forøget antal tegn</string>
     <string name="title_translate_usage">Forbrug: %1$s/%2$s (%3$d %%)</string>
@@ -1886,6 +1895,8 @@
     <string name="title_loading">Indlæser &#8230;</string>
     <string name="title_fetching_again">Henter beskeder igen fra server</string>
     <string name="title_go_back">Gå tilbage</string>
+    <string name="title_global_default">Benyt globale standardindstillinger</string>
+    <string name="title_not_existing">Denne besked findes ikke længere på e-mailserveren</string>
     <string name="title_conversation_actions">Handlinger</string>
     <string name="title_conversation_action_reply">Svar med: \'%1$s\'</string>
     <string name="title_conversation_action_copy">Kopiér: \'%1$s\'</string>
@@ -1931,6 +1942,8 @@
     <string name="title_debug_info_issue">Problematikbeskrivelse (obligatorisk)</string>
     <string name="title_debug_info_issue_remark">Detaljer, såsom anslåede tidspunkt for problematikken, den nøjagtige fejlmeddelelse mv., er vigtige</string>
     <string name="title_debug_info_contact">Der har over tid indsendt flere fejlanmeldelser med denne mangel</string>
+    <string name="title_debug_info_send">Indsend straks</string>
+    <string name="title_debug_info_send_remark">Normalt gemmes fejlretningsinfo som kladdebesked først, så man kan tjekke, hvad der indsendes</string>
     <string name="title_unexpected_info_remark">Beskriv, hvad du foretog dig, da fejlen opstod:</string>
     <string name="title_widget_title_count">Ny besked-tæller</string>
     <string name="title_widget_title_list">Beskedliste</string>
