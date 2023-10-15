@@ -162,6 +162,12 @@ class Core {
     private static final long FIND_RETRY_DELAY = 5 * 1000L; // milliseconds
     private static final int POP3_KEEP_EXTRA = 100; // messages
 
+    // Android applies a rate limit when updating a notification.
+    // If you post updates to a notification too frequently—many in less than one second—
+    // the system might drop updates.
+    private static final int DEFAULT_MAX_NOTIFICATION_ENQUEUE_RATE = 5; // NotificationManagerService.java
+    private static final long NOTIFY_DELAY = 1000L / DEFAULT_MAX_NOTIFICATION_ENQUEUE_RATE; // milliseconds
+
     private static final Map<Long, List<EntityIdentity>> accountIdentities = new HashMap<>();
 
     static void clearIdentities() {
@@ -2400,6 +2406,7 @@ class Core {
     static void onSynchronizeFolders(
             Context context, EntityAccount account, Store istore, State state,
             boolean keep_alive, boolean force) throws MessagingException {
+        // Folder names: https://datatracker.ietf.org/doc/html/rfc2060#section-5.1.3
         DB db = DB.getInstance(context);
 
         if (account.protocol != EntityAccount.TYPE_IMAP)
@@ -2731,20 +2738,19 @@ class Core {
                         !EntityFolder.SYSTEM.equals(type)) {
 
                     // Rename system folders
-                    if (!EntityFolder.INBOX.equals(type))
-                        for (EntityFolder folder : new ArrayList<>(local.values()))
-                            if (type.equals(folder.type) &&
-                                    !fullName.equals(folder.name) &&
-                                    !local.containsKey(fullName) &&
-                                    !istore.getFolder(folder.name).exists()) {
-                                Log.e(account.host +
-                                        " renaming " + type + " folder" +
-                                        " from " + folder.name + " to " + fullName);
-                                local.remove(folder.name);
-                                local.put(fullName, folder);
-                                folder.name = fullName;
-                                db.folder().setFolderName(folder.id, fullName);
-                            }
+                    for (EntityFolder folder : new ArrayList<>(local.values()))
+                        if (type.equals(folder.type) &&
+                                !fullName.equals(folder.name) &&
+                                !local.containsKey(fullName) &&
+                                !istore.getFolder(folder.name).exists()) {
+                            Log.e(account.host +
+                                    " renaming " + type + " folder" +
+                                    " from " + folder.name + " to " + fullName);
+                            local.remove(folder.name);
+                            local.put(fullName, folder);
+                            folder.name = fullName;
+                            db.folder().setFolderName(folder.id, fullName);
+                        }
 
                     // Reselect system folders once
                     String key = "unset." + account.id + "." + type;
@@ -3093,7 +3099,7 @@ class Core {
         } while (count > 0);
     }
 
-    private static void onRule(Context context, JSONArray jargs, EntityMessage message) throws JSONException, MessagingException {
+    private static void onRule(Context context, JSONArray jargs, EntityMessage message) throws JSONException, MessagingException, IOException {
         // Deferred rule (download headers, body, etc)
         DB db = DB.getInstance(context);
 
@@ -5703,8 +5709,17 @@ class Core {
                                             : " channel=" + notification.getChannelId()) +
                                     " sort=" + notification.getSortKey());
                     try {
-                        if (NotificationHelper.areNotificationsEnabled(nm))
+                        if (NotificationHelper.areNotificationsEnabled(nm)) {
                             nm.notify(tag, NotificationHelper.NOTIFICATION_TAGGED, notification);
+                            if (update.contains(id))
+                                try {
+                                    Log.i("Notify delay id=" + id);
+                                    Thread.sleep(NOTIFY_DELAY);
+                                } catch (InterruptedException ex) {
+                                    Log.w(ex);
+                                }
+                        }
+
                         // https://github.com/leolin310148/ShortcutBadger/wiki/Xiaomi-Device-Support
                         if (id == 0 && badge && Helper.isXiaomi())
                             ShortcutBadgerAlt.applyNotification(context, notification, current);

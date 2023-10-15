@@ -1038,6 +1038,7 @@
     <string name="title_answer_hide">پنهان کردن از فهرست‌ها</string>
     <string name="title_answer_text">متن الگو</string>
     <string name="title_answer_placeholder_date">تاریخ فعلی</string>
+    <string name="title_answer_placeholder_weekday" comment="title_answer_placeholder_weekday&#10;Title for menu item to insert a placeholder representing the day of the week">روز هفته</string>
     <string name="title_rule_noop">بدون کنش</string>
     <string name="title_rule_seen">علامت‌گذاری به‌عنوان خوانده شده</string>
     <string name="title_rule_unseen">علامت‌گذاری به‌عنوان خوانده نشده</string>
@@ -1079,6 +1080,7 @@
     <string name="title_rule_cc">پاسخ به نشانی گیرنده رونوشت</string>
     <string name="title_rule_name_missing">نام دستور موجود نیست</string>
     <string name="title_rule_condition_missing">فاقد شرایط</string>
+    <string name="title_rule_url_missing">آدرس وبسایت وارد نشده یا نامعتبر است</string>
     <string name="title_rule_execute">اکنون اجرا کن</string>
     <string name="title_rule_applied">پیام‌های متأثر: %1$d</string>
     <string name="title_rule_check">بررسی</string>
@@ -1281,6 +1283,7 @@
     <string name="title_debug_info_issue">شرح مشکل (لازم)</string>
     <string name="title_debug_info_contact">پیشتر درباره این مشکل پیام دریافت کرده‌ایم</string>
     <string name="title_debug_info_send">ارسال فوری</string>
+    <string name="title_debug_info_question">اگر پرسشی دارید، لطفا از دکمه اطلاعات استفاده کنید</string>
     <string name="title_widget_title_count">شمار پیام جدید</string>
     <string name="title_widget_title_list">لیست پیام‌ها</string>
     <string name="title_power_menu_off">خاموش</string>

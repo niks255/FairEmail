@@ -32,6 +32,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Patterns;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -42,12 +43,16 @@ import androidx.room.PrimaryKey;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.HttpStatusException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -128,6 +133,7 @@ public class EntityRule {
     static final int TYPE_SOUND = 16;
     static final int TYPE_LOCAL_ONLY = 17;
     static final int TYPE_NOTES = 18;
+    static final int TYPE_URL = 19;
 
     static final String ACTION_AUTOMATION = BuildConfig.APPLICATION_ID + ".AUTOMATION";
     static final String EXTRA_RULE = "rule";
@@ -136,9 +142,14 @@ public class EntityRule {
     static final String EXTRA_SUBJECT = "subject";
     static final String EXTRA_RECEIVED = "received";
 
+    static final String[] EXTRA_ALL = new String[]{
+            EXTRA_RULE, EXTRA_SENDER, EXTRA_NAME, EXTRA_SUBJECT, EXTRA_RECEIVED
+    };
+
     static final String JSOUP_PREFIX = "jsoup:";
     private static final long SEND_DELAY = 5000L; // milliseconds
     private static final int MAX_NOTES_LENGTH = 512; // characters
+    private static final int URL_TIMEOUT = 15 * 1000; // milliseconds
 
     static boolean needsHeaders(EntityMessage message, List<EntityRule> rules) {
         return needsHeaders(rules);
@@ -181,7 +192,7 @@ public class EntityRule {
 
     static int run(Context context, List<EntityRule> rules,
                    EntityMessage message, List<Header> headers, String html)
-            throws JSONException, MessagingException {
+            throws JSONException, MessagingException, IOException {
         int applied = 0;
 
         List<String> stopped = new ArrayList<>();
@@ -564,7 +575,7 @@ public class EntityRule {
         return matched;
     }
 
-    boolean execute(Context context, EntityMessage message, String html) throws JSONException {
+    boolean execute(Context context, EntityMessage message, String html) throws JSONException, IOException {
         boolean executed = _execute(context, message, html);
         if (this.id != null && executed) {
             DB db = DB.getInstance(context);
@@ -573,7 +584,7 @@ public class EntityRule {
         return executed;
     }
 
-    private boolean _execute(Context context, EntityMessage message, String html) throws JSONException, IllegalArgumentException {
+    private boolean _execute(Context context, EntityMessage message, String html) throws JSONException, IllegalArgumentException, IOException {
         JSONObject jaction = new JSONObject(action);
         int type = jaction.getInt("type");
         EntityLog.log(context, EntityLog.Type.Rules, message,
@@ -616,6 +627,8 @@ public class EntityRule {
                 return onActionLocalOnly(context, message, jaction);
             case TYPE_NOTES:
                 return onActionNotes(context, message, jaction, html);
+            case TYPE_URL:
+                return onActionUrl(context, message, jaction, html);
             default:
                 throw new IllegalArgumentException("Unknown rule type=" + type + " name=" + name);
         }
@@ -698,6 +711,11 @@ public class EntityRule {
                 String notes = jargs.optString("notes");
                 if (TextUtils.isEmpty(notes))
                     throw new IllegalArgumentException(context.getString(R.string.title_rule_notes_missing));
+                return;
+            case TYPE_URL:
+                String url = jargs.optString("url");
+                if (TextUtils.isEmpty(url) || !Patterns.WEB_URL.matcher(url).matches())
+                    throw new IllegalArgumentException(context.getString(R.string.title_rule_url_missing));
                 return;
             default:
                 throw new IllegalArgumentException("Unknown rule type=" + type);
@@ -1382,6 +1400,72 @@ public class EntityRule {
 
         DB db = DB.getInstance(context);
         db.message().setMessageNotes(message.id, notes, color);
+
+        return true;
+    }
+
+    private boolean onActionUrl(Context context, EntityMessage message, JSONObject jargs, String html) throws JSONException, IOException {
+        String url = jargs.getString("url");
+        String method = jargs.optString("method");
+
+        if (TextUtils.isEmpty(method))
+            method = "GET";
+
+        InternetAddress iaddr =
+                (message.from == null || message.from.length == 0
+                        ? null : ((InternetAddress) message.from[0]));
+        String address = (iaddr == null ? null : iaddr.getAddress());
+        String personal = (iaddr == null ? null : iaddr.getPersonal());
+
+        // ISO 8601
+        DateFormat DTF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        DTF.setTimeZone(java.util.TimeZone.getTimeZone("Zulu"));
+
+        url = url.replace("$" + EXTRA_RULE + "$", Uri.encode(name == null ? "" : name));
+        url = url.replace("$" + EXTRA_SENDER + "$", Uri.encode(address == null ? "" : address));
+        url = url.replace("$" + EXTRA_NAME + "$", Uri.encode(personal == null ? "" : personal));
+        url = url.replace("$" + EXTRA_SUBJECT + "$", Uri.encode(message.subject == null ? "" : message.subject));
+        url = url.replace("$" + EXTRA_RECEIVED + "$", Uri.encode(DTF.format(message.received)));
+
+        String body = null;
+        if ("POST".equals(method) || "PUT".equals(method)) {
+            Uri u = Uri.parse(url);
+            body = u.getQuery();
+            url = u.buildUpon().clearQuery().build().toString();
+        }
+
+        Log.i("GET " + url);
+
+        HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod(method);
+            connection.setDoOutput(body != null);
+            connection.setReadTimeout(URL_TIMEOUT);
+            connection.setConnectTimeout(URL_TIMEOUT);
+            connection.setInstanceFollowRedirects(true);
+            ConnectionHelper.setUserAgent(context, connection);
+            connection.connect();
+
+            if (body != null)
+                connection.getOutputStream().write(body.getBytes());
+
+            int status = connection.getResponseCode();
+            if (status < 200 || status > 299) {
+                String error = "Error " + status + ": " + connection.getResponseMessage();
+                try {
+                    InputStream is = connection.getErrorStream();
+                    if (is != null)
+                        error += "\n" + Helper.readStream(is);
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                }
+                throw new HttpStatusException(error, status, url);
+            }
+        } finally {
+            if (connection != null)
+                connection.disconnect();
+        }
 
         return true;
     }

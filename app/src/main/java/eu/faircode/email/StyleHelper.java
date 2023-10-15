@@ -1806,6 +1806,8 @@ public class StyleHelper {
             return "Caladea, Cambo, Cambria, serif";
         if (faces.contains("comic sans"))
             return "OpenDyslexic, \"Comic Sans\", \"Comic Sans MS\", sans-serif";
+        if (faces.contains("sans narrow"))
+            return "\"Liberation Sans Narrow\", \"Arial Narrow\"";
         return family;
     }
 
@@ -1820,6 +1822,7 @@ public class StyleHelper {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean bundled_fonts = prefs.getBoolean("bundled_fonts", true);
+        boolean narrow_fonts = prefs.getBoolean("narrow_fonts", false);
 
         List<String> faces = new ArrayList<>();
         for (String face : family.split(","))
@@ -1835,10 +1838,11 @@ public class StyleHelper {
                 return ResourcesCompat.getFont(context.getApplicationContext(), R.font.fantasy);
 
             if (bundled_fonts) {
-                if (faces.contains("montserrat") ||
-                        faces.contains("gotham") ||
-                        faces.contains("proxima nova"))
-                    return ResourcesCompat.getFont(context.getApplicationContext(), R.font.montserrat);
+                if (BuildConfig.DEBUG)
+                    if (faces.contains("montserrat") ||
+                            faces.contains("gotham") ||
+                            faces.contains("proxima nova"))
+                        return ResourcesCompat.getFont(context.getApplicationContext(), R.font.montserrat);
 
                 if (faces.contains("arimo") ||
                         faces.contains("arial") ||
@@ -1871,6 +1875,11 @@ public class StyleHelper {
                         faces.contains("comic sans") ||
                         faces.contains("comic sans ms"))
                     return ResourcesCompat.getFont(context.getApplicationContext(), R.font.opendyslexic);
+
+                if (narrow_fonts &&
+                        (faces.contains("sans narrow") ||
+                                faces.contains("arial narrow"))) // condensed, compressed
+                    return ResourcesCompat.getFont(context.getApplicationContext(), R.font.liberation_sans_narrow_regular);
             }
 
             for (String face : faces) {
@@ -1903,6 +1912,7 @@ public class StyleHelper {
     public static List<FontDescriptor> getFonts(Context context, boolean all) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean bundled_fonts = prefs.getBoolean("bundled_fonts", true);
+        boolean narrow_fonts = prefs.getBoolean("narrow_fonts", false);
 
         List<FontDescriptor> result = new ArrayList<>();
         String[] fontNameNames = context.getResources().getStringArray(R.array.fontNameNames);
@@ -1918,9 +1928,11 @@ public class StyleHelper {
             result.add(new FontDescriptor("lato", "Lato (Calibri)", true));
             result.add(new FontDescriptor("caladea", "Caladea (Cambria)", true));
 
-            if (BuildConfig.DEBUG) {
+            if (all || narrow_fonts)
+                result.add(new FontDescriptor("sans narrow", "Liberation Sans Narrow (Arial Narrow)", true));
+
+            if (BuildConfig.DEBUG)
                 result.add(new FontDescriptor("montserrat", "Montserrat", true));
-            }
 
             result.add(new FontDescriptor("comic sans", "OpenDyslexic", true));
         }

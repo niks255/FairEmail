@@ -579,6 +579,7 @@
     <string name="title_advanced_navbar_colorize">Koloruj pasek nawigacji Androida</string>
     <string name="title_advanced_list_count">Pokaż liczbę wiadomości lub konwersacji na górnym pasku akcji</string>
     <string name="title_advanced_bundled_fonts">Użyj dołączonych czcionek</string>
+    <string name="title_advanced_narrow_fonts">Używaj wąskich czcionek</string>
     <string name="title_advanced_parse_classes">Parsowanie arkuszy stylów</string>
     <string name="title_advanced_authentication">Pokaż ostrzeżenia o uwierzytelnieniu</string>
     <string name="title_advanced_authentication_hint">Podstawowe kontrole można skonfigurować w ustawieniach odbioru</string>
@@ -1177,6 +1178,7 @@
     <string name="title_print_header">Wydrukuj nagłówek</string>
     <string name="title_print_images">Drukuj obrazy</string>
     <string name="title_print_images_remark">Pobieranie obrazów może zająć trochę czasu</string>
+    <string name="title_print_block_quotes" comment="title_print_block_quotes&#10;Title for print option to disable printing of (block) quote lines">Drukuj wiersze z cudzysłowami blokowymi</string>
     <string name="title_show_headers">Pokaż nagłówki</string>
     <string name="title_share_as_html">Udostępnij jako HTML</string>
     <string name="title_raw_save">Zapisz nieprzetworzoną wiadomość</string>
@@ -1613,6 +1615,7 @@
     <string name="title_answer_placeholder_firstname">Imię nadawcy</string>
     <string name="title_answer_placeholder_lastname">Nazwisko nadawcy</string>
     <string name="title_answer_placeholder_date">Bieżąca data</string>
+    <string name="title_answer_placeholder_weekday" comment="title_answer_placeholder_weekday&#10;Title for menu item to insert a placeholder representing the day of the week">Dzień tygodnia</string>
     <string name="title_rule_noop">Brak akcji</string>
     <string name="title_rule_seen">Oznacz jako przeczytane</string>
     <string name="title_rule_unseen">Oznacz jako nieprzeczytane</string>
@@ -1684,7 +1687,9 @@
     <string name="title_rule_keyword_missing">Brak słowa kluczowego</string>
     <string name="title_rule_automation_hint">Zostanie wysłany zamiar (intent) \'%1$s\' z dodatkami (extras) \'%2$s\'</string>
     <string name="title_rule_notes_missing">Brak notatek lokalnych</string>
+    <string name="title_rule_url_missing">Brakujący lub nieprawidłowy adres URL</string>
     <string name="title_rule_delete_hint">Trwałe usunięcie jest nieodwracalne, więc upewnij się, że warunki reguły są poprawne!</string>
+    <string name="title_rule_url_hint">Możesz użyć następujących symboli zastępczych: %1$s</string>
     <string name="title_rule_edit_group">Edytuj grupę &#8230;</string>
     <string name="title_rule_execute">Wykonaj teraz</string>
     <string name="title_rule_applied">Problematycznych wiadomości: %1$d</string>
@@ -1966,6 +1971,7 @@
     <string name="title_debug_info_contact">Ostatnio kontaktowaliśmy się w sprawie tego problemu</string>
     <string name="title_debug_info_send">Wyślij natychmiast</string>
     <string name="title_debug_info_send_remark">Zwykle informacje o debugowaniu są najpierw zapisywane jako wersja robocza wiadomości, dzięki czemu można sprawdzić, co zostanie wysłane</string>
+    <string name="title_debug_info_question">Używaj przycisku informacyjnego, jeśli masz tylko pytanie</string>
     <string name="title_unexpected_info_remark">Opisz proszę, co robiłeś, w momencie awarii aplikacji:</string>
     <string name="title_widget_title_count">Liczba nowych wiadomości</string>
     <string name="title_widget_title_list">Lista wiadomości</string>

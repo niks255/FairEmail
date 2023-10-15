@@ -551,6 +551,7 @@
     <string name="title_advanced_navbar_colorize">Colorear la barra de navegación de Android</string>
     <string name="title_advanced_list_count">Mostrar el número de mensajes o conversaciones en la barra de acción superior</string>
     <string name="title_advanced_bundled_fonts">Usar fuentes empaquetadas</string>
+    <string name="title_advanced_narrow_fonts">Usar fuentes estrechas</string>
     <string name="title_advanced_parse_classes">Analizar hojas de estilo</string>
     <string name="title_advanced_authentication">Mostrar advertencias de autenticación</string>
     <string name="title_advanced_authentication_hint">Las comprobaciones subyacentes se pueden configurar en la configuración de recepción</string>
@@ -1149,6 +1150,7 @@
     <string name="title_print_header">Imprimir encabezado</string>
     <string name="title_print_images">Imprimir imágenes</string>
     <string name="title_print_images_remark">La descarga de imágenes puede tardar algún tiempo</string>
+    <string name="title_print_block_quotes" comment="title_print_block_quotes&#10;Title for print option to disable printing of (block) quote lines">Imprimir líneas de citas en bloque</string>
     <string name="title_show_headers">Mostrar encabezados</string>
     <string name="title_share_as_html">Compartir como HTML</string>
     <string name="title_raw_save">Guardar mensaje sin procesar</string>
@@ -1583,6 +1585,7 @@
     <string name="title_answer_placeholder_firstname">Nombre del remitente</string>
     <string name="title_answer_placeholder_lastname">Apellido del remitente</string>
     <string name="title_answer_placeholder_date">Fechal actual</string>
+    <string name="title_answer_placeholder_weekday" comment="title_answer_placeholder_weekday&#10;Title for menu item to insert a placeholder representing the day of the week">Día de la semana</string>
     <string name="title_rule_noop">Ninguna acción</string>
     <string name="title_rule_seen">Marcar como leído</string>
     <string name="title_rule_unseen">Marcar como no leído</string>
@@ -1654,7 +1657,9 @@
     <string name="title_rule_keyword_missing">Palabra clave faltante</string>
     <string name="title_rule_automation_hint">Esto enviará el intento \'%1$s\' con los extras \'%2$s\'</string>
     <string name="title_rule_notes_missing">Notas locales faltantes</string>
+    <string name="title_rule_url_missing">URL faltante o inválida</string>
     <string name="title_rule_delete_hint">La eliminación permanente es irreversible, ¡así que asegúrese de que las condiciones de la regla son correctas!</string>
+    <string name="title_rule_url_hint">Puede usar los siguientes marcadores de posición: %1$s</string>
     <string name="title_rule_edit_group">Editar grupo &#8230;</string>
     <string name="title_rule_execute">Ejecutar ahora</string>
     <string name="title_rule_applied">Mensajes afectados: %1$d</string>
@@ -1937,6 +1942,7 @@
     <string name="title_debug_info_contact">Recientemente hemos tenido contacto con este problema</string>
     <string name="title_debug_info_send">Enviar inmediatamente</string>
     <string name="title_debug_info_send_remark">Normalmente, la información de depuración se almacenará primero como borrador, así puede comprobar qué se enviará</string>
+    <string name="title_debug_info_question">Por favor utilice el botón de información sólo si tiene una pregunta</string>
     <string name="title_unexpected_info_remark">Por favor describa lo que estaba haciendo cuando obtuvo el error:</string>
     <string name="title_widget_title_count">Recuento de mensajes</string>
     <string name="title_widget_title_list">Lista de mensajes</string>

@@ -580,6 +580,7 @@
     <string name="title_advanced_navbar_colorize">לצבוע את סרגל הניווט של Android</string>
     <string name="title_advanced_list_count">הצגת מספר ההודעות או הדיונים בסרגל הפעולות העליון</string>
     <string name="title_advanced_bundled_fonts">להשתמש בגופנים מאוגדים</string>
+    <string name="title_advanced_narrow_fonts">להשתמש בגופנים צרים</string>
     <string name="title_advanced_parse_classes">פענוח גיליונות עיצוב</string>
     <string name="title_advanced_authentication">הצגת אזהרות אימות</string>
     <string name="title_advanced_authentication_hint">את הבדיקות שמאחורי הקלעים אפשר להגדיר בהגדרות הקבלה</string>
@@ -1179,6 +1180,7 @@
     <string name="title_print_header">הדפסת כותרת</string>
     <string name="title_print_images">הדפסת הודעות</string>
     <string name="title_print_images_remark">הורדת תמונות עשויה לארוך זמן מה</string>
+    <string name="title_print_block_quotes" comment="title_print_block_quotes&#10;Title for print option to disable printing of (block) quote lines">הדפסת שורות מקטעי ציטוט</string>
     <string name="title_show_headers">הצגת כותרות</string>
     <string name="title_share_as_html">שיתוף כ־HTML</string>
     <string name="title_raw_save">שמירת הודעה גולמית</string>
@@ -1616,6 +1618,7 @@
     <string name="title_answer_placeholder_firstname">השם הפרטי של המוען</string>
     <string name="title_answer_placeholder_lastname">שם המשפחה של המוען</string>
     <string name="title_answer_placeholder_date">תאריך נוכחי</string>
+    <string name="title_answer_placeholder_weekday" comment="title_answer_placeholder_weekday&#10;Title for menu item to insert a placeholder representing the day of the week">יום בשבוע</string>
     <string name="title_rule_noop">אין פעולה</string>
     <string name="title_rule_seen">סימון כנקרא</string>
     <string name="title_rule_unseen">סימון כלא נקרא</string>
@@ -1687,7 +1690,9 @@
     <string name="title_rule_keyword_missing">מילת מפתח חסרה</string>
     <string name="title_rule_automation_hint">פעולה זו תשלח את ה־intent‏ ‚%1$s’ עם התוספות ‚%2$s’</string>
     <string name="title_rule_notes_missing">חסרות הערות מקומיות</string>
+    <string name="title_rule_url_missing">הכתובת חסרה או שגויה</string>
     <string name="title_rule_delete_hint">מחיקה לצמיתות היא בלתי הפיכה, לכן כדאי לוודא שתנאי הכלל נכונים!</string>
+    <string name="title_rule_url_hint">תמיד אפשר להשתמש בממלאי המקום הבאים: %1$s</string>
     <string name="title_rule_edit_group">עריכת קבוצה&#8230;</string>
     <string name="title_rule_execute">לבצע כעת</string>
     <string name="title_rule_applied">הודעות שיושפעו: %1$d</string>
@@ -1971,6 +1976,7 @@
     <string name="title_debug_info_contact">לאחרונה יצרנו קשר סביב הבעיה הזאת</string>
     <string name="title_debug_info_send">לשלוח מייד</string>
     <string name="title_debug_info_send_remark">בדרך כלל, פרטי השגיאה יאוחסנו כהודעת טיוטה תחילה, כדי לאפשר לך לסקור מה יישלח</string>
+    <string name="title_debug_info_question">נא להשתמש בכפתור המידע אם יש לך רק שאלה</string>
     <string name="title_unexpected_info_remark">נא לתאר באנגלית מה עשית כשהופיעה השגיאה:</string>
     <string name="title_widget_title_count">מונה הודעות חדשות</string>
     <string name="title_widget_title_list">רשימת הודעות</string>

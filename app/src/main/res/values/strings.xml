@@ -640,6 +640,7 @@
     <string name="title_advanced_navbar_colorize">Colorize the Android navigation bar</string>
     <string name="title_advanced_list_count">Show the number of messages or conversations in the top action bar</string>
     <string name="title_advanced_bundled_fonts">Use bundled fonts</string>
+    <string name="title_advanced_narrow_fonts">Use narrow fonts</string>
     <string name="title_advanced_parse_classes">Parse style sheets</string>
     <string name="title_advanced_authentication">Show authentication warnings</string>
     <string name="title_advanced_authentication_hint">The underlying checks can be configured in the receive settings</string>
@@ -908,6 +909,9 @@
     <string name="title_advanced_exact_alarms" translatable="false">Use exact timers</string>
     <string name="title_advanced_native_dkim" translatable="false">Native DKIM verification</string>
     <string name="title_advanced_native_arc" translatable="false">Native ARC verification</string>
+    <string name="title_advanced_pdf_preview" translatable="false">PDF preview</string>
+    <string name="title_advanced_webp" translatable="false">Webp</string>
+    <string name="title_advanced_easy_correct" translatable="false">Easy correct</string>
     <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
     <string name="title_advanced_tld_flags" translatable="false">Show TLD flags</string>
     <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
@@ -1418,6 +1422,7 @@
     <string name="title_print_header">Print header</string>
     <string name="title_print_images">Print images</string>
     <string name="title_print_images_remark">Downloading images might take some time</string>
+    <string name="title_print_block_quotes">Print block quotes lines</string>
     <string name="title_show_headers">Show headers</string>
     <string name="title_share_as_html">Share as HTML</string>
     <string name="title_raw_save">Save raw message</string>
@@ -1453,6 +1458,7 @@
     <string name="title_quick_actions_clear">Clear selection after action</string>
 
     <string name="title_trash">Trash</string>
+    <string name="title_trash_selection">Trash selection</string>
     <string name="title_copy">Copy &#8230;</string>
     <string name="title_copy_to">Copy to &#8230;</string>
     <string name="title_subscribe">Subscribe</string>
@@ -1905,6 +1911,7 @@
     <string name="title_answer_placeholder_firstname">Sender\'s first name</string>
     <string name="title_answer_placeholder_lastname">Sender\'s last name</string>
     <string name="title_answer_placeholder_date">Current date</string>
+    <string name="title_answer_placeholder_weekday">Day of week</string>
 
     <string name="title_rule_noop">No action</string>
     <string name="title_rule_seen">Mark read</string>
@@ -1919,6 +1926,7 @@
     <string name="title_rule_keyword_add">Add</string>
     <string name="title_rule_keyword_delete">Delete</string>
     <string name="title_rule_notes">Local notes</string>
+    <string name="title_rule_url" translatable="false">Webhook</string>
     <string name="title_rule_move">Move</string>
     <string name="title_rule_copy">Copy (label)</string>
     <string name="title_rule_answer">Reply/forward</string>
@@ -1980,8 +1988,10 @@
     <string name="title_rule_keyword_missing">Keyword missing</string>
     <string name="title_rule_automation_hint">This will send the intent \'%1$s\' with the extras \'%2$s\'</string>
     <string name="title_rule_notes_missing">Local notes missing</string>
+    <string name="title_rule_url_missing">URL missing or invalid</string>
     <string name="title_rule_delete_hint">Permanent deletion is irreversible, so make sure the rule conditions are correct!</string>
     <string name="title_rule_local_only_hint" translatable="false">Try to avoid bridging notifications to other devices, such as smartwatches. Not all devices support this.</string>
+    <string name="title_rule_url_hint">You can use the following placeholders: %1$s</string>
     <string name="title_rule_edit_group">Edit group &#8230;</string>
 
     <string name="title_rule_execute">Execute now</string>
@@ -2739,6 +2749,14 @@
         <item>Work</item>
         <item>Other</item>
         <item>Mobile</item>
+    </string-array>
+
+    <string-array name="httpMethodNames" translatable="false">
+        <item>GET</item>
+        <item>HEAD</item>
+        <item>OPTIONS</item>
+        <item>POST</item>
+        <item>PUT</item>
     </string-array>
 
     <string name="fingerprint" translatable="false">17BA15C1AF55D925F98B99CEA4375D4CDF4C174B</string>

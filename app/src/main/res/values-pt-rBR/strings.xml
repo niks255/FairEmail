@@ -551,6 +551,7 @@
     <string name="title_advanced_navbar_colorize">Colorir a barra de navegação do Android</string>
     <string name="title_advanced_list_count">Mostrar o número de mensagens ou conversas na barra de ação superior</string>
     <string name="title_advanced_bundled_fonts">Usar fontes embutidas</string>
+    <string name="title_advanced_narrow_fonts">Usar fontes estreitas</string>
     <string name="title_advanced_parse_classes">Analisar folhas de estilo</string>
     <string name="title_advanced_authentication">Mostrar avisos de autenticação</string>
     <string name="title_advanced_authentication_hint">As verificações subjacentes podem ser configuradas nas configurações de recebimento</string>
@@ -571,6 +572,7 @@
     <string name="title_advanced_double_tap">Toque duplo para marcar mensagem lida/não lida</string>
     <string name="title_advanced_swipenav">Deslize para a esquerda/direita para ir para próxima/anterior conversa</string>
     <string name="title_advanced_volumenav">Volume para cima/baixo para ir para próxima/anterior conversa</string>
+    <string name="title_advanced_up_down">Use as setas para cima/para baixo para a conversa seguinte/anterior</string>
     <string name="title_advanced_reversed">Reverter a direção de navegação</string>
     <string name="title_advanced_swipe_close">Deslize para baixo para fechar uma conversa</string>
     <string name="title_advanced_swipe_move">Deslize para cima para mover a conversa</string>
@@ -1148,6 +1150,7 @@
     <string name="title_print_header">Imprimir cabeçalho</string>
     <string name="title_print_images">Imprimir imagens</string>
     <string name="title_print_images_remark">Baixar imagens pode demorar certo tempo</string>
+    <string name="title_print_block_quotes" comment="title_print_block_quotes&#10;Title for print option to disable printing of (block) quote lines">Imprimir linhas de aspas por bloco</string>
     <string name="title_show_headers">Mostrar cabeçalhos</string>
     <string name="title_share_as_html">Compartilhar como arquivo HTML</string>
     <string name="title_raw_save">Salvar imagem raw</string>
@@ -1584,6 +1587,7 @@
     <string name="title_answer_placeholder_firstname">Primeiro nome do remetente</string>
     <string name="title_answer_placeholder_lastname">Último nome do remetente</string>
     <string name="title_answer_placeholder_date">Data atual</string>
+    <string name="title_answer_placeholder_weekday" comment="title_answer_placeholder_weekday&#10;Title for menu item to insert a placeholder representing the day of the week">Dia da semana</string>
     <string name="title_rule_noop">Nenhuma ação</string>
     <string name="title_rule_seen">Marcar como lida</string>
     <string name="title_rule_unseen">Marcar como não lida</string>
@@ -1655,7 +1659,9 @@
     <string name="title_rule_keyword_missing">Palavra-chave faltando</string>
     <string name="title_rule_automation_hint">Isto enviará a intenção \'%1$s\' com os extras \'%2$s\'</string>
     <string name="title_rule_notes_missing">Notas locais ausentes</string>
+    <string name="title_rule_url_missing">URL ausente ou inválida</string>
     <string name="title_rule_delete_hint">A exclusão permanente é irreversível, por isso certifique-se de que as condições de regra estão corretas!</string>
+    <string name="title_rule_url_hint">Você pode usar os seguintes marcadores: %1$s</string>
     <string name="title_rule_edit_group">Editar grupo &#8230;</string>
     <string name="title_rule_execute">Execute agora</string>
     <string name="title_rule_applied">Mensagens afetadas: %1$d</string>
@@ -1938,6 +1944,7 @@
     <string name="title_debug_info_contact">Recentemente tivemos contato sobre este problema</string>
     <string name="title_debug_info_send">Enviar imediatamente</string>
     <string name="title_debug_info_send_remark">Normalmente, as informações de depuração serão armazenadas primeiro como rascunho da mensagem, para que você possa verificar o que será enviado</string>
+    <string name="title_debug_info_question">Por favor, use o botão de informações se você tiver apenas uma pergunta</string>
     <string name="title_unexpected_info_remark">Por favor, descreva o que você estava fazendo quando recebeu o erro:</string>
     <string name="title_widget_title_count">Nova contagem de mensagens</string>
     <string name="title_widget_title_list">Lista de mensagem</string>

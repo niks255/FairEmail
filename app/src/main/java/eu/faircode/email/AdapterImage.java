@@ -20,13 +20,18 @@ package eu.faircode.email;
 */
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.AnimatedImageDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.pdf.PdfRenderer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +45,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,17 +58,19 @@ import java.util.List;
 
 public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ViewHolder> {
     private Fragment parentFragment;
-    private Context context;
-    private LayoutInflater inflater;
-    private LifecycleOwner owner;
+    private final Context context;
+    private final LayoutInflater inflater;
+    private final LifecycleOwner owner;
 
     private List<EntityAttachment> items = new ArrayList<>();
 
+    private static final int PDF_WIDTH = 120;
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        private View view;
-        private ImageView ivImage;
-        private TextView tvCaption;
-        private TextView tvProperties;
+        private final View view;
+        private final ImageView ivImage;
+        private final TextView tvCaption;
+        private final TextView tvProperties;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -106,43 +114,74 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ViewHolder> 
                         String type = args.getString("type");
                         int max = args.getInt("max");
 
-                        args.putLong("size", file.length());
-
-                        try {
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inJustDecodeBounds = true;
-                            BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-                            args.putInt("width", options.outWidth);
-                            args.putInt("height", options.outHeight);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                if (options.outColorSpace != null)
-                                    args.putString("color", options.outColorSpace.getModel().name());
-                                if (options.outConfig != null)
-                                    args.putString("config", options.outConfig.name());
+                        if ("application/pdf".equals(type)) {
+                            // https://developer.android.com/reference/android/graphics/pdf/PdfRenderer
+                            try (ParcelFileDescriptor pfd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)) {
+                                try (PdfRenderer pdf = new PdfRenderer(pfd)) {
+                                    try (PdfRenderer.Page page = pdf.openPage(0)) {
+                                        int width = Helper.dp2pixels(context, PDF_WIDTH);
+                                        int height = (int) ((float) width / page.getWidth() * page.getHeight());
+                                        Bitmap bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                                        Canvas canvas = new Canvas(bm);
+                                        canvas.drawColor(Color.WHITE);
+                                        page.render(bm, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+                                        return new BitmapDrawable(context.getResources(), bm);
+                                    }
+                                }
+                            } catch (Throwable ex) {
+                                Log.w(ex);
+                                return null;
                             }
-                        } catch (Throwable ex) {
-                            Log.w(ex);
-                        }
+                        } else {
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                            boolean webp = prefs.getBoolean("webp", true);
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
-                                !"image/svg+xml".equals(type) &&
-                                !"svg".equals(Helper.getExtension(file.getName())))
+                            if ("image/webp".equalsIgnoreCase(type) && !webp) {
+                                args.putBoolean("nowebp", true);
+                                return null;
+                            }
+
+                            args.putLong("size", file.length());
+
                             try {
-                                return ImageHelper.getScaledDrawable(context, file, type, max);
+                                BitmapFactory.Options options = new BitmapFactory.Options();
+                                options.inJustDecodeBounds = true;
+                                BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                                args.putInt("width", options.outWidth);
+                                args.putInt("height", options.outHeight);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    if (options.outColorSpace != null)
+                                        args.putString("color", options.outColorSpace.getModel().name());
+                                    if (options.outConfig != null)
+                                        args.putString("config", options.outConfig.name());
+                                }
                             } catch (Throwable ex) {
                                 Log.w(ex);
                             }
 
-                        Bitmap bm = ImageHelper.decodeImage(file, type, max);
-                        if (bm == null)
-                            return null;
-                        return new BitmapDrawable(context.getResources(), bm);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
+                                    !"image/svg+xml".equals(type) &&
+                                    !"svg".equals(Helper.getExtension(file.getName())))
+                                try {
+                                    return ImageHelper.getScaledDrawable(context, file, type, max);
+                                } catch (Throwable ex) {
+                                    Log.w(ex);
+                                }
+
+                            Bitmap bm = ImageHelper.decodeImage(file, type, max);
+                            if (bm == null)
+                                return null;
+                            return new BitmapDrawable(context.getResources(), bm);
+                        }
                     }
 
                     @Override
                     protected void onExecuted(Bundle args, Drawable image) {
                         if (image == null)
-                            ivImage.setImageResource(R.drawable.twotone_broken_image_24);
+                            if (args.getBoolean("nowebp"))
+                                ivImage.setImageResource(R.drawable.twotone_warning_24);
+                            else
+                                ivImage.setImageResource(R.drawable.twotone_broken_image_24);
                         else
                             ivImage.setImageDrawable(image);
 
@@ -351,8 +390,8 @@ public class AdapterImage extends RecyclerView.Adapter<AdapterImage.ViewHolder> 
     }
 
     private static class DiffCallback extends DiffUtil.Callback {
-        private List<EntityAttachment> prev = new ArrayList<>();
-        private List<EntityAttachment> next = new ArrayList<>();
+        private final List<EntityAttachment> prev = new ArrayList<>();
+        private final List<EntityAttachment> next = new ArrayList<>();
 
         DiffCallback(List<EntityAttachment> prev, List<EntityAttachment> next) {
             this.prev.addAll(prev);

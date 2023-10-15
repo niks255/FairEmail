@@ -77,6 +77,7 @@ public class FragmentDialogPrint extends FragmentDialogBase {
         View dview = LayoutInflater.from(context).inflate(R.layout.dialog_print, null);
         CheckBox cbHeader = dview.findViewById(R.id.cbHeader);
         CheckBox cbImages = dview.findViewById(R.id.cbImages);
+        CheckBox cbBlockQuotes = dview.findViewById(R.id.cbBlockQuotes);
         CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
 
         cbHeader.setChecked(prefs.getBoolean("print_html_header", true));
@@ -92,6 +93,14 @@ public class FragmentDialogPrint extends FragmentDialogBase {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 prefs.edit().putBoolean("print_html_images", isChecked).apply();
+            }
+        });
+
+        cbBlockQuotes.setChecked(prefs.getBoolean("print_html_block_quotes", true));
+        cbBlockQuotes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                prefs.edit().putBoolean("print_html_block_quotes", isChecked).apply();
             }
         });
 
@@ -128,9 +137,11 @@ public class FragmentDialogPrint extends FragmentDialogBase {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         boolean print_html_header = prefs.getBoolean("print_html_header", true);
         boolean print_html_images = prefs.getBoolean("print_html_images", true);
+        boolean print_html_block_quotes = prefs.getBoolean("print_html_block_quotes", true);
 
         args.putBoolean("print_html_header", print_html_header);
         args.putBoolean("print_html_images", print_html_images);
+        args.putBoolean("print_html_block_quotes", print_html_block_quotes);
 
         new SimpleTask<String[]>() {
             @Override
@@ -139,6 +150,7 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                 boolean headers = args.getBoolean("headers");
                 boolean print_html_header = args.getBoolean("print_html_header");
                 boolean print_html_images = args.getBoolean("print_html_images");
+                boolean print_html_block_quotes = args.getBoolean("print_html_block_quotes");
                 CharSequence selected = args.getCharSequence("selected");
                 boolean draft = args.getBoolean("draft");
 
@@ -148,6 +160,10 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                 DB db = DB.getInstance(context);
                 EntityMessage message = db.message().getMessage(id);
                 if (message == null || !message.content)
+                    return null;
+
+                EntityFolder folder = db.folder().getFolder(message.folder);
+                if (folder == null)
                     return null;
 
                 File file = message.getFile(context);
@@ -167,6 +183,15 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                 boolean monospaced_pre = prefs.getBoolean("monospaced_pre", false);
                 if (message.isPlainOnly() && monospaced_pre)
                     HtmlHelper.restorePre(document);
+
+                if (!print_html_block_quotes)
+                    for (Element bq : document.select("blockquote")) {
+                        String style = bq.attr("style");
+                        bq.attr("style", HtmlHelper.mergeStyles(style,
+                                "border: none !important;" +
+                                        "margin-left: 0; margin-right: 0;" +
+                                        "padding-left: 0; padding-right: 0;"));
+                    }
 
                 HtmlHelper.markText(document);
 
@@ -280,11 +305,13 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                     if (message.received != null && !draft) {
                         DateFormat DTF = Helper.getDateTimeInstance(context, SimpleDateFormat.LONG, SimpleDateFormat.LONG);
 
+                        boolean sent = (EntityFolder.SENT.equals(folder.type) && message.sent != null);
+
                         Element span = document.createElement("span");
                         Element strong = document.createElement("strong");
-                        strong.text(context.getString(R.string.title_received));
+                        strong.text(context.getString(sent ? R.string.title_sent : R.string.title_received));
                         span.appendChild(strong);
-                        span.appendText(" " + DTF.format(message.received));
+                        span.appendText(" " + DTF.format(sent ? message.sent : message.received));
                         span.appendElement("br");
                         header.appendChild(span);
                     }
@@ -322,6 +349,7 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                     document.body().prependChild(header);
                 }
 
+                args.putLong("received", message.received);
                 return new String[]{message.subject, document.body().html()};
             }
 
@@ -360,9 +388,10 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                             }
 
                             PrintManager printManager = (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
-                            String jobName = activity.getString(R.string.app_name);
+                            String jobName = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                                    .format(args.getLong("received"));
                             if (!TextUtils.isEmpty(data[0]))
-                                jobName += " - " + data[0];
+                                jobName += " " + data[0];
 
                             Log.i("Print queue job=" + jobName);
                             PrintDocumentAdapter adapter = printWebView.createPrintDocumentAdapter(jobName);

@@ -172,6 +172,10 @@ public class FragmentRule extends FragmentBase {
     private EditText etNotes;
     private ViewButtonColor btnColorNotes;
 
+    private Spinner spUrlMethod;
+    private EditText etUrl;
+    private TextView tvUrlHint;
+
     private BottomNavigationView bottom_navigation;
     private ContentLoadingProgressBar pbWait;
 
@@ -190,6 +194,7 @@ public class FragmentRule extends FragmentBase {
     private Group grpDelete;
     private Group grpLocalOnly;
     private Group grpNotes;
+    private Group grpUrl;
 
     private ArrayAdapter<String> adapterGroup;
     private ArrayAdapter<String> adapterDay;
@@ -362,6 +367,10 @@ public class FragmentRule extends FragmentBase {
         etNotes = view.findViewById(R.id.etNotes);
         btnColorNotes = view.findViewById(R.id.btnColorNotes);
 
+        spUrlMethod = view.findViewById(R.id.spUrlMethod);
+        etUrl = view.findViewById(R.id.etUrl);
+        tvUrlHint = view.findViewById(R.id.tvUrlHint);
+
         bottom_navigation = view.findViewById(R.id.bottom_navigation);
 
         pbWait = view.findViewById(R.id.pbWait);
@@ -381,6 +390,7 @@ public class FragmentRule extends FragmentBase {
         grpDelete = view.findViewById(R.id.grpDelete);
         grpLocalOnly = view.findViewById(R.id.grpLocalOnly);
         grpNotes = view.findViewById(R.id.grpNotes);
+        grpUrl = view.findViewById(R.id.grpUrl);
 
         adapterGroup = new ArrayAdapter<>(getContext(), R.layout.spinner_item1_dropdown, android.R.id.text1);
         etGroup.setThreshold(1);
@@ -646,6 +656,7 @@ public class FragmentRule extends FragmentBase {
         actions.add(new Action(EntityRule.TYPE_TTS, getString(R.string.title_rule_tts)));
         actions.add(new Action(EntityRule.TYPE_SOUND, getString(R.string.title_rule_sound)));
         actions.add(new Action(EntityRule.TYPE_AUTOMATION, getString(R.string.title_rule_automation)));
+        actions.add(new Action(EntityRule.TYPE_URL, getString(R.string.title_rule_url)));
         adapterAction.addAll(actions);
 
         spAction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -793,10 +804,7 @@ public class FragmentRule extends FragmentBase {
 
         tvAutomation.setText(getString(R.string.title_rule_automation_hint,
                 EntityRule.ACTION_AUTOMATION,
-                TextUtils.join(",", new String[]{
-                        EntityRule.EXTRA_RULE,
-                        EntityRule.EXTRA_SENDER,
-                        EntityRule.EXTRA_SUBJECT})));
+                TextUtils.join(",", EntityRule.EXTRA_ALL)));
 
         btnColorNotes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -812,6 +820,11 @@ public class FragmentRule extends FragmentBase {
                 fragment.show(getParentFragmentManager(), "rule:color:notes");
             }
         });
+
+        List<String> extras = new ArrayList<>();
+        for (String extra : EntityRule.EXTRA_ALL)
+            extras.add("$" + extra + "$");
+        tvUrlHint.setText(getString(R.string.title_rule_url_hint, TextUtils.join(", ", extras)));
 
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -849,6 +862,7 @@ public class FragmentRule extends FragmentBase {
         grpDelete.setVisibility(View.GONE);
         grpLocalOnly.setVisibility(View.GONE);
         grpNotes.setVisibility(View.GONE);
+        grpUrl.setVisibility(View.GONE);
 
         pbWait.setVisibility(View.VISIBLE);
 
@@ -1300,7 +1314,6 @@ public class FragmentRule extends FragmentBase {
                                     etKeyword.setText(jaction.getString("keyword"));
                                     rgKeyword.check(jaction.optBoolean("set", true)
                                             ? R.id.keyword_add : R.id.keyword_delete);
-
                                     break;
 
                                 case EntityRule.TYPE_MOVE:
@@ -1358,6 +1371,17 @@ public class FragmentRule extends FragmentBase {
                                     btnColorNotes.setColor(
                                             !jaction.has("color") || jaction.isNull("color")
                                                     ? null : jaction.getInt("color"));
+                                    break;
+
+                                case EntityRule.TYPE_URL:
+                                    etUrl.setText(jaction.getString("url"));
+                                    String method = jaction.optString("method");
+                                    if (TextUtils.isEmpty(method))
+                                        method = "GET";
+                                    int pos = Arrays.asList(getResources().getStringArray(R.array.httpMethodNames))
+                                            .indexOf(method);
+                                    if (pos >= 0)
+                                        spUrlMethod.setSelection(pos);
                                     break;
                             }
 
@@ -1417,6 +1441,7 @@ public class FragmentRule extends FragmentBase {
         grpDelete.setVisibility(type == EntityRule.TYPE_DELETE ? View.VISIBLE : View.GONE);
         grpLocalOnly.setVisibility(type == EntityRule.TYPE_LOCAL_ONLY ? View.VISIBLE : View.GONE);
         grpNotes.setVisibility(type == EntityRule.TYPE_NOTES ? View.VISIBLE : View.GONE);
+        grpUrl.setVisibility(type == EntityRule.TYPE_URL ? View.VISIBLE : View.GONE);
     }
 
     private void onActionDelete() {
@@ -1763,6 +1788,16 @@ public class FragmentRule extends FragmentBase {
                     int ncolor = btnColorNotes.getColor();
                     if (ncolor != Color.TRANSPARENT)
                         jaction.put("color", ncolor);
+                    break;
+
+                case EntityRule.TYPE_URL:
+                    jaction.put("url", etUrl.getText().toString().trim());
+                    int pos = spUrlMethod.getSelectedItemPosition();
+                    String[] methods = getResources().getStringArray(R.array.httpMethodNames);
+                    if (pos >= 0 && pos < methods.length)
+                        jaction.put("method", methods[pos]);
+                    else
+                        jaction.put("method", "GET");
                     break;
             }
         }

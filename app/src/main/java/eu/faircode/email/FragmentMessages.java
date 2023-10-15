@@ -1345,12 +1345,12 @@ public class FragmentMessages extends FragmentBase
             }
         });
 
-        if (prefs.getBoolean("updown", false)) {
+        if (prefs.getBoolean("updown", true)) {
             boolean reversed = prefs.getBoolean("reversed", false);
             bottom_navigation.getMenu().findItem(R.id.action_prev)
-                    .setIcon(reversed ? R.drawable.baseline_arrow_upward_24 : R.drawable.baseline_arrow_downward_24);
+                    .setIcon(reversed ? R.drawable.twotone_north_24 : R.drawable.twotone_south_24);
             bottom_navigation.getMenu().findItem(R.id.action_next)
-                    .setIcon(reversed ? R.drawable.baseline_arrow_downward_24 : R.drawable.baseline_arrow_upward_24);
+                    .setIcon(reversed ? R.drawable.twotone_south_24 : R.drawable.twotone_north_24);
         }
 
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -2736,6 +2736,16 @@ public class FragmentMessages extends FragmentBase
         }
 
         @Override
+        public int getSelectionCount() {
+            return getSelection().length;
+        }
+
+        @Override
+        public void moveSelection(String type, boolean block) {
+            onActionMoveSelection(type, block);
+        }
+
+        @Override
         public void reply(TupleMessageEx message, CharSequence selected, View anchor) {
             onReply(message, selected, anchor);
         }
@@ -4073,15 +4083,15 @@ public class FragmentMessages extends FragmentBase
 
                 SubMenu importance = popupMenu.getMenu()
                         .addSubMenu(Menu.NONE, Menu.NONE, order++, R.string.title_set_importance)
-                        .setIcon(R.drawable.baseline_arrow_upward_24);
+                        .setIcon(R.drawable.twotone_north_24);
                 importance.add(Menu.NONE, R.string.title_importance_high, 1, R.string.title_importance_high)
-                        .setIcon(R.drawable.baseline_arrow_upward_24)
+                        .setIcon(R.drawable.twotone_north_24)
                         .setEnabled(!EntityMessage.PRIORITIY_HIGH.equals(result.importance));
                 importance.add(Menu.NONE, R.string.title_importance_normal, 2, R.string.title_importance_normal)
                         .setIcon(R.drawable.twotone_horizontal_rule_24)
                         .setEnabled(!EntityMessage.PRIORITIY_NORMAL.equals(result.importance));
                 importance.add(Menu.NONE, R.string.title_importance_low, 3, R.string.title_importance_low)
-                        .setIcon(R.drawable.baseline_arrow_downward_24)
+                        .setIcon(R.drawable.twotone_south_24)
                         .setEnabled(!EntityMessage.PRIORITIY_LOW.equals(result.importance));
 
                 if (ids.length < MAX_SEND_RAW)
@@ -8931,9 +8941,11 @@ public class FragmentMessages extends FragmentBase
                                         db.message().setMessageStored(message.id, new Date().getTime());
                                         db.message().setMessageFts(message.id, false);
 
-                                        File raw = message.getRawFile(context);
-                                        Helper.copy(plain, raw);
-                                        db.message().setMessageRaw(message.id, true);
+                                        if (BuildConfig.DEBUG || debug) {
+                                            File raw = message.getRawFile(context);
+                                            Helper.copy(plain, raw);
+                                            db.message().setMessageRaw(message.id, true);
+                                        }
 
                                         db.setTransactionSuccessful();
                                     } catch (SQLiteConstraintException ex) {

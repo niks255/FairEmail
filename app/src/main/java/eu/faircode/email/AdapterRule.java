@@ -225,6 +225,12 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                 } else if (type == EntityRule.TYPE_NOTES) {
                     String notes = jaction.getString("notes");
                     setAction(getAction(type), notes);
+                } else if (type == EntityRule.TYPE_URL) {
+                    String url = jaction.getString("url");
+                    String method = jaction.optString("method");
+                    if (TextUtils.isEmpty(method))
+                        method = "GET";
+                    setAction(getAction(type), method + " " + url);
                 } else
                     setAction(getAction(type), null);
 
@@ -577,6 +583,8 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                     return R.string.title_rule_local_only;
                 case EntityRule.TYPE_NOTES:
                     return R.string.title_rule_notes;
+                case EntityRule.TYPE_URL:
+                    return R.string.title_rule_url;
                 default:
                     throw new IllegalArgumentException("Unknown action type=" + type);
             }
