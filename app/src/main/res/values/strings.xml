@@ -209,6 +209,7 @@
     <string name="title_setup_quick_smtp">SMTP server to send messages</string>
     <string name="title_setup_quick_certificates">Server certificates</string>
     <string name="title_setup_wizard">Wizard</string>
+    <string name="title_setup_wizard_intro">In most cases the wizard button can be used to add an account, otherwise the server addresses can be entered or changed manually using the manual setup option</string>
     <string name="title_setup_wizard_tutorials">Tutorials</string>
     <string name="title_setup_wizard_multiple">The wizard can be used multiple times to set up multiple accounts</string>
     <string name="title_setup_wizard_new">I need a new email address</string>
@@ -448,6 +449,7 @@
     <string name="title_advanced_suggest_sent">Suggest addresses found in sent messages</string>
     <string name="title_advanced_suggest_received">Suggest addresses found in received messages</string>
     <string name="title_advanced_suggest_frequently">Sort suggested addresses on frequency of use</string>
+    <string name="title_advanced_suggest_account">Limit suggestions to current account</string>
     <string name="title_advanced_alt_re_fwd">Alternative reply/forward prefix</string>
     <string name="title_advanced_send_chips">Show address bubbles</string>
     <string name="title_advanced_send_nav_color">Use the identity color for the bottom action bar</string>
@@ -614,6 +616,7 @@
     <string name="title_advanced_unzip">Show contents of compressed attachments</string>
     <string name="title_advanced_attachments_alt">Show attachments after the message text</string>
     <string name="title_advanced_thumbnails">Show image thumbnails after the message text</string>
+    <string name="title_advanced_pdf_preview">Show PDF thumbnails</string>
     <string name="title_advanced_message_text_zoom2">Default message text zoom: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Zoom message text also in the message editor</string>
     <string name="title_advanced_overview_mode">Zoom original messages to fit the screen</string>
@@ -909,7 +912,6 @@
     <string name="title_advanced_exact_alarms" translatable="false">Use exact timers</string>
     <string name="title_advanced_native_dkim" translatable="false">Native DKIM verification</string>
     <string name="title_advanced_native_arc" translatable="false">Native ARC verification</string>
-    <string name="title_advanced_pdf_preview" translatable="false">PDF preview</string>
     <string name="title_advanced_webp" translatable="false">Webp</string>
     <string name="title_advanced_easy_correct" translatable="false">Easy correct</string>
     <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
@@ -968,6 +970,7 @@
 
     <string name="title_advanced_suggest_names_hint">If disabled, only email addresses will be used when selecting contacts</string>
     <string name="title_advanced_suggest_local_hint">In addition to contacts provided by Android. Contact data will be stored for newly sent or received messages only when enabled.</string>
+    <string name="title_advanced_suggest_account_hint">This only applies to local contacts because contacts in the Android address book are not linked to specific accounts</string>
     <string name="title_advanced_auto_identity_hint">This will select the last identity used when selecting a recipient for new messages</string>
     <string name="title_advanced_send_reminders_hint">Show a warning when the message text or the subject is empty or when an attachment might be missing</string>
     <string name="title_advanced_reply_move_hint">The email server could still add the messages to the sent message folder</string>
@@ -1288,6 +1291,7 @@
     <string name="title_delete_channel">Delete notification channel</string>
     <string name="title_insert_contact">Add contact</string>
     <string name="title_edit_contact">Edit contact</string>
+    <string name="title_delete_contact">Delete contact?</string>
     <string name="title_contact_email">Email</string>
     <string name="title_contact_name">Name</string>
     <string name="title_contact_group">Group</string>
@@ -1802,6 +1806,7 @@
     <string name="title_search_in_keywords">In keywords (if supported)</string>
     <string name="title_search_in_message">In message text</string>
     <string name="title_search_in_notes">In local notes</string>
+    <string name="title_search_in_filenames">In filenames (on device only)</string>
     <string name="title_search_in_headers" translatable="false">In headers</string>
     <string name="title_search_in_html" translatable="false">In HTML</string>
     <string name="title_search_with">Limit search to</string>
@@ -2329,6 +2334,7 @@
     <string name="title_widget_refresh">Show refresh messages button</string>
     <string name="title_widget_compose">Show compose new message button</string>
     <string name="title_widget_background">Background color</string>
+    <string name="title_widget_icon">Icon color</string>
     <string name="title_widget_day_night">Follow dark system theme</string>
 
     <string name="title_compat_dark">Google removed dark mode for Android versions before version 10</string>

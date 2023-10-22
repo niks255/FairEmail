@@ -177,6 +177,7 @@
     <string name="title_setup_quick_smtp">SMTP server za slanje poruka</string>
     <string name="title_setup_quick_certificates">Certifikati servera</string>
     <string name="title_setup_wizard">Čarobnjak</string>
+    <string name="title_setup_wizard_intro">Najčešće dugme čarobnjak služi da dodate račun, u suprotnom adrese servera se mogu ručno unositi i mijenjati koristeći ručne postavke</string>
     <string name="title_setup_wizard_tutorials">Tutorijali</string>
     <string name="title_setup_wizard_multiple">Čarobnjak se može koristiti višestruko kada postavljate više računa</string>
     <string name="title_setup_wizard_new">Potrebna je nova e-mail adresa</string>
@@ -389,6 +390,7 @@
     <string name="title_advanced_suggest_sent">Predloži adrese pronađene u poslanim porukama</string>
     <string name="title_advanced_suggest_received">Predloži adrese pronađene u primljenim porukama</string>
     <string name="title_advanced_suggest_frequently">Sortiraj predložene adrese prema učestalosti korištenja</string>
+    <string name="title_advanced_suggest_account">Ograniči sugestije na trenutni račun</string>
     <string name="title_advanced_alt_re_fwd">Alternativni prefiks za odgovor/prosljeđenje</string>
     <string name="title_advanced_send_chips">Prikaži balone s adresom</string>
     <string name="title_advanced_send_nav_color">Koristi boju identiteta za donju alatnu traku</string>
@@ -540,6 +542,7 @@
     <string name="title_advanced_unzip">Prikaži sadržaj kompresovanih priloga</string>
     <string name="title_advanced_attachments_alt">Prikaži priloge poslije teksta poruke</string>
     <string name="title_advanced_thumbnails">Prikaži sličice fotografija poslije teksta poruke</string>
+    <string name="title_advanced_pdf_preview">Prikaži PDF sličice</string>
     <string name="title_advanced_message_text_zoom2">Zadani nivo zumiranja teksta: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Zumiraj tekst poruke i u uređivaču poruka</string>
     <string name="title_advanced_overview_mode">Zumiraj originalne poruke da popune ekran</string>
@@ -786,6 +789,7 @@
     <string name="title_advanced_pull_all_hint">Kada se povlači preko spiska foldera ili računa</string>
     <string name="title_advanced_suggest_names_hint">Ako je isključeno, koristit će se samo e-mail adrese pri izboru kontakata</string>
     <string name="title_advanced_suggest_local_hint">Pored kontakata koje pruža Android. Kontaktni podaci bit će čuvani za nove poslane ili primljene poruke samo kada je opcija uključena.</string>
+    <string name="title_advanced_suggest_account_hint">Ovo se primjenjuje samo na lokalne kontakte jer kontakti u Android adresaru nisu povezani sa specifičnim računima</string>
     <string name="title_advanced_auto_identity_hint">Ovim će se izabrati posljednji identitet korišten pri biranju primaoca novih poruka</string>
     <string name="title_advanced_send_reminders_hint">Prikazuje upozorenje kada su tekst poruke ili predmet prazni ili kada nedostaje prilog</string>
     <string name="title_advanced_reply_move_hint">E-mail server još može dodavati poruke u folder za poslane poruke</string>
@@ -1044,6 +1048,7 @@
     <string name="title_delete_channel">Izbriši kanal obavještenja</string>
     <string name="title_insert_contact">Dodaj kontakt</string>
     <string name="title_edit_contact">Uredi kontakt</string>
+    <string name="title_delete_contact">Izbrisati kontakt?</string>
     <string name="title_contact_email">E-pošta</string>
     <string name="title_contact_name">Naziv</string>
     <string name="title_contact_group">Grupa</string>
@@ -1166,7 +1171,7 @@
     <string name="title_print_header">Štampaj zaglavlje</string>
     <string name="title_print_images">Štampaj slike</string>
     <string name="title_print_images_remark">Preuzimanje slika može malo potrajati</string>
-    <string name="title_print_block_quotes" comment="title_print_block_quotes&#10;Title for print option to disable printing of (block) quote lines">Štampanje blokova linija navodnika</string>
+    <string name="title_print_block_quotes">Štampanje blokova linija navodnika</string>
     <string name="title_show_headers">Prikaži zaglavlja</string>
     <string name="title_share_as_html">Podijeli kao HTML</string>
     <string name="title_raw_save">Sačuvaj raw poruku</string>
@@ -1198,6 +1203,7 @@
     <string name="title_quick_actions_snooze">Odgodi</string>
     <string name="title_quick_actions_clear">Deselekcija označenog nakon izvršene radnje</string>
     <string name="title_trash">Otpad</string>
+    <string name="title_trash_selection">Premjesti označeno u otpad</string>
     <string name="title_copy">Kopiraj &#8230;</string>
     <string name="title_copy_to">Kopiraj u &#8230;</string>
     <string name="title_subscribe">Pretplati se</string>
@@ -1511,6 +1517,7 @@
     <string name="title_search_in_keywords">U ključnim riječima (ako je podržano)</string>
     <string name="title_search_in_message">U tekstu poruke</string>
     <string name="title_search_in_notes">U lokalnim bilješkama</string>
+    <string name="title_search_in_filenames">U nazivima fajlova (samo na uređaju)</string>
     <string name="title_search_with">Ograniči pretragu na</string>
     <string name="title_search_with_unseen">Nepročitano</string>
     <string name="title_search_with_flagged">Favorite (zvjezdice)</string>
@@ -1604,7 +1611,7 @@
     <string name="title_answer_placeholder_firstname">Ime pošiljaoca</string>
     <string name="title_answer_placeholder_lastname">Prezime pošiljaoca</string>
     <string name="title_answer_placeholder_date">Trenutni datum</string>
-    <string name="title_answer_placeholder_weekday" comment="title_answer_placeholder_weekday&#10;Title for menu item to insert a placeholder representing the day of the week">Dan u sedmici</string>
+    <string name="title_answer_placeholder_weekday">Dan u sedmici</string>
     <string name="title_rule_noop">Bez radnji</string>
     <string name="title_rule_seen">Oznaci kao pročitano</string>
     <string name="title_rule_unseen">Označi kao nepročitano</string>
@@ -1989,6 +1996,7 @@
     <string name="title_widget_refresh">Prikaži dugme za osvježavanje poruka</string>
     <string name="title_widget_compose">Prikaži dugme za pisanje nove poruke</string>
     <string name="title_widget_background">Boja pozadine</string>
+    <string name="title_widget_icon" comment="title_widget_icon&#10;Title for option to select icon color of new message count widget">Boja ikone</string>
     <string name="title_widget_day_night">Prati tamnu sistemsku temu</string>
     <string name="title_compat_dark">Google je uklonio tamnu temu za Android verzije prije verzije 10</string>
     <!-- Thunderbird -->

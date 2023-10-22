@@ -60,18 +60,53 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
 
+                <ImageView
+                    android:id="@+id/intro_one"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="12dp"
+                    android:contentDescription="1"
+                    app:layout_constraintEnd_toStartOf="@+id/intro_two"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/intro"
+                    app:srcCompat="@drawable/twotone_looks_one_24" />
+
+                <ImageView
+                    android:id="@+id/intro_two"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="12dp"
+                    android:contentDescription="2"
+                    app:layout_constraintEnd_toStartOf="@+id/intro_three"
+                    app:layout_constraintStart_toEndOf="@+id/intro_one"
+                    app:layout_constraintTop_toBottomOf="@id/intro"
+                    app:srcCompat="@drawable/twotone_looks_two_24" />
+
+                <ImageView
+                    android:id="@+id/intro_three"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="12dp"
+                    android:contentDescription="3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/intro_two"
+                    app:layout_constraintTop_toBottomOf="@id/intro"
+                    app:srcCompat="@drawable/twotone_looks_3_24" />
+
                 <TextView
                     android:id="@+id/simple"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="12dp"
                     android:text="@string/title_setup_simple"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:textColor="?android:attr/textColorPrimary"
                     android:textStyle="italic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/intro" />
+                    app:layout_constraintTop_toBottomOf="@+id/intro_one" />
 
                 <TextView
                     android:id="@+id/issue"
@@ -141,7 +176,7 @@
                     android:id="@+id/grpWelcome"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:constraint_referenced_ids="intro,simple,issue,analytics,tvPrivacy,tvSupport" />
+                    app:constraint_referenced_ids="intro,intro_one,intro_two,intro_three,simple,issue,analytics,tvPrivacy,tvSupport" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -150,7 +185,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="3dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             app:cardBackgroundColor="?attr/colorCardBackground"
             app:cardCornerRadius="6dp"
             app:cardElevation="0dp"
@@ -172,7 +207,8 @@
                     android:contentDescription="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/twotone_looks_one_24" />
+                    app:srcCompat="@drawable/twotone_looks_one_24"
+                    app:tint="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:id="@+id/title1"
@@ -183,10 +219,22 @@
                     android:paddingTop="3dp"
                     android:text="@string/title_setup_quick_accounts"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/one"
                     app:layout_constraintTop_toTopOf="@id/one" />
+
+                <TextView
+                    android:id="@+id/tvQuickIntro"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_setup_wizard_intro"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/title1" />
 
                 <TextView
                     android:id="@+id/tvNoInternet"
@@ -202,7 +250,7 @@
                     app:drawableTint="?attr/colorWarning"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/title1" />
+                    app:layout_constraintTop_toBottomOf="@id/tvQuickIntro" />
 
                 <ImageButton
                     android:id="@+id/ibHelp"
@@ -556,7 +604,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="3dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             app:cardBackgroundColor="?attr/colorCardBackground"
             app:cardCornerRadius="6dp"
             app:cardElevation="0dp"
@@ -579,7 +627,8 @@
                     android:scaleType="fitCenter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/twotone_looks_two_24" />
+                    app:srcCompat="@drawable/twotone_looks_two_24"
+                    app:tint="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:id="@+id/title2"
@@ -590,6 +639,7 @@
                     android:paddingTop="3dp"
                     android:text="@string/title_setup_permissions"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/two"
@@ -713,7 +763,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="3dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             app:cardBackgroundColor="?attr/colorCardBackground"
             app:cardCornerRadius="6dp"
             app:cardElevation="0dp"
@@ -736,7 +786,8 @@
                     android:scaleType="fitCenter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/twotone_looks_3_24" />
+                    app:srcCompat="@drawable/twotone_looks_3_24"
+                    app:tint="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:id="@+id/title3"
@@ -747,6 +798,7 @@
                     android:paddingTop="3dp"
                     android:text="@string/title_setup_doze"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/three"
@@ -979,7 +1031,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="3dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             app:cardBackgroundColor="?attr/colorCardBackground"
             app:cardCornerRadius="6dp"
             app:cardElevation="0dp"
