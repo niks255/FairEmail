@@ -452,6 +452,7 @@
     <string name="title_advanced_ssl_harden_strict">Zahtjevaj TLS 1.3</string>
     <string name="title_advanced_cert_strict">Striktna provjera certifikata</string>
     <string name="title_advanced_open_safe">Otvaraj samo sigurne konekcije</string>
+    <string name="title_advanced_bouncy_castle">Koristi pružaoca sigurnog priključka od Bouncy Castle-a (JSSE)</string>
     <string name="title_advanced_manage_connectivity">Upravljanje konekcijama</string>
     <string name="title_advanced_caption_general">Općenito</string>
     <string name="title_advanced_caption_navigation">Navigacija</string>
@@ -520,6 +521,7 @@
     <string name="title_advanced_only_name">Prikaži samo imena kontakata</string>
     <string name="title_advanced_distinguish_contacts">Podvuci pošiljaoca kada je on/a poznat/a kao lokalni \'za\' kontakt</string>
     <string name="title_advanced_show_recipients">Prikaži primaoce u zaglavlju poruke</string>
+    <string name="title_advanced_reverse_addresses">Prikaži primaoca poslanih poruka</string>
     <string name="title_advanced_font_size_sender">Veličina teksta pošiljaoca</string>
     <string name="title_advanced_sender_ellipsize">Ako je potrebno, skrati ime pošiljaoca</string>
     <string name="title_advanced_subject_top">Prikaži predmet iznad pošiljaoca</string>
@@ -639,6 +641,8 @@
     <string name="title_advanced_notify_preview">Prikaži pregled poruke u obavještenjima</string>
     <string name="title_advanced_notify_preview_all">Prikaz cijelog teksta</string>
     <string name="title_advanced_notify_preview_only">Prikaži obavještenja samo sa pregledom poruka</string>
+    <string name="title_advanced_notify_transliterate">Transliteriraj na latinicu</string>
+    <string name="title_advanced_notify_ascii">Samo ASCII tekst</string>
     <string name="title_advanced_notify_actions">Radnje za obavještenja</string>
     <string name="title_advanced_notify_action_trash">Otpad</string>
     <string name="title_advanced_notify_action_delete">Izbriši</string>
@@ -724,12 +728,14 @@
     <string name="title_advanced_external_search">Dodaj \'Pretraži FairEmail\' u Androidov izbornik za selektovani tekst</string>
     <string name="title_advanced_sort_answers">Sortiraj prijedloške za odgovore prema učestalosti korištenja</string>
     <string name="title_advanced_shortcuts">Prikaži često korištene kontakte u Android meniju za dijeljenje</string>
+    <string name="title_advanced_ical_tentative">Čuvaj primljene pozivnice kao privremene</string>
     <string name="title_advanced_fts">Kreiraj indeks pretraživanja</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d poruke/a indeksirano (%3$s)</string>
     <string name="title_advanced_classification">Klasifikacija poruka</string>
     <string name="title_advanced_class_min_chance">Minimum vjerovatnosti klase: %1$s %%</string>
     <string name="title_advanced_class_min_difference">Minimalna razlika klasa: %1$s %%</string>
     <string name="title_advanced_show_filtered">Prikaži ikonicu za filtriranje kada su pravila primijenjena</string>
+    <string name="title_advanced_haptic_feedback">Haptičke povratne informacije za važne radnje</string>
     <string name="title_advanced_language">Jezik</string>
     <string name="title_advanced_language_system">Sistemski</string>
     <string name="title_advanced_lt">LanguageTool integracija</string>
@@ -1173,7 +1179,7 @@
     <string name="title_print_images_remark">Preuzimanje slika može malo potrajati</string>
     <string name="title_print_block_quotes">Štampanje blokova linija navodnika</string>
     <string name="title_show_headers">Prikaži zaglavlja</string>
-    <string name="title_share_as_html">Podijeli kao HTML</string>
+    <string name="title_show_html">Prikaži izvor</string>
     <string name="title_raw_save">Sačuvaj raw poruku</string>
     <string name="title_raw_send">Pošalji kao prilog</string>
     <string name="title_raw_send_message">Poruka</string>
@@ -1388,6 +1394,7 @@
     <string name="title_add_image_privacy">Ukloni osjetljive podatke</string>
     <string name="title_add_image_privacy_remark">Geografska lokacija, serijski brojevi, nazivi datoteka, itd.</string>
     <string name="title_add_resize_pixels">&lt; %1$d piksela</string>
+    <string name="title_add_image_resize_remark">Promjena veličine podržana za: %1$s</string>
     <string name="title_add_image_select_remark">Izbornik fotografija na Androidu više ne pruža nazive datoteka</string>
     <string name="title_add_image_select">Izaberi datoteku</string>
     <string name="title_add_attachment">Dodaj prilog</string>
@@ -1707,6 +1714,9 @@
     <string name="title_rule_alarm_duration">Maksimalno trajanje alarma (sekunde)</string>
     <string name="title_rule_alarm_title">Alarm</string>
     <string name="title_rule_alarm_stop">Zaustavi</string>
+    <string name="title_code_line_numbers">Prikaži brojeve linija</string>
+    <string name="title_code_enable_links">Omogući linkove</string>
+    <string name="title_code_pretty">Stilsko formatiranje izvora</string>
     <string name="title_legend_section_synchronize">Sinhronizuj</string>
     <string name="title_legend_section_folders">Folderi</string>
     <string name="title_legend_section_messages">Poruke</string>
@@ -1901,6 +1911,7 @@
     <string name="title_no_ask_again">Ne pitaj ovo ponovo</string>
     <string name="title_no_ask_for_again">Ne pitaj ovo ponovo za %1$s</string>
     <string name="title_no_body">Nije pronađen tekst poruke</string>
+    <string name="title_large_body">Ova poruka je jako velika i može uzrokovati probleme!</string>
     <string name="title_no_charset">Enkodiranje nije podržano: %1$s</string>
     <string name="title_via">Preko: %1$s</string>
     <string name="title_1hour">1 sat</string>
@@ -1982,6 +1993,7 @@
     <string name="title_widget_account_all">Svi</string>
     <string name="title_widget_folder">Folder</string>
     <string name="title_widget_folder_unified">Folderi objedinjenog inbox-a</string>
+    <string name="title_widget_folder_notifying">Folderi s obavještenjima o novim porukama</string>
     <string name="title_widget_unseen">Samo nepročitane poruke</string>
     <string name="title_widget_flagged">Samo poruke sa zvjezdicom</string>
     <string name="title_widget_font_size">Veličina teksta</string>
@@ -1996,7 +2008,7 @@
     <string name="title_widget_refresh">Prikaži dugme za osvježavanje poruka</string>
     <string name="title_widget_compose">Prikaži dugme za pisanje nove poruke</string>
     <string name="title_widget_background">Boja pozadine</string>
-    <string name="title_widget_icon" comment="title_widget_icon&#10;Title for option to select icon color of new message count widget">Boja ikone</string>
+    <string name="title_widget_icon">Boja ikone</string>
     <string name="title_widget_day_night">Prati tamnu sistemsku temu</string>
     <string name="title_compat_dark">Google je uklonio tamnu temu za Android verzije prije verzije 10</string>
     <!-- Thunderbird -->

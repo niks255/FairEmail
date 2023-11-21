@@ -38,6 +38,7 @@ import androidx.preference.PreferenceManager;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -59,6 +60,7 @@ public class Widget extends AppWidgetProvider {
                 for (int appWidgetId : appWidgetIds) {
                     String name = prefs.getString("widget." + appWidgetId + ".name", null);
                     long account = prefs.getLong("widget." + appWidgetId + ".account", -1L);
+                    long folder = prefs.getLong("widget." + appWidgetId + ".folder", -1L);
                     boolean daynight = prefs.getBoolean("widget." + appWidgetId + ".daynight", false);
                     boolean semi = prefs.getBoolean("widget." + appWidgetId + ".semi", true);
                     int background = prefs.getInt("widget." + appWidgetId + ".background", Color.TRANSPARENT);
@@ -71,7 +73,14 @@ public class Widget extends AppWidgetProvider {
                     if (version <= 1550)
                         semi = true; // Legacy
 
-                    List<EntityFolder> folders = db.folder().getNotifyingFolders(account);
+                    List<EntityFolder> folders = null;
+                    if (folder < 0)
+                        folders = db.folder().getNotifyingFolders(account);
+                    else {
+                        EntityFolder f = db.folder().getFolder(folder);
+                        if (f != null)
+                            folders = Arrays.asList(f);
+                    }
                     if (folders == null)
                         folders = new ArrayList<>();
 
@@ -106,8 +115,11 @@ public class Widget extends AppWidgetProvider {
                         }
                     }
 
-                    TupleMessageStats stats = db.message().getWidgetUnseen(account < 0 ? null : account);
-                    EntityLog.log(context, "Widget account=" + account + " ignore=" + unseen_ignored + " " + stats);
+                    TupleMessageStats stats = db.message().getWidgetUnseen(
+                            account < 0 ? null : account,
+                            folder < 0 ? null : folder);
+                    EntityLog.log(context, "Widget account=" + account + " folder=" + folder +
+                            " ignore=" + unseen_ignored + " " + stats);
 
                     Integer unseen = (unseen_ignored ? stats.notifying : stats.unseen);
                     if (unseen == null)

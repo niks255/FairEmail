@@ -489,6 +489,7 @@ Kata sandi diperlukan untuk mengimpor kembali pengaturan, harap jangan sampai lu
     <string name="title_advanced_only_name">Tampilkan nama kontak saja</string>
     <string name="title_advanced_distinguish_contacts">Garis bawahi pengirim ketika pengirim dikenal sebagai kontak lokal</string>
     <string name="title_advanced_show_recipients">Tampilkan penerima di header pesan</string>
+    <string name="title_advanced_reverse_addresses">Tunjukkan penerima pesan terkirim</string>
     <string name="title_advanced_font_size_sender">Ukuran teks pengirim</string>
     <string name="title_advanced_sender_ellipsize">Jika diperlukan, pengirim dipersingkat</string>
     <string name="title_advanced_subject_top">Tampilkan subjek di atas pengirim</string>
@@ -1136,7 +1137,6 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_print_images">Mencetak gambar</string>
     <string name="title_print_images_remark">Mengunduh gambar butuh beberapa waktu</string>
     <string name="title_show_headers">Tampilkan Judul</string>
-    <string name="title_share_as_html">Bagikan sebagai HTML</string>
     <string name="title_raw_save">Simpan pesan sebagai bahan</string>
     <string name="title_raw_send">Kirim sebagai lampiran</string>
     <string name="title_raw_send_message">Pesan</string>
@@ -1950,6 +1950,7 @@ Memformat ulang pesan perlu waktu, tergantung dari ukuran pesan dan keceoatan pe
     <string name="title_widget_refresh">Tampilkan tombol penyegaran pesan</string>
     <string name="title_widget_compose">Tampilkan tombol pesan baru</string>
     <string name="title_widget_background">Warna latar belakang</string>
+    <string name="title_widget_icon">Warna ikon</string>
     <string name="title_widget_day_night">Ikuti tema sistem gelap</string>
     <string name="title_compat_dark">Google menghilangkan dark mode untuk versi Android sebelum 10</string>
     <!-- Thunderbird -->

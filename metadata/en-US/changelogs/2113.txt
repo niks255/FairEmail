@@ -6,11 +6,18 @@ For support you can use the contact form.
 
 Vallibonavenatrix
 
+Next version
+
+* Added tap on title/subtitle to open/switch to inbox
+* Addded option to disable showing recipient for sent messages
+* Small improvements and minor bug fixes
+* Updated translations
+
 1.2113 - 2023-10-21
 
 * Added '*More options*' to send dialog box
 * Added option to disable PDF preview (display settings)
-* Added option suggest local contacts for the current account only (send settings)
+* Added option to suggest local contacts for the current account only (send settings)
 * Android 14: using Material You background color
 * Fixed back navigation in some circumstances
 * Small improvements and minor bug fixes

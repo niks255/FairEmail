@@ -424,6 +424,7 @@
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 を要求</string>
     <string name="title_advanced_cert_strict">厳格な証明書確認</string>
     <string name="title_advanced_open_safe">保護された接続のみ使用</string>
+    <string name="title_advanced_bouncy_castle">Bouncy Castle のセキュアソケットプロバイダー (JSSE) を使用</string>
     <string name="title_advanced_manage_connectivity">接続を管理</string>
     <string name="title_advanced_caption_general">概要</string>
     <string name="title_advanced_caption_navigation">ナビゲーションメニュー</string>
@@ -492,6 +493,7 @@
     <string name="title_advanced_only_name">連絡先の名前のみ表示</string>
     <string name="title_advanced_distinguish_contacts">受信したメールの差出人にメールを送ったことがあるとローカル連絡先に記録されている場合、差出人に下線を表示</string>
     <string name="title_advanced_show_recipients">見出しに宛先を表示</string>
+    <string name="title_advanced_reverse_addresses">送信済みメッセージの宛先を表示</string>
     <string name="title_advanced_font_size_sender">差出人のテキストサイズ</string>
     <string name="title_advanced_sender_ellipsize">差出人を短縮</string>
     <string name="title_advanced_subject_top">差出人の上に件名を表示</string>
@@ -611,6 +613,8 @@
     <string name="title_advanced_notify_preview">通知にメッセージプレビューを表示</string>
     <string name="title_advanced_notify_preview_all">全文をプレビュー</string>
     <string name="title_advanced_notify_preview_only">プレビューテキストが準備できた通知のみ表示</string>
+    <string name="title_advanced_notify_transliterate">ラテン文字に変換</string>
+    <string name="title_advanced_notify_ascii">ASCII テキストのみ</string>
     <string name="title_advanced_notify_actions">通知アクション</string>
     <string name="title_advanced_notify_action_trash">ごみ箱</string>
     <string name="title_advanced_notify_action_delete">削除</string>
@@ -696,12 +700,14 @@
     <string name="title_advanced_external_search">Android のテキスト選択メニューに「FairEmail を検索」を追加</string>
     <string name="title_advanced_sort_answers">返信テンプレートを使用頻度で並べ替え</string>
     <string name="title_advanced_shortcuts">頻繁に使用する連絡先を Android 共有メニューに表示</string>
+    <string name="title_advanced_ical_tentative">受信した招待状を未定として保存</string>
     <string name="title_advanced_fts">検索インデックスを作成</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d 個のメッセージがインデックスされました (%3$s)</string>
     <string name="title_advanced_classification">メッセージを分類</string>
     <string name="title_advanced_class_min_chance">最小分類確率: %1$s %%</string>
     <string name="title_advanced_class_min_difference">最小分類差: %1$s %%</string>
     <string name="title_advanced_show_filtered">ルールが適用された場合、フィルターアイコンを表示</string>
+    <string name="title_advanced_haptic_feedback">重要なアクションでの触覚フィードバック</string>
     <string name="title_advanced_language">言語</string>
     <string name="title_advanced_language_system">システム</string>
     <string name="title_advanced_lt">LanguageTool を統合</string>
@@ -1145,7 +1151,7 @@
     <string name="title_print_images_remark">画像のダウンロードには時間がかかる場合があります</string>
     <string name="title_print_block_quotes">ブロック引用の行を印刷</string>
     <string name="title_show_headers">ヘッダーを表示</string>
-    <string name="title_share_as_html">HTML で共有</string>
+    <string name="title_show_html">ソースを表示</string>
     <string name="title_raw_save">元のメッセージを保存</string>
     <string name="title_raw_send">添付ファイルとして送信</string>
     <string name="title_raw_send_message">メッセージ</string>
@@ -1360,6 +1366,7 @@
     <string name="title_add_image_privacy">プライバシーデータを削除</string>
     <string name="title_add_image_privacy_remark">位置情報、シリアル番号、ファイル名など</string>
     <string name="title_add_resize_pixels">&lt; %1$d ピクセル</string>
+    <string name="title_add_image_resize_remark">サイズ変更に対応したフォーマット: %1$s</string>
     <string name="title_add_image_select_remark">Android 写真選択ツールは、ファイル名を取得できなくなりました</string>
     <string name="title_add_image_select">ファイルを選択</string>
     <string name="title_add_attachment">添付ファイルを追加</string>
@@ -1679,6 +1686,9 @@
     <string name="title_rule_alarm_duration">自動消音時間 (秒)</string>
     <string name="title_rule_alarm_title">アラーム</string>
     <string name="title_rule_alarm_stop">停止</string>
+    <string name="title_code_line_numbers">行番号を表示</string>
+    <string name="title_code_enable_links">リンクを有効にする</string>
+    <string name="title_code_pretty">Pretty print コード表示</string>
     <string name="title_legend_section_synchronize">同期</string>
     <string name="title_legend_section_folders">フォルダー</string>
     <string name="title_legend_section_messages">メッセージ</string>
@@ -1873,6 +1883,7 @@
     <string name="title_no_ask_again">次回から確認しない</string>
     <string name="title_no_ask_for_again">%1$s は次回から確認しない</string>
     <string name="title_no_body">本文が見つかりません</string>
+    <string name="title_large_body">メッセージのサイズがとても大きいため、問題が発生することがあります！</string>
     <string name="title_no_charset">対応していないエンコーディング: %1$s</string>
     <string name="title_via">経由: %1$s</string>
     <string name="title_1hour">1 時間</string>
@@ -1925,7 +1936,7 @@
     <string name="title_pro_support">FairEmail にはあなたの支援が必要です。プロジェクトを維持するため、タップしてプロ版を購入するか、このメッセージをオフにしてください。</string>
     <string name="title_boundary_error">メールサーバーからのメッセージのダウンロードエラー</string>
     <string name="title_boundary_retry">再試行</string>
-    <string name="title_unexpected_error">予期しないエラー</string>
+    <string name="title_unexpected_error">予期せぬエラー</string>
     <string name="title_log">ログ</string>
     <string name="title_log_clear">クリア</string>
     <string name="title_rules_search_hint">名前または条件を検索</string>
@@ -1954,6 +1965,7 @@
     <string name="title_widget_account_all">すべて</string>
     <string name="title_widget_folder">フォルダー</string>
     <string name="title_widget_folder_unified">統合受信トレイフォルダー</string>
+    <string name="title_widget_folder_notifying">新着メッセージ通知のあるフォルダー</string>
     <string name="title_widget_unseen">未読メッセージのみ</string>
     <string name="title_widget_flagged">スター付きメッセージのみ</string>
     <string name="title_widget_font_size">テキストサイズ</string>
@@ -1968,7 +1980,7 @@
     <string name="title_widget_refresh">メッセージ更新ボタンを表示</string>
     <string name="title_widget_compose">メッセージ新規作成ボタンを表示</string>
     <string name="title_widget_background">背景色</string>
-    <string name="title_widget_icon" comment="title_widget_icon&#10;Title for option to select icon color of new message count widget">アイコンの色</string>
+    <string name="title_widget_icon">アイコンの色</string>
     <string name="title_widget_day_night">システムのダークテーマに従う</string>
     <string name="title_compat_dark">Android 10 以前では Google によりダークモードが取り除かれました</string>
     <!-- Thunderbird -->

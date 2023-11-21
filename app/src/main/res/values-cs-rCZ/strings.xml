@@ -466,6 +466,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_ssl_harden_strict">Vyžadovat TLS 1.3</string>
     <string name="title_advanced_cert_strict">Přísná kontrola certifikátu</string>
     <string name="title_advanced_open_safe">Otevřít pouze zabezpečená připojení</string>
+    <string name="title_advanced_bouncy_castle">Použít Bouncy Castle\'s secure socket provider (JSSE)</string>
     <string name="title_advanced_manage_connectivity">Spravovat připojení</string>
     <string name="title_advanced_caption_general">Obecné</string>
     <string name="title_advanced_caption_navigation">Navigace</string>
@@ -534,6 +535,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_only_name">Zobrazit pouze jména kontaktů</string>
     <string name="title_advanced_distinguish_contacts">Podtrhnout odesílatele, je-li známý jako lokální „komu“ kontakt</string>
     <string name="title_advanced_show_recipients">Zobrazit příjemce v hlavičce zprávy</string>
+    <string name="title_advanced_reverse_addresses">Zobrazit příjemce pro odeslané zprávy</string>
     <string name="title_advanced_font_size_sender">Velikost textu odesílatele</string>
     <string name="title_advanced_sender_ellipsize">V případě potřeby zkrátit odesílatele</string>
     <string name="title_advanced_subject_top">Zobrazit předmět nad odesílatelem</string>
@@ -653,6 +655,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_notify_preview">Zobrazit náhled zprávy v oznámení</string>
     <string name="title_advanced_notify_preview_all">Náhled na celý text</string>
     <string name="title_advanced_notify_preview_only">Zobrazit pouze oznámení s náhledem textu</string>
+    <string name="title_advanced_notify_transliterate">Přepsat do latinské abecedy</string>
+    <string name="title_advanced_notify_ascii">Pouze ASCII text</string>
     <string name="title_advanced_notify_actions">Akce oznámení</string>
     <string name="title_advanced_notify_action_trash">Koš</string>
     <string name="title_advanced_notify_action_delete">Odstranit</string>
@@ -737,12 +741,14 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_external_search">Přidat \"Vyhledat ve FairEmail\" do menu výběru textu v Androidu</string>
     <string name="title_advanced_sort_answers">Seřadit šablony odpovědí podle frekvence používání</string>
     <string name="title_advanced_shortcuts">Zobrazit často používané kontakty v nabídce sdílení Androidu</string>
+    <string name="title_advanced_ical_tentative">Uložit obdržené pozvánky jako předběžné</string>
     <string name="title_advanced_fts">Sestavit index vyhledávání</string>
     <string name="title_advanced_fts_indexed">Indexováno %1$d / %2$d zpráv (%3$s)</string>
     <string name="title_advanced_classification">Klasifikovat zprávy</string>
     <string name="title_advanced_class_min_chance">Minimální pravděpodobnost pro klasifikaci: %1$s %%</string>
     <string name="title_advanced_class_min_difference">Minimální rozdíl pro klasifikaci: %1$s %%</string>
     <string name="title_advanced_show_filtered">Zobrazit ikonu filtru při použití pravidel</string>
+    <string name="title_advanced_haptic_feedback">Hmatová odezva na důležité akce</string>
     <string name="title_advanced_language">Jazyk</string>
     <string name="title_advanced_language_system">Systémový</string>
     <string name="title_advanced_lt">Integrace LanguageTool</string>
@@ -1186,7 +1192,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_print_images_remark">Stažení obrázků může chvíli trvat</string>
     <string name="title_print_block_quotes">Tisk řádků s blokovými uvozovkami</string>
     <string name="title_show_headers">Zobrazit hlavičky</string>
-    <string name="title_share_as_html">Sdílet jako HTML</string>
+    <string name="title_show_html">Zobraz zdroj</string>
     <string name="title_raw_save">Uložit zdrojovou zprávu</string>
     <string name="title_raw_send">Odeslat jako přílohu</string>
     <string name="title_raw_send_message">Zpráva</string>
@@ -1399,6 +1405,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_add_image_privacy">Odebrat citlivé osobní údaje</string>
     <string name="title_add_image_privacy_remark">Zeměpisná poloha, sériová čísla, názvy souborů, apod.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixelů</string>
+    <string name="title_add_image_resize_remark">Změna velikosti je podporována pro: %1$s</string>
     <string name="title_add_image_select_remark">Výběr fotografií pro Android již neprochází názvy souborů</string>
     <string name="title_add_image_select">Vybrat soubor</string>
     <string name="title_add_attachment">Přidat přílohu</string>
@@ -1718,6 +1725,9 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_rule_alarm_duration">Maximální doba trvání budíku (sekundy)</string>
     <string name="title_rule_alarm_title">Budík</string>
     <string name="title_rule_alarm_stop">Zastavit</string>
+    <string name="title_code_line_numbers">Zobrazit čísla řádků</string>
+    <string name="title_code_enable_links">Povolit odkazy</string>
+    <string name="title_code_pretty">Prostý tisk</string>
     <string name="title_legend_section_synchronize">Synchronizace</string>
     <string name="title_legend_section_folders">Složky</string>
     <string name="title_legend_section_messages">Zprávy</string>
@@ -1912,6 +1922,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_no_ask_again">Znovu se neptat</string>
     <string name="title_no_ask_for_again">Znovu nežádat pro %1$s</string>
     <string name="title_no_body">Text zprávy nenalezen</string>
+    <string name="title_large_body">Tato zpráva je velmi velká a to může způsobit problémy!</string>
     <string name="title_no_charset">Nepodporované kódování: %1$s</string>
     <string name="title_via">Přes: %1$s</string>
     <string name="title_1hour">1 hodina</string>
@@ -1992,6 +2003,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_widget_account_all">Všechny</string>
     <string name="title_widget_folder">Složka</string>
     <string name="title_widget_folder_unified">Složky sjednocené doručené pošty</string>
+    <string name="title_widget_folder_notifying">Složky s oznámeními o nových zprávách</string>
     <string name="title_widget_unseen">Pouze nepřečtené zprávy</string>
     <string name="title_widget_flagged">Pouze zprávy označené hvězdičkou</string>
     <string name="title_widget_font_size">Velikost textu</string>
@@ -2006,7 +2018,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_widget_refresh">Zobrazit tlačítko pro obnovení zpráv</string>
     <string name="title_widget_compose">Zobrazit tlačítko pro vytvoření nové zprávy</string>
     <string name="title_widget_background">Barva pozadí</string>
-    <string name="title_widget_icon" comment="title_widget_icon&#10;Title for option to select icon color of new message count widget">Barva ikony</string>
+    <string name="title_widget_icon">Barva ikony</string>
     <string name="title_widget_day_night">Sledovat tmavý motiv systému</string>
     <string name="title_compat_dark">Google odstranil tmavý režim pro verze Androidu nižší než 10</string>
     <!-- Thunderbird -->
