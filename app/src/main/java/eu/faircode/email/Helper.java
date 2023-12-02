@@ -117,7 +117,6 @@ import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.core.view.SoftwareKeyboardControllerCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -997,7 +996,7 @@ public class Helper {
 
     static void share(Context context, File file, String type, String name) {
         // https://developer.android.com/reference/androidx/core/content/FileProvider
-        Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
+        Uri uri = FileProviderEx.getUri(context, BuildConfig.APPLICATION_ID, file, name);
         share(context, uri, type, name);
     }
 
@@ -1879,28 +1878,62 @@ public class Helper {
                         RecyclerView.Adapter.class.isAssignableFrom(type) ||
                         TwoStateOwner.class.isAssignableFrom(type))
                     try {
-                        Log.i("Clearing " + fname);
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("Clearing ").append(fname);
 
                         field.setAccessible(true);
 
                         if (!ftype.isArray()) {
-                            if (Animator.class.isAssignableFrom(type)) {
-                                Animator animator = (Animator) field.get(instance);
-                                if (animator != null) {
-                                    if (animator.isStarted())
-                                        animator.cancel();
-                                    animator.setTarget(null);
+                            try {
+                                if (View.class.isAssignableFrom(type)) {
+                                    View v = (View) field.get(instance);
+                                    if (v != null) {
+                                        sb.append(" tag");
+                                        v.setTag(null);
+                                    }
                                 }
-                            }
 
-                            if (Snackbar.class.isAssignableFrom(type)) {
-                                Snackbar snackbar = (Snackbar) field.get(instance);
-                                if (snackbar != null)
-                                    snackbar.setAction(null, null);
+                                if (TextView.class.isAssignableFrom(type)) {
+                                    TextView tv = (TextView) field.get(instance);
+                                    if (tv != null) {
+                                        sb.append(" drawables");
+                                        tv.setCompoundDrawables(null, null, null, null);
+                                    }
+                                }
+
+                                if (ImageView.class.isAssignableFrom(type)) {
+                                    ImageView iv = (ImageView) field.get(instance);
+                                    if (iv != null) {
+                                        sb.append(" drawable");
+                                        iv.setImageDrawable(null);
+                                    }
+                                }
+
+                                if (Animator.class.isAssignableFrom(type)) {
+                                    Animator animator = (Animator) field.get(instance);
+                                    if (animator != null) {
+                                        sb.append(" animator");
+                                        if (animator.isStarted())
+                                            animator.cancel();
+                                        animator.setTarget(null);
+                                    }
+                                }
+
+                                if (Snackbar.class.isAssignableFrom(type)) {
+                                    Snackbar snackbar = (Snackbar) field.get(instance);
+                                    if (snackbar != null) {
+                                        sb.append(" action");
+                                        snackbar.setAction(null, null);
+                                    }
+                                }
+                            } catch (Throwable ex) {
+                                Log.e(ex);
                             }
                         }
 
                         field.set(instance, null);
+
+                        Log.i(sb.toString());
                     } catch (Throwable ex) {
                         Log.e(new Throwable(fname, ex));
                     }
@@ -2412,32 +2445,6 @@ public class Helper {
         return false;
     }
 
-    static boolean isSingleScript(String s) {
-        // https://en.wikipedia.org/wiki/IDN_homograph_attack
-
-        if (TextUtils.isEmpty(s))
-            return true;
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
-            return true;
-
-        int codepoint;
-        Character.UnicodeScript us;
-        Character.UnicodeScript script = null;
-        for (int i = 0; i < s.length(); ) {
-            codepoint = s.codePointAt(i);
-            i += Character.charCount(codepoint);
-            us = Character.UnicodeScript.of(codepoint);
-            if (us.equals(Character.UnicodeScript.COMMON))
-                continue;
-            if (script == null)
-                script = us;
-            else if (!us.equals(script))
-                return false;
-        }
-        return true;
-    }
-
     static Integer parseInt(String text) {
         if (TextUtils.isEmpty(text))
             return null;
@@ -2837,12 +2844,16 @@ public class Helper {
     }
 
     static void secureDelete(File file) {
-        if (file.exists()) {
-            try {
-                Files.delete(Paths.get(file.getAbsolutePath()));
-            } catch (IOException ex) {
-                Log.e(ex);
+        try {
+            if (file.exists()) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                    if (!file.delete())
+                        throw new FileNotFoundException(file.getAbsolutePath());
+                } else
+                    Files.delete(Paths.get(file.getAbsolutePath()));
             }
+        } catch (IOException ex) {
+            Log.e(ex);
         }
     }
 

@@ -4,9 +4,31 @@ Changelog
 
 For support you can use the contact form.
 
+Wintonotitan
+
+1.2132 - 2023-12-01
+
+* Added basic support for Linked Data
+* Added date/time placeholders for keyword rules (see the FAQ
+* Added option to disable saving revisions for undo/redo
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated AndroidX
+* Updated translations
+
 Vallibonavenatrix
 
-Next version
+1.2131 - 2023-11-27 *
+
+* Small improvements and minor bug fixes
+* Updated translations
+
+1.2130 - 2023-11-25
+
+* Fixed styling of reformatted message view
+* Updated translations
+
+1.2129 - 2023-11-25
 
 * Added optional print margin
 * Small improvements and minor bug fixes

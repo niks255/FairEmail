@@ -4,7 +4,49 @@
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
+### [Wintonotitan](https://en.wikipedia.org/wiki/Wintonotitan)
+
+### 1.2134 - 2023-12-02
+
+* Fixed clearing settings values
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2133 - 2023-12-01
+
+* Fixed memory leak
+* Improved [Linked Data](https://json-ld.org/) support (GitHub version only)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2132 - 2023-12-01
+
+* Added basic support for [Linked Data](https://json-ld.org/) (GitHub version only)
+* Added date/time placeholders for keyword rules (see [the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq71))
+* Added option to disable saving revisions for undo/redo
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### [Vallibonavenatrix](https://en.wikipedia.org/wiki/Vallibonavenatrix)
+
+### 1.2131 - 2023-11-27 *
+
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2130 - 2023-11-25
+
+* Fixed styling of reformatted message view
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2129 - 2023-11-25
+
+* Added optional print margin
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
 
 ### 1.2128 - 2023-11-19
 

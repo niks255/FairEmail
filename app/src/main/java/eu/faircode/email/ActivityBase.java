@@ -52,7 +52,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 import androidx.core.graphics.ColorUtils;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
@@ -577,7 +576,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
 
             Helper.copy(is, new FileOutputStream(file));
 
-            return FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID, file);
+            return FileProviderEx.getUri(this, BuildConfig.APPLICATION_ID, file);
         } catch (Throwable ex) {
             Log.w(ex);
             return uri;

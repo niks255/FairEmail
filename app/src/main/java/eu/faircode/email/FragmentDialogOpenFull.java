@@ -76,11 +76,14 @@ public class FragmentDialogOpenFull extends FragmentDialogBase {
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
         settings.setAllowFileAccess(false);
+        settings.setJavaScriptEnabled(false);
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
         if (WebViewEx.isFeatureSupported(context, WebViewFeature.SAFE_BROWSING_ENABLE))
             WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
+        if (WebViewEx.isFeatureSupported(context, WebViewFeature.ATTRIBUTION_REGISTRATION_BEHAVIOR))
+            WebSettingsCompat.setAttributionRegistrationBehavior(settings, WebSettingsCompat.ATTRIBUTION_BEHAVIOR_DISABLED);
 
         boolean dark = (Helper.isDarkTheme(context) && !force_light);
         boolean canDarken = WebViewEx.isFeatureSupported(context, WebViewFeature.ALGORITHMIC_DARKENING);

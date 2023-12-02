@@ -116,7 +116,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.text.method.LinkMovementMethodCompat;
@@ -274,6 +273,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean check_reply_domain;
     private boolean check_mx;
     private boolean check_blocklist;
+    private boolean show_addresses_default;
+    private boolean hide_attachments_default;
 
     private MessageHelper.AddressFormat email_format;
     private boolean prefer_contact;
@@ -2517,16 +2518,21 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             ssb.setSpan(new ForegroundColorSpan(textColorLink), start, ssb.length(), 0);
                         }
                     } else {
+                        ssb.append(personal);
+                        if (!TextHelper.isSingleScript(personal)) {
+                            int start = ssb.length() - personal.length();
+                            ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
+                            ssb.setSpan(new ForegroundColorSpan(colorError), start, ssb.length(), 0);
+                        }
                         if (full) {
-                            ssb.append(personal).append(" <");
+                            ssb.append(" <");
                             if (!TextUtils.isEmpty(email)) {
                                 int start = ssb.length();
                                 ssb.append(email);
                                 ssb.setSpan(new ForegroundColorSpan(textColorLink), start, ssb.length(), 0);
                             }
                             ssb.append(">");
-                        } else
-                            ssb.append(personal);
+                        }
                     }
                 } else
                     ssb.append(addresses[i].toString());
@@ -2539,7 +2545,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void bindAddresses(TupleMessageEx message) {
-            boolean show_addresses = properties.getValue("addresses", message.id);
+            boolean show_addresses = properties.getValue("addresses", message.id, getShowAddressesDefault(message));
             boolean full = (show_addresses || email_format == MessageHelper.AddressFormat.NAME_EMAIL);
 
             int froms = (message.from == null ||
@@ -2679,11 +2685,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             tvSubjectEx.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
             tvSubjectEx.setText(message.subject);
-            if (subject_italic)
-                tvSubjectEx.setTypeface(Typeface.DEFAULT, Typeface.ITALIC);
-            else
-                tvSubjectEx.setTypeface(Typeface.DEFAULT);
-
+            boolean homoSubject = TextHelper.isSingleScript(message.subject);
+            tvSubjectEx.setTextColor(homoSubject ? textColorTertiary : colorError);
+            tvSubjectEx.setTypeface(Typeface.DEFAULT,
+                    (subject_italic ? Typeface.ITALIC : Typeface.NORMAL) |
+                            (homoSubject ? Typeface.NORMAL : Typeface.BOLD));
             // Flags
             tvFlags.setVisibility(show_addresses && debug ? View.VISIBLE : View.GONE);
             tvFlags.setText(message.flags);
@@ -3011,6 +3017,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             args.putBoolean("fake_dark", !canDarken && fake_dark && dark && !force_light);
 
+            Log.breadcrumb("message:body", args);
+
             new SimpleTask<Object>() {
                 @Override
                 protected void onPreExecute(Bundle args) {
@@ -3032,6 +3040,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     final int zoom = args.getInt("zoom");
                     final float scale = args.getFloat("scale");
                     final boolean download_plain = prefs.getBoolean("download_plain", false);
+                    final boolean json_ld = prefs.getBoolean("json_ld", !Helper.isPlayStoreInstall());
 
                     if (message == null || !message.content)
                         return null;
@@ -3163,6 +3172,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             break;
                         }
                     args.putBoolean("has_amp", has_amp);
+
+                    // Check for structured email
+                    if (json_ld)
+                        for (Element struct : document.select("script[type=application/ld+json]"))
+                            document.body().append(new JsonLd(struct.html()).getHtml(context));
 
                     // Format message
                     if (show_full) {
@@ -3595,7 +3609,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 attachments = new ArrayList<>();
             properties.setAttachments(message.id, attachments);
 
-            boolean hide_attachments = properties.getValue("hide_attachments", message.id);
+            boolean hide_attachments = properties.getValue("hide_attachments", message.id, hide_attachments_default);
             boolean show_inline = properties.getValue("inline", message.id);
             Log.i("Hide attachments=" + hide_attachments + " Show inline=" + show_inline);
 
@@ -4327,11 +4341,24 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private TupleMessageEx getMessage() {
-            int pos = getAdapterPosition();
-            if (pos == RecyclerView.NO_POSITION)
-                return null;
+            try {
+                int pos = getAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION)
+                    return null;
 
-            return differ.getItem(pos);
+                return differ.getItem(pos);
+            } catch (Throwable ex) {
+                /*
+                    Exception java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+                      at androidx.paging.PagedList.loadAround (PagedList.java:424)
+                      at androidx.paging.AsyncPagedListDiffer.getItem (AsyncPagedListDiffer.java:216)
+                      at eu.faircode.email.AdapterMessage$ViewHolder.getMessage (AdapterMessage.java:4334)
+                      at eu.faircode.email.AdapterMessage$ViewHolder.onKeyPressed (AdapterMessage.java:4746)
+                      at eu.faircode.email.FragmentMessages$131.onKeyPressed (FragmentMessages.java:8253)
+                 */
+                Log.e(ex);
+                return null;
+            }
         }
 
         @Override
@@ -5338,9 +5365,27 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onToggleAddresses(TupleMessageEx message) {
-            boolean addresses = !properties.getValue("addresses", message.id);
+            boolean addresses = !properties.getValue("addresses", message.id, getShowAddressesDefault(message));
             properties.setValue("addresses", message.id, addresses);
             bindAddresses(message);
+        }
+
+        private boolean getShowAddressesDefault(TupleMessageEx message) {
+            if (show_addresses_default)
+                return true;
+
+            if (message.from != null)
+                for (Address from : message.from) {
+                    if (!(from instanceof InternetAddress))
+                        continue;
+                    if (!TextHelper.isSingleScript(((InternetAddress) from).getPersonal()))
+                        return true;
+                }
+
+            if (!TextHelper.isSingleScript(message.subject))
+                return true;
+
+            return false;
         }
 
         private void onDownloadAttachments(final TupleMessageEx message) {
@@ -5389,7 +5434,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onExpandAttachments(TupleMessageEx message) {
-            boolean hide_attachments = properties.getValue("hide_attachments", message.id);
+            boolean hide_attachments = properties.getValue("hide_attachments", message.id, hide_attachments_default);
             properties.setValue("hide_attachments", message.id, !hide_attachments);
             cowner.restart();
             bindAttachments(message, properties.getAttachments(message.id), false);
@@ -6359,7 +6404,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             Helper.copy(source, target);
 
-                            return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, target);
+                            return FileProviderEx.getUri(context, BuildConfig.APPLICATION_ID, target);
                         }
 
                         @Override
@@ -7246,7 +7291,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         if (attachments != null)
                             for (EntityAttachment attachment : attachments) {
                                 File file = attachment.getFile(context);
-                                Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
+                                Uri uri = FileProviderEx.getUri(context, BuildConfig.APPLICATION_ID, file, attachment.name);
                                 uris.add(uri);
                             }
 
@@ -7941,6 +7986,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.check_reply_domain = prefs.getBoolean("check_reply_domain", true);
         this.check_mx = prefs.getBoolean("check_mx", false);
         this.check_blocklist = prefs.getBoolean("check_blocklist", false);
+        this.show_addresses_default = prefs.getBoolean("addresses", false);
+        this.hide_attachments_default = prefs.getBoolean("hide_attachments", false);
 
         this.email_format = MessageHelper.getAddressFormat(context);
         this.prefer_contact = prefs.getBoolean("prefer_contact", false);
@@ -8914,6 +8961,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         String getValue(String key);
 
         boolean getValue(String name, long id);
+
+        boolean getValue(String name, long id, boolean def);
 
         void setExpanded(TupleMessageEx message, boolean expanded, boolean scroll);
 

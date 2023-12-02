@@ -6,7 +6,12 @@ For support you can use the contact form.
 
 Vallibonavenatrix
 
-Next version
+1.2130 - 2023-11-25
+
+* Fixed styling of reformatted message view
+* Updated translations
+
+1.2129 - 2023-11-25
 
 * Added optional print margin
 * Small improvements and minor bug fixes

@@ -64,7 +64,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.util.PatternsCompat;
@@ -2407,7 +2406,7 @@ public class HtmlHelper {
                 if (attachment != null && attachment.available) {
                     File file = attachment.getFile(context);
                     if (local) {
-                        Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
+                        Uri uri = FileProviderEx.getUri(context, BuildConfig.APPLICATION_ID, file, attachment.name);
                         img.attr("src", uri.toString());
                         Log.i("Inline image uri=" + uri);
                     } else {
@@ -2735,18 +2734,38 @@ public class HtmlHelper {
     }
 
     static void removeSignatures(Document d) {
+        // https://jsoup.org/apidocs/org/jsoup/select/Selector.html
+
         // <div class="fairemail_signature">
         d.body().select(".fairemail_signature").remove();
 
         // <div data-smartmail="gmail_signature">
+        // <div data-smartmail="gmail_signature" dir="auto">
         // <div dir="ltr" class="gmail_signature" data-smartmail="gmail_signature">
-        d.body().select("[data-smartmail=gmail_signature]").remove();
+        d.body().select("div[data-smartmail=gmail_signature]").remove();
 
         // Outlook: <div id="Signature" data-lt-sig-active="">
-        d.body().select("#Signature").select("[data-lt-sig-active]").remove();
+        d.body().select("div#Signature").select("[data-lt-sig-active]").remove();
+
+        // Outlook/mobile <div id="ms-outlook-mobile-signature" dir="auto">
+        d.body().select("div#ms-outlook-mobile-signature").remove();
+
+        // Yahoo/Android: <div id="ymail_android_signature">
+        d.body().select("div#ymail_android_signature").remove();
+
+        // Spark: <div name="messageSignatureSection">
+        d.body().select("div[name=messageSignatureSection]").remove();
+
+        // BlackBerry: <div id="blackberry_signature_BBPPID" name="BB10" dir="auto">
+        d.body().select("div#blackberry_signature_BBPPID").remove();
+
+        // <div class="moz-signature">
+        // <pre class="moz-signature" cols="72">
+        d.body().select("div.moz-signature").remove();
+        d.body().select("pre.moz-signature").remove();
 
         // Apple: <br id="lineBreakAtBeginningOfSignature"> <div dir="ltr">
-        for (Element br : d.body().select("#lineBreakAtBeginningOfSignature")) {
+        for (Element br : d.body().select("br#lineBreakAtBeginningOfSignature")) {
             Element next = br.nextElementSibling();
             if (next != null && "div".equals(next.tagName())) {
                 br.remove();
@@ -2816,6 +2835,13 @@ public class HtmlHelper {
 
         SpannableStringBuilder ssb = fromDocument(context, d, null, null);
 
+        for (UnderlineSpan span : ssb.getSpans(0, ssb.length(), UnderlineSpan.class)) {
+            int start = ssb.getSpanStart(span);
+            int end = ssb.getSpanEnd(span);
+            ssb.insert(end, "_");
+            ssb.insert(start, "_");
+        }
+
         for (StyleSpan span : ssb.getSpans(0, ssb.length(), StyleSpan.class)) {
             int start = ssb.getSpanStart(span);
             int end = ssb.getSpanEnd(span);
@@ -2826,13 +2852,6 @@ public class HtmlHelper {
                 ssb.insert(end, "*");
                 ssb.insert(start, "*");
             }
-        }
-
-        for (UnderlineSpan span : ssb.getSpans(0, ssb.length(), UnderlineSpan.class)) {
-            int start = ssb.getSpanStart(span);
-            int end = ssb.getSpanEnd(span);
-            ssb.insert(end, "_");
-            ssb.insert(start, "_");
         }
 
         for (URLSpan span : ssb.getSpans(0, ssb.length(), URLSpan.class)) {
@@ -3957,7 +3976,9 @@ public class HtmlHelper {
     }
 
     static void clearComposingText(TextView view) {
-        //view.clearComposingText();
+        if (view == null)
+            return;
+        view.clearComposingText();
     }
 
     static Spanned fromHtml(@NonNull String html, Context context) {

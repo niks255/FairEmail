@@ -94,18 +94,20 @@ public class ActivityAMP extends ActivityBase {
 
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
-        settings.setAllowFileAccess(false);
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
         if (WebViewEx.isFeatureSupported(this, WebViewFeature.SAFE_BROWSING_ENABLE))
             WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
+        if (WebViewEx.isFeatureSupported(this, WebViewFeature.ATTRIBUTION_REGISTRATION_BEHAVIOR))
+            WebSettingsCompat.setAttributionRegistrationBehavior(settings, WebSettingsCompat.ATTRIBUTION_BEHAVIOR_DISABLED);
 
         setDarkMode();
 
         settings.setLoadsImagesAutomatically(true);
         settings.setBlockNetworkLoads(false);
         settings.setBlockNetworkImage(false);
+        settings.setAllowFileAccess(false);
         settings.setJavaScriptEnabled(true);
 
         wvAmp.setWebViewClient(new WebViewClient() {

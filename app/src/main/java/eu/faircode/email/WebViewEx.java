@@ -86,12 +86,15 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
         settings.setAllowFileAccess(false);
+        settings.setJavaScriptEnabled(false);
         settings.setAllowContentAccess(true); // default
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
         if (WebViewEx.isFeatureSupported(context, WebViewFeature.SAFE_BROWSING_ENABLE))
             WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
+        if (WebViewEx.isFeatureSupported(context, WebViewFeature.ATTRIBUTION_REGISTRATION_BEHAVIOR))
+            WebSettingsCompat.setAttributionRegistrationBehavior(settings, WebSettingsCompat.ATTRIBUTION_BEHAVIOR_DISABLED);
     }
 
     void init(int height, int maxHeight, float size, Pair<Integer, Integer> position, boolean force_light, IWebView intf) {

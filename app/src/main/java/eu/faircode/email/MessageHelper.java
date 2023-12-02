@@ -206,7 +206,7 @@ public class MessageHelper {
     private static final String ARC_MESSAGE_SIGNATURE = "ARC-Message-Signature";
 
     static final List<String> ARC_WHITELIST_DEFAULT = Collections.unmodifiableList(Arrays.asList(
-            "google.com", "microsoft.com"
+            "google.com", "microsoft.com", "amazonses.com"
     ));
 
     private static final String DOCTYPE = "<!DOCTYPE";
@@ -1591,6 +1591,9 @@ public class MessageHelper {
         header = MimeUtility.unfold(header);
         if (TextUtils.isEmpty(header))
             return result;
+        header = header
+                .replaceAll("<\\s*<", "<")
+                .replaceAll(">\\s*>", ">");
         for (String ref : header.split("[,\\s]+"))
             if (!result.contains(ref))
                 result.add(ref);
@@ -2613,6 +2616,8 @@ public class MessageHelper {
             InternetAddress iaddress = (InternetAddress) address;
             String email = iaddress.getAddress();
             String personal = iaddress.getPersonal();
+            if (!TextUtils.isEmpty(personal))
+                personal = personal.replace("\u00ad", BuildConfig.DEBUG ? "-" : ""); // soft hyphen
 
             if (TextUtils.isEmpty(email) && TextUtils.isEmpty(personal))
                 continue;
@@ -2848,7 +2853,8 @@ public class MessageHelper {
         return subject
                 .trim()
                 .replace("\n", "")
-                .replace("\r", "");
+                .replace("\r", "")
+                .replace("\u00ad", BuildConfig.DEBUG ? "-" : "");  // soft hyphen
     }
 
     Long getSize() throws MessagingException {
@@ -3695,7 +3701,12 @@ public class MessageHelper {
                     String preamble = h.contentType.getParameter("preamble");
                     if (Boolean.parseBoolean(preamble)) {
                         String text = ((MimeMultipart) h.part.getContent()).getPreamble();
-                        String html = "<h1>Preamble</h1><div x-plain=\"true\">" + HtmlHelper.formatPlainText(text) + "</div>";
+                        String html = "<div class=\"faircode_remove\">" +
+                                "<h1>Preamble</h1>" +
+                                "<div x-plain=\"true\">" +
+                                HtmlHelper.formatPlainText(text) +
+                                "</div>" +
+                                "</div>";
                         sb.append(html);
                         continue;
                     }

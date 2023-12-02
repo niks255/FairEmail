@@ -463,9 +463,10 @@
     <string name="title_advanced_answer_hint">The answer button actions can also be configured in the send settings tab page</string>
     <string name="title_advanced_answer_warning">Not all actions are possible without a selection menu!</string>
     <string name="title_advanced_send_pending">Show non-obtrusive send delayed icon</string>
-
+    <string name="title_advanced_save_revisions">Save draft revisions for undo and redo</string>
     <string name="title_advanced_auto_save_paragraph">Automatically save a draft after every paragraph</string>
     <string name="title_advanced_auto_save_dot">Automatically save a draft after every sentence</string>
+
     <string name="title_advanced_compose_color">Default text color</string>
     <string name="title_advanced_compose_font">Default font</string>
     <string name="title_advanced_compose_monospaced">Use monospaced font for plain text messages</string>
@@ -924,6 +925,7 @@
     <string name="title_advanced_easy_correct" translatable="false">Easy correct</string>
     <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
     <string name="title_advanced_tld_flags" translatable="false">Show TLD flags</string>
+    <string name="title_advanced_json_ld" translatable="false">Show Linked Data (JSON-LD)</string>
     <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
     <string name="title_advanced_thread_by_ref" translatable="false">Thread by common reference</string>
     <string name="title_advanced_mdn" translatable="false">Process MDNs</string>
@@ -1441,6 +1443,7 @@
     <string name="title_print_images">Print images</string>
     <string name="title_print_images_remark">Downloading images might take some time</string>
     <string name="title_print_block_quotes">Print block quotes lines</string>
+    <string name="title_print_margins">Add a margin</string>
     <string name="title_show_headers">Show headers</string>
     <string name="title_show_html">Show source</string>
     <string name="title_raw_save">Save raw message</string>

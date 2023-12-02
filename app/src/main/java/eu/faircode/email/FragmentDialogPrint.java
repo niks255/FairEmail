@@ -46,6 +46,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -78,6 +80,7 @@ public class FragmentDialogPrint extends FragmentDialogBase {
         CheckBox cbHeader = dview.findViewById(R.id.cbHeader);
         CheckBox cbImages = dview.findViewById(R.id.cbImages);
         CheckBox cbBlockQuotes = dview.findViewById(R.id.cbBlockQuotes);
+        CheckBox cbMargin = dview.findViewById(R.id.cbMargin);
         CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
 
         cbHeader.setChecked(prefs.getBoolean("print_html_header", true));
@@ -101,6 +104,14 @@ public class FragmentDialogPrint extends FragmentDialogBase {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 prefs.edit().putBoolean("print_html_block_quotes", isChecked).apply();
+            }
+        });
+
+        cbMargin.setChecked(prefs.getBoolean("print_html_margins", true));
+        cbMargin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                prefs.edit().putBoolean("print_html_margins", isChecked).apply();
             }
         });
 
@@ -138,10 +149,12 @@ public class FragmentDialogPrint extends FragmentDialogBase {
         boolean print_html_header = prefs.getBoolean("print_html_header", true);
         boolean print_html_images = prefs.getBoolean("print_html_images", true);
         boolean print_html_block_quotes = prefs.getBoolean("print_html_block_quotes", true);
+        boolean print_html_margins = prefs.getBoolean("print_html_margins", true);
 
         args.putBoolean("print_html_header", print_html_header);
         args.putBoolean("print_html_images", print_html_images);
         args.putBoolean("print_html_block_quotes", print_html_block_quotes);
+        args.putBoolean("print_html_margins", print_html_margins);
 
         new SimpleTask<String[]>() {
             @Override
@@ -151,6 +164,7 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                 boolean print_html_header = args.getBoolean("print_html_header");
                 boolean print_html_images = args.getBoolean("print_html_images");
                 boolean print_html_block_quotes = args.getBoolean("print_html_block_quotes");
+                boolean print_html_margins = args.getBoolean("print_html_margins");
                 CharSequence selected = args.getCharSequence("selected");
                 boolean draft = args.getBoolean("draft");
 
@@ -192,6 +206,13 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                                         "margin-left: 0; margin-right: 0;" +
                                         "padding-left: 0; padding-right: 0;"));
                     }
+
+                if (print_html_margins) {
+                    Element body = document.body();
+                    String style = body.attr("style");
+                    body.attr("style", HtmlHelper.mergeStyles(style,
+                            "margin: 1cm !important;")); // 0.4 inch
+                }
 
                 HtmlHelper.markText(document);
 
@@ -350,7 +371,7 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                 }
 
                 args.putLong("received", message.received);
-                return new String[]{message.subject, document.body().html()};
+                return new String[]{message.subject, document.html()};
             }
 
             @Override
@@ -363,6 +384,9 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                 final Context context = activity.getOriginalContext();
                 boolean print_html_images = args.getBoolean("print_html_images");
 
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean safe_browsing = prefs.getBoolean("safe_browsing", false);
+
                 // https://developer.android.com/training/printing/html-docs.html
                 printWebView = new WebView(context);
 
@@ -370,6 +394,12 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                 settings.setUserAgentString(WebViewEx.getUserAgent(context, printWebView));
                 settings.setLoadsImagesAutomatically(print_html_images);
                 settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+
+                if (WebViewEx.isFeatureSupported(context, WebViewFeature.SAFE_BROWSING_ENABLE))
+                    WebSettingsCompat.setSafeBrowsingEnabled(settings, safe_browsing);
+                if (WebViewEx.isFeatureSupported(context, WebViewFeature.ATTRIBUTION_REGISTRATION_BEHAVIOR))
+                    WebSettingsCompat.setAttributionRegistrationBehavior(settings, WebSettingsCompat.ATTRIBUTION_BEHAVIOR_DISABLED);
+
                 settings.setJavaScriptEnabled(false);
                 settings.setAllowFileAccess(true);
 

@@ -27,7 +27,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -165,10 +164,7 @@ public class EntityAttachment {
 
     Uri getUri(Context context) {
         File file = getFile(context);
-        if (TextUtils.isEmpty(name))
-            return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
-        else
-            return FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file, name);
+        return FileProviderEx.getUri(context, BuildConfig.APPLICATION_ID, file, name);
     }
 
     File getFile(Context context) {

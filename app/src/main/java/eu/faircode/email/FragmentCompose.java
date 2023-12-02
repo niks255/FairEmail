@@ -117,7 +117,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -2662,14 +2661,6 @@ public class FragmentCompose extends FragmentBase {
                 OpenAI.Message[] completions =
                         OpenAI.completeChat(context, model, result.toArray(new OpenAI.Message[0]), temperature, 1);
 
-                try {
-                    Pair<Double, Double> usage = OpenAI.getGrants(context);
-                    args.putDouble("used", usage.first);
-                    args.putDouble("granted", usage.second);
-                } catch (Throwable ex) {
-                    Log.w(ex);
-                }
-
                 return completions;
             }
 
@@ -3574,7 +3565,7 @@ public class FragmentCompose extends FragmentBase {
                 File dir = Helper.ensureExists(new File(context.getFilesDir(), "photo"));
                 File file = new File(dir, working + "_" + new Date().getTime() + ".jpg");
                 try {
-                    photoURI = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID, file);
+                    photoURI = FileProviderEx.getUri(context, BuildConfig.APPLICATION_ID, file);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     startActivityForResult(intent, REQUEST_TAKE_PHOTO);
                 } catch (Throwable ex) {
@@ -6663,6 +6654,7 @@ public class FragmentCompose extends FragmentBase {
             boolean discard_delete = prefs.getBoolean("discard_delete", true);
             boolean write_below = prefs.getBoolean("write_below", false);
             boolean save_drafts = prefs.getBoolean("save_drafts", true);
+            boolean save_revisions = prefs.getBoolean("save_revisions", true);
             int send_delayed = prefs.getInt("send_delayed", 0);
 
             DB db = DB.getInstance(context);
@@ -6894,8 +6886,10 @@ public class FragmentCompose extends FragmentBase {
                         body = d.html();
 
                         // Create new revision
-                        draft.revisions++;
-                        draft.revision = draft.revisions;
+                        if (save_revisions) {
+                            draft.revisions++;
+                            draft.revision = draft.revisions;
+                        }
 
                         Helper.writeText(draft.getFile(context, draft.revision), body);
                     } else
@@ -7864,6 +7858,9 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void performSearch(boolean next) {
+        if (etSearch == null || etBody == null)
+            return;
+
         clearSearch();
 
         searchIndex = (next ? searchIndex + 1 : 1);

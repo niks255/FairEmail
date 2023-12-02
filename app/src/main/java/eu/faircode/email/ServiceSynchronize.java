@@ -158,7 +158,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final String ACTION_NEW_MESSAGE_COUNT = BuildConfig.APPLICATION_ID + ".NEW_MESSAGE_COUNT";
 
     private static final List<String> PREF_EVAL = Collections.unmodifiableList(Arrays.asList(
-            "enabled", "poll_interval" // restart account(s)
+            "enabled", "poll_interval", "last_daily" // restart account(s)
     ));
 
     private static final List<String> PREF_RELOAD = Collections.unmodifiableList(Arrays.asList(
@@ -1504,6 +1504,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         intent.putExtra("account", account.id);
         intent.putExtra("protocol", account.protocol);
         intent.putExtra("auth_type", account.auth_type);
+        intent.putExtra("address", account.user);
         intent.putExtra("faq", 23);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent piAlert = PendingIntentCompat.getActivity(

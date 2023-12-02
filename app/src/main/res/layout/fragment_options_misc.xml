@@ -1835,19 +1835,16 @@
                     app:layout_constraintTop_toBottomOf="@id/flowInfra"
                     app:switchPadding="12dp" />
 
-                <TextView
-                    android:id="@+id/tvDkimVerifyHint"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swJsonLd"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginEnd="48dp"
-                    android:text="@string/title_advanced_usage_hint"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="?attr/colorWarning"
-                    android:textStyle="italic"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_json_ld"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swTldFlags" />
+                    app:layout_constraintTop_toBottomOf="@id/swTldFlags"
+                    app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swDupMsgId"
@@ -1857,7 +1854,7 @@
                     android:text="@string/title_advanced_dup_msgid"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDkimVerifyHint"
+                    app:layout_constraintTop_toBottomOf="@id/swJsonLd"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
