@@ -183,7 +183,7 @@ public class ActivityEML extends ActivityBase {
                         if (uri == null)
                             throw new FileNotFoundException();
 
-                        File dir = Helper.ensureExists(new File(context.getFilesDir(), "shared"));
+                        File dir = Helper.ensureExists(context, "shared");
                         File file = new File(dir, "email.eml");
 
                         Helper.copy(context, uri, file);
@@ -323,7 +323,8 @@ public class ActivityEML extends ActivityBase {
                     MessageHelper.getStructure(imessage, ssb, 0, textColorLink);
                     result.structure = ssb;
 
-                    result.headers = HtmlHelper.highlightHeaders(context, helper.getHeaders(), false);
+                    result.headers = HtmlHelper.highlightHeaders(context,
+                            helper.getFrom(), helper.getTo(), helper.getReceivedHeader(), helper.getHeaders(), false);
 
                     return result;
                 }
@@ -394,7 +395,8 @@ public class ActivityEML extends ActivityBase {
                                     create.putExtra(Intent.EXTRA_TITLE, apart.attachment.name);
                                 Helper.openAdvanced(ActivityEML.this, create);
                                 if (create.resolveActivity(getPackageManager()) == null) // system whitelisted
-                                    ToastEx.makeText(ActivityEML.this, R.string.title_no_saf, Toast.LENGTH_LONG).show();
+                                    Log.unexpectedError(getSupportFragmentManager(),
+                                            new IllegalArgumentException(getString(R.string.title_no_saf)), 25);
                                 else
                                     startActivityForResult(Helper.getChooser(ActivityEML.this, create), REQUEST_ATTACHMENT);
                             }
@@ -487,10 +489,8 @@ public class ActivityEML extends ActivityBase {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof IllegalArgumentException || ex instanceof FileNotFoundException)
-                    ToastEx.makeText(ActivityEML.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                else
-                    Log.unexpectedError(getSupportFragmentManager(), ex);
+                boolean report = !(ex instanceof IllegalArgumentException || ex instanceof FileNotFoundException);
+                Log.unexpectedError(getSupportFragmentManager(), ex, report);
             }
         }.execute(this, args, "eml:attachment");
     }
@@ -622,7 +622,7 @@ public class ActivityEML extends ActivityBase {
             @Override
             protected void onException(Bundle args, @NonNull Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(findViewById(android.R.id.content), ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(findViewById(android.R.id.content), new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else
                     Log.unexpectedError(getSupportFragmentManager(), ex);

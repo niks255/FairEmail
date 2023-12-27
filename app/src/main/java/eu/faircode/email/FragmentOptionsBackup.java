@@ -1311,7 +1311,7 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                         ssb.setSpan(new ForegroundColorSpan(colorWarning), 0, ssb.length(), 0);
                         ssb.append("\n\n");
                     }
-                    ssb.append(ex.toString());
+                    ssb.append(new ThrowableWrapper(ex).toSafeString());
                     onProgress(ssb, null);
                 }
             }
@@ -1701,7 +1701,8 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
         Intent intent = (export ? getIntentExport(context) : getIntentImport(context));
         PackageManager pm = context.getPackageManager();
         if (intent.resolveActivity(pm) == null) { //  // system/GET_CONTENT whitelisted
-            ToastEx.makeText(context, R.string.title_no_saf, Toast.LENGTH_LONG).show();
+            Log.unexpectedError(getParentFragmentManager(),
+                    new IllegalArgumentException(context.getString(R.string.title_no_saf)), 25);
             return;
         }
 
@@ -1841,7 +1842,7 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                                 .remove("cloud_last_sync")
                                 .apply();
 
-                        File dir = Helper.ensureExists(new File(context.getFilesDir(), "syncdata"));
+                        File dir = Helper.ensureExists(context, "syncdata");
                         File[] files = dir.listFiles();
                         if (files != null)
                             for (File file : files) {
@@ -1868,7 +1869,7 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                             .setIcon(R.drawable.twotone_warning_24)
                             .setTitle(getString(R.string.title_advanced_cloud_invalid))
                             .setNegativeButton(android.R.string.cancel, null);
-                    String message = ex.getMessage();
+                    String message = new ThrowableWrapper(ex).getSafeMessage();
                     if (!TextUtils.isEmpty(message))
                         builder.setMessage(message);
                     builder.show();

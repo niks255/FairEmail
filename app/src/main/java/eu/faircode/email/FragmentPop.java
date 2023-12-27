@@ -353,6 +353,11 @@ public class FragmentPop extends FragmentBase {
         // Initialize
         Helper.setViewsEnabled(view, false);
 
+        if (!SSLHelper.customTrustManager()) {
+            Helper.hide(cbInsecure);
+            Helper.hide(tvInsecureRemark);
+        }
+
         if (id < 0)
             tilPassword.setEndIconMode(END_ICON_PASSWORD_TOGGLE);
         else
@@ -753,7 +758,7 @@ public class FragmentPop extends FragmentBase {
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else {
                     tvError.setText(Log.formatThrowable(ex, false));
@@ -1063,6 +1068,11 @@ public class FragmentPop extends FragmentBase {
         flag.id = EntityMessage.SWIPE_ACTION_FLAG;
         flag.name = getString(R.string.title_flag);
         folders.add(flag);
+
+        EntityFolder importance = new EntityFolder();
+        importance.id = EntityMessage.SWIPE_ACTION_IMPORTANCE;
+        importance.name = getString(R.string.title_set_importance);
+        folders.add(importance);
 
         EntityFolder snooze = new EntityFolder();
         snooze.id = EntityMessage.SWIPE_ACTION_SNOOZE;

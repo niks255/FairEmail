@@ -1,24 +1,5 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
-<head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>FAQ FairEmail</title>
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-  </style>
-</head>
-<body>
-<header id="title-block-header">
-<h1 class="title">FAQ FairEmail</h1>
-</header>
-<p><a name="top"></a> # FairEmail support</p>
+<p><a name="top"></a></p>
+<h1 id="fairemail-support">FairEmail support</h1>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F">Google Translate</a></p>
 <p>🇬🇧 If you have a question, please check the following frequently asked questions first. <a href="#quick-support">At the bottom</a>, you can find out how to ask other questions, request features, and report bugs. You will receive an answer in your own language.</p>
 <p>🇩🇪 Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die folgenden häufig gestellten Fragen. <a href="#quick-support">Unten</a> erfahren Sie, wie Sie andere Fragen stellen, Funktionen anfordern und Fehler melden können. Sie erhalten eine Antwort in Ihrer eigenen Sprache.</p>
@@ -381,6 +362,7 @@
 <li><a href="#faq196">(196) Can you add empty trash on leaving the app?</a></li>
 <li><a href="#faq197">(197) How can I print a message?</a></li>
 <li><a href="#faq198">(198) Can you add spell checking?</a></li>
+<li><a href="#faq199">(199) Can you add proxy support?</a></li>
 </ul>
 <p><a href="#get-support">I have another question.</a></p>
 <p><a name="faq1"></a> <strong>(1) Which permissions are needed and why?</strong></p>
@@ -481,6 +463,7 @@
 <p><br /></p>
 <p><a name="faq4"></a> <strong>(4) How can I use an invalid security certificate / empty password / plain text connection?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq4">Google Translate</a></p>
+<p><strong>Since version 1.2137: Due to <a href="https://support.google.com/faqs/answer/6346016">Google’s Play Store policies</a>, it is no longer possible to support insecure connections to email servers with certificate issues for the version of FairEmail distributed in the Play Store. Therefore, this issue can only be resolved by your email provider, or by installing the GitHub version of the app (as an update) and enabling insecure connections in the account/identity settings.</strong></p>
 <p><em>… Untrusted … not in certificate …</em><br /> <em>… Invalid security certificate (Can’t verify identity of server) …</em><br /> <em>… Chain validation failed … timestamp check failed … Certificate expired at …</em><br /></p>
 <p>This can be caused by using an incorrect host name, so first double check the host name in the advanced identity/account settings (tap <em>Manual setup and account options</em>). Please see the documentation of the email provider about the right host name. Sometimes the right host name is in the error message.</p>
 <p>You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">man-in-the-middle attacks</a>. If money is an obstacle, you can get free security certificates from <a href="https://letsencrypt.org">Let’s Encrypt</a>.</p>
@@ -606,7 +589,7 @@
 <p><a name="faq8"></a> <strong>(8) Can I use a Microsoft Exchange account?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq8">Google Translate</a></p>
 <p>Firstly, Exchange <em>protocol</em> (EWS) is not the same as Exchange <em>server</em> or Exchange <em>account</em>.</p>
-<p>The Microsoft Exchange Web Services ™ (EWS) protocol <a href="https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055">is being phased out</a>. Microsoft stopped updating the EWS libraries <a href="https://github.com/OfficeDev/ews-java-api">in 2016</a>. So, it makes little sense to add this protocol anymore. Moreover, Microsoft announced that <a href="https://techcommunity.microsoft.com/t5/exchange-team-blog/retirement-of-exchange-web-services-in-exchange-online/ba-p/3924440">EWS will be retired on October 1, 2026</a>.</p>
+<p>The Microsoft Exchange Web Services ™ (EWS) protocol <a href="https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/Upcoming-changes-to-Exchange-Web-Services-EWS-API-for-Office-365/ba-p/608055">is being phased out</a>. Microsoft stopped updating the EWS libraries <a href="https://github.com/OfficeDev/ews-java-api">in 2016</a>. So, it makes little sense to add this protocol anymore. Moreover, Microsoft announced that <a href="https://techcommunity.microsoft.com/t5/exchange-team-blog/retirement-of-exchange-web-services-in-exchange-online/ba-p/3924440">EWS will be retired on October 1, 2026</a>. Please don’t leave a bad review for this. This cannot be added because Microsoft no longer provides the tools for this!</p>
 <p>You can use a Microsoft Exchange account if it is accessible via IMAP, which is almost always the case because all Exchange servers support the standard IMAP protocol. See <a href="https://support.office.com/en-us/article/what-is-a-microsoft-exchange-account-47f000aa-c2bf-48ac-9bc2-83e5c6036793">here</a> for more information.</p>
 <p>Note that the desciption of FairEmail starts with the remark that non-standard protocols, like Microsoft Exchange Web Services ™ and Microsoft ActiveSync ™ are not supported.</p>
 <p>Please see <a href="https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040">here</a> for the Microsoft documentation about configuring an email client. There is also a section about common connection errors and solutions.</p>
@@ -691,7 +674,7 @@
 <li><em>Missing key for encryption</em>: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.</li>
 <li><em>Key for signature verification is missing</em>: the public key for the sender is not available in the OpenKeychain app. This can also be caused by Autocrypt being disabled in the encryption settings or by the Autocrypt header not being sent.</li>
 <li><em>OpenPgp error 0: null</em> / <em>OpenPgp error 0: General error</em>: please check the key in the OpenKeychain app and make sure there are no conflicting identities for the key and make sure the email address exactly matches the key, including lower/upper case. Also, make sure the key can be used to sign/encrypt and isn’t for encrypting/signing only.</li>
-<li><em>OpenPgp error 0: Encountered an error reading input data!</em>: your public key has the <a href="https://en.wikipedia.org/wiki/Authenticated_encryption">AEAD</a> flag set, but the message was encrypted in the older MDC (Modification Detection Code) mode by the sender. For example the Posteo email server does this erroneously. Workaround: <a href="https://github.com/keybase/keybase-issues/issues/4025#issuecomment-853933127">remove the AEAD flag</a> from the public key.</li>
+<li><em>OpenPgp error 0: Encountered an error reading input data!</em>: your public key has the <a href="https://en.wikipedia.org/wiki/Authenticated_encryption">AEAD</a> flag set, but the message was encrypted in the older MDC (Modification Detection Code) mode by the sender. For example the Posteo email server does this erroneously. Workaround: <a href="https://github.com/keybase/keybase-issues/issues/4025#issuecomment-853933127">remove the AEAD flag</a> from the key.</li>
 </ul>
 <p><strong>Important</strong>: if <em>Don’t keep activities</em> is enabled in the Android developer options, FairEmail and the OpenKeychain app cannot run at the same time, causing PGP operations to fail. If needed, please <a href="https://developer.android.com/studio/debug/dev-options#enable">see here</a> about how to enable the developer options.</p>
 <p><strong>Important</strong>: Android 8.1.0 on Tecno CF8 Camon 11 Pro devices blocks communication between apps with the message “<em>AutoStart limited</em>” in the system logcat. So, FairEmail (or any other app) can’t communicate with the OpenKeychain app.</p>
@@ -898,7 +881,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p>Android <em>Settings, Data usage, Three-dots overflow menu, Data usage control</em></p>
 <p>The error <em>… Connection refused …</em> (ECONNREFUSED) means that the email server or something between the email server and the app, like a firewall, actively refused the connection.</p>
 <p>The error <em>… Network unreachable …</em> means that the email server was not reachable via the current internet connection, for example because internet traffic is restricted to local traffic only.</p>
-<p>The error <em>… Host is unresolved …</em>, <em>… Unable to resolve host …</em> or <em>… No address associated with hostname …</em> means that the address of the email server could not be resolved into an IP address. This might be caused by a VPN, ad blocking or an unreachable or not properly working (local) <a href="https://en.wikipedia.org/wiki/Domain_Name_System">DNS</a> server.</p>
+<p>The error <em>… Host is unresolved …</em>, <em>… Unable to resolve host …</em> or <em>… No address associated with hostname … android_getaddrinfo failed: EAI_NODATA</em> means that the address of the email server could not be resolved into an IP address. This might be caused by a VPN, ad blocking or an unreachable or not properly working (local) <a href="https://en.wikipedia.org/wiki/Domain_Name_System">DNS</a> server. An incorrect Android private DNS network setting can cause this too.</p>
 <p>The error <em>… Software caused connection abort …</em> means that the email server or something between FairEmail and the email server actively terminated an existing connection. This can for example happen when connectivity was abruptly lost. A typical example is turning on flight mode.</p>
 <p>The errors <em>… BYE Logging out …</em>, <em>… Connection reset …</em> mean that the email server or something between the email server and the app, for example a router or a firewall (app), actively terminated an existing connection.</p>
 <p>The error <em>… Connection closed by peer …</em> means that the email server actively closed the connection. This might be caused by a not updated Exchange server, see <a href="https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/">here</a> for more information.</p>
@@ -927,6 +910,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 </ul>
 <p>Many public Wi-Fi networks block outgoing email to prevent spam. Sometimes you can workaround this by using another SMTP port. See the documentation of the provider for the usable port numbers.</p>
 <p>If you are using a <a href="https://en.wikipedia.org/wiki/Virtual_private_network">VPN</a>, the VPN provider might block the connection because it is too aggressively trying to prevent spam. Similarly, the email server might block connections via a VPN because it was misused for sending spam. Some VPN providers have “cleaner” IP addresses than others, so switching to another VPN provider might be useful. Note that <a href="https://fi.google.com/">Google Fi</a> is using a VPN too.</p>
+<p>The error ‘<em>You must use stronger authentication such as AUTH or APOP to connect to this server</em>’ can be fixed by enabling debug mode (last option in the miscellaneous settings tab page), and in the debug panel that appears enabling the APOP option. After that, debug mode can be disabled again.</p>
 <p><strong>Send errors</strong></p>
 <p>SMTP servers can reject messages for <a href="https://en.wikipedia.org/wiki/List_of_SMTP_server_return_codes">a variety of reasons</a>. Too large messages and triggering the spam filter of an email server are the most common reasons.</p>
 <ul>
@@ -994,8 +978,8 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p><a name="faq25"></a> <strong>(25) Why can’t I select/open/save an image, attachment or a file?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq25">Google Translate</a></p>
 <p>When a menu item to select/open/save a file is disabled (dimmed) or when you get the message <em>Storage access framework not available</em>, the <a href="https://developer.android.com/guide/topics/providers/document-provider">storage access framework</a>, a standard Android component, is probably not present. This might be because your custom ROM does not include it or because it was actively removed (debloated).</p>
-<p>FairEmail does not request storage permissions, so this framework is required to select files and folders. No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to <em>all</em> files.</p>
-<p>The storage access framework is provided by the package <em>com.android.documentsui</em>, which is visible as <em>Files</em> app on some Android versions (notable OxygenOS).</p>
+<p>FairEmail does not request storage permissions, so this framework is required to select files and folders. No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to <em>all</em> files. Moreover, recent Android versions disallow access to all files for apps, except, under specific conditions, for file managers.</p>
+<p>The storage access framework is provided by the package <em>com.android.documentsui</em>, which is visible as <em>Files</em> app on some Android versions (notably OxygenOS).</p>
 <p>You can enable the storage access framework (again) with this adb command:</p>
 <pre><code>pm install -k --user 0 com.android.documentsui</code></pre>
 <p>Alternatively, you might be able to enable the <em>Files</em> app again using the Android app settings.</p>
@@ -1509,6 +1493,7 @@ $$deleted$ (marked as deleted)</code></pre>
 $$dkim$
 $$spf$
 $$dmarc$
+$$auth$ (since version 1.2141)
 $$mx$
 $$blocklist$
 $$replydomain$
@@ -1739,6 +1724,7 @@ Y1 OK CAPABILITY completed</code></pre>
 <li>An email address or a network address is on a block list (receive settings tab page).</li>
 </ul>
 <p>Note that a sender will automatically be blocked when a message is moved into the spam folder. You can disable this behavior by disabling the option <em>Automatically block the sender when reporting spam</em> in the behavior settings tab page.</p>
+<p>Since version 1.2143, there is an “<em>Unblock all</em>” button in the receive-settings tab page, which will reset all above options.</p>
 <p>If you receive a lot of spam messages in your inbox, the best you can do is to contact the email provider to ask if spam filtering can be improved.</p>
 <p>Also, FairEmail can show a small red warning flag when DKIM, SPF or <a href="https://en.wikipedia.org/wiki/DMARC">DMARC</a> authentication failed on the receiving server. You can enable/disable <a href="https://en.wikipedia.org/wiki/Email_authentication">authentication verification</a> in the display settings.</p>
 <p>FairEmail can show a warning flag too if the domain name of the (reply) email address of the sender does not define an MX record pointing to an email server. This can be enabled in the receive settings. Be aware that this will slow down synchronization of messages significantly.</p>
@@ -1751,6 +1737,7 @@ Y1 OK CAPABILITY completed</code></pre>
 <p>Since the app is small anyway and the data files will be stored in the same place, the benefit would be limited anyway.</p>
 <p>Messages, attachments, etc stored on external storage media, like an sdcard, can be accessed by other apps and is therefore not safe. See <a href="https://developer.android.com/training/data-storage">here</a> for the details. Instead, consider to use <a href="https://source.android.com/devices/storage/adoptable">adoptable storage</a>.</p>
 <p>Since version 1.1829 is it possible to store attachments to external storage space private to the app (except for file managers) via an option in the debug panel. You can enable the debug panel by enabling debug mode in the miscellaneous settings (last option). To prevent ongoing operations from storing attachments at the old location you should disable receiving messages in the receive settings and wait until all operations have been completed before changing this option. Please be aware that removing the storage space will inevitably result in problems, which is one of the reasons why this option is hidden.</p>
+<p>Please note that more often than not the external storage space is emulated on recent Android versions and recent devices. and that there is no longer a viable way to get permission to write to other locations.</p>
 <p>Moving messages to an sdcard is not an option because this would significantly reduce the response times of the app.</p>
 <p>When needed you can save (raw) messages via the three-dots menu just above the message text and save attachments by tapping on the floppy icon.</p>
 <p>If you need to save on storage space, you can limit the number of days messages are being synchronized and kept on your device and disable downloading and storing of message texts and attachments (which means only message headers will be stored). You can change these settings by long pressing a folder in the folder list and selecting <em>Edit properties</em>.</p>
@@ -2418,7 +2405,7 @@ $NotDisplayed</code></pre>
 <li>Make sure you have the latest version of the app installed</li>
 <li>Check if <a href="https://www.deepl.com/">DeepL</a> supports your language</li>
 <li>Enable DeepL support in the integration settings</li>
-<li><a href="https://www.deepl.com/pro#developer">Subscribe to</a> the DeepL API Free or Pro plan (credit card required; won’t be charged)</li>
+<li><a href="https://www.deepl.com/pro#developer">Subscribe to</a> the DeepL API Free (credit card required; won’t be charged)</li>
 <li><a href="https://www.deepl.com/pro-account/plan">Copy</a> the authentication key</li>
 <li>In the message composer tap on the translate button (文A) in the top action bar, select <em>Configure</em> and paste the key</li>
 </ol>
@@ -2718,9 +2705,9 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p><br></p>
 <p><a name="faq192"></a> <strong>(192) How can I resolve ‘Couldn’t connect to host, port: …; timeout …;’ ?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq192">Google Translate</a></p>
-<p>This error message means that the app didn’t receive a response from the email server. The email server might not be responding, for example because it is offline for maintenance, or the response might not arrive, for example due to internet connectivity issues.</p>
+<p>This error message means that the app didn’t receive a response from the email server of your email provider. The email server might not be responding, for example because it is offline for maintenance, or the response might not arrive, for example due to internet connectivity issues.</p>
 <p>So, please check if your email provider didn’t announce server maintenance, and if your internet connection is working correctly. Also, try to switch to mobile data or Wi-Fi.</p>
-<p>If you are using a VPN, firewall, ad blocker, or similar, please try to disable it, or make an exception for FairEmail. Email servers often block connections via a VPN.</p>
+<p>If you are using a VPN, firewall, ad blocker, or similar, please try to disable it, or make an exception for FairEmail. Email servers often block connections via a VPN, and in general from foreign countries.</p>
 <p><br></p>
 <p><a name="faq193"></a> <strong>(193) How can I import Outlook contacts?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq193">Google Translate</a></p>
@@ -2761,6 +2748,11 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>Spell checking should be provided by the keyboard app for all other apps. Sometimes, particularly on ChromeOS, spell checking needs to be enabled in the settings.</p>
 <p>That said, LanguageTool, which can be enabled in the integration settings, is an excellent style and spell checker.</p>
 <p><br></p>
+<p><a name="faq199"></a> <strong>(199) Can you add proxy support?</strong></p>
+<p>In fact, (HTTP, HTTPS, SOCKS) proxy support was removed because it is not possible to let an app proxy DNS requests, or in other words, an in-app proxy will always leak host names and therefore give a false sense of security.</p>
+<p>If you want to proxy traffic, for example to use Tor, you should use an Android VPN-service based app, which is the only way to reliably proxy traffic.</p>
+<p>Please note that if you want to use a .onion address, you will need to disable private DNS in the Android network settings.</p>
+<p><br></p>
 <h2>
 <a name="get-support"></a>Get support
 </h2>
@@ -2795,5 +2787,3 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>GitHub issues are disabled due to frequent misusage.</p>
 <p><br /></p>
 <p>Copyright © 2018-2023 Marcel Bokhorst.</p>
-</body>
-</html>

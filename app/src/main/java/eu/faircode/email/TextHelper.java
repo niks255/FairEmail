@@ -34,8 +34,10 @@ import android.view.textclassifier.TextClassifier;
 import androidx.annotation.RequiresApi;
 import androidx.preference.PreferenceManager;
 
-import java.io.StringReader;
-import java.io.StringWriter;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
+
 import java.text.Normalizer;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -52,13 +54,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 public class TextHelper {
     private static final int MIN_WORDS = 7;
@@ -138,27 +133,55 @@ public class TextHelper {
             return true;
 
         int codepoint;
-        Character.UnicodeScript us;
-        Character.UnicodeScript script = null;
+        Character.UnicodeScript script;
+        List<Character.UnicodeScript> scripts = new ArrayList<>();
         for (int i = 0; i < s.length(); ) {
             codepoint = s.codePointAt(i);
             i += Character.charCount(codepoint);
-            us = Character.UnicodeScript.of(codepoint);
 
-            if (Character.isSpaceChar(codepoint)) {
-                script = null;
-                continue;
-            }
-
-            if (us.equals(Character.UnicodeScript.COMMON))
+            if (Character.isSpaceChar(codepoint))
                 continue;
 
-            if (script == null)
-                script = us;
-            else if (!us.equals(script))
-                return false;
+            script = Character.UnicodeScript.of(codepoint);
+
+            if (Character.UnicodeScript.COMMON.equals(script))
+                continue;
+
+            if (!scripts.contains(script))
+                scripts.add(script);
         }
-        return true;
+
+        if (scripts.size() <= 1)
+            return true;
+
+        scripts.remove(Character.UnicodeScript.HAN); // Chinese/Japanese
+        scripts.remove(Character.UnicodeScript.HIRAGANA); // Japanese
+        scripts.remove(Character.UnicodeScript.KATAKANA); // Japanese
+
+        if (scripts.size() == 0)
+            return true; // All Chinese/Japanese
+        if (scripts.size() > 1)
+            return false;
+
+        // Chinese/Japanese + Latin
+        return Character.UnicodeScript.LATIN.equals(scripts.get(0));
+    }
+
+    static String getNonLatinCodepoints(String text) {
+        int codepoint;
+        Character.UnicodeScript us;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < text.length(); ) {
+            codepoint = text.codePointAt(i);
+            i += Character.charCount(codepoint);
+            us = Character.UnicodeScript.of(codepoint);
+            if (!Character.isSpaceChar(codepoint) &&
+                    !Character.UnicodeScript.COMMON.equals(us) &&
+                    !Character.UnicodeScript.LATIN.equals(us))
+                sb.append('<').append(Integer.toHexString(codepoint)).append('>');
+            sb.append(Character.toChars(codepoint));
+        }
+        return sb.toString();
     }
 
     static String normalizeNotification(Context context, String text) {
@@ -266,16 +289,9 @@ public class TextHelper {
 
     public static String formatXml(String xml, int indent) {
         try {
-            Source source = new StreamSource(new StringReader(xml));
-            StringWriter writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
-            TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer transformer = factory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", Integer.toString(indent));
-            transformer.transform(source, result);
-            return result.getWriter().toString();
+            Document d = Jsoup.parse(xml, "", Parser.xmlParser());
+            d.outputSettings().prettyPrint(true).outline(true).indentAmount(indent);
+            return d.html();
         } catch (Throwable ex) {
             Log.e(ex);
             return xml;

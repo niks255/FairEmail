@@ -91,6 +91,8 @@
     <string name="title_block_sender_hint">Het blokkeren van een afzender is een gratis functie.
 Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro functie is.    </string>
     <string name="title_blocked_senders">Geblokkeerde afzenders</string>
+    <string name="title_unblock_all">Alle deblokkeren</string>
+    <string name="title_unblock_all_remark">Dit zal alle lijsten en opties, die kunnen resulteren in het blokkeren van de afzenders, herstellen</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Blokkeer afzender van één bericht?</item>
         <item quantity="other">Blokkeer de afzender van %1$s berichten?</item>
@@ -387,7 +389,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_answer_hint">De acties van de antwoordknop kunnen ook worden geconfigureerd op het tabblad verzendinstellingen</string>
     <string name="title_advanced_answer_warning">Niet alle acties zijn mogelijk zonder een selectiemenu!</string>
     <string name="title_advanced_send_pending">Toon niet-opdringerig pictogram voor vertraagd verzenden</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">Conceptrevisies opslaan voor ongedaan maken (undo) en opnieuw uitvoeren (redo)</string>
+    <string name="title_advanced_save_revisions">Conceptrevisies opslaan voor ongedaan maken (undo) en opnieuw uitvoeren (redo)</string>
     <string name="title_advanced_auto_save_paragraph">Automatisch een concept opslaan na elke alinea</string>
     <string name="title_advanced_auto_save_dot">Automatisch een concept opslaan na elke zin</string>
     <string name="title_advanced_compose_color">Standaard tekstkleur</string>
@@ -423,6 +425,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_lookup_mx">Controleer e-mailadressen van de ontvangers voor verzenden</string>
     <string name="title_advanced_metered">Gemeten verbindingen gebruiken</string>
     <string name="title_advanced_download">Automatisch downloaden van berichten en bijlagen op een gemeten verbinding tot</string>
+    <string name="title_advanced_download_limited">Ook toepassen op ongemeten verbindingen</string>
     <string name="title_advanced_roaming">Download berichten en bijlagen tijdens roaming</string>
     <string name="title_advanced_rlah">Roam zoals thuis</string>
     <string name="title_advanced_download_headers">Download alle berichtkoppen</string>
@@ -433,10 +436,13 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_vpn_only">Alleen via een VPN verbinden</string>
     <string name="title_advanced_timeout">Verbinding timeout (seconden)</string>
     <string name="title_advanced_prefer_ip4">Geef de voorkeur aan IPv4 boven IPv6</string>
+    <string name="title_advanced_ssl_update">Bijgewerkte SSL-provider gebruiken</string>
     <string name="title_advanced_ssl_harden">Verhard SSL-verbindingen</string>
     <string name="title_advanced_ssl_harden_strict">Vereis TLS 1.3</string>
     <string name="title_advanced_cert_strict">Strenge certificaatcontrole</string>
+    <string name="title_advanced_check_names">Hostnamen met servercertificaten vergelijken</string>
     <string name="title_advanced_open_safe">Alleen beveiligde verbindingen openen</string>
+    <string name="title_advanced_http_redirect">Verbindingsomleiding toestaan</string>
     <string name="title_advanced_bouncy_castle">Gebruik de secure socket provider van Bouncy Castle (JSSE)</string>
     <string name="title_advanced_manage_connectivity">Beheer connectiviteit</string>
     <string name="title_advanced_caption_general">Algemeen</string>
@@ -852,6 +858,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_wearable_hint">Meldingen worden alleen verzonden naar een wearable nadat de berichttekst is gedownload</string>
     <string name="title_advanced_messaging_hint">Dit is vereist voor Android Auto ondersteuning</string>
     <string name="title_advanced_move_hint">De doelmap kan worden geconfigureerd in de accountinstellingen</string>
+    <string name="title_advanced_notify_sensitive_hint">Vereist het uitschakelen van gevoelige meldingen in de instellingen van Android</string>
     <string name="title_advanced_notify_no_grouping">Deze Android-versie ondersteunt geen meldingsgroepering</string>
     <string name="title_advanced_notify_no_channels">Deze Android-versie ondersteunt geen meldingskanalen</string>
     <string name="title_advanced_fts_hint">Dit inschakelen verbetert de zoekprestaties, maar verhoogt ook het batterij- en opslaggebruik</string>
@@ -1006,6 +1013,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_service_port">Controleer het poortnummer a.u.b.</string>
     <string name="title_service_protocol">Controleer a.u.b. het protocol (SSL/TLS of STARTTLS)</string>
     <string name="title_service_error10">Dit account moet opnieuw geverifieerd worden, wat gedaan kan worden via de snelle installatiewizard</string>
+    <string name="title_certificate_error">Als gevolg van het Play Store-beleid van Google, is het niet langer mogelijk om onveilige verbindingen met e-mailservers met certificaatproblemen te ondersteunen voor de versie van FairEmail die via de Play Store wordt gedistribueerd.
+        Daarom kan dit probleem alleen worden opgelost door uw e-mailprovider - de bovenstaande foutinformatie kan hen helpen dit probleem op te lossen.    </string>
     <string name="title_advanced_browse">Blader door berichten op de server</string>
     <string name="title_advanced_expand_read">Markeer berichten gelezen bij uitvouwen</string>
     <string name="title_synchronize_now">Nu synchroniseren</string>
@@ -1141,6 +1150,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_importance_low">Laag</string>
     <string name="title_importance_normal">Normaal</string>
     <string name="title_importance_high">Hoog</string>
+    <string name="title_important">Belangrijk</string>
+    <string name="title_unimportant">Onbelangrijk</string>
     <string name="title_search_in_text">Zoek in tekst &#8230;</string>
     <string name="title_forward">Doorsturen</string>
     <string name="title_resend">Verstuur opnieuw</string>

@@ -93,6 +93,8 @@
         welche nur in der Pro-Version verfügbar sind.
     </string>
     <string name="title_blocked_senders">Gesperrte Absender</string>
+    <string name="title_unblock_all">Alle entsperren</string>
+    <string name="title_unblock_all_remark">Dadurch werden alle Listen und Optionen zurückgesetzt, die zum Sperren von Absendern führen könnten</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Absender von %1$s Nachricht sperren?</item>
         <item quantity="other">Absender von %1$s Nachrichten sperren?</item>
@@ -390,7 +392,7 @@
     <string name="title_advanced_answer_hint">Aktionen der Schaltfläche »Antworten« können ebenfalls in den Einstellungen »Senden« konfiguriert werden</string>
     <string name="title_advanced_answer_warning">Nicht alle Aktionen sind ohne Auswahlmenü möglich!</string>
     <string name="title_advanced_send_pending">Nicht aufdringliches Symbol für verzögertes Senden anzeigen</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">Verlauf von Entwürfen speichern, um das Rückgängigmachen und Wiederherstellen zu ermöglichen</string>
+    <string name="title_advanced_save_revisions">Verlauf von Entwürfen speichern, um das Rückgängigmachen und Wiederherstellen zu ermöglichen</string>
     <string name="title_advanced_auto_save_paragraph">Entwurf nach jedem Absatz automatisch speichern</string>
     <string name="title_advanced_auto_save_dot">Entwurf nach jedem Satz automatisch speichern</string>
     <string name="title_advanced_compose_color">Standard-Textfarbe</string>
@@ -426,6 +428,7 @@
     <string name="title_advanced_lookup_mx">Überprüft die Empfänger-E-Mail-Adressen vor dem Senden per DNS MX</string>
     <string name="title_advanced_metered">Getaktete Verbindungen verwenden</string>
     <string name="title_advanced_download">Automatisches Herunterladen von E-Mails und Anhängen auf getakteten Verbindungen bis zu einer Größe von</string>
+    <string name="title_advanced_download_limited">Gilt auch auf nicht getakteten Verbindungen</string>
     <string name="title_advanced_roaming">Nachrichten und Anhänge bei Roaming herunterladen</string>
     <string name="title_advanced_rlah">Roaming wie zu Hause</string>
     <string name="title_advanced_download_headers">Alle Kopfzeilen der Nachricht herunterladen</string>
@@ -436,10 +439,13 @@
     <string name="title_advanced_vpn_only">Nur über ein VPN verbinden</string>
     <string name="title_advanced_timeout">Zeitüberschreitung der Verbindung (Sekunden)</string>
     <string name="title_advanced_prefer_ip4">IPv4 gegenüber IPv6 bevorzugen</string>
+    <string name="title_advanced_ssl_update">Aktualisierten SSL-Anbieter verwenden</string>
     <string name="title_advanced_ssl_harden">SSL-Verbindungen stärken</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 voraussetzen</string>
     <string name="title_advanced_cert_strict">Strenge Zertifikatsprüfung</string>
+    <string name="title_advanced_check_names">Hostnamen mit Serverzertifikaten abgleichen</string>
     <string name="title_advanced_open_safe">Nur sichere Verbindungen öffnen</string>
+    <string name="title_advanced_http_redirect">Verbindungsumleitung zulassen</string>
     <string name="title_advanced_bouncy_castle">Sicheren Socket-Anbieter (JSSE) von »Bouncy Castle« verwenden</string>
     <string name="title_advanced_manage_connectivity">Konnektivität verwalten</string>
     <string name="title_advanced_caption_general">Allgemein</string>
@@ -619,7 +625,7 @@
     <string name="title_advanced_notifications_newest_first">Neueste Benachrichtigungen zuerst anzeigen</string>
     <string name="title_advanced_badge">Startsymbol mit der Anzahl der neuen Nachrichten anzeigen</string>
     <string name="title_advanced_unseen_ignored">Anzahl der neuen Nachrichten mit der Anzahl der Benachrichtigungen übereinstimmen lassen</string>
-    <string name="title_advanced_notify_grouping">Gruppenbenachrichtigungen aufklappbar</string>
+    <string name="title_advanced_notify_grouping">Benachrichtigungen gruppieren</string>
     <string name="title_advanced_notify_private">Benachrichtigungen privat halten, wenn das Gerät gesperrt ist</string>
     <string name="title_advanced_notify_background">Benachrichtigungen nur anzeigen, wenn FairEmail im Hintergrund ausgeführt wird</string>
     <string name="title_advanced_notify_known">Benachrichtigungen nur für Kontakte anzeigen</string>
@@ -857,6 +863,7 @@
     <string name="title_advanced_wearable_hint">Benachrichtigungen werden erst dann an ein Wearable gesendet, wenn der Nachrichtentext heruntergeladen wurde</string>
     <string name="title_advanced_messaging_hint">Dies ist für die Unterstützung von Android Auto erforderlich</string>
     <string name="title_advanced_move_hint">Der Zielordner kann in den Kontoeinstellungen konfiguriert werden</string>
+    <string name="title_advanced_notify_sensitive_hint">Erfordert das Deaktivieren vertraulicher Benachrichtigungen in den Android-Einstellungen</string>
     <string name="title_advanced_notify_no_grouping">Diese Android-Version unterstützt keine Benachrichtigungsgruppierung</string>
     <string name="title_advanced_notify_no_channels">Diese Android-Version unterstützt keine Benachrichtigungskanäle</string>
     <string name="title_advanced_fts_hint">Das Aktivieren dieser Funktion verbessert die Suchleistung, erhöht aber auch den Akku- und Speicherplatzverbrauch</string>
@@ -1011,6 +1018,9 @@
     <string name="title_service_port">Bitte überprüfen Sie die Portnummer</string>
     <string name="title_service_protocol">Bitte überprüfen Sie das Protokoll (SSL/TLS oder STARTTLS)</string>
     <string name="title_service_error10">Dieses Konto muss erneut authentifiziert werden, was über den Schnelleinrichtungsassistenten erfolgen kann</string>
+    <string name="title_certificate_error">        Unsichere Verbindungen zu E-Mail-Servern mit Zertifikatsproblemen werden beim Verwenden der FairEmail-Version aus dem Play Store nicht mehr unterstützt. Der Grund dafür sind Google-Play-Store-Richtlinien.
+        Das Problem kann daher nur durch Ihren E-Mail-Anbieter gelöst werden. Die obige Fehlerinformation könnte bei der Lösung dieses Problems hilfreich sein.
+    </string>
     <string name="title_advanced_browse">Nachrichten auf dem Server durchsuchen</string>
     <string name="title_advanced_expand_read">Nachrichten beim Ausklappen als gelesen kennzeichnen</string>
     <string name="title_synchronize_now">Jetzt synchronisieren</string>
@@ -1148,6 +1158,8 @@
     <string name="title_importance_low">Niedrig</string>
     <string name="title_importance_normal">Normal</string>
     <string name="title_importance_high">Hoch</string>
+    <string name="title_important">Wichtig</string>
+    <string name="title_unimportant">Unwichtig</string>
     <string name="title_search_in_text">Im Text suchen &#8230;</string>
     <string name="title_forward">Weiterleiten</string>
     <string name="title_resend">Umleiten</string>

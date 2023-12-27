@@ -117,6 +117,8 @@
         Blocking a sender domain uses filter rules, which is a pro feature.
     </string>
     <string name="title_blocked_senders">Blocked senders</string>
+    <string name="title_unblock_all">Unblock all</string>
+    <string name="title_unblock_all_remark">This will reset all lists and options that could result in blocking senders</string>
 
     <plurals name="title_ask_block_sender">
         <item quantity="one">Block sender of %1$s message?</item>
@@ -502,6 +504,7 @@
 
     <string name="title_advanced_metered">Use metered connections</string>
     <string name="title_advanced_download">Automatically download messages and attachments on a metered connection up to</string>
+    <string name="title_advanced_download_limited">Apply to unmetered connections too</string>
     <string name="title_advanced_roaming">Download messages and attachments while roaming</string>
     <string name="title_advanced_rlah">Roam like at home</string>
     <string name="title_advanced_download_headers">Download all message headers</string>
@@ -515,10 +518,13 @@
     <string name="title_advanced_bind_socket" translatable="false">Bind sockets to the active network</string>
     <string name="title_advanced_standalone_vpn" translatable="false">Standalone VPN</string>
     <string name="title_advanced_tcp_keep_alive" translatable="false">TCP keep alive</string>
+    <string name="title_advanced_ssl_update">Use updated SSL provider</string>
     <string name="title_advanced_ssl_harden">Harden SSL connections</string>
     <string name="title_advanced_ssl_harden_strict">Require TLS 1.3</string>
     <string name="title_advanced_cert_strict">Strict certificate checking</string>
+    <string name="title_advanced_check_names">Check host names against server certificates</string>
     <string name="title_advanced_open_safe">Open secure connections only</string>
+    <string name="title_advanced_http_redirect">Allow connection redirection</string>
     <string name="title_advanced_bouncy_castle">Use Bouncy Castle\'s secure socket provider (JSSE)</string>
     <string name="title_advanced_fips_mode" translatable="false">FIPS mode</string>
     <string name="title_advanced_manage_connectivity">Manage connectivity</string>
@@ -1066,6 +1072,7 @@
     <string name="title_advanced_wearable_hint">Notifications are only sent to a wearable after the message text has been downloaded</string>
     <string name="title_advanced_messaging_hint">This is required for Android Auto support</string>
     <string name="title_advanced_move_hint">The target folder can be configured in the account settings</string>
+    <string name="title_advanced_notify_sensitive_hint">Requires disabling sensitive notifications in Android\'s settings</string>
     <string name="title_advanced_notify_no_grouping">This Android version does not support notification grouping</string>
     <string name="title_advanced_notify_no_channels">This Android version does not support notification channels</string>
 
@@ -1272,6 +1279,10 @@
     <string name="title_service_port">Please double check the port number</string>
     <string name="title_service_protocol">Please double check the protocol (SSL/TLS or STARTTLS)</string>
     <string name="title_service_error10">This account needs to be authenticated again, which can be done via the quick setup wizard</string>
+    <string name="title_certificate_error">
+        Due to Google\'s Play Store policies, it is no longer possible to support insecure connections to email servers with certificate issues for the version of FairEmail distributed in the Play Store.
+        Therefore, this issue can only be resolved by your email provider - the above error information may help them resolve this issue.
+    </string>
 
     <string name="title_advanced_browse">Browse messages on the server</string>
     <string name="title_advanced_expand_read">Mark messages read on expanding</string>
@@ -1420,6 +1431,8 @@
     <string name="title_importance_low">Low</string>
     <string name="title_importance_normal">Normal</string>
     <string name="title_importance_high">High</string>
+    <string name="title_important">Important</string>
+    <string name="title_unimportant">Unimportant</string>
     <string name="title_search_in_text">Search in text &#8230;</string>
     <string name="title_forward">Forward</string>
     <string name="title_resend">Resend</string>

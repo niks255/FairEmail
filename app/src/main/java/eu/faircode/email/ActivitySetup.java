@@ -209,9 +209,12 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         }, new Callable<Boolean>() {
             @Override
             public Boolean call() {
-                drawerLayout.closeDrawer(drawerContainer);
-                onDebugInfo();
-                return true;
+                if (DebugHelper.isAvailable()) {
+                    drawerLayout.closeDrawer(drawerContainer);
+                    onDebugInfo();
+                    return true;
+                } else
+                    return false;
             }
         }).setExternal(true));
 
@@ -499,11 +502,15 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
             @Override
             protected Long onExecute(Context context, Bundle args) throws IOException, JSONException {
-                return Log.getDebugInfo(context, "setup", R.string.title_debug_info_remark, null, null, args).id;
+                EntityMessage m = DebugHelper.getDebugInfo(context,
+                        "setup", R.string.title_debug_info_remark, null, null, args);
+                return (m == null ? null : m.id);
             }
 
             @Override
             protected void onExecuted(Bundle args, Long id) {
+                if (id == null)
+                    return;
                 startActivity(new Intent(ActivitySetup.this, ActivityCompose.class)
                         .putExtra("action", "edit")
                         .putExtra("id", id));
@@ -511,10 +518,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof IllegalArgumentException)
-                    ToastEx.makeText(ActivitySetup.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                else
-                    Log.unexpectedError(getSupportFragmentManager(), ex);
+                boolean report = !(ex instanceof IllegalArgumentException);
+                Log.unexpectedError(getSupportFragmentManager(), ex, report);
             }
 
         }.execute(this, args, "debug:info");
@@ -755,7 +760,8 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         open.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         open.setType("*/*");
         if (open.resolveActivity(getPackageManager()) == null)  // system whitelisted
-            ToastEx.makeText(this, R.string.title_no_saf, Toast.LENGTH_LONG).show();
+            Log.unexpectedError(getSupportFragmentManager(),
+                    new IllegalArgumentException(getString(R.string.title_no_saf)), 25);
         else
             startActivityForResult(Helper.getChooser(this, open), REQUEST_IMPORT_CERTIFICATE);
     }

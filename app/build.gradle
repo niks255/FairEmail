@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2134 }
+def getVersionCode = { -> return 2144 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Wintonotitan" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -28,7 +28,6 @@ android {
         targetSdkVersion 34
         versionCode getVersionCode()
         versionName "1." + getVersionCode()
-        archivesBaseName = "FairEmail-v$versionName" + getRevision()
 
         manifestPlaceholders = [namespace: applicationId.replace('.debug', '')]
 
@@ -67,6 +66,10 @@ android {
             // https://developer.android.com/ndk/guides/abis                                  
             abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
+    }
+
+    base {
+        archivesName = "FairEmail-v1." + getVersionCode() + getRevision()
     }
 
     sourceSets {
@@ -203,7 +206,7 @@ android {
         github {
             dimension "all"
             manifestPlaceholders.largeHeap = false
-            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes((archivesBaseName + "github").getBytes()).toString();
+            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes(("github" + getVersionCode() + getRevision()).getBytes()).toString();
             buildConfigField "boolean", "TEST_RELEASE", "false"
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "false"
@@ -225,7 +228,7 @@ android {
         large {
             dimension "all"
             manifestPlaceholders.largeHeap = true
-            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes((archivesBaseName + "large").getBytes()).toString();
+            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes(("large" + getVersionCode() + getRevision()).getBytes()).toString();
             buildConfigField "boolean", "TEST_RELEASE", "false"
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "false"
@@ -247,7 +250,7 @@ android {
         fdroid {
             dimension "all"
             manifestPlaceholders.largeHeap = false
-            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes((archivesBaseName + "fdroid").getBytes()).toString();
+            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes(("fdroid" + getVersionCode() + getRevision()).getBytes()).toString();
             externalNativeBuild {
                 cmake {
                     arguments "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,--build-id=none"
@@ -279,7 +282,7 @@ android {
             dimension "all"
             //minSdkVersion 23
             manifestPlaceholders.largeHeap = false
-            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes((archivesBaseName + "play").getBytes()).toString();
+            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes(("play" + getVersionCode() + getRevision()).getBytes()).toString();
             buildConfigField "boolean", "TEST_RELEASE", "false"
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "true"
@@ -297,12 +300,13 @@ android {
             buildConfigField "String", "OPENAI_ENDPOINT", "\"\""
             buildConfigField "String", "OPENAI_PRIVACY", "\"\""
             buildConfigField "String", "FDROID", "\"\""
+            getIsDefault().set(true)
         }
         amazon {
             dimension "all"
             minSdkVersion 23
             manifestPlaceholders.largeHeap = false
-            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes((archivesBaseName + "amazon").getBytes()).toString();
+            manifestPlaceholders.build_uuid = UUID.nameUUIDFromBytes(("amazon" + getVersionCode() + getRevision()).getBytes()).toString();
             buildConfigField "boolean", "TEST_RELEASE", "false"
             buildConfigField "boolean", "BETA_RELEASE", "true"
             buildConfigField "boolean", "PLAY_STORE_RELEASE", "false"
@@ -328,33 +332,36 @@ android {
         // Builds: release, debug
         // Flavors: github, large, fdroid, play
         if (variant.buildType.name == "debug" &&
-                (flavors.contains("fdroid") || flavors.contains("play") || flavors.contains("_amazon"))) {
+                (flavors.contains("amazon") ||
+                        flavors.contains("fdroid") ||
+                        flavors.contains("large") ||
+                        flavors.contains("play"))) {
             setIgnore(true)
         }
     }
 
     // https://stackoverflow.com/questions/28948538/
-    applicationVariants.all { variant ->
+    applicationVariants.configureEach { variant ->
         if (variant.buildType.name == "debug")
             variant.buildConfigField "String", "MXTOOLBOX_URI", "\"https://mxtoolbox.com\""
         else
             variant.buildConfigField "String", "MXTOOLBOX_URI", "\"\""
 
-        if (variant.getBuildType().isMinifyEnabled())
-            variant.assembleProvider.get().doLast {
-                for (file in variant.getMappingFileProvider().get().files)
-                    if (file != null && file.exists()) {
-                        def dir = "${rootDir}/app/schemas/mapping"
-                        def name = "$archivesBaseName-$variant.baseName-$file.name"
-                        def target = new File(dir, name)
-                        if (!target.exists())
-                            copy {
-                                from file
-                                into dir
-                                rename { String fileName -> name }
-                            }
-                    }
-            }
+        //if (variant.getBuildType().isMinifyEnabled())
+        //    variant.assembleProvider.get().doLast {
+        //        for (file in variant.getMappingFileProvider().get().files)
+        //            if (file != null && file.exists()) {
+        //                def dir = "${rootDir}/app/schemas/mapping"
+        //                def name = "$archivesBaseName-$variant.baseName-$file.name"
+        //                def target = new File(dir, name)
+        //                if (!target.exists())
+        //                    copy {
+        //                        from file
+        //                        into dir
+        //                        rename { String fileName -> name }
+        //                    }
+        //            }
+        //    }
     }
 
     bugsnag {
@@ -364,14 +371,10 @@ android {
         reportBuilds = false // disables upload of build metadata
         overwrite = true
         builderName = "M66B"
-        sourceControl {
-            provider = "github-enterprise"
-            repository = "https://github.com/M66B/FairEmail"
-        }
     }
 }
 
-task copyMarkdown(type: Copy) {
+tasks.register('copyMarkdown', Copy) {
     from "${rootDir}"
     into "src/main/assets"
     include "CHANGELOG.md"
@@ -381,7 +384,7 @@ task copyMarkdown(type: Copy) {
 
 preBuild.dependsOn copyMarkdown
 
-task copyChangelog(type: Copy) {
+tasks.register('copyChangelog', Copy) {
     from "${rootDir}"
     into "../metadata/en-US/changelogs"
     include "CHANGELOG.md"
@@ -400,38 +403,54 @@ task copyChangelog(type: Copy) {
 
 preBuild.dependsOn copyChangelog
 
-task updateFAQ(type: Exec) {
+tasks.register('updateFAQ', Exec) {
     workingDir "${rootDir}"
-    commandLine 'sh', '-c', 'pandoc --standalone --metadata title="FAQ FairEmail"  FAQ.md -o index.html'
+    commandLine 'sh', '-c', 'pandoc FAQ.md -o index.html'
 }
 
-task updatePrivacy(type: Exec) {
+tasks.register('updatePrivacy', Exec) {
     workingDir "${rootDir}"
     commandLine 'sh', '-c', 'pandoc --standalone --metadata title="FairEmail" --css=privacy.css PRIVACY.md -o privacy.html'
 }
 
-task updateCrowdin(type: Exec) {
+tasks.register('updateCrowdin', Exec) {
     // https://crowdin.github.io/crowdin-cli/
     // https://developer.crowdin.com/configuration-file/
     workingDir "${rootDir}"
     commandLine 'sh', '-c', 'crowdin download --branch=master'
 }
 
-task downloadPSL(type: Download) {
+tasks.register('downloadPSL', Download) {
     // https://github.com/michel-kraemer/gradle-download-task
     src "https://raw.githubusercontent.com/publicsuffix/list/master/public_suffix_list.dat"
     dest "src/main/assets"
     overwrite true
 }
 
-task extractSignature(type: Exec) {
+tasks.register('downloadBraveClean', Download) {
+    src "https://raw.githubusercontent.com/brave/adblock-lists/master/brave-lists/clean-urls.json"
+    dest "src/main/assets"
+    overwrite true
+}
+
+tasks.register('downloadBraveDebouce', Download) {
+    src "https://raw.githubusercontent.com/brave/adblock-lists/master/brave-lists/debounce.json"
+    dest "src/main/assets"
+    overwrite true
+}
+
+tasks.register('downloadBrave') {
+    dependsOn("downloadBraveClean", "downloadBraveDebouce")
+}
+
+tasks.register('extractSignature', Exec) {
     workingDir "${rootDir}"
     // sudo apt install apksigcopier
     commandLine 'sh', '-c', 'mkdir -p metadata/eu.faircode.email/signatures/' + getVersionCode() + ' &&' +
             'apksigcopier extract --v1-only=auto app/build/outputs/apk/fdroid/release/FairEmail-v1.' + getVersionCode() + getRevision() + '-fdroid-release.apk metadata/eu.faircode.email/signatures/' + getVersionCode()
 }
 
-task upload() {
+tasks.register('upload') {
     // ./gradlew upload -Ptarget=play-preview
     doLast {
         println "\nhttps://bitbucket.org/M66B/fairemail-test/downloads/FairEmail-v1." + getVersionCode() + getRevision() + "-" + target + "-release.apk\n"
@@ -454,10 +473,12 @@ repositories {
     //maven { url "https://jakarta.oss.sonatype.org/content/repositories/snapshots/" }
 }
 
-configurations.all {
+configurations.configureEach {
     // Workaround https://issuetracker.google.com/issues/138441698
     // Support @69c481c39a17d4e1e44a4eb298bb81c48f226eef
     exclude group: "androidx.room", module: "room-runtime"
+
+    exclude group: "androidx.sqlite", module: "sqlite-framework"
 
     // Workaround https://issuetracker.google.com/issues/134685570
     exclude group: "androidx.lifecycle", module: "lifecycle-livedata"
@@ -470,7 +491,7 @@ configurations.all {
     exclude group: "androidx.emoji2", module: "emoji2"
 }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy.eachDependency { details ->
         if (details.requested.group == "androidx.room") {
             //print("Pinning " + details.requested.group + ":" + details.requested.name + "\n")
@@ -496,15 +517,15 @@ dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     def startup_version = "1.1.1" // 1.2.0-alpha02
-    def annotation_version_experimental = "1.3.1" // 1.4.0-alpha01
+    def annotation_version_experimental = "1.3.1" // 1.4.0-beta01
     def core_version = "1.12.0" // 1.13.0-alpha02
     def appcompat_version = "1.6.1" // 1.7.0-alpha03
-    def emoji_version = "1.4.0"
+    def emoji_version = "1.4.0" // 1.5.0-alpha01
     def flatbuffers_version = "2.0.0"
-    def activity_version = "1.8.1" // 1.9.0-alpha01
+    def activity_version = "1.8.2" // 1.9.0-alpha01
     def fragment_version = "1.6.2" // 1.7.0-alpha07
     def windows_version = "1.2.0" // 1.3.0-alpha01
-    def webkit_version = "1.9.0" // 1.10.0-alpha01
+    def webkit_version = "1.9.0" // 1.10.0-beta01
     def recyclerview_version = "1.3.2" // 1.4.0-alpha01
     def coordinatorlayout_version = "1.2.0" // 1.3.0-alpha02
     def constraintlayout_version = "2.1.4" // 2.2.0-alpha13
@@ -513,7 +534,7 @@ dependencies {
     def lbm_version = "1.1.0"
     def swiperefresh_version = "1.2.0-alpha01"
     def documentfile_version = "1.1.0-alpha01"
-    def lifecycle_version = "2.6.2" // 2.7.0-rc01
+    def lifecycle_version = "2.6.2" // 2.7.0-rc02
     def lifecycle_extensions_version = "2.2.0"
     def room_version = "2.4.3" // 2.5.2/2.6.1
     def sqlite_version = "2.4.0"
@@ -521,9 +542,10 @@ dependencies {
     def paging_version = "2.1.2" //  3.2.0
     def preference_version = "1.2.1"
     def work_version = "2.9.0"
-    def exif_version = "1.3.6"
+    def exif_version = "1.3.7"
     def biometric_version = "1.2.0-alpha05"
     def billingclient_version = "6.0.1"
+    def playservicesbase_version = "18.2.0";
     def javamail_version = "1.6.7"
     def jsoup_version = "1.16.2"
     def jsonpath_version = "2.8.0"
@@ -551,6 +573,7 @@ dependencies {
     def ipaddress_version = "5.4.0"
     def canary_version = "2.12"
     def ws_version = "2.14"
+    def tinylog_version = "2.6.2"
 
     // https://mvnrepository.com/artifact/com.android.tools/desugar_jdk_libs?repo=google
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
@@ -629,7 +652,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-common:$room_version" // because of exclude
     // https://mvnrepository.com/artifact/androidx.sqlite/sqlite-framework
-    implementation "androidx.sqlite:sqlite-framework:$sqlite_version" // because of exclude
+    //implementation "androidx.sqlite:sqlite-framework:$sqlite_version" // because of exclude
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     // https://www.sqlite.org/changes.html
@@ -664,6 +687,11 @@ dependencies {
     githubImplementation "com.android.billingclient:billing:$billingclient_version"
     largeImplementation "com.android.billingclient:billing:$billingclient_version"
     playImplementation "com.android.billingclient:billing:$billingclient_version"
+
+    // https://mvnrepository.com/artifact/com.google.android.gms/play-services-base
+    githubImplementation "com.google.android.gms:play-services-basement:$playservicesbase_version"
+    largeImplementation "com.google.android.gms:play-services-basement:$playservicesbase_version"
+    playImplementation "com.google.android.gms:play-services-basement:$playservicesbase_version"
 
     // https://developer.amazon.com/docs/in-app-purchasing/iap-get-started.html
     amazonImplementation files('lib/in-app-purchasing-2.0.76.jar')
@@ -791,4 +819,9 @@ dependencies {
 
     // https://github.com/TakahikoKawasaki/nv-websocket-client
     implementation "com.neovisionaries:nv-websocket-client:$ws_version"
+
+    // https://tinylog.org/v2/download/
+    // https://mvnrepository.com/artifact/org.tinylog
+    implementation "org.tinylog:tinylog-api:$tinylog_version"
+    implementation "org.tinylog:tinylog-impl:$tinylog_version"
 }

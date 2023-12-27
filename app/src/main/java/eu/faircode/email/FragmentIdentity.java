@@ -566,7 +566,11 @@ public class FragmentIdentity extends FragmentBase {
         Helper.setViewsEnabled(view, false);
         btnAutoConfig.setEnabled(false);
         pbAutoConfig.setVisibility(View.GONE);
-        cbInsecure.setVisibility(View.GONE);
+
+        if (!SSLHelper.customTrustManager()) {
+            Helper.hide(cbInsecure);
+            Helper.hide(tvInsecureRemark);
+        }
 
         btnAdvanced.setVisibility(View.GONE);
 
@@ -704,7 +708,7 @@ public class FragmentIdentity extends FragmentBase {
                         (ex instanceof UnknownHostException ||
                                 ex instanceof FileNotFoundException ||
                                 ex instanceof IllegalArgumentException))
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
@@ -1163,7 +1167,7 @@ public class FragmentIdentity extends FragmentBase {
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else
                     showError(ex);

@@ -75,12 +75,14 @@
     </string>
     <string name="title_block">%1$s をブロック</string>
     <string name="title_block_sender">差出人をブロック</string>
-    <string name="title_block_sender_domain">ドメイン「%1$s」をブロック</string>
+    <string name="title_block_sender_domain">ドメイン \'%1$s\' をブロック</string>
     <string name="title_block_sender_remark">ブロックすると、自動で迷惑メールフォルダーに移動します</string>
-    <string name="title_block_sender_hint">        差出人のブロックは無料版の機能です。
-        差出人のドメインをブロックするにはフィルタールールを使用します。これはプロ版の機能です。
+    <string name="title_block_sender_hint">        差出人のブロックは無料の機能です。
+        差出人のドメインをブロックするにはフィルタールールを使用します。これはプロの機能です。
     </string>
     <string name="title_blocked_senders">ブロックした差出人</string>
+    <string name="title_unblock_all">すべてブロック解除</string>
+    <string name="title_unblock_all_remark">送信者をブロックするリストとオプションをすべてリセットします</string>
     <plurals name="title_ask_block_sender">
         <item quantity="other">メッセージ %1$s 通の差出人をブロックしますか？</item>
     </plurals>
@@ -98,7 +100,7 @@
     <string name="title_notification_sending">メールを送信中</string>
     <string name="title_notification_waiting">接続を待機しています</string>
     <string name="title_notification_idle">待機</string>
-    <string name="title_notification_failed">%1$s エラーが発生しました</string>
+    <string name="title_notification_failed">\'%1$s\' エラーが発生しました</string>
     <string name="title_notification_alert">サーバーの警告: %1$s</string>
     <string name="title_notification_sending_left">残りの試行回数: %1$d</string>
     <string name="title_notification_sending_retry">インターネット接続が変更されるか、送信トレイをプルダウンすると送信が再試行されます</string>
@@ -118,7 +120,7 @@
     <string name="menu_attribution">オープンソースライセンス</string>
     <string name="menu_privacy">プライバシー</string>
     <string name="menu_about">アプリについて</string>
-    <string name="menu_pro">プロ版の機能</string>
+    <string name="menu_pro">プロの機能</string>
     <string name="menu_rate">このアプリを評価</string>
     <string name="title_welcome">ようこそ</string>
     <string name="title_eula">エンドユーザー使用許諾契約書</string>
@@ -182,7 +184,7 @@
     <string name="title_setup_oauth_authorize">認証</string>
     <string name="title_setup_select_account">アカウントを選択</string>
     <string name="title_setup_instructions">セットアップ方法</string>
-    <string name="title_setup_no_settings">ドメイン「%1$s」の設定が見つかりませんでした</string>
+    <string name="title_setup_no_settings">ドメイン \'%1$s\' の設定が見つかりませんでした</string>
     <string name="title_setup_no_settings_hint">メールプロバイダーが提供する設定を使用して、手動でアカウントをセットアップしてみてください</string>
     <string name="title_setup_no_auth_hint">メールアドレスとパスワードをもう一度確認しアカウントで外部アクセス (IMAP/SMTP) が有効になっていることを確認してください</string>
     <string name="title_setup_app_password_hint">このプロバイダーではアカウントのパスワードの代わりにアプリパスワードが必要です。プロバイダーの指示を確認してください</string>
@@ -221,7 +223,7 @@
     <string name="title_setup_inexact">アラームとリマインダーが無効です</string>
     <string name="title_setup_background">バックグラウンドでの制限が有効です</string>
     <string name="title_setup_data">データセーバーが有効です</string>
-    <string name="title_setup_always">即時の新着メッセージ通知</string>
+    <string name="title_setup_always">新着メッセージを即時通知する</string>
     <string name="title_setup_always_remark">有効にすると、不安定な接続や古いネットワークハードウェアなどではバッテリー使用量が増加する可能性があります</string>
     <string name="title_setup_advanced_options">詳細設定を表示</string>
     <string name="title_setup_inbox">受信トレイに移動</string>
@@ -238,8 +240,8 @@
     <string name="title_setup_extra">その他</string>
     <string name="title_setup_delete_account_hint">この操作はアプリからのアカウント削除のみを行います</string>
     <string name="title_setup_close">設定を閉じる</string>
-    <string name="title_setup_export">設定をエクスポート</string>
-    <string name="title_setup_import">設定をインポート</string>
+    <string name="title_setup_export">設定をエクスポートする</string>
+    <string name="title_setup_import">設定をインポートする</string>
     <string name="title_setup_export_remark">        設定ファイルにはすべての設定とアカウント情報が保存され、パスワードで暗号化されます。
         設定をインポートするにはパスワードが必要です。パスワードは絶対に忘れないでください！
     </string>
@@ -252,13 +254,13 @@
     <string name="title_setup_password_missing">パスワードを入力してください</string>
     <string name="title_setup_password_different">パスワードが一致しません</string>
     <string name="title_setup_password_invalid">パスワードが間違っているか、ファイルが破損しています</string>
-    <string name="title_setup_import_accounts">アカウントとユーザー ID をインポート</string>
-    <string name="title_setup_import_delete">先に既存のアカウントを削除してください</string>
-    <string name="title_setup_import_rules">フィルタールールをインポート</string>
-    <string name="title_setup_import_contacts">ローカルの連絡先をインポート</string>
-    <string name="title_setup_import_answers">返信テンプレートをインポート</string>
-    <string name="title_setup_import_searches">保存した検索条件をインポート</string>
-    <string name="title_setup_import_settings">設定をインポート</string>
+    <string name="title_setup_import_accounts">アカウントとユーザー ID をインポートする</string>
+    <string name="title_setup_import_delete">先に既存のアカウントを削除する</string>
+    <string name="title_setup_import_rules">フィルタールールをインポートする</string>
+    <string name="title_setup_import_contacts">ローカルの連絡先をインポートする</string>
+    <string name="title_setup_import_answers">返信テンプレートをインポートする</string>
+    <string name="title_setup_import_searches">保存した検索条件をインポートする</string>
+    <string name="title_setup_import_settings">設定をインポートする</string>
     <string name="title_setup_exported">設定をエクスポートしました</string>
     <string name="title_setup_imported">設定をインポートしました</string>
     <string name="title_setup_import_invalid">設定ファイルが無効です</string>
@@ -375,7 +377,7 @@
     <string name="title_advanced_answer_hint">返信ボタンのアクションは、設定の送信タブからも変更できます</string>
     <string name="title_advanced_answer_warning">選択メニューを表示しないと、選択できないメニューが発生します！</string>
     <string name="title_advanced_send_pending">目立たない送信遅延アイコンを表示する</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">下書きで元に戻す/やり直すができるように編集内容を保存する</string>
+    <string name="title_advanced_save_revisions">下書きで元に戻す/やり直すができるように編集内容を保存する</string>
     <string name="title_advanced_auto_save_paragraph">段落ごとに下書きを自動で保存する</string>
     <string name="title_advanced_auto_save_dot">文ごとに下書きを自動で保存する</string>
     <string name="title_advanced_compose_color">デフォルトの文字色</string>
@@ -411,6 +413,7 @@
     <string name="title_advanced_lookup_mx">送信する前に宛先のメールアドレスを確認する</string>
     <string name="title_advanced_metered">従量課金制接続を使用する</string>
     <string name="title_advanced_download">従量課金制接続で自動ダウンロードするメッセージと添付ファイルの大きさの上限</string>
+    <string name="title_advanced_download_limited">定額制接続にも制限を適用する</string>
     <string name="title_advanced_roaming">ローミングでメッセージと添付ファイルをダウンロードする</string>
     <string name="title_advanced_rlah">Roam Like at Home を適用する</string>
     <string name="title_advanced_download_headers">すべてのメッセージヘッダーをダウンロードする</string>
@@ -421,10 +424,13 @@
     <string name="title_advanced_vpn_only">VPN 経由でのみ接続する</string>
     <string name="title_advanced_timeout">接続タイムアウト (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv6 より IPv4 を優先する</string>
+    <string name="title_advanced_ssl_update">更新された SSL プロバイダーを使用する</string>
     <string name="title_advanced_ssl_harden">より強固な SSL 接続</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 を要求する</string>
     <string name="title_advanced_cert_strict">厳格な証明書確認</string>
+    <string name="title_advanced_check_names">ホスト名をサーバー証明書と比較して確認する</string>
     <string name="title_advanced_open_safe">保護された接続のみ使用する</string>
+    <string name="title_advanced_http_redirect">接続のリダイレクトを許可する</string>
     <string name="title_advanced_bouncy_castle">Bouncy Castle のセキュアソケットプロバイダー (JSSE) を使用する</string>
     <string name="title_advanced_manage_connectivity">接続を管理</string>
     <string name="title_advanced_caption_general">概要</string>
@@ -482,7 +488,7 @@
     <string name="title_advanced_libravatars">Libravatar を表示する</string>
     <string name="title_advanced_favicons">ファビコンを表示する</string>
     <string name="title_advanced_favicons_partial">ウェブページの最初の %1$s だけをスキャンする</string>
-    <string name="title_advanced_favicons_manifest">ウェブアプリ マニフェストをスキャンする</string>
+    <string name="title_advanced_favicons_manifest">ウェブアプリマニフェストをスキャンする</string>
     <string name="title_advanced_generated_icons">アイコンを生成して表示する</string>
     <string name="title_advanced_identicons">Identicon を表示する</string>
     <string name="title_advanced_circular">丸アイコンを表示する</string>
@@ -647,7 +653,7 @@
     <string name="title_advanced_check_links_dbl">不審なリンクがないかドメインブロックリストを確認する</string>
     <string name="title_advanced_confirm_images">デフォルトで画像を表示しない</string>
     <string name="title_advanced_ask_images">画像を表示する前に確認を表示する</string>
-    <string name="title_advanced_confirm_html">デフォルトで再フォーマットされたメッセージを表示</string>
+    <string name="title_advanced_confirm_html">デフォルトで再フォーマットされたメッセージを表示する</string>
     <string name="title_advanced_ask_html">元のメッセージを表示する前に確認を表示する</string>
     <string name="title_advanced_tracking">トラッキング画像の識別と無効化を試みる</string>
     <string name="title_advanced_hide_timezone">送信するメッセージにタイムゾーン情報を追加しない</string>
@@ -910,7 +916,7 @@
     <string name="title_encryption">暗号化</string>
     <string name="title_encryption_none">なし (安全でない)</string>
     <string name="title_allow_insecure">保護されていない接続を許可する</string>
-    <string name="title_insecure_remark">保護されていない接続は信頼されたネットワークでのみ許可し、パブリックネットワークでは許可しないでください</string>
+    <string name="title_insecure_remark">保護されていない接続は信頼できるネットワークでのみ許可し、パブリックネットワークでは許可しないでください</string>
     <string name="title_notify_remark">アカウント別の通知を有効にできます</string>
     <string name="title_port">ポート番号</string>
     <string name="title_user">ユーザー名</string>
@@ -945,7 +951,7 @@
     <string name="title_ignore_schedule">スケジュール外でも同期する</string>
     <string name="title_related_identity">関連するユーザー ID (SMTPサーバー) を追加する</string>
     <string name="title_check">確認</string>
-    <string name="title_trust">フィンガープリント %1$s でサーバー証明書を信頼する</string>
+    <string name="title_trust">フィンガープリント %1$s のサーバー証明書を信頼する</string>
     <string name="title_no_name">名前を入力してください</string>
     <string name="title_no_email">メールアドレスを入力してください</string>
     <string name="title_email_invalid">メールアドレスが無効です: \'%1$s\'</string>
@@ -995,6 +1001,9 @@
     <string name="title_service_port">ポート番号をもう一度確認してください</string>
     <string name="title_service_protocol">プロトコル (SSL/TLS または STARTLS) をもう一度確認してください</string>
     <string name="title_service_error10">このアカウントをクイック設定ウィザードからもう一度認証してください</string>
+    <string name="title_certificate_error">        Google の Play ストアポリシーにより、Play ストア版の FairEmail では、証明書に問題があるメールサーバーとの安全でない接続ができなくなりました。
+        この問題を解決できるのは、あなたがお使いのメールプロバイダーのみです。上のエラー情報は、プロバイダーの問題解決に役立つかもしれません。
+    </string>
     <string name="title_advanced_browse">サーバー上のメッセージを閲覧する</string>
     <string name="title_advanced_expand_read">展開したメッセージを既読にする</string>
     <string name="title_synchronize_now">今すぐ同期</string>
@@ -1132,6 +1141,8 @@
     <string name="title_importance_low">低</string>
     <string name="title_importance_normal">標準</string>
     <string name="title_importance_high">高</string>
+    <string name="title_important">重要</string>
+    <string name="title_unimportant">重要でない</string>
     <string name="title_search_in_text">本文を検索&#8230;</string>
     <string name="title_forward">転送</string>
     <string name="title_resend">再送</string>
@@ -1220,7 +1231,7 @@
     <string name="title_reply_template">テンプレートで返信</string>
     <string name="title_reply_menu">選択メニューを表示</string>
     <string name="title_move_undo">%1$s に移動しました (%2$d)</string>
-    <string name="title_authentication_failed">%1$s の認証に失敗しました</string>
+    <string name="title_authentication_failed">%1$s 認証に失敗しました</string>
     <string name="title_on_blocklist">迷惑メールブロックリストにあります</string>
     <string name="title_receipt_subject">開封確認メッセージ: %1$s</string>
     <string name="title_receipt_text">この開封確認メッセージはメッセージが表示されたことを知らせるものです。受信者がメッセージを読んだことを保証するものではありません。</string>
@@ -1265,7 +1276,7 @@
     <string name="title_ask_discard">下書きを破棄しますか？</string>
     <string name="title_ask_show_html">元のメッセージを表示するとプライバシーデータの漏洩の原因となる可能性があります</string>
     <string name="title_ask_show_html_remark">ダークテーマでは元のメッセージを表示できません。これは暗い色のテキストや画像が見えなくなる可能性があるためです</string>
-    <string name="title_ask_show_html_images">元のメッセージを表示するときに常に画像を表示</string>
+    <string name="title_ask_show_html_images">元のメッセージを表示するときに常に画像を表示する</string>
     <string name="title_ask_show_image">画像を表示するとプライバシーデータの漏洩の原因となる可能性があります</string>
     <string name="title_ask_show_image_hint">トラッキング画像として識別された画像は表示されません</string>
     <string name="title_ask_show_amp">AMP メッセージを表示しますか？</string>
@@ -1691,7 +1702,7 @@
     <string name="title_code_line_numbers">行番号を表示する</string>
     <string name="title_code_enable_links">リンクを有効にする</string>
     <string name="title_code_pretty">Pretty print</string>
-    <string name="title_legend_section_synchronize">同期</string>
+    <string name="title_legend_section_synchronize">同期する</string>
     <string name="title_legend_section_folders">フォルダー</string>
     <string name="title_legend_section_messages">メッセージ</string>
     <string name="title_legend_section_compose">作成</string>
@@ -1914,28 +1925,28 @@
     <string name="title_icalendar_decline">辞退する</string>
     <string name="title_icalendar_maybe">仮承諾</string>
     <string name="title_icalendar_calendar">カレンダー</string>
-    <string name="title_pro_feature">これはプロ版の機能です</string>
-    <string name="title_pro_list">プロ版の機能リスト</string>
-    <string name="title_pro_purchase">購入</string>
+    <string name="title_pro_feature">これはプロの機能です</string>
+    <string name="title_pro_list">プロの機能リスト</string>
+    <string name="title_pro_purchase">アクティベート</string>
     <string name="title_pro_one_time">%1$s (支払いは一回限り)</string>
     <string name="title_pro_no_play">Play ストアが見つかりませんでした</string>
     <string name="title_pro_info">FairEmail の開発には文字通り数千時間かかりましたが、それにもかかわらず、ほとんどの機能は無料で使用できます。
          FairEmail はあなたのプライバシーを真剣に考え、広告を表示せず、お金を稼ぐためにトラッキングやアナリティクスを使用しません。
          FairEmail を長期的に維持およびサポートするために、いくつかの便利で高度な機能は無料では使用できません。
-         FairEmail は、これについて小さなリマインダーを表示します。これは、プロ版を購入すると削除されます。
+         FairEmail は、これについて小さなリマインダーを表示します。これは、プロを購入すると削除されます。
     </string>
-    <string name="title_pro_whichever">どの機能がプロ版の機能に選ばれても、無料であるべきであると文句を言う人が必ずいます。そのような人にならないでください。</string>
+    <string name="title_pro_whichever">どの機能がプロの機能に選ばれても、無料であるべきであると文句を言う人が必ずいます。どうかそうはならないでください。</string>
     <string name="title_pro_google">FairEmail は Play ストアの購入を開始しますが、最終的には Google が購入プロセス全体を管理します。購入に関する問題が発生してもアプリを非難しないでください！</string>
     <string name="title_pro_hide">メッセージを %1$d 週間非表示にする</string>
-    <string name="title_pro_hint">プロ版を購入すると、現在および将来すべてのプロ版の機能を使用できるようになり、アプリの開発とサポートを継続する支援になります</string>
-    <string name="title_pro_price">なぜプロ版はそんなに高価なのですか？</string>
+    <string name="title_pro_hint">プロを購入すると、現在および将来すべてのプロの機能を使用できるようになり、アプリの開発とサポートを継続する支援になります</string>
+    <string name="title_pro_price">なぜプロはそんなに高価なのですか？</string>
     <string name="title_pro_family">Google Play ファミリーライブラリを使用できますか？</string>
     <string name="title_pro_restore">(別の端末で) 購入を復元するにはどうすればよいですか？</string>
     <string name="title_pro_pending">購入保留中</string>
-    <string name="title_pro_activated">すべてのプロ版の機能が解放されました</string>
-    <string name="title_pro_valid">すべてのプロ版の機能が解放されました</string>
+    <string name="title_pro_activated">すべてのプロの機能が解放されました</string>
+    <string name="title_pro_valid">すべてのプロの機能が解放されました</string>
     <string name="title_pro_invalid">無効なレスポンスです</string>
-    <string name="title_pro_support">FairEmail にはあなたの支援が必要です。プロジェクトを維持するため、タップしてプロ版を購入するか、このメッセージをオフにしてください。</string>
+    <string name="title_pro_support">FairEmail にはあなたの支援が必要です。プロジェクトを維持するため、タップしてプロを購入するか、このメッセージをオフにしてください。</string>
     <string name="title_boundary_error">メールサーバーからのメッセージのダウンロードエラー</string>
     <string name="title_boundary_retry">再試行</string>
     <string name="title_unexpected_error">予期せぬエラー</string>
@@ -2137,9 +2148,9 @@
         <item>なし</item>
         <item>PGP デジタル署名のみ</item>
         <item>PGP 暗号化のみ</item>
-        <item>PGP デジタル署名 + 暗号化</item>
+        <item>PGP 暗号化 + デジタル署名</item>
         <item>S/MIME デジタル署名のみ</item>
-        <item>S/MIME デジタル署名 + 暗号化</item>
+        <item>S/MIME 暗号化 + デジタル署名</item>
     </string-array>
     <string-array name="sizeNames">
         <item>0 B</item>

@@ -114,6 +114,8 @@
         Blokování domény odesílatele používá pravidla filtru, což je Pro funkce.
     </string>
     <string name="title_blocked_senders">Zablokovaní odesílatelé</string>
+    <string name="title_unblock_all">Odblokovat vše</string>
+    <string name="title_unblock_all_remark">Tímto resetujete všechny seznamy a možnosti, které mohou mít za následek blokování odesílatelů</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Blokovat odesílatele %1$s zprávy?</item>
         <item quantity="few">Blokovat odesílatele %1$s zpráv?</item>
@@ -417,7 +419,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_answer_hint">Akce tlačítka odpovědi lze také nakonfigurovat na kartě nastavení odesílání</string>
     <string name="title_advanced_answer_warning">Ne všechny akce jsou možné bez výběrového menu!</string>
     <string name="title_advanced_send_pending">Zobrazit neobtěžující ikonu zpožděného odeslání</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">Uložit revize konceptu pro vrácení a opětovné provedení</string>
+    <string name="title_advanced_save_revisions">Uložit revize konceptu pro vrácení a opětovné provedení</string>
     <string name="title_advanced_auto_save_paragraph">Automaticky uložit koncept po každém odstavci</string>
     <string name="title_advanced_auto_save_dot">Automaticky uložit koncept po každé větě</string>
     <string name="title_advanced_compose_color">Výchozí barva textu</string>
@@ -453,6 +455,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_lookup_mx">Před odesláním zkontrolovat e-mailové adresy příjemců</string>
     <string name="title_advanced_metered">Používat účtovaná připojení</string>
     <string name="title_advanced_download">Automaticky stahovat zprávy a přílohy na účtovaném připojení až do velikosti</string>
+    <string name="title_advanced_download_limited">Použít i pro neměřená připojení</string>
     <string name="title_advanced_roaming">Stahovat zprávy a přílohy během roamingu</string>
     <string name="title_advanced_rlah">Roaming jako doma (RLAH)</string>
     <string name="title_advanced_download_headers">Stáhnout hlavičky všech zpráv</string>
@@ -463,10 +466,13 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_vpn_only">Připojit pouze pomocí VPN</string>
     <string name="title_advanced_timeout">Časový limit připojení (sekundy)</string>
     <string name="title_advanced_prefer_ip4">Upřednostňovat IPv4 před IPv6</string>
+    <string name="title_advanced_ssl_update">Použít aktualizovaného poskytovatele SSL</string>
     <string name="title_advanced_ssl_harden">Obrnit SSL připojení</string>
     <string name="title_advanced_ssl_harden_strict">Vyžadovat TLS 1.3</string>
     <string name="title_advanced_cert_strict">Přísná kontrola certifikátu</string>
+    <string name="title_advanced_check_names">Kontrolovat jména hostitelů podle serverových certifikátů</string>
     <string name="title_advanced_open_safe">Otevřít pouze zabezpečená připojení</string>
+    <string name="title_advanced_http_redirect">Povolit přesměrování připojení</string>
     <string name="title_advanced_bouncy_castle">Použít Bouncy Castle\'s secure socket provider (JSSE)</string>
     <string name="title_advanced_manage_connectivity">Spravovat připojení</string>
     <string name="title_advanced_caption_general">Obecné</string>
@@ -883,6 +889,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_wearable_hint">Oznámení jsou do nositelného zařízení odeslány teprve po stažení textu zprávy</string>
     <string name="title_advanced_messaging_hint">Vyžadováno pro podporu Android Auto</string>
     <string name="title_advanced_move_hint">Cílovou složku lze změnit v nastavení účtu</string>
+    <string name="title_advanced_notify_sensitive_hint">Vyžaduje vypnutí citlivých oznámení v nastavení Androidu</string>
     <string name="title_advanced_notify_no_grouping">Tato verze Androidu nepodporuje seskupování oznámení</string>
     <string name="title_advanced_notify_no_channels">Tato verze Androidu nepodporuje kanály oznámení</string>
     <string name="title_advanced_fts_hint">Povolením se zlepší výkon vyhledávání, ale také se zvýší využití baterie a místa v úložišti</string>
@@ -1037,6 +1044,9 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_service_port">Překontrolujte prosím číslo portu</string>
     <string name="title_service_protocol">Překontrolujte prosím protokol (SSL/TLS nebo STARTTLS)</string>
     <string name="title_service_error10">Tento účet musí být znovu ověřen, což lze provést pomocí průvodce rychlým nastavením</string>
+    <string name="title_certificate_error">        Kvůli pravidlům Obchodu Google Play již není možné podporovat nezabezpečená připojení k e-mailovým serverům s problémy s certifikátem pro verzi FairEmail distribuovanou v Obchodu Play.
+        Proto tento problém může být vyřešen pouze vaším poskytovatelem e-mailu - výše uvedené informace o chybách mu mohou pomoci tento problém vyřešit.
+    </string>
     <string name="title_advanced_browse">Procházet zprávy na serveru</string>
     <string name="title_advanced_expand_read">Označit zprávy jako přečtené při rozbalení</string>
     <string name="title_synchronize_now">Synchronizovat nyní</string>
@@ -1173,6 +1183,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_importance_low">Nízká</string>
     <string name="title_importance_normal">Normální</string>
     <string name="title_importance_high">Vysoká</string>
+    <string name="title_important">Důležité</string>
+    <string name="title_unimportant">Nedůležité</string>
     <string name="title_search_in_text">Hledat v textu &#8230;</string>
     <string name="title_forward">Přeposlat</string>
     <string name="title_resend">Odeslat znovu</string>

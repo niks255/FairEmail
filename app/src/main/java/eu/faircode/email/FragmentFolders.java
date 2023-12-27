@@ -346,7 +346,7 @@ public class FragmentFolders extends FragmentBase {
             public void onClick(View v) {
                 Boolean pop = (Boolean) v.getTag();
                 if (pop != null && pop) {
-                    Helper.viewFAQ(v.getContext(), 170, true);
+                    Helper.viewFAQ(v.getContext(), 170);
                     //ToastEx.makeText(v.getContext(), R.string.title_pop_folders, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -616,7 +616,7 @@ public class FragmentFolders extends FragmentBase {
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalStateException) {
-                    Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar snackbar = Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true);
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
@@ -628,7 +628,7 @@ public class FragmentFolders extends FragmentBase {
                     });
                     snackbar.show();
                 } else if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);

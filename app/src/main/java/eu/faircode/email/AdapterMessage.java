@@ -419,7 +419,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private TextView tvStoredTitle;
         private TextView tvSizeExTitle;
         private TextView tvLanguageTitle;
-        private TextView tvThreadTitle;
 
         private TextView tvSignedBy;
         private TextView tvSubmitter;
@@ -435,7 +434,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private TextView tvStored;
         private TextView tvSizeEx;
         private TextView tvLanguage;
-        private TextView tvThread;
 
         private TextView tvSubjectEx;
         private TextView tvFlags;
@@ -831,7 +829,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvStoredTitle = vsBody.findViewById(R.id.tvStoredTitle);
             tvSizeExTitle = vsBody.findViewById(R.id.tvSizeExTitle);
             tvLanguageTitle = vsBody.findViewById(R.id.tvLanguageTitle);
-            tvThreadTitle = vsBody.findViewById(R.id.tvThreadTitle);
 
             tvSignedBy = vsBody.findViewById(R.id.tvSignedBy);
             tvSubmitter = vsBody.findViewById(R.id.tvSubmitter);
@@ -847,7 +844,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvStored = vsBody.findViewById(R.id.tvStored);
             tvSizeEx = vsBody.findViewById(R.id.tvSizeEx);
             tvLanguage = vsBody.findViewById(R.id.tvLanguage);
-            tvThread = vsBody.findViewById(R.id.tvThread);
 
             tvSubjectEx = vsBody.findViewById(R.id.tvSubjectEx);
             tvFlags = vsBody.findViewById(R.id.tvFlags);
@@ -1280,6 +1276,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     !((Boolean.FALSE.equals(message.dkim) && check_authentication) ||
                             (Boolean.FALSE.equals(message.spf) && check_authentication) ||
                             (Boolean.FALSE.equals(message.dmarc) && check_authentication) ||
+                            (Boolean.FALSE.equals(message.auth) && check_authentication) ||
                             (Boolean.FALSE.equals(message.reply_domain) && check_reply_domain) ||
                             (Boolean.FALSE.equals(message.mx) && check_mx) ||
                             (Boolean.TRUE.equals(message.blocklist) && check_blocklist));
@@ -1381,9 +1378,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         !Boolean.FALSE.equals(message.dmarc))
                     auths = 3;
 
+                if (Boolean.TRUE.equals(message.auth))
+                    auths = 3;
+
                 boolean verified = (auths == 3 && (!check_tls || Boolean.TRUE.equals(message.tls)));
 
-                if (message.dkim == null && message.spf == null && message.dmarc == null)
+                if (!Boolean.TRUE.equals(message.auth) &&
+                        message.dkim == null && message.spf == null && message.dmarc == null)
                     ibAuth.setImageLevel(1);
                 else
                     ibAuth.setImageLevel(auths + 2);
@@ -1462,8 +1463,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     message.totalSize != null && ("size".equals(sort) || "attachments".equals(sort))
                             ? View.VISIBLE : View.GONE);
             SpannableStringBuilder time;
-            if (date_time)
-                time = new SpannableStringBuilderEx(Helper.getRelativeDateTimeSpanString(context, message.received));
+            if (EntityMessage.PRIORITIY_HIGH.equals(message.importance) ||
+                    EntityMessage.PRIORITIY_LOW.equals(message.importance))
+                time = new SpannableStringBuilderEx(Helper.getRelativeDateTimeSpanString(context, message.received, true));
+            else if (date_time)
+                time = new SpannableStringBuilderEx(Helper.getRelativeDateTimeSpanString(context, message.received, false));
             else if (date_week)
                 time = new SpannableStringBuilderEx(Helper.getRelativeDateSpanString(context, message.received));
             else
@@ -1629,8 +1633,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvError.setVisibility(View.VISIBLE);
                 ibError.setVisibility(View.VISIBLE);
             } else {
-                if (BuildConfig.DEBUG && Log.isDebugLogLevel())
-                    error = message.thread;
                 tvError.setText(error);
                 tvError.setVisibility(error == null ? View.GONE : View.VISIBLE);
                 ibError.setVisibility(error == null ? View.GONE : View.VISIBLE);
@@ -1759,7 +1761,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvStoredTitle.setVisibility(View.GONE);
             tvSizeExTitle.setVisibility(View.GONE);
             tvLanguageTitle.setVisibility(View.GONE);
-            tvThreadTitle.setVisibility(View.GONE);
 
             tvSignedBy.setVisibility(View.GONE);
             tvSubmitter.setVisibility(View.GONE);
@@ -1775,7 +1776,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvStored.setVisibility(View.GONE);
             tvSizeEx.setVisibility(View.GONE);
             tvLanguage.setVisibility(View.GONE);
-            tvThread.setVisibility(View.GONE);
 
             tvSubjectEx.setVisibility(View.GONE);
             tvFlags.setVisibility(View.GONE);
@@ -2025,9 +2025,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibAvatar.setVisibility(main == null || !main.hasPhoto() ? View.GONE : View.VISIBLE);
 
                 if (main != null && "vmc".equals(main.getType()) &&
-                        Boolean.TRUE.equals(message.dkim) &&
-                        Boolean.TRUE.equals(message.spf) &&
-                        Boolean.TRUE.equals(message.dmarc)) {
+                        (Boolean.TRUE.equals(message.auth) ||
+                                (Boolean.TRUE.equals(message.dkim) &&
+                                        Boolean.TRUE.equals(message.spf) &&
+                                        Boolean.TRUE.equals(message.dmarc)))) {
                     ibVerified.setImageLevel(main.isVerified() ? 1 : 0);
                     ibVerified.setImageTintList(ColorStateList.valueOf(main.isVerified()
                             ? colorVerified : colorControlNormal));
@@ -2518,8 +2519,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             ssb.setSpan(new ForegroundColorSpan(textColorLink), start, ssb.length(), 0);
                         }
                     } else {
+                        boolean homoPersonal = TextHelper.isSingleScript(personal);
+                        if (BuildConfig.DEBUG && !homoPersonal)
+                            personal = TextHelper.getNonLatinCodepoints(personal);
                         ssb.append(personal);
-                        if (!TextHelper.isSingleScript(personal)) {
+                        if (!homoPersonal) {
                             int start = ssb.length() - personal.length();
                             ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
                             ssb.setSpan(new ForegroundColorSpan(colorError), start, ssb.length(), 0);
@@ -2678,11 +2682,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             tvLanguage.setVisibility(showLanguage ? View.VISIBLE : View.GONE);
             tvLanguage.setText(message.language == null ? null : new Locale(message.language).getDisplayLanguage());
 
-            boolean show_thread = (show_addresses && (BuildConfig.DEBUG || debug));
-            tvThreadTitle.setVisibility(show_thread ? View.VISIBLE : View.GONE);
-            tvThread.setVisibility(show_thread ? View.VISIBLE : View.GONE);
-            tvThread.setText(message.thread);
-
             tvSubjectEx.setVisibility(show_addresses ? View.VISIBLE : View.GONE);
             tvSubjectEx.setText(message.subject);
             boolean homoSubject = TextHelper.isSingleScript(message.subject);
@@ -2724,7 +2723,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvStored.setTextIsSelectable(false);
                     tvSizeEx.setTextIsSelectable(false);
                     tvLanguage.setTextIsSelectable(false);
-                    tvThread.setTextIsSelectable(false);
                     tvSubject.setTextIsSelectable(false);
                     tvFlags.setTextIsSelectable(false);
                     tvKeywordsEx.setTextIsSelectable(false);
@@ -2743,7 +2741,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvStored.setTextIsSelectable(tvStored.getVisibility() == View.VISIBLE);
                     tvSizeEx.setTextIsSelectable(tvSizeEx.getVisibility() == View.VISIBLE);
                     tvLanguage.setTextIsSelectable(tvLanguage.getVisibility() == View.VISIBLE);
-                    tvThread.setTextIsSelectable(tvThread.getVisibility() == View.VISIBLE);
                     tvSubjectEx.setTextIsSelectable(tvSubjectEx.getVisibility() == View.VISIBLE);
                     tvFlags.setTextIsSelectable(tvFlags.getVisibility() == View.VISIBLE);
                     tvKeywordsEx.setTextIsSelectable(tvKeywordsEx.getVisibility() == View.VISIBLE && keywords_header);
@@ -2765,7 +2762,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             if (show_headers && message.headers != null) {
                 Spanned headers = HtmlHelper.highlightHeaders(context,
-                        message.headers, message.blocklist != null && message.blocklist);
+                        message.from, message.to, message.received, message.headers,
+                        message.blocklist != null && message.blocklist);
                 if (BuildConfig.DEBUG && headers instanceof SpannableStringBuilder) {
                     SpannableStringBuilder ssb = (SpannableStringBuilder) headers;
                     ssb.append('\n')
@@ -2773,6 +2771,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             .append(" DKIM=").append(message.dkim == null ? "-" : (message.dkim ? "✓" : "✗"))
                             .append(" SPF=").append(message.spf == null ? "-" : (message.spf ? "✓" : "✗"))
                             .append(" DMARC=").append(message.dmarc == null ? "-" : (message.dmarc ? "✓" : "✗"))
+                            .append(" SMTP=").append(message.auth == null ? "-" : (message.auth ? "✓" : "✗"))
                             .append(" BL=").append(message.blocklist == null ? "-" : (message.blocklist ? "✓" : "✗"))
                             .append('\n');
                 }
@@ -3040,7 +3039,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     final int zoom = args.getInt("zoom");
                     final float scale = args.getFloat("scale");
                     final boolean download_plain = prefs.getBoolean("download_plain", false);
-                    final boolean json_ld = prefs.getBoolean("json_ld", !Helper.isPlayStoreInstall());
+                    final boolean json_ld = prefs.getBoolean("json_ld", false);
 
                     if (message == null || !message.content)
                         return null;
@@ -3457,7 +3456,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
                     if (ex instanceof OutOfMemoryError)
-                        Snackbar.make(parentFragment.getView(), ex.getMessage(), Snackbar.LENGTH_LONG)
+                        Snackbar.make(parentFragment.getView(), new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                                 .setGestureInsetBottomIgnored(true).show();
                     else
                         Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
@@ -3706,6 +3705,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             Bundle args = new Bundle();
             args.putLong("id", message.id);
+            args.putLong("attachment", attachment.id);
             args.putSerializable("file", attachment.getFile(context));
 
             new SimpleTask<ICalendar>() {
@@ -3723,11 +3723,26 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @Override
                 protected ICalendar onExecute(Context context, Bundle args) throws IOException {
                     File file = (File) args.getSerializable("file");
-                    return CalendarHelper.parse(context, file);
+                    try {
+                        return CalendarHelper.parse(context, file);
+                    } catch (Throwable ex) {
+                        long attachment = args.getLong("attachment");
+                        String message = ex.getMessage();
+                        if (TextUtils.isEmpty(message))
+                            message = Log.formatThrowable(ex);
+
+                        DB db = DB.getInstance(context);
+                        db.attachment().setWarning(attachment, message);
+
+                        return null;
+                    }
                 }
 
                 @Override
                 protected void onExecuted(Bundle args, ICalendar icalendar) {
+                    if (icalendar == null)
+                        return;
+
                     long id = args.getLong("id");
                     TupleMessageEx amessage = getMessage();
                     if (amessage == null || !amessage.id.equals(id))
@@ -3828,13 +3843,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
-                    if (properties.getValue("ical_error", message.id))
-                        return;
-                    properties.setValue("ical_error", message.id, true);
-
-                    // https://github.com/mangstadt/biweekly/issues/121
-                    if (!(ex instanceof AssertionError))
-                        Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                    // Dummy
                 }
             }.setLog(false).execute(context, owner, args, "message:calendar");
         }
@@ -4112,7 +4121,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             response.setMethod(Method.REPLY);
                             response.addEvent(ev);
 
-                            File dir = Helper.ensureExists(new File(context.getFilesDir(), "calendar"));
+                            File dir = Helper.ensureExists(context, "calendar");
                             File ics = new File(dir, message.id + ".ics");
                             response.write(ics);
 
@@ -4856,6 +4865,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 result.add("SPF");
             if (Boolean.FALSE.equals(message.dmarc))
                 result.add("DMARC");
+            if (Boolean.FALSE.equals(message.auth))
+                result.add("SMTP");
             if (Boolean.FALSE.equals(message.mx))
                 result.add("MX");
 
@@ -4873,7 +4884,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         .append(message.spf == null ? "-" : (message.spf ? "✓" : "✗"))
                         .append('\n');
                 sb.append("DMARC: ")
-                        .append(message.dmarc == null ? "-" : (message.dmarc ? "✓" : "✗"));
+                        .append(message.dmarc == null ? "-" : (message.dmarc ? "✓" : "✗"))
+                        .append('\n');
+                sb.append("SMTP: ")
+                        .append(message.auth == null ? "-" : (message.auth ? "✓" : "✗"));
             }
 
             if (native_dkim && !TextUtils.isEmpty(message.signedby)) {
@@ -5381,9 +5395,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     if (!TextHelper.isSingleScript(((InternetAddress) from).getPersonal()))
                         return true;
                 }
-
-            if (!TextHelper.isSingleScript(message.subject))
-                return true;
 
             return false;
         }
@@ -6356,7 +6367,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         uri = alt;
                 }
 
-                Uri sanitized = UriHelper.sanitize(uri);
+                Uri sanitized = UriHelper.sanitize(context, uri);
                 if (sanitized != null && isActivate(sanitized))
                     uri = sanitized;
                 else if (title != null) {
@@ -6399,7 +6410,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             File source = EntityMessage.getFile(context, id);
 
-                            File dir = Helper.ensureExists(new File(context.getFilesDir(), "shared"));
+                            File dir = Helper.ensureExists(context, "shared");
                             File target = new File(dir, id + ".html");
 
                             Helper.copy(source, target);
@@ -6442,7 +6453,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean link_sanitize = prefs.getBoolean(chost + ".link_sanitize", false);
 
                     if (link_sanitize && UriHelper.isHyperLink(uri)) {
-                        Uri sanitized = UriHelper.sanitize(uri);
+                        Uri sanitized = UriHelper.sanitize(context, uri);
                         if (sanitized != null)
                             uri = sanitized;
                         Log.i("Open sanitized=" + uri);
@@ -8143,6 +8154,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("dmarc changed", next.id);
                 }
+                if (!Objects.equals(prev.auth, next.auth)) {
+                    same = false;
+                    log("auth changed", next.id);
+                }
                 if (!Objects.equals(prev.mx, next.mx)) {
                     same = false;
                     log("mx changed", next.id);
@@ -8602,7 +8617,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 keyPosition.put(message.id, i);
                 positionKey.put(i, message.id);
                 addExtra(message.from, message.extra);
-                addExtra(message.senders, message.extra);
+                if (threading) {
+                    if (message.senders == null || message.senders.length == 0)
+                        message.senders = message.from;
+                    if (message.recipients == null || message.recipients.length == 0)
+                        message.recipients = message.to;
+                    addExtra(message.senders, message.extra);
+                } else {
+                    message.senders = message.from;
+                    message.recipients = message.to;
+                }
+
                 message.resolveLabelColors(context);
                 message.resolveKeywordColors(context);
             }

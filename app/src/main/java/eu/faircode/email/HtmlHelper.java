@@ -40,7 +40,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextDirectionHeuristics;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
 import android.text.style.BackgroundColorSpan;
@@ -125,6 +124,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.mail.Address;
 import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MailDateFormat;
 import javax.mail.internet.MimeUtility;
@@ -428,7 +428,7 @@ public class HtmlHelper {
             Log.e(ex);
             Document document = Document.createShell("");
             Element strong = document.createElement("strong");
-            strong.text(android.util.Log.getStackTraceString(ex));
+            strong.text(new ThrowableWrapper(ex).getSafeStackTraceString());
             document.body().appendChild(strong);
             return document;
         }
@@ -442,7 +442,7 @@ public class HtmlHelper {
             Log.e(ex);
             Document document = Document.createShell("");
             Element strong = document.createElement("strong");
-            strong.text(android.util.Log.getStackTraceString(ex));
+            strong.text(new ThrowableWrapper(ex).getSafeStackTraceString());
             document.body().appendChild(strong);
             return document;
         }
@@ -2935,11 +2935,13 @@ public class HtmlHelper {
         return ssb.toString();
     }
 
-    static Spanned highlightHeaders(Context context, String headers, boolean blocklist) {
+    static Spanned highlightHeaders(Context context, Address[] from, Address[] to, Long time, String headers, boolean blocklist) {
         SpannableStringBuilder ssb = new SpannableStringBuilderEx(headers.replaceAll("\\t", " "));
         int textColorLink = Helper.resolveColor(context, android.R.attr.textColorLink);
         int colorVerified = Helper.resolveColor(context, R.attr.colorVerified);
         int colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
+        int colorSeparator = Helper.resolveColor(context, R.attr.colorSeparator);
+        float stroke = context.getResources().getDisplayMetrics().density;
 
         int index = 0;
         for (String line : headers.split("\n")) {
@@ -2951,6 +2953,10 @@ public class HtmlHelper {
             index += line.length() + 1;
         }
 
+        ssb.append("\n\uFFFC"); // Object replacement character
+        ssb.setSpan(new LineSpan(colorSeparator, stroke, 0), ssb.length() - 1, ssb.length(), 0);
+        ssb.append('\n');
+
         try {
             // https://datatracker.ietf.org/doc/html/rfc2821#section-4.4
             final DateFormat DTF = Helper.getDateTimeInstance(context, DateFormat.SHORT, DateFormat.MEDIUM);
@@ -2959,8 +2965,9 @@ public class HtmlHelper {
             ByteArrayInputStream bis = new ByteArrayInputStream(headers.getBytes());
             InternetHeaders iheaders = new InternetHeaders(bis, true);
 
-            String dh = iheaders.getHeader("Date", null);
             Date tx = null;
+
+            String dh = iheaders.getHeader("Date", null);
             try {
                 if (dh != null)
                     tx = mdf.parse(dh);
@@ -2968,6 +2975,26 @@ public class HtmlHelper {
                 Log.w(ex);
             }
 
+            if (tx != null) {
+                ssb.append('\n');
+                int s = ssb.length();
+                ssb.append(DTF.format(tx));
+                ssb.setSpan(new StyleSpan(Typeface.BOLD), s, ssb.length(), 0);
+            }
+
+            if (from != null) {
+                ssb.append('\n');
+                int s = ssb.length();
+                ssb.append("from");
+                ssb.setSpan(new ForegroundColorSpan(textColorLink), s, ssb.length(), 0);
+                ssb.setSpan(new StyleSpan(Typeface.BOLD), s, ssb.length(), 0);
+                ssb.append(' ').append(MessageHelper.formatAddresses(from, true, false));
+            }
+
+            if (tx != null || from != null)
+                ssb.append('\n');
+
+            Date rx = null;
             String[] received = iheaders.getHeader("Received");
             if (received != null && received.length > 0) {
                 for (int i = received.length - 1; i >= 0; i--) {
@@ -2975,7 +3002,6 @@ public class HtmlHelper {
                     String h = MimeUtility.unfold(received[i]);
 
                     int semi = h.lastIndexOf(';');
-                    Date rx = null;
                     if (semi > 0) {
                         rx = mdf.parse(h, new ParsePosition(semi + 1));
                         h = h.substring(0, semi);
@@ -2985,10 +3011,9 @@ public class HtmlHelper {
                     ssb.append('#').append(Integer.toString(received.length - i));
                     if (rx != null) {
                         ssb.append(' ').append(DTF.format(rx));
-                        if (tx != null) {
-                            long ms = rx.getTime() - tx.getTime();
-                            ssb.append(" \u0394").append(DateUtils.formatElapsedTime(ms / 1000));
-                        }
+                        if (tx != null)
+                            ssb.append(" \u0394")
+                                    .append(Helper.formatDuration(rx.getTime() - tx.getTime()));
                     }
                     ssb.setSpan(new StyleSpan(Typeface.BOLD), s, ssb.length(), 0);
 
@@ -3028,8 +3053,10 @@ public class HtmlHelper {
 
                         s = ssb.length();
                         ssb.append(w[j]);
-                        if (!p && MessageHelper.RECEIVED_WORDS.contains(w[j].toLowerCase(Locale.ROOT)))
+                        if (!p && MessageHelper.RECEIVED_WORDS.contains(w[j].toLowerCase(Locale.ROOT))) {
                             ssb.setSpan(new ForegroundColorSpan(textColorLink), s, ssb.length(), 0);
+                            ssb.setSpan(new StyleSpan(Typeface.BOLD), s, ssb.length(), 0);
+                        }
 
                         if (w[j].endsWith(")"))
                             p = false;
@@ -3047,9 +3074,35 @@ public class HtmlHelper {
                     ssb.append("\n");
                 }
             }
+
+            if (time != null) {
+                ssb.append('\n');
+                int s = ssb.length();
+                ssb.append(DTF.format(time));
+                if (rx != null)
+                    ssb.append(" \u0394")
+                            .append(Helper.formatDuration(time - rx.getTime()));
+                ssb.setSpan(new StyleSpan(Typeface.BOLD), s, ssb.length(), 0);
+            }
+
+            if (to != null) {
+                ssb.append('\n');
+                int s = ssb.length();
+                ssb.append("to");
+                ssb.setSpan(new ForegroundColorSpan(textColorLink), s, ssb.length(), 0);
+                ssb.setSpan(new StyleSpan(Typeface.BOLD), s, ssb.length(), 0);
+                ssb.append(' ').append(MessageHelper.formatAddresses(to, true, false));
+            }
+
+            if (time != null || to != null)
+                ssb.append('\n');
         } catch (Throwable ex) {
             Log.w(ex);
         }
+
+        ssb.append("\n\uFFFC"); // Object replacement character
+        ssb.setSpan(new LineSpan(colorSeparator, stroke, 0), ssb.length() - 1, ssb.length(), 0);
+        ssb.append('\n');
 
         return ssb;
     }
@@ -3808,15 +3861,6 @@ public class HtmlHelper {
                             setSpan(ssb, StyleHelper.getTypefaceSpan("Cousine", context), start, ssb.length());
                     } catch (Throwable ex) {
                         Log.e(ex);
-                        if (BuildConfig.DEBUG || debug) {
-                            int s = ssb.length();
-                            ssb.append(ex.toString()).append('\n')
-                                    .append(android.util.Log.getStackTraceString(ex)).append('\n');
-                            setSpan(ssb, StyleHelper.getTypefaceSpan("Cousine", context), s, ssb.length());
-                            setSpan(ssb, new RelativeSizeSpan(HtmlHelper.FONT_SMALL), s, ssb.length());
-                            int colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
-                            setSpan(ssb, new ForegroundColorSpan(colorWarning), s, ssb.length());
-                        }
                     }
 
                     if ("true".equals(element.attr("x-block")))

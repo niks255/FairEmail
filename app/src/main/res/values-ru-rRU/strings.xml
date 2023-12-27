@@ -114,6 +114,8 @@
         Блокировка домена отправителя использует фильтрующие правила, которые являются функцией pro.
     </string>
     <string name="title_blocked_senders">Заблокированные отправители</string>
+    <string name="title_unblock_all">Разблокировать всех</string>
+    <string name="title_unblock_all_remark">Будут сброшены все списки и параметры, выполняющие блокировку отправителей</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Заблокировать отправителя %1$s сообщения?</item>
         <item quantity="few">Заблокировать отправителя %1$s сообщений?</item>
@@ -416,7 +418,7 @@
     <string name="title_advanced_answer_hint">Действия кнопок ответа также могут быть настроены на вкладке настроек \"Отправка\"</string>
     <string name="title_advanced_answer_warning">Не все действия возможны без меню выбора!</string>
     <string name="title_advanced_send_pending">Показывать ненавязчивый значок задержки отправки</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">Сохранять черновые версии для отмены и повтора</string>
+    <string name="title_advanced_save_revisions">Сохранять черновые версии для отмены и повтора</string>
     <string name="title_advanced_auto_save_paragraph">Автоматически сохранять черновик после каждого абзаца</string>
     <string name="title_advanced_auto_save_dot">Автоматически сохранять черновик после каждого предложения</string>
     <string name="title_advanced_compose_color">Цвет текста по умолчанию</string>
@@ -431,7 +433,7 @@
     <string name="title_advanced_write_below">Писать под текстом отправителя</string>
     <string name="title_advanced_quote_reply">Цитировать текст при ответе</string>
     <string name="title_advanced_limit_reply">Ограничивать количество вложенных кавычек</string>
-    <string name="title_advanced_resize_reply">Менять размер изображений в ответе</string>
+    <string name="title_advanced_resize_reply">Изменять размер изображений в ответе</string>
     <string name="title_advanced_resize_paste">Изменять размер вставляемых изображений</string>
     <string name="title_advanced_signature_location">Расположение подписи</string>
     <string name="title_advanced_signature_new">Использовать подпись для новых сообщений</string>
@@ -452,6 +454,7 @@
     <string name="title_advanced_lookup_mx">Проверять адрес электронной почты получателя перед отправкой</string>
     <string name="title_advanced_metered">Использовать лимитированные подключения</string>
     <string name="title_advanced_download">Автоматически загружать сообщения и вложения для лимитного подключения до</string>
+    <string name="title_advanced_download_limited">Также применять для безлимитных подключений</string>
     <string name="title_advanced_roaming">Загружать сообщения и вложения в роуминге</string>
     <string name="title_advanced_rlah">В роуминге как дома</string>
     <string name="title_advanced_download_headers">Загружать все заголовки сообщений</string>
@@ -462,10 +465,13 @@
     <string name="title_advanced_vpn_only">Подключаться только через VPN</string>
     <string name="title_advanced_timeout">Время ожидания подключения (сек.)</string>
     <string name="title_advanced_prefer_ip4">Предпочитать IPv4</string>
+    <string name="title_advanced_ssl_update">Использовать обновлённый SSL-провайдер</string>
     <string name="title_advanced_ssl_harden">Усиленные SSL-подключения</string>
     <string name="title_advanced_ssl_harden_strict">Требовать TLS 1.3</string>
     <string name="title_advanced_cert_strict">Строгая проверка сертификатов</string>
+    <string name="title_advanced_check_names">Проверять имена хостов по сертификатам сервера</string>
     <string name="title_advanced_open_safe">Только безопасные подключения</string>
+    <string name="title_advanced_http_redirect">Разрешать перенаправление подключений</string>
     <string name="title_advanced_bouncy_castle">Использовать провайдера защищённых сокетов Bouncy Castle (JSSE)</string>
     <string name="title_advanced_manage_connectivity">Управление подключением</string>
     <string name="title_advanced_caption_general">По умолчанию</string>
@@ -883,6 +889,7 @@
     <string name="title_advanced_wearable_hint">Уведомления на носимое устройство отправляются только после загрузки текста сообщения</string>
     <string name="title_advanced_messaging_hint">Требуется поддержка Android Auto</string>
     <string name="title_advanced_move_hint">Целевая папка может быть указана в настройках учётной записи</string>
+    <string name="title_advanced_notify_sensitive_hint">Требуется отключить конфиденциальные уведомления в настройках Android</string>
     <string name="title_advanced_notify_no_grouping">Эта версия Android не поддерживает группировку уведомлений</string>
     <string name="title_advanced_notify_no_channels">Эта версия Android не поддерживает каналы уведомлений</string>
     <string name="title_advanced_fts_hint">Включение улучшит скорость поиска, но также увеличит расход батареи и занимаемое место в хранилище</string>
@@ -1037,6 +1044,9 @@
     <string name="title_service_port">Пожалуйста, дважды проверьте номер порта</string>
     <string name="title_service_protocol">Пожалуйста, дважды проверьте протокол (SSL/TLS или STARTTLS)</string>
     <string name="title_service_error10">Эта учётная запись должна быть повторно аутентифицирована, что можно сделать с помощью мастер быстрой настройки</string>
+    <string name="title_certificate_error">        В соответствии с правилами Google Play Store, поддержка небезопасных подключений к почтовым серверам с проблемами сертификатов для версии FairEmail, распространяемой через Play Store, более невозможна.
+        Данную проблему может решить только провайдер электронной почты — приведённая выше информация об ошибке может помочь ему с разрешением возникшей ситуации.
+    </string>
     <string name="title_advanced_browse">Просмотр сообщений на сервере</string>
     <string name="title_advanced_expand_read">Отмечать сообщения прочитанными при развёртывании</string>
     <string name="title_synchronize_now">Синхронизировать сейчас</string>
@@ -1174,6 +1184,8 @@
     <string name="title_importance_low">Низкая</string>
     <string name="title_importance_normal">Обычная</string>
     <string name="title_importance_high">Высокая</string>
+    <string name="title_important">Важное</string>
+    <string name="title_unimportant">Неважное</string>
     <string name="title_search_in_text">Поиск в тексте&#8230;</string>
     <string name="title_forward">Переслать</string>
     <string name="title_resend">Перенаправить</string>

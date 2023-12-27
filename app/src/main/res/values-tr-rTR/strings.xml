@@ -91,6 +91,8 @@
     <string name="title_block_sender_hint">Bir göndereni engellemek ücretsiz bir özelliktir.
 Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurallarını kullanır.    </string>
     <string name="title_blocked_senders">Engellenmiş gönderenler</string>
+    <string name="title_unblock_all">Tüm engelleri kaldır</string>
+    <string name="title_unblock_all_remark">Bu, gönderenlerin engellenmesine neden olabilecek tüm listeleri ve seçenekleri sıfırlayacaktır</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">%1$s iletisinin göndericisi engellensin mi?</item>
         <item quantity="other">%1$s iletisinin göndericisi engellensin mi?</item>
@@ -387,7 +389,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_answer_hint">Cevap düğmesi eylemleri, gönderme ayarları sekme sayfasında da yapılandırılabilir</string>
     <string name="title_advanced_answer_warning">Bir seçim menüsü olmadan tüm eylemler mümkün değildir!</string>
     <string name="title_advanced_send_pending">Rahatsız edici olmayan gecikmeli gönderme simgesini göster</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">Geri alma ve yineleme için taslak revizyonlarını kaydedin</string>
+    <string name="title_advanced_save_revisions">Geri alma ve yineleme için taslak revizyonlarını kaydedin</string>
     <string name="title_advanced_auto_save_paragraph">Her paragraftan sonra bir taslağı otomatik olarak kaydet</string>
     <string name="title_advanced_auto_save_dot">Her cümleden sonra bir taslağı otomatik olarak kaydet</string>
     <string name="title_advanced_compose_color">Varsayılan metin rengi</string>
@@ -423,6 +425,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_lookup_mx">Göndermeden önce alıcı e-posta adreslerini kontrol edin</string>
     <string name="title_advanced_metered">Ölçülü bağlantıları kullan</string>
     <string name="title_advanced_download">Mesajları ve ekleri ölçülü bir bağlantıya kadar otomatik olarak indir</string>
+    <string name="title_advanced_download_limited">Ölçülmeyen bağlantılar için de geçerlidir</string>
     <string name="title_advanced_roaming">Gezeleme yaparken iletileri ve ekleri indir</string>
     <string name="title_advanced_rlah">Evde gibi dolaşmak</string>
     <string name="title_advanced_download_headers">Tüm mesaj başlıklarını indir</string>
@@ -433,10 +436,13 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_vpn_only">Yalnızca bir VPN aracılığıyla bağlanın</string>
     <string name="title_advanced_timeout">Bağlantı zaman aşımı (saniye)</string>
     <string name="title_advanced_prefer_ip4">IPv6 yerine IPv4\'ü tercih edin</string>
+    <string name="title_advanced_ssl_update">Güncellenmiş SSL sağlayıcısı kullanın</string>
     <string name="title_advanced_ssl_harden">SSL bağlantılarını sağlamlaştır</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 gerektir</string>
     <string name="title_advanced_cert_strict">Katı sertifika kontrolü</string>
+    <string name="title_advanced_check_names">Ana bilgisayar adlarını sunucu sertifikalarına göre kontrol edin</string>
     <string name="title_advanced_open_safe">Yalnızca güvenli bağlantıları aç</string>
+    <string name="title_advanced_http_redirect">Bağlantının yeniden yönlendirilmesine izin ver</string>
     <string name="title_advanced_bouncy_castle">Bouncy Castle\'ın güvenli soket sağlayıcısını (JSSE) kullan</string>
     <string name="title_advanced_manage_connectivity">Bağlanabilirliği yönet</string>
     <string name="title_advanced_caption_general">Genel</string>
@@ -1007,6 +1013,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_service_port">Lütfen port numarasını tekrardan kontrol edin</string>
     <string name="title_service_protocol">Lütfen protokolü iki kez kontrol edin (SSL / TLS veya STARTTLS)</string>
     <string name="title_service_error10">Bu hesabın kimliğinin yeniden doğrulanması gerekiyor, bu işlem hızlı kurulum sihirbazı aracılığıyla yapılabilir</string>
+    <string name="title_certificate_error">..... Google\'ın Play Store politikaları nedeniyle, Play Store\'da dağıtılan FairEmail sürümü için sertifika sorunları olan e-posta sunucularına güvensiz bağlantıları desteklemek artık mümkün değildir  ...... Bu nedenle, bu sorun yalnızca e-posta sağlayıcınız tarafından çözülebilir - yukarıdaki hata bilgileri bu sorunu çözmelerine yardımcı olabilir.    </string>
     <string name="title_advanced_browse">Sunucudaki iletilere göz atın</string>
     <string name="title_advanced_expand_read">Genişletirken mesajları okundu olarak işaretle</string>
     <string name="title_synchronize_now">Şimdi senkronize et</string>
@@ -1142,6 +1149,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_importance_low">Düşük</string>
     <string name="title_importance_normal">Normal</string>
     <string name="title_importance_high">Yüksek</string>
+    <string name="title_important">Önemli</string>
+    <string name="title_unimportant">Önemsiz</string>
     <string name="title_search_in_text">Metin içinde ara &#8230;</string>
     <string name="title_forward">İlet</string>
     <string name="title_resend">Tekrar gönder</string>

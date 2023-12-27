@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.net.Uri;
-import android.os.Build;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -68,7 +67,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 285,
+        version = 287,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -133,7 +132,7 @@ public abstract class DB extends RoomDatabase {
             "identity", "account", "folder", "message", "attachment", "operation", "contact", "certificate", "answer", "rule", "search", "log"};
 
     private static final List<String> DB_PRAGMAS = Collections.unmodifiableList(Arrays.asList(
-            "synchronous", "journal_mode",
+            "synchronous", "journal_mode", "busy_timeout",
             "wal_checkpoint", "wal_autocheckpoint", "journal_size_limit",
             "page_count", "page_size", "max_page_count", "freelist_count",
             "cache_size", "cache_spill",
@@ -449,73 +448,97 @@ public abstract class DB extends RoomDatabase {
 
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                        Map<String, String> crumb = new HashMap<>();
-                        crumb.put("version", Integer.toString(db.getVersion()));
-                        crumb.put("WAL", Boolean.toString(db.isWriteAheadLoggingEnabled()));
-                        Log.breadcrumb("Database", crumb);
+                        try {
+                            Map<String, String> crumb = new HashMap<>();
+                            crumb.put("version", Integer.toString(db.getVersion()));
+                            crumb.put("WAL", Boolean.toString(db.isWriteAheadLoggingEnabled()));
+                            Log.breadcrumb("Database", crumb);
 
-                        // https://www.sqlite.org/pragma.html#pragma_auto_vacuum
-                        // https://android.googlesource.com/platform/external/sqlite.git/+/6ab557bdc070f11db30ede0696888efd19800475%5E!/
-                        boolean sqlite_auto_vacuum = prefs.getBoolean("sqlite_auto_vacuum", false);
-                        String mode = (sqlite_auto_vacuum ? "FULL" : "INCREMENTAL");
-                        Log.i("Set PRAGMA auto_vacuum=" + mode);
-                        try (Cursor cursor = db.query("PRAGMA auto_vacuum=" + mode + ";")) {
-                            cursor.moveToNext(); // required
-                        }
-
-                        // https://sqlite.org/pragma.html#pragma_synchronous
-                        boolean sqlite_sync_extra = prefs.getBoolean("sqlite_sync_extra", true);
-                        String sync = (sqlite_sync_extra ? "EXTRA" : "NORMAL");
-                        Log.i("Set PRAGMA synchronous=" + sync);
-                        try (Cursor cursor = db.query("PRAGMA synchronous=" + sync + ";")) {
-                            cursor.moveToNext(); // required
-                        }
-
-                        // https://www.sqlite.org/pragma.html#pragma_journal_size_limit
-                        Log.i("Set PRAGMA journal_size_limit=" + DB_JOURNAL_SIZE_LIMIT);
-                        try (Cursor cursor = db.query("PRAGMA journal_size_limit=" + DB_JOURNAL_SIZE_LIMIT + ";")) {
-                            cursor.moveToNext(); // required
-                        }
-
-                        // https://www.sqlite.org/pragma.html#pragma_cache_size
-                        Integer cache_size = getCacheSizeKb(context);
-                        if (cache_size != null) {
-                            cache_size = -cache_size; // kibibytes
-                            Log.i("Set PRAGMA cache_size=" + cache_size);
-                            try (Cursor cursor = db.query("PRAGMA cache_size=" + cache_size + ";")) {
+                            // https://www.sqlite.org/pragma.html#pragma_auto_vacuum
+                            // https://android.googlesource.com/platform/external/sqlite.git/+/6ab557bdc070f11db30ede0696888efd19800475%5E!/
+                            boolean sqlite_auto_vacuum = prefs.getBoolean("sqlite_auto_vacuum", false);
+                            String mode = (sqlite_auto_vacuum ? "FULL" : "INCREMENTAL");
+                            Log.i("Set PRAGMA auto_vacuum=" + mode);
+                            try (Cursor cursor = db.query("PRAGMA auto_vacuum=" + mode + ";")) {
                                 cursor.moveToNext(); // required
                             }
-                        }
 
-                        // Prevent long running operations from getting an exclusive lock
-                        // https://www.sqlite.org/pragma.html#pragma_cache_spill
-                        Log.i("Set PRAGMA cache_spill=0");
-                        try (Cursor cursor = db.query("PRAGMA cache_spill=0;")) {
-                            cursor.moveToNext(); // required
-                        }
+                            // https://sqlite.org/pragma.html#pragma_synchronous
+                            boolean sqlite_sync_extra = prefs.getBoolean("sqlite_sync_extra", true);
+                            String sync = (sqlite_sync_extra ? "EXTRA" : "NORMAL");
+                            Log.i("Set PRAGMA synchronous=" + sync);
+                            try (Cursor cursor = db.query("PRAGMA synchronous=" + sync + ";")) {
+                                cursor.moveToNext(); // required
+                            }
 
-                        Log.i("Set PRAGMA recursive_triggers=off");
-                        try (Cursor cursor = db.query("PRAGMA recursive_triggers=off;")) {
-                            cursor.moveToNext(); // required
-                        }
+                            // https://www.sqlite.org/pragma.html#pragma_journal_size_limit
+                            Log.i("Set PRAGMA journal_size_limit=" + DB_JOURNAL_SIZE_LIMIT);
+                            try (Cursor cursor = db.query("PRAGMA journal_size_limit=" + DB_JOURNAL_SIZE_LIMIT + ";")) {
+                                cursor.moveToNext(); // required
+                            }
 
-                        // https://www.sqlite.org/pragma.html
-                        for (String pragma : DB_PRAGMAS)
-                            if (!"compile_options".equals(pragma) || BuildConfig.DEBUG)
-                                try (Cursor cursor = db.query("PRAGMA " + pragma + ";")) {
-                                    boolean has = false;
-                                    while (cursor.moveToNext()) {
-                                        has = true;
-                                        Log.i("Get PRAGMA " + pragma + "=" + (cursor.isNull(0) ? "<null>" : cursor.getString(0)));
+                            // https://www.sqlite.org/pragma.html#pragma_cache_size
+                            Integer cache_size = getCacheSizeKb(context);
+                            if (cache_size != null) {
+                                cache_size = -cache_size; // kibibytes
+                                Log.i("Set PRAGMA cache_size=" + cache_size);
+                                // TODO CASA PRAGMA does not support placeholders
+                                try (Cursor cursor = db.query("PRAGMA cache_size=" + cache_size + ";")) {
+                                    cursor.moveToNext(); // required
+                                }
+                            }
+
+                            // Prevent long running operations from getting an exclusive lock
+                            // https://www.sqlite.org/pragma.html#pragma_cache_spill
+                            Log.i("Set PRAGMA cache_spill=0");
+                            try (Cursor cursor = db.query("PRAGMA cache_spill=0;")) {
+                                cursor.moveToNext(); // required
+                            }
+
+                            Log.i("Set PRAGMA recursive_triggers=off");
+                            try (Cursor cursor = db.query("PRAGMA recursive_triggers=off;")) {
+                                cursor.moveToNext(); // required
+                            }
+
+                            // https://www.sqlite.org/pragma.html
+                            for (String pragma : DB_PRAGMAS)
+                                if (!"compile_options".equals(pragma) || BuildConfig.DEBUG) {
+                                    // TODO CASA PRAGMA does not support placeholders
+                                    try (Cursor cursor = db.query("PRAGMA " + pragma + ";")) {
+                                        boolean has = false;
+                                        while (cursor.moveToNext()) {
+                                            has = true;
+                                            Log.i("Get PRAGMA " + pragma + "=" + (cursor.isNull(0) ? "<null>" : cursor.getString(0)));
+                                        }
+                                        if (!has)
+                                            Log.i("Get PRAGMA " + pragma + "=<?>");
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
                                     }
-                                    if (!has)
-                                        Log.i("Get PRAGMA " + pragma + "=<?>");
                                 }
 
-                        if (BuildConfig.DEBUG && false)
-                            dropTriggers(db);
+                            if (BuildConfig.DEBUG && false)
+                                dropTriggers(db);
 
-                        createTriggers(db);
+                            createTriggers(db);
+                        } catch (Throwable ex) {
+                            /*
+                                at eu.faircode.email.DB$6.onOpen(DB.java:522)
+                                at eu.faircode.email.DB_Impl$1.onOpen(DB_Impl.java:171)
+                                at androidx.room.RoomOpenHelper.onOpen(RoomOpenHelper.java:136)
+                                at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.onOpen(FrameworkSQLiteOpenHelper.kt:287)
+                                at android.database.sqlite.SQLiteOpenHelper.getDatabaseLocked(SQLiteOpenHelper.java:427)
+                                at android.database.sqlite.SQLiteOpenHelper.getWritableDatabase(SQLiteOpenHelper.java:316)
+                                at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.getWritableOrReadableDatabase(FrameworkSQLiteOpenHelper.kt:232)
+                                at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.innerGetDatabase(FrameworkSQLiteOpenHelper.kt:190)
+                                at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper$OpenHelper.getSupportDatabase(FrameworkSQLiteOpenHelper.kt:151)
+                                at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper.getWritableDatabase(FrameworkSQLiteOpenHelper.kt:104)
+                                at androidx.room.RoomDatabase.inTransaction(RoomDatabase.java:706)
+                             */
+                            Log.e(ex);
+                            // FrameworkSQLiteOpenHelper.innerGetDatabase will delete the database
+                            throw ex;
+                        }
                     }
 
                     @Override
@@ -560,24 +583,13 @@ public abstract class DB extends RoomDatabase {
     }
 
     private static void createTriggers(@NonNull SupportSQLiteDatabase db) {
-        List<String> image = new ArrayList<>();
-        for (String img : ImageHelper.IMAGE_TYPES)
-            image.add("'" + img + "'");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            for (String img : ImageHelper.IMAGE_TYPES8)
-                image.add("'" + img + "'");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            for (String img : ImageHelper.IMAGE_TYPES12)
-                image.add("'" + img + "'");
-        String images = TextUtils.join(",", image);
-
         db.execSQL("CREATE TRIGGER IF NOT EXISTS attachment_insert" +
                 " AFTER INSERT ON attachment" +
                 " BEGIN" +
                 "  UPDATE message SET attachments = attachments + 1" +
                 "  WHERE message.id = NEW.message" +
                 "  AND NEW.encryption IS NULL" +
-                "  AND NOT ((NEW.disposition = 'inline' OR (NEW.related IS NOT 0 AND NEW.cid IS NOT NULL)) AND NEW.type IN (" + images + "));" +
+                "  AND NOT ((NEW.disposition = 'inline' OR (NEW.related IS NOT 0 AND NEW.cid IS NOT NULL)) AND NEW.type LIKE 'image/%');" +
                 " END");
         db.execSQL("CREATE TRIGGER IF NOT EXISTS attachment_delete" +
                 " AFTER DELETE ON attachment" +
@@ -585,7 +597,7 @@ public abstract class DB extends RoomDatabase {
                 "  UPDATE message SET attachments = attachments - 1" +
                 "  WHERE message.id = OLD.message" +
                 "  AND OLD.encryption IS NULL" +
-                "  AND NOT ((OLD.disposition = 'inline' OR (OLD.related IS NOT 0 AND OLD.cid IS NOT NULL)) AND OLD.type IN (" + images + "));" +
+                "  AND NOT ((OLD.disposition = 'inline' OR (OLD.related IS NOT 0 AND OLD.cid IS NOT NULL)) AND OLD.type LIKE 'image/%');" +
                 " END");
 
         db.execSQL("CREATE TRIGGER IF NOT EXISTS account_update" +
@@ -2279,7 +2291,7 @@ public abstract class DB extends RoomDatabase {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
-                        db.execSQL("ALTER TABLE `log` ADD COLUMN `type` INTEGER NOT NULL DEFAULT " + EntityLog.Type.General.ordinal());
+                        db.execSQL("ALTER TABLE `log` ADD COLUMN `type` INTEGER NOT NULL DEFAULT 0");
                     }
                 }).addMigrations(new Migration(208, 209) {
                     @Override
@@ -2880,6 +2892,22 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `message` ADD COLUMN `write_below` INTEGER");
                     }
+                }).addMigrations(new Migration(285, 286) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        //boolean external_storage = prefs.getBoolean("external_storage", false);
+                        //if (external_storage || BuildConfig.DEBUG)
+                        //    db.execSQL("UPDATE `attachment` SET available = 0");
+                        //prefs.edit().remove("external_storage").apply();
+                    }
+                }).addMigrations(new Migration(286, 287) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `auth` INTEGER");
+                    }
                 }).addMigrations(new Migration(998, 999) {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
@@ -3031,6 +3059,23 @@ public abstract class DB extends RoomDatabase {
 
     public static class Converters {
         @TypeConverter
+        public static long[] toLongArray(String value) {
+            if (TextUtils.isEmpty(value))
+                return new long[0];
+            else {
+                String[] received = TextUtils.split(value, ",");
+                long[] result = new long[received.length];
+                for (int i = 0; i < result.length; i++)
+                    try {
+                        result[i] = Long.parseLong(received[i]);
+                    } catch (NumberFormatException ex) {
+                        Log.e(ex);
+                    }
+                return result;
+            }
+        }
+
+        @TypeConverter
         public static String[] toStringArray(String value) {
             if (value == null)
                 return new String[0];
@@ -3098,6 +3143,8 @@ public abstract class DB extends RoomDatabase {
                     else
                         result.add(InternetAddressJson.from((JSONObject) item));
                 }
+            } catch (JSONException ex) {
+                Log.i(ex);
             } catch (Throwable ex) {
                 // Compose can store invalid addresses
                 Log.w(ex);

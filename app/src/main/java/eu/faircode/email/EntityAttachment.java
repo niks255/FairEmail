@@ -172,7 +172,7 @@ public class EntityAttachment {
     }
 
     static File getFile(Context context, long id, String name) {
-        File dir = Helper.ensureExists(new File(getRoot(context), "attachments"));
+        File dir = getRoot(context);
         String filename = Long.toString(id);
         if (!TextUtils.isEmpty(name))
             filename += "." + Helper.sanitizeFilename(name);
@@ -185,10 +185,13 @@ public class EntityAttachment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean external_storage = prefs.getBoolean("external_storage", false);
 
-        File root = (external_storage
-                ? Helper.getExternalFilesDir(context)
-                : context.getFilesDir());
-        return root;
+        if (external_storage) {
+            File dir = new File(Helper.getExternalFilesDir(context), "attachments");
+            dir.mkdirs();
+            return dir;
+        }
+
+        return Helper.ensureExists(context, "attachments");
     }
 
     static void copy(Context context, long oldid, long newid) {
@@ -387,18 +390,41 @@ public class EntityAttachment {
         File file = getFile(context);
         File zip = new File(file.getAbsolutePath() + ".zip");
 
-        try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
-            try (ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zip)))) {
-                out.setMethod(ZipOutputStream.DEFLATED);
-                out.setLevel(Deflater.BEST_COMPRESSION);
-                ZipEntry entry = new ZipEntry(name);
-                out.putNextEntry(entry);
+        try (ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zip)))) {
+            out.setMethod(ZipOutputStream.DEFLATED);
+            out.setLevel(Deflater.BEST_COMPRESSION);
+            ZipEntry entry = new ZipEntry(name);
+            out.putNextEntry(entry);
+            try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
                 Helper.copy(in, out);
             }
         }
 
         DB db = DB.getInstance(context);
         db.attachment().setName(id, name + ".zip", "application/zip", zip.length());
+        db.attachment().setDownloaded(id, zip.length());
+        Helper.secureDelete(file);
+    }
+
+    void zip(Context context, File[] files) throws IOException {
+        File file = getFile(context);
+        File zip = new File(file.getAbsolutePath() + ".zip");
+
+        try (ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zip)))) {
+            out.setMethod(ZipOutputStream.DEFLATED);
+            out.setLevel(Deflater.BEST_COMPRESSION);
+            for (File f : files) {
+                ZipEntry entry = new ZipEntry(f.getName());
+                out.putNextEntry(entry);
+                try (InputStream in = new BufferedInputStream(new FileInputStream(f))) {
+                    Helper.copy(in, out);
+                }
+            }
+        }
+
+        DB db = DB.getInstance(context);
+        db.attachment().setName(id, name + ".zip", "application/zip", zip.length());
+        db.attachment().setDownloaded(id, zip.length());
         Helper.secureDelete(file);
     }
 

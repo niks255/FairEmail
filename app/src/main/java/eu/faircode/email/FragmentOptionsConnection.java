@@ -81,6 +81,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private ImageButton ibHelp;
     private SwitchCompat swMetered;
     private Spinner spDownload;
+    private SwitchCompat swDownloadLimited;
     private SwitchCompat swRoaming;
     private SwitchCompat swRlah;
     private SwitchCompat swDownloadHeaders;
@@ -95,10 +96,13 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private SwitchCompat swStandaloneVpn;
     private SwitchCompat swTcpKeepAlive;
     private TextView tvTcpKeepAliveHint;
+    private SwitchCompat swSslUpdate;
     private SwitchCompat swSslHarden;
     private SwitchCompat swSslHardenStrict;
     private SwitchCompat swCertStrict;
+    private SwitchCompat swCheckNames;
     private SwitchCompat swOpenSafe;
+    private SwitchCompat swHttpRedirect;
     private SwitchCompat swBouncyCastle;
     private SwitchCompat swFipsMode;
     private ImageButton ibBouncyCastle;
@@ -114,13 +118,16 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private TextView tvNetworkInfo;
 
     private Group grpValidated;
+    private Group grpCustomSsl;
 
     private final static String[] RESET_OPTIONS = new String[]{
-            "metered", "download", "roaming", "rlah",
+            "metered", "download", "download_limited", "roaming", "rlah",
             "download_headers", "download_eml", "download_plain",
             "require_validated", "require_validated_captive", "vpn_only",
             "timeout", "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive",
-            "ssl_harden", "ssl_harden_strict", "cert_strict", "open_safe", "bouncy_castle", "bc_fips"
+            "ssl_update", "ssl_harden", "ssl_harden_strict", "cert_strict", "check_names",
+            "open_safe", "http_redirect",
+            "bouncy_castle", "bc_fips"
     };
 
     @Override
@@ -136,6 +143,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         ibHelp = view.findViewById(R.id.ibHelp);
         swMetered = view.findViewById(R.id.swMetered);
         spDownload = view.findViewById(R.id.spDownload);
+        swDownloadLimited = view.findViewById(R.id.swDownloadLimited);
         swRoaming = view.findViewById(R.id.swRoaming);
         swRlah = view.findViewById(R.id.swRlah);
         swDownloadHeaders = view.findViewById(R.id.swDownloadHeaders);
@@ -150,10 +158,13 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         swStandaloneVpn = view.findViewById(R.id.swStandaloneVpn);
         swTcpKeepAlive = view.findViewById(R.id.swTcpKeepAlive);
         tvTcpKeepAliveHint = view.findViewById(R.id.tvTcpKeepAliveHint);
+        swSslUpdate = view.findViewById(R.id.swSslUpdate);
         swSslHarden = view.findViewById(R.id.swSslHarden);
         swSslHardenStrict = view.findViewById(R.id.swSslHardenStrict);
         swCertStrict = view.findViewById(R.id.swCertStrict);
+        swCheckNames = view.findViewById(R.id.swCheckNames);
         swOpenSafe = view.findViewById(R.id.swOpenSafe);
+        swHttpRedirect = view.findViewById(R.id.swHttpRedirect);
         swBouncyCastle = view.findViewById(R.id.swBouncyCastle);
         swFipsMode = view.findViewById(R.id.swFipsMode);
         ibBouncyCastle = view.findViewById(R.id.ibBouncyCastle);
@@ -171,6 +182,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         tvNetworkInfo = view.findViewById(R.id.tvNetworkInfo);
 
         grpValidated = view.findViewById(R.id.grpValidated);
+        grpCustomSsl = view.findViewById(R.id.grpCustomSsl);
 
         setOptions();
 
@@ -203,6 +215,13 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 prefs.edit().remove("download").apply();
+            }
+        });
+
+        swDownloadLimited.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("download_limited", checked).apply();
             }
         });
 
@@ -329,6 +348,14 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             }
         });
 
+        swSslUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton v, boolean checked) {
+                prefs.edit().putBoolean("ssl_update", checked).commit();
+                ApplicationEx.restart(v.getContext(), "ssl_update");
+            }
+        });
+
         swSslHarden.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -354,10 +381,24 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             }
         });
 
+        swCheckNames.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("check_names", checked).apply();
+            }
+        });
+
         swOpenSafe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("open_safe", checked).apply();
+            }
+        });
+
+        swHttpRedirect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("http_redirect", checked).apply();
             }
         });
 
@@ -502,7 +543,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
                                             tm.checkServerTrusted(x509certs.toArray(new X509Certificate[0]), "UNKNOWN");
                                             sb.append("Peer certificate trusted\n");
                                         } catch (Throwable ex) {
-                                            sb.append(ex.toString()).append('\n');
+                                            sb.append(new ThrowableWrapper(ex).toSafeString()).append('\n');
                                         }
                                     }
                                 } finally {
@@ -548,6 +589,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         FragmentDialogTheme.setBackground(getContext(), view, false);
         tvNetworkMetered.setVisibility(View.GONE);
         tvNetworkRoaming.setVisibility(View.GONE);
+        grpCustomSsl.setVisibility(SSLHelper.customTrustManager() ? View.VISIBLE : View.GONE);
         cardDebug.setVisibility(View.GONE);
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
@@ -635,6 +677,8 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
                     break;
                 }
 
+            swDownloadLimited.setChecked(prefs.getBoolean("download_limited", false));
+
             swRoaming.setChecked(prefs.getBoolean("roaming", true));
             swRlah.setChecked(prefs.getBoolean("rlah", true));
 
@@ -655,11 +699,14 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             swBindSocket.setChecked(prefs.getBoolean("bind_socket", false));
             swStandaloneVpn.setChecked(prefs.getBoolean("standalone_vpn", false));
             swTcpKeepAlive.setChecked(prefs.getBoolean("tcp_keep_alive", false));
+            swSslUpdate.setChecked(prefs.getBoolean("ssl_update", true));
             swSslHarden.setChecked(prefs.getBoolean("ssl_harden", false));
             swSslHardenStrict.setChecked(prefs.getBoolean("ssl_harden_strict", false));
             swSslHardenStrict.setEnabled(swSslHarden.isChecked());
-            swCertStrict.setChecked(prefs.getBoolean("cert_strict", !BuildConfig.PLAY_STORE_RELEASE));
+            swCertStrict.setChecked(prefs.getBoolean("cert_strict", true));
+            swCheckNames.setChecked(prefs.getBoolean("check_names", !BuildConfig.PLAY_STORE_RELEASE));
             swOpenSafe.setChecked(prefs.getBoolean("open_safe", false));
+            swHttpRedirect.setChecked(prefs.getBoolean("http_redirect", true));
             swBouncyCastle.setChecked(prefs.getBoolean("bouncy_castle", false));
             swFipsMode.setChecked(prefs.getBoolean("bc_fips", false));
             swFipsMode.setEnabled(swBouncyCastle.isChecked());

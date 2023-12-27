@@ -1722,21 +1722,25 @@ class Core {
                         long maxSize = prefs.getInt("download", MessageHelper.DEFAULT_DOWNLOAD_SIZE);
                         if (maxSize == 0)
                             maxSize = Long.MAX_VALUE;
+                        boolean download_limited = prefs.getBoolean("download_limited", false);
                         boolean download_eml = prefs.getBoolean("download_eml", false);
 
                         if (!message.content)
-                            if (state.getNetworkState().isUnmetered() || (message.size != null && message.size < maxSize))
+                            if ((!download_limited && state.getNetworkState().isUnmetered()) ||
+                                    (message.size != null && message.size < maxSize))
                                 async = true;
 
                         List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
                         for (EntityAttachment attachment : attachments)
                             if (!attachment.available)
-                                if (state.getNetworkState().isUnmetered() || (attachment.size != null && attachment.size < maxSize))
+                                if ((!download_limited && state.getNetworkState().isUnmetered()) ||
+                                        (attachment.size != null && attachment.size < maxSize))
                                     async = true;
 
                         if (download_eml &&
                                 (message.raw == null || !message.raw) &&
-                                (state.getNetworkState().isUnmetered() || (message.total != null && message.total < maxSize)))
+                                ((!download_limited && state.getNetworkState().isUnmetered()) ||
+                                        (message.total != null && message.total < maxSize)))
                             async = true;
                     }
 
@@ -3127,7 +3131,7 @@ class Core {
     private static void onDownload(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message, IMAPStore istore, IMAPFolder ifolder, State state) throws MessagingException, IOException, JSONException {
         long uid = jargs.getLong(0);
         if (!Objects.equals(uid, message.uid))
-            throw new IllegalArgumentException("Different uid" + uid + "/" + message.uid);
+            throw new IllegalArgumentException("Different uid=" + uid + "/" + message.uid);
 
         MimeMessage imessage = (MimeMessage) ifolder.getMessageByUID(uid);
         downloadMessage(context, account, folder, istore, ifolder, imessage, message.id, state, new SyncStats());
@@ -3205,9 +3209,9 @@ class Core {
             // Get capabilities
             Map<String, String> caps = istore.capabilities();
             boolean hasUidl = caps.containsKey("UIDL");
-            EntityLog.log(context, account.name +
-                    " POP capabilities= " + caps.keySet() +
-                    " uidl=" + account.capability_uidl);
+            String capabilities = TextUtils.join(" ", caps.values());
+            EntityLog.log(context, EntityLog.Type.Protocol, account, capabilities);
+            db.account().setAccountCapabilities(account.id, capabilities, false, false);
 
             if (hasUidl) {
                 if (Boolean.FALSE.equals(account.capability_uidl)) {
@@ -3433,6 +3437,7 @@ class Core {
                         if (message.spf == null && helper.getSPF())
                             message.spf = true;
                         message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
+                        message.auth = MessageHelper.getAuthentication("auth", authentication);
                         message.smtp_from = helper.getMailFrom(authentication);
                         message.return_path = helper.getReturnPath();
                         message.submitter = helper.getSubmitter();
@@ -3822,13 +3827,6 @@ class Core {
             cal_keep.set(Calendar.SECOND, 0);
             cal_keep.set(Calendar.MILLISECOND, 0);
 
-            Calendar cal_keep_unseen = Calendar.getInstance();
-            cal_keep_unseen.add(Calendar.DAY_OF_MONTH, -keep_days * 2);
-            cal_keep_unseen.set(Calendar.HOUR_OF_DAY, 0);
-            cal_keep_unseen.set(Calendar.MINUTE, 0);
-            cal_keep_unseen.set(Calendar.SECOND, 0);
-            cal_keep_unseen.set(Calendar.MILLISECOND, 0);
-
             long sync_time = cal_sync.getTimeInMillis();
             if (sync_time < 0)
                 sync_time = 0;
@@ -3836,10 +3834,6 @@ class Core {
             long keep_time = cal_keep.getTimeInMillis();
             if (keep_time < 0)
                 keep_time = 0;
-
-            long keep_time_unseen = cal_keep_unseen.getTimeInMillis();
-            if (keep_time_unseen < 0)
-                keep_time_unseen = 0;
 
             Log.i(folder.name + " sync=" + new Date(sync_time) + " keep=" + new Date(keep_time));
 
@@ -3859,7 +3853,7 @@ class Core {
                             EntityOperation.queue(context, message, EntityOperation.MOVE, trash.id);
                 }
             } else {
-                int old = db.message().deleteMessagesBefore(folder.id, delete_time, keep_time, keep_time_unseen, delete_unseen);
+                int old = db.message().deleteMessagesBefore(folder.id, delete_time, keep_time, delete_unseen);
                 Log.i(folder.name + " local old=" + old);
             }
 
@@ -4592,6 +4586,7 @@ class Core {
             if (message.spf == null && helper.getSPF())
                 message.spf = true;
             message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
+            message.auth = MessageHelper.getAuthentication("auth", authentication);
             message.smtp_from = helper.getMailFrom(authentication);
             message.return_path = helper.getReturnPath();
             message.submitter = helper.getSubmitter();
@@ -5361,19 +5356,22 @@ class Core {
         long maxSize = prefs.getInt("download", MessageHelper.DEFAULT_DOWNLOAD_SIZE);
         if (maxSize == 0)
             maxSize = Long.MAX_VALUE;
+        boolean download_limited = prefs.getBoolean("download_limited", false);
         boolean download_eml = prefs.getBoolean("download_eml", false);
 
         List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
 
         boolean fetch = false;
         if (!message.content)
-            if (state.getNetworkState().isUnmetered() || (message.size != null && message.size < maxSize))
+            if ((!download_limited && state.getNetworkState().isUnmetered()) ||
+                    (message.size != null && message.size < maxSize))
                 fetch = true;
 
         if (!fetch)
             for (EntityAttachment attachment : attachments)
                 if (!attachment.available)
-                    if (state.getNetworkState().isUnmetered() || (attachment.size != null && attachment.size < maxSize)) {
+                    if ((!download_limited && state.getNetworkState().isUnmetered()) ||
+                            (attachment.size != null && attachment.size < maxSize)) {
                         fetch = true;
                         break;
                     }
@@ -5402,7 +5400,7 @@ class Core {
             MessageHelper.MessageParts parts = helper.getMessageParts();
 
             if (!message.content) {
-                if (state.getNetworkState().isUnmetered() ||
+                if ((!download_limited && state.getNetworkState().isUnmetered()) ||
                         (message.size != null && message.size < maxSize)) {
                     String body = parts.getHtml(context);
                     File file = message.getFile(context);
@@ -5432,7 +5430,7 @@ class Core {
                 if (!attachment.available &&
                         attachment.subsequence == null &&
                         TextUtils.isEmpty(attachment.error))
-                    if (state.getNetworkState().isUnmetered() ||
+                    if ((!download_limited && state.getNetworkState().isUnmetered()) ||
                             (attachment.size != null && attachment.size < maxSize))
                         try {
                             parts.downloadAttachment(context, attachment, folder);
@@ -5446,7 +5444,8 @@ class Core {
 
         if (download_eml &&
                 (message.raw == null || !message.raw) &&
-                (state.getNetworkState().isUnmetered() || (message.total != null && message.total < maxSize))) {
+                ((!download_limited && state.getNetworkState().isUnmetered()) ||
+                        (message.total != null && message.total < maxSize))) {
             File file = message.getRawFile(context);
             try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
                 imessage.writeTo(os);

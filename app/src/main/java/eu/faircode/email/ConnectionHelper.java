@@ -48,8 +48,12 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
+import java.net.Proxy;
+import java.net.ProxySelector;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
@@ -716,8 +720,10 @@ public class ConnectionHelper {
     }
 
     static HttpURLConnection openConnectionUnsafe(Context context, URL url, int ctimeout, int rtimeout) throws IOException {
+        // https://support.google.com/faqs/answer/7188426
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean open_safe = prefs.getBoolean("open_safe", false);
+        boolean http_redirect = prefs.getBoolean("http_redirect", true);
 
         int redirects = 0;
         while (true) {
@@ -747,7 +753,7 @@ public class ConnectionHelper {
             try {
                 int status = urlConnection.getResponseCode();
 
-                if (!open_safe &&
+                if (http_redirect &&
                         (status == HttpURLConnection.HTTP_MOVED_PERM ||
                                 status == HttpURLConnection.HTTP_MOVED_TEMP ||
                                 status == HttpURLConnection.HTTP_SEE_OTHER ||
@@ -905,5 +911,33 @@ public class ConnectionHelper {
         } catch (IOException ex) {
             Log.w(ex);
         }
+    }
+
+    static void setupProxy(Context context) {
+        if (!BuildConfig.DEBUG)
+            return;
+
+        // https://docs.oracle.com/javase/8/docs/technotes/guides/net/proxies.html
+        ProxySelector.setDefault(new ProxySelector() {
+            @Override
+            public List<Proxy> select(URI uri) {
+                // new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("", 0));
+                Log.i("PROXY uri=" + uri);
+                return Arrays.asList(Proxy.NO_PROXY);
+            }
+
+            @Override
+            public void connectFailed(URI uri, SocketAddress sa, IOException ex) {
+                Log.e("PROXY uri=" + uri + " sa=" + sa, ex);
+            }
+        });
+    }
+
+    public static Socket getSocket(String host, int port) {
+        if (BuildConfig.DEBUG) {
+            Proxy proxy = ProxySelector.getDefault().select(URI.create("socket://" + host + ":" + port)).get(0);
+            return new Socket(proxy);
+        } else
+            return new Socket();
     }
 }

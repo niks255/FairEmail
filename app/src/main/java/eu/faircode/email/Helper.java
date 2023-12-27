@@ -1275,7 +1275,7 @@ public class Helper {
         viewFAQ(context, question, true /* Google translate */);
     }
 
-    static void viewFAQ(Context context, int question, boolean english) {
+    private static void viewFAQ(Context context, int question, boolean english) {
         // Redirection is done to prevent text editors from opening the link
         // https://email.faircode.eu/faq -> https://github.com/M66B/FairEmail/blob/master/FAQ.md
         // https://email.faircode.eu/docs -> https://github.com/M66B/FairEmail/tree/master/docs
@@ -1751,7 +1751,7 @@ public class Helper {
         String title = intent.getStringExtra(Intent.EXTRA_TITLE);
         Uri data = intent.getData();
         String type = intent.getType();
-        String fullName = (data == null ? intent.toString() : data.toString());
+        String fullName = (data == null ? intent.toString() : data.getLastPathSegment());
         String extension = (data == null ? null : getExtension(data.getLastPathSegment()));
 
         tvName.setText(title == null ? fullName : title);
@@ -1760,7 +1760,7 @@ public class Helper {
 
         tvType.setText(type);
 
-        tvException.setText(ex == null ? null : ex.toString());
+        tvException.setText(ex == null ? null : new ThrowableWrapper(ex).toSafeString());
         tvException.setVisibility(ex == null ? View.GONE : View.VISIBLE);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
@@ -1787,7 +1787,6 @@ public class Helper {
                         context.startActivity(intent);
                     } catch (Throwable ex) {
                         Log.e(ex);
-                        ToastEx.makeText(context, ex.toString(), Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -2140,7 +2139,7 @@ public class Helper {
         try {
             return view.getContext().getResources().getResourceEntryName(id);
         } catch (Throwable ex) {
-            return ex.toString();
+            return new ThrowableWrapper(ex).toSafeString();
         }
     }
 
@@ -2256,18 +2255,18 @@ public class Helper {
     }
 
     static CharSequence getRelativeDateSpanString(Context context, long millis) {
-        return getRelativeTimeSpanString(context, millis, false, true);
+        return getRelativeTimeSpanString(context, millis, false, true, false);
     }
 
     static CharSequence getRelativeTimeSpanString(Context context, long millis) {
-        return getRelativeTimeSpanString(context, millis, true, false);
+        return getRelativeTimeSpanString(context, millis, true, false, false);
     }
 
-    static CharSequence getRelativeDateTimeSpanString(Context context, long millis) {
-        return getRelativeTimeSpanString(context, millis, true, true);
+    static CharSequence getRelativeDateTimeSpanString(Context context, long millis, boolean condensed) {
+        return getRelativeTimeSpanString(context, millis, true, true, condensed);
     }
 
-    private static CharSequence getRelativeTimeSpanString(Context context, long millis, boolean withTime, boolean withDate) {
+    private static CharSequence getRelativeTimeSpanString(Context context, long millis, boolean withTime, boolean withDate, boolean condensed) {
         Calendar cal0 = Calendar.getInstance();
         Calendar cal1 = Calendar.getInstance();
         cal0.setTimeInMillis(millis);
@@ -2277,7 +2276,9 @@ public class Helper {
         boolean thisDay = (cal0.get(Calendar.DAY_OF_MONTH) == cal1.get(Calendar.DAY_OF_MONTH));
         if (withDate) {
             try {
-                String skeleton = (thisMonth && thisYear ? "MMM-d" : "yyyy-M-d");
+                if (condensed && thisYear && thisMonth && thisDay)
+                    return getTimeInstance(context, SimpleDateFormat.SHORT).format(millis);
+                String skeleton = (thisYear ? "MMM-d" : "yyyy-M-d");
                 if (withTime) {
                     boolean is24Hour = android.text.format.DateFormat.is24HourFormat(context);
                     skeleton += (is24Hour ? " Hm" : " hm");
@@ -2298,11 +2299,16 @@ public class Helper {
     }
 
     static String formatDuration(long ms) {
+        int sign = (ms < 0 ? -1 : 1);
+        ms = Math.abs(ms);
         int days = (int) (ms / (24 * 3600 * 1000L));
         ms = ms % (24 * 3600 * 1000L);
         long seconds = ms / 1000;
         ms = ms % 1000;
-        return (days > 0 ? days + " " : "") + DateUtils.formatElapsedTime(seconds) + "." + ms;
+        return (sign < 0 ? "-" : "") +
+                (days > 0 ? days + " " : "") +
+                DateUtils.formatElapsedTime(seconds) +
+                (ms == 0 ? "" : "." + ms);
     }
 
     static String formatNumber(Integer number, long max, NumberFormat nf) {
@@ -2640,15 +2646,15 @@ public class Helper {
 
     private static final Map<File, Boolean> exists = new HashMap<>();
 
-    static File ensureExists(File dir) {
+    static File ensureExists(Context context, String subdir) {
+        File dir = new File(context.getFilesDir(), subdir);
+        dir.mkdirs();
+
         synchronized (exists) {
             if (exists.containsKey(dir))
                 return dir;
             exists.put(dir, true);
         }
-
-        if (!dir.exists() && !dir.mkdirs())
-            throw new IllegalArgumentException("Failed to create=" + dir);
 
         return dir;
     }
@@ -2848,7 +2854,7 @@ public class Helper {
             if (file.exists()) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                     if (!file.delete())
-                        throw new FileNotFoundException(file.getAbsolutePath());
+                        Log.w("File not found: " + file);
                 } else
                     Files.delete(Paths.get(file.getAbsolutePath()));
             }
@@ -3526,8 +3532,8 @@ public class Helper {
             Runtime.getRuntime().gc();
             try {
                 Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException ex) {
+                Log.e(ex);
             }
         }
     }

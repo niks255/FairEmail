@@ -490,7 +490,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
                                             Intent intent = new Intent(this, ActivityError.class);
                                             intent.setAction("535:" + identity.id);
-                                            intent.putExtra("title", ex.getMessage());
+                                            intent.putExtra("title", new ThrowableWrapper(ex).getSafeMessage());
                                             intent.putExtra("message", Log.formatThrowable(ex, "\n", false));
                                             intent.putExtra("provider", "outlookgraph");
                                             intent.putExtra("account", identity.account);
@@ -777,6 +777,9 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                 if (BuildConfig.DEBUG && false)
                     throw new IOException("Test");
                 db.identity().setIdentityState(ident.id, "connected");
+
+                EntityLog.log(this, EntityLog.Type.Protocol, ident.email + " " +
+                        TextUtils.join(" ", iservice.getCapabilities()));
 
                 max_size = iservice.getMaxSize();
 

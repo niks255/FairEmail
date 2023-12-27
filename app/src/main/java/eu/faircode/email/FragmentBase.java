@@ -540,10 +540,10 @@ public class FragmentBase extends Fragment {
         create.putExtra(Intent.EXTRA_TITLE, attachment.name);
         Helper.openAdvanced(context, create);
         PackageManager pm = context.getPackageManager();
-        if (create.resolveActivity(pm) == null) { // system whitelisted
-            Log.w("SAF missing");
-            ToastEx.makeText(context, R.string.title_no_saf, Toast.LENGTH_LONG).show();
-        } else
+        if (create.resolveActivity(pm) == null) // system whitelisted
+            Log.unexpectedError(getParentFragmentManager(),
+                    new IllegalArgumentException(context.getString(R.string.title_no_saf)), 25);
+        else
             startActivityForResult(Helper.getChooser(context, create), REQUEST_ATTACHMENT);
     }
 
@@ -556,10 +556,10 @@ public class FragmentBase extends Fragment {
         Intent tree = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         Helper.openAdvanced(context, tree);
         PackageManager pm = context.getPackageManager();
-        if (tree.resolveActivity(pm) == null) { // system whitelisted
-            Log.w("SAF missing");
-            ToastEx.makeText(context, R.string.title_no_saf, Toast.LENGTH_LONG).show();
-        } else
+        if (tree.resolveActivity(pm) == null) // system whitelisted
+            Log.unexpectedError(getParentFragmentManager(),
+                    new IllegalArgumentException(context.getString(R.string.title_no_saf)), 25);
+        else
             startActivityForResult(Helper.getChooser(context, tree), REQUEST_ATTACHMENTS);
     }
 
@@ -634,12 +634,10 @@ public class FragmentBase extends Fragment {
                         return;
                     }
 
-                if (ex instanceof IllegalArgumentException ||
+                boolean report = !(ex instanceof IllegalArgumentException ||
                         ex instanceof FileNotFoundException ||
-                        ex instanceof SecurityException)
-                    ToastEx.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                else
-                    Log.unexpectedError(getParentFragmentManager(), ex);
+                        ex instanceof SecurityException);
+                Log.unexpectedError(getParentFragmentManager(), ex, report);
             }
         }.execute(this, args, "attachment:save");
     }
@@ -725,12 +723,10 @@ public class FragmentBase extends Fragment {
                         return;
                     }
 
-                if (ex instanceof IllegalArgumentException ||
+                boolean report = !(ex instanceof IllegalArgumentException ||
                         ex instanceof FileNotFoundException ||
-                        ex instanceof SecurityException)
-                    ToastEx.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                else
-                    Log.unexpectedError(getParentFragmentManager(), ex);
+                        ex instanceof SecurityException);
+                Log.unexpectedError(getParentFragmentManager(), ex, report);
             }
         }.execute(this, args, "attachments:save");
     }
@@ -738,7 +734,7 @@ public class FragmentBase extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void handle(RecoverableSecurityException ex) {
         new AlertDialog.Builder(getContext())
-                .setMessage(ex.getMessage())
+                .setMessage(new ThrowableWrapper(ex).getSafeMessage())
                 .setPositiveButton(ex.getUserAction().getTitle(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

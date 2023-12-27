@@ -866,7 +866,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                         @Override
                         protected void onException(Bundle args, Throwable ex) {
                             if (ex instanceof IllegalStateException) {
-                                Snackbar snackbar = Snackbar.make(parentFragment.getView(), ex.getMessage(), Snackbar.LENGTH_LONG)
+                                Snackbar snackbar = Snackbar.make(parentFragment.getView(), new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                                         .setGestureInsetBottomIgnored(true);
                                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                                     @Override
@@ -878,7 +878,7 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                                 });
                                 snackbar.show();
                             } else if (ex instanceof IllegalArgumentException)
-                                Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                                Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                                         .setGestureInsetBottomIgnored(true).show();
                             else
                                 Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
@@ -1263,7 +1263,8 @@ public class AdapterFolder extends RecyclerView.Adapter<AdapterFolder.ViewHolder
                     Helper.openAdvanced(context, intent);
 
                     if (intent.resolveActivity(context.getPackageManager()) == null) { //  // system/GET_CONTENT whitelisted
-                        ToastEx.makeText(context, R.string.title_no_saf, Toast.LENGTH_LONG).show();
+                        Log.unexpectedError(parentFragment.getParentFragmentManager(),
+                                new IllegalArgumentException(context.getString(R.string.title_no_saf)), 25);
                         return;
                     }
 

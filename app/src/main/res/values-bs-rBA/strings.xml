@@ -103,6 +103,8 @@
         Blokiranje domene pošiljaoca koristi pravila filtriranja, što predstavlja pro funkcionalnost.
     </string>
     <string name="title_blocked_senders">Blokirani pošiljaoci</string>
+    <string name="title_unblock_all">Odblokiraj sve</string>
+    <string name="title_unblock_all_remark">Ovo će resetovati sve liste i opcije za blokiranje pošiljaoca</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Blokirati pošiljaoca %1$s poruke?</item>
         <item quantity="few">Blokirati pošiljaoca %1$s poruke?</item>
@@ -403,7 +405,7 @@
     <string name="title_advanced_answer_hint">Radnje dugmeta za odgovor mogu se podesiti i na kartici postavki za slanje</string>
     <string name="title_advanced_answer_warning">Bez izbornog menija nisu moguće sve radnje!</string>
     <string name="title_advanced_send_pending">Prikaži nenametljivu ikonicu za odgođeno slanje</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">Čuvaj revizije nacrta za vraćanje i ponavljanje radnje</string>
+    <string name="title_advanced_save_revisions">Čuvaj revizije nacrta za vraćanje i ponavljanje radnje</string>
     <string name="title_advanced_auto_save_paragraph">Automatski sačuvaj nacrt nakon svakog paragrafa</string>
     <string name="title_advanced_auto_save_dot">Automatski sačuvaj nacrt nakon svake rečenice</string>
     <string name="title_advanced_compose_color">Zadana boja teksta</string>
@@ -439,6 +441,7 @@
     <string name="title_advanced_lookup_mx">Provjeri e-mail adresu primaoca prije slanja</string>
     <string name="title_advanced_metered">Koristi konekcije \'s ograničenim paketom\'</string>
     <string name="title_advanced_download">Automatski preuzimaj poruke i priloge na mrežama \'s ograničenim paketom\' do</string>
+    <string name="title_advanced_download_limited">Primjeni i na neograničene konekcije</string>
     <string name="title_advanced_roaming">Preuzimaj poruke i priloge u roamingu</string>
     <string name="title_advanced_rlah">Roaming kao u domovini</string>
     <string name="title_advanced_download_headers">Preuzimaj zaglavlja svih poruka</string>
@@ -449,10 +452,13 @@
     <string name="title_advanced_vpn_only">Poveži se samo putem VPN-a</string>
     <string name="title_advanced_timeout">Konekcija na isteku (sekunde)</string>
     <string name="title_advanced_prefer_ip4">Preferiraj IPv4 preko IPv6</string>
+    <string name="title_advanced_ssl_update">Koristi ažurirani SSL provajder</string>
     <string name="title_advanced_ssl_harden">Ojačaj SSL konekcije</string>
     <string name="title_advanced_ssl_harden_strict">Zahtjevaj TLS 1.3</string>
     <string name="title_advanced_cert_strict">Striktna provjera certifikata</string>
+    <string name="title_advanced_check_names">Uporedi imena hosta s onima iz serverskih certifikata</string>
     <string name="title_advanced_open_safe">Otvaraj samo sigurne konekcije</string>
+    <string name="title_advanced_http_redirect">Omogući preusmjeravanje konekcije</string>
     <string name="title_advanced_bouncy_castle">Koristi pružaoca sigurnog priključka od Bouncy Castle-a (JSSE)</string>
     <string name="title_advanced_manage_connectivity">Upravljanje konekcijama</string>
     <string name="title_advanced_caption_general">Općenito</string>
@@ -869,6 +875,7 @@
     <string name="title_advanced_wearable_hint">Obavještenja se šalju samo na nosive uređaje nakon preuzimanja poruke</string>
     <string name="title_advanced_messaging_hint">Ovo je neophodno za podršku Android auta</string>
     <string name="title_advanced_move_hint">Ciljni folder može se podesiti u postavkama računa</string>
+    <string name="title_advanced_notify_sensitive_hint">Zahtijeva onemogućavanje osjetljivih obavještenja u Android postavkama</string>
     <string name="title_advanced_notify_no_grouping">Ova verzija Androida ne podržava grupisanje obavještenja</string>
     <string name="title_advanced_notify_no_channels">Ova verzija Androida ne podržava kanale obavještenja</string>
     <string name="title_advanced_fts_hint">Omogućavanje ovoga poboljšava performanse pretraživanja, ali i povećava potrošnju baterije i korištenje skladišnog prostora</string>
@@ -1023,6 +1030,9 @@
     <string name="title_service_port">Molimo, ponovo provjerite broj porta</string>
     <string name="title_service_protocol">Molimo, ponovo provjerite protokol (SSL/TLS ili STARTTLS)</string>
     <string name="title_service_error10">Ovaj račun treba ponovnu provjeru autentičnosti, što se može učiniti pomoću čarobnjaka brzih postavki</string>
+    <string name="title_certificate_error">        Zbog politika trgovine Google Play, više se ne mogu podržavati nesigurne konekcije na e-mail servere s problematičnim certifikatima, a to važi za verziju FairEmail-a koja se isporučuje na Play trgovini.
+        Stoga, ovaj problem može riješiti jedino vaš e-mail provajder - informacije o navedenoj grešci mogu pomoći vašem provajderu u rješavanju problema.
+    </string>
     <string name="title_advanced_browse">Pretražuj poruke na serveru</string>
     <string name="title_advanced_expand_read">Pri proširivanju, označi poruke kao pročitane</string>
     <string name="title_synchronize_now">Sinhronizuj sada</string>
@@ -1160,6 +1170,8 @@
     <string name="title_importance_low">Niska</string>
     <string name="title_importance_normal">Normalna</string>
     <string name="title_importance_high">Visoka</string>
+    <string name="title_important">Važno</string>
+    <string name="title_unimportant">Nevažno</string>
     <string name="title_search_in_text">Pretraži u tekstu &#8230;</string>
     <string name="title_forward">Proslijedi</string>
     <string name="title_resend">Ponovljeno slanje</string>

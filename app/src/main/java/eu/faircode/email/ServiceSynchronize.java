@@ -135,6 +135,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     static final int DEFAULT_BACKOFF_POWER = 3; // 2^3=8 seconds (totally 8+2x20=48 seconds)
 
+    private static final long MSG_DELAY = 15 * 1000L; // milliseconds
     private static final long BACKUP_DELAY = 30 * 1000L; // milliseconds
     private static final long PURGE_DELAY = 30 * 1000L; // milliseconds
     private static final int QUIT_DELAY = 10; // seconds
@@ -171,7 +172,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "sync_shared_folders",
             "download_headers", "download_eml",
             "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive", // force reconnect
-            "ssl_harden", "ssl_harden_strict", "cert_strict", "bouncy_castle", "bc_fips", // force reconnect
+            "ssl_harden", "ssl_harden_strict", "cert_strict", "check_names", "bouncy_castle", "bc_fips", // force reconnect
             "experiments", "debug", "protocol", // force reconnect
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", // force reconnect
             "keep_alive_poll", "empty_pool", "idle_done", // force reconnect
@@ -737,6 +738,15 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         final TwoStateOwner cowner = new TwoStateOwner(this, "liveSynchronizing");
 
+        final Runnable updateNew = new Runnable() {
+            @Override
+            public void run() {
+                Log.i("Update new messages");
+                cowner.restart();
+                getMainHandler().postDelayed(this, MSG_DELAY);
+            }
+        };
+
         db.folder().liveSynchronizing().observe(this, new Observer<List<TupleFolderSync>>() {
             private List<Long> lastAccounts = new ArrayList<>();
             private List<Long> lastFolders = new ArrayList<>();
@@ -776,10 +786,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         " folders=" + folders.size() +
                         " accounts=" + accounts.size());
 
-                if (syncing == 0)
+                if (syncing == 0) {
+                    getMainHandler().removeCallbacks(updateNew);
                     cowner.start();
-                else
+                } else {
                     cowner.stop();
+                    getMainHandler().postDelayed(updateNew, MSG_DELAY);
+                }
 
                 if (!changed)
                     return;
@@ -1725,6 +1738,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     final boolean capNotify = iservice.hasCapability("NOTIFY");
 
                     String capabilities = TextUtils.join(" ", iservice.getCapabilities());
+                    EntityLog.log(this, EntityLog.Type.Protocol, account, capabilities);
                     if (capabilities.length() > 500)
                         capabilities = capabilities.substring(0, 500) + "...";
 

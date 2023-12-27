@@ -704,7 +704,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 return r.getRest();
         }
 
-        return ex.toString();
+        return new ThrowableWrapper(ex).toSafeString();
     }
 
     private Message[] search(boolean utf8, String[] keywords, IMAPProtocol protocol, State state) throws IOException, MessagingException, ProtocolException {

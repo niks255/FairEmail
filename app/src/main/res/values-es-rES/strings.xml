@@ -388,7 +388,7 @@
     <string name="title_advanced_answer_hint">Las acciones del botón de respuesta también se pueden configurar en la pestaña de configuración de envío</string>
     <string name="title_advanced_answer_warning">¡No todas las acciones son posibles sin un menú de selección!</string>
     <string name="title_advanced_send_pending">Mostrar icono de envío diferido no obtrusivo</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">Guardar revisiones de borradores para deshacer y rehacer</string>
+    <string name="title_advanced_save_revisions">Guardar revisiones de borradores para deshacer y rehacer</string>
     <string name="title_advanced_auto_save_paragraph">Guardar automáticamente un borrador después de cada párrafo</string>
     <string name="title_advanced_auto_save_dot">Guardar automáticamente un borrador después de cada oración</string>
     <string name="title_advanced_compose_color">Color de texto por defecto</string>
@@ -424,6 +424,7 @@
     <string name="title_advanced_lookup_mx">Comprobar direcciones de correo electrónico del destinatario antes de enviar</string>
     <string name="title_advanced_metered">Usar conexiones de uso medido</string>
     <string name="title_advanced_download">Descargar automáticamente mensajes y adjuntos usando conexión de datos hasta</string>
+    <string name="title_advanced_download_limited">Aplicar también a conexiones no medidas</string>
     <string name="title_advanced_roaming">Descargar mensajes y adjuntos en itinerancia</string>
     <string name="title_advanced_rlah">Itinerancia como en casa</string>
     <string name="title_advanced_download_headers">Descargar todos los encabezados de mensajes</string>
@@ -434,10 +435,13 @@
     <string name="title_advanced_vpn_only">Conectar sólo a través de una VPN</string>
     <string name="title_advanced_timeout">Tiempo de espera de conexión (segundos)</string>
     <string name="title_advanced_prefer_ip4">Preferir IPv4 sobre IPv6</string>
+    <string name="title_advanced_ssl_update">Usar proveedor SSL actualizado</string>
     <string name="title_advanced_ssl_harden">Endurecer conexiones SSL</string>
     <string name="title_advanced_ssl_harden_strict">Requerir TLS 1.3</string>
     <string name="title_advanced_cert_strict">Verificación estricta de certificados</string>
+    <string name="title_advanced_check_names">Comprobar nombres de host con certificados de servidor</string>
     <string name="title_advanced_open_safe">Abrir solo conexiones seguras</string>
+    <string name="title_advanced_http_redirect">Permitir redirección de conexión</string>
     <string name="title_advanced_bouncy_castle">Usar Bouncy Castle\'s secure socket provider (JSSE)</string>
     <string name="title_advanced_manage_connectivity">Administrar conectividad</string>
     <string name="title_advanced_caption_general">General</string>
@@ -1008,6 +1012,9 @@
     <string name="title_service_port">Por favor, compruebe el número de puerto</string>
     <string name="title_service_protocol">Por favor, compruebe el protocolo (SSL/TLS o STARTTLS)</string>
     <string name="title_service_error10">Esta cuenta necesita ser autenticada de nuevo, lo que puede hacerse a través del asistente de configuración rápida</string>
+    <string name="title_certificate_error">        Debido a la política de Google Play Store, ya no es posible brindar soporte para conexiones inseguras a servidores de correo con problemas de certificado en la versión de FairEmail distribuida en la Play Store.
+        Por eso, este problema sólo puede ser resuelto por su proveedor de correo - la información de arriba sobre el error puede ayudarle a resolverlo.
+    </string>
     <string name="title_advanced_browse">Explorar mensajes en el servidor</string>
     <string name="title_advanced_expand_read">Marcar mensajes leídos al expandir</string>
     <string name="title_synchronize_now">Sincronizar ahora</string>
@@ -1144,6 +1151,8 @@
     <string name="title_importance_low">Baja</string>
     <string name="title_importance_normal">Normal</string>
     <string name="title_importance_high">Alta</string>
+    <string name="title_important">Importante</string>
+    <string name="title_unimportant">No importante</string>
     <string name="title_search_in_text">Buscar en texto &#8230;</string>
     <string name="title_forward">Reenviar</string>
     <string name="title_resend">Reenviar</string>

@@ -29,7 +29,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.UriPermission;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
@@ -899,7 +898,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 if (checked)
                     prefs.edit()
                             .putLong("protocol_since", new Date().getTime())
-                            .putInt("log_level", android.util.Log.INFO)
                             .apply();
                 else
                     EntityLog.clear(compoundButton.getContext());
@@ -908,7 +906,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
         swLogInfo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+            public void onCheckedChanged(CompoundButton v, boolean checked) {
                 prefs.edit().putInt("log_level", checked ? android.util.Log.INFO : android.util.Log.WARN).apply();
             }
         });
@@ -1094,8 +1092,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean("external_storage", isChecked);
-                if (BuildConfig.DEBUG)
-                    editor.putBoolean("external_storage_message", isChecked);
                 editor.apply();
 
                 Bundle args = new Bundle();
@@ -1114,40 +1110,19 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                 ? Helper.getExternalFilesDir(context)
                                 : context.getFilesDir());
 
-                        File source = Helper.ensureExists(new File(sourceRoot, "attachments"));
-                        File target = Helper.ensureExists(new File(targetRoot, "attachments"));
+                        File source = new File(sourceRoot, "attachments");
+                        File target = new File(targetRoot, "attachments");
+                        source.mkdirs();
+                        target.mkdirs();
 
                         File[] attachments = source.listFiles();
                         if (attachments != null)
                             for (File attachment : attachments) {
                                 File dest = new File(target, attachment.getName());
-                                Log.i("Move " + attachment + " to " + dest);
+                                Log.w("Move " + attachment + " to " + dest);
                                 Helper.copy(attachment, dest);
                                 Helper.secureDelete(attachment);
                             }
-
-                        if (BuildConfig.DEBUG) {
-                            source = Helper.ensureExists(new File(sourceRoot, "messages"));
-                            target = Helper.ensureExists(new File(targetRoot, "messages"));
-                            File[] dirs = source.listFiles();
-                            if (dirs != null)
-                                for (File dir : dirs) {
-                                    File[] messages = dir.listFiles();
-                                    if (messages != null)
-                                        for (File message : messages) {
-                                            String path = dir.getPath();
-                                            path = path.substring(path.lastIndexOf(File.separator));
-                                            File t = new File(target, path);
-                                            if (!t.exists() && !t.mkdir())
-                                                throw new IOException("Could not create dir=" + t);
-                                            File dest = new File(t, message.getName());
-                                            Log.i("Move " + message + " to " + dest);
-                                            Helper.copy(message, dest);
-                                            Helper.secureDelete(message);
-                                        }
-                                    Helper.secureDelete(dir);
-                                }
-                        }
 
                         return (attachments == null ? -1 : attachments.length);
                     }
@@ -1765,7 +1740,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     for (String key : sSystemFontMap.keySet())
                         ssb.append(key).append("\n");
                 } catch (Throwable ex) {
-                    ssb.append(ex.toString());
+                    Log.e(ex);
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1812,7 +1787,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                         files.addAll(Helper.listFiles(context.getCacheDir(), MIN_FILE_SIZE));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                             files.addAll(Helper.listFiles(context.getDataDir(), MIN_FILE_SIZE));
-                        files.addAll(Helper.listFiles(Helper.getExternalFilesDir(context), MIN_FILE_SIZE));
 
                         Collections.sort(files, new Comparator<File>() {
                             @Override
@@ -1833,7 +1807,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                 ? null : context.getDataDir());
                         File filesDir = context.getFilesDir();
                         File cacheDir = context.getCacheDir();
-                        File externalDir = Helper.getExternalFilesDir(context);
 
                         if (dataDir != null)
                             ssb.append("Data: ").append(dataDir.getAbsolutePath()).append("\r\n");
@@ -1841,8 +1814,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                             ssb.append("Files: ").append(filesDir.getAbsolutePath()).append("\r\n");
                         if (cacheDir != null)
                             ssb.append("Cache: ").append(cacheDir.getAbsolutePath()).append("\r\n");
-                        if (externalDir != null)
-                            ssb.append("External: ").append(externalDir.getAbsolutePath()).append("\r\n");
                         ssb.append("\r\n");
 
                         for (File file : files) {
@@ -1933,8 +1904,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                     ssb.append("\n");
                                 }
                             } catch (PackageManager.NameNotFoundException ex) {
-                                ssb.append(ex.toString()).append("\n")
-                                        .append(android.util.Log.getStackTraceString(ex)).append("\n");
+                                Log.e(ex);
                             }
 
                             ssb.append("\n");
@@ -2374,7 +2344,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swEasyCorrect.setChecked(prefs.getBoolean("easy_correct", false));
             swInfra.setChecked(prefs.getBoolean("infra", false));
             swTldFlags.setChecked(prefs.getBoolean("tld_flags", false));
-            swJsonLd.setChecked(prefs.getBoolean("json_ld", !Helper.isPlayStoreInstall()));
+            swJsonLd.setChecked(prefs.getBoolean("json_ld", false));
             swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
             swThreadByRef.setChecked(prefs.getBoolean("thread_byref", true));
             swMdn.setChecked(prefs.getBoolean("mdn", swExperiments.isChecked()));
@@ -2520,7 +2490,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 Log.w(ex);
-                tvSuffixes.setText(ex.toString());
+                tvSuffixes.setText(new ThrowableWrapper(ex).toSafeString());
             }
         }.execute(this, new Bundle(), "suffixes");
     }
@@ -2534,6 +2504,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
             @Override
             protected Spanned onExecute(Context context, Bundle args) throws Throwable {
+                return new SpannableStringBuilderEx();
+/*
                 int start = 0;
                 int dp24 = Helper.dp2pixels(getContext(), 24);
                 SpannableStringBuilder ssb = new SpannableStringBuilderEx();
@@ -2552,13 +2524,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                             info.group = ex.toString();
                     }
 
-                    ssb.append(info.name).append('\n');
+                    ssb.append(info.name).append('\n'); // TODO CASA permission info
                     if (granted)
                         ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
                     start = ssb.length();
 
                     if (info.group != null) {
-                        ssb.append(info.group).append('\n');
+                        ssb.append(info.group).append('\n'); // TODO CASA permission info
                         ssb.setSpan(new IndentSpan(dp24), start, ssb.length(), 0);
                         start = ssb.length();
                     }
@@ -2588,7 +2560,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                                     break;
                             }
 
-                        ssb.append(Integer.toHexString(info.protectionLevel));
+                        ssb.append(Integer.toHexString(info.protectionLevel)); // TODO CASA permission info
 
                         if (info.flags != 0)
                             ssb.append(' ').append(Integer.toHexString(info.flags));
@@ -2602,6 +2574,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 }
 
                 return ssb;
+ */
             }
 
             @Override
@@ -2612,7 +2585,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 Log.w(ex);
-                tvPermissions.setText(ex.toString());
+                tvPermissions.setText(new ThrowableWrapper(ex).toSafeString());
             }
         }.execute(this, new Bundle(), "permissions");
     }

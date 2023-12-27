@@ -909,10 +909,13 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         }, new Callable<Boolean>() {
             @Override
             public Boolean call() {
-                if (!drawerLayout.isLocked(drawerContainer))
-                    drawerLayout.closeDrawer(drawerContainer);
-                onDebugInfo();
-                return true;
+                if (DebugHelper.isAvailable()) {
+                    if (!drawerLayout.isLocked(drawerContainer))
+                        drawerLayout.closeDrawer(drawerContainer);
+                    onDebugInfo();
+                    return true;
+                } else
+                    return false;
             }
         }).setExternal(true));
 
@@ -1502,7 +1505,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         new SimpleTask<Long>() {
             @Override
             protected Long onExecute(Context context, Bundle args) throws Throwable {
-                File file = new File(context.getFilesDir(), "crash.log");
+                File file = new File(context.getFilesDir(), DebugHelper.CRASH_LOG_NAME);
                 if (file.exists()) {
                     StringBuilder sb = new StringBuilder();
                     try {
@@ -1512,7 +1515,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                                 sb.append(line).append("\r\n");
                         }
 
-                        return Log.getDebugInfo(context, "crash", R.string.title_crash_info_remark, null, sb.toString(), null).id;
+                        EntityMessage m = DebugHelper.getDebugInfo(context,
+                                "crash", R.string.title_crash_info_remark, null, sb.toString(), null);
+                        return (m == null ? null : m.id);
                     } finally {
                         Helper.secureDelete(file);
                     }
@@ -1523,11 +1528,12 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
             @Override
             protected void onExecuted(Bundle args, Long id) {
-                if (id != null)
-                    startActivity(
-                            new Intent(ActivityView.this, ActivityCompose.class)
-                                    .putExtra("action", "edit")
-                                    .putExtra("id", id));
+                if (id == null)
+                    return;
+                startActivity(
+                        new Intent(ActivityView.this, ActivityCompose.class)
+                                .putExtra("action", "edit")
+                                .putExtra("id", id));
             }
 
             @Override
@@ -1535,7 +1541,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 ToastEx.makeText(ActivityView.this,
                         Log.formatThrowable(ex, false), Toast.LENGTH_LONG).show();
             }
-        }.execute(this, new Bundle(), "crash:log");
+        }.execute(this, new Bundle(), DebugHelper.CRASH_LOG_NAME);
     }
 
     private void checkUpdate(boolean always) {
@@ -1765,11 +1771,10 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (args.getBoolean("always"))
-                    if (ex instanceof IllegalArgumentException || ex instanceof IOException)
-                        ToastEx.makeText(ActivityView.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                    else
-                        Log.unexpectedError(getSupportFragmentManager(), ex);
+                if (args.getBoolean("always")) {
+                    boolean report = !(ex instanceof IllegalArgumentException || ex instanceof IOException);
+                    Log.unexpectedError(getSupportFragmentManager(), ex, report);
+                }
             }
         }.execute(this, args, "update:check");
     }
@@ -2278,14 +2283,17 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             protected Long onExecute(Context context, Bundle args) throws IOException, JSONException {
                 boolean send = args.getBoolean("send");
 
-                long id = Log.getDebugInfo(context, "main", R.string.title_debug_info_remark, null, null, args).id;
+                EntityMessage m = DebugHelper.getDebugInfo(context,
+                        "main", R.string.title_debug_info_remark, null, null, args);
+                if (m == null)
+                    return null;
 
                 if (send) {
                     DB db = DB.getInstance(context);
                     try {
                         db.beginTransaction();
 
-                        EntityMessage draft = db.message().getMessage(id);
+                        EntityMessage draft = db.message().getMessage(m.id);
                         if (draft != null) {
                             draft.folder = EntityFolder.getOutbox(context).id;
                             db.message().updateMessage(draft);
@@ -2302,11 +2310,14 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     }
                 }
 
-                return id;
+                return m.id;
             }
 
             @Override
             protected void onExecuted(Bundle args, Long id) {
+                if (id == null)
+                    return;
+
                 boolean sent = args.getBoolean("sent");
                 if (sent) {
                     ToastEx.makeText(ActivityView.this, R.string.title_debug_info_send, Toast.LENGTH_LONG).show();
@@ -2323,10 +2334,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof IllegalArgumentException)
-                    ToastEx.makeText(ActivityView.this, ex.getMessage(), Toast.LENGTH_LONG).show();
-                else
-                    Log.unexpectedError(getSupportFragmentManager(), ex);
+                boolean report = !(ex instanceof IllegalArgumentException);
+                Log.unexpectedError(getSupportFragmentManager(), ex, report);
             }
 
         }.execute(this, args, "debug:info");

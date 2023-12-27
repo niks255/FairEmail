@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -469,30 +470,7 @@ public class XCalDocument {
 	 * @throws TransformerException if there's a problem writing to the writer
 	 */
 	public void write(Writer writer, Map<String, String> outputProperties) throws TransformerException {
-		Transformer transformer;
-		try {
-			transformer = TransformerFactory.newInstance().newTransformer();
-		} catch (TransformerConfigurationException e) {
-			//should never be thrown because we're not doing anything fancy with the configuration
-			throw new RuntimeException(e);
-		} catch (TransformerFactoryConfigurationError e) {
-			//should never be thrown because we're not doing anything fancy with the configuration
-			throw new RuntimeException(e);
-		}
-
-		/*
-		 * Using Transformer#setOutputProperties(Properties) doesn't work for
-		 * some reason for setting the number of indentation spaces.
-		 */
-		for (Map.Entry<String, String> entry : outputProperties.entrySet()) {
-			String key = entry.getKey();
-			String value = entry.getValue();
-			transformer.setOutputProperty(key, value);
-		}
-
-		DOMSource source = new DOMSource(document);
-		StreamResult result = new StreamResult(writer);
-		transformer.transform(source, result);
+		throw new RuntimeException("Removed");
 	}
 
 	@Override

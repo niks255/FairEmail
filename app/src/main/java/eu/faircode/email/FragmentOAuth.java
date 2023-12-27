@@ -85,13 +85,13 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import javax.mail.AuthenticationFailedException;
@@ -140,6 +140,7 @@ public class FragmentOAuth extends FragmentBase {
     private Group grpError;
 
     private static final String FAIREMAIL_RANDOM = "fairemail.random";
+    private static final String FAIREMAIL_EXPIRE = "fairemail.expire";
     private static final int MAILRU_TIMEOUT = 20 * 1000; // milliseconds
 
     @Override
@@ -424,12 +425,14 @@ public class FragmentOAuth extends FragmentBase {
                     Uri.parse(authorizationEndpoint),
                     Uri.parse(tokenEndpoint));
 
-            int random = Math.abs(new Random().nextInt());
+            int random = Math.abs(new SecureRandom().nextInt());
+            long expire = new Date().getTime() + 10 * 60 * 1000L;
             AuthState authState = new AuthState(serviceConfig);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String key = "oauth." + provider.id + (graph ? ":graph" : "");
             JSONObject jauthstate = authState.jsonSerialize();
             jauthstate.put(FAIREMAIL_RANDOM, random);
+            jauthstate.put(FAIREMAIL_EXPIRE, expire);
             prefs.edit().putString(key, jauthstate.toString()).apply();
 
             Map<String, String> params = (oauth.parameters == null
@@ -549,11 +552,15 @@ public class FragmentOAuth extends FragmentBase {
             String json = prefs.getString(key, null);
             JSONObject jauthstate = new JSONObject(json);
             int random = jauthstate.optInt(FAIREMAIL_RANDOM, -1);
+            long expire = jauthstate.optLong(FAIREMAIL_EXPIRE, -1);
             jauthstate.remove(FAIREMAIL_RANDOM);
             prefs.edit().remove("oauth." + auth.state).apply();
+            long now = new Date().getTime();
 
             if (random != returnedRandom)
                 throw new SecurityException("random " + random + " <> " + returnedRandom);
+            if (expire < now)
+                throw new SecurityException("Session expired " + new Date(expire) + " < " + new Date(now));
 
             final AuthState authState = AuthState.jsonDeserialize(jauthstate);
 
@@ -1085,7 +1092,7 @@ public class FragmentOAuth extends FragmentBase {
             return;
 
         if (ex instanceof IllegalArgumentException)
-            tvError.setText(ex.getMessage());
+            tvError.setText(new ThrowableWrapper(ex).getSafeMessage());
         else
             tvError.setText(Log.formatThrowable(ex, false));
 

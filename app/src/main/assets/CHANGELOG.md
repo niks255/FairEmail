@@ -6,6 +6,77 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Wintonotitan](https://en.wikipedia.org/wiki/Wintonotitan)
 
+### 1.2144 - 2023-12-27
+
+* Using [Brave browser lists](https://github.com/brave/adblock-lists/tree/master/brave-lists) to filter URLs
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2143 - 2023-12-22
+
+* Fixed searching in single folder
+* Added button to unblock all
+* Added importance to swipe-ask popup menu
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2142 - 2023-12-20
+
+* Fixed performance issues
+* Restored storing attachments on external storage
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2141 - 2023-12-19
+
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2140 - 2023-12-17
+
+* Fixed sometimes failing biometric authentication
+* Switched to [tinylog](https://tinylog.org/v2/)
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2139 - 2023-12-13
+
+* Enabled TLSv1.3 by default
+* Added option to limit download size also for unmetered connections
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2138 - 2023-12-12
+
+* Fixed *No protocols enabled* error
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2137 - 2023-12-12
+
+* Optimized database for storing many messages
+* Automatically update [SSL provider](https://developer.android.com/privacy-and-security/security-gms-provider)
+* Removed custom trust manager to comply with Play Store policies (Play Store version only)
+* Removed external storage option of attachments to comply with Play Store policies (all versions)
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2136 - 2023-12-07
+
+* Preventing [XML external entity injection](https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2135 - 2023-12-04
+
+* Added swipe action to change importance
+* Added group headings for important and unimportant messages
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2134 - 2023-12-02
 
 * Fixed clearing settings values

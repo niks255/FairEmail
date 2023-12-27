@@ -92,6 +92,8 @@
         Göndərən domenini əngəlləmə pro özəllik olan filtr qaydalarını istifadə edir.
     </string>
     <string name="title_blocked_senders">Əngəllənən göndərənlər</string>
+    <string name="title_unblock_all">Hamısını əngəldən çıxart</string>
+    <string name="title_unblock_all_remark">Bu, göndərənlərin əngəllənməsi ilə nəticənə biləcək bütün siyahıları və seçimləri sıfırlayacaq</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">%1$s mesajı göndərən əngəllənsin?</item>
         <item quantity="other">%1$s mesajı göndərən əngəllənsin?</item>
@@ -389,7 +391,7 @@
     <string name="title_advanced_answer_hint">Cavab düyməsi əməliyyatları, göndərmə ayarları vərəq səhifəsində də konfiqurasiya edilə bilər</string>
     <string name="title_advanced_answer_warning">Bir seçim menyusu olmadan bütün əməliyyatlar mümkün deyil!</string>
     <string name="title_advanced_send_pending">Narahat edici olmayan gecikməli göndərmə nişanını göstər</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">Geri al və təkrar et üçün qaralama təftişlərini saxla</string>
+    <string name="title_advanced_save_revisions">Geri al və təkrar et üçün qaralama təftişlərini saxla</string>
     <string name="title_advanced_auto_save_paragraph">Qaralamanı hər paraqrafdan sonra avtomatik saxla</string>
     <string name="title_advanced_auto_save_dot">Cümləni hər paraqrafdan sonra avtomatik saxla</string>
     <string name="title_advanced_compose_color">İlkin mətn rəngi</string>
@@ -425,6 +427,7 @@
     <string name="title_advanced_lookup_mx">Göndərməzdən əvvəl alıcı e-poçt ünvanlarını yoxla</string>
     <string name="title_advanced_metered">Ölçülmüş bağlantıları istifadə et</string>
     <string name="title_advanced_download">Mesajları və qoşmaları ölçülmüş bağlantıda avtomatik endir</string>
+    <string name="title_advanced_download_limited">Ölçülməyən bağlantılara da tətbiq et</string>
     <string name="title_advanced_roaming">Roaminqdə olarkən mesajları və qoşmaları endir</string>
     <string name="title_advanced_rlah">Evdə olduğu kimi gəz</string>
     <string name="title_advanced_download_headers">Bütün mesaj başlıqlarını endir</string>
@@ -435,10 +438,13 @@
     <string name="title_advanced_vpn_only">Yalnız VPN vasitəsilə bağlantı qurun</string>
     <string name="title_advanced_timeout">Bağlantı bitmə vaxtı (saniyə)</string>
     <string name="title_advanced_prefer_ip4">IPv6 əvəzinə IPv4 tərcih et</string>
+    <string name="title_advanced_ssl_update">Güncəl SSL provayderini istifadə et</string>
     <string name="title_advanced_ssl_harden">SSL bağlantılarını sağlam et</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 tələb et</string>
     <string name="title_advanced_cert_strict">Ciddi sertifikat yoxlanışı</string>
+    <string name="title_advanced_check_names">Host adlarını server sertifikatlarına görə yoxla</string>
     <string name="title_advanced_open_safe">Yalnız güvənli bağlantıları aç</string>
+    <string name="title_advanced_http_redirect">Bağlantının təkrar yönləndirilməsinə icazə ver</string>
     <string name="title_advanced_bouncy_castle">\"Bouncy Castle\"ın güvənlik socket provayderini istifadə et (JSSE)</string>
     <string name="title_advanced_manage_connectivity">Bağlantını idarə et</string>
     <string name="title_advanced_caption_general">Ümumi</string>
@@ -855,6 +861,7 @@
     <string name="title_advanced_wearable_hint">Bildirişlər, yalnız mesaj mətni endiriləndən sonra geyinilə bilən cihazlara göndərilir</string>
     <string name="title_advanced_messaging_hint">Bu, Android Auto dəstəyi üçün tələb olunur</string>
     <string name="title_advanced_move_hint">Hədəf qovluq, hesab ayarlarında konfiqurasiya edilə bilər</string>
+    <string name="title_advanced_notify_sensitive_hint">Android ayarlarında həssas bildirişlərin sıradan çıxarılmasını tələb edir</string>
     <string name="title_advanced_notify_no_grouping">Bu Android versiyası bildiriş qruplaşdırmasını dəstəkləmir</string>
     <string name="title_advanced_notify_no_channels">Bu Android versiyası bildiriş kanallarını dəstəkləmir</string>
     <string name="title_advanced_fts_hint">Bunu fəallaşdırmaq, axtarış performansını yaxşılaşdırır, ancaq batareya və anbar sahəsinin istifadəsini də artırır</string>
@@ -1009,6 +1016,9 @@
     <string name="title_service_port">Zəhmət olmasa port nömrəsini iki dəfə yoxlayın</string>
     <string name="title_service_protocol">Zəhmət olmasa protokolu iki dəfə yoxlayın (SSL/TLS və ya STARTTLS)</string>
     <string name="title_service_error10">Bu hesabın kimliyi yenidən doğrulanmalıdır, cəld quraşdırma sehrbazı vasitəsilə həyata keçirilə bilər</string>
+    <string name="title_certificate_error">        Google-un Play Store siyasətlərinə görə, Play Store-da paylaşdırılmış FairEmail versiyası üçün sertifikat proflemləri olan e-poçt serverlərinə göndərilən güvənli olmayan bağlantıların dəstəklənməsi artıq mümkün deyil.
+        Buna görə də, bu problem yalnız e-poçt provayderiniz tərəfindən həll edilə bilər - yuxarıdakı xəta məlumatları bu problemi həll etməyə kömək edə bilər.
+    </string>
     <string name="title_advanced_browse">Serverdəki mesajlara nəzər yetir</string>
     <string name="title_advanced_expand_read">Genişləndirəndə mesajları oxundu kimi işarələ</string>
     <string name="title_synchronize_now">İndi sinxronlaşdır</string>
@@ -1146,6 +1156,8 @@
     <string name="title_importance_low">Aşağı</string>
     <string name="title_importance_normal">Normal</string>
     <string name="title_importance_high">Yüksək</string>
+    <string name="title_important">Vacib</string>
+    <string name="title_unimportant">Vacib olmayan</string>
     <string name="title_search_in_text">Mətndə axtar &#8230;</string>
     <string name="title_forward">Yönləndir</string>
     <string name="title_resend">Təkrar göndər</string>

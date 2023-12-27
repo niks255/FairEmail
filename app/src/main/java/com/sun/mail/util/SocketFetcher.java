@@ -312,20 +312,13 @@ public class SocketFetcher {
 	    } else {
 				SocketFactory f = (SocketFactory) props.get("fairemail.factory");
 				eu.faircode.email.Log.i("Using socket factory=" + f);
-				socket = (f == null ? new Socket() : f.createSocket());
+				socket = (f == null ? eu.faircode.email.ConnectionHelper.getSocket(host, port) : f.createSocket());
 	    }
 	}
 	if (to >= 0) {
 	    if (logger.isLoggable(Level.FINEST))
 		logger.finest("set socket read timeout " + to);
 	    socket.setSoTimeout(to);
-	}
-	int writeTimeout = PropUtil.getIntProperty(props,
-						prefix + ".writetimeout", -1);
-	if (writeTimeout != -1) {	// wrap original
-	    if (logger.isLoggable(Level.FINEST))
-		logger.finest("set socket write timeout " + writeTimeout);
-	    socket = new WriteTimeoutSocket(socket, writeTimeout);
 	}
 	if (localaddr != null)
 	    socket.bind(new InetSocketAddress(localaddr, localport));
@@ -383,7 +376,7 @@ public class SocketFetcher {
 		ssf = (SSLSocketFactory)sf;
 	    else
 		ssf = (SSLSocketFactory)SSLSocketFactory.getDefault();
-	    socket = ssf.createSocket(socket, host, port, true);
+	    socket = ssf.createSocket(WriteTimeoutSocket.unwrap(socket), host, port, true);
 	    sf = ssf;
 	}
 
@@ -393,7 +386,7 @@ public class SocketFetcher {
 	 */
 	configureSSLSocket(socket, host, props, prefix, sf);
 
-	return socket;
+	return WriteTimeoutSocket.wrap(socket, props, prefix, logger);
     }
 
     /**
@@ -543,7 +536,7 @@ public class SocketFetcher {
 		}
 	    }
 
-	    socket = ssf.createSocket(socket, host, port, true);
+	    socket = ssf.createSocket(WriteTimeoutSocket.unwrap(socket), host, port, true);
 	    configureSSLSocket(socket, host, props, prefix, ssf);
 	} catch (Exception ex) {
 	    if (ex instanceof InvocationTargetException) {
@@ -563,7 +556,7 @@ public class SocketFetcher {
 	    ioex.initCause(ex);
 	    throw ioex;
 	}
-	return socket;
+	return WriteTimeoutSocket.wrap(socket, props, prefix, logger);
     }
 
     /**

@@ -540,7 +540,8 @@ public class FragmentContacts extends FragmentBase {
             open.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             open.setType("*/*");
             if (open.resolveActivity(pm) == null)  // system whitelisted
-                ToastEx.makeText(context, R.string.title_no_saf, Toast.LENGTH_LONG).show();
+                Log.unexpectedError(getParentFragmentManager(),
+                        new IllegalArgumentException(context.getString(R.string.title_no_saf)), 25);
             else
                 startActivityForResult(Helper.getChooser(context, open), REQUEST_IMPORT);
         }
@@ -819,10 +820,8 @@ public class FragmentContacts extends FragmentBase {
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                if (ex instanceof IllegalArgumentException)
-                    ToastEx.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                else
-                    Log.unexpectedError(getParentFragmentManager(), ex);
+                boolean report = !(ex instanceof IllegalArgumentException);
+                Log.unexpectedError(getParentFragmentManager(), ex, report);
             }
         }.execute(this, args, "contacts:name");
     }

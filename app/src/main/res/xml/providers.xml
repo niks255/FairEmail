@@ -472,16 +472,16 @@
             starttls="false" />
     </provider>
     <provider
-        name="infomaniak"
-        link="https://www.infomaniak.com/fr/support/faq/1075/configurer-une-adresse-email-configuration-logiciel-de-messagerie-parametres-courrier">
+        name="Infomaniak"
+        link="https://www.infomaniak.com/fr/support/faq/search?q=imap">
         <imap
             host="mail.infomaniak.com"
             port="993"
             starttls="false" />
         <smtp
             host="mail.infomaniak.com"
-            port="587"
-            starttls="true" />
+            port="465"
+            starttls="false" />
     </provider>
     <provider
         name="gmx.com"
@@ -2182,6 +2182,19 @@
             starttls="false" />
         <smtp
             host="smtp.braxmail.net"
+            port="587"
+            starttls="true" />
+    </provider>
+    <provider
+        name="OK.de"
+        documentation="Wichtig! Voraussetzung für den Zugriff mit externen E-Mail-Clients ist die &lt;a href='https://kb.ok.de/de/support/solutions/articles/48001237314'&gt;Aktivierung von IMAP/POP-Zugriff&lt;/a&gt;."
+        domain="ok\\.de">
+        <imap
+            host="imap.ok.de"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.ok.de"
             port="587"
             starttls="true" />
     </provider>

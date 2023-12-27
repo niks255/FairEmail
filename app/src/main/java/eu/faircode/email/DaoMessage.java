@@ -51,8 +51,8 @@ public interface DaoMessage {
             ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, NULL AS folderInheritedType, folder.unified AS folderUnified, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.color AS identityColor, identity.synchronize AS identitySynchronize" +
-            ", '[' || group_concat(message.`from`, ',') || ']' AS senders" +
-            ", '[' || group_concat(message.`to`, ',') || ']' AS recipients" +
+            ", '[' || substr(group_concat(message.`from`, ','), 0, 2048) || ']' AS senders" +
+            ", '[' || substr(group_concat(message.`to`, ','), 0, 2048) || ']' AS recipients" +
             ", COUNT(message.id) AS count" +
             ", SUM(1 - message.ui_seen) AS unseen" +
             ", SUM(1 - message.ui_flagged) AS unflagged" +
@@ -130,8 +130,8 @@ public interface DaoMessage {
             ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, f.inherited_type AS folderInheritedType, folder.unified AS folderUnified, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.color AS identityColor, identity.synchronize AS identitySynchronize" +
-            ", '[' || group_concat(message.`from`, ',') || ']' AS senders" +
-            ", '[' || group_concat(message.`to`, ',') || ']' AS recipients" +
+            ", '[' || substr(group_concat(message.`from`, ','), 0, 2048) || ']' AS senders" +
+            ", '[' || substr(group_concat(message.`to`, ','), 0, 2048) || ']' AS recipients" +
             ", COUNT(message.id) AS count" +
             ", SUM(1 - message.ui_seen) AS unseen" +
             ", SUM(1 - message.ui_flagged) AS unflagged" +
@@ -292,7 +292,9 @@ public interface DaoMessage {
 
     static String FTS_STATS = "SELECT SUM(fts) AS fts, COUNT(*) AS total FROM message" +
             " JOIN folder_view AS folder ON folder.id = message.folder" +
+            " JOIN account_view AS account ON account.id = message.account" +
             " WHERE content" +
+            " AND account.synchronize" +
             " AND folder.type <> '" + EntityFolder.OUTBOX + "'";
 
     @Query(FTS_STATS)
@@ -334,7 +336,9 @@ public interface DaoMessage {
     @Transaction
     @Query("SELECT message.id FROM message" +
             " JOIN folder_view AS folder ON folder.id = message.folder" +
+            " JOIN account_view AS account ON account.id = message.account" +
             " WHERE NOT fts" +
+            " AND account.synchronize" +
             " AND folder.type <> '" + EntityFolder.OUTBOX + "'" +
             " ORDER BY message.received")
     Cursor getMessageFts();
@@ -384,7 +388,7 @@ public interface DaoMessage {
             " FROM message" +
             " WHERE content" +
             " ORDER BY message.received DESC")
-    List<Long> getMessageWithContent();
+    Cursor getMessageWithContent();
 
     @Query("SELECT message.id" +
             " FROM message" +
@@ -1019,11 +1023,11 @@ public interface DaoMessage {
             " WHERE folder = :folder" +
             " AND received < :keep_time" +
             " AND NOT uid IS NULL" +
-            " AND (ui_seen OR received < :keep_time_unseen OR :unseen)" +
+            " AND (ui_seen OR :unseen)" +
             " AND NOT ui_flagged" +
             " AND stored < :sync_time" + // moved, browsed
             " AND (ui_snoozed IS NULL OR ui_snoozed = " + Long.MAX_VALUE + ")")
-    int deleteMessagesBefore(long folder, long sync_time, long keep_time, long keep_time_unseen, boolean unseen);
+    int deleteMessagesBefore(long folder, long sync_time, long keep_time, boolean unseen);
 
     @Transaction
     @Query("DELETE FROM message" +

@@ -26,9 +26,12 @@ import android.util.Base64;
 import android.webkit.URLUtil;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.net.MailTo;
 import androidx.core.util.PatternsCompat;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -37,11 +40,14 @@ import java.io.InputStreamReader;
 import java.net.IDN;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UriHelper {
     // https://publicsuffix.org/
@@ -76,13 +82,13 @@ public class UriHelper {
 
             "kclickid", // https://support.freespee.com/hc/en-us/articles/202577831-Kenshoo-integration
 
-            // https://github.com/brave/brave-core/blob/master/browser/net/brave_site_hacks_network_delegate_helper.cc
             "oly_anon_id", "oly_enc_id", // https://training.omeda.com/knowledge-base/olytics-product-outline/
             "_openstat", // https://yandex.com/support/direct/statistics/url-tags.html
             "vero_conv", "vero_id", // https://help.getvero.com/cloud/articles/what-is-vero_id/
             "wickedid", // https://help.wickedreports.com/how-to-manually-tag-a-facebook-ad-with-wickedid
             "yclid", // https://ads-help.yahoo.co.jp/yahooads/ss/articledetail?lan=en&aid=20442
             "__s", // https://ads-help.yahoo.co.jp/yahooads/ss/articledetail?lan=en&aid=20442
+            "guccounter", "guce_referrer", "guce_referrer_sig", // Yahoo
             "rb_clickid", // Russian
             "s_cid", // https://help.goacoustic.com/hc/en-us/articles/360043311613-Track-lead-sources
             "ml_subscriber", "ml_subscriber_hash", // https://www.mailerlite.com/help/how-to-integrate-your-forms-to-a-wix-website
@@ -259,7 +265,7 @@ public class UriHelper {
         }
     }
 
-    static Uri sanitize(Uri uri) {
+    static Uri sanitize(Context context, Uri uri) {
         if (uri.isOpaque())
             return uri;
 
@@ -328,24 +334,27 @@ public class UriHelper {
         } else if (uri.getHost() != null && uri.getHost().endsWith(".awstrack.me")) {
             // https://docs.aws.amazon.com/ses/latest/dg/configure-custom-open-click-domains.html
             String path = uri.getPath();
-            int s = path.indexOf('/', 1);
+            int s = (path == null ? -1 : path.indexOf('/', 1));
             Uri result = (s > 0 ? Uri.parse(path.substring(s + 1)) : null);
             changed = (result != null && isHyperLink(result));
             url = (changed ? result : uri);
-        } else if (uri.getQueryParameter("redirectUrl") != null) {
-            // https://.../link-tracker?redirectUrl=<base64>&sig=...&iat=...&a=...&account=...&email=...&s=...&i=...
-            Uri result = null;
-            try {
-                byte[] bytes = Base64.decode(uri.getQueryParameter("redirectUrl"), Base64.URL_SAFE);
-                String u = URLDecoder.decode(new String(bytes), StandardCharsets.UTF_8.name());
-                result = Uri.parse(u);
-            } catch (Throwable ex) {
-                Log.i(ex);
-            }
+        } else {
+            Uri result = getBraveDebounce(context, uri);
+
+            if (result == null &&
+                    uri.getQueryParameter("redirectUrl") != null)
+                // https://.../link-tracker?redirectUrl=<base64>&sig=...&iat=...&a=...&account=...&email=...&s=...&i=...
+                try {
+                    byte[] bytes = Base64.decode(uri.getQueryParameter("redirectUrl"), Base64.URL_SAFE);
+                    String u = URLDecoder.decode(new String(bytes), StandardCharsets.UTF_8.name());
+                    result = Uri.parse(u);
+                } catch (Throwable ex) {
+                    Log.i(ex);
+                }
+
             changed = (result != null && isHyperLink(result));
             url = (changed ? result : uri);
-        } else
-            url = uri;
+        }
 
         if (!changed) {
             // Sophos Email Appliance
@@ -401,6 +410,9 @@ public class UriHelper {
             host = host.toLowerCase(Locale.ROOT);
         if (path != null)
             path = path.toLowerCase(Locale.ROOT);
+
+        List<String> clean = getBraveClean(context, url);
+
         boolean first = "www.facebook.com".equals(host);
         for (String key : url.getQueryParameterNames()) {
             // https://en.wikipedia.org/wiki/UTM_parameters
@@ -414,14 +426,15 @@ public class UriHelper {
                             FACEBOOK_WHITELIST_PATH.contains(path) &&
                             !FACEBOOK_WHITELIST_QUERY.contains(lkey)) ||
                     ("store.steampowered.com".equals(host) &&
-                            "snr".equals(lkey)))
+                            "snr".equals(lkey)) ||
+                    (clean != null && clean.contains(key)))
                 changed = true;
             else if (!TextUtils.isEmpty(key))
                 for (String value : url.getQueryParameters(key)) {
                     Log.i("Query " + key + "=" + value);
                     Uri suri = Uri.parse(value);
                     if (suri != null && isHyperLink(suri)) {
-                        Uri s = sanitize(suri);
+                        Uri s = sanitize(context, suri);
                         return (s == null ? suri : s);
                     }
                     builder.appendQueryParameter(key, value);
@@ -430,6 +443,114 @@ public class UriHelper {
         }
 
         return (changed ? builder.build() : null);
+    }
+
+    @Nullable
+    private static List<String> getBraveClean(Context context, Uri uri) {
+        // https://github.com/brave/adblock-lists/blob/master/brave-lists/clean-urls.json
+        try (InputStream is = context.getAssets().open("clean-urls.json")) {
+            String json = Helper.readStream(is);
+            JSONArray jclean = new JSONArray(json);
+            for (int i = 0; i < jclean.length(); i++) {
+                JSONObject jitem = jclean.getJSONObject(i);
+                JSONArray jinclude = jitem.getJSONArray("include");
+                JSONArray jexclude = jitem.getJSONArray("exclude");
+
+                boolean include = false;
+                for (int j = 0; j < jinclude.length(); j++)
+                    if (Pattern.matches(escapeStar(jinclude.getString(j)), uri.toString())) {
+                        include = true;
+                        break;
+                    }
+
+                if (include)
+                    for (int j = 0; j < jexclude.length(); j++)
+                        if (Pattern.matches(escapeStar(jexclude.getString(j)), uri.toString())) {
+                            include = false;
+                            break;
+                        }
+
+                if (include) {
+                    JSONArray jparams = jitem.getJSONArray("params");
+                    List<String> result = new ArrayList<>();
+                    for (int j = 0; j < jparams.length(); j++)
+                        result.add(jparams.getString(j));
+                    return result;
+                }
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private static Uri getBraveDebounce(Context context, Uri uri) {
+        // https://github.com/brave/adblock-lists/blob/master/brave-lists/debounce.json
+        try (InputStream is = context.getAssets().open("debounce.json")) {
+            String json = Helper.readStream(is);
+            JSONArray jbounce = new JSONArray(json);
+            for (int i = 0; i < jbounce.length(); i++) {
+                JSONObject jitem = jbounce.getJSONObject(i);
+                JSONArray jinclude = jitem.getJSONArray("include");
+                JSONArray jexclude = jitem.getJSONArray("exclude");
+
+                boolean include = false;
+                for (int j = 0; j < jinclude.length(); j++)
+                    if (Pattern.matches(escapeStar(jinclude.getString(j)), uri.toString())) {
+                        include = true;
+                        break;
+                    }
+
+                if (include)
+                    for (int j = 0; j < jexclude.length(); j++)
+                        if (Pattern.matches(escapeStar(jexclude.getString(j)), uri.toString())) {
+                            include = false;
+                            break;
+                        }
+
+                if (include) {
+                    String action = jitem.getString("action");
+                    if ("redirect".equals(action) || "base64,redirect".equals(action)) {
+                        String name = jitem.getString("param");
+                        String param = uri.getQueryParameter(name);
+                        if (!TextUtils.isEmpty(param))
+                            try {
+                                if ("base64,redirect".equals(action))
+                                    param = new String(Base64.decode(param, Base64.NO_PADDING));
+                                return Uri.parse(param);
+                            } catch (Throwable ex) {
+                                Log.w(ex);
+                            }
+                    } else if ("regex-path".equals(action)) {
+                        String regex = jitem.getString("param");
+                        String prepend = jitem.optString("prepend_scheme");
+                        String path = uri.getPath();
+                        if (!TextUtils.isEmpty(path)) {
+                            Matcher m = Pattern.compile(regex).matcher(path);
+                            if (m.matches()) {
+                                String param = m.group(1);
+                                if (!TextUtils.isEmpty(prepend))
+                                    param = prepend + "://" + param;
+                                return Uri.parse(param);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+
+        return null;
+    }
+
+    private static String escapeStar(String regex) {
+        for (char kar : "\\.?![]{}()<>*+-=^$|".toCharArray())
+            if (kar != '*')
+                regex = regex.replace("" + kar, "\\" + kar);
+        return regex.replace("*", ".*");
     }
 
     static Uri secure(Uri uri, boolean https) {

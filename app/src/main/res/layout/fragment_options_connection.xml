@@ -135,6 +135,18 @@
                     app:layout_constraintTop_toBottomOf="@id/tvDownload" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swDownloadLimited"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_download_limited"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spDownload"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swRoaming"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -143,7 +155,7 @@
                     android:text="@string/title_advanced_roaming"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spDownload"
+                    app:layout_constraintTop_toBottomOf="@id/swDownloadLimited"
                     app:switchPadding="12dp" />
 
                 <TextView
@@ -437,6 +449,30 @@
                     app:layout_constraintTop_toBottomOf="@id/swTcpKeepAlive" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swSslUpdate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:checked="true"
+                    android:text="@string/title_advanced_ssl_update"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTcpKeepAliveHint"
+                    app:switchPadding="12dp" />
+
+                <TextView
+                    android:id="@+id/tvSslUpdateHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_english_hint"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swSslUpdate" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swSslHarden"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -444,7 +480,7 @@
                     android:text="@string/title_advanced_ssl_harden"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvTcpKeepAliveHint"
+                    app:layout_constraintTop_toBottomOf="@id/tvSslUpdateHint"
                     app:switchPadding="12dp" />
 
                 <TextView
@@ -478,6 +514,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:checked="true"
                     android:text="@string/title_advanced_cert_strict"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -497,6 +534,18 @@
                     app:layout_constraintTop_toBottomOf="@id/swCertStrict" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swCheckNames"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:checked="true"
+                    android:text="@string/title_advanced_check_names"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCertStrictHint"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swOpenSafe"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -504,7 +553,7 @@
                     android:text="@string/title_advanced_open_safe"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvCertStrictHint"
+                    app:layout_constraintTop_toBottomOf="@id/swCheckNames"
                     app:switchPadding="12dp" />
 
                 <TextView
@@ -520,6 +569,17 @@
                     app:layout_constraintTop_toBottomOf="@id/swOpenSafe" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swHttpRedirect"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_http_redirect"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvOpenSafeHint"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swBouncyCastle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -527,7 +587,7 @@
                     android:text="@string/title_advanced_bouncy_castle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvOpenSafeHint"
+                    app:layout_constraintTop_toBottomOf="@id/swHttpRedirect"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -597,6 +657,14 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:constraint_referenced_ids="swValidated,tvValidatedHint,swVpnOnly" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/grpCustomSsl"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="
+                    swSslHarden,tvSslHardenHint,swSslHardenStrict,
+                    swCertStrict,tvCertStrictHint,swCheckNames" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 

@@ -131,7 +131,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         if (uri.isOpaque())
             sanitized = uri;
         else {
-            Uri s = UriHelper.sanitize(uri);
+            Uri s = UriHelper.sanitize(context, uri);
             sanitized = (s == null ? uri : s);
         }
 
@@ -324,6 +324,11 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         cbSanitize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                cbSanitize.setTextColor(Helper.resolveColor(context,
+                        checked ? android.R.attr.textColorSecondary : R.attr.colorWarning));
+                cbSanitize.setTypeface(
+                        checked ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD);
+
                 Uri link = (checked ? sanitized : uri);
                 boolean secure = cbSecure.isChecked();
                 cbSecure.setTag(secure);
@@ -426,7 +431,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
                     @Override
                     protected void onException(Bundle args, Throwable ex) {
                         tvHost.setText(ex.getClass().getName());
-                        tvOwner.setText(ex.getMessage());
+                        tvOwner.setText(new ThrowableWrapper(ex).getSafeMessage());
                     }
                 }.execute(FragmentDialogOpenLink.this, args, "link:owner");
             }

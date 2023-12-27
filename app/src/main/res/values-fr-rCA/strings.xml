@@ -92,6 +92,8 @@
         Bloquer un domaine expéditeur utilise une règle de filtrage qui est une fonctionnalité Pro.
     </string>
     <string name="title_blocked_senders">Expéditeurs bloqués</string>
+    <string name="title_unblock_all">Tout débloquer</string>
+    <string name="title_unblock_all_remark">Ceci réinitialisera toutes les listes et options pouvant provoquer le blocage des expéditeurs</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Bloquer l\'expéditeur de %1$s message?</item>
         <item quantity="other">Bloquer l\'expéditeur de %1$s messages?</item>
@@ -389,7 +391,7 @@
     <string name="title_advanced_answer_hint">Les actions du bouton de réponse peuvent également être configurées dans l\'onglet Envoi des paramètres</string>
     <string name="title_advanced_answer_warning">Toutes les actions ne sont pas possibles sans un menu de sélection!</string>
     <string name="title_advanced_send_pending">Afficher l\'icône discrète d\'envoi différé</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">Enregistrer les modifications de brouillons pour pouvoir annuler et rétablir</string>
+    <string name="title_advanced_save_revisions">Enregistrer les modifications de brouillons pour pouvoir annuler et rétablir</string>
     <string name="title_advanced_auto_save_paragraph">Enregistrer automatiquement un brouillon après chaque paragraphe</string>
     <string name="title_advanced_auto_save_dot">Enregistrer automatiquement un brouillon après chaque phrase</string>
     <string name="title_advanced_compose_color">Couleur du texte par défaut</string>
@@ -425,6 +427,7 @@
     <string name="title_advanced_lookup_mx">Vérifier les adresses courriel des destinataires avant l’envoi</string>
     <string name="title_advanced_metered">Utiliser les connexions limitées</string>
     <string name="title_advanced_download">Télécharger automatiquement les messages et les pièces jointes avec une connexion limitée jusqu’à</string>
+    <string name="title_advanced_download_limited">Appliquer également aux connexions non limitées</string>
     <string name="title_advanced_roaming">Télécharger les messages et les pièces jointes en itinérance</string>
     <string name="title_advanced_rlah">Ignorer l’itinérance chez soi</string>
     <string name="title_advanced_download_headers">Télécharger tous les en-têtes de message</string>
@@ -435,10 +438,13 @@
     <string name="title_advanced_vpn_only">Se connecter uniquement via un RPV</string>
     <string name="title_advanced_timeout">Délai d’expiration de la connexion (secondes)</string>
     <string name="title_advanced_prefer_ip4">Préférer IPv4 à IPv6</string>
+    <string name="title_advanced_ssl_update">Utiliser le fournisseur SSL mis à jour</string>
     <string name="title_advanced_ssl_harden">Renforcer les connexions SSL</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 requis</string>
     <string name="title_advanced_cert_strict">Vérification stricte du certificat</string>
+    <string name="title_advanced_check_names">Vérifier les noms d\'hôtes par rapport aux certificats de serveur</string>
     <string name="title_advanced_open_safe">Ouvrir uniquement des connexions sécurisées</string>
+    <string name="title_advanced_http_redirect">Autoriser la redirection de connexion</string>
     <string name="title_advanced_bouncy_castle">Utiliser le fournisseur de socket sécurisé de Bouncy Castle (JSSE)</string>
     <string name="title_advanced_manage_connectivity">Gérer la connectivité</string>
     <string name="title_advanced_caption_general">Général</string>
@@ -856,6 +862,7 @@
     <string name="title_advanced_wearable_hint">Les notifications ne sont envoyées à un appareil connecté qu’après le téléchargement du texte du message</string>
     <string name="title_advanced_messaging_hint">Ceci est nécessaire pour la prise en charge d\'Android Auto</string>
     <string name="title_advanced_move_hint">Le dossier de destination peut être configuré dans les paramètres du compte</string>
+    <string name="title_advanced_notify_sensitive_hint">Nécessite la désactivation des notifications sensibles dans les paramètres d\'Android</string>
     <string name="title_advanced_notify_no_grouping">Cette version d’Android ne prend pas en charge le regroupement de notifications</string>
     <string name="title_advanced_notify_no_channels">Cette version d’Android ne prend pas en charge les canaux de notification</string>
     <string name="title_advanced_fts_hint">Activer ceci améliore les performances de la recherche mais augmente également l’utilisation de la pile et de l’espace de stockage</string>
@@ -1010,6 +1017,9 @@
     <string name="title_service_port">Veuillez vérifier le numéro de port</string>
     <string name="title_service_protocol">Veuillez vérifier le protocole (SSL/TLS ou STARTTLS)</string>
     <string name="title_service_error10">Ce compte doit être de nouveau authentifié, ce qui peut être fait via l\'assistant de configuration rapide</string>
+    <string name="title_certificate_error">        En raison des politiques du Play Store de Google, il n\'est plus possible de prendre en charge les connexions non sécurisées vers des serveurs de messagerie ayant des problèmes de certificat et ce, pour la version de FairEmail distribuée dans le Play Store.
+        Par conséquent, ce problème ne peut être résolu que par votre fournisseur de messagerie - le message d\'erreur ci-dessus peut les aider à le résoudre.
+    </string>
     <string name="title_advanced_browse">Parcourir les messages sur le serveur</string>
     <string name="title_advanced_expand_read">Marquer les messages comme lus lors de leur ouverture</string>
     <string name="title_synchronize_now">Synchroniser maintenant</string>
@@ -1147,6 +1157,8 @@
     <string name="title_importance_low">Basse</string>
     <string name="title_importance_normal">Normale</string>
     <string name="title_importance_high">Haute</string>
+    <string name="title_important">Important</string>
+    <string name="title_unimportant">Non important</string>
     <string name="title_search_in_text">Rechercher dans le texte&#8230;</string>
     <string name="title_forward">Transférer</string>
     <string name="title_resend">Envoyer à nouveau</string>

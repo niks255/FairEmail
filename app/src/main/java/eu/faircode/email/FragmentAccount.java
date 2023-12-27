@@ -628,8 +628,10 @@ public class FragmentAccount extends FragmentBase {
         btnAutoConfig.setEnabled(false);
         pbAutoConfig.setVisibility(View.GONE);
 
-        rgEncryption.setVisibility(View.GONE);
-        cbInsecure.setVisibility(View.GONE);
+        if (!SSLHelper.customTrustManager()) {
+            Helper.hide(cbInsecure);
+            Helper.hide(tvInsecureRemark);
+        }
 
         if (id < 0)
             tilPassword.setEndIconMode(END_ICON_PASSWORD_TOGGLE);
@@ -705,7 +707,7 @@ public class FragmentAccount extends FragmentBase {
                         (ex instanceof UnknownHostException ||
                                 ex instanceof FileNotFoundException ||
                                 ex instanceof IllegalArgumentException))
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
@@ -885,7 +887,7 @@ public class FragmentAccount extends FragmentBase {
                 cbIdentity.setVisibility(View.GONE);
 
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else
                     showError(ex);
@@ -1519,7 +1521,7 @@ public class FragmentAccount extends FragmentBase {
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else
                     showError(ex);
@@ -2117,11 +2119,6 @@ public class FragmentAccount extends FragmentBase {
         seen.name = context.getString(R.string.title_seen);
         folders.add(seen);
 
-        EntityFolder flag = new EntityFolder();
-        flag.id = EntityMessage.SWIPE_ACTION_FLAG;
-        flag.name = context.getString(R.string.title_flag);
-        folders.add(flag);
-
         EntityFolder snooze = new EntityFolder();
         snooze.id = EntityMessage.SWIPE_ACTION_SNOOZE;
         snooze.name = context.getString(R.string.title_snooze_now);
@@ -2131,6 +2128,16 @@ public class FragmentAccount extends FragmentBase {
         hide.id = EntityMessage.SWIPE_ACTION_HIDE;
         hide.name = context.getString(R.string.title_hide);
         folders.add(hide);
+
+        EntityFolder flag = new EntityFolder();
+        flag.id = EntityMessage.SWIPE_ACTION_FLAG;
+        flag.name = context.getString(R.string.title_flag);
+        folders.add(flag);
+
+        EntityFolder importance = new EntityFolder();
+        importance.id = EntityMessage.SWIPE_ACTION_IMPORTANCE;
+        importance.name = context.getString(R.string.title_set_importance);
+        folders.add(importance);
 
         EntityFolder move = new EntityFolder();
         move.id = EntityMessage.SWIPE_ACTION_MOVE;

@@ -181,7 +181,7 @@ public class MessageHelper {
     static final int MAX_SUBJECT_AGE = 48; // hours
     static final int DEFAULT_THREAD_RANGE = 7; // 2^7 = 128 days
     static final int MAX_UNZIP_COUNT = 20;
-    static final long MAX_UNZIP_SIZE = 1000 * 1000 * 1000L;
+    static final long MAX_UNZIP_SIZE = 10 * 1024 * 1024L;
 
     static final List<String> UNZIP_FORMATS = Collections.unmodifiableList(Arrays.asList(
             "zip", "gz", "tar.gz"
@@ -1209,9 +1209,12 @@ public class MessageHelper {
                                                 ContactsContract.CommonDataKinds.Website.TYPE,
                                                 ContactsContract.CommonDataKinds.Website.URL
                                         },
-                                        ContactsContract.Data.CONTACT_ID + " = " + contactId +
-                                                " AND " + ContactsContract.Contacts.Data.MIMETYPE + " = '" + ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE + "'",
-                                        null, null)) {
+                                        ContactsContract.Data.CONTACT_ID + " = ?" +
+                                                " AND " + ContactsContract.Contacts.Data.MIMETYPE + " = ?",
+                                        new String[]{
+                                                contactId,
+                                                ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE
+                                        }, null)) {
                                     while (web.moveToNext()) {
                                         int type = web.getInt(0);
                                         String url = web.getString(1);
@@ -1226,8 +1229,10 @@ public class MessageHelper {
                                                 ContactsContract.CommonDataKinds.Phone.TYPE,
                                                 ContactsContract.CommonDataKinds.Phone.NUMBER
                                         },
-                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId,
-                                        null, null)) {
+                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                        new String[]{
+                                                contactId
+                                        }, null)) {
                                     while (phones.moveToNext()) {
                                         int type = phones.getInt(0);
                                         String number = phones.getString(1);
@@ -2141,6 +2146,7 @@ public class MessageHelper {
 
         List<String> all = new ArrayList<>();
 
+        // https://datatracker.ietf.org/doc/html/rfc8601
         String[] results = imessage.getHeader("Authentication-Results");
         if (results != null)
             all.addAll(Arrays.asList(results));
@@ -5562,12 +5568,12 @@ public class MessageHelper {
                         getStructure(multipart.getBodyPart(i), ssb, level + 1, textColorLink);
                     } catch (Throwable ex) {
                         Log.w(ex);
-                        ssb.append(ex.toString()).append('\n');
+                        ssb.append(new ThrowableWrapper(ex).toSafeString()).append('\n');
                     }
             }
         } catch (Throwable ex) {
             Log.w(ex);
-            ssb.append(ex.toString()).append('\n');
+            ssb.append(new ThrowableWrapper(ex).toSafeString()).append('\n');
         }
     }
 
@@ -5793,7 +5799,7 @@ public class MessageHelper {
                 }
             } catch (Throwable ex) {
                 Log.e(ex);
-                report.append(TextUtils.htmlEncode(ex.toString()));
+                report.append(TextUtils.htmlEncode(new ThrowableWrapper(ex).toSafeString()));
             }
             report.append("</div>");
             this.html = report.toString();

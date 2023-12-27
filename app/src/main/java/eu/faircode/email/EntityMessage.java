@@ -126,6 +126,7 @@ public class EntityMessage implements Serializable {
     static final Long SWIPE_ACTION_DELETE = -7L;
     static final Long SWIPE_ACTION_JUNK = -8L;
     static final Long SWIPE_ACTION_REPLY = -9L;
+    static final Long SWIPE_ACTION_IMPORTANCE = -10L;
 
     private static final int MAX_SNOOZED = 300;
 
@@ -162,6 +163,7 @@ public class EntityMessage implements Serializable {
     public Boolean dkim;
     public Boolean spf;
     public Boolean dmarc;
+    public Boolean auth; // SMTP
     public Boolean mx;
     public Boolean blocklist;
     public Boolean from_domain; // spf/smtp.mailfrom <> from
@@ -618,19 +620,10 @@ public class EntityMessage implements Serializable {
     }
 
     static File getFile(Context context, Long id) {
-        File root = Helper.ensureExists(new File(getRoot(context), "messages"));
-        File dir = Helper.ensureExists(new File(root, "D" + (id / 1000)));
+        File root = Helper.ensureExists(context, "messages");
+        File dir = new File(root, "D" + (id / 1000));
+        dir.mkdir(); // TODO CASA composed directory name
         return new File(dir, id.toString());
-    }
-
-    static File getRoot(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean external_storage = prefs.getBoolean("external_storage_message", false);
-
-        File root = (external_storage
-                ? Helper.getExternalFilesDir(context)
-                : context.getFilesDir());
-        return root;
     }
 
     static void convert(Context context) {
@@ -642,7 +635,7 @@ public class EntityMessage implements Serializable {
                     long id = Long.parseLong(file.getName());
                     File target = getFile(context, id);
                     if (!file.renameTo(target))
-                        throw new IllegalArgumentException("Failed moving " + file);
+                        Log.e("Move failed: " + file);
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
@@ -653,12 +646,12 @@ public class EntityMessage implements Serializable {
     }
 
     File getFile(Context context, int revision) {
-        File dir = Helper.ensureExists(new File(context.getFilesDir(), "revision"));
+        File dir = Helper.ensureExists(context, "revision");
         return new File(dir, id + "." + revision);
     }
 
     File getRefFile(Context context) {
-        File dir = Helper.ensureExists(new File(context.getFilesDir(), "references"));
+        File dir = Helper.ensureExists(context, "references");
         return new File(dir, id.toString());
     }
 
@@ -667,7 +660,7 @@ public class EntityMessage implements Serializable {
     }
 
     static File getRawFile(Context context, Long id) {
-        File dir = Helper.ensureExists(new File(context.getFilesDir(), "raw"));
+        File dir = Helper.ensureExists(context, "raw");
         return new File(dir, id + ".eml");
     }
 
@@ -728,6 +721,8 @@ public class EntityMessage implements Serializable {
             return "move";
         if (SWIPE_ACTION_FLAG.equals(type))
             return "flag";
+        if (SWIPE_ACTION_IMPORTANCE.equals(type))
+            return "importance";
         if (SWIPE_ACTION_DELETE.equals(type))
             return "delete";
         if (SWIPE_ACTION_JUNK.equals(type))
@@ -763,6 +758,7 @@ public class EntityMessage implements Serializable {
                     Objects.equals(this.dkim, other.dkim) &&
                     Objects.equals(this.spf, other.spf) &&
                     Objects.equals(this.dmarc, other.dmarc) &&
+                    Objects.equals(this.auth, other.auth) &&
                     Objects.equals(this.mx, other.mx) &&
                     Objects.equals(this.blocklist, other.blocklist) &&
                     Objects.equals(this.from_domain, other.from_domain) &&

@@ -1198,7 +1198,7 @@ public class FragmentCompose extends FragmentBase {
                     return MessageHelper.formatAddressesCompose(new Address[]{address});
                 } catch (Throwable ex) {
                     Log.e(ex);
-                    return ex.toString();
+                    return new ThrowableWrapper(ex).toSafeString();
                 }
             }
         });
@@ -3223,7 +3223,7 @@ public class FragmentCompose extends FragmentBase {
                 onPgp(intent);
             } catch (Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 else {
                     Log.e(ex);
@@ -3562,7 +3562,7 @@ public class FragmentCompose extends FragmentBase {
                 });
                 snackbar.show();
             } else {
-                File dir = Helper.ensureExists(new File(context.getFilesDir(), "photo"));
+                File dir = Helper.ensureExists(context, "photo");
                 File file = new File(dir, working + "_" + new Date().getTime() + ".jpg");
                 try {
                     photoURI = FileProviderEx.getUri(context, BuildConfig.APPLICATION_ID, file);
@@ -3874,7 +3874,7 @@ public class FragmentCompose extends FragmentBase {
                     throw new IllegalArgumentException(context.getString(R.string.title_from_missing));
 
                 // Create files
-                File tmp = Helper.ensureExists(new File(context.getFilesDir(), "encryption"));
+                File tmp = Helper.ensureExists(context, "encryption");
                 File input = new File(tmp, draft.id + "_" + session + ".pgp_input");
                 File output = new File(tmp, draft.id + "_" + session + ".pgp_output");
 
@@ -4202,7 +4202,7 @@ public class FragmentCompose extends FragmentBase {
                 if (ex instanceof IllegalArgumentException
                         || ex instanceof GeneralSecurityException /* InvalidKeyException */) {
                     Log.i(ex);
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
                             .setGestureInsetBottomIgnored(true).show();
                 } else if (ex instanceof OperationCanceledException) {
                     Snackbar snackbar = Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_INDEFINITE)
@@ -4242,7 +4242,7 @@ public class FragmentCompose extends FragmentBase {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean check_certificate = prefs.getBoolean("check_certificate", true);
 
-                File tmp = Helper.ensureExists(new File(context.getFilesDir(), "encryption"));
+                File tmp = Helper.ensureExists(context, "encryption");
 
                 DB db = DB.getInstance(context);
 
@@ -4563,7 +4563,7 @@ public class FragmentCompose extends FragmentBase {
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException) {
                     Log.i(ex);
-                    Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE)
+                    Snackbar snackbar = Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_INDEFINITE)
                             .setGestureInsetBottomIgnored(true);
                     Helper.setSnackbarLines(snackbar, 7);
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
@@ -5198,100 +5198,107 @@ public class FragmentCompose extends FragmentBase {
 
     private static void resizeAttachment(Context context, EntityAttachment attachment, int resize) throws IOException {
         File file = attachment.getFile(context);
-        if (file.exists() /* upload cancelled */ &&
-                ("image/jpeg".equals(attachment.type) ||
-                        "image/png".equals(attachment.type) ||
-                        "image/webp".equals(attachment.type))) {
-            ExifInterface exifSaved;
-            try {
-                exifSaved = new ExifInterface(file);
-            } catch (Throwable ex) {
-                Log.w(ex);
-                exifSaved = null;
-            }
+        if (!file.exists()) // Upload cancelled;
+            return;
 
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+        if (!"image/jpg".equals(attachment.type) &&
+                !"image/jpeg".equals(attachment.type) &&
+                !"image/png".equals(attachment.type) &&
+                !"image/webp".equals(attachment.type)) {
+            Log.i("Skipping resize of type=" + attachment.type);
+            return;
+        }
 
-            int factor = 1;
-            while (options.outWidth / factor > resize ||
-                    options.outHeight / factor > resize)
-                factor *= 2;
+        ExifInterface exifSaved;
+        try {
+            exifSaved = new ExifInterface(file);
+        } catch (Throwable ex) {
+            Log.w(ex);
+            exifSaved = null;
+        }
 
-            Matrix rotation = ("image/jpeg".equals(attachment.type) ? ImageHelper.getImageRotation(file) : null);
-            Log.i("Image type=" + attachment.type + " rotation=" + rotation);
-            if (factor > 1 || rotation != null) {
-                options.inJustDecodeBounds = false;
-                options.inSampleSize = factor;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file.getAbsolutePath(), options);
 
-                Log.i("Image target size=" + resize + " factor=" + factor + " source=" + options.outWidth + "x" + options.outHeight);
-                Bitmap resized = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-                if (resized != null) {
-                    Log.i("Image result size=" + resized.getWidth() + "x" + resized.getHeight() + " rotation=" + rotation);
+        int factor = 1;
+        while (options.outWidth / factor > resize ||
+                options.outHeight / factor > resize)
+            factor *= 2;
 
-                    if (rotation != null) {
-                        Bitmap rotated = Bitmap.createBitmap(resized, 0, 0, resized.getWidth(), resized.getHeight(), rotation, true);
-                        resized.recycle();
-                        resized = rotated;
-                    }
+        Matrix rotation = ("image/jpeg".equals(attachment.type) ? ImageHelper.getImageRotation(file) : null);
+        Log.i("Image type=" + attachment.type + " rotation=" + rotation);
+        if (factor > 1 || rotation != null) {
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = factor;
 
-                    Bitmap.CompressFormat format;
-                    if ("image/jpeg".equals(attachment.type))
-                        format = Bitmap.CompressFormat.JPEG;
-                    else if ("image/png".equals(attachment.type))
-                        format = Bitmap.CompressFormat.PNG;
-                    else if ("image/webp".equals(attachment.type))
-                        format = Bitmap.CompressFormat.WEBP;
-                    else
-                        throw new IllegalArgumentException("Invalid format type=" + attachment.type);
+            Log.i("Image target size=" + resize + " factor=" + factor + " source=" + options.outWidth + "x" + options.outHeight);
+            Bitmap resized = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+            if (resized != null) {
+                Log.i("Image result size=" + resized.getWidth() + "x" + resized.getHeight() + " rotation=" + rotation);
 
-                    File tmp = new File(file.getAbsolutePath() + ".tmp");
-                    try (OutputStream out = new BufferedOutputStream(new FileOutputStream(tmp))) {
-                        if (!resized.compress(format, REDUCED_IMAGE_QUALITY, out))
-                            throw new IOException("compress");
+                if (rotation != null) {
+                    Bitmap rotated = Bitmap.createBitmap(resized, 0, 0, resized.getWidth(), resized.getHeight(), rotation, true);
+                    resized.recycle();
+                    resized = rotated;
+                }
+
+                Bitmap.CompressFormat format;
+                if ("image/jpg".equals(attachment.type) ||
+                        "image/jpeg".equals(attachment.type))
+                    format = Bitmap.CompressFormat.JPEG;
+                else if ("image/png".equals(attachment.type))
+                    format = Bitmap.CompressFormat.PNG;
+                else if ("image/webp".equals(attachment.type))
+                    format = Bitmap.CompressFormat.WEBP;
+                else
+                    throw new IllegalArgumentException("Invalid format type=" + attachment.type);
+
+                File tmp = new File(file.getAbsolutePath() + ".tmp");
+                try (OutputStream out = new BufferedOutputStream(new FileOutputStream(tmp))) {
+                    if (!resized.compress(format, REDUCED_IMAGE_QUALITY, out))
+                        throw new IOException("compress");
+                } catch (Throwable ex) {
+                    Log.w(ex);
+                    Helper.secureDelete(tmp);
+                } finally {
+                    resized.recycle();
+                }
+
+                if (tmp.exists() && tmp.length() > 0) {
+                    Helper.secureDelete(file);
+                    tmp.renameTo(file);
+                }
+
+                DB db = DB.getInstance(context);
+                db.attachment().setDownloaded(attachment.id, file.length());
+
+                if (exifSaved != null)
+                    try {
+                        ExifInterface exif = new ExifInterface(file);
+
+                        // Preserve time
+                        if (exifSaved.hasAttribute(ExifInterface.TAG_DATETIME_ORIGINAL))
+                            exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL,
+                                    exifSaved.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL));
+                        if (exifSaved.hasAttribute(ExifInterface.TAG_GPS_DATESTAMP))
+                            exif.setAttribute(ExifInterface.TAG_GPS_DATESTAMP,
+                                    exifSaved.getAttribute(ExifInterface.TAG_GPS_DATESTAMP));
+
+                        // Preserve location
+                        double[] latlong = exifSaved.getLatLong();
+                        if (latlong != null)
+                            exif.setLatLong(latlong[0], latlong[1]);
+
+                        // Preserve altitude
+                        if (exifSaved.hasAttribute(ExifInterface.TAG_GPS_ALTITUDE) &&
+                                exifSaved.hasAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF))
+                            exif.setAltitude(exifSaved.getAltitude(0));
+
+                        exif.saveAttributes();
                     } catch (Throwable ex) {
                         Log.w(ex);
-                        Helper.secureDelete(tmp);
-                    } finally {
-                        resized.recycle();
                     }
-
-                    if (tmp.exists() && tmp.length() > 0) {
-                        Helper.secureDelete(file);
-                        tmp.renameTo(file);
-                    }
-
-                    DB db = DB.getInstance(context);
-                    db.attachment().setDownloaded(attachment.id, file.length());
-
-                    if (exifSaved != null)
-                        try {
-                            ExifInterface exif = new ExifInterface(file);
-
-                            // Preserve time
-                            if (exifSaved.hasAttribute(ExifInterface.TAG_DATETIME_ORIGINAL))
-                                exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL,
-                                        exifSaved.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL));
-                            if (exifSaved.hasAttribute(ExifInterface.TAG_GPS_DATESTAMP))
-                                exif.setAttribute(ExifInterface.TAG_GPS_DATESTAMP,
-                                        exifSaved.getAttribute(ExifInterface.TAG_GPS_DATESTAMP));
-
-                            // Preserve location
-                            double[] latlong = exifSaved.getLatLong();
-                            if (latlong != null)
-                                exif.setLatLong(latlong[0], latlong[1]);
-
-                            // Preserve altitude
-                            if (exifSaved.hasAttribute(ExifInterface.TAG_GPS_ALTITUDE) &&
-                                    exifSaved.hasAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF))
-                                exif.setAltitude(exifSaved.getAltitude(0));
-
-                            exif.saveAttributes();
-                        } catch (Throwable ex) {
-                            Log.w(ex);
-                        }
-                }
             }
         }
     }
@@ -6575,7 +6582,7 @@ public class FragmentCompose extends FragmentBase {
                           at android.content.ContentResolver.openInputStream(ContentResolver.java:1187)
                           at eu.faircode.email.FragmentCompose.addAttachment(SourceFile:27)
                      */
-            Snackbar.make(view, ex.toString(), Snackbar.LENGTH_LONG)
+            Snackbar.make(view, new ThrowableWrapper(ex).toSafeString(), Snackbar.LENGTH_LONG)
                     .setGestureInsetBottomIgnored(true).show();
         } else {
             if (ex instanceof IOException &&
@@ -7067,7 +7074,7 @@ public class FragmentCompose extends FragmentBase {
                                             R.string.title_address_duplicate,
                                             TextUtils.join(", ", dup)));
                             } catch (AddressException ex) {
-                                args.putString("address_error", ex.getMessage());
+                                args.putString("address_error", new ThrowableWrapper(ex).getSafeMessage());
                             }
 
                             if (draft.to == null && draft.cc == null && draft.bcc == null &&
@@ -7472,7 +7479,7 @@ public class FragmentCompose extends FragmentBase {
                     address.validate();
                 } catch (AddressException ex) {
                     throw new AddressException(context.getString(R.string.title_address_parse_error,
-                            MessageHelper.formatAddressesCompose(new Address[]{address}), ex.getMessage()));
+                            MessageHelper.formatAddressesCompose(new Address[]{address}), new ThrowableWrapper(ex).getSafeMessage()));
                 }
         }
 

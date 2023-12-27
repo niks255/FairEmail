@@ -81,6 +81,8 @@
         屏蔽发件人域使用过滤规则，这是一个高级功能。
     </string>
     <string name="title_blocked_senders">屏蔽的发件人</string>
+    <string name="title_unblock_all">全部取消拦截</string>
+    <string name="title_unblock_all_remark">这将重置可能导致拦截发件人的所有列表和选项</string>
     <plurals name="title_ask_block_sender">
         <item quantity="other">屏蔽 %1$s 封邮件的发件人？</item>
     </plurals>
@@ -374,7 +376,7 @@
     <string name="title_advanced_answer_hint">回复按钮操作也可以在“发送”设置标签页中配置</string>
     <string name="title_advanced_answer_warning">如果没有选择菜单，则无法执行菜单中的其他操作！</string>
     <string name="title_advanced_send_pending">显示不显眼的“延迟发送”图标（页面左下角）</string>
-    <string name="title_advanced_save_revisions" comment="title_advanced_save_revisions&#10;Title for option to disable saving draft revisions, and therefore undo/redo too">保存修订草稿以便撤销和重做</string>
+    <string name="title_advanced_save_revisions">保存修订草稿以便撤销和重做</string>
     <string name="title_advanced_auto_save_paragraph">在每一段后自动保存草稿</string>
     <string name="title_advanced_auto_save_dot">每句后自动保存草稿</string>
     <string name="title_advanced_compose_color">默认文本颜色</string>
@@ -410,6 +412,7 @@
     <string name="title_advanced_lookup_mx">发送前检查收件人电子邮件地址</string>
     <string name="title_advanced_metered">使用按流量计费的连接</string>
     <string name="title_advanced_download">在计量连接下自动下载最大__的邮件与附件</string>
+    <string name="title_advanced_download_limited">同样应用于不按流量计费的连接</string>
     <string name="title_advanced_roaming">漫游时下载邮件和附件</string>
     <string name="title_advanced_rlah">欧盟 Roam like at home</string>
     <string name="title_advanced_download_headers">下载所有消息标题</string>
@@ -420,10 +423,13 @@
     <string name="title_advanced_vpn_only">仅通过 VPN 连接</string>
     <string name="title_advanced_timeout">连接超时 (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv4 优先于 IPv6</string>
+    <string name="title_advanced_ssl_update">使用更新的 SSL 提供商</string>
     <string name="title_advanced_ssl_harden">加强 SSL 连接</string>
     <string name="title_advanced_ssl_harden_strict">需要 TLS 1.3</string>
     <string name="title_advanced_cert_strict">严格的证书检查</string>
+    <string name="title_advanced_check_names">检查服务器证书是否匹配主机名</string>
     <string name="title_advanced_open_safe">仅打开安全连接</string>
+    <string name="title_advanced_http_redirect">允许连接重定向</string>
     <string name="title_advanced_bouncy_castle">使用 Bouncy Castle 的安全套接字提供商 (JSSE)</string>
     <string name="title_advanced_manage_connectivity">管理连接</string>
     <string name="title_advanced_caption_general">常规​​​​​</string>
@@ -840,6 +846,7 @@
     <string name="title_advanced_wearable_hint">通知仅在消息文本下载后发送到可穿戴设备</string>
     <string name="title_advanced_messaging_hint">提供 Android Auto 支持时这必不可少</string>
     <string name="title_advanced_move_hint">可在账户设定中配置目标文件夹</string>
+    <string name="title_advanced_notify_sensitive_hint">需要在系统设置中禁用敏感通知</string>
     <string name="title_advanced_notify_no_grouping">此Android版本不支持通知分组</string>
     <string name="title_advanced_notify_no_channels">此Android版本不支持通知通道</string>
     <string name="title_advanced_fts_hint">启用此功能将提高搜索性能，但也会增加电池和存储空间用量</string>
@@ -994,6 +1001,9 @@
     <string name="title_service_port">请再次检查端口号</string>
     <string name="title_service_protocol">请仔细检查协议 (SSL/TLS 或 STARTTLS)</string>
     <string name="title_service_error10">此账户需要再次验证，可以通过快速设置向导完成。</string>
+    <string name="title_certificate_error">        由于Google Play商店政策，在Play商店发行的FairEmail版本不再支持连接到有证书问题的电子邮件服务器。 因此，
+        这个问题只能由您的电子邮件提供商解决—— 上述错误信息可能帮助他们解决这个问题。
+    </string>
     <string name="title_advanced_browse">浏览服务器上的消息</string>
     <string name="title_advanced_expand_read">将展开的消息标记为已读</string>
     <string name="title_synchronize_now">立即同步</string>
@@ -1128,6 +1138,8 @@
     <string name="title_importance_low">低</string>
     <string name="title_importance_normal">正常</string>
     <string name="title_importance_high">高</string>
+    <string name="title_important">重要</string>
+    <string name="title_unimportant">不重要</string>
     <string name="title_search_in_text">在文本中搜索 &#8230;</string>
     <string name="title_forward">转发</string>
     <string name="title_resend">重新发送</string>
