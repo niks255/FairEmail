@@ -30,7 +30,7 @@
         <item name="themeName">light</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">
-            @android:color/darker_gray
+            @color/splashBackground
         </item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
             @mipmap/ic_launcher_round
@@ -104,7 +104,7 @@
         <item name="themeName">dark</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">
-            @android:color/darker_gray
+            @color/splashBackground
         </item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
             @mipmap/ic_launcher_round
@@ -581,6 +581,11 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <style name="Theme.AppCompat.TranslucentSplash" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/splashBackground</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <style name="activityAnimationStyle" parent="@android:style/Animation.Activity">

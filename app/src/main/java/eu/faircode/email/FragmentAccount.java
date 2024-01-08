@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -97,10 +97,13 @@ public class FragmentAccount extends FragmentBase {
     private Button btnAutoConfig;
     private ContentLoadingProgressBar pbAutoConfig;
 
+    private CheckBox cbDnsSec;
     private EditText etHost;
     private RadioGroup rgEncryption;
     private CheckBox cbInsecure;
     private TextView tvInsecureRemark;
+    private CheckBox cbDane;
+
     private EditText etPort;
     private EditText etUser;
     private TextInputLayout tilPassword;
@@ -171,7 +174,6 @@ public class FragmentAccount extends FragmentBase {
     private ContentLoadingProgressBar pbWait;
 
     private Group grpServer;
-    private Group grpAuthorize;
     private Group grpCalendar;
     private Group grpAdvanced;
     private Group grpFolders;
@@ -219,11 +221,13 @@ public class FragmentAccount extends FragmentBase {
         btnAutoConfig = view.findViewById(R.id.btnAutoConfig);
         pbAutoConfig = view.findViewById(R.id.pbAutoConfig);
 
+        cbDnsSec = view.findViewById(R.id.cbDnsSec);
         etHost = view.findViewById(R.id.etHost);
         etPort = view.findViewById(R.id.etPort);
         rgEncryption = view.findViewById(R.id.rgEncryption);
         cbInsecure = view.findViewById(R.id.cbInsecure);
         tvInsecureRemark = view.findViewById(R.id.tvInsecureRemark);
+        cbDane = view.findViewById(R.id.cbDane);
         etUser = view.findViewById(R.id.etUser);
         tilPassword = view.findViewById(R.id.tilPassword);
         tvAppPassword = view.findViewById(R.id.tvAppPassword);
@@ -290,7 +294,6 @@ public class FragmentAccount extends FragmentBase {
         pbWait = view.findViewById(R.id.pbWait);
 
         grpServer = view.findViewById(R.id.grpServer);
-        grpAuthorize = view.findViewById(R.id.grpAuthorize);
         grpCalendar = view.findViewById(R.id.grpCalendar);
         grpAdvanced = view.findViewById(R.id.grpAdvanced);
         grpFolders = view.findViewById(R.id.grpFolders);
@@ -306,7 +309,6 @@ public class FragmentAccount extends FragmentBase {
                         auth == AUTH_TYPE_PASSWORD && "gmail".equals(provider.id)
                                 ? View.VISIBLE : View.GONE);
                 grpServer.setVisibility(position > 0 ? View.VISIBLE : View.GONE);
-                grpAuthorize.setVisibility(position > 0 ? View.VISIBLE : View.GONE);
                 grpCalendar.setVisibility(position > 0 && !BuildConfig.PLAY_STORE_RELEASE ? View.VISIBLE : View.GONE);
 
                 btnAdvanced.setVisibility(position > 0 ? View.VISIBLE : View.GONE);
@@ -363,6 +365,13 @@ public class FragmentAccount extends FragmentBase {
             @Override
             public void onCheckedChanged(RadioGroup group, int id) {
                 etPort.setHint(id == R.id.radio_ssl ? "993" : "143");
+            }
+        });
+
+        cbInsecure.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
+                cbDane.setEnabled(!checked);
             }
         });
 
@@ -622,6 +631,7 @@ public class FragmentAccount extends FragmentBase {
 
         // Initialize
         Helper.setViewsEnabled(view, false);
+        FragmentDialogTheme.setBackground(getContext(), view, false);
 
         tvGmailHint.setVisibility(View.GONE);
 
@@ -631,6 +641,7 @@ public class FragmentAccount extends FragmentBase {
         if (!SSLHelper.customTrustManager()) {
             Helper.hide(cbInsecure);
             Helper.hide(tvInsecureRemark);
+            Helper.hide(cbDane);
         }
 
         if (id < 0)
@@ -656,7 +667,6 @@ public class FragmentAccount extends FragmentBase {
         tvInstructions.setMovementMethod(LinkMovementMethodCompat.getInstance());
 
         grpServer.setVisibility(View.GONE);
-        grpAuthorize.setVisibility(View.GONE);
         grpCalendar.setVisibility(View.GONE);
         grpAdvanced.setVisibility(View.GONE);
         grpFolders.setVisibility(View.GONE);
@@ -726,9 +736,11 @@ public class FragmentAccount extends FragmentBase {
 
         Bundle args = new Bundle();
         args.putLong("id", id);
+        args.putBoolean("dnssec", cbDnsSec.isChecked());
         args.putString("host", etHost.getText().toString().trim().replace(" ", ""));
         args.putInt("encryption", encryption);
         args.putBoolean("insecure", cbInsecure.isChecked());
+        args.putBoolean("dane", cbDane.isChecked());
         args.putString("port", etPort.getText().toString());
         args.putInt("auth", auth);
         args.putString("provider", provider);
@@ -771,9 +783,11 @@ public class FragmentAccount extends FragmentBase {
             @Override
             protected CheckResult onExecute(Context context, Bundle args) throws Throwable {
                 long id = args.getLong("id");
+                boolean dnssec = args.getBoolean("dnssec");
                 String host = args.getString("host");
                 int encryption = args.getInt("encryption");
                 boolean insecure = args.getBoolean("insecure");
+                boolean dane = args.getBoolean("dane");
                 String port = args.getString("port");
                 int auth = args.getInt("auth");
                 String provider = args.getString("provider");
@@ -808,11 +822,11 @@ public class FragmentAccount extends FragmentBase {
 
                 // Check IMAP server / get folders
                 String protocol = "imap" + (encryption == EmailService.ENCRYPTION_SSL ? "s" : "");
-                try (EmailService iservice = new EmailService(
-                        context, protocol, realm, encryption, insecure, unicode,
+                try (EmailService iservice = new EmailService(context,
+                        protocol, realm, encryption, insecure, dane, unicode,
                         EmailService.PURPOSE_CHECK, true)) {
                     iservice.connect(
-                            host, Integer.parseInt(port),
+                            dnssec, host, Integer.parseInt(port),
                             auth, provider,
                             user, password,
                             certificate, fingerprint);
@@ -935,9 +949,11 @@ public class FragmentAccount extends FragmentBase {
         else
             encryption = EmailService.ENCRYPTION_SSL;
 
+        args.putBoolean("dnssec", cbDnsSec.isChecked());
         args.putString("host", etHost.getText().toString().trim().replace(" ", ""));
         args.putInt("encryption", encryption);
         args.putBoolean("insecure", cbInsecure.isChecked());
+        args.putBoolean("dane", cbDane.isChecked());
         args.putString("port", etPort.getText().toString());
         args.putInt("auth", auth);
         args.putString("provider", provider);
@@ -1012,9 +1028,11 @@ public class FragmentAccount extends FragmentBase {
             protected Boolean onExecute(Context context, Bundle args) throws Throwable {
                 long id = args.getLong("id");
 
+                boolean dnssec = args.getBoolean("dnssec");
                 String host = args.getString("host");
                 int encryption = args.getInt("encryption");
                 boolean insecure = args.getBoolean("insecure");
+                boolean dane = args.getBoolean("dane");
                 String port = args.getString("port");
                 int auth = args.getInt("auth");
                 String provider = args.getString("provider");
@@ -1105,11 +1123,15 @@ public class FragmentAccount extends FragmentBase {
                     if (account == null)
                         return !TextUtils.isEmpty(host) && !TextUtils.isEmpty(user);
 
+                    if (!Objects.equals(account.dnssec, dnssec))
+                        return true;
                     if (!Objects.equals(account.host, host))
                         return true;
                     if (!Objects.equals(account.encryption, encryption))
                         return true;
                     if (!Objects.equals(account.insecure, insecure))
+                        return true;
+                    if (!Objects.equals(account.dane, dane))
                         return true;
                     if (!Objects.equals(account.port, Integer.parseInt(port)))
                         return true;
@@ -1208,9 +1230,11 @@ public class FragmentAccount extends FragmentBase {
                 boolean check = (synchronize && (account == null ||
                         !account.synchronize ||
                         account.error != null ||
+                        !account.dnssec.equals(dnssec) ||
                         !account.host.equals(host) ||
                         !account.encryption.equals(encryption) ||
                         !account.insecure.equals(insecure) ||
+                        !account.dane.equals(dane) ||
                         !account.port.equals(Integer.parseInt(port)) ||
                         !account.user.equals(user) ||
                         !account.password.equals(password) ||
@@ -1228,11 +1252,11 @@ public class FragmentAccount extends FragmentBase {
                 EntityFolder inbox = null;
                 if (check) {
                     String protocol = "imap" + (encryption == EmailService.ENCRYPTION_SSL ? "s" : "");
-                    try (EmailService iservice = new EmailService(
-                            context, protocol, realm, encryption, insecure, unicode,
+                    try (EmailService iservice = new EmailService(context,
+                            protocol, realm, encryption, insecure, dane, unicode,
                             EmailService.PURPOSE_CHECK, true)) {
                         iservice.connect(
-                                host, Integer.parseInt(port),
+                                dnssec, host, Integer.parseInt(port),
                                 auth, provider,
                                 user, password,
                                 certificate, fingerprint);
@@ -1274,9 +1298,11 @@ public class FragmentAccount extends FragmentBase {
                     if (account == null)
                         account = new EntityAccount();
 
+                    account.dnssec = dnssec;
                     account.host = host;
                     account.encryption = encryption;
                     account.insecure = insecure;
+                    account.dane = dane;
                     account.port = Integer.parseInt(port);
                     account.auth_type = auth;
                     account.user = user;
@@ -1573,7 +1599,7 @@ public class FragmentAccount extends FragmentBase {
         outState.putInt("fair:provider", spProvider == null ? 0 : spProvider.getSelectedItemPosition());
         outState.putString("fair:certificate", certificate);
         outState.putString("fair:password", tilPassword == null ? null : tilPassword.getEditText().getText().toString());
-        outState.putInt("fair:advanced", grpAuthorize == null ? View.VISIBLE : grpAdvanced.getVisibility());
+        outState.putInt("fair:advanced", grpAdvanced == null ? View.VISIBLE : grpAdvanced.getVisibility());
         outState.putInt("fair:auth", auth);
         outState.putString("fair:authprovider", provider);
         outState.putString("fair:calendar", calendar);
@@ -1642,6 +1668,8 @@ public class FragmentAccount extends FragmentBase {
                         Log.e(ex);
                     }
 
+                    cbDnsSec.setChecked(account == null ? false : account.dnssec);
+
                     if (account != null) {
                         boolean found = false;
                         for (int pos = 2; pos < providers.size(); pos++) {
@@ -1673,6 +1701,8 @@ public class FragmentAccount extends FragmentBase {
                         rgEncryption.check(R.id.radio_ssl);
 
                     cbInsecure.setChecked(account == null ? false : account.insecure);
+                    cbDane.setChecked(account == null ? false : account.dane);
+                    cbDane.setEnabled(!cbInsecure.isChecked());
 
                     etUser.setText(account == null ? null : account.user);
                     tilPassword.getEditText().setText(account == null ? null : account.password);

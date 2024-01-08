@@ -40,6 +40,7 @@
 <li>Posteo: not that there is <a href="https://posteo.de/en/help/how-does-the-posteo-spam-filter-work">no spam folder</a> (<a href="https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter">German</a>)</li>
 <li>Web.de: please check if <a href="https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html">IMAP is enabled</a></li>
 <li>Web.de: with two factor authentication you’ll need to use <a href="https://web.de/email/sicherheit/zwei-faktor-authentifizierung/">an app password</a></li>
+<li>Web.de: if you are missing the spam messages folder, you should enable spam filtering via the website of web.de again</li>
 <li>GMX: please check if <a href="https://support.gmx.com/pop-imap/toggle.html">IMAP is enabled</a> (<a href="https://hilfe.gmx.net/pop-imap/einschalten.html">German</a>). Reportedly, you need to do this on a desktop computer.</li>
 <li>GMX: with two factor authentication you’ll need to use <a href="https://support.gmx.com/security/2fa/application-specific-passwords.html">an app password</a> (<a href="https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html">German</a>). Not that enabling two-factor authentication does not automatically enable IMAP.</li>
 <li>T-online.de: please make sure you use <a href="https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-adresse-passwoerter-und-sicherheit/passwort-fuer-e-mail-programme-einrichten">an email password</a> (German) and not your account password</li>
@@ -363,6 +364,9 @@
 <li><a href="#faq197">(197) How can I print a message?</a></li>
 <li><a href="#faq198">(198) Can you add spell checking?</a></li>
 <li><a href="#faq199">(199) Can you add proxy support?</a></li>
+<li><a href="#faq200">(200) How can I use Adguard to remove tracking parameters?</a></li>
+<li><a href="#faq201">(201) What is certificate transparency?</a></li>
+<li><a href="#faq202">(202) What is DNSSEC and what is DANE?</a></li>
 </ul>
 <p><a href="#get-support">I have another question.</a></p>
 <p><a name="faq1"></a> <strong>(1) Which permissions are needed and why?</strong></p>
@@ -885,7 +889,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p>The error <em>… Software caused connection abort …</em> means that the email server or something between FairEmail and the email server actively terminated an existing connection. This can for example happen when connectivity was abruptly lost. A typical example is turning on flight mode.</p>
 <p>The errors <em>… BYE Logging out …</em>, <em>… Connection reset …</em> mean that the email server or something between the email server and the app, for example a router or a firewall (app), actively terminated an existing connection.</p>
 <p>The error <em>… Connection closed by peer …</em> means that the email server actively closed the connection. This might be caused by a not updated Exchange server, see <a href="https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/">here</a> for more information.</p>
-<p>The errors <em>… Read error …</em>, <em>… Write error …</em>, <em>… Read timed out …</em>, <em>… Broken pipe …</em> mean that the email server is not responding anymore or that the internet connection is bad.</p>
+<p>The errors <em>… Read error …</em> (sometimes combined with <em>BAD_DECRYPT</em> / <em>DECRYPTION_FAILED_OR_BAD_RECORD_MAC</em>), <em>… Write error …</em>, <em>… Read timed out …</em>, <em>… Broken pipe …</em> mean that the email server is not responding anymore or that the internet connection is bad.</p>
 <p><a name="connectiondropped"></a> The error <em>… Connection dropped by server? …</em> means that the email server unexpectedly terminated the connection. This sometimes happen when there were too many (simultaneous) connections in a too short time or when a wrong password was used too often. In this case, please make sure your password is correct and disable receiving in the receive settings for about 30 minutes and try again. If needed, see <a href="#faq23">this FAQ</a> about how you can reduce the number of connections.</p>
 <p>The error <em>… Unexpected end of zlib input stream …</em> means that not all data was received, possibly due to a bad or interrupted connection.</p>
 <p>The error <em>… connection failure …</em> could indicate <a href="#faq23">Too many simultaneous connections</a>.</p>
@@ -2015,6 +2019,9 @@ $NotDisplayed</code></pre>
 <p><em>Block toolbar (version 1.1967+)</em></p>
 <p>When enabled in the three-dots overflow menu of the message editor, a toolbar to perform operations (align text, insert list, indent text, insert blockquote) on a block of text (consecutive non-empty lines) will be shown.</p>
 <p><br /></p>
+<p><em>Edit subject (1.2046+)</em></p>
+<p>The subject of a received message can be edited, also on the email server, via the horizontal three-dots button just above the message text near the left side of the screen.</p>
+<p><br></p>
 <p><a name="faq126"></a> <strong>(126) Can message previews be sent to my smartwatch?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq126">Google Translate</a></p>
 <p>FairEmail fetches a message in two steps:</p>
@@ -2753,6 +2760,28 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>If you want to proxy traffic, for example to use Tor, you should use an Android VPN-service based app, which is the only way to reliably proxy traffic.</p>
 <p>Please note that if you want to use a .onion address, you will need to disable private DNS in the Android network settings.</p>
 <p><br></p>
+<p><a name="faq200"></a> <strong>(200) How can I use Adguard to remove tracking parameters?</strong></p>
+<p>To use <a href="https://adguard.com/">Adguard</a> to remove tracking parameters from links:</p>
+<ol type="1">
+<li>Enable confirming links in the privacy-settings tab page</li>
+<li>Download and enable <a href="https://github.com/AdguardTeam/FiltersRegistry">the Adguard filter list</a>, also via the privacy-settings tab page</li>
+<li>When you tap on a link, the app will check the filter list</li>
+<li>If a list entry is found for the link, the app will suggest to <em>Remove tracking parameters</em> in the confirmation dialog box</li>
+</ol>
+<p>Note that the Adguard filter list contains over 2,000 entries, which takes a few moments to scan, visible as a short delay between tapping on a link and the link confirmation dialog box appearing.</p>
+<p><br></p>
+<p><a name="faq201"></a> <strong>(201) What is certificate transparency?</strong></p>
+<p>Please see <a href="https://certificate.transparency.dev/howctworks/">this article</a> about what certificate transparency is. Alternatively, see <a href="https://en.wikipedia.org/wiki/Certificate_Transparency">this Wikipedia article</a>.</p>
+<p>When certificate transparency is enabled in the connection-settings tab page of the app, the <a href="https://github.com/GoogleChrome/CertificateTransparency/blob/master/ct_policy.md">Chrome Certificate Transparency Policy</a> will be applied.</p>
+<p>FairEmail uses <a href="https://github.com/appmattus/certificatetransparency">this library</a> to implement certificate transparency via a custom trust manager.</p>
+<p><br></p>
+<p><a name="faq202"></a> <strong>(202) What is DNSSEC and what is DANE?</strong></p>
+<p>Please see <a href="https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">this Wikipedia article</a> about what DNSSEC is.</p>
+<p>Please see <a href="https://github.com/internetstandards/toolbox-wiki/blob/main/DANE-for-SMTP-how-to.md">this article</a> about what DANE is. Alternatively, see <a href="https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">this Wikipedia article</a>.</p>
+<p>You can use <a href="https://ssl-tools.net/tlsa-generator">this tool</a> to generate TSLA DNS records for DANE.</p>
+<p>You can enable enforcing DNSSEC and/or DANA in the (advanced) account and identity settings (since version 1.2148).</p>
+<p>Note that only some email providers support DANE and that only a limited number of DNS servers support DNSSEC (January 2024: ~30%), which is required for DANE. An alternative is using Certificate Transparency, see the previous FAQ.</p>
+<p><br></p>
 <h2>
 <a name="get-support"></a>Get support
 </h2>
@@ -2786,4 +2815,4 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p><br /></p>
 <p>GitHub issues are disabled due to frequent misusage.</p>
 <p><br /></p>
-<p>Copyright © 2018-2023 Marcel Bokhorst.</p>
+<p>Copyright © 2018-2024 Marcel Bokhorst.</p>

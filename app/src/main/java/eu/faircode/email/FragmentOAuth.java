@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -817,21 +817,21 @@ public class FragmentOAuth extends FragmentBase {
                     for (String alt : usernames) {
                         EntityLog.log(context, "Trying username=" + alt);
                         try {
-                            try (EmailService aservice = new EmailService(
-                                    context, aprotocol, null, aencryption, false, false,
+                            try (EmailService aservice = new EmailService(context,
+                                    aprotocol, null, aencryption, false, false, false,
                                     EmailService.PURPOSE_CHECK, true)) {
                                 aservice.connect(
-                                        inbound.host, inbound.port,
+                                        false, inbound.host, inbound.port,
                                         AUTH_TYPE_OAUTH, provider.id,
                                         alt, state[0],
                                         null, null);
                             }
                             if (state.length == 1) {
-                                try (EmailService iservice = new EmailService(
-                                        context, iprotocol, null, iencryption, false, false,
+                                try (EmailService iservice = new EmailService(context,
+                                        iprotocol, null, iencryption, false, false, false,
                                         EmailService.PURPOSE_CHECK, true)) {
                                     iservice.connect(
-                                            provider.smtp.host, provider.smtp.port,
+                                            false, provider.smtp.host, provider.smtp.port,
                                             AUTH_TYPE_OAUTH, provider.id,
                                             alt, state[0],
                                             null, null);
@@ -892,11 +892,11 @@ public class FragmentOAuth extends FragmentBase {
                 List<EntityFolder> folders;
 
                 EntityLog.log(context, "OAuth checking IMAP/POP3 provider=" + provider.id);
-                try (EmailService aservice = new EmailService(
-                        context, aprotocol, null, aencryption, false, false,
+                try (EmailService aservice = new EmailService(context,
+                        aprotocol, null, aencryption, false, false, false,
                         EmailService.PURPOSE_CHECK, true)) {
                     aservice.connect(
-                            inbound.host, inbound.port,
+                            false, inbound.host, inbound.port,
                             AUTH_TYPE_OAUTH, provider.id,
                             sharedname == null ? username : sharedname, state[0],
                             null, null);
@@ -911,11 +911,11 @@ public class FragmentOAuth extends FragmentBase {
                 if (!inbound_only && state.length == 1) {
                     EntityLog.log(context, "OAuth checking SMTP provider=" + provider.id);
 
-                    try (EmailService iservice = new EmailService(
-                            context, iprotocol, null, iencryption, false, false,
+                    try (EmailService iservice = new EmailService(context,
+                            iprotocol, null, iencryption, false, false, false,
                             EmailService.PURPOSE_CHECK, true)) {
                         iservice.connect(
-                                provider.smtp.host, provider.smtp.port,
+                                false, provider.smtp.host, provider.smtp.port,
                                 AUTH_TYPE_OAUTH, provider.id,
                                 username, state[0],
                                 null, null);

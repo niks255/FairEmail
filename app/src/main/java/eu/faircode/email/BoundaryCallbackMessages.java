@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -410,6 +410,15 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         if (account == null || account.protocol != EntityAccount.TYPE_IMAP)
             return 0;
 
+        if (criteria == null) {
+            String sort = prefs.getString(FragmentMessages.getSort(context, viewType, browsable.type), "time");
+            boolean ascending = prefs.getBoolean(FragmentMessages.getSortOrder(context, viewType, browsable.type), false);
+            if (!"time".equals(sort) || ascending) {
+                Log.i("Boundary sort=" + sort + " ascending=" + ascending);
+                return 0;
+            }
+        }
+
         if (state.imessages == null)
             try {
                 // Check connectivity
@@ -417,9 +426,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                     throw new IllegalStateException(context.getString(R.string.title_no_internet));
 
                 EntityLog.log(context, "Boundary server connecting account=" + account.name);
-                state.iservice = new EmailService(
-                        context, account.getProtocol(), account.realm, account.encryption, account.insecure, account.unicode,
-                        EmailService.PURPOSE_SEARCH, debug || BuildConfig.DEBUG);
+                state.iservice = new EmailService(context, account, EmailService.PURPOSE_SEARCH, debug || BuildConfig.DEBUG);
                 state.iservice.setPartialFetch(account.partial_fetch);
                 state.iservice.setRawFetch(account.raw_fetch);
                 state.iservice.setIgnoreBodyStructureSize(account.ignore_size);

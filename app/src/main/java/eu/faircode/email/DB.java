@@ -61,13 +61,13 @@ import javax.mail.internet.InternetAddress;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 287,
+        version = 289,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -535,6 +535,7 @@ public abstract class DB extends RoomDatabase {
                                 at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper.getWritableDatabase(FrameworkSQLiteOpenHelper.kt:104)
                                 at androidx.room.RoomDatabase.inTransaction(RoomDatabase.java:706)
                              */
+                            Log.forceCrashReporting();
                             Log.e(ex);
                             // FrameworkSQLiteOpenHelper.innerGetDatabase will delete the database
                             throw ex;
@@ -1083,7 +1084,7 @@ public abstract class DB extends RoomDatabase {
                     @Override
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
-                        File folder = new File(context.getFilesDir(), "attachments");
+                        File folder = Helper.ensureExists(context, "attachments");
                         File[] attachments = folder.listFiles();
                         if (attachments != null)
                             for (File source : attachments) {
@@ -1640,7 +1641,7 @@ public abstract class DB extends RoomDatabase {
                         logMigration(startVersion, endVersion);
                         db.execSQL("UPDATE `message` SET raw = NULL");
 
-                        File[] raws = new File(context.getFilesDir(), "raw").listFiles();
+                        File[] raws = Helper.ensureExists(context, "raw").listFiles();
                         if (raws != null)
                             for (File file : raws)
                                 Helper.secureDelete(file);
@@ -2907,6 +2908,20 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `message` ADD COLUMN `auth` INTEGER");
+                    }
+                }).addMigrations(new Migration(287, 288) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `account` ADD COLUMN `dane` INTEGER NOT NULL DEFAULT 0");
+                        db.execSQL("ALTER TABLE `identity` ADD COLUMN `dane` INTEGER NOT NULL DEFAULT 0");
+                    }
+                }).addMigrations(new Migration(288, 289) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `account` ADD COLUMN `dnssec` INTEGER NOT NULL DEFAULT 0");
+                        db.execSQL("ALTER TABLE `identity` ADD COLUMN `dnssec` INTEGER NOT NULL DEFAULT 0");
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

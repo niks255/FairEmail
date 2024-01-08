@@ -424,6 +424,44 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swDnsCustom"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_dns_custom"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swStandaloneVpn"
+                    app:switchPadding="12dp" />
+
+                <TextView
+                    android:id="@+id/tvDnsExtra"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_dns"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swDnsCustom" />
+
+                <eu.faircode.email.EditTextPlain
+                    android:id="@+id/etDnsExtra"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="48dp"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDnsExtra" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swTcpKeepAlive"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -432,7 +470,7 @@
                     android:text="@string/title_advanced_tcp_keep_alive"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swStandaloneVpn"
+                    app:layout_constraintTop_toBottomOf="@id/etDnsExtra"
                     app:switchPadding="12dp" />
 
                 <TextView
@@ -534,6 +572,30 @@
                     app:layout_constraintTop_toBottomOf="@id/swCertStrict" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swCertTransparency"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:checked="true"
+                    android:text="@string/title_advanced_cert_transparency"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCertStrictHint"
+                    app:switchPadding="12dp" />
+
+                <ImageButton
+                    android:id="@+id/ibCertTransparency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:contentDescription="@string/title_info"
+                    android:tooltipText="@string/title_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swCertTransparency"
+                    app:srcCompat="@drawable/twotone_info_24" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swCheckNames"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -542,7 +604,7 @@
                     android:text="@string/title_advanced_check_names"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvCertStrictHint"
+                    app:layout_constraintTop_toBottomOf="@id/ibCertTransparency"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -657,6 +719,13 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:constraint_referenced_ids="swValidated,tvValidatedHint,swVpnOnly" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/grpCustomDns"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="
+                    swDnsCustom,tvDnsExtra,etDnsExtra" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/grpCustomSsl"

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Activity;
@@ -218,7 +218,7 @@ public class FragmentDialogPrint extends FragmentDialogBase {
                 HtmlHelper.embedInlineImages(context, id, document, true);
 
                 // onPageFinished will not be called if not all images can be loaded
-                File dir = new File(context.getFilesDir(), "images");
+                File dir = Helper.ensureExists(context, "images");
                 List<Future<Void>> futures = new ArrayList<>();
                 Elements imgs = document.select("img");
                 for (int i = 0; i < imgs.size(); i++) {

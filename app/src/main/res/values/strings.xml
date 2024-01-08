@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">FairEmail</string>
-    <string name="app_copyright" translatable="false">Copyright &#x24B8; 2018–2023 by M. Bokhorst</string>
+    <string name="app_copyright" translatable="false">Copyright &#x24B8; 2018–2024 by M. Bokhorst</string>
     <string name="app_search">FairEmail search</string>
     <string name="app_send_self">Send to self</string>
     <string name="app_answer" translatable="false">FairEmail template</string>
@@ -517,11 +517,14 @@
     <string name="title_advanced_prefer_ip4">Prefer IPv4 over IPv6</string>
     <string name="title_advanced_bind_socket" translatable="false">Bind sockets to the active network</string>
     <string name="title_advanced_standalone_vpn" translatable="false">Standalone VPN</string>
+    <string name="title_advanced_dns">Preferred DNS server addresses (comma separated)</string>
+    <string name="title_advanced_dns_custom">Use custom DNS resolver</string>
     <string name="title_advanced_tcp_keep_alive" translatable="false">TCP keep alive</string>
     <string name="title_advanced_ssl_update">Use updated SSL provider</string>
     <string name="title_advanced_ssl_harden">Harden SSL connections</string>
     <string name="title_advanced_ssl_harden_strict">Require TLS 1.3</string>
     <string name="title_advanced_cert_strict">Strict certificate checking</string>
+    <string name="title_advanced_cert_transparency">Certificate transparency</string>
     <string name="title_advanced_check_names">Check host names against server certificates</string>
     <string name="title_advanced_open_safe">Open secure connections only</string>
     <string name="title_advanced_http_redirect">Allow connection redirection</string>
@@ -685,6 +688,7 @@
     <string name="title_advanced_expand_all">Automatically expand all read messages</string>
     <string name="title_advanced_expand_one">Expand only one message at a time</string>
     <string name="title_advanced_collapse_multiple">Collapse messages in a conversation with multiple messages on \'back\'</string>
+    <string name="title_advanced_seen_delay">Delay automatically marking messages as read</string>
     <string name="title_advanced_autoclose">Automatically close conversations</string>
     <string name="title_advanced_autoclose_send">Automatically close conversations after sending messages</string>
     <string name="title_advanced_onclose">On closing a conversation</string>
@@ -763,6 +767,8 @@
     <string name="title_advanced_confirm_files">Confirm viewing files</string>
     <string name="title_advanced_sanitize_links">Remove tracking parameters by default</string>
     <string name="title_advanced_sanitize_links_hint">Only when confirming links</string>
+    <string name="title_advanced_adguard">Use AdGuard filter list</string>
+    <string name="title_advanced_adguard_weekly">Automatically download weekly</string>
     <string name="title_advanced_check_links_dbl">Check domain block lists for suspicious links</string>
     <string name="title_advanced_confirm_images">Show no images by default</string>
     <string name="title_advanced_ask_images">Confirm showing images</string>
@@ -1183,6 +1189,8 @@
     <string name="title_aliases">Aliases</string>
     <string name="title_provider">Provider</string>
     <string name="title_custom">Custom</string>
+    <string name="title_dnssec">Enforce DNSSEC</string>
+    <string name="title_dnssec_remark">Only a limited number of DNS servers support DNSSEC</string>
     <string name="title_host">Host name</string>
     <string name="title_encryption">Encryption</string>
     <string name="title_encryption_ssl" translatable="false">SSL/TLS</string>
@@ -1190,6 +1198,8 @@
     <string name="title_encryption_none">None (insecure)</string>
     <string name="title_allow_insecure">Allow insecure connections</string>
     <string name="title_insecure_remark">Insecure connections should only be allowed on trusted networks and never on public networks</string>
+    <string name="title_dane">Enforce DANE</string>
+    <string name="title_dane_remark">Only some email providers support DANE</string>
     <string name="title_notify_remark">You can enable this for account specific notifications</string>
     <string name="title_port">Port number</string>
     <string name="title_user">User name</string>

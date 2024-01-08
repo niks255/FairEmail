@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -63,7 +63,7 @@ public class FairEmailLoggingProvider extends TinylogLoggingProvider {
 
     static void setup(Context context) {
         System.setProperty("tinylog.directory",
-                new File(context.getFilesDir(), "logs").getAbsolutePath());
+                Helper.ensureExists(context, "logs").getAbsolutePath());
 
         setLevel(context);
     }
@@ -77,8 +77,7 @@ public class FairEmailLoggingProvider extends TinylogLoggingProvider {
         if (debug)
             provider.activeLevel = Level.DEBUG;
         else {
-            int def = (BuildConfig.DEBUG || BuildConfig.TEST_RELEASE ? android.util.Log.INFO : android.util.Log.WARN);
-            int _level = prefs.getInt("log_level", def);
+            int _level = prefs.getInt("log_level", Log.getDefaultLogLevel());
             if (_level == android.util.Log.VERBOSE)
                 provider.activeLevel = Level.TRACE;
             else if (_level == android.util.Log.DEBUG)
@@ -93,7 +92,7 @@ public class FairEmailLoggingProvider extends TinylogLoggingProvider {
     }
 
     static File[] getLogFiles(Context context) {
-        File[] files = new File(context.getFilesDir(), "logs").listFiles();
+        File[] files = Helper.ensureExists(context, "logs").listFiles();
 
         if (files == null)
             return new File[0];

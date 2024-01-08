@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_FIRST_USER;
@@ -1665,6 +1665,7 @@ public class FragmentCompose extends FragmentBase {
                 Bundle extras = new Bundle();
                 extras.putString("html", HtmlHelper.toHtml(etBody.getText(), getContext()));
                 extras.putBoolean("show", true);
+                extras.putBoolean("refdelete", true);
                 onAction(R.id.action_save, extras, "refdelete");
             }
         });
@@ -5703,6 +5704,9 @@ public class FragmentCompose extends FragmentBase {
                                 data.draft.receipt_request = false;
                             }
 
+                            List<Address> recipients = data.draft.getAllRecipients();
+                            args.putBoolean("noreply", MessageHelper.isNoReply(recipients));
+
                         } else if ("forward".equals(action)) {
                             if (forward_new)
                                 data.draft.thread = data.draft.msgid; // new thread
@@ -5803,13 +5807,7 @@ public class FragmentCompose extends FragmentBase {
                                 data.draft.plain_only = 1;
 
                             // Encryption
-                            List<Address> recipients = new ArrayList<>();
-                            if (data.draft.to != null)
-                                recipients.addAll(Arrays.asList(data.draft.to));
-                            if (data.draft.cc != null)
-                                recipients.addAll(Arrays.asList(data.draft.cc));
-                            if (data.draft.bcc != null)
-                                recipients.addAll(Arrays.asList(data.draft.bcc));
+                            List<Address> recipients = data.draft.getAllRecipients();
 
                             if (!BuildConfig.DEBUG)
                                 if (EntityMessage.PGP_SIGNONLY.equals(ref.ui_encrypt) ||
@@ -6277,7 +6275,18 @@ public class FragmentCompose extends FragmentBase {
             bottom_navigation.getMenu().findItem(R.id.action_undo).setVisible(data.draft.revision > 1);
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(data.draft.revision < data.draft.revisions);
 
-            if (args.getBoolean("incomplete")) {
+            if (args.getBoolean("noreply")) {
+                final Snackbar snackbar = Snackbar.make(
+                                view, R.string.title_noreply_reminder, Snackbar.LENGTH_INDEFINITE)
+                        .setGestureInsetBottomIgnored(true);
+                snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snackbar.dismiss();
+                    }
+                });
+                snackbar.show();
+            } else if (args.getBoolean("incomplete")) {
                 final Snackbar snackbar = Snackbar.make(
                                 view, R.string.title_attachments_incomplete, Snackbar.LENGTH_INDEFINITE)
                         .setGestureInsetBottomIgnored(true);
@@ -6878,6 +6887,9 @@ public class FragmentCompose extends FragmentBase {
                             Helper.writeText(draft.getFile(context, draft.revision), c.html());
 
                             d = JsoupEx.parse(extras.getString("html"));
+
+                            if (extras.getBoolean("refdelete"))
+                                addSignature(context, d, draft, identity);
                         } else {
                             d = JsoupEx.parse(body); // Save
 
@@ -7085,21 +7097,9 @@ public class FragmentCompose extends FragmentBase {
                             //        identity != null && identity.sender_extra)
                             //    args.putBoolean("remind_extra", true);
 
-                            List<Address> recipients = new ArrayList<>();
-                            if (draft.to != null)
-                                recipients.addAll(Arrays.asList(draft.to));
-                            if (draft.cc != null)
-                                recipients.addAll(Arrays.asList(draft.cc));
-                            if (draft.bcc != null)
-                                recipients.addAll(Arrays.asList(draft.bcc));
+                            List<Address> recipients = draft.getAllRecipients();
 
-                            boolean noreply = false;
-                            for (Address recipient : recipients)
-                                if (MessageHelper.isNoReply(recipient)) {
-                                    noreply = true;
-                                    break;
-                                }
-                            args.putBoolean("remind_noreply", noreply);
+                            args.putBoolean("remind_noreply", MessageHelper.isNoReply(recipients));
 
                             if (identity != null && !TextUtils.isEmpty(identity.internal)) {
                                 boolean external = false;

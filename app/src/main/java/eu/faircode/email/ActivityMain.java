@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.app.ActivityOptions;
@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -218,15 +217,12 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
             final SimpleTask<Boolean> boot = new SimpleTask<Boolean>() {
                 @Override
                 protected void onPreExecute(Bundle args) {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
-                        getMainHandler().postDelayed(splash, SPLASH_DELAY);
+                    getMainHandler().postDelayed(splash, SPLASH_DELAY);
                 }
 
                 @Override
                 protected void onPostExecute(Bundle args) {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
-                        getMainHandler().removeCallbacks(splash);
-                    getWindow().setBackgroundDrawable(null);
+                    getMainHandler().removeCallbacks(splash);
                 }
 
                 @Override
@@ -465,8 +461,12 @@ public class ActivityMain extends ActivityBase implements FragmentManager.OnBack
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if ("eula".equals(key))
-            if (prefs.getBoolean(key, false))
+        if ("eula".equals(key)) {
+            boolean eula = prefs.getBoolean(key, false);
+            if (eula) {
+                // recreate is done without animation, unfortunately
                 recreate();
+            }
+        }
     }
 }

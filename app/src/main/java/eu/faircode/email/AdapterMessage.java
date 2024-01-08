@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -3390,7 +3390,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvDecrypt.setVisibility(encrypted && !unlocked ? View.VISIBLE : View.GONE);
                     tvSignedData.setVisibility(signed_data ? View.VISIBLE : View.GONE);
 
-                    if (!encrypted || unlocked) {
+                    if (!encrypted || inline || unlocked) {
                         if (show_full) {
                             ((WebViewEx) wvBody).setOnPageLoaded(new Runnable() {
                                 @Override
@@ -6111,6 +6111,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             boolean dark = Helper.isDarkTheme(context);
             boolean force_light = properties.getValue("force_light", message.id);
 
+            boolean experiments = prefs.getBoolean("experiments", false);
+
             PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibMore);
             popupMenu.inflate(R.menu.popup_message_more);
 
@@ -6137,7 +6139,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             popupMenu.getMenu().findItem(R.id.menu_edit_subject)
                     .setEnabled(message.uid != null && !message.folderReadOnly)
-                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP && BuildConfig.DEBUG);
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP &&
+                            experiments);
 
             popupMenu.getMenu().findItem(R.id.menu_move_to)
                     .setEnabled(message.uid != null && !message.folderReadOnly)

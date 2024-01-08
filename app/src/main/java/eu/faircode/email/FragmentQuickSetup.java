@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
@@ -430,8 +430,8 @@ public class FragmentQuickSetup extends FragmentBase {
                         String user = null;
                         String aprotocol = (provider.imap.starttls ? "imap" : "imaps");
                         int aencryption = (provider.imap.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
-                        try (EmailService iservice = new EmailService(
-                                context, aprotocol, null, aencryption, false, false,
+                        try (EmailService iservice = new EmailService(context,
+                                aprotocol, null, aencryption, false, false, false,
                                 EmailService.PURPOSE_CHECK, true)) {
                             List<Throwable> exceptions = new ArrayList<>();
                             for (int i = 0; i < users.size(); i++) {
@@ -439,7 +439,7 @@ public class FragmentQuickSetup extends FragmentBase {
                                 Log.i("Trying with user=" + user);
                                 try {
                                     iservice.connect(
-                                            provider.imap.host, provider.imap.port,
+                                            false, provider.imap.host, provider.imap.port,
                                             AUTH_TYPE_PASSWORD, null,
                                             user, password,
                                             null, null);
@@ -448,7 +448,7 @@ public class FragmentQuickSetup extends FragmentBase {
                                     imap_certificate = ex.getCertificate();
                                     imap_fingerprint = EntityCertificate.getKeyFingerprint(imap_certificate);
                                     iservice.connect(
-                                            provider.imap.host, provider.imap.port,
+                                            false, provider.imap.host, provider.imap.port,
                                             AUTH_TYPE_PASSWORD, null,
                                             user, password,
                                             null, imap_fingerprint);
@@ -539,13 +539,13 @@ public class FragmentQuickSetup extends FragmentBase {
                         Long max_size;
                         String iprotocol = (provider.smtp.starttls ? "smtp" : "smtps");
                         int iencryption = (provider.smtp.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
-                        try (EmailService iservice = new EmailService(
-                                context, iprotocol, null, iencryption, false, false,
+                        try (EmailService iservice = new EmailService(context,
+                                iprotocol, null, iencryption, false, false, false,
                                 EmailService.PURPOSE_CHECK, true)) {
                             iservice.setUseIp(provider.useip, null);
                             try {
                                 iservice.connect(
-                                        provider.smtp.host, provider.smtp.port,
+                                        false, provider.smtp.host, provider.smtp.port,
                                         AUTH_TYPE_PASSWORD, null,
                                         user, password,
                                         null, null);
@@ -553,7 +553,7 @@ public class FragmentQuickSetup extends FragmentBase {
                                 smtp_certificate = ex.getCertificate();
                                 smtp_fingerprint = EntityCertificate.getKeyFingerprint(smtp_certificate);
                                 iservice.connect(
-                                        provider.smtp.host, provider.smtp.port,
+                                        false, provider.smtp.host, provider.smtp.port,
                                         AUTH_TYPE_PASSWORD, null,
                                         user, password,
                                         null, smtp_fingerprint);

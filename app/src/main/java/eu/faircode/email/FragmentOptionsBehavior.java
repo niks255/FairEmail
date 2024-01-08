@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -51,6 +51,10 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class FragmentOptionsBehavior extends FragmentBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private View view;
     private ImageButton ibHelp;
@@ -83,6 +87,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     private SwitchCompat swExpandAll;
     private SwitchCompat swExpandOne;
     private SwitchCompat swAutoClose;
+    private Spinner spSeenDelay;
     private TextView tvAutoSeenHint;
     private TextView tvOnClose;
     private Spinner spOnClose;
@@ -113,19 +118,20 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
 
     final static int REQUEST_DEFAULT_FOLDER = 1;
 
-    private final static String[] RESET_OPTIONS = new String[]{
+    private final static List<String> RESET_OPTIONS = Collections.unmodifiableList(Arrays.asList(
             "restore_on_launch", "sync_on_launch", "double_back", "conversation_actions", "conversation_actions_replies", "language_detection",
             "photo_picker", "default_snooze",
             "pull", "pull_all", "autoscroll", "quick_filter", "quick_scroll", "quick_actions", "swipe_sensitivity", "foldernav",
             "doubletap", "swipenav", "volumenav", "updown", "reversed", "swipe_close", "swipe_move",
             "autoexpand", "expand_first", "expand_all", "expand_one", "collapse_multiple",
+            "seen_delay",
             "autoclose", "onclose", "autoclose_unseen", "autoclose_send", "collapse_marked",
             "undo_timeout",
             "autoread", "flag_snoozed", "autounflag", "auto_important", "reset_importance",
             "reset_snooze", "auto_block_sender", "auto_hide_answer", "swipe_reply",
             "move_thread_all", "move_thread_sent",
             "default_folder"
-    };
+    ));
 
     @Override
     @Nullable
@@ -167,6 +173,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         swExpandAll = view.findViewById(R.id.swExpandAll);
         swExpandOne = view.findViewById(R.id.swExpandOne);
         swCollapseMultiple = view.findViewById(R.id.swCollapseMultiple);
+        spSeenDelay = view.findViewById(R.id.spSeenDelay);
         tvAutoSeenHint = view.findViewById(R.id.tvAutoSeenHint);
         swAutoClose = view.findViewById(R.id.swAutoClose);
         tvOnClose = view.findViewById(R.id.tvOnClose);
@@ -197,6 +204,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         // Wire controls
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int[] undoValues = getResources().getIntArray(R.array.undoValues);
 
         ibHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -438,6 +446,19 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
+        spSeenDelay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                int value = undoValues[position];
+                prefs.edit().putInt("seen_delay", value).apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                prefs.edit().remove("seen_delay").apply();
+            }
+        });
+
         tvAutoSeenHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -496,8 +517,7 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         spUndoTimeout.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                int[] values = getResources().getIntArray(R.array.undoValues);
-                int value = values[position];
+                int value = undoValues[position];
                 prefs.edit().putInt("undo_timeout", value).apply();
             }
 
@@ -639,6 +659,9 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        if (!RESET_OPTIONS.contains(key))
+            return;
+
         if ("default_snooze".equals(key))
             return;
 
@@ -672,6 +695,8 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         try {
             if (view == null || getContext() == null)
                 return;
+
+            int[] undoValues = getResources().getIntArray(R.array.undoValues);
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
@@ -716,6 +741,13 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             swExpandOne.setEnabled(!swExpandAll.isChecked());
             swCollapseMultiple.setChecked(prefs.getBoolean("collapse_multiple", true));
 
+            int seen_delay = prefs.getInt("seen_delay", 0);
+            for (int pos = 0; pos < undoValues.length; pos++)
+                if (undoValues[pos] == seen_delay) {
+                    spSeenDelay.setSelection(pos);
+                    break;
+                }
+
             swAutoClose.setChecked(prefs.getBoolean("autoclose", true));
 
             String onClose = prefs.getString("onclose", "");
@@ -734,7 +766,6 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             swCollapseMarked.setChecked(prefs.getBoolean("collapse_marked", true));
 
             int undo_timeout = prefs.getInt("undo_timeout", 5000);
-            int[] undoValues = getResources().getIntArray(R.array.undoValues);
             for (int pos = 0; pos < undoValues.length; pos++)
                 if (undoValues[pos] == undo_timeout) {
                     spUndoTimeout.setSelection(pos);

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Notification;
@@ -74,12 +74,16 @@ public class EntityAccount extends EntityOrder implements Serializable {
     @ColumnInfo(name = "pop")
     public Integer protocol = TYPE_IMAP;
     @NonNull
+    public Boolean dnssec = false;
+    @NonNull
     public String host; // POP3/IMAP
     @NonNull
     @ColumnInfo(name = "starttls")
     public Integer encryption;
     @NonNull
     public Boolean insecure = false;
+    @NonNull
+    public Boolean dane = false;
     @NonNull
     public Integer port;
     @NonNull

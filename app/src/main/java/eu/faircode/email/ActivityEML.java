@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.content.ContentResolver;
@@ -583,8 +583,7 @@ public class ActivityEML extends ActivityBase {
                     Session isession = Session.getInstance(props, null);
                     MimeMessage imessage = new MimeMessage(isession, is);
 
-                    try (EmailService iservice = new EmailService(
-                            context, account.getProtocol(), account.realm, account.encryption, account.insecure, account.unicode, true)) {
+                    try (EmailService iservice = new EmailService(context, account, EmailService.PURPOSE_USE, true)) {
                         iservice.setPartialFetch(account.partial_fetch);
                         iservice.setRawFetch(account.raw_fetch);
                         iservice.setIgnoreBodyStructureSize(account.ignore_size);

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.Manifest;
@@ -178,7 +178,7 @@ public class ContactInfo {
         // Favicons
         Log.i("Cleanup avatars");
         for (String type : new String[]{"favicons", "generated"}) {
-            File[] favicons = new File(context.getFilesDir(), type).listFiles();
+            File[] favicons = Helper.ensureExists(context, type).listFiles();
             if (favicons != null)
                 for (File file : favicons)
                     if (file.lastModified() + CACHE_FAVICON_DURATION < now) {
@@ -201,7 +201,7 @@ public class ContactInfo {
             return;
 
         for (String type : new String[]{"favicons", "generated"}) {
-            final File dir = new File(context.getFilesDir(), type);
+            final File dir = Helper.ensureExists(context, type);
             Helper.getParallelExecutor().submit(new Runnable() {
                 @Override
                 public void run() {
@@ -525,6 +525,7 @@ public class ContactInfo {
                                 ex instanceof CertPathValidatorException ||
                                 ex.getCause() instanceof CertPathValidatorException ||
                                 ex.getCause() instanceof CertificateException ||
+                                ex instanceof SSLHandshakeException ||
                                 (ex instanceof SSLException &&
                                         "Unable to parse TLS packet header".equals(ex.getMessage())) ||
                                 (ex instanceof IOException &&

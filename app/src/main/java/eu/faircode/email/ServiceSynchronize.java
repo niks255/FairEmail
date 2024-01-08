@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -31,6 +31,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteFullException;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.Network;
@@ -171,8 +172,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             "sync_folders",
             "sync_shared_folders",
             "download_headers", "download_eml",
-            "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive", // force reconnect
-            "ssl_harden", "ssl_harden_strict", "cert_strict", "check_names", "bouncy_castle", "bc_fips", // force reconnect
+            "prefer_ip4", "bind_socket", "standalone_vpn", // force reconnect
+            "dns_extra", "dns_custom", // force reconnect
+            "tcp_keep_alive", // force reconnect
+            "ssl_harden", "ssl_harden_strict", "cert_strict", "cert_transparency", "check_names", "bouncy_castle", "bc_fips", // force reconnect
             "experiments", "debug", "protocol", // force reconnect
             "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", // force reconnect
             "keep_alive_poll", "empty_pool", "idle_done", // force reconnect
@@ -1591,8 +1594,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 boolean empty_pool = prefs.getBoolean("empty_pool", true);
                 boolean debug = (prefs.getBoolean("debug", false) || BuildConfig.DEBUG);
 
-                final EmailService iservice = new EmailService(
-                        this, account.getProtocol(), account.realm, account.encryption, account.insecure, account.unicode, debug);
+                final EmailService iservice = new EmailService(this, account, EmailService.PURPOSE_USE, debug);
                 iservice.setPartialFetch(account.partial_fetch);
                 iservice.setRawFetch(account.raw_fetch);
                 iservice.setIgnoreBodyStructureSize(account.ignore_size);
@@ -2592,8 +2594,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         long delayed = now - account.last_connected - account.poll_interval * 60 * 1000L;
                         long maxDelayed = (pollInterval > 0 && !account.isExempted(this)
                                 ? pollInterval * ACCOUNT_ERROR_AFTER_POLL : ACCOUNT_ERROR_AFTER) * 60 * 1000L;
-                        if (delayed > maxDelayed &&
-                                state.getBackoff() >= CONNECT_BACKOFF_ALARM_START * 60) {
+                        // android.database.sqlite.SQLiteFullException: database or disk is full (code 13 SQLITE_FULL)
+                        if (ex instanceof SQLiteFullException ||
+                                (delayed > maxDelayed &&
+                                        state.getBackoff() >= CONNECT_BACKOFF_ALARM_START * 60)) {
                             Log.i("Reporting sync error after=" + delayed);
                             Throwable warning = new Throwable(
                                     getString(R.string.title_no_sync,

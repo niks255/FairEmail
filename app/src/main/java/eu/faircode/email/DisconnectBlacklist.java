@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -29,12 +29,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -127,14 +129,12 @@ public class DisconnectBlacklist {
             if (status != HttpsURLConnection.HTTP_OK)
                 throw new FileNotFoundException("Error " + status + ": " + connection.getResponseMessage());
 
-            String response = Helper.readStream(connection.getInputStream());
-            Helper.writeText(file, response);
+            try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                Helper.copy(connection.getInputStream(), os);
+            }
         } finally {
             connection.disconnect();
         }
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().putLong("disconnect_last", new Date().getTime()).apply();
 
         init(file);
     }

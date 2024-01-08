@@ -67,6 +67,7 @@ For authorizing:
 * Posteo: not that there is [no spam folder](https://posteo.de/en/help/how-does-the-posteo-spam-filter-work) ([German](https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter))
 * Web.de: please check if [IMAP is enabled](https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html)
 * Web.de: with two factor authentication you'll need to use [an app password](https://web.de/email/sicherheit/zwei-faktor-authentifizierung/)
+* Web.de: if you are missing the spam messages folder, you should enable spam filtering via the website of web.de again
 * GMX: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html)). Reportedly, you need to do this on a desktop computer.
 * GMX: with two factor authentication you'll need to use [an app password](https://support.gmx.com/security/2fa/application-specific-passwords.html) ([German](https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html)). Not that enabling two-factor authentication does not automatically enable IMAP.
 * T-online.de: please make sure you use [an email password](https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-adresse-passwoerter-und-sicherheit/passwort-fuer-e-mail-programme-einrichten) (German) and not your account password
@@ -410,6 +411,9 @@ Anything on this list is in random order and *might* be added in the near future
 * [(197) How can I print a message?](#faq197)
 * [(198) Can you add spell checking?](#faq198)
 * [(199) Can you add proxy support?](#faq199)
+* [(200) How can I use Adguard to remove tracking parameters?](#faq200)
+* [(201) What is certificate transparency?](#faq201)
+* [(202) What is DNSSEC and what is DANE?](#faq202)
 
 [I have another question.](#get-support)
 
@@ -1502,7 +1506,8 @@ or something between the email server and the app, for example a router or a fir
 The error *... Connection closed by peer ...* means that the email server actively closed the connection.
 This might be caused by a not updated Exchange server, see [here](https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/) for more information.
 
-The errors *... Read error ...*, *... Write error ...*, *... Read timed out ...*, *... Broken pipe ...* mean that the email server is not responding anymore or that the internet connection is bad.
+The errors *... Read error ...* (sometimes combined with *BAD_DECRYPT* / *DECRYPTION_FAILED_OR_BAD_RECORD_MAC*),
+*... Write error ...*, *... Read timed out ...*, *... Broken pipe ...* mean that the email server is not responding anymore or that the internet connection is bad.
 
 <a name="connectiondropped"></a>
 The error *... Connection dropped by server? ...* means that the email server unexpectedly terminated the connection.
@@ -3982,6 +3987,12 @@ a toolbar to perform operations (align text, insert list, indent text, insert bl
 
 <br />
 
+*Edit subject (1.2046+)*
+
+The subject of a received message can be edited, also on the email server, via the horizontal three-dots button just above the message text near the left side of the screen.
+
+<br>
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my smartwatch?**
 
@@ -5634,6 +5645,51 @@ Please note that if you want to use a .onion address, you will need to disable p
 
 <br>
 
+<a name="faq200"></a>
+**(200) How can I use Adguard to remove tracking parameters?**
+
+To use [Adguard](https://adguard.com/) to remove tracking parameters from links:
+
+1. Enable confirming links in the privacy-settings tab page
+1. Download and enable [the Adguard filter list](https://github.com/AdguardTeam/FiltersRegistry), also via the privacy-settings tab page
+1. When you tap on a link, the app will check the filter list
+1. If a list entry is found for the link, the app will suggest to *Remove tracking parameters* in the confirmation dialog box
+
+Note that the Adguard filter list contains over 2,000 entries, which takes a few moments to scan,
+visible as a short delay between tapping on a link and the link confirmation dialog box appearing.
+
+<br>
+
+<a name="faq201"></a>
+**(201) What is certificate transparency?**
+
+Please see [this article](https://certificate.transparency.dev/howctworks/) about what certificate transparency is.
+Alternatively, see [this Wikipedia article](https://en.wikipedia.org/wiki/Certificate_Transparency).
+
+When certificate transparency is enabled in the connection-settings tab page of the app,
+the [Chrome Certificate Transparency Policy](https://github.com/GoogleChrome/CertificateTransparency/blob/master/ct_policy.md) will be applied.
+
+FairEmail uses [this library](https://github.com/appmattus/certificatetransparency) to implement certificate transparency via a custom trust manager.
+
+<br>
+
+<a name="faq202"></a>
+**(202) What is DNSSEC and what is DANE?**
+
+Please see [this Wikipedia article](https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions) about what DNSSEC is.
+
+Please see [this article](https://github.com/internetstandards/toolbox-wiki/blob/main/DANE-for-SMTP-how-to.md) about what DANE is.
+Alternatively, see [this Wikipedia article](https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities).
+
+You can use [this tool](https://ssl-tools.net/tlsa-generator) to generate TSLA DNS records for DANE.
+
+You can enable enforcing DNSSEC and/or DANA in the (advanced) account and identity settings (since version 1.2148).
+
+Note that only some email providers support DANE and that only a limited number of DNS servers support DNSSEC (January 2024: ~30%), which is required for DANE.
+An alternative is using Certificate Transparency, see the previous FAQ.
+
+<br>
+
 <h2><a name="get-support"></a>Get support</h2>
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23get-support)
@@ -5696,4 +5752,4 @@ GitHub issues are disabled due to frequent misusage.
 
 <br />
 
-Copyright &copy; 2018-2023 Marcel Bokhorst.
+Copyright &copy; 2018-2024 Marcel Bokhorst.

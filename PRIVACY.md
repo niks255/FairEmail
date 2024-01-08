@@ -98,7 +98,8 @@ This table provides a complete overview of all shared data and the conditions un
 | OpenAI             | Received and entered message texts                                 | Upen pressing a button in a navigation bar (*)                              |
 | Gravatar           | [MD5 hash](https://en.wikipedia.org/wiki/MD5) of email addresses   | If Gravatars are enabled, upon receiving a message (*)                      |
 | Libravatar         | [MD5 hash](https://en.wikipedia.org/wiki/MD5) of email addresses   | If Libravatars are enabled, upon receiving a message (*)                    |
-| GitHub             | None, but see the remarks below                                    | Upon downloading Disconnect's Tracker Protection lists                      |
+| GitHub             | None, but see the remarks below                                    | Upon downloading AdGuard tracking parameter list                            |
+|                    |                                                                    | Upon downloading Disconnect's Tracker Protection lists                      |
 |                    |                                                                    | Upon checking for updates (*)                                               |
 | BIMI               | Domain name of email addresses                                     | If BIMI is enabled, upon receiving a message (*)                            |
 | Favicons           | Domain name of email addresses                                     | If favicons are enabled, upon receiving a message (*)                       |
@@ -220,4 +221,4 @@ The data processor utilizes the services of the following sub-processors in orde
 Any support requests are sent voluntarily by the data subject, including any personal data that might be attached.
 As such, the explicit consent as outlined in Art. 6 (1) a GDPR forms the legal basis for processing.
 
-Copyright &copy; 2018-2023 Marcel Bokhorst.
+Copyright &copy; 2018-2024 Marcel Bokhorst.

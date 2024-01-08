@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -477,7 +477,7 @@ public class FragmentOptions extends FragmentBase {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    static void reset(Context context, String[] options, Runnable confirmed) {
+    static void reset(Context context, List<String> options, Runnable confirmed) {
         new AlertDialog.Builder(context)
                 .setIcon(R.drawable.twotone_help_24)
                 .setTitle(R.string.title_setup_defaults)

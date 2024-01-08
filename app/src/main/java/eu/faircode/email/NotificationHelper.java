@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.core.app.NotificationCompat.DEFAULT_LIGHTS;
@@ -619,7 +619,7 @@ class NotificationHelper {
         }
 
         if (notify_screen_on && flash) {
-            Log.i("Notify screen on");
+            EntityLog.log(context, EntityLog.Type.Notification, "Notify screen on");
             PowerManager pm = Helper.getSystemService(context, PowerManager.class);
             PowerManager.WakeLock wakeLock = pm.newWakeLock(
                     PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP,

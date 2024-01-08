@@ -4,7 +4,44 @@
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
+### [Ypupiara](https://en.wikipedia.org/wiki/Ypupiara)
+
+### 1.2149 - 2024-01-08
+
+* Added option to to delay automatically marking messages as read
+* Replaced [javadns](https://github.com/dnsjava/dnsjava) by [MiniDNS](https://github.com/MiniDNS/minidns)
+* Added account/identity options to enforce DNSSEC and/or DANE, see [the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#faq202)
+* Small improvements and minor bug fixes
+* Updated [biweekly](https://github.com/mangstadt/biweekly)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### [Wintonotitan](https://en.wikipedia.org/wiki/Wintonotitan)
+
+### 1.2148 - 2024-01-08 *
+
+* Fixed accepting EULA in some cases
+* Fixed unified/primary folders navigation
+
+### 1.2147 - 2024-01-04 *
+
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated Material design library
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2146 - 2024-01-02
+
+* Happy New Year!
+* Added *Certificate transparency*, see [the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#faq201)
+* Small improvements and minor bug fixes
+* Updated libraries (Apache Compress, Bugsnag, Bouncy Castle, Jsoup)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2145 - 2023-12-30
+
+* Added Adguard filter list to remove tracking parameters from links, see [the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#faq200)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
 
 ### 1.2144 - 2023-12-27
 

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_GRAPH;
@@ -752,8 +752,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             MicrosoftGraph.send(ServiceSend.this, ident, imessage);
             end = new Date().getTime();
         } else {
-            EmailService iservice = new EmailService(
-                    this, ident.getProtocol(), ident.realm, ident.encryption, ident.insecure, ident.unicode, debug);
+            EmailService iservice = new EmailService(this, ident, EmailService.PURPOSE_USE, debug);
             try {
                 iservice.setUseIp(ident.use_ip, ident.ehlo);
                 if (!message.isSigned() && !message.isEncrypted())

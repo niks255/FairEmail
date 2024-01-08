@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.room.ForeignKey.CASCADE;
@@ -349,6 +349,17 @@ public class EntityMessage implements Serializable {
         return addresses.toArray(new Address[0]);
     }
 
+    List<Address> getAllRecipients() {
+        List<Address> recipients = new ArrayList<>();
+        if (to != null)
+            recipients.addAll(Arrays.asList(to));
+        if (cc != null)
+            recipients.addAll(Arrays.asList(cc));
+        if (bcc != null)
+            recipients.addAll(Arrays.asList(bcc));
+        return recipients;
+    }
+
     boolean hasKeyword(@NonNull String value) {
         // https://tools.ietf.org/html/rfc5788
         if (keywords == null)
@@ -627,7 +638,7 @@ public class EntityMessage implements Serializable {
     }
 
     static void convert(Context context) {
-        File root = new File(context.getFilesDir(), "messages");
+        File root = Helper.ensureExists(context, "messages");
         List<File> files = Helper.listFiles(root);
         for (File file : files)
             if (file.isFile())

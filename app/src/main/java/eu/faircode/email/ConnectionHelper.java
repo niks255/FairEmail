@@ -16,13 +16,14 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.accounts.AccountsException;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -441,6 +442,36 @@ public class ConnectionHelper {
         return null;
     }
 
+    static Boolean isPrivateDnsActive(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return null;
+        ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
+        if (cm == null)
+            return null;
+        Network active = cm.getActiveNetwork();
+        if (active == null)
+            return null;
+        LinkProperties props = cm.getLinkProperties(active);
+        if (props == null)
+            return null;
+        return props.isPrivateDnsActive();
+    }
+
+    static String getPrivateDnsServerName(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return null;
+        ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
+        if (cm == null)
+            return null;
+        Network active = cm.getActiveNetwork();
+        if (active == null)
+            return null;
+        LinkProperties props = cm.getLinkProperties(active);
+        if (props == null)
+            return null;
+        return props.getPrivateDnsServerName();
+    }
+
     static boolean isIoError(Throwable ex) {
         if (ex instanceof MessagingException &&
                 ex.getMessage() != null &&
@@ -615,23 +646,36 @@ public class ConnectionHelper {
         boolean has4 = false;
         boolean has6 = false;
 
-        String ifacename = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 ConnectivityManager cm = Helper.getSystemService(context, ConnectivityManager.class);
                 Network active = (cm == null ? null : cm.getActiveNetwork());
                 LinkProperties props = (active == null ? null : cm.getLinkProperties(active));
-                ifacename = (props == null ? null : props.getInterfaceName());
+                String ifacename = (props == null ? null : props.getInterfaceName());
+                List<LinkAddress> las = (props == null ? null : props.getLinkAddresses());
+                if (las != null)
+                    for (LinkAddress la : las) {
+                        InetAddress addr = la.getAddress();
+                        boolean local = (addr.isLoopbackAddress() || addr.isLinkLocalAddress());
+                        EntityLog.log(context, EntityLog.Type.Network,
+                                "Link addr=" + addr + " local=" + local + " interface=" + ifacename);
+                        if (local)
+                            continue;
+                        if (addr instanceof Inet4Address)
+                            has4 = true;
+                        else if (addr instanceof Inet6Address)
+                            has6 = true;
+                    }
             } catch (Throwable ex) {
                 Log.e(ex);
             }
+            return new boolean[]{has4, has6};
+        }
 
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces != null && interfaces.hasMoreElements()) {
                 NetworkInterface ni = interfaces.nextElement();
-                if (ifacename != null && !ifacename.equals(ni.getName()))
-                    continue;
                 for (InterfaceAddress iaddr : ni.getInterfaceAddresses()) {
                     InetAddress addr = iaddr.getAddress();
                     boolean local = (addr.isLoopbackAddress() || addr.isLinkLocalAddress());

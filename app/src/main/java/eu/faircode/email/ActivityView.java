@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
@@ -774,8 +774,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private void init() {
         Bundle args = new Bundle();
 
-        long account = getIntent().getLongExtra("account", -1);
-
         FragmentBase fragment;
         switch (startup) {
             case "accounts":
@@ -784,15 +782,11 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 break;
             case "folders":
                 fragment = new FragmentFolders();
-                args.putLong("account", account);
                 args.putBoolean("unified", true);
                 break;
             case "primary":
                 fragment = new FragmentFolders();
-                if (account < 0)
-                    args.putBoolean("primary", true);
-                else
-                    args.putLong("account", account);
+                args.putBoolean("primary", true);
                 break;
             default:
                 fragment = new FragmentMessages();
@@ -1574,6 +1568,9 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             protected UpdateInfo onExecute(Context context, Bundle args) throws Throwable {
                 boolean beta = args.getBoolean("beta");
 
+                if (BuildConfig.DEBUG)
+                    DnsHelper.test(context);
+
                 StringBuilder response = new StringBuilder();
                 HttpsURLConnection urlConnection = null;
                 try {
@@ -1605,6 +1602,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                             throw new IllegalArgumentException(jmessage.getString("message"));
                         throw new IOException("HTTP " + status + ": " + response);
                     }
+                    if (status == HttpsURLConnection.HTTP_BAD_GATEWAY)
+                        throw new IOException("HTTP " + status);
                     if (status != HttpsURLConnection.HTTP_OK)
                         throw new IOException("HTTP " + status + ": " + response);
 

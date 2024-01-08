@@ -424,10 +424,13 @@
     <string name="title_advanced_vpn_only">VPN 経由でのみ接続する</string>
     <string name="title_advanced_timeout">接続タイムアウト (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv6 より IPv4 を優先する</string>
+    <string name="title_advanced_dns" comment="title_advanced_dns&#10;Title for an option to configure extra, preferred DNS server addresses&#10;https://en.wikipedia.org/wiki/Domain_Name_System">優先 DNS サーバーアドレス (カンマ区切り)</string>
+    <string name="title_advanced_dns_custom" comment="title_advanced_dns_custom&#10;Title for an option to use a custom DNS resolver instead of the Android DNS resolver&#10;https://en.wikipedia.org/wiki/Domain_Name_System">カスタム DNS リゾルバーを使用する</string>
     <string name="title_advanced_ssl_update">更新された SSL プロバイダーを使用する</string>
     <string name="title_advanced_ssl_harden">より強固な SSL 接続</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 を要求する</string>
     <string name="title_advanced_cert_strict">厳格な証明書確認</string>
+    <string name="title_advanced_cert_transparency">証明書の透明性 (Certificate Transparency)</string>
     <string name="title_advanced_check_names">ホスト名をサーバー証明書と比較して確認する</string>
     <string name="title_advanced_open_safe">保護された接続のみ使用する</string>
     <string name="title_advanced_http_redirect">接続のリダイレクトを許可する</string>
@@ -580,6 +583,7 @@
     <string name="title_advanced_expand_all">すべての既読メッセージを自動で展開する</string>
     <string name="title_advanced_expand_one">一度に 1 つのメッセージのみを展開する</string>
     <string name="title_advanced_collapse_multiple">複数のメッセージがある会話で「戻る」をタップしてメッセージを折りたたむ</string>
+    <string name="title_advanced_seen_delay" comment="title_advanced_seen_delay&#10;Title for an option to configure the time to delay marking messages automatically read on opening/expanding messages.">メッセージを自動で既読にするまでに遅延を入れる</string>
     <string name="title_advanced_autoclose">会話を自動で閉じる</string>
     <string name="title_advanced_autoclose_send">メッセージを送信したあと、自動で会話を閉じる</string>
     <string name="title_advanced_onclose">会話を閉じるとき</string>
@@ -650,6 +654,8 @@
     <string name="title_advanced_confirm_files">ファイルを開く前に確認を表示する</string>
     <string name="title_advanced_sanitize_links">デフォルトでトラッキングパラメーターを削除する</string>
     <string name="title_advanced_sanitize_links_hint">リンクを確認する場合のみ</string>
+    <string name="title_advanced_adguard">AdGuard のフィルターリストを使用する</string>
+    <string name="title_advanced_adguard_weekly">自動で毎週ダウンロードする</string>
     <string name="title_advanced_check_links_dbl">不審なリンクがないかドメインブロックリストを確認する</string>
     <string name="title_advanced_confirm_images">デフォルトで画像を表示しない</string>
     <string name="title_advanced_ask_images">画像を表示する前に確認を表示する</string>
@@ -847,6 +853,7 @@
     <string name="title_advanced_wearable_hint">通知は本文をダウンロード後、ウェアラブルにのみ送信されます</string>
     <string name="title_advanced_messaging_hint">Android Auto に対応するために必要です</string>
     <string name="title_advanced_move_hint">移動先フォルダーはアカウントから設定できます</string>
+    <string name="title_advanced_notify_sensitive_hint">Android の設定で機密性の高い通知を無効にする必要があります</string>
     <string name="title_advanced_notify_no_grouping">この Android バージョンは通知のグループ化に対応していません</string>
     <string name="title_advanced_notify_no_channels">この Android バージョンは通知チャンネルに対応していません</string>
     <string name="title_advanced_fts_hint">有効にすると、検索パフォーマンスが向上しますが、バッテリー使用量とストレージ使用量も増加します</string>
@@ -912,11 +919,13 @@
     <string name="title_aliases">エイリアス</string>
     <string name="title_provider">プロバイダー</string>
     <string name="title_custom">カスタム</string>
+    <string name="title_dnssec" comment="title_dnssec&#10;Title for account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">DNSSEC を強制する</string>
     <string name="title_host">ホスト名</string>
     <string name="title_encryption">暗号化</string>
     <string name="title_encryption_none">なし (安全でない)</string>
     <string name="title_allow_insecure">保護されていない接続を許可する</string>
     <string name="title_insecure_remark">保護されていない接続は信頼できるネットワークでのみ許可し、パブリックネットワークでは許可しないでください</string>
+    <string name="title_dane">DANE を強制する</string>
     <string name="title_notify_remark">アカウント別の通知を有効にできます</string>
     <string name="title_port">ポート番号</string>
     <string name="title_user">ユーザー名</string>

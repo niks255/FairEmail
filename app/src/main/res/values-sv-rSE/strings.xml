@@ -438,6 +438,7 @@
     <string name="title_advanced_ssl_harden">Strikta SSL-anslutningar</string>
     <string name="title_advanced_ssl_harden_strict">Kräv TLS 1.3</string>
     <string name="title_advanced_cert_strict">Strikt certifikatkontroll</string>
+    <string name="title_advanced_cert_transparency">Certifikattransparens</string>
     <string name="title_advanced_check_names">Kontrollera värdnamn mot servercertifikat</string>
     <string name="title_advanced_open_safe">Skapa endast säkra anslutningar</string>
     <string name="title_advanced_http_redirect">Tillåt omdirigering av anslutning</string>
@@ -660,6 +661,8 @@
     <string name="title_advanced_confirm_files">Bekräfta visning av filer</string>
     <string name="title_advanced_sanitize_links">Ta bort spårningsparametrar som standard</string>
     <string name="title_advanced_sanitize_links_hint">Endast när du bekräftar länkar</string>
+    <string name="title_advanced_adguard">Använd AdGuard filterlista</string>
+    <string name="title_advanced_adguard_weekly">Uppdatera automatiskt varje vecka</string>
     <string name="title_advanced_check_links_dbl">Kontrollera domänblockeringslistor för misstänkta länkar</string>
     <string name="title_advanced_confirm_images">Visa inga bilder som standard</string>
     <string name="title_advanced_ask_images">Bekräfta visning av bilder</string>
@@ -854,6 +857,7 @@
     <string name="title_advanced_wearable_hint">Aviseringar skickas endast till en bärbar enhet efter att meddelandet har laddats ner</string>
     <string name="title_advanced_messaging_hint">Detta krävs för Android Auto-stöd</string>
     <string name="title_advanced_move_hint">Målmappen kan konfigureras i kontoinställningarna</string>
+    <string name="title_advanced_notify_sensitive_hint">Kräver inaktivering av känsliga aviseringar i Androids inställningar</string>
     <string name="title_advanced_notify_no_grouping">Den här Android-versionen stödjer inte notifikationsgruppering</string>
     <string name="title_advanced_notify_no_channels">Den här Android-versionen stödjer inte notifikationsgruppering</string>
     <string name="title_advanced_fts_hint">Att aktivera detta förbättrar sökprestandan, men ökar både batteri- och utrymmesanvändingen</string>
@@ -924,6 +928,7 @@
     <string name="title_encryption_none">Ingen (osäker)</string>
     <string name="title_allow_insecure">Tillåt osäkra anslutningar</string>
     <string name="title_insecure_remark">Osäkra anslutningar bör endast tillåtas på betrodda nätverk och aldrig på offentliga nätverk</string>
+    <string name="title_dane">Tvinga DANE</string>
     <string name="title_notify_remark">Du kan aktivera det här för kontospecifika aviseringar</string>
     <string name="title_port">Portnummer</string>
     <string name="title_user">Användarnamn</string>

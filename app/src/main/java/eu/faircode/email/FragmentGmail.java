@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.accounts.AccountManager.newChooseAccountIntent;
@@ -479,11 +479,11 @@ public class FragmentGmail extends FragmentBase {
                 EmailProvider.Server inbound = (pop ? provider.pop : provider.imap);
                 String aprotocol = (pop ? (inbound.starttls ? "pop3" : "pop3s") : (inbound.starttls ? "imap" : "imaps"));
                 int aencryption = (inbound.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
-                try (EmailService aservice = new EmailService(
-                        context, aprotocol, null, aencryption, false, false,
+                try (EmailService aservice = new EmailService(context,
+                        aprotocol, null, aencryption, false, false, false,
                         EmailService.PURPOSE_CHECK, true)) {
                     aservice.connect(
-                            inbound.host, inbound.port,
+                            false, inbound.host, inbound.port,
                             AUTH_TYPE_GMAIL, null,
                             user, password,
                             null, null);
@@ -497,11 +497,11 @@ public class FragmentGmail extends FragmentBase {
                 Long max_size;
                 String iprotocol = (provider.smtp.starttls ? "smtp" : "smtps");
                 int iencryption = (provider.smtp.starttls ? EmailService.ENCRYPTION_STARTTLS : EmailService.ENCRYPTION_SSL);
-                try (EmailService iservice = new EmailService(
-                        context, iprotocol, null, iencryption, false, false,
+                try (EmailService iservice = new EmailService(context,
+                        iprotocol, null, iencryption, false, false, false,
                         EmailService.PURPOSE_CHECK, true)) {
                     iservice.connect(
-                            provider.smtp.host, provider.smtp.port,
+                            false, provider.smtp.host, provider.smtp.port,
                             AUTH_TYPE_GMAIL, null,
                             user, password,
                             null, null);

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
@@ -277,7 +277,7 @@ public class DebugHelper {
                 autostart == null ? "?" : Boolean.toString(autostart == 0)));
 
         boolean reporting = prefs.getBoolean("crash_reports", false);
-        if (reporting || BuildConfig.TEST_RELEASE) {
+        if (reporting || Log.isTestRelease()) {
             String uuid = prefs.getString("uuid", null);
             sb.append(String.format("Bugsnag UUID: %s\r\n", uuid == null ? "-" : uuid));
         }
@@ -1065,7 +1065,7 @@ public class DebugHelper {
                     Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
                     while (interfaces != null && interfaces.hasMoreElements()) {
                         NetworkInterface ni = interfaces.nextElement();
-                        size += write(os, "Interface=" + ni + "\r\n");
+                        size += write(os, "Interface=" + ni + " up=" + ni.isUp() + "\r\n");
                         for (InterfaceAddress iaddr : ni.getInterfaceAddresses()) {
                             InetAddress addr = iaddr.getAddress();
                             size += write(os, " addr=" + addr +
@@ -1094,6 +1094,9 @@ public class DebugHelper {
                 size += write(os, "VPN active=" + ConnectionHelper.vpnActive(context) + "\r\n");
                 size += write(os, "Data saving=" + ConnectionHelper.isDataSaving(context) + "\r\n");
                 size += write(os, "Airplane=" + ConnectionHelper.airplaneMode(context) + "\r\n");
+                size += write(os, "Private" +
+                        " DNS=" + ConnectionHelper.isPrivateDnsActive(context) +
+                        " server=" + ConnectionHelper.getPrivateDnsServerName(context) + "\r\n");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     size += write(os, "Cleartext permitted= " +
                             NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted() + "\r\n");
@@ -1117,6 +1120,7 @@ public class DebugHelper {
                 boolean ssl_harden = prefs.getBoolean("ssl_harden", false);
                 boolean ssl_harden_strict = (ssl_harden && prefs.getBoolean("ssl_harden_strict", false));
                 boolean cert_strict = prefs.getBoolean("cert_strict", true);
+                boolean cert_transparency = prefs.getBoolean("cert_transparency", false);
                 boolean open_safe = prefs.getBoolean("open_safe", false);
 
                 size += write(os, "timeout=" + timeout + "s" + (timeout == EmailService.DEFAULT_CONNECT_TIMEOUT ? "" : " !!!") + "\r\n");
@@ -1144,6 +1148,7 @@ public class DebugHelper {
                 size += write(os, "ssl_harden=" + ssl_harden + (ssl_harden ? " !!!" : "") + "\r\n");
                 size += write(os, "ssl_harden_strict=" + ssl_harden_strict + (ssl_harden_strict ? " !!!" : "") + "\r\n");
                 size += write(os, "cert_strict=" + cert_strict + (cert_strict ? " !!!" : "") + "\r\n");
+                size += write(os, "cert_transparency=" + cert_transparency + (cert_transparency ? " !!!" : "") + "\r\n");
                 size += write(os, "open_safe=" + open_safe + "\r\n");
 
                 size += write(os, "\r\n");

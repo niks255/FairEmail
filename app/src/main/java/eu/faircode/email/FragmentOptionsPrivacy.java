@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.content.ClipData;
@@ -55,6 +55,9 @@ import androidx.webkit.WebViewFeature;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -63,6 +66,11 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
     private ImageButton ibHelp;
     private SwitchCompat swConfirmLinks;
     private SwitchCompat swSanitizeLinks;
+    private SwitchCompat swAdguard;
+    private ImageButton ibAdguard;
+    private Button btnAdguard;
+    private TextView tvAdguardTime;
+    private SwitchCompat swAdguardAutoUpdate;
     private SwitchCompat swCheckLinksDbl;
     private SwitchCompat swConfirmFiles;
     private SwitchCompat swConfirmImages;
@@ -107,8 +115,9 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
 
     private final static int BIP39_WORDS = 6;
 
-    private final static String[] RESET_OPTIONS = new String[]{
-            "confirm_links", "sanitize_links", "check_links_dbl", "confirm_files",
+    private final static List<String> RESET_OPTIONS = Collections.unmodifiableList(Arrays.asList(
+            "confirm_links", "sanitize_links", "adguard", "adguard_auto_update",
+            "check_links_dbl", "confirm_files",
             "confirm_images", "ask_images", "html_always_images", "confirm_html", "ask_html",
             "disable_tracking",
             "pin", "biometrics", "biometrics_timeout", "autolock", "autolock_nav",
@@ -117,7 +126,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             "generic_ua", "safe_browsing", "load_emoji",
             "disconnect_auto_update", "disconnect_links", "disconnect_images",
             "wipe_mnemonic"
-    };
+    ));
 
     @Override
     @Nullable
@@ -132,6 +141,11 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
         ibHelp = view.findViewById(R.id.ibHelp);
         swConfirmLinks = view.findViewById(R.id.swConfirmLinks);
         swSanitizeLinks = view.findViewById(R.id.swSanitizeLinks);
+        swAdguard = view.findViewById(R.id.swAdguard);
+        ibAdguard = view.findViewById(R.id.ibAdguard);
+        btnAdguard = view.findViewById(R.id.btnAdguard);
+        tvAdguardTime = view.findViewById(R.id.tvAdguardTime);
+        swAdguardAutoUpdate = view.findViewById(R.id.swAdguardAutoUpdate);
         swCheckLinksDbl = view.findViewById(R.id.swCheckLinksDbl);
         swConfirmFiles = view.findViewById(R.id.swConfirmFiles);
         swConfirmImages = view.findViewById(R.id.swConfirmImages);
@@ -197,6 +211,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
                             editor.remove(key);
                 editor.apply();
                 swSanitizeLinks.setEnabled(checked);
+                swAdguard.setEnabled(checked);
                 swCheckLinksDbl.setEnabled(checked);
             }
         });
@@ -205,6 +220,61 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("sanitize_links", checked).apply();
+            }
+        });
+
+        swAdguard.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("adguard", checked).apply();
+            }
+        });
+
+        ibAdguard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 200);
+            }
+        });
+
+        btnAdguard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SimpleTask<Void>() {
+                    @Override
+                    protected void onPreExecute(Bundle args) {
+                        btnAdguard.setEnabled(false);
+                    }
+
+                    @Override
+                    protected void onPostExecute(Bundle args) {
+                        btnAdguard.setEnabled(true);
+                    }
+
+                    @Override
+                    protected Void onExecute(Context context, Bundle args) throws Throwable {
+                        Adguard.download(context);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, Void data) {
+                        prefs.edit().putLong("adguard_last", new Date().getTime()).apply();
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
+                    }
+                }.execute(FragmentOptionsPrivacy.this, new Bundle(), "adguard");
+            }
+        });
+
+        swAdguardAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("adguard_auto_update", checked).apply();
+                WorkerAutoUpdate.init(compoundButton.getContext());
             }
         });
 
@@ -463,7 +533,7 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
 
                     @Override
                     protected void onExecuted(Bundle args, Void data) {
-                        setOptions();
+                        prefs.edit().putLong("disconnect_last", new Date().getTime()).apply();
                     }
 
                     @Override
@@ -568,6 +638,9 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        if (!RESET_OPTIONS.contains(key))
+            return;
+
         getMainHandler().removeCallbacks(update);
         getMainHandler().postDelayed(update, FragmentOptions.DELAY_SETOPTIONS);
     }
@@ -599,11 +672,21 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             if (view == null || getContext() == null)
                 return;
 
+            DateFormat DF = SimpleDateFormat.getDateTimeInstance();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
             swConfirmLinks.setChecked(prefs.getBoolean("confirm_links", true));
             swSanitizeLinks.setChecked(prefs.getBoolean("sanitize_links", false));
             swSanitizeLinks.setEnabled(swConfirmLinks.isChecked());
+            swAdguard.setChecked(prefs.getBoolean("adguard", false));
+            swAdguard.setEnabled(swConfirmLinks.isChecked());
+
+            long adguard_last = prefs.getLong("adguard_last", -1);
+            tvAdguardTime.setText(adguard_last < 0 ? null : DF.format(adguard_last));
+            tvAdguardTime.setVisibility(adguard_last < 0 ? View.GONE : View.VISIBLE);
+
+            swAdguardAutoUpdate.setChecked(prefs.getBoolean("adguard_auto_update", false));
+
             swCheckLinksDbl.setChecked(prefs.getBoolean("check_links_dbl", BuildConfig.PLAY_STORE_RELEASE));
             swCheckLinksDbl.setEnabled(swConfirmLinks.isChecked());
             swConfirmFiles.setChecked(prefs.getBoolean("confirm_files", true));
@@ -648,10 +731,9 @@ public class FragmentOptionsPrivacy extends FragmentBase implements SharedPrefer
             swSafeBrowsing.setChecked(prefs.getBoolean("safe_browsing", false));
             swLoadEmoji.setChecked(prefs.getBoolean("load_emoji", true));
 
-            long time = prefs.getLong("disconnect_last", -1);
-            DateFormat DF = SimpleDateFormat.getDateTimeInstance();
-            tvDisconnectBlacklistTime.setText(time < 0 ? null : DF.format(time));
-            tvDisconnectBlacklistTime.setVisibility(time < 0 ? View.GONE : View.VISIBLE);
+            long disconnect_last = prefs.getLong("disconnect_last", -1);
+            tvDisconnectBlacklistTime.setText(disconnect_last < 0 ? null : DF.format(disconnect_last));
+            tvDisconnectBlacklistTime.setVisibility(disconnect_last < 0 ? View.GONE : View.VISIBLE);
 
             swDisconnectAutoUpdate.setChecked(prefs.getBoolean("disconnect_auto_update", false));
             swDisconnectLinks.setChecked(prefs.getBoolean("disconnect_links", true));

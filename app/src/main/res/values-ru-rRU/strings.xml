@@ -469,6 +469,7 @@
     <string name="title_advanced_ssl_harden">Усиленные SSL-подключения</string>
     <string name="title_advanced_ssl_harden_strict">Требовать TLS 1.3</string>
     <string name="title_advanced_cert_strict">Строгая проверка сертификатов</string>
+    <string name="title_advanced_cert_transparency">Прозрачность сертификата</string>
     <string name="title_advanced_check_names">Проверять имена хостов по сертификатам сервера</string>
     <string name="title_advanced_open_safe">Только безопасные подключения</string>
     <string name="title_advanced_http_redirect">Разрешать перенаправление подключений</string>
@@ -691,6 +692,8 @@
     <string name="title_advanced_confirm_files">Подтверждать просмотр файлов</string>
     <string name="title_advanced_sanitize_links">Удалять отслеживающие элементы по умолчанию</string>
     <string name="title_advanced_sanitize_links_hint">Только при подтверждении ссылок</string>
+    <string name="title_advanced_adguard">Использовать список фильтров AdGuard</string>
+    <string name="title_advanced_adguard_weekly">Еженедельное автообновление</string>
     <string name="title_advanced_check_links_dbl">Проверять списки блокировки доменов на подозрительные ссылки</string>
     <string name="title_advanced_confirm_images">Не показывать изображения по умолчанию</string>
     <string name="title_advanced_ask_images">Подтверждать отображение изображений</string>
@@ -960,6 +963,7 @@
     <string name="title_encryption_none">Нет (небезопасно)</string>
     <string name="title_allow_insecure">Разрешить небезопасные подключения</string>
     <string name="title_insecure_remark">Небезопасные соединения могут быть разрешены только в доверенных сетях и никогда в публичных сетях</string>
+    <string name="title_dane">Принудительно использовать DANE</string>
     <string name="title_notify_remark">Вы можете включить это для уведомлений конкретной учётной записи</string>
     <string name="title_port">Номер порта</string>
     <string name="title_user">Имя пользователя</string>

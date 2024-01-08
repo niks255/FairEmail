@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
@@ -64,7 +64,9 @@ import org.json.JSONObject;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -128,7 +130,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
     private int textColorTertiary;
     private int colorAccent;
 
-    private final static String[] RESET_OPTIONS = new String[]{
+    private final static List<String> RESET_OPTIONS = Collections.unmodifiableList(Arrays.asList(
             "enabled", "poll_interval", "auto_optimize",
             "schedule", "schedule_start", "schedule_end", "schedule_start_weekend", "schedule_end_weekend", "weekend",
             "sync_quick_imap", "sync_quick_pop",
@@ -138,7 +140,7 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
             "check_authentication", "check_tls", "check_reply_domain", "check_mx",
             "check_blocklist", "use_blocklist", "use_blocklist_pop",
             "tune_keep_alive"
-    };
+    ));
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -646,6 +648,9 @@ public class FragmentOptionsSynchronize extends FragmentBase implements SharedPr
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        if (!RESET_OPTIONS.contains(key))
+            return;
+
         getMainHandler().removeCallbacks(update);
         getMainHandler().postDelayed(update, FragmentOptions.DELAY_SETOPTIONS);
     }

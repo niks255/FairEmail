@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.system.OsConstants.ENOSPC;
@@ -3810,7 +3810,7 @@ public class MessageHelper {
                     throw ex;
                 } catch (Throwable ex) {
                     Log.e(ex);
-                    if (BuildConfig.TEST_RELEASE)
+                    if (Log.isTestRelease())
                         warnings.add(ex + "\n" + android.util.Log.getStackTraceString(ex));
                     else
                         warnings.add(Log.formatThrowable(ex, false));
@@ -5585,6 +5585,13 @@ public class MessageHelper {
                 return true;
             ex = ex.getCause();
         }
+        return false;
+    }
+
+    static boolean isNoReply(@NonNull List<Address> addresses) {
+        for (Address address : addresses)
+            if (isNoReply(address))
+                return true;
         return false;
     }
 

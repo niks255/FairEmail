@@ -3,9 +3,9 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2144 }
+def getVersionCode = { -> return 2149 }
 def getRevision = { -> return "a" }
-def getReleaseName = { -> return "Wintonotitan" }
+def getReleaseName = { -> return "Ypupiara" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
 
 def keystoreProperties = new Properties()
@@ -439,6 +439,12 @@ tasks.register('downloadBraveDebouce', Download) {
     overwrite true
 }
 
+tasks.register('downloadAdguard', Download) {
+    src "https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_17_TrackParam/filter.txt"
+    dest "src/main/assets/adguard_filter.txt"
+    overwrite true
+}
+
 tasks.register('downloadBrave') {
     dependsOn("downloadBraveClean", "downloadBraveDebouce")
 }
@@ -516,6 +522,7 @@ configurations.configureEach {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    def desugar_version = "2.0.4"
     def startup_version = "1.1.1" // 1.2.0-alpha02
     def annotation_version_experimental = "1.3.1" // 1.4.0-beta01
     def core_version = "1.12.0" // 1.13.0-alpha02
@@ -529,7 +536,7 @@ dependencies {
     def recyclerview_version = "1.3.2" // 1.4.0-alpha01
     def coordinatorlayout_version = "1.2.0" // 1.3.0-alpha02
     def constraintlayout_version = "2.1.4" // 2.2.0-alpha13
-    def material_version = "1.10.0" // 1.11.0-alpha01
+    def material_version = "1.11.0" // 1.11.0-alpha01
     def browser_version = "1.7.0" // 1.8.0-beta01
     def lbm_version = "1.1.0"
     def swiperefresh_version = "1.2.0-alpha01"
@@ -544,22 +551,23 @@ dependencies {
     def work_version = "2.9.0"
     def exif_version = "1.3.7"
     def biometric_version = "1.2.0-alpha05"
-    def billingclient_version = "6.0.1"
+    def billingclient_version = "6.0.1" // 6.1.0
     def playservicesbase_version = "18.2.0";
+    def transparency_version = "2.5.19"
     def javamail_version = "1.6.7"
-    def jsoup_version = "1.16.2"
+    def jsoup_version = "1.17.2"
     def jsonpath_version = "2.8.0"
     def css_version = "0.9.30"
     def jax_version = "2.3.0-jaxb-1.0.6"
-    def dnsjava_version = "2.1.9"
+    def minidns_version = "1.0.4"
     def openpgp_version = "12.0"
     def badge_version = "1.1.22"
-    def bugsnag_version = "5.31.3"
-    def biweekly_version = "0.6.7"
+    def bugsnag_version = "6.1.0"
+    def biweekly_version = "0.6.8"
     def vcard_version = "0.12.1"
     def relinker_version = "1.4.5"
     def markwon_version = "4.6.2"
-    def bouncycastle_version = "1.76"
+    def bouncycastle_version = "1.77"
     def colorpicker_version = "0.0.15"
     def overscroll_version = "1.1.1"
     def appauth_version = "0.11.1"
@@ -569,19 +577,20 @@ dependencies {
     def reactivestreams_version = "1.0.3"
     def rxjava2_version = "2.2.21"
     def svg_version = "1.4"
-    def compress_version = "1.24.0"
+    def compress_version = "1.25.0"
     def ipaddress_version = "5.4.0"
-    def canary_version = "2.12"
+    def canary_version = "2.13"
     def ws_version = "2.14"
     def tinylog_version = "2.6.2"
 
     // https://mvnrepository.com/artifact/com.android.tools/desugar_jdk_libs?repo=google
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_version"
 
     // https://developer.android.com/jetpack/androidx/releases/startup
     implementation "androidx.startup:startup-runtime:$startup_version"
 
     // https://developer.android.com/jetpack/androidx/releases/
+    // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
     fdroidImplementation "com.google.code.findbugs:jsr305:3.0.2"
     implementation "androidx.annotation:annotation-experimental:$annotation_version_experimental"
 
@@ -693,6 +702,9 @@ dependencies {
     largeImplementation "com.google.android.gms:play-services-basement:$playservicesbase_version"
     playImplementation "com.google.android.gms:play-services-basement:$playservicesbase_version"
 
+    // https://github.com/appmattus/certificatetransparency
+    implementation "com.appmattus.certificatetransparency:certificatetransparency-android:$transparency_version"
+
     // https://developer.amazon.com/docs/in-app-purchasing/iap-get-started.html
     amazonImplementation files('lib/in-app-purchasing-2.0.76.jar')
 
@@ -717,9 +729,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.w3c/dom
     implementation "org.w3c:dom:$jax_version"
 
-    // http://www.dnsjava.org/
-    // https://mvnrepository.com/artifact/dnsjava/dnsjava
-    implementation "dnsjava:dnsjava:$dnsjava_version"
+    // https://github.com/MiniDNS/minidns
+    // https://mvnrepository.com/artifact/org.minidns/minidns-hla
+    implementation "org.minidns:minidns-hla:$minidns_version"
 
     // https://github.com/open-keychain/openpgp-api
     // https://mvnrepository.com/artifact/org.sufficientlysecure/openpgp-api
@@ -740,12 +752,12 @@ dependencies {
 
     // https://github.com/mangstadt/biweekly
     // https://mvnrepository.com/artifact/net.sf.biweekly/biweekly
-    //implementation("net.sf.biweekly:biweekly:$biweekly_version") {
-    //    exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
-    //    exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
-    //}
-    api "com.fasterxml.jackson.core:jackson-core:2.14.2"
-    api "com.fasterxml.jackson.core:jackson-databind:2.14.2"
+    implementation("net.sf.biweekly:biweekly:$biweekly_version") {
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-databind'
+    }
+    //api "com.fasterxml.jackson.core:jackson-core:2.16.1"
+    //api "com.fasterxml.jackson.core:jackson-databind:2.16.1"
 
     // https://github.com/mangstadt/ez-vcard
     implementation("com.googlecode.ez-vcard:ez-vcard:$vcard_version") {

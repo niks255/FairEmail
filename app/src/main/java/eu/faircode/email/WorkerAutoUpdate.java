@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -49,22 +49,49 @@ public class WorkerAutoUpdate extends Worker {
     public Result doWork() {
         Thread.currentThread().setPriority(THREAD_PRIORITY_BACKGROUND);
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean adguard_auto_update = prefs.getBoolean("adguard_auto_update", false);
+        boolean disconnect_auto_update = prefs.getBoolean("disconnect_auto_update", false);
+
         try {
             Log.i("Auto updating");
-            DisconnectBlacklist.download(getApplicationContext());
+
+            Throwable adguard = null;
+            if (adguard_auto_update)
+                try {
+                    Adguard.download(getApplicationContext());
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                    adguard = ex;
+                }
+
+            Throwable disconnect = null;
+            if (disconnect_auto_update)
+                try {
+                    DisconnectBlacklist.download(getApplicationContext());
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                    disconnect = ex;
+                }
+
+            if (adguard != null)
+                throw adguard;
+            if (disconnect != null)
+                throw disconnect;
+
             Log.i("Auto updated");
             return Result.success();
         } catch (Throwable ex) {
-            Log.e(ex);
             return Result.failure();
         }
     }
 
     static void init(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean auto_update = prefs.getBoolean("disconnect_auto_update", false);
+        boolean adguard_auto_update = prefs.getBoolean("adguard_auto_update", false);
+        boolean disconnect_auto_update = prefs.getBoolean("disconnect_auto_update", false);
         try {
-            if (auto_update) {
+            if (adguard_auto_update || disconnect_auto_update) {
                 Log.i("Queuing " + getName());
                 PeriodicWorkRequest.Builder builder =
                         new PeriodicWorkRequest.Builder(WorkerAutoUpdate.class, UPDATE_INTERVAL, TimeUnit.DAYS)

@@ -1,5 +1,25 @@
 #include <jni.h>
 #include <android/log.h>
+
+/*
+    This file is part of FairEmail.
+
+    FairEmail is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FairEmail is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+*/
+
 #include <cstdio>
 
 #include <errno.h>
@@ -12,8 +32,16 @@
 #include "compact_enc_det/compact_enc_det.h"
 #include "cld_3/src/nnet_language_identifier.h"
 
+int log_level = ANDROID_LOG_DEBUG;
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_eu_faircode_email_Log_jni_1set_1log_1level(JNIEnv *env, jclass clazz, jint level) {
+    log_level = level;
+}
+
 void log_android(int prio, const char *fmt, ...) {
-    if (prio >= ANDROID_LOG_DEBUG) {
+    if (prio >= log_level) {
         char line[1024];
         va_list argptr;
         va_start(argptr, fmt);

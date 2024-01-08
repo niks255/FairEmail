@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.Manifest;
@@ -164,6 +164,11 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         menus.add(new NavMenuItem(R.drawable.twotone_close_24, R.string.title_setup_close, new Runnable() {
             @Override
             public void run() {
+                if (BuildConfig.DEBUG) {
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ActivitySetup.this);
+                    prefs.edit().remove("eula").apply();
+                }
+
                 onMenuClose();
             }
         }).setColor(colorWarning).setSeparated());

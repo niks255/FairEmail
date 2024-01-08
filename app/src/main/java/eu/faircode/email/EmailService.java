@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_GMAIL;
@@ -99,10 +99,12 @@ public class EmailService implements AutoCloseable {
     private Context context;
     private String protocol;
     private boolean insecure;
+    private boolean dane;
     private int purpose;
     private boolean ssl_harden;
     private boolean ssl_harden_strict;
     private boolean cert_strict;
+    private boolean cert_transparency;
     private boolean check_names;
     private boolean useip;
     private String ehlo;
@@ -167,14 +169,11 @@ public class EmailService implements AutoCloseable {
         // Prevent instantiation
     }
 
-    EmailService(Context context, String protocol, String realm, int encryption, boolean insecure, boolean unicode, boolean debug) throws NoSuchProviderException {
-        this(context, protocol, realm, encryption, insecure, unicode, PURPOSE_USE, debug);
-    }
-
-    EmailService(Context context, String protocol, String realm, int encryption, boolean insecure, boolean unicode, int purpose, boolean debug) throws NoSuchProviderException {
+    EmailService(Context context, String protocol, String realm, int encryption, boolean insecure, boolean dane, boolean unicode, int purpose, boolean debug) throws NoSuchProviderException {
         this.context = context.getApplicationContext();
         this.protocol = protocol;
         this.insecure = insecure;
+        this.dane = dane;
         this.purpose = purpose;
         this.debug = debug;
 
@@ -185,12 +184,13 @@ public class EmailService implements AutoCloseable {
         long protocol_since = prefs.getLong("protocol_since", 0);
         if (protocol_since == 0)
             prefs.edit().putLong("protocol_since", now).apply();
-        else if (protocol_since + PROTOCOL_LOG_DURATION < now && !BuildConfig.TEST_RELEASE)
+        else if (protocol_since + PROTOCOL_LOG_DURATION < now && !Log.isTestRelease())
             prefs.edit().putBoolean("protocol", false).apply();
         this.log = prefs.getBoolean("protocol", false);
         this.ssl_harden = prefs.getBoolean("ssl_harden", false);
         this.ssl_harden_strict = prefs.getBoolean("ssl_harden_strict", false);
         this.cert_strict = prefs.getBoolean("cert_strict", true);
+        this.cert_transparency = prefs.getBoolean("cert_transparency", false);
         this.check_names = prefs.getBoolean("check_names", !BuildConfig.PLAY_STORE_RELEASE);
 
         boolean auth_plain = prefs.getBoolean("auth_plain", true);
@@ -310,6 +310,14 @@ public class EmailService implements AutoCloseable {
             throw new NoSuchProviderException(protocol);
     }
 
+    EmailService(Context context, EntityIdentity ident, int purpose, boolean debug) throws NoSuchProviderException {
+        this(context, ident.getProtocol(), ident.realm, ident.encryption, ident.insecure, ident.dane, ident.unicode, purpose, debug);
+    }
+
+    EmailService(Context context, EntityAccount account, int purpose, boolean debug) throws NoSuchProviderException {
+        this(context, account.getProtocol(), account.realm, account.encryption, account.insecure, account.dane, account.unicode, purpose, debug);
+    }
+
     void setPartialFetch(boolean enabled) {
         properties.put("mail." + protocol + ".partialfetch", Boolean.toString(enabled));
     }
@@ -355,7 +363,7 @@ public class EmailService implements AutoCloseable {
 
     public void connect(EntityAccount account) throws MessagingException {
         connect(
-                account.host, account.port,
+                account.dnssec, account.host, account.port,
                 account.auth_type, account.provider,
                 account.user, account.password,
                 new ServiceAuthenticator.IAuthenticated() {
@@ -374,7 +382,7 @@ public class EmailService implements AutoCloseable {
 
     public void connect(EntityIdentity identity) throws MessagingException {
         connect(
-                identity.host, identity.port,
+                identity.dnssec, identity.host, identity.port,
                 identity.auth_type, identity.provider,
                 identity.user, identity.password,
                 new ServiceAuthenticator.IAuthenticated() {
@@ -392,20 +400,22 @@ public class EmailService implements AutoCloseable {
     }
 
     public void connect(
-            String host, int port,
+            boolean dnssec, String host, int port,
             int auth, String provider,
             String user, String password,
             String certificate, String fingerprint) throws MessagingException {
-        connect(host, port, auth, provider, user, password, null, certificate, fingerprint);
+        connect(dnssec, host, port, auth, provider, user, password, null, certificate, fingerprint);
     }
 
     private void connect(
-            String host, int port,
+            boolean dnssec, String host, int port,
             int auth, String provider,
             String user, String password,
             ServiceAuthenticator.IAuthenticated intf,
             String certificate, String fingerprint) throws MessagingException {
         properties.put("fairemail.server", host);
+
+        DnsHelper.clear(context);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean bind_socket = prefs.getBoolean("bind_socket", false);
@@ -452,7 +462,9 @@ public class EmailService implements AutoCloseable {
             boolean bc = prefs.getBoolean("bouncy_castle", false);
             boolean fips = prefs.getBoolean("bc_fips", false);
             factory = new SSLSocketFactoryService(
-                    host, insecure, ssl_harden, strict, cert_strict, check_names, bc, fips, key, chain, fingerprint);
+                    context, host, port, insecure, dane,
+                    ssl_harden, strict, cert_strict, cert_transparency, check_names,
+                    bc, fips, key, chain, fingerprint);
             properties.put("mail." + protocol + ".ssl.socketFactory", factory);
             properties.put("mail." + protocol + ".socketFactory.fallback", "false");
             properties.put("mail." + protocol + ".ssl.checkserveridentity", "false");
@@ -483,7 +495,7 @@ public class EmailService implements AutoCloseable {
                 properties.put("mail." + protocol + ".auth.xoauth2.two.line.authentication.format", "true");
 
             Log.i("Connecting to " + host + ":" + port + " auth=" + auth);
-            connect(host, port, auth, user, factory);
+            connect(dnssec, host, port, auth, user, factory);
         } catch (AuthenticationFailedException ex) {
             //if ("outlook.office365.com".equals(host) &&
             //        "AUTHENTICATE failed.".equals(ex.getMessage()))
@@ -501,7 +513,7 @@ public class EmailService implements AutoCloseable {
                     EntityLog.log(context, EntityLog.Type.Debug,
                             ex + "\n" + android.util.Log.getStackTraceString(ex));
                     authenticator.refreshToken(true);
-                    connect(host, port, auth, user, factory);
+                    connect(dnssec, host, port, auth, user, factory);
                 } catch (Exception ex1) {
                     Throwable cause = ex1.getCause();
                     if (cause == null)
@@ -592,7 +604,7 @@ public class EmailService implements AutoCloseable {
     }
 
     private void connect(
-            String host, int port, int auth, String user,
+            boolean dnssec, String host, int port, int auth, String user,
             SSLSocketFactoryService factory) throws MessagingException {
         Map<String, String> crumb = new HashMap<>();
         crumb.put("host", host);
@@ -613,7 +625,7 @@ public class EmailService implements AutoCloseable {
 
             String key = "dns." + host;
             try {
-                main = InetAddress.getByName(host);
+                main = DnsHelper.getByName(context, host, dnssec);
                 EntityLog.log(context, EntityLog.Type.Network, "Main address=" + main);
                 prefs.edit().putString(key, main.getHostAddress()).apply();
             } catch (UnknownHostException ex) {
@@ -622,7 +634,7 @@ public class EmailService implements AutoCloseable {
                     throw ex;
                 else {
                     EntityLog.log(context, EntityLog.Type.Network, "Using " + key + "=" + last);
-                    main = InetAddress.getByName(last);
+                    main = DnsHelper.getByName(context, last, dnssec);
                 }
             }
 
@@ -631,7 +643,7 @@ public class EmailService implements AutoCloseable {
                 boolean[] has46 = ConnectionHelper.has46(context);
                 if (has46[0])
                     try {
-                        for (InetAddress iaddr : InetAddress.getAllByName(host))
+                        for (InetAddress iaddr : DnsHelper.getAllByName(context, host, dnssec))
                             if (iaddr instanceof Inet4Address) {
                                 main = iaddr;
                                 EntityLog.log(context, EntityLog.Type.Network, "Preferring=" + main);
@@ -719,7 +731,7 @@ public class EmailService implements AutoCloseable {
                         ex + "\n" + android.util.Log.getStackTraceString(ex));
                 try {
                     // Some devices resolve IPv6 addresses while not having IPv6 connectivity
-                    InetAddress[] iaddrs = InetAddress.getAllByName(host);
+                    InetAddress[] iaddrs = DnsHelper.getAllByName(context, host, dnssec);
                     int ip4 = (main instanceof Inet4Address ? 1 : 0);
                     int ip6 = (main instanceof Inet6Address ? 1 : 0);
 
@@ -1034,23 +1046,24 @@ public class EmailService implements AutoCloseable {
         private boolean secure;
         private boolean ssl_harden;
         private boolean ssl_harden_strict;
-        private boolean cert_strict;
         private String trustedFingerprint;
         private SSLSocketFactory factory;
         private X509Certificate certificate;
 
-        SSLSocketFactoryService(String host, boolean insecure,
-                                boolean ssl_harden, boolean ssl_harden_strict, boolean cert_strict, boolean check_names,
+        SSLSocketFactoryService(Context context, String host, int port,
+                                boolean insecure, boolean dane,
+                                boolean ssl_harden, boolean ssl_harden_strict, boolean cert_strict, boolean cert_transparency,
+                                boolean check_names,
                                 boolean bc, boolean fips,
                                 PrivateKey key, X509Certificate[] chain, String fingerprint) throws GeneralSecurityException {
             this.server = host;
             this.secure = !insecure;
             this.ssl_harden = ssl_harden;
             this.ssl_harden_strict = ssl_harden_strict;
-            this.cert_strict = cert_strict;
             this.trustedFingerprint = fingerprint;
 
-            TrustManager[] tms = SSLHelper.getTrustManagers(server, secure, cert_strict, check_names, trustedFingerprint,
+            TrustManager[] tms = SSLHelper.getTrustManagers(
+                    context, server, port, secure, dane, cert_strict, cert_transparency, check_names, trustedFingerprint,
                     new SSLHelper.ITrust() {
                         @Override
                         public void checkServerTrusted(X509Certificate[] chain) {

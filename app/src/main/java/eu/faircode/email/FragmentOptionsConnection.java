@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -66,6 +66,8 @@ import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.SocketFactory;
@@ -94,12 +96,16 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private SwitchCompat swPreferIp4;
     private SwitchCompat swBindSocket;
     private SwitchCompat swStandaloneVpn;
+    private SwitchCompat swDnsCustom;
+    private TextView tvDnsExtra;
+    private EditText etDnsExtra;
     private SwitchCompat swTcpKeepAlive;
-    private TextView tvTcpKeepAliveHint;
     private SwitchCompat swSslUpdate;
     private SwitchCompat swSslHarden;
     private SwitchCompat swSslHardenStrict;
     private SwitchCompat swCertStrict;
+    private SwitchCompat swCertTransparency;
+    private ImageButton ibCertTransparency;
     private SwitchCompat swCheckNames;
     private SwitchCompat swOpenSafe;
     private SwitchCompat swHttpRedirect;
@@ -118,17 +124,20 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private TextView tvNetworkInfo;
 
     private Group grpValidated;
+    private Group grpCustomDns;
     private Group grpCustomSsl;
 
-    private final static String[] RESET_OPTIONS = new String[]{
+    private final static List<String> RESET_OPTIONS = Collections.unmodifiableList(Arrays.asList(
             "metered", "download", "download_limited", "roaming", "rlah",
             "download_headers", "download_eml", "download_plain",
             "require_validated", "require_validated_captive", "vpn_only",
-            "timeout", "prefer_ip4", "bind_socket", "standalone_vpn", "tcp_keep_alive",
-            "ssl_update", "ssl_harden", "ssl_harden_strict", "cert_strict", "check_names",
+            "timeout", "prefer_ip4", "bind_socket", "standalone_vpn",
+            "dns_extra", "dns_custom",
+            "tcp_keep_alive",
+            "ssl_update", "ssl_harden", "ssl_harden_strict", "cert_strict", "cert_transparency", "check_names",
             "open_safe", "http_redirect",
             "bouncy_castle", "bc_fips"
-    };
+    ));
 
     @Override
     @Nullable
@@ -156,12 +165,16 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         swPreferIp4 = view.findViewById(R.id.swPreferIp4);
         swBindSocket = view.findViewById(R.id.swBindSocket);
         swStandaloneVpn = view.findViewById(R.id.swStandaloneVpn);
+        swDnsCustom = view.findViewById(R.id.swDnsCustom);
+        tvDnsExtra = view.findViewById(R.id.tvDnsExtra);
+        etDnsExtra = view.findViewById(R.id.etDnsExtra);
         swTcpKeepAlive = view.findViewById(R.id.swTcpKeepAlive);
-        tvTcpKeepAliveHint = view.findViewById(R.id.tvTcpKeepAliveHint);
         swSslUpdate = view.findViewById(R.id.swSslUpdate);
         swSslHarden = view.findViewById(R.id.swSslHarden);
         swSslHardenStrict = view.findViewById(R.id.swSslHardenStrict);
         swCertStrict = view.findViewById(R.id.swCertStrict);
+        swCertTransparency = view.findViewById(R.id.swCertTransparency);
+        ibCertTransparency = view.findViewById(R.id.ibCertTransparency);
         swCheckNames = view.findViewById(R.id.swCheckNames);
         swOpenSafe = view.findViewById(R.id.swOpenSafe);
         swHttpRedirect = view.findViewById(R.id.swHttpRedirect);
@@ -182,6 +195,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         tvNetworkInfo = view.findViewById(R.id.tvNetworkInfo);
 
         grpValidated = view.findViewById(R.id.grpValidated);
+        grpCustomDns = view.findViewById(R.id.grpCustomDns);
         grpCustomSsl = view.findViewById(R.id.grpCustomSsl);
 
         setOptions();
@@ -333,6 +347,33 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             }
         });
 
+        swDnsCustom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
+                DnsHelper.clear(buttonView.getContext());
+                prefs.edit().putBoolean("dns_custom", checked).apply();
+                tvDnsExtra.setEnabled(checked || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q);
+                etDnsExtra.setEnabled(checked || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q);
+            }
+        });
+
+        etDnsExtra.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                prefs.edit().putString("dns_extra", s.toString()).apply();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
+            }
+        });
+
         swTcpKeepAlive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -378,6 +419,20 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("cert_strict", checked).apply();
+            }
+        });
+
+        swCertTransparency.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("cert_transparency", checked).apply();
+            }
+        });
+
+        ibCertTransparency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), 201);
             }
         });
 
@@ -589,6 +644,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         FragmentDialogTheme.setBackground(getContext(), view, false);
         tvNetworkMetered.setVisibility(View.GONE);
         tvNetworkRoaming.setVisibility(View.GONE);
+        grpCustomDns.setVisibility(debug || BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
         grpCustomSsl.setVisibility(SSLHelper.customTrustManager() ? View.VISIBLE : View.GONE);
         cardDebug.setVisibility(View.GONE);
 
@@ -605,7 +661,12 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        if (!RESET_OPTIONS.contains(key))
+            return;
+
         if ("timeout".equals(key))
+            return;
+        if ("dns_extra".equals(key))
             return;
 
         getMainHandler().removeCallbacks(update);
@@ -698,12 +759,17 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             swPreferIp4.setChecked(prefs.getBoolean("prefer_ip4", true));
             swBindSocket.setChecked(prefs.getBoolean("bind_socket", false));
             swStandaloneVpn.setChecked(prefs.getBoolean("standalone_vpn", false));
+            swDnsCustom.setChecked(prefs.getBoolean("dns_custom", false));
+            etDnsExtra.setText(prefs.getString("dns_extra", null));
+            tvDnsExtra.setEnabled(swDnsCustom.isChecked() || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q);
+            etDnsExtra.setEnabled(swDnsCustom.isChecked() || Build.VERSION.SDK_INT < Build.VERSION_CODES.Q);
             swTcpKeepAlive.setChecked(prefs.getBoolean("tcp_keep_alive", false));
             swSslUpdate.setChecked(prefs.getBoolean("ssl_update", true));
             swSslHarden.setChecked(prefs.getBoolean("ssl_harden", false));
             swSslHardenStrict.setChecked(prefs.getBoolean("ssl_harden_strict", false));
             swSslHardenStrict.setEnabled(swSslHarden.isChecked());
             swCertStrict.setChecked(prefs.getBoolean("cert_strict", true));
+            swCertTransparency.setChecked(prefs.getBoolean("cert_transparency", false));
             swCheckNames.setChecked(prefs.getBoolean("check_names", !BuildConfig.PLAY_STORE_RELEASE));
             swOpenSafe.setChecked(prefs.getBoolean("open_safe", false));
             swHttpRedirect.setChecked(prefs.getBoolean("http_redirect", true));

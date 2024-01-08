@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import android.app.ActivityManager;
@@ -96,6 +96,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Pattern;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.FolderClosedException;
@@ -113,15 +114,47 @@ import javax.net.ssl.TrustManagerFactory;
 public class Log {
     private static Context ctx;
 
-    private static final int MAX_CRASH_REPORTS = (BuildConfig.TEST_RELEASE ? 50 : 5);
+    private static final int MAX_CRASH_REPORTS = (Log.isTestRelease() ? 50 : 5);
     private static final String TAG = "fairemail";
 
     static final String TOKEN_REFRESH_REQUIRED =
             "Token refresh required. Is there a VPN based app running?";
 
+    static final List<String> IGNORE_CLASSES = Collections.unmodifiableList(Arrays.asList(
+            "com.sun.mail.util.MailConnectException",
+
+            "android.accounts.AuthenticatorException",
+            "android.accounts.OperationCanceledException",
+            "android.app.RemoteServiceException",
+
+            "java.lang.NoClassDefFoundError",
+            "java.lang.UnsatisfiedLinkError",
+
+            "java.nio.charset.MalformedInputException",
+
+            "java.net.ConnectException",
+            "java.net.SocketException",
+            "java.net.SocketTimeoutException",
+            "java.net.UnknownHostException",
+
+            "javax.mail.AuthenticationFailedException",
+            "javax.mail.internet.AddressException",
+            "javax.mail.internet.ParseException",
+            "javax.mail.MessageRemovedException",
+            "javax.mail.FolderNotFoundException",
+            "javax.mail.ReadOnlyFolderException",
+            "javax.mail.FolderClosedException",
+            "com.sun.mail.util.FolderClosedIOException",
+            "javax.mail.StoreClosedException",
+
+            "org.xmlpull.v1.XmlPullParserException"
+    ));
+
     static {
         System.loadLibrary("fairemail");
     }
+
+    public static native void jni_set_log_level(int level);
 
     public static native long[] jni_safe_runtime_stats();
 
@@ -284,6 +317,10 @@ public class Log {
         }
     }
 
+    static void forceCrashReporting() {
+        Bugsnag.resumeSession();
+    }
+
     public static void breadcrumb(String name, Bundle args) {
         Map<String, String> crumb = new HashMap<>();
         for (String key : args.keySet()) {
@@ -338,7 +375,18 @@ public class Log {
 
     static void setup(Context context) {
         ctx = context;
+        setLevel(context);
         setupBugsnag(context);
+    }
+
+    static void setLevel(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int level = prefs.getInt("log_level", getDefaultLogLevel());
+        jni_set_log_level(level);
+    }
+
+    static int getDefaultLogLevel() {
+        return (BuildConfig.DEBUG || Log.isTestRelease() ? android.util.Log.INFO : android.util.Log.WARN);
     }
 
     private static void setupBugsnag(final Context context) {
@@ -363,37 +411,10 @@ public class Log {
             config.setEnabledErrorTypes(etypes);
             config.setMaxBreadcrumbs(BuildConfig.PLAY_STORE_RELEASE ? 250 : 500);
 
-            Set<String> ignore = new HashSet<>();
-
-            ignore.add("com.sun.mail.util.MailConnectException");
-
-            ignore.add("android.accounts.AuthenticatorException");
-            ignore.add("android.accounts.OperationCanceledException");
-            ignore.add("android.app.RemoteServiceException");
-
-            ignore.add("java.lang.NoClassDefFoundError");
-            ignore.add("java.lang.UnsatisfiedLinkError");
-
-            ignore.add("java.nio.charset.MalformedInputException");
-
-            ignore.add("java.net.ConnectException");
-            ignore.add("java.net.SocketException");
-            ignore.add("java.net.SocketTimeoutException");
-            ignore.add("java.net.UnknownHostException");
-
-            ignore.add("javax.mail.AuthenticationFailedException");
-            ignore.add("javax.mail.internet.AddressException");
-            ignore.add("javax.mail.internet.ParseException");
-            ignore.add("javax.mail.MessageRemovedException");
-            ignore.add("javax.mail.FolderNotFoundException");
-            ignore.add("javax.mail.ReadOnlyFolderException");
-            ignore.add("javax.mail.FolderClosedException");
-            ignore.add("com.sun.mail.util.FolderClosedIOException");
-            ignore.add("javax.mail.StoreClosedException");
-
-            ignore.add("org.xmlpull.v1.XmlPullParserException");
-
-            config.setDiscardClasses(ignore);
+            Set<Pattern> discardClasses = new HashSet<>();
+            for (String clazz : IGNORE_CLASSES)
+                discardClasses.add(Pattern.compile(clazz.replace(".", "\\.")));
+            config.setDiscardClasses(discardClasses);
 
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             ActivityManager am = Helper.getSystemService(context, ActivityManager.class);
@@ -414,7 +435,7 @@ public class Log {
                 @Override
                 public boolean onSession(@NonNull Session session) {
                     // opt-in
-                    return prefs.getBoolean("crash_reports", false) || BuildConfig.TEST_RELEASE;
+                    return prefs.getBoolean("crash_reports", false) || Log.isTestRelease();
                 }
             });
 
@@ -423,7 +444,7 @@ public class Log {
                 public boolean onError(@NonNull Event event) {
                     // opt-in
                     boolean crash_reports = prefs.getBoolean("crash_reports", false);
-                    if (!crash_reports && !BuildConfig.TEST_RELEASE)
+                    if (!crash_reports && !Log.isTestRelease())
                         return false;
 
                     Throwable ex = event.getOriginalError();
@@ -528,7 +549,7 @@ public class Log {
             Log.i("uuid=" + uuid);
             client.setUser(uuid, null, null);
 
-            if (prefs.getBoolean("crash_reports", false) || BuildConfig.TEST_RELEASE)
+            if (prefs.getBoolean("crash_reports", false) || Log.isTestRelease())
                 Bugsnag.startSession();
         } catch (Throwable ex) {
             Log.e(ex);
@@ -566,6 +587,10 @@ public class Log {
             else
                 return "Clone";
         }
+    }
+
+    static boolean isTestRelease() {
+        return BuildConfig.TEST_RELEASE;
     }
 
     static void logExtras(Intent intent) {
@@ -1184,6 +1209,19 @@ public class Log {
                     at com.android.server.autofill.Session$1.onHandleAssistData(Session.java:322)
                     at com.android.server.am.ActivityManagerService.reportAssistContextExtras(ActivityManagerService.java:14510)
              */
+            return false;
+
+        if (ex instanceof NullPointerException &&
+                stack.length > 0 &&
+                "android.app.OplusActivityManager".equals(stack[0].getClassName()) &&
+                "finishNotOrderReceiver".equals(stack[0].getMethodName()))
+                /*
+                    java.lang.NullPointerException: Attempt to invoke interface method 'boolean android.os.IBinder.transact(int, android.os.Parcel, android.os.Parcel, int)' on a null object reference
+                        at android.app.OplusActivityManager.finishNotOrderReceiver(OplusActivityManager.java:2360)
+                        at android.content.BroadcastReceiver$PendingResult.sendFinished(BroadcastReceiver.java:347)
+                        at android.content.BroadcastReceiver$PendingResult.finish(BroadcastReceiver.java:302)
+                        at android.app.ActivityThread.handleReceiver(ActivityThread.java:4352)
+                 */
             return false;
 
         if (ex instanceof IndexOutOfBoundsException &&

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2023 by Marcel Bokhorst (M66B)
+    Copyright 2018-2024 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -213,7 +213,7 @@ public class WorkerCleanup extends Worker {
             // Cleanup message files
             Log.breadcrumb("worker", "cleanup", "message files");
             {
-                File[] files = new File(context.getFilesDir(), "messages").listFiles();
+                File[] files = Helper.ensureExists(context, "messages").listFiles();
                 if (files != null)
                     for (File file : files) {
                         if (file.isDirectory())
@@ -222,16 +222,16 @@ public class WorkerCleanup extends Worker {
                             cleanupMessageFiles(db, manual, new File[]{file});
                     }
             }
-            cleanupMessageFiles(db, manual, new File(context.getFilesDir(), "revision").listFiles());
-            cleanupMessageFiles(db, manual, new File(context.getFilesDir(), "references").listFiles());
-            cleanupMessageFiles(db, manual, new File(context.getFilesDir(), "encryption").listFiles());
-            cleanupMessageFiles(db, manual, new File(context.getFilesDir(), "photo").listFiles());
-            cleanupMessageFiles(db, manual, new File(context.getFilesDir(), "calendar").listFiles());
+            cleanupMessageFiles(db, manual, Helper.ensureExists(context, "revision").listFiles());
+            cleanupMessageFiles(db, manual, Helper.ensureExists(context, "references").listFiles());
+            cleanupMessageFiles(db, manual, Helper.ensureExists(context, "encryption").listFiles());
+            cleanupMessageFiles(db, manual, Helper.ensureExists(context, "photo").listFiles());
+            cleanupMessageFiles(db, manual, Helper.ensureExists(context, "calendar").listFiles());
 
             // Cleanup raw message files
             if (!download_eml) {
                 Log.breadcrumb("worker", "cleanup", "raw message files");
-                File[] raws = new File(context.getFilesDir(), "raw").listFiles();
+                File[] raws = Helper.ensureExists(context, "raw").listFiles();
                 if (raws != null)
                     for (File file : raws)
                         if (manual || file.lastModified() + KEEP_FILES_DURATION < now)
@@ -278,7 +278,7 @@ public class WorkerCleanup extends Worker {
             // Cleanup cached images
             {
                 Log.breadcrumb("worker", "cleanup", "image files");
-                File[] images = new File(context.getFilesDir(), "images").listFiles();
+                File[] images = Helper.ensureExists(context, "images").listFiles();
                 if (images != null)
                     for (File file : images)
                         if (manual || file.lastModified() + KEEP_FILES_DURATION < now)
@@ -299,7 +299,7 @@ public class WorkerCleanup extends Worker {
             // Cleanup shared files
             {
                 Log.breadcrumb("worker", "cleanup", "shared files");
-                File[] shared = new File(context.getFilesDir(), "shared").listFiles();
+                File[] shared = Helper.ensureExists(context, "shared").listFiles();
                 if (shared != null)
                     for (File file : shared)
                         if (manual || file.lastModified() + KEEP_FILES_DURATION < now) {
