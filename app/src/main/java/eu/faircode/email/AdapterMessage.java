@@ -302,6 +302,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private int message_zoom;
     private boolean attachments_alt;
     private boolean thumbnails;
+    private boolean pdf_preview;
+    private boolean video_preview;
+    private boolean audio_preview;
     private boolean contrast;
     private boolean hyphenation;
     private String display_font;
@@ -311,7 +314,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean authentication_indicator;
     private boolean infra;
     private boolean tld_flags;
-    private boolean pdf_preview;
 
     private boolean autoclose_unseen;
     private boolean collapse_marked;
@@ -526,17 +528,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private ImageButton ibStoreMedia;
         private ImageButton ibShareImages;
-        private RecyclerView rvImage;
+        private RecyclerView rvMedia;
 
         private Group grpAddresses;
         private Group grpHeaders;
         private Group grpAction;
         private Group grpCalendar;
         private Group grpCalendarResponse;
-        private Group grpImages;
+        private Group grpMedia;
 
         private AdapterAttachment adapterAttachment;
-        private AdapterImage adapterImage;
+        private AdapterMedia adapterMedia;
 
         private TwoStateOwner cowner = new TwoStateOwner(owner, "MessageAttachments");
         private TwoStateOwner powner = new TwoStateOwner(owner, "MessagePopup");
@@ -956,20 +958,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             ibStoreMedia = vsBody.findViewById(R.id.ibStoreMedia);
             ibShareImages = vsBody.findViewById(R.id.ibShareImages);
-            rvImage = vsBody.findViewById(R.id.rvImage);
-            rvImage.setHasFixedSize(false);
+            rvMedia = vsBody.findViewById(R.id.rvMedia);
+            rvMedia.setHasFixedSize(false);
             StaggeredGridLayoutManager sglm =
                     new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-            rvImage.setLayoutManager(sglm);
-            adapterImage = new AdapterImage(parentFragment);
-            rvImage.setAdapter(adapterImage);
+            rvMedia.setLayoutManager(sglm);
+            adapterMedia = new AdapterMedia(parentFragment);
+            rvMedia.setAdapter(adapterMedia);
 
             grpAddresses = vsBody.findViewById(R.id.grpAddresses);
             grpHeaders = vsBody.findViewById(R.id.grpHeaders);
             grpAction = vsBody.findViewById(R.id.grpAction);
             grpCalendar = vsBody.findViewById(R.id.grpCalendar);
             grpCalendarResponse = vsBody.findViewById(R.id.grpCalendarResponse);
-            grpImages = vsBody.findViewById(R.id.grpImages);
+            grpMedia = vsBody.findViewById(R.id.grpMedia);
 
             if (large_buttons) {
                 int dp36 = Helper.dp2pixels(context, 42);
@@ -1412,7 +1414,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ivImportance.setVisibility(View.VISIBLE);
             } else if (EntityMessage.PRIORITIY_LOW.equals(message.ui_importance)) {
                 ivImportance.setImageLevel(message.ui_importance);
-                ivImportance.setImageTintList(null);
+                ivImportance.setImageTintList(ColorStateList.valueOf(colorControlNormal));
                 ivImportance.setVisibility(View.VISIBLE);
             } else
                 ivImportance.setVisibility(View.GONE);
@@ -1734,7 +1736,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             grpAction.setVisibility(View.GONE);
             grpCalendar.setVisibility(View.GONE);
             grpCalendarResponse.setVisibility(View.GONE);
-            grpImages.setVisibility(View.GONE);
+            grpMedia.setVisibility(View.GONE);
 
             ivPlain.setVisibility(View.GONE);
             ibReceipt.setVisibility(View.GONE);
@@ -2318,6 +2320,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_move = prefs.getBoolean("button_move", true);
                     boolean button_copy = prefs.getBoolean("button_copy", false);
                     boolean button_keywords = prefs.getBoolean("button_keywords", false);
+                    boolean button_labels = prefs.getBoolean("button_labels", true);
                     boolean button_notes = prefs.getBoolean("button_notes", false);
                     boolean button_seen = prefs.getBoolean("button_seen", false);
                     boolean button_hide = prefs.getBoolean("button_hide", false);
@@ -2370,7 +2373,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibHide.setVisibility(tools && button_hide && !outbox ? View.VISIBLE : View.GONE);
                     ibSeen.setVisibility(tools && button_seen && !outbox && seen ? View.VISIBLE : View.GONE);
                     ibNotes.setVisibility(tools && button_notes && !outbox ? View.VISIBLE : View.GONE);
-                    ibLabels.setVisibility(tools && labels_header && labels ? View.VISIBLE : View.GONE);
+                    ibLabels.setVisibility(tools && labels_header && labels && button_labels ? View.VISIBLE : View.GONE);
                     ibKeywords.setVisibility(tools && button_keywords && keywords ? View.VISIBLE : View.GONE);
                     ibCopy.setVisibility(tools && button_copy && move ? View.VISIBLE : View.GONE);
                     ibMove.setVisibility(tools && button_move && move ? View.VISIBLE : View.GONE);
@@ -3681,18 +3684,21 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 bindCalendar(message, calendar);
 
             int iavailable = 0;
-            List<EntityAttachment> images = new ArrayList<>();
+            List<EntityAttachment> media = new ArrayList<>();
             if (thumbnails && bind_extras) {
                 for (EntityAttachment attachment : attachments)
                     if ((pdf_preview && attachment.isPDF()) ||
+                            (video_preview && attachment.isVideo()) ||
+                            (audio_preview && attachment.isAudio()) ||
                             (attachment.isAttachment() && attachment.isImage())) {
-                        images.add(attachment);
-                        if (attachment.available && !attachment.isPDF())
+                        media.add(attachment);
+                        if (attachment.available &&
+                                attachment.isAttachment() && attachment.isImage())
                             iavailable++;
                     }
             }
-            adapterImage.set(images);
-            grpImages.setVisibility(images.size() > 0 ? View.VISIBLE : View.GONE);
+            adapterMedia.set(media);
+            grpMedia.setVisibility(media.size() > 0 ? View.VISIBLE : View.GONE);
 
             ibStoreMedia.setVisibility(
                     iavailable > 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
@@ -4888,6 +4894,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         .append('\n');
                 sb.append("SMTP: ")
                         .append(message.auth == null ? "-" : (message.auth ? "✓" : "✗"));
+                if (check_mx)
+                    sb.append('\n')
+                            .append("MX: ")
+                            .append(message.mx == null ? "-" : (message.mx ? "✓" : "✗"));
             }
 
             if (native_dkim && !TextUtils.isEmpty(message.signedby)) {
@@ -6118,7 +6128,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             popupMenu.getMenu().findItem(R.id.menu_unseen)
                     .setTitle(message.ui_seen ? R.string.title_unseen : R.string.title_seen)
-                    .setIcon(message.ui_seen ? R.drawable.twotone_drafts_24 : R.drawable.twotone_mail_24)
+                    .setIcon(message.ui_seen ? R.drawable.twotone_mail_24 : R.drawable.twotone_drafts_24)
                     .setEnabled(message.uid != null ||
                             message.accountProtocol != EntityAccount.TYPE_IMAP);
 
@@ -8035,6 +8045,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.message_zoom = prefs.getInt("message_zoom", 100);
         this.attachments_alt = prefs.getBoolean("attachments_alt", false);
         this.thumbnails = prefs.getBoolean("thumbnails", true);
+        this.pdf_preview = prefs.getBoolean("pdf_preview", true);
+        this.video_preview = prefs.getBoolean("video_preview", true);
+        this.audio_preview = prefs.getBoolean("audio_preview", true);
         this.contrast = prefs.getBoolean("contrast", false);
         this.hyphenation = prefs.getBoolean("hyphenation", false);
         this.display_font = prefs.getString("display_font", "");
@@ -8044,7 +8057,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.authentication_indicator = prefs.getBoolean("authentication_indicator", false);
         this.infra = prefs.getBoolean("infra", false);
         this.tld_flags = prefs.getBoolean("tld_flags", false);
-        this.pdf_preview = prefs.getBoolean("pdf_preview", true);
         this.language_detection = prefs.getBoolean("language_detection", false);
         this.autoclose_unseen = prefs.getBoolean("autoclose_unseen", false);
         this.collapse_marked = prefs.getBoolean("collapse_marked", true);
@@ -8088,13 +8100,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("uid changed", next.id);
 
-                    if (prev.uid == null && next.uid != null) { // once only
+                    if (prev.uid == null && next.uid != null && // once only
+                            properties.getValue("expanded", next.id)) {
                         // Mark seen when needed
                         if (!Boolean.TRUE.equals(next.ui_seen) && next.accountAutoSeen)
                             EntityOperation.queue(context, next, EntityOperation.SEEN, true);
 
                         // Download body when needed
-                        if (!next.content && properties.getValue("expanded", next.id))
+                        if (!next.content)
                             EntityOperation.queue(context, next, EntityOperation.BODY);
                     }
                 }

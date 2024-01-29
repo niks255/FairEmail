@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<eu.faircode.email.ScrollViewEx xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll"
@@ -204,7 +204,7 @@
                     android:id="@+id/tvPollBattery"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="48dp"
                     android:text="@string/title_advanced_poll_battery"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -218,7 +218,7 @@
                     android:id="@+id/tvPollHint"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="48dp"
                     android:text="@string/title_advanced_poll_hint"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -240,15 +240,53 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPollHint" />
 
-                <androidx.recyclerview.widget.RecyclerView
+                <eu.faircode.email.FixedRecyclerView
                     android:id="@+id/rvExempted"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvExempted" />
+
+                <TextView
+                    android:id="@+id/tvPollExempted"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="48dp"
+                    android:text="@string/title_advanced_with_exceptions"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rvExempted" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swPollMetered"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_poll_metered"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPollExempted"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swPollUnmetered"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_poll_unmetered"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swPollMetered"
+                    app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swSchedule"
@@ -258,7 +296,7 @@
                     android:text="@string/title_advanced_schedule"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rvExempted"
+                    app:layout_constraintTop_toBottomOf="@id/swPollUnmetered"
                     app:switchPadding="12dp" />
 
                 <TextView
@@ -477,7 +515,7 @@
                     android:id="@+id/grpExempted"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:constraint_referenced_ids="tvExempted,rvExempted" />
+                    app:constraint_referenced_ids="tvExempted,rvExempted,tvPollExempted,swPollMetered,swPollUnmetered" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -1120,7 +1158,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvUseBlocklistPopHint" />
 
-                <androidx.recyclerview.widget.RecyclerView
+                <eu.faircode.email.FixedRecyclerView
                     android:id="@+id/rvBlocklist"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -1133,4 +1171,4 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</eu.faircode.email.ScrollViewEx>
+</ScrollView>

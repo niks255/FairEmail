@@ -978,10 +978,15 @@ public class FragmentMessages extends FragmentBase
                 if (!ch && !dh)
                     return null;
 
-                if (EntityMessage.PRIORITIY_HIGH.equals(message.importance)) {
+                Integer importance =
+                        (viewType == AdapterMessage.ViewType.UNIFIED ||
+                                viewType == AdapterMessage.ViewType.FOLDER
+                                ? message.importance : null);
+
+                if (EntityMessage.PRIORITIY_HIGH.equals(importance)) {
                     if (pos > 0)
                         return null;
-                } else if (EntityMessage.PRIORITIY_LOW.equals(message.importance)) {
+                } else if (EntityMessage.PRIORITIY_LOW.equals(importance)) {
                     if (prev != null && EntityMessage.PRIORITIY_LOW.equals(prev.importance))
                         return null;
                 } else if (pos > 0) {
@@ -999,7 +1004,8 @@ public class FragmentMessages extends FragmentBase
                         year0--;
                     int day0 = cal0.get(date_week ? Calendar.WEEK_OF_YEAR : Calendar.DAY_OF_YEAR);
                     int day1 = cal1.get(date_week ? Calendar.WEEK_OF_YEAR : Calendar.DAY_OF_YEAR);
-                    if (year0 == year1 && day0 == day1)
+                    if (year0 == year1 && day0 == day1 &&
+                            !EntityMessage.PRIORITIY_HIGH.equals(prev.importance))
                         dh = false;
                 }
 
@@ -1031,9 +1037,9 @@ public class FragmentMessages extends FragmentBase
                         vSeparator.setVisibility(View.GONE);
                     }
 
-                    if (EntityMessage.PRIORITIY_HIGH.equals(message.importance))
+                    if (EntityMessage.PRIORITIY_HIGH.equals(importance))
                         tvDate.setText(R.string.title_important);
-                    else if (EntityMessage.PRIORITIY_LOW.equals(message.importance))
+                    else if (EntityMessage.PRIORITIY_LOW.equals(importance))
                         tvDate.setText(R.string.title_unimportant);
                     else
                         tvDate.setText(date_week
@@ -1607,8 +1613,11 @@ public class FragmentMessages extends FragmentBase
         ibBatchFlag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MoreResult result = (MoreResult) cardMore.getTag();
+                if (result == null)
+                    return;
                 boolean more_clear = prefs.getBoolean("more_clear", true);
-                onActionFlagSelection(true, Color.TRANSPARENT, null, more_clear);
+                onActionFlagSelection(result.unflagged, Color.TRANSPARENT, null, more_clear);
             }
         });
 
@@ -2386,7 +2395,7 @@ public class FragmentMessages extends FragmentBase
                 }
 
                 if (force || reload)
-                    ServiceSynchronize.reload(context, null, true, "refresh");
+                    ServiceSynchronize.reload(context, null, force, "refresh");
                 else
                     ServiceSynchronize.eval(context, "refresh");
 
@@ -5301,10 +5310,10 @@ public class FragmentMessages extends FragmentBase
         //boolean canSchedule = AlarmManagerCompatEx.canScheduleExactAlarms(context);
         boolean enabled = prefs.getBoolean("enabled", true);
         boolean reminder = prefs.getBoolean("setup_reminder", true);
-        boolean targeting =
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU);
+        boolean was_ignoring = prefs.getBoolean("was_ignoring", false);
+        boolean targeting = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU);
         grpBatteryOptimizations.setVisibility(
-                !isIgnoring && enabled && reminder && targeting ? View.VISIBLE : View.GONE);
+                !isIgnoring && enabled && reminder && !was_ignoring && targeting ? View.VISIBLE : View.GONE);
 
         boolean compact = prefs.getBoolean("compact", false);
         int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
@@ -6907,6 +6916,10 @@ public class FragmentMessages extends FragmentBase
                         if (flag)
                             count++;
 
+                        boolean unflag = (more_flag && !flag && count < FragmentDialogQuickActions.MAX_QUICK_ACTIONS && result.flagged);
+                        if (unflag)
+                            count++;
+
                         boolean flag_color = (more_flag_color && count < FragmentDialogQuickActions.MAX_QUICK_ACTIONS && (result.unflagged || result.flagged));
                         if (flag_color)
                             count++;
@@ -6927,13 +6940,14 @@ public class FragmentMessages extends FragmentBase
                         if (seen)
                             count++;
 
+                        ibBatchFlag.setImageResource(unflag ? R.drawable.twotone_star_border_24 : R.drawable.twotone_star_24);
                         ibInbox.setImageResource(inJunk ? R.drawable.twotone_report_off_24 : R.drawable.twotone_inbox_24);
 
                         ibBatchSeen.setVisibility(seen ? View.VISIBLE : View.GONE);
                         ibBatchUnseen.setVisibility(unseen ? View.VISIBLE : View.GONE);
                         ibBatchSnooze.setVisibility(snooze ? View.VISIBLE : View.GONE);
                         ibBatchHide.setVisibility(hide ? View.VISIBLE : View.GONE);
-                        ibBatchFlag.setVisibility(flag ? View.VISIBLE : View.GONE);
+                        ibBatchFlag.setVisibility(flag || unflag ? View.VISIBLE : View.GONE);
                         ibBatchFlagColor.setVisibility(flag_color ? View.VISIBLE : View.GONE);
                         ibLowImportance.setVisibility(importance_low ? View.VISIBLE : View.GONE);
                         ibNormalImportance.setVisibility(importance_normal ? View.VISIBLE : View.GONE);
@@ -7660,7 +7674,7 @@ public class FragmentMessages extends FragmentBase
                 if (reload == null)
                     ServiceSynchronize.eval(context, "expand");
                 else
-                    ServiceSynchronize.reload(context, reload, true, "expand");
+                    ServiceSynchronize.reload(context, reload, false, "expand");
 
                 return null;
             }

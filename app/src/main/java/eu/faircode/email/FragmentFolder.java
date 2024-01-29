@@ -118,7 +118,7 @@ public class FragmentFolder extends FragmentBase {
     @Override
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setSubtitle(R.string.title_edit_folder);
+        setSubtitle(id < 0 ? R.string.title_new_folder : R.string.title_edit_folder);
         setHasOptionsMenu(true);
 
         view = (ViewGroup) inflater.inflate(R.layout.fragment_folder, container, false);
@@ -256,7 +256,6 @@ public class FragmentFolder extends FragmentBase {
         grpImap.setVisibility(imap ? View.VISIBLE : View.GONE);
         tvParent.setText(parent);
         grpParent.setVisibility(parent == null ? View.GONE : View.VISIBLE);
-        cbCountUnread.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
         cbAutoClassifySource.setVisibility(View.GONE);
         cbAutoClassifyTarget.setVisibility(View.GONE);
         tvAutoClassifyPro.setVisibility(View.GONE);

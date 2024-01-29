@@ -41,7 +41,7 @@
         <item quantity="other">Повідомлення</item>
     </plurals>
     <string name="page_folders">Теки</string>
-    <string name="page_compose">Написати</string>
+    <string name="page_compose">Створити</string>
     <string name="tile_synchronize">Синхронізувати</string>
     <string name="tile_unseen">Нові повідомлення</string>
     <string name="shortcut_refresh">Оновити</string>
@@ -177,6 +177,7 @@
     <string name="title_list_identities">Профілі</string>
     <string name="title_edit_account">Редагувати обліковий запис</string>
     <string name="title_edit_identity">Редагувати профіль</string>
+    <string name="title_new_folder">Нова тека</string>
     <string name="title_edit_folder">Редагувати теку</string>
     <string name="title_disable_gmail">Вимкнути додаток Gmail</string>
     <string name="title_setup">Налаштування</string>
@@ -200,6 +201,7 @@
     <string name="title_setup_wizard_new">Мені потрібна нова адреса електронної пошти</string>
     <string name="title_setup_manual">Ручне налаштування та параметри облікових записів</string>
     <string name="title_setup_classic">Класична конфігурація</string>
+    <string name="title_setup_wizard_hint">Майстер швидкого налаштування для «Іншого постачальника», наведений вище, зазвичай теж працює, і це простіше, ніж вводити всі дані сервера.</string>
     <string name="title_setup_documentation">Перегляньте документацію свого постачальника пошти для правильної конфігурації сервера електронної пошти</string>
     <string name="title_setup_account_remark">Отримання пошти</string>
     <string name="title_setup_identity_remark">Надсилання пошти</string>
@@ -209,6 +211,7 @@
     <string name="title_setup_google_sign_in">Увійти за допомогою Google</string>
     <string name="title_setup_other">Інші постачальники</string>
     <string name="title_setup_inbound">Тільки вхідна пошта (електронні листи не можуть бути надіслані!)</string>
+    <string name="title_setup_imap">Обліковий запис IMAP</string>
     <string name="title_setup_pop3">Обліковий запис POP3</string>
     <string name="title_setup_oauth_permission">Постачальник електронної пошти схвалив OAuth тільки для версій з Play Store та GitHub</string>
     <string name="title_setup_gmail_support">Авторизація облікових записів Google працюватиме тільки в версіях з Play Store та GitHub, тому що Android перевіряє цифровий підпис додатка</string>
@@ -373,6 +376,9 @@
     <string name="title_advanced_when">Коли</string>
     <string name="title_advanced_optimize">Автоматично оптимізувати</string>
     <string name="title_advanced_always">Завжди отримувати повідомлення для цих облікових записів</string>
+    <string name="title_advanced_with_exceptions">З такими винятками:</string>
+    <string name="title_advanced_poll_metered">Періодично перевіряти наявність нових повідомлень при підключенні до лімітованої мережі</string>
+    <string name="title_advanced_poll_unmetered">Періодично перевіряти наявність нових повідомлень при підключенні до безлімітної мережі</string>
     <string name="title_advanced_schedule">Розклад</string>
     <string name="title_advanced_schedule_workdays">Робочі дні</string>
     <string name="title_advanced_schedule_weekend">Вихідні</string>
@@ -455,7 +461,7 @@
     <string name="title_advanced_lookup_mx">Перевіряти адреси електронної пошти одержувача перед надсиланням</string>
     <string name="title_advanced_metered">Використовувати лімітовані підключення</string>
     <string name="title_advanced_download">Автоматично завантажувати повідомлення і вкладення при лімітованому з\'єднанні обсягом до</string>
-    <string name="title_advanced_download_limited">Застосовувати це також до нелімітованих підключень</string>
+    <string name="title_advanced_download_limited">Застосовувати це також до безлімітних підключень</string>
     <string name="title_advanced_roaming">Завантажувати повідомлення та вкладення у роумінгу</string>
     <string name="title_advanced_rlah">В роумінгу як вдома</string>
     <string name="title_advanced_download_headers">Завантажувати всі заголовки повідомлень</string>
@@ -466,8 +472,8 @@
     <string name="title_advanced_vpn_only">Під’єднуватися тільки через VPN</string>
     <string name="title_advanced_timeout">Час очікування підключення (секунди)</string>
     <string name="title_advanced_prefer_ip4">Віддавати перевагу IPv4 над IPv6</string>
-    <string name="title_advanced_dns" comment="title_advanced_dns&#10;Title for an option to configure extra, preferred DNS server addresses&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Бажані адреси DNS-серверів (через кому)</string>
-    <string name="title_advanced_dns_custom" comment="title_advanced_dns_custom&#10;Title for an option to use a custom DNS resolver instead of the Android DNS resolver&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Використовувати нетиповий DNS resolver</string>
+    <string name="title_advanced_dns">Бажані адреси DNS-серверів (через кому)</string>
+    <string name="title_advanced_dns_custom">Використовувати нетиповий DNS resolver</string>
     <string name="title_advanced_ssl_update">Використовувати оновленого SSL-провайдера</string>
     <string name="title_advanced_ssl_harden">Посилене SSL-з\'єднання</string>
     <string name="title_advanced_ssl_harden_strict">Вимагати TLS 1.3</string>
@@ -569,6 +575,8 @@
     <string name="title_advanced_attachments_alt">Показувати вкладення після тексту повідомлення</string>
     <string name="title_advanced_thumbnails">Показувати ескізи зображень після повідомлення</string>
     <string name="title_advanced_pdf_preview">Показувати ескізи PDF-файлів</string>
+    <string name="title_advanced_video_preview">Показувати мініатюри відео</string>
+    <string name="title_advanced_audio_preview">Показувати мініаудіоплеєр</string>
     <string name="title_advanced_message_text_zoom2">Масштаб тексту повідомлень за замовчуванням: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Масштабувати текст повідомлення також і в редакторі повідомлень</string>
     <string name="title_advanced_overview_mode">Масштабувати оригінальні повідомлення відповідно до розміру екрана</string>
@@ -625,7 +633,7 @@
     <string name="title_advanced_expand_all">Автоматично розкривати всі прочитані повідомлення</string>
     <string name="title_advanced_expand_one">Розкривати лише одне повідомлення за раз</string>
     <string name="title_advanced_collapse_multiple">Згортати повідомлення в розмові з декількома повідомленнями при переході «Назад»</string>
-    <string name="title_advanced_seen_delay" comment="title_advanced_seen_delay&#10;Title for an option to configure the time to delay marking messages automatically read on opening/expanding messages.">Затримка автоматичного позначення повідомлень прочитаними</string>
+    <string name="title_advanced_seen_delay">Затримка автоматичного позначення повідомлень прочитаними</string>
     <string name="title_advanced_autoclose">Автоматично закривати розмови</string>
     <string name="title_advanced_autoclose_send">Автоматично закривати розмови після відправлення повідомлень</string>
     <string name="title_advanced_onclose">При закритті розмови</string>
@@ -850,6 +858,7 @@
     <string name="title_advanced_split_hint">Це розділить екран на частини</string>
     <string name="title_advanced_split_min_hint">Ця умова стосується пристроїв із гнучким екраном</string>
     <string name="title_advanced_threading_hint">Групувати повідомлення, пов\'язані одне з одним</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Тільки для карткового стилю</string>
     <string name="title_advanced_highlight_hint">Колір акценту теми буде використаний для підсвічування</string>
     <string name="title_advanced_privacy_risk">Можливий ризик порушення приватності</string>
     <string name="title_advanced_name_email_hint">Імена показуватимуться лише за наявності</string>
@@ -960,15 +969,15 @@
     <string name="title_aliases">Псевдоніми</string>
     <string name="title_provider">Постачальник</string>
     <string name="title_custom">Власний</string>
-    <string name="title_dnssec" comment="title_dnssec&#10;Title for account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">Примусово використовувати DNSSEC</string>
-    <string name="title_dnssec_remark" comment="title_dnssec_remark&#10;Remark below account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">Лише обмежена кількість DNS-серверів підтримує DNSSEC</string>
+    <string name="title_dnssec">Примусово використовувати DNSSEC</string>
+    <string name="title_dnssec_remark">Лише обмежена кількість DNS-серверів підтримує DNSSEC</string>
     <string name="title_host">Ім\'я хосту</string>
     <string name="title_encryption">Шифрування</string>
     <string name="title_encryption_none">Немає (незахищено)</string>
     <string name="title_allow_insecure">Дозволити незахищене з’єднання</string>
     <string name="title_insecure_remark">Небезпечні підключення повинні бути дозволені тільки в надійних мережах і ніколи в мережах спільного користування</string>
     <string name="title_dane">Примусово використовувати DANE</string>
-    <string name="title_dane_remark" comment="title_dane_remark&#10;Remark below account/identity option to enforce DANE&#10;https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">Лише деякі поштові провайдери підтримують DANE</string>
+    <string name="title_dane_remark">Лише деякі поштові провайдери підтримують DANE</string>
     <string name="title_notify_remark">Ви можете ввімкнути цю функцію для сповіщень в певному обліковому записі</string>
     <string name="title_port">Номер порту</string>
     <string name="title_user">Ім\'я користувача</string>
@@ -999,7 +1008,7 @@
     <string name="title_received_header">Використовувати заголовок «Received»</string>
     <string name="title_date_header">Використовувати заголовок «Date» (час відправлення)</string>
     <string name="title_date_remark">Зміни будуть застосовані тільки до нових повідомлень</string>
-    <string name="title_unmetered_only">Підключатися тільки через нелімітовані мережі</string>
+    <string name="title_unmetered_only">Підключатися тільки через безлімітні мережі</string>
     <string name="title_ignore_schedule">Синхронізувати також і за межами розкладу</string>
     <string name="title_related_identity">Додати пов\'язаний профіль (сервер SMTP)</string>
     <string name="title_check">Перевірити</string>
@@ -1135,6 +1144,7 @@
     <string name="title_poll_folder">Перевіряти періодично замість неперервної синхронізації</string>
     <string name="title_poll_folder_remark">Більшість серверів електронної пошти дозволяють push повідомлення тільки для невеликої кількості тек!</string>
     <string name="title_download_folder">Автоматично завантажувати тексти та вкладення</string>
+    <string name="title_count_unread">Додати до облікового запису кількість непрочитаних повідомлень</string>
     <string name="title_notify_folder">Сповіщати про нові повідомлення</string>
     <string name="title_auto_classify_source">Класифікувати нові повідомлення в цій теці</string>
     <string name="title_auto_classify_target">Автоматично переміщати класифіковані повідомлення в цю теку</string>
@@ -1258,10 +1268,11 @@
     <string name="title_move">Перемістити</string>
     <string name="title_copy_btn">Копіювати</string>
     <string name="title_keywords_btn">Ключові слова</string>
+    <string name="title_labels_btn">Мітки (тільки для Gmail)</string>
     <string name="title_unsubscribe">Відписатися</string>
     <string name="title_message_rule">Створити правило</string>
     <string name="title_no_junk">Не спам</string>
-    <string name="title_edit_subject">Редагування теми &#8230;</string>
+    <string name="title_edit_subject">Редагувати тему &#8230;</string>
     <string name="title_move_to">Перемістити до &#8230;</string>
     <string name="title_move_to_folder">Перемістити до &#8230;</string>
     <string name="title_move_to_account">Перемістити в %1$s &#8230;</string>
@@ -1673,6 +1684,7 @@
     <string name="title_rule_automation">Автоматизація</string>
     <string name="title_rule_delete">Видалити назавжди</string>
     <string name="title_rule_sound">Відтворити звук</string>
+    <string name="title_rule_silent">Зробити сповіщення беззвучним</string>
     <string name="title_rule_caption">Редагувати правило</string>
     <string name="title_rule_title">Застосовується правило для</string>
     <string name="title_rule_name">Ім\'я</string>
@@ -1838,8 +1850,8 @@
     <string name="title_legend_italic">Зробити текст курсивом</string>
     <string name="title_legend_underline">Підкреслити текст</string>
     <string name="title_legend_text_style">Встановити стиль тексту</string>
-    <string name="title_legend_metered">Підключення з тарифікацією</string>
-    <string name="title_legend_unmetered">Підключення нетарифіковане</string>
+    <string name="title_legend_metered">Підключення лімітоване</string>
+    <string name="title_legend_unmetered">Підключення безлімітне</string>
     <string name="title_legend_roaming">Роумінг</string>
     <string name="title_legend_expander">Розкривач</string>
     <string name="title_legend_avatar">Аватар</string>

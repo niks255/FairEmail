@@ -147,6 +147,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_list_identities">Kimlikler</string>
     <string name="title_edit_account">Hesabı Düzenle</string>
     <string name="title_edit_identity">Kimliği düzenle</string>
+    <string name="title_new_folder">Yeni klasör</string>
     <string name="title_edit_folder">Klasörü düzenle</string>
     <string name="title_disable_gmail">Gmail \'i devre dışı bırak</string>
     <string name="title_setup">Ayarlar</string>
@@ -170,6 +171,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_wizard_new">Yeni bir e-posta adresi istiyorum</string>
     <string name="title_setup_manual">Elle kurulum ve hesap ayarları</string>
     <string name="title_setup_classic">Klasik yapılandırma</string>
+    <string name="title_setup_wizard_hint">Yukarıdaki \"Diğer Sağlayıcı\" için hızlı kurulum sihirbazı da genellikle işe yarar ve tüm sunucu verilerini girmekten daha kolaydır.</string>
     <string name="title_setup_documentation">Doğru e-posta sunucusu yapılandırması için lütfen e-posta sağlayıcınızın belgelerine bakın</string>
     <string name="title_setup_account_remark">E-posta al</string>
     <string name="title_setup_identity_remark">E-posta gönder</string>
@@ -179,6 +181,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_google_sign_in">Google ile giriş yap</string>
     <string name="title_setup_other">Diğer sağlayıcı</string>
     <string name="title_setup_inbound">Yalnızca gelen e-posta (e-posta gönderilemez!)</string>
+    <string name="title_setup_imap">IMAP hesabı</string>
     <string name="title_setup_pop3">POP3 hesabı</string>
     <string name="title_setup_oauth_permission">E-posta sağlayıcısı, yalnızca Play Store ve GitHub sürümü için OAuth\'u onayladı</string>
     <string name="title_setup_gmail_support">Google hesaplarını yetkilendirmek Android dijital uygulama imzasını kontrol ettiğinden, yalnızca Play Store ve GitHub sürümünde çalışır</string>
@@ -343,6 +346,9 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_when">Ne zaman</string>
     <string name="title_advanced_optimize">Otomatik olarak optimize et</string>
     <string name="title_advanced_always">Bu hesaplardan mesajları her zaman al</string>
+    <string name="title_advanced_with_exceptions">Aşağıdaki istisnalar dışında:</string>
+    <string name="title_advanced_poll_metered">Ölçülü bir ağdayken periyodik olarak yeni mesajları kontrol edin</string>
+    <string name="title_advanced_poll_unmetered">Ölçülmeyen bir ağdayken periyodik olarak yeni mesajları kontrol edin</string>
     <string name="title_advanced_schedule">Program</string>
     <string name="title_advanced_schedule_workdays">İş günleri</string>
     <string name="title_advanced_schedule_weekend">Haftasonu</string>
@@ -436,8 +442,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_vpn_only">Yalnızca bir VPN aracılığıyla bağlanın</string>
     <string name="title_advanced_timeout">Bağlantı zaman aşımı (saniye)</string>
     <string name="title_advanced_prefer_ip4">IPv6 yerine IPv4\'ü tercih edin</string>
-    <string name="title_advanced_dns" comment="title_advanced_dns&#10;Title for an option to configure extra, preferred DNS server addresses&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Tercih edilen DNS sunucu adresleri (virgülle ayrılmış)</string>
-    <string name="title_advanced_dns_custom" comment="title_advanced_dns_custom&#10;Title for an option to use a custom DNS resolver instead of the Android DNS resolver&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Özel DNS ayrıştırıcısu kullanma</string>
+    <string name="title_advanced_dns">Tercih edilen DNS sunucu adresleri (virgülle ayrılmış)</string>
+    <string name="title_advanced_dns_custom">Özel DNS ayrıştırıcısu kullanma</string>
     <string name="title_advanced_ssl_update">Güncellenmiş SSL sağlayıcısı kullanın</string>
     <string name="title_advanced_ssl_harden">SSL bağlantılarını sağlamlaştır</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 gerektir</string>
@@ -539,6 +545,8 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_attachments_alt">İleti metninden sonra ekleri göster</string>
     <string name="title_advanced_thumbnails">İleti metninden sonra görsellerin önizlemelerini göster</string>
     <string name="title_advanced_pdf_preview">PDF küçük resimlerini göster</string>
+    <string name="title_advanced_video_preview">Video küçük resimlerini göster</string>
+    <string name="title_advanced_audio_preview">Mini ses oynatıcısını göster</string>
     <string name="title_advanced_message_text_zoom2">Varsayılan mesaj metni yakınlaştırma: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Mesaj metnini mesaj düzenleyicide de yakınlaştırın</string>
     <string name="title_advanced_overview_mode">Orijinal mesajları ekrana sığacak şekilde yakınlaştırın</string>
@@ -595,7 +603,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_expand_all">Tüm okunmuş mesajları otomatik olarak aç</string>
     <string name="title_advanced_expand_one">Bir kerede yalnızca bir mesaj genişlet</string>
     <string name="title_advanced_collapse_multiple">Birden fazla mesaj içeren sohbetlerdeki mesajları \'geri\' seçeneğinde daralt</string>
-    <string name="title_advanced_seen_delay" comment="title_advanced_seen_delay&#10;Title for an option to configure the time to delay marking messages automatically read on opening/expanding messages.">Mesajların otomatik olarak okundu olarak işaretlenmesini geciktirme</string>
+    <string name="title_advanced_seen_delay">Mesajların otomatik olarak okundu olarak işaretlenmesini geciktirme</string>
     <string name="title_advanced_autoclose">İletişimleri otomatik olarak kapat</string>
     <string name="title_advanced_autoclose_send">Mesaj gönderdikten sonra konuşmaları otomatik olarak kapat</string>
     <string name="title_advanced_onclose">Bir konuşmayı kapatırken</string>
@@ -821,6 +829,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_split_hint">Bu, ekranı parçalara böler</string>
     <string name="title_advanced_split_min_hint">Bu, katlanabilir cihazlar için tasarlanmış bir durumdur</string>
     <string name="title_advanced_threading_hint">Birbirlerine bağlı grup iletileri</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Yalnızca kart stili için</string>
     <string name="title_advanced_highlight_hint">Temanın vurgu rengi vurgulamak için kullanılacak</string>
     <string name="title_advanced_privacy_risk">Bir gizlilik riski olabilir</string>
     <string name="title_advanced_name_email_hint">Adlar yalnızca uygun olduğunda gösterilecektir</string>
@@ -931,15 +940,15 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_aliases">Takma adlar</string>
     <string name="title_provider">Sağlayıcı</string>
     <string name="title_custom">Özel</string>
-    <string name="title_dnssec" comment="title_dnssec&#10;Title for account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">DNSSEC\'i Zorla</string>
-    <string name="title_dnssec_remark" comment="title_dnssec_remark&#10;Remark below account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">Yalnızca sınırlı sayıda DNS sunucusu DNSSEC\'i destekler</string>
+    <string name="title_dnssec">DNSSEC\'i Zorla</string>
+    <string name="title_dnssec_remark">Yalnızca sınırlı sayıda DNS sunucusu DNSSEC\'i destekler</string>
     <string name="title_host">Sunucu adı</string>
     <string name="title_encryption">Şifreleme açık</string>
     <string name="title_encryption_none">Yok (güvenliksiz)</string>
     <string name="title_allow_insecure">Güvensiz bağlantılara izin ver</string>
     <string name="title_insecure_remark">Güvensiz bağlantılara sadece güvenilen ağlarda izin verilmelidir ve halka açık ağlarda asla izin verilmemelidir</string>
     <string name="title_dane">DANE\'i Zorla</string>
-    <string name="title_dane_remark" comment="title_dane_remark&#10;Remark below account/identity option to enforce DANE&#10;https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">Yalnızca bazı e-posta sağlayıcıları DANE\'yi destekler</string>
+    <string name="title_dane_remark">Yalnızca bazı e-posta sağlayıcıları DANE\'yi destekler</string>
     <string name="title_notify_remark">Bunu hesaba özel bildirimler için etkinleştirebilirsiniz</string>
     <string name="title_port">Port numarası</string>
     <string name="title_user">Kullanıcı adı</string>
@@ -1104,6 +1113,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_poll_folder">Sürekli senkronizasyon yerine belirli aralıklarla kontrol et</string>
     <string name="title_poll_folder_remark">Çoğu e-posta sunucusu push mesajlarına yalnızca birkaç klasör için izin verir!</string>
     <string name="title_download_folder">İleti metinlerini ve eklerini otomatik olarak indir</string>
+    <string name="title_count_unread">Okunmamış mesaj sayısını hesaba ekleyin</string>
     <string name="title_notify_folder">Yeni iletileri bildir</string>
     <string name="title_auto_classify_source">Bu klasördeki yeni iletileri sınıflandır</string>
     <string name="title_auto_classify_target">Sınıflandırılmış iletileri otomatik olarak bu klasöre taşı</string>
@@ -1225,6 +1235,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_move">Taşı</string>
     <string name="title_copy_btn">Kopyala</string>
     <string name="title_keywords_btn">Anahtar Sözcükler/Kelimeler</string>
+    <string name="title_labels_btn">Etiketler (yalnızca Gmail)</string>
     <string name="title_unsubscribe">Abonelikten çık</string>
     <string name="title_message_rule">Kural oluştur</string>
     <string name="title_no_junk">Spam değil</string>
@@ -1639,6 +1650,7 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_rule_automation">Özdevinim</string>
     <string name="title_rule_delete">Kalıcı olarak sil</string>
     <string name="title_rule_sound">Ses Çal</string>
+    <string name="title_rule_silent">Sessiz bildirimler</string>
     <string name="title_rule_caption">Kuralı düzenle</string>
     <string name="title_rule_title">Kural geçerlidir</string>
     <string name="title_rule_name">Ad</string>

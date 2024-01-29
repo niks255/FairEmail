@@ -146,6 +146,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_list_identities">Identiteiten</string>
     <string name="title_edit_account">Account bewurkje</string>
     <string name="title_edit_identity">Identiteit bewurkje</string>
+    <string name="title_new_folder">Nije map</string>
     <string name="title_edit_folder">Map bewurkje</string>
     <string name="title_disable_gmail">Gmail-app útskeakelje</string>
     <string name="title_setup">Ynstellingen</string>
@@ -169,6 +170,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_setup_wizard_new">Ik haw in nij e-mailadres nedich</string>
     <string name="title_setup_manual">Hânmjittich ynstelle en accountopsjes</string>
     <string name="title_setup_classic">Klassike konfiguraasje</string>
+    <string name="title_setup_wizard_hint">De flugge ynstallaasjewizard foar ‘Oare provider’ hjirboppe wurket meastentiids ek en is makliker as it ynfieren fan alle servergegevens.</string>
     <string name="title_setup_documentation">Besjoch de dokumintaasje fan jo e-mailprovider foar de krekte e-mailserverkonfiguraasje.</string>
     <string name="title_setup_account_remark">E-mailberjochten ûntfange</string>
     <string name="title_setup_identity_remark">E-mailberjochten ferstjoere</string>
@@ -178,6 +180,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_setup_google_sign_in">Oanmelde mei Google</string>
     <string name="title_setup_other">Oare provider</string>
     <string name="title_setup_inbound">Allinnich ynkommende e-mail (e-mailberjochten kinne net ferstjoerd wurde!)</string>
+    <string name="title_setup_imap">IMAP-account</string>
     <string name="title_setup_pop3">POP3-account</string>
     <string name="title_setup_oauth_permission">De e-mailprovider hat OAuth allinnich goedkard foar de Play Store- en GitHub-ferzje</string>
     <string name="title_setup_gmail_support">Autorisearjen fan Google-accounts sil allinnich yn offisjele ferzjes wurkje omdat Android de app-hantekening kontrolearret</string>
@@ -343,6 +346,9 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_when">Wannear</string>
     <string name="title_advanced_optimize">Automatysk optimalisearje</string>
     <string name="title_advanced_always">Untfang altyd berjochten foar dizze accounts</string>
+    <string name="title_advanced_with_exceptions">Mei de folgjende útsûnderingen:</string>
+    <string name="title_advanced_poll_metered">Kontrolearje periodyk op nije berjochten op in gegevensbeheind netwurk</string>
+    <string name="title_advanced_poll_unmetered">Kontrolearje periodyk op nije berjochten op in foar gegevens ûnbeheind netwurk</string>
     <string name="title_advanced_schedule">Skema</string>
     <string name="title_advanced_schedule_workdays">Wurkdagen</string>
     <string name="title_advanced_schedule_weekend">Wykein</string>
@@ -436,6 +442,8 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_vpn_only">Allinnich fia in VPN ferbine</string>
     <string name="title_advanced_timeout">Timeout foar ferbining (sekonden)</string>
     <string name="title_advanced_prefer_ip4">Foarkar IPv4 boppe IPv6</string>
+    <string name="title_advanced_dns">Foarkar DNS-serveradressen (kommaskieden)</string>
+    <string name="title_advanced_dns_custom">Gebruik een aangepaste DNS-resolver</string>
     <string name="title_advanced_ssl_update">Bywurke SSL-provider brûke</string>
     <string name="title_advanced_ssl_harden">SSL-ferbiningen ferhurdzje</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 fereaskje</string>
@@ -537,6 +545,8 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_attachments_alt">Bylagen nei de berjochttekst toane</string>
     <string name="title_advanced_thumbnails">Miniatuerôfbylding nei de berjochttekst toane</string>
     <string name="title_advanced_pdf_preview">PDF-miniatueren toane</string>
+    <string name="title_advanced_video_preview">Fideominiatueren toane</string>
+    <string name="title_advanced_audio_preview">Mini-audiospiler toane</string>
     <string name="title_advanced_message_text_zoom2">Standert zoom berjochttekst: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Berjochttekst ek yn de berjochtbewurker zoome</string>
     <string name="title_advanced_overview_mode">Zoom orizjinele berjochten om op it skerm te passen</string>
@@ -593,6 +603,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_expand_all">Automatysk alle lêzen berjochten útklappe</string>
     <string name="title_advanced_expand_one">Mar ien berjocht tagelyk útklappe</string>
     <string name="title_advanced_collapse_multiple">Berjochten yn in petear mei meardere berjochten ynklappe by ‘tebek’</string>
+    <string name="title_advanced_seen_delay">Fertraging foar it automatysk as lêzen markearjen fan berichten</string>
     <string name="title_advanced_autoclose">Petearen automatysk slute</string>
     <string name="title_advanced_autoclose_send">Petearen automatysk slute nei it ferstjoeren fan berjochten</string>
     <string name="title_advanced_onclose">By it sluten fan in petear</string>
@@ -818,6 +829,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_advanced_split_hint">Dit sil it skerm splitse yn dielen</string>
     <string name="title_advanced_split_min_hint">Dit is in kondysje, bedoeld foar opfâldbere apparaten</string>
     <string name="title_advanced_threading_hint">Relatearre berjochten groepearje</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Allinnich foar kaartstyl</string>
     <string name="title_advanced_highlight_hint">De aksintkleur fan it tema wurdt brûkt foar markearring</string>
     <string name="title_advanced_privacy_risk">Der is mooglik in privacyrisiko</string>
     <string name="title_advanced_name_email_hint">Nammen wurde allinnich toand wannear beskikber</string>
@@ -928,12 +940,15 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_aliases">Aliassen</string>
     <string name="title_provider">Provider</string>
     <string name="title_custom">Oanpast</string>
+    <string name="title_dnssec">DNSSEC ôftwinge</string>
+    <string name="title_dnssec_remark">Mar in beheind tal DNS-servers stipet DNSSEC</string>
     <string name="title_host">Hostnamme</string>
     <string name="title_encryption">Fersifering</string>
     <string name="title_encryption_none">Gjin (ûnfeilich)</string>
     <string name="title_allow_insecure">Unfeilige ferbiningen tastean</string>
     <string name="title_insecure_remark">Unfeilige ferbiningen moatte allinnich tastien wurde op fertroude netwurken en nea op iepenbiere netwurken</string>
     <string name="title_dane">DANE ôftwinge</string>
+    <string name="title_dane_remark">Mar inkelde mailproviders stypje DANE</string>
     <string name="title_notify_remark">Jo kinne dit ynskeakelje foar accountspesifike meldingen</string>
     <string name="title_port">Poartenûmer</string>
     <string name="title_user">Brûkersnamme</string>
@@ -1098,6 +1113,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_poll_folder">Kontrolearje periodyk yn stee fan trochgeande syngronisaasje</string>
     <string name="title_poll_folder_remark">De measte e-mailservers stean push-berjochten allinnich foar in hantsjefol mappen ta!</string>
     <string name="title_download_folder">Berjochtteksten en bylagen automatysk downloade</string>
+    <string name="title_count_unread">Oantal net lêzen berjochten oan de account tafoegje</string>
     <string name="title_notify_folder">Melding by nije berjochten</string>
     <string name="title_auto_classify_source">Klassifisearje nije berjochten yn dizze map</string>
     <string name="title_auto_classify_target">Ferpleats klassifisearre berjochten automatysk nei dizze map</string>
@@ -1220,6 +1236,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_move">Ferpleatse</string>
     <string name="title_copy_btn">Kopiearje</string>
     <string name="title_keywords_btn">Kaaiwurden</string>
+    <string name="title_labels_btn">Labels (allinnich foar Gmail)</string>
     <string name="title_unsubscribe">Ofmelde</string>
     <string name="title_message_rule">Regel meitsje</string>
     <string name="title_no_junk">Net net-winske</string>
@@ -1634,6 +1651,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_rule_automation">Automatisearring</string>
     <string name="title_rule_delete">Permanint fuortsmite</string>
     <string name="title_rule_sound">Lûd ôfspylje</string>
+    <string name="title_rule_silent">Stille melding</string>
     <string name="title_rule_caption">Rigel bewurkje</string>
     <string name="title_rule_title">Regel jildt foar</string>
     <string name="title_rule_name">Namme</string>

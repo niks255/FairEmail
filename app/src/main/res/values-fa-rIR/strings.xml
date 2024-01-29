@@ -14,7 +14,7 @@
     <string name="app_cake_required">کمترین مقدار فضای ذخیره‌سازی لازم: %1$s</string>
     <string name="app_updated">آخرین به روز رسانی: %1$s</string>
     <string name="app_download">در حال دانلود از %1$s</string>
-    <string name="channel_service">نظارت</string>
+    <string name="channel_service">Monitor</string>
     <string name="channel_send">ارسال</string>
     <string name="channel_notification">ایمیل</string>
     <string name="channel_progress">پیش رفتن</string>
@@ -132,6 +132,7 @@
     <string name="title_list_identities">هویت‌ها</string>
     <string name="title_edit_account">ویرایش حساب</string>
     <string name="title_edit_identity">ویرایش هویت</string>
+    <string name="title_new_folder">پوشه جدید</string>
     <string name="title_edit_folder">ويرايش پوشه</string>
     <string name="title_disable_gmail">برنامه جیمیل را غیرفعال کن</string>
     <string name="title_setup">تنظیمات</string>
@@ -163,6 +164,7 @@
     <string name="title_setup_google_sign_in">ورود با گوگل</string>
     <string name="title_setup_other">فراهم کننده دیگر</string>
     <string name="title_setup_inbound">فقط ایمیل دریافتی (نمی‌توان ایمیل فرستاد!)</string>
+    <string name="title_setup_imap">حساب IMAP</string>
     <string name="title_setup_pop3">حساب POP3</string>
     <string name="title_setup_oauth_permission">سرویس دهنده ی ایمیل OAuth را فقط برای نسخه پلی استور و گیت هاب تایید کرده</string>
     <string name="title_setup_gmail_support">حساب های گوگل فقط در نسخه‌های پلی استور و گیت هاب مجاز می‌شوند چون اندروید امضای برنامه را بررسی می‌کند</string>
@@ -308,6 +310,9 @@
     <string name="title_advanced_when">هنگامی که</string>
     <string name="title_advanced_optimize">خودکار بهینه‌سازی کن</string>
     <string name="title_advanced_always">همیشه پیام‌ها را برای این حساب‌ها دریافت کن</string>
+    <string name="title_advanced_with_exceptions">به استثنای موارد زیر:</string>
+    <string name="title_advanced_poll_metered">چک کردن متناوب برای پیام‌های جدید در زمان انصال به اینترنت با حجم محدود</string>
+    <string name="title_advanced_poll_unmetered">چک کردن متناوب برای پیام‌های جدید در زمان انصال به اینترنت با حجم نامحدود</string>
     <string name="title_advanced_schedule">زمان بندی</string>
     <string name="title_advanced_schedule_workdays">روزهای کاری</string>
     <string name="title_advanced_schedule_weekend">روزهای تعطیل</string>
@@ -384,8 +389,8 @@
     <string name="title_advanced_vpn_only">اتصال تنها به وسیله وی‌پی‌ان</string>
     <string name="title_advanced_timeout">اتصال برقرار نشد (ثانیه)</string>
     <string name="title_advanced_prefer_ip4">ترجیح IPv4 به IPv6</string>
-    <string name="title_advanced_dns" comment="title_advanced_dns&#10;Title for an option to configure extra, preferred DNS server addresses&#10;https://en.wikipedia.org/wiki/Domain_Name_System">آدرس سرورهای DNS ترجیحی (جدا شده با ویرگول)</string>
-    <string name="title_advanced_dns_custom" comment="title_advanced_dns_custom&#10;Title for an option to use a custom DNS resolver instead of the Android DNS resolver&#10;https://en.wikipedia.org/wiki/Domain_Name_System">استفاده از DNS resolver انتخابی</string>
+    <string name="title_advanced_dns">آدرس سرورهای DNS ترجیحی (جدا شده با ویرگول)</string>
+    <string name="title_advanced_dns_custom">استفاده از DNS resolver انتخابی</string>
     <string name="title_advanced_ssl_update">استفاده از ارائه‌دهنده اس‌اس‌ال به روز</string>
     <string name="title_advanced_ssl_harden">اتصالات SSL را محکم کن</string>
     <string name="title_advanced_cert_transparency">شفافیت گواهینامه</string>
@@ -466,6 +471,8 @@
     <string name="title_advanced_attachments_alt">نمایش پیوست‌ها بعد از متن پیام</string>
     <string name="title_advanced_thumbnails">نمایش ریز عکس‌ها بعد از متن پیام</string>
     <string name="title_advanced_pdf_preview">نمایش ریز پی‌دی‌اف‌ها</string>
+    <string name="title_advanced_video_preview">نمایش ریز ویدئو‌ها</string>
+    <string name="title_advanced_audio_preview">نمایش پخش‌کننده صوتی کوچک</string>
     <string name="title_advanced_message_text_zoom2">بزرگ‌نمایی پیش‌فرض متن پیام: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">متن پیام را نیز در ویرایشگر پیام بزرگنمایی کنید</string>
     <string name="title_advanced_overview_mode">بزرگنمایی پیام‌های اصلی متناسب با اندازه صفحه</string>
@@ -505,7 +512,7 @@
     <string name="title_advanced_up_down">استفاده از کلیدهای بالا و پایین برای رفتن به مکالمات بعدی و قبلی</string>
     <string name="title_advanced_autoexpand">بسط دادن خودکار پیام‌ها</string>
     <string name="title_advanced_expand_all">همه پیام‌ها را خودکار گسترش بده</string>
-    <string name="title_advanced_seen_delay" comment="title_advanced_seen_delay&#10;Title for an option to configure the time to delay marking messages automatically read on opening/expanding messages.">علامت‌گذاری خودکار پیام‌ها به عنوان خوانده شده را به تاخیر بیانداز</string>
+    <string name="title_advanced_seen_delay">علامت‌گذاری خودکار پیام‌ها به عنوان خوانده شده را به تاخیر بیانداز</string>
     <string name="title_advanced_autoclose">بستن خودکار مکالمات</string>
     <string name="title_advanced_onclose">هنگام بستن یک گفتگو</string>
     <string name="title_advanced_autoread">به طور خودکار پیام‌های انتقال یافته به عنوان خوانده شده علامت گذاری شود</string>
@@ -603,6 +610,7 @@
     <string name="title_advanced_open_safe_hint">فعال کردن این نیازمند ارتباطات امن برای دانلود تصاویر و غیره خواهد بود</string>
     <string name="title_advanced_browse_hint">واکشی پیام‌های بیشتر هنگام پیمایش به پایین</string>
     <string name="title_advanced_threading_hint">پیام‌های گروهی مرتبط با یکدیگر</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">فقط برای سبک کارت</string>
     <string name="title_advanced_privacy_risk">شاید خطر حریم خصوصی وجود داشته باشد</string>
     <string name="title_advanced_preview_hint">فقط زمانی در دسترس است که متن پیام دانلود شده باشد</string>
     <string name="compressed">محتویات فایل‌های فشرده شده (%1$s) با بیش از %2$s فایل یا فایل‌های بزرگ‌تر از %3$s نمایش داده نخواهند شد</string>
@@ -653,13 +661,13 @@
     <string name="title_aliases">نام‌های مستعار</string>
     <string name="title_provider">فراهم کننده</string>
     <string name="title_custom">سفارشی</string>
-    <string name="title_dnssec" comment="title_dnssec&#10;Title for account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">اجبار به استفاده از DNSSEC</string>
-    <string name="title_dnssec_remark" comment="title_dnssec_remark&#10;Remark below account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">تنها تعداد کمی از سرورهای DNS از DNSSEC پشتیبانی می‌کنند</string>
+    <string name="title_dnssec">اجبار به استفاده از DNSSEC</string>
+    <string name="title_dnssec_remark">تنها تعداد کمی از سرورهای DNS از DNSSEC پشتیبانی می‌کنند</string>
     <string name="title_host">نام میزبان</string>
     <string name="title_encryption">رمزنگاری</string>
     <string name="title_allow_insecure">اجازه اتصال ناامن</string>
     <string name="title_dane">اعمال کردن DANE</string>
-    <string name="title_dane_remark" comment="title_dane_remark&#10;Remark below account/identity option to enforce DANE&#10;https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">تنها تعدادی از ارائه‌دهنده‌های ایمیل از DANE پشتیبانی می‌کنند</string>
+    <string name="title_dane_remark">تنها تعدادی از ارائه‌دهنده‌های ایمیل از DANE پشتیبانی می‌کنند</string>
     <string name="title_notify_remark">می‌توانید این را برای نوتیفیکیشن‌های خاص حساب فعال کنید</string>
     <string name="title_port">شماره پورت</string>
     <string name="title_user">نام کاربری</string>
@@ -750,6 +758,7 @@
     <string name="title_synchronize_folder">همگام سازی (دریافت پیام‌ها)</string>
     <string name="title_poll_folder">بررسی دوره‌ای به جای همگام سازی پیوسته</string>
     <string name="title_download_folder">دریافت خودکار متن پیام و پیوست</string>
+    <string name="title_count_unread">تعداد پیام‌های خوانده نشده را به حساب اضافه کن</string>
     <string name="title_notify_folder">آگاه‌سازی از پیام‌های جدید</string>
     <string name="title_sync_days">همگام سازی پیام‌ها (روزها)</string>
     <string name="title_sync_days_remark">افزایش مقدار این باعث افزایش مصرف باتری می‌شود</string>
@@ -842,6 +851,7 @@
     <string name="title_spam">هرزنامه</string>
     <string name="title_move">انتقال</string>
     <string name="title_copy_btn">روگرفت</string>
+    <string name="title_labels_btn">برچسب (فقط جیمیل)</string>
     <string name="title_unsubscribe">لغو اشتراک</string>
     <string name="title_message_rule">ساخت قانون</string>
     <string name="title_no_junk">هرزنامه نیست</string>
@@ -1126,6 +1136,7 @@
     <string name="title_rule_tts">متن به گفتار</string>
     <string name="title_rule_automation">خودکارسازی</string>
     <string name="title_rule_delete">حذف برای همیشه</string>
+    <string name="title_rule_silent">اعلان‌های بی‌صدا</string>
     <string name="title_rule_caption">ویرایش قانون</string>
     <string name="title_rule_title">قانون اعمال می‌شود بر</string>
     <string name="title_rule_name">نام</string>

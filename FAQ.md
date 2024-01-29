@@ -181,7 +181,7 @@ The cause might be [changes in Android 7 Nougat](https://ericsink.com/entries/sq
 * &#x2714; ~~Notification settings per folder~~
 * &#x2714; ~~Select local images for signatures~~
 * &#x2714; ~~Show messages matched by a rule~~
-* &#x274C; ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own filter rules)
+* &#x274C; ~~[ManageSieve](https://tools.ietf.org/html/rfc5804)~~ (there are no maintained Java libraries with a suitable license and without dependencies and besides that, FairEmail has its own rules)
 * &#x2714; ~~Search for messages with/without attachments~~ (on-device only because IMAP doesn't support searching for attachments)
 * &#x2714; ~~Search for a folder~~
 * &#x2714; ~~Search suggestions~~
@@ -283,7 +283,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [~~(68) Why can Adobe Acrobat reader not open PDF attachments / Microsoft apps not open attached documents?~~](#faq68)
 * [(69) Can you add auto scroll up on new message?](#faq69)
 * [(70) When will messages be auto expanded?](#faq70)
-* [(71) How do I use filter rules?](#faq71)
+* [(71) How do I use rules?](#faq71)
 * [(72) What are primary accounts/identities?](#faq72)
 * [(73) Is moving messages across accounts safe/efficient?](#faq73)
 * [(74) Why do I see duplicate messages?](#faq74)
@@ -1877,6 +1877,8 @@ If you want to match a catch-all email address, this regex is usually fine, prov
 
 The username of a message being replied to will be used as the default username when editing of usernames is enabled in the advanced identity settings.
 
+Please see [this FAQ](#faq9) about editing the email address when composing a message.
+
 If you want to *not* match specific addresses, you can use something like this:
 
 ```
@@ -1990,6 +1992,13 @@ Since the app needs to wait for responses of the email server, which requires th
 
 If you are comparing the battery usage of FairEmail with another email client, please make sure the other email client is set up similarly.
 For example, comparing always sync (push messages) and (infrequent) periodic checking for new messages is not a fair comparison.
+
+If you are comparing the battery usage of FairEmail with an app like Whatsapp,
+please understand that most apps use [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) (FCM) for push messages,
+which means that no battery usage will be contributed to an app for push messages, but instead to the Google Play Services system component.
+Apart from the privacy concerns, it is not possible to use FCM for email because email servers do not support FCM.
+The only way would be to download all your messages to a third-party server first and use FCM to push notifications to the app.
+The privacy and security implications would be significant, though.
 
 Reconnecting to an email server will use extra battery power, so an unstable internet connection will result in extra battery usage.
 Also, some email servers prematurely terminate idle connections, while [the standard](https://tools.ietf.org/html/rfc2177) says that an idle connection should be kept open for 29 minutes.
@@ -2645,11 +2654,11 @@ Messages will automatically be marked read on expanding, unless this was disable
 <br />
 
 <a name="faq71"></a>
-**(71) How do I use filter rules?**
+**(71) How do I use rules?**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq71)
 
-You can edit filter rules by long pressing a folder in the folder list of an account (tap the account name in the navigation/side menu).
+You can edit rules by long pressing a folder in the folder list of an account (tap the account name in the navigation/side menu).
 
 New rules will be applied to new messages received in the folder, not to existing messages.
 You can check the rule and apply the rule to existing messages or, alternatively, long press the rule in the rule list and select *Execute now*.
@@ -2721,6 +2730,7 @@ You can select one of these actions to apply to matching messages:
 * Mark as unread
 * Hide
 * Suppress notification
+* Silent notification (since version 1.2150)
 * Snooze
 * Add star
 * Set importance (local priority)
@@ -2865,8 +2875,8 @@ In the three-dots *more* message menu there is an item to create a rule for a re
 <br />
 
 If you want to set up archiving by week, month, year, etc,
-you can do this with filter rules with an absolute time condition on a 'jump' archive folder where archived messages are being moved to as a first step.
-The filter rules will move the messages to a (sub) archive folder as a second step.
+you can do this with rules with an absolute time condition on a 'jump' archive folder where archived messages are being moved to as a first step.
+Such a rule will move the messages to a (sub) archive folder as a second step.
 
 The POP3 protocol does not support setting keywords and moving or copying messages.
 
@@ -3001,7 +3011,7 @@ like for example multiple synchronization periods per day or different synchroni
 It is possible to install FairEmail in multiple user profiles, for example a personal and a work profile, and to configure FairEmail differently in each profile,
 which is another possibility to have different synchronization schedules and to synchronize a different set of accounts.
 
-It is also possible to create [filter rules](#faq71) with a time condition and to snooze messages until the end time of the time condition.
+It is also possible to create [rules](#faq71) with a time condition and to snooze messages until the end time of the time condition.
 This way it is possible to *snooze* business related messages until the start of the business hours.
 This also means that the messages will be on your device for when there is (temporarily) no internet connection. How to:
 
@@ -3016,6 +3026,8 @@ This also means that the messages will be on your device for when there is (temp
 Note that recent Android versions allow overriding DND (Do Not Disturb) per notification channel and per app,
 which could be used to (not) silence specific (business) notifications.
 Please [see here](https://support.google.com/android/answer/9069335) for more information.
+
+Since version 1.2150 it is possible to create [rules](#faq71) to silence specific new message notifications.
 
 For more complex schemes you could set one or more accounts to manual synchronization
 and send this command to FairEmail to check for new messages:
@@ -3301,7 +3313,7 @@ Please see [this FAQ](#faq163) for more information about this.
 
 Of course you can report messages as spam with FairEmail,
 which will move the reported messages to the spam folder and train the spam filter of the provider, which is how it is supposed to work.
-This can be done automatically with [filter rules](#faq71) too.
+This can be done automatically with [rules](#faq71) too.
 Blocking the sender will create a filter rule to automatically move future messages of the same sender into the spam folder.
 
 Note that the POP3 protocol gives access to the inbox only. So, it is won't be possible to report spam for POP3 accounts.
@@ -3774,9 +3786,10 @@ Moreover, setting up an account/identity with the quick setup wizard is simple, 
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq117)
 
-First of all, a purchase will be available on all devices logged into the same Google account,
+Firstly, a purchase will be available on all devices logged into the same Google account,
 *if* (this is important) the app is installed via the same Google account too.
-You can select the account in the Play store app by tapping on the avatar at the top right.
+You can select the account in the Play store app by tapping on the avatar at the top right, but only *before* installing the app.
+It is not possible to change the linked Google account after the app has been installed.
 
 Google manages all purchases, so as a developer I have little control over purchases.
 So, basically, the only thing I can do, is suggest some things:
@@ -3975,7 +3988,7 @@ It is probably a good idea to enable *Show keywords in message header* in the di
 
 Note that the email server needs to support IMAP flags (keywords) for this feature.
 
-Filter rules will be applied to the received receipt, so it is possible to move/archive the receipt.
+Rules will be applied to the received receipt, so it is possible to move/archive the receipt.
 See [this FAQ](#faq71) for a header condition to recognize receipts.
 
 <br />
@@ -3991,7 +4004,7 @@ a toolbar to perform operations (align text, insert list, indent text, insert bl
 
 The subject of a received message can be edited, also on the email server, via the horizontal three-dots button just above the message text near the left side of the screen.
 
-<br>
+<br />
 
 <a name="faq126"></a>
 **(126) Can message previews be sent to my smartwatch?**
@@ -4412,7 +4425,7 @@ Conditional: (since version 1.1803; experimental)
 * Long press the folder (inbox) in the folder list and select *Edit rules*
 * Add a rule with the big 'plus' button at the bottom right
 * Configure a rule condition, select *Play sound* as rule action and select a sound
-* For more information about filter rules, please [see here](#faq71)
+* For more information about rules, please [see here](#faq71)
 
 The order of precendence is: conditional sound, sender sound, folder sound, account sound and (default) notification sound.
 
@@ -4800,9 +4813,9 @@ You can delete all classification data by turning classification in the miscella
 This will be necessary when classification for a folder is enabled or disabled (or when a folder is deleted)
 because classification is based on comparision.
 
-[Filter rules](#faq71) will be executed before classification.
-If one or more filter rules were executed for a message, message classification will be skipped
-because it is assumed that the message will be processed by the filter rules in this case.
+[Rules](#faq71) will be executed before classification.
+If one or more rules were executed for a message, message classification will be skipped
+because it is assumed that the message will be processed by the rules in this case.
 
 Message classification is a pro feature, except for the spam folder.
 
@@ -5421,7 +5434,7 @@ otherwise synchronization will be postponed until after an internet connection b
 You can also manually synchronize with the opposite arrows button.
 
 Synchronization will currently add and update enabled accounts and identities only,
-but on the roadmap is synchronizing blocked senders and filter rules too.
+but on the roadmap is synchronizing blocked senders and rules too.
 
 Updating includes enabling/disabling accounts and identities.
 
@@ -5443,7 +5456,7 @@ Cloud sync is an experimental feature. It is not available for the Play Store ve
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq190)
 
-OpenAI can only be used if configured and enabled, and the app does not use third-party libraries to avoid tracking when OpenAI is not used.
+OpenAI can only be used if configured and enabled.
 
 **Setup**
 
@@ -5475,6 +5488,7 @@ Depending on the ChatGPT account (free or paid) there are usage limits. If you e
 *Error 429: Too Many Requests insufficient_quota: You exceeded your current quota, please check your plan and billing details*
 
 In this case, you'll either need to wait, or upgrade your ChatGPT plan.
+Please [see here](https://help.openai.com/en/articles/6843909-rate-limits-and-429-too-many-requests-errors) for details.
 
 <br>
 
@@ -5488,6 +5502,8 @@ There is currently a [waitlist](https://openai.com/waitlist/gpt-4-api) for API G
 Please read the [privacy policy](https://openai.com/policies/privacy-policy) of OpenAI,
 and perhaps [this article](https://katedowninglaw.com/2023/03/10/openais-massive-data-grab/)
 and [this article](https://www.ncsc.gov.uk/blog-post/chatgpt-and-large-language-models-whats-the-risk) too.
+
+FairEmail does not use third-party libraries to avoid being tracked when OpenAI is not being used.
 
 <br>
 
@@ -5581,6 +5597,8 @@ You can also pull down the messages list of any folder to sync it, and repeat th
 <a name="faq195"></a>
 **(195) Why are all messages in the archive folder of Gmail?**
 
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq195)
+
 The Gmail server stores all messages, except the messages in the draft, sent, trash and spam messages folder in the all messages' folder (=archive folder).
 FairEmail is an email client, which basically displays what is on the email server, and therefore it will show these messages too.
 
@@ -5592,6 +5610,8 @@ This has advantages, though, because it makes searching in all messages easier.
 
 <a name="faq196"></a>
 **(196) Can you add empty trash on leaving the app?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq196)
 
 Besides that leaving an app is an ambiguous action, automatically deleting trashed messages is a risky action because deleted messages can't be restored anymore.
 A message could accidentally be trashed, and you could switch to another app, which could be interpreted as leaving the app, and the message would be gone forever.
@@ -5610,6 +5630,9 @@ Note that the reference time is the time the message was first stored on the dev
 <a name="faq197"></a>
 **(197) How can I print a message?**
 
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq197)
+
+
 You can print a message, both to a PDF or a printer, by tapping on the horizontal three-dots button just above the message text near the left side.
 You might need to tap on the '>' button to show the message actions again.
 
@@ -5625,6 +5648,8 @@ A message is printed as-is, which means that the sender of the message determine
 <a name="faq198"></a>
 **(198) Can you add spell checking?**
 
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq198)
+
 Spell checking should be provided by the keyboard app for all other apps.
 Sometimes, particularly on ChromeOS, spell checking needs to be enabled in the settings.
 
@@ -5634,6 +5659,8 @@ That said, LanguageTool, which can be enabled in the integration settings, is an
 
 <a name="faq199"></a>
 **(199) Can you add proxy support?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq199)
 
 In fact, (HTTP, HTTPS, SOCKS) proxy support was removed because it is not possible to let an app proxy DNS requests,
 or in other words, an in-app proxy will always leak host names and therefore give a false sense of security.
@@ -5647,6 +5674,8 @@ Please note that if you want to use a .onion address, you will need to disable p
 
 <a name="faq200"></a>
 **(200) How can I use Adguard to remove tracking parameters?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq200)
 
 To use [Adguard](https://adguard.com/) to remove tracking parameters from links:
 
@@ -5663,6 +5692,9 @@ visible as a short delay between tapping on a link and the link confirmation dia
 <a name="faq201"></a>
 **(201) What is certificate transparency?**
 
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq201)
+
+
 Please see [this article](https://certificate.transparency.dev/howctworks/) about what certificate transparency is.
 Alternatively, see [this Wikipedia article](https://en.wikipedia.org/wiki/Certificate_Transparency).
 
@@ -5676,17 +5708,32 @@ FairEmail uses [this library](https://github.com/appmattus/certificatetransparen
 <a name="faq202"></a>
 **(202) What is DNSSEC and what is DANE?**
 
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq202)
+
 Please see [this Wikipedia article](https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions) about what DNSSEC is.
 
 Please see [this article](https://github.com/internetstandards/toolbox-wiki/blob/main/DANE-for-SMTP-how-to.md) about what DANE is.
 Alternatively, see [this Wikipedia article](https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities).
 
-You can use [this tool](https://ssl-tools.net/tlsa-generator) to generate TSLA DNS records for DANE.
+You can use [this tool](https://ssl-tools.net/tlsa-generator) to generate TLSA DNS records for DANE (select either PKIX-EE or DANE-EE).
 
-You can enable enforcing DNSSEC and/or DANA in the (advanced) account and identity settings (since version 1.2148).
+You can enable enforcing DNSSEC and/or DANA in the (advanced) account and identity settings (since version 1.2149).
 
 Note that only some email providers support DANE and that only a limited number of DNS servers support DNSSEC (January 2024: ~30%), which is required for DANE.
+Most private DNS providers support DNSSEC, though. You can configure private DNS in the Android network settings (since Android 9).
+To be sure that private DNS is being used, better configure a host name like *dns.google*, *1dot1dot1dot1.cloudflare-dns.com* or *dns.quad9.net*.
 An alternative is using Certificate Transparency, see the previous FAQ.
+
+Some email providers known to support DANE for client-to-server traffic:
+
+* [Disroot.org](https://disroot.org/)
+* [Freenet.de](https://email.freenet.de/)
+* [Mailbox.org](https://mailbox.org/)
+* [Posteo.de](https://posteo.de/)
+
+This is not a complete and exhaustive list.
+
+Please see [this article](https://www.zivver.com/blog/why-cisos-and-security-professionals-can-no-longer-rely-on-regular-email-for-the-sharing-of-personal-information) about why DANE is important.
 
 <br>
 

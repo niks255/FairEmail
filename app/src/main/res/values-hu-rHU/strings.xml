@@ -147,6 +147,7 @@
     <string name="title_list_identities">Azonosítók</string>
     <string name="title_edit_account">Fiók szerkesztése</string>
     <string name="title_edit_identity">Azonosító szerkesztése</string>
+    <string name="title_new_folder">Új mappa</string>
     <string name="title_edit_folder">Könyvtár szerkesztése</string>
     <string name="title_disable_gmail">Gmail alkalmazás letiltása</string>
     <string name="title_setup">Beállítások</string>
@@ -170,6 +171,7 @@
     <string name="title_setup_wizard_new">Új e-mail cím megadása</string>
     <string name="title_setup_manual">Kézi beállítás és fiók opciók</string>
     <string name="title_setup_classic">Klasszikus konfiguráció</string>
+    <string name="title_setup_wizard_hint">A fenti \"Egyéb szolgáltató\" gyorsbeállítás varázsló általában szintén működik, és könnyebb, mint bevinni a kiszolgáló adatait.</string>
     <string name="title_setup_documentation">Kérjük keresse fel az e-mail szolgáltatójának leírását a korrekt e-mail szerver konfigurációval kapcsolatban</string>
     <string name="title_setup_account_remark">E-mailek fogadása</string>
     <string name="title_setup_identity_remark">E-mailek küldése</string>
@@ -179,6 +181,7 @@
     <string name="title_setup_google_sign_in">Bejelentkezés Google fiókkal</string>
     <string name="title_setup_other">Egyéb szolgáltató</string>
     <string name="title_setup_inbound">Csak bejövő levelek (nem lehet leveleket küldeni!)</string>
+    <string name="title_setup_imap">IMAP fiók</string>
     <string name="title_setup_pop3">POP3 fiók</string>
     <string name="title_setup_oauth_permission">Az e-mail szolgáltató az OAuth-ot csak a Play Store és GitHub verziókra engedélyezte</string>
     <string name="title_setup_gmail_support">Google fiókok engedélyezése csak a Play Store és GitHub verzióknál engedélyezett, mert az Android rendszer ellenőrzi az app digitális aláírását</string>
@@ -343,6 +346,9 @@
     <string name="title_advanced_when">Mikor</string>
     <string name="title_advanced_optimize">Automatikus optimizálás</string>
     <string name="title_advanced_always">Mindig fogadjon értesítéseket e fiókokhoz</string>
+    <string name="title_advanced_with_exceptions">Az alábbi kivételekkel:</string>
+    <string name="title_advanced_poll_metered">Új üzenetek rendszeres ellenőrzése fizetős hálózaton</string>
+    <string name="title_advanced_poll_unmetered">Új üzenetek rendszeres ellenőrzése nem fizetős hálózaton</string>
     <string name="title_advanced_schedule">Ütemezés</string>
     <string name="title_advanced_schedule_workdays">Munkanapok</string>
     <string name="title_advanced_schedule_weekend">Hétvége</string>
@@ -436,8 +442,8 @@
     <string name="title_advanced_vpn_only">Csatlakozás csak VPN-en keresztül</string>
     <string name="title_advanced_timeout">Kapcsolat időtúllépés (másodpercben)</string>
     <string name="title_advanced_prefer_ip4">IPv4 preferálása IPv6 fölött</string>
-    <string name="title_advanced_dns" comment="title_advanced_dns&#10;Title for an option to configure extra, preferred DNS server addresses&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Előnyben részesített DNS kiszolgáló címek (vesszővel elválasztva)</string>
-    <string name="title_advanced_dns_custom" comment="title_advanced_dns_custom&#10;Title for an option to use a custom DNS resolver instead of the Android DNS resolver&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Használjon egyéni DNS feloldó kiszolgálót</string>
+    <string name="title_advanced_dns">Előnyben részesített DNS kiszolgáló címek (vesszővel elválasztva)</string>
+    <string name="title_advanced_dns_custom">Használjon egyéni DNS feloldó kiszolgálót</string>
     <string name="title_advanced_ssl_update">Frissített SSL szolgáltató használata</string>
     <string name="title_advanced_ssl_harden">SSL kapcsolatok megerősítése</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 megkövetelése</string>
@@ -539,6 +545,8 @@
     <string name="title_advanced_attachments_alt">Mellékletek megjelenítése a szöveg után</string>
     <string name="title_advanced_thumbnails">Képek bélyegképeinek megjelenítése a szöveg után</string>
     <string name="title_advanced_pdf_preview">PDF bélyegképek mutatása</string>
+    <string name="title_advanced_video_preview">Videó bélyegképek mutatása</string>
+    <string name="title_advanced_audio_preview">Mini hanglejátszó mutatása</string>
     <string name="title_advanced_message_text_zoom2">Szöveg nagyítás alapértelmezett érték: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Az üzenetszerkesztőben is állítható a szöveg nagyítása</string>
     <string name="title_advanced_overview_mode">Eredeti üzenetek kinagyítására teljes képernyőre</string>
@@ -595,7 +603,7 @@
     <string name="title_advanced_expand_all">Összes olvasott üzenet automatikus kibontása</string>
     <string name="title_advanced_expand_one">Egyszerre csak egy üzenet kibontása</string>
     <string name="title_advanced_collapse_multiple">Több üzenetet tartalmazó beszélgetés üzeneteinek összecsukása \'vissza\'-val</string>
-    <string name="title_advanced_seen_delay" comment="title_advanced_seen_delay&#10;Title for an option to configure the time to delay marking messages automatically read on opening/expanding messages.">Üzenetek automatikus olvasottak jelölése ennyi idő után</string>
+    <string name="title_advanced_seen_delay">Üzenetek automatikus olvasottak jelölése ennyi idő után</string>
     <string name="title_advanced_autoclose">Beszélgetések automatikus bezárása</string>
     <string name="title_advanced_autoclose_send">A beszélgetés automatikus bezárása az üzenet elküldése után</string>
     <string name="title_advanced_onclose">Beszélgetés bezárásakor</string>
@@ -820,6 +828,7 @@
     <string name="title_advanced_split_hint">Ez el fogja osztani a képernyőt részekre</string>
     <string name="title_advanced_split_min_hint">Ez a kondíció az összecsukható eszközökhöz készült</string>
     <string name="title_advanced_threading_hint">Egymáshoz kapcsolódó üzenetek csoportosítása</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Csak kártya stílus használatakor</string>
     <string name="title_advanced_highlight_hint">A téma kiemelőszíne a kiemeléshez lesz használva</string>
     <string name="title_advanced_privacy_risk">Adatvédelmi szempontból aggályos a használata</string>
     <string name="title_advanced_name_email_hint">Név csak akkor jelenik meg, ha elérhető</string>
@@ -930,15 +939,15 @@
     <string name="title_aliases">Álnevek</string>
     <string name="title_provider">Szolgáltató</string>
     <string name="title_custom">Egyéni</string>
-    <string name="title_dnssec" comment="title_dnssec&#10;Title for account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">DNSSEC megkövetelése</string>
-    <string name="title_dnssec_remark" comment="title_dnssec_remark&#10;Remark below account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">Csak korlátozott számú DNS kiszolgáló támogatja a DNSSEC-et</string>
+    <string name="title_dnssec">DNSSEC megkövetelése</string>
+    <string name="title_dnssec_remark">Csak korlátozott számú DNS kiszolgáló támogatja a DNSSEC-et</string>
     <string name="title_host">Kiszolgálónév</string>
     <string name="title_encryption">Titkosítás</string>
     <string name="title_encryption_none">Nincs (nem biztonságos)</string>
     <string name="title_allow_insecure">Nem biztonságos mért kapcsolatok engedélyezése</string>
     <string name="title_insecure_remark">Nem biztonságos kapcsolatokat csak megbízható hálózatokon ajánlott használni és soha publikus hálózatokon</string>
     <string name="title_dane">DANE megkövetelése</string>
-    <string name="title_dane_remark" comment="title_dane_remark&#10;Remark below account/identity option to enforce DANE&#10;https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">Csak néhány email kiszolgáló támogatja a DANE-t</string>
+    <string name="title_dane_remark">Csak néhány email kiszolgáló támogatja a DANE-t</string>
     <string name="title_notify_remark">Engedélyezheti a fiókonkénti egyedi értesítéseket</string>
     <string name="title_port">Port szám</string>
     <string name="title_user">Felhasználónév</string>
@@ -1104,6 +1113,7 @@
     <string name="title_poll_folder">Időszakos ellenőrzés a folyamatos szinkronizálás helyett</string>
     <string name="title_poll_folder_remark">A legtöbb email szerver leküldéses üzeneteket csak néhány mappához engedélyez!</string>
     <string name="title_download_folder">Üzenetek szövegének és mellékleteinek automatikus letöltése</string>
+    <string name="title_count_unread">Az olvasatlan üzenetek számának kijelzése a fióknál</string>
     <string name="title_notify_folder">Értesítés új üzenet érkezésekor</string>
     <string name="title_auto_classify_source">E mappa üzeneteinek mappázása</string>
     <string name="title_auto_classify_target">Mappázott üzenetek automatikus mozgatása ebbe a mappába</string>
@@ -1226,6 +1236,7 @@
     <string name="title_move">Áthelyezés</string>
     <string name="title_copy_btn">Másolás</string>
     <string name="title_keywords_btn">Kulcsszavak</string>
+    <string name="title_labels_btn">Címkék (csak Gmail)</string>
     <string name="title_unsubscribe">Leiratkozás</string>
     <string name="title_message_rule">Szabály létrehozása</string>
     <string name="title_no_junk">Nem levélszemét</string>
@@ -1641,6 +1652,7 @@
     <string name="title_rule_automation">Automatizálás</string>
     <string name="title_rule_delete">Végleges törlés</string>
     <string name="title_rule_sound">Hang lejátszása</string>
+    <string name="title_rule_silent">Csendes értesítés</string>
     <string name="title_rule_caption">Szabály szerkesztése</string>
     <string name="title_rule_title">A szabály érvényes erre</string>
     <string name="title_rule_name">Név</string>

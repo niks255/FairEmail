@@ -3,8 +3,8 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2149 }
-def getRevision = { -> return "a" }
+def getVersionCode = { -> return 2153 }
+def getRevision = { -> return "b" }
 def getReleaseName = { -> return "Ypupiara" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
 
@@ -367,7 +367,7 @@ android {
     bugsnag {
         // https://docs.bugsnag.com/build-integrations/gradle/
         uploadJvmMappings = false // disables upload of ProGuard/DexGuard/R8 mapping files
-        uploadNdkMappings = false // disables upload of NDK mapping files
+        uploadNdkMappings = true // disables upload of NDK mapping files
         reportBuilds = false // disables upload of build metadata
         overwrite = true
         builderName = "M66B"
@@ -410,7 +410,7 @@ tasks.register('updateFAQ', Exec) {
 
 tasks.register('updatePrivacy', Exec) {
     workingDir "${rootDir}"
-    commandLine 'sh', '-c', 'pandoc --standalone --metadata title="FairEmail" --css=privacy.css PRIVACY.md -o privacy.html'
+    commandLine 'sh', '-c', 'pandoc --standalone --metadata title="FairEmail" -H privacy/header.html --css=privacy.css PRIVACY.md -o privacy/index.html'
 }
 
 tasks.register('updateCrowdin', Exec) {
@@ -505,7 +505,7 @@ configurations.configureEach {
         } else if (details.requested.group == "androidx.lifecycle" &&
                 details.requested.name != "lifecycle-extensions") {
             //print("Pinning " + details.requested.group + ":" + details.requested.name + "\n")
-            details.useVersion "2.6.2"
+            details.useVersion "2.7.0"
         } else if (details.requested.group == "org.apache.poi") {
             //print("Pinning " + details.requested.group + ":" + details.requested.name + "\n")
             details.useVersion "3.17"
@@ -523,16 +523,16 @@ dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     def desugar_version = "2.0.4"
-    def startup_version = "1.1.1" // 1.2.0-alpha02
-    def annotation_version_experimental = "1.3.1" // 1.4.0-beta01
-    def core_version = "1.12.0" // 1.13.0-alpha02
+    def startup_version = "1.2.0-alpha02"
+    def annotation_version_experimental = "1.4.0"
+    def core_version = "1.12.0" // 1.13.0-alpha04
     def appcompat_version = "1.6.1" // 1.7.0-alpha03
     def emoji_version = "1.4.0" // 1.5.0-alpha01
     def flatbuffers_version = "2.0.0"
-    def activity_version = "1.8.2" // 1.9.0-alpha01
-    def fragment_version = "1.6.2" // 1.7.0-alpha07
+    def activity_version = "1.8.2" // 1.9.0-alpha02
+    def fragment_version = "1.6.2" // 1.7.0-alpha09
     def windows_version = "1.2.0" // 1.3.0-alpha01
-    def webkit_version = "1.9.0" // 1.10.0-beta01
+    def webkit_version = "1.10.0"
     def recyclerview_version = "1.3.2" // 1.4.0-alpha01
     def coordinatorlayout_version = "1.2.0" // 1.3.0-alpha02
     def constraintlayout_version = "2.1.4" // 2.2.0-alpha13
@@ -541,22 +541,22 @@ dependencies {
     def lbm_version = "1.1.0"
     def swiperefresh_version = "1.2.0-alpha01"
     def documentfile_version = "1.1.0-alpha01"
-    def lifecycle_version = "2.6.2" // 2.7.0-rc02
+    def lifecycle_version = "2.7.0" // 2.8.0-alpha01
     def lifecycle_extensions_version = "2.2.0"
     def room_version = "2.4.3" // 2.5.2/2.6.1
     def sqlite_version = "2.4.0"
     def requery_version = "3.39.2"
     def paging_version = "2.1.2" //  3.2.0
     def preference_version = "1.2.1"
-    def work_version = "2.9.0"
+    def work_version = "2.9.0" // 2.10.0-alpha01
     def exif_version = "1.3.7"
     def biometric_version = "1.2.0-alpha05"
     def billingclient_version = "6.0.1" // 6.1.0
-    def playservicesbase_version = "18.2.0";
+    def playservicesbase_version = "18.3.0";
     def transparency_version = "2.5.19"
     def javamail_version = "1.6.7"
     def jsoup_version = "1.17.2"
-    def jsonpath_version = "2.8.0"
+    def jsonpath_version = "2.9.0"
     def css_version = "0.9.30"
     def jax_version = "2.3.0-jaxb-1.0.6"
     def minidns_version = "1.0.4"
@@ -703,6 +703,7 @@ dependencies {
     playImplementation "com.google.android.gms:play-services-basement:$playservicesbase_version"
 
     // https://github.com/appmattus/certificatetransparency
+    // https://mvnrepository.com/artifact/com.appmattus.certificatetransparency/certificatetransparency-android
     implementation "com.appmattus.certificatetransparency:certificatetransparency-android:$transparency_version"
 
     // https://developer.amazon.com/docs/in-app-purchasing/iap-get-started.html
@@ -746,7 +747,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.bugsnag/bugsnag-android
     implementation("com.bugsnag:bugsnag-android:$bugsnag_version") {
         exclude group: "com.bugsnag", module: "bugsnag-plugin-android-anr"
-        exclude group: "com.bugsnag", module: "bugsnag-plugin-android-ndk"
+        //exclude group: "com.bugsnag", module: "bugsnag-plugin-android-ndk"
         exclude group: "com.bugsnag", module: "bugsnag-android-core"
     }
 
@@ -783,7 +784,8 @@ dependencies {
     implementation "io.github.everythingme:overscroll-decor-android:$overscroll_version"
 
     // https://www.bouncycastle.org/latest_releases.html
-    // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15to18
+    // https://mvnrepository.com/artifact/org.bouncycastle/bctls-jdk15to18
     implementation "org.bouncycastle:bcpkix-jdk15to18:$bouncycastle_version"
     implementation "org.bouncycastle:bctls-jdk15to18:$bouncycastle_version"
 
@@ -821,7 +823,7 @@ dependencies {
     implementation "com.github.seancfoley:ipaddress:$ipaddress_version"
 
     // https://mvnrepository.com/artifact/androidx.car.app/app?repo=google
-    // implementation "androidx.car.app:app:1.4.0-alpha01"
+    // implementation "androidx.car.app:app:1.4.0-rc02"
 
     // https://github.com/square/leakcanary
     // https://square.github.io/leakcanary/getting_started/

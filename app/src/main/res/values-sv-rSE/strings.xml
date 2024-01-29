@@ -148,6 +148,7 @@
     <string name="title_list_identities">Identiteter</string>
     <string name="title_edit_account">Redigera konto</string>
     <string name="title_edit_identity">Redigera identitet</string>
+    <string name="title_new_folder">Ny mapp</string>
     <string name="title_edit_folder">Redigera mapp</string>
     <string name="title_disable_gmail">Inaktivera Gmail-app</string>
     <string name="title_setup">Inställningar</string>
@@ -171,6 +172,7 @@
     <string name="title_setup_wizard_new">Jag behöver en ny e-postadress</string>
     <string name="title_setup_manual">Manuell installation och kontoalternativ</string>
     <string name="title_setup_classic">Manuell konfiguration</string>
+    <string name="title_setup_wizard_hint">Guiden för snabbkonfigurering för \"Annan Leverantör\" ovan fungerar oftast också, och är lättare än att ange all serverdata.</string>
     <string name="title_setup_documentation">Se din e-postleverantörs dokumentation för rätt e-postserver konfiguration</string>
     <string name="title_setup_account_remark">Ta emot e-post</string>
     <string name="title_setup_identity_remark">Skicka epost</string>
@@ -180,6 +182,7 @@
     <string name="title_setup_google_sign_in">Logga in med Google</string>
     <string name="title_setup_other">Annan leverantör</string>
     <string name="title_setup_inbound">Endast inkommande e-post (e-post kan inte skickas!)</string>
+    <string name="title_setup_imap">IMAP-konto</string>
     <string name="title_setup_pop3">POP3-konto</string>
     <string name="title_setup_oauth_permission">E-postleverantören har godkänt OAuth endast för Play Store- och GitHub-versionen</string>
     <string name="title_setup_gmail_support">Auktorisera Google-konton kommer endast att fungera i Play Store- och GitHub-versionen eftersom Android kontrollerar den digitala app-signaturen</string>
@@ -341,6 +344,9 @@
     <string name="title_advanced_when">När</string>
     <string name="title_advanced_optimize">Optimera automatiskt</string>
     <string name="title_advanced_always">Ta alltid emot meddelanden för dessa konton</string>
+    <string name="title_advanced_with_exceptions">Med följande undantag:</string>
+    <string name="title_advanced_poll_metered">Sök regelbundet efter nya meddelanden när du befinner dig på ett nätverk med begränsad datamängd</string>
+    <string name="title_advanced_poll_unmetered">Kontrollera regelbundet nya meddelanden när du är på ett nätverk med obegränsad datamängd</string>
     <string name="title_advanced_schedule">Schema</string>
     <string name="title_advanced_schedule_workdays">Vardagar</string>
     <string name="title_advanced_schedule_weekend">Helg</string>
@@ -434,6 +440,8 @@
     <string name="title_advanced_vpn_only">Anslut endast via VPN</string>
     <string name="title_advanced_timeout">Timeout för anslutning (sekunder)</string>
     <string name="title_advanced_prefer_ip4">Föredra IPv4 över IPv6</string>
+    <string name="title_advanced_dns">Föredragna DNS-serveradresser (kommaseparerade)</string>
+    <string name="title_advanced_dns_custom">Använd anpassad DNS-resolver</string>
     <string name="title_advanced_ssl_update">Använd uppdaterad SSL-leverantör</string>
     <string name="title_advanced_ssl_harden">Strikta SSL-anslutningar</string>
     <string name="title_advanced_ssl_harden_strict">Kräv TLS 1.3</string>
@@ -535,6 +543,7 @@
     <string name="title_advanced_attachments_alt">Visa bilagor efter meddelandetexten</string>
     <string name="title_advanced_thumbnails">Visa miniatyrbilder efter meddelandetexten</string>
     <string name="title_advanced_pdf_preview">Visa PDF-miniatyrer</string>
+    <string name="title_advanced_audio_preview">Visa miniljudspelare</string>
     <string name="title_advanced_message_text_zoom2">Standard meddelandetext zoom: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Zooma meddelandetext även i meddelanderedigeraren</string>
     <string name="title_advanced_overview_mode">Zooma originalmeddelanden för att passa skärmen</string>
@@ -591,6 +600,7 @@
     <string name="title_advanced_expand_all">Expandera automatiskt alla lästa meddelanden</string>
     <string name="title_advanced_expand_one">Expandera endast ett meddelande åt gången</string>
     <string name="title_advanced_collapse_multiple">Kollapsa meddelanden i en konversation med flera meddelanden på \'back\'</string>
+    <string name="title_advanced_seen_delay">Fördröj automatiskt markering av meddelanden som lästa</string>
     <string name="title_advanced_autoclose">Stäng konversationer automatiskt</string>
     <string name="title_advanced_autoclose_send">Stäng konversationer automatiskt efter att ha skickat meddelanden</string>
     <string name="title_advanced_onclose">När du stänger en konversation</string>
@@ -813,6 +823,7 @@
     <string name="title_advanced_split_hint">Detta kommer att dela upp skärmen i delar</string>
     <string name="title_advanced_split_min_hint">Detta är ett villkor för ihopfällbara enheter</string>
     <string name="title_advanced_threading_hint">Gruppera meddelanden relaterade till varandra</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Endast för kortstil</string>
     <string name="title_advanced_highlight_hint">Accentfärgen på temat kommer att användas för markering</string>
     <string name="title_advanced_privacy_risk">Det kan finnas en integritetsrisk</string>
     <string name="title_advanced_name_email_hint">Namnen visas endast när de är tillgängliga</string>
@@ -923,12 +934,15 @@
     <string name="title_aliases">Alias</string>
     <string name="title_provider">Leverantör</string>
     <string name="title_custom">Anpassad</string>
+    <string name="title_dnssec">Tvinga DNSSEC</string>
+    <string name="title_dnssec_remark">Endast ett begränsat antal DNS-servrar stöder DNSSEC</string>
     <string name="title_host">Värdnamn</string>
     <string name="title_encryption">Kryptering</string>
     <string name="title_encryption_none">Ingen (osäker)</string>
     <string name="title_allow_insecure">Tillåt osäkra anslutningar</string>
     <string name="title_insecure_remark">Osäkra anslutningar bör endast tillåtas på betrodda nätverk och aldrig på offentliga nätverk</string>
     <string name="title_dane">Tvinga DANE</string>
+    <string name="title_dane_remark">Endast vissa e-postleverantörer stöder DANE</string>
     <string name="title_notify_remark">Du kan aktivera det här för kontospecifika aviseringar</string>
     <string name="title_port">Portnummer</string>
     <string name="title_user">Användarnamn</string>
@@ -1095,6 +1109,7 @@
     <string name="title_poll_folder">Kontrollera regelbundet istället för kontinuerlig synkronisering</string>
     <string name="title_poll_folder_remark">De flesta e-postservrar tillåter endast push-meddelanden för en handfull mappar!</string>
     <string name="title_download_folder">Hämta automatiskt meddelandetexter och bilagor</string>
+    <string name="title_count_unread">Lägg till antalet olästa meddelanden till kontot</string>
     <string name="title_notify_folder">Notifiera för nya meddelanden</string>
     <string name="title_auto_classify_source">Klassificera nya meddelanden i denna mapp</string>
     <string name="title_auto_classify_target">Flytta automatiskt klassificerade meddelanden till denna mapp</string>
@@ -1217,6 +1232,7 @@
     <string name="title_move">Flytta</string>
     <string name="title_copy_btn">Kopiera</string>
     <string name="title_keywords_btn">Nyckelord</string>
+    <string name="title_labels_btn">Etiketter (endast Gmail)</string>
     <string name="title_unsubscribe">Avbryt prenumeration</string>
     <string name="title_message_rule">Skapa regel</string>
     <string name="title_no_junk">Inte skräppost</string>
@@ -1632,6 +1648,7 @@
     <string name="title_rule_automation">Automatisering</string>
     <string name="title_rule_delete">Ta bort permanent</string>
     <string name="title_rule_sound">Spela upp ljud</string>
+    <string name="title_rule_silent">Tyst avisering</string>
     <string name="title_rule_caption">Redigera regel</string>
     <string name="title_rule_title">Regeln gäller</string>
     <string name="title_rule_name">Namn</string>

@@ -148,6 +148,7 @@
     <string name="title_list_identities">Kimliklər</string>
     <string name="title_edit_account">Hesaba düzəliş et</string>
     <string name="title_edit_identity">Kimliyə düzəliş et</string>
+    <string name="title_new_folder">Yeni qovluq</string>
     <string name="title_edit_folder">Qovluğa düzəliş et</string>
     <string name="title_disable_gmail">Gmail tətbiqini sıradan çıxart</string>
     <string name="title_setup">Ayarlar</string>
@@ -171,6 +172,7 @@
     <string name="title_setup_wizard_new">Yeni bir e-poçt ünvanına ehtiyacım var</string>
     <string name="title_setup_manual">Əllə quraşdırma və hesab seçimləri</string>
     <string name="title_setup_classic">Klassik konfiqurasiya</string>
+    <string name="title_setup_wizard_hint">Yuxarıdakı \"Digər provayder\" üçün cəld quraşdırma sehrbazı da adətən işləyir və bütün server datasını daxil etməkdən daha asandır.</string>
     <string name="title_setup_documentation">Doğru e-poçt serverinin konfiqurasiyası üçün zəhmət olmasa e-poçt provayderinizin sənədləşdirməsinə baxın</string>
     <string name="title_setup_account_remark">E-poçt alma</string>
     <string name="title_setup_identity_remark">E-poçt göndərmə</string>
@@ -180,6 +182,7 @@
     <string name="title_setup_google_sign_in">Google ilə daxil ol</string>
     <string name="title_setup_other">Digər provayder</string>
     <string name="title_setup_inbound">Yalnız gələn e-poçt (e-poçt göndərilə bilməz!)</string>
+    <string name="title_setup_imap">IMAP hesabı</string>
     <string name="title_setup_pop3">POP3 hesabı</string>
     <string name="title_setup_oauth_permission">E-poçt provayderi, \"OAuth\"u yalnız Play Store və GitHub versiyaları üçün təsdiqlədi</string>
     <string name="title_setup_gmail_support">Google hesablarının səlahiyyətləndirilməsi, Android tətbiq imzalarını yoxladığı üçün yalnız Play Store və GitHub versiyalarında işləyəcək</string>
@@ -266,7 +269,7 @@
     <string name="title_setup_password_chars">Parol, nəzarət və ya boşluq simvollarını ehtiva edir</string>
     <string name="title_setup_password_repeat">Parolu təkrarla</string>
     <string name="title_setup_password_missing">Parol əskikdir</string>
-    <string name="title_setup_password_different">Parollar uyğunlaşmır</string>
+    <string name="title_setup_password_different">Parollar uyuşmur</string>
     <string name="title_setup_password_invalid">Yanlış parol və ya zədələnmiş ayarlar faylı</string>
     <string name="title_setup_import_accounts">Hesabları və kimlikləri daxilə köçür</string>
     <string name="title_setup_import_delete">Əvvəlcə mövcud hesabları sil</string>
@@ -345,6 +348,9 @@
     <string name="title_advanced_when">Nə vaxt</string>
     <string name="title_advanced_optimize">Avto-optimallaşdırma</string>
     <string name="title_advanced_always">Bu hesablar üçün mesajları həmişə al</string>
+    <string name="title_advanced_with_exceptions">Aşağıdakı istisnalarla:</string>
+    <string name="title_advanced_poll_metered">Ölçülmüş şəbəkədə olarkən yeni mesajları müntəzəm yoxla</string>
+    <string name="title_advanced_poll_unmetered">Ölçülməyən şəbəkədə olarkən yeni mesajları müntəzəm yoxla</string>
     <string name="title_advanced_schedule">Cədvəl</string>
     <string name="title_advanced_schedule_workdays">İş günləri</string>
     <string name="title_advanced_schedule_weekend">Həftəsonu</string>
@@ -438,8 +444,8 @@
     <string name="title_advanced_vpn_only">Yalnız VPN vasitəsilə bağlantı qurun</string>
     <string name="title_advanced_timeout">Bağlantı bitmə vaxtı (saniyə)</string>
     <string name="title_advanced_prefer_ip4">IPv6 əvəzinə IPv4 tərcih et</string>
-    <string name="title_advanced_dns" comment="title_advanced_dns&#10;Title for an option to configure extra, preferred DNS server addresses&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Tərcih edilən DNS server ünvanları (vergüllə ayrılmış)</string>
-    <string name="title_advanced_dns_custom" comment="title_advanced_dns_custom&#10;Title for an option to use a custom DNS resolver instead of the Android DNS resolver&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Özəl DNS həlledici istifadə et</string>
+    <string name="title_advanced_dns">Tərcih edilən DNS server ünvanları (vergüllə ayrılmış)</string>
+    <string name="title_advanced_dns_custom">Özəl DNS həlledici istifadə et</string>
     <string name="title_advanced_ssl_update">Güncəl SSL provayderini istifadə et</string>
     <string name="title_advanced_ssl_harden">SSL bağlantılarını sağlam et</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 tələb et</string>
@@ -541,6 +547,8 @@
     <string name="title_advanced_attachments_alt">Mesaj mətnindən sonra qoşmaları göstər</string>
     <string name="title_advanced_thumbnails">Mesaj mətnindən sonra təsvir eskizlərini göstər</string>
     <string name="title_advanced_pdf_preview">PDF eskizlərini göstər</string>
+    <string name="title_advanced_video_preview">Video eskizlərini göstər</string>
+    <string name="title_advanced_audio_preview">Mini səs pleyerini göstər</string>
     <string name="title_advanced_message_text_zoom2">İlkin mesajın mətn yaxınlaşdırması: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Mesajın mətnini redaktorda da yaxınlaşdır</string>
     <string name="title_advanced_overview_mode">Orijinal mesajı tam ekrana qədər yaxınlaşdır</string>
@@ -597,7 +605,7 @@
     <string name="title_advanced_expand_all">Bütün oxunan mesajları avtomatik genişləndir</string>
     <string name="title_advanced_expand_one">Bir dəfəyə yalnız bir mesajı genişləndir</string>
     <string name="title_advanced_collapse_multiple">Bir neçə mesajlı danışıqlardakı mesajları \"geri\" seçimində yığcamlaşdır</string>
-    <string name="title_advanced_seen_delay" comment="title_advanced_seen_delay&#10;Title for an option to configure the time to delay marking messages automatically read on opening/expanding messages.">Mesajların avtomatik oxundu olaraq işarələnməsi üzrə gecikmə</string>
+    <string name="title_advanced_seen_delay">Mesajların avtomatik oxundu olaraq işarələnməsi üzrə gecikmə</string>
     <string name="title_advanced_autoclose">Söhbətləri avtomatik bağla</string>
     <string name="title_advanced_autoclose_send">Mesajları göndərdikdən sonra danışıqları avtomatik bağla</string>
     <string name="title_advanced_onclose">Bir danışığı bağlayanda</string>
@@ -627,7 +635,7 @@
     <string name="title_advanced_notifications_service">Müşahidə kanalı</string>
     <string name="title_advanced_notifications_newest_first">Əvvəlcə ən yeni bildirişləri göstər</string>
     <string name="title_advanced_badge">Başladıcı nişanını yeni mesaj sayı ilə göstər</string>
-    <string name="title_advanced_unseen_ignored">Yeni mesajların sayı ilə bildiriş sayının uyğun gəlməsinə icazə ver</string>
+    <string name="title_advanced_unseen_ignored">Yeni mesaj sayının bildiriş sayı ilə uyuşmasına icazə ver</string>
     <string name="title_advanced_notify_grouping">Bildirişləri qruplaşdır</string>
     <string name="title_advanced_notify_private">Cihaz kilidli ikən bildirişləri gizli saxla</string>
     <string name="title_advanced_notify_background">Bildirişləri yalnız arxaplanda olanda göstər</string>
@@ -895,7 +903,7 @@
     <string name="title_advanced_sender">Göndərənin ünvanına düzəlişə icazə ver</string>
     <string name="title_advanced_sender_name">Göndərənin ünvanına düzəliş ediləndə adı istifadə et</string>
     <string name="title_advanced_reply_name">Alınmış mesajdakı adı kopyala</string>
-    <string name="title_advanced_sender_regex">Gələn e-poçt ünvanlarının istifadəçi adını uyğunlaşdırmaq üçün normal ifadə</string>
+    <string name="title_advanced_sender_regex">Gələn e-poçt ünvanlarının istifadəçi adını uyuşdurmaq üçün normal ifadə</string>
     <string name="title_identity_reply_to">Cavablama ünvanı</string>
     <string name="title_identity_internal">Daxili domen adları (vergüllə ayrılan)</string>
     <string name="title_identity_uri">Kontaktı əlaqələndir</string>
@@ -933,15 +941,15 @@
     <string name="title_aliases">Ləqəblər</string>
     <string name="title_provider">Provayder</string>
     <string name="title_custom">Xüsusi</string>
-    <string name="title_dnssec" comment="title_dnssec&#10;Title for account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">Məcbur et: DNSSEC</string>
-    <string name="title_dnssec_remark" comment="title_dnssec_remark&#10;Remark below account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">Yalnız məhdud sayda DNS serveri DNSSEC-i dəstəkləyir</string>
+    <string name="title_dnssec">Məcbur et: DNSSEC</string>
+    <string name="title_dnssec_remark">Yalnız məhdud sayda DNS serveri DNSSEC-i dəstəkləyir</string>
     <string name="title_host">Host adı</string>
     <string name="title_encryption">Şifrələmə</string>
     <string name="title_encryption_none">Heç biri (güvənsiz)</string>
     <string name="title_allow_insecure">Güvənli olmayan bağlantılara icazə ver</string>
     <string name="title_insecure_remark">Güvənli olmayan bağlantılara, yalnız güvənli şəbəkələrdə icazə verilməli və heç vaxt ictimai şəbəkələrdə icazə verilməməlidir</string>
     <string name="title_dane">Məcbur et: DANE</string>
-    <string name="title_dane_remark" comment="title_dane_remark&#10;Remark below account/identity option to enforce DANE&#10;https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">Yalnız bəzi e-poçt provayderləri DANE-ni dəstəkləyir</string>
+    <string name="title_dane_remark">Yalnız bəzi e-poçt provayderləri DANE-ni dəstəkləyir</string>
     <string name="title_notify_remark">Bunu, hesaba özəl bildirişlər üçün fəallaşdıra bilərsiniz</string>
     <string name="title_port">Port nömrəsi</string>
     <string name="title_user">İstifadəçi adı</string>
@@ -1108,6 +1116,7 @@
     <string name="title_poll_folder">Davamlı sinxronlaşdırma əvəzinə vaxtaşırı yoxlayın</string>
     <string name="title_poll_folder_remark">Əksər e-poçt serverləri, ani mesajlara yalnız bir neçə qovluq üçün icazə verir!</string>
     <string name="title_download_folder">Mesaj mətn və qoşmalarını avtomatik endir</string>
+    <string name="title_count_unread">Oxunmamış mesajların sayını hesaba əlavə et</string>
     <string name="title_notify_folder">Yeni mesajları bildir</string>
     <string name="title_auto_classify_source">Bu qovluqdakı yeni mesajları sinifləşdir</string>
     <string name="title_auto_classify_target">Sinifləşdirilmiş mesajları bu qovluğa avtomatik köçürt</string>
@@ -1231,6 +1240,7 @@
     <string name="title_move">Köçürt</string>
     <string name="title_copy_btn">Kopyala</string>
     <string name="title_keywords_btn">Açar sözlər</string>
+    <string name="title_labels_btn">Etiketlər (yalnız Gmail)</string>
     <string name="title_unsubscribe">Abunəlikdən çıx</string>
     <string name="title_message_rule">Qayda yarat</string>
     <string name="title_no_junk">Spam deyil</string>
@@ -1444,7 +1454,7 @@
     <string name="title_certificate_invalid">%1$s üçün ictimai açar yararsızdır</string>
     <string name="title_no_key">Şəxsi açar yoxdur</string>
     <string name="title_invalid_key">Yararsız şəxsi açar</string>
-    <string name="title_unknown_key">Şəxsi açar, şifrələmə açarı ilə uyğunlaşmır</string>
+    <string name="title_unknown_key">Şəxsi açar, heç bir şifrələmə açarı ilə uyuşmur</string>
     <string name="title_key_missing">%1$s üçün açar yoxdur</string>
     <string name="title_send_reminder_remark">Xatırladıcılar göndəriş ayarlarında yenidən fəallaşdırıla bilər</string>
     <string name="title_send_plain_text">Yalnız düz mətn</string>
@@ -1510,7 +1520,7 @@
     <string name="title_signature_certificate_invalid">Sertifikat zənciri yararsızdır</string>
     <string name="title_signature_sender">Göndərənin ünvanı</string>
     <string name="title_signature_email">İmzanın ünvanı</string>
-    <string name="title_signature_mismatch">Göndərənin və imzanın e-poçt ünvanları uyğunlaşmır</string>
+    <string name="title_signature_mismatch">Göndərənin e-poçt ünvanı və imzası uyuşmur</string>
     <string name="title_signature_algorithm">Alqoritm</string>
     <string name="title_signature_subject">Mövzu</string>
     <string name="title_signature_validity">Yararlılıq</string>
@@ -1648,6 +1658,7 @@
     <string name="title_rule_automation">Avtomatlaşdırma</string>
     <string name="title_rule_delete">Birdəfəlik sil</string>
     <string name="title_rule_sound">Səs oxut</string>
+    <string name="title_rule_silent">Bildirişləri susdur</string>
     <string name="title_rule_caption">Qaydaya düzəliş et</string>
     <string name="title_rule_title">Qayda tətbiq olunur</string>
     <string name="title_rule_name">Ad</string>
@@ -1709,8 +1720,8 @@
     <string name="title_rule_check">Yoxla</string>
     <string name="title_rule_no_headers">Başlıq şərtləri yoxlanıla bilmədi</string>
     <string name="title_rule_no_body">Mesaj mətni əlçatmazdır</string>
-    <string name="title_rule_matched">Uyğun mesajlar</string>
-    <string name="title_rule_no_matches">Uyğunlaşan mesaj yoxdur</string>
+    <string name="title_rule_matched">Uyuşan mesajlar</string>
+    <string name="title_rule_no_matches">Uyuşan mesaj yoxdur</string>
     <string name="title_rule_tts_ok">Quraşdırma hazırdır</string>
     <string name="title_rule_tts_setup">Quraşdırmanı yoxla</string>
     <string name="title_rule_tts_data">Səsli verilənləri quraşdır</string>

@@ -176,6 +176,7 @@
     <string name="title_list_identities">Identity</string>
     <string name="title_edit_account">Upravit účet</string>
     <string name="title_edit_identity">Upravit identitu</string>
+    <string name="title_new_folder">Nová složka</string>
     <string name="title_edit_folder">Upravit složku</string>
     <string name="title_disable_gmail">Zakázat aplikaci Gmail</string>
     <string name="title_setup">Nastavení</string>
@@ -199,6 +200,7 @@
     <string name="title_setup_wizard_new">Potřebuji novou e-mailovou adresu</string>
     <string name="title_setup_manual">Ruční nastavení a možnosti účtu</string>
     <string name="title_setup_classic">Klasická konfigurace</string>
+    <string name="title_setup_wizard_hint">Průvodce rychlým nastavením výše uvedeného \"Ostatní poskytovatele\" obvykle funguje a je snazší, než vkládat všechna data serveru.</string>
     <string name="title_setup_documentation">Pro správné nastavení e-mailového serveru si prosím přečtěte dokumentaci svého poskytovatele e-mailu</string>
     <string name="title_setup_account_remark">Příjem e-mailů</string>
     <string name="title_setup_identity_remark">Odesílání e-mailů</string>
@@ -208,6 +210,7 @@
     <string name="title_setup_google_sign_in">Přihlásit se pomocí Googlu</string>
     <string name="title_setup_other">Jiný poskytovatel</string>
     <string name="title_setup_inbound">Pouze příchozí e-maily (e-mail nelze odeslat)</string>
+    <string name="title_setup_imap">IMAP účet</string>
     <string name="title_setup_pop3">POP3 účet</string>
     <string name="title_setup_oauth_permission">Poskytovatel e-mailu schválil OAuth pouze pro Google Play a GitHub verzi</string>
     <string name="title_setup_gmail_support">Autorizace účtů Google bude fungovat pouze v Google Play a GitHub verzi, protože Android kontroluje digitální podpis aplikace</string>
@@ -373,6 +376,9 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_when">Kdy</string>
     <string name="title_advanced_optimize">Automaticky optimalizovat</string>
     <string name="title_advanced_always">Neustále přijímat zprávy pro tyto účty</string>
+    <string name="title_advanced_with_exceptions">S těmito výjimkami:</string>
+    <string name="title_advanced_poll_metered">Pravidelně ověřovat nové zprávy v měřené síti</string>
+    <string name="title_advanced_poll_unmetered">Pravidelně kontrolovat nové zprávy na neměřené síti</string>
     <string name="title_advanced_schedule">Plán</string>
     <string name="title_advanced_schedule_workdays">Pracovní dny</string>
     <string name="title_advanced_schedule_weekend">Víkend</string>
@@ -466,6 +472,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_vpn_only">Připojit pouze pomocí VPN</string>
     <string name="title_advanced_timeout">Časový limit připojení (sekundy)</string>
     <string name="title_advanced_prefer_ip4">Upřednostňovat IPv4 před IPv6</string>
+    <string name="title_advanced_dns">Adresy preferovaných DNS serverů (oddělených čárkami)</string>
+    <string name="title_advanced_dns_custom">Použít vlastní DNS resolver</string>
     <string name="title_advanced_ssl_update">Použít aktualizovaného poskytovatele SSL</string>
     <string name="title_advanced_ssl_harden">Obrnit SSL připojení</string>
     <string name="title_advanced_ssl_harden_strict">Vyžadovat TLS 1.3</string>
@@ -567,6 +575,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_attachments_alt">Zobrazit přílohy pod textem zprávy</string>
     <string name="title_advanced_thumbnails">Zobrazit náhledy obrázků pod textem zprávy</string>
     <string name="title_advanced_pdf_preview">Zobrazit náhledy PDF</string>
+    <string name="title_advanced_video_preview">Zobrazit náhledy videa</string>
+    <string name="title_advanced_audio_preview">Zobrazit mini audio přehrávač</string>
     <string name="title_advanced_message_text_zoom2">Výchozí zvětšení textu zprávy: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Změnit přiblížení textu zprávy také v editoru zpráv</string>
     <string name="title_advanced_overview_mode">Přizpůsobit zobrazení původních zpráv šířce obrazovky</string>
@@ -623,6 +633,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_expand_all">Rozbalovat všechny přečtené zprávy automaticky</string>
     <string name="title_advanced_expand_one">Rozbalit vždy pouze jednu zprávu</string>
     <string name="title_advanced_collapse_multiple">Při pohybu \"zpět\" sbalit zprávy v konverzaci s vícero zprávami</string>
+    <string name="title_advanced_seen_delay">Zpoždění automatického označování zpráv jako přečtených</string>
     <string name="title_advanced_autoclose">Zavírat konverzace automaticky</string>
     <string name="title_advanced_autoclose_send">Automaticky zavřít konverzace po odeslání zpráv</string>
     <string name="title_advanced_onclose">Při zavření konverzace</string>
@@ -848,6 +859,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_split_hint">Rozdělí obrazovku na více částí</string>
     <string name="title_advanced_split_min_hint">To je podmínka určená pro skládací zařízení</string>
     <string name="title_advanced_threading_hint">Seskupit související zprávy</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Pouze pro styl karty</string>
     <string name="title_advanced_highlight_hint">Pro zvýrazňování bude použita sekundární barva motivu</string>
     <string name="title_advanced_privacy_risk">Může dojít k ohrožení soukromí</string>
     <string name="title_advanced_name_email_hint">Jména budou zobrazena pouze jsou-li k dispozici</string>
@@ -958,12 +970,15 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_aliases">Aliasy</string>
     <string name="title_provider">Poskytovatel</string>
     <string name="title_custom">Vlastní</string>
+    <string name="title_dnssec">Vynutit DNSSEC</string>
+    <string name="title_dnssec_remark">DNSSEC podporuje pouze omezený počet DNS serverů</string>
     <string name="title_host">Název hostitele</string>
     <string name="title_encryption">Šifrování</string>
     <string name="title_encryption_none">Žádné (nezabezpečené)</string>
     <string name="title_allow_insecure">Povolit nezabezpečené připojení</string>
     <string name="title_insecure_remark">Nezabezpečená připojení by měla být povolena pouze v důvěryhodných, a nikdy na veřejných sítích</string>
     <string name="title_dane">Vynutit DANE</string>
+    <string name="title_dane_remark">DANE podporují pouze někteří poskytovatelé e-mailu</string>
     <string name="title_notify_remark">Toto můžete povolit pro specifická upozornění účtu</string>
     <string name="title_port">Číslo portu</string>
     <string name="title_user">Uživatelské jméno</string>
@@ -1130,6 +1145,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_poll_folder">Kontrolovat pravidelně namísto průběžné synchronizace</string>
     <string name="title_poll_folder_remark">Většina e-mailových serverů povoluje okamžité zprávy pouze pro některé složky!</string>
     <string name="title_download_folder">Automaticky stahovat obsah a přílohy zpráv</string>
+    <string name="title_count_unread">Přidat do účtu počet nepřečtených zpráv</string>
     <string name="title_notify_folder">Oznamovat nové zprávy</string>
     <string name="title_auto_classify_source">Klasifikovat nové zprávy v této složce</string>
     <string name="title_auto_classify_target">Automaticky přesunout klasifikované zprávy do této složky</string>
@@ -1252,6 +1268,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_move">Přesunout</string>
     <string name="title_copy_btn">Kopírovat</string>
     <string name="title_keywords_btn">Klíčová slova</string>
+    <string name="title_labels_btn">Štítky (pouze Gmail)</string>
     <string name="title_unsubscribe">Odhlásit odběr</string>
     <string name="title_message_rule">Vytvořit pravidlo</string>
     <string name="title_no_junk">Není spam</string>
@@ -1667,6 +1684,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_rule_automation">Automatizace</string>
     <string name="title_rule_delete">Trvale smazat</string>
     <string name="title_rule_sound">Přehrát zvuk</string>
+    <string name="title_rule_silent">Tichá oznámení</string>
     <string name="title_rule_caption">Upravit pravidlo</string>
     <string name="title_rule_title">Pravidlo platí pro</string>
     <string name="title_rule_name">Název</string>

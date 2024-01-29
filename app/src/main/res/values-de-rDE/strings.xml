@@ -149,6 +149,7 @@
     <string name="title_list_identities">Identitäten</string>
     <string name="title_edit_account">Konto bearbeiten</string>
     <string name="title_edit_identity">Identität bearbeiten</string>
+    <string name="title_new_folder">Neuer Ordner</string>
     <string name="title_edit_folder">Ordner bearbeiten</string>
     <string name="title_disable_gmail">Gmail-App deaktivieren</string>
     <string name="title_setup">Einstellungen</string>
@@ -172,6 +173,7 @@
     <string name="title_setup_wizard_new">Ich benötige eine neue E-Mail-Adresse</string>
     <string name="title_setup_manual">Manuelle Einrichtung und Kontooptionen</string>
     <string name="title_setup_classic">Klassische Konfiguration</string>
+    <string name="title_setup_wizard_hint">Der obige Schnelleinrichtungsassistent für »Anderer Anbieter« funktioniert in der Regel auch und ist einfacher als die Eingabe aller Serverdaten.</string>
     <string name="title_setup_documentation">Bitte lesen Sie die Dokumentation Ihres E-Mail-Anbieters für die korrekte Konfiguration des E-Mail-Servers</string>
     <string name="title_setup_account_remark">E-Mail empfangen</string>
     <string name="title_setup_identity_remark">E-Mail senden</string>
@@ -181,6 +183,7 @@
     <string name="title_setup_google_sign_in">Mit Google anmelden</string>
     <string name="title_setup_other">Anderer Anbieter</string>
     <string name="title_setup_inbound">Nur eingehende Nachrichten (E-Mails können nicht gesendet werden!)</string>
+    <string name="title_setup_imap">IMAP-Konto</string>
     <string name="title_setup_pop3">POP3-Konto</string>
     <string name="title_setup_oauth_permission">Der E-Mail-Anbieter hat OAuth nur für die Play-Store- und GitHub-Version freigegeben</string>
     <string name="title_setup_gmail_support">Das Autorisieren von Google-Konten funktioniert nur in der Play-Store- und in der GitHub-Version, weil Android die digitale App-Signatur überprüft</string>
@@ -197,7 +200,7 @@
     <string name="title_setup_oauth_updated">Kontoautorisierung wurde aktualisiert</string>
     <string name="title_setup_oauth_brave">Wenn Sie den Browser Brave verwenden, dann müssen Sie in den Datenschutz-Einstellungen »Erlauben, dass Anwendungslinks in Anwendungen außerhalb von Brave geöffnet werden« aktivieren</string>
     <string name="title_setup_oauth_authorize">Autorisieren</string>
-    <string name="title_setup_select_account">Konto wählen</string>
+    <string name="title_setup_select_account">Konto auswählen</string>
     <string name="title_setup_instructions">Einrichtungsanleitung</string>
     <string name="title_setup_no_settings">Keine Einstellungen für Domain \'%1$s\' gefunden</string>
     <string name="title_setup_no_settings_hint">Versuchen Sie, ein Konto manuell einzurichten, indem Sie die Einstellungen Ihres E-Mail-Anbieters verwenden</string>
@@ -319,8 +322,8 @@
     <string name="title_setup_reset_files">Dateien anzeigen</string>
     <string name="title_setup_reset_images">Bilder anzeigen</string>
     <string name="title_setup_reset_full">Originalnachrichten anzeigen</string>
-    <string name="title_check_gmail_oauth">Ihre Google-Mail-Konten werden nach dem 30. Mai 2022 weiterhin funktionieren</string>
-    <string name="title_check_gmail_password">Einige Ihrer Google-Mail-Konten funktionieren möglicherweise nicht mehr nach dem 30. Mai 2022</string>
+    <string name="title_check_gmail_oauth">Ihre Gmail-Konten werden nach dem 30. Mai 2022 weiterhin funktionieren</string>
+    <string name="title_check_gmail_password">Einige Ihrer Gmail-Konten funktionieren möglicherweise nicht mehr nach dem 30. Mai 2022</string>
     <string name="title_check_outlook_oauth">Ihre Outlook-Konten werden nach dem 1. Oktober 2022 weiterhin funktionieren</string>
     <string name="title_check_outlook_password">Einige Ihrer Outlook-Konten funktionieren möglicherweise nicht mehr nach dem 1. Oktober 2022</string>
     <string name="title_advanced_hint_title">Erweiterte Optionen</string>
@@ -346,6 +349,9 @@
     <string name="title_advanced_when">Wann</string>
     <string name="title_advanced_optimize">Automatisch optimieren</string>
     <string name="title_advanced_always">Nachrichten für diese Konten immer empfangen</string>
+    <string name="title_advanced_with_exceptions">Mit den folgenden Ausnahmen:</string>
+    <string name="title_advanced_poll_metered">Regelmäßig auf neue Nachrichten prüfen, während ein getaktetes Netzwerk verwendet wird</string>
+    <string name="title_advanced_poll_unmetered">Regelmäßig auf neue Nachrichten prüfen, während ein nicht getaktetes Netzwerk verwendet wird</string>
     <string name="title_advanced_schedule">Zeitplan</string>
     <string name="title_advanced_schedule_workdays">Werktage</string>
     <string name="title_advanced_schedule_weekend">Wochenende</string>
@@ -356,7 +362,7 @@
     <string name="title_advanced_flagged">Alle markierten Nachrichten empfangen</string>
     <string name="title_advanced_delete_unseen">Alte ungelesene Nachrichten löschen</string>
     <string name="title_advanced_kept_removed">Überprüfen, ob alte Nachrichten vom Server entfernt wurden</string>
-    <string name="title_advanced_gmail_thread">Die Nachrichten in Gmail-Konten im Stil von Gmail gruppieren</string>
+    <string name="title_advanced_gmail_thread">Nachrichten in Gmail-Konten im Stil von Gmail gruppieren</string>
     <string name="title_advanced_subject_threading">Nachrichten nach Absender und Betreff gruppieren</string>
     <string name="title_advanced_sync_folders">Ordnerliste synchronisieren</string>
     <string name="title_advanced_sync_folders_poll">Ordnerliste aktiv synchronisieren</string>
@@ -439,8 +445,8 @@
     <string name="title_advanced_vpn_only">Nur über ein VPN verbinden</string>
     <string name="title_advanced_timeout">Zeitüberschreitung der Verbindung (Sekunden)</string>
     <string name="title_advanced_prefer_ip4">IPv4 gegenüber IPv6 bevorzugen</string>
-    <string name="title_advanced_dns" comment="title_advanced_dns&#10;Title for an option to configure extra, preferred DNS server addresses&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Bevorzugte DNS-Server-Adressen (Komma-getrennt)</string>
-    <string name="title_advanced_dns_custom" comment="title_advanced_dns_custom&#10;Title for an option to use a custom DNS resolver instead of the Android DNS resolver&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Benutzerdefinierten DNS-Resolver verwenden</string>
+    <string name="title_advanced_dns">Bevorzugte DNS-Server-Adressen (durch Kommas getrennt)</string>
+    <string name="title_advanced_dns_custom">Benutzerdefinierten DNS-Resolver verwenden</string>
     <string name="title_advanced_ssl_update">Aktualisierten SSL-Anbieter verwenden</string>
     <string name="title_advanced_ssl_harden">SSL-Verbindungen stärken</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 voraussetzen</string>
@@ -542,6 +548,8 @@
     <string name="title_advanced_attachments_alt">Anhänge nach (statt vor) dem Nachrichtentext anzeigen</string>
     <string name="title_advanced_thumbnails">Vorschaubilder nach dem Nachrichtentext anzeigen</string>
     <string name="title_advanced_pdf_preview">PDF-Vorschaubilder anzeigen</string>
+    <string name="title_advanced_video_preview">Video-Vorschaubilder anzeigen</string>
+    <string name="title_advanced_audio_preview">Mini-Audio-Player anzeigen</string>
     <string name="title_advanced_message_text_zoom2">Standardgröße des Nachrichtentextes: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Größe des Nachrichtentextes auch im Verfassenfenster anpassen</string>
     <string name="title_advanced_overview_mode">Originalnachrichten an Bildschirmgröße anpassen</string>
@@ -598,7 +606,7 @@
     <string name="title_advanced_expand_all">Alle gelesenen Nachrichten automatisch ausklappen</string>
     <string name="title_advanced_expand_one">Jeweils nur eine Nachricht ausklappen</string>
     <string name="title_advanced_collapse_multiple">Nachrichten in einer Unterhaltung mit mehreren Nachrichten bei »Zurück« zusammenklappen</string>
-    <string name="title_advanced_seen_delay" comment="title_advanced_seen_delay&#10;Title for an option to configure the time to delay marking messages automatically read on opening/expanding messages.">Verzögerung der automatischen Markierung von Nachrichten als gelesen</string>
+    <string name="title_advanced_seen_delay">Verzögerung der automatischen Markierung von Nachrichten als gelesen</string>
     <string name="title_advanced_autoclose">Unterhaltungen automatisch schließen</string>
     <string name="title_advanced_autoclose_send">Unterhaltungen nach dem Senden von Nachrichten automatisch schließen</string>
     <string name="title_advanced_onclose">Beim Schließen einer Unterhaltung</string>
@@ -825,6 +833,7 @@
     <string name="title_advanced_split_hint">Dadurch wird der Bildschirm aufgeteilt</string>
     <string name="title_advanced_split_min_hint">Dies ist eine Voraussetzung für faltbare Geräte</string>
     <string name="title_advanced_threading_hint">Zusammengehörige Nachrichten gruppieren</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Nur im Kartenstil</string>
     <string name="title_advanced_highlight_hint">Die Akzentfarbe des Designs wird zur Hervorhebung verwendet</string>
     <string name="title_advanced_privacy_risk">Es könnte ein Datenschutzrisiko geben</string>
     <string name="title_advanced_name_email_hint">Namen werden nur angezeigt, wenn sie verfügbar sind</string>
@@ -935,15 +944,15 @@
     <string name="title_aliases">Aliasse</string>
     <string name="title_provider">Anbieter</string>
     <string name="title_custom">Benutzerdefiniert</string>
-    <string name="title_dnssec" comment="title_dnssec&#10;Title for account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">DNSSEC erzwingen</string>
-    <string name="title_dnssec_remark" comment="title_dnssec_remark&#10;Remark below account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">Nur eine begrenzte Anzahl von DNS-Servern unterstützt DNSSEC</string>
+    <string name="title_dnssec">DNSSEC erzwingen</string>
+    <string name="title_dnssec_remark">Nur eine begrenzte Anzahl von DNS-Servern unterstützt DNSSEC</string>
     <string name="title_host">Hostname</string>
     <string name="title_encryption">Verschlüsselung</string>
     <string name="title_encryption_none">Keine (unsicher)</string>
     <string name="title_allow_insecure">Unsichere Verbindungen zulassen</string>
     <string name="title_insecure_remark">Unsichere Verbindungen sollten nur in vertrauenswürdigen Netzwerken und niemals in öffentlichen Netzwerken erlaubt werden</string>
     <string name="title_dane">DANE erzwingen</string>
-    <string name="title_dane_remark" comment="title_dane_remark&#10;Remark below account/identity option to enforce DANE&#10;https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">Nur einige E-Mail-Anbieter unterstützen DANE</string>
+    <string name="title_dane_remark">Nur einige E-Mail-Anbieter unterstützen DANE</string>
     <string name="title_notify_remark">Sie können das für kontenspezifische Benachrichtigungen aktivieren</string>
     <string name="title_port">Portnummer</string>
     <string name="title_user">Benutzername</string>
@@ -969,7 +978,7 @@
     </string>
     <string name="title_keep_poll_interval">Abrufintervall (Minuten)</string>
     <string name="title_keep_alive_interval">Aktivitätsintervall (Minuten)</string>
-    <string name="title_keep_alive_noop">IMAP IDLE periodisch neu starten</string>
+    <string name="title_keep_alive_noop">IMAP IDLE regelmäßig neu starten</string>
     <string name="title_server_time">Empfangszeit verwenden (Server)</string>
     <string name="title_received_header">Received-Kopfzeile verwenden</string>
     <string name="title_date_header">Date-Kopfzeile verwenden (Sendezeit)</string>
@@ -1107,9 +1116,10 @@
     <string name="title_unified_inbox_add">Zum Sammeleingang hinzufügen</string>
     <string name="title_unified_inbox_delete">Aus Sammeleingang löschen</string>
     <string name="title_synchronize_folder">Synchronisieren (E-Mails empfangen)</string>
-    <string name="title_poll_folder">Periodisch prüfen statt fortlaufend synchronisieren</string>
+    <string name="title_poll_folder">Regelmäßig prüfen statt fortlaufend synchronisieren</string>
     <string name="title_poll_folder_remark">Die meisten E-Mail-Server erlauben Push-Nachrichten nur für einige wenige Ordner!</string>
     <string name="title_download_folder">Automatisch den Nachrichtentext und Anhänge herunterladen</string>
+    <string name="title_count_unread">Anzahl ungelesener Nachrichten zum Konto hinzufügen</string>
     <string name="title_notify_folder">Eingangsbenachrichtigung</string>
     <string name="title_auto_classify_source">Neue Nachrichten in diesem Ordner klassifizieren</string>
     <string name="title_auto_classify_target">Für diesen Ordner klassifizierte Nachrichten automatisch in diesen Ordner verschieben</string>
@@ -1118,8 +1128,8 @@
     <string name="title_keep_days">Nachrichten aufbewahren (Tage)</string>
     <string name="title_keep_days_remark">Alte Nachrichten werden vom Gerät entfernt, aber auf dem Server belassen</string>
     <string name="title_keep_all">Alle E-Mails aufbewahren</string>
-    <string name="title_poll_system">Systemordner so einstellen, dass periodisch nach neuen Nachrichten gesucht wird</string>
-    <string name="title_poll_user">Benutzerordner so einstellen, dass periodisch nach neuen Nachrichten gesucht wird</string>
+    <string name="title_poll_system">Systemordner so einstellen, dass regelmäßig auf neue Nachrichten geprüft wird</string>
+    <string name="title_poll_user">Benutzerordner so einstellen, dass regelmäßig auf neue Nachrichten geprüft wird</string>
     <string name="title_auto_trash">Alte Nachrichten automatisch in den Papierkorb verschieben</string>
     <string name="title_auto_delete">Automatisch alte Nachrichten dauerhaft löschen</string>
     <string name="title_auto_delete_hint">Alte Nachrichten sind Nachrichten, die nicht mehr auf dem Gerät vorgehalten werden</string>
@@ -1233,6 +1243,7 @@
     <string name="title_move">Verschieben</string>
     <string name="title_copy_btn">Kopieren</string>
     <string name="title_keywords_btn">Schlagwörter</string>
+    <string name="title_labels_btn">Labels (nur für Gmail)</string>
     <string name="title_unsubscribe">Abbestellen</string>
     <string name="title_message_rule">Regel erstellen</string>
     <string name="title_no_junk">Kein Spam</string>
@@ -1650,6 +1661,7 @@
     <string name="title_rule_automation">Automatisierung</string>
     <string name="title_rule_delete">Dauerhaft löschen</string>
     <string name="title_rule_sound">Ton abspielen</string>
+    <string name="title_rule_silent">Lautlose Benachrichtigung</string>
     <string name="title_rule_caption">Regel bearbeiten</string>
     <string name="title_rule_title">Regel gilt für</string>
     <string name="title_rule_name">Name</string>
@@ -1703,7 +1715,7 @@
     <string name="title_rule_automation_hint">Das wird den Intent »%1$s« mit den Extras »%2$s« senden</string>
     <string name="title_rule_notes_missing">Lokale Notizen fehlen</string>
     <string name="title_rule_url_missing">Adresse fehlt oder ist ungültig</string>
-    <string name="title_rule_delete_hint">Das dauerhafte Löschen kann nicht widerrufen werden. Stellen Sie daher sicher, dass die Bedingungen der Regel richtig sind!</string>
+    <string name="title_rule_delete_hint">Das dauerhafte Löschen kann nicht widerrufen werden. Vergewissern Sie sich, dass die Bedingungen der Regel richtig sind!</string>
     <string name="title_rule_url_hint">Sie können die folgenden Platzhalter verwenden: %1$s</string>
     <string name="title_rule_edit_group">Gruppe bearbeiten &#8230;</string>
     <string name="title_rule_execute">Jetzt ausführen</string>
@@ -1741,7 +1753,7 @@
     <string name="title_legend_download_off">Nachrichteninhalt bei Bedarf herunterladen</string>
     <string name="title_legend_synchronize_on">Synchronisation aktiviert</string>
     <string name="title_legend_synchronize_off">Synchronisation deaktiviert</string>
-    <string name="title_legend_synchronize_poll">Periodisch synchronisieren</string>
+    <string name="title_legend_synchronize_poll">Regelmäßig synchronisieren</string>
     <string name="title_legend_disconnected">Nicht verbunden</string>
     <string name="title_legend_connecting">Verbindungsvorgang</string>
     <string name="title_legend_connected">Verbunden</string>
@@ -1868,7 +1880,7 @@
     <string name="title_hint_sync_note">Standardmäßig werden nicht alle Nachrichten heruntergeladen, um Speicherplatz, Akku- und Datenverbrauch zu begrenzen. Sie können dies ändern, indem Sie lange auf einen Ordner in der Ordnerliste drücken und »Weitere Nachrichten abrufen« auswählen.</string>
     <string name="title_hint_battery">Da FairEmail standardmäßig immer bereit ist, Nachrichten zu erhalten, meldet Android FairEmail als immer aktiv. Daher mag es so aussehen, als ob FairEmail immer Akkuleistung verbraucht, aber das ist nicht der Fall.</string>
     <string name="title_hint_reformat">Standardmäßig formatiert FairEmail Nachrichten aus Datenschutz- und Sicherheitsgründen neu. Um die Originalnachricht anzuzeigen, tippen Sie über dem Nachrichtentext auf das Vollbildsymbol »Original anzeigen«.</string>
-    <string name="title_hint_design">Das Design ist absichtlich nicht ablenkend, sondern sehr funktional gehalten. Es gibt viele Optionen, um das Erscheinungsbild individuell anzupassen, aber bitte haben Sie Verständnis dafür, dass es unmöglich ist, alle gleichzeitig glücklich zu machen.</string>
+    <string name="title_hint_design">Das Design ist bewusst nicht ablenkend, sondern sehr funktional gestaltet. Es gibt viele Optionen, um das Erscheinungsbild anzupassen, aber bitte haben Sie Verständnis dafür, dass es unmöglich ist, alle zufriedenzustellen.</string>
     <string name="title_hint_junk">Das Filtern von Spam sollte durch den E-Mail-Server erfolgen und kann auf einem akkubetriebenen Gerät mit begrenzten Kapazitäten nicht zuverlässig durchgeführt werden.</string>
     <string name="title_hint_junk_learn">Durch das Verschieben von Nachrichten in und aus dem Spam-Ordner „erlernt” der E-Mail-Server, welche Nachrichten Spam sind</string>
     <string name="title_hint_contact_actions">Gedrückt halten für weitere Optionen</string>

@@ -1108,6 +1108,11 @@ public class Helper {
                 " isInstalled=" + isInstalled(context, open_with_pkg) +
                 " hasCustomTabs=" + hasCustomTabs(context, uri, open_with_pkg));
 
+        if ("file".equals(uri.getScheme())) {
+            reportNoViewer(context, uri, new SecurityException("Cannot open files"));
+            return;
+        }
+
         if (UriHelper.isHyperLink(uri))
             uri = UriHelper.fix(uri);
         else {
@@ -1527,6 +1532,10 @@ public class Helper {
 
     static boolean isXiaomi() {
         return "Xiaomi".equalsIgnoreCase(Build.MANUFACTURER);
+    }
+
+    static boolean isZte() {
+        return "ZTE".equalsIgnoreCase(Build.MANUFACTURER);
     }
 
     static boolean isRedmiNote() {
@@ -2299,6 +2308,10 @@ public class Helper {
     }
 
     static String formatDuration(long ms) {
+        return formatDuration(ms, true);
+    }
+
+    static String formatDuration(long ms, boolean withFraction) {
         int sign = (ms < 0 ? -1 : 1);
         ms = Math.abs(ms);
         int days = (int) (ms / (24 * 3600 * 1000L));
@@ -2308,7 +2321,7 @@ public class Helper {
         return (sign < 0 ? "-" : "") +
                 (days > 0 ? days + " " : "") +
                 DateUtils.formatElapsedTime(seconds) +
-                (ms == 0 ? "" : "." + ms);
+                (ms == 0 || !withFraction ? "" : "." + ms);
     }
 
     static String formatNumber(Integer number, long max, NumberFormat nf) {

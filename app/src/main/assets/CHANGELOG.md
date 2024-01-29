@@ -6,9 +6,40 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Ypupiara](https://en.wikipedia.org/wiki/Ypupiara)
 
+### 1.2153 - 2024-01-27
+
+* Added mini audio player position
+* Added showing duration of audio/video files
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2152 - 2024-01-26
+
+* Added mini audio player
+* Added video preview image
+* Small improvements and minor bug fixes
+* Updated libraries (JsonPath)
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2151 - 2024-01-22
+
+* Fixed crash on some devices
+
+### 1.2150 - 2024-01-22
+
+* Added rule action to silence notifications, see [the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#faq71)
+* Added option to disable Gmail labels button
+* Performance optimizations
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2149 - 2024-01-08
 
-* Added option to to delay automatically marking messages as read
+* Added option to delay automatically marking messages as read
 * Replaced [javadns](https://github.com/dnsjava/dnsjava) by [MiniDNS](https://github.com/MiniDNS/minidns)
 * Added account/identity options to enforce DNSSEC and/or DANE, see [the FAQ](https://github.com/M66B/FairEmail/blob/master/FAQ.md#faq202)
 * Small improvements and minor bug fixes

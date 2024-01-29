@@ -112,7 +112,7 @@
     <string name="title_junk_clear">Изчистване</string>
     <string name="title_junk_clear_hint">Ще се изтрият всички правила за блокиране на подател</string>
     <string name="title_notification_sending">Изпращане на съобщения</string>
-    <string name="title_notification_waiting">Изчаква се подходяща връзка</string>
+    <string name="title_notification_waiting">Чака се подходяща връзка</string>
     <string name="title_notification_idle">Празен</string>
     <string name="title_notification_failed">%1$s се провали</string>
     <string name="title_notification_alert">Предупреждение на сървъра: \'%1$s\'</string>
@@ -148,6 +148,7 @@
     <string name="title_list_identities">Самоличности</string>
     <string name="title_edit_account">Редактиране на акаунта</string>
     <string name="title_edit_identity">Редактиране на самоличността</string>
+    <string name="title_new_folder">Нова папка</string>
     <string name="title_edit_folder">Редактиране на папка</string>
     <string name="title_disable_gmail">Изключване на приложението Gmail</string>
     <string name="title_setup">Настройки</string>
@@ -171,6 +172,7 @@
     <string name="title_setup_wizard_new">Трябва ми друг адрес на е-поща</string>
     <string name="title_setup_manual">Ръчна настройка и възможности на акаунта</string>
     <string name="title_setup_classic">Класическо конфигуриране</string>
+    <string name="title_setup_wizard_hint">Вълшебникът за бърза настройка за \"Друг доставчик\" горе обикновено също работи, а и е по-лесно от ръчно въвеждане на всички данни на сървъра.</string>
     <string name="title_setup_documentation">Прегледайте документацията на имейл доставчика си за правилна настройки на сървъра</string>
     <string name="title_setup_account_remark">Получаване на е-писмо</string>
     <string name="title_setup_identity_remark">Изпращане на е-писмо</string>
@@ -180,6 +182,7 @@
     <string name="title_setup_google_sign_in">Влизане с помощта на Google</string>
     <string name="title_setup_other">Друг доставчик</string>
     <string name="title_setup_inbound">Само входящ имейл (не може да се изпращат е-писма!)</string>
+    <string name="title_setup_imap">Акаунт на IMAP</string>
     <string name="title_setup_pop3">Акаунт на POP3</string>
     <string name="title_setup_oauth_permission">Доставчикът на имейл одобрил OAuth само за версии на Play Store и GitHub</string>
     <string name="title_setup_gmail_support">Упълномощаването на акаунти в Google ще работи само във версии на Play Store и GitHub, защото Android проверява цифровия подпис на приложението</string>
@@ -344,6 +347,9 @@
     <string name="title_advanced_when">Кога</string>
     <string name="title_advanced_optimize">Автоматично оптимизиране</string>
     <string name="title_advanced_always">Винаги да се получават известия за тези акаунти</string>
+    <string name="title_advanced_with_exceptions">Със следните изключения:</string>
+    <string name="title_advanced_poll_metered">Периодична проверка за нови съобщения при връзка с мрежа с измерено потребление</string>
+    <string name="title_advanced_poll_unmetered">Периодична проверка за нови съобщения при връзка с мрежа с безмерено потребление</string>
     <string name="title_advanced_schedule">График</string>
     <string name="title_advanced_schedule_workdays">Работни дни</string>
     <string name="title_advanced_schedule_weekend">Уикенд</string>
@@ -437,6 +443,8 @@
     <string name="title_advanced_vpn_only">Свързване само чрез VPN</string>
     <string name="title_advanced_timeout">Време на изчакване на връзката (секунди)</string>
     <string name="title_advanced_prefer_ip4">Предпочитане на IPv4 пред IPv6</string>
+    <string name="title_advanced_dns">Предпочитани адреси на сървъри на DNS (разделени със запетая)</string>
+    <string name="title_advanced_dns_custom">Употреба на потребителски DNS преобразувател</string>
     <string name="title_advanced_ssl_update">Употреба на обновения доставчик SSL</string>
     <string name="title_advanced_ssl_harden">Твърди SSL връзки</string>
     <string name="title_advanced_ssl_harden_strict">Изисква се TLS 1.3</string>
@@ -538,6 +546,8 @@
     <string name="title_advanced_attachments_alt">Покажи прикачените файлове след текста на съобщението</string>
     <string name="title_advanced_thumbnails">Показване на миниатюри на изображения след текста на съобщението</string>
     <string name="title_advanced_pdf_preview">Показване на миниобраз на PDF</string>
+    <string name="title_advanced_video_preview">Показване на миниобраз на видео</string>
+    <string name="title_advanced_audio_preview">Показване на дребен звуковъзпроизводител</string>
     <string name="title_advanced_message_text_zoom2">Подразбиращ се мащаб на текста на съобщение: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Мащабиране на текста на съобщението в редактора</string>
     <string name="title_advanced_overview_mode">Мащабиране на първообразните съобщения към размера на екрана</string>
@@ -567,6 +577,7 @@
     <string name="title_advanced_narrow_fonts">Употреба на тесни шрифтове</string>
     <string name="title_advanced_parse_classes">Листове за избор на стилове</string>
     <string name="title_advanced_authentication">Показване на предупрежденията за удостоверяване</string>
+    <string name="title_advanced_authentication_hint">Основните проверки може да се конфигурират в настройките за получаване</string>
     <string name="title_advanced_authentication_indicator">Показване на показателя за състоянието на удостоверяване</string>
     <string name="title_advanced_authentication_none">Няма удостоверяване</string>
     <string name="title_advanced_authentication_some">Частично удостоверяване</string>
@@ -574,6 +585,8 @@
     <string name="title_advanced_restore_on_launch">Възстановяване на състоянието на приложението при старт</string>
     <string name="title_advanced_sync_on_launch">Синхронизиране при пускане</string>
     <string name="title_advanced_double_back">Двойно назад за изход</string>
+    <string name="title_advanced_conversation_actions">Предлагане на действия (Android 10+)</string>
+    <string name="title_advanced_conversation_actions_replies">Предлагане на текстове за отговор (Android 10+)</string>
     <string name="title_advanced_language_detection">Разпознаване езика на текста на съобщението</string>
     <string name="title_advanced_photo_picker">Употреба на подбирача за снимки на Android</string>
     <string name="title_advanced_pull_refresh">Плъзни надолу за опресняване</string>
@@ -591,6 +604,7 @@
     <string name="title_advanced_expand_all">Автоматично разгъване на всички прочетени съобщения</string>
     <string name="title_advanced_expand_one">Разгъване само на едно съобщение на момента</string>
     <string name="title_advanced_collapse_multiple">Свиване на съобщенията от разговор с много съобщения при натискане \"назад\"</string>
+    <string name="title_advanced_seen_delay">Отлагане на автоматично означаване на съобщенията като прочетени</string>
     <string name="title_advanced_autoclose">Автоматично затваряне на разговори</string>
     <string name="title_advanced_autoclose_send">Автоматично затваряне на разговорите след изпращане на съобщенията</string>
     <string name="title_advanced_onclose">При затваряне на разговор</string>
@@ -727,6 +741,7 @@
     <string name="title_advanced_class_min_chance">Минимум вероятност на класа: %1$s %%</string>
     <string name="title_advanced_class_min_difference">Минимум разлика на класа: %1$s %%</string>
     <string name="title_advanced_show_filtered">Иконата на филтъра на показ при приложени правила</string>
+    <string name="title_advanced_haptic_feedback">Тактилна обратна връзка при важни действия</string>
     <string name="title_advanced_language">Език</string>
     <string name="title_advanced_language_system">Система</string>
     <string name="title_advanced_lt">Интегриране с LanguageTool</string>
@@ -795,7 +810,7 @@
     <string name="title_advanced_attach_new_hint">В противен случай добавете споделени адреси или файлове към текущата чернова на съобщението</string>
     <string name="title_advanced_usenet_hint">Вмъкнете \'-\' между текста и подписа</string>
     <string name="title_advanced_remove_signature_hint">Това може да доведе до премахване на премалко или премного текст</string>
-    <string name="title_advanced_metered_hint">Измерваните връзки обикновено са мобилен интернет или платени Wi-Fi точки</string>
+    <string name="title_advanced_metered_hint">Връзките на мрежи с измерено потребление обикновено са мобилен интернет или платени Wi-Fi точки за достъп</string>
     <string name="title_advanced_metered_warning">Деактивирането на тази опция ще деактивира получаването и изпращането на съобщения през мобилния интернет</string>
     <string name="title_advanced_rlah_hint">Ако не се допуска роуминг в рамките на ЕС</string>
     <string name="title_advanced_usage_hint">Това ще увеличи употребата на батерията, данните и мястото в хранилището</string>
@@ -815,6 +830,7 @@
     <string name="title_advanced_split_hint">Това ще раздели екрана на части</string>
     <string name="title_advanced_split_min_hint">Това е условие предназначено за сгъваеми устройства</string>
     <string name="title_advanced_threading_hint">Групови съобщения, свързани помежду си</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Само за картов стил</string>
     <string name="title_advanced_highlight_hint">Акцентираният цвят на темата ще бъде използван за подчертаване</string>
     <string name="title_advanced_privacy_risk">Възможно е да съществува риск за поверителността</string>
     <string name="title_advanced_name_email_hint">Имената ще се показват само, когато са налични</string>
@@ -925,12 +941,15 @@
     <string name="title_aliases">Псевдоним</string>
     <string name="title_provider">Доставчик</string>
     <string name="title_custom">Персонализиране</string>
+    <string name="title_dnssec">Налагане на употребата на DNSSEC</string>
+    <string name="title_dnssec_remark">Само ограничен брой сървъри на DNS поддържат DNSSEC</string>
     <string name="title_host">Име на хост</string>
     <string name="title_encryption">Криптиране</string>
     <string name="title_encryption_none">Няма (несигурно)</string>
     <string name="title_allow_insecure">Разрешаване на несигурни връзки</string>
     <string name="title_insecure_remark">Несигурните връзки трябва да се разрешават само в доверени мрежи и никога в обществени мрежи</string>
     <string name="title_dane">Налагане на употребата на DANE</string>
+    <string name="title_dane_remark">Само някои доставчици на е-поща поддържат DANE</string>
     <string name="title_notify_remark">Може да включите това за известия на конкретен акаунт</string>
     <string name="title_port">Номер на порт</string>
     <string name="title_user">Потребителско име</string>
@@ -1097,6 +1116,7 @@
     <string name="title_poll_folder">Проверявайте периодично, вместо непрекъснато синхронизиране</string>
     <string name="title_poll_folder_remark">Повечето имейл сървъри позволяват push известия само за шепа папки!</string>
     <string name="title_download_folder">Автоматично изтегляне на текста на съобщението и прикачените файлове</string>
+    <string name="title_count_unread">Добавяне на броя непрочетени съобщения към акаунта</string>
     <string name="title_notify_folder">Уведомяване при нови съобщения</string>
     <string name="title_auto_classify_source">Класифициране на новите съобщения в тази папка</string>
     <string name="title_auto_classify_target">Автоматично преместване на класифицираните съобщения в тази папка</string>
@@ -1175,6 +1195,7 @@
     <string name="title_print_images">Отпечатване на образите</string>
     <string name="title_print_images_remark">Тегленето на образи може да отнеме известно време</string>
     <string name="title_print_block_quotes">Отпечатване на редовете в блока с цитат</string>
+    <string name="title_print_margins">Добавяне на краищни полета</string>
     <string name="title_show_headers">Показване на заглавките</string>
     <string name="title_show_html">Показване на извора</string>
     <string name="title_raw_save">Запазване на необработено съобщение</string>
@@ -1218,6 +1239,7 @@
     <string name="title_move">Премести</string>
     <string name="title_copy_btn">Копиране</string>
     <string name="title_keywords_btn">Ключови думи</string>
+    <string name="title_labels_btn">Етикети (само за Gmail)</string>
     <string name="title_unsubscribe">Отписване</string>
     <string name="title_message_rule">Създай правило</string>
     <string name="title_no_junk">Не е спам</string>
@@ -1634,6 +1656,7 @@
     <string name="title_rule_automation">Автоматично</string>
     <string name="title_rule_delete">Изтрийте за постоянно</string>
     <string name="title_rule_sound">Пускане на звука</string>
+    <string name="title_rule_silent">Тихо известие</string>
     <string name="title_rule_caption">Редакция правило</string>
     <string name="title_rule_title">Правилото важи за</string>
     <string name="title_rule_name">Име</string>

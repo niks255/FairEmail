@@ -32,6 +32,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.FastScrollerEx;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 public class FixedRecyclerView extends RecyclerView {
     public FixedRecyclerView(@NonNull Context context) {
         super(context);
@@ -59,6 +62,17 @@ public class FixedRecyclerView extends RecyclerView {
                 .getDrawable(androidx.recyclerview.R.styleable.RecyclerView_fastScrollHorizontalThumbDrawable);
         Drawable horizontalTrackDrawable = a
                 .getDrawable(androidx.recyclerview.R.styleable.RecyclerView_fastScrollHorizontalTrackDrawable);
+
+        if (verticalThumbDrawable == null)
+            verticalThumbDrawable = (StateListDrawable) context.getDrawable(R.drawable.scroll_thumb);
+        if (verticalTrackDrawable == null)
+            verticalTrackDrawable = context.getDrawable(R.drawable.scroll_track);
+
+        if (horizontalThumbDrawable == null)
+            horizontalThumbDrawable = (StateListDrawable) context.getDrawable(R.drawable.scroll_thumb);
+        if (horizontalTrackDrawable == null)
+            horizontalTrackDrawable = context.getDrawable(R.drawable.scroll_track);
+
         Resources resources = getContext().getResources();
         new FastScrollerEx(this, verticalThumbDrawable, verticalTrackDrawable,
                 horizontalThumbDrawable, horizontalTrackDrawable,
@@ -195,5 +209,71 @@ public class FixedRecyclerView extends RecyclerView {
                         at android.view.View.layout(View.java:16076)
              */
         }
+    }
+
+    private Map<Runnable, Runnable> mapRunnable = null;
+
+    @NonNull
+    private Map<Runnable, Runnable> getMapRunnable() {
+        if (mapRunnable == null)
+            mapRunnable = new WeakHashMap<>();
+        return mapRunnable;
+    }
+
+    @Override
+    public boolean post(Runnable action) {
+        Runnable wrapped = new RunnableEx("post") {
+            @Override
+            protected void delegate() {
+                action.run();
+            }
+        };
+        getMapRunnable().put(action, wrapped);
+        return super.post(wrapped);
+    }
+
+    @Override
+    public boolean postDelayed(Runnable action, long delayMillis) {
+        Runnable wrapped = new RunnableEx("postDelayed") {
+            @Override
+            protected void delegate() {
+                action.run();
+            }
+        };
+        getMapRunnable().put(action, wrapped);
+        return super.postDelayed(wrapped, delayMillis);
+    }
+
+    @Override
+    public void postOnAnimation(Runnable action) {
+        Runnable wrapped = new RunnableEx("postOnAnimation") {
+            @Override
+            protected void delegate() {
+                action.run();
+            }
+        };
+        getMapRunnable().put(action, wrapped);
+        super.postOnAnimation(wrapped);
+    }
+
+    @Override
+    public void postOnAnimationDelayed(Runnable action, long delayMillis) {
+        Runnable wrapped = new RunnableEx("postOnAnimationDelayed") {
+            @Override
+            protected void delegate() {
+                action.run();
+            }
+        };
+        getMapRunnable().put(action, wrapped);
+        super.postOnAnimationDelayed(wrapped, delayMillis);
+    }
+
+    @Override
+    public boolean removeCallbacks(Runnable action) {
+        Runnable wrapped = getMapRunnable().get(action);
+        if (wrapped == null)
+            return super.removeCallbacks(action);
+        else
+            return super.removeCallbacks(wrapped);
     }
 }

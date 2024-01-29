@@ -194,6 +194,7 @@
 
     <string name="title_edit_account">Edit account</string>
     <string name="title_edit_identity">Edit identity</string>
+    <string name="title_new_folder">New folder</string>
     <string name="title_edit_folder">Edit folder</string>
     <string name="title_disable_gmail">Disable Gmail app</string>
 
@@ -218,6 +219,7 @@
     <string name="title_setup_wizard_new">I need a new email address</string>
     <string name="title_setup_manual">Manual setup and account options</string>
     <string name="title_setup_classic">Classic configuration</string>
+    <string name="title_setup_wizard_hint">The quick setup wizard for \"Other Provider\" above usually works too, and is easier than entering all the server data.</string>
     <string name="title_setup_documentation">Please see your email provider\'s documentation for the correct email server configuration</string>
     <string name="title_setup_account_remark">Receive email</string>
     <string name="title_setup_identity_remark">Send email</string>
@@ -230,6 +232,7 @@
     <string name="title_setup_google_sign_in">Sign in with Google</string>
     <string name="title_setup_other">Other provider</string>
     <string name="title_setup_inbound">Incoming email only (email cannot be sent!)</string>
+    <string name="title_setup_imap">IMAP account</string>
     <string name="title_setup_pop3">POP3 account</string>
     <string name="title_setup_oauth_permission">The email provider has approved OAuth only for the Play Store and GitHub version</string>
     <string name="title_setup_gmail_support">Authorizing Google accounts will work in the Play Store and GitHub version only because Android checks the digital app signature</string>
@@ -417,6 +420,9 @@
     <string name="title_advanced_when">When</string>
     <string name="title_advanced_optimize">Automatically optimize</string>
     <string name="title_advanced_always">Always receive messages for these accounts</string>
+    <string name="title_advanced_with_exceptions">With the following exceptions:</string>
+    <string name="title_advanced_poll_metered">Periodically check for new messages while on a metered network</string>
+    <string name="title_advanced_poll_unmetered">Periodically check for new messages while on an unmetered network</string>
     <string name="title_advanced_schedule">Schedule</string>
     <string name="title_advanced_schedule_workdays">Workdays</string>
     <string name="title_advanced_schedule_weekend">Weekend</string>
@@ -631,6 +637,8 @@
     <string name="title_advanced_attachments_alt">Show attachments after the message text</string>
     <string name="title_advanced_thumbnails">Show image thumbnails after the message text</string>
     <string name="title_advanced_pdf_preview">Show PDF thumbnails</string>
+    <string name="title_advanced_video_preview">Show video thumbnails</string>
+    <string name="title_advanced_audio_preview">Show mini audio player</string>
     <string name="title_advanced_message_text_zoom2">Default message text zoom: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Zoom message text also in the message editor</string>
     <string name="title_advanced_overview_mode">Zoom original messages to fit the screen</string>
@@ -1030,6 +1038,7 @@
     <string name="title_advanced_split_hint">This will split the screen into parts</string>
     <string name="title_advanced_split_min_hint">This is a condition intended for foldable devices</string>
     <string name="title_advanced_threading_hint">Group messages related to each other</string>
+    <string name="title_advanced_indentation_hint">For card style only</string>
     <string name="title_advanced_highlight_hint">The accent color of the theme will be used for highlighting</string>
     <string name="title_advanced_privacy_risk">There might be a privacy risk</string>
     <string name="title_advanced_name_email_hint">Names will only be shown when available</string>
@@ -1377,7 +1386,7 @@
     <string name="title_poll_folder">Check periodically instead of continuous synchronize</string>
     <string name="title_poll_folder_remark">Most email servers allow push messages for a handful of folders only!</string>
     <string name="title_download_folder">Automatically download message texts and attachments</string>
-    <string name="title_count_unread" translatable="false">Count unread messages</string>
+    <string name="title_count_unread">Add the number of unread messages to the account</string>
     <string name="title_notify_folder">Notify on new messages</string>
     <string name="title_auto_classify_source">Classify new messages in this folder</string>
     <string name="title_auto_classify_target">Automatically move classified messages to this folder</string>
@@ -1514,6 +1523,7 @@
     <string name="title_move">Move</string>
     <string name="title_copy_btn">Copy</string>
     <string name="title_keywords_btn">Keywords</string>
+    <string name="title_labels_btn">Labels (Gmail only)</string>
     <string name="title_unsubscribe">Unsubscribe</string>
     <string name="title_message_rule">Create rule</string>
     <string name="title_no_junk">Not spam</string>
@@ -1980,6 +1990,7 @@
     <string name="title_rule_automation">Automation</string>
     <string name="title_rule_delete">Delete permanently</string>
     <string name="title_rule_sound">Play sound</string>
+    <string name="title_rule_silent">Silent notification</string>
 
     <string name="title_rule_caption">Edit rule</string>
     <string name="title_rule_title">Rule applies to</string>

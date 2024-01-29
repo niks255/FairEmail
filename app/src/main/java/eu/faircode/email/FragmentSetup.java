@@ -346,9 +346,13 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
 
                 order = getMenuItems(menu, context, providers, order, true, debug);
 
-                SpannableString ss = new SpannableString(getString(R.string.title_setup_pop3));
-                ss.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ss.length(), 0);
-                menu.add(Menu.FIRST, R.string.title_setup_pop3, order++, ss);
+                SpannableString imap = new SpannableString(getString(R.string.title_setup_imap));
+                imap.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, imap.length(), 0);
+                menu.add(Menu.FIRST, R.string.title_setup_imap, order++, imap);
+
+                SpannableString pop3 = new SpannableString(getString(R.string.title_setup_pop3));
+                pop3.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, pop3.length(), 0);
+                menu.add(Menu.FIRST, R.string.title_setup_pop3, order++, pop3);
 
                 popupMenu.insertIcons(context);
 
@@ -381,7 +385,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
                             lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_QUICK_SETUP)
                                     .putExtra("title", itemId));
                             return true;
-                        } else if (itemId == R.string.title_setup_classic) {
+                        } else if (itemId == R.string.title_setup_imap) {
                             ibManual.setPressed(true);
                             ibManual.setPressed(false);
                             manual = true;
@@ -774,6 +778,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
             public void onClick(View v) {
                 LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(v.getContext());
                 lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_SETUP_REORDER)
+                        .putExtra("title", R.string.title_setup_reorder_accounts)
                         .putExtra("className", EntityAccount.class.getName()));
             }
         });
@@ -783,6 +788,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
             public void onClick(View v) {
                 LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(v.getContext());
                 lbm.sendBroadcast(new Intent(ActivitySetup.ACTION_SETUP_REORDER)
+                        .putExtra("title", R.string.title_setup_reorder_folders)
                         .putExtra("className", TupleFolderSort.class.getName()));
             }
         });
@@ -1011,6 +1017,11 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
         boolean isIgnoring = !Boolean.FALSE.equals(Helper.isIgnoringOptimizations(getContext()));
         boolean canScheduleExact = AlarmManagerCompatEx.canScheduleExactAlarms(getContext());
 
+        if (isIgnoring && !BuildConfig.DEBUG) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            prefs.edit().putBoolean("was_ignoring", true).apply();
+        }
+
         tvDozeDone.setText(isIgnoring ? R.string.title_setup_done : R.string.title_setup_to_do);
         tvDozeDone.setTextColor(isIgnoring ? textColorPrimary : colorWarning);
         tvDozeDone.setCompoundDrawablesWithIntrinsicBounds(
@@ -1018,7 +1029,7 @@ public class FragmentSetup extends FragmentBase implements SharedPreferences.OnS
         TextViewCompat.setCompoundDrawableTintList(tvDozeDone,
                 ColorStateList.valueOf(isIgnoring ? textColorPrimary : colorWarning));
 
-        btnDoze.setEnabled(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M);
+        btnDoze.setEnabled(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Helper.isArc());
         btnDoze.setCompoundDrawablesRelativeWithIntrinsicBounds(
                 0, 0, isIgnoring ? R.drawable.twotone_settings_24 : R.drawable.twotone_check_24, 0);
         btnDoze.setText(isIgnoring ? R.string.title_setup_manage : R.string.title_setup_grant);

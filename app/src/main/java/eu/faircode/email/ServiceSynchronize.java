@@ -20,7 +20,7 @@ package eu.faircode.email;
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
-import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
+import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_GMAIL;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -160,7 +160,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final String ACTION_NEW_MESSAGE_COUNT = BuildConfig.APPLICATION_ID + ".NEW_MESSAGE_COUNT";
 
     private static final List<String> PREF_EVAL = Collections.unmodifiableList(Arrays.asList(
-            "enabled", "poll_interval", "last_daily" // restart account(s)
+            "enabled", "poll_interval", "poll_metered", "poll_unmetered", "last_daily" // restart account(s)
     ));
 
     private static final List<String> PREF_RELOAD = Collections.unmodifiableList(Arrays.asList(
@@ -1415,7 +1415,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                     Collections.sort(folders, folders.get(0).getComparator(ServiceSynchronize.this));
                                 for (EntityFolder folder : folders)
                                     if (folder.poll ||
-                                            !account.poll_exempted ||
+                                            !account.isExempted(ServiceSynchronize.this) ||
                                             account.protocol == EntityAccount.TYPE_POP ||
                                             !BuildConfig.DEBUG)
                                         EntityOperation.poll(ServiceSynchronize.this, folder.id);
@@ -1708,7 +1708,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 Log.e(ex);
 
                                 // Allow Android account manager to refresh the access token
-                                if (account.auth_type != AUTH_TYPE_PASSWORD &&
+                                if (account.auth_type == AUTH_TYPE_GMAIL &&
                                         state.getBackoff() <= CONNECT_BACKOFF_ALARM_START * 60)
                                     throw ex;
 
@@ -2894,7 +2894,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         if (quota.resources != null)
                             for (Quota.Resource resource : quota.resources) {
                                 EntityLog.log(context, EntityLog.Type.Account, account,
-                                        account.name + " Quota " + resource.name + " " + resource.usage + "/" + resource.limit);
+                                        account.name + "quota " +
+                                                " root=\"" + quota.quotaRoot + "\"" +
+                                                " resource=\"" + resource.name + "\"" +
+                                                " " + resource.usage + "/" + resource.limit);
                                 // (STORAGE nnnnn 9999999999999999)
                                 if ("STORAGE".equalsIgnoreCase(resource.name)) {
                                     if (resource.usage * 1024 >= 0)
@@ -2903,6 +2906,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                         limit = Math.max(limit == null ? 0L : limit, resource.limit * 1024);
                                 }
                             }
+                    EntityLog.log(context, EntityLog.Type.Account,
+                            account.name + " Quota" +
+                                    " records=" + quotas.length +
+                                    " usage=" + (usage == null ? null : Helper.humanReadableByteCount(usage)) +
+                                    " limit=" + (limit == null ? null : Helper.humanReadableByteCount(limit)) +
+                                    " " + (usage == null || limit == null ? "?" : 100 * usage / limit) + " %");
                     db.account().setAccountQuota(account.id, usage, limit);
                 }
             } else
@@ -3486,6 +3495,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     }
 
     static void reload(Context context, Long account, boolean force, String reason) {
+        EntityLog.log(context, "### Reload account=" + account + " force=" + force + " reason=" + reason);
         start(context,
                 new Intent(context, ServiceSynchronize.class)
                         .setAction("reload")

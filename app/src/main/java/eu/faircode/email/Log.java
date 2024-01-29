@@ -136,6 +136,7 @@ public class Log {
             "java.net.SocketException",
             "java.net.SocketTimeoutException",
             "java.net.UnknownHostException",
+            "java.lang.InterruptedException",
 
             "javax.mail.AuthenticationFailedException",
             "javax.mail.internet.AddressException",
@@ -407,7 +408,8 @@ public class Log {
 
             ErrorTypes etypes = new ErrorTypes();
             etypes.setAnrs(BuildConfig.DEBUG);
-            etypes.setNdkCrashes(false);
+            etypes.setNdkCrashes(true);
+            etypes.setUnhandledExceptions(true);
             config.setEnabledErrorTypes(etypes);
             config.setMaxBreadcrumbs(BuildConfig.PLAY_STORE_RELEASE ? 250 : 500);
 
@@ -756,6 +758,15 @@ public class Log {
                     at android.app.ActivityThread.-$$Nest$mthrowRemoteServiceException(Unknown Source:0)
                     at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2505)
                     at android.os.Handler.dispatchMessage(Handler.java:106)
+             */
+            return false;
+
+        if ("android.app.RemoteServiceException$BadForegroundServiceNotificationException".equals(ex.getClass().getName()))
+            /*
+                android.app.RemoteServiceException$BadForegroundServiceNotificationException: Bad notification(tag=null, id=100) posted from package eu.faircode.email, crashing app(uid=10122, pid=3370): Software rendering doesn't support hardware bitmaps
+                    at android.app.ActivityThread.throwRemoteServiceException(ActivityThread.java:1982)
+                    at android.app.ActivityThread.-$$Nest$mthrowRemoteServiceException(Unknown Source:0)
+                    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2238)
              */
             return false;
 

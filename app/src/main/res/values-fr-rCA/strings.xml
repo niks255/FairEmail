@@ -148,6 +148,7 @@
     <string name="title_list_identities">Identités</string>
     <string name="title_edit_account">Modifier le compte</string>
     <string name="title_edit_identity">Modifier l’identité</string>
+    <string name="title_new_folder">Nouveau dossier</string>
     <string name="title_edit_folder">Modifier le dossier</string>
     <string name="title_disable_gmail">Désactiver l\'application Gmail</string>
     <string name="title_setup">Paramètres</string>
@@ -171,6 +172,7 @@
     <string name="title_setup_wizard_new">J\'ai besoin d\'une nouvelle adresse courriel</string>
     <string name="title_setup_manual">Configuration manuelle et options des comptes</string>
     <string name="title_setup_classic">Configuration classique</string>
+    <string name="title_setup_wizard_hint">L\'assistant de configuration rapide pour un \"Autre fournisseur\" ci-dessus fonctionne également et est plus facile à utiliser que saisir toutes les données du serveur.</string>
     <string name="title_setup_documentation">Veuillez consulter la documentation de votre fournisseur de messagerie pour la configuration correcte du serveur de messagerie</string>
     <string name="title_setup_account_remark">Recevoir des courriels</string>
     <string name="title_setup_identity_remark">Envoyer des courriels</string>
@@ -180,6 +182,7 @@
     <string name="title_setup_google_sign_in">Se connecter avec Google</string>
     <string name="title_setup_other">Autre fournisseur</string>
     <string name="title_setup_inbound">Courrier entrant seulement (le courriel ne peut pas être envoyé!)</string>
+    <string name="title_setup_imap">Compte IMAP</string>
     <string name="title_setup_pop3">Compte POP3</string>
     <string name="title_setup_oauth_permission">Le fournisseur de messagerie a approuvé OAuth uniquement pour les versions Play Store et GitHub</string>
     <string name="title_setup_gmail_support">L\'autorisation des comptes Google fonctionnera uniquement avec les versions Play Store et GitHub parce qu\'Android vérifie la signature numérique de l\'application</string>
@@ -345,6 +348,9 @@
     <string name="title_advanced_when">Quand</string>
     <string name="title_advanced_optimize">Optimiser automatiquement</string>
     <string name="title_advanced_always">Recevoir les messages en continu pour ces comptes</string>
+    <string name="title_advanced_with_exceptions">Avec les exceptions suivantes:</string>
+    <string name="title_advanced_poll_metered">Vérifier périodiquement la présence de nouveaux messages sur un réseau limité</string>
+    <string name="title_advanced_poll_unmetered">Vérifier périodiquement la présence de nouveaux messages sur un réseau non limité</string>
     <string name="title_advanced_schedule">Planification</string>
     <string name="title_advanced_schedule_workdays">Jours ouvrés</string>
     <string name="title_advanced_schedule_weekend">Fin de semaine</string>
@@ -438,8 +444,8 @@
     <string name="title_advanced_vpn_only">Se connecter uniquement via un RPV</string>
     <string name="title_advanced_timeout">Délai d’expiration de la connexion (secondes)</string>
     <string name="title_advanced_prefer_ip4">Préférer IPv4 à IPv6</string>
-    <string name="title_advanced_dns" comment="title_advanced_dns&#10;Title for an option to configure extra, preferred DNS server addresses&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Adresses de serveurs DNS favoris (séparées par des virgules)</string>
-    <string name="title_advanced_dns_custom" comment="title_advanced_dns_custom&#10;Title for an option to use a custom DNS resolver instead of the Android DNS resolver&#10;https://en.wikipedia.org/wiki/Domain_Name_System">Utiliser un résolveur DNS personnalisé</string>
+    <string name="title_advanced_dns">Adresses de serveurs DNS favoris (séparées par des virgules)</string>
+    <string name="title_advanced_dns_custom">Utiliser un résolveur DNS personnalisé</string>
     <string name="title_advanced_ssl_update">Utiliser le fournisseur SSL mis à jour</string>
     <string name="title_advanced_ssl_harden">Renforcer les connexions SSL</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 requis</string>
@@ -541,6 +547,8 @@
     <string name="title_advanced_attachments_alt">Afficher les pièces jointes après le texte du message</string>
     <string name="title_advanced_thumbnails">Afficher les vignettes des images après le texte du message</string>
     <string name="title_advanced_pdf_preview">Afficher les miniatures des fichiers PDF</string>
+    <string name="title_advanced_video_preview">Afficher les vignettes des vidéos</string>
+    <string name="title_advanced_audio_preview">Afficher le mini-lecteur audio</string>
     <string name="title_advanced_message_text_zoom2">Zoom du texte du message par défaut : %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Zoomer le texte du message également dans l\'éditeur de message</string>
     <string name="title_advanced_overview_mode">Zoomer sur les messages originaux pour les adapter à l\'écran</string>
@@ -597,7 +605,7 @@
     <string name="title_advanced_expand_all">Déplier automatiquement tous les messages lus</string>
     <string name="title_advanced_expand_one">Ne déplier qu’un seul message à la fois</string>
     <string name="title_advanced_collapse_multiple">Replier les multiples messages d’une conversation en faisant « Retour »</string>
-    <string name="title_advanced_seen_delay" comment="title_advanced_seen_delay&#10;Title for an option to configure the time to delay marking messages automatically read on opening/expanding messages.">Retarder le marquage automatique des messages comme lus</string>
+    <string name="title_advanced_seen_delay">Retarder le marquage automatique des messages comme lus</string>
     <string name="title_advanced_autoclose">Fermer automatiquement les conversations</string>
     <string name="title_advanced_autoclose_send">Fermer automatiquement les conversations après l\'envoi de messages</string>
     <string name="title_advanced_onclose">Lors de la fermeture d’une conversation</string>
@@ -824,6 +832,7 @@
     <string name="title_advanced_split_hint">Ceci divisera l\'écran en plusieurs parties</string>
     <string name="title_advanced_split_min_hint">Ceci est une condition destinée aux appareils pliables</string>
     <string name="title_advanced_threading_hint">Regrouper les messages liés les uns aux autres</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Pour le style carte uniquement</string>
     <string name="title_advanced_highlight_hint">La couleur d’accentuation du thème sera utilisée pour la surbrillance</string>
     <string name="title_advanced_privacy_risk">Ceci pourrait présenter un risque pour la confidentialité</string>
     <string name="title_advanced_name_email_hint">Les noms ne seront affichés que s\'ils sont disponibles</string>
@@ -934,15 +943,15 @@
     <string name="title_aliases">Alias</string>
     <string name="title_provider">Fournisseur</string>
     <string name="title_custom">Personnalisé</string>
-    <string name="title_dnssec" comment="title_dnssec&#10;Title for account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">Renforcer DNSSEC</string>
-    <string name="title_dnssec_remark" comment="title_dnssec_remark&#10;Remark below account/identity option to enforce DNSSEC&#10;https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">Seul un nombre limité de serveurs DNS prennent en charge DNSSEC</string>
+    <string name="title_dnssec">Renforcer DNSSEC</string>
+    <string name="title_dnssec_remark">Seul un nombre limité de serveurs DNS prennent en charge DNSSEC</string>
     <string name="title_host">Nom d’hôte</string>
     <string name="title_encryption">Chiffrement</string>
     <string name="title_encryption_none">Aucun (non sécurisé)</string>
     <string name="title_allow_insecure">Autoriser les connexions non sécurisées</string>
     <string name="title_insecure_remark">Les connexions non sécurisées ne doivent être autorisées que sur des réseaux de confiance et jamais sur des réseaux publics</string>
     <string name="title_dane">Renforcer DANE</string>
-    <string name="title_dane_remark" comment="title_dane_remark&#10;Remark below account/identity option to enforce DANE&#10;https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">Seuls certains fournisseurs de messagerie supportent DANE</string>
+    <string name="title_dane_remark">Seuls certains fournisseurs de messagerie supportent DANE</string>
     <string name="title_notify_remark">Vous pouvez activer ceci pour avoir des notifications spécifiques par compte</string>
     <string name="title_port">Numéro de port</string>
     <string name="title_user">Nom d’utilisateur</string>
@@ -1109,6 +1118,7 @@
     <string name="title_poll_folder">Vérifier périodiquement au lieu de synchroniser en continu</string>
     <string name="title_poll_folder_remark">La plupart des serveurs de messagerie autorisent les messages poussés pour un petit nombre de dossiers seulement!</string>
     <string name="title_download_folder">Télécharger automatiquement le texte des messages et les pièces-jointes</string>
+    <string name="title_count_unread">Ajouter le nombre de messages non lus au compte</string>
     <string name="title_notify_folder">Notification pour les nouveaux messages</string>
     <string name="title_auto_classify_source">Classer les nouveaux messages de ce dossier</string>
     <string name="title_auto_classify_target">Déplacer automatiquement les messages à classer vers ce dossier</string>
@@ -1232,6 +1242,7 @@
     <string name="title_move">Déplacer</string>
     <string name="title_copy_btn">Copier</string>
     <string name="title_keywords_btn">Mots-clés</string>
+    <string name="title_labels_btn">Libellés (Gmail uniquement)</string>
     <string name="title_unsubscribe">Se désabonner</string>
     <string name="title_message_rule">Créer une règle</string>
     <string name="title_no_junk">Non indésirable</string>
@@ -1649,6 +1660,7 @@
     <string name="title_rule_automation">Automatisation</string>
     <string name="title_rule_delete">Supprimer définitivement</string>
     <string name="title_rule_sound">Jouer un son</string>
+    <string name="title_rule_silent">Notification silencieuse</string>
     <string name="title_rule_caption">Modifier la règle</string>
     <string name="title_rule_title">La règle s’applique à</string>
     <string name="title_rule_name">Nom</string>

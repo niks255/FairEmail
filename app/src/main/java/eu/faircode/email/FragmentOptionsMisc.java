@@ -304,7 +304,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "identities_asked", "identities_primary_hint",
             "raw_asked", "all_read_asked", "delete_asked",
             "cc_bcc", "inline_image_hint", "compose_reference", "send_dialog",
-            "setup_reminder", "setup_advanced",
+            "setup_reminder", "was_ignoring", "setup_advanced",
             "signature_images_hint",
             "gmail_checked",
             "eml_auto_confirm",
@@ -2060,7 +2060,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if (!RESET_OPTIONS.contains(key))
+        if (!RESET_OPTIONS.contains(key) &&
+                !"last_cleanup".equals(key) &&
+                !"last_daily".equals(key))
             return;
 
         if ("last_cleanup".equals(key))

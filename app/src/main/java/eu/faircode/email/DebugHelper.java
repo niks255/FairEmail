@@ -326,7 +326,7 @@ public class DebugHelper {
         sb.append(String.format("Manufacturer: %s\r\n", Build.MANUFACTURER));
         sb.append(String.format("Model: %s\r\n", Build.MODEL));
         sb.append(String.format("Product: %s\r\n", Build.PRODUCT));
-        sb.append(String.format("Device: %s\r\n", Build.DEVICE));
+        sb.append(String.format("Device: %s Arc: %b\r\n", Build.DEVICE, Helper.isArc()));
         sb.append(String.format("Host: %s\r\n", Build.HOST));
         sb.append(String.format("Time: %s\r\n", new Date(Build.TIME).toString()));
         sb.append(String.format("Display: %s\r\n", Build.DISPLAY));
@@ -669,6 +669,8 @@ public class DebugHelper {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean enabled = prefs.getBoolean("enabled", true);
                 int pollInterval = ServiceSynchronize.getPollInterval(context);
+                boolean poll_metered = prefs.getBoolean("poll_metered", false);
+                boolean poll_unmetered = prefs.getBoolean("poll_unmetered", false);
                 boolean metered = prefs.getBoolean("metered", true);
                 Boolean ignoring = Helper.isIgnoringOptimizations(context);
                 boolean canSchedule = AlarmManagerCompatEx.canScheduleExactAlarms(context);
@@ -713,6 +715,8 @@ public class DebugHelper {
 
                 size += write(os, "enabled=" + enabled + (enabled ? "" : " !!!") +
                         " interval=" + pollInterval + "\r\n" +
+                        (pollInterval != 0 && poll_metered ? "poll metered=" + poll_metered + " !!!\r\n" : "") +
+                        (pollInterval != 0 && poll_unmetered ? "poll unmetered=" + poll_unmetered + " !!!\r\n" : "") +
                         "metered=" + metered + (metered ? "" : " !!!") +
                         " saving=" + ds + ("enabled".equals(ds) ? " !!!" : "") +
                         " vpn=" + vpn + (vpn ? " !!!" : "") +

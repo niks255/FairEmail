@@ -176,6 +176,7 @@
     <string name="title_list_identities">Идентификаторы</string>
     <string name="title_edit_account">Изменить учётную запись</string>
     <string name="title_edit_identity">Изменить идентификатор</string>
+    <string name="title_new_folder">Новая папка</string>
     <string name="title_edit_folder">Изменить папку</string>
     <string name="title_disable_gmail">Отключить приложение Gmail</string>
     <string name="title_setup">Настройки</string>
@@ -199,6 +200,7 @@
     <string name="title_setup_wizard_new">Мне нужен новый адрес электронной почты</string>
     <string name="title_setup_manual">Ручная настройка и параметры учётной записи</string>
     <string name="title_setup_classic">Классическая настройка</string>
+    <string name="title_setup_wizard_hint">Мастер быстрой настройки для \"Другого провайдера\" обычно тоже работает и он проще, чем ввод всех данных сервера вручную.</string>
     <string name="title_setup_documentation">Ознакомьтесь с документацией почтового провайдера для правильной настройки сервера</string>
     <string name="title_setup_account_remark">Получение почты</string>
     <string name="title_setup_identity_remark">Отправка почты</string>
@@ -208,6 +210,7 @@
     <string name="title_setup_google_sign_in">Войти с помощью Google</string>
     <string name="title_setup_other">Другой провайдер</string>
     <string name="title_setup_inbound">Только входящая почта (отправка письма невозможна!)</string>
+    <string name="title_setup_imap">Учётная запись IMAP</string>
     <string name="title_setup_pop3">Учётная запись POP3</string>
     <string name="title_setup_oauth_permission">Провайдер электронной почты одобрил OAuth только для официальных версий приложения из Play Store и GitHub</string>
     <string name="title_setup_gmail_support">Авторизация учётных записей Google будет работать только в официальных версиях из Play Store и GitHub, так как Android проверяет подпись приложения</string>
@@ -372,6 +375,9 @@
     <string name="title_advanced_when">Когда</string>
     <string name="title_advanced_optimize">Автоматическая оптимизация</string>
     <string name="title_advanced_always">Непрерывно получать сообщения с этих учётных записей</string>
+    <string name="title_advanced_with_exceptions">За исключением:</string>
+    <string name="title_advanced_poll_metered">Периодически проверять новые сообщения при лимитированном подключении</string>
+    <string name="title_advanced_poll_unmetered">Периодически проверять новые сообщения при безлимитном подключении</string>
     <string name="title_advanced_schedule">Расписание</string>
     <string name="title_advanced_schedule_workdays">Будни</string>
     <string name="title_advanced_schedule_weekend">Выходные</string>
@@ -465,6 +471,8 @@
     <string name="title_advanced_vpn_only">Подключаться только через VPN</string>
     <string name="title_advanced_timeout">Время ожидания подключения (сек.)</string>
     <string name="title_advanced_prefer_ip4">Предпочитать IPv4</string>
+    <string name="title_advanced_dns">Адреса предпочтительных DNS-серверов (через запятую)</string>
+    <string name="title_advanced_dns_custom">Использовать пользовательский DNS</string>
     <string name="title_advanced_ssl_update">Использовать обновлённый SSL-провайдер</string>
     <string name="title_advanced_ssl_harden">Усиленные SSL-подключения</string>
     <string name="title_advanced_ssl_harden_strict">Требовать TLS 1.3</string>
@@ -566,6 +574,8 @@
     <string name="title_advanced_attachments_alt">Показывать вложения после текста сообщения</string>
     <string name="title_advanced_thumbnails">Показывать миниатюры изображений после текста сообщения</string>
     <string name="title_advanced_pdf_preview">Показывать миниатюры PDF</string>
+    <string name="title_advanced_video_preview">Показывать миниатюры видео</string>
+    <string name="title_advanced_audio_preview">Показывать мини-аудиопроигрыватель</string>
     <string name="title_advanced_message_text_zoom2">Масштаб текста сообщения по умолчанию: %1$s%%</string>
     <string name="title_advanced_editor_text_zoom">Масштабировать текст сообщения в редакторе</string>
     <string name="title_advanced_overview_mode">Изменять масштаб исходных сообщений к размеру экрана</string>
@@ -622,6 +632,7 @@
     <string name="title_advanced_expand_all">Автоматически разворачивать все прочитанные сообщения</string>
     <string name="title_advanced_expand_one">Разворачивать только одно сообщение за раз</string>
     <string name="title_advanced_collapse_multiple">Сворачивать сообщения в диалоге с несколькими сообщениями кнопкой \"назад\"</string>
+    <string name="title_advanced_seen_delay">Задержка автоматической пометки сообщений прочитанными</string>
     <string name="title_advanced_autoclose">Автоматически закрывать диалоги</string>
     <string name="title_advanced_autoclose_send">Автоматически закрывать диалоги после отправки сообщений</string>
     <string name="title_advanced_onclose">При закрытии диалога</string>
@@ -848,6 +859,7 @@
     <string name="title_advanced_split_hint">Экран будет разделён на части</string>
     <string name="title_advanced_split_min_hint">Это условие предназначено для складных устройств</string>
     <string name="title_advanced_threading_hint">Группировать сообщения, связанные друг с другом</string>
+    <string name="title_advanced_indentation_hint" comment="title_advanced_indentation_hint&#10;Remark for options that are available when using the card style only, and not when using the tabular style.">Только для карточного стиля</string>
     <string name="title_advanced_highlight_hint">Для подсветки будет использован цвет акцента темы</string>
     <string name="title_advanced_privacy_risk">Возможен риск нарушения конфиденциальности</string>
     <string name="title_advanced_name_email_hint">Имена будут показаны только при наличии</string>
@@ -958,12 +970,15 @@
     <string name="title_aliases">Псевдонимы</string>
     <string name="title_provider">Провайдер</string>
     <string name="title_custom">Пользовательское</string>
+    <string name="title_dnssec">Принудительно использовать DNSSEC</string>
+    <string name="title_dnssec_remark">DNSSEC поддерживает ограниченное количество DNS-серверов</string>
     <string name="title_host">Имя хоста</string>
     <string name="title_encryption">Шифрование</string>
     <string name="title_encryption_none">Нет (небезопасно)</string>
     <string name="title_allow_insecure">Разрешить небезопасные подключения</string>
     <string name="title_insecure_remark">Небезопасные соединения могут быть разрешены только в доверенных сетях и никогда в публичных сетях</string>
     <string name="title_dane">Принудительно использовать DANE</string>
+    <string name="title_dane_remark">DANE поддерживают только некоторые провайдеры электронной почты</string>
     <string name="title_notify_remark">Вы можете включить это для уведомлений конкретной учётной записи</string>
     <string name="title_port">Номер порта</string>
     <string name="title_user">Имя пользователя</string>
@@ -1130,6 +1145,7 @@
     <string name="title_poll_folder">Периодическая проверка вместо непрерывной синхронизации</string>
     <string name="title_poll_folder_remark">Большинство почтовых серверов позволяют отправлять сообщения только для некоторых папок!</string>
     <string name="title_download_folder">Автоматически загружать текст сообщений и вложения</string>
+    <string name="title_count_unread">Добавлять количество непрочитанных сообщений к учётной записи</string>
     <string name="title_notify_folder">Уведомлять о новых сообщениях</string>
     <string name="title_auto_classify_source">Классифицировать новые сообщения в этой папке</string>
     <string name="title_auto_classify_target">Автоматически перемещать классифицированные сообщения в эту папку</string>
@@ -1253,6 +1269,7 @@
     <string name="title_move">Переместить</string>
     <string name="title_copy_btn">Копировать</string>
     <string name="title_keywords_btn">Ключевые слова</string>
+    <string name="title_labels_btn">Метки (только Gmail)</string>
     <string name="title_unsubscribe">Отписаться</string>
     <string name="title_message_rule">Создать правило</string>
     <string name="title_no_junk">Не спам</string>
@@ -1669,6 +1686,7 @@
     <string name="title_rule_automation">Автоматизация</string>
     <string name="title_rule_delete">Удалить окончательно</string>
     <string name="title_rule_sound">Воспроизвести звук</string>
+    <string name="title_rule_silent">Тихое уведомление</string>
     <string name="title_rule_caption">Изменить правило</string>
     <string name="title_rule_title">Правило применяется к</string>
     <string name="title_rule_name">Название</string>
