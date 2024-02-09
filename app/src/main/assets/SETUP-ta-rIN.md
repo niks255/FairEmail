@@ -6,7 +6,7 @@ Setting up FairEmail is fairly simple. You'll need to add at least one account t
 
 An internet connection is required to set up accounts and identities.
 
-## Quick setup
+## விரைவான அமைவு
 
 Just select the appropriate provider or *Other provider* and enter your name, email address and password and tap *Check*.
 

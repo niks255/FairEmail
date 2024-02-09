@@ -1940,6 +1940,8 @@ class Core {
     private static void onRaw(Context context, JSONArray jargs, EntityAccount account, EntityFolder folder, EntityMessage message, IMAPFolder ifolder) throws MessagingException, IOException, JSONException {
         // Download raw message
         DB db = DB.getInstance(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean save_user_flags = prefs.getBoolean("save_user_flags", false);
 
         if (message.raw == null || !message.raw) {
             IMAPMessage imessage = (IMAPMessage) ifolder.getMessageByUID(message.uid);
@@ -1955,12 +1957,21 @@ class Core {
             Properties props = MessageHelper.getSessionProperties(account.unicode);
             Session isession = Session.getInstance(props, null);
 
-            MessageHelper helper;
+            MimeMessage saved;
             try (InputStream is = new FileInputStream(file)) {
-                helper = new MessageHelper(new MimeMessage(isession, is), context);
+                saved = new MimeMessage(isession, is);
+            }
+
+            if (save_user_flags) {
+                String userFlags = TextUtils.join(",", imessage.getFlags().getUserFlags());
+                saved.addHeader("X-User-Flags", userFlags);
+                try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                    saved.writeTo(os);
+                }
             }
 
             // Yahoo is returning incorrect messages
+            MessageHelper helper = new MessageHelper(saved, context);
             if (!Objects.equals(message.msgid, helper.getMessageID()))
                 throw new MessagingException("Incorrect msgid=" + message.msgid + "/" + helper.getMessageID());
 
@@ -3418,6 +3429,8 @@ class Core {
                         String[] authentication = helper.getAuthentication();
                         MessageHelper.MessageParts parts = helper.getMessageParts();
 
+                        Pair<String, Boolean> unsubscribe = helper.getListUnsubscribe();
+
                         EntityMessage message = new EntityMessage();
                         message.account = folder.account;
                         message.folder = folder.id;
@@ -3451,7 +3464,7 @@ class Core {
                         message.bcc = helper.getBcc();
                         message.reply = helper.getReply();
                         message.list_post = helper.getListPost();
-                        message.unsubscribe = helper.getListUnsubscribe();
+                        message.unsubscribe = (unsubscribe == null ? null : unsubscribe.first);
                         message.headers = helper.getHeaders();
                         message.infrastructure = helper.getInfrastructure();
                         message.subject = helper.getSubject();
@@ -4554,6 +4567,8 @@ class Core {
             String[] authentication = helper.getAuthentication();
             MessageHelper.MessageParts parts = helper.getMessageParts();
 
+            Pair<String, Boolean> unsubscribe = helper.getListUnsubscribe();
+
             message = new EntityMessage();
             message.account = folder.account;
             message.folder = folder.id;
@@ -4600,7 +4615,7 @@ class Core {
             message.bcc = helper.getBcc();
             message.reply = helper.getReply();
             message.list_post = helper.getListPost();
-            message.unsubscribe = helper.getListUnsubscribe();
+            message.unsubscribe = (unsubscribe == null ? null : unsubscribe.first);
             message.autocrypt = helper.getAutocrypt();
             if (download_headers)
                 message.headers = helper.getHeaders();

@@ -1448,7 +1448,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     else {
                         String email = ((InternetAddress) a[0]).getAddress();
                         String domain = UriHelper.getEmailDomain(email);
-                        String tld = UriHelper.getTld(context, domain);
+                        String tld = (domain == null ? "" : UriHelper.getTld(context, domain));
                         int resid = context.getResources().getIdentifier(
                                 "flag_" + tld, "drawable", context.getPackageName());
                         Drawable d = (resid > 0 ? context.getDrawable(resid) : null);
@@ -2769,14 +2769,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         message.blocklist != null && message.blocklist);
                 if (BuildConfig.DEBUG && headers instanceof SpannableStringBuilder) {
                     SpannableStringBuilder ssb = (SpannableStringBuilder) headers;
-                    ssb.append('\n')
-                            .append("TLS=").append(message.tls == null ? "-" : (message.tls ? "✓" : "✗"))
-                            .append(" DKIM=").append(message.dkim == null ? "-" : (message.dkim ? "✓" : "✗"))
-                            .append(" SPF=").append(message.spf == null ? "-" : (message.spf ? "✓" : "✗"))
-                            .append(" DMARC=").append(message.dmarc == null ? "-" : (message.dmarc ? "✓" : "✗"))
-                            .append(" SMTP=").append(message.auth == null ? "-" : (message.auth ? "✓" : "✗"))
-                            .append(" BL=").append(message.blocklist == null ? "-" : (message.blocklist ? "✓" : "✗"))
-                            .append('\n');
+                    ssb.append('\n');
+                    ssb.append("TLS=").append(message.tls == null ? "-" : (message.tls ? "✓" : "✗"));
+                    ssb.append(" DKIM=").append(message.dkim == null ? "-" : (message.dkim ? "✓" : "✗"));
+                    ssb.append(" SPF=").append(message.spf == null ? "-" : (message.spf ? "✓" : "✗"));
+                    ssb.append(" DMARC=").append(message.dmarc == null ? "-" : (message.dmarc ? "✓" : "✗"));
+                    if (message.auth != null)
+                        ssb.append(" SMTP=").append(message.auth ? "✓" : "✗");
+                    ssb.append(" BL=").append(message.blocklist == null ? "-" : (message.blocklist ? "✓" : "✗"));
+                    ssb.append('\n');
                 }
                 tvHeaders.setText(headers);
                 ibCopyHeaders.setVisibility(View.VISIBLE);
@@ -4892,8 +4893,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 sb.append("DMARC: ")
                         .append(message.dmarc == null ? "-" : (message.dmarc ? "✓" : "✗"))
                         .append('\n');
-                sb.append("SMTP: ")
-                        .append(message.auth == null ? "-" : (message.auth ? "✓" : "✗"));
+                if (message.auth != null)
+                    sb.append("SMTP: ").append(message.auth ? "✓" : "✗");
                 if (check_mx)
                     sb.append('\n')
                             .append("MX: ")
@@ -6360,7 +6361,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
         private boolean onOpenLink(Uri uri, String title, boolean always_confirm) {
             Log.i("Opening uri=" + uri + " title=" + title + " always confirm=" + always_confirm);
-            uri = Uri.parse(uri.toString().trim().replaceAll("\\s+", "+"));
+            if (UriHelper.isHyperLink(uri))
+                uri = Uri.parse(uri.toString().trim().replaceAll("\\s+", "+"));
 
             if (ProtectedContent.isProtectedContent(uri)) {
                 Bundle args = new Bundle();

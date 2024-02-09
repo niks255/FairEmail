@@ -168,6 +168,7 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         // Get views
         final View dview = LayoutInflater.from(context).inflate(R.layout.dialog_open_link, null);
         scroll = dview.findViewById(R.id.scroll);
+        final TextView tvCaption = dview.findViewById(R.id.tvCaption);
         final ImageButton ibInfo = dview.findViewById(R.id.ibInfo);
         final TextView tvTitle = dview.findViewById(R.id.tvTitle);
         final ImageButton ibDifferent = dview.findViewById(R.id.ibDifferent);
@@ -528,6 +529,17 @@ public class FragmentDialogOpenLink extends FragmentDialogBase {
         });
 
         // Initialize
+
+        int icon = 0;
+        if (UriHelper.isHyperLink(uri))
+            icon = R.drawable.twotone_insert_link_45_24;
+        else if (UriHelper.isMail(uri))
+            icon = R.drawable.twotone_mail_24;
+        else if (UriHelper.isPhoneNumber(uri))
+            icon = R.drawable.twotone_call_24;
+        else if (UriHelper.isGeo(uri))
+            icon = R.drawable.twotone_language_24;
+        tvCaption.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
 
         tvTitle.setText(title);
         tvTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);

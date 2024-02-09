@@ -953,7 +953,7 @@ public class Helper {
             }
         };
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(fab, "alpha", 0.9f, 1.0f);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(fab, "alpha", 0.9f, 1.1f);
         animator.setDuration(750L);
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setRepeatMode(ValueAnimator.REVERSE);
@@ -1687,20 +1687,6 @@ public class Helper {
         }
     }
 
-    // 0=allowed, 1=denied
-    static Integer getMIUIAutostart(Context context) {
-        try {
-            @SuppressLint("PrivateApi")
-            Class<?> c = Class.forName("android.miui.AppOpsUtils");
-            Method m = c.getDeclaredMethod("getApplicationAutoStart", Context.class, String.class);
-            m.setAccessible(true);
-            return (Integer) m.invoke(null, context, context.getPackageName());
-        } catch (Throwable ex) {
-            Log.w(ex);
-            return null;
-        }
-    }
-
     static String getUiModeType(Context context) {
         try {
             UiModeManager uimm = Helper.getSystemService(context, UiModeManager.class);
@@ -2307,6 +2293,15 @@ public class Helper {
             return DateUtils.getRelativeTimeSpanString(context, millis);
     }
 
+    static String formatHour(Context context, int minutes) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, minutes / 60);
+        cal.set(Calendar.MINUTE, minutes % 60);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return Helper.getTimeInstance(context, SimpleDateFormat.SHORT).format(cal.getTime());
+    }
+
     static String formatDuration(long ms) {
         return formatDuration(ms, true);
     }
@@ -2647,6 +2642,12 @@ public class Helper {
         }
 
         return value;
+    }
+
+    static String limit(String value, int max) {
+        if (TextUtils.isEmpty(value) || value.length() < max)
+            return value;
+        return value.substring(0, max);
     }
 
     // Files

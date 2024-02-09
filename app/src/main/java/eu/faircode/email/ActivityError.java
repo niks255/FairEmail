@@ -21,7 +21,9 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +44,7 @@ public class ActivityError extends ActivityBase {
     private Button btnPassword;
     private ImageButton ibSetting;
     private ImageButton ibInfo;
+    private Button btnReload;
     private Button btnSupport;
 
     @Override
@@ -58,6 +61,7 @@ public class ActivityError extends ActivityBase {
         btnPassword = findViewById(R.id.btnPassword);
         ibSetting = findViewById(R.id.ibSetting);
         ibInfo = findViewById(R.id.ibInfo);
+        btnReload = findViewById(R.id.btnReload);
         btnSupport = findViewById(R.id.btnSupport);
 
         load();
@@ -98,7 +102,9 @@ public class ActivityError extends ActivityBase {
         tvMessage.setMovementMethod(LinkMovementMethodCompat.getInstance());
         tvMessage.setText(message);
 
-        tvCertificate.setVisibility(isCertificateException ? View.VISIBLE : View.GONE);
+        tvCertificate.setVisibility(
+                isCertificateException && !SSLHelper.customTrustManager()
+                        ? View.VISIBLE : View.GONE);
 
         boolean password = (auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD);
 
@@ -175,10 +181,42 @@ public class ActivityError extends ActivityBase {
             }
         });
 
+        btnReload.setVisibility(account > 0 ? View.VISIBLE : View.GONE);
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ServiceSynchronize.reload(v.getContext(), account, true, "retry");
+                finish();
+            }
+        });
+
         btnSupport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.view(v.getContext(), Helper.getSupportUri(v.getContext(), "error"), false);
+                StringBuilder sb = new StringBuilder();
+
+                sb.append("auth_type=")
+                        .append(ServiceAuthenticator.getAuthTypeName(auth_type))
+                        .append("\n");
+
+                if (account > 0)
+                    sb.append("protocol=")
+                            .append(protocol == EntityAccount.TYPE_IMAP ? "imap" : "pop3")
+                            .append("\n");
+
+                if (!TextUtils.isEmpty(provider))
+                    sb.append("provider=")
+                            .append(provider)
+                            .append("\n");
+
+                if (!TextUtils.isEmpty(message))
+                    sb.append(Helper.limit(message, 384));
+
+                Uri uri = Helper.getSupportUri(v.getContext(), "Sync:error")
+                        .buildUpon()
+                        .appendQueryParameter("message", sb.toString())
+                        .build();
+                Helper.view(v.getContext(), uri, true);
             }
         });
 

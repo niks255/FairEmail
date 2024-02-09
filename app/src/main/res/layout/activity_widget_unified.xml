@@ -234,6 +234,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cbAccountName" />
 
+        <eu.faircode.email.EditTextPlain
+            android:id="@+id/etName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            android:hint="@string/title_optional"
+            android:inputType="textCapSentences|textAutoCorrect"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbCaption" />
+
         <CheckBox
             android:id="@+id/cbRefresh"
             android:layout_width="wrap_content"
@@ -242,7 +256,7 @@
             android:checked="true"
             android:text="@string/title_widget_refresh"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cbCaption" />
+            app:layout_constraintTop_toBottomOf="@id/etName" />
 
         <CheckBox
             android:id="@+id/cbCompose"
@@ -254,6 +268,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cbRefresh" />
 
+        <CheckBox
+            android:id="@+id/cbStandalone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_widget_standalone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cbCompose" />
+
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
@@ -263,7 +286,7 @@
             android:drawablePadding="6dp"
             android:text="@string/title_save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cbCompose" />
+            app:layout_constraintTop_toBottomOf="@id/cbStandalone" />
 
         <eu.faircode.email.ContentLoadingProgressBar
             android:id="@+id/pbWait"

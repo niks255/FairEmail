@@ -5583,6 +5583,11 @@ public class FragmentCompose extends FragmentBase {
                         // - receipt
                         // - participation
 
+                        ref.from = MessageHelper.removeGroups(ref.from);
+                        ref.to = MessageHelper.removeGroups(ref.to);
+                        ref.cc = MessageHelper.removeGroups(ref.cc);
+                        ref.bcc = MessageHelper.removeGroups(ref.bcc);
+
                         // References
                         if ("reply".equals(action) || "reply_all".equals(action) ||
                                 "list".equals(action) ||
@@ -5809,20 +5814,19 @@ public class FragmentCompose extends FragmentBase {
                             // Encryption
                             List<Address> recipients = data.draft.getAllRecipients();
 
-                            if (!BuildConfig.DEBUG)
-                                if (EntityMessage.PGP_SIGNONLY.equals(ref.ui_encrypt) ||
-                                        EntityMessage.PGP_SIGNENCRYPT.equals(ref.ui_encrypt)) {
-                                    if (PgpHelper.isOpenKeychainInstalled(context) &&
-                                            selected.sign_key != null &&
-                                            PgpHelper.hasPgpKey(context, recipients, true))
-                                        data.draft.ui_encrypt = ref.ui_encrypt;
-                                } else if (EntityMessage.SMIME_SIGNONLY.equals(ref.ui_encrypt) ||
-                                        EntityMessage.SMIME_SIGNENCRYPT.equals(ref.ui_encrypt)) {
-                                    if (ActivityBilling.isPro(context) &&
-                                            selected.sign_key_alias != null &&
-                                            SmimeHelper.hasSmimeKey(context, recipients, true))
-                                        data.draft.ui_encrypt = ref.ui_encrypt;
-                                }
+                            if (EntityMessage.PGP_SIGNONLY.equals(ref.ui_encrypt) ||
+                                    EntityMessage.PGP_SIGNENCRYPT.equals(ref.ui_encrypt)) {
+                                if (PgpHelper.isOpenKeychainInstalled(context) &&
+                                        selected.sign_key != null &&
+                                        PgpHelper.hasPgpKey(context, recipients, true))
+                                    data.draft.ui_encrypt = ref.ui_encrypt;
+                            } else if (EntityMessage.SMIME_SIGNONLY.equals(ref.ui_encrypt) ||
+                                    EntityMessage.SMIME_SIGNENCRYPT.equals(ref.ui_encrypt)) {
+                                if (ActivityBilling.isPro(context) &&
+                                        selected.sign_key_alias != null &&
+                                        SmimeHelper.hasSmimeKey(context, recipients, true))
+                                    data.draft.ui_encrypt = ref.ui_encrypt;
+                            }
                         }
 
                         // Reply template
@@ -6861,6 +6865,8 @@ public class FragmentCompose extends FragmentBase {
                                 dirty = true;
                         }
 
+                    Log.i("Dirty=" + dirty + " id=" + draft.id);
+
                     if (draft.revision == null) {
                         draft.revision = 1;
                         draft.revisions = 1;
@@ -6997,6 +7003,7 @@ public class FragmentCompose extends FragmentBase {
 
                     if (silent) {
                         // Skip storing on the server, etc
+                        Log.i("Silent id=" + draft.id);
                         db.setTransactionSuccessful();
                         return draft;
                     }
@@ -7011,6 +7018,7 @@ public class FragmentCompose extends FragmentBase {
                     boolean needsEncryption = (dirty && !encrypted && shouldEncrypt);
                     boolean autosave = extras.getBoolean("autosave");
                     if (needsEncryption && !autosave) {
+                        Log.i("Need encryption id=" + draft.id);
                         args.putBoolean("needsEncryption", true);
                         db.setTransactionSuccessful();
                         return draft;

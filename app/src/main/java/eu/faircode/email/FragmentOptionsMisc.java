@@ -178,11 +178,12 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swSyncExtra;
     private TextView tvSqliteCache;
     private SeekBar sbSqliteCache;
+    private ImageButton ibSqliteCache;
+    private SwitchCompat swOauthTabs;
     private TextView tvChunkSize;
     private SeekBar sbChunkSize;
     private TextView tvThreadRange;
     private SeekBar sbThreadRange;
-    private ImageButton ibSqliteCache;
     private SwitchCompat swAutoScroll;
     private SwitchCompat swUndoManager;
     private SwitchCompat swBrowserZoom;
@@ -220,6 +221,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swJsonLd;
     private SwitchCompat swDupMsgId;
     private SwitchCompat swThreadByRef;
+    private SwitchCompat swSaveUserFlags;
     private SwitchCompat swMdn;
     private SwitchCompat swAppChooser;
     private SwitchCompat swAppChooserShare;
@@ -274,6 +276,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "test1", "test2", "test3", "test4", "test5",
             "emergency_file", "work_manager", // "external_storage",
             "sqlite_integrity_check", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_auto_vacuum", "sqlite_sync_extra", "sqlite_cache",
+            "oauth_tabs",
             "chunk_size", "thread_range",
             "autoscroll_editor", "undo_manager",
             "browser_zoom", "fake_dark",
@@ -285,7 +288,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "exact_alarms",
             "native_dkim", "native_arc", "native_arc_whitelist",
             "webp", "animate_images",
-            "easy_correct", "infra", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "mdn",
+            "easy_correct", "infra", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "save_user_flags", "mdn",
             "app_chooser", "app_chooser_share", "adjacent_links", "adjacent_documents", "adjacent_portrait", "adjacent_landscape",
             "delete_confirmation", "global_keywords", "test_iab"
     ));
@@ -416,6 +419,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvSqliteCache = view.findViewById(R.id.tvSqliteCache);
         sbSqliteCache = view.findViewById(R.id.sbSqliteCache);
         ibSqliteCache = view.findViewById(R.id.ibSqliteCache);
+        swOauthTabs = view.findViewById(R.id.swOauthTabs);
         tvChunkSize = view.findViewById(R.id.tvChunkSize);
         sbChunkSize = view.findViewById(R.id.sbChunkSize);
         tvThreadRange = view.findViewById(R.id.tvThreadRange);
@@ -457,6 +461,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swJsonLd = view.findViewById(R.id.swJsonLd);
         swDupMsgId = view.findViewById(R.id.swDupMsgId);
         swThreadByRef = view.findViewById(R.id.swThreadByRef);
+        swSaveUserFlags = view.findViewById(R.id.swSaveUserFlags);
         swMdn = view.findViewById(R.id.swMdn);
         swAppChooser = view.findViewById(R.id.swAppChooser);
         swAppChooserShare = view.findViewById(R.id.swAppChooserShare);
@@ -1221,6 +1226,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swOauthTabs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton v, boolean checked) {
+                prefs.edit().putBoolean("oauth_tabs", checked).apply();
+            }
+        });
+
         sbChunkSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -1557,6 +1569,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("thread_byref", checked).apply();
+            }
+        });
+
+        swSaveUserFlags.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("save_user_flags", checked).apply();
             }
         });
 
@@ -2296,6 +2315,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     Helper.humanReadableByteCount(cache_size * 1024L)));
             sbSqliteCache.setProgress(sqlite_cache);
 
+            swOauthTabs.setChecked(prefs.getBoolean("oauth_tabs", true));
+
             int chunk_size = prefs.getInt("chunk_size", Core.DEFAULT_CHUNK_SIZE);
             tvChunkSize.setText(getString(R.string.title_advanced_chunk_size, chunk_size));
             sbChunkSize.setProgress(chunk_size);
@@ -2353,6 +2374,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swJsonLd.setChecked(prefs.getBoolean("json_ld", false));
             swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
             swThreadByRef.setChecked(prefs.getBoolean("thread_byref", true));
+            swSaveUserFlags.setChecked(prefs.getBoolean("save_user_flags", false));
             swMdn.setChecked(prefs.getBoolean("mdn", swExperiments.isChecked()));
             swAppChooser.setChecked(prefs.getBoolean("app_chooser", false));
             swAppChooserShare.setChecked(prefs.getBoolean("app_chooser_share", false));

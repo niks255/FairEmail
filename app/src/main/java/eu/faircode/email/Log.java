@@ -407,9 +407,9 @@ public class Log {
             config.setAutoTrackSessions(false);
 
             ErrorTypes etypes = new ErrorTypes();
-            etypes.setAnrs(BuildConfig.DEBUG);
-            etypes.setNdkCrashes(true);
             etypes.setUnhandledExceptions(true);
+            etypes.setAnrs(BuildConfig.DEBUG);
+            etypes.setNdkCrashes(false);
             config.setEnabledErrorTypes(etypes);
             config.setMaxBreadcrumbs(BuildConfig.PLAY_STORE_RELEASE ? 250 : 500);
 
@@ -1867,7 +1867,7 @@ public class Log {
                             if (!TextUtils.isEmpty(message))
                                 uri = uri
                                         .buildUpon()
-                                        .appendQueryParameter("message", "Unexpected: " + message)
+                                        .appendQueryParameter("message", Helper.limit(message, 384))
                                         .build();
                             Helper.view(context, uri, true);
                         }

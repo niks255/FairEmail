@@ -909,6 +909,7 @@
     <string name="title_advanced_auto_vacuum" translatable="false">sqlite auto vacuum</string>
     <string name="title_advanced_sync_extra" translatable="false">sqlite sync extra</string>
     <string name="title_advanced_sqlite_cache" translatable="false">sqlite cache: %1$s %% - %2$s</string>
+    <string name="title_advanced_oauth_tabs" translatable="false">OAuth tabs</string>
     <string name="title_advanced_chunk_size" translatable="false">Chunk size: %1$d</string>
     <string name="title_advanced_thread_range" translatable="false">Thread range: %1$d days</string>
     <string name="title_advanced_auto_scroll" translatable="false">Auto scroll editor</string>
@@ -948,6 +949,7 @@
     <string name="title_advanced_json_ld" translatable="false">Show Linked Data (JSON-LD)</string>
     <string name="title_advanced_dup_msgid" translatable="false">Duplicates by message ID</string>
     <string name="title_advanced_thread_by_ref" translatable="false">Thread by common reference</string>
+    <string name="title_advanced_save_user_flags" translatable="false">Save user flags</string>
     <string name="title_advanced_mdn" translatable="false">Process MDNs</string>
     <string name="title_advanced_app_chooser" translatable="false">Use Android app chooser for links</string>
     <string name="title_advanced_app_chooser_share" translatable="false">Use Android app chooser for files</string>
@@ -1459,6 +1461,7 @@
     <string name="title_new_message">New message</string>
     <string name="title_editasnew">Edit as new</string>
     <string name="title_edit_notes">Edit local notes</string>
+    <string name="title_edit_notes_remark">Local notes are not stored on the mail server and are therefore only available in this app on this device</string>
     <string name="title_create_rule">Create rule &#8230;</string>
     <string name="title_full_screen">Full screen</string>
     <string name="title_force_light">Force light theme</string>
@@ -2086,6 +2089,7 @@
     <string name="title_legend_section_keyboard">Keyboard</string>
 
     <string name="title_legend_oauth">OAuth authorization</string>
+    <string name="title_legend_graph" translatable="false">Microsoft Graph</string>
     <string name="title_legend_folder_connected">Folder connected</string>
     <string name="title_legend_folder_disconnected">Folder disconnected</string>
     <string name="title_legend_download_on">Download message content automatically</string>
@@ -2394,6 +2398,7 @@
     <string name="title_widget_background">Background color</string>
     <string name="title_widget_icon">Icon color</string>
     <string name="title_widget_day_night">Follow dark system theme</string>
+    <string name="title_widget_standalone">Open the content standalone</string>
 
     <string name="title_compat_dark">Google removed dark mode for Android versions before version 10</string>
 
@@ -2403,6 +2408,11 @@
     <string name="title_keyword_label3">Personal</string>
     <string name="title_keyword_label4">To do</string>
     <string name="title_keyword_label5">Later</string>
+
+    <string name="title_keyword_displayed">Displayed</string>
+    <string name="title_keyword_delivered">Delivered</string>
+    <string name="title_keyword_not_displayed">Not displayed</string>
+    <string name="title_keyword_not_delivered">Not delivered</string>
 
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d message</item>

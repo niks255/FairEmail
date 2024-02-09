@@ -1149,6 +1149,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ibSqliteCache" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swOauthTabs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_oauth_tabs"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvSqliteCacheHint"
+                    app:switchPadding="12dp" />
+
                 <TextView
                     android:id="@+id/tvChunkSize"
                     android:layout_width="0dp"
@@ -1159,7 +1170,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvSqliteCacheHint" />
+                    app:layout_constraintTop_toBottomOf="@id/swOauthTabs" />
 
                 <SeekBar
                     android:id="@+id/sbChunkSize"
@@ -1869,6 +1880,17 @@
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swSaveUserFlags"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_save_user_flags"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swThreadByRef"
+                    app:switchPadding="12dp" />
+
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swMdn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -1876,7 +1898,7 @@
                     android:text="@string/title_advanced_mdn"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swThreadByRef"
+                    app:layout_constraintTop_toBottomOf="@id/swSaveUserFlags"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat

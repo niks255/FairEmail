@@ -1792,7 +1792,7 @@ public class MessageHelper {
         }
 
         // https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-oxomsg/9e994fbb-b839-495f-84e3-2c8c02c7dd9b
-        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG && false)
             try {
                 String tindex = imessage.getHeader("Thread-Index", null);
                 if (tindex != null) {
@@ -1880,7 +1880,7 @@ public class MessageHelper {
                 }
         }
 
-        if (thread == null && !TextUtils.isEmpty(BuildConfig.DEV_DOMAIN)) {
+        if (thread == null && !TextUtils.isEmpty(BuildConfig.DEV_DOMAIN) && false) {
             String awsses = imessage.getHeader("X-SES-Outgoing", null);
             if (!TextUtils.isEmpty(awsses)) {
                 Address[] froms = getFrom();
@@ -2691,7 +2691,7 @@ public class MessageHelper {
             Address[] from = getAddressHeader("From");
             if (from != null && from.length == 1) {
                 String email = ((InternetAddress) from[0]).getAddress();
-                if (email != null && email.endsWith("@mozmail.com"))
+                if (email != null && email.endsWith(".mozmail.com"))
                     sender = getAddressHeader("Resent-From");
             }
         }
@@ -2761,13 +2761,12 @@ public class MessageHelper {
         }
     }
 
-    String getListUnsubscribe() throws MessagingException {
+    Pair<String, Boolean> getListUnsubscribe() throws MessagingException {
         ensureHeaders();
 
-        String list;
         try {
             // https://www.ietf.org/rfc/rfc2369.txt
-            list = imessage.getHeader("List-Unsubscribe", null);
+            String list = imessage.getHeader("List-Unsubscribe", null);
             if (list == null)
                 return null;
 
@@ -2776,6 +2775,15 @@ public class MessageHelper {
 
             if (list == null || list.startsWith("NO"))
                 return null;
+
+            // https://datatracker.ietf.org/doc/html/rfc8058
+            boolean onclick = false;
+            String post = imessage.getHeader("List-Unsubscribe-Post", null);
+            if (post != null) {
+                post = MimeUtility.unfold(post);
+                post = decodeMime(post);
+                onclick = "List-Unsubscribe=One-Click".equalsIgnoreCase(post.trim());
+            }
 
             String link = null;
             String mailto = null;
@@ -2821,9 +2829,9 @@ public class MessageHelper {
             }
 
             if (link != null)
-                return link;
+                return new Pair<>(link, onclick);
             if (mailto != null)
-                return mailto;
+                return new Pair<>(mailto, onclick);
 
             if (!BuildConfig.PLAY_STORE_RELEASE)
                 Log.i(new IllegalArgumentException("List-Unsubscribe: " + list));
@@ -4461,20 +4469,25 @@ public class MessageHelper {
                 File file = local.getFile(context);
                 ICalendar icalendar = CalendarHelper.parse(context, file);
 
-                Method method = icalendar.getMethod();
-                VEvent event = icalendar.getEvents().get(0);
+                List<VEvent> events = icalendar.getEvents();
+                if (events == null || events.size() == 0)
+                    EntityLog.log(context, "No events");
+                else {
+                    VEvent event = events.get(0);
 
-                // https://www.rfc-editor.org/rfc/rfc5546#section-3.2
-                if (method != null && method.isCancel())
-                    CalendarHelper.delete(context, event, message);
-                else if (method == null || method.isRequest()) {
-                    if (ical_tentative)
-                        CalendarHelper.insert(context, icalendar, event,
-                                CalendarContract.Events.STATUS_TENTATIVE, account, message);
-                    else
-                        EntityLog.log(context, "Tentative event not stored");
-                } else
-                    EntityLog.log(context, "Unknown event method=" + method.getValue());
+                    // https://www.rfc-editor.org/rfc/rfc5546#section-3.2
+                    Method method = icalendar.getMethod();
+                    if (method != null && method.isCancel())
+                        CalendarHelper.delete(context, event, message);
+                    else if (method == null || method.isRequest()) {
+                        if (ical_tentative)
+                            CalendarHelper.insert(context, icalendar, event,
+                                    CalendarContract.Events.STATUS_TENTATIVE, account, message);
+                        else
+                            EntityLog.log(context, "Tentative event not stored");
+                    } else
+                        EntityLog.log(context, "Unknown event method=" + method.getValue());
+                }
             } catch (Throwable ex) {
                 Log.w(ex);
                 db.attachment().setWarning(local.id, Log.formatThrowable(ex));
@@ -5472,6 +5485,21 @@ public class MessageHelper {
         }
 
         return result.toArray(new InternetAddress[0]);
+    }
+
+    static Address[] removeGroups(Address[] addresses) {
+        if (addresses == null)
+            return null;
+
+        List<Address> result = new ArrayList<>();
+
+        for (Address address : addresses) {
+            if (address instanceof InternetAddress && ((InternetAddress) address).isGroup())
+                continue;
+            result.add(address);
+        }
+
+        return result.toArray(new Address[0]);
     }
 
     static void getStructure(Part part, SpannableStringBuilder ssb, int level, int textColorLink) {

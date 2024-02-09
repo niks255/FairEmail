@@ -271,10 +271,7 @@ public class DebugHelper {
                 Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Helper.getTargetSdk(context)));
 
         String miui = Helper.getMIUIVersion();
-        Integer autostart = (miui == null ? null : Helper.getMIUIAutostart(context));
-        sb.append(String.format("MIUI: %s autostart: %s\r\n",
-                miui == null ? "-" : miui,
-                autostart == null ? "?" : Boolean.toString(autostart == 0)));
+        sb.append(String.format("MIUI: %s\r\n", miui == null ? "-" : miui));
 
         boolean reporting = prefs.getBoolean("crash_reports", false);
         if (reporting || Log.isTestRelease()) {
@@ -1094,6 +1091,20 @@ public class DebugHelper {
 
                 boolean[] has46 = ConnectionHelper.has46(context);
 
+                boolean mx;
+                try {
+                    DnsHelper.checkMx(context, new Address[]{Log.myAddress()});
+                    mx = true;
+                } catch (Throwable ignored) {
+                    mx = false;
+                }
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean dns_custom = prefs.getBoolean("dns_custom", false);
+
+                size += write(os, "DNS custom=" + dns_custom +
+                        " servers=" + TextUtils.join(", ", DnsHelper.getDnsServers(context)) + "\r\n");
+                size += write(os, "MX=" + mx + "\r\n");
                 size += write(os, "Has IPv4=" + has46[0] + " IPv6=" + has46[1] + "\r\n");
                 size += write(os, "VPN active=" + ConnectionHelper.vpnActive(context) + "\r\n");
                 size += write(os, "Data saving=" + ConnectionHelper.isDataSaving(context) + "\r\n");
@@ -1106,7 +1117,6 @@ public class DebugHelper {
                             NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted() + "\r\n");
                 size += write(os, "\r\n");
 
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 int timeout = prefs.getInt("timeout", EmailService.DEFAULT_CONNECT_TIMEOUT);
                 boolean metered = prefs.getBoolean("metered", true);
                 int download = prefs.getInt("download", MessageHelper.DEFAULT_DOWNLOAD_SIZE);
@@ -1474,8 +1484,34 @@ public class DebugHelper {
             PackageManager pm = context.getPackageManager();
 
             long size = 0;
+
+            boolean safOpen = false;
+            try {
+                Intent open = new Intent(Intent.ACTION_GET_CONTENT);
+                open.addCategory(Intent.CATEGORY_OPENABLE);
+                open.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                open.setType("*/*");
+                safOpen = (open.resolveActivity(pm) != null);
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+
+            boolean safCreate = false;
+            try {
+                Intent create = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                create.addCategory(Intent.CATEGORY_OPENABLE);
+                create.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                create.setType("*/*");
+                create.putExtra(Intent.EXTRA_TITLE, "x.x");
+                Helper.openAdvanced(context, create);
+                safCreate = (create.resolveActivity(pm) != null);
+            } catch (Throwable ex) {
+                Log.e(ex);
+            }
+
             File file = attachment.getFile(context);
             try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
+                size += write(os, String.format("SAF open=%b create=%b\r\n", safOpen, safCreate));
                 size += write(os, String.format("Photo picker=%b\r\n", Helper.hasPhotoPicker()));
                 size += write(os, String.format("Double tap timeout=%d\r\n", ViewConfiguration.getDoubleTapTimeout()));
                 size += write(os, String.format("Long press timeout=%d\r\n", ViewConfiguration.getLongPressTimeout()));
