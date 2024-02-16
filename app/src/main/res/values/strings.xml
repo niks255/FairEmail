@@ -119,6 +119,7 @@
     <string name="title_blocked_senders">Blocked senders</string>
     <string name="title_unblock_all">Unblock all</string>
     <string name="title_unblock_all_remark">This will reset all lists and options that could result in blocking senders</string>
+    <string name="title_unblock_all_hint">Note that the app cannot prevent the email server from moving messages to the spam folder!</string>
 
     <plurals name="title_ask_block_sender">
         <item quantity="one">Block sender of %1$s message?</item>
@@ -639,6 +640,7 @@
     <string name="title_advanced_pdf_preview">Show PDF thumbnails</string>
     <string name="title_advanced_video_preview">Show video thumbnails</string>
     <string name="title_advanced_audio_preview">Show mini audio player</string>
+    <string name="title_advanced_barcode_preview">Show barcode content</string>
     <string name="title_advanced_message_text_zoom2">Default message text zoom: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Zoom message text also in the message editor</string>
     <string name="title_advanced_overview_mode">Zoom original messages to fit the screen</string>
@@ -944,6 +946,7 @@
     <string name="title_advanced_webp" translatable="false">WebP</string>
     <string name="title_advanced_animate" translatable="false">Animate images (GIF, etc.)</string>
     <string name="title_advanced_easy_correct" translatable="false">Easy correct</string>
+    <string name="title_advanced_paste_plain" translatable="false">Add paste as plain text</string>
     <string name="title_advanced_infra" translatable="false">Show infrastructure</string>
     <string name="title_advanced_tld_flags" translatable="false">Show TLD flags</string>
     <string name="title_advanced_json_ld" translatable="false">Show Linked Data (JSON-LD)</string>
@@ -2147,6 +2150,7 @@
     <string name="title_legend_plain_only">Is plain text only</string>
     <string name="title_legend_receipt">Receipt was requested</string>
     <string name="title_legend_auto_submitted">Was automatically sent</string>
+    <string name="title_legend_by_list">Sent by a list</string>
     <string name="title_legend_attachment">Has attachment</string>
     <string name="title_legend_flagged">Is favorite</string>
     <string name="title_legend_contacts">Manage contacts</string>
@@ -2218,6 +2222,8 @@
     <string name="title_hint_notifications">No notification permissions</string>
     <string name="title_hint_notifications_remark">Notification permissions are required for (account) alerts too. Notifications for new messages can be turned off in the settings.</string>
     <string name="title_hint_battery_optimizations">Battery optimizations still enabled</string>
+    <string name="title_hint_data_saver">If the data saver is enabled, the app will not be able to sync in the background and connection errors may occur.</string>
+    <string name="title_hint_dismiss">You can dismiss this dialog box to remove the notice.</string>
     <string name="title_hint_support">If you have a question or a problem, please use the support menu to get help</string>
     <string name="title_hint_message_actions">Swipe left to trash; Swipe right to archive (if available); The swipe actions can be configured in the account settings</string>
     <string name="title_hint_message_selection">Long press a message to start selecting multiple messages; Hold and swipe up or down to select more messages</string>
@@ -2413,6 +2419,7 @@
     <string name="title_keyword_delivered">Delivered</string>
     <string name="title_keyword_not_displayed">Not displayed</string>
     <string name="title_keyword_not_delivered">Not delivered</string>
+    <string name="title_keyword_complaint">Complaint</string>
 
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d message</item>

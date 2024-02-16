@@ -28,7 +28,6 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
@@ -1290,14 +1289,14 @@ public class Helper {
         String base;
         String locale = (english ? null : getFAQLocale());
         if (locale == null)
-            base = "https://email.faircode.eu/faq";
+            base = "https://m66b.github.io/FairEmail/";
         else
             base = "https://email.faircode.eu/docs/FAQ-" + locale + ".md";
 
         if (question == 0)
             view(context, Uri.parse(base + "#top"), "text/html", false, false);
         else
-            view(context, Uri.parse(base + "#user-content-faq" + question), "text/html", false, false);
+            view(context, Uri.parse(base + "#faq" + question), "text/html", false, false);
     }
 
     static Uri getPrivacyUri(Context context) {
@@ -2178,26 +2177,29 @@ public class Helper {
         return df.format(sign * bytes / Math.pow(unit, exp)) + " " + pre + "B";
     }
 
-    static boolean isPrintableChar(char c) {
-        Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+    static boolean isPrintableChar(int codepoint) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of(codepoint);
         if (block == null || block == Character.UnicodeBlock.SPECIALS)
             return false;
-        return !Character.isISOControl(c);
+        return !Character.isISOControl(codepoint);
     }
     // https://issuetracker.google.com/issues/37054851
 
-    static String getPrintableString(String value) {
+    static String getPrintableString(String value, boolean debug) {
+        if (TextUtils.isEmpty(value))
+            return value;
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < value.length(); i++) {
-            char kar = value.charAt(i);
-            if (kar == '\n')
+        for (int i = 0; i < value.length(); ) {
+            int codepoint = value.codePointAt(i);
+            if (debug && codepoint == 10)
                 result.append('|');
-            else if (kar == ' ')
+            else if (debug && codepoint == 32)
                 result.append('_');
-            else if (!Helper.isPrintableChar(kar) || kar == '\u00a0')
-                result.append('{').append(Integer.toHexString(kar)).append('}');
+            else if (!Helper.isPrintableChar(codepoint) || codepoint == 160)
+                result.append('{').append(Integer.toHexString(codepoint)).append('}');
             else
-                result.append(kar);
+                result.append(Character.toChars(codepoint));
+            i += Character.charCount(codepoint);
         }
         return result.toString();
     }
@@ -2218,7 +2220,7 @@ public class Helper {
         return getDateInstance(context, SimpleDateFormat.MEDIUM);
     }
 
-    private static DateFormat getDateInstance(Context context, int style) {
+    static DateFormat getDateInstance(Context context, int style) {
         return SimpleDateFormat.getDateInstance(style);
     }
 
@@ -2240,7 +2242,7 @@ public class Helper {
         return SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle);
     }
 
-    private static String getTimePattern(Context context, int style) {
+    static String getTimePattern(Context context, int style) {
         // https://issuetracker.google.com/issues/37054851
         boolean is24Hour = android.text.format.DateFormat.is24HourFormat(context);
         String skeleton = (is24Hour ? "Hm" : "hm");
@@ -3537,18 +3539,12 @@ public class Helper {
 
     // Miscellaneous
 
-    static void gc() {
-        gc(false);
-    }
-
-    static void gc(boolean force) {
-        if (force || BuildConfig.DEBUG) {
+    static void gc(String reason) {
+        try {
+            Log.i("GC " + reason);
             Runtime.getRuntime().gc();
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ex) {
-                Log.e(ex);
-            }
+        } catch (Throwable ex) {
+            Log.e(ex);
         }
     }
 

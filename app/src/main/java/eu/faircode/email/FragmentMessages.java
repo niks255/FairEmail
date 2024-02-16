@@ -249,6 +249,7 @@ public class FragmentMessages extends FragmentBase
     private TextView tvAirplane;
     private TextView tvNotifications;
     private TextView tvBatteryOptimizations;
+    private TextView tvDataSaver;
     private TextView tvSupport;
     private ImageButton ibHintSupport;
     private ImageButton ibHintSwipe;
@@ -273,6 +274,7 @@ public class FragmentMessages extends FragmentBase
     private Group grpAirplane;
     private Group grpNotifications;
     private Group grpBatteryOptimizations;
+    private Group grpDataSaver;
     private Group grpSupport;
     private Group grpHintSupport;
     private Group grpHintSwipe;
@@ -285,6 +287,7 @@ public class FragmentMessages extends FragmentBase
     private FloatingActionButton fabMore;
     private TextView tvSelectedCount;
     private CardView cardMore;
+    private ImageButton ibAnswer;
     private ImageButton ibBatchSeen;
     private ImageButton ibBatchUnseen;
     private ImageButton ibBatchSnooze;
@@ -568,6 +571,7 @@ public class FragmentMessages extends FragmentBase
         tvAirplane = view.findViewById(R.id.tvAirplane);
         tvNotifications = view.findViewById(R.id.tvNotifications);
         tvBatteryOptimizations = view.findViewById(R.id.tvBatteryOptimizations);
+        tvDataSaver = view.findViewById(R.id.tvDataSaver);
         tvSupport = view.findViewById(R.id.tvSupport);
         ibHintSupport = view.findViewById(R.id.ibHintSupport);
         ibHintSwipe = view.findViewById(R.id.ibHintSwipe);
@@ -593,6 +597,7 @@ public class FragmentMessages extends FragmentBase
         grpAirplane = view.findViewById(R.id.grpAirplane);
         grpNotifications = view.findViewById(R.id.grpNotifications);
         grpBatteryOptimizations = view.findViewById(R.id.grpBatteryOptimizations);
+        grpDataSaver = view.findViewById(R.id.grpDataSaver);
         grpSupport = view.findViewById(R.id.grpSupport);
         grpHintSupport = view.findViewById(R.id.grpHintSupport);
         grpHintSwipe = view.findViewById(R.id.grpHintSwipe);
@@ -606,6 +611,7 @@ public class FragmentMessages extends FragmentBase
         fabMore = view.findViewById(R.id.fabMore);
         tvSelectedCount = view.findViewById(R.id.tvSelectedCount);
         cardMore = view.findViewById(R.id.cardMore);
+        ibAnswer = view.findViewById(R.id.ibAnswer);
         ibBatchSeen = view.findViewById(R.id.ibBatchSeen);
         ibBatchUnseen = view.findViewById(R.id.ibBatchUnseen);
         ibBatchSnooze = view.findViewById(R.id.ibBatchSnooze);
@@ -663,6 +669,13 @@ public class FragmentMessages extends FragmentBase
                 Intent intent = new Intent(v.getContext(), ActivitySetup.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 v.getContext().startActivity(intent);
+            }
+        });
+
+        tvDataSaver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new FragmentDialogDataSaver().show(getParentFragmentManager(), "datasaver");
             }
         });
 
@@ -1581,6 +1594,16 @@ public class FragmentMessages extends FragmentBase
             ((ViewGroup.MarginLayoutParams) cardMore.getLayoutParams()).setMarginEnd(dp71);
         }
 
+        ibAnswer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MoreResult result = (MoreResult) cardMore.getTag();
+                if (result == null || result.single == null || !result.single.content)
+                    return;
+                onReply(result.single, null, v);
+            }
+        });
+
         ibBatchSeen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1944,6 +1967,7 @@ public class FragmentMessages extends FragmentBase
         grpAirplane.setVisibility(View.GONE);
         grpNotifications.setVisibility(View.GONE);
         grpBatteryOptimizations.setVisibility(View.GONE);
+        grpDataSaver.setVisibility(View.GONE);
         tvNoEmail.setVisibility(View.GONE);
         tvNoEmailHint.setVisibility(View.GONE);
         etSearch.setVisibility(View.GONE);
@@ -5335,6 +5359,7 @@ public class FragmentMessages extends FragmentBase
 
         prefs.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(prefs, "notifications_reminder");
+        onSharedPreferenceChanged(prefs, "datasaver_reminder");
         onSharedPreferenceChanged(prefs, "pro");
 
         if (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER) {
@@ -5397,7 +5422,22 @@ public class FragmentMessages extends FragmentBase
             if (canNotify)
                 prefs.edit().remove("notifications_reminder").apply();
             boolean notifications_reminder = prefs.getBoolean("notifications_reminder", true);
-            grpNotifications.setVisibility(canNotify || !notifications_reminder ? View.GONE : View.VISIBLE);
+            grpNotifications.setVisibility(
+                    !canNotify && notifications_reminder
+                            ? View.VISIBLE : View.GONE);
+        }
+
+        if (grpDataSaver != null &&
+                ("enabled".equals(key) || "datasaver_reminder".equals(key))) {
+            boolean isDataSaving = ConnectionHelper.isDataSaving(getContext());
+            if (!isDataSaving)
+                prefs.edit().remove("datasaver_reminder").apply();
+
+            boolean enabled = prefs.getBoolean("enabled", true);
+            boolean datasaver_reminder = prefs.getBoolean("datasaver_reminder", true);
+            grpDataSaver.setVisibility(
+                    isDataSaving && enabled && datasaver_reminder
+                            ? View.VISIBLE : View.GONE);
         }
 
         if (grpSupport != null &&
@@ -6848,6 +6888,7 @@ public class FragmentMessages extends FragmentBase
                     @Override
                     protected void onExecuted(Bundle args, MoreResult result) {
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        boolean more_answer = prefs.getBoolean("more_answer", false);
                         boolean more_seen = prefs.getBoolean("more_seen", true);
                         boolean more_unseen = prefs.getBoolean("more_unseen", false);
                         boolean more_snooze = prefs.getBoolean("more_snooze", false);
@@ -6942,9 +6983,13 @@ public class FragmentMessages extends FragmentBase
                         if (seen)
                             count++;
 
+                        boolean answer = (more_answer && count < FragmentDialogQuickActions.MAX_QUICK_ACTIONS &&
+                                result.single != null && result.single.content);
+
                         ibBatchFlag.setImageResource(unflag ? R.drawable.twotone_star_border_24 : R.drawable.twotone_star_24);
                         ibInbox.setImageResource(inJunk ? R.drawable.twotone_report_off_24 : R.drawable.twotone_inbox_24);
 
+                        ibAnswer.setVisibility(answer ? View.VISIBLE : View.GONE);
                         ibBatchSeen.setVisibility(seen ? View.VISIBLE : View.GONE);
                         ibBatchUnseen.setVisibility(unseen ? View.VISIBLE : View.GONE);
                         ibBatchSnooze.setVisibility(snooze ? View.VISIBLE : View.GONE);
@@ -10869,6 +10914,7 @@ public class FragmentMessages extends FragmentBase
         List<Long> folders;
         List<EntityAccount> imapAccounts;
         EntityAccount copyto;
+        TupleMessageEx single;
 
         boolean canInbox() {
             if (read_only)
@@ -11004,6 +11050,9 @@ public class FragmentMessages extends FragmentBase
                         else
                             result.hidden = true;
                 }
+
+                if (ids.length == 1)
+                    result.single = db.message().getMessageEx(id);
             }
 
             for (EntityAccount account : accounts.values()) {

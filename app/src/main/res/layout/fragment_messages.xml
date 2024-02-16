@@ -23,6 +23,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="?android:attr/selectableItemBackground"
                 android:drawableStart="@drawable/twotone_flight_24"
+                android:drawableEnd="@drawable/twotone_settings_24"
                 android:drawablePadding="6dp"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="6dp"
@@ -48,6 +49,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="?android:attr/selectableItemBackground"
                 android:drawableStart="@drawable/twotone_notifications_off_24"
+                android:drawableEnd="@drawable/twotone_settings_24"
                 android:drawablePadding="6dp"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="6dp"
@@ -73,12 +75,12 @@
                 android:layout_gravity="center_vertical"
                 android:background="?android:attr/selectableItemBackground"
                 android:drawableStart="@drawable/twotone_warning_24"
+                android:drawableEnd="@drawable/twotone_settings_24"
                 android:drawablePadding="6dp"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="6dp"
                 android:text="@string/title_hint_battery_optimizations"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:drawableTint="?attr/colorWarning"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/vSeparatorNotifications" />
@@ -92,6 +94,31 @@
                 app:layout_constraintTop_toBottomOf="@id/tvBatteryOptimizations" />
 
             <TextView
+                android:id="@+id/tvDataSaver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawableStart="@drawable/twotone_warning_24"
+                android:drawableEnd="@drawable/twotone_settings_24"
+                android:drawablePadding="6dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="@string/title_setup_data"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vSeparatorBatteryOptimizations" />
+
+            <View
+                android:id="@+id/vSeparatorDataSaver"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorSeparator"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvDataSaver" />
+
+            <TextView
                 android:id="@+id/tvSupport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,7 +128,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/vSeparatorBatteryOptimizations" />
+                app:layout_constraintTop_toBottomOf="@+id/vSeparatorDataSaver" />
 
             <View
                 android:id="@+id/vSeparatorSupport"
@@ -497,6 +524,12 @@
                 app:constraint_referenced_ids="tvBatteryOptimizations,vSeparatorBatteryOptimizations" />
 
             <androidx.constraintlayout.widget.Group
+                android:id="@+id/grpDataSaver"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:constraint_referenced_ids="tvDataSaver,vSeparatorDataSaver" />
+
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/grpSupport"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -584,6 +617,20 @@
             android:paddingEnd="6dp">
 
             <ImageButton
+                android:id="@+id/ibAnswer"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/title_reply"
+                android:padding="6dp"
+                android:scaleType="fitCenter"
+                android:tooltipText="@string/title_reply"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/twotone_reply_24_options"
+                app:tint="@color/action_foreground" />
+
+            <ImageButton
                 android:id="@+id/ibBatchSeen"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -592,7 +639,7 @@
                 android:padding="6dp"
                 android:scaleType="fitCenter"
                 android:tooltipText="@string/title_seen"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ibAnswer"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/twotone_drafts_24"
                 app:tint="@color/action_foreground" />

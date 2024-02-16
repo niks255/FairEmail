@@ -1138,23 +1138,34 @@ Searching in the unified inbox will search in all folders of all accounts,
 searching in the folder list will search in the associated account only
 and searching in a folder will search in that folder only.
 
-Messages will be searched for on the device first.
+Messages will be searched for on the device first, unless you use a complex expression, see below.
+
+<br>
+
 You can download more messages on the device via the three-dots overflow menu in the start screen.
 There will be an action button with a search again icon at the bottom to continue searching on the server.
 You can select in which folder to continue the search.
+
+<br>
 
 The IMAP protocol doesn't support searching in more than one folder at the same time.
 Searching on the server is an expensive operation, therefore it is not possible to select multiple folders.
 
 The POP3 protocol doesn't support searching on the server at all.
 
-Searching local messages is case insensitive and on partial text.
+<br>
+
+Searching local (on-device) messages is case insensitive and on partial text.
 The message text of local messages will not be searched if the message text was not downloaded yet.
 Searching on the server might be case sensitive or case insensitive and might be on partial text or whole words, depending on the provider.
+
+<br>
 
 Some servers cannot handle searching in the message text when there are a large number of messages.
 For this case there is an option to disable searching in the message text.
 Since version 1.1888 a popup message will be shown and the search will automatically be retried without searching in the message text.
+
+<br>
 
 It is possible to use Gmail search operators by prefixing a search command with *raw:*.
 If you configured just one Gmail account, you can start a raw search directly on the server by searching from the unified inbox.
@@ -1166,6 +1177,8 @@ Please [see here](https://support.google.com/mail/answer/7190) for the possible 
 raw:larger:10M
 ``
 
+<br>
+
 Searching through a large number of messages on the device is not very fast because of two limitations:
 
 * [sqlite](https://www.sqlite.org/), the database engine of Android has a record size limit, preventing message texts from being stored in the database
@@ -1176,7 +1189,7 @@ to check if the searched text is contained in the file, which is a relatively ex
 
 In the *miscellaneous settings* you can enable *Build search index* to significantly increase the speed of searching on the device,
 but be aware that this will increase battery and storage space usage.
-The search index is based on words in all message parts,
+The search index is based on <ins>whole</ins> words in all message parts,
 so searching for partial text and searching in specific messages parts (from, subject, text, etc) is not possible.
 
 Note that only messages for which the message text was downloaded will be indexed.
@@ -1184,10 +1197,9 @@ In the connection settings can be configured up to which size messages texts wil
 when using a metered connection (generally mobile data or paid WiFi).
 In the folder properties (long press on a folder in the folder list of an account) downloading of messages texts can be enabled/disabled.
 
-Searching using the search index is by default AND, so searching for *apple orange* will search for apple AND orange.
-Words separated by commas result in searching for OR, so for example *apple, orange* will search for apple OR orange.
-Both can be combined, so searching for *apple, orange banana* will search for apple OR (orange AND banana).
 Using the search index is a pro feature.
+
+<br />
 
 Since version 1.1315 it is possible to use search expressions like this:
 
@@ -1211,11 +1223,13 @@ bcc:<email address>
 keyword:<keyword>
 ```
 
-There should be no space between the prefix and the search term, which will be applied as an AND-condition.
+There should be <ins>no space</ins> between the prefix and the search term, which will be applied as an AND-condition.
 
 Only AND conditions (+) and NOT conditions (-) can be used for on-device searching (since version 1.1981).
 If you try to use other search expressions, you get the error *Select a folder for a complex search*,
 which means that a folder in an account's folder list must be selected in order to perform the search on the server.
+
+<br>
 
 Since version 1.1733 it is possible to save searches, which means that a named entry in the navigation menu will be created to repeat the same search later.
 You can save a search after searching by tapping on the save button in the top action bar.
@@ -4181,22 +4195,22 @@ In the account settings (Settings, tap Manual setup, tap Accounts, tap account) 
 
 *IMAP*
 
-Since the IMAP protocol is meant to synchronize two ways,
+Since the IMAP protocol is meant to synchronize two ways, from server to client and from client to server,
 trashing (=move to trash) and (permanently) deleting messages will be performed on the email server too,
 so that the message list is the same for all connected clients.
-Deleting a messages from the device only won't work because it would be synchronized again later.
+Deleting a message from the device only won't work because it would be synchronized again later.
 
-However, FairEmail supports hiding messages,
-either via the three-dots menu in the action bar just above the message text (you can configure a button for this via the same menu)
+Some email apps pretend they can do this, but, in fact, messages are hidden on the device.
+FairEmail can do this too, but in a more explicit way, also allowing you to show the messages again.
+
+You can hide messages either via the three-dots menu in the action bar just above the message text (you can configure a button for this via the same menu)
 or by multiple selecting messages in the message list.
-Basically this is the same as "leave on server" of the POP3 protocol
-with the advantage that you can show the messages again when needed.
 
 Alternatively, you can disable AUTO EXPUNGE, which will result in marking messages being deleted on the server (by setting the *deleted* flag), but not expunging (deleting) them.
 You can find this option in the debug panel, which can be shown by (temporarily) enabling debug mode in the miscellaneous settings.
 
 Note that it is possible to set the swipe left or right action to hide a message.
-There is a button in the behavior settings to quickly configure the swipe left and right actions for all IMAP account.
+There is a button in the behavior settings to quickly configure the swipe left and right actions for all IMAP accounts.
 
 <br />
 
@@ -4467,6 +4481,8 @@ the F-Droid build, but **only if** the version number of the F-Droid build is th
 
 F-Droid builds irregularly, which can be problematic when there is an important update.
 Therefore you are advised to switch to the GitHub release.
+
+Note that developers have no control over F-Droid builds and the F-Droid infrastructure (apps, forums, etc.).
 
 OAuth access is available only for Play Store and Github releases
 because email providers permitted the use of OAuth for these releases only.
@@ -5773,6 +5789,8 @@ Requested features should:
 * comply with common standards (IMAP, SMTP, etc.)
 * comply with the [Core app quality guidelines](https://developer.android.com/docs/quality-guidelines/core-app-quality)
 
+Features unrelated to email, including reading newsgroups and reading RSS feeds, fall outside the scope of the project.
+
 The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc).
 All displayed things should be useful in one or another way and should be carefully positioned for easy usage.
 Fonts, sizes, colors, etc should be material design whenever possible.
@@ -5802,7 +5820,7 @@ Note that there are already more features and options in FairEmail than in any o
 
 <br />
 
-GitHub issues are disabled due to frequent misusage.
+**GitHub issues and GitHub pull requests are disabled due to frequent misusage.**
 
 <br />
 

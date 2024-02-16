@@ -62,11 +62,13 @@ import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.PrivateKey;
+import java.security.cert.CertPathValidatorException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -617,6 +619,8 @@ public class EmailService implements AutoCloseable {
         crumb.put("port", Integer.toString(port));
         crumb.put("auth", Integer.toString(auth));
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
         InetAddress main = null;
         boolean require_id = (purpose == PURPOSE_CHECK &&
                 auth == AUTH_TYPE_OAUTH &&
@@ -626,8 +630,6 @@ public class EmailService implements AutoCloseable {
             //if (BuildConfig.DEBUG)
             //    throw new MailConnectException(
             //            new SocketConnectException("Debug", new IOException("Test"), host, port, 0));
-
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
             String key = "dns." + host;
             try {
@@ -724,7 +726,9 @@ public class EmailService implements AutoCloseable {
             boolean ioError = false;
             Throwable ce = ex;
             while (ce != null) {
-                if (factory != null && ce instanceof CertificateException)
+                if (factory != null &&
+                        (ce instanceof CertificateException ||
+                                ce instanceof CertPathValidatorException))
                     throw new UntrustedException(ex, factory.certificate);
                 if (ce instanceof IOException)
                     ioError = true;
@@ -747,6 +751,15 @@ public class EmailService implements AutoCloseable {
                             " count=" + iaddrs.length +
                             " ip4=" + ip4 + " max4=" + MAX_IPV4 + " has4=" + has46[0] +
                             " ip6=" + ip6 + " max6=" + MAX_IPV6 + " has6=" + has46[1]);
+
+                    boolean prefer_ip4 = prefs.getBoolean("prefer_ip4", true);
+                    if (prefer_ip4)
+                        Arrays.sort(iaddrs, new Comparator<InetAddress>() {
+                            @Override
+                            public int compare(InetAddress a1, InetAddress a2) {
+                                return -Boolean.compare(a1 instanceof Inet4Address, a2 instanceof Inet4Address);
+                            }
+                        });
 
                     for (InetAddress iaddr : iaddrs) {
                         EntityLog.log(context, EntityLog.Type.Network, "Address resolved=" + iaddr);

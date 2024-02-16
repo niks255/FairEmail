@@ -1125,7 +1125,7 @@
     </provider>
     <provider
         name="OVH"
-        domain="ovh\\..*"
+        domain="ovh\\.net,.*\\.ovh"
         link="https://docs.ovh.com/fr/emails/mail-mutualise-guide-configuration-dun-telephone-mobile-sous-android-version-51/#rappel-des-parametres-pop-imap_1">
         <imap
             host="ssl0.ovh.net"
@@ -2237,5 +2237,31 @@
             scopes=""
             tokenEndpoint="http://reg.163.com/open/oauth2/token.do" />
         <!-- https://reg.163.com/help/help_oauth2.html -->
+    </provider>
+    <provider
+        name="Private-Mail"
+        domain="privatemail\\.com"
+        link="https://privatemail.com/">
+        <imap
+            host="smtp.privatemail.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.privatemail.com"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Forward Email"
+        documentation="Sending email requires &lt;a href='https://forwardemail.net/private-business-email?pricing=true'&gt;a subscription&lt;/a&gt;."
+        link="https://forwardemail.net/faq#what-are-your-imap-server-configuration-settings">
+        <imap
+            host="imap.forwardemail.net"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.forwardemail.net"
+            port="465"
+            starttls="false" />
     </provider>
 </providers>

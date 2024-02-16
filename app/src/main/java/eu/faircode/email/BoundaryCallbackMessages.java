@@ -173,7 +173,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                Helper.gc();
+                Helper.gc("Boundary start");
 
                 int free = Log.getFreeMemMb();
                 Map<String, String> crumb = new HashMap<>();
@@ -228,7 +228,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 } finally {
                     state.queued.decrementAndGet();
                     Log.i("Boundary queued -" + state.queued.get());
-                    Helper.gc();
+                    Helper.gc("Boundary end");
 
                     crumb.put("queued", Integer.toString(state.queued.get()));
                     Log.breadcrumb("Boundary done", crumb);
@@ -276,19 +276,22 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         List<String> word = new ArrayList<>();
         List<String> plus = new ArrayList<>();
         List<String> minus = new ArrayList<>();
+        List<String> opt = new ArrayList<>();
         if (criteria.query != null) {
             for (String w : criteria.query.trim().split("\\s+"))
                 if (w.length() > 1 && w.startsWith("+"))
                     plus.add(w.substring(1));
                 else if (w.length() > 1 && w.startsWith("-"))
                     minus.add(w.substring(1));
+                else if (w.length() > 1 && w.startsWith("?"))
+                    opt.add(w.substring(1));
                 else
                     word.add(w);
             if (word.size() == 0 && plus.size() > 0)
                 word.add(plus.get(0));
         }
 
-        if (criteria.fts && word.size() > 0 && !criteria.in_headers && !criteria.in_html) {
+        if (criteria.fts && word.size() > 0 && opt.size() == 0 && !criteria.in_headers && !criteria.in_html) {
             if (state.ids == null) {
                 SQLiteDatabase sdb = Fts4DbHelper.getInstance(context);
                 state.ids = Fts4DbHelper.match(sdb, account, folder, exclude, criteria, TextUtils.join(" ", word));
@@ -331,7 +334,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         while (found < pageSize && !state.destroyed) {
             if (state.matches == null ||
                     (state.matches.size() > 0 && state.index >= state.matches.size())) {
-                String query = (word.size() == 0 ? null : '%' + TextUtils.join("%", word) + '%');
+                String query = (word.size() == 0 || opt.size() > 0
+                        ? null : '%' + TextUtils.join("%", word) + '%');
                 state.matches = db.message().matchMessages(
                         account, folder, exclude,
                         query,
@@ -372,7 +376,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 state.index = i + 1;
 
                 TupleMatch match = state.matches.get(i);
-                boolean matched = (criteria.query == null || Boolean.TRUE.equals(match.matched));
+                boolean matched = (opt.size() == 0 &&
+                        (criteria.query == null || Boolean.TRUE.equals(match.matched)));
 
                 if (!matched) {
                     EntityMessage message = db.message().getMessage(match.id);
@@ -899,6 +904,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
 
         text = Fts4DbHelper.processBreakText(text);
 
+        boolean or = false;
         List<String> word = new ArrayList<>();
         for (String w : query.trim().split("\\s+"))
             if (w.length() > 1 && w.startsWith("+")) {
@@ -907,11 +913,15 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             } else if (w.length() > 1 && w.startsWith("-")) {
                 if (!html && text.contains(Fts4DbHelper.preprocessText(w.substring(1))))
                     return false;
+            } else if (w.length() > 1 && w.startsWith("?")) {
+                or = true;
+                if (text.contains(Fts4DbHelper.preprocessText(w.substring(1))))
+                    return true;
             } else
                 word.addAll(Arrays.asList(Fts4DbHelper.processBreakText(w).split("\\s+")));
 
         if (word.size() == 0)
-            return true;
+            return !or;
 
         // \b is limited to [0-9A-Za-z_]
         String b = "(^|\\s+)";
@@ -994,7 +1004,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
             ifolder = null;
             imessages = null;
 
-            Helper.gc();
+            Helper.gc("Boundary reset");
         }
     }
 
@@ -1043,9 +1053,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
                 return false;
 
             for (String w : query.trim().split("\\s+"))
-                if (w.length() > 1 && w.startsWith("?"))
-                    return true;
-                else if (w.length() > FROM.length() && w.startsWith(FROM))
+                if (w.length() > FROM.length() && w.startsWith(FROM))
                     return true;
                 else if (w.length() > TO.length() && w.startsWith(TO))
                     return true;

@@ -1,3 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>FAQ</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
 <p><a name="top"></a></p>
 <h1 id="fairemail-support">FairEmail support</h1>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F">Google Translate</a></p>
@@ -731,22 +753,30 @@ openssl pkcs12 -export -legacy -in certbag.pem &gt;legacy.p12</code></pre>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq13">Google Translate</a></p>
 <p>You can start searching for messages on sender (from), recipient (to, cc, bcc), subject, keywords or message text by using the magnify glass in the action bar of a folder. You can also search from any app by selecting <em>Search email</em> in the copy/paste popup menu.</p>
 <p>Searching in the unified inbox will search in all folders of all accounts, searching in the folder list will search in the associated account only and searching in a folder will search in that folder only.</p>
-<p>Messages will be searched for on the device first. You can download more messages on the device via the three-dots overflow menu in the start screen. There will be an action button with a search again icon at the bottom to continue searching on the server. You can select in which folder to continue the search.</p>
+<p>Messages will be searched for on the device first, unless you use a complex expression, see below.</p>
+<p><br></p>
+<p>You can download more messages on the device via the three-dots overflow menu in the start screen. There will be an action button with a search again icon at the bottom to continue searching on the server. You can select in which folder to continue the search.</p>
+<p><br></p>
 <p>The IMAP protocol doesn’t support searching in more than one folder at the same time. Searching on the server is an expensive operation, therefore it is not possible to select multiple folders.</p>
 <p>The POP3 protocol doesn’t support searching on the server at all.</p>
-<p>Searching local messages is case insensitive and on partial text. The message text of local messages will not be searched if the message text was not downloaded yet. Searching on the server might be case sensitive or case insensitive and might be on partial text or whole words, depending on the provider.</p>
+<p><br></p>
+<p>Searching local (on-device) messages is case insensitive and on partial text. The message text of local messages will not be searched if the message text was not downloaded yet. Searching on the server might be case sensitive or case insensitive and might be on partial text or whole words, depending on the provider.</p>
+<p><br></p>
 <p>Some servers cannot handle searching in the message text when there are a large number of messages. For this case there is an option to disable searching in the message text. Since version 1.1888 a popup message will be shown and the search will automatically be retried without searching in the message text.</p>
+<p><br></p>
 <p>It is possible to use Gmail search operators by prefixing a search command with <em>raw:</em>. If you configured just one Gmail account, you can start a raw search directly on the server by searching from the unified inbox. If you configured multiple Gmail accounts, you’ll first need to navigate to the folder list or the archive (all messages) folder of the Gmail account you want to search in. Please <a href="https://support.google.com/mail/answer/7190">see here</a> for the possible search operators. For example:</p>
 <p><code>raw:larger:10M</code></p>
+<p><br></p>
 <p>Searching through a large number of messages on the device is not very fast because of two limitations:</p>
 <ul>
 <li><a href="https://www.sqlite.org/">sqlite</a>, the database engine of Android has a record size limit, preventing message texts from being stored in the database</li>
 <li>Android apps get only limited memory to work with, even if the device has plenty memory available</li>
 </ul>
 <p>This means that searching for a message text requires that files containing the message texts need to be opened one by one to check if the searched text is contained in the file, which is a relatively expensive process.</p>
-<p>In the <em>miscellaneous settings</em> you can enable <em>Build search index</em> to significantly increase the speed of searching on the device, but be aware that this will increase battery and storage space usage. The search index is based on words in all message parts, so searching for partial text and searching in specific messages parts (from, subject, text, etc) is not possible.</p>
+<p>In the <em>miscellaneous settings</em> you can enable <em>Build search index</em> to significantly increase the speed of searching on the device, but be aware that this will increase battery and storage space usage. The search index is based on <ins>whole</ins> words in all message parts, so searching for partial text and searching in specific messages parts (from, subject, text, etc) is not possible.</p>
 <p>Note that only messages for which the message text was downloaded will be indexed. In the connection settings can be configured up to which size messages texts will be downloaded automatically when using a metered connection (generally mobile data or paid WiFi). In the folder properties (long press on a folder in the folder list of an account) downloading of messages texts can be enabled/disabled.</p>
-<p>Searching using the search index is by default AND, so searching for <em>apple orange</em> will search for apple AND orange. Words separated by commas result in searching for OR, so for example <em>apple, orange</em> will search for apple OR orange. Both can be combined, so searching for <em>apple, orange banana</em> will search for apple OR (orange AND banana). Using the search index is a pro feature.</p>
+<p>Using the search index is a pro feature.</p>
+<p><br /></p>
 <p>Since version 1.1315 it is possible to use search expressions like this:</p>
 <pre><code>apple +banana -cherry ?nuts</code></pre>
 <p>This will result in searching in the subject or text (only) like this:</p>
@@ -757,8 +787,9 @@ to:&lt;email address&gt;
 cc:&lt;email address&gt;
 bcc:&lt;email address&gt;
 keyword:&lt;keyword&gt;</code></pre>
-<p>There should be no space between the prefix and the search term, which will be applied as an AND-condition.</p>
+<p>There should be <ins>no space</ins> between the prefix and the search term, which will be applied as an AND-condition.</p>
 <p>Only AND conditions (+) and NOT conditions (-) can be used for on-device searching (since version 1.1981). If you try to use other search expressions, you get the error <em>Select a folder for a complex search</em>, which means that a folder in an account’s folder list must be selected in order to perform the search on the server.</p>
+<p><br></p>
 <p>Since version 1.1733 it is possible to save searches, which means that a named entry in the navigation menu will be created to repeat the same search later. You can save a search after searching by tapping on the save button in the top action bar. After repeating a search there will be a delete button at the same place to delete a saved search again. A saved search might be useful to quickly search for starred messages, or for messages from a specific email address, etc.</p>
 <p>Using the search index is a pro feature.</p>
 <p><br /></p>
@@ -2091,10 +2122,11 @@ $NotDisplayed</code></pre>
 <p><em>POP3</em></p>
 <p>In the account settings (Settings, tap Manual setup, tap Accounts, tap account) you can enable <em>Leave messages on server</em> and <em>Leave deleted messages on server</em>.</p>
 <p><em>IMAP</em></p>
-<p>Since the IMAP protocol is meant to synchronize two ways, trashing (=move to trash) and (permanently) deleting messages will be performed on the email server too, so that the message list is the same for all connected clients. Deleting a messages from the device only won’t work because it would be synchronized again later.</p>
-<p>However, FairEmail supports hiding messages, either via the three-dots menu in the action bar just above the message text (you can configure a button for this via the same menu) or by multiple selecting messages in the message list. Basically this is the same as “leave on server” of the POP3 protocol with the advantage that you can show the messages again when needed.</p>
+<p>Since the IMAP protocol is meant to synchronize two ways, from server to client and from client to server, trashing (=move to trash) and (permanently) deleting messages will be performed on the email server too, so that the message list is the same for all connected clients. Deleting a message from the device only won’t work because it would be synchronized again later.</p>
+<p>Some email apps pretend they can do this, but, in fact, messages are hidden on the device. FairEmail can do this too, but in a more explicit way, also allowing you to show the messages again.</p>
+<p>You can hide messages either via the three-dots menu in the action bar just above the message text (you can configure a button for this via the same menu) or by multiple selecting messages in the message list.</p>
 <p>Alternatively, you can disable AUTO EXPUNGE, which will result in marking messages being deleted on the server (by setting the <em>deleted</em> flag), but not expunging (deleting) them. You can find this option in the debug panel, which can be shown by (temporarily) enabling debug mode in the miscellaneous settings.</p>
-<p>Note that it is possible to set the swipe left or right action to hide a message. There is a button in the behavior settings to quickly configure the swipe left and right actions for all IMAP account.</p>
+<p>Note that it is possible to set the swipe left or right action to hide a message. There is a button in the behavior settings to quickly configure the swipe left and right actions for all IMAP accounts.</p>
 <p><br /></p>
 <p><a name="faq135"></a> <strong>(135) Why are trashed messages and drafts shown in conversations?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq135">Google Translate</a></p>
@@ -2227,6 +2259,7 @@ $NotDisplayed</code></pre>
 <p>You likely came here because you are using a third party build of FairEmail.</p>
 <p>There is <strong>only support</strong> on the latest Play store version, the latest GitHub release and the F-Droid build, but <strong>only if</strong> the version number of the F-Droid build is the same as the version number of the latest GitHub release.</p>
 <p>F-Droid builds irregularly, which can be problematic when there is an important update. Therefore you are advised to switch to the GitHub release.</p>
+<p>Note that developers have no control over F-Droid builds and the F-Droid infrastructure (apps, forums, etc.).</p>
 <p>OAuth access is available only for Play Store and Github releases because email providers permitted the use of OAuth for these releases only. The responsible for a release, for the F-Droid build this is the F-Droid organization, needs to ask for OAuth permissions, which mostly involves signing a contract with binding terms and conditions.</p>
 <p>Note that you’ll need to uninstall the F-Droid build first before you can install a GitHub release because Android refuses to install (“<em>App was not installed</em>”) the same app with a different signature for security reasons.</p>
 <p>At the start of 2024, the Play Store app started to update all apps, including apps not installed via the Play Store. Since the F-Droid build is signed by the F-Droid organization, which basically means the F-Droid build is another app, updating the F-Droid build will fail. Unfortunately, there is no way to resolve this.</p>
@@ -2824,6 +2857,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <li>comply with common standards (IMAP, SMTP, etc.)</li>
 <li>comply with the <a href="https://developer.android.com/docs/quality-guidelines/core-app-quality">Core app quality guidelines</a></li>
 </ul>
+<p>Features unrelated to email, including reading newsgroups and reading RSS feeds, fall outside the scope of the project.</p>
 <p>The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.</p>
 <p>There are requests daily to change the appearance in this or that way, but the problem is that these requests are more often than not conflicting. To prevent making other people unhappy, changes in the appearance always need to clearly and objectively contribute to the usability of the app to be considered.</p>
 <p>A feature will be considered useful to most people if more than 0.1% of the users request a feature, which in practice means about 500 people.</p>
@@ -2836,6 +2870,8 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>🇩🇪 Wenn Sie eine Frage haben, eine Funktion anfordern oder einen Fehler melden möchten, <strong>verwenden Sie bitte <a href="https://contact.faircode.eu/?product=fairemailsupport">dieses Formular</a></strong>.</p>
 <p>🇫🇷 Si vous avez une question, souhaitez demander une fonctionnalité ou signaler un bogue, <strong>veuillez utiliser <a href="https://contact.faircode.eu/?product=fairemailsupport">ce formulaire</a></strong>.</p>
 <p><br /></p>
-<p>GitHub issues are disabled due to frequent misusage.</p>
+<p><strong>GitHub issues and GitHub pull requests are disabled due to frequent misusage.</strong></p>
 <p><br /></p>
 <p>Copyright © 2018-2024 Marcel Bokhorst.</p>
+</body>
+</html>

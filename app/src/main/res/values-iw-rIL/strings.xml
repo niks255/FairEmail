@@ -116,6 +116,7 @@
     <string name="title_blocked_senders">שולחים חסומים</string>
     <string name="title_unblock_all">שחרור של הכול</string>
     <string name="title_unblock_all_remark">פעולה זו תאפס את כל הרשימות והאפשרויות שיכולות לגרום לחסימת מוענים</string>
+    <string name="title_unblock_all_hint" comment="title_unblock_all_hint&#10;Remark for the unblock all dialog box">נא לשים לב שהיישומון לא יכול למנוע משרת דוא״ל להעביר הודעות לתיקיית הספאם!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">לחסום את מוען ההודעה?</item>
         <item quantity="two">לחסום את מוען %1$s ההודעות?</item>
@@ -577,6 +578,7 @@
     <string name="title_advanced_pdf_preview">הצגת תמונות ממוזערות של PDF</string>
     <string name="title_advanced_video_preview">הצגת תמונות ממוזערות של סרטונים</string>
     <string name="title_advanced_audio_preview">הצגת נגן שמע קטן</string>
+    <string name="title_advanced_barcode_preview">הצגת תוכן ברקוד</string>
     <string name="title_advanced_message_text_zoom2">תקריב טקסט ההודעות כברירת מחדל: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">התמקדות על טקסט ההודעה גם בעורך ההודעות</string>
     <string name="title_advanced_overview_mode">התאמת התקריב של ההודעות המקוריות לגודל המסך</string>
@@ -1829,6 +1831,7 @@
     <string name="title_legend_plain_only">בטקסט פשוט בלבד</string>
     <string name="title_legend_receipt">התבקש אישור</string>
     <string name="title_legend_auto_submitted">נשלח אוטומטית</string>
+    <string name="title_legend_by_list">נשלח על ידי רשימה</string>
     <string name="title_legend_attachment">יש קבצים מצורפים</string>
     <string name="title_legend_flagged">האם מועדף</string>
     <string name="title_legend_contacts">ניהול אנשי קשר</string>
@@ -1895,6 +1898,8 @@
     <string name="title_hint_notifications">אין הרשאות להתראות</string>
     <string name="title_hint_notifications_remark">נדרשות הרשאות גם להתראות (חשבון). אפשר לכבות התראות על הודעות חדשות בהגדרות.</string>
     <string name="title_hint_battery_optimizations">מיטובי סוללה עדיין פעילים</string>
+    <string name="title_hint_data_saver">אם מצב חיסכון בסוללה פעיל, היישומון לא יוכל להסתנכרן ברקע ועלולות לצוץ שגיאות בחיבור.</string>
+    <string name="title_hint_dismiss">אפשר להתעלם מהחלונית הסרת כדי להסיר את ההתראה.</string>
     <string name="title_hint_support">יש לך לך שאלה או טענה, נא להשתמש בתפריט התמיכה לקבלת עזרה</string>
     <string name="title_hint_message_actions">החלקה שמאלה לאשפה, החלקה ימינה לארעיון (אם זמין), ניתן להגדיר את פעולות ההחלקה בהגדרות החשבון</string>
     <string name="title_hint_message_selection">לחיצה ארוכה על הודעה מתחילה בחירה במגוון הודעות, יש להחזיק ולהחליק כלפי מעלה או מטה כדי לבחור הודעות נוספות</string>
@@ -2069,6 +2074,11 @@
     <string name="title_keyword_label3">אישי</string>
     <string name="title_keyword_label4">לביצוע</string>
     <string name="title_keyword_label5">אחר כך</string>
+    <string name="title_keyword_displayed">הוצג</string>
+    <string name="title_keyword_delivered">נמסר</string>
+    <string name="title_keyword_not_displayed">לא הוצג</string>
+    <string name="title_keyword_not_delivered">לא נמסר</string>
+    <string name="title_keyword_complaint">תלונה</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">הודעה</item>
         <item quantity="two">%1$d הודעות</item>

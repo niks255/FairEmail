@@ -6,6 +6,20 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Ypupiara](https://en.wikipedia.org/wiki/Ypupiara)
 
+### 1.2159 - 2024-02-15
+
+* Added optional reply/answer quick action
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2158 - 2024-02-10
+
+* Added image barcode decoding (requires Android 7+)
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2157 - 2024-02-08
 
 * Added widget option to show messages/folders standalone

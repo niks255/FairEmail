@@ -94,6 +94,7 @@
     <string name="title_blocked_senders">Expéditeurs bloqués</string>
     <string name="title_unblock_all">Tout débloquer</string>
     <string name="title_unblock_all_remark">Ceci réinitialisera toutes les listes et options pouvant provoquer le blocage des expéditeurs</string>
+    <string name="title_unblock_all_hint" comment="title_unblock_all_hint&#10;Remark for the unblock all dialog box">Notez que l\'application ne peut pas empêcher le serveur de messagerie de déplacer des messages vers le dossier des indésirables!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Bloquer l\'expéditeur de %1$s message?</item>
         <item quantity="other">Bloquer l\'expéditeur de %1$s messages?</item>
@@ -549,6 +550,7 @@
     <string name="title_advanced_pdf_preview">Afficher les miniatures des fichiers PDF</string>
     <string name="title_advanced_video_preview">Afficher les vignettes des vidéos</string>
     <string name="title_advanced_audio_preview">Afficher le mini-lecteur audio</string>
+    <string name="title_advanced_barcode_preview">Afficher le contenu du code barre</string>
     <string name="title_advanced_message_text_zoom2">Zoom du texte du message par défaut : %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Zoomer le texte du message également dans l\'éditeur de message</string>
     <string name="title_advanced_overview_mode">Zoomer sur les messages originaux pour les adapter à l\'écran</string>
@@ -1802,6 +1804,7 @@
     <string name="title_legend_plain_only">Texte brut seulement</string>
     <string name="title_legend_receipt">Une confirmation a été demandée</string>
     <string name="title_legend_auto_submitted">A été envoyé automatiquement</string>
+    <string name="title_legend_by_list">Envoyé par une liste</string>
     <string name="title_legend_attachment">A une pièce jointe</string>
     <string name="title_legend_flagged">Est suivi</string>
     <string name="title_legend_contacts">Gérer les contacts</string>
@@ -1868,6 +1871,8 @@
     <string name="title_hint_notifications">Aucune autorisation de notification</string>
     <string name="title_hint_notifications_remark">Les autorisations de notification sont également obligatoires pour les alertes (comptes). Les notifications de nouveaux messages peuvent être désactivées dans les paramètres.</string>
     <string name="title_hint_battery_optimizations">Les optimisations de la pile sont toujours activées</string>
+    <string name="title_hint_data_saver">Si l\'économiseur de données est activé, l\'application ne sera pas en mesure de synchroniser en arrière-plan et des erreurs de connexion pourraient se produire.</string>
+    <string name="title_hint_dismiss">Vous pouvez fermer cette boîte de dialogue pour supprimer la notification.</string>
     <string name="title_hint_support">Si vous avez une question ou un problème, veuillez utiliser le menu « Assistance » pour obtenir de l’aide</string>
     <string name="title_hint_message_actions">Balayer vers la gauche pour mettre à la corbeille; balayer vers la droite pour archiver (si disponible); les actions de balayage peuvent être configurées dans les paramètres du compte</string>
     <string name="title_hint_message_selection">Appuyez longuement sur un message pour activer la sélection multiple; maintenez et faites glisser vers le haut ou vers le bas pour sélectionner davantage de messages</string>
@@ -2042,10 +2047,11 @@
     <string name="title_keyword_label3">Personnel</string>
     <string name="title_keyword_label4">À faire</string>
     <string name="title_keyword_label5">Plus tard</string>
-    <string name="title_keyword_displayed" comment="title_keyword_displayed&#10;Text to indicate a read receipt was received for a sent message.&#10;Note that &quot;displayed&quot; is more correct than &quot;read&quot; because you can't be sure the recipient actually read and understood the message completely">Vu</string>
-    <string name="title_keyword_delivered" comment="title_keyword_delivered&#10;Text to indicate a delivery receipt was received for a sent message.">Délivré</string>
-    <string name="title_keyword_not_displayed" comment="title_keyword_not_displayed&#10;Text to indicate a not-read receipt was received for a sent message.&#10;Note that &quot;displayed&quot; is more correct than &quot;read&quot; because you can't be sure the recipient actually read and understood the message completely">Non vu</string>
-    <string name="title_keyword_not_delivered" comment="title_keyword_not_delivered&#10;Text to indicate a non-delivery receipt was received for a sent message.">Non délivré</string>
+    <string name="title_keyword_displayed">Vu</string>
+    <string name="title_keyword_delivered">Délivré</string>
+    <string name="title_keyword_not_displayed">Non vu</string>
+    <string name="title_keyword_not_delivered">Non délivré</string>
+    <string name="title_keyword_complaint">Plainte</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d message</item>
         <item quantity="other">%1$d messages</item>

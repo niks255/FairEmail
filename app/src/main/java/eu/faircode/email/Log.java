@@ -625,9 +625,9 @@ public class Log {
                         if (element instanceof Long)
                             elements[i] = element + " (0x" + Long.toHexString((Long) element) + ")";
                         else if (element instanceof Spanned)
-                            elements[i] = "(span:" + Helper.getPrintableString(element.toString()) + ")";
+                            elements[i] = "(span:" + Helper.getPrintableString(element.toString(), true) + ")";
                         else
-                            elements[i] = (element == null ? "<null>" : Helper.getPrintableString(element.toString()));
+                            elements[i] = (element == null ? "<null>" : Helper.getPrintableString(element.toString(), true));
                     }
                     value = TextUtils.join(",", elements);
                     if (length > 10)
@@ -636,7 +636,7 @@ public class Log {
                 } else if (v instanceof Long)
                     value = v + " (0x" + Long.toHexString((Long) v) + ")";
                 else if (v instanceof Spanned)
-                    value = "(span:" + Helper.getPrintableString(v.toString()) + ")";
+                    value = "(span:" + Helper.getPrintableString(v.toString(), true) + ")";
                 else if (v instanceof Bundle)
                     value = "{" + TextUtils.join(" ", getExtras((Bundle) v)) + "}";
 
@@ -1843,8 +1843,11 @@ public class Log {
             final Context context = getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
             View dview = inflater.inflate(R.layout.dialog_unexpected, null);
+            TextView tvCaption = dview.findViewById(R.id.tvCaption);
             TextView tvError = dview.findViewById(R.id.tvError);
             Button btnHelp = dview.findViewById(R.id.btnHelp);
+
+            tvCaption.setText(report ? R.string.title_unexpected_error : R.string.title_setup_error);
 
             String message = Log.formatThrowable(ex, false);
             tvError.setText(message);

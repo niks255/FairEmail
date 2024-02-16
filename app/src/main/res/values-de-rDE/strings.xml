@@ -95,6 +95,7 @@
     <string name="title_blocked_senders">Gesperrte Absender</string>
     <string name="title_unblock_all">Alle entsperren</string>
     <string name="title_unblock_all_remark">Dadurch werden alle Listen und Optionen zurückgesetzt, die zum Sperren von Absendern führen könnten</string>
+    <string name="title_unblock_all_hint" comment="title_unblock_all_hint&#10;Remark for the unblock all dialog box">Beachten Sie, dass die App nicht verhindern kann, dass der E-Mail-Server Nachrichten in den Spam-Ordner verschiebt!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Absender von %1$s Nachricht sperren?</item>
         <item quantity="other">Absender von %1$s Nachrichten sperren?</item>
@@ -550,6 +551,7 @@
     <string name="title_advanced_pdf_preview">PDF-Vorschaubilder anzeigen</string>
     <string name="title_advanced_video_preview">Video-Vorschaubilder anzeigen</string>
     <string name="title_advanced_audio_preview">Mini-Audio-Player anzeigen</string>
+    <string name="title_advanced_barcode_preview">Barcode-Inhalt anzeigen</string>
     <string name="title_advanced_message_text_zoom2">Standardgröße des Nachrichtentextes: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Größe des Nachrichtentextes auch im Verfassenfenster anpassen</string>
     <string name="title_advanced_overview_mode">Originalnachrichten an Bildschirmgröße anpassen</string>
@@ -1187,7 +1189,7 @@
     <string name="title_new_message">Neue Nachricht</string>
     <string name="title_editasnew">Als neu bearbeiten</string>
     <string name="title_edit_notes">Lokale Notizen bearbeiten</string>
-    <string name="title_edit_notes_remark">Lokale Notizen werden nicht auf dem Mailserver gespeichert und sind daher nur in dieser App auf diesem Gerät verfügbar</string>
+    <string name="title_edit_notes_remark">Lokale Notizen werden nicht auf dem E-Mail-Server gespeichert und sind daher nur in dieser App auf diesem Gerät verfügbar</string>
     <string name="title_create_rule">Regel erstellen &#8230;</string>
     <string name="title_full_screen">Vollbild</string>
     <string name="title_force_light">Helles Farbschema erzwingen</string>
@@ -1803,6 +1805,7 @@
     <string name="title_legend_plain_only">Nur einfacher Text</string>
     <string name="title_legend_receipt">Bestätigung wurde angefordert</string>
     <string name="title_legend_auto_submitted">Wurde automatisch gesendet</string>
+    <string name="title_legend_by_list">Von einer Liste gesendet</string>
     <string name="title_legend_attachment">Anhang vorhanden</string>
     <string name="title_legend_flagged">Favorit</string>
     <string name="title_legend_contacts">Kontakte verwalten</string>
@@ -1869,6 +1872,8 @@
     <string name="title_hint_notifications">Keine Benachrichtigungsberechtigungen</string>
     <string name="title_hint_notifications_remark">Benachrichtigungsberechtigungen sind auch für (Konto-)Benachrichtigungen erforderlich. Benachrichtigungen für neue Nachrichten können in den Einstellungen deaktiviert werden.</string>
     <string name="title_hint_battery_optimizations">Akkuoptimierung ist immer noch aktiv</string>
+    <string name="title_hint_data_saver">Wenn die Datenspar-Funktion aktiviert ist, kann die App im Hintergrund nicht synchronisiert werden und es können Verbindungsfehler auftreten.</string>
+    <string name="title_hint_dismiss">Sie können dieses Dialogfeld schließen, um den Hinweis zu entfernen.</string>
     <string name="title_hint_support">Wenn Sie eine Frage oder ein Problem haben, verwenden Sie bitte die Hilfe im Menü</string>
     <string name="title_hint_message_actions">Für den Papierkorb nach links wischen; zum Archivieren nach rechts wischen (falls verfügbar); die Wischgesten können in den Kontoeinstellungen konfiguriert werden</string>
     <string name="title_hint_message_selection">Lange auf eine Nachricht drücken, um mehrere Nachrichten auszuwählen; gedrückt halten und nach oben oder unten wischen, um weitere Nachrichten auszuwählen</string>
@@ -2043,10 +2048,11 @@
     <string name="title_keyword_label3">Persönlich</string>
     <string name="title_keyword_label4">Zu erledigen</string>
     <string name="title_keyword_label5">Später</string>
-    <string name="title_keyword_displayed" comment="title_keyword_displayed&#10;Text to indicate a read receipt was received for a sent message.&#10;Note that &quot;displayed&quot; is more correct than &quot;read&quot; because you can't be sure the recipient actually read and understood the message completely">Angezeigt</string>
-    <string name="title_keyword_delivered" comment="title_keyword_delivered&#10;Text to indicate a delivery receipt was received for a sent message.">Zugestellt</string>
-    <string name="title_keyword_not_displayed" comment="title_keyword_not_displayed&#10;Text to indicate a not-read receipt was received for a sent message.&#10;Note that &quot;displayed&quot; is more correct than &quot;read&quot; because you can't be sure the recipient actually read and understood the message completely">Nicht angezeigt</string>
-    <string name="title_keyword_not_delivered" comment="title_keyword_not_delivered&#10;Text to indicate a non-delivery receipt was received for a sent message.">Nicht zugestellt</string>
+    <string name="title_keyword_displayed">Angezeigt</string>
+    <string name="title_keyword_delivered">Zugestellt</string>
+    <string name="title_keyword_not_displayed">Nicht angezeigt</string>
+    <string name="title_keyword_not_delivered">Nicht zugestellt</string>
+    <string name="title_keyword_complaint">Beschwerde</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d Nachricht</item>
         <item quantity="other">%1$d Nachrichten</item>

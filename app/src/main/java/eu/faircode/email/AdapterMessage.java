@@ -399,6 +399,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageView ivPlain;
         private ImageButton ibReceipt;
         private ImageView ivAutoSubmitted;
+        private ImageView ivList;
         private ImageView ivBrowsed;
         private ImageView ivRaw;
 
@@ -809,6 +810,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ivPlain = vsBody.findViewById(R.id.ivPlain);
             ibReceipt = vsBody.findViewById(R.id.ibReceipt);
             ivAutoSubmitted = vsBody.findViewById(R.id.ivAutoSubmitted);
+            ivList = vsBody.findViewById(R.id.ivList);
             ivBrowsed = vsBody.findViewById(R.id.ivBrowsed);
             ivRaw = vsBody.findViewById(R.id.ivRaw);
 
@@ -1741,6 +1743,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ivPlain.setVisibility(View.GONE);
             ibReceipt.setVisibility(View.GONE);
             ivAutoSubmitted.setVisibility(View.GONE);
+            ivList.setVisibility(View.GONE);
             ivBrowsed.setVisibility(View.GONE);
             ivRaw.setVisibility(View.GONE);
 
@@ -2577,6 +2580,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibReceipt.setVisibility(message.receipt_request != null && message.receipt_request ? View.VISIBLE : View.GONE);
             ibReceipt.setImageTintList(ColorStateList.valueOf(message.ui_answered ? colorControlNormal : colorError));
             ivAutoSubmitted.setVisibility(show_addresses && message.auto_submitted != null && message.auto_submitted ? View.VISIBLE : View.GONE);
+            ivList.setVisibility(message.list_post != null && message.list_post.length > 0 ? View.VISIBLE : View.GONE);
             ivBrowsed.setVisibility(show_addresses && message.ui_browsed ? View.VISIBLE : View.GONE);
             ivRaw.setVisibility(BuildConfig.DEBUG && Boolean.TRUE.equals(message.raw) ? View.VISIBLE : View.GONE);
 
@@ -2764,11 +2768,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             if (show_headers && message.headers != null) {
-                Spanned headers = HtmlHelper.highlightHeaders(context,
+                SpannableStringBuilder ssb = HtmlHelper.highlightHeaders(context,
                         message.from, message.to, message.received, message.headers,
-                        message.blocklist != null && message.blocklist);
-                if (BuildConfig.DEBUG && headers instanceof SpannableStringBuilder) {
-                    SpannableStringBuilder ssb = (SpannableStringBuilder) headers;
+                        message.blocklist != null && message.blocklist, true);
+                if (BuildConfig.DEBUG) {
+                    float stroke = context.getResources().getDisplayMetrics().density;
+
+                    ssb.append("\n\uFFFC"); // Object replacement character
+                    ssb.setSpan(new LineSpan(colorSeparator, stroke, 0), ssb.length() - 1, ssb.length(), 0);
+                    ssb.append('\n');
+
                     ssb.append('\n');
                     ssb.append("TLS=").append(message.tls == null ? "-" : (message.tls ? "✓" : "✗"));
                     ssb.append(" DKIM=").append(message.dkim == null ? "-" : (message.dkim ? "✓" : "✗"));
@@ -2779,7 +2788,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ssb.append(" BL=").append(message.blocklist == null ? "-" : (message.blocklist ? "✓" : "✗"));
                     ssb.append('\n');
                 }
-                tvHeaders.setText(headers);
+
+                tvHeaders.setText(ssb);
                 ibCopyHeaders.setVisibility(View.VISIBLE);
             } else {
                 tvHeaders.setText(null);
@@ -5643,6 +5653,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                 public void onDestroyed() {
                     try {
+                        onViewRecycled(ViewHolder.this);
                         dialog.dismiss();
                         owner.getLifecycle().removeObserver(this);
                     } catch (Throwable ex) {
@@ -5847,10 +5858,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onActionUnsubscribe(TupleMessageEx message) {
-            Uri uri = Uri.parse(message.unsubscribe);
-            onOpenLink(uri,
-                    context.getString(R.string.title_legend_show_unsubscribe),
-                    EntityFolder.JUNK.equals(message.folderType));
+            if (message.unsubscribe.startsWith(MessageHelper.ONE_CLICK_UNSUBSCRIBE)) {
+                Bundle args = new Bundle();
+                args.putString("uri", message.unsubscribe.substring(MessageHelper.ONE_CLICK_UNSUBSCRIBE.length()));
+                args.putString("from", MessageHelper.formatAddresses(message.from));
+
+                FragmentDialogUnsubscribe fragment = new FragmentDialogUnsubscribe();
+                fragment.setArguments(args);
+                fragment.show(parentFragment.getParentFragmentManager(), "unsubscribe");
+            } else {
+                Uri uri = Uri.parse(message.unsubscribe);
+                onOpenLink(uri,
+                        context.getString(R.string.title_legend_show_unsubscribe),
+                        EntityFolder.JUNK.equals(message.folderType));
+            }
         }
 
         private void onActionVerifyDecrypt(TupleMessageEx message, boolean auto) {
@@ -6768,7 +6789,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             for (EntityMessage m : db.message().getMessagesByMsgId(message.account, ref))
                                 map.put(m.msgid, m);
 
-                    return new ArrayList(map.values());
+                    return new ArrayList<>(map.values());
                 }
 
                 @Override
@@ -7462,7 +7483,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 new SimpleTask<Void>() {
                     @Override
                     protected Void onExecute(Context context, Bundle args) {
-                        Long id = args.getLong("id");
+                        long id = args.getLong("id");
 
                         DB db = DB.getInstance(context);
                         try {
