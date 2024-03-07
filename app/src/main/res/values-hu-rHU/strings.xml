@@ -93,7 +93,7 @@
     <string name="title_blocked_senders">Tiltott küldők</string>
     <string name="title_unblock_all">Összes tiltás feloldása</string>
     <string name="title_unblock_all_remark">Így minden listát és beállítást, mellyel feladókat tilthat le, alaphelyzetbe állít</string>
-    <string name="title_unblock_all_hint" comment="title_unblock_all_hint&#10;Remark for the unblock all dialog box">Vegye figyelembe, hogy az alkalmazás nem tudja megakadályozni, hogy a szerver az üzeneteket a levélszemét mappába tegye!</string>
+    <string name="title_unblock_all_hint">Vegye figyelembe, hogy az alkalmazás nem tudja megakadályozni, hogy a szerver az üzeneteket a levélszemét mappába tegye!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Letiltja az üzenet küldőjét?</item>
         <item quantity="other">Letiltja az %1$s üzenet küldőjét?</item>
@@ -384,6 +384,7 @@
     <string name="title_advanced_suggest_received">Fogadott üzenetekben szereplő címek felajánlása</string>
     <string name="title_advanced_suggest_frequently">A felajánlott címek rendezése gyakoriság alapján</string>
     <string name="title_advanced_suggest_account">Csak az aktuális fiókhoz javasoljon</string>
+    <string name="title_advanced_auto_delete_local">Automatikusan törölje le a helyi kapcsolatokat, ha régebbiek mint, illetve ritkábban használták, mint:</string>
     <string name="title_advanced_alt_re_fwd">Alternatív válasz/továbbítás előtag</string>
     <string name="title_advanced_send_chips">Cím buborékok megjelenítése</string>
     <string name="title_advanced_send_nav_color">Az identitás színét alkalmazza az alsó műveletek sávra</string>
@@ -483,6 +484,7 @@
     <string name="title_advanced_nav_message_count">Mutassa a helyileg elmentett üzeneteket a navigációs menüben</string>
     <string name="title_advanced_nav_unseen_drafts">Elküldetlen piszkozatok számának megjelenítése a navigációs menüben</string>
     <string name="title_advanced_nav_pinned_count">Olvasatlan üzenetek számának mutatása a kitűzött navigációs menüben</string>
+    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Csillaggal jelölje az újonnan érkezett, olvasatlan üzeneketet tartalmazó fiókokat/mappákat</string>
     <string name="title_advanced_startup">Megjelenítés a kezdőképernyőn</string>
     <string name="title_advanced_cards">A kártyás stílus használata a tabuláris stílus helyett</string>
     <string name="title_advanced_category">A fiókkategória beállítható az Alapbeállítások oldal Haladó fiókbeállításoknál</string>
@@ -492,6 +494,7 @@
     <string name="title_advanced_cards_shadow_border">Keret mutatása</string>
     <string name="title_advanced_cards_shadow_highlight">Kiemelt színek használata pasztell színek helyett</string>
     <string name="title_advanced_tabular_dividers">Táblázatos elrendezésnél használjon elválasztó vonalakat</string>
+    <string name="title_advanced_tabular_unread_bg">Az olvasatlan üzeneteknek legyen szürke a háttere táblázat stílus használatakor</string>
     <string name="title_advanced_date_header">Csoportosítás dátum szerint</string>
     <string name="title_advanced_date_week">Csoportosítás nap helyett hét szerint</string>
     <string name="title_advanced_date_fixed">Fixált dátum mutatása a felső fejlécben</string>
@@ -625,7 +628,7 @@
     <string name="title_advanced_auto_block_sender">Küldő automatikus letiltása levélszemét jelentésekor</string>
     <string name="title_advanced_auto_hide_answer">Válaszgomb automatikus elrejtése görgetéskor</string>
     <string name="title_advanced_swipe_reply">Jobbra húzva a kiterjesztett üzenetet válaszolhat</string>
-    <string name="title_advanced_move_thread_all">Beszélgetés áthelyezésekor az összes üzenetet helyezze át</string>
+    <string name="title_advanced_move_thread_all">A kiválasztott beszélgetés mozgatasakor, az összes üzenetét helyezze át</string>
     <string name="title_advanced_move_thread_sent">Beszélgetés áthelyezésekor az elküldött üzeneteket is helyezze át</string>
     <string name="title_advanced_default_snooze">Alapértelmezett elhalasztás/késleltetés időtartama</string>
     <string name="title_advanced_default_folder">Válassza ki az alapértelmezett mappát</string>
@@ -815,6 +818,7 @@
     <string name="title_advanced_rlah_hint">Roaming figyelmen kívül hagyása az EU-n belül</string>
     <string name="title_advanced_usage_hint">Ez megnöveli az akkumulátor, adat és tárhely használatot</string>
     <string name="title_advanced_plain_hint">Ezen opció bekapcsolása csökkenti az adathasználatot, de az üzenetek formázás nélkül fognak megjelenni</string>
+    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Az egyszerű szöveges rész nem mindig tartalmazza a teljes üzenetet!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Bekapcsolása esetén okozhat csatlakozási problémákat egyes eszközökön, és megnövelheti az akksi fogyasztást</string>
     <string name="title_advanced_validate_hint">Ez azt eredményezheti, hogy nem szinkronizálják az üzeneteket, például VPN használatakor, de más helyzetekben is</string>
     <string name="title_advanced_timeout_hint">Az olvasás/írás időtúllépés be lesz állítva a kapcsolat időtúllépés duplájára. Nagyobb értékek több akkumulátor használatot eredményezhetnek.</string>
@@ -859,7 +863,6 @@
     <string name="title_advanced_display_harmful_hint">Ennek az opciónak a kikapcsolása negatív hatással lehet az adatvédelemre</string>
     <string name="title_advanced_display_hidden_hint">Ez furcsa kinézetű és megkétszerezett szöveget eredményezhet</string>
     <string name="title_advanced_display_pin_hint">A PIN kód elsőbbséget élvez a biometrikus azonosítással szemben</string>
-    <string name="title_advanced_display_autolock_nav_hint">%1$d másodperc türelmi idő</string>
     <string name="title_advanced_user_agent_hint">Egyes szerverek nem fogadnak el általános felhasználói agent sorokat</string>
     <string name="title_advanced_safe_browsing_hint">A Google szervere tudja milyen címek kerülnek felkeresésre</string>
     <string name="title_advanced_badge_hint">Csak támogatott \"launcher\"-ek esetén elérhető</string>
@@ -1063,6 +1066,7 @@
     <string name="title_edit_rules">Szabályok szerkesztése</string>
     <string name="title_execute_rules">Szabályok végrehajtása</string>
     <string name="title_export_messages">Üzenetek exportálása</string>
+    <string name="title_import_messages">Fontos üzenetek</string>
     <string name="title_create_channel">Értesítési csatorna létrehozása</string>
     <string name="title_edit_channel">Értesítési csatorna szerkesztése</string>
     <string name="title_delete_channel">Értesítési csatorna törlése</string>

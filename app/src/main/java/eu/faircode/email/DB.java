@@ -3,6 +3,7 @@ package eu.faircode.email;
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_PASSWORD;
 
 import android.app.ActivityManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -67,7 +68,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 290,
+        version = 291,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -521,6 +522,17 @@ public abstract class DB extends RoomDatabase {
                                 dropTriggers(db);
 
                             createTriggers(db);
+
+                            ContentValues cv = new ContentValues();
+                            cv.put("host", "imap.mnet-online.de");
+                            int rows = db.update(
+                                    "account",
+                                    SQLiteDatabase.CONFLICT_ABORT,
+                                    cv,
+                                    "host = ? AND (port = ? OR port = ?)",
+                                    new Object[]{"mail.m-online.net", 143, 993});
+                            if (rows > 0)
+                                EntityLog.log(context, "M-net updated");
                         } catch (Throwable ex) {
                             /*
                                 at eu.faircode.email.DB$6.onOpen(DB.java:522)
@@ -2931,6 +2943,12 @@ public abstract class DB extends RoomDatabase {
                         db.execSQL("UPDATE `folder` SET `count_unread` = 0 WHERE `type` = '" + EntityFolder.TRASH + "'");
                         db.execSQL("UPDATE `folder` SET `count_unread` = 0 WHERE `type` = '" + EntityFolder.JUNK + "'");
                         db.execSQL("UPDATE `folder` SET `count_unread` = 0 WHERE `type` = '" + EntityFolder.DRAFTS + "'");
+                    }
+                }).addMigrations(new Migration(290, 291) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `folder` ADD COLUMN `last_view` INTEGER");
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

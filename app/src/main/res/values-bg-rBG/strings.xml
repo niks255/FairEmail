@@ -94,6 +94,7 @@
     <string name="title_blocked_senders">Блокирани податели</string>
     <string name="title_unblock_all">Разблокиране на всички</string>
     <string name="title_unblock_all_remark">Това ще занули всички списъци и възможности, което може да доведе до блокиране на податели</string>
+    <string name="title_unblock_all_hint">Имайте предвид, че приложението не може да предотврати сървъра на имейл от преместването на съобщения в папката спам!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Блокирате ли подателя на %1$s съобщение?</item>
         <item quantity="other">Блокирате ли подателя на %1$s съобщения?</item>
@@ -384,6 +385,7 @@
     <string name="title_advanced_suggest_received">Предложи адреси, намерени в получени съобщения</string>
     <string name="title_advanced_suggest_frequently">Сортиране на предложените адреси по използваемост</string>
     <string name="title_advanced_suggest_account">Ограничаване на предложенията за текущия акаунт</string>
+    <string name="title_advanced_auto_delete_local">Самодейно изтриване на локални контакти по-стари от и по-малко употребявани от:</string>
     <string name="title_advanced_alt_re_fwd">Алтернативен префикс за отговор/препращане</string>
     <string name="title_advanced_send_chips">Показване на адресни мехурчета</string>
     <string name="title_advanced_send_nav_color">Употреба на цвят за самоличност за долната лента с действия</string>
@@ -483,6 +485,7 @@
     <string name="title_advanced_nav_message_count">Показване на броя локално съхранени съобщения в менюто навигация</string>
     <string name="title_advanced_nav_unseen_drafts">Показване на броя на непрочетените чернови в менюто за навигиране</string>
     <string name="title_advanced_nav_pinned_count">Показване на броя непрочетени съобщения в менюто закачени на навигиране</string>
+    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Показване на звезда за акаунти/папки с новополучени непрочетени съобщения</string>
     <string name="title_advanced_startup">Показване на началния екран</string>
     <string name="title_advanced_cards">Употреба на картов стил вместо табличен стил</string>
     <string name="title_advanced_category">Категорията на акаунта може да се конфигурира в опциите за напреднали на акаунта чрез главния екран с настройки</string>
@@ -492,6 +495,7 @@
     <string name="title_advanced_cards_shadow_border">Показване на граница</string>
     <string name="title_advanced_cards_shadow_highlight">Употреба на цвят на подсветка вместо цвят на акцента</string>
     <string name="title_advanced_tabular_dividers">Употреба на разделителни линии, използвайки табличен стил</string>
+    <string name="title_advanced_tabular_unread_bg">Употреба на сив цвят на фон за непрочетени съобщения, употребявайки табличен стил</string>
     <string name="title_advanced_date_header">Групиране по дата</string>
     <string name="title_advanced_date_week">Групиране по седмица вместо по ден</string>
     <string name="title_advanced_date_fixed">Показване на фиксирана дата на заглавката най-отгоре</string>
@@ -625,7 +629,7 @@
     <string name="title_advanced_auto_block_sender">Автоматично блокиране на подателя, докладвайки спам</string>
     <string name="title_advanced_auto_hide_answer">Автоматично скриване на бутон за отговор, превъртайки</string>
     <string name="title_advanced_swipe_reply">Прелистете надясно на разширените съобщения за отговор</string>
-    <string name="title_advanced_move_thread_all">Премествайки разговор, премествате всички съобщения</string>
+    <string name="title_advanced_move_thread_all">При преместване на избрани разговори, преместват се всички съобщения</string>
     <string name="title_advanced_move_thread_sent">Премествайки разговора, преместват се и изпратените съобщения</string>
     <string name="title_advanced_default_snooze">Време за отлагане/закъснение по подразбиране</string>
     <string name="title_advanced_default_folder">Изберете подразбираща се папка</string>
@@ -816,6 +820,7 @@
     <string name="title_advanced_rlah_hint">Ако не се допуска роуминг в рамките на ЕС</string>
     <string name="title_advanced_usage_hint">Това ще увеличи употребата на батерията, данните и мястото в хранилището</string>
     <string name="title_advanced_plain_hint">Включването на това ще ограничи употребата на данните, но съобщенията ще се показват без стил</string>
+    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Частта с прост текст на съобщението не винаги съдържа пълното съобщение!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Включването на това може да причини проблеми с връзката в някои устройства и да увеличи употребата на батерията</string>
     <string name="title_advanced_validate_hint">Може да доведе до това, че съобщенията не се синхронизират, например, употребявайки VPN, но също в други ситуации</string>
     <string name="title_advanced_timeout_hint">Времето за четене/запис ще бъде зададено двойно на времето за изчакване на връзката. По-високите стойности ще доведат до по-голяма консумация на батерията.</string>
@@ -860,7 +865,6 @@
     <string name="title_advanced_display_harmful_hint">Деактивирането на тази опция може да бъде вредно за поверителността ви</string>
     <string name="title_advanced_display_hidden_hint">Това може да доведе до странен изглед и размазан текст</string>
     <string name="title_advanced_display_pin_hint">ПИН има предимство пред удостоверяването с биометрични данни</string>
-    <string name="title_advanced_display_autolock_nav_hint">Ще има време на забавяне от %1$d сек.</string>
     <string name="title_advanced_user_agent_hint">Някои сървъри не приемат общия низ \"user agent\"</string>
     <string name="title_advanced_safe_browsing_hint">Сървърите на Google знаят кои адреси се търсят</string>
     <string name="title_advanced_badge_hint">Предлага се само на поддържани начални екрани</string>
@@ -1065,6 +1069,7 @@
     <string name="title_edit_rules">Редактиране на правилата</string>
     <string name="title_execute_rules">Извършване на правилата</string>
     <string name="title_export_messages">Износ на съобщения</string>
+    <string name="title_import_messages">Внасяне на съобщения</string>
     <string name="title_create_channel">Създаване на канал за известия</string>
     <string name="title_edit_channel">Редактиране на канал за известия</string>
     <string name="title_delete_channel">Изтриване на канал за известия</string>

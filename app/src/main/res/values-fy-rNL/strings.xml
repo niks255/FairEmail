@@ -92,6 +92,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_blocked_senders">Blokkearre ôfstjoerders</string>
     <string name="title_unblock_all">Alle deblokkearje</string>
     <string name="title_unblock_all_remark">Dit sil alle listen en opsjes, dy\'t resultearje kinne yn it blokkearjen fan de ôfstjoerders, werstelle</string>
+    <string name="title_unblock_all_hint">De app kin net foarkomme dat de mailserver berjohten nei de net-winske-map ferpleatst!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Ofstjoerder fan %1$s berjocht blokkearje?</item>
         <item quantity="other">Ofstjoerder fan %1$s berjochten blokkearje?</item>
@@ -383,6 +384,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_suggest_received">Adressen fûn yn ûntfangen berjochten foarstelle</string>
     <string name="title_advanced_suggest_frequently">Sortearje foarstelle adressen op gebrûksfrekwinsje</string>
     <string name="title_advanced_suggest_account">Suggestjes beheine ta aktuele account</string>
+    <string name="title_advanced_auto_delete_local">Automatysk lokale kontakten fuortsmite âlder as en minder brûkt as:</string>
     <string name="title_advanced_alt_re_fwd">Alternatyf antwurd/trochstjoere foarfoechsel</string>
     <string name="title_advanced_send_chips">Adresballonnen toane</string>
     <string name="title_advanced_send_nav_color">Brûk de identiteitskleur foar de ûnderste aksjebalke</string>
@@ -482,6 +484,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_nav_message_count">Toan it tal lokaal bewarre berjochten yn it navigaasjemenu</string>
     <string name="title_advanced_nav_unseen_drafts">Toan it tal net lêzen berjochten yn it navigaasjemenu</string>
     <string name="title_advanced_nav_pinned_count">Toan it tal net lêzen berjochten yn it fêstsette navigaasjemenu</string>
+    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Toan in stjer foar accounts/mappen mei nij ûntfongen net-lêzen berjochten</string>
     <string name="title_advanced_startup">Op it startskerm toane</string>
     <string name="title_advanced_cards">Brûk kaartstyl yn stee fan tabelstyl</string>
     <string name="title_advanced_category">De accountkategory kin konfigurearre wurde yn de avansearre accountopsjes fia it haadynstellingenskerm</string>
@@ -491,6 +494,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_cards_shadow_border">Râne toane</string>
     <string name="title_advanced_cards_shadow_highlight">Markearkleur yn stee fan aksintkleur brûke</string>
     <string name="title_advanced_tabular_dividers">Skiedingslinen by brûken fan tabelstyl brûke</string>
+    <string name="title_advanced_tabular_unread_bg">Brûk in grize eftergrûnkleur foar net- lêzen berjochten by gebrûk fan tabelstyl</string>
     <string name="title_advanced_date_header">Op datum groepearje</string>
     <string name="title_advanced_date_week">Op wike yn stee fan dei groepearje</string>
     <string name="title_advanced_date_fixed">Fêste datumkoptekst boppe oan toane</string>
@@ -547,6 +551,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_pdf_preview">PDF-miniatueren toane</string>
     <string name="title_advanced_video_preview">Fideominiatueren toane</string>
     <string name="title_advanced_audio_preview">Mini-audiospiler toane</string>
+    <string name="title_advanced_barcode_preview">Barkoadeynhâld toane</string>
     <string name="title_advanced_message_text_zoom2">Standert zoom berjochttekst: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Berjochttekst ek yn de berjochtbewurker zoome</string>
     <string name="title_advanced_overview_mode">Zoom orizjinele berjochten om op it skerm te passen</string>
@@ -623,7 +628,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_auto_block_sender">By it rapportearjen fan net-winske de ôfstjoerder automatysk blokkearje</string>
     <string name="title_advanced_auto_hide_answer">Antwurdknop automatysk ferstopje by skowen</string>
     <string name="title_advanced_swipe_reply">Fei útklapte berjochten nei rjochts om te beäntwurdzjen</string>
-    <string name="title_advanced_move_thread_all">Wannear’t in petear ferpleatst wurdt, alle berjochten ferpleatse</string>
+    <string name="title_advanced_move_thread_all">By it ferpleatsen fan selektearre petearen, alle berjochten ferpleatse</string>
     <string name="title_advanced_move_thread_sent">Wannear’t in petear ferpleatst wurdt, ek ferstjoerde berjochten ferpleatse</string>
     <string name="title_advanced_default_snooze">Standert slommerdoer/fertragingstiid</string>
     <string name="title_advanced_default_folder">Standert map selektearje</string>
@@ -814,6 +819,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_advanced_rlah_hint">Utgeande fan gjin ‘roaming’ binnen de EU</string>
     <string name="title_advanced_usage_hint">Dit sil gebrûk fan de batterij, gegevens en opslachromte ferheegje</string>
     <string name="title_advanced_plain_hint">Dit ynskeakelje sil it gegevensgebrûk beheine, mar berjochten sille werjûn wurde sûnder opmaak</string>
+    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">It plattetekstdiel befettet net altyd it folsleine berjocht!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Dit ynskeakelje kin ferbiningsproblemen feroarsaakje op guon apparaten en kin it batterijferbrûk ferheegje</string>
     <string name="title_advanced_validate_hint">Dit kin resultearje yn berjochten dy’t net syngronisearje, bygelyks as jo in VPN brûke, mar ek yn oare situaasjes</string>
     <string name="title_advanced_timeout_hint">De time-out foar lêzen/skriuwen wurdt ynsteld op it dûbele fan de time-out foar ferbining. Hegere wearden sille resultearje yn mear batterijgebrûk.</string>
@@ -858,7 +864,6 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_advanced_display_harmful_hint">Dizze opsje útskeakelje kin skealik wêze foar jo privacy</string>
     <string name="title_advanced_display_hidden_hint">Dit kin resultearje yn frjemde en dûbele teksten</string>
     <string name="title_advanced_display_pin_hint">In PIN hat foarrang boppe biometryske autentikaasje</string>
-    <string name="title_advanced_display_autolock_nav_hint">Der sil in frijwaringstiid fan %1$d sekonden wêze</string>
     <string name="title_advanced_user_agent_hint">Guon servers akseptearje gjin generike user-agentstring</string>
     <string name="title_advanced_safe_browsing_hint">De Google-server wit hokker adressen opsocht wurde</string>
     <string name="title_advanced_badge_hint">Allinnich beskikber op stipe lanchers</string>
@@ -1061,6 +1066,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_edit_rules">Rigel bewurkje</string>
     <string name="title_execute_rules">Rigels útfiere</string>
     <string name="title_export_messages">Berjochten eksportearje</string>
+    <string name="title_import_messages">Berjochten ymportearje</string>
     <string name="title_create_channel">Meldingskanaal oanmeitsje</string>
     <string name="title_edit_channel">Meldingskanaal bewurkje</string>
     <string name="title_delete_channel">Meldingskanaal fuortsmite</string>
@@ -1793,6 +1799,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_legend_plain_only">Is allinnich platte tekst</string>
     <string name="title_legend_receipt">Untfangstbefêstiging is oanfrege</string>
     <string name="title_legend_auto_submitted">Is automatysk ferstjoerd</string>
+    <string name="title_legend_by_list">Troch in list ferstjoerd</string>
     <string name="title_legend_attachment">Befettet bylagen</string>
     <string name="title_legend_flagged">Is favoryt</string>
     <string name="title_legend_contacts">Kontakten beheare</string>
@@ -1859,6 +1866,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_hint_notifications">Gjin meldingsrjochten</string>
     <string name="title_hint_notifications_remark">Meldingsrjochten binne fereaske foar (account)meldingen. Meldingen foar nije berjochten kinne útskeakele wurde yn de ynstellingen.</string>
     <string name="title_hint_battery_optimizations">Batterij-optimalisaasjes noch hieltyd ynskeakele</string>
+    <string name="title_hint_data_saver">As gegevensbesparring ynskeakele is, kin de app net op de eftergrûn syngronisearje en kinne der ferbiningsflaters barre.</string>
+    <string name="title_hint_dismiss">Jo kinne dit dialoochfienster slute om de melding fuort te smiten.</string>
     <string name="title_hint_support">As jo in fraach of in probleem hawwe, brûk dan it stipemenu om help te krijen</string>
     <string name="title_hint_message_actions">Fei links nei jiskefet; Fei rjochts nei argyf (as beskikber); De fei-aksjes kinne ynsteld wurde yn de accountynstellingen</string>
     <string name="title_hint_message_selection">Druk lang op in berjocht om meardere berjochten te selektearjen; Hâld en swipe omheech of omleech om mear berjochten te selektearjen</string>
@@ -2032,6 +2041,11 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_keyword_label3">Persoanlik</string>
     <string name="title_keyword_label4">Te dwaan</string>
     <string name="title_keyword_label5">Letter</string>
+    <string name="title_keyword_displayed">Toand</string>
+    <string name="title_keyword_delivered">Oflevere</string>
+    <string name="title_keyword_not_displayed">Net toand</string>
+    <string name="title_keyword_not_delivered">Net ôflevere</string>
+    <string name="title_keyword_complaint">Klacht</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d berjocht</item>
         <item quantity="other">%1$d berjochten</item>

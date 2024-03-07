@@ -94,6 +94,7 @@
     <string name="title_blocked_senders">Remetentes bloqueados</string>
     <string name="title_unblock_all">Desbloquear todos</string>
     <string name="title_unblock_all_remark">Isso redefinirá todas as listas e opções que poderiam resultar no bloqueio de remetentes</string>
+    <string name="title_unblock_all_hint">Observe que o aplicativo não pode impedir que o servidor de e-mail mova mensagens para a pasta de spam!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Bloquear remetente da %1$s mensagem?</item>
         <item quantity="other">Bloquear remetentes das %1$s mensagens?</item>
@@ -384,6 +385,7 @@
     <string name="title_advanced_suggest_received">Sugerir endereços encontrados em mensagens recebidas</string>
     <string name="title_advanced_suggest_frequently">Ordenar endereços sugeridos de acordo com a frequência de uso</string>
     <string name="title_advanced_suggest_account">Limitar sugestões à conta atual</string>
+    <string name="title_advanced_auto_delete_local">Exclua automaticamente contatos locais mais antigos e menos usados ​​que:</string>
     <string name="title_advanced_alt_re_fwd">Prefixo alternativo</string>
     <string name="title_advanced_send_chips">Mostrar endereço em bolhas</string>
     <string name="title_advanced_send_nav_color">Use a cor de identidade para a barra de ação inferior</string>
@@ -483,6 +485,7 @@
     <string name="title_advanced_nav_message_count">Mostrar número de mensagens armazenadas localmente no menu de navegação</string>
     <string name="title_advanced_nav_unseen_drafts">Mostrar o número de rascunhos não lidos no menu de navegação</string>
     <string name="title_advanced_nav_pinned_count">Mostrar o número de mensagens não lidas em um menu de navegação fixado</string>
+    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Mostrar uma estrela para contas/pastas com mensagens não lidas recém-recebidas</string>
     <string name="title_advanced_startup">Mostrar na Tela de bloqueio</string>
     <string name="title_advanced_cards">Usar estilo de cartões em vez do estilo tabular</string>
     <string name="title_advanced_category">A categoria da conta pode ser configurada nas opções avançadas da conta na tela principal de configurações</string>
@@ -492,6 +495,7 @@
     <string name="title_advanced_cards_shadow_border">Mostrar borda</string>
     <string name="title_advanced_cards_shadow_highlight">Use a cor de destaque em vez da cor do realce</string>
     <string name="title_advanced_tabular_dividers">Use linhas divisórias ao usar o estilo tabular</string>
+    <string name="title_advanced_tabular_unread_bg">Usar uma cor de fundo cinza para mensagens não lidas ao usar o estilo de tabela</string>
     <string name="title_advanced_date_header">Agrupar por data</string>
     <string name="title_advanced_date_week">Agrupar por semana em vez de dia</string>
     <string name="title_advanced_date_fixed">Mostrar cabeçalho de data fixo no topo</string>
@@ -625,7 +629,7 @@
     <string name="title_advanced_auto_block_sender">Bloquear automaticamente o remetente ao denunciar spam</string>
     <string name="title_advanced_auto_hide_answer">Ocultar automaticamente o botão de resposta ao rolar</string>
     <string name="title_advanced_swipe_reply">Deslize as mensagens expandidas para a direita para responder</string>
-    <string name="title_advanced_move_thread_all">Ao mover uma conversa, mova todas as mensagens</string>
+    <string name="title_advanced_move_thread_all">Ao mover conversas selecionadas, mova todas as mensagens</string>
     <string name="title_advanced_move_thread_sent">Ao mover uma conversa, mova também as mensagens enviadas</string>
     <string name="title_advanced_default_snooze">Tempo de soneca/atraso padrão</string>
     <string name="title_advanced_default_folder">Selecionar pasta padrão</string>
@@ -816,6 +820,7 @@
     <string name="title_advanced_rlah_hint">Não assumindo roaming na UE</string>
     <string name="title_advanced_usage_hint">Isto aumentará o uso de bateria, dados e espaço de armazenamento</string>
     <string name="title_advanced_plain_hint">Habilitar isso limitará o uso de dados, mas as mensagens serão mostradas sem estilo</string>
+    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">A parte do texto simples nem sempre contém a mensagem completa!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Habilitar isso pode causar problemas de conexão em alguns dispositivos e pode aumentar o uso da bateria</string>
     <string name="title_advanced_validate_hint">Isso pode levar a problemas na sincronização de mensagens, ao utilizar uma VP por exemplo, mas também em outras situações</string>
     <string name="title_advanced_timeout_hint">O tempo limite de leitura/escrita será definido para o dobro do tempo limite de conexão. Valores mais altos resultarão em mais uso da bateria.</string>
@@ -860,7 +865,6 @@
     <string name="title_advanced_display_harmful_hint">Desativar esta opção pode prejudicar sua privacidade</string>
     <string name="title_advanced_display_hidden_hint">Isso pode resultar em textos estranhos e duplos</string>
     <string name="title_advanced_display_pin_hint">Um PIN tem precedência sobre a autenticação de dados biométricos</string>
-    <string name="title_advanced_display_autolock_nav_hint">Haverá um tempo de tolerância de %1$d segundos</string>
     <string name="title_advanced_user_agent_hint">Alguns servidores não aceitam a linha genérica de agente do usuário</string>
     <string name="title_advanced_safe_browsing_hint">O servidor do Google reconhece quais endereços estão sendo procurados</string>
     <string name="title_advanced_badge_hint">Disponível somente em lançadores suportados</string>
@@ -1065,6 +1069,7 @@
     <string name="title_edit_rules">Editar regras</string>
     <string name="title_execute_rules">Executar regras</string>
     <string name="title_export_messages">Exportar mensagens</string>
+    <string name="title_import_messages">Importar mensagens</string>
     <string name="title_create_channel">Criar canal de notificação</string>
     <string name="title_edit_channel">Editar canal de notificação</string>
     <string name="title_delete_channel">Excluir canal de notificação</string>

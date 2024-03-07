@@ -41,14 +41,11 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.Collator;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -63,6 +60,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
     private boolean nav_count_pinned;
     private boolean nav_unseen_drafts;
     private boolean nav_categories;
+    private boolean show_unexposed;
 
     private int dp6;
     private int dp12;
@@ -158,10 +156,17 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
                 ivItem.setColorFilter(color);
 
             String name = account.getName(context);
-            if (count == 0)
+            int unexposed = (show_unexposed ? account.unexposed : 0);
+            if (count == 0 && unexposed == 0)
                 tvItem.setText(name);
-            else
-                tvItem.setText(context.getString(R.string.title_name_count, name, NF.format(count)));
+            else {
+                StringBuilder sb = new StringBuilder();
+                if (count > 0)
+                    sb.append(NF.format(count));
+                if (unexposed > 0)
+                    sb.append('\u2B51');
+                tvItem.setText(context.getString(R.string.title_name_count, name, sb));
+            }
 
             tvItem.setTextColor(count == 0 ? textColorSecondary : colorUnread);
             tvItem.setTypeface(count == 0 ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD);
@@ -290,6 +295,7 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
         this.nav_count_pinned = prefs.getBoolean("nav_count_pinned", false);
         this.nav_unseen_drafts = prefs.getBoolean("nav_unseen_drafts", false);
         this.nav_categories = prefs.getBoolean("nav_categories", false);
+        this.show_unexposed = prefs.getBoolean("show_unexposed", false);
 
         boolean highlight_unread = prefs.getBoolean("highlight_unread", true);
         int colorHighlight = prefs.getInt("highlight_color", Helper.resolveColor(context, R.attr.colorUnreadHighlight));
@@ -311,66 +317,8 @@ public class AdapterNavAccountFolder extends RecyclerView.Adapter<AdapterNavAcco
     public void set(@NonNull List<TupleAccountFolder> accounts, boolean expanded, boolean folders) {
         Log.i("Set nav accounts=" + accounts.size());
 
-        if (accounts.size() > 0) {
-            final Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
-
-            Collections.sort(accounts, new Comparator<TupleAccountFolder>() {
-                @Override
-                public int compare(TupleAccountFolder a1, TupleAccountFolder a2) {
-                    // Account
-
-                    if (nav_categories) {
-                        int c = collator.compare(
-                                a1.category == null ? "" : a1.category,
-                                a2.category == null ? "" : a2.category);
-                        if (c != 0)
-                            return c;
-                    }
-
-                    int a = Integer.compare(
-                            a1.order == null ? -1 : a1.order,
-                            a2.order == null ? -1 : a2.order);
-                    if (a != 0)
-                        return a;
-
-                    int p = -Boolean.compare(a1.primary, a2.primary);
-                    if (p != 0)
-                        return p;
-
-                    int n = collator.compare(a1.name, a2.name);
-                    if (n != 0)
-                        return n;
-
-                    // Folder
-
-                    int o = Integer.compare(
-                            a1.folderOrder == null ? -1 : a1.folderOrder,
-                            a2.folderOrder == null ? -1 : a2.folderOrder);
-                    if (o != 0)
-                        return o;
-
-                    int t1 = EntityFolder.FOLDER_SORT_ORDER.indexOf(a1.folderType);
-                    int t2 = EntityFolder.FOLDER_SORT_ORDER.indexOf(a2.folderType);
-                    int t = Integer.compare(t1, t2);
-                    if (t != 0)
-                        return t;
-
-                    int s = -Boolean.compare(a1.folderSync, a2.folderSync);
-                    if (s != 0)
-                        return s;
-
-                    if (a1.folderName == null && a2.folderName == null)
-                        return 0;
-                    else if (a1.folderName == null)
-                        return -1;
-                    else if (a2.folderName == null)
-                        return 1;
-
-                    return collator.compare(a1.getName(context), a2.getName(context));
-                }
-            });
-        }
+        if (accounts.size() > 0)
+            TupleAccountFolder.sort(accounts, nav_categories, context);
 
         all = accounts;
         if (!folders) {

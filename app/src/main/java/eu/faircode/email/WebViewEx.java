@@ -187,7 +187,7 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
 
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Log.i("Open url=" + url);
-                return intf.onOpenLink(url);
+                return intf.onOpenLink(url, false);
             }
 
             @Override
@@ -300,6 +300,7 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
     public boolean onLongClick(View view) {
         try {
             final Context context = view.getContext();
+
             WebView.HitTestResult result = ((WebView) view).getHitTestResult();
             int type = result.getType();
             String extra = result.getExtra();
@@ -313,19 +314,24 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
                     type == HitTestResult.EMAIL_TYPE ||
                     type == HitTestResult.SRC_ANCHOR_TYPE ||
                     type == HitTestResult.EDIT_TEXT_TYPE) {
-                ClipboardManager clipboard = Helper.getSystemService(context, ClipboardManager.class);
-                if (clipboard == null)
-                    return false;
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean confirm_links = prefs.getBoolean("confirm_links", true);
+                if (confirm_links) {
+                    ClipboardManager clipboard = Helper.getSystemService(context, ClipboardManager.class);
+                    if (clipboard == null)
+                        return false;
 
-                String title = context.getString(R.string.app_name);
+                    String title = context.getString(R.string.app_name);
 
-                ClipData clip = ClipData.newPlainText(title, extra);
-                clipboard.setPrimaryClip(clip);
+                    ClipData clip = ClipData.newPlainText(title, extra);
+                    clipboard.setPrimaryClip(clip);
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
-                    ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                        ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
 
-                return true;
+                    return true;
+                } else
+                    return intf.onOpenLink(extra, true);
             }
 
             if (type == WebView.HitTestResult.IMAGE_TYPE ||
@@ -502,7 +508,7 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
 
         void onScrollChange(int dx, int dy, int scrollX, int scrollY);
 
-        boolean onOpenLink(String url);
+        boolean onOpenLink(String url, boolean always);
 
         void onUserInterAction();
     }

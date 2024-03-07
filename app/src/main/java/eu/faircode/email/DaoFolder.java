@@ -44,6 +44,7 @@ public interface DaoFolder {
             ", COUNT(DISTINCT message.id) AS messages" +
             ", COUNT(DISTINCT CASE WHEN message.content = 1 THEN message.id ELSE NULL END) AS content" +
             ", COUNT(DISTINCT CASE WHEN NOT message.ui_seen THEN message.id ELSE NULL END) AS unseen" +
+            ", COUNT(DISTINCT CASE WHEN NOT message.ui_seen AND message.received > folder.last_view THEN message.id ELSE NULL END) AS unexposed" +
             ", COUNT(DISTINCT CASE WHEN message.ui_flagged THEN message.id ELSE NULL END) AS flagged" +
             ", COUNT(DISTINCT CASE WHEN operation.state = 'executing' THEN operation.id ELSE NULL END) AS executing" +
             " FROM folder" +
@@ -84,6 +85,7 @@ public interface DaoFolder {
             ", COUNT(DISTINCT CASE WHEN message.ui_hide THEN NULL ELSE message.id END) AS messages" +
             ", COUNT(DISTINCT CASE WHEN message.content = 1 AND NOT message.ui_hide THEN message.id ELSE NULL END) AS content" +
             ", COUNT(DISTINCT CASE WHEN NOT message.ui_seen AND NOT message.ui_hide THEN message.id ELSE NULL END) AS unseen" +
+            ", COUNT(DISTINCT CASE WHEN NOT message.ui_seen AND NOT message.ui_hide AND message.received > folder.last_view THEN message.id ELSE NULL END) AS unexposed" +
             ", COUNT(DISTINCT CASE WHEN message.ui_flagged AND NOT message.ui_hide THEN message.id ELSE NULL END) AS flagged" +
             ", COUNT(DISTINCT CASE WHEN operation.state = 'executing' THEN operation.id ELSE NULL END) AS executing" +
             " FROM folder" +
@@ -108,6 +110,7 @@ public interface DaoFolder {
             ", COUNT(DISTINCT message.id) AS messages" +
             ", COUNT(DISTINCT CASE WHEN message.content = 1 THEN message.id ELSE NULL END) AS content" +
             ", COUNT(DISTINCT CASE WHEN NOT message.ui_seen THEN message.id ELSE NULL END) AS unseen" +
+            ", COUNT(DISTINCT CASE WHEN NOT message.ui_seen AND message.received > folder.last_view THEN message.id ELSE NULL END) AS unexposed" +
             ", COUNT(DISTINCT CASE WHEN message.ui_flagged THEN message.id ELSE NULL END) AS flagged" +
             ", COUNT(DISTINCT CASE WHEN operation.state = 'executing' THEN operation.id ELSE NULL END) AS executing" +
             " FROM folder" +
@@ -141,6 +144,7 @@ public interface DaoFolder {
             ", COUNT(DISTINCT message.id) AS messages" +
             ", COUNT(DISTINCT CASE WHEN message.content = 1 THEN message.id ELSE NULL END) AS content" +
             ", COUNT(DISTINCT CASE WHEN NOT message.ui_seen THEN message.id ELSE NULL END) AS unseen" +
+            ", COUNT(DISTINCT CASE WHEN NOT message.ui_seen AND message.received > folder.last_view THEN message.id ELSE NULL END) AS unexposed" +
             ", COUNT(DISTINCT CASE WHEN message.ui_flagged THEN message.id ELSE NULL END) AS flagged" +
             ", COUNT(DISTINCT CASE WHEN operation.state = 'executing' THEN operation.id ELSE NULL END) AS executing" +
             " FROM folder" +
@@ -190,6 +194,7 @@ public interface DaoFolder {
             ", COUNT(DISTINCT folder.id) AS folders" +
             ", COUNT(message.id) AS messages" +
             ", SUM(CASE WHEN NOT message.ui_seen THEN 1 ELSE 0 END) AS unseen" +
+            ", SUM(CASE WHEN NOT message.ui_seen AND message.received > folder.last_view THEN 1 ELSE 0 END) AS unexposed" +
             ", CASE WHEN folder.account IS NULL THEN folder.sync_state ELSE NULL END AS sync_state" +
             ", folder.color, COUNT (DISTINCT folder.color) AS colorCount" +
             " FROM folder" +
@@ -401,6 +406,12 @@ public interface DaoFolder {
 
     @Query("UPDATE folder SET last_sync_count = :last_sync_count WHERE id = :id AND NOT (last_sync_count IS :last_sync_count)")
     int setFolderLastSyncCount(long id, Integer last_sync_count);
+
+    @Query("UPDATE folder SET last_view = :last_view" +
+            " WHERE (id = :folder" +
+            "   OR (type = :type AND type <> '" + EntityFolder.OUTBOX + "')" +
+            "   OR (account = :account AND :folder IS NULL AND :type IS NULL AND unified))")
+    int setFolderLastView(Long account, Long folder, String type, long last_view);
 
     @Query("UPDATE folder SET read_only = :read_only WHERE id = :id AND NOT (read_only IS :read_only)")
     int setFolderReadOnly(long id, boolean read_only);

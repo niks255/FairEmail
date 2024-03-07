@@ -93,7 +93,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_blocked_senders">Geblokkeerde afzenders</string>
     <string name="title_unblock_all">Deblokkeer alles</string>
     <string name="title_unblock_all_remark">Dit zal alle lijsten en opties herstellen die kunnen resulteren in het blokkeren van de afzenders</string>
-    <string name="title_unblock_all_hint" comment="title_unblock_all_hint&#10;Remark for the unblock all dialog box">De app kan niet voorkomen dat de mailserver berichten naar de spammap verplaatst!</string>
+    <string name="title_unblock_all_hint">De app kan niet voorkomen dat de mailserver berichten naar de spammap verplaatst!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Blokkeer afzender van één bericht?</item>
         <item quantity="other">Blokkeer de afzender van %1$s berichten?</item>
@@ -384,6 +384,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_suggest_received">Suggereer adressen gevonden in ontvangen berichten</string>
     <string name="title_advanced_suggest_frequently">Sorteer voorgestelde adressen op gebruiksfrequentie</string>
     <string name="title_advanced_suggest_account">Suggesties beperken tot huidige account</string>
+    <string name="title_advanced_auto_delete_local">Verwijder automatisch lokale contacten ouder dan en minder gebruikt dan:</string>
     <string name="title_advanced_alt_re_fwd">Alternatief antwoord/doorsturen voorvoegsel</string>
     <string name="title_advanced_send_chips">Toon adresballonnen</string>
     <string name="title_advanced_send_nav_color">Gebruik de identiteitskleur voor de onderste actiebalk</string>
@@ -483,6 +484,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_nav_message_count">Toon aantal lokaal opgeslagen berichten in het navigatiemenu</string>
     <string name="title_advanced_nav_unseen_drafts">Toon het aantal ongelezen concepten in het navigatiemenu</string>
     <string name="title_advanced_nav_pinned_count">Toon het aantal ongelezen berichten in het vastgezette navigatiemenu</string>
+    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Toon een ster voor accounts/mappen met nieuw ontvangen ongelezen berichten</string>
     <string name="title_advanced_startup">Toon op het startscherm</string>
     <string name="title_advanced_cards">Gebruik kaart-stijl in plaats van tabulaire stijl</string>
     <string name="title_advanced_category">De accountcategorie kan worden geconfigureerd in de geavanceerde accountopties via het hoofdinstellingen scherm</string>
@@ -492,6 +494,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_cards_shadow_border">Toon rand</string>
     <string name="title_advanced_cards_shadow_highlight">Gebruik markeerkleur in plaats van accentkleur</string>
     <string name="title_advanced_tabular_dividers">Gebruik scheidingslijnen bij gebruik van tabulaire style</string>
+    <string name="title_advanced_tabular_unread_bg">Gebruik een grijze achtergrondkleur voor ongelezen berichten bij gebruik van tabelstijl</string>
     <string name="title_advanced_date_header">Op datum groeperen</string>
     <string name="title_advanced_date_week">Groeperen per week in plaats van dag</string>
     <string name="title_advanced_date_fixed">Toon vaste datumkoptekst bovenaan</string>
@@ -625,7 +628,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_auto_block_sender">Blokkeer de afzender automatisch bij het rapporteren van spam</string>
     <string name="title_advanced_auto_hide_answer">Automatisch de antwoordknop verbergen bij scrollen</string>
     <string name="title_advanced_swipe_reply">Veeg uitgevouwde berichten naar rechts om te beantwoorden</string>
-    <string name="title_advanced_move_thread_all">Wanneer een gesprek wordt verplaatst, verplaats alle berichten</string>
+    <string name="title_advanced_move_thread_all">Bij het verplaatsen van geselecteerde gesprekken, alle berichten verplaatsen</string>
     <string name="title_advanced_move_thread_sent">Wanneer een gesprek wordt verplaatst, verplaats ook verzonden berichten</string>
     <string name="title_advanced_default_snooze">Standaard sluimer/vertragingstijd</string>
     <string name="title_advanced_default_folder">Selecteer standaard map</string>
@@ -815,6 +818,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_rlah_hint">Veronderstel geen roaming binnen de EU</string>
     <string name="title_advanced_usage_hint">Dit zal het gebruik van de batterij, gegevens en opslagruimte verhogen</string>
     <string name="title_advanced_plain_hint">Dit inschakelen zal het gegevensgebruik beperken, maar berichten zullen worden weergegeven zonder opmaak</string>
+    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Het platte tekstdeel bevat niet altijd het volledige bericht!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Dit inschakelen kan verbindingsproblemen veroorzaken op sommige apparaten en kan het batterijverbruik verhogen</string>
     <string name="title_advanced_validate_hint">Dit kan resulteren in het niet synchroniseren van berichten, bijvoorbeeld bij het gebruik van een VPN, maar ook in andere situaties</string>
     <string name="title_advanced_timeout_hint">De lees/schrijf time-out wordt ingesteld op de dubbele waarde van de verbinding time-out. Hogere waarden zullen leiden tot meer batterijgebruik.</string>
@@ -859,7 +863,6 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_display_harmful_hint">Het uitschakelen van deze optie kan schadelijk zijn voor uw privacy</string>
     <string name="title_advanced_display_hidden_hint">Dit kan leiden tot vreemd uitziende en dubbele teksten</string>
     <string name="title_advanced_display_pin_hint">Een PIN code gaat voor biometrische authenticatie</string>
-    <string name="title_advanced_display_autolock_nav_hint">Er zal een vrijwaringstijd van %1$d seconden zijn</string>
     <string name="title_advanced_user_agent_hint">Sommige servers accepteren geen generieke user agent string</string>
     <string name="title_advanced_safe_browsing_hint">De Google-server weet welke adressen worden opgezocht</string>
     <string name="title_advanced_badge_hint">Alleen beschikbaar op ondersteunde launchers</string>
@@ -1062,6 +1065,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_edit_rules">Bewerk regels</string>
     <string name="title_execute_rules">Voer regels uit</string>
     <string name="title_export_messages">Exporteer berichten</string>
+    <string name="title_import_messages">Importeer berichten</string>
     <string name="title_create_channel">Meldingskanaal maken</string>
     <string name="title_edit_channel">Meldingskanaal wijzigen</string>
     <string name="title_delete_channel">Meldingskanaal verwijderen</string>

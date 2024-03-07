@@ -13,10 +13,9 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
   </style>
+  <link rel="shortcut icon" href="https://raw.githubusercontent.com/M66B/FairEmail/master/app/src/main/ic_launcher-web.png">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
+    body { font-family: Arial, sans-serif; }
   </style>
 </head>
 <body>
@@ -1340,6 +1339,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <li>Did you know that you can insert the email addresses of an Android contact group via the three dots overflow menu?</li>
 <li>Did you know that if you select text and reply, only the selected text will be quoted? (this works for reformatted messages only because of <a href="https://issuetracker.google.com/issues/36939405">this issue</a>)</li>
 <li>Did you know that you can long press the trash icons (both in the message and the bottom action bar) to permanently delete a message or conversation? (version 1.1368+)</li>
+<li>Did you know that you can long press the archive button in the bottom action bar to move a conversation? (version 1.2160+)</li>
 <li>Did you know that you can long press the send action to show the send dialog, even if it was disabled?</li>
 <li>Did you know that you can long press the full screen icon to show the original message text only?</li>
 <li>Did you know that you can long press the answer button to reply to the sender? (since version 1.1562; since version 1.1839 you can configure the action in the send settings)</li>
@@ -1975,6 +1975,7 @@ category:promotions</code></pre>
 <li>You can’t restore purchases with <a href="https://microg.org/">microG</a></li>
 </ul>
 <p>Please <a href="https://support.google.com/googleplay/answer/4646404">see here</a> about how to add, remove, or edit your Google Play payment method.</p>
+<p>Sometimes the Play Store assigns a purchase incorrectly to another Google account configured on the device, resulting in the purchase not being recognized anymore. Some people reported that force stopping the Play Store app / Google Play Services, clearing the data and the cache, and starting the Play Store again resolves this problem.</p>
 <p>If you cannot restore a purchase, please contact me via <a href="https://contact.faircode.eu/?product=fairemailsupport">this contact form</a>, mentioning the email address of the Google account used for the purchase.</p>
 <p><br /></p>
 <p><a name="faq118"></a> <strong>(118) What does ‘Remove tracking parameters’ exactly?</strong></p>
@@ -2016,6 +2017,8 @@ category:promotions</code></pre>
 <p><br /></p>
 <p><a name="faq125"></a> <strong>(125) What are the current experimental features?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq125">Google Translate</a></p>
+<p>Experimental features can be enabled in the miscellaneous-settings tab page.</p>
+<p><br /></p>
 <p><em>Send hard bounce (version 1.1477+)</em></p>
 <p>Send a <a href="https://tools.ietf.org/html/rfc3464">Delivery Status Notification</a> (=hard bounce) via the reply/answer menu.</p>
 <p>Hard bounces will mostly be processed automatically because they affect the reputation of the email provider. The bounce address (=<em>Return-Path</em> header) is mostly very specific, so the email server can determine the sending account.</p>
@@ -2056,6 +2059,9 @@ $NotDisplayed</code></pre>
 <p><br /></p>
 <p><em>Edit subject (1.2046+)</em></p>
 <p>The subject of a received message can be edited, also on the email server, via the horizontal three-dots button just above the message text near the left side of the screen.</p>
+<p><br /></p>
+<p><em>Markdown (1.2061+)</em></p>
+<p>Composing messages using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> can be enabled via the three-dots overflow menu of the message editor.</p>
 <p><br /></p>
 <p><a name="faq126"></a> <strong>(126) Can message previews be sent to my smartwatch?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq126">Google Translate</a></p>
@@ -2162,14 +2168,16 @@ $NotDisplayed</code></pre>
 <p>The confusing Microsoft specific server error <em>User is authenticated but not connected</em> might occur if:</p>
 <ul>
 <li>External access is administratively disabled, please see <a href="https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules">this article</a> about how an administrator can enable it again</li>
+<li>Access by third-party apps is administratively disabled or allowed for specific apps only</li>
+<li>IMAP is administratively disabled, please see <a href="https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/pop3-and-imap4/enable-or-disable-pop3-or-imap4-access">this article</a> about how an administrator can enable it again</li>
 <li>SMTP is administratively disabled, please see <a href="https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission">this article</a> about how an administrator can enable it again</li>
+<li>A security policy is blocking the login, for example because only specific network connections are allowed, please see <a href="https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules">this article</a> about how an administrator can enable it again</li>
 <li>Required server components are disabled, please see <a href="https://learn.microsoft.com/en-us/exchange/troubleshoot/user-and-shared-mailboxes/pop3-imap-owa-activesync-office-365">this article</a> about enabling IMAP, MAPI, etc.</li>
 <li>Push messages are enabled for too many folders: see <a href="#faq23">this FAQ</a> for more information and a workaround</li>
 <li>There were too many login attempts in a too short time, for example by using multiple email clients at the same time</li>
 <li>The wrong account was selected in the Microsoft account selector, for example an account with a different email address or a personal instead of a business account</li>
 <li>An ad blocker or DNS changer is being used</li>
 <li>Devices in another time zone are connected to the same account</li>
-<li>A security policy is blocking the login, for example because only specific network connections are allowed</li>
 <li>There is a problem with the Exchange server license: it might be expired or for another server edition</li>
 <li>An alias email address is being used as username instead of the primary email address</li>
 <li>An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain</li>
@@ -2296,6 +2304,7 @@ $NotDisplayed</code></pre>
 <p>An email client is meant to read and write messages, not to back up and restore messages. In other words, an email client is a viewer for messages on an email server, and not a backup tool. Instead, the email provider/server is responsible for backups.</p>
 <p>If you want to make a backup yourself, you could use a tool like <a href="https://imapsync.lamiral.info/">imapsync</a>.</p>
 <p>Since version 1.1556 it is possible to export all messages of a POP3 folder in mbox format according to <a href="https://www.ietf.org/rfc/rfc4155.txt">RFC4155</a>, which might be useful to backup sent messages if the email server doesn’t (which is risky because breaking or losing your device, means losing your sent messages!). For this, please long press on the folder in the folder list of an account (tap on the account name in the navigation menu).</p>
+<p>Since version 1.2160 it is possible to import messages in an mbox file conforming to <a href="https://www.ietf.org/rfc/rfc4155.txt">RFC4155</a> into a POP3 folder. Note that imported messages won’t be uploaded to the email server because this is not possible with POP3.</p>
 <p>If you want to import an mbox file into an existing email account, you can use Thunderbird on a desktop computer and the <a href="https://addons.thunderbird.net/de/thunderbird/addon/importexporttools-ng/">ImportExportTools NG</a> add-on.</p>
 <p>Note that in case of IMAP, all messages on your device are also on the email server.</p>
 <p><br /></p>
@@ -2372,6 +2381,7 @@ $NotDisplayed</code></pre>
 <p>Note that the POP3 protocol can download messages from the inbox only. So, deleted messages cannot be uploaded to the inbox again. This means that messages can only be permanently deleted in case of a POP3 account.</p>
 <p>Advanced: the IMAP delete flag in combination with the EXPUNGE command is not supportable because both email servers and not all people can handle this, risking unexpected loss of messages. A complicating factor is that not all email servers support <a href="https://tools.ietf.org/html/rfc4315">UID EXPUNGE</a>.</p>
 <p>Since version 1.1485 it is possible to temporarily enable debug mode in the miscellaneous settings to disable auto expunging messages. Note that messages with a *flag will not be shown if auto EXPUNGE is enabled.</p>
+<p>In the debug panel, it is also possible to disable permanent delete confirmation and enable permanent delete from notifications (since version 1.2163).</p>
 <p><br /></p>
 <p><a name="faq161"></a> <strong>(161) Can you add a setting to change the primary and accent color?</strong>*</p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq161">Google Translate</a></p>
@@ -2650,7 +2660,7 @@ _submission._tcp SRV 0 1 587 smtp.example.com.</code></pre>
 <p><a name="faq184"></a> <strong>(184) How do I password protect content?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq184">Google Translate</a></p>
 <p>Password protected content is a simple, yet secure form of end-to-end encryption that requires no configuration.</p>
-<p>How to use: select some text by long pressing it, and in the style toolbar at the bottom tap on the <em><ins>A</ins></em>-button and select <em>Password protect</em> in the pop-up menu. This will replace the selected content with a link that the recipient can click to decrypt the content on a dedicated static web page.</p>
+<p>How to use: select some text by long pressing it, and in the style toolbar at the bottom tap on the padlock-button and select <em>Password protect</em> in the pop-up menu. This will replace the selected content with a link that the recipient can click to decrypt the content on a dedicated static web page.</p>
 <p>Password protected content is sent as a <a href="https://en.wikipedia.org/wiki/URI_fragment">URI fragment</a> and decrypted in the browser with JavaScript. In other words, protected content is never stored on or seen by third party servers. Since version 1.1990 received protected content will be decrypted by the app, with as fallback decryption in the browser for other email clients.</p>
 <p>Password protected content is encrypted with <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a> / <a href="https://en.wikipedia.org/wiki/Galois/Counter_Mode">GCM</a> with a 256 bits key derived with <a href="https://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a> / <a href="https://en.wikipedia.org/wiki/Secure_Hash_Algorithms">SHA</a>-512 with 120,000 iterations. With a sufficiently long/complex password, which is communicated to the recipient securely, this is considered safe in 2022 and for the foreseeable future.</p>
 <p>Due to <a href="https://stackoverflow.com/a/417184/1794097">length limitations</a> of <a href="https://en.wikipedia.org/wiki/URL">URL</a>s and Android <a href="https://developer.android.com/reference/android/os/TransactionTooLargeException">binder limitations</a>, the maximum content size is 1,500 bytes, which includes <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> formatting tags. Images will be replaced with placeholders to reduce the content size, but other formatting, like bold, italic, links, etc., will be retained. If the content is too long, there will be a popup <em>Text too long</em>.</p>

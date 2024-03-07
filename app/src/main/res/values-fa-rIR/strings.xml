@@ -90,7 +90,7 @@
     <string name="title_blocked_senders">فرستندگان مسدود شده</string>
     <string name="title_unblock_all">آنبلاک کردن همه</string>
     <string name="title_unblock_all_remark">با این کار تمام لیست‌ها و گزینه‌هایی که می‌توانند منجر به مسدود کردن فرستندگان شوند، ریست می‌شوند</string>
-    <string name="title_unblock_all_hint" comment="title_unblock_all_hint&#10;Remark for the unblock all dialog box">متوجه این موضوع باشید که اپلیکیشن نمی‌تواند سرور ایمیل را از فرستادن پیام‌ها به پوشه اسپم باز دارد!</string>
+    <string name="title_unblock_all_hint">متوجه این موضوع باشید که اپلیکیشن نمی‌تواند سرور ایمیل را از فرستادن پیام‌ها به پوشه اسپم باز دارد!</string>
     <string name="title_junk_filter">از فیلتر هرزنامه محلی استفاده کنید</string>
     <string name="title_junk_filter_hint">این می تواند استفاده از باتری را افزایش دهد و پیام ها را به صورت نادرست به عنوان اسپم علامت گذاری کند</string>
     <string name="title_junk_blocklist">از فهرست‌های انسداد هرزنامه استفاده کن</string>
@@ -418,6 +418,7 @@
     <string name="title_advanced_nav_hide_title">پنهان کردن گزینه‌های منوی ناوبری؟</string>
     <string name="title_advanced_nav_hide_message">شما می‌توانید مجددا گزینه‌ها را در تنظیمات نمایش فعال کنید</string>
     <string name="title_advanced_nav_pinned_count">تعداد پیام‌های خوانده نشده را در منوی ناوبری سنجاق‌شده نشان بده</string>
+    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">نمایش ستاره برای حساب‌ها/پوشه‌هایی که پیام خوانده نشده جدید دارند</string>
     <string name="title_advanced_startup">نمایش در صفحه آغازین</string>
     <string name="title_advanced_cards_shadow_border">نمایش حاشیه</string>
     <string name="title_advanced_date_header">گروه بندی بر اساس تاریخ</string>
@@ -519,6 +520,7 @@
     <string name="title_advanced_onclose">هنگام بستن یک گفتگو</string>
     <string name="title_advanced_autoread">به طور خودکار پیام‌های انتقال یافته به عنوان خوانده شده علامت گذاری شود</string>
     <string name="title_advanced_autounstar">هنگام انتقال پیام‌ها ستاره‌ها را خودکار از پیام‌ها حذف کن</string>
+    <string name="title_advanced_move_thread_all">هنگام جابجا کردن مکالمات انتخابی، کل پیام‌ها منتقل شود</string>
     <string name="title_advanced_move_thread_sent">به هنگام انتقال یک مکالمه، پیام‌های ارسالی را هم منتقل کن</string>
     <string name="title_advanced_notifications">مدیریت اعلان‌ها</string>
     <string name="title_advanced_notifications_default">کانال پیش‌فرض</string>
@@ -607,6 +609,7 @@
     <string name="title_advanced_usenet_hint">بین متن و امضا \'-- \' درج کنید</string>
     <string name="title_advanced_metered_hint">اتصال‌های حجمی عموما شبکه‌های موبایل یا یک هات اسپات غیر رایگان می‌باشند</string>
     <string name="title_advanced_metered_warning">غیرفعال‌سازی این گزینه، دریافت و فرستادن پیام‌ها را روی داده همراه غیرفعال خواهد کرد</string>
+    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">آنچه که با خط ساده دیده می‌شود لزوما همیشه تمامی پیام را به طور کامل نشان نمی‌دهد!</string>
     <string name="title_advanced_tcp_keep_alive_hint">فعال کردنش می‌تواند منجر به اختلال در ارتباط در بعضی دستگاه‌ها و یا افزایش مصرف باتری شود</string>
     <string name="title_advanced_ssl_harden_hint">فعال‌سازی این باعث غیرفعال‌سازی SSL و رمز‌های ضعیف خواهد شد، که می‌تواند موجب مشکلات اتصال شود</string>
     <string name="title_advanced_open_safe_hint">فعال کردن این نیازمند ارتباطات امن برای دانلود تصاویر و غیره خواهد بود</string>
@@ -728,6 +731,7 @@
     <string name="title_empty_spam">خالی کردن هرزنامه</string>
     <string name="title_edit_properties">ویرایش ویژگی‌ها</string>
     <string name="title_edit_rules">ویرایش دستورات</string>
+    <string name="title_import_messages">درون‌برد پیام‌ها</string>
     <string name="title_create_channel">کانال اعلان بساز</string>
     <string name="title_edit_channel">ویرایش کانال اعلان</string>
     <string name="title_delete_channel">حذف کانال اعلان</string>

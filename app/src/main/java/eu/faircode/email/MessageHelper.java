@@ -69,8 +69,6 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -2238,8 +2236,17 @@ public class MessageHelper {
             }
 
             // https://datatracker.ietf.org/doc/html/rfc6376/
-            String[] headers = amessage.getHeader(DKIM_SIGNATURE);
-            if (headers == null || headers.length < 1)
+            List<String> headers = new ArrayList<>();
+
+            String[] dkim_headers = amessage.getHeader(DKIM_SIGNATURE);
+            if (dkim_headers != null && dkim_headers.length > 0)
+                headers.addAll(Arrays.asList(dkim_headers));
+
+            String[] arc_headers = amessage.getHeader(ARC_MESSAGE_SIGNATURE);
+            if (arc_headers != null && arc_headers.length > 0)
+                headers.addAll(Arrays.asList(arc_headers));
+
+            if (headers.size() == 0)
                 return signers;
 
             for (String header : headers) {
@@ -2275,9 +2282,9 @@ public class MessageHelper {
                     else
                         throw new IllegalArgumentException(n);
 
-                    headers = amessage.getHeader(n);
-                    if (headers != null) {
-                        for (String header : headers) {
+                    String[] aheaders = amessage.getHeader(n);
+                    if (aheaders != null) {
+                        for (String header : aheaders) {
                             Map<String, String> kv = getKeyValues(MimeUtility.unfold(header));
                             Integer i = Helper.parseInt(kv.get("i"));
                             if (i == null || map.containsKey(i)) {
@@ -3707,6 +3714,7 @@ public class MessageHelper {
 
             parts.addAll(extra);
 
+            boolean first = true;
             for (PartHolder h : parts) {
 /*
                 int size = h.part.getSize();
@@ -3986,16 +3994,17 @@ public class MessageHelper {
                     }
                 } else if (h.isMarkdown()) {
                     try {
-                        Parser p = Parser.builder().build();
-                        org.commonmark.node.Node d = p.parse(result);
-                        HtmlRenderer r = HtmlRenderer.builder().build();
-                        result = r.render(d);
+                        if (cs == null ||
+                                StandardCharsets.US_ASCII.equals(cs) ||
+                                StandardCharsets.ISO_8859_1.equals(cs))
+                            result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+                        result = (first ? "" : "<br><hr>") + Markdown.toHtml(result);
                     } catch (Throwable ex) {
                         Log.e(ex);
-                        result = HtmlHelper.formatPlainText(Log.formatThrowable(ex));
+                        result = HtmlHelper.formatPlainText(result);
                     }
                 } else if (h.isPatch()) {
-                    result = "<hr>" +
+                    result = (first ? "" : "<br><hr>") +
                             "<pre style=\"font-family: monospace; font-size:small;\">" +
                             HtmlHelper.formatPlainText(result) +
                             "</pre>";
@@ -4036,6 +4045,7 @@ public class MessageHelper {
                     Log.w("Unexpected content type=" + h.contentType);
 
                 sb.append(result);
+                first = false;
             }
 
             return sb.toString();

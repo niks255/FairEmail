@@ -82,6 +82,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swShadowBorder;
     private SwitchCompat swShadowHighlight;
     private SwitchCompat swTabularDividers;
+    private SwitchCompat swTabularUnreadBg;
     private SwitchCompat swPortrait2;
     private SwitchCompat swPortrait2c;
     private Spinner spPortraitMinSize;
@@ -98,6 +99,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swNavMessageCount;
     private SwitchCompat swNavUnseenDrafts;
     private SwitchCompat swNavPinnedCount;
+    private SwitchCompat swShowUnexposed;
     private SwitchCompat swNavBarColorize;
 
     private SwitchCompat swThreading;
@@ -210,9 +212,9 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private final static List<String> RESET_OPTIONS = Collections.unmodifiableList(Arrays.asList(
             "theme", "startup",
             "date", "date_week", "date_fixed", "date_bold", "date_time", "group_category",
-            "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_border", "shadow_highlight", "dividers",
+            "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_border", "shadow_highlight", "dividers", "tabular_unread_bg",
             "portrait2", "portrait2c", "landscape", "close_pane", "open_pane", "column_width",
-            "hide_toolbar", "nav_options", "nav_categories", "nav_last_sync", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "navbar_colorize",
+            "hide_toolbar", "nav_options", "nav_categories", "nav_last_sync", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "show_unexposed", "navbar_colorize",
             "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_swap", "actionbar_color",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
             "avatars", "bimi", "gravatars", "libravatars", "favicons", "favicons_partial", "favicons_manifest", "generated_icons", "identicons",
@@ -259,6 +261,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swShadowBorder = view.findViewById(R.id.swShadowBorder);
         swShadowHighlight = view.findViewById(R.id.swShadowHighlight);
         swTabularDividers = view.findViewById(R.id.swTabularDividers);
+        swTabularUnreadBg = view.findViewById(R.id.swTabularUnreadBg);
         swPortrait2 = view.findViewById(R.id.swPortrait2);
         swPortrait2c = view.findViewById(R.id.swPortrait2c);
         spPortraitMinSize = view.findViewById(R.id.spPortraitMinSize);
@@ -275,6 +278,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swNavMessageCount = view.findViewById(R.id.swNavMessageCount);
         swNavUnseenDrafts = view.findViewById(R.id.swNavUnseenDrafts);
         swNavPinnedCount = view.findViewById(R.id.swNavPinnedCount);
+        swShowUnexposed = view.findViewById(R.id.swShowUnexposed);
         swNavBarColorize = view.findViewById(R.id.swNavBarColorize);
 
         swThreading = view.findViewById(R.id.swThreading);
@@ -492,6 +496,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
                 swShadowBorder.setEnabled(swShadow.isEnabled() && checked);
                 swShadowHighlight.setEnabled(swShadow.isEnabled() && checked);
                 swTabularDividers.setEnabled(!checked);
+                swTabularUnreadBg.setEnabled(!checked);
                 swIndentation.setEnabled(checked);
             }
         });
@@ -538,6 +543,13 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("dividers", checked).apply();
+            }
+        });
+
+        swTabularUnreadBg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("tabular_unread_bg", checked).apply();
             }
         });
 
@@ -673,6 +685,13 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("nav_count_pinned", checked).apply();
+            }
+        });
+
+        swShowUnexposed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("show_unexposed", checked).apply();
             }
         });
 
@@ -1542,6 +1561,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swShadowHighlight.setEnabled(swShadow.isEnabled() && swShadow.isChecked());
             swTabularDividers.setChecked(prefs.getBoolean("dividers", true));
             swTabularDividers.setEnabled(!swCards.isChecked());
+            swTabularUnreadBg.setChecked(prefs.getBoolean("tabular_unread_bg", true));
+            swTabularUnreadBg.setEnabled(!swCards.isChecked());
             swPortrait2.setChecked(prefs.getBoolean("portrait2", false));
             swPortrait2c.setChecked(prefs.getBoolean("portrait2c", false) && !swPortrait2.isChecked());
             spPortraitMinSize.setSelection(prefs.getInt("portrait_min_size", 0));
@@ -1562,6 +1583,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swNavMessageCount.setChecked(prefs.getBoolean("nav_count", false));
             swNavUnseenDrafts.setChecked(prefs.getBoolean("nav_unseen_drafts", false));
             swNavPinnedCount.setChecked(prefs.getBoolean("nav_count_pinned", false));
+            swShowUnexposed.setChecked(prefs.getBoolean("show_unexposed", false));
             swNavBarColorize.setChecked(prefs.getBoolean("navbar_colorize", false));
 
             swThreading.setChecked(prefs.getBoolean("threading", true));

@@ -69,6 +69,7 @@ public class FragmentAccounts extends FragmentBase {
     private boolean cards;
     private boolean dividers;
     private boolean compact;
+    private boolean show_folders;
 
     private ViewGroup view;
     private SwipeRefreshLayout swipeRefresh;
@@ -94,6 +95,7 @@ public class FragmentAccounts extends FragmentBase {
         cards = prefs.getBoolean("cards", true);
         dividers = prefs.getBoolean("dividers", true);
         compact = prefs.getBoolean("compact_accounts", false) && !settings;
+        show_folders = prefs.getBoolean("folders_accounts", false) && !settings;
     }
 
     @Override
@@ -183,8 +185,8 @@ public class FragmentAccounts extends FragmentBase {
                 if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
                     return null;
 
-                TupleAccountEx prev = adapter.getItemAtPosition(pos - 1);
-                TupleAccountEx account = adapter.getItemAtPosition(pos);
+                TupleAccountFolder prev = adapter.getItemAtPosition(pos - 1);
+                TupleAccountFolder account = adapter.getItemAtPosition(pos);
                 if (pos > 0 && prev == null)
                     return null;
                 if (account == null)
@@ -219,7 +221,7 @@ public class FragmentAccounts extends FragmentBase {
         };
         rvAccount.addItemDecoration(categoryDecorator);
 
-        adapter = new AdapterAccount(this, settings, compact);
+        adapter = new AdapterAccount(this, settings, compact, show_folders);
         rvAccount.setAdapter(adapter);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -309,15 +311,15 @@ public class FragmentAccounts extends FragmentBase {
         final DB db = DB.getInstance(context);
 
         // Observe accounts
-        db.account().liveAccountsEx(settings)
-                .observe(getViewLifecycleOwner(), new Observer<List<TupleAccountEx>>() {
+        db.account().liveAccountFolder(settings)
+                .observe(getViewLifecycleOwner(), new Observer<List<TupleAccountFolder>>() {
                     @Override
-                    public void onChanged(@Nullable List<TupleAccountEx> accounts) {
+                    public void onChanged(@Nullable List<TupleAccountFolder> accounts) {
                         if (accounts == null)
                             accounts = new ArrayList<>();
 
                         boolean authorized = true;
-                        for (TupleAccountEx account : accounts)
+                        for (TupleAccountFolder account : accounts)
                             if (account.auth_type != AUTH_TYPE_PASSWORD &&
                                     !Helper.hasPermissions(getContext(), Helper.getOAuthPermissions())) {
                                 authorized = false;
@@ -356,6 +358,8 @@ public class FragmentAccounts extends FragmentBase {
         menu.findItem(R.id.menu_outbox).setVisible(!settings);
         menu.findItem(R.id.menu_compact).setChecked(compact);
         menu.findItem(R.id.menu_compact).setVisible(!settings);
+        menu.findItem(R.id.menu_show_folders).setChecked(show_folders);
+        menu.findItem(R.id.menu_show_folders).setVisible(!settings);
         menu.findItem(R.id.menu_theme).setVisible(!settings);
         menu.findItem(R.id.menu_force_sync).setVisible(!settings);
 
@@ -376,6 +380,9 @@ public class FragmentAccounts extends FragmentBase {
             return true;
         } else if (itemId == R.id.menu_compact) {
             onMenuCompact();
+            return true;
+        } else if (itemId == R.id.menu_show_folders) {
+            onMenuShowFolders();
             return true;
         } else if (itemId == R.id.menu_theme) {
             onMenuTheme();
@@ -428,6 +435,16 @@ public class FragmentAccounts extends FragmentBase {
                 }
             }
         });
+    }
+
+    private void onMenuShowFolders() {
+        show_folders = !show_folders;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        prefs.edit().putBoolean("folders_accounts", show_folders).apply();
+
+        invalidateOptionsMenu();
+        adapter.setShowFolders(show_folders);
     }
 
     private void onMenuTheme() {

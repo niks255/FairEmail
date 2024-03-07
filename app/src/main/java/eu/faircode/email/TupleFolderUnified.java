@@ -27,6 +27,7 @@ public class TupleFolderUnified {
     public int folders;
     public int messages;
     public int unseen;
+    public int unexposed;
     public String sync_state;
     public Integer color;
     public int colorCount;
@@ -40,6 +41,7 @@ public class TupleFolderUnified {
                     this.folders == other.folders &&
                     this.messages == other.messages &&
                     this.unseen == other.unseen &&
+                    this.unexposed == other.unexposed &&
                     Objects.equals(this.sync_state, other.sync_state) &&
                     Objects.equals(this.color, other.color) &&
                     this.colorCount == other.colorCount);

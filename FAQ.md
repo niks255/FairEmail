@@ -2466,6 +2466,7 @@ but even Google's Chrome cannot handle this.
 * Did you know that you can insert the email addresses of an Android contact group via the three dots overflow menu?
 * Did you know that if you select text and reply, only the selected text will be quoted? (this works for reformatted messages only because of [this issue](https://issuetracker.google.com/issues/36939405))
 * Did you know that you can long press the trash icons (both in the message and the bottom action bar) to permanently delete a message or conversation? (version 1.1368+)
+* Did you know that you can long press the archive button in the bottom action bar to move a conversation? (version 1.2160+)
 * Did you know that you can long press the send action to show the send dialog, even if it was disabled?
 * Did you know that you can long press the full screen icon to show the original message text only?
 * Did you know that you can long press the answer button to reply to the sender? (since version 1.1562; since version 1.1839 you can configure the action in the send settings)
@@ -3837,6 +3838,9 @@ Note that:
 
 Please [see here](https://support.google.com/googleplay/answer/4646404) about how to add, remove, or edit your Google Play payment method.
 
+Sometimes the Play Store assigns a purchase incorrectly to another Google account configured on the device, resulting in the purchase not being recognized anymore.
+Some people reported that force stopping the Play Store app / Google Play Services, clearing the data and the cache, and starting the Play Store again resolves this problem.
+
 If you cannot restore a purchase,
 please contact me via [this contact form](https://contact.faircode.eu/?product=fairemailsupport),
 mentioning the email address of the Google account used for the purchase.
@@ -3952,6 +3956,10 @@ Reformatting and displaying such messages will take too long. You can try to use
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq125)
 
+Experimental features can be enabled in the miscellaneous-settings tab page.
+
+<br />
+
 *Send hard bounce (version 1.1477+)*
 
 Send a [Delivery Status Notification](https://tools.ietf.org/html/rfc3464) (=hard bounce) via the reply/answer menu.
@@ -4021,6 +4029,12 @@ a toolbar to perform operations (align text, insert list, indent text, insert bl
 *Edit subject (1.2046+)*
 
 The subject of a received message can be edited, also on the email server, via the horizontal three-dots button just above the message text near the left side of the screen.
+
+<br />
+
+*Markdown (1.2061+)*
+
+Composing messages using [Markdown](https://en.wikipedia.org/wiki/Markdown) can be enabled via the three-dots overflow menu of the message editor.
 
 <br />
 
@@ -4286,14 +4300,16 @@ Note that FairEmail does support replying to calendar invites (a pro feature) an
 The confusing Microsoft specific server error *User is authenticated but not connected* might occur if:
 
 * External access is administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules) about how an administrator can enable it again
+* Access by third-party apps is administratively disabled or allowed for specific apps only
+* IMAP is administratively disabled, please see [this article](https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/pop3-and-imap4/enable-or-disable-pop3-or-imap4-access) about how an administrator can enable it again
 * SMTP is administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission) about how an administrator can enable it again
+* A security policy is blocking the login, for example because only specific network connections are allowed, please see [this article](https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules) about how an administrator can enable it again
 * Required server components are disabled, please see [this article](https://learn.microsoft.com/en-us/exchange/troubleshoot/user-and-shared-mailboxes/pop3-imap-owa-activesync-office-365) about enabling IMAP, MAPI, etc.
 * Push messages are enabled for too many folders: see [this FAQ](#faq23) for more information and a workaround
 * There were too many login attempts in a too short time, for example by using multiple email clients at the same time
 * The wrong account was selected in the Microsoft account selector, for example an account with a different email address or a personal instead of a business account
 * An ad blocker or DNS changer is being used
 * Devices in another time zone are connected to the same account
-* A security policy is blocking the login, for example because only specific network connections are allowed
 * There is a problem with the Exchange server license: it might be expired or for another server edition
 * An alias email address is being used as username instead of the primary email address
 * An incorrect login scheme is being used for a shared mailbox: the right scheme is *username@domain\SharedMailboxAlias*
@@ -4576,6 +4592,9 @@ Since version 1.1556 it is possible to export all messages of a POP3 folder in m
 which might be useful to backup sent messages if the email server doesn't (which is risky because breaking or losing your device, means losing your sent messages!).
 For this, please long press on the folder in the folder list of an account (tap on the account name in the navigation menu).
 
+Since version 1.2160 it is possible to import messages in an mbox file conforming to [RFC4155](https://www.ietf.org/rfc/rfc4155.txt) into a POP3 folder.
+Note that imported messages won't be uploaded to the email server because this is not possible with POP3.
+
 If you want to import an mbox file into an existing email account,
 you can use Thunderbird on a desktop computer and the [ImportExportTools NG](https://addons.thunderbird.net/de/thunderbird/addon/importexporttools-ng/) add-on.
 
@@ -4745,6 +4764,8 @@ A complicating factor is that not all email servers support [UID EXPUNGE](https:
 
 Since version 1.1485 it is possible to temporarily enable debug mode in the miscellaneous settings to disable auto expunging messages.
 Note that messages with a *\Deleted* flag will not be shown if auto EXPUNGE is enabled.
+
+In the debug panel, it is also possible to disable permanent delete confirmation and enable permanent delete from notifications (since version 1.2163).
 
 <br />
 
@@ -5325,7 +5346,7 @@ Send is only available in non-Play Store versions of the app (since version 1.19
 
 Password protected content is a simple, yet secure form of end-to-end encryption that requires no configuration.
 
-How to use: select some text by long pressing it, and in the style toolbar at the bottom tap on the *<ins>A</ins>*-button and select *Password protect* in the pop-up menu.
+How to use: select some text by long pressing it, and in the style toolbar at the bottom tap on the padlock-button and select *Password protect* in the pop-up menu.
 This will replace the selected content with a link that the recipient can click to decrypt the content on a dedicated static web page.
 
 Password protected content is sent as a [URI fragment](https://en.wikipedia.org/wiki/URI_fragment) and decrypted in the browser with JavaScript.

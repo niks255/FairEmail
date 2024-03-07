@@ -105,6 +105,7 @@
     <string name="title_blocked_senders">Expeditori blocați</string>
     <string name="title_unblock_all">Deblocați pe toți</string>
     <string name="title_unblock_all_remark">Aceasta va reseta toate listele și opțiunile care ar putea duce la blocarea expeditorilor</string>
+    <string name="title_unblock_all_hint">Țineți cont că aplicația nu poate împiedica serverul de e-mail să mute mesaje în folderul spam!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Blochează expeditorul a %1$s mesaj?</item>
         <item quantity="few">Blochează expeditorul a %1$s mesaje?</item>
@@ -398,6 +399,7 @@
     <string name="title_advanced_suggest_received">Sugerează adrese găsite în mesajele primite</string>
     <string name="title_advanced_suggest_frequently">Sortați adresele sugerate în funcție de frecvența de utilizare</string>
     <string name="title_advanced_suggest_account">Limitează sugestiile la contul curent</string>
+    <string name="title_advanced_auto_delete_local">Șterge automat contactele locale mai vechi sau cele utilizate mai puțin de:</string>
     <string name="title_advanced_alt_re_fwd">Prefix alternativ de răspuns/întârziere</string>
     <string name="title_advanced_send_chips">Afișați bule de adrese</string>
     <string name="title_advanced_send_nav_color">Utilizați culoarea de identitate pentru bara de acțiune de jos</string>
@@ -497,6 +499,7 @@
     <string name="title_advanced_nav_message_count">Afișarea numărului de mesaje stocate local în meniul de navigare</string>
     <string name="title_advanced_nav_unseen_drafts">Afișarea numărului de ciorne necitite în meniul de navigare</string>
     <string name="title_advanced_nav_pinned_count">Afișarea numărului de mesaje necitite în meniul de navigare fixat</string>
+    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Arată o stea pentru conturi/dosare cu mesaje necitite primite recent</string>
     <string name="title_advanced_startup">Arată pe ecranul de start</string>
     <string name="title_advanced_cards">Folosește stilul carduri în loc de cel tabular</string>
     <string name="title_advanced_category">Categoria contului poate fi configurată în opțiunile avansate ale contului prin intermediul ecranului principal de setări</string>
@@ -506,6 +509,7 @@
     <string name="title_advanced_cards_shadow_border">Arată chenarul</string>
     <string name="title_advanced_cards_shadow_highlight">Utilizați culoarea de evidențiere în loc de culoarea de accent</string>
     <string name="title_advanced_tabular_dividers">Utilizați linii despărțitoare atunci când utilizați stilul tabelar</string>
+    <string name="title_advanced_tabular_unread_bg">Folosește o culoare gri de fundal pentru mesajele necitite când se folosește stilul tabel</string>
     <string name="title_advanced_date_header">Grupare după dată</string>
     <string name="title_advanced_date_week">Grupare pe săptămână în loc de zi</string>
     <string name="title_advanced_date_fixed">Afișați antetul cu dată fixă în partea de sus</string>
@@ -639,7 +643,7 @@
     <string name="title_advanced_auto_block_sender">Blochează automat expeditorul când raportezi spam-ul</string>
     <string name="title_advanced_auto_hide_answer">Ascunde automat butonul de răspuns la derulare</string>
     <string name="title_advanced_swipe_reply">Glisați mesajele extinse spre dreapta pentru a răspunde</string>
-    <string name="title_advanced_move_thread_all">Când mutați o conversație, mutați toate mesajele</string>
+    <string name="title_advanced_move_thread_all">La mutarea conversațiilor selectate, mutați toate mesajele</string>
     <string name="title_advanced_move_thread_sent">Atunci când mutați o conversație, mutați și mesajele trimise</string>
     <string name="title_advanced_default_snooze">Timpul implicit de amânare/prelungire</string>
     <string name="title_advanced_default_folder">Selectați directorul implicit</string>
@@ -830,6 +834,7 @@
     <string name="title_advanced_rlah_hint">În zona UE nu se tratează ca roaming</string>
     <string name="title_advanced_usage_hint">Acest lucru va crește utilizarea bateriei, a datelor și a spațiului de stocare</string>
     <string name="title_advanced_plain_hint">Activarea acestei opțiuni va limita utilizarea datelor, dar mesajele vor fi afișate fără stilizare</string>
+    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Textul simplu nu conține întotdeauna mesajul complet!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activarea acesteia poate cauza probleme de conexiune pe unele dispozitive și poate crește utilizarea bateriei</string>
     <string name="title_advanced_validate_hint">Acest lucru poate duce la nesincronizarea mesajelor, de exemplu atunci când se utilizează un VPN, dar și în alte situații</string>
     <string name="title_advanced_timeout_hint">Timpul de expirare a citirii/scrierii va fi setat la dublul intervalului de expirare a conexiunii. Valori mai mari au ca rezultat o utilizare mai mare a bateriei.</string>
@@ -874,7 +879,6 @@
     <string name="title_advanced_display_harmful_hint">Dezactivarea poate fi dăunătoare pentru intimitatea dumneavoastră</string>
     <string name="title_advanced_display_hidden_hint">Se poate ca rezultatul să arate ciudat și textul să fie dublat</string>
     <string name="title_advanced_display_pin_hint">PIN-ul are prioritate față de autentificarea biometrică</string>
-    <string name="title_advanced_display_autolock_nav_hint">Va exista un timp de grație de %1$d secunde</string>
     <string name="title_advanced_user_agent_hint">Unele servere nu acceptă un șir generic de agent utilizator</string>
     <string name="title_advanced_safe_browsing_hint">Serverul Google știe ce adrese sunt căutate</string>
     <string name="title_advanced_badge_hint">Disponibil doar pe lansatoarele suportate</string>
@@ -1079,6 +1083,7 @@
     <string name="title_edit_rules">Editare reguli</string>
     <string name="title_execute_rules">Execută regulile</string>
     <string name="title_export_messages">Exportă mesajele</string>
+    <string name="title_import_messages">Importă mesaje</string>
     <string name="title_create_channel">Creare canal de notificare</string>
     <string name="title_edit_channel">Editare canal de notificare</string>
     <string name="title_delete_channel">Șterge canal de notificare</string>

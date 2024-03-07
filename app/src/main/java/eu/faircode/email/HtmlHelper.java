@@ -540,12 +540,14 @@ public class HtmlHelper {
             sheets = parseStyles(parsed.head().select("style"));
 
         Safelist safelist = Safelist.relaxed()
-                .addTags("hr", "abbr", "big", "font", "dfn", "del", "s", "tt", "mark", "address")
+                .addTags("hr", "abbr", "big", "font", "dfn", "ins", "del", "s", "tt", "mark", "address", "input")
                 .addAttributes(":all", "class")
                 .addAttributes(":all", "style")
                 .addAttributes("span", "dir")
                 .addAttributes("li", "dir")
                 .addAttributes("div", "x-plain")
+                .addAttributes("input", "type")
+                .addAttributes("input", "checked")
                 .removeTags("col", "colgroup")
                 .removeTags("thead", "tbody", "tfoot")
                 .addAttributes("td", "width")
@@ -1120,8 +1122,8 @@ public class HtmlHelper {
         for (Element h : hs)
             if (!"false".equals(h.attr("x-line-before")))
                 h.attr("x-line-before", "true");
-        if (text_size) {
-            if (text_separators && view)
+        if (text_size && view) {
+            if (text_separators)
                 for (Element h : hs)
                     h.appendElement("hr")
                             .attr("x-block", "true");
@@ -3730,8 +3732,14 @@ public class HtmlHelper {
                             case "h4":
                             case "h5":
                             case "h6":
-                                // Font size is already set
                                 setSpan(ssb, new StyleSpan(Typeface.BOLD), start, ssb.length());
+                                int hsize = tag.charAt(1) - '0';
+                                if (hsize == 1)
+                                    setSpan(ssb, new RelativeSizeSpan(FONT_XLARGE), start, ssb.length());
+                                else if (hsize == 2)
+                                    setSpan(ssb, new RelativeSizeSpan(FONT_LARGE), start, ssb.length());
+                                else if (hsize > 3)
+                                    setSpan(ssb, new RelativeSizeSpan(FONT_SMALL), start, ssb.length());
                                 break;
                             case "hr":
                                 // Suppress successive lines
@@ -3774,6 +3782,12 @@ public class HtmlHelper {
                                     ssb.insert(start, "\uFFFC"); // Object replacement character
                                     setSpan(ssb, new ImageSpanEx(d, element), start, start + 1);
                                 }
+                                break;
+                            case "input":
+                                String type = element.attr("type");
+                                boolean checked = element.hasAttr("checked");
+                                if ("checkbox".equalsIgnoreCase(type))
+                                    ssb.append(checked ? "\u2611" : "\u2610");
                                 break;
                             case "li":
                                 if (start == 0 || ssb.charAt(start - 1) != '\n')
@@ -3881,12 +3895,15 @@ public class HtmlHelper {
                             case "s":
                             case "del":
                             case "strike":
+                                // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/del
                                 setSpan(ssb, new StrikethroughSpan(), start, ssb.length());
                                 break;
                             case "title":
                                 // Signature, etc
                                 break;
                             case "u":
+                            case "ins":
+                                // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ins
                                 setSpan(ssb, new UnderlineSpan(), start, ssb.length());
                                 break;
                             default:

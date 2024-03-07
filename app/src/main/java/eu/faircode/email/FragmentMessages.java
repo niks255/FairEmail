@@ -2237,20 +2237,7 @@ public class FragmentMessages extends FragmentBase
                             if (offset < 0 && dx > height / 8) {
                                 otriggered.value = true;
 
-                                Bundle args = new Bundle();
-                                args.putInt("icon", R.drawable.twotone_drive_file_move_24);
-                                args.putString("title", getString(R.string.title_move_to_folder));
-                                args.putLong("account", account);
-                                args.putString("thread", thread);
-                                args.putLong("id", id);
-                                args.putBoolean("move_thread_sent", move_thread_sent);
-                                args.putBoolean("filter_archive", filter_archive);
-                                args.putLongArray("disabled", new long[]{folder});
-
-                                FragmentDialogSelectFolder fragment = new FragmentDialogSelectFolder();
-                                fragment.setArguments(args);
-                                fragment.setTargetFragment(FragmentMessages.this, REQUEST_THREAD_MOVE);
-                                fragment.show(getParentFragmentManager(), "overscroll:move");
+                                moveThread();
                             }
                         }
                     }
@@ -5364,35 +5351,50 @@ public class FragmentMessages extends FragmentBase
 
         if (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER) {
             boolean notify_clear = prefs.getBoolean("notify_clear", false);
-            if (notify_clear) {
-                Bundle args = new Bundle();
-                args.putLong("folder", folder);
-                args.putString("type", type);
 
-                new SimpleTask<Void>() {
-                    @Override
-                    protected Void onExecute(Context context, Bundle args) {
-                        long folder = args.getLong("folder");
-                        String type = args.getString("type");
+            Bundle args = new Bundle();
+            args.putLong("folder", folder);
+            args.putString("type", type);
+            args.putBoolean("notify_clear", notify_clear);
 
-                        DB db = DB.getInstance(context);
+            new SimpleTask<Void>() {
+                @Override
+                protected Void onExecute(Context context, Bundle args) {
+                    long folder = args.getLong("folder");
+                    String type = args.getString("type");
+                    boolean notify_clear = args.getBoolean("notify_clear");
+
+                    DB db = DB.getInstance(context);
+                    try {
+                        db.beginTransaction();
+
                         if (folder < 0) {
                             List<EntityAccount> accounts = db.account().getSynchronizingAccounts(null);
                             if (accounts != null)
-                                for (EntityAccount account : accounts)
-                                    db.message().ignoreAll(account.id, null, type);
-                        } else
-                            db.message().ignoreAll(null, folder, type);
+                                for (EntityAccount account : accounts) {
+                                    if (notify_clear)
+                                        db.message().ignoreAll(account.id, null, type);
+                                    db.folder().setFolderLastView(account.id, null, type, new Date().getTime());
+                                }
+                        } else {
+                            if (notify_clear)
+                                db.message().ignoreAll(null, folder, type);
+                            db.folder().setFolderLastView(null, folder, type, new Date().getTime());
+                        }
 
-                        return null;
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
                     }
 
-                    @Override
-                    protected void onException(Bundle args, Throwable ex) {
-                        Log.unexpectedError(getParentFragmentManager(), ex);
-                    }
-                }.execute(this, args, "messages:ignore");
-            }
+                    return null;
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragmentManager(), ex);
+                }
+            }.execute(this, args, "messages:ignore");
         }
     }
 
@@ -7607,6 +7609,15 @@ public class FragmentMessages extends FragmentBase
                             .setVisible(data.archivable);
                     bottom_navigation.setVisibility(View.VISIBLE);
 
+                    bottom_navigation.findViewById(actionbar_archive_id)
+                            .setOnLongClickListener(new View.OnLongClickListener() {
+                                @Override
+                                public boolean onLongClick(View v) {
+                                    moveThread();
+                                    return true;
+                                }
+                            });
+
                     bottom_navigation.findViewById(actionbar_delete_id)
                             .setOnLongClickListener(new View.OnLongClickListener() {
                                 @Override
@@ -7917,6 +7928,23 @@ public class FragmentMessages extends FragmentBase
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "messages:navigate");
+    }
+
+    private void moveThread() {
+        Bundle args = new Bundle();
+        args.putInt("icon", R.drawable.twotone_drive_file_move_24);
+        args.putString("title", getString(R.string.title_move_to_folder));
+        args.putLong("account", account);
+        args.putString("thread", thread);
+        args.putLong("id", id);
+        args.putBoolean("move_thread_sent", move_thread_sent);
+        args.putBoolean("filter_archive", filter_archive);
+        args.putLongArray("disabled", new long[]{folder});
+
+        FragmentDialogSelectFolder fragment = new FragmentDialogSelectFolder();
+        fragment.setArguments(args);
+        fragment.setTargetFragment(this, REQUEST_THREAD_MOVE);
+        fragment.show(getParentFragmentManager(), "messages:move:thread");
     }
 
     private void moveAsk(final ArrayList<MessageTarget> result, boolean undo) {
