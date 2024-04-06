@@ -127,8 +127,10 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
     private SwitchCompat swLookupMx;
     private SwitchCompat swReplyMove;
     private SwitchCompat swReplyMoveInbox;
+    private EditText etSendRetryMax;
+    private SwitchCompat swSendPartial;
 
-    private final static List<String> RESET_OPTIONS = Collections.unmodifiableList(Arrays.asList(
+    final static List<String> RESET_OPTIONS = Collections.unmodifiableList(Arrays.asList(
             "keyboard", "keyboard_no_fullscreen",
             "suggest_names", "suggest_sent", "suggested_received", "suggest_frequently", "suggest_account", "auto_identity",
             "purge_contact_age", "purge_contact_freq",
@@ -146,7 +148,8 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             "format_flowed", "usenet_signature", "remove_signatures",
             "receipt_default", "receipt_type", "receipt_legacy",
             "forward_new",
-            "lookup_mx", "reply_move", "reply_move_inbox"
+            "lookup_mx", "reply_move", "reply_move_inbox",
+            "send_retry_max", "send_partial"
     ));
 
     @Override
@@ -219,6 +222,8 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         swLookupMx = view.findViewById(R.id.swLookupMx);
         swReplyMove = view.findViewById(R.id.swReplyMove);
         swReplyMoveInbox = view.findViewById(R.id.swReplyMoveInbox);
+        etSendRetryMax = view.findViewById(R.id.etSendRetryMax);
+        swSendPartial = view.findViewById(R.id.swSendPartial);
 
         List<StyleHelper.FontDescriptor> fonts = StyleHelper.getFonts(getContext(), false);
 
@@ -762,6 +767,34 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             }
         });
 
+        etSendRetryMax.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Integer count = Helper.parseInt(s.toString());
+                if (count == null)
+                    prefs.edit().remove("send_retry_max").apply();
+                else
+                    prefs.edit().putInt("send_retry_max", count).apply();
+            }
+        });
+
+        swSendPartial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("send_partial", checked).apply();
+            }
+        });
+
         // Initialize
         FragmentDialogTheme.setBackground(getContext(), view, false);
 
@@ -797,6 +830,8 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
         if (!RESET_OPTIONS.contains(key))
             return;
         if ("purge_contact_age".equals(key) || "purge_contact_freq".equals(key))
+            return;
+        if ("send_retry_max".equals(key))
             return;
 
         getMainHandler().removeCallbacks(update);
@@ -938,6 +973,12 @@ public class FragmentOptionsSend extends FragmentBase implements SharedPreferenc
             swReplyMove.setChecked(prefs.getBoolean("reply_move", false));
             swReplyMoveInbox.setChecked(prefs.getBoolean("reply_move_inbox", true));
             swReplyMoveInbox.setEnabled(swReplyMove.isChecked());
+
+            int send_retry_max = prefs.getInt("send_retry_max", 0);
+            etSendRetryMax.setText(send_retry_max > 0 ? Integer.toString(send_retry_max) : null);
+            etSendRetryMax.setHint(Integer.toString(ServiceSend.RETRY_MAX_DEFAULT));
+
+            swSendPartial.setChecked(prefs.getBoolean("send_partial", false));
         } catch (Throwable ex) {
             Log.e(ex);
         }

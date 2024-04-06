@@ -414,6 +414,8 @@ Anything on this list is in random order and *might* be added in the near future
 * [(200) How can I use Adguard to remove tracking parameters?](#faq200)
 * [(201) What is certificate transparency?](#faq201)
 * [(202) What is DNSSEC and what is DANE?](#faq202)
+* [(203) Where is my sent message?](#faq203)
+* [(204) How do I use Gemini?](#faq204)
 
 [I have another question.](#get-support)
 
@@ -1075,6 +1077,7 @@ In case the certificate chain is incorrect, you can tap on the little info butto
 After the certificate details the issuer or "selfSign" is shown.
 A certificate is self signed when the subject and the issuer are the same.
 Certificates from a certificate authority (CA) are marked with "[keyCertSign](https://tools.ietf.org/html/rfc5280#section-4.2.1.3)".
+You can find the description of other key usage bits, like *cRLSign*, via this same link.
 Certificates found in the Android key store are marked with "Android".
 
 A valid chain looks like this:
@@ -1093,8 +1096,6 @@ The use of expired keys, inline encrypted/signed messages and hardware security 
 If you are looking for a free (test) S/MIME certificate, see [here](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for the options.
 Please be sure to [read this first](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219)
 if you want to request an S/MIME Actalis certificate.
-
-S/MIME certificates can for example be purchased via [Xolphin](https://www.xolphin.com/).
 
 How to extract a public key from a S/MIME certificate:
 
@@ -5777,6 +5778,47 @@ Some email providers known to support DANE for client-to-server traffic:
 This is not a complete and exhaustive list.
 
 Please see [this article](https://www.zivver.com/blog/why-cisos-and-security-professionals-can-no-longer-rely-on-regular-email-for-the-sharing-of-personal-information) about why DANE is important.
+
+<br>
+
+<a name="faq203"></a>
+**(203) Where is my sent message?**
+
+When you write a message, it will be stored in the draft messages folder.
+
+When you send a message, it will be in the outbox first and later in the sent messages folder.
+
+The outbox is a queue of messages to be transferred to the email server of your email provider.
+After a message has been transferred to the email server, it will be stored in the sent messages folder.
+
+The sent messages folder can be selected in the account settings: navigation menu (left side menu) > Settings > Manual setup and account options > Accounts > tap the account.
+
+The email server will take care of sending the message to the recipient.
+
+If a message could not be sent to the recipient, you'll in most cases receive a non-delivery notification message,
+a special email, indicating the reason, like user (email address) unknown.
+FairEmail will decode non-delivery notification messages, so you can see all the details.
+
+Basically, an outgoing message is either in the draft messages folder, the outbox, or the sent messages folder.
+
+<br>
+
+<a name="faq204"></a>
+**(204) How do I use Gemini?**
+
+To use [Gemini](https://gemini.google.com/), please follow these steps:
+
+1. Check if your country [is supported](https://support.google.com/gemini/answer/13575153)
+1. Get an API key via [here](https://ai.google.dev/tutorials/setup)
+1. Enter the API key in the integration settings tab page
+1. Enable Gemini integration in the integration settings tab page
+
+For usage instructions, please see [this FAQ](#faq190).
+
+Please read the privacy policy of [Gemini](https://support.google.com/gemini/answer/13594961).
+FairEmail does not use third-party libraries to avoid being tracked when Gemini is not being used.
+
+This feature was added in version 1.2171 and is available in the GitHub version of the app only.
 
 <br>
 

@@ -14,6 +14,9 @@
     <string name="app_cake_required">Espacio de almacenamiento mínimo requerido: %1$s</string>
     <string name="app_updated">Última actualización: %1$s</string>
     <string name="app_download">Descargado de: %1$s</string>
+    <string name="app_mod1">La actualización de seguridad de Marzo está ocasionando mensajes de \'La app no responde\', exclusivamente en dispositivos Google Pixel.
+        Por favor no culpe a la app por esto, ¡sólo Google puede resolverlo!
+    </string>
     <string name="channel_service">Monitor</string>
     <string name="channel_send">Enviar</string>
     <string name="channel_notification">Correo electrónico</string>
@@ -423,6 +426,11 @@
     <string name="title_advanced_discard_delete">Al descartar borrador eliminarlo permanentemente</string>
     <string name="title_advanced_reply_move">Al responder un mensaje, guardar la respuesta en la misma carpeta</string>
     <string name="title_advanced_reply_move_inbox">También para mensajes en la bandeja de entrada</string>
+    <string name="title_advanced_send_retry_max">Máximo de intentos de envío</string>
+    <string name="title_advanced_send_retry_hint">El envío se reintentará en caso de cambios de conectividad</string>
+    <string name="title_advanced_send_partial">Ignorar direcciones inválidas al enviar</string>
+    <string name="title_advanced_send_partial_hint">Si algunas direcciones no son válidas, se enviará un mensaje a las otras direcciones</string>
+    <string name="title_advanced_sent_partially">El mensaje no fue enviado a todos los destinatarios</string>
     <string name="title_advanced_auto_link">Crear enlaces automáticamente</string>
     <string name="title_advanced_plain_only">Enviar sólo texto plano por defecto</string>
     <string name="title_advanced_plain_only_reply">Texto plano automático sólo cuando se responde a un mensaje de texto plano</string>
@@ -485,7 +493,7 @@
     <string name="title_advanced_nav_message_count">Mostrar el número de mensajes almacenados localmente en el menú de navegación</string>
     <string name="title_advanced_nav_unseen_drafts">Mostrar número de borradores sin leer en el menú de navegación</string>
     <string name="title_advanced_nav_pinned_count">Mostrar el número de mensajes no leídos en el menú de navegación fijado</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Mostrar una estrella para cuentas o carpetas con mensajes no leídos recibidos recientemente</string>
+    <string name="title_advanced_show_unexposed">Mostrar una estrella para cuentas o carpetas con mensajes no leídos recibidos recientemente</string>
     <string name="title_advanced_startup">Mostrar en pantalla de inicio</string>
     <string name="title_advanced_cards">Usar estilo de tarjeta en lugar del estilo tabular</string>
     <string name="title_advanced_category">La categoría de la cuenta puede configurarse en las opciones avanzadas de la cuenta a través de la pantalla de configuración principal</string>
@@ -820,7 +828,7 @@
     <string name="title_advanced_rlah_hint">Suponiendo que no hay itinerancia dentro de la UE</string>
     <string name="title_advanced_usage_hint">Esto aumentará el uso de batería, datos y espacio de almacenamiento</string>
     <string name="title_advanced_plain_hint">Activar esto limitará el uso de datos, pero los mensajes se mostrarán sin estilizar</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">¡La parte de texto plano no siempre contiene el mensaje completo!</string>
+    <string name="title_advanced_plain_remark">¡La parte de texto plano no siempre contiene el mensaje completo!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activar esto puede causar problemas de conexión en algunos dispositivos y puede aumentar el uso de la batería</string>
     <string name="title_advanced_validate_hint">Esto puede ocasionar que no sincronicen los mensajes, por ejemplo cuando se utiliza una VPN, pero también en otras situaciones</string>
     <string name="title_advanced_timeout_hint">El tiempo de espera de lectura/escritura se establecerá al doble del tiempo de espera de conexión. Valores más altos resultarán en un mayor uso de la batería.</string>
@@ -1169,6 +1177,7 @@
     <string name="title_subject_forward_alt">Fwd: %1$s</string>
     <string name="title_seen">Marcar como leído</string>
     <string name="title_unseen">Marcar como no leído</string>
+    <string name="title_seen_unseen">Marcar como leído/no leído</string>
     <string name="title_toggle_seen">Cambiar leído</string>
     <string name="title_hide">Ocultar</string>
     <string name="title_unhide">Mostrar</string>
@@ -1583,6 +1592,8 @@
     <string name="title_sort_on_time">Tiempo</string>
     <string name="title_sort_on_unread">No leído</string>
     <string name="title_sort_on_starred">Destacado</string>
+    <string name="title_sort_on_unread_starred">No leído, destacado</string>
+    <string name="title_sort_on_starred_unread">Destacado, no leído</string>
     <string name="title_sort_on_priority">Prioridad</string>
     <string name="title_sort_on_sender">Remitente</string>
     <string name="title_sort_on_subject">Asunto</string>

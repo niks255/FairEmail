@@ -168,6 +168,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAutostart;
     private SwitchCompat swEmergency;
     private SwitchCompat swWorkManager;
+    private SwitchCompat swTaskDescription;
     private SwitchCompat swExternalStorage;
     private TextView tvExternalStorageFolder;
     private SwitchCompat swIntegrity;
@@ -267,7 +268,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private static final int REQUEST_CLASSIFIER = 1;
     private static final long MIN_FILE_SIZE = 1024 * 1024L;
 
-    private final static List<String> RESET_OPTIONS = Collections.unmodifiableList(Arrays.asList(
+    final static List<String> RESET_OPTIONS = Collections.unmodifiableList(Arrays.asList(
             "sort_answers", "shortcuts", "ical_tentative", "fts",
             "classification", "class_min_probability", "class_min_difference",
             "show_filtered", "haptic_feedback",
@@ -276,7 +277,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "crash_reports", "cleanup_attachments",
             "watchdog", "experiments", "main_log", "main_log_memory", "protocol", "log_level", "debug", "leak_canary",
             "test1", "test2", "test3", "test4", "test5",
-            "emergency_file", "work_manager", // "external_storage",
+            "emergency_file", "work_manager", "task_description", // "external_storage",
             "sqlite_integrity_check", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_auto_vacuum", "sqlite_sync_extra", "sqlite_cache",
             "oauth_tabs",
             "chunk_size", "thread_range",
@@ -410,6 +411,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAutostart = view.findViewById(R.id.swAutostart);
         swEmergency = view.findViewById(R.id.swEmergency);
         swWorkManager = view.findViewById(R.id.swWorkManager);
+        swTaskDescription = view.findViewById(R.id.swTaskDescription);
         swExternalStorage = view.findViewById(R.id.swExternalStorage);
         tvExternalStorageFolder = view.findViewById(R.id.tvExternalStorageFolder);
         swIntegrity = view.findViewById(R.id.swIntegrity);
@@ -1096,6 +1098,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
         swHwAccel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {prefs.edit().putBoolean("hw_accel", isChecked).commit();}});
+        swTaskDescription.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton v, boolean isChecked) {
+                prefs.edit().putBoolean("task_description", isChecked).apply();
+            }
+        });
+
         swExternalStorage.setEnabled(Helper.getExternalFilesDir(getContext()) != null);
         swExternalStorage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -2315,6 +2324,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swAutostart.setChecked(Helper.isComponentEnabled(getContext(), ReceiverAutoStart.class));
             swEmergency.setChecked(prefs.getBoolean("emergency_file", true));
             swWorkManager.setChecked(prefs.getBoolean("work_manager", true));
+            swTaskDescription.setChecked(prefs.getBoolean("task_description", true));
             swExternalStorage.setChecked(prefs.getBoolean("external_storage", false));
 
             swIntegrity.setChecked(prefs.getBoolean("sqlite_integrity_check", true));

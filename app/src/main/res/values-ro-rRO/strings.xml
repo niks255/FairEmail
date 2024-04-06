@@ -14,6 +14,9 @@
     <string name="app_cake_required">Spațiu minim necesar de stocare: %1$s</string>
     <string name="app_updated">Ultima actualizare: %1$s</string>
     <string name="app_download">Descărcat de la: %1$s</string>
+    <string name="app_mod1">        Actualizarea de securitate din martie provoacă mesaje de tip \"Aplicația nu răspunde\", exclusiv pe dispozitivele Google Pixel.
+        Vă rugăm să nu dați vina pe aplicație pentru acest lucru, doar Google poate rezolva asta!
+    </string>
     <string name="channel_service">Ecran</string>
     <string name="channel_send">Trimite</string>
     <string name="channel_notification">E-mail</string>
@@ -437,6 +440,11 @@
     <string name="title_advanced_discard_delete">Ciorna se șterge când renunțați la ea</string>
     <string name="title_advanced_reply_move">Când răspundeți la un mesaj, salvați răspunsul în același dosar</string>
     <string name="title_advanced_reply_move_inbox">De asemenea, pentru mesajele din primite</string>
+    <string name="title_advanced_send_retry_max">Încercări maxime de trimitere</string>
+    <string name="title_advanced_send_retry_hint">Trimiterea va fi reîncercată la schimbarea conectivității</string>
+    <string name="title_advanced_send_partial">Ignoră adresele incorecte la trimitere</string>
+    <string name="title_advanced_send_partial_hint">Dacă unele adrese nu sunt valide, mesajul va fi trimis totuși la celelalte adrese</string>
+    <string name="title_advanced_sent_partially">Mesajul nu a fost trimis tuturor destinatarilor</string>
     <string name="title_advanced_auto_link">Creează automat adrese</string>
     <string name="title_advanced_plain_only">Trimite implicit ca text simplu</string>
     <string name="title_advanced_plain_only_reply">Setează automat text simplu doar când se răspunde la un mesaj cu text simplu</string>
@@ -499,7 +507,7 @@
     <string name="title_advanced_nav_message_count">Afișarea numărului de mesaje stocate local în meniul de navigare</string>
     <string name="title_advanced_nav_unseen_drafts">Afișarea numărului de ciorne necitite în meniul de navigare</string>
     <string name="title_advanced_nav_pinned_count">Afișarea numărului de mesaje necitite în meniul de navigare fixat</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Arată o stea pentru conturi/dosare cu mesaje necitite primite recent</string>
+    <string name="title_advanced_show_unexposed">Arată o stea pentru conturi/dosare cu mesaje necitite primite recent</string>
     <string name="title_advanced_startup">Arată pe ecranul de start</string>
     <string name="title_advanced_cards">Folosește stilul carduri în loc de cel tabular</string>
     <string name="title_advanced_category">Categoria contului poate fi configurată în opțiunile avansate ale contului prin intermediul ecranului principal de setări</string>
@@ -834,7 +842,7 @@
     <string name="title_advanced_rlah_hint">În zona UE nu se tratează ca roaming</string>
     <string name="title_advanced_usage_hint">Acest lucru va crește utilizarea bateriei, a datelor și a spațiului de stocare</string>
     <string name="title_advanced_plain_hint">Activarea acestei opțiuni va limita utilizarea datelor, dar mesajele vor fi afișate fără stilizare</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Textul simplu nu conține întotdeauna mesajul complet!</string>
+    <string name="title_advanced_plain_remark">Textul simplu nu conține întotdeauna mesajul complet!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activarea acesteia poate cauza probleme de conexiune pe unele dispozitive și poate crește utilizarea bateriei</string>
     <string name="title_advanced_validate_hint">Acest lucru poate duce la nesincronizarea mesajelor, de exemplu atunci când se utilizează un VPN, dar și în alte situații</string>
     <string name="title_advanced_timeout_hint">Timpul de expirare a citirii/scrierii va fi setat la dublul intervalului de expirare a conexiunii. Valori mai mari au ca rezultat o utilizare mai mare a bateriei.</string>
@@ -1183,6 +1191,7 @@
     <string name="title_subject_forward_alt">Redir: %1$s</string>
     <string name="title_seen">Marcare ca citit</string>
     <string name="title_unseen">Marcare ca necitit</string>
+    <string name="title_seen_unseen">Marcat citit/necitit</string>
     <string name="title_toggle_seen">Comutare citire</string>
     <string name="title_hide">Ascunde</string>
     <string name="title_unhide">Arată</string>
@@ -1598,6 +1607,8 @@
     <string name="title_sort_on_time">Dată</string>
     <string name="title_sort_on_unread">Necitit</string>
     <string name="title_sort_on_starred">Cu stea</string>
+    <string name="title_sort_on_unread_starred">Necitit, fără stea</string>
+    <string name="title_sort_on_starred_unread">Cu stea, necitit</string>
     <string name="title_sort_on_priority">Prioritate</string>
     <string name="title_sort_on_sender">Expeditor</string>
     <string name="title_sort_on_subject">Subiect</string>

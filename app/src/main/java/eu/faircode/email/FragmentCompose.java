@@ -256,7 +256,6 @@ public class FragmentCompose extends FragmentBase {
     private TextView tvPlainTextOnly;
     private EditTextCompose etBody;
     private ImageView ivMarkdown;
-    private ImageButton ibTemplate;
     private TextView tvNoInternet;
     private TextView tvSignature;
     private CheckBox cbSignature;
@@ -416,7 +415,6 @@ public class FragmentCompose extends FragmentBase {
         tvPlainTextOnly = view.findViewById(R.id.tvPlainTextOnly);
         etBody = view.findViewById(R.id.etBody);
         ivMarkdown = view.findViewById(R.id.ivMarkdown);
-        ibTemplate = view.findViewById(R.id.ibTemplate);
         tvNoInternet = view.findViewById(R.id.tvNoInternet);
         tvSignature = view.findViewById(R.id.tvSignature);
         cbSignature = view.findViewById(R.id.cbSignature);
@@ -814,14 +812,6 @@ public class FragmentCompose extends FragmentBase {
                     } finally {
                         inserted = false;
                     }
-            }
-        });
-
-        ibTemplate.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
-        ibTemplate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onMenuAnswerInsert(v);
             }
         });
 
@@ -1888,11 +1878,14 @@ public class FragmentCompose extends FragmentBase {
         ImageButton ibOpenAi = (ImageButton) infl.inflate(R.layout.action_button, null);
         ibOpenAi.setId(View.generateViewId());
         ibOpenAi.setImageResource(R.drawable.twotone_smart_toy_24);
-        ibOpenAi.setContentDescription(getString(R.string.title_openai));
+        ibOpenAi.setContentDescription("AI");
         ibOpenAi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onOpenAi();
+                if (OpenAI.isAvailable(view.getContext()))
+                    onOpenAi();
+                else if (Gemini.isAvailable(view.getContext()))
+                    onGemini();
             }
         });
         menu.findItem(R.id.menu_openai).setActionView(ibOpenAi);
@@ -1962,7 +1955,7 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_translate).setVisible(DeepL.isAvailable(context));
         menu.findItem(R.id.menu_openai).setEnabled(state == State.LOADED && !chatting);
         ((ImageButton) menu.findItem(R.id.menu_openai).getActionView()).setEnabled(!chatting);
-        menu.findItem(R.id.menu_openai).setVisible(OpenAI.isAvailable(context));
+        menu.findItem(R.id.menu_openai).setVisible(OpenAI.isAvailable(context) || Gemini.isAvailable(context));
         menu.findItem(R.id.menu_zoom).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_style).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_media).setEnabled(state == State.LOADED);
@@ -2761,6 +2754,80 @@ public class FragmentCompose extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
             }
         }.serial().execute(this, args, "openai");
+    }
+
+    private void onGemini() {
+        int start = etBody.getSelectionStart();
+        int end = etBody.getSelectionEnd();
+        boolean selection = (start >= 0 && end > start);
+        Editable edit = etBody.getText();
+        String body = (selection ? edit.subSequence(start, end) : edit).toString().trim();
+
+        Bundle args = new Bundle();
+        args.putLong("id", working);
+        args.putString("body", body);
+        args.putBoolean("selection", selection);
+
+        new SimpleTask<String[]>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                chatting = true;
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                chatting = false;
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            protected String[] onExecute(Context context, Bundle args) throws Throwable {
+                long id = args.getLong("id");
+                String body = args.getString("body");
+                boolean selection = args.getBoolean("selection");
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                String model = prefs.getString("gemini_model", "gemini-pro");
+
+                return Gemini.generate(context, model, new String[]{Gemini.truncateParagraphs(body)});
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, String[] result) {
+                if (result == null || result.length == 0)
+                    return;
+
+                String text = result[0]
+                        .replaceAll("^\\n+", "").replaceAll("\\n+$", "");
+
+                Editable edit = etBody.getText();
+                int start = etBody.getSelectionStart();
+                int end = etBody.getSelectionEnd();
+
+                int index;
+                if (etBody.hasSelection()) {
+                    edit.delete(start, end);
+                    index = start;
+                } else
+                    index = end;
+
+                if (index < 0)
+                    index = 0;
+                if (index > 0 && edit.charAt(index - 1) != '\n')
+                    edit.insert(index++, "\n");
+
+                edit.insert(index, text + "\n");
+                etBody.setSelection(index + text.length() + 1);
+
+                StyleHelper.markAsInserted(edit, index, index + text.length() + 1);
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
+            }
+        }.serial().execute(this, args, "gemini");
     }
 
     private void onTranslate(View anchor) {
@@ -6372,10 +6439,13 @@ public class FragmentCompose extends FragmentBase {
 
             DB db = DB.getInstance(getContext());
 
+            Map<Long, EntityAttachment> map = new HashMap<>();
+            if (last_attachments != null)
+                for (EntityAttachment attachment : last_attachments)
+                    map.put(attachment.id, attachment);
+
             db.attachment().liveAttachments(data.draft.id).observe(getViewLifecycleOwner(),
                     new Observer<List<EntityAttachment>>() {
-                        private Integer count = null;
-
                         @Override
                         public void onChanged(@Nullable List<EntityAttachment> attachments) {
                             if (attachments == null)
@@ -6423,43 +6493,98 @@ public class FragmentCompose extends FragmentBase {
                                     downloading = true;
                             }
 
-                            Log.i("Attachments=" + attachments.size() + " downloading=" + downloading);
-
                             rvAttachment.setTag(downloading);
                             checkInternet();
 
-                            if (count != null && count > attachments.size()) {
+                            try {
                                 boolean updated = false;
                                 Editable edit = etBody.getEditableText();
-
                                 ImageSpan[] spans = edit.getSpans(0, edit.length(), ImageSpan.class);
-                                for (int i = 0; i < spans.length && !updated; i++) {
-                                    ImageSpan span = spans[i];
-                                    String source = span.getSource();
-                                    if (source != null && source.startsWith("cid:")) {
-                                        String cid = "<" + source.substring(4) + ">";
-                                        boolean found = false;
-                                        for (EntityAttachment attachment : attachments)
-                                            if (cid.equals(attachment.cid)) {
-                                                found = true;
+                                if (spans == null)
+                                    spans = new ImageSpan[0];
+
+                                for (EntityAttachment attachment : attachments) {
+                                    EntityAttachment prev = map.get(attachment.id);
+                                    if (prev == null) // New attachment
+                                        continue;
+                                    map.remove(attachment.id);
+
+                                    if (!prev.available && attachment.available) // Attachment downloaded
+                                        for (ImageSpan span : spans) {
+                                            String source = span.getSource();
+                                            if (source != null && source.startsWith("cid:")) {
+                                                String cid = "<" + source.substring(4) + ">";
+                                                if (cid.equals(attachment.cid)) {
+                                                    Bundle args = new Bundle();
+                                                    args.putLong("id", working);
+                                                    args.putString("source", source);
+                                                    args.putInt("zoom", zoom);
+
+                                                    new SimpleTask<Drawable>() {
+                                                        @Override
+                                                        protected Drawable onExecute(Context context, Bundle args) throws Throwable {
+                                                            long id = args.getLong("id");
+                                                            String source = args.getString("source");
+                                                            int zoom = args.getInt("zoom");
+                                                            return ImageHelper.decodeImage(context, id, source, true, zoom, 1.0f, etBody);
+                                                        }
+
+                                                        @Override
+                                                        protected void onExecuted(Bundle args, Drawable d) {
+                                                            String source = args.getString("source");
+                                                            Editable edit = etBody.getEditableText();
+                                                            ImageSpan[] spans = edit.getSpans(0, edit.length(), ImageSpan.class);
+                                                            for (ImageSpan span : spans)
+                                                                if (source != null && source.equals(span.getSource())) {
+                                                                    int start = edit.getSpanStart(span);
+                                                                    int end = edit.getSpanEnd(span);
+                                                                    edit.removeSpan(span);
+                                                                    if (d == null)
+                                                                        edit.delete(start, end);
+                                                                    else
+                                                                        edit.setSpan(new ImageSpan(d, source), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                                    etBody.setText(edit);
+                                                                    break;
+                                                                }
+                                                        }
+
+                                                        @Override
+                                                        protected void onException(Bundle args, Throwable ex) {
+                                                            // Ignored
+                                                        }
+                                                    }.execute(FragmentCompose.this, args, "attachment:downloaded");
+
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                }
+
+                                for (EntityAttachment removed : map.values())
+                                    for (ImageSpan span : spans) {
+                                        String source = span.getSource();
+                                        if (source != null && source.startsWith("cid:")) {
+                                            String cid = "<" + source.substring(4) + ">";
+                                            if (cid.equals(removed.cid)) {
+                                                updated = true;
+                                                int start = edit.getSpanStart(span);
+                                                int end = edit.getSpanEnd(span);
+                                                edit.removeSpan(span);
+                                                edit.delete(start, end);
                                                 break;
                                             }
-
-                                        if (!found) {
-                                            updated = true;
-                                            int start = edit.getSpanStart(span);
-                                            int end = edit.getSpanEnd(span);
-                                            edit.removeSpan(span);
-                                            edit.delete(start, end);
                                         }
                                     }
-                                }
 
                                 if (updated)
                                     etBody.setText(edit);
-                            }
 
-                            count = attachments.size();
+                                map.clear();
+                                for (EntityAttachment attachment : attachments)
+                                    map.put(attachment.id, attachment);
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            }
                         }
                     });
 

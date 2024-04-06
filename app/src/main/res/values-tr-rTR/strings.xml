@@ -14,6 +14,8 @@
     <string name="app_cake_required">Minimum gerekli depolama alanı: %1$s</string>
     <string name="app_updated">Son güncelleme %1$s</string>
     <string name="app_download">Şuradan indirildi: %1$s</string>
+    <string name="app_mod1">........ Mart güvenlik güncellemesi, yalnızca Google Pixel cihazlarında \'Uygulama yanıt vermiyor\' mesajlarına neden oluyor.
+........ Lütfen bunun için suçlamayın, bunu yalnızca Google çözebilir!!    </string>
     <string name="channel_service">Monitör</string>
     <string name="channel_send">Gönder</string>
     <string name="channel_notification">e-posta</string>
@@ -422,6 +424,11 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_discard_delete">Taslak gönderildiğinde taslağı kalıcı olarak sil</string>
     <string name="title_advanced_reply_move">Bir mesajı yanıtlarken, yanıtı aynı klasöre kaydedin</string>
     <string name="title_advanced_reply_move_inbox">Ayrıca gelen kutusundaki mesajlar için</string>
+    <string name="title_advanced_send_retry_max">Maksimum gönderme denemesi</string>
+    <string name="title_advanced_send_retry_hint">Bağlantı değişikliklerinde gönderme yeniden denenecektir</string>
+    <string name="title_advanced_send_partial">Gönderirken geçersiz adresleri yoksay</string>
+    <string name="title_advanced_send_partial_hint">Bazı adresler geçersizse, diğer adreslere yine de bir mesaj gönderilecektir</string>
+    <string name="title_advanced_sent_partially">Mesaj tüm alıcılara gönderilmedi</string>
     <string name="title_advanced_auto_link">Otomatik olarak bağlantı oluşturun</string>
     <string name="title_advanced_plain_only">Öntanımlı olarak yalnızca düz metin gönder</string>
     <string name="title_advanced_plain_only_reply">Yalnızca düz metin mesajına yanıt verirken otomatik olarak yalnızca düz metin</string>
@@ -484,7 +491,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_nav_message_count">Navigasyon menüsünde yerel olarak saklanan mesajların sayısını göster</string>
     <string name="title_advanced_nav_unseen_drafts">Gezinme menüsünde okunmamış taslak sayısını göster</string>
     <string name="title_advanced_nav_pinned_count">Sabitlenmiş gezinme menüsünde okunmamış mesajların sayısını göster</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Yeni alınan okunmamış mesajların bulunduğu hesaplar/klasörler için bir yıldız gösterin</string>
+    <string name="title_advanced_show_unexposed">Yeni alınan okunmamış mesajların bulunduğu hesaplar/klasörler için bir yıldız gösterin</string>
     <string name="title_advanced_startup">Başlangıç ekranında göster</string>
     <string name="title_advanced_cards">Tablo stili yerine kart stilini kullan</string>
     <string name="title_advanced_category">Hesap kategorisi, ayarlar ana ekranındaki gelişmiş hesap opsiyonlarından ayarlanabilir</string>
@@ -761,6 +768,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_openai_model">Model</string>
     <string name="title_advanced_openai_temperature">Sıcaklık: %1$s</string>
     <string name="title_advanced_openai_moderation">İçerik denetimi</string>
+    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Gemini entegrasyonu</string>
     <string name="title_advanced_sdcard">SD kart kullanmak istiyorum</string>
     <string name="title_advanced_watchdog">Düzenli aralıklarla FairEmail hala etkin mi diye kontrol et</string>
     <string name="title_advanced_updates">GitHub güncellemelerini kontrol et</string>
@@ -819,7 +827,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_rlah_hint">AB içinde dolaşımda olmadığını varsayma</string>
     <string name="title_advanced_usage_hint">Bu pil, veri ve depolama alanı kullanımını artıracaktır</string>
     <string name="title_advanced_plain_hint">Bunu etkinleştirmek veri kullanımını sınırlayacaktır, ancak mesajlar stil olmadan gösterilecektir</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Düz metin kısmı her zaman mesajın tamamını içermez!</string>
+    <string name="title_advanced_plain_remark">Düz metin kısmı her zaman mesajın tamamını içermez!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Bunu etkinleştirmek bazı cihazlarda bağlantı sorunlarına neden olabilir ve pil kullanımını artırabilir</string>
     <string name="title_advanced_validate_hint">Bu, örneğin bir VPN kullanırken değil, diğer durumlarda da mesajların senkronize edilmemesine neden olabilir</string>
     <string name="title_advanced_timeout_hint">Okuma / yazma zaman aşımı, bağlantı zaman aşımının iki katına ayarlanacaktır. Daha yüksek değerler daha fazla pil kullanımına neden olacaktır.</string>
@@ -1165,6 +1173,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_subject_forward_alt">İlet: %1$s</string>
     <string name="title_seen">Okundu olarak işaretle</string>
     <string name="title_unseen">Okunmadı olarak işaretle</string>
+    <string name="title_seen_unseen">Okundu/okunmadı olarak işaretle</string>
     <string name="title_toggle_seen">Okumayı aç/kapat</string>
     <string name="title_hide">Gizle</string>
     <string name="title_unhide">Göster</string>
@@ -1579,6 +1588,8 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_sort_on_time">Zaman</string>
     <string name="title_sort_on_unread">Okunmadı</string>
     <string name="title_sort_on_starred">Yıldızlı</string>
+    <string name="title_sort_on_unread_starred">Okunmamış, yıldızlı</string>
+    <string name="title_sort_on_starred_unread">Yıldızlı, okunmamış</string>
     <string name="title_sort_on_priority">Öncelik</string>
     <string name="title_sort_on_sender">Gönderen</string>
     <string name="title_sort_on_subject">Konu</string>

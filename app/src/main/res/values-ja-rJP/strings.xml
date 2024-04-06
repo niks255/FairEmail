@@ -14,6 +14,9 @@
     <string name="app_cake_required">最低限必要な空き容量: %1$s</string>
     <string name="app_updated">最終更新: %1$s</string>
     <string name="app_download">ダウンロード元: %1$s</string>
+    <string name="app_mod1">        3 月のセキュリティアップデートにより、Google Pixel でのみ「アプリが応答しません」というメッセージが表示されるようになりました。
+        この問題を解決できるのは Google のみのため、アプリを非難しないでください！
+    </string>
     <string name="channel_service">モニター</string>
     <string name="channel_send">送信</string>
     <string name="channel_notification">メール</string>
@@ -410,6 +413,11 @@
     <string name="title_advanced_discard_delete">下書きを破棄とき完全に削除する</string>
     <string name="title_advanced_reply_move">メッセージに返信したときに返信を同じフォルダーに保存する</string>
     <string name="title_advanced_reply_move_inbox">受信トレイにあるメッセージにも適用する</string>
+    <string name="title_advanced_send_retry_max">送信試行回数の上限</string>
+    <string name="title_advanced_send_retry_hint">接続が変更されると送信を再試行します</string>
+    <string name="title_advanced_send_partial">複数の宛先へ送信するとき、無効なアドレスを無視する</string>
+    <string name="title_advanced_send_partial_hint">一部のメールアドレスが無効な場合でも、その他のアドレスにメッセージを送信します</string>
+    <string name="title_advanced_sent_partially">一部の宛先にはメッセージを送信できませんでした</string>
     <string name="title_advanced_auto_link">自動でリンクを作成する</string>
     <string name="title_advanced_plain_only">デフォルトでプレーンテキストのみ送信する</string>
     <string name="title_advanced_plain_only_reply">プレーンテキストのみのメッセージにはプレーンテキストのみで返信する</string>
@@ -472,6 +480,7 @@
     <string name="title_advanced_nav_message_count">ナビゲーションメニューにローカルに保存されたメッセージの数を表示する</string>
     <string name="title_advanced_nav_unseen_drafts">ナビゲーションメニューに未読の下書きの数を表示する</string>
     <string name="title_advanced_nav_pinned_count">ピン留めしたナビゲーションメニューに未読の数を表示する</string>
+    <string name="title_advanced_show_unexposed">新着の未読メッセージがあるアカウント/フォルダーに星印を表示する</string>
     <string name="title_advanced_startup">スタート画面の表示</string>
     <string name="title_advanced_cards">表形式の代わりにカード形式を使用する</string>
     <string name="title_advanced_category">アカウントのカテゴリーは、メイン設定のアカウントの詳細オプションから設定できます</string>
@@ -806,6 +815,7 @@
     <string name="title_advanced_rlah_hint">EU 加盟国の SIM カードで加盟国のネットワークを使用する場合、ローミングではないとみなします</string>
     <string name="title_advanced_usage_hint">これによりバッテリー使用量、データ使用量、ストレージ使用量が増加します</string>
     <string name="title_advanced_plain_hint">有効にするとデータ使用量が制限されますが、スタイルを設定せずにメッセージが表示されます</string>
+    <string name="title_advanced_plain_remark">常に完全な内容がプレーンテキスト部分に含まれないことがあります！</string>
     <string name="title_advanced_tcp_keep_alive_hint">有効にすると、一部の端末で接続の問題が発生したりバッテリー使用量が増加したりする可能性があります</string>
     <string name="title_advanced_validate_hint">これにより、VPN を使用している場合や、その他の状況でメッセージが同期されない可能性があります</string>
     <string name="title_advanced_timeout_hint">読み取り/書き込みタイムアウトは接続タイムアウトの 2 倍に設定されます。値を大きくするとバッテリーの使用量が増加します</string>
@@ -958,8 +968,8 @@
     <string name="title_client_delete">ダウンロードしたメッセージをアクティブに削除</string>
     <string name="title_leave_deleted">削除したメッセージをサーバーに残す</string>
     <string name="title_leave_on_device">端末にメッセージを残す</string>
-    <string name="title_max_messages">ダウンロードするメッセージの最大数 (空白にするとすべてダウンロードします)</string>
-    <string name="title_max_messages_keep">これは、端末に保存されるメッセージの最大数です</string>
+    <string name="title_max_messages">ダウンロードするメッセージ件数の上限 (空白にするとすべてダウンロードします)</string>
+    <string name="title_max_messages_keep">これは、端末に保存されるメッセージ件数の上限です</string>
     <string name="title_max_messages_remark">        正の数を入力すると、最後からメッセージをダウンロードします (推奨)
         負の数を入力すると、最初からメッセージをダウンロードします (一般的でない)
     </string>
@@ -975,7 +985,7 @@
     <string name="title_related_identity">関連するユーザー ID (SMTPサーバー) を追加する</string>
     <string name="title_check">確認</string>
     <string name="title_trust">フィンガープリント %1$s のサーバー証明書を信頼する</string>
-    <string name="title_no_name">名前を入力してください</string>
+    <string name="title_no_name">お名前を入力してください</string>
     <string name="title_no_email">メールアドレスを入力してください</string>
     <string name="title_email_invalid">メールアドレスが無効です: \'%1$s\'</string>
     <string name="title_address_duplicate">アドレス「%1$s」が重複しています</string>
@@ -1155,6 +1165,7 @@
     <string name="title_subject_forward_alt">FW: %1$s</string>
     <string name="title_seen">既読にする</string>
     <string name="title_unseen">未読にする</string>
+    <string name="title_seen_unseen">既読/未読にする</string>
     <string name="title_toggle_seen">既読/未読の切り替え</string>
     <string name="title_hide">非表示にする</string>
     <string name="title_unhide">表示</string>
@@ -1572,6 +1583,8 @@
     <string name="title_sort_on_time">時間</string>
     <string name="title_sort_on_unread">未読</string>
     <string name="title_sort_on_starred">スター付き</string>
+    <string name="title_sort_on_unread_starred">未読、スター付き</string>
+    <string name="title_sort_on_starred_unread">スター付き、未読</string>
     <string name="title_sort_on_priority">重要度</string>
     <string name="title_sort_on_sender">差出人</string>
     <string name="title_sort_on_subject">件名</string>
@@ -2017,7 +2030,7 @@
     <string name="title_widget_separator_lines">区切り線を表示する</string>
     <string name="title_widget_semi_transparent">半透明の背景</string>
     <string name="title_widget_count_top">未読件数を上部に表示する</string>
-    <string name="title_widget_subject_lines">件名の最大行数</string>
+    <string name="title_widget_subject_lines">件名の行数の上限</string>
     <string name="title_widget_avatars">連絡先のアバターを表示する</string>
     <string name="title_widget_account_name">アカウント名を表示する</string>
     <string name="title_widget_caption">件名を表示する</string>

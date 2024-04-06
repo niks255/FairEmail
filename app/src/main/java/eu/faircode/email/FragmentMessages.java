@@ -255,6 +255,8 @@ public class FragmentMessages extends FragmentBase
     private ImageButton ibHintSwipe;
     private ImageButton ibHintSelect;
     private ImageButton ibHintJunk;
+    private TextView tvMod;
+    private ImageButton ibMod;
     private TextView tvNoEmail;
     private TextView tvNoEmailHint;
     private FixedRecyclerView rvMessage;
@@ -280,6 +282,7 @@ public class FragmentMessages extends FragmentBase
     private Group grpHintSwipe;
     private Group grpHintSelect;
     private Group grpHintJunk;
+    private Group grpMod;
     private Group grpReady;
     private Group grpOutbox;
     private FloatingActionButton fabReply;
@@ -577,6 +580,8 @@ public class FragmentMessages extends FragmentBase
         ibHintSwipe = view.findViewById(R.id.ibHintSwipe);
         ibHintSelect = view.findViewById(R.id.ibHintSelect);
         ibHintJunk = view.findViewById(R.id.ibHintJunk);
+        tvMod = view.findViewById(R.id.tvMod);
+        ibMod = view.findViewById(R.id.ibMod);
         tvNoEmail = view.findViewById(R.id.tvNoEmail);
         tvNoEmailHint = view.findViewById(R.id.tvNoEmailHint);
         rvMessage = view.findViewById(R.id.rvMessage);
@@ -603,6 +608,7 @@ public class FragmentMessages extends FragmentBase
         grpHintSwipe = view.findViewById(R.id.grpHintSwipe);
         grpHintSelect = view.findViewById(R.id.grpHintSelect);
         grpHintJunk = view.findViewById(R.id.grpHintJunk);
+        grpMod = view.findViewById(R.id.grpMod);
         grpReady = view.findViewById(R.id.grpReady);
         grpOutbox = view.findViewById(R.id.grpOutbox);
 
@@ -716,6 +722,17 @@ public class FragmentMessages extends FragmentBase
             public void onClick(View v) {
                 prefs.edit().putBoolean("message_junk", true).apply();
                 grpHintJunk.setVisibility(View.GONE);
+            }
+        });
+
+        if (Helper.isGoogle())
+            tvMod.setText(getString(R.string.app_mod1));
+
+        ibMod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefs.edit().putBoolean("mod", false).apply();
+                grpMod.setVisibility(View.GONE);
             }
         });
 
@@ -1180,6 +1197,7 @@ public class FragmentMessages extends FragmentBase
                                 long from = cal.getTimeInMillis();
 
                                 onMenuSelect(from, to, true);
+                                Helper.performHapticFeedback(view, HapticFeedbackConstants.CONFIRM);
                                 return;
                             }
                         }
@@ -3040,10 +3058,17 @@ public class FragmentMessages extends FragmentBase
                 swipes.left_type = null;
             } else if (EntityFolder.OUTBOX.equals(message.folderType)) {
                 swipes = new TupleAccountSwipes();
-                swipes.swipe_right = 0L;
-                swipes.right_type = EntityFolder.DRAFTS;
-                swipes.swipe_left = 0L;
-                swipes.left_type = EntityFolder.DRAFTS;
+                if (message.warning == null) {
+                    swipes.swipe_right = 0L;
+                    swipes.right_type = EntityFolder.DRAFTS;
+                    swipes.swipe_left = 0L;
+                    swipes.left_type = EntityFolder.DRAFTS;
+                } else {
+                    swipes.swipe_right = EntityMessage.SWIPE_ACTION_DELETE;
+                    swipes.right_type = null;
+                    swipes.swipe_left = EntityMessage.SWIPE_ACTION_DELETE;
+                    swipes.left_type = null;
+                }
             } else {
                 swipes = accountSwipes.get(message.account);
                 if (swipes == null)
@@ -3200,7 +3225,10 @@ public class FragmentMessages extends FragmentBase
                 }
 
                 if (EntityFolder.OUTBOX.equals(message.folderType)) {
-                    ActivityCompose.undoSend(message.id, getContext(), getViewLifecycleOwner(), getParentFragmentManager());
+                    if (message.warning == null)
+                        ActivityCompose.undoSend(message.id, getContext(), getViewLifecycleOwner(), getParentFragmentManager());
+                    else
+                        onDelete(message.id);
                     return;
                 }
 
@@ -4700,6 +4728,11 @@ public class FragmentMessages extends FragmentBase
                                 ids.add(threaded.id);
                     }
 
+                    if (ids.size() == 1) {
+                        EntityMessage message = db.message().getMessage(ids.get(0));
+                        args.putString("remark", message == null ? null : message.getRemark());
+                    }
+
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
@@ -4713,6 +4746,7 @@ public class FragmentMessages extends FragmentBase
                 Bundle aargs = new Bundle();
                 aargs.putString("question", getResources()
                         .getQuantityString(R.plurals.title_deleting_messages, ids.size(), ids.size()));
+                aargs.putString("remark", args.getString("remark"));
                 aargs.putString("accept", getString(R.string.title_ask_delete_accept));
                 aargs.putInt("faq", 160);
                 aargs.putLongArray("ids", Helper.toLongArray(ids));
@@ -5052,6 +5086,11 @@ public class FragmentMessages extends FragmentBase
                             result.add(threaded.id);
                     }
 
+                    if (result.size() == 1) {
+                        EntityMessage message = db.message().getMessage(result.get(0));
+                        args.putString("remark", message == null ? null : message.getRemark());
+                    }
+
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
@@ -5072,6 +5111,7 @@ public class FragmentMessages extends FragmentBase
                 } else {
                     aargs.putString("question", getResources()
                             .getQuantityString(R.plurals.title_deleting_messages, ids.size(), ids.size()));
+                    aargs.putString("remark", args.getString("remark"));
                     aargs.putString("accept", getString(R.string.title_ask_delete_accept));
                 }
                 aargs.putInt("faq", 160);
@@ -5160,12 +5200,14 @@ public class FragmentMessages extends FragmentBase
         boolean message_swipe = prefs.getBoolean("message_swipe", false);
         boolean message_select = prefs.getBoolean("message_select", false);
         boolean message_junk = prefs.getBoolean("message_junk", false);
+        boolean mod = prefs.getBoolean("mod", false);
         boolean send_pending = prefs.getBoolean("send_pending", true);
 
         grpHintSupport.setVisibility(app_support || !hints || junk ? View.GONE : View.VISIBLE);
         grpHintSwipe.setVisibility(message_swipe || !hints || junk ? View.GONE : View.VISIBLE);
         grpHintSelect.setVisibility(message_select || !hints || junk ? View.GONE : View.VISIBLE);
         grpHintJunk.setVisibility(message_junk || !junk ? View.GONE : View.VISIBLE);
+        grpMod.setVisibility(mod ? View.VISIBLE : View.GONE);
 
         final DB db = DB.getInstance(getContext());
 
@@ -5943,6 +5985,8 @@ public class FragmentMessages extends FragmentBase
                 menu.findItem(R.id.menu_sort_on_unread).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_priority).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_starred).setVisible(false);
+                menu.findItem(R.id.menu_sort_on_unread_starred).setVisible(false);
+                menu.findItem(R.id.menu_sort_on_starred_unread).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_sender).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_subject).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_size).setVisible(false);
@@ -5960,6 +6004,10 @@ public class FragmentMessages extends FragmentBase
                 menu.findItem(R.id.menu_sort_on_unread).setChecked(true);
             else if ("starred".equals(sort))
                 menu.findItem(R.id.menu_sort_on_starred).setChecked(true);
+            else if ("unread+starred".equals(sort))
+                menu.findItem(R.id.menu_sort_on_unread_starred).setChecked(true);
+            else if ("starred+unread".equals(sort))
+                menu.findItem(R.id.menu_sort_on_starred_unread).setChecked(true);
             else if ("priority".equals(sort))
                 menu.findItem(R.id.menu_sort_on_priority).setChecked(true);
             else if ("sender".equals(sort))
@@ -6103,6 +6151,14 @@ public class FragmentMessages extends FragmentBase
         } else if (itemId == R.id.menu_sort_on_starred) {
             item.setChecked(true);
             onMenuSort("starred");
+            return true;
+        } else if (itemId == R.id.menu_sort_on_unread_starred) {
+            item.setChecked(true);
+            onMenuSort("unread+starred");
+            return true;
+        } else if (itemId == R.id.menu_sort_on_starred_unread) {
+            item.setChecked(true);
+            onMenuSort("starred+unread");
             return true;
         } else if (itemId == R.id.menu_sort_on_priority) {
             item.setChecked(true);
@@ -8239,6 +8295,9 @@ public class FragmentMessages extends FragmentBase
                 return;
             }
 
+            if (message.revision != null && message.revision < 0)
+                db.message().setMessageSubject(message.id, "...");
+
             File file = message.getFile(context);
             Helper.writeText(file, null);
             db.message().setMessageContent(message.id, true, null, null, null, null);
@@ -9173,6 +9232,7 @@ public class FragmentMessages extends FragmentBase
                                         String text = Helper.readText(plain);
                                         String html = "<div x-plain=\"true\">" + HtmlHelper.formatPlainText(text) + "</div>";
                                         Helper.writeText(message.getFile(context), html);
+                                        db.message().setMessageRevision(message.id, 1);
                                         db.message().setMessageStored(message.id, new Date().getTime());
                                         db.message().setMessageFts(message.id, false);
 
@@ -9245,11 +9305,11 @@ public class FragmentMessages extends FragmentBase
                                             }
                                         }
 
-                                        checkPep(message, remotes, context);
+                                        boolean pep = checkPep(message, remotes, context);
 
                                         encrypt = parts.getEncryption();
                                         db.message().setMessageEncrypt(message.id, encrypt);
-                                        db.message().setMessageRevision(message.id, 1);
+                                        db.message().setMessageRevision(message.id, pep || protect_subject == null ? 1 : -1);
                                         db.message().setMessageStored(message.id, new Date().getTime());
                                         db.message().setMessageFts(message.id, false);
 
@@ -9985,10 +10045,11 @@ public class FragmentMessages extends FragmentBase
                             }
                     }
 
-                    checkPep(message, remotes, context);
+                    boolean pep = checkPep(message, remotes, context);
 
                     db.message().setMessageEncrypt(message.id,
                             signedData ? EntityMessage.SMIME_SIGNONLY : parts.getEncryption());
+                    db.message().setMessageRevision(message.id, pep || protect_subject == null ? 1 : -1);
                     db.message().setMessageStored(message.id, new Date().getTime());
                     db.message().setMessageFts(message.id, false);
 
@@ -10045,7 +10106,7 @@ public class FragmentMessages extends FragmentBase
         }.serial().execute(this, args, "decrypt:s/mime");
     }
 
-    private static void checkPep(EntityMessage message, List<EntityAttachment> remotes, Context context) {
+    private static boolean checkPep(EntityMessage message, List<EntityAttachment> remotes, Context context) {
         DB db = DB.getInstance(context);
         for (EntityAttachment remote : remotes)
             if ("message/rfc822".equals(remote.getMimeType()))
@@ -10083,10 +10144,11 @@ public class FragmentMessages extends FragmentBase
                         db.endTransaction();
                     }
 
-                    break;
+                    return true;
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
+        return false;
     }
 
     private void onDelete(long id) {

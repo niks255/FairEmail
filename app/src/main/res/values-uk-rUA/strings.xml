@@ -14,6 +14,9 @@
     <string name="app_cake_required">Мінімальний потрібний розмір сховища: %1$s</string>
     <string name="app_updated">Останнє оновлення: %1$s</string>
     <string name="app_download">Завантажено з: %1$s</string>
+    <string name="app_mod1">        Березневе оновлення безпеки спричиняє виникнення повідомлення «Програма не відповідає». Це відбувається виключно на пристроях Google Pixel.
+         Будь ласка, не звинувачуйте програму в цьому. Тільки Google може розв\'язати цю проблему!
+    </string>
     <string name="channel_service">Монітор</string>
     <string name="channel_send">Надсилання</string>
     <string name="channel_notification">Повідомлення</string>
@@ -232,7 +235,7 @@
     <string name="title_setup_select_account">Обрати обліковий запис</string>
     <string name="title_setup_instructions">Інструкції з встановлення</string>
     <string name="title_setup_no_settings">Не знайдено налаштувань для домену \'%1$s\'</string>
-    <string name="title_setup_no_settings_hint">Спробуйте, вручну, налаштувати обліковий запис за допомогою налаштувань, що надаються провайдером електронної пошти</string>
+    <string name="title_setup_no_settings_hint">Спробуйте вручну налаштувати обліковий запис за допомогою налаштувань, що надаються провайдером електронної пошти</string>
     <string name="title_setup_no_auth_hint">Будь ласка, двічі перевірте свою електронну адресу і пароль та переконайтеся, що для вашого облікового запису увімкнений зовнішній доступ (IMAP/SMTP)</string>
     <string name="title_setup_app_password_hint">Цей постачальник вимагає пароль для додатків замість пароля для облікового запису. Будь ласка, перевірте інструкції вашого постачальника.</string>
     <string name="title_setup_no_inbox">Вхідних повідомлень не знайдено</string>
@@ -452,6 +455,11 @@
     <string name="title_advanced_discard_delete">Видаляти чернетку назавжди при відкиданні</string>
     <string name="title_advanced_reply_move">Зберігати повідомлення-відповідь у тій самій теці</string>
     <string name="title_advanced_reply_move_inbox">Також для вхідних повідомлень</string>
+    <string name="title_advanced_send_retry_max">Максимальна кількість спроб надсилання</string>
+    <string name="title_advanced_send_retry_hint">При зміні підключення буде повторна спроба надсилання</string>
+    <string name="title_advanced_send_partial">Ігнорувати некоректні адреси під час відправлення</string>
+    <string name="title_advanced_send_partial_hint">Якщо деякі адреси невірні, повідомлення все одно буде відправлено на інші адреси</string>
+    <string name="title_advanced_sent_partially">Повідомлення не було відправлено усім отримувачам</string>
     <string name="title_advanced_auto_link">Автоматично створювати посилання</string>
     <string name="title_advanced_plain_only">Надсилати повідомлення за замовчуванням як простий текст</string>
     <string name="title_advanced_plain_only_reply">Автоматично використовувати простий текст тільки при відповіді на повідомлення, які містять тільки простий текст</string>
@@ -514,7 +522,7 @@
     <string name="title_advanced_nav_message_count">Показувати кількість локально збережених повідомлень в меню навігації</string>
     <string name="title_advanced_nav_unseen_drafts">Показувати кількість непрочитаних чернеток у меню навігації</string>
     <string name="title_advanced_nav_pinned_count">Показувати кількість непрочитаних повідомлень у закріпленому навігаційному меню</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Показувати зірочку для аккаунтів/папок, що мають нещодавно отримані непрочитані повідомлення</string>
+    <string name="title_advanced_show_unexposed">Показувати зірочку для аккаунтів/папок, що мають нещодавно отримані непрочитані повідомлення</string>
     <string name="title_advanced_startup">Показувати на стартовому екрані</string>
     <string name="title_advanced_cards">Використовувати картковий стиль замість табличного стилю</string>
     <string name="title_advanced_category">Категорії облікового запису можна налаштувати у розширених налаштуваннях облікового запису, що знаходяться на головному екрані налаштувань</string>
@@ -791,6 +799,7 @@
     <string name="title_advanced_openai_model">Модель</string>
     <string name="title_advanced_openai_temperature">Температура: %1$s</string>
     <string name="title_advanced_openai_moderation">Модерація вмісту</string>
+    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Інтеграція з Gemini</string>
     <string name="title_advanced_sdcard">Я хочу використовувати SD-карту</string>
     <string name="title_advanced_watchdog">Періодично перевіряти, чи FairEmail є все ще активним</string>
     <string name="title_advanced_updates">Перевіряти наявність оновлень на GitHub</string>
@@ -798,7 +807,7 @@
     <string name="title_advanced_beta">Перевірити наявність тестових версій на BitBucket</string>
     <string name="title_advanced_changelog">Показувати список змін після оновлення</string>
     <string name="title_advanced_announcements">Перевірити на оголошення</string>
-    <string name="title_advanced_experiments">Спробуйте експериментальні функції</string>
+    <string name="title_advanced_experiments">Спробувати експериментальні функції</string>
     <string name="title_advanced_crash_reports">Надсилати звіти про помилки</string>
     <string name="title_advanced_cleanup_attachments">Видаляти вкладення для старих повідомлень</string>
     <string name="title_advanced_cleanup">Очистити</string>
@@ -848,7 +857,7 @@
     <string name="title_advanced_rlah_hint">Мається на увазі відсутність роумінгу в межах ЄС</string>
     <string name="title_advanced_usage_hint">Це збільшить використання акумулятора, даних та місця для зберігання</string>
     <string name="title_advanced_plain_hint">Увімкнення цієї опції обмежить використання даних, але повідомлення будуть показуватись без стилізації</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Частина повідомлення з простим текстом не завжди містить це повідомлення в повному обсязі!</string>
+    <string name="title_advanced_plain_remark">Частина повідомлення з простим текстом не завжди містить це повідомлення в повному обсязі!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Увімкнення цієї опції може викликати проблеми з підключенням на деяких пристроях і може збільшити використання акумулятора</string>
     <string name="title_advanced_validate_hint">Це може призвести до того, що повідомлення можуть бути не синхронізовані, наприклад, при використанні VPN, але також і в інших ситуаціях</string>
     <string name="title_advanced_timeout_hint">Тайм-аут читання/запису буде встановлено у розмірі, у два рази більшому за тайм-аут підключення. Вищі значення призведуть до збільшення використання заряду акумулятора.</string>
@@ -1198,6 +1207,7 @@
     <string name="title_subject_forward_alt">Fw: %1$s</string>
     <string name="title_seen">Позначити як прочитане</string>
     <string name="title_unseen">Позначити як непрочитане</string>
+    <string name="title_seen_unseen">Позначити (не-)/прочитаним</string>
     <string name="title_toggle_seen">Перемкнути статус прочитання</string>
     <string name="title_hide">Приховати</string>
     <string name="title_unhide">Показати</string>
@@ -1613,6 +1623,8 @@
     <string name="title_sort_on_time">Час</string>
     <string name="title_sort_on_unread">Непрочитані</string>
     <string name="title_sort_on_starred">Обрані</string>
+    <string name="title_sort_on_unread_starred">Непрочитані, обрані</string>
+    <string name="title_sort_on_starred_unread">Обрані, непрочитані</string>
     <string name="title_sort_on_priority">Пріоритет</string>
     <string name="title_sort_on_sender">Відправник</string>
     <string name="title_sort_on_subject">Тема</string>

@@ -423,6 +423,8 @@
     <string name="title_advanced_discard_delete">При отказване на чернова за постоянно изтрий черновата</string>
     <string name="title_advanced_reply_move">Отговаряйки на съобщение, запазване на отговора в същата папка</string>
     <string name="title_advanced_reply_move_inbox">Също за входящите съобщения</string>
+    <string name="title_advanced_send_retry_max">Максимум брой опити за изпращане</string>
+    <string name="title_advanced_send_retry_hint">Изпращането ще се пробва пак при промени в свързаността</string>
     <string name="title_advanced_auto_link">Автоматично сътворение на връзки</string>
     <string name="title_advanced_plain_only">Изпращане на обикновен текст по подразбиране</string>
     <string name="title_advanced_plain_only_reply">Автоматична употреба на прост текст само при отговор на съобщението с прост текст</string>
@@ -485,7 +487,7 @@
     <string name="title_advanced_nav_message_count">Показване на броя локално съхранени съобщения в менюто навигация</string>
     <string name="title_advanced_nav_unseen_drafts">Показване на броя на непрочетените чернови в менюто за навигиране</string>
     <string name="title_advanced_nav_pinned_count">Показване на броя непрочетени съобщения в менюто закачени на навигиране</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Показване на звезда за акаунти/папки с новополучени непрочетени съобщения</string>
+    <string name="title_advanced_show_unexposed">Показване на звезда за акаунти/папки с новополучени непрочетени съобщения</string>
     <string name="title_advanced_startup">Показване на началния екран</string>
     <string name="title_advanced_cards">Употреба на картов стил вместо табличен стил</string>
     <string name="title_advanced_category">Категорията на акаунта може да се конфигурира в опциите за напреднали на акаунта чрез главния екран с настройки</string>
@@ -820,7 +822,7 @@
     <string name="title_advanced_rlah_hint">Ако не се допуска роуминг в рамките на ЕС</string>
     <string name="title_advanced_usage_hint">Това ще увеличи употребата на батерията, данните и мястото в хранилището</string>
     <string name="title_advanced_plain_hint">Включването на това ще ограничи употребата на данните, но съобщенията ще се показват без стил</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Частта с прост текст на съобщението не винаги съдържа пълното съобщение!</string>
+    <string name="title_advanced_plain_remark">Частта с прост текст на съобщението не винаги съдържа пълното съобщение!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Включването на това може да причини проблеми с връзката в някои устройства и да увеличи употребата на батерията</string>
     <string name="title_advanced_validate_hint">Може да доведе до това, че съобщенията не се синхронизират, например, употребявайки VPN, но също в други ситуации</string>
     <string name="title_advanced_timeout_hint">Времето за четене/запис ще бъде зададено двойно на времето за изчакване на връзката. По-високите стойности ще доведат до по-голяма консумация на батерията.</string>
@@ -1169,6 +1171,7 @@
     <string name="title_subject_forward_alt">Fwd: %1$s</string>
     <string name="title_seen">Отбелязвам като прочетено</string>
     <string name="title_unseen">Отбелязвам като непрочетено</string>
+    <string name="title_seen_unseen">Означаване прочетено/непрочетено</string>
     <string name="title_toggle_seen">Прочетено/непрочетено</string>
     <string name="title_hide">Скриване</string>
     <string name="title_unhide">Показване</string>
@@ -1585,6 +1588,8 @@
     <string name="title_sort_on_time">Време</string>
     <string name="title_sort_on_unread">Непрочетени</string>
     <string name="title_sort_on_starred">Със звезда</string>
+    <string name="title_sort_on_unread_starred">Непрочетено, озвездено</string>
+    <string name="title_sort_on_starred_unread">Озвездено, непрочетено</string>
     <string name="title_sort_on_priority">Приоритет</string>
     <string name="title_sort_on_sender">Подател</string>
     <string name="title_sort_on_subject">Тема</string>

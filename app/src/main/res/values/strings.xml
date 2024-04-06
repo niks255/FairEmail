@@ -19,6 +19,11 @@
     <string name="app_download">Downloaded from: %1$s</string>
     <string name="app_dmarc" translatable="false">DMARC</string>
 
+    <string name="app_mod1">
+        The March security update is causing \'App not responding\' messages, exclusively on Google Pixel devices.
+        Please do not blame the app for this, only Google can solve this!
+    </string>
+
     <string name="channel_service">Monitor</string>
     <string name="channel_send">Send</string>
     <string name="channel_notification">Email</string>
@@ -499,6 +504,11 @@
     <string name="title_advanced_discard_delete">On discard draft, permanently delete draft</string>
     <string name="title_advanced_reply_move">On replying to a message, save the reply in the same folder</string>
     <string name="title_advanced_reply_move_inbox">Also for messages in the inbox</string>
+    <string name="title_advanced_send_retry_max">Maximum send attempts</string>
+    <string name="title_advanced_send_retry_hint">Sending will be retried on connectivity changes</string>
+    <string name="title_advanced_send_partial">Ignore invalid addresses when sending</string>
+    <string name="title_advanced_send_partial_hint">If some addresses are invalid, a message will still be sent to the other addresses</string>
+    <string name="title_advanced_sent_partially">The message was not sent to all recipients</string>
 
     <string name="title_advanced_auto_link">Automatically create links</string>
     <string name="title_advanced_plain_only">Send plain text only by default</string>
@@ -875,6 +885,7 @@
     <string name="title_advanced_openai_model">Model</string>
     <string name="title_advanced_openai_temperature">Temperature: %1$s</string>
     <string name="title_advanced_openai_moderation">Content moderation</string>
+    <string name="title_advanced_gemini">Gemini integration</string>
     <string name="title_advanced_sdcard">I want to use an SD card</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_updates">Check for GitHub updates</string>
@@ -906,6 +917,7 @@
     <string name="title_advanced_hwaccel" translatable="false">Hardware Acceleration</string>
     <string name="title_advanced_emergency" translatable="false">Write emergency file</string>
     <string name="title_advanced_work_manager" translatable="false">Initialize work manager</string>
+    <string name="title_advanced_task_description" translatable="false">Set task description</string>
     <string name="title_advanced_external_storage" translatable="false">Use external storage</string>
     <string name="title_advanced_integrity" translatable="false">sqlite integrity check</string>
     <string name="title_advanced_wal" translatable="false">sqlite WAL</string>
@@ -1449,6 +1461,7 @@
 
     <string name="title_seen">Mark read</string>
     <string name="title_unseen">Mark unread</string>
+    <string name="title_seen_unseen">Mark read/unread</string>
     <string name="title_toggle_seen">Toggle read</string>
     <string name="title_hide">Hide</string>
     <string name="title_unhide">Show</string>
@@ -1911,6 +1924,8 @@
     <string name="title_sort_on_time">Time</string>
     <string name="title_sort_on_unread">Unread</string>
     <string name="title_sort_on_starred">Starred</string>
+    <string name="title_sort_on_unread_starred">Unread, starred</string>
+    <string name="title_sort_on_starred_unread">Starred, unread</string>
     <string name="title_sort_on_priority">Priority</string>
     <string name="title_sort_on_sender">Sender</string>
     <string name="title_sort_on_subject">Subject</string>

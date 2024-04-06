@@ -14,6 +14,9 @@
     <string name="app_cake_required">Minsta nödvändiga lagringsutrymme: %1$s</string>
     <string name="app_updated">Senast uppdaterad: %1$s</string>
     <string name="app_download">Hämtad från: %1$s</string>
+    <string name="app_mod1">        Säkerhetsuppdateringen från mars framtvingar meddelandet \'Appen svarar inte\', detta händer enbart på Google Pixel-enheter.
+        Vänligen skyll inte detta på appen, det är bara Google som kan åtgärda detta!
+    </string>
     <string name="channel_service">Övervakning</string>
     <string name="channel_send">Skicka</string>
     <string name="channel_notification">E-post</string>
@@ -420,6 +423,11 @@
     <string name="title_advanced_discard_delete">Ta bort utkastet permanent om du kastar det</string>
     <string name="title_advanced_reply_move">När du svarar på ett meddelande, spara svaret i samma mapp</string>
     <string name="title_advanced_reply_move_inbox">Även för meddelanden i inkorgen</string>
+    <string name="title_advanced_send_retry_max">Maximalt antal sändningsförsök</string>
+    <string name="title_advanced_send_retry_hint">Sändning kommer att återupptas vid ändringar av anslutning</string>
+    <string name="title_advanced_send_partial">Ignorera ogiltiga adresser när du skickar</string>
+    <string name="title_advanced_send_partial_hint">Om vissa adresser är ogiltiga kommer ett meddelande fortfarande att skickas till de andra adresserna</string>
+    <string name="title_advanced_sent_partially">Meddelandet skickades inte till alla mottagare</string>
     <string name="title_advanced_auto_link">Skapa länkar automatiskt</string>
     <string name="title_advanced_plain_only">Skicka bara vanlig text som standard</string>
     <string name="title_advanced_plain_only_reply">Använd textformat automatiskt när du svarar på ett meddelande i textformat</string>
@@ -482,7 +490,7 @@
     <string name="title_advanced_nav_message_count">Visa antalet lokalt lagrade meddelanden i navigeringsmenyn</string>
     <string name="title_advanced_nav_unseen_drafts">Visa antal olästa utkast i navigeringsmenyn</string>
     <string name="title_advanced_nav_pinned_count">Visa antalet olästa meddelanden i navigeringsmenyn</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Visa en stjärna för konton/mappar med nyligen mottagna olästa meddelanden</string>
+    <string name="title_advanced_show_unexposed">Visa en stjärna för konton/mappar med nyligen mottagna olästa meddelanden</string>
     <string name="title_advanced_startup">Visa på startskärmen</string>
     <string name="title_advanced_cards">Använd kortstil istället för tabellstil</string>
     <string name="title_advanced_category">Kontokategorin kan konfigureras i de avancerade kontoalternativen via huvudinställningsskärmen</string>
@@ -756,6 +764,7 @@
     <string name="title_advanced_openai_model">Modell</string>
     <string name="title_advanced_openai_temperature">Temperatur: %1$s</string>
     <string name="title_advanced_openai_moderation">Moderering av innehåll</string>
+    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Gemini-integration</string>
     <string name="title_advanced_sdcard">Jag vill använda ett SD-kort</string>
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
     <string name="title_advanced_updates">Sök efter GitHub-uppdateringar</string>
@@ -814,7 +823,7 @@
     <string name="title_advanced_rlah_hint">Förutsatt ingen roaming inom EU</string>
     <string name="title_advanced_usage_hint">Det här kommer att öka användningen av batteri, data och lagringsutrymme</string>
     <string name="title_advanced_plain_hint">Aktivering av detta kommer att begränsa dataanvändningen, men meddelanden kommer att visas utan formatering</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Den oformaterade textdelen innehåller inte alltid hela meddelandet!</string>
+    <string name="title_advanced_plain_remark">Den oformaterade textdelen innehåller inte alltid hela meddelandet!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Aktivering av detta kan orsaka anslutningsproblem på vissa enheter och kan öka batterianvändningen</string>
     <string name="title_advanced_validate_hint">Detta kan resultera i att meddelanden inte synkroniseras, till exempel vid användning av VPN, men även i andra situationer</string>
     <string name="title_advanced_timeout_hint">Tidsgräns för läs/skriva kommer att ställas in på den dubbla av anslutningens tidsgräns. Högre värden kommer att resultera i mer batterianvändning.</string>
@@ -1163,6 +1172,7 @@
     <string name="title_subject_forward_alt">Vb: %1$s</string>
     <string name="title_seen">Märk som läst</string>
     <string name="title_unseen">Märk som oläst</string>
+    <string name="title_seen_unseen">Markera som läst/oläst</string>
     <string name="title_toggle_seen">Växla lästa</string>
     <string name="title_hide">Dölj</string>
     <string name="title_unhide">Visa</string>
@@ -1578,6 +1588,8 @@
     <string name="title_sort_on_time">Tid</string>
     <string name="title_sort_on_unread">Olästa</string>
     <string name="title_sort_on_starred">Stjärnmärkta</string>
+    <string name="title_sort_on_unread_starred">Olästa, stjärnmärkta</string>
+    <string name="title_sort_on_starred_unread">Stjärnmärkta, olästa</string>
     <string name="title_sort_on_priority">Prioritet</string>
     <string name="title_sort_on_sender">Avsändaren</string>
     <string name="title_sort_on_subject">Ämne</string>

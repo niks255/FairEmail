@@ -14,6 +14,9 @@
     <string name="app_cake_required">Espace de stockage minimum requis : %1$s</string>
     <string name="app_updated">Dernière mise à jour : %1$s</string>
     <string name="app_download">Téléchargé depuis : %1$s</string>
+    <string name="app_mod1">        La mise à jour de sécurité de mars provoque l\'apparition de messages \"L\'application ne répond pas\" exclusivement sur les appareils Google Pixel.
+        Veuillez ne pas blâmer cette application, seul Google peut résoudre ceci !
+    </string>
     <string name="channel_service">Surveillance</string>
     <string name="channel_send">Envoi</string>
     <string name="channel_notification">E-mail</string>
@@ -424,6 +427,11 @@
     <string name="title_advanced_discard_delete">Lors de l’abandon d’un brouillon, le supprimer définitivement</string>
     <string name="title_advanced_reply_move">Lors de la réponse à un message, enregistrer la réponse dans le même dossier</string>
     <string name="title_advanced_reply_move_inbox">Également pour les messages dans la boîte de réception</string>
+    <string name="title_advanced_send_retry_max">Nombre maximum de tentatives d\'envoi</string>
+    <string name="title_advanced_send_retry_hint">L\'envoi sera tenté de nouveau en cas de changement de connectivité</string>
+    <string name="title_advanced_send_partial">Ignorer les adresses invalides lors de l\'envoi</string>
+    <string name="title_advanced_send_partial_hint">Si certaines adresses sont invalides, le message sera quand même envoyé aux autres adresses</string>
+    <string name="title_advanced_sent_partially">Le message n\'a pas été envoyé à tous les destinataires</string>
     <string name="title_advanced_auto_link">Créer automatiquement des liens</string>
     <string name="title_advanced_plain_only">Envoyer uniquement le texte brut par défaut</string>
     <string name="title_advanced_plain_only_reply">Texte brut automatique uniquement en réponse à un message en texte brut exclusivement</string>
@@ -486,7 +494,7 @@
     <string name="title_advanced_nav_message_count">Afficher le nombre de messages stockés localement dans le menu de navigation</string>
     <string name="title_advanced_nav_unseen_drafts">Afficher le nombre de brouillons non lus dans le menu de navigation</string>
     <string name="title_advanced_nav_pinned_count">Afficher le nombre de messages non lus dans le menu de navigation épinglé</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Afficher une étoile de suivi pour les comptes/dossiers avec des messages non lus reçus récemment</string>
+    <string name="title_advanced_show_unexposed">Afficher une étoile de suivi pour les comptes/dossiers avec des messages non lus reçus récemment</string>
     <string name="title_advanced_startup">Afficher sur l\'écran de démarrage</string>
     <string name="title_advanced_cards">Utiliser le style carte au lieu du style tableau</string>
     <string name="title_advanced_category">La catégorie d\'un compte peut être configurée dans les options avancées du compte via l\'écran des paramètres principaux</string>
@@ -764,6 +772,7 @@
     <string name="title_advanced_openai_model">Modèle</string>
     <string name="title_advanced_openai_temperature">Aléa : %1$s</string>
     <string name="title_advanced_openai_moderation">Modération du contenu</string>
+    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Intégration de Gemini</string>
     <string name="title_advanced_sdcard">Je veux utiliser une carte SD</string>
     <string name="title_advanced_watchdog">Vérifier périodiquement si FairEmail est toujours actif</string>
     <string name="title_advanced_updates">Rechercher des mises à jour sur GitHub</string>
@@ -822,7 +831,7 @@
     <string name="title_advanced_rlah_hint">Considérer qu’il n’y a pas d’itinérance au sein de l’Union Européenne (Roam Like at Home)</string>
     <string name="title_advanced_usage_hint">Ceci augmentera l\'utilisation de la batterie, des données et de l\'espace de stockage</string>
     <string name="title_advanced_plain_hint">Activer ceci limitera l\'utilisation des données, mais les messages seront affichés sans style</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">La partie texte brut ne contient pas toujours le message complet !</string>
+    <string name="title_advanced_plain_remark">La partie texte brut ne contient pas toujours le message complet !</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activer ceci peut provoquer des problèmes de connexion sur certains appareils et peut augmenter l\'utilisation de la batterie</string>
     <string name="title_advanced_validate_hint">Ceci peut entraîner la non-synchronisation des messages, par exemple lors de l\'utilisation d\'un VPN mais aussi dans d\'autres situations</string>
     <string name="title_advanced_timeout_hint">Le délai d’expiration de la connexion sera doublé s’il reste encore des opérations de lecture/écriture. Des valeurs plus élevées entraîneront une utilisation accrue de la batterie.</string>
@@ -1172,6 +1181,7 @@
     <string name="title_subject_forward_alt">Tr: %1$s</string>
     <string name="title_seen">Marquer comme lu</string>
     <string name="title_unseen">Marquer comme non lu</string>
+    <string name="title_seen_unseen">Marquer lu/non lu</string>
     <string name="title_toggle_seen">Marquer lu/non lu</string>
     <string name="title_hide">Masquer</string>
     <string name="title_unhide">Afficher</string>
@@ -1589,6 +1599,8 @@
     <string name="title_sort_on_time">Date</string>
     <string name="title_sort_on_unread">Non lus</string>
     <string name="title_sort_on_starred">Suivis</string>
+    <string name="title_sort_on_unread_starred">Non lus, suivis</string>
+    <string name="title_sort_on_starred_unread">Suivis, non lus</string>
     <string name="title_sort_on_priority">Priorité</string>
     <string name="title_sort_on_sender">Expéditeur</string>
     <string name="title_sort_on_subject">Objet</string>

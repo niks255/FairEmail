@@ -14,6 +14,9 @@
     <string name="app_cake_required">需要的最小存储空间： %1$s</string>
     <string name="app_updated">上次更新：%1$s</string>
     <string name="app_download">下载自：%1$s</string>
+    <string name="app_mod1">        2024年3月的安全更新导致出现“应用未响应”消息，只有 Google Pixel 设备有这个问题。
+        请不要将这一问题怪罪在 FairEmail 身上，只有 Google 才能解决这个问题！
+    </string>
     <string name="channel_service">监控</string>
     <string name="channel_send">发送</string>
     <string name="channel_notification">电子邮件</string>
@@ -409,6 +412,11 @@
     <string name="title_advanced_discard_delete">舍弃草稿时将其永久删除</string>
     <string name="title_advanced_reply_move">回复邮件时，将回复保存在相同文件夹中</string>
     <string name="title_advanced_reply_move_inbox">也适用于收件箱中的消息</string>
+    <string name="title_advanced_send_retry_max">最大发送尝试次数</string>
+    <string name="title_advanced_send_retry_hint">连接更改时将重新尝试发送</string>
+    <string name="title_advanced_send_partial">发送时忽略无效地址</string>
+    <string name="title_advanced_send_partial_hint">即使某些地址无效，仍将发送消息到其他地址</string>
+    <string name="title_advanced_sent_partially">消息未发送到所有收件人</string>
     <string name="title_advanced_auto_link">自动创建链接</string>
     <string name="title_advanced_plain_only">默认仅发送纯文本</string>
     <string name="title_advanced_plain_only_reply">仅在回复纯文本消息时自动使用纯文本</string>
@@ -471,7 +479,7 @@
     <string name="title_advanced_nav_message_count">在导航菜单中显示本地存储消息的数量</string>
     <string name="title_advanced_nav_unseen_drafts">在导航菜单中显示未读草稿的数量</string>
     <string name="title_advanced_nav_pinned_count">在固定导航菜单中显示未读邮件的数量</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">对有新接收到的未读消息的账户/文件夹显示星标</string>
+    <string name="title_advanced_show_unexposed">对有新接收到的未读消息的账户/文件夹显示星标</string>
     <string name="title_advanced_startup">在启动屏幕上显示</string>
     <string name="title_advanced_cards">使用卡片样式而非表单样式 (即主页会话间有间隔)</string>
     <string name="title_advanced_category">账户类别可以通过主设置屏幕在高级账户选项中配置</string>
@@ -748,6 +756,7 @@
     <string name="title_advanced_openai_model">模型</string>
     <string name="title_advanced_openai_temperature">温度：%1$s</string>
     <string name="title_advanced_openai_moderation">内容审核</string>
+    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Gemini 集成</string>
     <string name="title_advanced_sdcard">我想使用 SD 卡</string>
     <string name="title_advanced_watchdog">定期检查 FairEmail 是否仍在运行</string>
     <string name="title_advanced_updates">检查 GitHub 更新</string>
@@ -806,7 +815,7 @@
     <string name="title_advanced_rlah_hint">假设欧盟境内不存在漫游</string>
     <string name="title_advanced_usage_hint">这将增加电池、数据和存储空间的使用</string>
     <string name="title_advanced_plain_hint">启用此选项将限制数据使用量，但邮件将不会显示样式</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">纯文本部分并不总是包含完整信息！</string>
+    <string name="title_advanced_plain_remark">纯文本部分并不总是包含完整信息！</string>
     <string name="title_advanced_tcp_keep_alive_hint">启用此功能可能会导致某些设备出现连接问题，并可能会增加电池使用量</string>
     <string name="title_advanced_validate_hint">这可能导致消息停止同步，例如使用 VPN 或其他某些情况下</string>
     <string name="title_advanced_timeout_hint">读/写超时时间将翻倍，值越高将越耗电</string>
@@ -1153,6 +1162,7 @@
     <string name="title_subject_forward_alt">Fwd: %1$s</string>
     <string name="title_seen">标记为已读</string>
     <string name="title_unseen">标记为未读</string>
+    <string name="title_seen_unseen">标为已读/未读</string>
     <string name="title_toggle_seen">切换已读状态</string>
     <string name="title_hide">隐藏</string>
     <string name="title_unhide">显示</string>
@@ -1568,6 +1578,8 @@
     <string name="title_sort_on_time">时间</string>
     <string name="title_sort_on_unread">未读</string>
     <string name="title_sort_on_starred">星标</string>
+    <string name="title_sort_on_unread_starred">未读，星标</string>
+    <string name="title_sort_on_starred_unread">星标，未读</string>
     <string name="title_sort_on_priority">优先级</string>
     <string name="title_sort_on_sender">发件人</string>
     <string name="title_sort_on_subject">主题</string>

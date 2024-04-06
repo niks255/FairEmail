@@ -14,6 +14,9 @@
     <string name="app_cake_required">Ελάχιστος απαιτούμενος χώρος αποθήκευσης: %1$s</string>
     <string name="app_updated">Τελευταία ενημέρωση: %1$s</string>
     <string name="app_download">Λήφθηκε από: %1$s</string>
+    <string name="app_mod1">        Η ενημέρωση ασφαλείας του Μαρτίου προκαλεί μηνύματα: \"Η εφαρμογή δεν ανταποκρίνεται\", αποκλειστικά σε συσκευές Google Pixel.
+        Παρακαλούμε, μην κατηγορείτε την εφαρμογή για αυτό, μόνο η Google μπορεί να το επιλύσει!
+    </string>
     <string name="channel_service">Παρακολούθηση</string>
     <string name="channel_send">Αποστολή</string>
     <string name="channel_notification">E-mail</string>
@@ -423,6 +426,11 @@
     <string name="title_advanced_discard_delete">Οριστική διαγραφή ενός προχείρου όταν αυτό απορρίπτεται</string>
     <string name="title_advanced_reply_move">Κατά την απάντηση ενός μηνύματος, να αποθηκεύεται η απάντηση μέσα στον ίδιο φάκελο</string>
     <string name="title_advanced_reply_move_inbox">Το ίδιο για τα μηνύματα στα εισερχόμενα</string>
+    <string name="title_advanced_send_retry_max">Μέγιστος αριθμός προσπαθειών αποστολής</string>
+    <string name="title_advanced_send_retry_hint">Εκ νέου απόπειρα αποστολής σε περίπτωση αλλαγής σύνδεσης</string>
+    <string name="title_advanced_send_partial">Να αγνοούνται οι μη έγκυρες διευθύνσεις κατά την αποστολή</string>
+    <string name="title_advanced_send_partial_hint">Εάν κάποιες διευθύνσεις δεν είναι έγκυρες, ένα μήνυμα θα εξακολουθεί να αποστέλλεται στις άλλες διευθύνσεις</string>
+    <string name="title_advanced_sent_partially">Το μήνυμα δεν εστάλη σε όλους τους παραλήπτες</string>
     <string name="title_advanced_auto_link">Αυτόματη δημιουργία συνδέσμων</string>
     <string name="title_advanced_plain_only">Αποστολή απλού κειμένου από προεπιλογή</string>
     <string name="title_advanced_plain_only_reply">Αυτόματη χρήση μόνο απλού κειμένου κατά την απάντηση σε μήνυμα που έχει μόνο απλό κείμενο</string>
@@ -485,6 +493,7 @@
     <string name="title_advanced_nav_message_count">Να προβάλλεται ο αριθμός των τοπικά αποθηκευμένων μηνυμάτων στο μενού πλοήγησης</string>
     <string name="title_advanced_nav_unseen_drafts">Να προβάλλεται ο αριθμός των μη αναγνωσμένων προχείρων στο μενού πλοήγησης</string>
     <string name="title_advanced_nav_pinned_count">Να προβάλλεται ο αριθμός των μη αναγνωσμένων μηνυμάτων στο καρφιτσωμένο μενού πλοήγησης</string>
+    <string name="title_advanced_show_unexposed">Προβολή ενός αστεριού για λογαριασμούς/φακέλους με μηνύματα που λήφθηκαν πρόσφατα και δεν έχουν αναγνωσθεί</string>
     <string name="title_advanced_startup">Εμφάνιση στην οθόνη έναρξης</string>
     <string name="title_advanced_cards">Προβολή σε στιλ κάρτας αντί σε στιλ πίνακα</string>
     <string name="title_advanced_category">Η κατηγορία λογαριασμού μπορεί να ρυθμιστεί στις επιλογές λογαριασμού για προχωρημένους, μέσω της οθόνης των κυρίων ρυθμίσεων</string>
@@ -760,6 +769,7 @@
     <string name="title_advanced_openai_model">Μοντέλο</string>
     <string name="title_advanced_openai_temperature">Θερμοκρασία: %1$s</string>
     <string name="title_advanced_openai_moderation">Έλεγχος περιεχομένου</string>
+    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Ενσωμάτωση Gemini</string>
     <string name="title_advanced_sdcard">Θέλω να χρησιμοποιήσω μια κάρτα SD</string>
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
     <string name="title_advanced_updates">Έλεγχος για ενημερώσεις στο GitHub</string>
@@ -817,6 +827,7 @@
     <string name="title_advanced_rlah_hint">Υπό την προϋπόθεση ότι δεν λαμβάνει χώρα περιαγωγή εντός της ΕΕ</string>
     <string name="title_advanced_usage_hint">Θα αυξήσει τη χρήση μπαταρίας, δεδομένων και χώρου αποθήκευσης</string>
     <string name="title_advanced_plain_hint">Εάν ενεργοποιηθεί, θα περιοριστεί η χρήση δεδομένων, αλλά τα μηνύματα θα προβάλλονται χωρίς μορφοποίηση</string>
+    <string name="title_advanced_plain_remark">Το τμήμα απλού κειμένου δεν περιέχει πάντα το πλήρες μήνυμα!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Αν ενεργοποιηθεί, μπορεί να προκαλέσει προβλήματα σύνδεσης σε ορισμένες συσκευές και ίσως αυξήσει την κατανάλωση μπαταρίας</string>
     <string name="title_advanced_validate_hint">Μπορεί να οδηγήσει σε μη συγχρονισμό μηνυμάτων, για παράδειγμα όταν χρησιμοποιείτε VPN, αλλά και σε άλλες περιπτώσεις</string>
     <string name="title_advanced_timeout_hint">Το χρονικό όριο για τις διαδικασίες ανάγνωσης/εγγραφής θα τεθεί στο διπλάσιο από εκείνο για τη λήξη της σύνδεσης. Υψηλότερες τιμές συνεπάγονται μεγαλύτερη χρήση μπαταρίας.</string>
@@ -1165,6 +1176,7 @@
     <string name="title_subject_forward_alt">Πρθ: %1$s</string>
     <string name="title_seen">Σήμανση ως αναγνωσμένου</string>
     <string name="title_unseen">Σήμανση ως μη αναγνωσμένου</string>
+    <string name="title_seen_unseen">Αναγνωσμένο/μη αναγνωσμένο</string>
     <string name="title_toggle_seen">(Μη) αναγνωσμένο</string>
     <string name="title_hide">Απόκρυψη</string>
     <string name="title_unhide">Προβολή</string>
@@ -1580,6 +1592,8 @@
     <string name="title_sort_on_time">Ημερομηνία</string>
     <string name="title_sort_on_unread">Μη αναγνωσμένα</string>
     <string name="title_sort_on_starred">Με αστέρι</string>
+    <string name="title_sort_on_unread_starred">Μη αναγνωσμένα, με αστέρι</string>
+    <string name="title_sort_on_starred_unread">Με αστέρι, μη αναγνωσμένα</string>
     <string name="title_sort_on_priority">Προτεραιότητα</string>
     <string name="title_sort_on_sender">Αποστολέα</string>
     <string name="title_sort_on_subject">Θέμα</string>

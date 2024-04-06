@@ -457,7 +457,7 @@ public class MessageHelper {
                             }
                             break;
                         case "references":
-                            imessage.setHeader("References", value);
+                            imessage.setHeader("References", limitReferences(value));
                             break;
                         case "in-reply-to":
                             imessage.setHeader("In-Reply-To", value);
@@ -822,14 +822,22 @@ public class MessageHelper {
         return new InternetAddress(email, name, StandardCharsets.UTF_8.name());
     }
 
-    static String limitReferences(String references) {
-        int maxlen = MAX_HEADER_LENGTH - "References: ".length();
+    static String limitReferences(String ref) {
+        final int maxlen = MAX_HEADER_LENGTH - "References: ".length();
+
+        String references = ref.trim();
         int sp = references.indexOf(' ');
         while (references.length() > maxlen && sp > 0) {
             Log.i("Dropping reference=" + references.substring(0, sp));
-            references = references.substring(sp);
+            references = references.substring(sp).trim();
             sp = references.indexOf(' ');
         }
+
+        if (references.length() > maxlen) {
+            Log.e("Too long References=" + Helper.getPrintableString(references, true));
+            references = "";
+        }
+
         return references;
     }
 
@@ -5667,6 +5675,25 @@ public class MessageHelper {
         }
 
         return false;
+    }
+
+    static Address[] removeAddresses(Address[] addresses, List<Address> removes) {
+        if (addresses == null || addresses.length == 0)
+            return new Address[0];
+
+        List<Address> result = new ArrayList<>();
+        for (Address address : addresses) {
+            boolean found = false;
+            for (Address remove : removes)
+                if (equalEmail(address, remove)) {
+                    found = true;
+                    break;
+                }
+            if (!found)
+                result.add(address);
+        }
+
+        return result.toArray(new Address[0]);
     }
 
     static boolean equalEmail(Address a1, Address a2) {

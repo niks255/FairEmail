@@ -633,10 +633,18 @@ public class FragmentAccount extends FragmentBase {
         btnAutoConfig.setEnabled(false);
         pbAutoConfig.setVisibility(View.GONE);
 
+        if (!DnsHelper.hasDnsSec()) {
+            Helper.hide(cbDnsSec);
+            Helper.hide(view.findViewById(R.id.tvDnsRemark));
+            Helper.hide(cbDane);
+            Helper.hide(view.findViewById(R.id.tvDaneRemark));
+        }
+
         if (!SSLHelper.customTrustManager()) {
             Helper.hide(cbInsecure);
             Helper.hide(tvInsecureRemark);
             Helper.hide(cbDane);
+            Helper.hide(view.findViewById(R.id.tvDaneRemark));
         }
 
         if (id < 0)
@@ -2108,7 +2116,7 @@ public class FragmentAccount extends FragmentBase {
 
         EntityFolder seen = new EntityFolder();
         seen.id = EntityMessage.SWIPE_ACTION_SEEN;
-        seen.name = context.getString(R.string.title_seen);
+        seen.name = context.getString(R.string.title_seen_unseen);
         folders.add(seen);
 
         EntityFolder snooze = new EntityFolder();

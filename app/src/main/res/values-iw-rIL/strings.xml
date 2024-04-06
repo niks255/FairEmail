@@ -14,6 +14,9 @@
     <string name="app_cake_required">נפח האחסון המזערי הנחוץ: %1$s</string>
     <string name="app_updated">עדכון אחרון: %1$s</string>
     <string name="app_download">מקור ההורדה: %1$s</string>
+    <string name="app_mod1">        עדכון האבטחה של מרץ גורם להודעות ‚היישומון לא מגיב’, באופן בלעדי על מכשירי Google Pixel.
+        נא לא להאשים בכך את היישומון, רק Google יכולים לפתור את זה!
+    </string>
     <string name="channel_service">מעקב</string>
     <string name="channel_send">שליחה</string>
     <string name="channel_notification">דוא״ל</string>
@@ -452,6 +455,11 @@
     <string name="title_advanced_discard_delete">השלכת טיוטה מוחקת אותה לצמיתות</string>
     <string name="title_advanced_reply_move">בעת מענה להודעה, המענה יישמר באותה התיקייה</string>
     <string name="title_advanced_reply_move_inbox">גם להודעות בדואר הנכנס</string>
+    <string name="title_advanced_send_retry_max">כמות ניסיונות השליחה המרבית</string>
+    <string name="title_advanced_send_retry_hint">יתבצע ניסיון לשלוח מחדש בעת שינויים בחיבור</string>
+    <string name="title_advanced_send_partial">התעלמות מכתובות שגויות בעת השליחה</string>
+    <string name="title_advanced_send_partial_hint">אם חלק מהנמענים שגויים, עדיין תישלח הודעה לכתובות האחרות</string>
+    <string name="title_advanced_sent_partially">ההודעה לא נשלחה לכל הנמענים</string>
     <string name="title_advanced_auto_link">ליצור קישורים אוטומטית</string>
     <string name="title_advanced_plain_only">לשלוח טקסט פשוט בלבד כברירת מחדל</string>
     <string name="title_advanced_plain_only_reply">להפוך לטקסט פשוט אוטומטית בעת שליחת תגובה להודעה שהיא בטקסט פשוט בלבד</string>
@@ -514,7 +522,7 @@
     <string name="title_advanced_nav_message_count">להציג את מספר ההודעות שמאוחסנות מקומית בתפריט הניווט</string>
     <string name="title_advanced_nav_unseen_drafts">להציג את מספר הטיוטות שלא נקראו בתפריט הניווט</string>
     <string name="title_advanced_nav_pinned_count">להציג את מספר ההודעות שלא נקראו בתפריט הניווט הנעוץ</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">הצגת כוכב לחשבונות/תיקיות עם הודעות חדשות שהתקבלו וטרם נקראו</string>
+    <string name="title_advanced_show_unexposed">הצגת כוכב לחשבונות/תיקיות עם הודעות חדשות שהתקבלו וטרם נקראו</string>
     <string name="title_advanced_startup">הצגה במסך הפתיחה</string>
     <string name="title_advanced_cards">להשתמש בסגנון כרטיסים במקום בסגנון לשוניות</string>
     <string name="title_advanced_category">ניתן להגדיר את קטגוריית החשבון באפשרויות המתקדמות של החשבון דרך מסך ההגדרות הראשי</string>
@@ -792,6 +800,7 @@
     <string name="title_advanced_openai_model">דגם</string>
     <string name="title_advanced_openai_temperature">טמפרטורה: %1$s</string>
     <string name="title_advanced_openai_moderation">ניהול תוכן</string>
+    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">שילוב מול Gemini</string>
     <string name="title_advanced_sdcard">ארצה להשתמש בכרטיס SD</string>
     <string name="title_advanced_watchdog">לבדוק מדי פעם אם FairEmail עדיין פעיל</string>
     <string name="title_advanced_updates">איתור עדכונים ב־GitHub</string>
@@ -849,7 +858,7 @@
     <string name="title_advanced_rlah_hint">להניח שאין נדידה בתוך אירופה</string>
     <string name="title_advanced_usage_hint">יגדיל את צריכת הסוללה, הנתונים ואת נפח האחסון</string>
     <string name="title_advanced_plain_hint">הפעלת האפשרות תגביל את השימוש בנתונים אך הודעות תופענה ללא עיצוב</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">החלק עם הטקסט הפשוט לא תמיד מכיל את ההודעה המלאה!</string>
+    <string name="title_advanced_plain_remark">החלק עם הטקסט הפשוט לא תמיד מכיל את ההודעה המלאה!</string>
     <string name="title_advanced_tcp_keep_alive_hint">הפעלת אפשרות זו יכולה לגרום לתקלות תקשורת בחלק מהמכשירים ועלולה להגביר את צריכת הסוללה</string>
     <string name="title_advanced_validate_hint">יכול לגרום לכך שהודעות לא תסתנכרנה, למשל בעת שימוש ב־VPN, אך גם במקרים אחרים</string>
     <string name="title_advanced_timeout_hint">תום זמן קריאה/כתיבה יוגדר להיות כפול מהזמן המוקצב לחיבור. ערכים גבוהים יותר יובילו לצריכה גבוהה יותר של סוללה.</string>
@@ -1199,6 +1208,7 @@
     <string name="title_subject_forward_alt">העברה: %1$s</string>
     <string name="title_seen">סימון כנקרא</string>
     <string name="title_unseen">סימון כלא נקרא</string>
+    <string name="title_seen_unseen">סימון נקרא/לא נקרא</string>
     <string name="title_toggle_seen">החלפת מצב קריאה</string>
     <string name="title_hide">הסתרה</string>
     <string name="title_unhide">הצגה</string>
@@ -1616,6 +1626,8 @@
     <string name="title_sort_on_time">שעה</string>
     <string name="title_sort_on_unread">לא נקרא</string>
     <string name="title_sort_on_starred">סימון בכוכב</string>
+    <string name="title_sort_on_unread_starred">לא נקרא, מסומן בכוכב</string>
+    <string name="title_sort_on_starred_unread">מסומן בכוכב, לא נקרא</string>
     <string name="title_sort_on_priority">עדיפות</string>
     <string name="title_sort_on_sender">מוען</string>
     <string name="title_sort_on_subject">נושא</string>

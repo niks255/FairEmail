@@ -14,6 +14,7 @@
     <string name="app_cake_required">Op syn minst fereaske ûnthâld: %1$s</string>
     <string name="app_updated">Lêst bywurke: %1$s</string>
     <string name="app_download">Download fan: %1$s</string>
+    <string name="app_mod1">De befeiligingsfernijing fan maart feroarsaket ‘App reageert niet’-meldingen, allinnich op Google Pixel-apparaten. Jou net de app de skuld, allinnich Google kin dit oplosse!    </string>
     <string name="channel_service">Beweitsje</string>
     <string name="channel_send">Ferstjoere</string>
     <string name="channel_notification">E-mailbericht</string>
@@ -422,6 +423,11 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_discard_delete">By fuortsmiten fan in konsept, it konsept definityf fuotsmite</string>
     <string name="title_advanced_reply_move">Bewarje, by it beäntwurdzjen fan in berjocht, it antwurd yn deselde map</string>
     <string name="title_advanced_reply_move_inbox">Ek foar berjochten yn Postfek YN</string>
+    <string name="title_advanced_send_retry_max">Maksimaal tal ferstjoerbesykjen</string>
+    <string name="title_advanced_send_retry_hint">Ferstjoeren sil opnij probearre wurde by wizigingen yn de ferbining</string>
+    <string name="title_advanced_send_partial">Unjildige adressen by ferstjoeren negearje</string>
+    <string name="title_advanced_send_partial_hint">As guon adressen ûnjildich binne, wurdt der dochs in berjocht nei de oare adressen stjoerd</string>
+    <string name="title_advanced_sent_partially">It berjocht is net nei alle ûntfangers ferstjoerd</string>
     <string name="title_advanced_auto_link">Automatysk keppelingen meitsje</string>
     <string name="title_advanced_plain_only">Ferstjoer standert platte tekst</string>
     <string name="title_advanced_plain_only_reply">Automatysk allinnich platte tekst by beäntwurdzjen fan in berjocht mei allinnich platte tekst</string>
@@ -484,7 +490,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_nav_message_count">Toan it tal lokaal bewarre berjochten yn it navigaasjemenu</string>
     <string name="title_advanced_nav_unseen_drafts">Toan it tal net lêzen berjochten yn it navigaasjemenu</string>
     <string name="title_advanced_nav_pinned_count">Toan it tal net lêzen berjochten yn it fêstsette navigaasjemenu</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Toan in stjer foar accounts/mappen mei nij ûntfongen net-lêzen berjochten</string>
+    <string name="title_advanced_show_unexposed">Toan in stjer foar accounts/mappen mei nij ûntfongen net-lêzen berjochten</string>
     <string name="title_advanced_startup">Op it startskerm toane</string>
     <string name="title_advanced_cards">Brûk kaartstyl yn stee fan tabelstyl</string>
     <string name="title_advanced_category">De accountkategory kin konfigurearre wurde yn de avansearre accountopsjes fia it haadynstellingenskerm</string>
@@ -819,7 +825,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_advanced_rlah_hint">Utgeande fan gjin ‘roaming’ binnen de EU</string>
     <string name="title_advanced_usage_hint">Dit sil gebrûk fan de batterij, gegevens en opslachromte ferheegje</string>
     <string name="title_advanced_plain_hint">Dit ynskeakelje sil it gegevensgebrûk beheine, mar berjochten sille werjûn wurde sûnder opmaak</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">It plattetekstdiel befettet net altyd it folsleine berjocht!</string>
+    <string name="title_advanced_plain_remark">It plattetekstdiel befettet net altyd it folsleine berjocht!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Dit ynskeakelje kin ferbiningsproblemen feroarsaakje op guon apparaten en kin it batterijferbrûk ferheegje</string>
     <string name="title_advanced_validate_hint">Dit kin resultearje yn berjochten dy’t net syngronisearje, bygelyks as jo in VPN brûke, mar ek yn oare situaasjes</string>
     <string name="title_advanced_timeout_hint">De time-out foar lêzen/skriuwen wurdt ynsteld op it dûbele fan de time-out foar ferbining. Hegere wearden sille resultearje yn mear batterijgebrûk.</string>
@@ -1166,6 +1172,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_subject_forward_alt">Fwd: %1$s</string>
     <string name="title_seen">As lêzen markearje</string>
     <string name="title_unseen">As net lêzen markearje</string>
+    <string name="title_seen_unseen">Markearje as lêzen/net-lêzen</string>
     <string name="title_toggle_seen">Lêzen/Net-lêzen</string>
     <string name="title_hide">Ferstopje</string>
     <string name="title_unhide">Toane</string>
@@ -1581,6 +1588,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_sort_on_time">Tiid</string>
     <string name="title_sort_on_unread">Net lêzen</string>
     <string name="title_sort_on_starred">Mei stjer</string>
+    <string name="title_sort_on_unread_starred">Net-lêzen, mei stjer</string>
+    <string name="title_sort_on_starred_unread">Mei stjer, net-lêzen</string>
     <string name="title_sort_on_priority">Prioriteit</string>
     <string name="title_sort_on_sender">Ofstjoerder</string>
     <string name="title_sort_on_subject">Underwerp</string>

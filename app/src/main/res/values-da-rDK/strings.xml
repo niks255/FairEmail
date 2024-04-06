@@ -14,6 +14,9 @@
     <string name="app_cake_required">Krævet minimum af lagerplads: %1$s</string>
     <string name="app_updated">Senest opdateret: %1$s</string>
     <string name="app_download">Downloadet fra: %1$s</string>
+    <string name="app_mod1">        Marts-sikkerhedsopdateringen forårsager \'App svarer ikke\'-meddelelser udelukkende på Google Pixel-enheder.
+        Bebrejd dog ikke appen for dette, da kun Google kan løse problemet!
+    </string>
     <string name="channel_service">Monitorering</string>
     <string name="channel_send">Send</string>
     <string name="channel_notification">E-mail</string>
@@ -424,6 +427,11 @@
     <string name="title_advanced_discard_delete">Ved kassering af udkast, slet dette permanent</string>
     <string name="title_advanced_reply_move">Ved beskedbesvarelse, gem svaret i pågældende mappe</string>
     <string name="title_advanced_reply_move_inbox">Også for beskeder i indbakken</string>
+    <string name="title_advanced_send_retry_max">Maks. afsendelsesforsøg</string>
+    <string name="title_advanced_send_retry_hint">Afsendelse forsøges igen ved forbindelsesændringer</string>
+    <string name="title_advanced_send_partial">Ignorér ugyldige adresser ved afsendelse</string>
+    <string name="title_advanced_send_partial_hint">Er nogle adresser ugyldige, sendes en besked stadig til de øvrige adresser</string>
+    <string name="title_advanced_sent_partially">Beskeden blev ikke sendt til alle modtagere</string>
     <string name="title_advanced_auto_link">Opret links automatisk</string>
     <string name="title_advanced_plain_only">Send kun simpel tekst som standard</string>
     <string name="title_advanced_plain_only_reply">Brug automatisk ren tekst ved besvarelse af en ren tekst besked</string>
@@ -486,7 +494,7 @@
     <string name="title_advanced_nav_message_count">Vis antal lokalt gemte beskeder i navigationsmenuen</string>
     <string name="title_advanced_nav_unseen_drafts">Vis antallet af ulæste udkast i navigeringsmenuen</string>
     <string name="title_advanced_nav_pinned_count">Vis antallet af ulæste udkast i den fastgjorte navigeringsmenu</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Vis en stjerne for konti/mapper med nyligt modtagne, ulæste beskeder</string>
+    <string name="title_advanced_show_unexposed">Vis en stjerne for konti/mapper med nyligt modtagne, ulæste beskeder</string>
     <string name="title_advanced_startup">Vis på startskærmen</string>
     <string name="title_advanced_cards">Brug kortstil i stedet for tabelform</string>
     <string name="title_advanced_category">Kontokategorien kan opsættes i de avancerede kontoindstillinger via hovedindstillingsskærmen</string>
@@ -764,6 +772,7 @@
     <string name="title_advanced_openai_model">Model</string>
     <string name="title_advanced_openai_temperature">Temperatur: %1$s</string>
     <string name="title_advanced_openai_moderation">Indholdsmoderering</string>
+    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Gemini-integration</string>
     <string name="title_advanced_sdcard">Et SD-kort ønskes benyttet</string>
     <string name="title_advanced_watchdog">Tjek periodisk om FairEmail stadig er aktiv</string>
     <string name="title_advanced_updates">Tjek for GitHub-opdateringer</string>
@@ -822,7 +831,7 @@
     <string name="title_advanced_rlah_hint">Antager ingen roaming inden for EU</string>
     <string name="title_advanced_usage_hint">Dette vil forøge batteri-, data- samt lagerpladsforbrug</string>
     <string name="title_advanced_plain_hint">Aktivering af dette reducerer dataforbruget, men beskeder vises uden styling</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Den rene tekstdel indeholder ikke altid den fulde besked!</string>
+    <string name="title_advanced_plain_remark">Den rene tekstdel indeholder ikke altid den fulde besked!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Aktivering af dette kan forårsage forbindelsesproblemer på visse enheder samt øge strømforbruget</string>
     <string name="title_advanced_validate_hint">Dette kan betyde, at beskeder i visse situationer ikke synkes, bl.a. ved brug af VPN</string>
     <string name="title_advanced_timeout_hint">Læse-/skrive-timeout indstilles til det dobbelte af forbindelses-timeout. Højere værdier vil resultere i øget batteriforbrug.</string>
@@ -1589,6 +1598,8 @@
     <string name="title_sort_on_time">Tid</string>
     <string name="title_sort_on_unread">Ulæst</string>
     <string name="title_sort_on_starred">Stjernemarkeret</string>
+    <string name="title_sort_on_unread_starred">Ulæste, stjernemarkerede</string>
+    <string name="title_sort_on_starred_unread">Stjernemarkerede, ulæste</string>
     <string name="title_sort_on_priority">Prioritet</string>
     <string name="title_sort_on_sender">Afsender</string>
     <string name="title_sort_on_subject">Emne</string>

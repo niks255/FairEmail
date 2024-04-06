@@ -406,19 +406,14 @@ public class ApplicationEx extends Application
                 case "watchdog":
                     ServiceSynchronize.scheduleWatchdog(this);
                     break;
-                case "secure": // privacy
-                case "load_emoji": // privacy
-                case "shortcuts": // misc
-                case "language": // misc
-                case "wal": // misc
-                    // Should be excluded for import
-                    restart(this, key);
-                    break;
                 case "debug":
                 case "log_level":
                     Log.setLevel(this);
                     FairEmailLoggingProvider.setLevel(this);
                     break;
+                default:
+                    if (FragmentOptionsBackup.RESTART_OPTIONS.contains(key))
+                        restart(this, key);
             }
         } catch (Throwable ex) {
             Log.e(ex);
@@ -854,6 +849,13 @@ public class ApplicationEx extends Application
         } else if (version < 2162) {
             if (!BuildConfig.DEBUG)
                 editor.putBoolean("tabular_unread_bg", false);
+        } else if (version < 2168) {
+            if (Helper.isGoogle())
+                editor.putBoolean("mod", true);
+        } else if (version < 2170) {
+            if (Build.PRODUCT == null || !Build.PRODUCT.endsWith("_beta") ||
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+                editor.putBoolean("mod", false);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)

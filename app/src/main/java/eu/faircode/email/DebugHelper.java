@@ -73,6 +73,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.biometric.BiometricManager;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.emoji2.text.EmojiCompat;
@@ -274,10 +275,9 @@ public class DebugHelper {
         sb.append(String.format("MIUI: %s\r\n", miui == null ? "-" : miui));
 
         boolean reporting = prefs.getBoolean("crash_reports", false);
-        if (reporting || Log.isTestRelease()) {
-            String uuid = prefs.getString("uuid", null);
-            sb.append(String.format("Bugsnag UUID: %s\r\n", uuid == null ? "-" : uuid));
-        }
+        String uuid = (reporting || Log.isTestRelease()
+                ? prefs.getString("uuid", null) : null);
+        sb.append(String.format("Bugsnag UUID: %s\r\n", uuid == null ? "-" : uuid));
 
         try {
             ApplicationInfo app = pm.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
@@ -1543,6 +1543,11 @@ public class DebugHelper {
                         Helper.getDateTimeInstance(context, SimpleDateFormat.MEDIUM, SimpleDateFormat.MEDIUM).format(now)));
                 size += write(os, String.format("Date/time long=%s\r\n",
                         Helper.getDateTimeInstance(context, SimpleDateFormat.LONG, SimpleDateFormat.LONG).format(now)));
+
+                BiometricManager bm = BiometricManager.from(context);
+                boolean secure = (bm.canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+                        == BiometricManager.BIOMETRIC_SUCCESS);
+                size += write(os, String.format("Device credentials allowed=%b\r\n", secure));
 
                 for (Class<?> cls : new Class[]{
                         ActivitySendSelf.class,

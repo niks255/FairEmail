@@ -14,6 +14,9 @@
     <string name="app_cake_required">Tələb olunan minimum anbar sahəsi: %1$s</string>
     <string name="app_updated">Son güncəlləmə: %1$s</string>
     <string name="app_download">%1$s üzərindən endirildi</string>
+    <string name="app_mod1">        Mart ayı güvənlik güncəlləməsi, xüsusilə Google Pixel cihazlarında \"Tətbiq cavab vermir\" mesajına səbəb olur.
+        Lütfən nəzərə alın ki, bu, tətbiqdən qaynaqlanan məsələ deyil, bunu yalnız Google həll edə bilər!
+    </string>
     <string name="channel_service">Müşahidə</string>
     <string name="channel_send">Göndər</string>
     <string name="channel_notification">E-poçt</string>
@@ -424,6 +427,11 @@
     <string name="title_advanced_discard_delete">Qaralamanı ləğv edəndə, onu birdəfəlik sil</string>
     <string name="title_advanced_reply_move">Bir mesaja cavab verəndə, cavabı eyni qovluqda saxla</string>
     <string name="title_advanced_reply_move_inbox">Həmçinin gələn qutusundakı mesajlar üçün</string>
+    <string name="title_advanced_send_retry_max">Maksimum göndərmə cəhdi</string>
+    <string name="title_advanced_send_retry_hint">Bağlantı dəyişəndə yenidən göndərməyə çalışılacaq</string>
+    <string name="title_advanced_send_partial">Göndərəndə yararsız ünvanları yox say</string>
+    <string name="title_advanced_send_partial_hint">Bəzi ünvanlar yararsız olsa da, digər ünvanlara mesaj göndərilməyə davam ediləcək</string>
+    <string name="title_advanced_sent_partially">Mesaj bütün alıcılara göndərilmədi</string>
     <string name="title_advanced_auto_link">Bağlantıları avtomatik yarat</string>
     <string name="title_advanced_plain_only">İlkin olaraq yalnız düz mətn göndər</string>
     <string name="title_advanced_plain_only_reply">Yalnız düz mətn mesajına cavab verərkən avtomatik olaraq yalnız düz mətn</string>
@@ -486,7 +494,7 @@
     <string name="title_advanced_nav_message_count">Naviqasiya menyusunda yerli yaddaşda saxlanılmış mesaj sayını göstər</string>
     <string name="title_advanced_nav_unseen_drafts">Naviqasiya menyusunda oxunmamış qaralamaların sayını göstər</string>
     <string name="title_advanced_nav_pinned_count">Sancaqlanmış naviqasiya menyusunda oxunmamış mesajların sayını göstər</string>
-    <string name="title_advanced_show_unexposed" comment="title_advanced_show_unexposed&#10;Title for an option that causes a star to be shown after the number of unread messages when new messages were received after the last time the message list was shown">Yeni alınan oxunmamış mesajların olduğu hesablar/qovluqlar üçün bir ulduz göstər</string>
+    <string name="title_advanced_show_unexposed">Yeni alınan oxunmamış mesajların olduğu hesablar/qovluqlar üçün bir ulduz göstər</string>
     <string name="title_advanced_startup">Başlanğıc ekranında göstər</string>
     <string name="title_advanced_cards">Cədvəl stili əvəzinə kart stilini istifadə et</string>
     <string name="title_advanced_category">Hesab kateqoriyası, əsas ayarlar ekranı vasitəsilə qabaqcıl hesab seçimlərində konfiqurasiya edilə bilər</string>
@@ -764,6 +772,7 @@
     <string name="title_advanced_openai_model">Model</string>
     <string name="title_advanced_openai_temperature">Hərarət: %1$s</string>
     <string name="title_advanced_openai_moderation">Məzmun moderasiyası</string>
+    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Gemini inteqrasiyası</string>
     <string name="title_advanced_sdcard">SD kart istifadə etmək istəyirəm</string>
     <string name="title_advanced_watchdog">Mütəmadi olaraq \"FairEmail\"in aktivliyini yoxla</string>
     <string name="title_advanced_updates">GitHub güncəlləmələrini yoxla</string>
@@ -821,7 +830,7 @@
     <string name="title_advanced_rlah_hint">AB daxilində roaminqdə olmadığını hesab et</string>
     <string name="title_advanced_usage_hint">Bu, batareya, verilənlər və anbar sahəsi istifadəsini artıracaq</string>
     <string name="title_advanced_plain_hint">Bunu fəallaşdırmaq verilənlər istifadəsini məhdudlaşdıracaq, ancaq mesajlar stil olmadan görünəcək</string>
-    <string name="title_advanced_plain_remark" comment="title_advanced_plain_remark&#10;Remark for the option that causes the plain text only part of messages to be downloaded only">Düz mətn hissəsi həmişə tam mesajı ehtiva etmir!</string>
+    <string name="title_advanced_plain_remark">Düz mətn hissəsi həmişə tam mesajı ehtiva etmir!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Bunu fəallaşdırmaq, bəzi cihazlarda bağlantı problemlərinə və batareya istifadəsinin artmasına səbəb ola bilər</string>
     <string name="title_advanced_validate_hint">Bu, məsələn bir VPN istifadə edəndə və digər hallarda mesajların sinxronlaşdırılmaması ilə nəticələnə bilər</string>
     <string name="title_advanced_timeout_hint">Oxuma/yazma üçün bitmə vaxtı, bağlantı üçün bitmə vaxtının iki qatına ayarlanacaq. Yüksək dəyərlər, daha çox batareya istifadəsi ilə nəticələnəcək.</string>
@@ -1171,6 +1180,7 @@
     <string name="title_subject_forward_alt">Ynlndr: %1$s</string>
     <string name="title_seen">Oxundu kimi işarələ</string>
     <string name="title_unseen">Oxunmadı kimi işarələ</string>
+    <string name="title_seen_unseen">Oxundu/oxunmadı işarələ</string>
     <string name="title_toggle_seen">Oxumanı aç/bağla</string>
     <string name="title_hide">Gizlət</string>
     <string name="title_unhide">Göstər</string>
@@ -1588,6 +1598,8 @@
     <string name="title_sort_on_time">Vaxt</string>
     <string name="title_sort_on_unread">Oxunmadı</string>
     <string name="title_sort_on_starred">Ulduzlu</string>
+    <string name="title_sort_on_unread_starred">Oxunmamış, ulduzlu</string>
+    <string name="title_sort_on_starred_unread">Ulduzlu, oxunmamış</string>
     <string name="title_sort_on_priority">Əhəmiyyət</string>
     <string name="title_sort_on_sender">Göndərən</string>
     <string name="title_sort_on_subject">Mövzu</string>
