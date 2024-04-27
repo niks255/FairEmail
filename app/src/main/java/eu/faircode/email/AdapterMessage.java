@@ -2841,8 +2841,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 properties.setValue("images_asked", message.id, true);
             }
 
-            if (message.from != null)
-                for (Address sender : message.from) {
+            Address[] senders = (message.isForwarder() ? message.submitter : message.from);
+
+            if (senders != null)
+                for (Address sender : senders) {
                     String from = ((InternetAddress) sender).getAddress();
                     if (TextUtils.isEmpty(from))
                         continue;
@@ -5525,15 +5527,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
 
             boolean junk = EntityFolder.JUNK.equals(message.folderType);
+            Address[] senders = (message.isForwarder() ? message.submitter : message.from);
 
             boolean current = properties.getValue(full ? "full" : "images", message.id);
             boolean asked = properties.getValue(full ? "full_asked" : "images_asked", message.id);
             boolean confirm = prefs.getBoolean(full ? "confirm_html" : "confirm_images", true) || junk;
             boolean ask = prefs.getBoolean(full ? "ask_html" : "ask_images", true) || junk;
             if (current || asked || !confirm || !ask) {
-                if (current && message.from != null) {
+                if (current && senders != null) {
                     SharedPreferences.Editor editor = prefs.edit();
-                    for (Address sender : message.from) {
+                    for (Address sender : senders) {
                         String from = ((InternetAddress) sender).getAddress();
                         if (TextUtils.isEmpty(from))
                             continue;
@@ -5563,13 +5566,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 cbNotAgainSender.setVisibility(View.GONE);
                 cbNotAgainDomain.setVisibility(View.GONE);
                 cbNotAgain.setVisibility(View.GONE);
-            } else if (message.from == null || message.from.length == 0) {
+            } else if (senders == null || senders.length == 0) {
                 cbNotAgainSender.setVisibility(View.GONE);
                 cbNotAgainDomain.setVisibility(View.GONE);
             } else {
                 List<String> froms = new ArrayList<>();
                 List<String> domains = new ArrayList<>();
-                for (Address address : message.from) {
+                for (Address address : senders) {
                     String from = ((InternetAddress) address).getAddress();
                     froms.add(from);
                     int at = from.indexOf('@');
@@ -5641,8 +5644,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             if (!junk) {
                                 SharedPreferences.Editor editor = prefs.edit();
-                                if (message.from != null)
-                                    for (Address sender : message.from) {
+                                if (senders != null)
+                                    for (Address sender : senders) {
                                         String from = ((InternetAddress) sender).getAddress();
                                         if (TextUtils.isEmpty(from))
                                             continue;
@@ -6182,7 +6185,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             boolean experiments = prefs.getBoolean("experiments", false);
 
-            PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibMore);
+            PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, powner, ibMore == null ? view : ibMore);
             popupMenu.inflate(R.menu.popup_message_more);
 
             popupMenu.getMenu().findItem(R.id.menu_unseen)
@@ -6421,6 +6424,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             Log.i("Opening uri=" + uri + " title=" + title + " always confirm=" + always_confirm);
 
             try {
+                uri = Uri.parse(uri.toString().replaceAll("[\r\n]", ""));
                 if (UriHelper.isHyperLink(uri))
                     uri = Uri.parse(uri.toString().trim().replaceAll("\\s+", "+"));
 
@@ -6457,8 +6461,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     try {
                         if (ActivityBilling.activatePro(context, uri))
                             ToastEx.makeText(context, R.string.title_pro_valid, Toast.LENGTH_LONG).show();
-                        else
-                            ToastEx.makeText(context, R.string.title_pro_invalid, Toast.LENGTH_LONG).show();
+                        else {
+                            Uri invalid = Uri.parse(BuildConfig.PRO_FEATURES_URI + "invalid.html" +
+                                    "?challenge=" + ActivityBilling.getChallenge(context) +
+                                    "&version=" + BuildConfig.VERSION_CODE);
+                            Helper.view(context, invalid, true);
+                        }
                     } catch (NoSuchAlgorithmException ex) {
                         Log.e(ex);
                         ToastEx.makeText(context, Log.formatThrowable(ex), Toast.LENGTH_LONG).show();
@@ -6570,6 +6578,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private boolean isActivate(Uri uri) {
+            if ("eu.faircode.email".equals(uri.getHost()))
+                return true;
             return ("email.faircode.eu".equals(uri.getHost()) &&
                     "/activate/".equals(uri.getPath()));
         }
@@ -7751,7 +7761,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             return tvBody.getText().subSequence(start, end);
         }
 
-        private View.AccessibilityDelegate accessibilityDelegateHeader = new View.AccessibilityDelegate() {
+        private final View.AccessibilityDelegate accessibilityDelegateHeader = new View.AccessibilityDelegate() {
             @Override
             public void onInitializeAccessibilityEvent(View host, AccessibilityEvent event) {
                 super.onInitializeAccessibilityEvent(host, event);
@@ -7788,63 +7798,82 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     Log.e(ex);
                 }
 
-                TupleMessageEx message = getMessage();
-                if (message == null)
-                    return;
+                try {
+                    TupleMessageEx message = getMessage();
+                    if (message == null)
+                        return;
 
-                boolean expanded = properties.getValue("expanded", message.id);
+                    boolean expanded = properties.getValue("expanded", message.id);
 
-                vwColor.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                    vwColor.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
 
-                if (ibExpander.getVisibility() == View.VISIBLE)
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibExpander,
-                            context.getString(expanded ? R.string.title_accessibility_collapse : R.string.title_accessibility_expand)));
-                ibExpander.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                    if (ibExpander.getVisibility() == View.VISIBLE)
+                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibExpander,
+                                context.getString(expanded ? R.string.title_accessibility_collapse : R.string.title_accessibility_expand)));
+                    ibExpander.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
 
-                info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibSeen,
-                        context.getString(message.ui_seen ? R.string.title_unseen : R.string.title_seen)));
+                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibSeen,
+                            context.getString(message.ui_seen ? R.string.title_unseen : R.string.title_seen)));
 
-                info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibAnswer,
-                        context.getString(R.string.title_reply)));
+                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibAnswer,
+                            context.getString(R.string.title_reply)));
 
-                info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibArchive,
-                        context.getString(R.string.title_archive)));
+                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibArchive,
+                            context.getString(R.string.title_archive)));
 
-                info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibTrash,
-                        context.getString(R.string.title_trash)));
+                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibTrash,
+                            context.getString(R.string.title_trash)));
 
-                if (properties.getSelectionCount() > 0)
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibDelete,
-                            context.getString(R.string.title_trash_selection)));
+                    if (properties.getSelectionCount() > 0)
+                        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibDelete,
+                                context.getString(R.string.title_trash_selection)));
 
-                if (ibAvatar.getVisibility() == View.VISIBLE && ibAvatar.isEnabled())
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibAvatar,
-                            context.getString(R.string.title_accessibility_view_contact)));
-                ibAvatar.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                    if (ibAvatar != null) {
+                        if (ibAvatar.getVisibility() == View.VISIBLE && ibAvatar.isEnabled())
+                            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibAvatar,
+                                    context.getString(R.string.title_accessibility_view_contact)));
+                        ibAvatar.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                    }
 
-                if (ibFlagged.getVisibility() == View.VISIBLE && ibFlagged.isEnabled()) {
-                    int flagged = (message.count - message.unflagged);
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibFlagged,
-                            context.getString(flagged > 0 ? R.string.title_unflag : R.string.title_flag)));
+                    if (ibFlagged != null) {
+                        if (ibFlagged.getVisibility() == View.VISIBLE && ibFlagged.isEnabled()) {
+                            int flagged = (message.count - message.unflagged);
+                            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibFlagged,
+                                    context.getString(flagged > 0 ? R.string.title_unflag : R.string.title_flag)));
+                        }
+                        ibFlagged.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                    }
+
+                    if (ibAuth != null) {
+                        if (ibAuth.getVisibility() == View.VISIBLE)
+                            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibAuth,
+                                    context.getString(R.string.title_accessibility_show_authentication_result)));
+                        ibAuth.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                    }
+
+                    if (ibSnoozed != null) {
+                        if (ibSnoozed.getVisibility() == View.VISIBLE)
+                            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibSnoozed,
+                                    context.getString(R.string.title_accessibility_show_snooze_time)));
+                        ibSnoozed.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                    }
+
+                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibMore,
+                            context.getString(R.string.title_advanced_more)));
+                    if (ibMore != null)
+                        ibMore.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+
+                    if (ibError != null) {
+                        if (ibError.getVisibility() == View.VISIBLE)
+                            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibError,
+                                    context.getString(R.string.title_accessibility_view_help)));
+                        ibError.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                    }
+
+                    info.setContentDescription(populateContentDescription(message));
+                } catch (Throwable ex) {
+                    Log.e(ex);
                 }
-                ibFlagged.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-
-                if (ibAuth.getVisibility() == View.VISIBLE)
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibAuth,
-                            context.getString(R.string.title_accessibility_show_authentication_result)));
-                ibAuth.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-
-                if (ibSnoozed.getVisibility() == View.VISIBLE)
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibSnoozed,
-                            context.getString(R.string.title_accessibility_show_snooze_time)));
-                ibSnoozed.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-
-                if (ibError.getVisibility() == View.VISIBLE)
-                    info.addAction(new AccessibilityNodeInfo.AccessibilityAction(R.id.ibError,
-                            context.getString(R.string.title_accessibility_view_help)));
-                ibError.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-
-                info.setContentDescription(populateContentDescription(message));
             }
 
             @Override
@@ -7882,6 +7911,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     return true;
                 } else if (action == R.id.ibSnoozed) {
                     onShowSnoozed(message);
+                    return true;
+                } else if (action == R.id.ibMore) {
+                    onActionMore(message);
                     return true;
                 } else if (action == R.id.ibError) {
                     onHelp(message);

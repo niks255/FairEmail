@@ -4,11 +4,62 @@
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
+### [Acantholipan](https://en.wikipedia.org/wiki/Acantholipan)
+
+### 1.2177 - 2024-04-27
+
+* Added [Have I Been Pwned?](https://haveibeenpwned.com/) check (*)
+* Added identity option to configure envelope-from (*MAIL FROM*)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+(*) Via the three-dots overflow menu of the account list under "*Manual setup and account options*" in the main settings screen (GitHub version only).
+
 ### [Zby](https://en.wikipedia.org/wiki/Zby)
+
+### 1.2176 - 2024-04-22
+
+* Fixed British English translation
+* Small improvements and minor bug fixes
+
+### 1.2175 - 2024-04-20
+
+* Fixed primary inbox navigation
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2174 - 2024-04-19
+
+* Added expression conditions to rules, see [the FAQ](https://m66b.github.io/FairEmail/#faq71)
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2173 - 2024-04-16
+
+* Added *primary inbox* start screen option
+* Added *NOT* option to rule conditions
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2172 - 2024-04-08
+
+* Improved handling of messages via email forwarders (*)
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+(*) Currently supported email forwarders:
+
+* [addy.io](https://addy.io/)
+* [DuckDuckGo Email Protection](https://duckduckgo.com/email/)
+* [Firefox Relay](https://relay.firefox.com/)
+* [SimpleLogin](https://simplelogin.io/)
 
 ### 1.2171 - 2024-03-30
 
-* Added [Gemini](https://github.com/M66B/FairEmail/blob/master/FAQ.md#faq204) integration
+* Added [Gemini](https://m66b.github.io/FairEmail/#faq204) integration
 * Added answer button to buttons configuration
 * Small improvements and minor bug fixes
 * Updated [Public Suffix List](https://github.com/publicsuffix/list)

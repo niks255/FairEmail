@@ -21,6 +21,8 @@ package eu.faircode.email;
 
 import static androidx.room.ForeignKey.CASCADE;
 
+import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_COMPARISON;
+
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -41,6 +43,18 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.ezylang.evalex.EvaluationException;
+import com.ezylang.evalex.Expression;
+import com.ezylang.evalex.config.ExpressionConfiguration;
+import com.ezylang.evalex.data.EvaluationValue;
+import com.ezylang.evalex.functions.AbstractFunction;
+import com.ezylang.evalex.functions.FunctionParameter;
+import com.ezylang.evalex.operators.AbstractOperator;
+import com.ezylang.evalex.operators.InfixOperator;
+import com.ezylang.evalex.parser.ASTNode;
+import com.ezylang.evalex.parser.ParseException;
+import com.ezylang.evalex.parser.Token;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
@@ -50,6 +64,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -59,9 +75,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -151,6 +169,10 @@ public class EntityRule {
     private static final int MAX_NOTES_LENGTH = 512; // characters
     private static final int URL_TIMEOUT = 15 * 1000; // milliseconds
 
+    private static final List<String> EXPR_VARIABLES = Collections.unmodifiableList(Arrays.asList(
+            "to", "from", "subject", "text", "hasAttachments"
+    ));
+
     static boolean needsHeaders(EntityMessage message, List<EntityRule> rules) {
         return needsHeaders(rules);
     }
@@ -173,6 +195,7 @@ public class EntityRule {
         for (EntityRule rule : rules)
             try {
                 JSONObject jcondition = new JSONObject(rule.condition);
+
                 if (jcondition.has(what)) {
                     if ("header".equals(what)) {
                         JSONObject jheader = jcondition.getJSONObject("header");
@@ -182,6 +205,16 @@ public class EntityRule {
                             continue;
                     }
                     return true;
+                }
+
+                if (jcondition.has("expression")) {
+                    Expression expression = getExpression(rule, null, null, null, null);
+                    if (expression != null) {
+                        if ("header".equals(what) && needsHeaders(expression))
+                            return true;
+                        if ("body".equals(what) && needsBody(expression))
+                            return true;
+                    }
                 }
             } catch (Throwable ex) {
                 Log.e(ex);
@@ -237,6 +270,7 @@ public class EntityRule {
             // Sender
             JSONObject jsender = jcondition.optJSONObject("sender");
             if (jsender != null) {
+                boolean not = jsender.optBoolean("not");
                 String value = jsender.getString("value");
                 boolean regex = jsender.getBoolean("regex");
                 boolean known = jsender.optBoolean("known");
@@ -279,13 +313,14 @@ public class EntityRule {
                         }
                     }
                 }
-                if (!matches)
+                if (matches == not)
                     return false;
             }
 
             // Recipient
             JSONObject jrecipient = jcondition.optJSONObject("recipient");
             if (jrecipient != null) {
+                boolean not = jrecipient.optBoolean("not");
                 String value = jrecipient.getString("value");
                 boolean regex = jrecipient.getBoolean("regex");
 
@@ -306,17 +341,18 @@ public class EntityRule {
                         break;
                     }
                 }
-                if (!matches)
+                if (matches == not)
                     return false;
             }
 
             // Subject
             JSONObject jsubject = jcondition.optJSONObject("subject");
             if (jsubject != null) {
+                boolean not = jsubject.optBoolean("not");
                 String value = jsubject.getString("value");
                 boolean regex = jsubject.getBoolean("regex");
 
-                if (!matches(context, message, value, message.subject, regex))
+                if (matches(context, message, value, message.subject, regex) == not)
                     return false;
             }
 
@@ -346,99 +382,15 @@ public class EntityRule {
             // Header
             JSONObject jheader = jcondition.optJSONObject("header");
             if (jheader != null) {
+                boolean not = jheader.optBoolean("not");
                 String value = jheader.getString("value");
                 boolean regex = jheader.getBoolean("regex");
 
                 if (!regex &&
                         value.startsWith("$") &&
                         value.endsWith("$")) {
-                    String keyword = value.substring(1, value.length() - 1);
-
-                    if ("$tls".equals(keyword)) {
-                        if (!Boolean.TRUE.equals(message.tls))
-                            return false;
-                    } else if ("$aligned".equals(keyword)) {
-                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                        boolean native_dkim = prefs.getBoolean("native_dkim", false);
-                        if (!native_dkim)
-                            return false;
-                        if (message.signedby == null)
-                            return false;
-                        if (message.from == null || message.from.length != 1)
-                            return false;
-                        String domain = UriHelper.getEmailDomain(((InternetAddress) message.from[0]).getAddress());
-                        if (domain == null)
-                            return false;
-                        boolean valid = false;
-                        for (String signer : message.signedby.split(","))
-                            if (Objects.equals(
-                                    UriHelper.getRootDomain(context, signer),
-                                    UriHelper.getRootDomain(context, domain))) {
-                                valid = true;
-                                break;
-                            }
-                        if (!valid)
-                            return false;
-                    } else if ("$dkim".equals(keyword)) {
-                        if (!Boolean.TRUE.equals(message.dkim))
-                            return false;
-                    } else if ("$spf".equals(keyword)) {
-                        if (!Boolean.TRUE.equals(message.spf))
-                            return false;
-                    } else if ("$dmarc".equals(keyword)) {
-                        if (!Boolean.TRUE.equals(message.dmarc))
-                            return false;
-                    } else if ("$auth".equals(keyword)) {
-                        if (!Boolean.TRUE.equals(message.auth))
-                            return false;
-                    } else if ("$mx".equals(keyword)) {
-                        if (!Boolean.TRUE.equals(message.mx))
-                            return false;
-                    } else if ("$blocklist".equals(keyword)) {
-                        if (!Boolean.FALSE.equals(message.blocklist))
-                            return false;
-                    } else if ("$replydomain".equals(keyword)) {
-                        if (!Boolean.TRUE.equals(message.reply_domain))
-                            return false;
-                    } else if ("$nofrom".equals(keyword)) {
-                        if (message.from != null && message.from.length > 0)
-                            return false;
-                    } else if ("$multifrom".equals(keyword)) {
-                        if (message.from == null || message.from.length < 2)
-                            return false;
-                    } else if ("$automatic".equals(keyword)) {
-                        if (!Boolean.TRUE.equals(message.auto_submitted))
-                            return false;
-                    } else if ("$lowpriority".equals(keyword)) {
-                        if (!EntityMessage.PRIORITIY_LOW.equals(message.priority))
-                            return false;
-                    } else if ("$highpriority".equals(keyword)) {
-                        if (!EntityMessage.PRIORITIY_HIGH.equals(message.priority))
-                            return false;
-                    } else if ("$signed".equals(keyword)) {
-                        if (!message.isSigned())
-                            return false;
-                    } else if ("$encrypted".equals(keyword)) {
-                        if (!message.isEncrypted())
-                            return false;
-                    } else {
-                        List<String> keywords = new ArrayList<>();
-                        keywords.addAll(Arrays.asList(message.keywords));
-
-                        if (message.ui_seen)
-                            keywords.add("$seen");
-                        if (message.ui_answered)
-                            keywords.add("$answered");
-                        if (message.ui_flagged)
-                            keywords.add("$flagged");
-                        if (message.ui_deleted)
-                            keywords.add("$deleted");
-                        if (message.infrastructure != null)
-                            keywords.add('$' + message.infrastructure);
-
-                        if (!keywords.contains(keyword))
-                            return false;
-                    }
+                    if (matchKeywords(context, message, value) != not)
+                        return false;
                 } else {
                     if (headers == null) {
                         if (message.headers == null)
@@ -456,7 +408,7 @@ public class EntityRule {
                             break;
                         }
                     }
-                    if (!matches)
+                    if (matches == not)
                         return false;
                 }
             }
@@ -464,6 +416,7 @@ public class EntityRule {
             // Body
             JSONObject jbody = jcondition.optJSONObject("body");
             if (jbody != null) {
+                boolean not = jbody.optBoolean("not");
                 String value = jbody.getString("value");
                 boolean regex = jbody.getBoolean("regex");
                 boolean skip_quotes = jbody.optBoolean("skip_quotes");
@@ -493,11 +446,11 @@ public class EntityRule {
                     d.select("blockquote").remove();
                 if (jsoup) {
                     String selector = value.substring(JSOUP_PREFIX.length());
-                    if (d.select(selector).size() == 0)
+                    if (d.select(selector).isEmpty() != not)
                         return false;
                 } else {
                     String text = d.body().text();
-                    if (!matches(context, message, value, text, regex))
+                    if (matches(context, message, value, text, regex) == not)
                         return false;
                 }
             }
@@ -535,11 +488,25 @@ public class EntityRule {
                     return false;
             }
 
+            // Younger
             if (jcondition.has("younger")) {
                 int younger = jcondition.getInt("younger");
                 Calendar y = Calendar.getInstance();
                 y.add(Calendar.HOUR_OF_DAY, -younger);
                 if (message.received < y.getTimeInMillis())
+                    return false;
+            }
+
+            // Expression
+            Expression expression = getExpression(this, message, headers, html, context);
+            if (expression != null) {
+                if (needsHeaders(expression) && headers == null && message.headers == null)
+                    throw new IllegalArgumentException(context.getString(R.string.title_rule_no_headers));
+
+                Log.i("EXPR evaluating='" + jcondition.getString("expression") + "'");
+                Boolean result = expression.evaluate().getBooleanValue();
+                Log.i("EXPR evaluated=" + result);
+                if (!Boolean.TRUE.equals(result))
                     return false;
             }
 
@@ -552,14 +519,107 @@ public class EntityRule {
                     jbody == null &&
                     jdate == null &&
                     jschedule == null &&
-                    !jcondition.has("younger"))
+                    !jcondition.has("younger") &&
+                    !jcondition.has("expression"))
                 return false;
-        } catch (JSONException ex) {
+        } catch (JSONException | ParseException | EvaluationException ex) {
             Log.e(ex);
             return false;
         }
 
         return true;
+    }
+
+    private static boolean matchKeywords(Context context, EntityMessage message, String value) {
+        String keyword = value.substring(1, value.length() - 1);
+
+        if ("$tls".equals(keyword)) {
+            if (!Boolean.TRUE.equals(message.tls))
+                return true;
+        } else if ("$aligned".equals(keyword)) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean native_dkim = prefs.getBoolean("native_dkim", false);
+            if (!native_dkim)
+                return true;
+            if (message.signedby == null)
+                return true;
+            if (message.from == null || message.from.length != 1)
+                return true;
+            String domain = UriHelper.getEmailDomain(((InternetAddress) message.from[0]).getAddress());
+            if (domain == null)
+                return true;
+            boolean valid = false;
+            for (String signer : message.signedby.split(","))
+                if (Objects.equals(
+                        UriHelper.getRootDomain(context, signer),
+                        UriHelper.getRootDomain(context, domain))) {
+                    valid = true;
+                    break;
+                }
+            if (!valid)
+                return true;
+        } else if ("$dkim".equals(keyword)) {
+            if (!Boolean.TRUE.equals(message.dkim))
+                return true;
+        } else if ("$spf".equals(keyword)) {
+            if (!Boolean.TRUE.equals(message.spf))
+                return true;
+        } else if ("$dmarc".equals(keyword)) {
+            if (!Boolean.TRUE.equals(message.dmarc))
+                return true;
+        } else if ("$auth".equals(keyword)) {
+            if (!Boolean.TRUE.equals(message.auth))
+                return true;
+        } else if ("$mx".equals(keyword)) {
+            if (!Boolean.TRUE.equals(message.mx))
+                return true;
+        } else if ("$blocklist".equals(keyword)) {
+            if (!Boolean.FALSE.equals(message.blocklist))
+                return true;
+        } else if ("$replydomain".equals(keyword)) {
+            if (!Boolean.TRUE.equals(message.reply_domain))
+                return true;
+        } else if ("$nofrom".equals(keyword)) {
+            if (message.from != null && message.from.length > 0)
+                return true;
+        } else if ("$multifrom".equals(keyword)) {
+            if (message.from == null || message.from.length < 2)
+                return true;
+        } else if ("$automatic".equals(keyword)) {
+            if (!Boolean.TRUE.equals(message.auto_submitted))
+                return true;
+        } else if ("$lowpriority".equals(keyword)) {
+            if (!EntityMessage.PRIORITIY_LOW.equals(message.priority))
+                return true;
+        } else if ("$highpriority".equals(keyword)) {
+            if (!EntityMessage.PRIORITIY_HIGH.equals(message.priority))
+                return true;
+        } else if ("$signed".equals(keyword)) {
+            if (!message.isSigned())
+                return true;
+        } else if ("$encrypted".equals(keyword)) {
+            if (!message.isEncrypted())
+                return true;
+        } else {
+            List<String> keywords = new ArrayList<>();
+            keywords.addAll(Arrays.asList(message.keywords));
+
+            if (message.ui_seen)
+                keywords.add("$seen");
+            if (message.ui_answered)
+                keywords.add("$answered");
+            if (message.ui_flagged)
+                keywords.add("$flagged");
+            if (message.ui_deleted)
+                keywords.add("$deleted");
+            if (message.infrastructure != null)
+                keywords.add('$' + message.infrastructure);
+
+            if (!keywords.contains(keyword))
+                return true;
+        }
+
+        return false;
     }
 
     private boolean matches(Context context, EntityMessage message, String needle, String haystack, boolean regex) {
@@ -579,6 +639,244 @@ public class EntityRule {
             Log.i("Rule=" + name + "@" + order + " matched=" + matched +
                     " needle=" + needle + " haystack=" + haystack + " regex=" + regex);
         return matched;
+    }
+
+    @FunctionParameter(name = "value")
+    public static class HeaderFunction extends AbstractFunction {
+        private List<Header> headers;
+
+        HeaderFunction(List<Header> headers) {
+            this.headers = headers;
+        }
+
+        @Override
+        public EvaluationValue evaluate(
+                Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+            List<String> result = new ArrayList<>();
+
+            try {
+                if (parameterValues.length == 1) {
+                    String name = parameterValues[0].getStringValue();
+                    if (name != null && headers != null)
+                        for (Header header : headers)
+                            if (name.equalsIgnoreCase(header.getName()))
+                                result.add(header.getValue());
+                }
+            } catch (Throwable ex) {
+                Log.e("EXPR", ex);
+            }
+
+            Log.i("EXPR header(" + parameterValues[0] + ")=" + TextUtils.join(", ", result));
+            return new EvaluationValue(result, ExpressionConfiguration.defaultConfiguration());
+        }
+    }
+
+    @FunctionParameter(name = "value")
+    public static class MessageFunction extends AbstractFunction {
+        private EntityMessage message;
+
+        MessageFunction(EntityMessage message) {
+            this.message = message;
+        }
+
+        @Override
+        public EvaluationValue evaluate(
+                Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+            List<Object> result = new ArrayList<>();
+
+            try {
+                if (parameterValues.length == 1) {
+                    String name = parameterValues[0].getStringValue();
+                    if (name != null && message != null) {
+                        Field field = message.getClass().getField(name);
+                        field.setAccessible(true);
+                        Object value = field.get(message);
+                        if (value != null)
+                            result.add(value);
+                    }
+                }
+            } catch (Throwable ex) {
+                Log.e("EXPR", ex);
+            }
+
+            Log.i("EXPR message(" + parameterValues[0] + ")=" + TextUtils.join(", ", result));
+            return new EvaluationValue(result, ExpressionConfiguration.defaultConfiguration());
+        }
+    }
+
+    public static class BlocklistFunction extends AbstractFunction {
+        private Context context;
+        private Address[] from;
+        private List<Header> headers;
+
+        BlocklistFunction(Context context, Address[] from, List<Header> headers) {
+            this.context = context;
+            this.from = from;
+            this.headers = headers;
+        }
+
+        @Override
+        public EvaluationValue evaluate(
+                Expression expression, Token functionToken, EvaluationValue... parameterValues) {
+            boolean result = false;
+
+            try {
+                if (from != null)
+                    result = Boolean.TRUE.equals(DnsBlockList.isJunk(context, Arrays.asList(from)));
+
+                List<String> received = new ArrayList<>();
+                if (headers != null)
+                    for (Header header : headers)
+                        if (header.getName().equalsIgnoreCase("Received"))
+                            received.add(header.getValue());
+                result = result || Boolean.TRUE.equals(DnsBlockList.isJunk(context, received.toArray(new String[0])));
+            } catch (Throwable ex) {
+                Log.e("EXPR", ex);
+            }
+
+            Log.i("EXPR blocklist()=" + result);
+            return expression.convertValue(result);
+        }
+    }
+
+    @InfixOperator(precedence = OPERATOR_PRECEDENCE_COMPARISON)
+    public static class ContainsOperator extends AbstractOperator {
+        private boolean regex;
+
+        ContainsOperator(boolean regex) {
+            this.regex = regex;
+        }
+
+        @Override
+        public EvaluationValue evaluate(
+                Expression expression, Token operatorToken, EvaluationValue... operands) {
+            boolean result = false;
+
+            try {
+                if (operands.length == 2) {
+                    List<EvaluationValue> array;
+                    if (operands[1].getDataType() == EvaluationValue.DataType.ARRAY)
+                        array = operands[0].getArrayValue();
+                    else
+                        array = Arrays.asList(operands[0]);
+
+                    String condition = operands[1].getStringValue();
+
+                    if (array != null && !array.isEmpty() && !TextUtils.isEmpty(condition))
+                        for (EvaluationValue item : array) {
+                            String value = item.getStringValue();
+                            if (!TextUtils.isEmpty(value))
+                                if (regex
+                                        ? Pattern.compile(condition, Pattern.DOTALL).matcher(value).matches()
+                                        : value.toLowerCase().contains(condition.toLowerCase())) {
+                                    result = true;
+                                    break;
+                                }
+                        }
+                }
+            } catch (Throwable ex) {
+                Log.e("EXPR", ex);
+            }
+
+            Log.i("EXPR " + operands[0] + (regex ? " MATCHES " : " CONTAINS ") + operands[1] +
+                    " regex=" + regex + " result=" + result);
+
+            return expression.convertValue(result);
+        }
+    }
+
+    static Expression getExpression(EntityRule rule, EntityMessage message, List<Header> headers, String html, Context context) throws JSONException, ParseException, MessagingException {
+        // https://ezylang.github.io/EvalEx/
+
+        JSONObject jcondition = new JSONObject(rule.condition);
+        if (!jcondition.has("expression"))
+            return null;
+        String eval = jcondition.getString("expression");
+
+        List<String> to = new ArrayList<>();
+        if (message != null && message.to != null)
+            for (Address a : message.to)
+                to.add(MessageHelper.formatAddresses(new Address[]{a}));
+
+        List<String> from = new ArrayList<>();
+        if (message != null && message.from != null)
+            for (Address a : message.from)
+                from.add(MessageHelper.formatAddresses(new Address[]{a}));
+
+        if (html == null && message != null && message.content)
+            try {
+                html = Helper.readText(message.getFile(context));
+            } catch (IOException ex) {
+                Log.e(ex);
+            }
+
+        Document doc = (html == null ? null : JsoupEx.parse(html));
+
+        if (headers == null && message != null && message.headers != null) {
+            ByteArrayInputStream bis = new ByteArrayInputStream(message.headers.getBytes());
+            headers = Collections.list(new InternetHeaders(bis, true).getAllHeaders());
+        }
+
+        ExpressionConfiguration configuration = ExpressionConfiguration.defaultConfiguration();
+        configuration.getFunctionDictionary().addFunction("Header",
+                new HeaderFunction(headers));
+        configuration.getFunctionDictionary().addFunction("Message",
+                new MessageFunction(message));
+        configuration.getFunctionDictionary().addFunction("Blocklist",
+                new BlocklistFunction(context, message == null ? null : message.from, headers));
+        configuration.getOperatorDictionary().addOperator("Contains",
+                new ContainsOperator(false));
+        configuration.getOperatorDictionary().addOperator("Matches",
+                new ContainsOperator(true));
+
+        Expression expression = new Expression(eval, configuration)
+                .with("to", to)
+                .with("from", from)
+                .with("subject", message == null ? null : message.subject)
+                .with("text", doc == null ? null : doc.text());
+
+        if (message != null) {
+            boolean hasAttachments = false;
+            for (String variable : expression.getUsedVariables())
+                if (!hasAttachments && "hasAttachments".equals(variable)) {
+                    hasAttachments = true;
+                    DB db = DB.getInstance(context);
+                    List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
+                    expression.with("hasAttachments", attachments != null && !attachments.isEmpty());
+                }
+        }
+
+        return expression;
+    }
+
+    static boolean needsHeaders(Expression expression) {
+        try {
+            expression.validate();
+            for (ASTNode node : expression.getAllASTNodes()) {
+                Token token = node.getToken();
+                Log.i("EXPR token=" + token.getType() + ":" + token.getValue());
+                if (token.getType() == Token.TokenType.FUNCTION &&
+                        ("header".equalsIgnoreCase(token.getValue()) ||
+                                "blocklist".equalsIgnoreCase(token.getValue()))) {
+                    Log.i("EXPR needs headers");
+                    return true;
+                }
+            }
+        } catch (Throwable ex) {
+            Log.e("EXPR", ex);
+        }
+        return false;
+    }
+
+    static boolean needsBody(Expression expression) {
+        try {
+            for (String variable : expression.getUsedVariables())
+                if ("text".equalsIgnoreCase(variable))
+                    return true;
+        } catch (Throwable ex) {
+            Log.e("EXPR", ex);
+        }
+        return false;
     }
 
     boolean execute(Context context, EntityMessage message, String html) throws JSONException, IOException {
@@ -643,6 +941,26 @@ public class EntityRule {
     }
 
     void validate(Context context) throws JSONException, IllegalArgumentException {
+        try {
+            Expression expression = getExpression(this, null, null, null, context);
+            if (expression != null) {
+                for (String variable : expression.getUsedVariables()) {
+                    Log.i("EXPR variable=" + variable);
+                    if (!EXPR_VARIABLES.contains(variable))
+                        throw new IllegalArgumentException("Unknown variable '" + variable + "'");
+                }
+                Log.i("EXPR validating");
+                expression.validate();
+                Log.i("EXPR validated");
+            }
+        } catch (ParseException | MessagingException ex) {
+            Log.w("EXPR", ex);
+            String message = ex.getMessage();
+            if (TextUtils.isEmpty(message))
+                message = "Invalid expression";
+            throw new IllegalArgumentException(message, ex);
+        }
+
         JSONObject jargs = new JSONObject(action);
         int type = jargs.getInt("type");
 

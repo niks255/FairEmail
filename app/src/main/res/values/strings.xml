@@ -934,6 +934,7 @@
     <string name="title_advanced_browser_zoom" translatable="false">Use browser zoom</string>
     <string name="title_advanced_fake_dark" translatable="false">Fake dark</string>
     <string name="title_advanced_viewport_height" translatable="false">Viewport height</string>
+    <string name="title_advanced_ignore_formatted_size" translatable="false">Ignore formatted size</string>
     <string name="title_advanced_show_recent" translatable="false">Show recent flag</string>
     <string name="title_advanced_modseq" translatable="false">MODSEQ</string>
     <string name="title_advanced_preamble" translatable="false">Preamble</string>
@@ -1085,6 +1086,7 @@
     <string name="title_advanced_autoclose_hint">Automatically close conversations when all messages are archived, sent or trashed</string>
     <string name="title_advanced_sender_hint">Most providers do not allow modified sender addresses</string>
     <string name="title_advanced_bcc_hint">The address won\'t be shown, but will be added on sending</string>
+    <string name="title_advanced_envelope_from_hint">This address will be used for SMTP MAIL FROM</string>
     <string name="title_advanced_internal_hint">There will be a warning when sending to another domain</string>
     <string name="title_advanced_uri">The details of the selected contact will be used for vCard attachments</string>
     <string name="title_advanced_e2e_encryption">Options for end-to-end encryption</string>
@@ -1662,6 +1664,7 @@
     <string name="title_reply_to">Reply to:</string>
     <string name="title_cc">CC:</string>
     <string name="title_bcc">BCC:</string>
+    <string name="title_envelope_from">Envelope from:</string>
     <string name="title_recipients">%1$d recipients</string>
     <string name="title_via_identity">Via:</string>
     <string name="title_sent">Sent:</string>
@@ -1959,6 +1962,7 @@
     <string name="title_view_thread">View conversation</string>
     <string name="title_force_sync">Force sync</string>
     <string name="title_force_send">Force send</string>
+    <string name="title_pawned" translatable="false">Have I been pwned?</string>
 
     <string name="title_language_all">All</string>
 
@@ -2045,8 +2049,10 @@
     <string name="title_rule_time_rel">Relative time (received) between</string>
     <string name="title_rule_time_every_day">Every day</string>
     <string name="title_rule_younger">Messages younger than (hours)</string>
+    <string name="title_rule_expression" translatable="false">Expression</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">AND</string>
+    <string name="title_rule_not">NOT</string>
     <string name="title_rule_action">Action</string>
     <string name="title_rule_action_remark">This action will be applied to new messages arriving in the folder %1$s</string>
     <string name="title_rule_hours">Hours</string>
@@ -2552,6 +2558,7 @@
         <item>folders</item>
         <item>primary</item>
         <item>accounts</item>
+        <item>inbox</item>
     </string-array>
 
     <string-array name="startupNames">
@@ -2559,6 +2566,7 @@
         <item>Unified folders</item>
         <item>Primary account folders</item>
         <item>Accounts</item>
+        <item>Primary inbox</item>
     </string-array>
 
     <string-array name="downloadNames">

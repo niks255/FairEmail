@@ -1472,6 +1472,12 @@ Sometimes it is necessary to enable external access (IMAP/SMTP) on the website o
 Other possible causes are that the account is blocked or that logging in has been administratively restricted in some way,
 for example by allowing to login from certain networks / IP addresses only.
 
+<br />
+
+**In the case of an existing account with an authentication error, please try to use the quick setup wizard button to authenticate the account again.**
+
+<br />
+
 * **Free.fr**: please see [this FAQ](#faq157)
 * **Gmail / G suite**: please see [this FAQ](#faq6)
 * **iCloud**: please see [this FAQ](#faq148)
@@ -1707,6 +1713,7 @@ You can disable this feature in the advanced account settings.
 When a menu item to select/open/save a file is disabled (dimmed) or when you get the message *Storage access framework not available*,
 the [storage access framework](https://developer.android.com/guide/topics/providers/document-provider), a standard Android component, is probably not present.
 This might be because your custom ROM does not include it or because it was actively removed (debloated).
+Note that this will result in similar problems in other apps too.
 
 FairEmail does not request storage permissions, so this framework is required to select files and folders.
 No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to *all* files.
@@ -1745,15 +1752,15 @@ please [contact me](https://contact.faircode.eu/?product=fairemailsupport).
 
 External image:
 
-<img alt="External image" src="https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png" width="48" height="48" />
+<img alt="External image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_image_black_48dp.png" width="48" height="48" />
 
 Embedded image:
 
-<img alt="Embedded image" src="https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png" width="48" height="48" />
+<img alt="Embedded image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_photo_library_black_48dp.png" width="48" height="48" />
 
 Broken image:
 
-<img alt="Broken image" src="https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png" width="48" height="48" />
+<img alt="Broken image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_broken_image_black_48dp.png" width="48" height="48" />
 
 Note that downloading external images from a remote server can be used to record you did see a message, which you likely don't want if the message is spam or malicious.
 
@@ -1864,6 +1871,8 @@ Note that this is independent of receiving messages.
 **(34) How are identities matched?**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq34)
+
+Matched identities are used to select the correct (matched) identity when replying to a message.
 
 Identities are as expected matched by account.
 For incoming messages the *to*, *cc*, *bcc*, *from* and *(X-)delivered/envelope/original-to* addresses will be checked (in this order)
@@ -2424,11 +2433,11 @@ so it is better to resize images with an image editor first.
 
 The email icon in the folder list can be open (outlined) or closed (solid):
 
-<img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png" width="48" height="48" />
+<img alt="Mail outline image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_mail_outline_black_48dp.png" width="48" height="48" />
 
 Message bodies and attachments are not downloaded by default.
 
-<img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_email_black_48dp.png" width="48" height="48" />
+<img alt="Mail image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_email_black_48dp.png" width="48" height="48" />
 
 Message bodies and attachments are downloaded by default.
 
@@ -2689,6 +2698,10 @@ If a rule is part of a group, stop processing means stop processing the group.
 
 Since version 1.2018 there is a rule option to run rules daily on messages (around 1:00am) older than xxx.
 
+<br>
+
+**Conditions**
+
 The following rule conditions are available:
 
 * Sender (from, reply-to) contains or sender is contact
@@ -2699,9 +2712,11 @@ The following rule conditions are available:
 * Text contains (since version 1.1785)
 * Absolute time (received) between (since version 1.1540)
 * Relative time (received) between
+* Expression (since version 1.2174)
 
 All the conditions of a rule need to be true for the rule action to be executed.
 All conditions are optional, but there needs to be at least one condition, to prevent matching all messages.
+
 If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character.
 If you want to match a domain name, you can use as a condition something like *@example.org*
 
@@ -2724,6 +2739,7 @@ jsoup:html > body > div > a[href=https://example.org]
 ```
 
 You can use multiple rules, possibly with a *stop processing*, for an *or* or a *not* condition.
+Since version 1.2173 there is a *NOT* option for conditions that accept a regex.
 
 Matching is not case sensitive, unless you use [regular expressions](https://en.wikipedia.org/wiki/Regular_expression).
 Please see [here](https://developer.android.com/reference/java/util/regex/Pattern) for the documentation of Java regular expressions.
@@ -2738,6 +2754,36 @@ Note that a regular expression supports an *or* operator, so if you want to matc
 
 Note that [dot all mode](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) is enabled
 to be able to match [unfolded headers](https://tools.ietf.org/html/rfc2822#section-3.2.3).
+
+Since version 1.2174 it is possible to use expression conditions, which is [experimental](#faq125) for now.
+
+Please [see here](https://ezylang.github.io/EvalEx/references/references.html) about which constants, operators and functions are available.
+
+The following extra variables are available:
+
+* *from* (array)
+* *to* (array)
+* *subject* (string)
+* *text* (string)
+* *hasAttachments* (boolean)
+
+The following extra operators are available:
+
+* *contains* (contains substring)
+* *matches* (matches regex)
+
+The following extra functions are available:
+
+* *header(name)* (returns an array of header values for the named header)
+* *blocklist()* (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2176)
+
+Example condition:
+
+```header("X-Mailer") contains "Open-Xchange" && from matches ".*service@.*" && !hasAttachments```
+
+<br>
+
+**Actions**
 
 You can select one of these actions to apply to matching messages:
 
@@ -3160,7 +3206,7 @@ The BBC article '[Spy pixels in emails have become endemic](https://www.bbc.com/
 
 FairEmail will in most cases automatically recognize tracking images and replace them by this icon:
 
-<img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png" width="48" height="48" />
+<img alt="Tracking image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_my_location_black_48dp.png" width="48" height="48" />
 
 Automatic recognition of tracking images can be disabled in the privacy settings.
 
@@ -4039,6 +4085,12 @@ Composing messages using [Markdown](https://en.wikipedia.org/wiki/Markdown) can 
 
 <br />
 
+*Rule expression condition (1.2174+)*
+
+See [this FAQ](#faq71)
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my smartwatch?**
 
@@ -4415,7 +4467,7 @@ Note that trashing a message will permanently remove it from the server and that
 
 To record voice notes you can press this icon in the bottom action bar of the message composer:
 
-<img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_record_voice_over_black_48dp.png" width="48" height="48" />
+<img alt="Record image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_record_voice_over_black_48dp.png" width="48" height="48" />
 
 This requires a compatible audio recorder app to be installed.
 In particular [this common intent](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION)
@@ -4496,7 +4548,7 @@ You likely came here because you are using a third party build of FairEmail.
 There is **only support** on the latest Play store version, the latest GitHub release and
 the F-Droid build, but **only if** the version number of the F-Droid build is the same as the version number of the latest GitHub release.
 
-F-Droid builds irregularly, which can be problematic when there is an important update.
+F-Droid builds irregularly, which can be problematic if there is an important update.
 Therefore you are advised to switch to the GitHub release.
 
 Note that developers have no control over F-Droid builds and the F-Droid infrastructure (apps, forums, etc.).
@@ -4625,7 +4677,7 @@ You might need to change [the Gmail IMAP settings](https://mail.google.com/mail/
 * When I mark a message in IMAP as deleted: Auto-Expunge off - Wait for the client to update the server.
 * When a message is marked as deleted and expunged from the last visible IMAP folder: Immediately delete the message forever
 
-<img alt="External image" src="https://github.com/M66B/FairEmail/blob/master/images/Gmail_IMAP_delete_settings.png" width="600" height="333" />
+<img alt="External image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/Gmail_IMAP_delete_settings.png" width="600" height="333" />
 
 Note that archived messages can be deleted only by moving them to the trash folder first.
 
@@ -5808,7 +5860,7 @@ Basically, an outgoing message is either in the draft messages folder, the outbo
 
 To use [Gemini](https://gemini.google.com/), please follow these steps:
 
-1. Check if your country [is supported](https://support.google.com/gemini/answer/13575153)
+1. Check if your country [is supported](https://ai.google.dev/available_regions)
 1. Get an API key via [here](https://ai.google.dev/tutorials/setup)
 1. Enter the API key in the integration settings tab page
 1. Enable Gemini integration in the integration settings tab page
@@ -5818,7 +5870,7 @@ For usage instructions, please see [this FAQ](#faq190).
 Please read the privacy policy of [Gemini](https://support.google.com/gemini/answer/13594961).
 FairEmail does not use third-party libraries to avoid being tracked when Gemini is not being used.
 
-This feature was added in version 1.2171 and is available in the GitHub version of the app only.
+This feature is experimental and available in the GitHub version only and requires version 1.2171 or later.
 
 <br>
 

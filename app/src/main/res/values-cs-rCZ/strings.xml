@@ -798,7 +798,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_openai_model">Model</string>
     <string name="title_advanced_openai_temperature">Teplota: %1$s</string>
     <string name="title_advanced_openai_moderation">Moderování obsahu</string>
-    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Gemini integrace</string>
+    <string name="title_advanced_gemini">Gemini integrace</string>
     <string name="title_advanced_sdcard">Chci použít Sd kartu</string>
     <string name="title_advanced_watchdog">Pravidelně kontrolovat, zda je FairEmail stále aktivní</string>
     <string name="title_advanced_updates">Kontrolovat aktualizace na GitHubu</string>
@@ -896,6 +896,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_autoclose_hint">Automaticky zavírat konverzace, když jsou všechny zprávy archivovány, odeslány nebo v koši</string>
     <string name="title_advanced_sender_hint">Většina poskytovatelů nepovoluje pozměněné adresy odesílatele</string>
     <string name="title_advanced_bcc_hint">Adresa nebude zobrazena, ale bude přidána při odesílání</string>
+    <string name="title_advanced_envelope_from_hint" comment="title_advanced_envelope_from_hint&#10;Remark for &quot;Envelope from&quot; input field&#10;&quot;SMTP MAIL FROM&quot; should not be translated!&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3">Tato adresa bude použita pro SMTP MAIL FROM</string>
     <string name="title_advanced_internal_hint">Při odesílání na jinou doménu se zobrazí varování</string>
     <string name="title_advanced_uri">Údaje vybraného kontaktu se použijí pro přílohy vCard</string>
     <string name="title_advanced_e2e_encryption">Možnosti end-to-end šifrování</string>
@@ -1385,6 +1386,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_reply_to">Odpovědět na:</string>
     <string name="title_cc">Kopie:</string>
     <string name="title_bcc">Skrytá kopie:</string>
+    <string name="title_envelope_from" comment="title_envelope_from&#10;Envelope from = SMTP MAIL FROM, see the related remark text for more details&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3&#10;">Obálka od:</string>
     <string name="title_recipients">%1$d příjemců</string>
     <string name="title_via_identity">Přes:</string>
     <string name="title_sent">Odesláno:</string>
@@ -1730,6 +1732,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_rule_younger">Zprávy mladší než (hodin)</string>
     <string name="title_rule_regex">Regulární výraz</string>
     <string name="title_rule_and">A</string>
+    <string name="title_rule_not">NE</string>
     <string name="title_rule_action">Akce</string>
     <string name="title_rule_action_remark">Tato akce bude použita na nové zprávy přijaté do složky %1$s</string>
     <string name="title_rule_hours">Hodiny</string>
@@ -2152,6 +2155,7 @@ v prohlížeči ze všech Google účtů.</string>
         <item>Sjednocené složky</item>
         <item>Složky hlavního účtu</item>
         <item>Účty</item>
+        <item>Primární doručená pošta</item>
     </string-array>
     <string-array name="downloadNames">
         <item>16 KB</item>

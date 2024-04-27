@@ -25,6 +25,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.media.RingtoneManager;
@@ -64,6 +65,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Lifecycle;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -93,25 +95,30 @@ public class FragmentRule extends FragmentBase {
     private EditText etAge;
     private CheckBox cbStop;
 
+    private CheckBox cbSenderNot;
     private EditText etSender;
     private CheckBox cbSender;
     private ImageButton ibSender;
     private CheckBox cbKnownSender;
 
+    private CheckBox cbRecipientNot;
     private EditText etRecipient;
     private CheckBox cbRecipient;
     private ImageButton ibRecipient;
 
+    private CheckBox cbSubjectNot;
     private EditText etSubject;
     private CheckBox cbSubject;
 
     private CheckBox cbAttachments;
     private EditText etMimeType;
 
+    private CheckBox cbHeaderNot;
     private EditText etHeader;
     private ImageButton ibHeader;
     private CheckBox cbHeader;
 
+    private CheckBox cbBodyNot;
     private EditText etBody;
     private CheckBox cbBody;
     private CheckBox cbSkipQuotes;
@@ -127,6 +134,8 @@ public class FragmentRule extends FragmentBase {
     private TextView tvScheduleHourEnd;
     private CheckBox cbEveryDay;
     private EditText etYounger;
+
+    private EditText etExpression;
 
     private Spinner spAction;
     private TextView tvActionRemark;
@@ -179,6 +188,7 @@ public class FragmentRule extends FragmentBase {
     private ContentLoadingProgressBar pbWait;
 
     private Group grpReady;
+    private Group grpExpression;
     private Group grpAge;
     private Group grpSnooze;
     private Group grpFlag;
@@ -288,25 +298,30 @@ public class FragmentRule extends FragmentBase {
         etAge = view.findViewById(R.id.etAge);
         cbStop = view.findViewById(R.id.cbStop);
 
+        cbSenderNot = view.findViewById(R.id.cbSenderNot);
         etSender = view.findViewById(R.id.etSender);
         cbSender = view.findViewById(R.id.cbSender);
         ibSender = view.findViewById(R.id.ibSender);
         cbKnownSender = view.findViewById(R.id.cbKnownSender);
 
+        cbRecipientNot = view.findViewById(R.id.cbRecipientNot);
         etRecipient = view.findViewById(R.id.etRecipient);
         cbRecipient = view.findViewById(R.id.cbRecipient);
         ibRecipient = view.findViewById(R.id.ibRecipient);
 
+        cbSubjectNot = view.findViewById(R.id.cbSubjectNot);
         etSubject = view.findViewById(R.id.etSubject);
         cbSubject = view.findViewById(R.id.cbSubject);
 
         cbAttachments = view.findViewById(R.id.cbAttachments);
         etMimeType = view.findViewById(R.id.etMimeType);
 
+        cbHeaderNot = view.findViewById(R.id.cbHeaderNot);
         etHeader = view.findViewById(R.id.etHeader);
         ibHeader = view.findViewById(R.id.ibHeader);
         cbHeader = view.findViewById(R.id.cbHeader);
 
+        cbBodyNot = view.findViewById(R.id.cbBodyNot);
         etBody = view.findViewById(R.id.etBody);
         cbBody = view.findViewById(R.id.cbBody);
         cbSkipQuotes = view.findViewById(R.id.cbSkipQuotes);
@@ -322,6 +337,8 @@ public class FragmentRule extends FragmentBase {
         tvScheduleHourEnd = view.findViewById(R.id.tvScheduleHourEnd);
         cbEveryDay = view.findViewById(R.id.cbEveryDay);
         etYounger = view.findViewById(R.id.etYounger);
+
+        etExpression = view.findViewById(R.id.etExpression);
 
         spAction = view.findViewById(R.id.spAction);
         tvActionRemark = view.findViewById(R.id.tvActionRemark);
@@ -375,6 +392,7 @@ public class FragmentRule extends FragmentBase {
         pbWait = view.findViewById(R.id.pbWait);
 
         grpReady = view.findViewById(R.id.grpReady);
+        grpExpression = view.findViewById(R.id.grpExpression);
         grpAge = view.findViewById(R.id.grpAge);
         grpSnooze = view.findViewById(R.id.grpSnooze);
         grpFlag = view.findViewById(R.id.grpFlag);
@@ -708,8 +726,6 @@ public class FragmentRule extends FragmentBase {
         npDuration.setMinValue(0);
         npDuration.setMaxValue(999);
 
-        tvActionRemark.setVisibility(View.GONE);
-
         btnColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -758,7 +774,6 @@ public class FragmentRule extends FragmentBase {
             }
         });
 
-        cbAttached.setEnabled(protocol == EntityAccount.TYPE_IMAP);
         cbResend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -847,6 +862,7 @@ public class FragmentRule extends FragmentBase {
         tvFolder.setText(null);
         bottom_navigation.setVisibility(View.GONE);
         grpReady.setVisibility(View.GONE);
+        grpExpression.setVisibility(View.GONE);
         grpAge.setVisibility(View.GONE);
         grpSnooze.setVisibility(View.GONE);
         grpFlag.setVisibility(View.GONE);
@@ -916,7 +932,6 @@ public class FragmentRule extends FragmentBase {
 
                 tvActionRemark.setText(
                         getString(R.string.title_rule_action_remark, data.folder.getDisplayName(getContext())));
-                tvActionRemark.setVisibility(View.VISIBLE);
 
                 loadRule(savedInstanceState);
             }
@@ -1235,6 +1250,7 @@ public class FragmentRule extends FragmentBase {
                         etAge.setText(jgeneral == null ? null : Integer.toString(jgeneral.optInt("age")));
                         cbStop.setChecked(rule != null && rule.stop);
 
+                        cbSenderNot.setChecked(jsender != null && jsender.optBoolean("not"));
                         etSender.setText(jsender == null ? args.getString("sender") : jsender.getString("value"));
                         cbSender.setChecked(jsender != null && jsender.getBoolean("regex"));
                         cbKnownSender.setChecked(jsender != null && jsender.optBoolean("known"));
@@ -1242,9 +1258,11 @@ public class FragmentRule extends FragmentBase {
                         ibSender.setEnabled(!cbKnownSender.isChecked());
                         cbSender.setEnabled(!cbKnownSender.isChecked());
 
+                        cbRecipientNot.setChecked(jrecipient != null && jrecipient.optBoolean("not"));
                         etRecipient.setText(jrecipient == null ? args.getString("recipient") : jrecipient.getString("value"));
                         cbRecipient.setChecked(jrecipient != null && jrecipient.getBoolean("regex"));
 
+                        cbSubjectNot.setChecked(jsubject != null && jsubject.optBoolean("not"));
                         etSubject.setText(jsubject == null ? args.getString("subject") : jsubject.getString("value"));
                         cbSubject.setChecked(jsubject != null && jsubject.getBoolean("regex"));
 
@@ -1252,9 +1270,11 @@ public class FragmentRule extends FragmentBase {
                         etMimeType.setText(jcondition.optString("mimetype"));
                         etMimeType.setEnabled(cbAttachments.isChecked());
 
+                        cbHeaderNot.setChecked(jheader != null && jheader.optBoolean("not"));
                         etHeader.setText(jheader == null ? null : jheader.getString("value"));
                         cbHeader.setChecked(jheader != null && jheader.getBoolean("regex"));
 
+                        cbBodyNot.setChecked(jbody != null && jbody.optBoolean("not"));
                         etBody.setText(jbody == null ? null : jbody.getString("value"));
                         cbBody.setChecked(jbody != null && jbody.getBoolean("regex"));
                         cbSkipQuotes.setChecked(jbody != null && jbody.optBoolean("skip_quotes"));
@@ -1274,6 +1294,8 @@ public class FragmentRule extends FragmentBase {
                         cbEveryDay.setChecked(jschedule != null && jschedule.optBoolean("all"));
                         etYounger.setText(jcondition.has("younger")
                                 ? Integer.toString(jcondition.optInt("younger")) : null);
+
+                        etExpression.setText(jcondition.optString("expression"));
 
                         spScheduleDayStart.setSelection(start / (24 * 60));
                         spScheduleDayEnd.setSelection(end / (24 * 60));
@@ -1408,6 +1430,9 @@ public class FragmentRule extends FragmentBase {
                             showActionParameters(action.type);
                     }
 
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    boolean experiments = prefs.getBoolean("experiments", false);
+                    grpExpression.setVisibility(experiments ? View.VISIBLE : View.GONE);
                 } catch (Throwable ex) {
                     Log.e(ex);
                 } finally {
@@ -1550,7 +1575,9 @@ public class FragmentRule extends FragmentBase {
                             jheader == null &&
                             jbody == null &&
                             jdate == null &&
-                            jschedule == null)
+                            jschedule == null &&
+                            !jcondition.has("younger") &&
+                            !jcondition.has("expression"))
                         throw new IllegalArgumentException(context.getString(R.string.title_rule_condition_missing));
 
                     if (TextUtils.isEmpty(order))
@@ -1626,6 +1653,7 @@ public class FragmentRule extends FragmentBase {
         boolean known = cbKnownSender.isChecked();
         if (!TextUtils.isEmpty(sender) || known) {
             JSONObject jsender = new JSONObject();
+            jsender.put("not", cbSenderNot.isChecked());
             jsender.put("value", sender);
             jsender.put("regex", cbSender.isChecked());
             jsender.put("known", known);
@@ -1635,6 +1663,7 @@ public class FragmentRule extends FragmentBase {
         String recipient = etRecipient.getText().toString();
         if (!TextUtils.isEmpty(recipient)) {
             JSONObject jrecipient = new JSONObject();
+            jrecipient.put("not", cbRecipientNot.isChecked());
             jrecipient.put("value", recipient);
             jrecipient.put("regex", cbRecipient.isChecked());
             jcondition.put("recipient", jrecipient);
@@ -1643,6 +1672,7 @@ public class FragmentRule extends FragmentBase {
         String subject = etSubject.getText().toString();
         if (!TextUtils.isEmpty(subject)) {
             JSONObject jsubject = new JSONObject();
+            jsubject.put("not", cbSubjectNot.isChecked());
             jsubject.put("value", subject);
             jsubject.put("regex", cbSubject.isChecked());
             jcondition.put("subject", jsubject);
@@ -1654,6 +1684,7 @@ public class FragmentRule extends FragmentBase {
         String header = etHeader.getText().toString();
         if (!TextUtils.isEmpty(header)) {
             JSONObject jheader = new JSONObject();
+            jheader.put("not", cbHeaderNot.isChecked());
             jheader.put("value", header);
             jheader.put("regex", cbHeader.isChecked());
             jcondition.put("header", jheader);
@@ -1662,6 +1693,7 @@ public class FragmentRule extends FragmentBase {
         String body = etBody.getText().toString();
         if (!TextUtils.isEmpty(body)) {
             JSONObject jbody = new JSONObject();
+            jbody.put("not", cbBodyNot.isChecked());
             jbody.put("value", body);
             jbody.put("regex", cbBody.isChecked());
             jbody.put("skip_quotes", cbSkipQuotes.isChecked());
@@ -1712,6 +1744,10 @@ public class FragmentRule extends FragmentBase {
             } catch (Throwable ex) {
                 Log.e(ex);
             }
+
+        String expression = etExpression.getText().toString().trim();
+        if (!TextUtils.isEmpty(expression))
+            jcondition.put("expression", expression);
 
         return jcondition;
     }

@@ -12,11 +12,32 @@
     div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="shortcut icon" href="https://raw.githubusercontent.com/M66B/FairEmail/master/app/src/main/ic_launcher-web.png">
   <style>
     body { font-family: Arial, sans-serif; }
+    @media (prefers-color-scheme: light) {
+      body {
+        color: #212121;
+        background: #FFFFFF;
+      }
+      a:link { color: #C68400; }
+      a:visited { color: #ff6f00; }
+      a:hover { color: #039BE5; }
+      a:active { color: #039BE5; }
+      img { filter: invert(0%); }
+    }
+    @media (prefers-color-scheme: dark) {
+      body {
+        color: #FFFFFF;
+        background: #424242;
+      }
+      a:link { color: #FFB300; }
+      a:visited { color: #FF6F00; }
+      a:hover { color: #01579B; }
+      a:active { color: #01579B; }
+      img { filter: invert(75%); }
+    }
   </style>
 </head>
 <body>
@@ -902,6 +923,9 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p>There are general errors and errors specific to Gmail accounts (see below).</p>
 <p><strong>General errors</strong></p>
 <p><a name="authfailed"></a> The error <em>… <strong>Authentication failed</strong> …</em> or <em>… AUTHENTICATE failed …</em> likely means that your username or password was incorrect. Some providers expect as username just <em>username</em> and others your full email address <em>username@example.com</em>. When copying/pasting to enter a username or password, invisible characters might be copied, which could cause this problem as well. Some password managers are known to do this incorrectly too. The username might be case sensitive, so try lowercase characters only. The password is almost always case sensitive. Some providers require using an app password instead of the account password, so please check the documentation of the provider. Sometimes it is necessary to enable external access (IMAP/SMTP) on the website of the provider first. Other possible causes are that the account is blocked or that logging in has been administratively restricted in some way, for example by allowing to login from certain networks / IP addresses only.</p>
+<p><br /></p>
+<p><strong>In the case of an existing account with an authentication error, please try to use the quick setup wizard button to authenticate the account again.</strong></p>
+<p><br /></p>
 <ul>
 <li><strong>Free.fr</strong>: please see <a href="#faq157">this FAQ</a></li>
 <li><strong>Gmail / G suite</strong>: please see <a href="#faq6">this FAQ</a></li>
@@ -1013,7 +1037,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p><br /></p>
 <p><a name="faq25"></a> <strong>(25) Why can’t I select/open/save an image, attachment or a file?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq25">Google Translate</a></p>
-<p>When a menu item to select/open/save a file is disabled (dimmed) or when you get the message <em>Storage access framework not available</em>, the <a href="https://developer.android.com/guide/topics/providers/document-provider">storage access framework</a>, a standard Android component, is probably not present. This might be because your custom ROM does not include it or because it was actively removed (debloated).</p>
+<p>When a menu item to select/open/save a file is disabled (dimmed) or when you get the message <em>Storage access framework not available</em>, the <a href="https://developer.android.com/guide/topics/providers/document-provider">storage access framework</a>, a standard Android component, is probably not present. This might be because your custom ROM does not include it or because it was actively removed (debloated). Note that this will result in similar problems in other apps too.</p>
 <p>FairEmail does not request storage permissions, so this framework is required to select files and folders. No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to <em>all</em> files. Moreover, recent Android versions disallow access to all files for apps, except, under specific conditions, for file managers.</p>
 <p>The storage access framework is provided by the package <em>com.android.documentsui</em>, which is visible as <em>Files</em> app on some Android versions (notably OxygenOS).</p>
 <p>You can enable the storage access framework (again) with this adb command:</p>
@@ -1028,11 +1052,11 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p><a name="faq27"></a> <strong>(27) How can I distinguish between embedded and external images?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq27">Google Translate</a></p>
 <p>External image:</p>
-<p><img alt="External image" src="https://github.com/M66B/FairEmail/blob/master/images/baseline_image_black_48dp.png" width="48" height="48" /></p>
+<p><img alt="External image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_image_black_48dp.png" width="48" height="48" /></p>
 <p>Embedded image:</p>
-<p><img alt="Embedded image" src="https://github.com/M66B/FairEmail/blob/master/images/baseline_photo_library_black_48dp.png" width="48" height="48" /></p>
+<p><img alt="Embedded image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_photo_library_black_48dp.png" width="48" height="48" /></p>
 <p>Broken image:</p>
-<p><img alt="Broken image" src="https://github.com/M66B/FairEmail/blob/master/images/baseline_broken_image_black_48dp.png" width="48" height="48" /></p>
+<p><img alt="Broken image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_broken_image_black_48dp.png" width="48" height="48" /></p>
 <p>Note that downloading external images from a remote server can be used to record you did see a message, which you likely don’t want if the message is spam or malicious.</p>
 <p><br /></p>
 <p><a name="faq28"></a> <strong>(28) How can I manage status bar notifications?</strong></p>
@@ -1087,6 +1111,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p><br /></p>
 <p><a name="faq34"></a> <strong>(34) How are identities matched?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq34">Google Translate</a></p>
+<p>Matched identities are used to select the correct (matched) identity when replying to a message.</p>
 <p>Identities are as expected matched by account. For incoming messages the <em>to</em>, <em>cc</em>, <em>bcc</em>, <em>from</em> and <em>(X-)delivered/envelope/original-to</em> addresses will be checked (in this order) and for outgoing messages (drafts, outbox and sent) only the <em>from</em> addresses will be checked. Equal addresses have precedence over partially matching addresses, except for <em>delivered-to</em> addresses.</p>
 <p>The matched address will be shown as <em>via</em> in the addresses section of received messages (between the message header and message text).</p>
 <p>Note that identities need to be enabled to be able to be matched and that identities of other accounts will not be considered.</p>
@@ -1312,9 +1337,9 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p><a name="faq58"></a> <strong>(58) What does an open/closed email icon mean?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq58">Google Translate</a></p>
 <p>The email icon in the folder list can be open (outlined) or closed (solid):</p>
-<p><img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_mail_outline_black_48dp.png" width="48" height="48" /></p>
+<p><img alt="Mail outline image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_mail_outline_black_48dp.png" width="48" height="48" /></p>
 <p>Message bodies and attachments are not downloaded by default.</p>
-<p><img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_email_black_48dp.png" width="48" height="48" /></p>
+<p><img alt="Mail image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_email_black_48dp.png" width="48" height="48" /></p>
 <p>Message bodies and attachments are downloaded by default.</p>
 <p><br /></p>
 <p><a name="faq59"></a> <strong>(59) Can original messages be opened in the browser?</strong></p>
@@ -1446,6 +1471,8 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p>You can disable a rule and you can stop processing other rules after a rule has been executed, which can be used to create a <em>not</em> condition.</p>
 <p>Since version 1.2061 rules can be part of a named group. Group names will be displayed in the list of rules. If a rule is part of a group, stop processing means stop processing the group.</p>
 <p>Since version 1.2018 there is a rule option to run rules daily on messages (around 1:00am) older than xxx.</p>
+<p><br></p>
+<p><strong>Conditions</strong></p>
 <p>The following rule conditions are available:</p>
 <ul>
 <li>Sender (from, reply-to) contains or sender is contact</li>
@@ -1456,19 +1483,45 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <li>Text contains (since version 1.1785)</li>
 <li>Absolute time (received) between (since version 1.1540)</li>
 <li>Relative time (received) between</li>
+<li>Expression (since version 1.2174)</li>
 </ul>
-<p>All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages. If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character. If you want to match a domain name, you can use as a condition something like <em><span class="citation" data-cites="example.org">@example.org</span></em></p>
+<p>All the conditions of a rule need to be true for the rule action to be executed. All conditions are optional, but there needs to be at least one condition, to prevent matching all messages.</p>
+<p>If you want to match all senders or all recipients, you can just use the @ character as condition because all email addresses will contain this character. If you want to match a domain name, you can use as a condition something like <em><span class="citation" data-cites="example.org">@example.org</span></em></p>
 <p>Note that email addresses are formatted like this:</p>
 <p><code>"Somebody" &lt;somebody@example.org&gt;</code></p>
 <p>When using a regex, you need to take care to match the complete address.</p>
 <p>Note that message texts are normalized when not using a regex, which means that all whitespaces (spaces, tabs, line breaks, etc) are replaced by a single space. This makes it easier to match texts on multiple lines or when the line break is at different places.</p>
 <p>Since version 1.1996 it is possible to use <a href="https://jsoup.org/cookbook/extracting-data/selector-syntax">Jsoup selectors</a> to match HTML elements, by prefixing the selector by <em>jsoup:</em> and entering it as text contains condition, like for example:</p>
 <pre><code>jsoup:html &gt; body &gt; div &gt; a[href=https://example.org]</code></pre>
-<p>You can use multiple rules, possibly with a <em>stop processing</em>, for an <em>or</em> or a <em>not</em> condition.</p>
+<p>You can use multiple rules, possibly with a <em>stop processing</em>, for an <em>or</em> or a <em>not</em> condition. Since version 1.2173 there is a <em>NOT</em> option for conditions that accept a regex.</p>
 <p>Matching is not case sensitive, unless you use <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>. Please see <a href="https://developer.android.com/reference/java/util/regex/Pattern">here</a> for the documentation of Java regular expressions. Note that you need to match the complete text from the first to the last character. You can test a regex <a href="https://regexr.com/">here</a>.</p>
 <p>Note that a regular expression supports an <em>or</em> operator, so if you want to match multiple senders, you can do this:</p>
 <p><code>.*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*</code></p>
 <p>Note that <a href="https://developer.android.com/reference/java/util/regex/Pattern#DOTALL">dot all mode</a> is enabled to be able to match <a href="https://tools.ietf.org/html/rfc2822#section-3.2.3">unfolded headers</a>.</p>
+<p>Since version 1.2174 it is possible to use expression conditions, which is <a href="#faq125">experimental</a> for now.</p>
+<p>Please <a href="https://ezylang.github.io/EvalEx/references/references.html">see here</a> about which constants, operators and functions are available.</p>
+<p>The following extra variables are available:</p>
+<ul>
+<li><em>from</em> (array)</li>
+<li><em>to</em> (array)</li>
+<li><em>subject</em> (string)</li>
+<li><em>text</em> (string)</li>
+<li><em>hasAttachments</em> (boolean)</li>
+</ul>
+<p>The following extra operators are available:</p>
+<ul>
+<li><em>contains</em> (contains substring)</li>
+<li><em>matches</em> (matches regex)</li>
+</ul>
+<p>The following extra functions are available:</p>
+<ul>
+<li><em>header(name)</em> (returns an array of header values for the named header)</li>
+<li><em>blocklist()</em> (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2176)</li>
+</ul>
+<p>Example condition:</p>
+<p><code>header("X-Mailer") contains "Open-Xchange" &amp;&amp; from matches ".*service@.*" &amp;&amp; !hasAttachments</code></p>
+<p><br></p>
+<p><strong>Actions</strong></p>
 <p>You can select one of these actions to apply to matching messages:</p>
 <ul>
 <li>No action (useful for <em>not</em>)</li>
@@ -1681,7 +1734,7 @@ Target: Service</code></pre>
 <p>Please see <a href="https://en.wikipedia.org/wiki/Web_beacon">here</a> about what a tracking image exactly is. In short tracking images keep track if you opened a message.</p>
 <p>The BBC article ‘<a href="https://www.bbc.com/news/technology-56071437">Spy pixels in emails have become endemic</a>’ is worth reading.</p>
 <p>FairEmail will in most cases automatically recognize tracking images and replace them by this icon:</p>
-<p><img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_my_location_black_48dp.png" width="48" height="48" /></p>
+<p><img alt="Tracking image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_my_location_black_48dp.png" width="48" height="48" /></p>
 <p>Automatic recognition of tracking images can be disabled in the privacy settings.</p>
 <p><br /></p>
 <p><a name="faq84"></a> <strong>(84) What are local contacts for?</strong></p>
@@ -2065,6 +2118,9 @@ $NotDisplayed</code></pre>
 <p><em>Markdown (1.2061+)</em></p>
 <p>Composing messages using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> can be enabled via the three-dots overflow menu of the message editor.</p>
 <p><br /></p>
+<p><em>Rule expression condition (1.2174+)</em></p>
+<p>See <a href="#faq71">this FAQ</a></p>
+<p><br /></p>
 <p><a name="faq126"></a> <strong>(126) Can message previews be sent to my smartwatch?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq126">Google Translate</a></p>
 <p>FairEmail fetches a message in two steps:</p>
@@ -2220,7 +2276,7 @@ $NotDisplayed</code></pre>
 <p><a name="faq144"></a> <strong>(144) How can I record voice notes?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq144">Google Translate</a></p>
 <p>To record voice notes you can press this icon in the bottom action bar of the message composer:</p>
-<p><img src="https://github.com/M66B/FairEmail/blob/master/images/baseline_record_voice_over_black_48dp.png" width="48" height="48" /></p>
+<p><img alt="Record image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_record_voice_over_black_48dp.png" width="48" height="48" /></p>
 <p>This requires a compatible audio recorder app to be installed. In particular <a href="https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION">this common intent</a> needs to be supported.</p>
 <p>For example <a href="https://f-droid.org/app/com.github.axet.audiorecorder">this audio recorder</a> is compatible.</p>
 <p>Voice notes will automatically be attached.</p>
@@ -2268,7 +2324,7 @@ $NotDisplayed</code></pre>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq147">Google Translate</a></p>
 <p>You likely came here because you are using a third party build of FairEmail.</p>
 <p>There is <strong>only support</strong> on the latest Play store version, the latest GitHub release and the F-Droid build, but <strong>only if</strong> the version number of the F-Droid build is the same as the version number of the latest GitHub release.</p>
-<p>F-Droid builds irregularly, which can be problematic when there is an important update. Therefore you are advised to switch to the GitHub release.</p>
+<p>F-Droid builds irregularly, which can be problematic if there is an important update. Therefore you are advised to switch to the GitHub release.</p>
 <p>Note that developers have no control over F-Droid builds and the F-Droid infrastructure (apps, forums, etc.).</p>
 <p>OAuth access is available only for Play Store and Github releases because email providers permitted the use of OAuth for these releases only. The responsible for a release, for the F-Droid build this is the F-Droid organization, needs to ask for OAuth permissions, which mostly involves signing a contract with binding terms and conditions.</p>
 <p>Note that you’ll need to uninstall the F-Droid build first before you can install a GitHub release because Android refuses to install (“<em>App was not installed</em>”) the same app with a different signature for security reasons.</p>
@@ -2322,7 +2378,7 @@ $NotDisplayed</code></pre>
 <li>When I mark a message in IMAP as deleted: Auto-Expunge off - Wait for the client to update the server.</li>
 <li>When a message is marked as deleted and expunged from the last visible IMAP folder: Immediately delete the message forever</li>
 </ul>
-<p><img alt="External image" src="https://github.com/M66B/FairEmail/blob/master/images/Gmail_IMAP_delete_settings.png" width="600" height="333" /></p>
+<p><img alt="External image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/Gmail_IMAP_delete_settings.png" width="600" height="333" /></p>
 <p>Note that archived messages can be deleted only by moving them to the trash folder first.</p>
 <p>Some background: Gmail seems to have an additional message view for IMAP, which can be different from the main message view.</p>
 <p>Another oddity is that a star (favorite message) set via the web interface cannot be removed with the IMAP command</p>
@@ -2861,14 +2917,14 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p><a name="faq204"></a> <strong>(204) How do I use Gemini?</strong></p>
 <p>To use <a href="https://gemini.google.com/">Gemini</a>, please follow these steps:</p>
 <ol type="1">
-<li>Check if your country <a href="https://support.google.com/gemini/answer/13575153">is supported</a></li>
+<li>Check if your country <a href="https://ai.google.dev/available_regions">is supported</a></li>
 <li>Get an API key via <a href="https://ai.google.dev/tutorials/setup">here</a></li>
 <li>Enter the API key in the integration settings tab page</li>
 <li>Enable Gemini integration in the integration settings tab page</li>
 </ol>
 <p>For usage instructions, please see <a href="#faq190">this FAQ</a>.</p>
 <p>Please read the privacy policy of <a href="https://support.google.com/gemini/answer/13594961">Gemini</a>. FairEmail does not use third-party libraries to avoid being tracked when Gemini is not being used.</p>
-<p>This feature was added in version 1.2171 and is available in the GitHub version of the app only.</p>
+<p>This feature is experimental and available in the GitHub version only and requires version 1.2171 or later.</p>
 <p><br></p>
 <h2>
 <a name="get-support"></a>Get support

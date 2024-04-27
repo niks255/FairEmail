@@ -773,7 +773,7 @@
     <string name="title_advanced_openai_model">Modell</string>
     <string name="title_advanced_openai_temperature">Temperatur: %1$s</string>
     <string name="title_advanced_openai_moderation">Moderation von Inhalten</string>
-    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Gemini-Integration</string>
+    <string name="title_advanced_gemini">Gemini-Integration</string>
     <string name="title_advanced_sdcard">Ich möchte eine SD-Karte verwenden</string>
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
     <string name="title_advanced_updates">Auf GitHub nach Aktualisierungen suchen</string>
@@ -871,6 +871,7 @@
     <string name="title_advanced_autoclose_hint">Unterhaltungen automatisch schließen, wenn alle E-Mails archiviert, gesendet oder gelöscht wurden</string>
     <string name="title_advanced_sender_hint">Die meisten Anbieter erlauben keine veränderten Absenderadressen</string>
     <string name="title_advanced_bcc_hint">Die Adresse wird nicht angezeigt, wird aber beim Absenden hinzugefügt</string>
+    <string name="title_advanced_envelope_from_hint" comment="title_advanced_envelope_from_hint&#10;Remark for &quot;Envelope from&quot; input field&#10;&quot;SMTP MAIL FROM&quot; should not be translated!&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3">Diese Adresse wird für »SMTP MAIL FROM« verwendet</string>
     <string name="title_advanced_internal_hint">Beim Senden an eine andere Domain wird ein Warnhinweis ausgegeben</string>
     <string name="title_advanced_uri">Die Details des ausgewählten Kontakts werden für vCard-Anhänge verwendet</string>
     <string name="title_advanced_e2e_encryption">Optionen für Ende-zu-Ende-Verschlüsselung</string>
@@ -1168,7 +1169,7 @@
     <string name="title_folder_system">System</string>
     <string name="title_folder_user">Benutzer</string>
     <string name="title_folder_user_only">Nur Benutzerordner</string>
-    <string name="title_folder_primary">Hauptkontoordner</string>
+    <string name="title_folder_primary">Ordner des Hauptkontos</string>
     <string name="title_folders_unified">Sammeleingangsordner</string>
     <string name="title_folder_local_drafts">Lokale Entwürfe</string>
     <string name="title_no_folders">Keine Ordner</string>
@@ -1363,6 +1364,7 @@
     <string name="title_reply_to">Antworten an:</string>
     <string name="title_cc">Kopie:</string>
     <string name="title_bcc">Blindkopie:</string>
+    <string name="title_envelope_from" comment="title_envelope_from&#10;Envelope from = SMTP MAIL FROM, see the related remark text for more details&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3&#10;">Briefumschlag von:</string>
     <string name="title_recipients">%1$d Empfänger</string>
     <string name="title_via_identity">Über:</string>
     <string name="title_sent">Gesendet:</string>
@@ -1708,6 +1710,7 @@
     <string name="title_rule_younger">Nachrichten jünger als (Stunden)</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">UND</string>
+    <string name="title_rule_not">NICHT</string>
     <string name="title_rule_action">Aktion</string>
     <string name="title_rule_action_remark">Diese Aktion wird auf neu ankommende Nachrichten im Ordner %1$s angewendet</string>
     <string name="title_rule_hours">Stunden</string>
@@ -2129,6 +2132,7 @@
         <item>Sammelordner</item>
         <item>Ordner des Hauptkontos</item>
         <item>Konten</item>
+        <item>Primärer Posteingang</item>
     </string-array>
     <string-array name="downloadNames">
         <item>16 KB</item>

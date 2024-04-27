@@ -799,7 +799,7 @@
     <string name="title_advanced_openai_model">Модель</string>
     <string name="title_advanced_openai_temperature">Температура: %1$s</string>
     <string name="title_advanced_openai_moderation">Модерація вмісту</string>
-    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Інтеграція з Gemini</string>
+    <string name="title_advanced_gemini">Інтеграція з Gemini</string>
     <string name="title_advanced_sdcard">Я хочу використовувати SD-карту</string>
     <string name="title_advanced_watchdog">Періодично перевіряти, чи FairEmail є все ще активним</string>
     <string name="title_advanced_updates">Перевіряти наявність оновлень на GitHub</string>
@@ -896,6 +896,7 @@
     <string name="title_advanced_autoclose_hint">Автоматично закривати розмови коли всі повідомлення архівовані, надіслані або видалені</string>
     <string name="title_advanced_sender_hint">Більшість провайдерів не дозволяють змінювати адреси відправника</string>
     <string name="title_advanced_bcc_hint">Адреса не буде показана, але буде додана при відправленні</string>
+    <string name="title_advanced_envelope_from_hint" comment="title_advanced_envelope_from_hint&#10;Remark for &quot;Envelope from&quot; input field&#10;&quot;SMTP MAIL FROM&quot; should not be translated!&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3">Ця адреса буде використовуватися для SMTP MAIL FROM</string>
     <string name="title_advanced_internal_hint">При надсиланні на інший домен буде попередження</string>
     <string name="title_advanced_uri">Деталі вибраного контакту буде використано для вкладених файлів з vCard</string>
     <string name="title_advanced_e2e_encryption">Параметри наскрізного шифрування</string>
@@ -1386,6 +1387,7 @@
     <string name="title_reply_to">Відповісти:</string>
     <string name="title_cc">Копія:</string>
     <string name="title_bcc">Прихована копія:</string>
+    <string name="title_envelope_from" comment="title_envelope_from&#10;Envelope from = SMTP MAIL FROM, see the related remark text for more details&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3&#10;">Конверт від:</string>
     <string name="title_recipients">%1$d одержувачів</string>
     <string name="title_via_identity">Через:</string>
     <string name="title_sent">Надіслано:</string>
@@ -1731,6 +1733,7 @@
     <string name="title_rule_younger">Повідомлення, отримані за останні (години)</string>
     <string name="title_rule_regex">Регулярний вираз</string>
     <string name="title_rule_and">ТА</string>
+    <string name="title_rule_not">НІ</string>
     <string name="title_rule_action">Дія</string>
     <string name="title_rule_action_remark">Ця дія буде застосована до нових повідомлень, які надходять до теки «%1$s»</string>
     <string name="title_rule_hours">Годин</string>
@@ -2154,6 +2157,7 @@
         <item>Об\'єднані теки</item>
         <item>Теки основного облікового запису</item>
         <item>Облікові записи</item>
+        <item>Основні вхідні</item>
     </string-array>
     <string-array name="downloadNames">
         <item>16 КБ</item>

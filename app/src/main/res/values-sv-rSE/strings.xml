@@ -764,7 +764,7 @@
     <string name="title_advanced_openai_model">Modell</string>
     <string name="title_advanced_openai_temperature">Temperatur: %1$s</string>
     <string name="title_advanced_openai_moderation">Moderering av innehåll</string>
-    <string name="title_advanced_gemini" comment="title_advanced_gemini&#10;Title for option switch to enable Gemini integration&#10;https://gemini.google.com/">Gemini-integration</string>
+    <string name="title_advanced_gemini">Gemini-integration</string>
     <string name="title_advanced_sdcard">Jag vill använda ett SD-kort</string>
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
     <string name="title_advanced_updates">Sök efter GitHub-uppdateringar</string>
@@ -1696,6 +1696,7 @@
     <string name="title_rule_younger">Meddelanden inte äldre än (timmar)</string>
     <string name="title_rule_regex">Regex</string>
     <string name="title_rule_and">OCH</string>
+    <string name="title_rule_not">INTE</string>
     <string name="title_rule_action">Åtgärd</string>
     <string name="title_rule_action_remark">Denna åtgärd kommer att tillämpas på nya meddelanden som kommer i mappen %1$s</string>
     <string name="title_rule_hours">Timmar</string>
@@ -2116,6 +2117,7 @@
         <item>Samlade mappar</item>
         <item>Primära kontomappar</item>
         <item>Konton</item>
+        <item>Primär inkorg</item>
     </string-array>
     <string-array name="downloadNames">
         <item>16 KB</item>

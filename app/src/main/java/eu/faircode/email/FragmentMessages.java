@@ -3267,8 +3267,18 @@ public class FragmentMessages extends FragmentBase
                         " folder=" + message.folderType);
 
                 if (EntityMessage.SWIPE_ACTION_ASK.equals(action)) {
-                    redraw(null);
-                    onSwipeAsk(message, viewHolder);
+                    rvMessage.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+                        @Override
+                        public void onChildViewAttachedToWindow(@NonNull View view) {
+                            rvMessage.removeOnChildAttachStateChangeListener(this);
+                            onSwipeAsk(message, view);
+                        }
+
+                        @Override
+                        public void onChildViewDetachedFromWindow(@NonNull View view) {
+                        }
+                    });
+                    redraw(viewHolder);
                 } else if (EntityMessage.SWIPE_ACTION_SEEN.equals(action)) {
                     redraw(viewHolder);
                     onActionSeenSelection(!message.ui_seen, message.id, false);
@@ -3369,14 +3379,14 @@ public class FragmentMessages extends FragmentBase
             });
         }
 
-        private void onSwipeAsk(final @NonNull TupleMessageEx message, @NonNull RecyclerView.ViewHolder viewHolder) {
+        private void onSwipeAsk(final @NonNull TupleMessageEx message, @NonNull View anchor) {
             // Make sure animations are done
             rvMessage.post(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         int order = 1;
-                        PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), viewHolder.itemView);
+                        PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), anchor);
 
                         if (message.ui_seen)
                             popupMenu.getMenu().add(Menu.NONE, R.string.title_unseen, order++, R.string.title_unseen)
@@ -3470,7 +3480,7 @@ public class FragmentMessages extends FragmentBase
                                     onSwipeJunk(message);
                                     return true;
                                 } else if (itemId == R.string.title_delete_permanently) {
-                                    onSwipeDelete(message, viewHolder);
+                                    onSwipeDelete(message, null);
                                     return true;
                                 }
                                 return false;
@@ -3632,7 +3642,8 @@ public class FragmentMessages extends FragmentBase
                 return;
             }
 
-            redraw(vh);
+            if (vh != null)
+                redraw(vh);
 
             FragmentDialogAsk ask = new FragmentDialogAsk();
             ask.setArguments(args);
@@ -5250,9 +5261,6 @@ public class FragmentMessages extends FragmentBase
                 db.folder().liveUnified(type).observe(getViewLifecycleOwner(), new Observer<List<TupleFolderEx>>() {
                     @Override
                     public void onChanged(List<TupleFolderEx> folders) {
-                        if (folders == null)
-                            folders = new ArrayList<>();
-
                         updateState(folders);
                     }
                 });
@@ -5924,6 +5932,7 @@ public class FragmentMessages extends FragmentBase
 
             final Context context = getContext();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean primary_inbox = "inbox".equals(prefs.getString("startup", "unified"));
             String sort = prefs.getString(getSort(context, viewType, type), "time");
             boolean ascending = prefs.getBoolean(getSortOrder(context, viewType, type), outbox);
             boolean filter_seen = prefs.getBoolean(getFilter(context, "seen", viewType, type), false);
@@ -6061,7 +6070,7 @@ public class FragmentMessages extends FragmentBase
                     .setVisible(viewType == AdapterMessage.ViewType.THREAD);
 
             menu.findItem(R.id.menu_compact).setChecked(compact);
-            menu.findItem(R.id.menu_theme).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
+            menu.findItem(R.id.menu_theme).setVisible(viewType == AdapterMessage.ViewType.UNIFIED || primary_inbox);
 
             menu.findItem(R.id.menu_confirm_links)
                     .setChecked(confirm_links)
@@ -6088,7 +6097,7 @@ public class FragmentMessages extends FragmentBase
             }
 
             menu.findItem(R.id.menu_sync_more).setVisible(folder);
-            menu.findItem(R.id.menu_force_sync).setVisible(viewType == AdapterMessage.ViewType.UNIFIED);
+            menu.findItem(R.id.menu_force_sync).setVisible(viewType == AdapterMessage.ViewType.UNIFIED || primary_inbox);
             menu.findItem(R.id.menu_force_send).setVisible(outbox);
 
             menu.findItem(R.id.menu_expunge).setVisible(viewType == AdapterMessage.ViewType.FOLDER &&
@@ -6838,6 +6847,8 @@ public class FragmentMessages extends FragmentBase
     }
 
     private void updateState(List<TupleFolderEx> folders) {
+        if (folders == null)
+            folders = new ArrayList<>();
         Log.i("Folder state updated count=" + folders.size());
 
         // Get state

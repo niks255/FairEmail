@@ -33,6 +33,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -368,6 +369,7 @@ public class FragmentAccounts extends FragmentBase {
         menu.findItem(R.id.menu_show_folders).setVisible(!settings);
         menu.findItem(R.id.menu_theme).setVisible(!settings);
         menu.findItem(R.id.menu_force_sync).setVisible(!settings);
+        menu.findItem(R.id.menu_pwned).setVisible(settings && !TextUtils.isEmpty(BuildConfig.PWNED_ENDPOINT));
 
         super.onPrepareOptionsMenu(menu);
     }
@@ -398,6 +400,9 @@ public class FragmentAccounts extends FragmentBase {
             return true;
         } else if (itemId == R.id.menu_force_sync) {
             onMenuForceSync();
+            return true;
+        } else if (itemId == R.id.menu_pwned) {
+            onMenuPwned();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -473,6 +478,10 @@ public class FragmentAccounts extends FragmentBase {
     private void onMenuForceSync() {
         refresh(true);
         ToastEx.makeText(getContext(), R.string.title_executing, Toast.LENGTH_LONG).show();
+    }
+
+    private void onMenuPwned() {
+        new FragmentDialogPwned().show(getParentFragmentManager(), "pawned");
     }
 
     @Override

@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -111,6 +112,7 @@ public class EntityIdentity {
     public String replyto;
     public String cc;
     public String bcc;
+    public String envelopeFrom;
     public String internal;
     public String uri; // linked contact
     @NonNull

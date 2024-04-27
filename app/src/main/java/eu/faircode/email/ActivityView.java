@@ -155,6 +155,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private AdapterNavMenu adapterNavMenu;
     private AdapterNavMenu adapterNavMenuExtra;
 
+    private boolean initialized = false;
     private boolean exit = false;
     private boolean searching = false;
     private int lastBackStackCount = 0;
@@ -779,6 +780,41 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     private void init() {
         Bundle args = new Bundle();
 
+        if ("inbox".equals(startup)) {
+            new SimpleTask<EntityFolder>() {
+                @Override
+                protected void onPreExecute(Bundle args) {
+                    initialized = false;
+                }
+
+                @Override
+                protected EntityFolder onExecute(Context context, Bundle args) throws Throwable {
+                    DB db = DB.getInstance(context);
+                    return db.folder().getFolderPrimary(EntityFolder.INBOX);
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, EntityFolder inbox) {
+                    FragmentBase fragment = new FragmentMessages();
+                    if (inbox != null) {
+                        args.putString("type", inbox.type);
+                        args.putLong("account", inbox.account);
+                        args.putLong("folder", inbox.id);
+                    }
+                    fragment.setArguments(args);
+                    setFragment(fragment);
+                    checkIntent();
+                    initialized = true;
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getSupportFragmentManager(), ex);
+                }
+            }.execute(this, new Bundle(), "primary");
+            return;
+        }
+
         FragmentBase fragment;
         switch (startup) {
             case "accounts":
@@ -798,7 +834,10 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         }
 
         fragment.setArguments(args);
+        setFragment(fragment);
+    }
 
+    private void setFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         for (Fragment existing : fm.getFragments())
@@ -1127,7 +1166,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         checkUpdate(false);
         checkAnnouncements(false);
-        checkIntent();
+        if (initialized || !"inbox".equals(startup))
+            checkIntent();
     }
 
     @Override
