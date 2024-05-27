@@ -90,10 +90,12 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     static final int REQUEST_SELECT_IDENTITY = 8;
     static final int REQUEST_EDIT_SIGNATURE = 9;
     static final int REQUEST_CHANGE_PASSWORD = 10;
-    static final int REQUEST_DELETE_ACCOUNT = 11;
-    static final int REQUEST_IMPORT_PROVIDERS = 12;
-    static final int REQUEST_GRAPH_CONTACTS = 13;
-    static final int REQUEST_GRAPH_CONTACTS_OAUTH = 14;
+    static final int REQUEST_EDIT_ACCOUNT_COLOR = 11;
+    static final int REQUEST_DELETE_ACCOUNT = 12;
+    static final int REQUEST_EDIT_IDENITY_COLOR = 13;
+    static final int REQUEST_IMPORT_PROVIDERS = 14;
+    static final int REQUEST_GRAPH_CONTACTS = 15;
+    static final int REQUEST_GRAPH_CONTACTS_OAUTH = 16;
     static final int REQUEST_DEBUG_INFO = 7000;
 
     static final int PI_CONNECTION = 1;
@@ -120,10 +122,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         view = LayoutInflater.from(this).inflate(R.layout.activity_setup, null);
         setContentView(view);
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.action_bar);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.setScrimColor(Helper.resolveColor(this, R.attr.colorDrawerScrim));

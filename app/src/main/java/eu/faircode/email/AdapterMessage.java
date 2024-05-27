@@ -179,6 +179,7 @@ import java.util.Properties;
 import java.util.SortedMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.regex.Matcher;
 
 import javax.mail.Address;
 import javax.mail.Session;
@@ -478,6 +479,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibSearchText;
         private ImageButton ibSearch;
         private ImageButton ibTranslate;
+        private ImageButton ibSummarize;
         private ImageButton ibFullScreen;
         private ImageButton ibForceLight;
         private ImageButton ibImportance;
@@ -645,6 +647,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 ImageSpan[] image = buffer.getSpans(off, off, ImageSpan.class);
                                 if (image.length > 0 && image[0].getSource() != null) {
                                     Uri uri = Uri.parse(image[0].getSource());
+
                                     if (UriHelper.isHyperLink(uri)) {
                                         ripple(event);
                                         if (onOpenLink(uri, null,
@@ -673,10 +676,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             }
 
                             ImageSpan[] image = buffer.getSpans(off, off, ImageSpan.class);
-                            if (image.length > 0) {
-                                if (image[0] instanceof ImageSpanEx &&
-                                        ((ImageSpanEx) image[0]).getTracking())
+                            if (image.length > 0 && image[0] instanceof ImageSpanEx) {
+                                String tracking = ((ImageSpanEx) image[0]).getTracking();
+                                if (!TextUtils.isEmpty(tracking)) {
+                                    onOpenLink(Uri.parse(tracking),
+                                            context.getString(R.string.title_legend_tracking_pixel), true);
                                     return true;
+                                }
 
                                 ripple(event);
                                 onOpenImage(message.id, image[0].getSource(),
@@ -927,6 +933,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSearchText = vsBody.findViewById(R.id.ibSearchText);
             ibSearch = vsBody.findViewById(R.id.ibSearch);
             ibTranslate = vsBody.findViewById(R.id.ibTranslate);
+            ibSummarize = vsBody.findViewById(R.id.ibSummarize);
             ibFullScreen = vsBody.findViewById(R.id.ibFullScreen);
             ibForceLight = vsBody.findViewById(R.id.ibForceLight);
             ibImportance = vsBody.findViewById(R.id.ibImportance);
@@ -1099,6 +1106,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibSearch.setOnClickListener(this);
                 ibTranslate.setOnClickListener(this);
                 ibTranslate.setOnLongClickListener(this);
+                ibSummarize.setOnClickListener(this);
                 ibFullScreen.setOnClickListener(this);
                 ibForceLight.setOnClickListener(this);
                 ibImportance.setOnClickListener(this);
@@ -1221,6 +1229,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibSearch.setOnClickListener(null);
                 ibTranslate.setOnClickListener(null);
                 ibTranslate.setOnLongClickListener(null);
+                ibSummarize.setOnClickListener(null);
                 ibFullScreen.setOnClickListener(null);
                 ibForceLight.setOnClickListener(null);
                 ibImportance.setOnClickListener(null);
@@ -1288,6 +1297,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                     message.folderUnified && outgoing) ||
                             EntityFolder.isOutgoing(message.folderInheritedType));
             String selector = (reverse ? null : message.bimi_selector);
+            boolean dmarc = (!reverse && Boolean.TRUE.equals(message.dmarc));
             Address[] addresses = (reverse ? message.to : (message.isForwarder() ? message.submitter : message.from));
             Address[] senders = ContactInfo.fillIn(
                     reverse && !show_recipients ? message.to : message.senders, prefer_contact, only_contact);
@@ -1394,9 +1404,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                 (Boolean.TRUE.equals(message.dmarc) ? 1 : 0);
 
                 // https://en.wikipedia.org/wiki/DMARC#Alignment
-                if (Boolean.TRUE.equals(message.dkim) &&
-                        !Boolean.FALSE.equals(message.spf) &&
-                        !Boolean.FALSE.equals(message.dmarc))
+                if (Boolean.TRUE.equals(message.dmarc) &&
+                        (Boolean.TRUE.equals(message.dkim) ||
+                                Boolean.TRUE.equals(message.spf)))
                     auths = 3;
 
                 if (Boolean.TRUE.equals(message.auth))
@@ -1661,7 +1671,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             // Contact info
             ContactInfo[] info = ContactInfo.getCached(context,
-                    message.account, message.folderType, selector, addresses);
+                    message.account, message.folderType, selector, dmarc, addresses);
             if (info == null) {
                 if (taskContactInfo != null) {
                     taskContactInfo.cancel(context);
@@ -1673,6 +1683,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 aargs.putLong("account", message.account);
                 aargs.putString("folderType", message.folderType);
                 aargs.putString("selector", selector);
+                aargs.putBoolean("dmarc", dmarc);
                 aargs.putSerializable("addresses", addresses);
 
                 taskContactInfo = new SimpleTask<ContactInfo[]>() {
@@ -1681,8 +1692,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         long account = args.getLong("account");
                         String folderType = args.getString("folderType");
                         String selector = args.getString("selector");
+                        boolean dmarc = args.getBoolean("dmarc");
                         Address[] addresses = (Address[]) args.getSerializable("addresses");
-                        return ContactInfo.get(context, account, folderType, selector, addresses);
+                        return ContactInfo.get(context, account, folderType, selector, dmarc, addresses);
                     }
 
                     @Override
@@ -1839,6 +1851,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSearchText.setVisibility(View.GONE);
             ibSearch.setVisibility(View.GONE);
             ibTranslate.setVisibility(View.GONE);
+            ibSummarize.setVisibility(View.GONE);
             ibFullScreen.setVisibility(View.GONE);
             ibForceLight.setVisibility(View.GONE);
             ibImportance.setVisibility(View.GONE);
@@ -2135,6 +2148,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSearchText.setVisibility(View.GONE);
             ibSearch.setVisibility(View.GONE);
             ibTranslate.setVisibility(View.GONE);
+            ibSummarize.setVisibility(View.GONE);
             ibFullScreen.setVisibility(View.GONE);
             ibForceLight.setVisibility(View.GONE);
             ibImportance.setVisibility(View.GONE);
@@ -2349,6 +2363,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_hide = prefs.getBoolean("button_hide", false);
                     boolean button_importance = prefs.getBoolean("button_importance", false);
                     boolean button_translate = prefs.getBoolean("button_translate", true);
+                    boolean button_summarize = prefs.getBoolean("button_summarize", false);
                     boolean button_full_screen = prefs.getBoolean("button_full_screen", false);
                     boolean button_force_light = prefs.getBoolean("button_force_light", true);
                     boolean button_search = prefs.getBoolean("button_search", false);
@@ -2389,6 +2404,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibSearchText.setVisibility(tools && !outbox && button_search_text && message.content ? View.VISIBLE : View.GONE);
                     ibSearch.setVisibility(tools && !outbox && button_search && (froms > 0 || tos > 0) ? View.VISIBLE : View.GONE);
                     ibTranslate.setVisibility(tools && !outbox && button_translate && DeepL.isAvailable(context) && message.content ? View.VISIBLE : View.GONE);
+                    ibSummarize.setVisibility(tools && !outbox && button_summarize && AI.isAvailable(context) && message.content ? View.VISIBLE : View.GONE);
                     ibFullScreen.setVisibility(tools && full && button_full_screen && message.content ? View.VISIBLE : View.GONE);
                     ibForceLight.setVisibility(tools && full && dark && button_force_light && message.content ? View.VISIBLE : View.GONE);
                     ibForceLight.setImageLevel(!(canDarken || fake_dark) || force_light ? 1 : 0);
@@ -2546,7 +2562,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         }
                     } else {
                         boolean homoPersonal = TextHelper.isSingleScript(personal);
-                        if (BuildConfig.DEBUG && !homoPersonal)
+                        if (debug && !homoPersonal)
                             personal = TextHelper.getNonLatinCodepoints(personal);
                         ssb.append(personal);
                         if (!homoPersonal) {
@@ -2554,6 +2570,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
                             ssb.setSpan(new ForegroundColorSpan(colorError), start, ssb.length(), 0);
                         }
+
+                        Matcher m = Helper.EMAIL_ADDRESS.matcher(personal);
+                        while (m.find()) {
+                            ssb.setSpan(new StyleSpan(Typeface.BOLD), m.start(), m.end(), 0);
+                            ssb.setSpan(new ForegroundColorSpan(colorError), m.start(), m.end(), 0);
+                        }
+
                         if (full) {
                             ssb.append(" <");
                             if (!TextUtils.isEmpty(email)) {
@@ -2611,29 +2634,39 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibAddContact.setVisibility(show_addresses && contacts && froms > 0 ? View.VISIBLE : View.GONE);
 
             boolean known_signer = false;
-            if (native_dkim &&
-                    message.signedby != null &&
-                    message.from != null &&
-                    message.from.length == 1) {
+            SpannableStringBuilder signers = new SpannableStringBuilderEx();
+            if (native_dkim && message.signedby != null) {
                 // https://dmarcly.com/blog/what-is-dmarc-identifier-alignment-domain-alignment
-                String domain = UriHelper.getEmailDomain(((InternetAddress) message.from[0]).getAddress());
-                if (domain != null)
-                    for (String signer : message.signedby.split(","))
-                        if (Objects.equals(
-                                UriHelper.getRootDomain(context, signer),
-                                UriHelper.getRootDomain(context, domain))) {
+                List<Address> envelop = new ArrayList<>();
+                if (message.return_path != null)
+                    envelop.addAll(Arrays.asList(message.return_path));
+                if (message.from != null)
+                    envelop.addAll(Arrays.asList(message.from));
+                for (String signer : message.signedby.split(",")) {
+                    if (signers.length() > 0)
+                        signers.append(", ");
+                    int start = signers.length();
+                    signers.append(signer);
+                    for (Address a : envelop) {
+                        String domain = UriHelper.getEmailDomain(((InternetAddress) a).getAddress());
+                        if (signer != null && domain != null && Objects.equals(
+                                UriHelper.getRootDomain(context, signer.toLowerCase(Locale.ROOT)),
+                                UriHelper.getRootDomain(context, domain.toLowerCase(Locale.ROOT)))) {
+                            signers.setSpan(new ForegroundColorSpan(textColorLink), start, signers.length(), 0);
                             known_signer = true;
                             break;
                         }
+                    }
+                }
             }
             boolean show_signers = (native_dkim &&
                     message.signedby != null &&
                     (show_addresses || !known_signer));
 
             tvSignedByTitle.setVisibility(show_signers ? View.VISIBLE : View.GONE);
+            tvSignedByTitle.setTextColor(known_signer ? textColorTertiary : colorWarning);
             tvSignedBy.setVisibility(show_signers ? View.VISIBLE : View.GONE);
-            tvSignedBy.setTextColor(known_signer ? textColorTertiary : colorAccent);
-            tvSignedBy.setText(message.signedby);
+            tvSignedBy.setText(signers);
 
             tvSubmitterTitle.setVisibility(!TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
             tvSubmitter.setVisibility(!TextUtils.isEmpty(submitter) ? View.VISIBLE : View.GONE);
@@ -4440,7 +4473,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             else if (id == R.id.ibVerified)
                 onShowVerified(message);
             else if (id == R.id.ibAuth)
-                onShowAuth(message);
+                onShowAuth(message, null);
             else if (id == R.id.ibPriority)
                 onShowPriority(message);
             else if (id == R.id.ibSensitivity)
@@ -4529,6 +4562,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     onSearchContact(message, false);
                 } else if (id == R.id.ibTranslate) {
                     onActionTranslate(message);
+                } else if (id == R.id.ibSummarize) {
+                    onActionSummarize(message);
                 } else if (id == R.id.ibFullScreen)
                     onActionOpenFull(message);
                 else if (id == R.id.ibForceLight) {
@@ -4892,11 +4927,14 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onShowVerified(TupleMessageEx message) {
-            ToastEx.makeText(context, ibVerified.getContentDescription(), Toast.LENGTH_LONG).show();
+            onShowAuth(message, ibVerified.getContentDescription().toString());
         }
 
-        private void onShowAuth(TupleMessageEx message) {
+        private void onShowAuth(TupleMessageEx message, String title) {
             StringBuilder sb = new StringBuilder();
+
+            if (title != null)
+                sb.append(title).append('\n');
 
             List<String> result = new ArrayList<>();
             if (Boolean.FALSE.equals(message.dkim))
@@ -4911,61 +4949,48 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 result.add("MX");
 
             if (result.size() > 0)
-                sb.append(context.getString(R.string.title_authentication_failed, TextUtils.join(", ", result)));
-            else {
+                sb.append(context.getString(R.string.title_authentication_failed, TextUtils.join(", ", result)))
+                        .append('\n');
+
+            if (authentication_indicator) {
                 if (check_tls)
                     sb.append("TLS: ")
-                            .append(message.tls == null ? "-" : (message.tls ? "✓" : "✗"))
-                            .append('\n');
+                            .append(message.tls == null ? "-" : (message.tls ? "✓" : "✗")).append('\n');
                 sb.append("DKIM: ")
-                        .append(message.dkim == null ? "-" : (message.dkim ? "✓" : "✗"))
-                        .append('\n');
+                        .append(message.dkim == null ? "-" : (message.dkim ? "✓" : "✗")).append('\n');
                 sb.append("SPF: ")
-                        .append(message.spf == null ? "-" : (message.spf ? "✓" : "✗"))
-                        .append('\n');
+                        .append(message.spf == null ? "-" : (message.spf ? "✓" : "✗")).append('\n');
                 sb.append("DMARC: ")
-                        .append(message.dmarc == null ? "-" : (message.dmarc ? "✓" : "✗"))
-                        .append('\n');
+                        .append(message.dmarc == null ? "-" : (message.dmarc ? "✓" : "✗")).append('\n');
                 if (message.auth != null)
-                    sb.append("SMTP: ").append(message.auth ? "✓" : "✗");
+                    sb.append("SMTP: ")
+                            .append(message.auth ? "✓" : "✗").append('\n');
                 if (check_mx)
-                    sb.append('\n')
-                            .append("MX: ")
-                            .append(message.mx == null ? "-" : (message.mx ? "✓" : "✗"));
+                    sb.append("MX: ")
+                            .append(message.mx == null ? "-" : (message.mx ? "✓" : "✗")).append('\n');
             }
 
             if (native_dkim && !TextUtils.isEmpty(message.signedby)) {
-                if (sb.length() > 0)
-                    sb.append('\n');
-                sb.append("Signed by:");
+                sb.append(context.getString(R.string.title_signed_by)).append(' ');
                 for (String signer : message.signedby.split(","))
-                    sb.append('\n').append(signer);
+                    sb.append(signer).append('\n');
             }
 
-            if (Boolean.TRUE.equals(message.blocklist)) {
-                if (sb.length() > 0)
-                    sb.append('\n');
-                sb.append(context.getString(R.string.title_on_blocklist));
-            }
+            if (Boolean.TRUE.equals(message.blocklist))
+                sb.append(context.getString(R.string.title_on_blocklist)).append('\n');
 
             if (Boolean.FALSE.equals(message.from_domain) && message.smtp_from != null)
                 for (Address smtp_from : message.smtp_from) {
                     String domain = UriHelper.getEmailDomain(((InternetAddress) smtp_from).getAddress());
                     String root = UriHelper.getRootDomain(context, domain);
-                    if (root != null) {
-                        if (sb.length() > 0)
-                            sb.append('\n');
-                        sb.append(context.getString(R.string.title_via, root));
-                    }
+                    if (root != null)
+                        sb.append(context.getString(R.string.title_via, root)).append('\n');
                 }
 
             if (Boolean.FALSE.equals(message.reply_domain)) {
                 String[] warning = message.checkReplyDomain(context);
-                if (warning != null) {
-                    if (sb.length() > 0)
-                        sb.append('\n');
-                    sb.append(context.getString(R.string.title_reply_domain, warning[0], warning[1]));
-                }
+                if (warning != null)
+                    sb.append(context.getString(R.string.title_reply_domain, warning[0], warning[1])).append('\n');
             }
 
             if (message.from != null && message.from.length > 0) {
@@ -4974,6 +4999,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (!TextUtils.isEmpty(domain))
                     sb.insert(0, '\n').insert(0, domain);
             }
+
+            if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '\n')
+                sb.deleteCharAt(sb.length() - 1);
 
             ToastEx.makeText(context, sb.toString(), Toast.LENGTH_LONG).show();
         }
@@ -5436,7 +5464,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 for (Address from : message.from) {
                     if (!(from instanceof InternetAddress))
                         continue;
-                    if (!TextHelper.isSingleScript(((InternetAddress) from).getPersonal()))
+                    String personal = ((InternetAddress) from).getPersonal();
+                    if (TextUtils.isEmpty(personal))
+                        continue;
+                    if (!TextHelper.isSingleScript(personal))
+                        return true;
+                    if (Helper.EMAIL_ADDRESS.matcher(personal).find())
                         return true;
                 }
 
@@ -5559,6 +5592,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             CheckBox cbNotAgainSender = dview.findViewById(R.id.cbNotAgainSender);
             CheckBox cbNotAgainDomain = dview.findViewById(R.id.cbNotAgainDomain);
             CheckBox cbNotAgain = dview.findViewById(R.id.cbNotAgain);
+            CheckBox cbNeverAgain = dview.findViewById(R.id.cbNeverAgain);
+            TextView tvNeverAgainHint = dview.findViewById(R.id.tvNeverAgainHint);
 
             if (junk) {
                 if (full)
@@ -5566,6 +5601,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 cbNotAgainSender.setVisibility(View.GONE);
                 cbNotAgainDomain.setVisibility(View.GONE);
                 cbNotAgain.setVisibility(View.GONE);
+                cbNeverAgain.setVisibility(View.GONE);
+                tvNeverAgainHint.setVisibility(View.GONE);
             } else if (senders == null || senders.length == 0) {
                 cbNotAgainSender.setVisibility(View.GONE);
                 cbNotAgainDomain.setVisibility(View.GONE);
@@ -5600,8 +5637,11 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     cbNotAgainSender.setEnabled(!isChecked);
                     cbNotAgainDomain.setEnabled(!isChecked && cbNotAgainSender.isChecked());
+                    cbNeverAgain.setEnabled(isChecked);
                 }
             });
+
+            cbNeverAgain.setEnabled(false);
 
             if (full) {
                 TextView tvDark = dview.findViewById(R.id.tvDark);
@@ -5617,21 +5657,21 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                 boolean isDark = Helper.isDarkTheme(context);
                 tvDark.setVisibility(isDark && !(canDarken || fake_dark) ? View.VISIBLE : View.GONE);
-            } else {
-                boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
-
-                TextView tvTracking = dview.findViewById(R.id.tvTracking);
-                Group grpTracking = dview.findViewById(R.id.grpTracking);
-
-                grpTracking.setVisibility(disable_tracking ? View.VISIBLE : View.GONE);
-
-                tvTracking.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Helper.viewFAQ(v.getContext(), 82);
-                    }
-                });
             }
+
+            boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
+
+            TextView tvTracking = dview.findViewById(R.id.tvTracking);
+            Group grpTracking = dview.findViewById(R.id.grpTracking);
+
+            grpTracking.setVisibility(disable_tracking ? View.VISIBLE : View.GONE);
+
+            tvTracking.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewFAQ(v.getContext(), 82);
+                }
+            });
 
             // TODO: dialog fragment
             final AlertDialog.Builder builder = new AlertDialog.Builder(context)
@@ -5644,7 +5684,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                             if (!junk) {
                                 SharedPreferences.Editor editor = prefs.edit();
-                                if (senders != null)
+
+                                if (cbNotAgain.isChecked() && cbNeverAgain.isChecked())
+                                    editor.putBoolean(full ? "confirm_html" : "confirm_images", false);
+                                else if (senders != null && !cbNotAgain.isChecked())
                                     for (Address sender : senders) {
                                         String from = ((InternetAddress) sender).getAddress();
                                         if (TextUtils.isEmpty(from))
@@ -5656,7 +5699,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         editor.putBoolean(domain + (full ? ".show_full" : ".show_images"),
                                                 cbNotAgainSender.isChecked() && cbNotAgainDomain.isChecked());
                                     }
+
                                 editor.putBoolean(full ? "ask_html" : "ask_images", !cbNotAgain.isChecked());
+
                                 editor.apply();
                             }
 
@@ -6239,6 +6284,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_search_in_text).setEnabled(message.content && !full);
             popupMenu.getMenu().findItem(R.id.menu_translate).setVisible(
                     DeepL.isAvailable(context) && message.content);
+            popupMenu.getMenu().findItem(R.id.menu_summarize).setVisible(
+                    AI.isAvailable(context) && message.content);
 
             popupMenu.getMenu().findItem(R.id.menu_force_light).setVisible(full && dark);
             popupMenu.getMenu().findItem(R.id.menu_force_light).setChecked(force_light);
@@ -6347,6 +6394,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         return true;
                     } else if (itemId == R.id.menu_translate) {
                         onActionTranslate(message);
+                        return true;
+                    } else if (itemId == R.id.menu_summarize) {
+                        onActionSummarize(message);
                         return true;
                     } else if (itemId == R.id.menu_force_light) {
                         onActionForceLight(message);
@@ -7256,6 +7306,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
         }
 
+        private void onActionSummarize(TupleMessageEx message) {
+            FragmentDialogSummarize.summarize(message, parentFragment.getParentFragmentManager());
+        }
+
         private void onActionForceLight(TupleMessageEx message) {
             if (canDarken || fake_dark) {
                 boolean force_light = !properties.getValue("force_light", message.id);
@@ -7477,6 +7531,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             args.putLong("account", message.account);
             args.putString("folderType", message.folderType);
             args.putString("selector", message.bimi_selector);
+            args.putBoolean("dmarc", Boolean.TRUE.equals(message.dmarc));
             args.putSerializable("addresses", message.from);
 
             new SimpleTask<ContactInfo[]>() {
@@ -7485,8 +7540,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     long account = args.getLong("account");
                     String folderType = args.getString("folderType");
                     String selector = args.getString("selector");
+                    boolean dmarc = args.getBoolean("dmarc");
                     Address[] addresses = (Address[]) args.getSerializable("addresses");
-                    return ContactInfo.get(context, account, folderType, selector, addresses);
+                    return ContactInfo.get(context, account, folderType, selector, dmarc, addresses);
                 }
 
                 @Override
@@ -7907,7 +7963,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     onToggleFlag(message);
                     return true;
                 } else if (action == R.id.ibAuth) {
-                    onShowAuth(message);
+                    onShowAuth(message, null);
                     return true;
                 } else if (action == R.id.ibSnoozed) {
                     onShowSnoozed(message);
@@ -8503,6 +8559,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     same = false;
                     log("last_attempt changed " + prev.last_attempt + "/" + next.last_attempt, next.id);
                 }
+                // last_touched
 
                 // accountPop
                 if (!Objects.equals(prev.accountName, next.accountName)) {
@@ -8742,12 +8799,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             if (message != null) {
                 keyPosition.put(message.id, i);
                 positionKey.put(i, message.id);
+
                 addExtra(message.from, message.extra);
+
                 if (threading) {
-                    if (message.senders == null || message.senders.length == 0)
-                        message.senders = message.from;
-                    if (message.recipients == null || message.recipients.length == 0)
-                        message.recipients = message.to;
+                    message.senders = merge(message.from, message.senders);
+                    message.recipients = merge(message.to, message.recipients);
                     addExtra(message.senders, message.extra);
                 } else {
                     message.senders = message.from;
@@ -8773,6 +8830,28 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 }
             }
         });
+    }
+
+    static Address[] merge(Address[] base, Address[] addresses) {
+        if (base == null || base.length == 0)
+            return (addresses == null ? new Address[0] : addresses);
+        if (addresses == null)
+            return base;
+
+        List<Address> result = new ArrayList<>();
+        result.addAll(Arrays.asList(base));
+        for (Address a : addresses)
+            for (Address b : base) {
+                if (a.equals(b)) {
+                    if (a instanceof InternetAddress && b instanceof InternetAddress) {
+                        if (Objects.equals(((InternetAddress) a).getPersonal(), ((InternetAddress) b).getPersonal()))
+                            continue;
+                    } else
+                        continue;
+                }
+                result.add(a);
+            }
+        return result.toArray(new Address[0]);
     }
 
     static void addExtra(Address[] addresses, String extra) {

@@ -19,9 +19,10 @@
     <string name="app_download">Downloaded from: %1$s</string>
     <string name="app_dmarc" translatable="false">DMARC</string>
 
-    <string name="app_mod1">
-        The March security update is causing \'App not responding\' messages, exclusively on Google Pixel devices.
-        Please do not blame the app for this, only Google can solve this!
+    <string name="app_motd">
+        With Android 14/15 beta, \'App not responding\' notifications occasionally occur.
+        Google is working on a fix.
+        Please do not blame the app for this Android problem!
     </string>
 
     <string name="channel_service">Monitor</string>
@@ -150,7 +151,7 @@
     <string name="title_notification_sending">Sending messages</string>
     <string name="title_notification_waiting">Waiting for suitable connection</string>
     <string name="title_notification_idle">Idle</string>
-    <string name="title_notification_failed">\'%1$s\' failed</string>
+    <string name="title_notification_failed">Account \'%1$s\' failed</string>
     <string name="title_notification_alert">Server alert: \'%1$s\'</string>
     <string name="title_notification_sending_left">Attempts left: %1$d</string>
     <string name="title_notification_sending_retry">Sending will be retried on internet connection changes or pulling down on the outbox</string>
@@ -293,6 +294,7 @@
     <string name="title_setup_doze_stopped">Sync stopped?</string>
     <string name="title_setup_doze_device">This is probably required for this device</string>
     <string name="title_setup_alarm_12">The app won\'t work properly</string>
+    <string name="title_setup_fg_15">The app cannot be started automatically</string>
     <string name="title_setup_inexact">Alarms &amp; reminders are disabled</string>
     <string name="title_setup_background">Background restrictions are enabled</string>
     <string name="title_setup_data">Data saver is enabled</string>
@@ -569,9 +571,9 @@
     <string name="title_advanced_two_col">Use two columns</string>
     <string name="title_advanced_min_screen_size">Minimum screen size for splitting the screen</string>
     <string name="title_advanced_close_pane">Collapse row or column when closing a conversation</string>
-    <string name="title_advanced_open_pane">Start with two rows or two columns</string>
     <string name="title_advanced_column_width">Message column width / row height: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Hide top toolbar when scrolling messages</string>
+    <string name="title_advanced_edge_to_edge" translatable="false">Edge-to-edge (experimental)</string>
     <string name="title_advanced_nav_options">Show navigation menu options</string>
     <string name="title_advanced_nav_categories">Show account categories in the navigation menu</string>
     <string name="title_advanced_nav_pin">Pin navigation menu</string>
@@ -677,7 +679,6 @@
     <string name="title_advanced_actionbar_swap">Swap trash and archive button</string>
     <string name="title_advanced_actionbar_color">Use account color as background color for conversation action bar</string>
     <string name="title_advanced_category_header">Group by account category</string>
-    <string name="title_advanced_navbar_colorize">Colorize the Android navigation bar</string>
     <string name="title_advanced_list_count">Show the number of messages or conversations in the top action bar</string>
     <string name="title_advanced_bundled_fonts">Use bundled fonts</string>
     <string name="title_advanced_narrow_fonts">Use narrow fonts</string>
@@ -733,6 +734,7 @@
     <string name="title_advanced_swipe_reply">Swipe expanded messages to the right to reply</string>
     <string name="title_advanced_move_thread_all">When moving selected conversations, move all messages</string>
     <string name="title_advanced_move_thread_sent">When moving a conversation, also move sent messages</string>
+    <string name="title_advanced_swipe_trash_all">When swiping a conversation to the trash, trash all messages</string>
     <string name="title_advanced_default_snooze">Default snooze/delay time</string>
     <string name="title_advanced_default_folder">Select default folder</string>
 
@@ -871,6 +873,7 @@
     <string name="title_advanced_haptic_feedback">Haptic feedback on important actions</string>
     <string name="title_advanced_language">Language</string>
     <string name="title_advanced_language_system">System</string>
+    <string name="title_advanced_integrations_hint">The cloud services below are not part of the app. Any payments will go directly to the cloud service and not to the app developer.</string>
     <string name="title_advanced_lt">LanguageTool integration</string>
     <string name="title_advanced_lt_sentence">Check every sentence</string>
     <string name="title_advanced_lt_auto">Check paragraph after a new line</string>
@@ -886,6 +889,8 @@
     <string name="title_advanced_openai_temperature">Temperature: %1$s</string>
     <string name="title_advanced_openai_moderation">Content moderation</string>
     <string name="title_advanced_gemini">Gemini integration</string>
+    <string name="title_advanced_multi_modal">Multimodal</string>
+    <string name="title_advanced_summarize_prompt">Summarize prompt</string>
     <string name="title_advanced_sdcard">I want to use an SD card</string>
     <string name="title_advanced_watchdog">Periodically check if FairEmail is still active</string>
     <string name="title_advanced_updates">Check for GitHub updates</string>
@@ -926,6 +931,7 @@
     <string name="title_advanced_auto_vacuum" translatable="false">sqlite auto vacuum</string>
     <string name="title_advanced_sync_extra" translatable="false">sqlite sync extra</string>
     <string name="title_advanced_sqlite_cache" translatable="false">sqlite cache: %1$s %% - %2$s</string>
+    <string name="title_advanced_legacy_queries" translatable="false">Legacy queries</string>
     <string name="title_advanced_oauth_tabs" translatable="false">OAuth tabs</string>
     <string name="title_advanced_chunk_size" translatable="false">Chunk size: %1$d</string>
     <string name="title_advanced_thread_range" translatable="false">Thread range: %1$d days</string>
@@ -1063,6 +1069,9 @@
     <string name="title_advanced_threading_hint">Group messages related to each other</string>
     <string name="title_advanced_indentation_hint">For card style only</string>
     <string name="title_advanced_highlight_hint">The accent color of the theme will be used for highlighting</string>
+    <string name="title_advanced_free">This cloud service is free to use</string>
+    <string name="title_advanced_free_tier">This cloud service has a free tier</string>
+    <string name="title_advanced_paid_service">This cloud service requires payment</string>
     <string name="title_advanced_privacy_risk">There might be a privacy risk</string>
     <string name="title_advanced_name_email_hint">Names will only be shown when available</string>
     <string name="title_advanced_preview_hint">Only available when message text has been downloaded</string>
@@ -1176,6 +1185,7 @@
     <string name="title_identity_email">Your email address</string>
     <string name="title_identity_tenant" translatable="false">Tenant ID</string>
     <string name="title_identity_tenant_hint">This field should be empty in most cases</string>
+    <string name="title_identity_receive_first_hint">It is seldom necessary to turn on this option, moreover, data usage will increase!</string>
     <string name="title_identity_color_hint">Identity colors take precedence over folder and account colors</string>
     <string name="title_advanced_sender">Allow editing sender address</string>
     <string name="title_advanced_sender_name">Use name when sender address has been edited</string>
@@ -1238,6 +1248,7 @@
     <string name="title_password">Password</string>
     <string name="title_password_storage">How are passwords stored?</string>
     <string name="title_case_sensitive">Usernames and passwords are usually case sensitive</string>
+    <string name="title_login_before_send">Receive before sending</string>
     <string name="title_client_certificate">Client certificate</string>
     <string name="title_realm">Realm</string>
     <string name="title_use_ip">Use local IP address instead of host name</string>
@@ -1351,6 +1362,7 @@
     <string name="title_expunge_remark">This will permanently delete all messages marked for deletion</string>
     <string name="title_empty_trash">Empty trash</string>
     <string name="title_empty_spam">Empty spam</string>
+    <string name="title_edit_color">Edit color</string>
     <string name="title_edit_properties">Edit properties</string>
     <string name="title_edit_rules">Edit rules</string>
     <string name="title_execute_rules">Execute rules</string>
@@ -1380,8 +1392,10 @@
     <string name="title_delete_operation_move">Move operations</string>
     <string name="title_delete_operation_flag">Flag operations</string>
     <string name="title_delete_operation_delete">Delete operations</string>
+    <string name="title_delete_operation_send">Send operations</string>
     <string name="title_delete_operation_deleted">%1$d operations deleted</string>
-    <string name="title_delete_contacts">Delete visible local contacts?</string>
+    <string name="title_delete_contacts">Delete all local contacts?</string>
+    <string name="title_delete_contacts_remark">All contacts shown and not shown will be deleted, even if searched!</string>
     <string name="title_no_operations">No pending operations</string>
     <string name="title_check_operations">Checking for operations</string>
     <string name="title_hint_operations">Deleting operations can result in disappearing messages and synchronization problems</string>
@@ -1627,7 +1641,9 @@
     <string name="title_ask_show_html">Showing the original message can leak privacy sensitive information</string>
     <string name="title_ask_show_html_remark">Displaying the original message on a dark background is not possible as it may make dark texts and images invisible</string>
     <string name="title_ask_show_html_images">Always show images on showing original messages</string>
+    <string name="title_ask_show_html_always">Show original messages by default</string>
     <string name="title_ask_show_image">Showing images can leak privacy sensitive information</string>
+    <string name="title_ask_show_images_always">Show images by default</string>
     <string name="title_ask_show_image_hint">Images recognized as tracking images will not be shown</string>
     <string name="title_ask_show_amp">Show AMP variant of the message?</string>
     <string name="title_ask_show_amp_hint">AMP messages are designed to be dynamic and to interact with the internet and can therefore by definition be used to track you</string>
@@ -1767,6 +1783,7 @@
     <string name="title_create_template">Create template</string>
     <string name="title_select_default_identity">Select default address</string>
     <string name="title_translate">Translate</string>
+    <string name="title_summarize">Summarize</string>
     <string name="title_openai" translatable="false">OpenAI (ChatGPT)</string>
     <string name="title_translate_configure">Configure &#8230;</string>
     <string name="title_translate_key">Enter key</string>
@@ -1909,6 +1926,7 @@
     <string name="title_search_flag_notes">notes</string>
     <string name="title_search_flag_invite">invitation</string>
     <string name="title_search_flag_size">size &gt; %1$s</string>
+    <string name="title_search_flag_touched">touched</string>
 
     <string name="title_search_device">Search on device</string>
     <string name="title_search_server">Search on server</string>
@@ -1962,7 +1980,8 @@
     <string name="title_view_thread">View conversation</string>
     <string name="title_force_sync">Force sync</string>
     <string name="title_force_send">Force send</string>
-    <string name="title_pawned" translatable="false">Have I been pwned?</string>
+    <string name="title_pwned" translatable="false">Have I been pwned?</string>
+    <string name="title_pwned_remark">This will check the password, without sending it (using k-anonymization), and not the email address!</string>
 
     <string name="title_language_all">All</string>
 
@@ -2022,6 +2041,8 @@
     <string name="title_rule_delete">Delete permanently</string>
     <string name="title_rule_sound">Play sound</string>
     <string name="title_rule_silent">Silent notification</string>
+    <string name="title_rule_summarize">Summarize</string>
+    <string name="title_rule_summarize_remark">Summarize the message with configured AI integration</string>
 
     <string name="title_rule_caption">Edit rule</string>
     <string name="title_rule_title">Rule applies to</string>
@@ -2320,6 +2341,7 @@
     <string name="title_ask_what">Ask what to do</string>
     <string name="title_no_ask_again">Do not ask this again</string>
     <string name="title_no_ask_for_again">Do not ask this again for %1$s</string>
+    <string name="title_undo_privacy">This can be undone in the privacy-settings tab page</string>
     <string name="title_no_body">No message text found</string>
     <string name="title_large_body">This message is very large and this may cause problems!</string>
     <string name="title_no_charset">Unsupported encoding: %1$s</string>
@@ -2447,6 +2469,7 @@
     <string name="title_keyword_not_displayed">Not displayed</string>
     <string name="title_keyword_not_delivered">Not delivered</string>
     <string name="title_keyword_complaint">Complaint</string>
+    <string name="title_keyword_phishing">Phishing</string>
 
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d message</item>

@@ -72,7 +72,6 @@
     <string name="title_junk_clear">Очисти</string>
     <string name="title_notification_sending">Слање порука</string>
     <string name="title_notification_waiting">Чекам на погодну конекцију</string>
-    <string name="title_notification_failed">%1$s неуспело</string>
     <string name="menu_answers">Шаблони</string>
     <string name="menu_rules">Правила</string>
     <string name="menu_operations">Операције</string>
@@ -405,6 +404,7 @@
     <string name="title_empty_trash_ask">Заувек обрисати све поруке из отпада?</string>
     <string name="title_empty_spam_ask">Обрисати све нежељене поруке заувек?</string>
     <string name="title_empty_trash_all_ask">Трајно обрисати све поруке свих налога из отпада?</string>
+    <string name="title_delete_contacts">Обриши све локалне контакте?</string>
     <string name="title_no_operations">Нема операција на чекању</string>
     <string name="title_hint_operations">Операције брисања могу довести до порука које нестају и синхронизационих проблема</string>
     <string name="title_folder_name">Име фасцикле</string>

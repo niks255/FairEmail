@@ -3,7 +3,7 @@
     <string name="app_search">Пошук FairEmail</string>
     <string name="app_send_self">Адправіць сабе</string>
     <string name="app_changelog">Журнал змяненняў</string>
-    <string name="app_welcome">FairEmail - гэта праграма электроннай пошты з адкрытым зыходным кодам, арыентаваная на канфідэнцыяльнасць і бяспеку. Менавіта таму некаторыя функцыі могуць адрознівацца ад функцый, якія вы выкарыстоўваеце ў іншых падобных праграмах.</string>
+    <string name="app_welcome">FairEmail - гэта праграма электроннай пошты з адкрытым зыходным кодам, яркая арыентавана на прыватнасць і бяспеку. Па гэтай прычыне некаторыя функцыі могуць адрознівацца ад функцый, якія вы выкарыстоўваеце ў іншых падобных праграмах.</string>
     <string name="app_limitations">Напрыклад, для выдалення небяспечных элементаў і паляпшэння чытальнасці паведамленні падлягаюць фарматаванню, а адкрыццё спасылак для бяспекі патрабуе пацвярджэння. Пры жаданні гэта можна адключыць.</string>
     <string name="app_unsupported">Памылкі ў версіі Android гэтай канкрэтнай прылады выклікаюць збоі</string>
     <string name="app_data_loss">Усе даныя праграмы будуць страчаныя</string>
@@ -14,9 +14,6 @@
     <string name="app_cake_required">Мінімальна патрэбны памер сховішча: %1$s</string>
     <string name="app_updated">Апошняе абнаўленне: %1$s</string>
     <string name="app_download">Спампавана з %1$s</string>
-    <string name="app_mod1">        Сакавіцкае абнаўленне сістэмы бяспекі выводзіць апавяшчэнне «Праграма не адказвае» выключна на прыладах Google Pixel.
-         Калі ласка, не абвінавачвайце праграму ў гэтым, толькі Google можа вырашыць гэтую праблему!
-    </string>
     <string name="channel_service">Маніторынг</string>
     <string name="channel_send">Адправіць</string>
     <string name="channel_notification">Электронная пошта</string>
@@ -146,7 +143,6 @@
     <string name="title_notification_sending">Адпраўка паведамленняў</string>
     <string name="title_notification_waiting">Чаканне адпаведнага злучэння</string>
     <string name="title_notification_idle">Неактыўны</string>
-    <string name="title_notification_failed">\'%1$s\' не ўдалося</string>
     <string name="title_notification_alert">Папярэджанне сервера: \'%1$s\'</string>
     <string name="title_notification_sending_left">Засталося %1$d спроб</string>
     <string name="title_notification_sending_retry">Спроба адпраўкі будзе выканана пры змяненні спосабу злучэння з інтэрнэтам або пры праверцы пошты</string>
@@ -511,7 +507,6 @@
     <string name="title_advanced_two_col">Выкарыстоўваць дзве калонкі</string>
     <string name="title_advanced_min_screen_size">Мінімальны памер экрана для падзелу</string>
     <string name="title_advanced_close_pane">Згортваць радок або слупок пры закрыцці размовы</string>
-    <string name="title_advanced_open_pane">Пачынаць з двух радкоў або двух слупкоў</string>
     <string name="title_advanced_column_width">Шырыня слупка паведамлення / вышыня радка: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Хаваць верхнюю панэль інструментаў пры пракручванні паведамленняў</string>
     <string name="title_advanced_nav_options">Паказваць опцыі меню навігацыі</string>
@@ -614,7 +609,6 @@
     <string name="title_advanced_actionbar_swap">Памяняць месцамі кнопкі выдалення і архівацыі</string>
     <string name="title_advanced_actionbar_color">Выкарыстоўваць колер уліковага запісу ў якасці фонавага колеру для панэлі дзеянняў размовы</string>
     <string name="title_advanced_category_header">Групаваць паводле катэгорыі ўліковага запісу</string>
-    <string name="title_advanced_navbar_colorize">Расфарбаваць панэль навігацыі Android</string>
     <string name="title_advanced_list_count">Паказаць колькасць паведамленняў або размоў у верхняй панэлі дзеянняў</string>
     <string name="title_advanced_bundled_fonts">Выкарыстоўваць убудаваныя шрыфты</string>
     <string name="title_advanced_narrow_fonts">Выкарыстоўваць вузкія шрыфты</string>
@@ -1135,7 +1129,6 @@
     <string name="title_delete_operation_flag">Аперацыі адзначэння</string>
     <string name="title_delete_operation_delete">Аперацыі выдалення</string>
     <string name="title_delete_operation_deleted">%1$d аперацый выдалена</string>
-    <string name="title_delete_contacts">Выдаліць бачныя лакальныя кантакты?</string>
     <string name="title_no_operations">Няма адкладзеных аперацый</string>
     <string name="title_check_operations">Праверка аперацый</string>
     <string name="title_hint_operations">Выдаленне аперацый можа прывесці да знікнення паведамленняў і праблем з сінхранізацыяй</string>

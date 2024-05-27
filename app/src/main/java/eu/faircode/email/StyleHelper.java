@@ -318,8 +318,7 @@ public class StyleHelper {
                         if (renum)
                             StyleHelper.renumber(text, false, etBody.getContext());
 
-                        if (BuildConfig.DEBUG)
-                            StyleHelper.markAsInserted(text, -1, -1);
+                        StyleHelper.markAsInserted(text, -1, -1);
                     } catch (Throwable ex) {
                         Log.e(ex);
                     } finally {
@@ -350,6 +349,12 @@ public class StyleHelper {
                             int start = text.getSpanStart(span);
                             int end = text.getSpanEnd(span);
                             if (end == inserted) {
+                                for (Object o : text.getSpans(start, end, Object.class)) {
+                                    int s = text.getSpanStart(o);
+                                    int e = text.getSpanEnd(o);
+                                    if (s <= e && s >= start && e <= end)
+                                        text.removeSpan(o);
+                                }
                                 text.delete(start, end);
                                 text.removeSpan(span);
                             }
@@ -1761,10 +1766,42 @@ public class StyleHelper {
     }
 
     static void markAsInserted(Editable text, int start, int end) {
+        if (!BuildConfig.DEBUG)
+            return;
         for (InsertedSpan span : text.getSpans(0, text.length(), InsertedSpan.class))
             text.removeSpan(span);
-        if (start >= 0 && start < end && end <= text.length())
+        if (start >= 0 && start < end && end <= text.length()) {
+            if (start == 0) {
+                /*
+                    java.lang.IndexOutOfBoundsException: Invalid Context Range: 0, 1 must be in 0, 0
+                        at android.graphics.Paint.getRunCharacterAdvance(Paint.java:3541)
+                        at android.text.TextLine.getRunAdvance(TextLine.java:1274)
+                        at android.text.TextLine.handleText(TextLine.java:1361)
+                        at android.text.TextLine.handleRun(TextLine.java:1640)
+                        at android.text.TextLine.measureRun(TextLine.java:882)
+                        at android.text.TextLine.measure(TextLine.java:604)
+                        at android.text.TextLine.metrics(TextLine.java:494)
+                        at android.text.Layout.getLineExtent(Layout.java:1896)
+                        at android.text.Layout.getLineMax(Layout.java:1843)
+                        at android.text.Layout.getLineRight(Layout.java:1833)
+                        at android.widget.TextView.getCursorAnchorInfo(TextView.java:14517)
+                        at android.widget.Editor$CursorAnchorInfoNotifier.updatePosition(Editor.java:4883)
+                        at android.widget.Editor$PositionListener.onPreDraw(Editor.java:3750)
+                        at android.view.ViewTreeObserver.dispatchOnPreDraw(ViewTreeObserver.java:1176)
+                        at android.view.ViewRootImpl.performTraversals(ViewRootImpl.java:4158)
+                        at android.view.ViewRootImpl.doTraversal(ViewRootImpl.java:2836)
+                        at android.view.ViewRootImpl$TraversalRunnable.run(ViewRootImpl.java:10145)
+                        at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1406)
+                        at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1415)
+                        at android.view.Choreographer.doCallbacks(Choreographer.java:1015)
+                        at android.view.Choreographer.doFrame(Choreographer.java:945)
+                        at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:1389)
+                        at android.os.Handler.handleCallback(Handler.java:959)
+                */
+                return;
+            }
             text.setSpan(new InsertedSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
     }
 
     static class InsertedSpan implements NoCopySpan {

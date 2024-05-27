@@ -218,8 +218,10 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         iff.addAction(ACTION_NEW_MESSAGE);
         lbm.registerReceiver(creceiver, iff);
 
-        if (savedInstanceState != null)
+        if (savedInstanceState != null) {
+            initialized = savedInstanceState.getBoolean("fair:initialized");
             searching = savedInstanceState.getBoolean("fair:searching");
+        }
 
         colorDrawerScrim = Helper.resolveColor(this, R.attr.colorDrawerScrim);
 
@@ -247,7 +249,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 " landscape cols=" + landscape + " min=" + landscape_min_size);
         boolean duo = Helper.isSurfaceDuo();
         boolean close_pane = prefs.getBoolean("close_pane", !duo);
-        boolean open_pane = (!close_pane && prefs.getBoolean("open_pane", false));
         boolean nav_categories = prefs.getBoolean("nav_categories", false);
 
         // 1=small, 2=normal, 3=large, 4=xlarge
@@ -267,8 +268,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         if (!prefs.getBoolean("hw_accel", true)) { view.setLayerType(View.LAYER_TYPE_SOFTWARE, null); }
         setContentView(view);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.action_bar);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
 
         content_separator = findViewById(R.id.content_separator);
         content_pane = findViewById(R.id.content_pane);
@@ -711,8 +710,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         // Initialize
 
         if (content_pane != null) {
-            content_separator.setVisibility(duo || open_pane ? View.INVISIBLE : View.GONE);
-            content_pane.setVisibility(duo || open_pane ? View.INVISIBLE : View.GONE);
+            content_separator.setVisibility(close_pane ? View.GONE : View.INVISIBLE);
+            content_pane.setVisibility(close_pane ? View.GONE : View.INVISIBLE);
         }
 
         FragmentManager fm = getSupportFragmentManager();
@@ -745,12 +744,15 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
             boolean unified = (intent != null && "unified".equals(intent.getAction()));
             if (!search && !(standalone && !unified))
                 init();
+            else
+                initialized = true;
         }
 
         if (savedInstanceState != null)
             drawerToggle.setDrawerIndicatorEnabled(savedInstanceState.getBoolean("fair:toggle"));
 
-        checkFirst();
+        if (!"inbox".equals(startup))
+            checkFirst();
         checkBanner();
         checkCrash();
 
@@ -804,6 +806,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                     fragment.setArguments(args);
                     setFragment(fragment);
                     checkIntent();
+                    checkFirst();
                     initialized = true;
                 }
 
@@ -850,6 +853,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable("fair:intent", getIntent());
         outState.putBoolean("fair:toggle", drawerToggle == null || drawerToggle.isDrawerIndicatorEnabled());
+        outState.putBoolean("fair:initialized", initialized);
         outState.putBoolean("fair:searching", searching);
         super.onSaveInstanceState(outState);
     }
@@ -1386,8 +1390,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         if (count == 0)
             finish();
         else {
-            showActionBar(true);
-
             if (count < lastBackStackCount) {
                 Intent intent = getIntent();
                 intent.setAction(null);
@@ -1525,6 +1527,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
             String last = prefs.getString("changelog", null);
             if (!Objects.equals(version, last) || BuildConfig.DEBUG) {
+                prefs.edit().putString("changelog", version).apply();
+
                 Bundle args = new Bundle();
                 args.putString("name", "CHANGELOG.md");
                 FragmentDialogMarkdown fragment = new FragmentDialogMarkdown();
@@ -1532,8 +1536,6 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 fragment.show(getSupportFragmentManager(), "changelog");
             }
         }
-
-        prefs.edit().putString("changelog", version).apply();
     }
 
     private void checkBanner() {

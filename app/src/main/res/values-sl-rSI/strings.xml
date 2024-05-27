@@ -132,7 +132,6 @@
     <string name="title_notification_sending">Pošiljanje sporočil</string>
     <string name="title_notification_waiting">Čakanje na primerno povezavo</string>
     <string name="title_notification_idle">Nedejavno</string>
-    <string name="title_notification_failed">\'%1$s\' je spodletelo.</string>
     <string name="title_notification_alert">Opozorilo strežnika: \'%1$s\'</string>
     <string name="title_notification_sending_left">Preostalih poizkusov: %1$d</string>
     <string name="title_notification_sending_retry">Pošiljanje so bo poizkusilo ponovno izvesti ob spremembi internetne povezave ali če povlečete dol v oknu izhodne pošte.</string>
@@ -545,7 +544,6 @@
     <string name="title_advanced_actionbar_swap">Zamenjaj gumba za smeti in arhiviranje</string>
     <string name="title_advanced_actionbar_color">Za barvo ozadja vrstice z dejanji pogovorov uporabi barvo računa</string>
     <string name="title_advanced_category_header">Združi po kategorijah računa</string>
-    <string name="title_advanced_navbar_colorize">Obarvaj Androidovo vrstico za krmarjenje</string>
     <string name="title_advanced_list_count">Prikaži število sporočil ali pogovorov v vrhnji vrstici dejanj</string>
     <string name="title_advanced_bundled_fonts">Uporabi svežnje pisav</string>
     <string name="title_advanced_parse_classes">Razčleni slogovne predloge</string>
@@ -1003,7 +1001,7 @@
     <string name="title_delete_operation_flag">Opravila označevanja</string>
     <string name="title_delete_operation_delete">Opravila brisanja</string>
     <string name="title_delete_operation_deleted">Izbrisanih je bilo %1$d opravil.</string>
-    <string name="title_delete_contacts">Izbriši vidne krajevne stike?</string>
+    <string name="title_delete_contacts">Izbriši vse krajevne stike?</string>
     <string name="title_no_operations">Ni opravil na čakanju.</string>
     <string name="title_check_operations">Preverjanje za opravila</string>
     <string name="title_hint_operations">Izbris opravil lahko povzroči izginjanje sporočil in težave s sinhronizacijo.</string>

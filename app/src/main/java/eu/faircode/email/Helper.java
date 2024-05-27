@@ -93,7 +93,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.MimeTypeMap;
@@ -236,7 +235,7 @@ public class Helper {
     static final String REGEX_UUID = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 
     static final Pattern EMAIL_ADDRESS = Pattern.compile(
-            "[\\S&&[^\"@]]{1,256}" +
+            "[\\S&&[^\"@<>]]{1,256}" +
                     "\\@" +
                     "[\\p{L}0-9][\\p{L}0-9\\-\\_]{0,64}" +
                     "(" +
@@ -913,25 +912,6 @@ public class Helper {
 
     // View
 
-    static void setStatusBarColor(Activity activity, Integer color) {
-        if (!BuildConfig.DEBUG)
-            return;
-        if (activity == null)
-            return;
-        Window window = activity.getWindow();
-        if (window == null)
-            return;
-
-        if (color == null) {
-            //window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(Helper.resolveColor(window.getContext(), androidx.appcompat.R.attr.colorPrimaryDark));
-        } else {
-            //window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(color);
-        }
-    }
-
     static Integer actionBarHeight = null;
 
     static int getActionBarHeight(Context context) {
@@ -953,6 +933,18 @@ public class Helper {
             return Helper.dp2pixels(context, 56);
         else
             return context.getResources().getDimensionPixelSize(resid);
+    }
+
+    static @NonNull List<View> getViewsWithTag(@NonNull View view, @NonNull String tag) {
+        List<View> result = new ArrayList<>();
+        if (view != null && tag.equals(view.getTag()))
+            result.add(view);
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i <= group.getChildCount(); i++)
+                result.addAll(getViewsWithTag(group.getChildAt(i), tag));
+        }
+        return result;
     }
 
     static ObjectAnimator getFabAnimator(View fab, LifecycleOwner owner) {
@@ -1175,15 +1167,13 @@ public class Helper {
                 reportNoViewer(context, uri, ex);
             }
         } else {
-            boolean navbar_colorize = prefs.getBoolean("navbar_colorize", false);
             int colorPrimary = resolveColor(context, androidx.appcompat.R.attr.colorPrimary);
             int colorPrimaryDark = resolveColor(context, androidx.appcompat.R.attr.colorPrimaryDark);
 
             CustomTabColorSchemeParams.Builder schemes = new CustomTabColorSchemeParams.Builder()
                     .setToolbarColor(colorPrimary)
-                    .setSecondaryToolbarColor(colorPrimaryDark);
-            if (navbar_colorize)
-                schemes.setNavigationBarColor(colorPrimaryDark);
+                    .setSecondaryToolbarColor(colorPrimaryDark)
+                    .setNavigationBarColor(colorPrimaryDark);
 
             // https://developer.chrome.com/multidevice/android/customtabs
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder()
@@ -1531,6 +1521,12 @@ public class Helper {
         return "Google".equalsIgnoreCase(Build.MANUFACTURER);
     }
 
+    static boolean isPixelBeta() {
+        return (isGoogle() &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE &&
+                Build.PRODUCT != null && Build.PRODUCT.endsWith("_beta"));
+    }
+
     static boolean isSamsung() {
         return "Samsung".equalsIgnoreCase(Build.MANUFACTURER);
     }
@@ -1685,6 +1681,10 @@ public class Helper {
 
     static boolean isAndroid12() {
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S);
+    }
+
+    static boolean isAndroid15() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.UPSIDE_DOWN_CAKE);
     }
 
     static String getMIUIVersion() {
@@ -2096,21 +2096,23 @@ public class Helper {
     }
 
     static void showKeyboard(final View view) {
-        try {
-            Log.i("showKeyboard view=" + view);
-            new SoftwareKeyboardControllerCompat(view).show();
-        } catch (Throwable ex) {
-            Log.e(ex);
-        }
+        view.post(new RunnableEx("showKeyboard") {
+            @Override
+            protected void delegate() {
+                Log.i("showKeyboard view=" + view);
+                new SoftwareKeyboardControllerCompat(view).show();
+            }
+        });
     }
 
     static void hideKeyboard(final View view) {
-        try {
-            Log.i("hideKeyboard view=" + view);
-            new SoftwareKeyboardControllerCompat(view).hide();
-        } catch (Throwable ex) {
-            Log.e(ex);
-        }
+        view.post(new RunnableEx("hideKeyboard") {
+            @Override
+            protected void delegate() {
+                Log.i("hideKeyboard view=" + view);
+                new SoftwareKeyboardControllerCompat(view).hide();
+            }
+        });
     }
 
     static boolean isKeyboardVisible(final View view) {

@@ -507,6 +507,8 @@
 <li><em>rule</em>: execute rule on body text</li>
 <li><em>expunge</em>: permanently delete messages</li>
 <li><em>report</em>: process delivery or read receipt (experimental)</li>
+<li><em>download</em>: async download of text and attachments (experimental)</li>
+<li><em>subject</em>: update subject</li>
 </ul>
 <p>Operations are processed only when there is a connection to the email server or when manually synchronizing. See also <a href="#faq16">this FAQ</a>.</p>
 <p><br /></p>
@@ -599,9 +601,10 @@
 <p>Note that this won’t work on devices without Google Play Store/Services, such as recent Huawei devices. In this case you will need to use an app password, see below.</p>
 <p><strong>Note that other email apps, possibly on other devices, which still use your account password could cause your account to be blocked!</strong></p>
 </blockquote>
-<p>If you use the Play store or GitHub version of FairEmail, you can use the quick setup wizard to easily setup a Gmail account and identity. The Gmail quick setup wizard is not available for third party builds, like the F-Droid build because Google approved the use of OAuth for official builds only. OAuth is also not available on devices without Google services, such as recent Huawei devices, in which case selecting an account will fail.</p>
-<p>The Gmail quick setup wizard won’t work if the Android account manager doesn’t work or doesn’t support Google accounts, which is typically the case if the account selection is being <em>canceled</em> right away.</p>
-<p>If you don’t want to use or can’t use an on-device Google account, for example on recent Huawei devices, you can <del>either enable access for “less secure apps” and use your account password (not advised)</del> or enable two factor authentication and use an app specific password. To use a password you can use the quick setup wizard and select <em>Other provider</em>.</p>
+<p>If you use the Play store or GitHub version of FairEmail, you can use the quick setup wizard to easily setup a Gmail account and identity. The Gmail quick setup wizard is not available for third party builds, like the F-Droid build because Google approved the use of OAuth for official builds only.</p>
+<p>When using OAuth with multiple Google accounts, other Google accounts probably need to be logged out first.</p>
+<p>The “<em>Gmail (Android)</em>” quick setup wizard won’t work if the Android account manager doesn’t work or doesn’t support Google accounts, which is typically the case if the account selection is being <em>canceled</em> right away.</p>
+<p>If you don’t want to use or can’t use OAuth or an on-device Google account, for example on recent Huawei devices, you can <del>either enable access for “less secure apps” and use your account password (not advised)</del> or enable two factor authentication and use an app specific password. To use a password you can use the quick setup wizard and select <em>Other provider</em>.</p>
 <p><strong>Important</strong>: sometimes Google issues this alert:</p>
 <p><em>[ALERT] Please log in via your web browser: https://support.google.com/mail/accounts/answer/78754 (Failure)</em></p>
 <p>This Google security check is triggered more often with <em>less secure apps</em> enabled, less with an app password, and hardly when using an on-device account (OAuth). You might see the error <em>OAUTH2 asked for more</em>, which basically says the connection is temporarily blocked, until you confirm it is you.</p>
@@ -676,7 +679,8 @@
 <p><br /></p>
 <p><a name="faq12"></a> <strong>(12) How does encryption/decryption work?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq12">Google Translate</a></p>
-<p>Communication with email servers is always encrypted, unless you explicitly turned this off. This question is about optional end-to-end encryption with PGP or S/MIME. The sender and recipient should first agree on this and exchange signed messages to transfer their public key to be able to send encrypted messages.</p>
+<p>Communication with email servers is always encrypted, unless you explicitly turned this off. This question is about optional end-to-end encryption with PGP or S/MIME.</p>
+<p>The sender and recipient should first agree on this and exchange signed messages to transfer their public key to be able to send encrypted messages. There is a gesture icon button just above the text of a received message on the right to verify a signature and store the public key.</p>
 <p><br /></p>
 <p><em>General</em></p>
 <p>Please <a href="https://en.wikipedia.org/wiki/Public-key_cryptography">see here</a> about how public/private key encryption works.</p>
@@ -989,6 +993,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <li><em>451 4.7.0 Temporary server error. Please try again later. PRX4 …</em> indicates a server configuration problem, please <a href="https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4">see here</a> or <a href="https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/">see here</a>.</li>
 <li><em>451 4.7.0 Temporary server error. Please try again later. PRX5 …</em> indicates a server configuration problem, please <a href="https://www.limilabs.com/qa/4471/451-4-7-0-temporary-server-error-please-try-again-later-prx5">see here</a></li>
 <li><em>571 5.7.1 Relay access denied</em>: please double check the username and email address in the advanced identity settings (via the manual setup).</li>
+<li><em>550 5.7.1.You must check for new mail before sending mail … Local senders are prohibited to send to local recipients without authentication</em>: did you enter a username/password and did you select either SSL/TLS or STARTTLS in the identity settings? You can try the identity option <em>Login before sending</em> (since version 1.2184).</li>
 <li>Please <a href="https://support.google.com/a/answer/3726730">see here</a> for more information and other SMTP error codes</li>
 </ul>
 <p>If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:</p>
@@ -1317,6 +1322,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p><a name="faq56"></a> <strong>(56) Can you add support for JMAP?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq56">Google Translate</a></p>
 <p>There are almost no providers offering the <a href="https://jmap.io/">JMAP</a> protocol, so it is not worth a lot of effort to add support for this to FairEmail.</p>
+<p>Moreover, the only available <a href="https://github.com/iNPUTmice/jmap">Java JMAP library</a> seems not to be maintained anymore.</p>
 <p><br /></p>
 <p><a name="faq57"></a> <strong>(57) Can I use HTML in signatures?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq57">Google Translate</a></p>
@@ -1498,28 +1504,38 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p>Note that a regular expression supports an <em>or</em> operator, so if you want to match multiple senders, you can do this:</p>
 <p><code>.*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*</code></p>
 <p>Note that <a href="https://developer.android.com/reference/java/util/regex/Pattern#DOTALL">dot all mode</a> is enabled to be able to match <a href="https://tools.ietf.org/html/rfc2822#section-3.2.3">unfolded headers</a>.</p>
+<p><br /></p>
+<p><strong>Expressions</strong></p>
 <p>Since version 1.2174 it is possible to use expression conditions, which is <a href="#faq125">experimental</a> for now.</p>
 <p>Please <a href="https://ezylang.github.io/EvalEx/references/references.html">see here</a> about which constants, operators and functions are available.</p>
 <p>The following extra variables are available:</p>
 <ul>
-<li><em>from</em> (array)</li>
-<li><em>to</em> (array)</li>
+<li><em>received</em> (long, unix epoch in milliseconds; since version 1.2179)</li>
+<li><em>from</em> (array of strings)</li>
+<li><em>to</em> (array of strings)</li>
 <li><em>subject</em> (string)</li>
 <li><em>text</em> (string)</li>
-<li><em>hasAttachments</em> (boolean)</li>
+<li><em>hasAttachments</em> (boolean; deprecated, use function <em>attachments()</em> instead)</li>
 </ul>
 <p>The following extra operators are available:</p>
 <ul>
-<li><em>contains</em> (contains substring)</li>
-<li><em>matches</em> (matches regex)</li>
+<li><em>contains</em> (string/array of strings contains substring)</li>
+<li><em>matches</em> (string/array of strings matches regex)</li>
 </ul>
 <p>The following extra functions are available:</p>
 <ul>
 <li><em>header(name)</em> (returns an array of header values for the named header)</li>
-<li><em>blocklist()</em> (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2176)</li>
+<li><em>blocklist()</em> (version 1.2176-1.2178; deprecated, use <em>onBlocklist()</em> instead)</li>
+<li><em>onBlocklist()</em> (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2179)</li>
+<li><em>hasMx()</em> (returns a boolean indicating if the from/reply-to address has an associated MX record; since version 1.2179)</li>
+<li><em>attachments()</em> (returns an integer indicating number of attachments; since version 1.2179)</li>
+<li><em>Jsoup()</em> (returns an array of selected strings; since version 1.2179)</li>
+<li><em>Size(array)</em> (returns the number of items in an array; since version 1.2179)</li>
+<li><em>knownContact()</em> (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)</li>
 </ul>
-<p>Example condition:</p>
-<p><code>header("X-Mailer") contains "Open-Xchange" &amp;&amp; from matches ".*service@.*" &amp;&amp; !hasAttachments</code></p>
+<p>Example conditions:</p>
+<p><code>header("X-Mailer") contains "Open-Xchange" &amp;&amp; from matches ".*service@.*"</code></p>
+<p><code>!onBlocklist() &amp;&amp; hasMx() &amp;&amp; attachments() &gt; 0</code></p>
 <p><br></p>
 <p><strong>Actions</strong></p>
 <p>You can select one of these actions to apply to matching messages:</p>
@@ -1731,11 +1747,11 @@ Target: Service</code></pre>
 <p><br /></p>
 <p><a name="faq82"></a> <strong>(82) What is a tracking image?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq82">Google Translate</a></p>
-<p>Please see <a href="https://en.wikipedia.org/wiki/Web_beacon">here</a> about what a tracking image exactly is. In short tracking images keep track if you opened a message.</p>
+<p>Please see <a href="https://en.wikipedia.org/wiki/Web_beacon">here</a> about what a tracking image is. In short, companies, organizations and even governments use tracking images to see if and when you opened a message.</p>
 <p>The BBC article ‘<a href="https://www.bbc.com/news/technology-56071437">Spy pixels in emails have become endemic</a>’ is worth reading.</p>
 <p>FairEmail will in most cases automatically recognize tracking images and replace them by this icon:</p>
 <p><img alt="Tracking image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_my_location_black_48dp.png" width="48" height="48" /></p>
-<p>Automatic recognition of tracking images can be disabled in the privacy settings.</p>
+<p>Automatic recognition of tracking images can be disabled in the privacy-settings tab page.</p>
 <p><br /></p>
 <p><a name="faq84"></a> <strong>(84) What are local contacts for?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq84">Google Translate</a></p>
@@ -2779,6 +2795,8 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p><a name="faq190"></a> <strong>(190) How do I use OpenAI (ChatGPT)?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq190">Google Translate</a></p>
 <p>OpenAI can only be used if configured and enabled.</p>
+<p><strong>Note that using OpenAI is not free (anymore) !</strong></p>
+<p><br></p>
 <p><strong>Setup</strong></p>
 <ul>
 <li>Create an account <a href="https://platform.openai.com/signup">here</a></li>
@@ -2788,17 +2806,22 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 </ul>
 <p><br></p>
 <p><strong>Usage</strong></p>
+<p><em>Editor</em></p>
 <p>Tap on the robot button in the top action bar of the message editor. The text in the message editor (if any) and the first part of the message being replied to (if any) will be used for <a href="https://platform.openai.com/docs/guides/chat/introduction">chat completion</a>. If text is selected in the message editor, only the selected text will be used, and it will be replaced by the answer. A maximum of 1,000 characters of the message being replied to will be used to avoid exceeding the token limit.</p>
 <p>For example: create a new draft and enter the text “<em>How far is the sun?</em>”, and tap on the robot button in the top action bar.</p>
 <p><br></p>
+<p><em>Summarize</em> (since version 1.2178)</p>
+<p>You can request a summary via the horizontal three-dots button just above the message text. It is possible to configure a button for this (a robot icon).</p>
+<p>The summary prompt text can be configured in the receive-settings tab page. The default is <em>Summarize the following text:</em>.</p>
+<p>Since version 1.2182, it is possible to configure a quick action button and a swipe action to summarize a message. Since version 1.2183, it is possible to use a rule action to summarize a message and use it as a preview text.</p>
+<p><br></p>
 <p>OpenAI isn’t very fast, so be patient. Sometimes a timeout error occurs because the app is not receiving a response from OpenAI.</p>
 <p><br></p>
-<p>Depending on the ChatGPT account (free or paid) there are usage limits. If you exceed the limit, there will be an error message like this:</p>
+<p>If you exceed <a href="https://platform.openai.com/docs/guides/rate-limits">your usage limit</a>, there will be an error message like this:</p>
 <p><em>Error 429: Too Many Requests insufficient_quota: You exceeded your current quota, please check your plan and billing details</em></p>
-<p>In this case, you’ll either need to wait, or upgrade your ChatGPT plan. Please <a href="https://help.openai.com/en/articles/6843909-rate-limits-and-429-too-many-requests-errors">see here</a> for details.</p>
+<p>Note that you are required to switch to a <a href="https://openai.com/api/pricing/">paid plan</a> after the testing period.</p>
 <p><br></p>
-<p>You can select the <a href="https://platform.openai.com/docs/models/overview">model</a>, configure the <a href="https://platform.openai.com/docs/api-reference/chat/create#chat/create-temperature">temperature</a> and enable <a href="https://platform.openai.com/docs/api-reference/moderations">moderation</a> in the integration settings.</p>
-<p>If you have access to GPT-4, you can change the model name to <a href="https://platform.openai.com/docs/models/gpt-4">gpt-4</a> in the integration settings. There is currently a <a href="https://openai.com/waitlist/gpt-4-api">waitlist</a> for API GPT-4 access.</p>
+<p>You can select the <a href="https://platform.openai.com/docs/models/overview">model</a>, and configure the <a href="https://platform.openai.com/docs/api-reference/chat/create#chat/create-temperature">temperature</a>.</p>
 <p>Please read the <a href="https://openai.com/policies/privacy-policy">privacy policy</a> of OpenAI, and perhaps <a href="https://katedowninglaw.com/2023/03/10/openais-massive-data-grab/">this article</a> and <a href="https://www.ncsc.gov.uk/blog-post/chatgpt-and-large-language-models-whats-the-risk">this article</a> too.</p>
 <p>FairEmail does not use third-party libraries to avoid being tracked when OpenAI is not being used.</p>
 <p><br></p>
@@ -2808,7 +2831,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <li>In the integration settings enter the URI https://api.deepinfra.com/v1/openai, an API key and the model name</li>
 </ul>
 <p><br></p>
-<p>This feature is experimental and available in the GitHub version only and requires version 1.2053 or later.</p>
+<p>This feature is experimental and requires version 1.2053 or later for the GitHub version and version 1.2182 or later for the Play Store version.</p>
 <p><br></p>
 <p><a name="faq191"></a> <strong>(191) How do I download and keep older messages on my device?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq191">Google Translate</a></p>
@@ -2915,6 +2938,9 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>Basically, an outgoing message is either in the draft messages folder, the outbox, or the sent messages folder.</p>
 <p><br></p>
 <p><a name="faq204"></a> <strong>(204) How do I use Gemini?</strong></p>
+<p>Gemini can only be used if configured and enabled.</p>
+<p><strong>Note that using Gemini is not free (anymore) !</strong></p>
+<p><br></p>
 <p>To use <a href="https://gemini.google.com/">Gemini</a>, please follow these steps:</p>
 <ol type="1">
 <li>Check if your country <a href="https://ai.google.dev/available_regions">is supported</a></li>
@@ -2922,9 +2948,10 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <li>Enter the API key in the integration settings tab page</li>
 <li>Enable Gemini integration in the integration settings tab page</li>
 </ol>
+<p><br></p>
 <p>For usage instructions, please see <a href="#faq190">this FAQ</a>.</p>
 <p>Please read the privacy policy of <a href="https://support.google.com/gemini/answer/13594961">Gemini</a>. FairEmail does not use third-party libraries to avoid being tracked when Gemini is not being used.</p>
-<p>This feature is experimental and available in the GitHub version only and requires version 1.2171 or later.</p>
+<p>This feature is experimental and requires version 1.2171 or later for the GitHub version and version 1.2182 or later for the Play Store version.</p>
 <p><br></p>
 <h2>
 <a name="get-support"></a>Get support

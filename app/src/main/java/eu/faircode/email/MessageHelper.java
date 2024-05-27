@@ -69,6 +69,7 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.jcajce.interfaces.EdDSAPublicKey;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -192,15 +193,18 @@ public class MessageHelper {
 
     private static final int MAX_HEADER_LENGTH = 998;
     private static final int MAX_MESSAGE_SIZE = 10 * 1024 * 1024; // bytes
+    private static final int MAX_KEYWORDS = 32;
+    private static final int MAX_LABELS = 32;
     private static final long ATTACHMENT_PROGRESS_UPDATE = 1500L; // milliseconds
     private static final int MAX_META_EXCERPT = 1024; // characters
     private static final int FORMAT_FLOWED_LINE_LENGTH = 72; // characters
     private static final int MAX_DIAGNOSTIC = 250; // characters
-    private static final int DKIM_MIN_TEXT = 100; // characters
     private static final int DKIM_MIN_KEY_LENGTH = 1024; //  bits
 
     private static final String DKIM_SIGNATURE = "DKIM-Signature";
+    private static final String GOOGLE_DKIM_SIGNATURE = "X-Google-DKIM-Signature";
     private static final String ARC_SEAL = "ARC-Seal";
+    private static final String AUTHENTICATION_RESULTS = "Authentication-Results";
     private static final String ARC_AUTHENTICATION_RESULTS = "ARC-Authentication-Results";
     private static final String ARC_MESSAGE_SIGNATURE = "ARC-Message-Signature";
 
@@ -226,7 +230,9 @@ public class MessageHelper {
             "donotreply",
             "do.not.reply",
             "do-not-reply",
-            "nicht.antworten"
+            "nicht.antworten",
+            "nepasrepondre",
+            "ne-pas-repondre"
     ));
 
     static final String FLAG_FORWARDED = "$Forwarded";
@@ -241,6 +247,7 @@ public class MessageHelper {
     static final String FLAG_COMPLAINT = "Complaint";
     static final String FLAG_LOW_IMPORTANCE = "$LowImportance";
     static final String FLAG_HIGH_IMPORTANCE = "$HighImportance";
+    static final String FLAG_PHISHING = "$Phishing"; // Gmail
 
     // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
     // Not black listed: Gmail $Phishing
@@ -1482,7 +1489,7 @@ public class MessageHelper {
 
     boolean isReport() {
         try {
-            return imessage.isMimeType("multipart/report");
+            return isMimeType(imessage, "multipart/report");
         } catch (Throwable ex) {
             Log.w(ex);
             return false;
@@ -1521,14 +1528,13 @@ public class MessageHelper {
     @NonNull
     String[] getKeywords() throws MessagingException {
         List<String> keywords = Arrays.asList(imessage.getFlags().getUserFlags());
+        while (keywords.size() > MAX_KEYWORDS)
+            keywords.remove(keywords.size() - 1);
         Collections.sort(keywords);
         return keywords.toArray(new String[0]);
     }
 
     static boolean showKeyword(String keyword) {
-        if (BuildConfig.DEBUG)
-            return true;
-
         int len = FLAG_BLACKLIST.size();
         for (int i = 0; i < len; i++)
             if (FLAG_BLACKLIST.get(i).equalsIgnoreCase(keyword))
@@ -1660,7 +1666,7 @@ public class MessageHelper {
         try {
             ensureStructure();
 
-            if (imessage.isMimeType("multipart/report")) {
+            if (isMimeType(imessage, "multipart/report")) {
                 ContentType ct = new ContentType(imessage.getContentType());
                 String reportType = ct.getParameter("report-type");
                 if ("delivery-status".equalsIgnoreCase(reportType) ||
@@ -1962,6 +1968,9 @@ public class MessageHelper {
                 if (!label.startsWith("\\"))
                     labels.add(label);
 
+        while (labels.size() > MAX_LABELS)
+            labels.remove(labels.size() - 1);
+
         Collections.sort(labels);
 
         return labels.toArray(new String[0]);
@@ -2154,11 +2163,11 @@ public class MessageHelper {
         List<String> all = new ArrayList<>();
 
         // https://datatracker.ietf.org/doc/html/rfc8601
-        String[] results = imessage.getHeader("Authentication-Results");
+        String[] results = imessage.getHeader(AUTHENTICATION_RESULTS);
         if (results != null)
             all.addAll(Arrays.asList(results));
 
-        String[] aresults = imessage.getHeader("ARC-Authentication-Results");
+        String[] aresults = imessage.getHeader(ARC_AUTHENTICATION_RESULTS);
         if (aresults != null)
             all.addAll(Arrays.asList(aresults));
 
@@ -2173,48 +2182,77 @@ public class MessageHelper {
     }
 
     static Boolean getAuthentication(String type, String[] headers) {
-        if (headers == null)
+        // https://tools.ietf.org/html/rfc7601
+
+        if (headers == null || headers.length == 0)
             return null;
 
-        // https://tools.ietf.org/html/rfc7601
-        Boolean result = null;
-        for (String header : headers) {
-            String v = getKeyValues(header).get(type);
-            if (v == null)
-                continue;
-            String[] val = v.split("\\s+");
-            if (val.length > 0) {
-                if ("fail".equals(val[0])) {
-                    if ("dmarc".equals(type)) {
-                        // dmarc=fail (p=NONE sp=NONE dis=NONE) header.from=example.com
-                        int s = v.indexOf('(');
-                        int e = v.indexOf(')');
-                        if (s > 0 && e > s) {
-                            Boolean none = null;
-                            for (String p : v.substring(s + 1, e).split("\\s+")) {
-                                String[] kv = p.split("=");
-                                // Without getting the DMARC DNS record, it isn't possible to check the sub/domain
-                                if (kv.length == 2 &&
-                                        ("p".equalsIgnoreCase(kv[0]) || "sp".equalsIgnoreCase(kv[0])) &&
-                                        "none".equalsIgnoreCase(kv[1]))
-                                    none = (none == null || none) && "none".equalsIgnoreCase(kv[1]);
-                            }
-                            if (none != null && none)
-                                continue; // neutral
-                        }
-                    }
-                    result = false;
-                } else if ("pass".equals(val[0])) {
-                    // https://www.rfc-editor.org/rfc/rfc7489#section-3.1.1
-                    if ("dkim".equals(type))
-                        return true;
-                    if (result == null)
-                        result = true;
-                }
-            }
+        String v = getKeyValues(headers[0]).get(type);
+        if (v == null)
+            return null;
+
+        String[] val = v.split("\\s+");
+        if (val.length == 0)
+            return null;
+
+        if ("pass".equals(val[0]))
+            return true;
+        else if ("none".equals(val[0]))
+            return null;
+        else
+            return false; // fail, policy, neutral, temperror, permerror
+    }
+
+    Address[] getMailFrom(String[] headers) {
+        if (headers == null || headers.length == 0)
+            return null;
+
+        Address[] mailfrom = null;
+        String spf = getKeyValues(headers[0]).get("spf");
+        if (spf == null)
+            return null;
+
+        int i = spf.indexOf(SMTP_MAILFORM + "=");
+        if (i < 0)
+            return null;
+
+        String v = spf.substring(i + SMTP_MAILFORM.length() + 1);
+        int s = v.indexOf(' ');
+        if (s > 0)
+            v = v.substring(0, s);
+
+        if (v.startsWith("\"") && v.endsWith("\""))
+            v = v.substring(1, v.length() - 1);
+
+        try {
+            mailfrom = InternetAddress.parseHeader(v, false);
+        } catch (Throwable ex) {
+            Log.w(ex);
         }
 
-        return result;
+        return mailfrom;
+    }
+
+    String getSigner(String[] headers) {
+        if (headers == null || headers.length == 0)
+            return null;
+
+        int semi = headers[0].indexOf(';');
+        if (semi < 0)
+            return null;
+        String signer = headers[0].substring(0, semi).trim();
+
+        if (signer.toLowerCase(Locale.ROOT).startsWith("i=")) {
+            int semi2 = headers[0].indexOf(';', semi + 1);
+            if (semi2 < 0)
+                return null;
+            signer = headers[0].substring(semi + 1, semi2).trim();
+        }
+
+        if (TextUtils.isEmpty(signer))
+            signer = null;
+
+        return signer;
     }
 
     boolean getSPF() throws MessagingException {
@@ -2244,24 +2282,23 @@ public class MessageHelper {
             }
 
             // https://datatracker.ietf.org/doc/html/rfc6376/
-            List<String> headers = new ArrayList<>();
+            List<Pair<String, String[]>> list = new ArrayList<>();
+            list.add(new Pair<>(DKIM_SIGNATURE, amessage.getHeader(DKIM_SIGNATURE)));
+            list.add(new Pair<>(ARC_MESSAGE_SIGNATURE, amessage.getHeader(ARC_MESSAGE_SIGNATURE)));
+            list.add(new Pair<>(DKIM_SIGNATURE, amessage.getHeader(GOOGLE_DKIM_SIGNATURE)));
 
-            String[] dkim_headers = amessage.getHeader(DKIM_SIGNATURE);
-            if (dkim_headers != null && dkim_headers.length > 0)
-                headers.addAll(Arrays.asList(dkim_headers));
+            boolean found = false;
+            for (Pair<String, String[]> entry : list)
+                if (entry.second != null)
+                    for (String header : entry.second) {
+                        found = true;
+                        String signer = verifySignatureHeader(context, header, entry.first, amessage);
+                        if (signer != null && !signers.contains(signer))
+                            signers.add(signer);
+                    }
 
-            String[] arc_headers = amessage.getHeader(ARC_MESSAGE_SIGNATURE);
-            if (arc_headers != null && arc_headers.length > 0)
-                headers.addAll(Arrays.asList(arc_headers));
-
-            if (headers.size() == 0)
+            if (!found)
                 return signers;
-
-            for (String header : headers) {
-                String signer = verifySignatureHeader(context, header, DKIM_SIGNATURE, amessage);
-                if (signer != null && !signers.contains(signer))
-                    signers.add(signer);
-            }
 
             Log.i("DKIM signers=" + TextUtils.join(",", signers));
 
@@ -2349,9 +2386,10 @@ public class MessageHelper {
                     }
                 }
             }
-
         } catch (Throwable ex) {
             Log.e("DKIM", ex);
+            EntityLog.log(context, EntityLog.Type.Debug3, "DKIM failed" +
+                    " ex=" + Log.formatThrowable(ex));
         }
 
         return signers;
@@ -2378,7 +2416,9 @@ public class MessageHelper {
         }
 
         try {
+            // https://serverfault.com/questions/591655/what-domain-name-should-appear-in-a-dkim-signature
             String signer = kv.get("d");
+
             String dns = kv.get("s") + "._domainkey." + signer;
             Log.i("DKIM lookup " + dns);
             DnsHelper.DnsRecord[] records = DnsHelper.lookup(context, dns, "txt");
@@ -2390,6 +2430,18 @@ public class MessageHelper {
             // DKIM version and key type are not always present
             //  v=DKIM1; k=rsa; p=...
             //  v=DKIM1; k=ed25519; p=...
+
+            String note = dk.get("n");
+            if (!TextUtils.isEmpty(note))
+                Log.i("DKIM note=" + note);
+
+            // https://datatracker.ietf.org/doc/html/rfc6376#section-3.5
+            Integer t = Helper.parseInt(kv.get("t")); // Works until 2038
+            if (t != null)
+                Log.i("DKIM timestamp=" + new Date(t * 1000L));
+            Integer x = Helper.parseInt(kv.get("x"));
+            if (x != null)
+                Log.i("DKIM expiry=" + new Date(x * 1000L));
 
             String canonic = kv.get("c");
             Log.i("DKIM canonicalization=" + canonic);
@@ -2497,13 +2549,8 @@ public class MessageHelper {
                 throw new IllegalArgumentException(c[1]);
 
             String length = kv.get("l");
-            if (!TextUtils.isEmpty(length) && TextUtils.isDigitsOnly(length)) {
-                int l = Integer.parseInt(length);
-                if (l < DKIM_MIN_TEXT)
-                    throw new IllegalArgumentException("Body length " + l + " < " + DKIM_MIN_TEXT);
-                if (l < body.length())
-                    body = body.substring(0, l);
-            }
+            if (!TextUtils.isEmpty(length))
+                throw new IllegalArgumentException("Length l=" + length);
 
             Log.i("DKIM body=" + body.replace("\r\n", "|"));
 
@@ -2513,6 +2560,10 @@ public class MessageHelper {
             String pubkey = dk.get("p");
             if (pubkey == null)
                 return null;
+            if ("".equals(pubkey)) {
+                Log.i("DKIM key revoked");
+                return null;
+            }
 
             String p = pubkey.replaceAll("\\s+", "");
             Log.i("DKIM pubkey=" + p);
@@ -2554,55 +2605,58 @@ public class MessageHelper {
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
+            else if (pubKey instanceof EdDSAPublicKey) {
+                Log.i("DKIM EdDSA pubkey");
+            } else
+                Log.i("DKIM key class=" + pubKey.getClass());
 
             sig.initVerify(pubKey);
             sig.update(data);
 
             boolean verified = sig.verify(signature);
-            Log.i("DKIM valid=" + verified +
+            String msg = "DKIM valid=" + verified +
+                    " header=" + name +
                     " algo=" + salgo +
                     " dns=" + dns +
-                    " from=" + formatAddresses(getFrom()));
+                    " from=" + formatAddresses(getFrom());
+            Log.i(msg);
+            EntityLog.log(context, verified ? EntityLog.Type.Debug2 : EntityLog.Type.Debug3, msg);
 
             if (verified)
                 return signer;
         } catch (Throwable ex) {
             Log.e("DKIM", ex);
+            Address[] from;
+            try {
+                from = getFrom();
+            } catch (Throwable ignored) {
+                from = null;
+            }
+            EntityLog.log(context, EntityLog.Type.Debug3, "DKIM failed" +
+                    " from=" + formatAddresses(from) +
+                    " ex=" + Log.formatThrowable(ex));
         }
 
         return null;
     }
 
-    Address[] getMailFrom(String[] headers) {
-        if (headers == null)
-            return null;
-
-        Address[] mailfrom = null;
-        for (String header : headers) {
-            String spf = getKeyValues(header).get("spf");
-            if (spf == null)
-                continue;
-
-            int i = spf.indexOf(SMTP_MAILFORM + "=");
-            if (i < 0)
-                continue;
-
-            String v = spf.substring(i + SMTP_MAILFORM.length() + 1);
-            int s = v.indexOf(' ');
-            if (s > 0)
-                v = v.substring(0, s);
-
-            if (v.startsWith("\"") && v.endsWith("\""))
-                v = v.substring(1, v.length() - 1);
-
-            try {
-                mailfrom = InternetAddress.parseHeader(v, false);
-            } catch (Throwable ex) {
-                Log.w(ex);
+    boolean isAligned(Context context, List<String> signers, Address[] return_path, Address[] smtp_from, Address[] from) {
+        List<Address> envelop = new ArrayList<>();
+        if (return_path != null)
+            envelop.addAll(Arrays.asList(return_path));
+        if (from != null)
+            envelop.addAll(Arrays.asList(from));
+        if (smtp_from != null)
+            envelop.addAll(Arrays.asList(smtp_from));
+        for (String signer : signers)
+            for (Address a : envelop) {
+                String domain = UriHelper.getEmailDomain(((InternetAddress) a).getAddress());
+                if (signer != null && domain != null && Objects.equals(
+                        UriHelper.getRootDomain(context, signer.toLowerCase(Locale.ROOT)),
+                        UriHelper.getRootDomain(context, domain.toLowerCase(Locale.ROOT))))
+                    return true;
             }
-        }
-
-        return mailfrom;
+        return false;
     }
 
     private String fixEncoding(String name, String header) {
@@ -3129,7 +3183,8 @@ public class MessageHelper {
     }
 
     private static boolean isLocal(String value) {
-        if (value.contains("localhost") ||
+        if (value.contains("exim") || // with sa-scanned / with dspam-scanned
+                value.contains("localhost") ||
                 value.contains("127.0.0.1") ||
                 value.contains("[::1]"))
             return true;
@@ -4806,7 +4861,7 @@ public class MessageHelper {
             try {
                 MimePart part = imessage;
 
-                if (part.isMimeType("multipart/mixed")) {
+                if (isMimeType(part, "multipart/mixed")) {
                     Object content = part.getContent();
 
                     if (content instanceof String)
@@ -4816,10 +4871,10 @@ public class MessageHelper {
                         Multipart mp = (Multipart) content;
                         for (int i = 0; i < mp.getCount(); i++) {
                             BodyPart bp = mp.getBodyPart(i);
-                            if (bp.isMimeType("multipart/signed") || bp.isMimeType("multipart/encrypted")) {
+                            if (isMimeType(bp, "multipart/signed") || isMimeType(bp, "multipart/encrypted")) {
                                 part = (MimePart) bp;
                                 break;
-                            } else if (bp.isMimeType("application/pgp-encrypted") && i + 1 < mp.getCount()) {
+                            } else if (isMimeType(bp, "application/pgp-encrypted") && i + 1 < mp.getCount()) {
                                 // Workaround Outlook problem
                                 //  --_xxxoutlookfr_
                                 // Content-Type: text/plain; charset="us-ascii"
@@ -4842,7 +4897,7 @@ public class MessageHelper {
                     }
                 }
 
-                if (part.isMimeType("multipart/signed")) {
+                if (isMimeType(part, "multipart/signed")) {
                     ContentType ct = new ContentType(part.getContentType());
                     String protocol = ct.getParameter("protocol");
                     if ("application/pgp-signature".equals(protocol) ||
@@ -4894,7 +4949,7 @@ public class MessageHelper {
                         }
                     } else
                         Log.e(ct.toString());
-                } else if (part.isMimeType("multipart/encrypted")) {
+                } else if (isMimeType(part, "multipart/encrypted")) {
                     ContentType ct = new ContentType(part.getContentType());
                     String protocol = ct.getParameter("protocol");
                     if ("application/pgp-encrypted".equals(protocol) || protocol == null) {
@@ -4924,8 +4979,8 @@ public class MessageHelper {
                         }
                     } else
                         Log.e(ct.toString());
-                } else if (part.isMimeType("application/pkcs7-mime") ||
-                        part.isMimeType("application/x-pkcs7-mime")) {
+                } else if (isMimeType(part, "application/pkcs7-mime") ||
+                        isMimeType(part, "application/x-pkcs7-mime")) {
                     ContentType ct = new ContentType(part.getContentType());
                     String smimeType = ct.getParameter("smime-type");
                     if ("enveloped-data".equalsIgnoreCase(smimeType)) {
@@ -5013,7 +5068,7 @@ public class MessageHelper {
                 Log.e(ex);
             }
 
-            if (part.isMimeType("multipart/*")) {
+            if (isMimeType(part, "multipart/*")) {
                 Multipart multipart;
                 Object content = part.getContent(); // Should always be Multipart
 
@@ -5176,7 +5231,7 @@ public class MessageHelper {
                 Boolean related = null;
                 if (parent != null)
                     try {
-                        related = parent.isMimeType("multipart/related");
+                        related = isMimeType(parent, "multipart/related");
                     } catch (MessagingException ex) {
                         Log.w(ex);
                     }
@@ -5218,6 +5273,19 @@ public class MessageHelper {
                 Log.w(ex);
             parts.warnings.add(Log.formatThrowable(ex, false));
         }
+    }
+
+    private static boolean isMimeType(Part part, String mimeType) throws MessagingException {
+        if (mimeType.endsWith("/*"))
+            return part.isMimeType(mimeType);
+
+        if (part.isMimeType(mimeType)) {
+            ContentType ct = new ContentType(part.getContentType());
+            if (!"*".equals(ct.getSubType()))
+                return true;
+        }
+
+        return false;
     }
 
     private Object tryParseMultipart(String text, String contentType) {
@@ -5580,7 +5648,7 @@ public class MessageHelper {
                     .append('\n');
 
             if (BuildConfig.DEBUG &&
-                    !part.isMimeType("multipart/*")) {
+                    !isMimeType(part, "multipart/*")) {
                 Object content = part.getContent();
                 if (content instanceof String) {
                     String text = (String) content;
@@ -5615,7 +5683,7 @@ public class MessageHelper {
 
             ssb.append('\n');
 
-            if (part.isMimeType("multipart/*")) {
+            if (isMimeType(part, "multipart/*")) {
                 Multipart multipart = (Multipart) part.getContent();
                 for (int i = 0; i < multipart.getCount(); i++)
                     try {

@@ -550,6 +550,8 @@ The low priority status bar notification shows the number of pending operations,
 * *rule*: execute rule on body text
 * *expunge*: permanently delete messages
 * *report*: process delivery or read receipt (experimental)
+* *download*: async download of text and attachments (experimental)
+* *subject*: update subject
 
 Operations are processed only when there is a connection to the email server or when manually synchronizing.
 See also [this FAQ](#faq16).
@@ -709,12 +711,13 @@ If you use the Play store or GitHub version of FairEmail,
 you can use the quick setup wizard to easily setup a Gmail account and identity.
 The Gmail quick setup wizard is not available for third party builds, like the F-Droid build
 because Google approved the use of OAuth for official builds only.
-OAuth is also not available on devices without Google services, such as recent Huawei devices, in which case selecting an account will fail.
 
-The Gmail quick setup wizard won't work if the Android account manager doesn't work or doesn't support Google accounts,
+When using OAuth with multiple Google accounts, other Google accounts probably need to be logged out first.
+
+The "*Gmail (Android)*" quick setup wizard won't work if the Android account manager doesn't work or doesn't support Google accounts,
 which is typically the case if the account selection is being *canceled* right away.
 
-If you don't want to use or can't use an on-device Google account, for example on recent Huawei devices,
+If you don't want to use or can't use OAuth or an on-device Google account, for example on recent Huawei devices,
 you can ~~either enable access for "less secure apps" and use your account password (not advised)~~
 or enable two factor authentication and use an app specific password.
 To use a password you can use the quick setup wizard and select *Other provider*.
@@ -912,7 +915,9 @@ POP3 is supported!
 
 Communication with email servers is always encrypted, unless you explicitly turned this off.
 This question is about optional end-to-end encryption with PGP or S/MIME.
+
 The sender and recipient should first agree on this and exchange signed messages to transfer their public key to be able to send encrypted messages.
+There is a gesture icon button just above the text of a received message on the right to verify a signature and store the public key.
 
 <br />
 
@@ -1607,6 +1612,7 @@ Too large messages and triggering the spam filter of an email server are the mos
 * *451 4.7.0 Temporary server error. Please try again later. PRX4 ...* indicates a server configuration problem, please [see here](https://www.limilabs.com/blog/office365-temporary-server-error-please-try-again-later-prx4) or [see here](https://judeperera.wordpress.com/2019/10/11/fixing-451-4-7-0-temporary-server-error-please-try-again-later-prx4/).
 * *451 4.7.0 Temporary server error. Please try again later. PRX5 ...* indicates a server configuration problem, please [see here](https://www.limilabs.com/qa/4471/451-4-7-0-temporary-server-error-please-try-again-later-prx5)
 * *571 5.7.1 Relay access denied*: please double check the username and email address in the advanced identity settings (via the manual setup).
+* *550 5.7.1.You must check for new mail before sending mail ... Local senders are prohibited to send to local recipients without authentication*: did you enter a username/password and did you select either SSL/TLS or STARTTLS in the identity settings? You can try the identity option *Login before sending* (since version 1.2184).
 * Please [see here](https://support.google.com/a/answer/3726730) for more information and other SMTP error codes
 
 If you want to use the Gmail SMTP server to workaround a too strict outgoing spam filter or to improve delivery of messages:
@@ -2390,6 +2396,8 @@ Then use the three dot action button to execute the desired action.
 There are almost no providers offering the [JMAP](https://jmap.io/) protocol,
 so it is not worth a lot of effort to add support for this to FairEmail.
 
+Moreover, the only available [Java JMAP library](https://github.com/iNPUTmice/jmap) seems not to be maintained anymore.
+
 <br />
 
 <a name="faq57"></a>
@@ -2755,31 +2763,44 @@ Note that a regular expression supports an *or* operator, so if you want to matc
 Note that [dot all mode](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) is enabled
 to be able to match [unfolded headers](https://tools.ietf.org/html/rfc2822#section-3.2.3).
 
+<br />
+
+**Expressions**
+
 Since version 1.2174 it is possible to use expression conditions, which is [experimental](#faq125) for now.
 
 Please [see here](https://ezylang.github.io/EvalEx/references/references.html) about which constants, operators and functions are available.
 
 The following extra variables are available:
 
-* *from* (array)
-* *to* (array)
+* *received* (long, unix epoch in milliseconds; since version 1.2179)
+* *from* (array of strings)
+* *to* (array of strings)
 * *subject* (string)
 * *text* (string)
-* *hasAttachments* (boolean)
+* *hasAttachments* (boolean; deprecated, use function *attachments()* instead)
 
 The following extra operators are available:
 
-* *contains* (contains substring)
-* *matches* (matches regex)
+* *contains* (string/array of strings contains substring)
+* *matches* (string/array of strings matches regex)
 
 The following extra functions are available:
 
 * *header(name)* (returns an array of header values for the named header)
-* *blocklist()* (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2176)
+* *blocklist()* (version 1.2176-1.2178; deprecated, use *onBlocklist()* instead)
+* *onBlocklist()* (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2179)
+* *hasMx()* (returns a boolean indicating if the from/reply-to address has an associated MX record; since version 1.2179)
+* *attachments()* (returns an integer indicating number of attachments; since version 1.2179)
+* *Jsoup()* (returns an array of selected strings; since version 1.2179)
+* *Size(array)* (returns the number of items in an array; since version 1.2179)
+* *knownContact()* (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)
 
-Example condition:
+Example conditions:
 
-```header("X-Mailer") contains "Open-Xchange" && from matches ".*service@.*" && !hasAttachments```
+```header("X-Mailer") contains "Open-Xchange" && from matches ".*service@.*"```
+
+```!onBlocklist() && hasMx() && attachments() > 0```
 
 <br>
 
@@ -3199,8 +3220,8 @@ The original message view will use a dark background when using a dark theme for
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq82)
 
-Please see [here](https://en.wikipedia.org/wiki/Web_beacon) about what a tracking image exactly is.
-In short tracking images keep track if you opened a message.
+Please see [here](https://en.wikipedia.org/wiki/Web_beacon) about what a tracking image is.
+In short, companies, organizations and even governments use tracking images to see if and when you opened a message.
 
 The BBC article '[Spy pixels in emails have become endemic](https://www.bbc.com/news/technology-56071437)' is worth reading.
 
@@ -3208,7 +3229,7 @@ FairEmail will in most cases automatically recognize tracking images and replace
 
 <img alt="Tracking image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/baseline_my_location_black_48dp.png" width="48" height="48" />
 
-Automatic recognition of tracking images can be disabled in the privacy settings.
+Automatic recognition of tracking images can be disabled in the privacy-settings tab page.
 
 <br />
 
@@ -5554,6 +5575,10 @@ Cloud sync is an experimental feature. It is not available for the Play Store ve
 
 OpenAI can only be used if configured and enabled.
 
+**Note that using OpenAI is not free (anymore) !**
+
+<br>
+
 **Setup**
 
 * Create an account [here](https://platform.openai.com/signup)
@@ -5565,6 +5590,8 @@ OpenAI can only be used if configured and enabled.
 
 **Usage**
 
+*Editor*
+
 Tap on the robot button in the top action bar of the message editor.
 The text in the message editor (if any) and the first part of the message being replied to (if any)
 will be used for [chat completion](https://platform.openai.com/docs/guides/chat/introduction).
@@ -5575,25 +5602,33 @@ For example: create a new draft and enter the text "*How far is the sun?*", and 
 
 <br>
 
+*Summarize* (since version 1.2178)
+
+You can request a summary via the horizontal three-dots button just above the message text.
+It is possible to configure a button for this (a robot icon).
+
+The summary prompt text can be configured in the receive-settings tab page.
+The default is *Summarize the following text:*.
+
+Since version 1.2182, it is possible to configure a quick action button and a swipe action to summarize a message.
+Since version 1.2183, it is possible to use a rule action to summarize a message and use it as a preview text.
+
+<br>
+
 OpenAI isn't very fast, so be patient. Sometimes a timeout error occurs because the app is not receiving a response from OpenAI.
 
 <br>
 
-Depending on the ChatGPT account (free or paid) there are usage limits. If you exceed the limit, there will be an error message like this:
+If you exceed [your usage limit](https://platform.openai.com/docs/guides/rate-limits), there will be an error message like this:
 
 *Error 429: Too Many Requests insufficient_quota: You exceeded your current quota, please check your plan and billing details*
 
-In this case, you'll either need to wait, or upgrade your ChatGPT plan.
-Please [see here](https://help.openai.com/en/articles/6843909-rate-limits-and-429-too-many-requests-errors) for details.
+Note that you are required to switch to a [paid plan](https://openai.com/api/pricing/) after the testing period.
 
 <br>
 
 You can select the [model](https://platform.openai.com/docs/models/overview),
-configure the [temperature](https://platform.openai.com/docs/api-reference/chat/create#chat/create-temperature)
-and enable [moderation](https://platform.openai.com/docs/api-reference/moderations) in the integration settings.
-
-If you have access to GPT-4, you can change the model name to [gpt-4](https://platform.openai.com/docs/models/gpt-4) in the integration settings.
-There is currently a [waitlist](https://openai.com/waitlist/gpt-4-api) for API GPT-4 access.
+and configure the [temperature](https://platform.openai.com/docs/api-reference/chat/create#chat/create-temperature).
 
 Please read the [privacy policy](https://openai.com/policies/privacy-policy) of OpenAI,
 and perhaps [this article](https://katedowninglaw.com/2023/03/10/openais-massive-data-grab/)
@@ -5610,7 +5645,7 @@ It is possible to use **DeepInfra** too (since version 1.2132).
 
 <br>
 
-This feature is experimental and available in the GitHub version only and requires version 1.2053 or later.
+This feature is experimental and requires version 1.2053 or later for the GitHub version and version 1.2182 or later for the Play Store version.
 
 <br>
 
@@ -5858,6 +5893,12 @@ Basically, an outgoing message is either in the draft messages folder, the outbo
 <a name="faq204"></a>
 **(204) How do I use Gemini?**
 
+Gemini can only be used if configured and enabled.
+
+**Note that using Gemini is not free (anymore) !**
+
+<br>
+
 To use [Gemini](https://gemini.google.com/), please follow these steps:
 
 1. Check if your country [is supported](https://ai.google.dev/available_regions)
@@ -5865,12 +5906,14 @@ To use [Gemini](https://gemini.google.com/), please follow these steps:
 1. Enter the API key in the integration settings tab page
 1. Enable Gemini integration in the integration settings tab page
 
+<br>
+
 For usage instructions, please see [this FAQ](#faq190).
 
 Please read the privacy policy of [Gemini](https://support.google.com/gemini/answer/13594961).
 FairEmail does not use third-party libraries to avoid being tracked when Gemini is not being used.
 
-This feature is experimental and available in the GitHub version only and requires version 1.2171 or later.
+This feature is experimental and requires version 1.2171 or later for the GitHub version and version 1.2182 or later for the Play Store version.
 
 <br>
 

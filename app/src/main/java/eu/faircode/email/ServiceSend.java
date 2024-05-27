@@ -67,6 +67,7 @@ import java.util.concurrent.ExecutorService;
 
 import javax.mail.Address;
 import javax.mail.AuthenticationFailedException;
+import javax.mail.Folder;
 import javax.mail.MessageRemovedException;
 import javax.mail.MessagingException;
 import javax.mail.SendFailedException;
@@ -108,6 +109,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         super.onCreate();
         try {
             startForeground(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
+            EntityLog.log(this, EntityLog.Type.Debug2,
+                    "onCreate class=" + this.getClass().getName());
         } catch (Throwable ex) {
             if (Helper.isPlayStoreInstall())
                 Log.i(ex);
@@ -211,7 +214,12 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
     @Override
     public void onTimeout(int startId) {
-        Log.e(new Throwable("onTimeout"));
+        String msg = "onTimeout" +
+                " class=" + this.getClass().getName() +
+                " ignoring=" + Helper.isIgnoringOptimizations(this);
+        Log.e(new Throwable(msg));
+        EntityLog.log(this, EntityLog.Type.Debug3, msg);
+        stopSelf();
     }
 
     @Override
@@ -250,6 +258,8 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         super.onStartCommand(intent, flags, startId);
         try {
             startForeground(NotificationHelper.NOTIFICATION_SEND, getNotificationService(false));
+            EntityLog.log(this, EntityLog.Type.Debug2,
+                    "onStartCommand class=" + this.getClass().getName());
         } catch (Throwable ex) {
             if (Helper.isPlayStoreInstall())
                 Log.i(ex);
@@ -722,7 +732,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             if (plain != null && (plain & 1) != 0)
                 body = body.replace("<div x-plain=\"true\">", "<div>");
 
-            String text = HtmlHelper.getFullText(body);
+            String text = HtmlHelper.getFullText(body, true);
             String language = HtmlHelper.getLanguage(this, message.subject, text);
             String preview = HtmlHelper.getPreview(text);
 
@@ -791,6 +801,18 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
             MicrosoftGraph.send(ServiceSend.this, ident, imessage);
             end = new Date().getTime();
         } else {
+            if (account != null)
+                try (EmailService iaccount = new EmailService(this, account, EmailService.PURPOSE_USE, debug)) {
+                    iaccount.connect(account);
+                    Folder ifolder = iaccount.getStore().getFolder("INBOX");
+                    ifolder.open(Folder.READ_ONLY);
+                    try {
+                        ifolder.getMessages();
+                    } finally {
+                        ifolder.close();
+                    }
+                }
+
             EmailService iservice = new EmailService(this, ident, EmailService.PURPOSE_USE, debug);
             try {
                 if (ident.envelopeFrom != null)

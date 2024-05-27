@@ -89,10 +89,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swLandscape;
     private Spinner spLandscapeMinSize;
     private SwitchCompat swClosePane;
-    private SwitchCompat swOpenPane;
     private TextView tvColumnWidth;
     private SeekBar sbColumnWidth;
     private SwitchCompat swHideToolbar;
+    private SwitchCompat swEdgeToEdge;
     private SwitchCompat swNavOptions;
     private SwitchCompat swNavCategories;
     private SwitchCompat swNavLastSync;
@@ -100,7 +100,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
     private SwitchCompat swNavUnseenDrafts;
     private SwitchCompat swNavPinnedCount;
     private SwitchCompat swShowUnexposed;
-    private SwitchCompat swNavBarColorize;
 
     private SwitchCompat swThreading;
     private SwitchCompat swThreadingUnread;
@@ -213,8 +212,8 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             "theme", "startup",
             "date", "date_week", "date_fixed", "date_bold", "date_time", "group_category",
             "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_border", "shadow_highlight", "dividers", "tabular_unread_bg",
-            "portrait2", "portrait2c", "landscape", "close_pane", "open_pane", "column_width",
-            "hide_toolbar", "nav_options", "nav_categories", "nav_last_sync", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "show_unexposed", "navbar_colorize",
+            "portrait2", "portrait2c", "landscape", "close_pane", "column_width",
+            "hide_toolbar", "edge_to_edge", "nav_options", "nav_categories", "nav_last_sync", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "show_unexposed",
             "threading", "threading_unread", "indentation", "seekbar", "actionbar", "actionbar_swap", "actionbar_color",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
             "avatars", "bimi", "gravatars", "libravatars", "favicons", "favicons_partial", "favicons_manifest", "generated_icons", "identicons",
@@ -268,10 +267,10 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swLandscape = view.findViewById(R.id.swLandscape);
         spLandscapeMinSize = view.findViewById(R.id.spLandscapeMinSize);
         swClosePane = view.findViewById(R.id.swClosePane);
-        swOpenPane = view.findViewById(R.id.swOpenPane);
         tvColumnWidth = view.findViewById(R.id.tvColumnWidth);
         sbColumnWidth = view.findViewById(R.id.sbColumnWidth);
         swHideToolbar = view.findViewById(R.id.swHideToolbar);
+        swEdgeToEdge = view.findViewById(R.id.swEdgeToEdge);
         swNavOptions = view.findViewById(R.id.swNavOptions);
         swNavCategories = view.findViewById(R.id.swNavCategories);
         swNavLastSync = view.findViewById(R.id.swNavLastSync);
@@ -279,7 +278,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         swNavUnseenDrafts = view.findViewById(R.id.swNavUnseenDrafts);
         swNavPinnedCount = view.findViewById(R.id.swNavPinnedCount);
         swShowUnexposed = view.findViewById(R.id.swShowUnexposed);
-        swNavBarColorize = view.findViewById(R.id.swNavBarColorize);
 
         swThreading = view.findViewById(R.id.swThreading);
         swThreadingUnread = view.findViewById(R.id.swThreadingUnread);
@@ -405,6 +403,7 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         // Wire controls
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean debug = prefs.getBoolean("debug", false);
 
         ibHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -606,14 +605,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("close_pane", checked).apply();
-                swOpenPane.setEnabled(!checked);
-            }
-        });
-
-        swOpenPane.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("open_pane", checked).apply();
             }
         });
 
@@ -643,6 +634,14 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("hide_toolbar", checked).apply();
+            }
+        });
+
+        swEdgeToEdge.setVisibility(debug || BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+        swEdgeToEdge.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("edge_to_edge", checked).apply();
             }
         });
 
@@ -692,15 +691,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("show_unexposed", checked).apply();
-            }
-        });
-
-        swNavBarColorize.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("navbar_colorize", checked).apply();
-                setNavigationBarColor(
-                        checked ? Helper.resolveColor(getContext(), androidx.appcompat.R.attr.colorPrimaryDark) : Color.BLACK);
             }
         });
 
@@ -1467,7 +1457,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
         });
 
         // Initialize
-        FragmentDialogTheme.setBackground(getContext(), view, false);
         swFaviconsPartial.setText(getString(R.string.title_advanced_favicons_partial,
                 Helper.humanReadableByteCount(ContactInfo.FAVICON_READ_BYTES, false)));
         grpAvatar.setVisibility(BuildConfig.PLAY_STORE_RELEASE ? View.GONE : View.VISIBLE);
@@ -1569,14 +1558,13 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swLandscape.setChecked(prefs.getBoolean("landscape", true));
             spLandscapeMinSize.setSelection(prefs.getInt("landscape_min_size", 0));
             swClosePane.setChecked(prefs.getBoolean("close_pane", !Helper.isSurfaceDuo()));
-            swOpenPane.setChecked(prefs.getBoolean("open_pane", false));
-            swOpenPane.setEnabled(!swClosePane.isChecked());
 
             int column_width = prefs.getInt("column_width", 67);
             tvColumnWidth.setText(getString(R.string.title_advanced_column_width, NF.format(column_width)));
             sbColumnWidth.setProgress(column_width);
 
-            swHideToolbar.setChecked(prefs.getBoolean("hide_toolbar", !BuildConfig.PLAY_STORE_RELEASE));
+            swHideToolbar.setChecked(prefs.getBoolean("hide_toolbar", true));
+            swEdgeToEdge.setChecked(prefs.getBoolean("edge_to_edge", false));
             swNavOptions.setChecked(prefs.getBoolean("nav_options", true));
             swNavCategories.setChecked(prefs.getBoolean("nav_categories", false));
             swNavLastSync.setChecked(prefs.getBoolean("nav_last_sync", true));
@@ -1584,7 +1572,6 @@ public class FragmentOptionsDisplay extends FragmentBase implements SharedPrefer
             swNavUnseenDrafts.setChecked(prefs.getBoolean("nav_unseen_drafts", false));
             swNavPinnedCount.setChecked(prefs.getBoolean("nav_count_pinned", false));
             swShowUnexposed.setChecked(prefs.getBoolean("show_unexposed", false));
-            swNavBarColorize.setChecked(prefs.getBoolean("navbar_colorize", false));
 
             swThreading.setChecked(prefs.getBoolean("threading", true));
             swThreadingUnread.setChecked(prefs.getBoolean("threading_unread", false));

@@ -22,6 +22,7 @@ package eu.faircode.email;
 import static androidx.core.app.NotificationCompat.DEFAULT_LIGHTS;
 import static androidx.core.app.NotificationCompat.DEFAULT_SOUND;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
@@ -395,7 +396,7 @@ class NotificationHelper {
         if (notify_screen_on &&
                 !(BuildConfig.DEBUG ||
                         Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU ||
-                        Helper.hasPermission(context, "android.permission.TURN_SCREEN_ON")))
+                        Helper.hasPermission(context, Manifest.permission.TURN_SCREEN_ON)))
             notify_screen_on = false;
 
         Log.i("Notify messages=" + messages.size() +
@@ -711,7 +712,8 @@ class NotificationHelper {
         for (int m = 0; m < messages.size() && m < MAX_NOTIFICATION_DISPLAY; m++) {
             TupleMessageEx message = messages.get(m);
             ContactInfo[] info = ContactInfo.get(context,
-                    message.account, message.folderType, message.bimi_selector,
+                    message.account, message.folderType,
+                    message.bimi_selector, Boolean.TRUE.equals(message.dmarc),
                     message.isForwarder() ? message.submitter : message.from);
 
             Address[] modified = (message.from == null
@@ -1002,7 +1004,7 @@ class NotificationHelper {
                 if (notify_preview_all)
                     try {
                         File file = message.getFile(context);
-                        preview = HtmlHelper.getFullText(file);
+                        preview = HtmlHelper.getFullText(file, true);
                         if (preview != null && preview.length() > MAX_PREVIEW)
                             preview = preview.substring(0, MAX_PREVIEW);
                     } catch (Throwable ex) {

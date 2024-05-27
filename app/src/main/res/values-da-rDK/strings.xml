@@ -14,8 +14,9 @@
     <string name="app_cake_required">Krævet minimum af lagerplads: %1$s</string>
     <string name="app_updated">Senest opdateret: %1$s</string>
     <string name="app_download">Downloadet fra: %1$s</string>
-    <string name="app_mod1">        Marts-sikkerhedsopdateringen forårsager \'App svarer ikke\'-meddelelser udelukkende på Google Pixel-enheder.
-        Bebrejd dog ikke appen for dette, da kun Google kan løse problemet!
+    <string name="app_motd">        Med Android 14/15 beta forekommer lejlighedsvise \'App svarer ikke\'-notifikationer.
+        Google arbejder på en rettelse.
+        Bebrejd derfor ikke appen for dette Android-problem!
     </string>
     <string name="channel_service">Monitorering</string>
     <string name="channel_send">Send</string>
@@ -118,7 +119,7 @@
     <string name="title_notification_sending">Sender beskeder</string>
     <string name="title_notification_waiting">Afventer en passende forbindelse</string>
     <string name="title_notification_idle">Inaktiv</string>
-    <string name="title_notification_failed">\'%1$s\' mislykkedes</string>
+    <string name="title_notification_failed">Fejl på konto \'%1$s</string>
     <string name="title_notification_alert">Serveradvarsel: \'%1$s\'</string>
     <string name="title_notification_sending_left">Forsøg resterer: %1$d</string>
     <string name="title_notification_sending_retry">Afsendelse gentages ved Internetforbindelsesændringer eller et træk nedad på udbakken</string>
@@ -241,6 +242,7 @@
     <string name="title_setup_doze_stopped">Synk stoppet?</string>
     <string name="title_setup_doze_device">Dette kræves sandsynligvis for denne enhed</string>
     <string name="title_setup_alarm_12">Appen vil ikke fungere korrekt</string>
+    <string name="title_setup_fg_15">Appen kan ikke startes automatisk</string>
     <string name="title_setup_inexact">Alarmer og påmindelser er deaktiveret</string>
     <string name="title_setup_background">Baggrundsbegrænsninger er aktive</string>
     <string name="title_setup_data">Datasparer er aktiveret</string>
@@ -482,7 +484,6 @@
     <string name="title_advanced_two_col">Brug to kolonner</string>
     <string name="title_advanced_min_screen_size">Minimumsskærmstørrelse for opsplitning af skærmen</string>
     <string name="title_advanced_close_pane">Skjul række eller kolonne, når en samtale lukkes</string>
-    <string name="title_advanced_open_pane">Start med to rækker eller kolonner</string>
     <string name="title_advanced_column_width">Beskedkolonnebredde/-rækkehøjde: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Skjul øverste værktøjsbjælke ved rulning gennem beskeder</string>
     <string name="title_advanced_nav_options">Vis navigeringsmenuindstillinger</string>
@@ -585,7 +586,6 @@
     <string name="title_advanced_actionbar_swap">Ombyt papirkurv- og arkiv-knap</string>
     <string name="title_advanced_actionbar_color">Benyt kontofarve som baggrundsfarve til samtalens handlingsbjælke</string>
     <string name="title_advanced_category_header">Gruppering efter kontokategori</string>
-    <string name="title_advanced_navbar_colorize">Farvelæg Android-navigeringsbjælken</string>
     <string name="title_advanced_list_count">Vis antallet af beskeder eller samtaler på øverste handlingsbjælke</string>
     <string name="title_advanced_bundled_fonts">Brug bundtede skrifttyper</string>
     <string name="title_advanced_narrow_fonts">Brug pileskrifttyper</string>
@@ -640,6 +640,7 @@
     <string name="title_advanced_swipe_reply">Stryg udvidede beskeder til højre for at besvare</string>
     <string name="title_advanced_move_thread_all">Når valgte samtaler flyttes, flyt alle beskeder</string>
     <string name="title_advanced_move_thread_sent">Når en samtale flyttes, flyt også sendte beskeder</string>
+    <string name="title_advanced_swipe_trash_all">Stryges en samtale til papirkurven, kassér alle beskeder</string>
     <string name="title_advanced_default_snooze">Standard slumre-/forsinkelsestid</string>
     <string name="title_advanced_default_folder">Vælg standardmappe</string>
     <string name="title_advanced_notifications">Håndtér notifikationer</string>
@@ -758,6 +759,7 @@
     <string name="title_advanced_haptic_feedback">Haptisk feedback for vigtige handlinger</string>
     <string name="title_advanced_language">Sprog</string>
     <string name="title_advanced_language_system">System</string>
+    <string name="title_advanced_integrations_hint">Cloud-tjenesterne nedenfor er ikke en del af appen, og evt. betalinger vil gå direkte til tjenesten og ikke til app-udvikleren.</string>
     <string name="title_advanced_lt">LanguageTool-integration</string>
     <string name="title_advanced_lt_sentence">Tjek hver sætning</string>
     <string name="title_advanced_lt_auto">Tjek afsnit efter en ny linje</string>
@@ -773,6 +775,8 @@
     <string name="title_advanced_openai_temperature">Temperatur: %1$s</string>
     <string name="title_advanced_openai_moderation">Indholdsmoderering</string>
     <string name="title_advanced_gemini">Gemini-integration</string>
+    <string name="title_advanced_multi_modal">Multimodalitet</string>
+    <string name="title_advanced_summarize_prompt">Opsummeringsprompt</string>
     <string name="title_advanced_sdcard">Et SD-kort ønskes benyttet</string>
     <string name="title_advanced_watchdog">Tjek periodisk om FairEmail stadig er aktiv</string>
     <string name="title_advanced_updates">Tjek for GitHub-opdateringer</string>
@@ -849,6 +853,9 @@
     <string name="title_advanced_threading_hint">Gruppér beskeder relateret til hinanden</string>
     <string name="title_advanced_indentation_hint">Kun til kortstil</string>
     <string name="title_advanced_highlight_hint">Temaets accentfarve benyttes til fremhævning</string>
+    <string name="title_advanced_free">Brug af denne cloud-tjeneste er gratis</string>
+    <string name="title_advanced_free_tier">Denne cloud-tjeneste har et gratis-niveau</string>
+    <string name="title_advanced_paid_service">Denne cloud-tjeneste kræver betaling</string>
     <string name="title_advanced_privacy_risk">Der kan være en fortrolighedsrisiko</string>
     <string name="title_advanced_name_email_hint">Navne vises kun, hvis tilgængelige</string>
     <string name="title_advanced_preview_hint">Kun tilgængelig, når beskedtekst er downloadet</string>
@@ -870,7 +877,7 @@
     <string name="title_advanced_autoclose_hint">Luk automatisk samtaler, når alle beskeder arkiveres, sendes eller kasseres</string>
     <string name="title_advanced_sender_hint">De fleste udbydere tillader ikke ændrede afsenderadresser</string>
     <string name="title_advanced_bcc_hint">Adressen vises ikke, men tilføjes ved afsendelse</string>
-    <string name="title_advanced_envelope_from_hint" comment="title_advanced_envelope_from_hint&#10;Remark for &quot;Envelope from&quot; input field&#10;&quot;SMTP MAIL FROM&quot; should not be translated!&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3">Denne adresse vil blive brugt til SMTP MAIL FRA</string>
+    <string name="title_advanced_envelope_from_hint">Denne adresse vil blive brugt til SMTP MAIL FRA</string>
     <string name="title_advanced_internal_hint">En advarsel vises, når der sendes til et andet domæne</string>
     <string name="title_advanced_uri">Detaljerne for den valgte kontakt vil blive brugt til vCard-vedhæftninger</string>
     <string name="title_advanced_e2e_encryption">Indstillinger for ende-til-ende kryptering</string>
@@ -916,6 +923,7 @@
     <string name="title_identity_name">Dit navn</string>
     <string name="title_identity_email">Din e-mailadresse</string>
     <string name="title_identity_tenant_hint">Dette felt bør fortrinsvis være tomt</string>
+    <string name="title_identity_receive_first_hint">Det er sjældent nødvendigt at slå denne mulighed til, og desuden vil dataforbruget stige!</string>
     <string name="title_identity_color_hint">Identitetsfarver har forrang over kontofarver</string>
     <string name="title_advanced_sender">Tillad redigering af afsenderadresse</string>
     <string name="title_advanced_sender_name">Brug navnet, når afsenderadressen er blevet redigeret</string>
@@ -973,6 +981,7 @@
     <string name="title_password">Adgangskode</string>
     <string name="title_password_storage">Hvordan opbevares adgangskoder?</string>
     <string name="title_case_sensitive">I brugernavne og adgangskoder skelnes normalt mellem minuskler og versaler</string>
+    <string name="title_login_before_send">Modtag før afsendelse</string>
     <string name="title_client_certificate">Klientcertifikat</string>
     <string name="title_realm">Område</string>
     <string name="title_use_ip">Brug lokal IP-adresse i stedet for værtsnavn</string>
@@ -1077,6 +1086,7 @@
     <string name="title_expunge_remark">Dette sletter permanent alle beskeder markeret for sletning</string>
     <string name="title_empty_trash">Tøm papirkurv</string>
     <string name="title_empty_spam">Tøm spam</string>
+    <string name="title_edit_color">Redigér farve</string>
     <string name="title_edit_properties">Redigér egenskaber</string>
     <string name="title_edit_rules">Redigér regler</string>
     <string name="title_execute_rules">Eksekvere regler</string>
@@ -1105,8 +1115,10 @@
     <string name="title_delete_operation_move">Flyt-operationer</string>
     <string name="title_delete_operation_flag">Flagningsoperationer</string>
     <string name="title_delete_operation_delete">Slet operationer</string>
+    <string name="title_delete_operation_send">Send-handlinger</string>
     <string name="title_delete_operation_deleted">%1$d operationer slettet</string>
-    <string name="title_delete_contacts">Slet synlige lokale kontakter?</string>
+    <string name="title_delete_contacts">Slet alle lokale kontakter?</string>
+    <string name="title_delete_contacts_remark">Alle viste kontakter slettes, selv hvis de søges!</string>
     <string name="title_no_operations">Ingen afventende handlinger</string>
     <string name="title_check_operations">Tjekker handlinger</string>
     <string name="title_hint_operations">Sletning af handlinger kan resultere i forsvundne beskeder og synkroniseringsproblemer</string>
@@ -1331,7 +1343,9 @@
     <string name="title_ask_show_html">Visning af beskedindhold kan lække personfølsomme data</string>
     <string name="title_ask_show_html_remark">Visning af originalbeskeden på en mørk baggrund er ikke mulig, da det kan afstedkomme usynlige mørke tekster og billeder</string>
     <string name="title_ask_show_html_images">Vis altid billeder, når originalbeskederne vises</string>
+    <string name="title_ask_show_html_always">Vis som standard oprindelig beskeder</string>
     <string name="title_ask_show_image">Visning af billeder kan lække personfølsomme data</string>
+    <string name="title_ask_show_images_always">Vis som standard billeder</string>
     <string name="title_ask_show_image_hint">Billeder genkendt som sporingsbilleder, vises ikke</string>
     <string name="title_ask_show_amp">Vis AMP-variant af beskeden?</string>
     <string name="title_ask_show_amp_hint">AMP-beskeder er designet til at være dynamiske og interagere med Internet, og de kan derfor potentielt bruges til brugersporing</string>
@@ -1362,7 +1376,7 @@
     <string name="title_reply_to">Svar til:</string>
     <string name="title_cc">Cc:</string>
     <string name="title_bcc">Bcc:</string>
-    <string name="title_envelope_from" comment="title_envelope_from&#10;Envelope from = SMTP MAIL FROM, see the related remark text for more details&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3&#10;">Konvolut fra:</string>
+    <string name="title_envelope_from">Konvolut fra:</string>
     <string name="title_recipients">%1$d modtagere</string>
     <string name="title_via_identity">Via:</string>
     <string name="title_sent">Sendt:</string>
@@ -1454,6 +1468,7 @@
     <string name="title_create_template">Opret skabelon</string>
     <string name="title_select_default_identity">Vælg standardadresse</string>
     <string name="title_translate">Oversæt</string>
+    <string name="title_summarize">Sammenfatning</string>
     <string name="title_translate_configure">Opsæt&#8230;</string>
     <string name="title_translate_key">Angiv nøgle</string>
     <string name="title_translating">Oversætter&#8230;</string>
@@ -1586,6 +1601,7 @@
     <string name="title_search_flag_notes">notater</string>
     <string name="title_search_flag_invite">invitation</string>
     <string name="title_search_flag_size">størrelse &gt; %1$s</string>
+    <string name="title_search_flag_touched">åbnede</string>
     <string name="title_search_device">Søg på enhed</string>
     <string name="title_search_server">Søg på server</string>
     <string name="title_search_server_wait">Venter på server</string>
@@ -1632,6 +1648,7 @@
     <string name="title_view_thread">Vis samtale</string>
     <string name="title_force_sync">Gennemtving synk</string>
     <string name="title_force_send">Gennemtving afsend</string>
+    <string name="title_pwned_remark">Dette vil tjekke adgangskoden, uden at sende den (vha. k-anonymization), og ikke e-mailadressen!</string>
     <string name="title_language_all">Alle</string>
     <string name="title_previous">Foregående</string>
     <string name="title_next">Næste</string>
@@ -1681,6 +1698,8 @@
     <string name="title_rule_delete">Slet permanent</string>
     <string name="title_rule_sound">Afspil lyd</string>
     <string name="title_rule_silent">Tavse notifikationer</string>
+    <string name="title_rule_summarize">Sammenfatning</string>
+    <string name="title_rule_summarize_remark">Opsummér meddelelsen med opsat AI-integration</string>
     <string name="title_rule_caption">Redigér regel</string>
     <string name="title_rule_title">Regel gælder for</string>
     <string name="title_rule_name">Navn</string>
@@ -1957,6 +1976,7 @@
     <string name="title_ask_what">Spørg, hvad der skal ske</string>
     <string name="title_no_ask_again">Spørg ikke om dette igen</string>
     <string name="title_no_ask_for_again">Spørg ikke om dette igen for %1$s</string>
+    <string name="title_undo_privacy">Dette kan fortrydes på fanesiden fortrolighedsindstillinger</string>
     <string name="title_no_body">Ingen beskedtekst fundet</string>
     <string name="title_large_body">Denne meddelelse er meget stor, hvilket kan give problemer!</string>
     <string name="title_no_charset">Uunderstøttet kodning: %1$s</string>
@@ -2070,6 +2090,7 @@
     <string name="title_keyword_not_displayed">Ikke vist</string>
     <string name="title_keyword_not_delivered">Ikke leveret</string>
     <string name="title_keyword_complaint">Klage</string>
+    <string name="title_keyword_phishing">Phishing</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d besked</item>
         <item quantity="other">%1$d beskeder</item>

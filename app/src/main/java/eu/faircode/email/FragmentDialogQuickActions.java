@@ -47,6 +47,7 @@ public class FragmentDialogQuickActions extends FragmentDialogBase {
         final View dview = LayoutInflater.from(context).inflate(R.layout.dialog_quick_actions, null);
         final TextView tvHint = dview.findViewById(R.id.tvHint);
         final CheckBox cbAnswer = dview.findViewById(R.id.cbAnswer);
+        final CheckBox cbSummarize = dview.findViewById(R.id.cbSummarize);
         final CheckBox cbSeen = dview.findViewById(R.id.cbSeen);
         final CheckBox cbUnseen = dview.findViewById(R.id.cbUnseen);
         final CheckBox cbSnooze = dview.findViewById(R.id.cbSnooze);
@@ -56,16 +57,20 @@ public class FragmentDialogQuickActions extends FragmentDialogBase {
         final CheckBox cbImportanceLow = dview.findViewById(R.id.cbImportanceLow);
         final CheckBox cbImportanceNormal = dview.findViewById(R.id.cbImportanceNormal);
         final CheckBox cbImportanceHigh = dview.findViewById(R.id.cbImportanceHigh);
-        final CheckBox cbInbox = dview.findViewById(R.id.cbInbox);
+        final CheckBox cbMove = dview.findViewById(R.id.cbMove);
         final CheckBox cbArchive = dview.findViewById(R.id.cbArchive);
-        final CheckBox cbJunk = dview.findViewById(R.id.cbJunk);
         final CheckBox cbTrash = dview.findViewById(R.id.cbTrash);
         final CheckBox cbDelete = dview.findViewById(R.id.cbDelete);
-        final CheckBox cbMove = dview.findViewById(R.id.cbMove);
+        final CheckBox cbJunk = dview.findViewById(R.id.cbJunk);
+        final CheckBox cbInbox = dview.findViewById(R.id.cbInbox);
         final CheckBox cbClear = dview.findViewById(R.id.cbClear);
 
+        cbSummarize.setVisibility(AI.isAvailable(context) ? View.VISIBLE : View.GONE);
+
         tvHint.setText(getString(R.string.title_quick_actions_hint, MAX_QUICK_ACTIONS));
+
         cbAnswer.setChecked(prefs.getBoolean("more_answer", false));
+        cbSummarize.setChecked(prefs.getBoolean("more_summarize", false));
         cbSeen.setChecked(prefs.getBoolean("more_seen", true));
         cbUnseen.setChecked(prefs.getBoolean("more_unseen", false));
         cbSnooze.setChecked(prefs.getBoolean("more_snooze", false));
@@ -75,12 +80,12 @@ public class FragmentDialogQuickActions extends FragmentDialogBase {
         cbImportanceLow.setChecked(prefs.getBoolean("more_importance_low", false));
         cbImportanceNormal.setChecked(prefs.getBoolean("more_importance_normal", false));
         cbImportanceHigh.setChecked(prefs.getBoolean("more_importance_high", false));
-        cbInbox.setChecked(prefs.getBoolean("more_inbox", true));
+        cbMove.setChecked(prefs.getBoolean("more_move", true));
         cbArchive.setChecked(prefs.getBoolean("more_archive", true));
-        cbJunk.setChecked(prefs.getBoolean("more_junk", true));
         cbTrash.setChecked(prefs.getBoolean("more_trash", true));
         cbDelete.setChecked(prefs.getBoolean("more_delete", false));
-        cbMove.setChecked(prefs.getBoolean("more_move", true));
+        cbJunk.setChecked(prefs.getBoolean("more_junk", true));
+        cbInbox.setChecked(prefs.getBoolean("more_inbox", true));
         cbClear.setChecked(prefs.getBoolean("more_clear", true));
 
         return new AlertDialog.Builder(getContext())
@@ -90,6 +95,7 @@ public class FragmentDialogQuickActions extends FragmentDialogBase {
                     public void onClick(DialogInterface dialog, int which) {
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putBoolean("more_answer", cbAnswer.isChecked());
+                        editor.putBoolean("more_summarize", cbSummarize.isChecked());
                         editor.putBoolean("more_seen", cbSeen.isChecked());
                         editor.putBoolean("more_unseen", cbUnseen.isChecked());
                         editor.putBoolean("more_snooze", cbSnooze.isChecked());
@@ -99,12 +105,12 @@ public class FragmentDialogQuickActions extends FragmentDialogBase {
                         editor.putBoolean("more_importance_low", cbImportanceLow.isChecked());
                         editor.putBoolean("more_importance_normal", cbImportanceNormal.isChecked());
                         editor.putBoolean("more_importance_high", cbImportanceHigh.isChecked());
-                        editor.putBoolean("more_inbox", cbInbox.isChecked());
+                        editor.putBoolean("more_move", cbMove.isChecked());
                         editor.putBoolean("more_archive", cbArchive.isChecked());
-                        editor.putBoolean("more_junk", cbJunk.isChecked());
                         editor.putBoolean("more_trash", cbTrash.isChecked());
                         editor.putBoolean("more_delete", cbDelete.isChecked());
-                        editor.putBoolean("more_move", cbMove.isChecked());
+                        editor.putBoolean("more_junk", cbJunk.isChecked());
+                        editor.putBoolean("more_inbox", cbInbox.isChecked());
                         editor.putBoolean("more_clear", cbClear.isChecked());
                         editor.apply();
                         sendResult(Activity.RESULT_OK);

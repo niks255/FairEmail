@@ -341,7 +341,7 @@ public class ServiceUI extends IntentService {
         Object obj = results.get("text");
         String body = (obj == null ? null : "<p>" + obj.toString().replaceAll("\\r?\\n", "<br>") + "</p>");
 
-        String text = HtmlHelper.getFullText(body);
+        String text = HtmlHelper.getFullText(body, true);
         String language = HtmlHelper.getLanguage(this, ref.subject, text);
         String preview = HtmlHelper.getPreview(text);
 
@@ -393,7 +393,6 @@ public class ServiceUI extends IntentService {
                 return;
 
             EntityOperation.queue(this, message, EntityOperation.FLAG, true);
-            EntityOperation.queue(this, message, EntityOperation.SEEN, true);
 
             db.setTransactionSuccessful();
         } finally {

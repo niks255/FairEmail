@@ -17,10 +17,8 @@ crowdin.properties
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/deploymentTargetDropDown.xml
-.idea/migrations.xml
+.idea/deploymentTargetSelector.xml
 app/.cxx/
-app/full
 build
 captures
 metadata
-app/schemas/mapping/

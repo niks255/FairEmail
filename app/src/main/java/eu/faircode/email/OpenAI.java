@@ -21,7 +21,9 @@ package eu.faircode.email;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.text.Spannable;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -31,20 +33,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-import javax.net.ssl.HttpsURLConnection;
-
 public class OpenAI {
+    static final String DEFAULT_MODEL = "gpt-4o";
+    static final float DEFAULT_TEMPERATURE = 0.5f;
+    static final String DEFAULT_SUMMARY_PROMPT = "Summarize the following text:";
+
+    static final String ASSISTANT = "assistant";
+    static final String USER = "user";
+
+    // https://cookbook.openai.com/examples/gpt4o/introduction_to_gpt4o
+    static final String CONTENT_TEXT = "text";
+    static final String CONTENT_IMAGE = "image_url";
+
     private static final int MAX_OPENAI_LEN = 1000; // characters
     private static final int TIMEOUT = 45; // seconds
+    private static final int SCALE2PIXELS = 1440; // medium
 
     static boolean isAvailable(Context context) {
         if (TextUtils.isEmpty(BuildConfig.OPENAI_ENDPOINT))
@@ -105,7 +121,25 @@ public class OpenAI {
         for (Message message : messages) {
             JSONObject jmessage = new JSONObject();
             jmessage.put("role", message.role);
-            jmessage.put("content", message.content);
+
+            if (message.content.length == 1 && CONTENT_TEXT.equals(message.content[0].type))
+                jmessage.put("content", message.content[0].content);
+            else {
+                JSONArray jcontents = new JSONArray();
+                for (Content content : message.content) {
+                    JSONObject jcontent = new JSONObject();
+                    jcontent.put("type", content.type);
+                    if (CONTENT_IMAGE.equals(content.type)) {
+                        JSONObject jimage = new JSONObject();
+                        jimage.put("url", content.content);
+                        jcontent.put(content.type, jimage);
+                    } else
+                        jcontent.put(content.type, content.content);
+                    jcontents.put(jcontent);
+                }
+                jmessage.put("content", jcontents);
+            }
+
             jmessages.put(jmessage);
         }
 
@@ -122,7 +156,8 @@ public class OpenAI {
         for (int i = 0; i < jchoices.length(); i++) {
             JSONObject jchoice = jchoices.getJSONObject(i);
             JSONObject jmessage = jchoice.getJSONObject("message");
-            choices[i] = new Message(jmessage.getString("role"), jmessage.getString("content"));
+            choices[i] = new Message(jmessage.getString("role"),
+                    new Content[]{new Content(CONTENT_TEXT, jmessage.getString("content"))});
         }
 
         return choices;
@@ -147,7 +182,7 @@ public class OpenAI {
         long start = new Date().getTime();
 
         URL url = new URL(uri.toString());
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestMethod(method);
         connection.setDoOutput(args != null);
@@ -168,9 +203,9 @@ public class OpenAI {
             }
 
             int status = connection.getResponseCode();
-            if (status != HttpsURLConnection.HTTP_OK) {
-                // https://platform.openai.com/docs/guides/error-codes/api-errors
+            if (status != HttpURLConnection.HTTP_OK) {
                 String error = "Error " + status + ": " + connection.getResponseMessage();
+                String detail = null;
                 try {
                     // HTTP 429
                     // {
@@ -182,30 +217,40 @@ public class OpenAI {
                     //    }
                     //}
                     InputStream is = connection.getErrorStream();
-                    if (is != null) {
-                        String err = Helper.readStream(is);
-                        if (BuildConfig.DEBUG)
-                            error += "\n" + err;
-                        else {
-                            Log.w(new Throwable(err));
-                            try {
-                                JSONObject jerror = new JSONObject(err).getJSONObject("error");
-                                error += "\n" + jerror.getString("type") + ": " + jerror.getString("message");
-                            } catch (JSONException ignored) {
-                                error += "\n" + err;
-                            }
-                        }
-                    }
+                    if (is != null)
+                        detail = Helper.readStream(is);
                 } catch (Throwable ex) {
                     Log.w(ex);
                 }
-                if (status == 429)
-                    error += "\nThis is an error message from OpenAI, not of the app";
-                throw new IOException(error);
+                Log.w("OpenAI error=" + error + " detail=" + detail);
+                if (detail != null)
+                    try {
+                        JSONObject jroot = new JSONObject(detail);
+                        JSONObject jerror = jroot.optJSONObject("error");
+                        if (jerror != null) {
+                            String msg = jerror.optString("message");
+                            if (!TextUtils.isEmpty(msg))
+                                detail = msg;
+                        }
+                    } catch (Throwable ignored) {
+                    }
+                throw new IOException(TextUtils.isEmpty(detail) ? error : detail);
             }
 
             String response = Helper.readStream(connection.getInputStream());
             Log.i("OpenAI response=" + response);
+
+            try {
+                // https://platform.openai.com/docs/guides/rate-limits/rate-limits-in-headers
+                for (Map.Entry<String, List<String>> entries : connection.getHeaderFields().entrySet()) {
+                    String key = entries.getKey();
+                    if (key != null && key.startsWith("x-ratelimit"))
+                        for (String value : entries.getValue())
+                            Log.i("OpenAI", key + "=" + value);
+                }
+            } catch (Throwable ex) {
+                Log.w(ex);
+            }
 
             return new JSONObject(response);
         } finally {
@@ -215,27 +260,83 @@ public class OpenAI {
         }
     }
 
-    static String truncateParagraphs(@NonNull String text) {
-        return truncateParagraphs(text, MAX_OPENAI_LEN);
-    }
+    static class Content {
+        private String type;
+        private String content;
 
-    static String truncateParagraphs(@NonNull String text, int maxlen) {
-        String[] paragraphs = text.split("[\\r\\n]+");
+        public Content(String type, String content) {
+            this.type = type;
+            this.content = content;
+        }
 
-        int i = 0;
-        StringBuilder sb = new StringBuilder();
-        while (i < paragraphs.length &&
-                sb.length() + paragraphs[i].length() + 1 < maxlen)
-            sb.append(paragraphs[i++]).append('\n');
+        public String getType() {
+            return this.type;
+        }
 
-        return sb.toString();
+        public String getContent() {
+            return this.content;
+        }
+
+        static Content[] get(Spannable ssb, long id, Context context) {
+            DB db = DB.getInstance(context);
+            List<OpenAI.Content> contents = new ArrayList<>();
+            int start = 0;
+            while (start < ssb.length()) {
+                int end = ssb.nextSpanTransition(start, ssb.length(), ImageSpanEx.class);
+
+                String text = ssb.subSequence(start, end).toString().trim()
+                        .replace("\u00a0", "")
+                        .replace("\ufffc", "");
+                Log.i("OpenAI content " + start + "..." + end +
+                        " text=[" + Helper.getPrintableString(text, true) + "]");
+
+                if (!TextUtils.isEmpty(text))
+                    contents.add(new OpenAI.Content(OpenAI.CONTENT_TEXT, text));
+
+                if (end < ssb.length()) {
+                    ImageSpanEx[] spans = ssb.getSpans(end, end, ImageSpanEx.class);
+                    Log.i("OpenAI images=" + (spans == null ? null : spans.length));
+                    if (spans != null && spans.length == 1) {
+                        int e = ssb.getSpanEnd(spans[0]);
+
+                        String url = null;
+                        String src = spans[0].getSource();
+                        Log.i("OpenAI image url=" + src);
+                        if (src != null && src.startsWith("cid:")) {
+                            String cid = '<' + src.substring(4) + '>';
+                            EntityAttachment attachment = db.attachment().getAttachment(id, cid);
+                            if (attachment != null && attachment.available) {
+                                File file = attachment.getFile(context);
+                                try (InputStream is = new FileInputStream(file)) {
+                                    Bitmap bm = ImageHelper.getScaledBitmap(is, null, null, SCALE2PIXELS);
+                                    Helper.ByteArrayInOutStream bos = new Helper.ByteArrayInOutStream();
+                                    bm.compress(Bitmap.CompressFormat.PNG, 90, bos);
+                                    url = ImageHelper.getDataUri(bos.getInputStream(), "image/png");
+                                } catch (Throwable ex) {
+                                    Log.w(ex);
+                                }
+                            }
+                        } else
+                            url = src;
+                        if (url != null)
+                            contents.add(new OpenAI.Content(OpenAI.CONTENT_IMAGE, url));
+
+                        end = e;
+                    }
+                }
+
+                start = (end > start ? end : start + 1);
+            }
+
+            return contents.toArray(new OpenAI.Content[0]);
+        }
     }
 
     static class Message {
         private final String role; // system, user, assistant
-        private final String content;
+        private final Content[] content;
 
-        public Message(String role, String content) {
+        public Message(String role, Content[] content) {
             this.role = role;
             this.content = content;
         }
@@ -244,14 +345,21 @@ public class OpenAI {
             return this.role;
         }
 
-        public String getContent() {
+        public Content[] getContent() {
             return this.content;
         }
 
         @NonNull
         @Override
         public String toString() {
-            return this.role + ": " + this.content;
+            StringBuilder sb = new StringBuilder();
+            if (this.content != null)
+                for (Content c : this.content) {
+                    if (sb.length() > 0)
+                        sb.append(", ");
+                    sb.append(c.type).append(':').append(c.content);
+                }
+            return this.role + ": " + sb;
         }
     }
 

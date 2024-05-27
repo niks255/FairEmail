@@ -49,7 +49,7 @@ public class EntityLog {
     private static Long last_cleanup = null;
 
     private static final long LOG_CLEANUP_INTERVAL = 3600 * 1000L; // milliseconds
-    private static final long LOG_KEEP_DURATION = 12 * 3600 * 1000L; // milliseconds
+    private static final long LOG_KEEP_DURATION = (BuildConfig.DEBUG ? 24 : 12) * 3600 * 1000L; // milliseconds
     private static final int LOG_DELETE_BATCH_SIZE = 50;
 
     @PrimaryKey(autoGenerate = true)
@@ -65,7 +65,7 @@ public class EntityLog {
     @NonNull
     public String data;
 
-    public enum Type {General, Statistics, Scheduling, Network, Account, Protocol, Classification, Notification, Rules, Cloud, Debug}
+    public enum Type {General, Statistics, Scheduling, Network, Account, Protocol, Classification, Notification, Rules, Cloud, Debug1, Debug2, Debug3}
 
     public static void log(final Context context, String data) {
         log(context, Type.General, data);
@@ -109,7 +109,7 @@ public class EntityLog {
 
         if (context == null)
             return;
-        if (type == Type.Debug &&
+        if ((type == Type.Debug1 || type == Type.Debug2 || type == Type.Debug3) &&
                 !(BuildConfig.DEBUG || Log.isTestRelease()))
             return;
 
@@ -233,8 +233,12 @@ public class EntityLog {
                 return ContextCompat.getColor(context, R.color.solarizedCyan);
             case Cloud:
                 return ContextCompat.getColor(context, R.color.solarizedRed);
-            case Debug:
-                return Helper.resolveColor(context, R.attr.colorWarning);
+            case Debug1:
+                return ContextCompat.getColor(context, R.color.solarizedRed);
+            case Debug2:
+                return ContextCompat.getColor(context, R.color.solarizedGreen);
+            case Debug3:
+                return ContextCompat.getColor(context, R.color.solarizedBlue);
             default:
                 return null;
         }

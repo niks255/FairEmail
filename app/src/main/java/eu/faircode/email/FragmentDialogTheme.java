@@ -24,10 +24,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -645,29 +647,44 @@ public class FragmentDialogTheme extends FragmentDialogBase {
         boolean tabular_card_bg = prefs.getBoolean("tabular_card_bg", false);
         String theme = prefs.getString("theme", "blue_orange_system");
         boolean dark = Helper.isDarkTheme(context);
-        boolean black = (!"black".equals(theme) && theme.endsWith("black"));
+        boolean black = ((!"black".equals(theme) && theme.endsWith("black")) || "black_and_white".equals(theme));
         boolean solarized = theme.startsWith("solarized");
         boolean you = theme.startsWith("you_");
 
+        Integer color = null;
         if (cards) {
             if (you && (!dark || !black) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-                view.setBackgroundColor(ContextCompat.getColor(context, dark
+                color = ContextCompat.getColor(context, dark
                         ? android.R.color.system_background_dark
-                        : android.R.color.system_background_light));
+                        : android.R.color.system_background_light);
             else {
                 if (compose) {
                     if (!dark || solarized)
-                        view.setBackgroundColor(Helper.resolveColor(context, R.attr.colorCardBackground));
+                        color = Helper.resolveColor(context, R.attr.colorCardBackground);
                 } else {
                     if (!dark && !solarized)
-                        view.setBackgroundColor(ContextCompat.getColor(context, beige
+                        color = ContextCompat.getColor(context, beige
                                 ? R.color.lightColorBackground_cards_beige
-                                : R.color.lightColorBackground_cards));
+                                : R.color.lightColorBackground_cards);
                 }
             }
         } else {
             if (tabular_card_bg)
-                view.setBackgroundColor(Helper.resolveColor(context, R.attr.colorCardBackground));
+                color = Helper.resolveColor(context, R.attr.colorCardBackground);
         }
+
+        if (color == null)
+            if (black)
+                color = Color.BLACK;
+            else {
+                TypedValue a = new TypedValue();
+                context.getTheme().resolveAttribute(android.R.attr.windowBackground, a, true);
+                if (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT)
+                    color = a.data;
+                else
+                    color = Color.parseColor(dark ? "#121316" : "#FAF9FD");
+            }
+
+        view.setBackgroundColor(color);
     }
 }

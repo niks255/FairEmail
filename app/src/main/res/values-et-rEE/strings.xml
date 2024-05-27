@@ -14,9 +14,6 @@
     <string name="app_cake_required">Miinimu vajalik talletusruum: %1$s</string>
     <string name="app_updated">Viimati uuendatud: %1$s</string>
     <string name="app_download">Laaditud kohast: %1$s</string>
-    <string name="app_mod1">        Märtsi turvaparandus põhjustab teateid \"Rakendus ei vasta\", ainult Google Pixel seadmetes.
-        Palun ära süüdista selles äppi. Vaid Google saab selle parandada!
-    </string>
     <string name="channel_service">Jälgimine</string>
     <string name="channel_send">Saatmine</string>
     <string name="channel_notification">E-post</string>
@@ -118,7 +115,6 @@
     <string name="title_notification_sending">Sõnumite saatmine</string>
     <string name="title_notification_waiting">Sobiva ühenduse ootamine</string>
     <string name="title_notification_idle">Jõude</string>
-    <string name="title_notification_failed">\'%1$s\' nurjus</string>
     <string name="title_notification_alert">Serveri teade: \'%1$s\'</string>
     <string name="title_notification_sending_left">Katseid jäänud: %1$d</string>
     <string name="title_notification_sending_retry">Saatmist proovitakse ühenduse muutumisel või väljundkausta värskendamisel</string>
@@ -482,7 +478,6 @@
     <string name="title_advanced_two_col">Kasuta kaht veergu</string>
     <string name="title_advanced_min_screen_size">Ekraani miinimumsuurus ekraani poolitamiseks</string>
     <string name="title_advanced_close_pane">Ahenda read või veerud vestluse sulgemisel</string>
-    <string name="title_advanced_open_pane">Alusta kahe veeru või kahe reaga</string>
     <string name="title_advanced_column_width">Sõnumi veeru laius / rea kõrgus: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Peida sõnumite kerimisel ülemine vahendiriba</string>
     <string name="title_advanced_nav_options">Näita navigeerimismenüü valikuid</string>
@@ -585,7 +580,6 @@
     <string name="title_advanced_actionbar_swap">Vaheta nupud prügi ja arhiiv</string>
     <string name="title_advanced_actionbar_color">Näita vestluse tegevusriba taustavärvina konto värvi</string>
     <string name="title_advanced_category_header">Rühmita konto kategooria järgi</string>
-    <string name="title_advanced_navbar_colorize">Värviline Androidi navigeerimisriba</string>
     <string name="title_advanced_list_count">Näita ülemisel tegevusribal sõnumite või vestluste arvu</string>
     <string name="title_advanced_bundled_fonts">Kasuta kaasatud fonte</string>
     <string name="title_advanced_narrow_fonts">Kasuta kitsaid fonte</string>
@@ -640,6 +634,7 @@
     <string name="title_advanced_swipe_reply">Pühi vastamiseks laiendatud sõnumil paremale</string>
     <string name="title_advanced_move_thread_all">Valitud vestluste liigutamisel liiguta kõiki sõnumeid</string>
     <string name="title_advanced_move_thread_sent">Vestluse liigutamisel liiguta ka saadetud sõnumeid</string>
+    <string name="title_advanced_swipe_trash_all">Kui pühkida vestlus prügisse, vii prügisse kõik sõnumid</string>
     <string name="title_advanced_default_snooze">Tukastamise vaikeaeg</string>
     <string name="title_advanced_default_folder">Vali vaikekaust</string>
     <string name="title_advanced_notifications">Halda teavitamist</string>
@@ -773,6 +768,7 @@
     <string name="title_advanced_openai_temperature">Temperatuur: %1$s</string>
     <string name="title_advanced_openai_moderation">Sisu modereerimine</string>
     <string name="title_advanced_gemini">Gemini lõimimine</string>
+    <string name="title_advanced_summarize_prompt">Kokkuvõtte viip</string>
     <string name="title_advanced_sdcard">Ma soovin kasutada SD-kaarti</string>
     <string name="title_advanced_watchdog">Kontrolli perioodiliselt, kas FairEmail on jätkuvalt aktiivne</string>
     <string name="title_advanced_updates">Kontrolli GitHub uuendusi</string>
@@ -869,6 +865,7 @@
     <string name="title_advanced_autoclose_hint">Sule vestlused automaatselt, kui kõik sõnumid on arhiivitud, saadetud või saadetud prügisse</string>
     <string name="title_advanced_sender_hint">Enamik teenusepakkujaid ei luba muudetud saatjaaadressi</string>
     <string name="title_advanced_bcc_hint">Aadressi ei näidata, kuid lisatakse saatmisel</string>
+    <string name="title_advanced_envelope_from_hint">Aadressi kasutuskohaks on SMTP MAIL FROM</string>
     <string name="title_advanced_internal_hint">Antakse hoiatus, kui saadetakse teisele domeenile</string>
     <string name="title_advanced_uri">Valitud kontakti üksikasju kasutatakse vCard manuste jaoks</string>
     <string name="title_advanced_e2e_encryption">Otspunktkrüpteerimise valikud</string>
@@ -1103,8 +1100,10 @@
     <string name="title_delete_operation_move">Liigutamise tegevused</string>
     <string name="title_delete_operation_flag">Märkimistegevused</string>
     <string name="title_delete_operation_delete">Kustutamistegevused</string>
+    <string name="title_delete_operation_send">Saatmistegevused</string>
     <string name="title_delete_operation_deleted">%1$d tegevust kustutatud</string>
-    <string name="title_delete_contacts">Kustutada nähtavad kohalikud kontaktid?</string>
+    <string name="title_delete_contacts">Kustutada kõik kohalikud kontaktid?</string>
+    <string name="title_delete_contacts_remark">Kõik näidatud ja mittenäidatud kontaktid kustutatakse, isegi otsitud!</string>
     <string name="title_no_operations">Pole ootel tegevusi</string>
     <string name="title_check_operations">Tegevuste kontrollimine</string>
     <string name="title_hint_operations">Tegevuste kustutamine võib põhjustada sõnumite kadumist ja sünkroonimisprobleeme</string>
@@ -1361,6 +1360,7 @@
     <string name="title_reply_to">Vasta saajale:</string>
     <string name="title_cc">Koopia:</string>
     <string name="title_bcc">P-koopia:</string>
+    <string name="title_envelope_from">Ümbrik kohast:</string>
     <string name="title_recipients">%1$d saajat</string>
     <string name="title_via_identity">Läbi:</string>
     <string name="title_sent">Saadetud:</string>
@@ -1452,6 +1452,7 @@
     <string name="title_create_template">Loo mall</string>
     <string name="title_select_default_identity">Vali vaikeaadress</string>
     <string name="title_translate">Tõlgi</string>
+    <string name="title_summarize">Kokkuvõte</string>
     <string name="title_translate_configure">Häälestamine &#8230;</string>
     <string name="title_translate_key">Sisesta võti</string>
     <string name="title_translating">Tõlkimine &#8230;</string>
@@ -1630,6 +1631,7 @@
     <string name="title_view_thread">Vaata vestlust</string>
     <string name="title_force_sync">Käsk sünkroonida</string>
     <string name="title_force_send">Käsk saata</string>
+    <string name="title_pwned_remark">See kontrollib salasõna ilma seda saatmata (kasutades k-anonymization) ja mitte e-posti!</string>
     <string name="title_language_all">Kõik</string>
     <string name="title_previous">Eelmine</string>
     <string name="title_next">Järgmine</string>
@@ -1679,6 +1681,7 @@
     <string name="title_rule_delete">Kustuta jäädavalt</string>
     <string name="title_rule_sound">Mängi heli</string>
     <string name="title_rule_silent">Hääletu teavitus</string>
+    <string name="title_rule_summarize">Kokkuvõte</string>
     <string name="title_rule_caption">Reegel</string>
     <string name="title_rule_title">Reegli rakendamiskoht</string>
     <string name="title_rule_name">Nimi</string>
@@ -1706,6 +1709,7 @@
     <string name="title_rule_younger">Sõnumid uuemad kui (tundi)</string>
     <string name="title_rule_regex">Reg. avaldis</string>
     <string name="title_rule_and">JA</string>
+    <string name="title_rule_not">MITTE</string>
     <string name="title_rule_action">Tegevus</string>
     <string name="title_rule_action_remark">Seda tegevust rakendatakse sõnumitele, mis saabuvad kausta %1$s</string>
     <string name="title_rule_hours">Tundi</string>
@@ -2067,6 +2071,7 @@
     <string name="title_keyword_not_displayed">Pole näidatud</string>
     <string name="title_keyword_not_delivered">Pole kättetoimetatud</string>
     <string name="title_keyword_complaint">Kaebus</string>
+    <string name="title_keyword_phishing">Õngitsemine</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d sõnum</item>
         <item quantity="other">%1$d sõnumit</item>
@@ -2127,7 +2132,7 @@
         <item>Ühendatud kaustad</item>
         <item>Peakonto kaustad</item>
         <item>Kontod</item>
-        <item>Primary inbox</item>
+        <item>Peamine sisendkast</item>
     </string-array>
     <string-array name="downloadNames">
         <item>16 KB</item>

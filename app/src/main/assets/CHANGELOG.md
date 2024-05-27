@@ -4,20 +4,114 @@
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
+*The use of "AI" integrations is and will remain completely optional*
+
 ### [Acantholipan](https://en.wikipedia.org/wiki/Acantholipan)
+
+Preview versions are available [here](https://bitbucket.org/M66B/fairemail-test/downloads/).
+
+### 1.2188 - 2024-05-27 *
+
+* Fixed keyboard inset in some cases
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2187 - 2024-05-26
+
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2186 - 2024-05-24
+
+* Fixed jitter when hiding the top toolbar
+* Fixed Android navigation bar color for some Android versions (regression)
+* Reverted AndroidX fragment to version 1.6.2 again due to instability
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2185 - 2024-05-22
+
+* Fixed constraint violation when inserting identity
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2184 - 2024-05-22
+
+* Fixed keyboard inset (regression)
+* Fixed black background of black and white theme (regression)
+* Using account color as default for inbox folder color
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2183 - 2024-05-21
+
+* Prepared for Android 15
+* Added "AI" summarize rule action
+* Listing NOT rule conditions
+* Reverted AndroidX fragment to version 1.6.2
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2182 - 2024-05-15
+
+* Added optional "AI" summarize quick action
+* Added optional "AI" summarize swipe action
+* Changed default OpenAI model to [gpt-4o](https://openai.com/index/hello-gpt-4o/)
+* Improved OpenAI integration (added multimodal support)
+* Improved Gemini integration
+* Made "AI" integrations available in the Play Store version
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2181 - 2024-05-13
+
+* Reverted [AndroidX ROOM](https://developer.android.com/jetpack/androidx/releases/room#2.6.1) to version 2.4.3 to solve locking issues (*)
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2180 - 2024-05-13
+
+* Improved [Gemini](https://m66b.github.io/FairEmail/#faq204) integration
+* Performance improvements
+* Small improvements and minor bug fixes
+* Updated [NDK](https://developer.android.com/ndk/)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2179 - 2024-05-08
+
+* Added option to change "AI" summarize prompt
+* Added expression condition functions, see [the FAQ](https://m66b.github.io/FairEmail/#faq71)
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated libraries (including [Bouncy Castle](https://www.bouncycastle.org/))
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2178 - 2024-04-29
+
+* Added "AI" summarization of received messages (*)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+<sup>(*) Via the horizontal three-dots button just above the message text. ChatGPT or Gemini needs to be configured in the integrations-settings tab page for this.</sub>
 
 ### 1.2177 - 2024-04-27
 
-* Added [Have I Been Pwned?](https://haveibeenpwned.com/) check (*)
+* Added [Have I Been Pwned?](https://haveibeenpwned.com/) **<ins>password</ins>** check (*)
 * Added identity option to configure envelope-from (*MAIL FROM*)
 * Small improvements and minor bug fixes
 * Updated [translations](https://crowdin.com/project/open-source-email)
 
-(*) Via the three-dots overflow menu of the account list under "*Manual setup and account options*" in the main settings screen (GitHub version only).
+<sub>(*) Via the three-dots overflow menu of the account list under "*Manual setup and account options*" in the main settings screen (GitHub version only)</sub>
 
 ### [Zby](https://en.wikipedia.org/wiki/Zby)
 
-### 1.2176 - 2024-04-22
+### 1.2176 - 2024-04-22 *
 
 * Fixed British English translation
 * Small improvements and minor bug fixes
@@ -50,7 +144,7 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 * Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
 * Updated [translations](https://crowdin.com/project/open-source-email)
 
-(*) Currently supported email forwarders:
+<sub>(*) Currently supported email forwarders:</sub>
 
 * [addy.io](https://addy.io/)
 * [DuckDuckGo Email Protection](https://duckduckgo.com/email/)
@@ -241,6 +335,8 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 * Small improvements and minor bug fixes
 * Updated libraries (Apache Compress, Bugsnag, Bouncy Castle, Jsoup)
 * Updated [translations](https://crowdin.com/project/open-source-email)
+
+<!-- truncate here -->
 
 ### 1.2145 - 2023-12-30
 
@@ -1652,7 +1748,7 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 * Small improvements and minor bug fixes
 * Updated translations
 
-(*) Due to Play store policies this feature is not available in the Play store version; Android version 6 or later is required
+<sub>(*) Due to Play store policies this feature is not available in the Play store version; Android version 6 or later is required</sub>
 
 ### 1.1930 - 2022-07-04
 

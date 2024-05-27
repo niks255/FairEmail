@@ -338,7 +338,7 @@ public class FragmentPop extends FragmentBase {
 
         etInterval.setHint(Integer.toString(EntityAccount.DEFAULT_POLL_INTERVAL));
 
-        adapterSwipe = new ArrayAdapter<>(getContext(), R.layout.spinner_item1, android.R.id.text1, getSwipeActions());
+        adapterSwipe = new ArrayAdapter<>(getContext(), R.layout.spinner_item1, android.R.id.text1, getSwipeActions(getContext()));
         adapterSwipe.setDropDownViewResource(R.layout.spinner_item1_dropdown);
 
         spLeft.setAdapter(adapterSwipe);
@@ -363,7 +363,6 @@ public class FragmentPop extends FragmentBase {
 
         // Initialize
         Helper.setViewsEnabled(view, false);
-        FragmentDialogTheme.setBackground(getContext(), view, false);
 
         if (!DnsHelper.hasDnsSec()) {
             Helper.hide(cbDnsSec);
@@ -903,7 +902,7 @@ public class FragmentPop extends FragmentBase {
 
                     cbIdentity.setChecked(account == null);
 
-                    List<EntityFolder> folders = getSwipeActions();
+                    List<EntityFolder> folders = getSwipeActions(getContext());
                     for (int pos = 0; pos < folders.size(); pos++) {
                         EntityFolder folder = folders.get(pos);
 
@@ -1088,7 +1087,7 @@ public class FragmentPop extends FragmentBase {
         }.execute(this, args, "account:delete");
     }
 
-    private List<EntityFolder> getSwipeActions() {
+    private List<EntityFolder> getSwipeActions(Context context) {
         List<EntityFolder> folders = new ArrayList<>();
 
         EntityFolder ask = new EntityFolder();
@@ -1098,8 +1097,18 @@ public class FragmentPop extends FragmentBase {
 
         EntityFolder seen = new EntityFolder();
         seen.id = EntityMessage.SWIPE_ACTION_SEEN;
-        seen.name = getString(R.string.title_seen);
+        seen.name = getString(R.string.title_seen_unseen);
         folders.add(seen);
+
+        EntityFolder snooze = new EntityFolder();
+        snooze.id = EntityMessage.SWIPE_ACTION_SNOOZE;
+        snooze.name = getString(R.string.title_snooze_now);
+        folders.add(snooze);
+
+        EntityFolder hide = new EntityFolder();
+        hide.id = EntityMessage.SWIPE_ACTION_HIDE;
+        hide.name = getString(R.string.title_hide);
+        folders.add(hide);
 
         EntityFolder flag = new EntityFolder();
         flag.id = EntityMessage.SWIPE_ACTION_FLAG;
@@ -1111,15 +1120,12 @@ public class FragmentPop extends FragmentBase {
         importance.name = getString(R.string.title_set_importance);
         folders.add(importance);
 
-        EntityFolder snooze = new EntityFolder();
-        snooze.id = EntityMessage.SWIPE_ACTION_SNOOZE;
-        snooze.name = getString(R.string.title_snooze_now);
-        folders.add(snooze);
-
-        EntityFolder hide = new EntityFolder();
-        hide.id = EntityMessage.SWIPE_ACTION_HIDE;
-        hide.name = getString(R.string.title_hide);
-        folders.add(hide);
+        if (AI.isAvailable(context)) {
+            EntityFolder summarize = new EntityFolder();
+            summarize.id = EntityMessage.SWIPE_ACTION_SUMMARIZE;
+            summarize.name = context.getString(R.string.title_summarize);
+            folders.add(summarize);
+        }
 
         EntityFolder junk = new EntityFolder();
         junk.id = EntityMessage.SWIPE_ACTION_JUNK;

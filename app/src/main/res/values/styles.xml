@@ -26,7 +26,7 @@
     <attr name="colorInfoBackground" format="reference" />
     <attr name="activatableItemBackground" format="reference" />
 
-    <style name="AppThemeBaseLight" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemeBaseLight" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="themeName">light</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">
@@ -100,7 +100,7 @@
         <item name="viewInflaterClass">eu.faircode.email.AppCompatViewInflaterEx</item>
     </style>
 
-    <style name="AppThemeBaseDark" parent="Base.Theme.AppCompat">
+    <style name="AppThemeBaseDark" parent="Theme.AppCompat.NoActionBar">
         <item name="themeName">dark</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">
@@ -112,8 +112,6 @@
 
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowAnimationStyle">@style/activityAnimationStyle</item>
-
-        <item name="android:navigationBarColor">@color/black</item>
 
         <item name="android:textColorPrimary">@color/abc_primary_text_material_dark</item>
         <item name="android:textColorPrimaryInverse">@color/abc_primary_text_material_light</item>
@@ -430,19 +428,7 @@
         <item name="colorInfoForeground">@color/white</item>
         <item name="colorInfoBackground">@color/blackPrimary</item>
 
-        <item name="actionBarTheme">@style/WhiteActionBar</item>
         <item name="snackbarStyle">@style/WhiteSnackBar</item>
-    </style>
-
-    <style name="WhiteActionBar" parent="Base.Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/blackPrimary</item>
-        <item name="colorPrimaryDark">@color/blackPrimaryDark</item>
-        <item name="colorAccent">@color/blackAccent</item>
-
-        <item name="android:background">@color/white</item>
-        <item name="android:titleTextStyle">@style/ActionBarTitle</item>
-        <!-- snackbar text color -->
-        <item name="android:textColor">@color/blackPrimaryDark</item>
     </style>
 
     <style name="WhiteSnackBar" parent="Widget.Design.Snackbar">
@@ -651,4 +637,6 @@
     <style name="ChipDark" parent="Base.Theme.Material3.Dark">
         <item name="chipCornerRadius">6dp</item>
     </style>
+
+    <style name="actionBarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
 </resources>

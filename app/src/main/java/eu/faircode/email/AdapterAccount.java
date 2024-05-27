@@ -494,6 +494,8 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
             }
             popupMenu.getMenu().add(Menu.NONE, R.string.title_primary, order++, R.string.title_primary)
                     .setCheckable(true).setChecked(account.primary);
+            if (parentFragment instanceof FragmentAccounts)
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_edit_color, order++, R.string.title_edit_color);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 String channelId = EntityAccount.getNotificationChannelId(account.id);
@@ -518,6 +520,9 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_log, order++, R.string.title_log);
             }
 
+            if (!settings)
+                popupMenu.getMenu().add(Menu.NONE, R.string.menu_setup, order++, R.string.menu_setup);
+
             if (debug || BuildConfig.DEBUG) {
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_reset, order++, R.string.title_reset);
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_setup_oauth_authorize, order++, R.string.title_setup_oauth_authorize);
@@ -535,6 +540,9 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                         return true;
                     } else if (itemId == R.string.title_primary) {
                         onActionPrimary(!item.isChecked());
+                        return true;
+                    } else if (itemId == R.string.title_edit_color) {
+                        onActionEditColor();
                         return true;
                     } else if (itemId == R.string.title_create_channel) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -559,6 +567,9 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                         return true;
                     } else if (itemId == R.string.title_log) {
                         onActionLog();
+                        return true;
+                    } else if (itemId == R.string.menu_setup) {
+                        onActionSettings();
                         return true;
                     } else if (itemId == R.string.title_reset) {
                         onActionReset();
@@ -674,6 +685,19 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                             Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
                         }
                     }.execute(context, owner, args, "account:primary");
+                }
+
+                private void onActionEditColor() {
+                    Bundle args = new Bundle();
+                    args.putLong("id", account.id);
+                    args.putInt("color", account.color == null ? Color.TRANSPARENT : account.color);
+                    args.putString("title", context.getString(R.string.title_color));
+                    args.putBoolean("reset", true);
+
+                    FragmentDialogColor fragment = new FragmentDialogColor();
+                    fragment.setArguments(args);
+                    fragment.setTargetFragment(parentFragment, ActivitySetup.REQUEST_EDIT_ACCOUNT_COLOR);
+                    fragment.show(parentFragment.getParentFragmentManager(), "edit:color");
                 }
 
                 @TargetApi(Build.VERSION_CODES.O)
@@ -793,6 +817,14 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                     FragmentTransaction fragmentTransaction = parentFragment.getParentFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.content_frame, fragment).addToBackStack("logs");
                     fragmentTransaction.commit();
+                }
+
+                private void onActionSettings() {
+                    context.startActivity(new Intent(context, ActivitySetup.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            .putExtra("target", "accounts")
+                            .putExtra("id", account.id)
+                            .putExtra("protocol", account.protocol));
                 }
 
                 private void onActionReset() {

@@ -272,7 +272,7 @@ public class FragmentAccounts extends FragmentBase {
                         getContext(),
                         getViewLifecycleOwner(),
                         getParentFragmentManager(),
-                        fabCompose, -1L);
+                        fabCompose, -1L, -1L);
             }
         });
 
@@ -291,8 +291,6 @@ public class FragmentAccounts extends FragmentBase {
         animator = Helper.getFabAnimator(fab, getViewLifecycleOwner());
 
         // Initialize
-        FragmentDialogTheme.setBackground(getContext(), view, false);
-
         if (settings) {
             fab.show();
             fabCompose.hide();
@@ -490,6 +488,10 @@ public class FragmentAccounts extends FragmentBase {
 
         try {
             switch (requestCode) {
+                case ActivitySetup.REQUEST_EDIT_ACCOUNT_COLOR:
+                    if (resultCode == RESULT_OK && data != null)
+                        onEditAccountColor(data.getBundleExtra("args"));
+                    break;
                 case ActivitySetup.REQUEST_DELETE_ACCOUNT:
                     if (resultCode == RESULT_OK && data != null)
                         onDeleteAccount(data.getBundleExtra("args"));
@@ -506,6 +508,33 @@ public class FragmentAccounts extends FragmentBase {
             btnGrant.setVisibility(View.GONE);
             ServiceSynchronize.reload(getContext(), null, false, "Permissions regranted");
         }
+    }
+
+    private void onEditAccountColor(Bundle args) {
+        if (!ActivityBilling.isPro(getContext())) {
+            startActivity(new Intent(getContext(), ActivityBilling.class));
+            return;
+        }
+
+        new SimpleTask<Void>() {
+            @Override
+            protected Void onExecute(Context context, Bundle args) {
+                long id = args.getLong("id");
+                Integer color = args.getInt("color");
+
+                if (color == Color.TRANSPARENT)
+                    color = null;
+
+                DB db = DB.getInstance(context);
+                db.account().setAccountColor(id, color);
+                return null;
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "edit:color");
     }
 
     private void onDeleteAccount(Bundle args) {

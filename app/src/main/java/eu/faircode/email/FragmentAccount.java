@@ -626,7 +626,6 @@ public class FragmentAccount extends FragmentBase {
 
         // Initialize
         Helper.setViewsEnabled(view, false);
-        FragmentDialogTheme.setBackground(getContext(), view, false);
 
         tvGmailHint.setVisibility(View.GONE);
 
@@ -2138,6 +2137,13 @@ public class FragmentAccount extends FragmentBase {
         importance.id = EntityMessage.SWIPE_ACTION_IMPORTANCE;
         importance.name = context.getString(R.string.title_set_importance);
         folders.add(importance);
+
+        if (AI.isAvailable(context)) {
+            EntityFolder summarize = new EntityFolder();
+            summarize.id = EntityMessage.SWIPE_ACTION_SUMMARIZE;
+            summarize.name = context.getString(R.string.title_summarize);
+            folders.add(summarize);
+        }
 
         EntityFolder move = new EntityFolder();
         move.id = EntityMessage.SWIPE_ACTION_MOVE;

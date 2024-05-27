@@ -1084,7 +1084,6 @@ public class FragmentCompose extends FragmentBase {
 
         // Initialize
         setHasOptionsMenu(true);
-        FragmentDialogTheme.setBackground(getContext(), view, true);
 
         if (keyboard_no_fullscreen) {
             // https://developer.android.com/reference/android/view/inputmethod/EditorInfo#IME_FLAG_NO_FULLSCREEN
@@ -1873,22 +1872,22 @@ public class FragmentCompose extends FragmentBase {
         final Context context = getContext();
         PopupMenuLifecycle.insertIcons(context, menu, false);
 
-        LayoutInflater infl = LayoutInflater.from(context);
+        ActionBar actionBar = getSupportActionBar();
+        Context actionBarContext = (actionBar == null ? context : actionBar.getThemedContext());
+        LayoutInflater infl = LayoutInflater.from(actionBarContext);
 
-        ImageButton ibOpenAi = (ImageButton) infl.inflate(R.layout.action_button, null);
-        ibOpenAi.setId(View.generateViewId());
-        ibOpenAi.setImageResource(R.drawable.twotone_smart_toy_24);
-        ibOpenAi.setContentDescription("AI");
-        ibOpenAi.setOnClickListener(new View.OnClickListener() {
+        ImageButton ibAI = (ImageButton) infl.inflate(R.layout.action_button, null);
+        ibAI.setId(View.generateViewId());
+        ibAI.setImageResource(R.drawable.twotone_smart_toy_24);
+        ibAI.setContentDescription("AI");
+        ibAI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (OpenAI.isAvailable(view.getContext()))
-                    onOpenAi();
-                else if (Gemini.isAvailable(view.getContext()))
-                    onGemini();
+                if (AI.isAvailable(context))
+                    onAI();
             }
         });
-        menu.findItem(R.id.menu_openai).setActionView(ibOpenAi);
+        menu.findItem(R.id.menu_ai).setActionView(ibAI);
 
         View v = infl.inflate(R.layout.action_button_text, null);
         v.setId(View.generateViewId());
@@ -1953,9 +1952,9 @@ public class FragmentCompose extends FragmentBase {
         menu.findItem(R.id.menu_encrypt).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_translate).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_translate).setVisible(DeepL.isAvailable(context));
-        menu.findItem(R.id.menu_openai).setEnabled(state == State.LOADED && !chatting);
-        ((ImageButton) menu.findItem(R.id.menu_openai).getActionView()).setEnabled(!chatting);
-        menu.findItem(R.id.menu_openai).setVisible(OpenAI.isAvailable(context) || Gemini.isAvailable(context));
+        menu.findItem(R.id.menu_ai).setEnabled(state == State.LOADED && !chatting);
+        ((ImageButton) menu.findItem(R.id.menu_ai).getActionView()).setEnabled(!chatting);
+        menu.findItem(R.id.menu_ai).setVisible(AI.isAvailable(context));
         menu.findItem(R.id.menu_zoom).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_style).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_media).setEnabled(state == State.LOADED);
@@ -2640,19 +2639,18 @@ public class FragmentCompose extends FragmentBase {
         }.serial().execute(this, args, "compose:print");
     }
 
-    private void onOpenAi() {
+    private void onAI() {
         int start = etBody.getSelectionStart();
         int end = etBody.getSelectionEnd();
         boolean selection = (start >= 0 && end > start);
         Editable edit = etBody.getText();
-        String body = (selection ? edit.subSequence(start, end) : edit).toString().trim();
+        CharSequence body = (selection ? edit.subSequence(start, end) : edit);
 
         Bundle args = new Bundle();
         args.putLong("id", working);
-        args.putString("body", body);
-        args.putBoolean("selection", selection);
+        args.putCharSequence("body", body);
 
-        new SimpleTask<OpenAI.Message[]>() {
+        new SimpleTask<String>() {
             @Override
             protected void onPreExecute(Bundle args) {
                 chatting = true;
@@ -2666,60 +2664,17 @@ public class FragmentCompose extends FragmentBase {
             }
 
             @Override
-            protected OpenAI.Message[] onExecute(Context context, Bundle args) throws Throwable {
+            protected String onExecute(Context context, Bundle args) throws Throwable {
                 long id = args.getLong("id");
-                String body = args.getString("body");
-                boolean selection = args.getBoolean("selection");
+                CharSequence body = args.getCharSequence("body");
 
-                DB db = DB.getInstance(context);
-                EntityMessage draft = db.message().getMessage(id);
-                if (draft == null)
-                    return null;
-
-                List<EntityMessage> inreplyto;
-                if (selection || TextUtils.isEmpty(draft.inreplyto))
-                    inreplyto = new ArrayList<>();
-                else
-                    inreplyto = db.message().getMessagesByMsgId(draft.account, draft.inreplyto);
-
-                List<OpenAI.Message> result = new ArrayList<>();
-
-                if (inreplyto.size() > 0 && inreplyto.get(0).content) {
-                    String role = (MessageHelper.equalEmail(draft.from, inreplyto.get(0).from) ? "assistant" : "user");
-                    Document parsed = JsoupEx.parse(inreplyto.get(0).getFile(context));
-                    Document document = HtmlHelper.sanitizeView(context, parsed, false);
-                    Spanned spanned = HtmlHelper.fromDocument(context, document, null, null);
-                    result.add(new OpenAI.Message(role, OpenAI.truncateParagraphs(spanned.toString())));
-                }
-
-                if (!TextUtils.isEmpty(body))
-                    result.add(new OpenAI.Message("assistant", OpenAI.truncateParagraphs(body)));
-
-                if (result.size() == 0)
-                    return null;
-
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                String model = prefs.getString("openai_model", "gpt-3.5-turbo");
-                float temperature = prefs.getFloat("openai_temperature", 0.5f);
-                boolean moderation = prefs.getBoolean("openai_moderation", false);
-
-                if (moderation)
-                    for (OpenAI.Message message : result)
-                        OpenAI.checkModeration(context, message.getContent());
-
-                OpenAI.Message[] completions =
-                        OpenAI.completeChat(context, model, result.toArray(new OpenAI.Message[0]), temperature, 1);
-
-                return completions;
+                return AI.completeChat(context, id, body);
             }
 
             @Override
-            protected void onExecuted(Bundle args, OpenAI.Message[] messages) {
-                if (messages == null || messages.length == 0)
+            protected void onExecuted(Bundle args, String completion) {
+                if (completion == null)
                     return;
-
-                String text = messages[0].getContent()
-                        .replaceAll("^\\n+", "").replaceAll("\\n+$", "");
 
                 Editable edit = etBody.getText();
                 int start = etBody.getSelectionStart();
@@ -2730,17 +2685,17 @@ public class FragmentCompose extends FragmentBase {
                     edit.delete(start, end);
                     index = start;
                 } else
-                    index = end;
+                    index = etBody.length();
 
                 if (index < 0)
                     index = 0;
                 if (index > 0 && edit.charAt(index - 1) != '\n')
                     edit.insert(index++, "\n");
 
-                edit.insert(index, text + "\n");
-                etBody.setSelection(index + text.length() + 1);
+                edit.insert(index, completion + "\n");
+                etBody.setSelection(index + completion.length() + 1);
 
-                StyleHelper.markAsInserted(edit, index, index + text.length() + 1);
+                StyleHelper.markAsInserted(edit, index, index + completion.length() + 1);
 
                 if (args.containsKey("used") && args.containsKey("granted")) {
                     double used = args.getDouble("used");
@@ -2753,81 +2708,7 @@ public class FragmentCompose extends FragmentBase {
             protected void onException(Bundle args, Throwable ex) {
                 Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
             }
-        }.serial().execute(this, args, "openai");
-    }
-
-    private void onGemini() {
-        int start = etBody.getSelectionStart();
-        int end = etBody.getSelectionEnd();
-        boolean selection = (start >= 0 && end > start);
-        Editable edit = etBody.getText();
-        String body = (selection ? edit.subSequence(start, end) : edit).toString().trim();
-
-        Bundle args = new Bundle();
-        args.putLong("id", working);
-        args.putString("body", body);
-        args.putBoolean("selection", selection);
-
-        new SimpleTask<String[]>() {
-            @Override
-            protected void onPreExecute(Bundle args) {
-                chatting = true;
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            protected void onPostExecute(Bundle args) {
-                chatting = false;
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            protected String[] onExecute(Context context, Bundle args) throws Throwable {
-                long id = args.getLong("id");
-                String body = args.getString("body");
-                boolean selection = args.getBoolean("selection");
-
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                String model = prefs.getString("gemini_model", "gemini-pro");
-
-                return Gemini.generate(context, model, new String[]{Gemini.truncateParagraphs(body)});
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, String[] result) {
-                if (result == null || result.length == 0)
-                    return;
-
-                String text = result[0]
-                        .replaceAll("^\\n+", "").replaceAll("\\n+$", "");
-
-                Editable edit = etBody.getText();
-                int start = etBody.getSelectionStart();
-                int end = etBody.getSelectionEnd();
-
-                int index;
-                if (etBody.hasSelection()) {
-                    edit.delete(start, end);
-                    index = start;
-                } else
-                    index = end;
-
-                if (index < 0)
-                    index = 0;
-                if (index > 0 && edit.charAt(index - 1) != '\n')
-                    edit.insert(index++, "\n");
-
-                edit.insert(index, text + "\n");
-                etBody.setSelection(index + text.length() + 1);
-
-                StyleHelper.markAsInserted(edit, index, index + text.length() + 1);
-            }
-
-            @Override
-            protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
-            }
-        }.serial().execute(this, args, "gemini");
+        }.serial().execute(this, args, "AI");
     }
 
     private void onTranslate(View anchor) {
@@ -6004,8 +5885,9 @@ public class FragmentCompose extends FragmentBase {
                                 !("list".equals(action) && TextUtils.isEmpty(selected_text)) &&
                                 !"dsn".equals(action)) {
                             // Reply/forward
-                            Element reply = document.createElement("div");
-                            reply.attr("fairemail", "reference");
+                            Element reply = document.createElement("div")
+                                    .addClass("fairemail_quote")
+                                    .attr("fairemail", "reference");
 
                             // Build reply header
                             boolean separate_reply = prefs.getBoolean("separate_reply", false);
@@ -6136,7 +6018,7 @@ public class FragmentCompose extends FragmentBase {
                     Helper.writeText(data.draft.getFile(context), html);
                     Helper.writeText(data.draft.getFile(context, data.draft.revision), html);
 
-                    String text = HtmlHelper.getFullText(html);
+                    String text = HtmlHelper.getFullText(html, true);
                     data.draft.preview = HtmlHelper.getPreview(text);
                     data.draft.language = HtmlHelper.getLanguage(context, data.draft.subject, text);
                     db.message().setMessageContent(data.draft.id,
@@ -6323,7 +6205,7 @@ public class FragmentCompose extends FragmentBase {
                         Helper.writeText(file, html);
                         Helper.writeText(data.draft.getFile(context, data.draft.revision), html);
 
-                        String text = HtmlHelper.getFullText(html);
+                        String text = HtmlHelper.getFullText(html, true);
                         data.draft.preview = HtmlHelper.getPreview(text);
                         data.draft.language = HtmlHelper.getLanguage(context, data.draft.subject, text);
                         db.message().setMessageContent(data.draft.id,
@@ -7190,7 +7072,7 @@ public class FragmentCompose extends FragmentBase {
                     if (f.length() > MAX_REASONABLE_SIZE)
                         args.putBoolean("large", true);
 
-                    String full = HtmlHelper.getFullText(body);
+                    String full = HtmlHelper.getFullText(body, true);
                     draft.preview = HtmlHelper.getPreview(full);
                     draft.language = HtmlHelper.getLanguage(context, draft.subject, full);
                     db.message().setMessageContent(draft.id,

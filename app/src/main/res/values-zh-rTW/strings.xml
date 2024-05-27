@@ -96,7 +96,6 @@
     <string name="title_notification_sending">正在傳送訊息</string>
     <string name="title_notification_waiting">正在等待適用的網路連線</string>
     <string name="title_notification_idle">閒置</string>
-    <string name="title_notification_failed">\'%1$s\' 失敗</string>
     <string name="title_notification_alert">伺服器警報: \'%1$s\'</string>
     <string name="title_notification_sending_left">剩餘嘗試數: %1$d</string>
     <string name="title_notification_sending_retry">傳送操作將在互聯網連線變更或於寄件匣執行下拉操作後重試</string>
@@ -499,7 +498,6 @@
     <string name="title_advanced_actionbar">顯示會話工具列</string>
     <string name="title_advanced_actionbar_color">使用帳戶色作為會話工具列的背景色</string>
     <string name="title_advanced_category_header">帳戶分類群組</string>
-    <string name="title_advanced_navbar_colorize">著色 Android 導覽列</string>
     <string name="title_advanced_list_count">在頂端操作區中顯示訊息或對話的數量</string>
     <string name="title_advanced_bundled_fonts">使用綑綁的字體</string>
     <string name="title_advanced_narrow_fonts">使用窄字體</string>
@@ -929,7 +927,7 @@
     <string name="title_delete_operation_flag">標記操作</string>
     <string name="title_delete_operation_delete">刪除操作</string>
     <string name="title_delete_operation_deleted">%1$d 操作已刪除</string>
-    <string name="title_delete_contacts">刪除可見的本地聯絡人？</string>
+    <string name="title_delete_contacts">刪除所有本地聯絡人？</string>
     <string name="title_no_operations">無待處理操作</string>
     <string name="title_check_operations">操作檢查中</string>
     <string name="title_hint_operations">將操作刪除可能會使得訊息消失並導致同步問題</string>

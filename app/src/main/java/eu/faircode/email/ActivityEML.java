@@ -109,11 +109,11 @@ public class ActivityEML extends ActivityBase {
             junk = savedInstanceState.getBoolean("fair:junk");
         }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setSubtitle("EML");
-
         View view = LayoutInflater.from(this).inflate(R.layout.activity_eml, null);
         setContentView(view);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setSubtitle("EML");
 
         tvFrom = findViewById(R.id.tvFrom);
         tvTo = findViewById(R.id.tvTo);
@@ -207,7 +207,6 @@ public class ActivityEML extends ActivityBase {
         });
 
         // Initialize
-        FragmentDialogTheme.setBackground(this, view, false);
         vSeparatorAttachments.setVisibility(View.GONE);
         grpReady.setVisibility(View.GONE);
         cardHeaders.setVisibility(View.GONE);

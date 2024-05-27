@@ -143,7 +143,7 @@ public class FragmentOptions extends FragmentBase {
             "cards", "beige", "tabular_card_bg", "shadow_unread", "shadow_border", "shadow_highlight", "dividers", "tabular_unread_bg",
             "portrait2", "portrait2c", "portrait_min_size", "landscape", "landscape_min_size",
             "column_width",
-            "hide_toolbar", "nav_categories", "nav_last_sync", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "show_unexposed", "navbar_colorize",
+            "hide_toolbar", "edge_to_edge", "nav_categories", "nav_last_sync", "nav_count", "nav_unseen_drafts", "nav_count_pinned", "show_unexposed",
             "indentation", "date", "date_week", "date_fixed", "date_bold", "date_time", "threading", "threading_unread",
             "show_filtered",
             "highlight_unread", "highlight_color", "color_stripe", "color_stripe_wide",
@@ -256,10 +256,12 @@ public class FragmentOptions extends FragmentBase {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        final Context context = getContext();
+
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
+        tabLayout.setBackgroundColor(Helper.resolveColor(context, R.attr.colorCardBackground));
         tabLayout.setupWithViewPager(pager);
 
-        final Context context = getContext();
         int colorAccent = Helper.resolveColor(context, androidx.appcompat.R.attr.colorAccent);
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             Drawable d = ContextCompat.getDrawable(context, PAGE_ICONS[i]);
@@ -424,7 +426,7 @@ public class FragmentOptions extends FragmentBase {
                     }
 
                     searchView.setSuggestionsAdapter(new SimpleCursorAdapter(
-                            searchView.getContext(),
+                            pager.getContext(),
                             R.layout.spinner_item1_dropdown,
                             cursor,
                             new String[]{"title"},

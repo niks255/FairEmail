@@ -742,7 +742,7 @@
     </provider>
     <provider
         name="freenet.de"
-        documentation="Haben Sie SMTP über die Systemsteuerung des E-Mail-Anbieters aktiviert?"
+        documentation="Haben Sie SMTP über die Systemsteuerung des E-Mail-Anbieters &lt;a href=&quot;https://kundenservice.freenet.de/artikel/1685&quot;&gt;aktiviert&lt;/a&gt;?"
         domain="freenet\\.de,fn\\.de,freenetmail\\.de,bossmail\\.de,justmail\\.de"
         link="https://kundenservice.freenet.de/artikel/1869">
         <imap
@@ -2276,5 +2276,19 @@
             host="mail.mnet-online.de"
             port="587"
             starttls="true" />
+    </provider>
+    <provider
+        name="Namirial"
+        documentation="Potrebbe essere necessaria una password per l'applicazione, vedere &lt;a href='https://servicedesk.namirial.com/hc/it/articles/4406869586065-Come-si-configura-in-un-client-di-posta#h_01HBDFX24AVGQ4Z9K9DFAAD3VC'&gt;qui&lt;/a&gt;."
+        link="https://servicedesk.namirial.com/hc/it/articles/4406869586065-Come-si-configura-in-un-client-di-posta#h_01FJBS1SXG8J110SFVJ03ENQAB"
+        mx=".*sicurezzapostale\\.it">
+        <imap
+            host="imaps.sicurezzapostale.it"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtps.sicurezzapostale.it"
+            port="465"
+            starttls="false" />
     </provider>
 </providers>

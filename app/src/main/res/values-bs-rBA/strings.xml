@@ -14,9 +14,6 @@
     <string name="app_cake_required">Minimalno zahtijevani skladišni prostor: %1$s</string>
     <string name="app_updated">Posljednje ažuriranje: %1$s</string>
     <string name="app_download">Preuzeto sa: %1$s</string>
-    <string name="app_mod1">        Martovsko sigurnosno ažuriranje uzrok je porukama \'Aplikacija ne reaguje\', ekskluzivno na Google Pixel uređajima.
-        Molimo da ne krivite aplikaciju zbog ovog, samo Google može riješiti ovaj problem!
-    </string>
     <string name="channel_service">Monitoring</string>
     <string name="channel_send">Slanje</string>
     <string name="channel_notification">E-pošta</string>
@@ -132,7 +129,6 @@
     <string name="title_notification_sending">Slanje poruka</string>
     <string name="title_notification_waiting">Čekanje na prihvatljivu konekciju</string>
     <string name="title_notification_idle">Stanje mirovanja</string>
-    <string name="title_notification_failed">\'%1$s\' nije uspjelo</string>
     <string name="title_notification_alert">Upozorenje servera: \'%1$s\'</string>
     <string name="title_notification_sending_left">Preostalih pokušaja: %1$d</string>
     <string name="title_notification_sending_retry">Slanje će se ponoviti mijenjanjem internet konekcije ili povlačenjem prema dolje u outbox-u tj. izlaznoj pošti</string>
@@ -496,7 +492,6 @@
     <string name="title_advanced_two_col">Koristi dvije kolone</string>
     <string name="title_advanced_min_screen_size">Minimalna veličina ekrana za podijeljeni ekran</string>
     <string name="title_advanced_close_pane">Suzi red ili kolonu pri zatvaranju konverzacije</string>
-    <string name="title_advanced_open_pane">Započni s dva reda ili dvije kolone</string>
     <string name="title_advanced_column_width">Širina kolone / visina reda poruka: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Sakrij gornju alatnu traku pri skrolanju poruka</string>
     <string name="title_advanced_nav_options">Prikaži opcije navigacijskog menija</string>
@@ -599,7 +594,6 @@
     <string name="title_advanced_actionbar_swap">Zamijeni dugmad za otpad i arhiviranje</string>
     <string name="title_advanced_actionbar_color">Koristi boju računa kao pozadinsku boju radne trake za konverzaciju</string>
     <string name="title_advanced_category_header">Grupiši prema kategoriji računa</string>
-    <string name="title_advanced_navbar_colorize">Oboji navigacijsku traku Androida</string>
     <string name="title_advanced_list_count">Prikaži broj poruka ili konverzacija u gornjoj akcionoj traci</string>
     <string name="title_advanced_bundled_fonts">Koristi paketske fontove</string>
     <string name="title_advanced_narrow_fonts">Koristi uske fontove</string>
@@ -654,6 +648,7 @@
     <string name="title_advanced_swipe_reply">Prstom prevucite proširene poruke na desno za odgovor</string>
     <string name="title_advanced_move_thread_all">Pri premještanju označenih konverzacija, premjesti sve poruke</string>
     <string name="title_advanced_move_thread_sent">Pri premještanju konverzacije, premjesti i poslane poruke</string>
+    <string name="title_advanced_swipe_trash_all">Kod prevlačenja konverzacije u otpad, izbriši sve poruke</string>
     <string name="title_advanced_default_snooze">Zadano vrijeme odlaganja/odgađanja</string>
     <string name="title_advanced_default_folder">Izaberite zadani folder</string>
     <string name="title_advanced_notifications">Upravljaj obavještenjima</string>
@@ -787,6 +782,7 @@
     <string name="title_advanced_openai_temperature">Temperatura: %1$s</string>
     <string name="title_advanced_openai_moderation">Moderacija sadržaja</string>
     <string name="title_advanced_gemini">Integracija s Geminijem</string>
+    <string name="title_advanced_summarize_prompt">Naredba za sažetak</string>
     <string name="title_advanced_sdcard">Želim koristiti SD karticu</string>
     <string name="title_advanced_watchdog">Povremeno provjeri da li je FairEmail još aktivan</string>
     <string name="title_advanced_updates">Provjeri ažuriranja na GitHub-u</string>
@@ -883,6 +879,7 @@
     <string name="title_advanced_autoclose_hint">Automatski zatvori konverzacije kada se sve poruke arhiviraju, pošalju ili izbrišu</string>
     <string name="title_advanced_sender_hint">Većina provajdera ne dopušta modifikovane adrese pošiljaoca</string>
     <string name="title_advanced_bcc_hint">Adresa se neće prikazivati, ali će biti dodana tokom slanja</string>
+    <string name="title_advanced_envelope_from_hint">Ova adresa će se koristiti za SMTP MAIL FROM</string>
     <string name="title_advanced_internal_hint">Pojavit će se upozorenje tokom slanja na drugu domenu</string>
     <string name="title_advanced_uri">Detalji izabranog kontakta koristit če se za vCard priloge</string>
     <string name="title_advanced_e2e_encryption">Opcija za E2E (end-to-end) šifriranje</string>
@@ -1117,8 +1114,10 @@
     <string name="title_delete_operation_move">Premjesti operacije</string>
     <string name="title_delete_operation_flag">Označi operacije</string>
     <string name="title_delete_operation_delete">Izbriši operacije</string>
+    <string name="title_delete_operation_send">Operacije slanja</string>
     <string name="title_delete_operation_deleted">%1$d operacije/a izbrisano</string>
-    <string name="title_delete_contacts">Izbrisati vidljive lokalne kontakte?</string>
+    <string name="title_delete_contacts">Izbrisati sve lokalne kontakte?</string>
+    <string name="title_delete_contacts_remark">Svi prikazani i neprikazani kontakti bit će izbrisani, čak i tokom pretrage!</string>
     <string name="title_no_operations">Nema operacija na čekanju</string>
     <string name="title_check_operations">Provjera operacija</string>
     <string name="title_hint_operations">Brisanje operacija može prouzrokovati nestanak poruka i probleme sa sinhronizacijom</string>
@@ -1375,6 +1374,7 @@
     <string name="title_reply_to">Odgovori za:</string>
     <string name="title_cc">CC:</string>
     <string name="title_bcc">BCC:</string>
+    <string name="title_envelope_from">Koverta od:</string>
     <string name="title_recipients">%1$d primaoca</string>
     <string name="title_via_identity">Preko:</string>
     <string name="title_sent">Poslano:</string>
@@ -1466,6 +1466,7 @@
     <string name="title_create_template">Napravi prijedložak</string>
     <string name="title_select_default_identity">Izaberite zadanu adresu</string>
     <string name="title_translate">Prevedi</string>
+    <string name="title_summarize">Sažetak</string>
     <string name="title_translate_configure">Podesi &#8230;</string>
     <string name="title_translate_key">Unesite ključ</string>
     <string name="title_translating">Prevođenje &#8230;</string>
@@ -1644,6 +1645,7 @@
     <string name="title_view_thread">Pogledaj konverzaciju</string>
     <string name="title_force_sync">Forsiraj sinhronizaciju</string>
     <string name="title_force_send">Forsiraj slanje</string>
+    <string name="title_pwned_remark">Ovo će provjeriti lozinku, bez njenog slanja (korištenjem k-anonimizacije), a ne e-mail adresu!</string>
     <string name="title_language_all">Svi</string>
     <string name="title_previous">Prethodni</string>
     <string name="title_next">Sljedeći</string>
@@ -1693,6 +1695,8 @@
     <string name="title_rule_delete">Trajno izbriši</string>
     <string name="title_rule_sound">Pokreni zvuk</string>
     <string name="title_rule_silent">Tiha obavještenja</string>
+    <string name="title_rule_summarize">Sažetak</string>
+    <string name="title_rule_summarize_remark">Sažetak poruke pomoću podešene AI (UI) integracije</string>
     <string name="title_rule_caption">Uredi pravilo</string>
     <string name="title_rule_title">Pravilo se primjenjuje na</string>
     <string name="title_rule_name">Naziv</string>
@@ -1720,6 +1724,7 @@
     <string name="title_rule_younger">Poruke koje nisu starije od (sati)</string>
     <string name="title_rule_regex">Regularni izraz</string>
     <string name="title_rule_and">AND</string>
+    <string name="title_rule_not">NOT</string>
     <string name="title_rule_action">Radnja</string>
     <string name="title_rule_action_remark">Ova radnja će se primijeniti na nove poruke koje stižu u folder %1$s</string>
     <string name="title_rule_hours">Sati</string>
@@ -2081,6 +2086,7 @@
     <string name="title_keyword_not_displayed">Nije pogledano</string>
     <string name="title_keyword_not_delivered">Nije dostavljeno</string>
     <string name="title_keyword_complaint">Žalba</string>
+    <string name="title_keyword_phishing">Fišing</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d poruka</item>
         <item quantity="few">%1$d poruke</item>

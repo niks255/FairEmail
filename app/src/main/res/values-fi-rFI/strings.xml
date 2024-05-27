@@ -14,9 +14,6 @@
     <string name="app_cake_required">Tallennustilaa vaaditaan: %1$s</string>
     <string name="app_updated">Päivitetty viimeksi: %1$s</string>
     <string name="app_download">Ladattu palvelusta: %1$s</string>
-    <string name="app_mod1">        Maaliskuun tietoturvapäivitys aiheuttaa \'Sovellus ei vastaa\'-viestejä Google Pixel -laitteissa.
-        Tämä ei johdu sovelluksesta. Vain Google voi ratkaista ongelman!
-    </string>
     <string name="channel_service">Monitorointi</string>
     <string name="channel_send">Lähettäminen</string>
     <string name="channel_notification">Sähköposti</string>
@@ -114,7 +111,6 @@
     <string name="title_notification_sending">Lähetetään viestejä</string>
     <string name="title_notification_waiting">Odotetaan sopivaa yhteyttä</string>
     <string name="title_notification_idle">Toimeton</string>
-    <string name="title_notification_failed">\'%1$s\' epäonnistui</string>
     <string name="title_notification_alert">Palvelimen hälytys: \'%1$s\'</string>
     <string name="title_notification_sending_left">Yrityksiä jäljellä: %1$d</string>
     <string name="title_notification_sending_retry">Lähettämistä yritetään uudestaan internetyhteyden muuttuessa tai vetämällä alaspäin lähtevät-kansiossa</string>
@@ -477,7 +473,6 @@
     <string name="title_advanced_two_col">Käytä kahta saraketta</string>
     <string name="title_advanced_min_screen_size">Näytön vähimmäiskoko näytön jakamiseksi</string>
     <string name="title_advanced_close_pane">Tiivistä rivi tai sarake, kun keskustelu suljetaan</string>
-    <string name="title_advanced_open_pane">Aloita kahdella rivillä tai sarakkeella</string>
     <string name="title_advanced_column_width">Viestisarakkeen leveys / rivin korkeus: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Piilota työkalupalkki vierittäessä viestejä</string>
     <string name="title_advanced_nav_options">Näytä asetukset navigointivalikossa</string>
@@ -580,7 +575,6 @@
     <string name="title_advanced_actionbar_swap">Vaihda roskakorin ja arkistoinnin painikkeiden paikat</string>
     <string name="title_advanced_actionbar_color">Käytä tilin väriä taustavärinä keskustelun toimintopalkissa</string>
     <string name="title_advanced_category_header">Ryhmittele tilin luokan mukaan</string>
-    <string name="title_advanced_navbar_colorize">Väritä Androidin navigointipalkki</string>
     <string name="title_advanced_list_count">Näytä viestien tai keskustelujen määrä toimintopalkissa ylhäällä</string>
     <string name="title_advanced_bundled_fonts">Käytä mukaan paketoituja kirjasimia</string>
     <string name="title_advanced_narrow_fonts">Käytä kapeita kirjasimia</string>
@@ -1098,7 +1092,7 @@
     <string name="title_delete_operation_flag">Merkitsemistoimenpiteet</string>
     <string name="title_delete_operation_delete">Poistotoimenpiteet</string>
     <string name="title_delete_operation_deleted">%1$d toimenpidettä poistettu</string>
-    <string name="title_delete_contacts">Poistetaanko näkyvät paikalliset yhteystiedot?</string>
+    <string name="title_delete_contacts">Poistetaanko kaikki paikalliset yhteystiedot?</string>
     <string name="title_no_operations">Ei odottavia toimenpiteitä</string>
     <string name="title_check_operations">Tarkistetaan toimenpiteitä</string>
     <string name="title_hint_operations">Toimenpiteiden poisto voi aiheuttaa viestien katoamista ja synkronointiongelmia</string>

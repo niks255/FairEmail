@@ -14,8 +14,9 @@
     <string name="app_cake_required">Minimaler erforderlicher Speicherplatz: %1$s</string>
     <string name="app_updated">Letzte Aktualisierung: %1$s</string>
     <string name="app_download">Heruntergeladen von: %1$s</string>
-    <string name="app_mod1">        Die März-Sicherheitsaktualisierung verursacht die Fehlermeldung »App reagiert nicht« und betrifft ausschließlich Google-Pixel-Geräte.
-        Bitte machen Sie nicht die App dafür verantwortlich – nur Google kann das Problem beheben!
+    <string name="app_motd">        Unter Android 14 / 15 Beta kann es gelegentlich zur Fehlermeldung »App reagiert nicht« kommen.
+        Google arbeitet bereits an einer Lösung.
+        Bitte machen Sie nicht die App für dieses Problem verantwortlich!
     </string>
     <string name="channel_service">Überwachen</string>
     <string name="channel_send">Senden</string>
@@ -119,7 +120,7 @@
     <string name="title_notification_sending">Nachrichten werden gesendet</string>
     <string name="title_notification_waiting">Auf eine geeignete Verbindung wird gewartet</string>
     <string name="title_notification_idle">Leerlauf</string>
-    <string name="title_notification_failed">\'%1$s\' fehlgeschlagen</string>
+    <string name="title_notification_failed">Konto »%1$s« fehlgeschlagen</string>
     <string name="title_notification_alert">Serverwarnung: \'%1$s\'</string>
     <string name="title_notification_sending_left">Verbleibende Versuche: %1$d</string>
     <string name="title_notification_sending_retry">Das Senden wird erneut versucht, wenn sich die Internetverbindung ändert oder der Postausgang heruntergezogen wird</string>
@@ -242,6 +243,7 @@
     <string name="title_setup_doze_stopped">Synchronisation angehalten?</string>
     <string name="title_setup_doze_device">Dies ist wahrscheinlich für dieses Gerät erforderlich</string>
     <string name="title_setup_alarm_12">Die App wird nicht ordnungsgemäß funktionieren</string>
+    <string name="title_setup_fg_15">Die App kann nicht automatisch gestartet werden</string>
     <string name="title_setup_inexact">Benachrichtigungen und Erinnerungen sind deaktiviert</string>
     <string name="title_setup_background">Hintergrundbeschränkungen sind aktiviert</string>
     <string name="title_setup_data">Datensparmodus aktiviert</string>
@@ -307,10 +309,10 @@
     <string name="title_setup_theme_white">Weiß</string>
     <string name="title_setup_theme_black_or_white">Schwarz oder Weiß</string>
     <string name="title_setup_theme_black_and_white">Schwarzweiß</string>
-    <string name="title_setup_theme_reverse">Farben umkehren</string>
+    <string name="title_setup_theme_reverse">Farben tauschen</string>
     <string name="title_setup_theme_light">Hell</string>
     <string name="title_setup_theme_dark">Dunkel</string>
-    <string name="title_setup_theme_system">wie System</string>
+    <string name="title_setup_theme_system">Systemstandard</string>
     <string name="title_setup_theme_black_background">Schwarzer Hintergrund</string>
     <string name="title_setup_theme_html_light">Heller Hintergrund für die Ansicht der Originalnachricht</string>
     <string name="title_setup_theme_composer_light">Heller Hintergrund für das Verfassenfenster</string>
@@ -483,7 +485,6 @@
     <string name="title_advanced_two_col">Zwei Spalten verwenden</string>
     <string name="title_advanced_min_screen_size">Minimale Bildschirmgröße zum Aufteilen des Bildschirms</string>
     <string name="title_advanced_close_pane">Zeile oder Spalte beim Schließen einer Unterhaltung zusammenklappen</string>
-    <string name="title_advanced_open_pane">Mit zwei Zeilen oder zwei Spalten beginnen</string>
     <string name="title_advanced_column_width">Spaltenbreite/Zeilenhöhe der Nachricht: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Obere Symbolleiste beim Scrollen von Nachrichten ausblenden</string>
     <string name="title_advanced_nav_options">Optionen im Navigationsmenü anzeigen</string>
@@ -586,7 +587,6 @@
     <string name="title_advanced_actionbar_swap">Schaltflächen »Papierkorb« und »Archiv« tauschen</string>
     <string name="title_advanced_actionbar_color">Farbe des Kontos als Hintergrundfarbe der Aktionsleiste verwenden</string>
     <string name="title_advanced_category_header">Nach Kontokategorie gruppieren</string>
-    <string name="title_advanced_navbar_colorize">Android-Navigationsleiste farbig darstellen</string>
     <string name="title_advanced_list_count">Anzahl der Nachrichten oder Unterhaltungen in der oberen Aktionsleiste anzeigen</string>
     <string name="title_advanced_bundled_fonts">Vorinstallierte Schriftarten verwenden</string>
     <string name="title_advanced_narrow_fonts">Schmale Schriftarten verwenden</string>
@@ -641,6 +641,7 @@
     <string name="title_advanced_swipe_reply">Ausgeklappte Nachricht nach rechts wischen, um zu antworten</string>
     <string name="title_advanced_move_thread_all">Beim Verschieben einer Unterhaltung alle zu dieser Unterhaltung gehörenden Nachrichten verschieben</string>
     <string name="title_advanced_move_thread_sent">Beim Verschieben einer Unterhaltung auch die zu dieser Unterhaltung gehörenden gesendeten Nachrichten verschieben</string>
+    <string name="title_advanced_swipe_trash_all">Beim Wischen einer Unterhaltung in den Papierkorb alle zu dieser Unterhaltung gehörenden Nachrichten löschen</string>
     <string name="title_advanced_default_snooze">Standardzeit für Zurückstellen/Verzögern</string>
     <string name="title_advanced_default_folder">Standardordner auswählen</string>
     <string name="title_advanced_notifications">Benachrichtigungen verwalten</string>
@@ -759,6 +760,7 @@
     <string name="title_advanced_haptic_feedback">Haptisches Feedback bei wichtigen Aktionen</string>
     <string name="title_advanced_language">Sprache</string>
     <string name="title_advanced_language_system">System</string>
+    <string name="title_advanced_integrations_hint">Die nachfolgenden Cloud-Dienste sind nicht Teil der App. Alle Zahlungen gehen direkt an den Cloud-Dienst und nicht an den App-Entwickler.</string>
     <string name="title_advanced_lt">LanguageTool-Integration</string>
     <string name="title_advanced_lt_sentence">Jeden Satz prüfen</string>
     <string name="title_advanced_lt_auto">Absatz nach einer neuen Zeile prüfen</string>
@@ -774,6 +776,8 @@
     <string name="title_advanced_openai_temperature">Temperatur: %1$s</string>
     <string name="title_advanced_openai_moderation">Moderation von Inhalten</string>
     <string name="title_advanced_gemini">Gemini-Integration</string>
+    <string name="title_advanced_multi_modal">Multimodal</string>
+    <string name="title_advanced_summarize_prompt">Aufforderung zusammenfassen</string>
     <string name="title_advanced_sdcard">Ich möchte eine SD-Karte verwenden</string>
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
     <string name="title_advanced_updates">Auf GitHub nach Aktualisierungen suchen</string>
@@ -850,6 +854,9 @@
     <string name="title_advanced_threading_hint">Zusammengehörige Nachrichten gruppieren</string>
     <string name="title_advanced_indentation_hint">Nur im Kartenstil</string>
     <string name="title_advanced_highlight_hint">Die Akzentfarbe des Designs wird zur Hervorhebung verwendet</string>
+    <string name="title_advanced_free">Dieser Cloud-Dienst kann kostenlos verwendet werden</string>
+    <string name="title_advanced_free_tier">Dieser Cloud-Dienst kann mit Einschränkungen kostenlos verwendet werden</string>
+    <string name="title_advanced_paid_service">Dieser Cloud-Dienst ist kostenpflichtig</string>
     <string name="title_advanced_privacy_risk">Es könnte ein Datenschutzrisiko geben</string>
     <string name="title_advanced_name_email_hint">Namen werden nur angezeigt, wenn sie verfügbar sind</string>
     <string name="title_advanced_preview_hint">Nur verfügbar, wenn der Nachrichtentext heruntergeladen wurde</string>
@@ -871,7 +878,7 @@
     <string name="title_advanced_autoclose_hint">Unterhaltungen automatisch schließen, wenn alle E-Mails archiviert, gesendet oder gelöscht wurden</string>
     <string name="title_advanced_sender_hint">Die meisten Anbieter erlauben keine veränderten Absenderadressen</string>
     <string name="title_advanced_bcc_hint">Die Adresse wird nicht angezeigt, wird aber beim Absenden hinzugefügt</string>
-    <string name="title_advanced_envelope_from_hint" comment="title_advanced_envelope_from_hint&#10;Remark for &quot;Envelope from&quot; input field&#10;&quot;SMTP MAIL FROM&quot; should not be translated!&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3">Diese Adresse wird für »SMTP MAIL FROM« verwendet</string>
+    <string name="title_advanced_envelope_from_hint">Diese Adresse wird für »SMTP MAIL FROM« verwendet</string>
     <string name="title_advanced_internal_hint">Beim Senden an eine andere Domain wird ein Warnhinweis ausgegeben</string>
     <string name="title_advanced_uri">Die Details des ausgewählten Kontakts werden für vCard-Anhänge verwendet</string>
     <string name="title_advanced_e2e_encryption">Optionen für Ende-zu-Ende-Verschlüsselung</string>
@@ -917,6 +924,7 @@
     <string name="title_identity_name">Ihr Name</string>
     <string name="title_identity_email">Ihre E-Mail-Adresse</string>
     <string name="title_identity_tenant_hint">Dieses Feld sollte in den meisten Fällen leer bleiben</string>
+    <string name="title_identity_receive_first_hint">Es ist selten notwendig, diese Option zu aktivieren, außerdem erhöht sich dadurch der Datenverbrauch!</string>
     <string name="title_identity_color_hint">Identitätsfarben haben gegenüber Ordner- und Kontofarben Vorrang</string>
     <string name="title_advanced_sender">Bearbeitung der Absenderadresse erlauben</string>
     <string name="title_advanced_sender_name">Namen verwenden, wenn die Absenderadresse bearbeitet wurde</string>
@@ -974,6 +982,7 @@
     <string name="title_password">Passwort</string>
     <string name="title_password_storage">Wie werden Passwörter gespeichert?</string>
     <string name="title_case_sensitive">Bei Benutzernamen und Passwörtern wird normalerweise zwischen Groß- und Kleinschreibung unterschieden</string>
+    <string name="title_login_before_send">Vor dem Senden empfangen</string>
     <string name="title_client_certificate">Clientzertifikat</string>
     <string name="title_realm">Bereich</string>
     <string name="title_use_ip">Lokale IP-Adresse anstelle des Hostnamens verwenden</string>
@@ -1078,6 +1087,7 @@
     <string name="title_expunge_remark">Dadurch werden alle zum Löschen gekennzeichneten Nachrichten dauerhaft gelöscht</string>
     <string name="title_empty_trash">Papierkorb leeren</string>
     <string name="title_empty_spam">Spam-Ordner leeren</string>
+    <string name="title_edit_color">Farbe bearbeiten</string>
     <string name="title_edit_properties">Eigenschaften bearbeiten</string>
     <string name="title_edit_rules">Regeln bearbeiten</string>
     <string name="title_execute_rules">Regeln ausführen</string>
@@ -1106,8 +1116,10 @@
     <string name="title_delete_operation_move">Verschiebe-Vorgänge</string>
     <string name="title_delete_operation_flag">Kennzeichnungs-Vorgänge</string>
     <string name="title_delete_operation_delete">Lösch-Vorgänge</string>
+    <string name="title_delete_operation_send">Sendevorgänge</string>
     <string name="title_delete_operation_deleted">%1$d Vorgänge gelöscht</string>
-    <string name="title_delete_contacts">Sichtbare lokale Kontakte löschen?</string>
+    <string name="title_delete_contacts">Alle lokalen Kontakte löschen?</string>
+    <string name="title_delete_contacts_remark">Alle angezeigten und nicht angezeigten Kontakte werden gelöscht, auch wenn sie gesucht wurden!</string>
     <string name="title_no_operations">Keine weiteren Vorgänge</string>
     <string name="title_check_operations">Auf Vorgänge wird geprüft</string>
     <string name="title_hint_operations">Das Löschen von Vorgängen kann zum Verschwinden von Meldungen und zu Synchronisationsproblemen führen</string>
@@ -1122,7 +1134,7 @@
     <string name="title_search_folder">Nach Ordnern suchen</string>
     <string name="title_apply_to_all">Für alle übernehmen</string>
     <string name="title_edit_account_name">Kontonamen ändern</string>
-    <string name="title_edit_account_color">Farbe des Kontos ändern</string>
+    <string name="title_edit_account_color">Kontofarbe bearbeiten</string>
     <string name="title_hide_folder">Ordner ausblenden</string>
     <string name="title_hide_seen_folder">Ordner ausblenden, wenn alle Nachrichten gelesen wurden</string>
     <string name="title_hide_seen_folder_hint">Nur in der Konto- und vereinheitlichten Ordnerliste</string>
@@ -1333,7 +1345,9 @@
     <string name="title_ask_show_html">Das Anzeigen der originalen Nachricht kann vertrauliche Daten preisgeben</string>
     <string name="title_ask_show_html_remark">Das Anzeigen der Originalnachricht mit dunklem Hintergrund ist nicht möglich, da dadurch dunkle Texte und Bilder nicht sichtbar wären</string>
     <string name="title_ask_show_html_images">Bilder immer anzeigen, wenn Originalnachrichten angezeigt werden</string>
+    <string name="title_ask_show_html_always">Standardmäßig Originalnachrichten anzeigen</string>
     <string name="title_ask_show_image">Das Anzeigen von Bildern kann vertrauliche Daten preisgeben</string>
+    <string name="title_ask_show_images_always">Standardmäßig Bilder anzeigen</string>
     <string name="title_ask_show_image_hint">Erkannte Verfolgungsbilder werden nicht angezeigt</string>
     <string name="title_ask_show_amp">AMP-Variante der Nachricht anzeigen?</string>
     <string name="title_ask_show_amp_hint">AMP-Nachrichten sind so ausgelegt, dass sie dynamisch sind, mit dem Internet interagieren und daher per Definition dazu verwendet werden können, um Sie zu verfolgen.</string>
@@ -1364,7 +1378,7 @@
     <string name="title_reply_to">Antworten an:</string>
     <string name="title_cc">Kopie:</string>
     <string name="title_bcc">Blindkopie:</string>
-    <string name="title_envelope_from" comment="title_envelope_from&#10;Envelope from = SMTP MAIL FROM, see the related remark text for more details&#10;https://datatracker.ietf.org/doc/html/rfc5321#section-3.3&#10;">Briefumschlag von:</string>
+    <string name="title_envelope_from">Briefumschlag von:</string>
     <string name="title_recipients">%1$d Empfänger</string>
     <string name="title_via_identity">Über:</string>
     <string name="title_sent">Gesendet:</string>
@@ -1456,6 +1470,7 @@
     <string name="title_create_template">Vorlage erstellen</string>
     <string name="title_select_default_identity">Standardadresse auswählen</string>
     <string name="title_translate">Übersetzen</string>
+    <string name="title_summarize">Zusammenfassen</string>
     <string name="title_translate_configure">Konfigurieren &#8230;</string>
     <string name="title_translate_key">Schlüssel einfügen</string>
     <string name="title_translating">Wird übersetzt &#8230;</string>
@@ -1588,6 +1603,7 @@
     <string name="title_search_flag_notes">Notizen</string>
     <string name="title_search_flag_invite">Einladungen</string>
     <string name="title_search_flag_size">Größe &gt; %1$s</string>
+    <string name="title_search_flag_touched">geöffnet</string>
     <string name="title_search_device">Gerät durchsuchen</string>
     <string name="title_search_server">Auf dem Server suchen</string>
     <string name="title_search_server_wait">Auf Server wird gewartet</string>
@@ -1634,6 +1650,7 @@
     <string name="title_view_thread">Unterhaltung ansehen</string>
     <string name="title_force_sync">Synchronisation erzwingen</string>
     <string name="title_force_send">Senden erzwingen</string>
+    <string name="title_pwned_remark">Damit wird das Passwort geprüft, ohne es zu senden (unter Verwendung von k-Anonymität), und nicht die E-Mail-Adresse!</string>
     <string name="title_language_all">Alle</string>
     <string name="title_previous">Vorherige</string>
     <string name="title_next">Nächste</string>
@@ -1683,6 +1700,8 @@
     <string name="title_rule_delete">Dauerhaft löschen</string>
     <string name="title_rule_sound">Ton abspielen</string>
     <string name="title_rule_silent">Lautlose Benachrichtigung</string>
+    <string name="title_rule_summarize">Zusammenfassen</string>
+    <string name="title_rule_summarize_remark">Nachricht mit der konfigurierten KI-Integration zusammenfassen</string>
     <string name="title_rule_caption">Regel bearbeiten</string>
     <string name="title_rule_title">Regel gilt für</string>
     <string name="title_rule_name">Name</string>
@@ -1959,6 +1978,7 @@
     <string name="title_ask_what">Fragen, was getan werden soll</string>
     <string name="title_no_ask_again">Nicht noch einmal fragen</string>
     <string name="title_no_ask_for_again">Nicht noch einmal für %1$s fragen</string>
+    <string name="title_undo_privacy">Das Verhalten kann in den Einstellungen »Datenschutz« rückgängig gemacht werden</string>
     <string name="title_no_body">Kein Nachrichtentext gefunden</string>
     <string name="title_large_body">Diese Nachricht ist sehr groß und kann zu Problemen führen!</string>
     <string name="title_no_charset">Nicht unterstützte Kodierung: %1$s</string>
@@ -2072,6 +2092,7 @@
     <string name="title_keyword_not_displayed">Nicht angezeigt</string>
     <string name="title_keyword_not_delivered">Nicht zugestellt</string>
     <string name="title_keyword_complaint">Beschwerde</string>
+    <string name="title_keyword_phishing">Phishing</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d Nachricht</item>
         <item quantity="other">%1$d Nachrichten</item>

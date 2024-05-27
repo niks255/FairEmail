@@ -134,7 +134,6 @@
     <string name="title_notification_sending">Odosielanie správ</string>
     <string name="title_notification_waiting">Čakanie na vhodné pripojenie</string>
     <string name="title_notification_idle">Nečinný</string>
-    <string name="title_notification_failed">\"%1$s\" zlyhalo</string>
     <string name="title_notification_alert">Upozornenie zo servera: \'%1$s\'</string>
     <string name="title_notification_sending_left">%1$d zostávajúcich pokusov</string>
     <string name="title_notification_sending_retry">Opätovné odosielanie sa spustí pri zmene parametrov pripojenia na internet alebo potiahnutím dolu v priečinku pošta na odoslanie</string>
@@ -477,7 +476,6 @@
     <string name="title_advanced_two_col">Použiť dva stĺpce</string>
     <string name="title_advanced_min_screen_size">Minimálna veľkosť obrazovky pre funkciu rozdelenie obrazovky</string>
     <string name="title_advanced_close_pane">Zbaliť riadok alebo stĺpec pri zatvorení konverzácie</string>
-    <string name="title_advanced_open_pane">Začať s dvoma riadkami alebo dvoma stĺpcami</string>
     <string name="title_advanced_column_width">Šírka stĺpca / výška riadku správy: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Skrytie horného panela nástrojov pri posúvaní správ</string>
     <string name="title_advanced_nav_options">Zobrazovať možnosti navigačnej ponuky</string>
@@ -571,7 +569,6 @@
     <string name="title_advanced_actionbar_swap">Tlačidlo vymeniť kôš a archív</string>
     <string name="title_advanced_actionbar_color">Použiť farbu účtu ako farbu pozadia panela akcií konverzácie</string>
     <string name="title_advanced_category_header">Zoskupiť podľa kategórie účtu</string>
-    <string name="title_advanced_navbar_colorize">Zafarbiť navigačný panel Androidu</string>
     <string name="title_advanced_list_count">Zobrazovať počet správ alebo konverzácií na vrchnom panely akcií</string>
     <string name="title_advanced_bundled_fonts">Používať zabudované písma</string>
     <string name="title_advanced_parse_classes">Spracovať štýly CSS</string>
@@ -1056,7 +1053,7 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_delete_operation_flag">Operácie so značkami</string>
     <string name="title_delete_operation_delete">Operácie mazania</string>
     <string name="title_delete_operation_deleted">Vymazaných %1$d operácií</string>
-    <string name="title_delete_contacts">Odstrániť viditeľné lokálne kontakty?</string>
+    <string name="title_delete_contacts">Odstrániť všetky lokálne kontakty?</string>
     <string name="title_no_operations">Žiadne prebiehajúce operácie</string>
     <string name="title_check_operations">Zisťovanie operácií</string>
     <string name="title_hint_operations">Mazanie operácií môže viesť k miznúcim správam a synchronizačným problémom</string>

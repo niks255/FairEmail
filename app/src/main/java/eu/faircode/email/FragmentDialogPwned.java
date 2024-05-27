@@ -52,15 +52,25 @@ public class FragmentDialogPwned extends FragmentDialogBase {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         final Context context = getContext();
         final View dview = LayoutInflater.from(context).inflate(R.layout.dialog_pwned, null);
+        final TextView tvCaption = dview.findViewById(R.id.tvCaption);
         final TextView tvPwned = dview.findViewById(R.id.tvPwned);
         final Button btnCheck = dview.findViewById(R.id.btnCheck);
         final ContentLoadingProgressBar pbCheck = dview.findViewById(R.id.pbCheck);
         final ImageButton ibPwned = dview.findViewById(R.id.ibPwned);
+        final TextView tvRemark = dview.findViewById(R.id.tvRemark);
         final TextView tvPrivacy = dview.findViewById(R.id.tvPrivacy);
         final Group grpReady = dview.findViewById(R.id.grpReady);
 
         final int colorError = Helper.resolveColor(context, androidx.appcompat.R.attr.colorError);
         final int colorVerified = Helper.resolveColor(context, R.attr.colorVerified);
+
+        tvCaption.getPaint().setUnderlineText(true);
+        tvCaption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse(BuildConfig.PWNED_URI + "Passwords"), true);
+            }
+        });
 
         btnCheck.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,14 +149,17 @@ public class FragmentDialogPwned extends FragmentDialogBase {
         ibPwned.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.view(v.getContext(), Uri.parse(BuildConfig.PWNED_URI), true);
+                Helper.view(v.getContext(), Uri.parse(BuildConfig.PWNED_URI + "Passwords"), true);
             }
         });
 
-        pbCheck.setVisibility(View.GONE);
-        grpReady.setVisibility(View.GONE);
+        tvRemark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.view(v.getContext(), Uri.parse("https://en.wikipedia.org/wiki/K-anonymity"), true);
+            }
+        });
 
-        tvPrivacy.setText(BuildConfig.PWNED_URI + "Privacy");
         tvPrivacy.getPaint().setUnderlineText(true);
         tvPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +167,9 @@ public class FragmentDialogPwned extends FragmentDialogBase {
                 Helper.view(v.getContext(), Uri.parse(BuildConfig.PWNED_URI + "Privacy"), true);
             }
         });
+
+        pbCheck.setVisibility(View.GONE);
+        grpReady.setVisibility(View.GONE);
 
         return new AlertDialog.Builder(context)
                 .setView(dview)

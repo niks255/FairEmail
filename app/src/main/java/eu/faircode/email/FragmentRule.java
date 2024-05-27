@@ -204,6 +204,7 @@ public class FragmentRule extends FragmentBase {
     private Group grpLocalOnly;
     private Group grpNotes;
     private Group grpUrl;
+    private Group grpSummarize;
 
     private ArrayAdapter<String> adapterGroup;
     private ArrayAdapter<String> adapterDay;
@@ -408,6 +409,7 @@ public class FragmentRule extends FragmentBase {
         grpLocalOnly = view.findViewById(R.id.grpLocalOnly);
         grpNotes = view.findViewById(R.id.grpNotes);
         grpUrl = view.findViewById(R.id.grpUrl);
+        grpSummarize = view.findViewById(R.id.grpSummarize);
 
         adapterGroup = new ArrayAdapter<>(getContext(), R.layout.spinner_item1_dropdown, android.R.id.text1);
         etGroup.setThreshold(1);
@@ -670,6 +672,8 @@ public class FragmentRule extends FragmentBase {
             actions.add(new Action(EntityRule.TYPE_COPY, getString(R.string.title_rule_copy)));
         actions.add(new Action(EntityRule.TYPE_DELETE, getString(R.string.title_rule_delete)));
         actions.add(new Action(EntityRule.TYPE_ANSWER, getString(R.string.title_rule_answer)));
+        if (AI.isAvailable(getContext()))
+            actions.add(new Action(EntityRule.TYPE_SUMMARIZE, getString(R.string.title_rule_summarize)));
         actions.add(new Action(EntityRule.TYPE_TTS, getString(R.string.title_rule_tts)));
         actions.add(new Action(EntityRule.TYPE_SOUND, getString(R.string.title_rule_sound)));
         actions.add(new Action(EntityRule.TYPE_AUTOMATION, getString(R.string.title_rule_automation)));
@@ -878,6 +882,7 @@ public class FragmentRule extends FragmentBase {
         grpLocalOnly.setVisibility(View.GONE);
         grpNotes.setVisibility(View.GONE);
         grpUrl.setVisibility(View.GONE);
+        grpSummarize.setVisibility(View.GONE);
 
         pbWait.setVisibility(View.VISIBLE);
 
@@ -1466,6 +1471,7 @@ public class FragmentRule extends FragmentBase {
         grpLocalOnly.setVisibility(type == EntityRule.TYPE_LOCAL_ONLY ? View.VISIBLE : View.GONE);
         grpNotes.setVisibility(type == EntityRule.TYPE_NOTES ? View.VISIBLE : View.GONE);
         grpUrl.setVisibility(type == EntityRule.TYPE_URL ? View.VISIBLE : View.GONE);
+        grpSummarize.setVisibility(type == EntityRule.TYPE_SUMMARIZE ? View.VISIBLE : View.GONE);
     }
 
     private void onActionDelete() {

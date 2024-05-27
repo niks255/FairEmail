@@ -46,6 +46,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.app.NotificationCompat;
@@ -121,7 +122,6 @@ public class FragmentFolders extends FragmentBase {
     private boolean primary;
     private boolean show_hidden = false;
     private boolean show_flagged = false;
-    private boolean hide_toolbar = false;
     private String searching = null;
     private AdapterFolder adapter;
 
@@ -133,8 +133,9 @@ public class FragmentFolders extends FragmentBase {
     static final int REQUEST_EXECUTE_RULES = 4;
     static final int REQUEST_EXPORT_MESSAGES = 5;
     static final int REQUEST_IMPORT_MESSAGES = 6;
-    static final int REQUEST_EDIT_ACCOUNT_NAME = 7;
-    static final int REQUEST_EDIT_ACCOUNT_COLOR = 8;
+    static final int REQUEST_EDIT_FOLDER_COLOR = 7;
+    static final int REQUEST_EDIT_ACCOUNT_NAME = 8;
+    static final int REQUEST_EDIT_ACCOUNT_COLOR = 9;
 
     private static final long EXPORT_PROGRESS_INTERVAL = 5000L; // milliseconds
 
@@ -154,7 +155,6 @@ public class FragmentFolders extends FragmentBase {
         compact = prefs.getBoolean("compact_folders", true);
         show_hidden = false; // prefs.getBoolean("hidden_folders", false);
         show_flagged = prefs.getBoolean("flagged_folders", false);
-        hide_toolbar = prefs.getBoolean("hide_toolbar", !BuildConfig.PLAY_STORE_RELEASE);
 
         if (BuildConfig.DEBUG) {
             ViewModelSelected selectedModel =
@@ -217,22 +217,7 @@ public class FragmentFolders extends FragmentBase {
         });
 
         rvFolder.setHasFixedSize(false);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext()) {
-            @Override
-            public void onLayoutCompleted(RecyclerView.State state) {
-                super.onLayoutCompleted(state);
-                if (!isActionBarShown())
-                    try {
-                        int range = computeVerticalScrollRange(state);
-                        int extend = computeVerticalScrollExtent(state);
-                        boolean canScrollVertical = (range > extend);
-                        if (!canScrollVertical) // anymore
-                            showActionBar(true);
-                    } catch (Throwable ex) {
-                        Log.e(ex);
-                    }
-            }
-        };
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rvFolder.setLayoutManager(llm);
 
         if (!cards && dividers) {
@@ -323,27 +308,6 @@ public class FragmentFolders extends FragmentBase {
             rvFolder.addItemDecoration(categoryDecorator);
         }
 
-        rvFolder.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            private boolean show = true;
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
-                if (hide_toolbar && dy != 0)
-                    try {
-                        show = (dy < 0 || rv.computeVerticalScrollOffset() == 0);
-                    } catch (Throwable ex) {
-                        Log.e(ex);
-                        show = true;
-                    }
-            }
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView rv, int newState) {
-                if (hide_toolbar && newState != RecyclerView.SCROLL_STATE_DRAGGING)
-                    showActionBar(show);
-            }
-        });
-
         adapter = new AdapterFolder(this, account, unified, primary, compact, show_hidden, show_flagged, null);
         rvFolder.setAdapter(adapter);
 
@@ -374,7 +338,7 @@ public class FragmentFolders extends FragmentBase {
                         getContext(),
                         getViewLifecycleOwner(),
                         getParentFragmentManager(),
-                        fabCompose, account);
+                        fabCompose, account, -1L);
             }
         });
 
@@ -443,7 +407,6 @@ public class FragmentFolders extends FragmentBase {
         });
 
         // Initialize
-        FragmentDialogTheme.setBackground(getContext(), view, false);
         grpReady.setVisibility(View.GONE);
         pbWait.setVisibility(View.VISIBLE);
         fabAdd.hide();
@@ -697,7 +660,10 @@ public class FragmentFolders extends FragmentBase {
                 }
             });
 
-        LayoutInflater infl = LayoutInflater.from(getContext());
+        ActionBar actionBar = getSupportActionBar();
+        Context actionBarContext = (actionBar == null ? getContext() : actionBar.getThemedContext());
+        LayoutInflater infl = LayoutInflater.from(actionBarContext);
+
         ImageButton ibSearch = (ImageButton) infl.inflate(R.layout.action_button, null);
         ibSearch.setId(View.generateViewId());
         ibSearch.setImageResource(R.drawable.twotone_search_24);
@@ -1006,6 +972,10 @@ public class FragmentFolders extends FragmentBase {
                 case REQUEST_IMPORT_MESSAGES:
                     if (resultCode == RESULT_OK && data != null)
                         onImportMessages(data.getData());
+                    break;
+                case REQUEST_EDIT_FOLDER_COLOR:
+                    if (resultCode == RESULT_OK && data != null)
+                        onEditFolderColor(data.getBundleExtra("args"));
                     break;
                 case REQUEST_EDIT_ACCOUNT_NAME:
                     if (resultCode == RESULT_OK && data != null)
@@ -1676,7 +1646,7 @@ public class FragmentFolders extends FragmentBase {
 
                             File file = message.getFile(context);
                             Helper.writeText(file, body);
-                            String text = HtmlHelper.getFullText(body);
+                            String text = HtmlHelper.getFullText(body, true);
                             message.preview = HtmlHelper.getPreview(text);
                             message.language = HtmlHelper.getLanguage(context, message.subject, text);
                             db.message().setMessageContent(message.id,
@@ -1724,6 +1694,47 @@ public class FragmentFolders extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex, report);
             }
         }.setKeepAwake(true).execute(this, args, "folder:export");
+    }
+
+    private void onEditFolderColor(Bundle args) {
+        if (!ActivityBilling.isPro(getContext())) {
+            startActivity(new Intent(getContext(), ActivityBilling.class));
+            return;
+        }
+
+        new SimpleTask<Void>() {
+            @Override
+            protected Void onExecute(Context context, Bundle args) {
+                long id = args.getLong("id");
+                boolean children = args.getBoolean("children");
+                Integer color = args.getInt("color");
+
+                if (color == Color.TRANSPARENT)
+                    color = null;
+
+                DB db = DB.getInstance(context);
+                try {
+                    db.beginTransaction();
+
+                    if (children)
+                        for (EntityFolder folder : EntityFolder.getChildFolders(context, id))
+                            db.folder().setFolderColor(folder.id, color);
+                    else
+                        db.folder().setFolderColor(id, color);
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "edit:color");
     }
 
     private void onEditAccountName(Bundle args) {

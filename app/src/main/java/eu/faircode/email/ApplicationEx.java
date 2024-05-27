@@ -46,6 +46,7 @@ import androidx.core.os.LocaleListCompat;
 import androidx.emoji2.text.DefaultEmojiCompatConfig;
 import androidx.emoji2.text.EmojiCompat;
 import androidx.emoji2.text.FontRequestEmojiCompatConfig;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
@@ -253,6 +254,11 @@ public class ApplicationEx extends Application
             NotificationHelper.createNotificationChannels(this);
 
         DB.setupViewInvalidation(this);
+
+        // https://issuetracker.google.com/issues/341313071
+        // https://developer.android.com/guide/navigation/custom-back/support-animations#fragments
+        // https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture#opt-predictive
+        //FragmentManager.enablePredictiveBack(false);
 
         if (Helper.hasWebView(this))
             CookieManager.getInstance().setAcceptCookie(false);
@@ -853,9 +859,17 @@ public class ApplicationEx extends Application
             if (Helper.isGoogle())
                 editor.putBoolean("mod", true);
         } else if (version < 2170) {
-            if (Build.PRODUCT == null || !Build.PRODUCT.endsWith("_beta") ||
-                    Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-                editor.putBoolean("mod", false);
+            editor.putBoolean("mod", false);
+        } else if (version < 2180) {
+            if (Helper.isAndroid15())
+                editor.putInt("last_sdk", 0);
+        } else if (version < 2187) {
+            if (!prefs.contains("hide_toolbar"))
+                editor.putBoolean("hide_toolbar", !BuildConfig.PLAY_STORE_RELEASE);
+            if (!prefs.contains("delete_unseen"))
+                editor.putBoolean("delete_unseen", false);
+            if (Helper.isPixelBeta())
+                editor.putBoolean("motd", true);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)
@@ -864,6 +878,11 @@ public class ApplicationEx extends Application
         if (version < BuildConfig.VERSION_CODE)
             editor.putInt("previous_version", version);
         editor.putInt("version", BuildConfig.VERSION_CODE);
+
+        int last_sdk = prefs.getInt("last_sdk", Build.VERSION.SDK_INT);
+        if (Helper.isAndroid15() && last_sdk <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+            editor.remove("setup_reminder");
+        editor.putInt("last_sdk", Build.VERSION.SDK_INT);
 
         editor.apply();
     }

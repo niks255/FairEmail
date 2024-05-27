@@ -97,7 +97,6 @@
     <string name="title_notification_sending">Mezuak bidaltzen</string>
     <string name="title_notification_waiting">Konexio erabilgarriaren zain</string>
     <string name="title_notification_idle">Inaktiboa</string>
-    <string name="title_notification_failed">%1$s(e)k huts egin du</string>
     <string name="title_notification_alert">Zerbitzari-alerta: \'%1$s\'</string>
     <string name="title_notification_sending_left">Geratzen diren saiakerak: %1$d</string>
     <string name="title_notification_sending_retry">Bidalketa berriro saiatuko da internet konexioa aldatzen denean, edo irteera ontzian behera tiratzean</string>
@@ -433,7 +432,6 @@
     <string name="title_advanced_seekbar">Erakutsi posizio erlatiboa elkarrizketan puntu batekin</string>
     <string name="title_advanced_actionbar">Erakutsi elkarrizketako ekintza-barra</string>
     <string name="title_advanced_actionbar_color">Erabili kontuaren kolorea elkarrizketaren tresna barrako atzeko planoaren kolore gisa</string>
-    <string name="title_advanced_navbar_colorize">Koloreztatu Android-en nabigazio barra</string>
     <string name="title_advanced_bundled_fonts">Erabili txertatutako tipografiak</string>
     <string name="title_advanced_parse_classes">Erabili estilo orria</string>
     <string name="title_advanced_authentication">Erakutsi autentifikazio abisuak</string>
@@ -754,7 +752,7 @@
     <string name="title_delete_operation_flag">Markatze eragiketak</string>
     <string name="title_delete_operation_delete">Ezabatze eragiketak</string>
     <string name="title_delete_operation_deleted">%1$d eragiketa ezabatuta</string>
-    <string name="title_delete_contacts">Kontaktu lokal ikusgarriak ezabatu?</string>
+    <string name="title_delete_contacts">Ezabatu kontaktu lokal guztiak?</string>
     <string name="title_no_operations">Ez dago eragiketarik egiteke</string>
     <string name="title_hint_operations">Eragiketak ezabatzeak mezuen desagertzea eta sinkronizazio arazoak eragin ditzake</string>
     <string name="title_op_title_headers">Goiburuak deskargatzen</string>

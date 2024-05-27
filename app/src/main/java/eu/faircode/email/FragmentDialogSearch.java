@@ -65,6 +65,7 @@ import java.util.List;
 
 public class FragmentDialogSearch extends FragmentDialogBase {
     private static final int MAX_SUGGESTIONS = 3;
+    private static final int RECENTLY_TOUCHED = 7 * 24; // hours
 
     @NonNull
     @Override
@@ -101,6 +102,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         final ImageButton ibInfo = dview.findViewById(R.id.ibInfo);
         final ImageButton ibFlagged = dview.findViewById(R.id.ibFlagged);
         final ImageButton ibUnseen = dview.findViewById(R.id.ibUnseen);
+        final ImageButton ibHidden = dview.findViewById(R.id.ibHidden);
         final ImageButton ibInvite = dview.findViewById(R.id.ibInvite);
         final ImageButton ibAttachment = dview.findViewById(R.id.ibAttachment);
         final ImageButton ibNotes = dview.findViewById(R.id.ibNotes);
@@ -585,6 +587,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                     criteria.with_flagged = true;
                 else if (id == R.id.ibUnseen)
                     criteria.with_unseen = true;
+                else if (id == R.id.ibHidden)
+                    criteria.with_hidden = true;
                 else if (id == R.id.ibInvite) {
                     criteria.with_attachments = true;
                     criteria.with_types = new String[]{"text/calendar"};
@@ -606,8 +610,27 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         ibNotes.setOnClickListener(onClick);
         ibAttachment.setOnClickListener(onClick);
         ibInvite.setOnClickListener(onClick);
+        ibHidden.setOnClickListener(onClick);
         ibUnseen.setOnClickListener(onClick);
         ibFlagged.setOnClickListener(onClick);
+
+        ibHidden.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                dialog.dismiss();
+
+                BoundaryCallbackMessages.SearchCriteria criteria = new BoundaryCallbackMessages.SearchCriteria();
+                criteria.touched = RECENTLY_TOUCHED;
+
+                FragmentMessages.search(
+                        context, getViewLifecycleOwner(), getParentFragmentManager(),
+                        account, -1L,
+                        false,
+                        criteria);
+
+                return true;
+            }
+        });
 
         etQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

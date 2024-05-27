@@ -14,8 +14,9 @@
     <string name="app_cake_required">最低限必要な空き容量: %1$s</string>
     <string name="app_updated">最終更新: %1$s</string>
     <string name="app_download">ダウンロード元: %1$s</string>
-    <string name="app_mod1">        3 月のセキュリティアップデートにより、Google Pixel でのみ「アプリが応答しません」というメッセージが表示されるようになりました。
-        この問題を解決できるのは Google のみのため、アプリを非難しないでください！
+    <string name="app_motd">        Android 14/15 beta では「アプリが応答しません」という通知がときどき表示されます。
+        Google が修正に取り組んでいます。
+        Android 側の問題のため、アプリを非難しないでください！
     </string>
     <string name="channel_service">モニター</string>
     <string name="channel_send">送信</string>
@@ -104,7 +105,7 @@
     <string name="title_notification_sending">メールを送信中</string>
     <string name="title_notification_waiting">接続を待機しています</string>
     <string name="title_notification_idle">待機</string>
-    <string name="title_notification_failed">\'%1$s\' エラーが発生しました</string>
+    <string name="title_notification_failed">アカウント \'%1$s\' エラーが発生しました</string>
     <string name="title_notification_alert">サーバーの警告: %1$s</string>
     <string name="title_notification_sending_left">残りの試行回数: %1$d</string>
     <string name="title_notification_sending_retry">インターネット接続が変更されるか、送信トレイをプルダウンすると送信が再試行されます</string>
@@ -227,6 +228,7 @@
     <string name="title_setup_doze_stopped">同期が停止しましたか？</string>
     <string name="title_setup_doze_device">この端末では必要と思われます</string>
     <string name="title_setup_alarm_12">このアプリは正常に動作しません</string>
+    <string name="title_setup_fg_15">アプリを自動で起動できません</string>
     <string name="title_setup_inexact">アラームとリマインダーが無効です</string>
     <string name="title_setup_background">バックグラウンドでの制限が有効です</string>
     <string name="title_setup_data">データセーバーが有効です</string>
@@ -468,7 +470,6 @@
     <string name="title_advanced_two_col">2 列に分割する</string>
     <string name="title_advanced_min_screen_size">画面を分割するときの最小画面サイズ</string>
     <string name="title_advanced_close_pane">会話スレッドを閉じるときに、行または列を閉じる</string>
-    <string name="title_advanced_open_pane">2 行または 2 列の表示から開始する</string>
     <string name="title_advanced_column_width">本文の列の幅 / 行の高さ: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">メッセージをスクロールするとき上部ツールバーを隠す</string>
     <string name="title_advanced_nav_options">ナビゲーションメニューにオプションを表示する</string>
@@ -571,7 +572,6 @@
     <string name="title_advanced_actionbar_swap">ごみ箱とアーカイブのボタンを入れ替える</string>
     <string name="title_advanced_actionbar_color">会話スレッド アクションバーの背景色としてアカウントの色を使用する</string>
     <string name="title_advanced_category_header">アカウントのカテゴリーでグループ化する</string>
-    <string name="title_advanced_navbar_colorize">Android ナビゲーションバーに色を付ける</string>
     <string name="title_advanced_list_count">上部アクションバーにメッセージ数または会話スレッド数を表示する</string>
     <string name="title_advanced_bundled_fonts">バンドルされたフォントを使用する</string>
     <string name="title_advanced_narrow_fonts">幅狭フォントを使用する</string>
@@ -626,6 +626,7 @@
     <string name="title_advanced_swipe_reply">展開したメッセージを右にスワイプして返信する</string>
     <string name="title_advanced_move_thread_all">選択した会話スレッドを移動するとき、すべてのメッセージを移動する</string>
     <string name="title_advanced_move_thread_sent">会話スレッドを移動するとき、送信済みメッセージも移動する</string>
+    <string name="title_advanced_swipe_trash_all">会話スレッドをスワイプしてごみ箱に移動するとき、すべてのメッセージをごみ箱に移動する</string>
     <string name="title_advanced_default_snooze">デフォルトのスヌーズ/遅延時間</string>
     <string name="title_advanced_default_folder">デフォルトのフォルダーを選択</string>
     <string name="title_advanced_notifications">通知を管理</string>
@@ -744,6 +745,7 @@
     <string name="title_advanced_haptic_feedback">重要なアクションでの触覚フィードバック</string>
     <string name="title_advanced_language">言語</string>
     <string name="title_advanced_language_system">システム</string>
+    <string name="title_advanced_integrations_hint">以下のクラウドサービスはアプリの一部ではありません。すべての支払いはアプリ開発者ではなく、クラウドサービスに直接支払われます。</string>
     <string name="title_advanced_lt">LanguageTool を統合する</string>
     <string name="title_advanced_lt_sentence">一文ごとに確認する</string>
     <string name="title_advanced_lt_auto">改行後に段落を確認する</string>
@@ -759,6 +761,8 @@
     <string name="title_advanced_openai_temperature">温度 (Temperature): %1$s</string>
     <string name="title_advanced_openai_moderation">コンテンツモデレーション</string>
     <string name="title_advanced_gemini">Gemini を統合する</string>
+    <string name="title_advanced_multi_modal">マルチモーダル (テキスト + メディア)</string>
+    <string name="title_advanced_summarize_prompt">要約プロンプト</string>
     <string name="title_advanced_sdcard">SD カードを使用できますか？</string>
     <string name="title_advanced_watchdog">FairEmail がアクティブか定期的に確認する</string>
     <string name="title_advanced_updates">GitHub で更新を確認する</string>
@@ -834,6 +838,9 @@
     <string name="title_advanced_threading_hint">互いに関連するメッセージをグループ化します</string>
     <string name="title_advanced_indentation_hint">カード形式のみ</string>
     <string name="title_advanced_highlight_hint">テーマのアクセントカラーをハイライトカラーに使用します</string>
+    <string name="title_advanced_free">無料で使用できるクラウドサービスです</string>
+    <string name="title_advanced_free_tier">一部ランクは無料で使用できるクラウドサービスです</string>
+    <string name="title_advanced_paid_service">有料のクラウドサービスです</string>
     <string name="title_advanced_privacy_risk">プライバシーリスクがあるかもしれません</string>
     <string name="title_advanced_name_email_hint">名前は利用可能な場合のみ表示されます</string>
     <string name="title_advanced_preview_hint">本文がダウンロードできた場合のみ使用できます</string>
@@ -855,6 +862,7 @@
     <string name="title_advanced_autoclose_hint">すべてのメッセージがアーカイブ、送信、または削除されたときに自動で会話スレッドを閉じます</string>
     <string name="title_advanced_sender_hint">ほとんどのプロバイダーは差出人アドレスの編集を許可しません</string>
     <string name="title_advanced_bcc_hint">アドレスは表示されませんが送信するときに追加されます</string>
+    <string name="title_advanced_envelope_from_hint">このアドレスは SMTP MAIL FROM に使用されます</string>
     <string name="title_advanced_internal_hint">別のドメインに送信するときに警告が表示されます</string>
     <string name="title_advanced_uri">選択した連絡先の詳細が、vCard として添付されます</string>
     <string name="title_advanced_e2e_encryption">エンドツーエンド暗号化のオプション</string>
@@ -900,6 +908,7 @@
     <string name="title_identity_name">あなたのお名前</string>
     <string name="title_identity_email">メールアドレス</string>
     <string name="title_identity_tenant_hint">ほとんどの場合、このフィールドは空です</string>
+    <string name="title_identity_receive_first_hint">このオプションを有効にする必要はほとんどありませんが、データ使用量は増加します！</string>
     <string name="title_identity_color_hint">ユーザー ID の色はフォルダーとアカウントの色よりも優先されます</string>
     <string name="title_advanced_sender">差出人アドレスの編集を許可する</string>
     <string name="title_advanced_sender_name">差出人アドレスが編集されたときに名前を使用する</string>
@@ -957,6 +966,7 @@
     <string name="title_password">パスワード</string>
     <string name="title_password_storage">パスワードはどのように保管されますか？</string>
     <string name="title_case_sensitive">通常、ユーザー名とパスワードでは大文字と小文字が区別されます</string>
+    <string name="title_login_before_send">送信前に同期を実行する</string>
     <string name="title_client_certificate">クライアント証明書</string>
     <string name="title_realm">Realm</string>
     <string name="title_use_ip">ホスト名の代わりにローカル IP アドレスを使用する</string>
@@ -1061,6 +1071,7 @@
     <string name="title_expunge_remark">削除マークのついたすべてのメッセージを完全に削除します</string>
     <string name="title_empty_trash">ごみ箱を空にする</string>
     <string name="title_empty_spam">迷惑メールを空にする</string>
+    <string name="title_edit_color">色を編集する</string>
     <string name="title_edit_properties">プロパティを編集</string>
     <string name="title_edit_rules">ルールを編集</string>
     <string name="title_execute_rules">ルールを実行</string>
@@ -1089,8 +1100,10 @@
     <string name="title_delete_operation_move">移動操作</string>
     <string name="title_delete_operation_flag">フラグ操作</string>
     <string name="title_delete_operation_delete">削除操作</string>
+    <string name="title_delete_operation_send">送信操作</string>
     <string name="title_delete_operation_deleted">%1$d 件の操作が削除されました</string>
-    <string name="title_delete_contacts">表示されているローカル連絡先を削除しますか？</string>
+    <string name="title_delete_contacts">すべてのローカル連絡先を削除しますか？</string>
+    <string name="title_delete_contacts_remark">表示されていないものも含めてすべての連絡先が削除されます。検索しても表示されなくなります！</string>
     <string name="title_no_operations">保留中の操作はありません</string>
     <string name="title_check_operations">操作の確認</string>
     <string name="title_hint_operations">操作を削除するとメッセージが消失し、同期の問題が発生する可能性があります</string>
@@ -1316,7 +1329,9 @@
     <string name="title_ask_show_html">元のメッセージを表示するとプライバシーデータの漏洩の原因となる可能性があります</string>
     <string name="title_ask_show_html_remark">ダークテーマでは元のメッセージを表示できません。これは暗い色のテキストや画像が見えなくなる可能性があるためです</string>
     <string name="title_ask_show_html_images">元のメッセージを表示するときに常に画像を表示する</string>
+    <string name="title_ask_show_html_always">デフォルトで元のメッセージを表示する</string>
     <string name="title_ask_show_image">画像を表示するとプライバシーデータの漏洩の原因となる可能性があります</string>
+    <string name="title_ask_show_images_always">デフォルトで画像を表示する</string>
     <string name="title_ask_show_image_hint">トラッキング画像として識別された画像は表示されません</string>
     <string name="title_ask_show_amp">AMP メッセージを表示しますか？</string>
     <string name="title_ask_show_amp_hint">AMP メッセージはインターネットを利用して動的に表示するため、必然的にトラッキングされます</string>
@@ -1347,6 +1362,7 @@
     <string name="title_reply_to">返信先:</string>
     <string name="title_cc">CC:</string>
     <string name="title_bcc">BCC:</string>
+    <string name="title_envelope_from">エンベロープ From:</string>
     <string name="title_recipients">宛先 %1$d 件</string>
     <string name="title_via_identity">経由:</string>
     <string name="title_sent">送信:</string>
@@ -1366,7 +1382,7 @@
     <string name="title_send_now">今すぐ送信</string>
     <string name="title_send_via">送信に使用するアドレス</string>
     <string name="title_send_at">日時を指定して送信&#8230;</string>
-    <string name="title_send_auto_archive">返信されたメッセージをアーカイブ</string>
+    <string name="title_send_auto_archive">返信されたメッセージをアーカイブする</string>
     <string name="title_send_encryption">暗号化</string>
     <string name="title_send_priority">重要度</string>
     <string name="title_send_sensitivity">機密度</string>
@@ -1438,6 +1454,7 @@
     <string name="title_create_template">テンプレートを作成</string>
     <string name="title_select_default_identity">デフォルトのアドレスを選択</string>
     <string name="title_translate">翻訳</string>
+    <string name="title_summarize">要約</string>
     <string name="title_translate_configure">設定&#8230;</string>
     <string name="title_translate_key">キーを入力</string>
     <string name="title_translating">翻訳しています&#8230;</string>
@@ -1570,6 +1587,7 @@
     <string name="title_search_flag_notes">メモ</string>
     <string name="title_search_flag_invite">招待</string>
     <string name="title_search_flag_size">サイズ &gt; %1$s</string>
+    <string name="title_search_flag_touched">閲覧済み</string>
     <string name="title_search_device">端末上を検索</string>
     <string name="title_search_server">サーバーを検索</string>
     <string name="title_search_server_wait">サーバーからの応答を待っています</string>
@@ -1616,6 +1634,7 @@
     <string name="title_view_thread">会話スレッドを見る</string>
     <string name="title_force_sync">強制同期</string>
     <string name="title_force_send">強制送信</string>
+    <string name="title_pwned_remark">使用すると、パスワードやメールアドレス自体を送信せずに (k-匿名化を使用して) パスワードを確認します！</string>
     <string name="title_language_all">すべて</string>
     <string name="title_previous">前へ</string>
     <string name="title_next">次へ</string>
@@ -1665,6 +1684,8 @@
     <string name="title_rule_delete">完全に削除する</string>
     <string name="title_rule_sound">音声を再生</string>
     <string name="title_rule_silent">サイレント通知</string>
+    <string name="title_rule_summarize">要約</string>
+    <string name="title_rule_summarize_remark">設定した AI 統合機能でメッセージを要約</string>
     <string name="title_rule_caption">ルールを編集</string>
     <string name="title_rule_title">ルールの適用先</string>
     <string name="title_rule_name">名前</string>
@@ -1941,6 +1962,7 @@
     <string name="title_ask_what">毎回確認する</string>
     <string name="title_no_ask_again">次回から確認しない</string>
     <string name="title_no_ask_for_again">%1$s は次回から確認しない</string>
+    <string name="title_undo_privacy">設定のプライバシータブで変更できます</string>
     <string name="title_no_body">本文が見つかりません</string>
     <string name="title_large_body">メッセージのサイズがとても大きいため、問題が発生することがあります！</string>
     <string name="title_no_charset">対応していないエンコーディング: %1$s</string>
@@ -2054,6 +2076,7 @@
     <string name="title_keyword_not_displayed">未開封</string>
     <string name="title_keyword_not_delivered">未配信</string>
     <string name="title_keyword_complaint">報告</string>
+    <string name="title_keyword_phishing">フィッシング</string>
     <plurals name="title_accessibility_messages">
         <item quantity="other">メッセージ %1$d 通</item>
     </plurals>

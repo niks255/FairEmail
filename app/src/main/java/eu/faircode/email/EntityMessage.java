@@ -127,6 +127,7 @@ public class EntityMessage implements Serializable {
     static final Long SWIPE_ACTION_JUNK = -8L;
     static final Long SWIPE_ACTION_REPLY = -9L;
     static final Long SWIPE_ACTION_IMPORTANCE = -10L;
+    static final Long SWIPE_ACTION_SUMMARIZE = -11L;
 
     private static final int MAX_SNOOZED = 300;
 
@@ -262,6 +263,7 @@ public class EntityMessage implements Serializable {
     public String warning; // persistent
     public String error; // volatile
     public Long last_attempt; // send
+    public Long last_touched;
 
     static String generateMessageId() {
         return generateMessageId("localhost");
@@ -286,6 +288,15 @@ public class EntityMessage implements Serializable {
 
     boolean hasAlt() {
         return (this.plain_only != null && (this.plain_only & 0x80) != 0);
+    }
+
+    boolean fromSelf(EntityIdentity identity) {
+        if (from != null && identity != null)
+            for (Address sender : from)
+                if (identity.self &&
+                        (identity.sameAddress(sender) || identity.similarAddress(sender)))
+                    return true;
+        return false;
     }
 
     boolean fromSelf(List<TupleIdentityEx> identities) {
@@ -753,6 +764,8 @@ public class EntityMessage implements Serializable {
             return "junk";
         if (SWIPE_ACTION_REPLY.equals(type))
             return "reply";
+        if (SWIPE_ACTION_SUMMARIZE.equals(type))
+            return "summarize";
         return "???";
     }
 

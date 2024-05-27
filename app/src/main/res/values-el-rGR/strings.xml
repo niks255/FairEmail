@@ -14,8 +14,9 @@
     <string name="app_cake_required">Ελάχιστος απαιτούμενος χώρος αποθήκευσης: %1$s</string>
     <string name="app_updated">Τελευταία ενημέρωση: %1$s</string>
     <string name="app_download">Λήφθηκε από: %1$s</string>
-    <string name="app_mod1">        Η ενημέρωση ασφαλείας του Μαρτίου προκαλεί μηνύματα: \"Η εφαρμογή δεν ανταποκρίνεται\", αποκλειστικά σε συσκευές Google Pixel.
-        Παρακαλούμε, μην κατηγορείτε την εφαρμογή για αυτό, μόνο η Google μπορεί να το επιλύσει!
+    <string name="app_motd">        Με την beta έκδοση του Android 14/15, περιστασιακά εμφανίζονται ειδοποιήσεις \"Η εφαρμογή δεν ανταποκρίνεται\".
+        Η Google προσπαθεί να το διορθώσει.
+        Παρακαλούμε μην κατηγορείτε την εφαρμογή για αυτό το πρόβλημα του Android!
     </string>
     <string name="channel_service">Παρακολούθηση</string>
     <string name="channel_send">Αποστολή</string>
@@ -118,7 +119,7 @@
     <string name="title_notification_sending">Αποστολή μηνυμάτων</string>
     <string name="title_notification_waiting">Αναμονή για κατάλληλη σύνδεση</string>
     <string name="title_notification_idle">Σε αδράνεια</string>
-    <string name="title_notification_failed">\'%1$s\' απέτυχε</string>
+    <string name="title_notification_failed">Αποτυχία λογαριασμού %1$s</string>
     <string name="title_notification_alert">Ειδοποίηση διακομιστή: \'%1$s\'</string>
     <string name="title_notification_sending_left">Προσπάθειες που απομένουν: %1$d</string>
     <string name="title_notification_sending_retry">Η αποστολή θα επιχειρηθεί εκ νέου όταν μεταβληθεί η σύνδεση στο διαδίκτυο ή όταν τραβήξετε προς τα κάτω στα εξερχόμενα</string>
@@ -241,6 +242,7 @@
     <string name="title_setup_doze_stopped">Σταμάτησε ο συγχρονισμός;</string>
     <string name="title_setup_doze_device">Αυτό πιθανόν απαιτείται για αυτήν τη συσκευή</string>
     <string name="title_setup_alarm_12">Η εφαρμογή δεν θα λειτουργήσει σωστά</string>
+    <string name="title_setup_fg_15">Η εφαρμογή δεν μπορεί να ξεκινήσει αυτόματα</string>
     <string name="title_setup_inexact">Ειδοποιήσεις &amp; υπενθυμίσεις απενεργοποιημένες</string>
     <string name="title_setup_background">Οι περιορισμοί παρασκηνίου είναι ενεργοποιημένοι</string>
     <string name="title_setup_data">Η εξοικονόμηση δεδομένων είναι ενεργή</string>
@@ -481,7 +483,6 @@
     <string name="title_advanced_two_col">Χρήση δύο στηλών</string>
     <string name="title_advanced_min_screen_size">Ελάχιστο μέγεθος οθόνης για διαχωρισμό της οθόνης</string>
     <string name="title_advanced_close_pane">Σύμπτυξη γραμμής ή στήλης κατά το κλείσιμο μιας συζήτησης</string>
-    <string name="title_advanced_open_pane">Έναρξη με δύο γραμμές ή δύο στήλες</string>
     <string name="title_advanced_column_width">Πλάτος στήλης / ύψος γραμμής μηνύματος: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Απόκρυψη της πάνω γραμμής εργαλείων κατά την κύλιση μηνυμάτων</string>
     <string name="title_advanced_nav_options">Να προβάλλονται οι επιλογές του μενού πλοήγησης</string>
@@ -584,7 +585,6 @@
     <string name="title_advanced_actionbar_swap">Εναλλαγή των κουμπιών απορριμμάτων και αρχειοθέτησης</string>
     <string name="title_advanced_actionbar_color">Χρήση του χρώματος του λογαριασμού ως χρωματικό υπόβαθρο για τη γραμμή ενεργειών της συζήτησης</string>
     <string name="title_advanced_category_header">Ομαδοποίηση ανά κατηγορία λογαριασμού</string>
-    <string name="title_advanced_navbar_colorize">Να χρωματίζεται η γραμμή πλοήγησης του Android</string>
     <string name="title_advanced_list_count">Προβολή του αριθμού μηνυμάτων ή συζητήσεων στην πάνω γραμμή ενεργειών</string>
     <string name="title_advanced_bundled_fonts">Χρήση γραμματοσειρών σε πακέτο</string>
     <string name="title_advanced_narrow_fonts">Χρήση στενών γραμματοσειρών</string>
@@ -639,6 +639,7 @@
     <string name="title_advanced_swipe_reply">Σύρετε προς τα δεξιά τα αναπτυγμένα μηνύματα για να απαντήσετε</string>
     <string name="title_advanced_move_thread_all">Κατά τη μετακίνηση της επιλεγμένης συζήτησης, να μετακινούνται όλα τα μηνύματα</string>
     <string name="title_advanced_move_thread_sent">Κατά τη μετακίνηση μιας συζήτησης, να μετακινούνται επίσης και τα απεσταλμένα μηνύματα</string>
+    <string name="title_advanced_swipe_trash_all">Όταν σύρετε μια συζήτηση στον κάδο απορριμάτων, να διαγράφονται όλα τα μηνύματα</string>
     <string name="title_advanced_default_snooze">Προεπιλεγμένος χρόνος αναβολής/καθυστέρησης</string>
     <string name="title_advanced_default_folder">Επιλογή προεπιλεγμένου φακέλου</string>
     <string name="title_advanced_notifications">Διαχείριση ειδοποιήσεων</string>
@@ -755,6 +756,7 @@
     <string name="title_advanced_haptic_feedback">Απτική ανάδραση για σημαντικές ενέργειες</string>
     <string name="title_advanced_language">Γλώσσα</string>
     <string name="title_advanced_language_system">Σύστημα</string>
+    <string name="title_advanced_integrations_hint">Οι παρακάτω υπηρεσίες νέφους (cloud) δεν αποτελούν μέρος της εφαρμογής. Οποιεσδήποτε πληρωμές θα πιστωθούν απευθείας στην υπηρεσία του νέφους και όχι στον προγραμματιστή της εφαρμογής.</string>
     <string name="title_advanced_lt">Ενσωμάτωση του LanguageTool</string>
     <string name="title_advanced_lt_sentence">Έλεγχος κάθε πρότασης</string>
     <string name="title_advanced_lt_auto">Έλεγχος της παραγράφου μετά από μία νέα γραμμή</string>
@@ -770,6 +772,8 @@
     <string name="title_advanced_openai_temperature">Θερμοκρασία: %1$s</string>
     <string name="title_advanced_openai_moderation">Έλεγχος περιεχομένου</string>
     <string name="title_advanced_gemini">Ενσωμάτωση Gemini</string>
+    <string name="title_advanced_multi_modal">Πολυτροπικό</string>
+    <string name="title_advanced_summarize_prompt">Εντολή για σύνοψη</string>
     <string name="title_advanced_sdcard">Θέλω να χρησιμοποιήσω μια κάρτα SD</string>
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
     <string name="title_advanced_updates">Έλεγχος για ενημερώσεις στο GitHub</string>
@@ -845,6 +849,9 @@
     <string name="title_advanced_threading_hint">Ομαδοποίηση των μηνυμάτων που σχετίζονται αναμεταξύ τους</string>
     <string name="title_advanced_indentation_hint">Μόνο για το στιλ κάρτας</string>
     <string name="title_advanced_highlight_hint">Το χρώμα έμφασης του θέματος θα χρησιμοποιηθεί για την επισήμανση</string>
+    <string name="title_advanced_free">Αυτή η υπηρεσία νέφους προσφέρεται δωρεάν για χρήση</string>
+    <string name="title_advanced_free_tier">Αυτή η υπηρεσία νέφους προσφέρει περιορισμένη δωρεάν χρήση</string>
+    <string name="title_advanced_paid_service">Αυτή η υπηρεσία νέφους απαιτεί πληρωμή</string>
     <string name="title_advanced_privacy_risk">Το προσωπικό σας απόρρητο μπορεί να τεθεί σε κίνδυνο</string>
     <string name="title_advanced_name_email_hint">Τα ονόματα θα εμφανίζονται μόνον όταν είναι διαθέσιμα</string>
     <string name="title_advanced_preview_hint">Διαθέσιμο μόνον εφόσον το κείμενο του μηνύματος έχει κατέβει</string>
@@ -866,6 +873,7 @@
     <string name="title_advanced_autoclose_hint">Αυτόματο κλείσιμο των συζητήσεων όταν όλα τα μηνύματα έχουν αρχειοθετηθεί, διαβαστεί ή διαγραφεί</string>
     <string name="title_advanced_sender_hint">Οι περισσότεροι πάροχοι δεν επιτρέπουν τροποποιημένες διευθύνσεις αποστολέων</string>
     <string name="title_advanced_bcc_hint">Η διεύθυνση δεν θα προβληθεί αλλά θα προστεθεί κατά την αποστολή</string>
+    <string name="title_advanced_envelope_from_hint">Αυτή η διεύθυνση θα χρησιμοποιηθεί για το SMTP MAIL FROM</string>
     <string name="title_advanced_internal_hint">Θα υπάρξει μια προειδοποίηση κατά την αποστολή προς άλλον τομέα</string>
     <string name="title_advanced_uri">Οι λεπτομέρειες της επιλεγμένης επαφής θα χρησιμοποιηθούν για τα συνημμένα vCard</string>
     <string name="title_advanced_e2e_encryption">Επιλογές για από άκρο σε άκρο κρυπτογράφηση</string>
@@ -911,6 +919,7 @@
     <string name="title_identity_name">Το όνομα σας</string>
     <string name="title_identity_email">Η διεύθυνση ηλεκτρονικού ταχυδρομείου σας</string>
     <string name="title_identity_tenant_hint">Το πεδίο αυτό θα πρέπει να είναι κενό στις περισσότερες περιπτώσεις</string>
+    <string name="title_identity_receive_first_hint">Σπάνια είναι απαραίτητο να ενεργοποιηθεί αυτή η επιλογή - επιπλέον, η χρήση δεδομένων θα αυξηθεί!</string>
     <string name="title_identity_color_hint">Τα χρώματα των ταυτοτήτων έχουν προτεραιότητα έναντι των χρωμάτων των φακέλων και των λογαριασμών</string>
     <string name="title_advanced_sender">Να επιτρέπεται η τροποποίηση της διεύθυνσης του αποστολέα</string>
     <string name="title_advanced_sender_name">Χρήση ονόματος όταν η διεύθυνση αποστολέα έχει τροποποιηθεί</string>
@@ -968,6 +977,7 @@
     <string name="title_password">Κωδικός πρόσβασης</string>
     <string name="title_password_storage">Πώς αποθηκεύονται οι κωδικοί πρόσβασης;</string>
     <string name="title_case_sensitive">Τα ονόματα χρηστών και οι κωδικοί πρόσβασης επηρεάζονται συνήθως από τις αλλαγές κεφαλαίων και μικρών γραμμάτων</string>
+    <string name="title_login_before_send">Λήψη πριν από την αποστολή</string>
     <string name="title_client_certificate">Πιστοποιητικό πελάτη</string>
     <string name="title_realm">Realm</string>
     <string name="title_use_ip">Χρήση τοπικής διεύθυνσης IP αντί για το όνομα του υπολογιστή</string>
@@ -1072,6 +1082,7 @@
     <string name="title_expunge_remark">Αυτό θα διαγράψει μόνιμα όλα τα μηνύματα που έχουν επισημανθεί για διαγραφή</string>
     <string name="title_empty_trash">Άδειασμα κάδου απορριμμάτων</string>
     <string name="title_empty_spam">Άδειασμα Ανεπιθύμητων</string>
+    <string name="title_edit_color">Επεξεργασία χρώματος</string>
     <string name="title_edit_properties">Επεξεργασία ιδιοτήτων</string>
     <string name="title_edit_rules">Επεξεργασία κανόνων</string>
     <string name="title_execute_rules">Εκτέλεση κανόνων</string>
@@ -1100,8 +1111,10 @@
     <string name="title_delete_operation_move">Δραστηριότητες μετακίνησης</string>
     <string name="title_delete_operation_flag">Δραστηριότητες επισήμανσης</string>
     <string name="title_delete_operation_delete">Δραστηριότητες διαγραφής</string>
+    <string name="title_delete_operation_send">Δραστηριότητες αποστολής</string>
     <string name="title_delete_operation_deleted">%1$d δραστηριότητες διεγράφησαν</string>
-    <string name="title_delete_contacts">Διαγραφή των ορατών τοπικών επαφών;</string>
+    <string name="title_delete_contacts">Διαγραφή όλων των τοπικών επαφών;</string>
+    <string name="title_delete_contacts_remark">Όλες οι επαφές που εμφανίζονται και δεν εμφανίζονται θα διαγραφούν, ακόμη και αν αναζητηθούν!</string>
     <string name="title_no_operations">Καμία εκκρεμής δραστηριότητα</string>
     <string name="title_check_operations">Έλεγχος για δραστηριότητες</string>
     <string name="title_hint_operations">Η διαγραφή των δραστηριοτήτων μπορεί να οδηγήσει σε εξαφανισμένα μηνύματα και προβλήματα συγχρονισμού</string>
@@ -1326,7 +1339,9 @@
     <string name="title_ask_show_html">Η προβολή του αρχικού μηνύματος μπορεί να προδώσει ευαίσθητα προσωπικά δεδομένα</string>
     <string name="title_ask_show_html_remark">Η προβολή του αρχικού μηνύματος σε σκούρο φόντο δεν είναι εφικτή, καθώς ενδέχεται να κάνει αόρατα κείμενα και εικόνες με σκούρα χρώματα</string>
     <string name="title_ask_show_html_images">Να προβάλλονται πάντοτε οι εικόνες κατά την προβολή των αρχικών μηνυμάτων</string>
+    <string name="title_ask_show_html_always">Προβολή αρχικών μηνυμάτων από προεπιλογή</string>
     <string name="title_ask_show_image">Η προβολή των εικόνων ίσως προκαλέσει διαρροή ευαίσθητων προσωπικών δεδομένων</string>
+    <string name="title_ask_show_images_always">Προβολή εικόνων από προεπιλογή</string>
     <string name="title_ask_show_image_hint">Όσες εικόνες αναγνωρίζονται ως εικόνες ιχνηλάτησης δεν θα προβληθούν</string>
     <string name="title_ask_show_amp">Προβολή παραλλαγής AMP του μηνύματος;</string>
     <string name="title_ask_show_amp_hint">Τα μηνύματα AMP έχουν σχεδιαστεί έτσι ώστε να είναι δυναμικά και να αλληλεπιδρούν με το διαδίκτυο, και, ως εκ τούτου, εξ ορισμού μπορούν να χρησιμοποιηθούν για την παρακολούθησή σας</string>
@@ -1355,6 +1370,7 @@
     <string name="title_reply_to">Απάντηση σε:</string>
     <string name="title_cc">Κοιν.:</string>
     <string name="title_bcc">Κρυφ. Κοιν.:</string>
+    <string name="title_envelope_from">Φάκελος από:</string>
     <string name="title_recipients">%1$d Παραλήπτες</string>
     <string name="title_via_identity">Μέσω:</string>
     <string name="title_sent">Απεστάλη:</string>
@@ -1446,6 +1462,7 @@
     <string name="title_create_template">Δημιουργία προτύπου</string>
     <string name="title_select_default_identity">Ορισμός προεπιλεγμένης διεύθυνσης</string>
     <string name="title_translate">Μετάφραση</string>
+    <string name="title_summarize">Σύνοψη</string>
     <string name="title_translate_configure">Ρύθμιση &#8230;</string>
     <string name="title_translate_key">Εισαγωγή κλειδιού</string>
     <string name="title_translating">Μεταφράζεται &#8230;</string>
@@ -1578,6 +1595,7 @@
     <string name="title_search_flag_notes">σημειώσεις</string>
     <string name="title_search_flag_invite">πρόσκληση</string>
     <string name="title_search_flag_size">μέγεθος &gt; %1$s</string>
+    <string name="title_search_flag_touched">έχουν ανοιχτεί</string>
     <string name="title_search_device">Αναζήτηση στη συσκευή</string>
     <string name="title_search_server">Αναζήτηση στο διακομιστή</string>
     <string name="title_search_server_wait">Αναμονή για διακομιστή</string>
@@ -1624,6 +1642,7 @@
     <string name="title_view_thread">Προβολή συζήτησης</string>
     <string name="title_force_sync">Αναγκαστικός συγχρονισμός</string>
     <string name="title_force_send">Αναγκαστική αποστολή</string>
+    <string name="title_pwned_remark">Αυτό θα ελέγξει τον κωδικό πρόσβασης, χωρίς να τον στείλει (χρησιμοποιώντας το k-anonymization), και όχι τη διεύθυνση ηλ. ταχυδρομείου!</string>
     <string name="title_language_all">Όλα</string>
     <string name="title_previous">Προηγούμενο</string>
     <string name="title_next">Επόμενο</string>
@@ -1673,6 +1692,8 @@
     <string name="title_rule_delete">Οριστική διαγραφή</string>
     <string name="title_rule_sound">Αναπαραγωγή ήχου</string>
     <string name="title_rule_silent">Αθόρυβη ειδοποίηση</string>
+    <string name="title_rule_summarize">Σύνοψη</string>
+    <string name="title_rule_summarize_remark">Σύνοψη του μηνύματος με ρυθμισμένη ενσωμάτωση τεχνητής νοημοσύνης</string>
     <string name="title_rule_caption">Επεξεργασία κανόνα</string>
     <string name="title_rule_title">Ο κανόνας εφαρμόζεται σε</string>
     <string name="title_rule_name">Όνομα</string>
@@ -1949,6 +1970,7 @@
     <string name="title_ask_what">Ερώτηση για το τι πρέπει να γίνεται</string>
     <string name="title_no_ask_again">Να μην ερωτηθώ ξανά</string>
     <string name="title_no_ask_for_again">Να μην ερωτηθώ ξανά για %1$s</string>
+    <string name="title_undo_privacy">Αυτό μπορεί να αναιρεθεί στην καρτέλα με τις ρυθμίσεις απορρήτου</string>
     <string name="title_no_body">Δεν βρέθηκε κανένα κείμενο μηνύματος</string>
     <string name="title_large_body">Το μήνυμα αυτό είναι πολύ μεγάλο και μπορεί να προκύψουν προβλήματα!</string>
     <string name="title_no_charset">Μη υποστηριζόμενη κωδικοποίηση: %1$s</string>
@@ -2061,6 +2083,7 @@
     <string name="title_keyword_not_displayed">Δεν προβλήθηκε</string>
     <string name="title_keyword_not_delivered">Δεν παραδόθηκε</string>
     <string name="title_keyword_complaint">Καταγγελία</string>
+    <string name="title_keyword_phishing">Phishing/\"Ψάρεμα\"</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d μήνυμα</item>
         <item quantity="other">%1$d μηνύματα</item>

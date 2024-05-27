@@ -115,6 +115,7 @@ import me.leolin.shortcutbadger.ShortcutBadgerAlt;
 public class ServiceSynchronize extends ServiceBase implements SharedPreferences.OnSharedPreferenceChangeListener {
     private Network lastActive = null;
     private Boolean lastSuitable = null;
+    private long lastAcquired = 0;
     private long lastLost = 0;
     private int lastAccounts = 0;
     private int lastOperations = 0;
@@ -156,6 +157,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final int FAST_FAIL_COUNT = 3;
     private static final int FETCH_YIELD_DURATION = 50; // milliseconds
     private static final long WATCHDOG_INTERVAL = 60 * 60 * 1000L; // milliseconds
+    private static final long MAX_QUOTA = 1000 * 1000 * 1000L; // KB
 
     private static final String ACTION_NEW_MESSAGE_COUNT = BuildConfig.APPLICATION_ID + ".NEW_MESSAGE_COUNT";
 
@@ -204,6 +206,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             try {
                 startForeground(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
                         getNotificationService(null, null));
+                EntityLog.log(this, EntityLog.Type.Debug2,
+                        "onCreate class=" + this.getClass().getName());
             } catch (Throwable ex) {
                 if (Helper.isPlayStoreInstall())
                     Log.i(ex);
@@ -572,6 +576,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             crumb.put("suitable", Boolean.toString(accountNetworkState.networkState.isSuitable()));
                             crumb.put("unmetered", Boolean.toString(accountNetworkState.networkState.isUnmetered()));
                             crumb.put("roaming", Boolean.toString(accountNetworkState.networkState.isRoaming()));
+                            crumb.put("lastAcquired", new Date(lastAcquired).toString());
                             crumb.put("lastLost", new Date(lastLost).toString());
                             Log.breadcrumb("start", crumb);
 
@@ -613,6 +618,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             crumb.put("suitable", Boolean.toString(accountNetworkState.networkState.isSuitable()));
                             crumb.put("unmetered", Boolean.toString(accountNetworkState.networkState.isUnmetered()));
                             crumb.put("roaming", Boolean.toString(accountNetworkState.networkState.isRoaming()));
+                            crumb.put("lastAcquired", new Date(lastAcquired).toString());
                             crumb.put("lastLost", new Date(lastLost).toString());
                             Log.breadcrumb("stop", crumb);
 
@@ -849,7 +855,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
             public void onStateChanged() {
                 Lifecycle.State state = mowner.getLifecycle().getCurrentState();
-                EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Debug, "Owner state=" + state);
+                EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Debug1, "Owner state=" + state);
                 if (state.equals(Lifecycle.State.DESTROYED))
                     mowner.getLifecycle().removeObserver(this);
             }
@@ -871,7 +877,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             @Override
             public void onChanged(boolean inCall) {
                 boolean suppress = prefs.getBoolean("notify_suppress_in_call", false);
-                EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Debug,
+                EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Debug1,
                         "In call=" + inCall + " suppress=" + suppress);
                 isInCall = (inCall && suppress);
                 boolean fg = Boolean.TRUE.equals(foreground.getValue());
@@ -888,7 +894,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 boolean projection = (connectionState != null &&
                         connectionState == CarConnection.CONNECTION_TYPE_PROJECTION);
                 boolean suppress = prefs.getBoolean("notify_suppress_in_car", false);
-                EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Debug,
+                EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Debug1,
                         "Projection=" + projection + " state=" + connectionState + " suppress=" + suppress);
                 isInCar = (projection && suppress);
                 boolean fg = Boolean.TRUE.equals(foreground.getValue());
@@ -1119,6 +1125,10 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                 try {
                     startForeground(NotificationHelper.NOTIFICATION_SYNCHRONIZE,
                             getNotificationService(null, null));
+                    String msg = "onStartCommand" +
+                            " class=" + this.getClass().getName() +
+                            " action=" + action;
+                    EntityLog.log(this, EntityLog.Type.Debug2, msg);
                 } catch (Throwable ex) {
                     if (Helper.isPlayStoreInstall())
                         Log.i(ex);
@@ -1193,7 +1203,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     @Override
     public void onTimeout(int startId) {
-        Log.e(new Throwable("onTimeout"));
+        String msg = "onTimeout" +
+                " class=" + this.getClass().getName() +
+                " ignoring=" + Helper.isIgnoringOptimizations(this);
+        Log.e(new Throwable(msg));
+        EntityLog.log(this, EntityLog.Type.Debug3, msg);
+        stopSelf();
     }
 
     private void onEnable(Intent intent) {
@@ -2913,15 +2928,15 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                         if (quota.resources != null)
                             for (Quota.Resource resource : quota.resources) {
                                 EntityLog.log(context, EntityLog.Type.Account, account,
-                                        account.name + "quota " +
+                                        account.name + " quota " +
                                                 " root=\"" + quota.quotaRoot + "\"" +
                                                 " resource=\"" + resource.name + "\"" +
                                                 " " + resource.usage + "/" + resource.limit);
                                 // (STORAGE nnnnn 9999999999999999)
                                 if ("STORAGE".equalsIgnoreCase(resource.name)) {
-                                    if (resource.usage * 1024 >= 0)
+                                    if (resource.usage * 1024 >= 0 && resource.usage < MAX_QUOTA)
                                         usage = (usage == null ? 0L : usage) + resource.usage * 1024;
-                                    if (resource.limit * 1024 > 0)
+                                    if (resource.limit * 1024 > 0 && resource.limit < MAX_QUOTA)
                                         limit = Math.max(limit == null ? 0L : limit, resource.limit * 1024);
                                 }
                             }
@@ -3074,16 +3089,18 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                     if (active != null && !active.equals(lastActive)) {
                         if (ConnectionHelper.isConnected(ServiceSynchronize.this, active)) {
+                            lastActive = active;
+                            lastAcquired = new Date().getTime();
                             EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Network,
                                     reason + ": new active network=" + active + "/" + lastActive);
-                            lastActive = active;
                         }
                     } else if (lastActive != null) {
                         if (!ConnectionHelper.isConnected(ServiceSynchronize.this, lastActive)) {
-                            EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Network,
-                                    reason + ": lost active network=" + lastActive);
                             lastActive = null;
                             lastLost = new Date().getTime();
+                            EntityLog.log(ServiceSynchronize.this, EntityLog.Type.Network,
+                                    reason + ": lost active network=" + lastActive +
+                                            " after=" + (lastLost - lastAcquired) / 1000 + " s");
                         }
                     }
 

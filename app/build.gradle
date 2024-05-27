@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2177 }
+def getVersionCode = { -> return 2188 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Acantholipan" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -18,6 +18,7 @@ if (rootProject.file("local.properties").exists())
 
 android {
     //compileSdkExtension 4 // https://developer.android.com/guide/sdk-extensions
+    //compileSdkPreview "VanillaIceCream"
     namespace 'eu.faircode.email'
 
     // https://apilevels.com/
@@ -26,6 +27,7 @@ android {
         compileSdk 34
         minSdkVersion 21
         targetSdkVersion 34
+        //targetSdkPreview "VanillaIceCream"
         versionCode getVersionCode()
         versionName "1." + getVersionCode()
 
@@ -60,7 +62,7 @@ android {
         }
 
         // https://developer.android.com/ndk/downloads
-        ndkVersion "25.2.9519653" // r25c
+        ndkVersion "26.3.11579264" // r26d
         ndk {
             // Bugsnag, sqlite
             // https://developer.android.com/ndk/guides/abis                                  
@@ -125,7 +127,9 @@ android {
     }
     packagingOptions {
         jniLibs {
-            useLegacyPackaging = true // https://issuetracker.google.com/issues/127691101
+            // https://issuetracker.google.com/issues/127691101
+            // https://developer.android.com/guide/practices/page-sizes#build
+            useLegacyPackaging = true
             excludes += [
                     'org/apache/**'
             ]
@@ -162,15 +166,17 @@ android {
         }
     }
 
+    // https://developer.android.com/reference/tools/gradle-api/8.3/com/android/build/api/dsl/BuildFeatures
     buildFeatures {
-        buildConfig = true
-        viewBinding = false
-        dataBinding = false
         aidl = true
+        buildConfig = true
+        compose = false
+        prefab = false
         renderScript = false
         resValues = false
         shaders = false
-        compose = false
+        viewBinding = false
+        dataBinding = false
     }
 
     buildTypes {
@@ -309,12 +315,12 @@ android {
             buildConfigField "String", "ANNOUNCEMENT_URI", "\"\""
             buildConfigField "String", "CLOUD_URI", "\"\""
             buildConfigField "String", "CLOUD_EMAIL", "\"\""
-            buildConfigField "String", "OPENAI_ENDPOINT", "\"\""
-            buildConfigField "String", "OPENAI_PRIVACY", "\"\""
-            buildConfigField "String", "GEMINI_ENDPOINT", "\"\""
-            buildConfigField "String", "GEMINI_PRIVACY", "\"\""
-            buildConfigField "String", "PWNED_ENDPOINT", "\"\""
-            buildConfigField "String", "PWNED_URI", "\"\""
+            buildConfigField "String", "OPENAI_ENDPOINT", "\"https://api.openai.com/v1/\""
+            buildConfigField "String", "OPENAI_PRIVACY", "\"https://openai.com/policies/privacy-policy\""
+            buildConfigField "String", "GEMINI_ENDPOINT", "\"https://generativelanguage.googleapis.com/v1beta/\""
+            buildConfigField "String", "GEMINI_PRIVACY", "\"https://support.google.com/gemini/answer/13594961\""
+            buildConfigField "String", "PWNED_ENDPOINT", "\"https://api.pwnedpasswords.com/\""
+            buildConfigField "String", "PWNED_URI", "\"https://haveibeenpwned.com/\""
             buildConfigField "String", "FDROID", "\"\""
             getIsDefault().set(true)
         }
@@ -341,8 +347,8 @@ android {
             buildConfigField "String", "OPENAI_PRIVACY", "\"\""
             buildConfigField "String", "GEMINI_ENDPOINT", "\"\""
             buildConfigField "String", "GEMINI_PRIVACY", "\"\""
-            buildConfigField "String", "PWNED_ENDPOINT", "\"\""
-            buildConfigField "String", "PWNED_URI", "\"\""
+            buildConfigField "String", "PWNED_ENDPOINT", "\"https://api.pwnedpasswords.com/\""
+            buildConfigField "String", "PWNED_URI", "\"https://haveibeenpwned.com/\""
             buildConfigField "String", "FDROID", "\"\""
         }
     }
@@ -481,11 +487,11 @@ tasks.register('upload') {
     doLast {
         println "\nhttps://bitbucket.org/M66B/fairemail-test/downloads/FairEmail-v1." + getVersionCode() + getRevision() + "-" + target + "-release.apk\n"
         exec {
-            workingDir "${buildDir}"
+            workingDir "${rootDir}/app/build"
             commandLine 'curl',
                     '-o', '/dev/null',
                     '-X', 'POST', "https://M66B:" + localProperties.getProperty("bb.pwd", "") + "@api.bitbucket.org/2.0/repositories/M66B/fairemail-test/downloads",
-                    '--form', "files=@${buildDir}/outputs/apk/" + target.split('-')[0] + "/release/FairEmail-v1." + getVersionCode() + getRevision() + "-" + target.split('-')[0] + "-release.apk;" +
+                    '--form', "files=@${rootDir}/app/build/outputs/apk/" + target.split('-')[0] + "/release/FairEmail-v1." + getVersionCode() + getRevision() + "-" + target.split('-')[0] + "-release.apk;" +
                     "filename=FairEmail-v1." + getVersionCode() + getRevision() + "-" + target + "-release.apk"
         }
     }
@@ -548,50 +554,50 @@ dependencies {
     def desugar_version = "2.0.4"
     def startup_version = "1.2.0-alpha02"
     def annotation_version_experimental = "1.4.1"
-    def core_version = "1.13.0"
-    def appcompat_version = "1.6.1" // 1.7.0-alpha03
+    def core_version = "1.13.1" // 1.14.0-alpha01
+    def appcompat_version = "1.6.1" // 1.7.0-rc01
     def emoji_version = "1.4.0" // 1.5.0-alpha01
     def flatbuffers_version = "2.0.0"
     def activity_version = " 1.9.0"
-    def fragment_version = "1.6.2" // 1.7.0-rc02
-    def windows_version = "1.2.0" // 1.3.0-beta01
-    def webkit_version = "1.10.0" // 1.11.0-rc01
+    def fragment_version = "1.6.2" // 1.7.1 // 1.8.0-beta01
+    def windows_version = "1.2.0" // 1.3.0-rc01
+    def webkit_version = "1.10.0" // 1.11.0
     def recyclerview_version = "1.3.2" // 1.4.0-alpha01
     def coordinatorlayout_version = "1.2.0" // 1.3.0-alpha02
     def constraintlayout_version = "2.1.4" // 2.2.0-alpha13
-    def material_version = "1.11.0" // 1.11.0-alpha01
+    def material_version = "1.11.0" // 1.12.0-rc01 / 1.13.0-alpha01
     def browser_version = "1.8.0"
     def lbm_version = "1.1.0"
     def swiperefresh_version = "1.2.0-alpha01"
     def documentfile_version = "1.1.0-alpha01"
-    def lifecycle_version = "2.7.0" // 2.8.0-beta01
+    def lifecycle_version = "2.7.0" // 2.8.0
     def lifecycle_extensions_version = "2.2.0"
-    def room_version = "2.4.3" // 2.5.2/2.6.1
-    def sqlite_version = "2.4.0"
+    def room_version = "2.4.3" // 2.5.2/2.6.1/2.7.0-alpha02
+    def sqlite_version = "2.4.0" // 2.5.0-alpha02
     def requery_version = "3.39.2"
-    def paging_version = "2.1.2" // 3.3.0-beta01
+    def paging_version = "2.1.2" // 3.3.0-rc01
     def preference_version = "1.2.1"
     def work_version = "2.9.0" // 2.10.0-alpha02
     def exif_version = "1.3.7"
     def biometric_version = "1.2.0-alpha05"
     def billingclient_version = "6.0.1" // 6.2.0
-    def playservicesbase_version = "18.3.0";
+    def playservicesbasement_version = "18.3.0";
     def transparency_version = "2.5.19"
     def javamail_version = "1.6.7"
     def jsoup_version = "1.17.2"
     def jsonpath_version = "2.9.0"
     def css_version = "0.9.30"
     def jax_version = "2.3.0-jaxb-1.0.6"
-    def minidns_version = "1.0.4"
+    def minidns_version = "1.0.5"
     def openpgp_version = "12.0"
     def badge_version = "1.1.22"
-    def bugsnag_version = "6.1.0"
+    def bugsnag_version = "6.4.0"
     def biweekly_version = "0.6.8"
     def vcard_version = "0.12.1"
     def relinker_version = "1.4.5"
     def markwon_version = "4.6.2"
-    def commonmark_version = "0.21.0"
-    def bouncycastle_version = "1.77"
+    def commonmark_version = "0.22.0"
+    def bouncycastle_version = "1.78.1"
     def colorpicker_version = "0.0.15"
     def overscroll_version = "1.1.1"
     def appauth_version = "0.11.1"
@@ -601,9 +607,9 @@ dependencies {
     def reactivestreams_version = "1.0.3"
     def rxjava2_version = "2.2.21"
     def svg_version = "1.4"
-    def compress_version = "1.25.0"
-    def ipaddress_version = "5.4.0"
-    def canary_version = "2.13"
+    def compress_version = "1.26.1"
+    def ipaddress_version = "5.5.0"
+    def canary_version = "2.14"
     def ws_version = "2.14"
     def tinylog_version = "2.6.2"
     def zxing_version = "3.5.3"
@@ -708,7 +714,8 @@ dependencies {
     // https://mvnrepository.com/artifact/androidx.work/work-runtime
     implementation "androidx.work:work-runtime:$work_version"
     // implementation "com.google.guava:listenablefuture:1.0"
-    implementation "com.google.guava:guava:31.1-android" // ListenableFuture
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation "com.google.guava:guava:33.1.0-android" // ListenableFuture
 
     // https://mvnrepository.com/artifact/androidx.exifinterface/exifinterface
     implementation "androidx.exifinterface:exifinterface:$exif_version"
@@ -721,10 +728,10 @@ dependencies {
     // https://android-developers.googleblog.com/2020/06/meet-google-play-billing-library.html
     playImplementation "com.android.billingclient:billing:$billingclient_version"
 
-    // https://mvnrepository.com/artifact/com.google.android.gms/play-services-base
-    githubImplementation "com.google.android.gms:play-services-basement:$playservicesbase_version"
-    largeImplementation "com.google.android.gms:play-services-basement:$playservicesbase_version"
-    playImplementation "com.google.android.gms:play-services-basement:$playservicesbase_version"
+    // https://mvnrepository.com/artifact/com.google.android.gms/play-services-basement
+    githubImplementation "com.google.android.gms:play-services-basement:$playservicesbasement_version"
+    largeImplementation "com.google.android.gms:play-services-basement:$playservicesbasement_version"
+    playImplementation "com.google.android.gms:play-services-basement:$playservicesbasement_version"
 
     // https://github.com/appmattus/certificatetransparency
     // https://mvnrepository.com/artifact/com.appmattus.certificatetransparency/certificatetransparency-android
@@ -809,6 +816,7 @@ dependencies {
     implementation "org.commonmark:commonmark-ext-gfm-strikethrough:$commonmark_version";
 
     // https://github.com/vsch/flexmark-java
+    // https://mvnrepository.com/artifact/com.vladsch.flexmark/flexmark
     implementation "com.vladsch.flexmark:flexmark-html2md-converter:0.64.8"
 
     // // https://github.com/QuadFlask/colorpicker

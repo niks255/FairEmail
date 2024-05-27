@@ -30,7 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
+import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,7 +70,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 292,
+        version = 294,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -123,6 +125,7 @@ public abstract class DB extends RoomDatabase {
     static final String DB_NAME = "fairemail";
     static final int DEFAULT_QUERY_THREADS = 4; // AndroidX default thread count: 4
     static final int DEFAULT_CACHE_SIZE = 20; // percentage of memory class
+    private static final long DB_LOCK_TIMEOUT = 60 * 1000L;
     private static final int DB_JOURNAL_SIZE_LIMIT = 1048576; // requery/sqlite-android default
     private static final int DB_CHECKPOINT = 1000; // requery/sqlite-android default
 
@@ -148,7 +151,7 @@ public abstract class DB extends RoomDatabase {
         File dbfile = configuration.context.getDatabasePath(DB_NAME);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(configuration.context);
-        boolean sqlite_integrity_check = prefs.getBoolean("sqlite_integrity_check", true);
+        boolean sqlite_integrity_check = prefs.getBoolean("sqlite_integrity_check", false);
 
         // https://www.sqlite.org/pragma.html#pragma_integrity_check
         if (sqlite_integrity_check && dbfile.exists()) {
@@ -416,6 +419,8 @@ public abstract class DB extends RoomDatabase {
 
                 Log.i("Disabled view invalidation");
             } catch (ReflectiveOperationException ex) {
+                // Should never happen
+                Log.forceCrashReporting();
                 Log.e(ex);
             }
 
@@ -425,6 +430,42 @@ public abstract class DB extends RoomDatabase {
                     Log.d("ROOM invalidated=" + TextUtils.join(",", tables));
                 }
             });
+
+            // Ref: https://android-review.googlesource.com/c/platform/frameworks/support/+/1797472
+            Log.i("DB critical section start");
+            File dbDir = context.getDatabasePath(DB_NAME).getParentFile();
+            dbDir.mkdirs();
+            File lockFile = new File(dbDir, DB_NAME + ".lock");
+            try (FileOutputStream fos = new FileOutputStream(lockFile)) {
+                ObjectHolder<FileLock> lock = new ObjectHolder<>(null);
+                try {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                lock.value = fos.getChannel().lock();
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            }
+                        }
+                    });
+                    thread.start();
+                    thread.join(DB_LOCK_TIMEOUT);
+                    if (thread.isAlive())
+                        throw new IllegalArgumentException("DB critical section failed");
+
+                    // Force migration
+                    sInstance.getOpenHelper().getWritableDatabase();
+                } finally {
+                    if (lock.value != null)
+                        lock.value.release();
+                }
+            } catch (Throwable ex) {
+                // Should never happen
+                Log.forceCrashReporting();
+                Log.e(ex);
+            }
+            Log.i("DB critical section end");
         }
 
         return sInstance;
@@ -547,6 +588,7 @@ public abstract class DB extends RoomDatabase {
                                 at androidx.sqlite.db.framework.FrameworkSQLiteOpenHelper.getWritableDatabase(FrameworkSQLiteOpenHelper.kt:104)
                                 at androidx.room.RoomDatabase.inTransaction(RoomDatabase.java:706)
                              */
+                            // Should never happen
                             Log.forceCrashReporting();
                             Log.e(ex);
                             // FrameworkSQLiteOpenHelper.innerGetDatabase will delete the database
@@ -2955,6 +2997,18 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `identity` ADD COLUMN `envelopeFrom` TEXT");
+                    }
+                }).addMigrations(new Migration(292, 293) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `message` ADD COLUMN `last_touched` INTEGER");
+                    }
+                }).addMigrations(new Migration(293, 294) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `identity` ADD COLUMN `login` INTEGER NOT NULL DEFAULT 0");
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

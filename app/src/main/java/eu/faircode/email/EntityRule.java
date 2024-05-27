@@ -21,8 +21,6 @@ package eu.faircode.email;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-import static com.ezylang.evalex.operators.OperatorIfc.OPERATOR_PRECEDENCE_COMPARISON;
-
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -40,20 +38,13 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.ezylang.evalex.EvaluationException;
 import com.ezylang.evalex.Expression;
-import com.ezylang.evalex.config.ExpressionConfiguration;
-import com.ezylang.evalex.data.EvaluationValue;
-import com.ezylang.evalex.functions.AbstractFunction;
-import com.ezylang.evalex.functions.FunctionParameter;
-import com.ezylang.evalex.operators.AbstractOperator;
-import com.ezylang.evalex.operators.InfixOperator;
-import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.ParseException;
-import com.ezylang.evalex.parser.Token;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,8 +55,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -75,11 +64,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -132,6 +119,9 @@ public class EntityRule {
     public Integer applied = 0;
     public Long last_applied;
 
+    @Ignore
+    public boolean async;
+
     static final int TYPE_SEEN = 1;
     static final int TYPE_UNSEEN = 2;
     static final int TYPE_MOVE = 3;
@@ -152,6 +142,7 @@ public class EntityRule {
     static final int TYPE_NOTES = 18;
     static final int TYPE_URL = 19;
     static final int TYPE_SILENT = 20;
+    static final int TYPE_SUMMARIZE = 21;
 
     static final String ACTION_AUTOMATION = BuildConfig.APPLICATION_ID + ".AUTOMATION";
     static final String EXTRA_RULE = "rule";
@@ -168,10 +159,6 @@ public class EntityRule {
     private static final long SEND_DELAY = 5000L; // milliseconds
     private static final int MAX_NOTES_LENGTH = 512; // characters
     private static final int URL_TIMEOUT = 15 * 1000; // milliseconds
-
-    private static final List<String> EXPR_VARIABLES = Collections.unmodifiableList(Arrays.asList(
-            "to", "from", "subject", "text", "hasAttachments"
-    ));
 
     static boolean needsHeaders(EntityMessage message, List<EntityRule> rules) {
         return needsHeaders(rules);
@@ -208,11 +195,11 @@ public class EntityRule {
                 }
 
                 if (jcondition.has("expression")) {
-                    Expression expression = getExpression(rule, null, null, null, null);
+                    Expression expression = ExpressionHelper.getExpression(rule, null, null, null, null);
                     if (expression != null) {
-                        if ("header".equals(what) && needsHeaders(expression))
+                        if ("header".equals(what) && ExpressionHelper.needsHeaders(expression))
                             return true;
-                        if ("body".equals(what) && needsBody(expression))
+                        if ("body".equals(what) && ExpressionHelper.needsBody(expression))
                             return true;
                     }
                 }
@@ -443,7 +430,7 @@ public class EntityRule {
 
                 Document d = JsoupEx.parse(html);
                 if (skip_quotes)
-                    d.select("blockquote").remove();
+                    HtmlHelper.removeQuotes(d);
                 if (jsoup) {
                     String selector = value.substring(JSOUP_PREFIX.length());
                     if (d.select(selector).isEmpty() != not)
@@ -498,9 +485,9 @@ public class EntityRule {
             }
 
             // Expression
-            Expression expression = getExpression(this, message, headers, html, context);
+            Expression expression = ExpressionHelper.getExpression(this, message, headers, html, context);
             if (expression != null) {
-                if (needsHeaders(expression) && headers == null && message.headers == null)
+                if (ExpressionHelper.needsHeaders(expression) && headers == null && message.headers == null)
                     throw new IllegalArgumentException(context.getString(R.string.title_rule_no_headers));
 
                 Log.i("EXPR evaluating='" + jcondition.getString("expression") + "'");
@@ -641,244 +628,6 @@ public class EntityRule {
         return matched;
     }
 
-    @FunctionParameter(name = "value")
-    public static class HeaderFunction extends AbstractFunction {
-        private List<Header> headers;
-
-        HeaderFunction(List<Header> headers) {
-            this.headers = headers;
-        }
-
-        @Override
-        public EvaluationValue evaluate(
-                Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-            List<String> result = new ArrayList<>();
-
-            try {
-                if (parameterValues.length == 1) {
-                    String name = parameterValues[0].getStringValue();
-                    if (name != null && headers != null)
-                        for (Header header : headers)
-                            if (name.equalsIgnoreCase(header.getName()))
-                                result.add(header.getValue());
-                }
-            } catch (Throwable ex) {
-                Log.e("EXPR", ex);
-            }
-
-            Log.i("EXPR header(" + parameterValues[0] + ")=" + TextUtils.join(", ", result));
-            return new EvaluationValue(result, ExpressionConfiguration.defaultConfiguration());
-        }
-    }
-
-    @FunctionParameter(name = "value")
-    public static class MessageFunction extends AbstractFunction {
-        private EntityMessage message;
-
-        MessageFunction(EntityMessage message) {
-            this.message = message;
-        }
-
-        @Override
-        public EvaluationValue evaluate(
-                Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-            List<Object> result = new ArrayList<>();
-
-            try {
-                if (parameterValues.length == 1) {
-                    String name = parameterValues[0].getStringValue();
-                    if (name != null && message != null) {
-                        Field field = message.getClass().getField(name);
-                        field.setAccessible(true);
-                        Object value = field.get(message);
-                        if (value != null)
-                            result.add(value);
-                    }
-                }
-            } catch (Throwable ex) {
-                Log.e("EXPR", ex);
-            }
-
-            Log.i("EXPR message(" + parameterValues[0] + ")=" + TextUtils.join(", ", result));
-            return new EvaluationValue(result, ExpressionConfiguration.defaultConfiguration());
-        }
-    }
-
-    public static class BlocklistFunction extends AbstractFunction {
-        private Context context;
-        private Address[] from;
-        private List<Header> headers;
-
-        BlocklistFunction(Context context, Address[] from, List<Header> headers) {
-            this.context = context;
-            this.from = from;
-            this.headers = headers;
-        }
-
-        @Override
-        public EvaluationValue evaluate(
-                Expression expression, Token functionToken, EvaluationValue... parameterValues) {
-            boolean result = false;
-
-            try {
-                if (from != null)
-                    result = Boolean.TRUE.equals(DnsBlockList.isJunk(context, Arrays.asList(from)));
-
-                List<String> received = new ArrayList<>();
-                if (headers != null)
-                    for (Header header : headers)
-                        if (header.getName().equalsIgnoreCase("Received"))
-                            received.add(header.getValue());
-                result = result || Boolean.TRUE.equals(DnsBlockList.isJunk(context, received.toArray(new String[0])));
-            } catch (Throwable ex) {
-                Log.e("EXPR", ex);
-            }
-
-            Log.i("EXPR blocklist()=" + result);
-            return expression.convertValue(result);
-        }
-    }
-
-    @InfixOperator(precedence = OPERATOR_PRECEDENCE_COMPARISON)
-    public static class ContainsOperator extends AbstractOperator {
-        private boolean regex;
-
-        ContainsOperator(boolean regex) {
-            this.regex = regex;
-        }
-
-        @Override
-        public EvaluationValue evaluate(
-                Expression expression, Token operatorToken, EvaluationValue... operands) {
-            boolean result = false;
-
-            try {
-                if (operands.length == 2) {
-                    List<EvaluationValue> array;
-                    if (operands[1].getDataType() == EvaluationValue.DataType.ARRAY)
-                        array = operands[0].getArrayValue();
-                    else
-                        array = Arrays.asList(operands[0]);
-
-                    String condition = operands[1].getStringValue();
-
-                    if (array != null && !array.isEmpty() && !TextUtils.isEmpty(condition))
-                        for (EvaluationValue item : array) {
-                            String value = item.getStringValue();
-                            if (!TextUtils.isEmpty(value))
-                                if (regex
-                                        ? Pattern.compile(condition, Pattern.DOTALL).matcher(value).matches()
-                                        : value.toLowerCase().contains(condition.toLowerCase())) {
-                                    result = true;
-                                    break;
-                                }
-                        }
-                }
-            } catch (Throwable ex) {
-                Log.e("EXPR", ex);
-            }
-
-            Log.i("EXPR " + operands[0] + (regex ? " MATCHES " : " CONTAINS ") + operands[1] +
-                    " regex=" + regex + " result=" + result);
-
-            return expression.convertValue(result);
-        }
-    }
-
-    static Expression getExpression(EntityRule rule, EntityMessage message, List<Header> headers, String html, Context context) throws JSONException, ParseException, MessagingException {
-        // https://ezylang.github.io/EvalEx/
-
-        JSONObject jcondition = new JSONObject(rule.condition);
-        if (!jcondition.has("expression"))
-            return null;
-        String eval = jcondition.getString("expression");
-
-        List<String> to = new ArrayList<>();
-        if (message != null && message.to != null)
-            for (Address a : message.to)
-                to.add(MessageHelper.formatAddresses(new Address[]{a}));
-
-        List<String> from = new ArrayList<>();
-        if (message != null && message.from != null)
-            for (Address a : message.from)
-                from.add(MessageHelper.formatAddresses(new Address[]{a}));
-
-        if (html == null && message != null && message.content)
-            try {
-                html = Helper.readText(message.getFile(context));
-            } catch (IOException ex) {
-                Log.e(ex);
-            }
-
-        Document doc = (html == null ? null : JsoupEx.parse(html));
-
-        if (headers == null && message != null && message.headers != null) {
-            ByteArrayInputStream bis = new ByteArrayInputStream(message.headers.getBytes());
-            headers = Collections.list(new InternetHeaders(bis, true).getAllHeaders());
-        }
-
-        ExpressionConfiguration configuration = ExpressionConfiguration.defaultConfiguration();
-        configuration.getFunctionDictionary().addFunction("Header",
-                new HeaderFunction(headers));
-        configuration.getFunctionDictionary().addFunction("Message",
-                new MessageFunction(message));
-        configuration.getFunctionDictionary().addFunction("Blocklist",
-                new BlocklistFunction(context, message == null ? null : message.from, headers));
-        configuration.getOperatorDictionary().addOperator("Contains",
-                new ContainsOperator(false));
-        configuration.getOperatorDictionary().addOperator("Matches",
-                new ContainsOperator(true));
-
-        Expression expression = new Expression(eval, configuration)
-                .with("to", to)
-                .with("from", from)
-                .with("subject", message == null ? null : message.subject)
-                .with("text", doc == null ? null : doc.text());
-
-        if (message != null) {
-            boolean hasAttachments = false;
-            for (String variable : expression.getUsedVariables())
-                if (!hasAttachments && "hasAttachments".equals(variable)) {
-                    hasAttachments = true;
-                    DB db = DB.getInstance(context);
-                    List<EntityAttachment> attachments = db.attachment().getAttachments(message.id);
-                    expression.with("hasAttachments", attachments != null && !attachments.isEmpty());
-                }
-        }
-
-        return expression;
-    }
-
-    static boolean needsHeaders(Expression expression) {
-        try {
-            expression.validate();
-            for (ASTNode node : expression.getAllASTNodes()) {
-                Token token = node.getToken();
-                Log.i("EXPR token=" + token.getType() + ":" + token.getValue());
-                if (token.getType() == Token.TokenType.FUNCTION &&
-                        ("header".equalsIgnoreCase(token.getValue()) ||
-                                "blocklist".equalsIgnoreCase(token.getValue()))) {
-                    Log.i("EXPR needs headers");
-                    return true;
-                }
-            }
-        } catch (Throwable ex) {
-            Log.e("EXPR", ex);
-        }
-        return false;
-    }
-
-    static boolean needsBody(Expression expression) {
-        try {
-            for (String variable : expression.getUsedVariables())
-                if ("text".equalsIgnoreCase(variable))
-                    return true;
-        } catch (Throwable ex) {
-            Log.e("EXPR", ex);
-        }
-        return false;
-    }
-
     boolean execute(Context context, EntityMessage message, String html) throws JSONException, IOException {
         boolean executed = _execute(context, message, html);
         if (this.id != null && executed) {
@@ -935,6 +684,8 @@ public class EntityRule {
                 return onActionUrl(context, message, jaction, html);
             case TYPE_SILENT:
                 return onActionSilent(context, message, jaction);
+            case TYPE_SUMMARIZE:
+                return onActionSummarize(context, message, jaction);
             default:
                 throw new IllegalArgumentException("Unknown rule type=" + type + " name=" + name);
         }
@@ -942,17 +693,9 @@ public class EntityRule {
 
     void validate(Context context) throws JSONException, IllegalArgumentException {
         try {
-            Expression expression = getExpression(this, null, null, null, context);
-            if (expression != null) {
-                for (String variable : expression.getUsedVariables()) {
-                    Log.i("EXPR variable=" + variable);
-                    if (!EXPR_VARIABLES.contains(variable))
-                        throw new IllegalArgumentException("Unknown variable '" + variable + "'");
-                }
-                Log.i("EXPR validating");
-                expression.validate();
-                Log.i("EXPR validated");
-            }
+            Expression expression = ExpressionHelper.getExpression(this, null, null, null, context);
+            if (expression != null)
+                ExpressionHelper.check(expression);
         } catch (ParseException | MessagingException ex) {
             Log.w("EXPR", ex);
             String message = ex.getMessage();
@@ -1044,6 +787,8 @@ public class EntityRule {
                     throw new IllegalArgumentException(context.getString(R.string.title_rule_url_missing));
                 return;
             case TYPE_SILENT:
+                return;
+            case TYPE_SUMMARIZE:
                 return;
             default:
                 throw new IllegalArgumentException("Unknown rule type=" + type);
@@ -1444,7 +1189,7 @@ public class EntityRule {
 
         File file = reply.getFile(context);
         Helper.writeText(file, body);
-        String text = HtmlHelper.getFullText(body);
+        String text = HtmlHelper.getFullText(body, true);
         reply.preview = HtmlHelper.getPreview(text);
         reply.language = HtmlHelper.getLanguage(context, reply.subject, text);
         db.message().setMessageContent(reply.id,
@@ -1556,7 +1301,7 @@ public class EntityRule {
                     .append(' ').append(message.subject).append(". ");
 
         String body = Helper.readText(message.getFile(context));
-        String text = HtmlHelper.getFullText(body);
+        String text = HtmlHelper.getFullText(body, false);
         String preview = HtmlHelper.getPreview(text);
 
         if (!TextUtils.isEmpty(preview))
@@ -1815,6 +1560,31 @@ public class EntityRule {
         db.message().setMessageUiSilent(message.id, true);
 
         message.ui_silent = true;
+        return true;
+    }
+
+    private boolean onActionSummarize(Context context, EntityMessage message, JSONObject jargs) throws JSONException, IOException {
+        DB db = DB.getInstance(context);
+
+        if (message.ui_hide)
+            return false;
+
+        if (!this.async && this.id != null) {
+            EntityOperation.queue(context, message, EntityOperation.RULE, this.id);
+            return true;
+        }
+
+        try {
+            message.preview = AI.getSummaryText(context, message);
+        } catch (Throwable ex) {
+            message.error = Log.formatThrowable(ex);
+            db.message().setMessageError(message.id, message.error);
+            return false;
+        }
+
+        db.message().setMessageContent(message.id, message.content, message.language, message.plain_only, message.preview, message.warning);
+        db.message().setMessageNotifying(message.id, 0);
+
         return true;
     }
 

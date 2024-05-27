@@ -64,18 +64,17 @@ public class ActivityDMARC extends ActivityBase {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setSubtitle(R.string.title_advanced_dmarc_viewer);
-
         View view = LayoutInflater.from(this).inflate(R.layout.activity_dmarc, null);
         setContentView(view);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setSubtitle(R.string.title_advanced_dmarc_viewer);
 
         tvDmarc = findViewById(R.id.tvDmarc);
         pbWait = findViewById(R.id.pbWait);
         grpReady = findViewById(R.id.grpReady);
 
         // Initialize
-        FragmentDialogTheme.setBackground(this, view, false);
         grpReady.setVisibility(View.GONE);
 
         load();

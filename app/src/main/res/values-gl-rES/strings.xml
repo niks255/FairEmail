@@ -104,7 +104,6 @@
     <string name="title_notification_sending">Enviando mensaxes</string>
     <string name="title_notification_waiting">Agardando por unha conexión axeitada</string>
     <string name="title_notification_idle">Inactivo</string>
-    <string name="title_notification_failed">\'%1$s\' fallou</string>
     <string name="title_notification_alert">Alerta do servidor: \'%1$s\'</string>
     <string name="title_notification_sending_left">Intentos restantes: %1$d</string>
     <string name="title_notification_sending_retry">O envío intentarase de novo cando mude a conexión de internet ou cando se tire cara abaixo da caixa de saída</string>
@@ -494,7 +493,6 @@
     <string name="title_advanced_actionbar">Mostrar a barra de accións de conversa</string>
     <string name="title_advanced_actionbar_color">Usar a cor da conta coma a cor de fondo para a barra de acción de conversa</string>
     <string name="title_advanced_category_header">Agrupar por categoría de conta</string>
-    <string name="title_advanced_navbar_colorize">Dar cor á barra de navegación de Android</string>
     <string name="title_advanced_list_count">Mostrar o número de mensaxes ou conversas na barra de accións superior</string>
     <string name="title_advanced_bundled_fonts">Usar as fontes internas</string>
     <string name="title_advanced_parse_classes">Interpretar as follas de estilo</string>
@@ -910,6 +908,7 @@
     <string name="title_delete_operation_flag">Marcar operacións</string>
     <string name="title_delete_operation_delete">Eliminar operacións</string>
     <string name="title_delete_operation_deleted">%1$d operacións borradas</string>
+    <string name="title_delete_contacts">Eliminar todos os contactos locais?</string>
     <string name="title_no_operations">Sen operacións pendentes</string>
     <string name="title_hint_operations">Borrar operacións pode resultar en mensaxes desaparecidas e problemas de sincronización</string>
     <string name="title_op_title_headers">Descargando cabeceiras</string>

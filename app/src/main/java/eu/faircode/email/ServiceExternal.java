@@ -71,6 +71,8 @@ public class ServiceExternal extends ServiceBase {
         super.onCreate();
         try {
             startForeground(NotificationHelper.NOTIFICATION_EXTERNAL, getNotification());
+            EntityLog.log(this, EntityLog.Type.Debug2,
+                    "onCreate class=" + this.getClass().getName());
         } catch (Throwable ex) {
             if (Helper.isPlayStoreInstall())
                 Log.i(ex);
@@ -81,7 +83,12 @@ public class ServiceExternal extends ServiceBase {
 
     @Override
     public void onTimeout(int startId) {
-        Log.e(new Throwable("onTimeout"));
+        String msg = "onTimeout" +
+                " class=" + this.getClass().getName() +
+                " ignoring=" + Helper.isIgnoringOptimizations(this);
+        Log.e(new Throwable(msg));
+        EntityLog.log(this, EntityLog.Type.Debug3, msg);
+        stopSelf();
     }
 
     @Override
@@ -101,6 +108,8 @@ public class ServiceExternal extends ServiceBase {
             super.onStartCommand(intent, flags, startId);
             try {
                 startForeground(NotificationHelper.NOTIFICATION_EXTERNAL, getNotification());
+                EntityLog.log(this, EntityLog.Type.Debug2,
+                        "onStartCommand class=" + this.getClass().getName());
             } catch (Throwable ex) {
                 if (Helper.isPlayStoreInstall())
                     Log.i(ex);
@@ -337,7 +346,7 @@ public class ServiceExternal extends ServiceBase {
 
         File file = msg.getFile(context);
         Helper.writeText(file, body);
-        String text = HtmlHelper.getFullText(body);
+        String text = HtmlHelper.getFullText(body, true);
         msg.preview = HtmlHelper.getPreview(text);
         msg.language = HtmlHelper.getLanguage(context, msg.subject, text);
         db.message().setMessageContent(msg.id,

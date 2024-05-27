@@ -92,7 +92,6 @@
     <string name="title_notification_sending">Đang gửi thư</string>
     <string name="title_notification_waiting">Đang đợi kết nối phù hợp</string>
     <string name="title_notification_idle">Rảnh</string>
-    <string name="title_notification_failed">\'%1$s\' thất bại</string>
     <string name="title_notification_alert">Báo động của máy chủ: \'%1$s\'</string>
     <string name="title_notification_sending_left">Lần thử còn lại: %1$d</string>
     <string name="title_notification_sending_retry">Việc gửi sẽ được thử lại khi có thay đổi về kết nối internet hoặc khi kéo xuống trong hộp thư đi</string>
@@ -484,7 +483,6 @@
     <string name="title_advanced_actionbar">Hiện thanh hành đông ở cuộc hội thoại</string>
     <string name="title_advanced_actionbar_color">Sử dụng màu tài khoản làm màu nền cho thanh hành động trong cuộc hội thoại</string>
     <string name="title_advanced_category_header">Nhóm theo thể loại tài khoản</string>
-    <string name="title_advanced_navbar_colorize">Tô màu thanh điều hướng Android</string>
     <string name="title_advanced_list_count">Hiện số thư hoặc cuộc hội thoại trong thanh hành động trên cùng</string>
     <string name="title_advanced_bundled_fonts">Sử dụng phông chữ tích hợp</string>
     <string name="title_advanced_parse_classes">Xử lý các trang phong cách</string>
@@ -909,7 +907,7 @@
     <string name="title_delete_operation_flag">Gắn cờ các hoạt động</string>
     <string name="title_delete_operation_delete">Xoá các hoạt động</string>
     <string name="title_delete_operation_deleted">%1$d hoạt động đã xoá</string>
-    <string name="title_delete_contacts">Xoá các liên hệ cục bộ có thể nhìn thấy?</string>
+    <string name="title_delete_contacts">Xoá tất cả liên hệ cục bộ?</string>
     <string name="title_no_operations">Không có hoạt động đang chờ</string>
     <string name="title_check_operations">Đang kiểm tra hoạt động</string>
     <string name="title_hint_operations">Việc xoá các hoạt động có thể dẫn đến biến mất thư và các vấn đề đồng bộ hoá</string>

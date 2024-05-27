@@ -14,9 +14,6 @@
     <string name="app_cake_required">Minsta nödvändiga lagringsutrymme: %1$s</string>
     <string name="app_updated">Senast uppdaterad: %1$s</string>
     <string name="app_download">Hämtad från: %1$s</string>
-    <string name="app_mod1">        Säkerhetsuppdateringen från mars framtvingar meddelandet \'Appen svarar inte\', detta händer enbart på Google Pixel-enheter.
-        Vänligen skyll inte detta på appen, det är bara Google som kan åtgärda detta!
-    </string>
     <string name="channel_service">Övervakning</string>
     <string name="channel_send">Skicka</string>
     <string name="channel_notification">E-post</string>
@@ -118,7 +115,7 @@
     <string name="title_notification_sending">Skickar meddelanden</string>
     <string name="title_notification_waiting">Väntar på lämplig anslutning</string>
     <string name="title_notification_idle">Inaktiv</string>
-    <string name="title_notification_failed">\"%1$s\" misslyckades</string>
+    <string name="title_notification_failed">Problem med kontot \'%1$s\'</string>
     <string name="title_notification_alert">Servermeddelande: \'%1$s\'</string>
     <string name="title_notification_sending_left">Försök kvar: %1$d</string>
     <string name="title_notification_sending_retry">Nytt försök att skicka görs när Internetförbindelsen ändras eller när du drar ner utlådan</string>
@@ -241,6 +238,7 @@
     <string name="title_setup_doze_stopped">Slutade synkroniseringen?</string>
     <string name="title_setup_doze_device">Detta krävs förmodligen för denna enhet</string>
     <string name="title_setup_alarm_12">Appen kommer inte att fungera korrekt</string>
+    <string name="title_setup_fg_15">Appen kan inte startas automatiskt</string>
     <string name="title_setup_inexact">Larm &amp; påminnelser är inaktiverade</string>
     <string name="title_setup_background">Balgrundsrestriktioner är aktiverat</string>
     <string name="title_setup_data">Datasparning är aktiverat</string>
@@ -478,7 +476,6 @@
     <string name="title_advanced_two_col">Använd två kolumner</string>
     <string name="title_advanced_min_screen_size">Minsta skärmstorlek för uppdelning av skärmen</string>
     <string name="title_advanced_close_pane">Kollapsa rad eller kolumn när en konversation stängs</string>
-    <string name="title_advanced_open_pane">Börja med två rader eller två kolumner</string>
     <string name="title_advanced_column_width">Meddelandekolumnens bredd / radhöjd: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Dölj övre verktygsfältet vid bläddring i meddelanden</string>
     <string name="title_advanced_nav_options">Visa alternativ för navigeringsmeny</string>
@@ -581,7 +578,6 @@
     <string name="title_advanced_actionbar_swap">Växla knapparna för papperskorgen och arkivering</string>
     <string name="title_advanced_actionbar_color">Använd kontofärg som bakgrundsfärg för konversationsfältet</string>
     <string name="title_advanced_category_header">Gruppera efter kontokategori</string>
-    <string name="title_advanced_navbar_colorize">Färglägg navigeringsfältet för Android</string>
     <string name="title_advanced_list_count">Visa antalet meddelanden eller konversationer i det översta åtgärdsfältet</string>
     <string name="title_advanced_bundled_fonts">Använd medföljande typsnitt</string>
     <string name="title_advanced_narrow_fonts">Använd smala typsnitt</string>
@@ -636,6 +632,7 @@
     <string name="title_advanced_swipe_reply">Svep expanderade meddelanden till höger för att svara</string>
     <string name="title_advanced_move_thread_all">När du flyttar valda konversationer, flytta alla meddelanden</string>
     <string name="title_advanced_move_thread_sent">När en konversation flyttas, flytta också skickade meddelanden</string>
+    <string name="title_advanced_swipe_trash_all">När du sveper en konversation till papperskorgen, kasta alla meddelanden</string>
     <string name="title_advanced_default_snooze">Standardlängd på slumra</string>
     <string name="title_advanced_default_folder">Välj standardmapp</string>
     <string name="title_advanced_notifications">Hantera aviseringar</string>
@@ -750,6 +747,7 @@
     <string name="title_advanced_haptic_feedback">Haptisk återkoppling på viktiga åtgärder</string>
     <string name="title_advanced_language">Språk</string>
     <string name="title_advanced_language_system">System</string>
+    <string name="title_advanced_integrations_hint">Molntjänsterna nedan är inte en del av appen. Eventuella betalningar går direkt till molntjänsten och inte till apputvecklaren.</string>
     <string name="title_advanced_lt">Språkintegration för verktyg</string>
     <string name="title_advanced_lt_sentence">Kontrollera varje mening</string>
     <string name="title_advanced_lt_auto">Kontrollera paragraf efter en ny rad</string>
@@ -765,6 +763,8 @@
     <string name="title_advanced_openai_temperature">Temperatur: %1$s</string>
     <string name="title_advanced_openai_moderation">Moderering av innehåll</string>
     <string name="title_advanced_gemini">Gemini-integration</string>
+    <string name="title_advanced_multi_modal">Multimodal</string>
+    <string name="title_advanced_summarize_prompt">Sammanfatta prompten</string>
     <string name="title_advanced_sdcard">Jag vill använda ett SD-kort</string>
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
     <string name="title_advanced_updates">Sök efter GitHub-uppdateringar</string>
@@ -841,6 +841,9 @@
     <string name="title_advanced_threading_hint">Gruppera meddelanden relaterade till varandra</string>
     <string name="title_advanced_indentation_hint">Endast för kortstil</string>
     <string name="title_advanced_highlight_hint">Accentfärgen på temat kommer att användas för markering</string>
+    <string name="title_advanced_free">Den här molntjänsten är kostnadsfri</string>
+    <string name="title_advanced_free_tier">Den här molntjänsten har en gratisnivå</string>
+    <string name="title_advanced_paid_service">Den här molntjänsten kräver betalning</string>
     <string name="title_advanced_privacy_risk">Det kan finnas en integritetsrisk</string>
     <string name="title_advanced_name_email_hint">Namnen visas endast när de är tillgängliga</string>
     <string name="title_advanced_preview_hint">Endast tillgängligt när meddelandetexten hämtades</string>
@@ -862,6 +865,7 @@
     <string name="title_advanced_autoclose_hint">Stäng automatiskt konversationstrådar när alla meddelanden arkiveras, skickas eller kastas</string>
     <string name="title_advanced_sender_hint">De flesta leverantörer tillåter inte ändrade avsändaradresser</string>
     <string name="title_advanced_bcc_hint">Adressen kommer inte att visas, men kommer att läggas till vid sändning</string>
+    <string name="title_advanced_envelope_from_hint">Denna adress kommer att användas för SMTP MAIL FROM</string>
     <string name="title_advanced_internal_hint">En varning kommer att visas när du skickar till en annan domän</string>
     <string name="title_advanced_uri">Information från den valda kontakten kommer att användas för vCard-bilagor</string>
     <string name="title_advanced_e2e_encryption">Alternativ för ändpunktskryptering</string>
@@ -1068,6 +1072,7 @@
     <string name="title_expunge_remark">Detta raderar (permanent) alla meddelanden märkta för radering</string>
     <string name="title_empty_trash">Töm papperskorg</string>
     <string name="title_empty_spam">Töm skräppost</string>
+    <string name="title_edit_color">Ändra färg</string>
     <string name="title_edit_properties">Redigera egenskaper</string>
     <string name="title_edit_rules">Redigera regler</string>
     <string name="title_execute_rules">Kör regler</string>
@@ -1096,8 +1101,9 @@
     <string name="title_delete_operation_move">Flytta åtgärder</string>
     <string name="title_delete_operation_flag">Flagga åtgärder</string>
     <string name="title_delete_operation_delete">Ta bort åtgärder</string>
+    <string name="title_delete_operation_send">Pågående utleveranser</string>
     <string name="title_delete_operation_deleted">%1$d åtgärder raderade</string>
-    <string name="title_delete_contacts">Radera synliga lokala kontakter?</string>
+    <string name="title_delete_contacts">Ta bort alla lokalt lagrade kontakter?</string>
     <string name="title_no_operations">Inga pågående åtgärder</string>
     <string name="title_check_operations">Söker efter aktiviteter</string>
     <string name="title_hint_operations">Att ta bort pågående åtgärder kan resultera i försvinnande meddelanden och synkroniseringsproblem</string>
@@ -1351,6 +1357,7 @@
     <string name="title_reply_to">Svara till:</string>
     <string name="title_cc">Kopia:</string>
     <string name="title_bcc">Dold kopia:</string>
+    <string name="title_envelope_from">Kuvert (SMTP) från:</string>
     <string name="title_recipients">%1$d mottagare</string>
     <string name="title_via_identity">Via:</string>
     <string name="title_sent">Skickat:</string>
@@ -1442,6 +1449,7 @@
     <string name="title_create_template">Skapa mall</string>
     <string name="title_select_default_identity">Välj standardadress</string>
     <string name="title_translate">Översätt</string>
+    <string name="title_summarize">Sammanfatta</string>
     <string name="title_translate_configure">Konfigurera &#8230;</string>
     <string name="title_translate_key">Ange nyckel</string>
     <string name="title_translating">Översätter &#8230;</string>
@@ -1574,6 +1582,7 @@
     <string name="title_search_flag_notes">anteckningar</string>
     <string name="title_search_flag_invite">inbjudan</string>
     <string name="title_search_flag_size">storlek &gt; %1$s</string>
+    <string name="title_search_flag_touched">hanterade</string>
     <string name="title_search_device">Sök på enheten</string>
     <string name="title_search_server">Sök på servern</string>
     <string name="title_search_server_wait">Väntar på server</string>
@@ -1620,6 +1629,7 @@
     <string name="title_view_thread">Visa konversation</string>
     <string name="title_force_sync">Tvinga synkronisering</string>
     <string name="title_force_send">Tvinga skickning</string>
+    <string name="title_pwned_remark">Detta kommer att kontrollera lösenordet, utan att skicka det (med k-anonymisering), och inte e-postadressen!</string>
     <string name="title_language_all">Alla</string>
     <string name="title_previous">Föregående</string>
     <string name="title_next">Nästa</string>
@@ -1669,6 +1679,8 @@
     <string name="title_rule_delete">Ta bort permanent</string>
     <string name="title_rule_sound">Spela upp ljud</string>
     <string name="title_rule_silent">Tyst avisering</string>
+    <string name="title_rule_summarize">Sammanfatta</string>
+    <string name="title_rule_summarize_remark">Sammanfatta meddelandet med konfigurerad AI-integration</string>
     <string name="title_rule_caption">Redigera regel</string>
     <string name="title_rule_title">Regeln gäller</string>
     <string name="title_rule_name">Namn</string>
@@ -2057,6 +2069,7 @@
     <string name="title_keyword_not_displayed">Inte visat</string>
     <string name="title_keyword_not_delivered">Inte levererat</string>
     <string name="title_keyword_complaint">Klagomål</string>
+    <string name="title_keyword_phishing">Nätfiske</string>
     <plurals name="title_accessibility_messages">
         <item quantity="one">%1$d meddelande</item>
         <item quantity="other">%1$d meddelanden</item>
