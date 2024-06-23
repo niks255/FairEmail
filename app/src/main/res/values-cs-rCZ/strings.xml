@@ -14,6 +14,10 @@
     <string name="app_cake_required">Minimální požadovaná kapacita úložiště: %1$s</string>
     <string name="app_updated">Poslední aktualizace: %1$s</string>
     <string name="app_download">Staženo z: %1$s</string>
+    <string name="app_motd">        S Androidem 14/15 beta se občas objeví oznámení \"Aplikace neodpovídá\".
+        Google pracuje na opravě.
+        Neobviňujte prosím aplikaci z tohoto problému s Androidem!
+    </string>
     <string name="channel_service">Monitor</string>
     <string name="channel_send">Odesílání</string>
     <string name="channel_notification">E-mail</string>
@@ -224,6 +228,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_setup_gmail_password">Chci autorizovat účet s pomocí hesla namísto účtu v zařízení</string>
     <string name="title_setup_office_auth">Chyba „AUTHENTICATE failed“ může být způsobena zakázaným IMAP/SMTP správcem systému</string>
     <string name="title_setup_office_auth_5_7_3">Prosím, zkuste průvodce rychlým nastavením \"jiného poskytovatele\".</string>
+    <string name="title_setup_office_auth_5_7_139">Prosím, zkuste průvodce rychlým nastavením \'Outlook/Hotmail/Live\'.</string>
     <string name="title_setup_oauth_rationale">Autorizovat přístup k vašemu účtu %1$s</string>
     <string name="title_setup_oauth_update">Znovu autorizovat existující účet (jinak vytvořit nový účet)</string>
     <string name="title_setup_oauth_updated">Autorizace účtu byla aktualizována</string>
@@ -354,8 +359,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_setup_reset_full">Zobrazit původní zprávy</string>
     <string name="title_check_gmail_oauth">Vaše Gmail účty budou fungovat i po 30. květnu 2022</string>
     <string name="title_check_gmail_password">Některé z vašich Gmail účtů mohou přestat fungovat po 30. květnu 2022</string>
-    <string name="title_check_outlook_oauth">Vaše účty Outlook budou fungovat i po 1. říjnu 2022</string>
-    <string name="title_check_outlook_password">Některé z vašich účtů Outlook mohou přestat fungovat po 1. říjnu 2022</string>
+    <string name="title_check_outlook_password">Některé z vašich účtů Outlook/Hotmail/Live přestanou fungovat po 16. září 2024</string>
     <string name="title_advanced_hint_title">Pokročilé možnosti</string>
     <string name="title_advanced_hint_message">        Vcházíte do rozšířených možností.        Všechny volby jsou nastaveny dle běžných konvencí, tudíž je není potřeba měnit, nemáte-li odlišnou preferenci.
     </string>
@@ -421,6 +425,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_send_nav_color">Použít barvu identity pro dolní panel akcí</string>
     <string name="title_advanced_send_reminders">Zobrazit připomínky</string>
     <string name="title_advanced_send_delayed">Pozdržet odesílání zpráv</string>
+    <string name="title_advanced_send_top">Zobrazit tlačítko pro odeslání nahoře</string>
     <string name="title_advanced_attach_new">Vytvořit nový koncept zprávy pro sdílené adresy a soubory</string>
     <string name="title_advanced_answer_caption">Nastavení tlačítka pro odpověď</string>
     <string name="title_advanced_answer_default">Krátkým stisknutím tlačítka odpovědi:</string>
@@ -800,6 +805,10 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_gemini">Gemini integrace</string>
     <string name="title_advanced_multi_modal">Multimodální</string>
     <string name="title_advanced_summarize_prompt">Shrnutí výzvy</string>
+    <string name="title_advanced_answer_prompt">Výzva k odpovědi</string>
+    <string name="title_advanced_system_instructions">Systémové pokyny</string>
+    <string name="title_advanced_default_prompt">Výchozí výzva</string>
+    <string name="title_advanced_entered_text">Zadaný text</string>
     <string name="title_advanced_sdcard">Chci použít Sd kartu</string>
     <string name="title_advanced_watchdog">Pravidelně kontrolovat, zda je FairEmail stále aktivní</string>
     <string name="title_advanced_updates">Kontrolovat aktualizace na GitHubu</string>
@@ -812,6 +821,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_cleanup_attachments">Odstranit přílohy starých zpráv</string>
     <string name="title_advanced_cleanup">Úklid</string>
     <string name="title_advanced_last_cleanup">Poslední čištění: %1$s</string>
+    <string name="title_advanced_google_backup">Použít zálohu dat systému Android</string>
     <string name="title_advanced_app">Nastavení aplikace</string>
     <string name="title_advanced_more">Více možností</string>
     <string name="title_advanced_main_log">Hlavní logování</string>
@@ -857,7 +867,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_metered_warning">Vypnutí této volby zakáže přijímání a odesílání zpráv při mobilních datových přenosech</string>
     <string name="title_advanced_rlah_hint">Nepředpokládat žádný roaming v rámci EU</string>
     <string name="title_advanced_usage_hint">Zvýší využití baterie, dat a úložného prostoru</string>
-    <string name="title_advanced_plain_hint">Pomocí této volby omezíte využití dat, zprávy však budou zobrazeny bez specifického formátování</string>
+    <string name="title_advanced_plain_hint">Povolením této volby se omezí využití dat, ale zprávy budou zobrazeny bez specifického formátování a bez obrázků</string>
     <string name="title_advanced_plain_remark">Část zprávy v prostém textu ne vždy obsahuje celou zprávu!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Povolení této funkce může způsobit problémy s připojením na některých zařízeních a může zvýšit využití baterie</string>
     <string name="title_advanced_validate_hint">Může vést k nesynchronizovaným zprávám, například při použití VPN, ale i v jiných situacích</string>
@@ -1006,6 +1016,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_case_sensitive">Uživatelská jména a hesla obvykle vyžadují rozlišit velká a malá písmena</string>
     <string name="title_login_before_send">Přijímat před odesláním</string>
     <string name="title_client_certificate">Klientský certifikát</string>
+    <string name="title_no_key_selected">Není vybrán žádný klíč nebo nejsou k dispozici žádné klíče</string>
     <string name="title_realm">Sféra</string>
     <string name="title_use_ip">Použít lokální IP adresu namísto názvu hostitele</string>
     <string name="title_ehlo">Vlastní HELO/EHLO identifikace</string>
@@ -1014,9 +1025,12 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_primary_identity">Hlavní (výchozí identita)</string>
     <string name="title_self_identity">Odebrat e-mailovou adresu při odpovědi</string>
     <string name="title_leave_on_server">Ponechat zprávy na serveru</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Po stažení zpráv ze serveru na něm zprávy zůstávají</string>
     <string name="title_client_delete">Aktivně odstranit zprávy po stažení</string>
     <string name="title_leave_deleted">Ponechat smazané zprávy na serveru</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Po odstranění zpráv ze zařízení zůstanou zprávy na serveru</string>
     <string name="title_leave_on_device">Ponechat zprávy v zařízení</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Když jsou zprávy odstraněny ze serveru, tak zůstanou v zařízení</string>
     <string name="title_max_messages">Maximální počet zpráv ke stažení (prázdné pro všechny)</string>
     <string name="title_max_messages_keep">Toto je maximální počet zpráv, které budou uloženy na zařízení</string>
     <string name="title_max_messages_remark">        Zadejte kladné číslo ke stažení zpráv na konci (nejvíce běžné)
@@ -1241,6 +1255,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_create_rule">Vytvořit pravidlo &#8230;</string>
     <string name="title_full_screen">Celá obrazovka</string>
     <string name="title_force_light">Vynutit světlý motiv</string>
+    <string name="title_rename">Přejmenovat</string>
     <string name="title_share">Sdílet</string>
     <string name="title_event">Přidat do kalendáře</string>
     <string name="title_pin">Přidat zkratku</string>
@@ -1385,8 +1400,10 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_third_party">Používáte verzi třetí strany</string>
     <string name="title_expand_warning">Rozbalení této zprávy stáhne %1$s</string>
     <string name="title_download_message">Stahování &#8230;</string>
-    <string name="title_reformatted">        Toto je přeformátované zobrazení zprávy.        Stiskem ikony &#x26F6; si můžete zobrazit původní zprávu, zároveň se i skryje toto oznámení.
-        Přeformátování zpráv trvá pár chvil, v závislosti na velikosti zprávy a rychlosti vašeho zařízení.
+    <string name="title_reformatted">        Toto je bezpečné přeformátované zobrazení zprávy.
+        Můžete klepnout na ikonu &#x26F6; pro zobrazení méně bezpečné původní zprávy a pro skrytí této zprávy.
+        Přeformátování zpráv trvá nějaký čas, v závislosti na velikosti zprávy a rychlosti zařízení.
+        Někdy musí být původní zpráva zobrazena pro zobrazení QR kódů.
     </string>
     <string name="title_compose">Napsat zprávu</string>
     <string name="title_submitter">Odeslal:</string>
@@ -1539,6 +1556,9 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_dsn_reminder">Oznámení o nedoručitelnosti (hard bounce) poškozují e-mailovou reputaci původního odesílatele!</string>
     <string name="title_size_reminder">Zpráva (%1$s) je větší než limit serveru (%2$s)</string>
     <string name="title_attachments_missing">Nebyly staženy všechny přílohy</string>
+    <string name="title_download_attachments">Stáhnout přílohy</string>
+    <string name="title_attachments_download">Stažených příloh: %1$s</string>
+    <string name="title_attachments_no_download">Toto již nebude zobrazeno, ani nebudou automaticky staženy přílohy</string>
     <string name="title_dialog_hint">Toto dialogové okno může být znovu zapnuto v menu s třemi tečkami horní liště akcí</string>
     <string name="title_draft_deleted">Koncept zahozen</string>
     <string name="title_draft_saved">Koncept uložen</string>
@@ -1690,6 +1710,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_answer_favorite">Oblíbená</string>
     <string name="title_answer_snippet">Úryvek</string>
     <string name="title_answer_receipt">Použít jako potvrzení o přečtení</string>
+    <string name="title_answer_ai">Použít jako výzvu AI</string>
     <string name="title_answer_hide">Skrýt z nabídek</string>
     <string name="title_answer_text">Text šablony</string>
     <string name="title_answer_placeholder">Zástupný text</string>
@@ -1793,6 +1814,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_rule_tts_subject">Předmět</string>
     <string name="title_rule_tts_content">Text</string>
     <string name="title_rule_select_sound">Vybrat zvuk</string>
+    <string name="title_rule_select_sound_ringtone">Vyzváněcí tón</string>
+    <string name="title_rule_select_sound_audio">Audio soubor</string>
     <string name="title_rule_use_as_alarm">Použít jako budík</string>
     <string name="title_rule_alarm_hint">Toto ignoruje pravidla režimu \"Nerušit\"</string>
     <string name="title_rule_alarm_duration">Maximální doba trvání budíku (sekundy)</string>
@@ -1933,6 +1956,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_hint_dismiss">Pro odstranění oznámení můžete toto dialogové okno odmítnout.</string>
     <string name="title_hint_support">Máte-li dotaz nebo problém, použijte prosím menu podpory pro získání pomoci</string>
     <string name="title_hint_message_actions">Tažením doleva hodit do koše; Tažením doprava archivovat (je-li k dispozici); Akce tažením lze změnit v nastavení účtu</string>
+    <string name="title_hint_outbox">Pro zrušení odesílání můžete táhnout doleva nebo doprava</string>
     <string name="title_hint_message_selection">Dlouhým podržením zprávy zahájíte násobný výběr zpráv; Držte a táhněte nahoru či dolů pro výběr více zpráv</string>
     <string name="title_hint_message_junk">        Emailový klient v podstatě zobrazuje zprávy na e-mailovém serveru.
         E-mailový server je zodpovědný za filtrování nevyžádané pošty, nikoli e-mailový klient.
@@ -1997,6 +2021,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_ask_what">Zeptej se, co dělat</string>
     <string name="title_no_ask_again">Znovu se neptat</string>
     <string name="title_no_ask_for_again">Znovu nežádat pro %1$s</string>
+    <string name="title_no_show_again">Znovu nezobrazovat</string>
     <string name="title_undo_privacy">Toto lze vrátit zpět na stránce nastavení soukromí</string>
     <string name="title_no_body">Text zprávy nenalezen</string>
     <string name="title_large_body">Tato zpráva je velmi velká a to může způsobit problémy!</string>
@@ -2082,6 +2107,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_widget_folder_unified">Složky sjednocené doručené pošty</string>
     <string name="title_widget_folder_notifying">Složky s oznámeními o nových zprávách</string>
     <string name="title_widget_unseen">Pouze nepřečtené zprávy</string>
+    <string name="title_widget_show_unseen">Zobrazit jako nepřečtené</string>
     <string name="title_widget_flagged">Pouze zprávy označené hvězdičkou</string>
     <string name="title_widget_font_size">Velikost textu</string>
     <string name="title_widget_padding">Velikost odsazení položek</string>

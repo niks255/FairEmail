@@ -312,14 +312,25 @@ public class Log {
     static void setCrashReporting(boolean enabled) {
         try {
             if (enabled)
-                Bugsnag.startSession();
+                Bugsnag.resumeSession();
+            else
+                Bugsnag.pauseSession();
         } catch (Throwable ex) {
             Log.i(ex);
         }
     }
 
-    static void forceCrashReporting() {
-        Bugsnag.resumeSession();
+    static void forceCrashReport(Context context, Throwable fatal) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean crash_reports = prefs.getBoolean("crash_reports", false);
+        try {
+            prefs.edit().putBoolean("crash_reports", true).apply();
+            setCrashReporting(true);
+            Log.e(fatal);
+        } finally {
+            prefs.edit().putBoolean("crash_reports", crash_reports).apply();
+            setCrashReporting(crash_reports);
+        }
     }
 
     public static void breadcrumb(String name, Bundle args) {
@@ -786,6 +797,17 @@ public class Log {
                   at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:70)
                   at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1976)
              */
+            return false;
+
+        if ("java.lang.Daemons$FinalizerWatchdogDaemon".equals(ex.getClass().getName()))
+            /*
+                java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String java.lang.Object.toString()' on a null object reference
+                    at java.lang.Daemons$FinalizerWatchdogDaemon.finalizingObjectAsString(Daemons.java:605)
+                    at java.lang.Daemons$FinalizerWatchdogDaemon.waitForProgress(Daemons.java:559)
+                    at java.lang.Daemons$FinalizerWatchdogDaemon.runInternal(Daemons.java:412)
+                    at java.lang.Daemons$Daemon.run(Daemons.java:145)
+                    at java.lang.Thread.run(Thread.java:1012)
+            */
             return false;
 
         if (ex instanceof NoSuchMethodError)

@@ -31,6 +31,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Patterns;
 
@@ -1158,10 +1159,12 @@ public class EntityRule {
         reply.id = db.message().insertMessage(reply);
 
         String body;
+        EntityAnswer.Data answerData = null;
         if (resend)
             body = Helper.readText(message.getFile(context));
         else {
-            body = answer.getHtml(context, message.from);
+            answerData = answer.getData(context, message.from);
+            body = answerData.getHtml();
 
             if (original_text) {
                 Document msg = JsoupEx.parse(body);
@@ -1217,6 +1220,9 @@ public class EntityRule {
             Helper.copy(source, target);
             db.attachment().setDownloaded(attachment.id, target.length());
         }
+
+        if (answerData != null)
+            answerData.insertAttachments(context, reply.id);
 
         EntityOperation.queue(context, reply, EntityOperation.SEND);
 
@@ -1403,9 +1409,6 @@ public class EntityRule {
     }
 
     private boolean onActionSound(Context context, EntityMessage message, JSONObject jargs) throws JSONException {
-        if (message.ui_seen)
-            return false;
-
         Uri uri = (jargs.has("uri") ? Uri.parse(jargs.getString("uri")) : null);
         boolean alarm = jargs.getBoolean("alarm");
         int duration = jargs.optInt("duration", MediaPlayerHelper.DEFAULT_ALARM_DURATION);
@@ -1575,7 +1578,8 @@ public class EntityRule {
         }
 
         try {
-            message.preview = AI.getSummaryText(context, message);
+            Spanned summary = AI.getSummaryText(context, message, -1L);
+            message.preview = (summary == null ? null : summary.toString());
         } catch (Throwable ex) {
             message.error = Log.formatThrowable(ex);
             db.message().setMessageError(message.id, message.error);

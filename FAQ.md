@@ -24,11 +24,13 @@ Vous recevrez une réponse dans votre propre langue.
 There is a lot of technical information in this FAQ, mostly for specific problems or specific use cases.
 For other more common questions, please see the tutorials below or contact me via *Get support* below.
 
-<br>
+<br />
 
 ## Tutorials
 
 Please [see here](https://github.com/M66B/FairEmail/tree/master/tutorials) for tutorials &#x1F4D6;.
+
+<br />
 
 ## Index
 
@@ -38,6 +40,8 @@ Please [see here](https://github.com/M66B/FairEmail/tree/master/tutorials) for t
 * [Planned features](#planned-features)
 * [Frequently Asked Questions](#frequently-asked-questions) (FAQ)
 * [Get support](#get-support)
+
+<br />
 
 <h2><a name="authorizing-accounts"></a>Authorizing accounts</h2>
 
@@ -82,6 +86,8 @@ Related questions:
 * [Is OAuth supported?](#faq111)
 * [Why is ActiveSync &trade; not supported?](#faq133)
 
+<br />
+
 <a name="howto">
 
 ## How to ...?
@@ -109,7 +115,9 @@ Related questions:
 
 (*) Swipe actions for individual and POP3 accounts can be configured in the account setting: (Main) Settings, tap Manual setup, tap Accounts, tap account
 
-<h2><a name="known-problems"></a>Known problem</h2>
+<br />
+
+<h2><a name="known-problems"></a>Known problems</h2>
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23known-problems)
 
@@ -134,17 +142,18 @@ Related questions:
 * [A bug](https://techcommunity.microsoft.com/t5/outlook/outlook-office-365-imap-idle-is-broken/m-p/3616242) in the Outlook IMAP server causes delayed new message notifications.
 
 <a name="redmi"></a>
+<a name="realme"></a>
 <a name="oneplus"></a>
 <a name="oppo"></a>
 
 <br />
 
-**Xiaomi Redmi / OnePlus / Oppo**
+**Xiaomi Redmi / Realme / OnePlus / Oppo**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23redmi)
 
-On some Xiaomi Redmi (Note) devices, some OnePlus devices with Android 12 and some Oppo devices with Android 12 the database occasionally gets corrupted, resulting in total data loss
-(on the device only, unless you are using a POP3 account with the option *Leave messages on server* disabled).
+On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices running Android 12 and some Oppo devices running Android 12 the database occasionally gets corrupted, especially after an update,
+resulting in total data loss (on the device only, unless you are using a POP3 account with the option *Leave messages on server* disabled).
 
 The cause of this problem are disk I/O errors due to an Android bug (more likely) or maybe a hardware issue (less likely),
 please [see here](https://www.sqlite.org/rescode.html#ioerr_write).
@@ -169,6 +178,8 @@ android.database.sqlite.SQLiteDiskIOException: disk I/O error (code 778)
 ```
 
 The cause might be [changes in Android 7 Nougat](https://ericsink.com/entries/sqlite_android_n.html), which is why sqlite isn't bundled anymore since version 1.1970.
+
+<br />
 
 <h2><a name="planned-features"></a>Planned features</h2>
 
@@ -209,6 +220,8 @@ The cause might be [changes in Android 7 Nougat](https://ericsink.com/entries/sq
 * Bottom action bar
 
 Anything on this list is in random order and *might* be added in the near future.
+
+<br />
 
 <h2><a name="frequently-asked-questions"></a>Frequently Asked Questions</h2>
 
@@ -399,7 +412,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(185) Can I install FairEmail on Windows?](#faq185)
 * [(186) How can I let the app auto store iCalendar invitations?](#faq186)
 * [(187) Are colored stars synchronized across devices?](#faq187)
-* [(188) Why is Google backup disabled?](#faq188)
+* [~~(188) Why is Google backup disabled?~~](#faq188)
 * [(189) What is cloud sync?](#faq189)
 * [(190) How do I use OpenAI (ChatGPT)?](#faq190)
 * [(191) How do I download and keep older messages on my device?](#faq191)
@@ -682,7 +695,7 @@ Some people ask:
 >
 > "*To help keep your account secure, starting May 30, 2022, ​​Google will no longer support the use of third-party apps or devices which ask you to sign in to your Google Account using only your username and password.*"
 >
-> &#x2714; If you authorized your Gmail account with the quick setup wizard or manually with an app password, your account will keep being synchronized after May 30, 2022.
+> &#x2705; If you authorized your Gmail account with the quick setup wizard or manually with an app password, your account will keep being synchronized after May 30, 2022.
 >
 > &#x274C; If you enabled *Less secure apps* in the Google account settings and authorized your Gmail account manually with your normal account password, your account can't be synchronized from May 30, 2022 anymore. The app will show the error **Invalid credentials (Failure)**.
 >
@@ -856,6 +869,8 @@ Some providers allow you to have multiple aliases.
 The easiest way to create an alias is to copy the main identity, and change the email address and perhaps the (display) name.
 You should not change the username!
 For this, please go to the settings via the navigation menu (left side menu), tap on *Manual setup and account options*, tap on *Identities*, long press the main identity, and select to copy it.
+
+**Important**: In the case of an Outlook account, you should first authenticate the account again with the "Office 365" wizard. You don't need to remove the account for this.
 
 **In many cases, an alias address must first be verified via the website of the mail provider**
 
@@ -1251,12 +1266,39 @@ Using the search index is a pro feature.
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq14)
 
+<br />
+
 >
-> **Important**: Basic Authentication (=password authentication) [will be turned off from October 1, 2022](https://techcommunity.microsoft.com/t5/exchange-team-blog/basic-authentication-deprecation-in-exchange-online-may-2022/ba-p/3301866).
+> **IMPORTANT: If you came here via a warning in the app, you MUST take action!**
 >
-> &#x2714; If you authorized your Outlook/Office 365 account with the quick setup wizard, your account will keep being synchronized after October 1, 2022.
+> It takes just two minutes to be prepared.
 >
-> &#x274C; If you authorized your Outlook/Office 365 account manually with a password, your account can't be synchronized from October 1, 2022 anymore.
+
+<br />
+
+>
+> **Important**: Basic Authentication [will be turned off for Office 365 accounts from October 1, 2022](https://techcommunity.microsoft.com/t5/exchange-team-blog/basic-authentication-deprecation-in-exchange-online-may-2022/ba-p/3301866).
+>
+> **Important**: Basic Authentication **[will be turned off for Outlook/Hotmail/Live accounts from September 16, 2024](https://techcommunity.microsoft.com/t5/outlook-blog/keeping-our-outlook-personal-email-users-safe-reinforcing-our/ba-p/4164184)**.
+>
+
+<br />
+
+>
+> Microsoft calls password authentication "*Basic authentication*" and authentication with OAuth "*Modern authentication*".
+> Confusingly, using [OAuth](https://en.wikipedia.org/wiki/OAuth) also requires entering a password.
+>
+
+<br />
+
+>
+> &#x2705; If you authorized your Outlook/Office 365 account with the quick setup wizard, your account will keep being synchronized after September 16, 2024.
+>
+> &#x274C; If you authorized your Outlook/Office 365 account manually with a password, **your account won't be synchronized from September 16, 2024 anymore!**
+>
+
+<br />
+
 >
 > How to check:
 >
@@ -1266,16 +1308,22 @@ Using the search index is a pro feature.
 > * Find the account in the list
 > * If there is a shield icon before the account name (=OAuth), the account will keep working
 >
+
+<br />
+
+>
 > How to fix:
 >
 > * Go to the *Settings* via the navigation menu (left side menu)
-> * Tap on the *Wizard* button and select *Outlook/Office365 (OAuth)*
+> * Tap on the *Wizard* button and select *Outlook/Hotmail/Live (OAuth)* or *Office 365 (OAuth)*.
 > * Tick the checkbox to authenticate an existing account (else you'll create a new account!)
 > * Fill in the fields and follow the steps
 > * Repeat for each account
 >
 
-An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting *Outlook/Office 365*.
+<br />
+
+An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting *Outlook/Hotmail/Live (OAuth)* or *Office 365 (OAuth)*.
 
 **Important**: a personal and a business account can have the same email address, but have different mailboxes (folders). So, please make sure you select the right option.
 
@@ -1291,6 +1339,8 @@ So, basically this means that Microsoft is pushing you to their own products. Is
 
 To use an Outlook, Live or Hotmail account with two factor authentication enabled, you might need to create an app password.
 See [here](https://support.microsoft.com/en-us/help/12409/microsoft-account-app-passwords-two-step-verification) for the details.
+
+**Important**: Microsoft will drop support for app passwords from September 16, 2024.
 
 See [here](https://support.office.com/en-us/article/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040) for Microsoft's instructions.
 
@@ -1943,14 +1993,14 @@ Viewing remotely stored images (see also [this FAQ](#faq27)) and opening links m
 but will also leak your IP address.
 See also this question: [Why email's link is more dangerous than web search's link?](https://security.stackexchange.com/questions/241139/why-emails-link-is-more-dangerous-than-web-searchs-link).
 
-This BBC article is worth reading: [Spy pixels in emails have become endemic](https://www.bbc.com/news/technology-56071437).
+This BBC article is worth reading as well: [Spy pixels in emails have become endemic](https://www.bbc.com/news/technology-56071437).
 
 Opening attachments or viewing an original message might load remote content and execute scripts,
 that might not only cause privacy sensitive information to leak, but can also be a security risk.
 
 Note that your contacts could unknowingly send malicious messages if they got infected with malware.
 
-FairEmail formats messages again causing messages to look different from the original, but also uncovering phishing links.
+FairEmail formats messages again causing messages to look different from the original, but also uncovering phishing links, etc.
 
 Note that reformatted messages are often better readable than original messages because the margins are removed, and font colors and sizes are standardized.
 
@@ -1959,7 +2009,7 @@ Since the images are downloaded from the source server [in real-time](https://bl
 this is even less secure because Google is involved too without providing much benefit.
 
 You can show images and original messages by default for trusted senders on a case-by-case basis by checking *Do not ask this again for ...*.
-You might need to reset the questions via a button in the miscellaneous settings tab page.
+You might need to reset the questions via a button in the miscellaneous-settings tab page.
 
 <br />
 
@@ -2791,7 +2841,7 @@ The following extra functions are available:
 * *blocklist()* (version 1.2176-1.2178; deprecated, use *onBlocklist()* instead)
 * *onBlocklist()* (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2179)
 * *hasMx()* (returns a boolean indicating if the from/reply-to address has an associated MX record; since version 1.2179)
-* *attachments()* (returns an integer indicating number of attachments; since version 1.2179)
+* *attachments(regex)* (returns an integer indicating number of attachments; since version 1.2179; optional regex since version 1.2194)
 * *Jsoup()* (returns an array of selected strings; since version 1.2179)
 * *Size(array)* (returns the number of items in an array; since version 1.2179)
 * *knownContact()* (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)
@@ -2946,6 +2996,7 @@ The automation action will broadcast the intent *eu.faircode.email.AUTOMATION* w
 * *received* (ISO 8601 date/time)
 
 An app like Tasker can listen for this intent and perform some action.
+Please [see here](https://tasker.joaoapps.com/userguide/en/intents.html) about receiving intents in Tasker.
 
 <br />
 
@@ -3422,8 +3473,11 @@ Also, FairEmail can show a small red warning flag
 when DKIM, SPF or [DMARC](https://en.wikipedia.org/wiki/DMARC) authentication failed on the receiving server.
 You can enable/disable [authentication verification](https://en.wikipedia.org/wiki/Email_authentication) in the display settings.
 The feature depends on the header [Authentication-Results](https://datatracker.ietf.org/doc/html/rfc7601), which the receiving email server should add.
-If the email server doesn't add an *Authentication-Results*, which is optional,
+The shield will be green only if DMARC passes (=alignment)
+and either [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework) or [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail) passes.
+If the email server doesn't add an *Authentication-Results* header, which is optional,
 you can enable native DKIM in the debug panel, which appears when you enable debug mode in the miscellaneous settings tab page (last option).
+In this case, the shield will be green only when DKIM passes and the signer domain matches that of the sender.
 Please be aware that this option will increase both data and battery usage.
 
 FairEmail can show a warning flag too if the domain name of the (reply) email address of the sender does not define an MX record pointing to an email server.
@@ -3877,6 +3931,7 @@ Firstly, a purchase will be available on all devices logged into the same Google
 *if* (this is important) the app is installed via the same Google account too.
 You can select the account in the Play store app by tapping on the avatar at the top right, but only *before* installing the app.
 It is not possible to change the linked Google account after the app has been installed.
+Google doesn't support moving a Play Store purchase from one to another account either.
 
 Google manages all purchases, so as a developer I have little control over purchases.
 So, basically, the only thing I can do, is suggest some things:
@@ -4296,6 +4351,9 @@ or by multiple selecting messages in the message list.
 
 Alternatively, you can disable AUTO EXPUNGE, which will result in marking messages being deleted on the server (by setting the *deleted* flag), but not expunging (deleting) them.
 You can find this option in the debug panel, which can be shown by (temporarily) enabling debug mode in the miscellaneous settings.
+Note that with AUTO EXPUNGE enabled, all messages in all folders of all accounts will remain on the email server (with the deleted flag set),
+also in the draft-messages folder and when emptying the trash-messages or spam-messages folder.
+You'll need to manually perform the EXPUNGE command, which you can do by long pressing on a folder, or via the three-dots overflow menu of a messages list.
 
 Note that it is possible to set the swipe left or right action to hide a message.
 There is a button in the behavior settings to quickly configure the swipe left and right actions for all IMAP accounts.
@@ -4577,7 +4635,8 @@ Note that developers have no control over F-Droid builds and the F-Droid infrast
 OAuth access is available only for Play Store and Github releases
 because email providers permitted the use of OAuth for these releases only.
 The responsible for a release, for the F-Droid build this is the F-Droid organization, needs to ask for OAuth permissions,
-which mostly involves signing a contract with binding terms and conditions.
+which mostly involves signing a contract with binding terms and conditions,
+often with the clause that the use of OAuth is exclusive.
 
 Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release
 because Android refuses to install ("*App was not installed*") the same app with a different signature for security reasons.
@@ -5373,7 +5432,7 @@ This feature was added in version 1.1942 and is available in non Play store vers
 When clicking on a link, by default, a confirmation dialog will be shown.
 The available browser(s) will be listed and if a browser supports [Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs/), it will be listed twice,
 once with an "open external" icon (the browser will be started standalone, independent of the app)
-and once without this icon (the browser will be started embedded as "Custom Tab", dependent on the app).
+and once without this icon (the browser will be started embedded as "Custom Tab", which looks like being part of the app, but in fact isn't).
 
 In addition, *Select app* will be listed, which means that the link will be handed over to Android, which will select how to open the link.
 In most cases, this will be with the default browser, which you can select in the Android settings.
@@ -5516,17 +5575,17 @@ In other words, the color of stars is stored on your device only, and won't be s
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq188)
 
-Google backup is disabled to prevent privacy-sensitive information, like account credentials and email addresses,
-from [automatically being sent to Google](https://developer.android.com/guide/topics/data/autobackup).
+~~Google backup is disabled to prevent privacy-sensitive information, like account credentials and email addresses,~~
+~~from [automatically being sent to Google](https://developer.android.com/guide/topics/data/autobackup).~~
 
-In theory, there is client-side encryption, but there is no specification available about what this means.
-Moreover, many people do not trust Google.
+~~In theory, there is client-side encryption, but there is no specification available about what this means.~~
+~~Moreover, many people do not trust Google.~~
 
-Unfortunately, it is not possible to enable cloud backup for other backup software without enabling Google backup.
-Whether Google backup is enabled needs to be specified in the app manifest. So, unfortunately, it isn't possible to add an option for this.
+~~Unfortunately, it is not possible to enable cloud backup for other backup software without enabling Google backup.~~
+~~Whether Google backup is enabled needs to be specified in the app manifest. So, unfortunately, it isn't possible to add an option for this.~~
 
-As a replacement, you can back up and restore all settings, including the account settings and credentials, via the backup-settings tab page.
-This backup export uses a proper encryption method, [see here](#faq36).
+~~As a replacement, you can back up and restore all settings, including the account settings and credentials, via the backup-settings tab page.~~
+~~This backup export uses a proper encryption method, [see here](#faq36).~~
 
 <br />
 
@@ -5582,6 +5641,7 @@ OpenAI can only be used if configured and enabled.
 **Setup**
 
 * Create an account [here](https://platform.openai.com/signup)
+* Pay some money via [here](https://platform.openai.com/settings/organization/billing/overview)
 * Create an API key [here](https://platform.openai.com/account/api-keys)
 * Copy the API key and paste it in the corresponding field of the integration settings
 * Enable the OpenAI switch
@@ -5593,12 +5653,13 @@ OpenAI can only be used if configured and enabled.
 *Editor*
 
 Tap on the robot button in the top action bar of the message editor.
-The text in the message editor (if any) and the first part of the message being replied to (if any)
-will be used for [chat completion](https://platform.openai.com/docs/guides/chat/introduction).
-If text is selected in the message editor, only the selected text will be used, and it will be replaced by the answer.
-A maximum of 1,000 characters of the message being replied to will be used to avoid exceeding the token limit.
+If the text in the message editor is empty, the message being replied to will be answered (using the configured answer prompt),
+else the entered text will be sent, which could be a question or command.
+If you select entered text, it will be replaced by the answer.
 
 For example: create a new draft and enter the text "*How far is the sun?*", and tap on the robot button in the top action bar.
+
+Since version 1.2191 it is possible to define AI templates, which you can select after tapping on the robot icon.
 
 <br>
 
@@ -5656,6 +5717,7 @@ This feature is experimental and requires version 1.2053 or later for the GitHub
 
 You can download and keep older messages in the unified inbox folders by using *Fetch more messages* in the three-dots overflow menu of the start screen.
 For other folders, you can long press the folder in the folder list of the account (tap on the account name in the navigation menu = left side menu).
+When you long press on a parent folder, there will be a subfolders option with a menu item to fetch more messages for all child folders.
 Please read the remark in the confirmation dialog box.
 
 Note that starred (favorite) messages will be kept on your device "forever".
@@ -5784,7 +5846,7 @@ A message is printed as-is, which means that the sender of the message determine
 Spell checking should be provided by the keyboard app for all other apps.
 Sometimes, particularly on ChromeOS, spell checking needs to be enabled in the settings.
 
-That said, LanguageTool, which can be enabled in the integration settings, is an excellent style and spell checker.
+That said, LanguageTool, which can be enabled in the integration-settings tab, is an excellent alternative to style and spell checking.
 
 <br>
 
@@ -5831,6 +5893,7 @@ Alternatively, see [this Wikipedia article](https://en.wikipedia.org/wiki/Certif
 
 When certificate transparency is enabled in the connection-settings tab page of the app,
 the [Chrome Certificate Transparency Policy](https://github.com/GoogleChrome/CertificateTransparency/blob/master/ct_policy.md) will be applied.
+The CT log will be downloaded from [https://www.gstatic.com/](https://www.gstatic.com/ct/log_list/v3/all_logs_list.json).
 
 FairEmail uses [this library](https://github.com/appmattus/certificatetransparency) to implement certificate transparency via a custom trust manager.
 
@@ -5901,7 +5964,7 @@ Gemini can only be used if configured and enabled.
 
 To use [Gemini](https://gemini.google.com/), please follow these steps:
 
-1. Check if your country [is supported](https://ai.google.dev/available_regions)
+1. **Check if your country [is supported](https://ai.google.dev/available_regions)**
 1. Get an API key via [here](https://ai.google.dev/tutorials/setup)
 1. Enter the API key in the integration settings tab page
 1. Enable Gemini integration in the integration settings tab page

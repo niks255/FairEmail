@@ -185,6 +185,7 @@
     <string name="title_setup_gmail_password">端末上のアカウントの代わりにパスワードで別のアカウントを認証したい</string>
     <string name="title_setup_office_auth">「AUTHENTICATE failed」というエラーは、システム管理者によって IMAP/SMTP が無効にされていることが原因である可能性があります</string>
     <string name="title_setup_office_auth_5_7_3">クイック セットアップ ウィザードの「その他のプロバイダー」をお試しください。</string>
+    <string name="title_setup_office_auth_5_7_139">「Outlook/Hotmail/Live」のセットアップウィザードをお試しください。</string>
     <string name="title_setup_oauth_rationale">%1$s アカウントへのアクセスを許可する</string>
     <string name="title_setup_oauth_update">設定済みのアカウントをもう一度認証する (設定されていない場合、新しいアカウントを作成)</string>
     <string name="title_setup_oauth_updated">アカウントの認証情報が更新されました</string>
@@ -315,8 +316,7 @@
     <string name="title_setup_reset_full">元のメッセージの表示</string>
     <string name="title_check_gmail_oauth">あなたの Gmail アカウントは 2022 年 5 月 30 日以降も引き続き利用できます</string>
     <string name="title_check_gmail_password">あなたの Gmail アカウントの一部は 2022 年 5 月 30 日以降に停止される可能性があります</string>
-    <string name="title_check_outlook_oauth">あなたの Outlook アカウントは 2022 年 10 月 1 日以降も引き続き利用できます</string>
-    <string name="title_check_outlook_password">あなたの Outlook アカウントは 2022 年 10 月 1 日以降に停止される可能性があります</string>
+    <string name="title_check_outlook_password">一部の Outlook/Hotmail/Live アカウントは、2024 年 9 月 16 日以降に停止します。</string>
     <string name="title_advanced_hint_title">詳細設定</string>
     <string name="title_advanced_hint_message">        詳細設定に移動しています。
         初期状態では特に変更しなくてもアプリを使用できる一般的な設定になっています。
@@ -383,6 +383,7 @@
     <string name="title_advanced_send_nav_color">下部のボタンアクションバーをユーザー ID の色にする</string>
     <string name="title_advanced_send_reminders">リマインダーを表示する</string>
     <string name="title_advanced_send_delayed">メッセージ送信を遅延させる</string>
+    <string name="title_advanced_send_top">送信ボタンを上部に表示する</string>
     <string name="title_advanced_attach_new">URI やファイルをアプリに共有したとき、新しい下書きを作成する</string>
     <string name="title_advanced_answer_caption">返信ボタン設定</string>
     <string name="title_advanced_answer_default">返信ボタンを短く押したときのアクション:</string>
@@ -763,6 +764,10 @@
     <string name="title_advanced_gemini">Gemini を統合する</string>
     <string name="title_advanced_multi_modal">マルチモーダル (テキスト + メディア)</string>
     <string name="title_advanced_summarize_prompt">要約プロンプト</string>
+    <string name="title_advanced_answer_prompt">返信プロンプト</string>
+    <string name="title_advanced_system_instructions">システムへの指定</string>
+    <string name="title_advanced_default_prompt">デフォルトのプロンプト</string>
+    <string name="title_advanced_entered_text">入力テキスト</string>
     <string name="title_advanced_sdcard">SD カードを使用できますか？</string>
     <string name="title_advanced_watchdog">FairEmail がアクティブか定期的に確認する</string>
     <string name="title_advanced_updates">GitHub で更新を確認する</string>
@@ -774,6 +779,7 @@
     <string name="title_advanced_crash_reports">エラーレポートを送信する</string>
     <string name="title_advanced_cleanup_attachments">古いメッセージの添付ファイルを削除する</string>
     <string name="title_advanced_cleanup">クリーンアップ</string>
+    <string name="title_advanced_google_backup">Android のデータバックアップを使用する</string>
     <string name="title_advanced_app">アプリ設定</string>
     <string name="title_advanced_more">その他のオプション</string>
     <string name="title_advanced_main_log">メインログ</string>
@@ -819,7 +825,7 @@
     <string name="title_advanced_metered_warning">無効にするとモバイルネットワークでのメッセージの送受信が無効になります</string>
     <string name="title_advanced_rlah_hint">EU 加盟国の SIM カードで加盟国のネットワークを使用する場合、ローミングではないとみなします</string>
     <string name="title_advanced_usage_hint">これによりバッテリー使用量、データ使用量、ストレージ使用量が増加します</string>
-    <string name="title_advanced_plain_hint">有効にするとデータ使用量が制限されますが、スタイルを設定せずにメッセージが表示されます</string>
+    <string name="title_advanced_plain_hint">有効にするとデータ使用量が制限されますが、スタイルを設定せず画像なしでメッセージが表示されます</string>
     <string name="title_advanced_plain_remark">常に完全な内容がプレーンテキスト部分に含まれないことがあります！</string>
     <string name="title_advanced_tcp_keep_alive_hint">有効にすると、一部の端末で接続の問題が発生したりバッテリー使用量が増加したりする可能性があります</string>
     <string name="title_advanced_validate_hint">これにより、VPN を使用している場合や、その他の状況でメッセージが同期されない可能性があります</string>
@@ -968,6 +974,7 @@
     <string name="title_case_sensitive">通常、ユーザー名とパスワードでは大文字と小文字が区別されます</string>
     <string name="title_login_before_send">送信前に同期を実行する</string>
     <string name="title_client_certificate">クライアント証明書</string>
+    <string name="title_no_key_selected">鍵が選択されていないか、利用できません</string>
     <string name="title_realm">Realm</string>
     <string name="title_use_ip">ホスト名の代わりにローカル IP アドレスを使用する</string>
     <string name="title_ehlo">カスタム HELO/EHLO 識別</string>
@@ -976,9 +983,12 @@
     <string name="title_primary_identity">プライマリー (デフォルトのユーザー ID)</string>
     <string name="title_self_identity">返信するときにメールアドレスを削除する</string>
     <string name="title_leave_on_server">サーバーにメッセージを残す</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">サーバーからメッセージをダウンロードした後、メッセージがサーバーに残ります</string>
     <string name="title_client_delete">ダウンロードしたメッセージをアクティブに削除</string>
     <string name="title_leave_deleted">削除したメッセージをサーバーに残す</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">端末からメッセージを削除しても、メッセージはサーバーに残ります</string>
     <string name="title_leave_on_device">端末にメッセージを残す</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">メッセージがサーバーから削除されても、メッセージは端末に残ります</string>
     <string name="title_max_messages">ダウンロードするメッセージ件数の上限 (空白にするとすべてダウンロードします)</string>
     <string name="title_max_messages_keep">これは、端末に保存されるメッセージ件数の上限です</string>
     <string name="title_max_messages_remark">        正の数を入力すると、最後からメッセージをダウンロードします (推奨)
@@ -1204,6 +1214,7 @@
     <string name="title_create_rule">ルールを作成&#8230;</string>
     <string name="title_full_screen">全画面表示</string>
     <string name="title_force_light">ライトテーマを強制</string>
+    <string name="title_rename">名前を変更</string>
     <string name="title_share">共有</string>
     <string name="title_event">カレンダーに追加</string>
     <string name="title_pin">ショートカットを追加</string>
@@ -1349,9 +1360,10 @@
     <string name="title_third_party">サードパーティー版を使用しています</string>
     <string name="title_expand_warning">このメッセージを展開すると、%1$s がダウンロードされます</string>
     <string name="title_download_message">ダウンロードしています&#8230;</string>
-    <string name="title_reformatted">        これは、再フォーマットされたメッセージ表示です。
-        元のメッセージを表示するには &#x26F6; アイコンをタップし、このメッセージを非表示にできます。
-        メッセージの再フォーマットには、メッセージのサイズや端末の速度に応じて時間がかかります。
+    <string name="title_reformatted">        これは、安全のために再フォーマットされたメッセージ表示です。
+        &#x26F6; アイコンをタップすると、安全性の低い元のメッセージを表示でき、このメッセージは非表示になります。
+        メッセージの再フォーマットには、メッセージのサイズや端末の処理速度に応じて時間がかかります。
+        QR コードを表示するときなど、元のメッセージを表示する必要がある場合もあります。
     </string>
     <string name="title_compose">作成</string>
     <string name="title_submitter">送信元:</string>
@@ -1504,6 +1516,9 @@
     <string name="title_dsn_reminder">ハードバウンスは、送信元のメールアドレスの評判を損ないます！</string>
     <string name="title_size_reminder">メッセージの大きさ (%1$s) がサーバーの制限 (%2$s) を超えています</string>
     <string name="title_attachments_missing">一部の添付ファイルがダウンロードされませんでした</string>
+    <string name="title_download_attachments">添付ファイルをダウンロード</string>
+    <string name="title_attachments_download">ダウンロード済みの添付ファイル: %1$s</string>
+    <string name="title_attachments_no_download">この確認は表示されなくなり、添付ファイルは自動ではダウンロードされません</string>
     <string name="title_dialog_hint">このダイアログは上部アクションバーの 3 点メニューからもう一度有効にできます</string>
     <string name="title_draft_deleted">下書きを破棄しました</string>
     <string name="title_draft_saved">下書きを保存しました</string>
@@ -1655,6 +1670,7 @@
     <string name="title_answer_favorite">お気に入り</string>
     <string name="title_answer_snippet">スニペット</string>
     <string name="title_answer_receipt">開封確認メッセージとして使用する</string>
+    <string name="title_answer_ai">AI プロンプトを使用する</string>
     <string name="title_answer_hide">メニューに表示しない</string>
     <string name="title_answer_text">テンプレートテキスト</string>
     <string name="title_answer_placeholder">プレースホルダー</string>
@@ -1758,6 +1774,8 @@
     <string name="title_rule_tts_subject">件名</string>
     <string name="title_rule_tts_content">本文</string>
     <string name="title_rule_select_sound">音声を選択</string>
+    <string name="title_rule_select_sound_ringtone">通知音</string>
+    <string name="title_rule_select_sound_audio">音声ファイル</string>
     <string name="title_rule_use_as_alarm">アラームに設定</string>
     <string name="title_rule_alarm_hint">サイレントモードを無視します</string>
     <string name="title_rule_alarm_duration">自動消音時間 (秒)</string>
@@ -1898,6 +1916,7 @@
     <string name="title_hint_dismiss">このダイアログボックスを閉じて通知を削除できます。</string>
     <string name="title_hint_support">質問や問題がある場合はサポートメニューを使用してヘルプにアクセスしてください</string>
     <string name="title_hint_message_actions">左にスワイプしてごみ箱に移動し、右にスワイプしてアーカイブ (利用可能な場合) します。スワイプ操作はアカウント設定で変更できます</string>
+    <string name="title_hint_outbox">左右どちらかにスワイプすると、送信をキャンセルします</string>
     <string name="title_hint_message_selection">メッセージを長押しして、複数のメッセージを選択します。そのまま上または下にスワイプすると、まとめてメッセージを選択できます</string>
     <string name="title_hint_message_junk">        メールクライアントは、基本的にメールサーバーにあるメッセージをそのまま表示しています。
         メールクライアントではなく、メールサーバーが迷惑メールをフィルターする責任を負っています。
@@ -1962,6 +1981,7 @@
     <string name="title_ask_what">毎回確認する</string>
     <string name="title_no_ask_again">次回から確認しない</string>
     <string name="title_no_ask_for_again">%1$s は次回から確認しない</string>
+    <string name="title_no_show_again">今後は表示しない</string>
     <string name="title_undo_privacy">設定のプライバシータブで変更できます</string>
     <string name="title_no_body">本文が見つかりません</string>
     <string name="title_large_body">メッセージのサイズがとても大きいため、問題が発生することがあります！</string>
@@ -2048,6 +2068,7 @@
     <string name="title_widget_folder_unified">統合受信トレイフォルダー</string>
     <string name="title_widget_folder_notifying">新着メッセージ通知のあるフォルダー</string>
     <string name="title_widget_unseen">未読メッセージのみ</string>
+    <string name="title_widget_show_unseen">未読として表示</string>
     <string name="title_widget_flagged">スター付きメッセージのみ</string>
     <string name="title_widget_font_size">テキストサイズ</string>
     <string name="title_widget_padding">余白サイズ</string>

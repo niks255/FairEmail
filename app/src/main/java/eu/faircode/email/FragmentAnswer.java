@@ -71,6 +71,7 @@ public class FragmentAnswer extends FragmentBase {
     private AutoCompleteTextView etGroup;
     private CheckBox cbStandard;
     private CheckBox cbReceipt;
+    private CheckBox cbAI;
     private CheckBox cbFavorite;
     private CheckBox cbSnippet;
     private CheckBox cbHide;
@@ -89,8 +90,9 @@ public class FragmentAnswer extends FragmentBase {
 
     private static final int REQUEST_COLOR = 1;
     private static final int REQUEST_IMAGE = 2;
-    private static final int REQUEST_LINK = 3;
-    private final static int REQUEST_DELETE = 4;
+    private static final int REQUEST_FILE = 3;
+    private static final int REQUEST_LINK = 4;
+    private final static int REQUEST_DELETE = 5;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,6 +129,7 @@ public class FragmentAnswer extends FragmentBase {
         etGroup = view.findViewById(R.id.etGroup);
         cbStandard = view.findViewById(R.id.cbStandard);
         cbReceipt = view.findViewById(R.id.cbReceipt);
+        cbAI = view.findViewById(R.id.cbAI);
         cbFavorite = view.findViewById(R.id.cbFavorite);
         cbSnippet = view.findViewById(R.id.cbSnippet);
         cbHide = view.findViewById(R.id.cbHide);
@@ -183,6 +186,9 @@ public class FragmentAnswer extends FragmentBase {
                 if (itemId == R.id.action_insert_image) {
                     onInsertImage();
                     return true;
+                } else if (itemId == R.id.action_attach_file) {
+                    onAttachFile();
+                    return true;
                 } else if (itemId == R.id.action_insert_link) {
                     onInsertLink();
                     return true;
@@ -199,6 +205,7 @@ public class FragmentAnswer extends FragmentBase {
 
         // Initialize
         etLabel.setVisibility(BuildConfig.DEBUG ? View.VISIBLE : View.GONE);
+        cbAI.setVisibility(View.GONE);
         cbExternal.setVisibility(View.GONE);
         cbSnippet.setVisibility(View.GONE);
         grpReady.setVisibility(View.GONE);
@@ -277,6 +284,7 @@ public class FragmentAnswer extends FragmentBase {
                     etGroup.setText(answer == null ? null : answer.group);
                     cbStandard.setChecked(answer == null ? false : answer.standard);
                     cbReceipt.setChecked(answer == null ? false : answer.receipt);
+                    cbAI.setChecked(answer == null ? false : answer.ai);
                     cbFavorite.setChecked(answer == null ? false : answer.favorite);
                     cbSnippet.setChecked(answer == null ? false : answer.snippet);
                     cbHide.setChecked(answer == null ? false : answer.hide);
@@ -293,6 +301,7 @@ public class FragmentAnswer extends FragmentBase {
 
                 if (ActivityAnswer.canAnswer(context))
                     cbExternal.setVisibility(View.VISIBLE);
+                cbAI.setVisibility(AI.isAvailable(context) ? View.VISIBLE : View.GONE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     cbSnippet.setVisibility(View.VISIBLE);
                 grpReady.setVisibility(View.VISIBLE);
@@ -408,6 +417,16 @@ public class FragmentAnswer extends FragmentBase {
         startActivityForResult(intent, REQUEST_IMAGE);
     }
 
+    private void onAttachFile() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("*/*");
+        Helper.openAdvanced(getContext(), intent);
+        startActivityForResult(intent, REQUEST_FILE);
+    }
+
     private void onInsertLink() {
         FragmentDialogInsertLink fragment = new FragmentDialogInsertLink();
         fragment.setArguments(FragmentDialogInsertLink.getArguments(etText));
@@ -442,6 +461,7 @@ public class FragmentAnswer extends FragmentBase {
         args.putString("group", etGroup.getText().toString().trim());
         args.putBoolean("standard", cbStandard.isChecked());
         args.putBoolean("receipt", cbReceipt.isChecked());
+        args.putBoolean("ai", cbAI.isChecked());
         args.putBoolean("favorite", cbFavorite.isChecked());
         args.putBoolean("snippet", cbSnippet.isChecked());
         args.putBoolean("hide", cbHide.isChecked());
@@ -468,6 +488,7 @@ public class FragmentAnswer extends FragmentBase {
                 String group = args.getString("group");
                 boolean standard = args.getBoolean("standard");
                 boolean receipt = args.getBoolean("receipt");
+                boolean ai = args.getBoolean("ai");
                 boolean favorite = args.getBoolean("favorite");
                 boolean snippet = args.getBoolean("snippet");
                 boolean hide = args.getBoolean("hide");
@@ -506,6 +527,7 @@ public class FragmentAnswer extends FragmentBase {
                     answer.group = group;
                     answer.standard = standard;
                     answer.receipt = receipt;
+                    answer.ai = ai;
                     answer.favorite = favorite;
                     answer.snippet = snippet;
                     answer.hide = hide;
@@ -534,8 +556,9 @@ public class FragmentAnswer extends FragmentBase {
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -557,6 +580,10 @@ public class FragmentAnswer extends FragmentBase {
                 case REQUEST_IMAGE:
                     if (resultCode == RESULT_OK && data != null)
                         onImageSelected(data.getData());
+                    break;
+                case REQUEST_FILE:
+                    if (resultCode == RESULT_OK && data != null)
+                        onFileSelected(data.getData());
                     break;
                 case REQUEST_LINK:
                     if (resultCode == RESULT_OK && data != null)
@@ -589,6 +616,26 @@ public class FragmentAnswer extends FragmentBase {
             ssb.setSpan(is, start + 1, start + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             etText.setText(ssb);
             etText.setSelection(start + 3);
+        } catch (NoStreamException ex) {
+            ex.report(getActivity());
+        } catch (Throwable ex) {
+            Log.unexpectedError(getParentFragmentManager(), ex);
+        }
+    }
+
+    private void onFileSelected(Uri uri) {
+        try {
+            NoStreamException.check(uri, getContext());
+
+            getContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (!Helper.isPersisted(getContext(), uri, true, false))
+                throw new IllegalStateException("No permission granted to access selected file " + uri);
+
+            Editable edit = etText.getText();
+            if (edit.length() > 0 && edit.charAt(edit.length() - 1) != '\n')
+                edit.append("\n");
+            edit.append(EntityAnswer.ATTACHMENT_PREFIX + uri + EntityAnswer.ATTACHMENT_SUFFIX + "\n");
+            etText.setSelection(edit.length());
         } catch (NoStreamException ex) {
             ex.report(getActivity());
         } catch (Throwable ex) {

@@ -576,7 +576,7 @@ class Core {
 
                             db.operation().setOperationTries(op.id, op.tries);
 
-                            op.error = Log.formatThrowable(ex);
+                            op.error = Log.formatThrowable(ex, !EntityOperation.BODY.equals(op.name));
                             db.operation().setOperationError(op.id, op.error);
 
                             if (message != null &&
@@ -1495,6 +1495,7 @@ class Core {
                                 String msgid = EntityMessage.generateMessageId();
                                 msgids.put(message, msgid);
                                 icopy = new MimeMessageEx(isession, is, msgid);
+                                icopy.removeHeader(MessageHelper.HEADER_CORRELATION_ID);
                                 icopy.saveChanges();
 
                                 if (!copy) {
@@ -3200,6 +3201,7 @@ class Core {
         boolean sync_quick_pop = prefs.getBoolean("sync_quick_pop", true);
         boolean notify_known = prefs.getBoolean("notify_known", false);
         boolean native_dkim = prefs.getBoolean("native_dkim", false);
+        boolean strict_alignment = prefs.getBoolean("strict_alignment", false);
         boolean download_eml = prefs.getBoolean("download_eml", false);
         boolean download_plain = prefs.getBoolean("download_plain", false);
         boolean check_blocklist = prefs.getBoolean("check_blocklist", false);
@@ -3452,8 +3454,8 @@ class Core {
                         message.tls = helper.getTLS();
                         message.dkim = MessageHelper.getAuthentication("dkim", authentication);
                         message.spf = MessageHelper.getAuthentication("spf", authentication);
-                        if (message.spf == null && helper.getSPF())
-                            message.spf = true;
+                        if (message.spf == null)
+                            message.spf = helper.getSPF();
                         message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
                         message.auth = MessageHelper.getAuthentication("auth", authentication);
                         message.smtp_from = helper.getMailFrom(authentication);
@@ -3516,8 +3518,23 @@ class Core {
                                 boolean aligned = helper.isAligned(context, signers, message.return_path, message.smtp_from, message.from);
                                 if (aligned)
                                     message.dmarc = true;
-                                else if (message.dmarc != null)
-                                    message.dmarc = false;
+                                else if (message.dmarc != null) {
+                                    boolean found = false;
+                                    if (!strict_alignment) {
+                                        String asigner = helper.getSigner(authentication);
+                                        String adomain = UriHelper.getRootDomain(context, asigner);
+                                        if (adomain != null)
+                                            for (String signer : signers) {
+                                                String sdomain = UriHelper.getRootDomain(context, signer);
+                                                if (adomain.equalsIgnoreCase(sdomain)) {
+                                                    found = true;
+                                                    break;
+                                                }
+                                            }
+                                    }
+                                    if (!found)
+                                        message.dmarc = false;
+                                }
                             }
                         }
 
@@ -3817,13 +3834,21 @@ class Core {
             if (use_modseq)
                 try {
                     if (MessageHelper.hasCapability(ifolder, "CONDSTORE")) {
-                        modseq = ifolder.getHighestModSeq();
+                        Status status = (Status) ifolder.doCommand(new IMAPFolder.ProtocolCommand() {
+                            @Override
+                            public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
+                                return protocol.status(ifolder.getFullName(), new String[]{"HIGHESTMODSEQ"});
+                            }
+                        });
+                        modseq = status.highestmodseq;
                         if (modseq < 0)
                             modseq = null;
                         modified = (force || initialize != 0 ||
                                 folder.modseq == null || !folder.modseq.equals(modseq));
-                        EntityLog.log(context, folder.name + " modseq=" + modseq + "/" + folder.modseq +
-                                " force=" + force + " init=" + (initialize != 0) + " modified=" + modified);
+                        EntityLog.log(context,
+                                BuildConfig.DEBUG ? EntityLog.Type.Debug4 : EntityLog.Type.General,
+                                folder.name + " modseq=" + modseq + "/" + folder.modseq +
+                                        " force=" + force + " init=" + (initialize != 0) + " modified=" + modified);
                     }
                 } catch (MessagingException ex) {
                     Log.w(folder.name, ex);
@@ -3883,7 +3908,8 @@ class Core {
                             EntityOperation.queue(context, message, EntityOperation.MOVE, trash.id);
                 }
             } else {
-                int old = db.message().deleteMessagesBefore(folder.id, delete_time, keep_time, keep_unread_time, delete_unseen);
+                int old = db.message().deleteMessagesBefore(folder.id, delete_time, keep_time,
+                        sync_unseen ? 0 : keep_unread_time, delete_unseen && !sync_unseen);
                 Log.i(folder.name + " local old=" + old);
             }
 
@@ -3974,7 +4000,6 @@ class Core {
                         } catch (Throwable ex) {
                             Log.w(ex);
                             modified = true;
-                            modseq = null;
                         }
                     }
 
@@ -4019,20 +4044,24 @@ class Core {
                         if (!ifolder.isOpen())
                             throw new FolderClosedException(ifolder);
 
+                        boolean ok = false;
                         try {
                             if (perform_expunge && imessages[i].isSet(Flags.Flag.DELETED))
                                 deleted.add(imessages[i]);
                             else
                                 uids.remove(ifolder.getUID(imessages[i]));
+                            ok = true;
                         } catch (MessageRemovedException ex) {
                             Log.w(folder.name, ex);
                         } catch (FolderClosedException ex) {
                             throw ex;
                         } catch (Throwable ex) {
                             Log.e(folder.name, ex);
-                            modseq = null;
                             EntityLog.log(context, folder.name + " expunge " + Log.formatThrowable(ex, false));
                             db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
+                        } finally {
+                            if (!ok)
+                                modseq = null;
                         }
                     }
 
@@ -4239,6 +4268,7 @@ class Core {
                         for (int j = isub.length - 1; j >= 0; j--) {
                             state.ensureRunning("Sync/IMAP/sync");
 
+                            boolean ok = false;
                             try {
                                 dc.start();
 
@@ -4267,6 +4297,8 @@ class Core {
                                         false, download && initialize == 0,
                                         rules, state, stats);
                                 ids[from + j] = (message == null || message.ui_hide ? null : message.id);
+                                if (message != null)
+                                    ok = true;
                             } catch (MessageRemovedException ex) {
                                 Log.w(folder.name, ex);
                             } catch (FolderClosedException ex) {
@@ -4274,17 +4306,17 @@ class Core {
                             } catch (IOException ex) {
                                 if (ex.getCause() instanceof MessagingException) {
                                     Log.w(folder.name, ex);
-                                    modseq = null;
                                     db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                                 } else
                                     throw ex;
                             } catch (Throwable ex) {
                                 Log.e(folder.name, ex);
-                                modseq = null;
                                 db.folder().setFolderError(folder.id, Log.formatThrowable(ex));
                             } finally {
                                 // Free memory
                                 isub[j] = null;
+                                if (!ok)
+                                    modseq = null;
                                 dc.stop(state.getForeground(), from == 0 && j == 0);
                             }
                         }
@@ -4321,7 +4353,9 @@ class Core {
 
             // Update modseq
             folder.modseq = modseq;
-            Log.i(folder.name + " set modseq=" + modseq);
+            EntityLog.log(context,
+                    BuildConfig.DEBUG ? EntityLog.Type.Debug4 : EntityLog.Type.General,
+                    folder.name + " set modseq=" + modseq);
             db.folder().setFolderModSeq(folder.id, folder.modseq);
 
             // Update stats
@@ -4422,6 +4456,7 @@ class Core {
         boolean download_plain = prefs.getBoolean("download_plain", false);
         boolean notify_known = prefs.getBoolean("notify_known", false);
         boolean native_dkim = prefs.getBoolean("native_dkim", false);
+        boolean strict_alignment = prefs.getBoolean("strict_alignment", false);
         boolean experiments = prefs.getBoolean("experiments", false);
         boolean mdn = prefs.getBoolean("mdn", experiments);
         boolean pro = ActivityBilling.isPro(context);
@@ -4615,8 +4650,8 @@ class Core {
             message.tls = helper.getTLS();
             message.dkim = MessageHelper.getAuthentication("dkim", authentication);
             message.spf = MessageHelper.getAuthentication("spf", authentication);
-            if (message.spf == null && helper.getSPF())
-                message.spf = true;
+            if (message.spf == null)
+                message.spf = helper.getSPF();
             message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
             message.auth = MessageHelper.getAuthentication("auth", authentication);
             message.smtp_from = helper.getMailFrom(authentication);
@@ -4657,7 +4692,7 @@ class Core {
             message.ui_deleted = deleted;
             message.ui_hide = false;
             message.ui_found = false;
-            message.ui_ignored = (seen || deleted);
+            message.ui_ignored = (seen || deleted || browsed);
             message.ui_browsed = browsed;
 
             if (message.flagged)
@@ -4690,8 +4725,23 @@ class Core {
                     boolean aligned = helper.isAligned(context, signers, message.return_path, message.smtp_from, message.from);
                     if (aligned)
                         message.dmarc = true;
-                    else if (message.dmarc != null)
-                        message.dmarc = false;
+                    else if (message.dmarc != null) {
+                        boolean found = false;
+                        if (!strict_alignment) {
+                            String asigner = helper.getSigner(authentication);
+                            String adomain = UriHelper.getRootDomain(context, asigner);
+                            if (adomain != null)
+                                for (String signer : signers) {
+                                    String sdomain = UriHelper.getRootDomain(context, signer);
+                                    if (adomain.equalsIgnoreCase(sdomain)) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                        }
+                        if (!found)
+                            message.dmarc = false;
+                    }
                 }
             }
 

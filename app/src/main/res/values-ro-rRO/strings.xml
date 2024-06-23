@@ -14,6 +14,10 @@
     <string name="app_cake_required">Spațiu minim necesar de stocare: %1$s</string>
     <string name="app_updated">Ultima actualizare: %1$s</string>
     <string name="app_download">Descărcat de la: %1$s</string>
+    <string name="app_motd">        Cu Android 14/15 beta, notificările \'Aplicația nu răspunde\' apar ocazional.
+        Google lucrează la un remediu.
+        Te rugăm să nu învinuiești aplicația pentru această problemă de Android!
+    </string>
     <string name="channel_service">Ecran</string>
     <string name="channel_send">Trimite</string>
     <string name="channel_notification">E-mail</string>
@@ -209,6 +213,7 @@
     <string name="title_setup_gmail_password">Vreau să autorizez un cont cu o parolă în loc de un cont pe dispozitiv</string>
     <string name="title_setup_office_auth">Eroarea \'Autentificare eșuată\' poate fi cauzată de dezactivarea administrativă a IMAP/SMTP</string>
     <string name="title_setup_office_auth_5_7_3">Vă rugăm să încercați expertul de configurare rapidă \'Alt furnizor\'.</string>
+    <string name="title_setup_office_auth_5_7_139">Vă rugăm să încercați \"Outlook/Hotmail/Live\" pentru configurare rapidă.</string>
     <string name="title_setup_oauth_rationale">Autorizare acces la contul %1$s</string>
     <string name="title_setup_oauth_update">Autorizați din nou un cont existent (în caz contrar, creați un cont nou)</string>
     <string name="title_setup_oauth_updated">Autorizarea contului a fost actualizată</string>
@@ -339,8 +344,7 @@
     <string name="title_setup_reset_full">Afișați mesajele originale</string>
     <string name="title_check_gmail_oauth">Conturile dumneavoastră Gmail vor continua să funcționeze și după 30 mai 2022</string>
     <string name="title_check_gmail_password">Este posibil ca unele dintre conturile tale de Gmail să nu mai funcționeze după 30 mai 2022</string>
-    <string name="title_check_outlook_oauth">Conturile Outlook vor continua să funcționeze și după 1 octombrie 2022</string>
-    <string name="title_check_outlook_password">Este posibil ca unele dintre conturile Outlook să nu mai funcționeze după 1 octombrie 2022</string>
+    <string name="title_check_outlook_password">Unele dintre conturile dvs. Outlook/Hotmail/Live nu vor mai funcționa după 16 septembrie 2024</string>
     <string name="title_advanced_hint_title">Opțiuni și mai avansate</string>
     <string name="title_advanced_hint_message">        Navigați la opțiunile mai avansate.        Toate opțiunile au utilizat în mod obișnuit valori standard, pe care nu trebuie să o schimbați decât dacă aveți o preferință diferită.
     </string>
@@ -406,6 +410,7 @@
     <string name="title_advanced_send_nav_color">Utilizați culoarea de identitate pentru bara de acțiune de jos</string>
     <string name="title_advanced_send_reminders">Arată mementouri</string>
     <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
+    <string name="title_advanced_send_top">Arată butonul de trimitere în partea de sus</string>
     <string name="title_advanced_attach_new">Creați un mesaj ciornă nou pentru adresele și fișierele partajate</string>
     <string name="title_advanced_answer_caption">Setări buton de răspuns</string>
     <string name="title_advanced_answer_default">Apăsarea scurtă pe butonul de răspuns va:</string>
@@ -785,6 +790,10 @@
     <string name="title_advanced_gemini">Integrarea Gemini</string>
     <string name="title_advanced_multi_modal">Multimodale</string>
     <string name="title_advanced_summarize_prompt">Realizează un sumar</string>
+    <string name="title_advanced_answer_prompt">Introducere răspuns</string>
+    <string name="title_advanced_system_instructions">Instrucțiuni sistem</string>
+    <string name="title_advanced_default_prompt">Solicitare implicită</string>
+    <string name="title_advanced_entered_text">Text introdus</string>
     <string name="title_advanced_sdcard">Vreau să folosesc un sdcard</string>
     <string name="title_advanced_watchdog">Verifică periodic dacă FairEmail este încă activ</string>
     <string name="title_advanced_updates">Verificați dacă există actualizări pe Github</string>
@@ -797,6 +806,7 @@
     <string name="title_advanced_cleanup_attachments">Ştergeţi ataşamentele mesajelor vechi</string>
     <string name="title_advanced_cleanup">Curățare</string>
     <string name="title_advanced_last_cleanup">Ultima curățare: %1$s</string>
+    <string name="title_advanced_google_backup">Folosește copia de rezervă a datelor Android</string>
     <string name="title_advanced_app">Setări aplicație</string>
     <string name="title_advanced_more">Mai multe opțiuni</string>
     <string name="title_advanced_main_log">Jurnal principal de depanare</string>
@@ -842,7 +852,7 @@
     <string name="title_advanced_metered_warning">Dezactivarea acestei opțiuni va opri primirea și trimiterea mesajelor pe conexiunile mobile de internet</string>
     <string name="title_advanced_rlah_hint">În zona UE nu se tratează ca roaming</string>
     <string name="title_advanced_usage_hint">Acest lucru va crește utilizarea bateriei, a datelor și a spațiului de stocare</string>
-    <string name="title_advanced_plain_hint">Activarea acestei opțiuni va limita utilizarea datelor, dar mesajele vor fi afișate fără stilizare</string>
+    <string name="title_advanced_plain_hint">Activarea acestei opțiuni va limita utilizarea datelor, dar mesajele vor fi afișate fără stilizare și fără imagini</string>
     <string name="title_advanced_plain_remark">Textul simplu nu conține întotdeauna mesajul complet!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activarea acesteia poate cauza probleme de conexiune pe unele dispozitive și poate crește utilizarea bateriei</string>
     <string name="title_advanced_validate_hint">Acest lucru poate duce la nesincronizarea mesajelor, de exemplu atunci când se utilizează un VPN, dar și în alte situații</string>
@@ -991,6 +1001,7 @@
     <string name="title_case_sensitive">Numele de utilizator și parolele sunt de obicei sensibile la majuscule</string>
     <string name="title_login_before_send">Primește înainte de a trimite</string>
     <string name="title_client_certificate">Certificat client</string>
+    <string name="title_no_key_selected">Nici o cheie selectată sau nici o cheie disponibilă</string>
     <string name="title_realm">Domeniu</string>
     <string name="title_use_ip">Folosește adresa IP în loc de numele gazdei</string>
     <string name="title_ehlo">Identificare personalizată HELO/EHLO</string>
@@ -1226,6 +1237,7 @@
     <string name="title_create_rule">Creare regulă &#8230;</string>
     <string name="title_full_screen">Ecran complet</string>
     <string name="title_force_light">Tema forțată a luminii</string>
+    <string name="title_rename">Redenumire</string>
     <string name="title_share">Partajează</string>
     <string name="title_event">Adaugă în calendar</string>
     <string name="title_pin">Adaugă scurtătură</string>
@@ -1370,8 +1382,10 @@
     <string name="title_third_party">Folosiți o versiune a unei terțe părți</string>
     <string name="title_expand_warning">Extinderea acestui mesaj va descărca %1$s</string>
     <string name="title_download_message">Se descarcă &#8230;</string>
-    <string name="title_reformatted">        Aceasta este vizualizarea mesajelor reformatate.        Puteți apăsa pe pictograma &#x26F6; pentru a vizualiza mesajul original și pentru a ascunde acest mesaj.
+    <string name="title_reformatted">        Aceasta este vizualizarea de mesaj reformată pentru siguranță.
+        Puteți apăsa pe pictograma &#x26F6; pentru a vizualiza mesajul original mai puțin sigur și pentru a ascunde acest mesaj.
         Reformatarea mesajelor necesită ceva timp, în funcție de dimensiunea mesajului și de viteza dispozitivului.
+        Uneori mesajul original trebuie vizualizat pentru a vedea codurile QR.
     </string>
     <string name="title_compose">Compune</string>
     <string name="title_submitter">Trimis de:</string>
@@ -1524,6 +1538,9 @@
     <string name="title_dsn_reminder">Mesajul de eroare serios deteriorează reputația expeditorului e-mailului original!</string>
     <string name="title_size_reminder">Mesajul (%1$s) mai mare decât limita serverului (%2$s)</string>
     <string name="title_attachments_missing">Nu toate ataşamentele se descarcă</string>
+    <string name="title_download_attachments">Descărcare atașamente</string>
+    <string name="title_attachments_download">Atașamente descărcate: %1$s</string>
+    <string name="title_attachments_no_download">Acest lucru nu va mai fi afișat și atașamentele nu vor fi descărcate automat</string>
     <string name="title_dialog_hint">Această fereastră de dialog poate fi activată din nou în meniul cu trei puncte din bara de acțiuni de sus</string>
     <string name="title_draft_deleted">S-a renunțat la ciornă</string>
     <string name="title_draft_saved">Ciornă salvată</string>
@@ -1675,6 +1692,7 @@
     <string name="title_answer_favorite">Favorit</string>
     <string name="title_answer_snippet">Fragment</string>
     <string name="title_answer_receipt">Utilizați ca și chitanță de citire</string>
+    <string name="title_answer_ai">Utilizează ca și solicitare AI</string>
     <string name="title_answer_hide">Ascunde din meniuri</string>
     <string name="title_answer_text">Text șablon</string>
     <string name="title_answer_placeholder">Substituent</string>
@@ -1778,6 +1796,8 @@
     <string name="title_rule_tts_subject">Subiect</string>
     <string name="title_rule_tts_content">Text</string>
     <string name="title_rule_select_sound">Alege sunet</string>
+    <string name="title_rule_select_sound_ringtone">Sunet de notificare</string>
+    <string name="title_rule_select_sound_audio">Fişier audio</string>
     <string name="title_rule_use_as_alarm">Utilizează ca alarmă</string>
     <string name="title_rule_alarm_hint">Acest lucru va ignora regulile \"nu deranjați\"</string>
     <string name="title_rule_alarm_duration">Durata maximă a alarmei (secunde)</string>
@@ -1918,6 +1938,7 @@
     <string name="title_hint_dismiss">Puteți respinge această casetă de dialog pentru a elimina notificarea.</string>
     <string name="title_hint_support">Dacă aveți o întrebare sau o problemă, vă rugăm să utilizați meniul de suport tehnic pentru a obține ajutor</string>
     <string name="title_hint_message_actions">Glisați stânga pentru Gunoi sau dreapta pentru Arhivă (dacă este disponibilă). Acțiunile de glisare se pot configura în setările contului</string>
+    <string name="title_hint_outbox">Puteți glisa la stânga sau la dreapta pentru a anula trimiterea</string>
     <string name="title_hint_message_selection">Atingeți lung un mesaj pentru a începe selecția multiplă. Țineți și glisați sus sau jos pentru a selecta mai multe mesaje</string>
     <string name="title_hint_message_junk">        Un client de e-mail afișează practic mesajele de pe un server de e-mail.
         Un server de e-mail este responsabil pentru filtrarea spam-ului, nu un client de e-mail.
@@ -1982,6 +2003,7 @@
     <string name="title_ask_what">Întreabă ce să faci</string>
     <string name="title_no_ask_again">Nu mai întreba din nou</string>
     <string name="title_no_ask_for_again">Nu mai întreba din nou pentru %1$s</string>
+    <string name="title_no_show_again">Nu mai arăta din nou</string>
     <string name="title_undo_privacy">Aceasta poate fi anulată în pagina de setări de confidențialitate</string>
     <string name="title_no_body">Nu a fost găsit textul mesajului</string>
     <string name="title_large_body">Acest mesaj este foarte mare şi poate cauza probleme!</string>
@@ -2067,6 +2089,7 @@
     <string name="title_widget_folder_unified">Dosare unificate</string>
     <string name="title_widget_folder_notifying">Dosare cu notificări de mesaje noi</string>
     <string name="title_widget_unseen">Numai mesajele necitite</string>
+    <string name="title_widget_show_unseen">Arată ca necitit</string>
     <string name="title_widget_flagged">Numai mesajele cu stea</string>
     <string name="title_widget_font_size">Mărime text</string>
     <string name="title_widget_padding">Mărime spațiu liber</string>

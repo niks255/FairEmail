@@ -22,6 +22,7 @@ package eu.faircode.email;
 import static android.system.OsConstants.ECONNREFUSED;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.system.ErrnoException;
@@ -29,11 +30,15 @@ import android.text.TextUtils;
 import android.util.Xml;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -71,6 +76,14 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 public class EmailProvider implements Parcelable {
     public String id;
@@ -646,20 +659,22 @@ public class EmailProvider implements Parcelable {
     @NonNull
     private static EmailProvider fromISPDB(Context context, String domain, String email, IDiscovery intf) throws Throwable {
         // https://wiki.mozilla.org/Thunderbird:Autoconfiguration
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean open_safe = prefs.getBoolean("open_safe", false);
         for (String link : Misc.getISPDBUrls(context, domain, email))
             try {
                 URL url = new URL(link);
-                return getISPDB(context, domain, url, true, intf);
+                return getISPDB(context, domain, url, open_safe, intf);
             } catch (Throwable ex) {
                 Log.i(ex);
             }
 
         URL url = new URL("https://autoconfig.thunderbird.net/v1.1/" + domain);
-        return getISPDB(context, domain, url, false, intf);
+        return getISPDB(context, domain, url, true, intf);
     }
 
     @NonNull
-    private static EmailProvider getISPDB(Context context, String domain, URL url, boolean unsafe, IDiscovery intf) throws IOException, XmlPullParserException {
+    private static EmailProvider getISPDB(Context context, String domain, URL url, boolean open_safe, IDiscovery intf) throws IOException, XmlPullParserException {
         EmailProvider provider = new EmailProvider(domain);
 
         HttpURLConnection request = null;
@@ -674,13 +689,17 @@ public class EmailProvider implements Parcelable {
             request.setDoInput(true);
             ConnectionHelper.setUserAgent(context, request);
 
-            if (unsafe && request instanceof HttpsURLConnection) {
-                ((HttpsURLConnection) request).setHostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                });
+            if (request instanceof HttpsURLConnection) {
+                if (!open_safe)
+                    ((HttpsURLConnection) request).setHostnameVerifier(new HostnameVerifier() {
+                        @Override
+                        public boolean verify(String hostname, SSLSession session) {
+                            return true;
+                        }
+                    });
+            } else {
+                if (open_safe)
+                    throw new IOException("https required url=" + url);
             }
 
             request.connect();
@@ -871,7 +890,7 @@ public class EmailProvider implements Parcelable {
         for (String link : Misc.getMSUrls(context, domain, email))
             try {
                 URL url = new URL(link);
-                return getMSAutodiscovery(context, domain, url, true, intf);
+                return getMSAutodiscovery(context, domain, email, url, true, intf);
             } catch (Throwable ex) {
                 Log.i(ex);
             }
@@ -879,8 +898,36 @@ public class EmailProvider implements Parcelable {
         throw new UnknownHostException(domain);
     }
 
-    private static EmailProvider getMSAutodiscovery(Context context, String domain, URL url, boolean unsafe, IDiscovery intf) throws IOException, XmlPullParserException {
+    private static EmailProvider getMSAutodiscovery(Context context, String domain, String email, URL url, boolean unsafe, IDiscovery intf)
+            throws IOException, XmlPullParserException, ParserConfigurationException, TransformerException {
         EmailProvider provider = new EmailProvider(domain);
+
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+        // root elements
+        Document doc = docBuilder.newDocument();
+        Element xAutodiscover = doc.createElement("Autodiscover");
+        xAutodiscover.setAttribute("xmlns", "http://schemas.microsoft.com/exchange/autodiscover/outlook/requestschema/2006");
+        doc.appendChild(xAutodiscover);
+
+        Element xRequest = doc.createElement("Request");
+        xAutodiscover.appendChild(xRequest);
+
+        Element xEMailAddress = doc.createElement("EMailAddress");
+        xEMailAddress.setTextContent(email);
+        xRequest.appendChild(xEMailAddress);
+
+        Element xAcceptableResponseSchema = doc.createElement("AcceptableResponseSchema");
+        xAcceptableResponseSchema.setTextContent("http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a");
+        xRequest.appendChild(xAcceptableResponseSchema);
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(doc);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        StreamResult result = new StreamResult(bos);
+        transformer.transform(source, result);
 
         HttpURLConnection request = null;
         try {
@@ -888,9 +935,10 @@ public class EmailProvider implements Parcelable {
             intf.onStatus("MS " + url);
 
             request = (HttpURLConnection) url.openConnection();
-            request.setRequestMethod("GET");
+            request.setRequestMethod("POST");
             request.setReadTimeout(MS_TIMEOUT);
             request.setConnectTimeout(MS_TIMEOUT);
+            request.setDoOutput(true);
             request.setDoInput(true);
             ConnectionHelper.setUserAgent(context, request);
 
@@ -904,6 +952,8 @@ public class EmailProvider implements Parcelable {
             }
 
             request.connect();
+
+            request.getOutputStream().write(bos.toByteArray());
 
             int status = request.getResponseCode();
             if (status != HttpURLConnection.HTTP_OK)
@@ -1006,6 +1056,8 @@ public class EmailProvider implements Parcelable {
 
             provider.validate();
             Log.e("MS=" + url);
+            Log.i("MS imap=" + provider.imap);
+            Log.i("MS smtp=" + provider.smtp);
 
             return provider;
         } finally {
@@ -1038,7 +1090,7 @@ public class EmailProvider implements Parcelable {
             Collections.sort(list, new Comparator<DnsHelper.DnsRecord>() {
                 @Override
                 public int compare(DnsHelper.DnsRecord d1, DnsHelper.DnsRecord d2) {
-                    int p = -Integer.compare(d1.priority, d2.priority);
+                    int p = Integer.compare(d1.priority, d2.priority);
                     if (p != 0)
                         return p;
                     int w = -Integer.compare(d1.weight, d2.weight);
@@ -1076,7 +1128,7 @@ public class EmailProvider implements Parcelable {
             Collections.sort(list, new Comparator<DnsHelper.DnsRecord>() {
                 @Override
                 public int compare(DnsHelper.DnsRecord d1, DnsHelper.DnsRecord d2) {
-                    int p = -Integer.compare(d1.priority, d2.priority);
+                    int p = Integer.compare(d1.priority, d2.priority);
                     if (p != 0)
                         return p;
                     int w = -Integer.compare(d1.weight, d2.weight);

@@ -68,7 +68,7 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
         super(context);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        this.viewportHeight = prefs.getInt("viewport_height", DEFAULT_VIEWPORT_HEIGHT);
+        this.viewportHeight = prefs.getInt("viewport_height", getDefaultViewportHeight(context));
         boolean overview_mode = prefs.getBoolean("overview_mode", false);
         boolean safe_browsing = prefs.getBoolean("safe_browsing", false);
 
@@ -205,8 +205,14 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
             setOnScrollChangeListener(new View.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    Log.i("Scroll (x,y)=" + scrollX + "," + scrollY);
-                    intf.onScrollChange(scrollX - oldScrollX, scrollY - oldScrollY, scrollX, scrollY);
+                    int yrange = computeVerticalScrollRange();
+                    int yextend = computeVerticalScrollExtent();
+                    int yoff = computeVerticalScrollOffset();
+                    boolean canScrollVertical = (yrange > yextend && yoff < yrange - yextend);
+                    Log.i("Scroll (x,y)=" + scrollX + "," + scrollY +
+                            " yrange=" + yrange + " yextend=" + yextend + " yoff=" + yoff +
+                            " can=" + canScrollVertical);
+                    intf.onScrollChange(scrollX - oldScrollX, canScrollVertical ? scrollY - oldScrollY : -1, scrollX, scrollY);
                 }
             });
     }
@@ -469,6 +475,10 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
             Log.w(ex);
             return false;
         }
+    }
+
+    static int getDefaultViewportHeight(Context context) {
+        return DEFAULT_VIEWPORT_HEIGHT;
     }
 
     @NonNull

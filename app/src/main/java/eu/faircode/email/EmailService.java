@@ -425,8 +425,6 @@ public class EmailService implements AutoCloseable {
             String certificate, String fingerprint) throws MessagingException {
         properties.put("fairemail.server", host);
 
-        DnsHelper.clear(context);
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean bind_socket = prefs.getBoolean("bind_socket", false);
         if (bind_socket &&

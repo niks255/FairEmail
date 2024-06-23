@@ -178,6 +178,7 @@
     <string name="title_setup_gmail_on_device">چرا لازم است که یک حساب روی دستگاه انتخاب کنم؟</string>
     <string name="title_setup_gmail_password">می‌خواهم به جای حسابی روی دستگاه، به یک حساب با رمز عبور اجازه بدهم</string>
     <string name="title_setup_office_auth">خطای \'AUTHENTICATE failed\' می‌تواند به‌دلیل غیرفعال بودن IMAP/SMTP به‌ دست مدیر سیستم باشد</string>
+    <string name="title_setup_office_auth_5_7_139">لطفا از راهنمای سریع نصب \'آوت‌لوک/هات‌میل/لایو\' استفاده کنید.</string>
     <string name="title_setup_oauth_rationale">برای دسترسی به %1$s حسابتان اجازه دهید</string>
     <string name="title_setup_oauth_update">به یک حساب موجود اجازه بدهید (در غیر این صورت یک حساب جدید بسازید)</string>
     <string name="title_setup_oauth_updated">تایید هویت حساب به روز شد</string>
@@ -296,8 +297,7 @@
     <string name="title_setup_reset_full">مشاهده پیام‌های اصلی</string>
     <string name="title_check_gmail_oauth">حساب‌های جیمیل شما پس از ۳۰ می ۲۰۲۲، همچنان کار خواهند کرد</string>
     <string name="title_check_gmail_password">تعدادی از حساب‌های جیمیل شما پس از ۳۰ می ۲۰۲۲، ممکن است از کار بیافتند</string>
-    <string name="title_check_outlook_oauth">حساب‌های آوت‌لوک شما پس از ۱ اکتبر ۲۰۲۲، همچنان کار خواهند کرد</string>
-    <string name="title_check_outlook_password">تعدادی از حساب‌های آوت‌لوک شما پس از ۱ اکتبر ۲۰۲۲، ممکن است از کار بیافتند</string>
+    <string name="title_check_outlook_password">تعدادی از حساب‌های آوت‌لوک/هات‌میل/لایو شما پس از ۱۶ سپتامبر ۲۰۲۴ از کار خواهند افتاد</string>
     <string name="title_advanced_hint_title">گزینه‌های پیشرفته بیشتر</string>
     <string name="title_advanced_hint_message">        You are navigating to the more advanced options.        All options have commonly used standard values, which you do not need to change unless you have a different preference.
     </string>
@@ -354,6 +354,7 @@
     <string name="title_advanced_send_chips">نمایش حباب‌ آدرس‌ها</string>
     <string name="title_advanced_send_reminders">نمایش یادآورها</string>
     <string name="title_advanced_send_delayed">وقفه ارسال پیام‌ها</string>
+    <string name="title_advanced_send_top">نشان دادن دکمه فرستادن در بالا</string>
     <string name="title_advanced_answer_caption">تنظیمات دکمه پاسخ</string>
     <string name="title_advanced_answer_default">با فشار کوتاه‌مدت دکمه پاسخ:</string>
     <string name="title_advanced_answer_action">با فشار بلندمدت دکمه پاسخ:</string>
@@ -397,6 +398,7 @@
     <string name="title_advanced_download_limited">برای اتصالات بدون اندازه‌گیری نیز به کار رود</string>
     <string name="title_advanced_roaming">بارگیری پیام‌ها و پیوست‌ها هنگام رومینگ</string>
     <string name="title_advanced_rlah">رومینگ مانند اینکه در خانه‌ای</string>
+    <string name="title_advanced_download_eml">دانلود فایل‌های پیام خام</string>
     <string name="title_advanced_vpn_only">اتصال تنها به وسیله وی‌پی‌ان</string>
     <string name="title_advanced_timeout">اتصال برقرار نشد (ثانیه)</string>
     <string name="title_advanced_prefer_ip4">ترجیح IPv4 به IPv6</string>
@@ -404,6 +406,8 @@
     <string name="title_advanced_dns_custom">استفاده از DNS resolver انتخابی</string>
     <string name="title_advanced_ssl_update">استفاده از ارائه‌دهنده اس‌اس‌ال به روز</string>
     <string name="title_advanced_ssl_harden">اتصالات SSL را محکم کن</string>
+    <string name="title_advanced_ssl_harden_strict">نیازمند TLS 1.3</string>
+    <string name="title_advanced_cert_strict">بررسی سفت و سخت گواهینامه</string>
     <string name="title_advanced_cert_transparency">شفافیت گواهینامه</string>
     <string name="title_advanced_check_names">اسامی هاست‌ها را با گواهی‌های سرور مقایسه کنید</string>
     <string name="title_advanced_open_safe">فقط ارتباطات اوپن‌سورس</string>
@@ -417,7 +421,10 @@
     <string name="title_advanced_caption_message">پیام</string>
     <string name="title_advanced_caption_message_header">عنوان پیام</string>
     <string name="title_advanced_caption_message_body">متن پیام</string>
+    <string name="title_advanced_caption_file">فایل</string>
+    <string name="title_advanced_caption_integrations">یکپارچه سازی‌ها</string>
     <string name="title_advanced_portrait">حالت عمودی</string>
+    <string name="title_advanced_landscape">حالت افقی</string>
     <string name="title_advanced_two_row">استفاده از دو ردیف</string>
     <string name="title_advanced_two_col">استفاده از دو ستون</string>
     <string name="title_advanced_min_screen_size">کمترین اندازه صفحه برای تقسیم کردن صفحه</string>
@@ -603,11 +610,14 @@
     <string name="title_advanced_lt_description">نمایش پاپ‌آپ همراه با شرح مشکل</string>
     <string name="title_advanced_multi_modal">چند وجهی</string>
     <string name="title_advanced_summarize_prompt">خلاصه کردن</string>
+    <string name="title_advanced_system_instructions">دستورالعمل‌های سیستم</string>
+    <string name="title_advanced_entered_text">متن وارد شده</string>
     <string name="title_advanced_watchdog">بطور دوره ای بررسی کن که آیا FairEmail هنوز فعال است یا خیر</string>
     <string name="title_advanced_experiments">امتحان ویژگی‌های آزمایشی</string>
     <string name="title_advanced_crash_reports">ارسال گزارش‌های خطا</string>
     <string name="title_advanced_cleanup_attachments">پیوست‌های پیام‌های قدیمی را حذف کن</string>
     <string name="title_advanced_cleanup">پاک‌سازی</string>
+    <string name="title_advanced_google_backup">استفاده از پشتیبان‌گیری داده اندروید</string>
     <string name="title_advanced_app">تنظیمات برنامه</string>
     <string name="title_advanced_more">گزینه‌های بیشتر</string>
     <string name="title_advanced_debug">حالت عیب‌یابی</string>
@@ -622,6 +632,7 @@
     <string name="title_advanced_usenet_hint">بین متن و امضا \'-- \' درج کنید</string>
     <string name="title_advanced_metered_hint">اتصال‌های حجمی عموما شبکه‌های موبایل یا یک هات اسپات غیر رایگان می‌باشند</string>
     <string name="title_advanced_metered_warning">غیرفعال‌سازی این گزینه، دریافت و فرستادن پیام‌ها را روی داده همراه غیرفعال خواهد کرد</string>
+    <string name="title_advanced_plain_hint">فعال کردن این قابلیت مصرف داده را کاهش خواهد داد، اما پیام‌ها بدون تصاویر و سبک نمایش داده خواهند شد</string>
     <string name="title_advanced_plain_remark">آنچه که با خط ساده دیده می‌شود لزوما همیشه تمامی پیام را به طور کامل نشان نمی‌دهد!</string>
     <string name="title_advanced_tcp_keep_alive_hint">فعال کردنش می‌تواند منجر به اختلال در ارتباط در بعضی دستگاه‌ها و یا افزایش مصرف باتری شود</string>
     <string name="title_advanced_ssl_harden_hint">فعال‌سازی این باعث غیرفعال‌سازی SSL و رمز‌های ضعیف خواهد شد، که می‌تواند موجب مشکلات اتصال شود</string>
@@ -697,6 +708,7 @@
     <string name="title_case_sensitive">نام‌های کاربری و گذرواژه‌ها در بیشتر موارد به بزرگ و کوچک بودن حروف حساسند</string>
     <string name="title_login_before_send">دریافت پیش از ارسال</string>
     <string name="title_client_certificate">گواهی‌نامه کارخواه</string>
+    <string name="title_no_key_selected">کلیدی انتخاب نشده یا موجود نیست</string>
     <string name="title_realm">حوزه</string>
     <string name="title_use_ip">استفاده از نشانی IP محلی بجای نام میزبان</string>
     <string name="title_ehlo">شناسایی سفارشی HELO/EHLO</string>
@@ -705,8 +717,11 @@
     <string name="title_primary_identity">اصلی (هویت پیش فرض)</string>
     <string name="title_self_identity">حذف نشانی ایمیل هنگام پاسخ</string>
     <string name="title_leave_on_server">رها کردن پیام‌ها روی سرور</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">پس از دانلود پیام‌ها از سرور، آنها روی سرور باقی می‌مانند</string>
     <string name="title_leave_deleted">رهاکردن پیام‌های حذف شده روی سرور</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">پس از پاک کردن پیام‌ها ار دستگاه، آنها روی سرور باقی می‌مانند</string>
     <string name="title_leave_on_device">رها کردن پیام‌ها روی دستگاه</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">هنگامی که پیام‌ها از سرور حذف می‌شوند، آنها روی دستگاه باقی می‌مانند</string>
     <string name="title_unmetered_only">فقط از طریق شبکه‌های نامحدود وصل شو</string>
     <string name="title_ignore_schedule">خارج از زمان تعیین شده هم همگام‌رسانی کن</string>
     <string name="title_check">بررسی</string>
@@ -843,6 +858,7 @@
     <string name="title_new_message">پیام جدید</string>
     <string name="title_editasnew">ویرایش به‌عنوان جدید</string>
     <string name="title_create_rule">ساخت قانون &#8230;</string>
+    <string name="title_rename">تغییر نام</string>
     <string name="title_share">اشتراک گذاری</string>
     <string name="title_event">افزودن به تقویم</string>
     <string name="title_pin">افزودن میانبر</string>
@@ -942,6 +958,11 @@
     <string name="title_third_party">شما در حال استفاده از نسخه شخص ثالث هستید</string>
     <string name="title_expand_warning">گسترش این پیام باعث بارگیری %1$s خواهد شد</string>
     <string name="title_download_message">درحال بارگیری &#8230;</string>
+    <string name="title_reformatted">        این پیام به صورت دوباره قالب‌بندی شده و امن در حال نمایش است.
+        برای مشاهده پیام اصلی کمتر ایمن و پنهان کردن این پیغام می‌توانید روی آیکون &#x26F6; ضربه بزنید.
+        قالب‌بندی مجدد پیام‌ها بسته به اندازه پیام و سرعت دستگاه شما مدتی طول می‌کشد.
+        گاهی برای دیده شدن کدهای QR باید پیام به صورت اصلی آن نمایش داده شود.
+    </string>
     <string name="title_compose">ایجاد پیام</string>
     <string name="title_submitter">ارسال توسط:</string>
     <string name="title_delivered_to">تحویل شده به:</string>
@@ -1038,6 +1059,9 @@
     <string name="title_text_reminder">پیام خالی است</string>
     <string name="title_attachment_reminder">آیا می‌خواستید که یک پیوست اضافه کنید؟</string>
     <string name="title_attachments_missing">همه پیوست ها دانلود نشدند</string>
+    <string name="title_download_attachments">دانلود پیوست‌ها</string>
+    <string name="title_attachments_download">پیوست‌های دانلود شده: %1$s</string>
+    <string name="title_attachments_no_download">نه فقط این دیگر نمایش داده نخواهد شد، بلکه ضمیمه‌ها هم دیگر خودکار دانلود نخواهند شد</string>
     <string name="title_draft_deleted">از پیش‌نویس صرف‌نظر شد</string>
     <string name="title_draft_saved">پیش‌نویس ذخیره شد</string>
     <string name="title_ask_send_via">ارسال پیام به %1$s از طریق %2$s?</string>
@@ -1213,6 +1237,8 @@
     <string name="title_rule_tts_from">از</string>
     <string name="title_rule_tts_subject">موضوع</string>
     <string name="title_rule_tts_content">متن</string>
+    <string name="title_rule_select_sound_ringtone">ملودی زنگ</string>
+    <string name="title_rule_select_sound_audio">فایل صوتی</string>
     <string name="title_code_line_numbers">نمایش تعداد خطوط</string>
     <string name="title_code_enable_links">فعال کردن لینک‌ها</string>
     <string name="title_code_pretty">چاپ زیبا</string>
@@ -1327,6 +1353,7 @@
     <string name="title_hint_dismiss">برای حذف اعلان، می‌توانید این کادر محاوره‌ای را رد کنید.</string>
     <string name="title_hint_support">اگر سوال یا مشکلی دارید لطفا از قسمت پشتیبانی برای کمک گرفتن استفاده کنید</string>
     <string name="title_hint_message_actions">برای حذف به چپ بکشید؛ برای بایگانی به راست بکشید (اگر در دسترس باشد)؛ کنش‌های کشیدن می‌تواند در تنظیمات حساب پیکربندی شوند</string>
+    <string name="title_hint_outbox">برای لغو ارسال می‌توانید به چپ یا راست بکشید</string>
     <string name="title_hint_important">مهم</string>
     <string name="title_hint_sync">دریافت پیامها می تواند زمانی بسته به سرعت سرویس دهنده، اتصال به اینترنت، دستگاه و تعداد پیام‌ها طول بکشد. هنگام دریافت پیامها ممکن است عملکرد برنامه کند شود.</string>
     <string name="title_hint_contact_actions">لمس طولانی برای گزینه‌ها</string>
@@ -1363,6 +1390,7 @@
     <string name="title_ask_what">بپرس چه باید کرد</string>
     <string name="title_no_ask_again">دیگر نپرس</string>
     <string name="title_no_ask_for_again">دوباره برای %1$s نپرس</string>
+    <string name="title_no_show_again">دوباره نشان داده نشود</string>
     <string name="title_undo_privacy">می‌توان در صفحه برگه تنظیمات حریم خصوصی این را به حالت اولیه برگرداند</string>
     <string name="title_no_body">هیچ پیام متنی یافت نشد</string>
     <string name="title_large_body">این پیام بسیار طولانیست و ممکن است باعث بروز مشکلاتی شود!</string>
@@ -1421,6 +1449,7 @@
     <string name="title_widget_folder">پوشه</string>
     <string name="title_widget_folder_unified">پوشه های صندوق پستی یکپارچه</string>
     <string name="title_widget_unseen">فقط پیام‌های خوانده نشده</string>
+    <string name="title_widget_show_unseen">به عنوان خوانده نشده نشان بده</string>
     <string name="title_widget_flagged">فقط پیام‌های ستاره‌دار</string>
     <string name="title_widget_font_size">اندازه متن</string>
     <string name="title_widget_padding">اندازه لایه‌گذاری</string>

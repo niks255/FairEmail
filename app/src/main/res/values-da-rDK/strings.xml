@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_password">Jeg ønsker at godkende en konto med en adgangskode i stedet for en enhedskonto</string>
     <string name="title_setup_office_auth">Fejlen \'GODKENDELSE mislykkedes\' kan skyldes, at IMAP/SMTP er deaktiveret af systemadministratoren</string>
     <string name="title_setup_office_auth_5_7_3">Prøv guiden \'Anden udbyder\' for hurtig opsætning.</string>
+    <string name="title_setup_office_auth_5_7_139">Prøv guiden \'Outlook/Hotmail/Live\' for hurtig opsætning.</string>
     <string name="title_setup_oauth_rationale">Godkend adgang til din %1$s-konto</string>
     <string name="title_setup_oauth_update">Godkend en eksisterende konto igen (ellers opret en ny konto)</string>
     <string name="title_setup_oauth_updated">Kontogodkendelsen blev opdateret</string>
@@ -329,8 +330,7 @@
     <string name="title_setup_reset_full">Vis oprindelige beskeder</string>
     <string name="title_check_gmail_oauth">Gmail-konti vil fortsat fungere efter 3005-22</string>
     <string name="title_check_gmail_password">Visse Gmail-konti kan ophøre med at fungere efter 3005-22</string>
-    <string name="title_check_outlook_oauth">Aktuelle Outlook-konti vil fortsat fungere efter 1. okt. 2022</string>
-    <string name="title_check_outlook_password">Visse aktuelle Outlook-konti kan ophøre med at fungere efter 1. okt. 2022</string>
+    <string name="title_check_outlook_password">Visse eksisterende Outlook-/Hotmail-/Live-konti ophører med at fungere efter 16. sep. 2024</string>
     <string name="title_advanced_hint_title">Flere avancerede indstillinger</string>
     <string name="title_advanced_hint_message">        De mere avancerede indstillinger tilgås nu.
         Alle valgmuligheder har alm. brugte standardværdier, som kun behøver ændring ifm. en evt. anden præference.
@@ -397,6 +397,7 @@
     <string name="title_advanced_send_nav_color">Brug identitetsfarven til den nederste handlingsbjælke</string>
     <string name="title_advanced_send_reminders">Vis påmindelser</string>
     <string name="title_advanced_send_delayed">Udsæt afsendelsen af beskeder</string>
+    <string name="title_advanced_send_top">Vis Send-knap øverst</string>
     <string name="title_advanced_attach_new">Opret et nyt beskedudkast til delte adresser og filer</string>
     <string name="title_advanced_answer_caption">Indstillinger for svar-knap</string>
     <string name="title_advanced_answer_default">Kort tryk på svarknappen vil:</string>
@@ -777,6 +778,10 @@
     <string name="title_advanced_gemini">Gemini-integration</string>
     <string name="title_advanced_multi_modal">Multimodalitet</string>
     <string name="title_advanced_summarize_prompt">Opsummeringsprompt</string>
+    <string name="title_advanced_answer_prompt">Svarprompt</string>
+    <string name="title_advanced_system_instructions">Systemvejledning</string>
+    <string name="title_advanced_default_prompt">Standardprompt</string>
+    <string name="title_advanced_entered_text">Angivet tekst</string>
     <string name="title_advanced_sdcard">Et SD-kort ønskes benyttet</string>
     <string name="title_advanced_watchdog">Tjek periodisk om FairEmail stadig er aktiv</string>
     <string name="title_advanced_updates">Tjek for GitHub-opdateringer</string>
@@ -789,6 +794,7 @@
     <string name="title_advanced_cleanup_attachments">Slet gamle beskeders vedhæftninger</string>
     <string name="title_advanced_cleanup">Oprydning</string>
     <string name="title_advanced_last_cleanup">Sidste oprydning: %1$s</string>
+    <string name="title_advanced_google_backup">Brug Androids datasikkerhedskopi</string>
     <string name="title_advanced_app">App-indstillinger</string>
     <string name="title_advanced_more">Flere valgmuligheder</string>
     <string name="title_advanced_main_log">Hovedlogning</string>
@@ -834,7 +840,7 @@
     <string name="title_advanced_metered_warning">Deaktivering af denne indstilling vil ikke gøre det muligt at modtage og sende meddelelser på mobildataforbindelser</string>
     <string name="title_advanced_rlah_hint">Antager ingen roaming inden for EU</string>
     <string name="title_advanced_usage_hint">Dette vil forøge batteri-, data- samt lagerpladsforbrug</string>
-    <string name="title_advanced_plain_hint">Aktivering af dette reducerer dataforbruget, men beskeder vises uden styling</string>
+    <string name="title_advanced_plain_hint">Aktivering af dette reducerer dataforbruget, men beskeder vises uden styling og billeder</string>
     <string name="title_advanced_plain_remark">Den rene tekstdel indeholder ikke altid den fulde besked!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Aktivering af dette kan forårsage forbindelsesproblemer på visse enheder samt øge strømforbruget</string>
     <string name="title_advanced_validate_hint">Dette kan betyde, at beskeder i visse situationer ikke synkes, bl.a. ved brug af VPN</string>
@@ -983,6 +989,7 @@
     <string name="title_case_sensitive">I brugernavne og adgangskoder skelnes normalt mellem minuskler og versaler</string>
     <string name="title_login_before_send">Modtag før afsendelse</string>
     <string name="title_client_certificate">Klientcertifikat</string>
+    <string name="title_no_key_selected">Ingen nøgle valgt eller ingen tilgængelige nøgler</string>
     <string name="title_realm">Område</string>
     <string name="title_use_ip">Brug lokal IP-adresse i stedet for værtsnavn</string>
     <string name="title_ehlo">Tilpasset HELO/EHLO identifikation</string>
@@ -991,9 +998,12 @@
     <string name="title_primary_identity">Primær (standardidentitet)</string>
     <string name="title_self_identity">Fjern e-mailadresse ved besvarelse</string>
     <string name="title_leave_on_server">Lad beskeder forblive på server</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Efter download af beskeder fra serveren, forbliver beskederne på serveren</string>
     <string name="title_client_delete">Slet aktivt beskeder efter download</string>
     <string name="title_leave_deleted">Lad slettede beskeder forblive på serveren</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Efter sletning af beskeder fra enheden, forbliver beskederne på serveren</string>
     <string name="title_leave_on_device">Lad beskeder forblive på enhed</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Når beskeder slettes fra serveren, forbliver meddelelserne på enheden</string>
     <string name="title_max_messages">Maks. antal beskeder at downloade (tomt for samtlige)</string>
     <string name="title_max_messages_keep">Dette er det maksimale antal besked, som gemmes på enheden</string>
     <string name="title_max_messages_remark">        Angiv et positivt tal for at downloade meddelelserne i slutningen (mest almindeligt)
@@ -1194,6 +1204,7 @@
     <string name="title_subject_forward_alt">Vs: %1$s</string>
     <string name="title_seen">Markér som læst</string>
     <string name="title_unseen">Markér som ulæst</string>
+    <string name="title_seen_unseen">Markér som læst/ulæst</string>
     <string name="title_toggle_seen">Slå læst til/fra</string>
     <string name="title_hide">Skjul</string>
     <string name="title_unhide">Vis</string>
@@ -1218,6 +1229,7 @@
     <string name="title_create_rule">Opret regel &#8230;</string>
     <string name="title_full_screen">Fuldskærm</string>
     <string name="title_force_light">Gennemtving lyst tema</string>
+    <string name="title_rename">Omdøb</string>
     <string name="title_share">Del</string>
     <string name="title_event">Føj til kalender</string>
     <string name="title_pin">Tilføj genvej</string>
@@ -1363,9 +1375,10 @@
     <string name="title_third_party">Du benytter en tredjepartsversion</string>
     <string name="title_expand_warning">Udvides denne besked, downloades %1$s</string>
     <string name="title_download_message">Downloader &#8230;</string>
-    <string name="title_reformatted">        Dette er den omformaterede beskedvisning.
-        Tryk på &#x26F6;-ikonet for at se originalbeskeden og skjule denne besked.
-        Beskedomformatering tages lidt tid afhængigt af beskedstørrelsen og hastigheden på enheden.
+    <string name="title_reformatted">        Dette er den sikre omformaterede beskedvisning.
+        Tryk på &#x26F6;-ikonet for at se den mindre sikre originalbesked og skjule denne.
+        Beskedomformatering kan tage lidt tid afhængigt af beskedstørrelse og enhedens hastighed.
+        Nogle gange vil originalbeskeden skulle vises for at kunne se QR-koder.
     </string>
     <string name="title_compose">Skriv</string>
     <string name="title_submitter">Sendt af:</string>
@@ -1518,6 +1531,9 @@
     <string name="title_dsn_reminder">Hard bounces skader den oprindelige afsenders e-mailomdømme!</string>
     <string name="title_size_reminder">Besked (%1$s) større end servergrænsen (%2$s)</string>
     <string name="title_attachments_missing">Ikke alle vedhæftninger er downloadet</string>
+    <string name="title_download_attachments">Download vedhæftninger</string>
+    <string name="title_attachments_download">Vedhæftninger downloadet: %1$s</string>
+    <string name="title_attachments_no_download">Dette vises ikke længere, og vedhæftede filer hentes heller ikke automatisk</string>
     <string name="title_dialog_hint">Denne dialog kan slås til igen via trepriksmenuen i den øverste handlingsbjælke</string>
     <string name="title_draft_deleted">Kladde kasseret</string>
     <string name="title_draft_saved">Kladde gemt</string>
@@ -1669,6 +1685,7 @@
     <string name="title_answer_favorite">Favorit</string>
     <string name="title_answer_snippet">Uddrag</string>
     <string name="title_answer_receipt">Brug som læst-kvittering</string>
+    <string name="title_answer_ai">Brug som AI-prompt</string>
     <string name="title_answer_hide">Skjul fra menuer</string>
     <string name="title_answer_text">Skabelontekst</string>
     <string name="title_answer_placeholder">Variabel</string>
@@ -1772,6 +1789,8 @@
     <string name="title_rule_tts_subject">Emne</string>
     <string name="title_rule_tts_content">Tekst</string>
     <string name="title_rule_select_sound">Vælg lyd</string>
+    <string name="title_rule_select_sound_ringtone">Ringetone</string>
+    <string name="title_rule_select_sound_audio">Lydfil</string>
     <string name="title_rule_use_as_alarm">Benyt som alarm</string>
     <string name="title_rule_alarm_hint">Dette vil tilsidesætte \"Forstyr ikke\"-regler</string>
     <string name="title_rule_alarm_duration">Maks. alarmvarighed (sekunder)</string>
@@ -1912,6 +1931,7 @@
     <string name="title_hint_dismiss">Denne dialog kan afvises for at fjerne beskeden.</string>
     <string name="title_hint_support">Har du et spørgsmål eller problem, så benyt venligst supportmenuen for at få hjælp</string>
     <string name="title_hint_message_actions">Stryg til venstre for Papirkurv; Stryg til højre for at arkivere (hvis tilgængeligt); Strygehandlingerne kan opsættes i kontoindstillingerne</string>
+    <string name="title_hint_outbox">Afsendelse kan annulleres med et stryg til venstre eller højre</string>
     <string name="title_hint_message_selection">Langt tryk på en besked for at tilgå valg af flere beskeder; Hold og stryg op/ned for at vælge flere beskeder</string>
     <string name="title_hint_message_junk">        En e-mailklient viser beskeder, som befinder sig på en e-mail-server.
         E-mailserveren er ansvarlig for spamfiltrering, ikke e-mailklienten.
@@ -1976,6 +1996,7 @@
     <string name="title_ask_what">Spørg, hvad der skal ske</string>
     <string name="title_no_ask_again">Spørg ikke om dette igen</string>
     <string name="title_no_ask_for_again">Spørg ikke om dette igen for %1$s</string>
+    <string name="title_no_show_again">Vis ikke igen</string>
     <string name="title_undo_privacy">Dette kan fortrydes på fanesiden fortrolighedsindstillinger</string>
     <string name="title_no_body">Ingen beskedtekst fundet</string>
     <string name="title_large_body">Denne meddelelse er meget stor, hvilket kan give problemer!</string>
@@ -2062,6 +2083,7 @@
     <string name="title_widget_folder_unified">Samlede Indbakkemapper</string>
     <string name="title_widget_folder_notifying">Mapper med nye beskednotifikationer</string>
     <string name="title_widget_unseen">Kun ulæste beskeder</string>
+    <string name="title_widget_show_unseen">Vis som ulæst</string>
     <string name="title_widget_flagged">Kun stjerne-beskeder</string>
     <string name="title_widget_font_size">Tekststørrelse</string>
     <string name="title_widget_padding">Polstringsstørrelse</string>

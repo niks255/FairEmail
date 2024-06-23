@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_password">Quiero autorizar una cuenta con una contraseña en lugar de una cuenta en el dispositivo</string>
     <string name="title_setup_office_auth">El error \'AUTHENTICATE failed\' puede ser causado por IMAP/SMTP desactivado por el administrador de sistemas</string>
     <string name="title_setup_office_auth_5_7_3">Por favor, pruebe el asistente de configuración rápida \'Otro proveedor\'.</string>
+    <string name="title_setup_office_auth_5_7_139">Por favor, pruebe el asistente de configuración rápida \'Outlook/Hotmail/Live\'.</string>
     <string name="title_setup_oauth_rationale">Autorizar acceso a su cuenta %1$s</string>
     <string name="title_setup_oauth_update">Volver a autorizar una cuenta existente (de lo contrario crear una nueva cuenta)</string>
     <string name="title_setup_oauth_updated">Se ha actualizado la autorización de la cuenta</string>
@@ -329,8 +330,6 @@
     <string name="title_setup_reset_full">Mostrar el mensaje original</string>
     <string name="title_check_gmail_oauth">Tus cuentas de Gmail continuarán funcionando después del 30 de Mayo de 2022</string>
     <string name="title_check_gmail_password">Algunas de sus cuentas de Gmail podrían dejar de funcionar después del 30 de Mayo de 2022</string>
-    <string name="title_check_outlook_oauth">Sus cuentas de Outlook continuarán funcionando después del 1 de octubre de 2022</string>
-    <string name="title_check_outlook_password">Algunas de sus cuentas de Outlook pueden dejar de funcionar después del 1 de octubre de 2022</string>
     <string name="title_advanced_hint_title">Opciones más avanzadas</string>
     <string name="title_advanced_hint_message">        Está navegando a las opciones más avanzadas.        Todas las opciones tienen por defecto valores estándar, que no necesitan ser modificados a menos que así lo prefiera.
     </string>
@@ -396,6 +395,7 @@
     <string name="title_advanced_send_nav_color">Usar el color de identidad para la barra de acción inferior</string>
     <string name="title_advanced_send_reminders">Mostrar recordatorios</string>
     <string name="title_advanced_send_delayed">Diferir envío de mensajes</string>
+    <string name="title_advanced_send_top">Mostrar botón de enviar en la parte superior</string>
     <string name="title_advanced_attach_new">Crear un nuevo borrador de mensajes para direcciones y archivos compartidos</string>
     <string name="title_advanced_answer_caption">Ajustes del botón de respuesta</string>
     <string name="title_advanced_answer_default">Una pulsación corta en el botón de respuesta:</string>
@@ -775,6 +775,10 @@
     <string name="title_advanced_gemini">Integración con Gemini</string>
     <string name="title_advanced_multi_modal">Multimodal</string>
     <string name="title_advanced_summarize_prompt">Orden para resumir</string>
+    <string name="title_advanced_answer_prompt">Indicación de respuesta</string>
+    <string name="title_advanced_system_instructions">Instrucciones del sistema</string>
+    <string name="title_advanced_default_prompt">Indicación por defecto</string>
+    <string name="title_advanced_entered_text">Texto ingresado</string>
     <string name="title_advanced_sdcard">Quiero usar una tarjeta SD</string>
     <string name="title_advanced_watchdog">Comprobar periódicamente si FairEmail sigue activo</string>
     <string name="title_advanced_updates">Comprobar actualizaciones de GitHub</string>
@@ -787,6 +791,7 @@
     <string name="title_advanced_cleanup_attachments">Eliminar archivos adjuntos de mensajes antiguos</string>
     <string name="title_advanced_cleanup">Limpieza</string>
     <string name="title_advanced_last_cleanup">Última limpieza: %1$s</string>
+    <string name="title_advanced_google_backup">Usar copia de seguridad de datos de Android</string>
     <string name="title_advanced_app">Ajustes de la app</string>
     <string name="title_advanced_more">Más opciones</string>
     <string name="title_advanced_main_log">Registro principal</string>
@@ -832,7 +837,6 @@
     <string name="title_advanced_metered_warning">Desactivar esta opción desactivará la recepción y envío de mensajes en conexiones móviles a Internet</string>
     <string name="title_advanced_rlah_hint">Suponiendo que no hay itinerancia dentro de la UE</string>
     <string name="title_advanced_usage_hint">Esto aumentará el uso de batería, datos y espacio de almacenamiento</string>
-    <string name="title_advanced_plain_hint">Activar esto limitará el uso de datos, pero los mensajes se mostrarán sin estilizar</string>
     <string name="title_advanced_plain_remark">¡La parte de texto plano no siempre contiene el mensaje completo!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Activar esto puede causar problemas de conexión en algunos dispositivos y puede aumentar el uso de la batería</string>
     <string name="title_advanced_validate_hint">Esto puede ocasionar que no sincronicen los mensajes, por ejemplo cuando se utiliza una VPN, pero también en otras situaciones</string>
@@ -1216,6 +1220,7 @@
     <string name="title_create_rule">Crear regla &#8230;</string>
     <string name="title_full_screen">Pantalla completa</string>
     <string name="title_force_light">Forzar tema claro</string>
+    <string name="title_rename">Renombrar</string>
     <string name="title_share">Compartir</string>
     <string name="title_event">Añadir al calendario</string>
     <string name="title_pin">Añadir acceso directo</string>
@@ -1360,8 +1365,10 @@
     <string name="title_third_party">Está usando una versión de un tercero</string>
     <string name="title_expand_warning">Expandir este mensaje descargará %1$s</string>
     <string name="title_download_message">Descargando &#8230;</string>
-    <string name="title_reformatted">        Esta es la vista de mensaje reformateada.        Puede tocar el icono &#x26F6; para ver el mensaje original y ocultar este mensaje.
+    <string name="title_reformatted">        Esta es la vista segura de mensaje reformateado.
+        Puede tocar el ícono &#x26F6; para ver el mensaje original menos seguro y ocultar este mensaje.
         El reformateo de mensajes toma algún tiempo, dependiendo del tamaño del mensaje y la velocidad de su dispositivo.
+        A veces el mensaje original debe ser visualizado para mostrar códigos QR.
     </string>
     <string name="title_compose">Redactar</string>
     <string name="title_submitter">Enviado por:</string>
@@ -1514,6 +1521,9 @@
     <string name="title_dsn_reminder">¡Los rebotes duros dañan la reputación de correo del remitente original!</string>
     <string name="title_size_reminder">Mensaje (%1$s) más grande que el límite del servidor (%2$s)</string>
     <string name="title_attachments_missing">No todos los adjuntos fueron descargados</string>
+    <string name="title_download_attachments">Descargar adjuntos</string>
+    <string name="title_attachments_download">Adjuntos descargados: %1$s</string>
+    <string name="title_attachments_no_download">Esto ya no se mostrará, ni los archivos adjuntos se descargarán automáticamente</string>
     <string name="title_dialog_hint">Este diálogo se puede activar de nuevo a través del menú de tres puntos en la barra de acción superior</string>
     <string name="title_draft_deleted">Borrador eliminado</string>
     <string name="title_draft_saved">Borrador guardado</string>
@@ -1664,6 +1674,7 @@
     <string name="title_answer_favorite">Favorito</string>
     <string name="title_answer_snippet">Snippet</string>
     <string name="title_answer_receipt">Usar como acuse de lectura</string>
+    <string name="title_answer_ai">Usar como orden de IA</string>
     <string name="title_answer_hide">Ocultar de menús</string>
     <string name="title_answer_text">Texto de plantilla</string>
     <string name="title_answer_placeholder">Marcador de posición</string>
@@ -1767,6 +1778,8 @@
     <string name="title_rule_tts_subject">Asunto</string>
     <string name="title_rule_tts_content">Texto</string>
     <string name="title_rule_select_sound">Seleccionar sonido</string>
+    <string name="title_rule_select_sound_ringtone">Tono de notificación</string>
+    <string name="title_rule_select_sound_audio">Archivo de audio</string>
     <string name="title_rule_use_as_alarm">Usar como alarma</string>
     <string name="title_rule_alarm_hint">Esto ignorará las reglas \"no molestar\"</string>
     <string name="title_rule_alarm_duration">Duración máxima de la alarma (segundos)</string>
@@ -1907,6 +1920,7 @@
     <string name="title_hint_dismiss">Puede descartar este diálogo para eliminar el aviso.</string>
     <string name="title_hint_support">Si tiene una pregunta o problema, por favor use el menú de soporte para obtener ayuda</string>
     <string name="title_hint_message_actions">Desliza a la izquierda para enviar a la papelera; Desliza a la derecha para archivar (si está disponible); las acciones de deslizamiento pueden configurarse en la configuración de la cuenta</string>
+    <string name="title_hint_outbox">Puedes deslizar a la izquierda o derecha para cancelar el envío</string>
     <string name="title_hint_message_selection">Mantenga pulsado un mensaje para empezar a seleccionar varios mensajes; mantenga pulsado y deslice hacia arriba o abajo para seleccionar más mensajes</string>
     <string name="title_hint_message_junk">        Un cliente de correo básicamente muestra los mensajes en un servidor de correo.
         Un servidor de correo electrónico es responsable de filtrar el spam, no un cliente de correo electrónico.
@@ -1971,6 +1985,7 @@
     <string name="title_ask_what">Preguntar qué hacer</string>
     <string name="title_no_ask_again">No volver a preguntar</string>
     <string name="title_no_ask_for_again">No volver a preguntar esto para %1$s</string>
+    <string name="title_no_show_again">No mostrar esto de nuevo</string>
     <string name="title_undo_privacy">Esto se puede deshacer en la página de configuración de privacidad</string>
     <string name="title_no_body">No se encontró texto en el mensaje</string>
     <string name="title_large_body">¡Este mensaje es muy grande y puede causar problemas!</string>
@@ -2056,6 +2071,7 @@
     <string name="title_widget_folder_unified">Carpetas de bandeja de entrada unificadas</string>
     <string name="title_widget_folder_notifying">Carpetas con notificaciones de mensajes nuevos</string>
     <string name="title_widget_unseen">Sólo mensajes no leídos</string>
+    <string name="title_widget_show_unseen">Mostrar como no leídos</string>
     <string name="title_widget_flagged">Sólo mensajes destacados</string>
     <string name="title_widget_font_size">Tamaño del texto</string>
     <string name="title_widget_padding">Tamaño de margen interno</string>

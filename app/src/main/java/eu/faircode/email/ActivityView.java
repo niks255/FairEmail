@@ -1455,8 +1455,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         final View content = drawerLayout.getChildAt(0);
 
-        final Snackbar snackbar = Snackbar.make(content, title, Snackbar.LENGTH_INDEFINITE)
-                .setGestureInsetBottomIgnored(true);
+        final Snackbar snackbar = Helper.setSnackbarOptions(
+                Snackbar.make(content, title, Snackbar.LENGTH_INDEFINITE));
         Helper.setSnackbarLines(snackbar, 7);
 
         lastSnackbar = snackbar;
@@ -1512,7 +1512,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean first = prefs.getBoolean("first", true);
-        boolean show_changelog = prefs.getBoolean("show_changelog", !BuildConfig.PLAY_STORE_RELEASE);
+        boolean show_changelog = prefs.getBoolean("show_changelog", true);
 
         if (first)
             new FragmentDialogFirst().show(getSupportFragmentManager(), "first");
@@ -1526,11 +1526,12 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 return;
 
             String last = prefs.getString("changelog", null);
-            if (!Objects.equals(version, last) || BuildConfig.DEBUG) {
+            if (last != null && !last.equals(version)) {
                 prefs.edit().putString("changelog", version).apply();
 
                 Bundle args = new Bundle();
                 args.putString("name", "CHANGELOG.md");
+                args.putString("option", "show_changelog");
                 FragmentDialogMarkdown fragment = new FragmentDialogMarkdown();
                 fragment.setArguments(args);
                 fragment.show(getSupportFragmentManager(), "changelog");

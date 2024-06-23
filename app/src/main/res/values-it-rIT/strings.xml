@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_password">Desidero autorizzare un profilo con una password, invece di un profilo su dispositivo</string>
     <string name="title_setup_office_auth">L\'errore \'AUTHENTICATE fallita\' può esser causato dalla disabilitazione di IMAP/SMTP dall\'amministratore di sistema</string>
     <string name="title_setup_office_auth_5_7_3">Sei pregato di provare la procedura guidata rapida \'Altro fornitore\'.</string>
+    <string name="title_setup_office_auth_5_7_139">Prova la procedura guidata rapida \'Outlook/Hotmail/Live\'.</string>
     <string name="title_setup_oauth_rationale">Autorizza l\'accesso al tuo profilo di %1$s</string>
     <string name="title_setup_oauth_update">Autorizza nuovamente un profilo esistente (altrimenti creane uno nuovo)</string>
     <string name="title_setup_oauth_updated">Autorizzazione del profilo aggiornata</string>
@@ -329,8 +330,7 @@
     <string name="title_setup_reset_full">Mostra i messaggi originali</string>
     <string name="title_check_gmail_oauth">I tuoi profili Gmail continueranno a funzionare dopo il 30 Maggio 2022</string>
     <string name="title_check_gmail_password">Alcuni dei profili Gmail potrebbero smettere di funzionare dopo il 30 Maggio 2022</string>
-    <string name="title_check_outlook_oauth">I tuoi profili di Outlook continueranno a funzionare dopo l\'1 ottobre 2022</string>
-    <string name="title_check_outlook_password">Alcuni dei tuoi profili di Outlook potrebbero smettere di funzionare dopo l\'1 ottobre 2022</string>
+    <string name="title_check_outlook_password">Alcuni dei tuoi profili Outlook/Hotmail/Live smetteranno di funzionare dopo il 16 settembre 2024</string>
     <string name="title_advanced_hint_title">Opzioni più avanzate</string>
     <string name="title_advanced_hint_message">        Stai navigando alle opzioni più avanzate.
         Tutte le opzioni hanno comunemente usato valori standard, che non devi modificare a meno che tu non abbia una preferenza differente.
@@ -397,6 +397,7 @@
     <string name="title_advanced_send_nav_color">Utilizza il colore dell\'identità per la barra delle azioni inferiore</string>
     <string name="title_advanced_send_reminders">Mostra promemoria</string>
     <string name="title_advanced_send_delayed">Ritarda invio dei messaggi</string>
+    <string name="title_advanced_send_top">Mostra il pulsante Inviare in cima</string>
     <string name="title_advanced_attach_new">Crea un nuovo messaggio di bozza per indirizzi e file condivisi</string>
     <string name="title_advanced_answer_caption">Impostazioni del pulsante di risposta</string>
     <string name="title_advanced_answer_default">La pressione breve del pulsante di risposta:</string>
@@ -777,6 +778,10 @@
     <string name="title_advanced_gemini">Integrazione di Gemini</string>
     <string name="title_advanced_multi_modal">Multimodale</string>
     <string name="title_advanced_summarize_prompt">Invito per riassumere</string>
+    <string name="title_advanced_answer_prompt">Invito per rispondere</string>
+    <string name="title_advanced_system_instructions">Istruzioni di sistema</string>
+    <string name="title_advanced_default_prompt">Invito di default</string>
+    <string name="title_advanced_entered_text">Testo inserito</string>
     <string name="title_advanced_sdcard">Desidero usare una scheda sd</string>
     <string name="title_advanced_watchdog">Verifica periodicamente se FairEmail è ancora attivo</string>
     <string name="title_advanced_updates">Controlla gli aggiornamenti di GitHub</string>
@@ -789,6 +794,7 @@
     <string name="title_advanced_cleanup_attachments">Elimina gli allegati dei vecchi messaggi</string>
     <string name="title_advanced_cleanup">Pulizia</string>
     <string name="title_advanced_last_cleanup">Ultima pulizia: %1$s</string>
+    <string name="title_advanced_google_backup">Usa il backup dei dati di Android</string>
     <string name="title_advanced_app">Impostazioni dell\'app</string>
     <string name="title_advanced_more">Altre opzioni</string>
     <string name="title_advanced_main_log">Registrazione principale</string>
@@ -834,7 +840,7 @@
     <string name="title_advanced_metered_warning">Disabilitare quest\'opzione disabiliterà la ricezione e l\'invio dei messaggi su connessioni internet mobili</string>
     <string name="title_advanced_rlah_hint">Presumi che non ci sia roaming nell\'UE</string>
     <string name="title_advanced_usage_hint">Questo aumenterà l\'uso di batteria, dati e spazio d\'archiviazione</string>
-    <string name="title_advanced_plain_hint">Abilitarlo limiterà l\'uso dei dati, ma i messaggi saranno mostrati senza stilizzazione</string>
+    <string name="title_advanced_plain_hint">Abilitarlo limiterà l\'uso dei dati ma i messaggi saranno mostrati senza stile e senza immagini</string>
     <string name="title_advanced_plain_remark">La parte in testo semplice non contiene sempre il messaggio completo!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Abilitarlo può causare problemi di connessione su alcuni dispositivi e può aumentare l\'uso della batteria</string>
     <string name="title_advanced_validate_hint">Questo può risultare nel non sincronizzare i messaggi, ad esempio usando una VPN, ma anche altre situazioni</string>
@@ -983,6 +989,7 @@
     <string name="title_case_sensitive">Nomi utente e password sono solitamente sensibili alle maiuscole</string>
     <string name="title_login_before_send">Ricevere prima d\'inviare</string>
     <string name="title_client_certificate">Certificato del client</string>
+    <string name="title_no_key_selected">Nessuna chiave selezionata o nessuna chiave disponibile</string>
     <string name="title_realm">Dominio</string>
     <string name="title_use_ip">Usa l\'indirizzo IP locale invece del nome dell\'host</string>
     <string name="title_ehlo">Identificazione HELO/EHLO personalizzata</string>
@@ -991,9 +998,12 @@
     <string name="title_primary_identity">Principale (identità predefinita)</string>
     <string name="title_self_identity">Rimuovi l\'indirizzo email alla risposta</string>
     <string name="title_leave_on_server">Lascia i messaggi sul server</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Dopo aver scaricato messaggi dal server, questi rimangono sul server</string>
     <string name="title_client_delete">Elimina attivamente i messaggi dopo il download</string>
     <string name="title_leave_deleted">Lascia i messaggi eliminati sul server</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Dopo aver eliminato messaggi dal dispositivo, questi rimarranno sul server</string>
     <string name="title_leave_on_device">Lascia messaggi sul dispositivo</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Eliminando messaggi dal server, questi rimangono sul dispositivo</string>
     <string name="title_max_messages">Numero massimo di messaggi da scaricare (vuoto per tutti)</string>
     <string name="title_max_messages_keep">Questo è il numero massimo di messaggi che verranno mantenuti sul dispositivo</string>
     <string name="title_max_messages_remark">        Inserisci un numero positivo per scaricare i messaggi al termine (più comune)
@@ -1219,6 +1229,7 @@
     <string name="title_create_rule">Crea regola&#8230;</string>
     <string name="title_full_screen">Schermo intero</string>
     <string name="title_force_light">Forza tema chiaro</string>
+    <string name="title_rename">Rinomina</string>
     <string name="title_share">Condividi</string>
     <string name="title_event">Aggiungi al calendario</string>
     <string name="title_pin">Aggiungi scorciatoia</string>
@@ -1364,9 +1375,10 @@
     <string name="title_third_party">Stai usando una versione di terze parti</string>
     <string name="title_expand_warning">Espandere questo messaggio scaricherà %1$s</string>
     <string name="title_download_message">Scaricando&#8230;</string>
-    <string name="title_reformatted">        Questa è la visualizzazione del messaggio riformattato.
-        Puoi toccare sull\'icona &#x26F6; per visualizzare il messaggio originale e nascondere questo.
-        La riformattazione dei messaggi richiede un po\' di tempo, in base alle dimensioni del messaggio e alla velocità del tuo dispositivo.
+    <string name="title_reformatted">        Questa è la visualizzazione di messaggio sicuro e riformattato.
+        Puoi toccare l\'icona &#x26F6; per visualizzare il messaggio originale meno sicuro e nascondere questo.
+        La riformattazione dei messaggi richiede un po\' di tempo, in base alla dimensione del messaggio e alla velocità del tuo dispositivo.
+        A volte, il messaggio originale deve essere visualizzato per vedere i codici QR.
     </string>
     <string name="title_compose">Scrivi</string>
     <string name="title_submitter">Inviato da:</string>
@@ -1519,6 +1531,9 @@
     <string name="title_dsn_reminder">Gli hard bounce danneggiano la reputazione dell\'email del mittente originale!</string>
     <string name="title_size_reminder">Messaggio (%1$s) più grande del limite del server (%2$s)</string>
     <string name="title_attachments_missing">Non tutti gli allegati sono stati scaricati</string>
+    <string name="title_download_attachments">Scarica allegati</string>
+    <string name="title_attachments_download">Allegati scaricati: %1$s</string>
+    <string name="title_attachments_no_download">Questo non sarà più mostrato e gli allegati non saranno più scaricati automaticamente</string>
     <string name="title_dialog_hint">Questa finestra è riabilitabile tramite il menu a tre puntini nella barra d\'azione superiore</string>
     <string name="title_draft_deleted">Bozza scartata</string>
     <string name="title_draft_saved">Bozza salvata</string>
@@ -1670,6 +1685,7 @@
     <string name="title_answer_favorite">Preferito</string>
     <string name="title_answer_snippet">Frammento</string>
     <string name="title_answer_receipt">Usa come conferma di lettura</string>
+    <string name="title_answer_ai">Usa come invito AI</string>
     <string name="title_answer_hide">Nascondi dai menu</string>
     <string name="title_answer_text">Testo del modello</string>
     <string name="title_answer_placeholder">Segnaposto</string>
@@ -1773,6 +1789,8 @@
     <string name="title_rule_tts_subject">Oggetto</string>
     <string name="title_rule_tts_content">Testo</string>
     <string name="title_rule_select_sound">Seleziona suono</string>
+    <string name="title_rule_select_sound_ringtone">Suoneria</string>
+    <string name="title_rule_select_sound_audio">File audio</string>
     <string name="title_rule_use_as_alarm">Usa come sveglia</string>
     <string name="title_rule_alarm_hint">Questo ignorerà le regole \"non disturbare\"</string>
     <string name="title_rule_alarm_duration">Durata massima della sveglia (secondi)</string>
@@ -1913,6 +1931,7 @@
     <string name="title_hint_dismiss">Puoi ignorare questa finestra per rimuovere l\'avviso.</string>
     <string name="title_hint_support">Se hai una domanda o un problema, sei pregato di usare il menu di supporto per ricevere aiuto</string>
     <string name="title_hint_message_actions">Scorri a sinistra per cestinare; Scorri a destra per archiviare (se disponibile); Le azioni di scorrimento sono configurabili nelle impostazioni del profilo</string>
+    <string name="title_hint_outbox">Puoi scorrere a sinistra o a destra per annullare l\'invio</string>
     <string name="title_hint_message_selection">Tieni premuto un messaggio per iniziare a selezionare più messaggi: Tieni premuto e scorri in su o in giù per selezionare più messaggi</string>
     <string name="title_hint_message_junk">        Un client email, essenzialmente, mostra i messaggi su un server email.
         Un server email è responsabile del filtraggio dello spam, non un client email.
@@ -1977,6 +1996,7 @@
     <string name="title_ask_what">Chiedi cosa fare</string>
     <string name="title_no_ask_again">Non chiederlo di nuovo</string>
     <string name="title_no_ask_for_again">Non chiederlo di nuovo per %1$s</string>
+    <string name="title_no_show_again">Non mostrarlo più</string>
     <string name="title_undo_privacy">Questo può essere annullato nella scheda delle impostazioni della privacy</string>
     <string name="title_no_body">Nessun testo del messaggio trovato</string>
     <string name="title_large_body">Questo messaggio è molto grande e ciò potrebbe causare problemi!</string>
@@ -2063,6 +2083,7 @@
     <string name="title_widget_folder_unified">Cartelle in arrivo unificate</string>
     <string name="title_widget_folder_notifying">Cartelle con notifiche di nuovi messaggi</string>
     <string name="title_widget_unseen">Solo messaggi non letti</string>
+    <string name="title_widget_show_unseen">Mostra come non letti</string>
     <string name="title_widget_flagged">Solo messaggi stellati</string>
     <string name="title_widget_font_size">Dimensione testo</string>
     <string name="title_widget_padding">Dimensione del rientro</string>

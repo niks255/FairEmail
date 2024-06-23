@@ -121,7 +121,6 @@ import androidx.core.graphics.ColorUtils;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
-import androidx.documentfile.provider.DocumentFile;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -221,7 +220,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
-import javax.mail.internet.ParseException;
 import javax.mail.util.ByteArrayDataSource;
 
 import biweekly.ICalendar;
@@ -348,7 +346,8 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_LINK = 14;
     private static final int REQUEST_DISCARD = 15;
     private static final int REQUEST_SEND = 16;
-    private static final int REQUEST_REMOVE_ATTACHMENTS = 17;
+    static final int REQUEST_EDIT_ATTACHMENT = 17;
+    private static final int REQUEST_REMOVE_ATTACHMENTS = 18;
 
     ActivityResultLauncher<PickVisualMediaRequest> pickImages;
 
@@ -825,9 +824,13 @@ public class FragmentCompose extends FragmentBase {
                 Object tag = cbSignature.getTag();
                 if (tag == null || !tag.equals(checked)) {
                     cbSignature.setTag(checked);
+                    ibSignature.setEnabled(checked);
                     tvSignature.setAlpha(checked ? 1.0f : Helper.LOW_LIGHT);
-                    if (tag != null)
-                        onAction(R.id.action_save, "signature");
+                    if (tag != null) {
+                        Bundle extras = new Bundle();
+                        extras.putBoolean("silent", true);
+                        onAction(R.id.action_save, extras, "signature");
+                    }
                 }
             }
         });
@@ -839,18 +842,27 @@ public class FragmentCompose extends FragmentBase {
                 if (identity == null || TextUtils.isEmpty(identity.signature))
                     return;
 
-                ClipboardManager clipboard = Helper.getSystemService(v.getContext(), ClipboardManager.class);
-                if (clipboard == null)
-                    return;
+                Document d = HtmlHelper.sanitizeCompose(v.getContext(), identity.signature, true);
+                SpannableStringBuilder spanned = HtmlHelper.fromDocument(v.getContext(), d, new HtmlHelper.ImageGetterEx() {
+                    @Override
+                    public Drawable getDrawable(Element element) {
+                        return ImageHelper.decodeImage(v.getContext(),
+                                working, element, true, zoom, 1.0f, etBody);
+                    }
+                }, null);
+                if (spanned.length() > 0 && spanned.charAt(spanned.length() - 1) != '\n')
+                    spanned.append('\n');
 
-                ClipData clip = ClipData.newHtmlText(
-                        v.getContext().getString(R.string.title_edit_signature_text),
-                        HtmlHelper.getText(v.getContext(), identity.signature),
-                        identity.signature);
-                clipboard.setPrimaryClip(clip);
+                Editable edit = etBody.getText();
+                if (edit.length() > 0 && edit.charAt(edit.length() - 1) != '\n')
+                    edit.append('\n');
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
-                    ToastEx.makeText(v.getContext(), R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+                int start = edit.length();
+                edit.append(spanned);
+                etBody.setSelection(start);
+
+                cbSignature.setChecked(false);
+                ibSignature.setEnabled(false);
             }
         });
 
@@ -1884,7 +1896,16 @@ public class FragmentCompose extends FragmentBase {
             @Override
             public void onClick(View view) {
                 if (AI.isAvailable(context))
-                    onAI();
+                    onAI(view);
+            }
+        });
+        ibAI.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        .putExtra("tab", "integrations"));
+                return true;
             }
         });
         menu.findItem(R.id.menu_ai).setActionView(ibAI);
@@ -1926,6 +1947,27 @@ public class FragmentCompose extends FragmentBase {
         });
         menu.findItem(R.id.menu_translate).setActionView(ibTranslate);
 
+        ImageButton ibSend = (ImageButton) infl.inflate(R.layout.action_button, null);
+        ibSend.setId(View.generateViewId());
+        ibSend.setImageResource(R.drawable.twotone_send_24);
+        ibSend.setContentDescription(getString(R.string.title_translate));
+        ibSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onAction(R.id.action_check, "menu:send");
+            }
+        });
+        ibSend.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Bundle args = new Bundle();
+                args.putBoolean("force_dialog", true);
+                onAction(R.id.action_check, args, "menu:send:force");
+                return true;
+            }
+        });
+        menu.findItem(R.id.menu_send).setActionView(ibSend);
+
         ImageButton ibZoom = (ImageButton) infl.inflate(R.layout.action_button, null);
         ibZoom.setId(View.generateViewId());
         ibZoom.setImageResource(R.drawable.twotone_format_size_24);
@@ -1949,12 +1991,22 @@ public class FragmentCompose extends FragmentBase {
 
         final Context context = getContext();
 
-        menu.findItem(R.id.menu_encrypt).setEnabled(state == State.LOADED);
-        menu.findItem(R.id.menu_translate).setEnabled(state == State.LOADED);
-        menu.findItem(R.id.menu_translate).setVisible(DeepL.isAvailable(context));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean send_at_top = prefs.getBoolean("send_at_top", false);
+        boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
+        boolean save_drafts = prefs.getBoolean("save_drafts", perform_expunge);
+        boolean send_chips = prefs.getBoolean("send_chips", true);
+        boolean send_dialog = prefs.getBoolean("send_dialog", true);
+        boolean image_dialog = prefs.getBoolean("image_dialog", true);
+        boolean experiments = prefs.getBoolean("experiments", false);
+
         menu.findItem(R.id.menu_ai).setEnabled(state == State.LOADED && !chatting);
         ((ImageButton) menu.findItem(R.id.menu_ai).getActionView()).setEnabled(!chatting);
         menu.findItem(R.id.menu_ai).setVisible(AI.isAvailable(context));
+        menu.findItem(R.id.menu_encrypt).setEnabled(state == State.LOADED);
+        menu.findItem(R.id.menu_translate).setEnabled(state == State.LOADED);
+        menu.findItem(R.id.menu_translate).setVisible(DeepL.isAvailable(context));
+        menu.findItem(R.id.menu_send).setVisible(send_at_top);
         menu.findItem(R.id.menu_zoom).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_style).setEnabled(state == State.LOADED);
         menu.findItem(R.id.menu_media).setEnabled(state == State.LOADED);
@@ -2011,13 +2063,6 @@ public class FragmentCompose extends FragmentBase {
         ibZoom.setAlpha(state == State.LOADED ? 1f : Helper.LOW_LIGHT);
         ibZoom.setEnabled(state == State.LOADED);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean save_drafts = prefs.getBoolean("save_drafts", true);
-        boolean send_chips = prefs.getBoolean("send_chips", true);
-        boolean send_dialog = prefs.getBoolean("send_dialog", true);
-        boolean image_dialog = prefs.getBoolean("image_dialog", true);
-        boolean experiments = prefs.getBoolean("experiments", false);
-
         menu.findItem(R.id.menu_save_drafts).setChecked(save_drafts);
         menu.findItem(R.id.menu_send_chips).setChecked(send_chips);
         menu.findItem(R.id.menu_send_dialog).setChecked(send_dialog);
@@ -2062,6 +2107,8 @@ public class FragmentCompose extends FragmentBase {
                     return false;
             }
         });
+
+        bottom_navigation.findViewById(R.id.action_send).setVisibility(send_at_top ? View.GONE : View.VISIBLE);
 
         bottom_navigation.findViewById(R.id.action_send).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -2290,7 +2337,8 @@ public class FragmentCompose extends FragmentBase {
 
     private void onMenuSaveDrafts() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean save_drafts = prefs.getBoolean("save_drafts", true);
+        boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
+        boolean save_drafts = prefs.getBoolean("save_drafts", perform_expunge);
         prefs.edit().putBoolean("save_drafts", !save_drafts).apply();
     }
 
@@ -2461,17 +2509,19 @@ public class FragmentCompose extends FragmentBase {
                         long id = intent.getLongExtra("id", -1);
 
                         Bundle args = new Bundle();
-                        args.putLong("id", id);
+                        args.putLong("id", working);
+                        args.putLong("aid", id);
                         args.putString("to", etTo.getText().toString());
 
                         new SimpleTask<EntityAnswer>() {
                             @Override
-                            protected EntityAnswer onExecute(Context context, Bundle args) throws Throwable {
+                            protected EntityAnswer onExecute(Context context, Bundle args) {
                                 long id = args.getLong("id");
+                                long aid = args.getLong("aid");
                                 String to = args.getString("to");
 
                                 DB db = DB.getInstance(context);
-                                EntityAnswer answer = db.answer().getAnswer(id);
+                                EntityAnswer answer = db.answer().getAnswer(aid);
                                 if (answer != null) {
                                     InternetAddress[] tos = null;
                                     try {
@@ -2479,7 +2529,8 @@ public class FragmentCompose extends FragmentBase {
                                     } catch (AddressException ignored) {
                                     }
 
-                                    String html = EntityAnswer.replacePlaceholders(context, answer.text, tos);
+                                    EntityAnswer.Data answerData = answer.getData(context, tos);
+                                    String html = answerData.getHtml();
 
                                     Document d = HtmlHelper.sanitizeCompose(context, html, true);
                                     Spanned spanned = HtmlHelper.fromDocument(context, d, new HtmlHelper.ImageGetterEx() {
@@ -2493,6 +2544,8 @@ public class FragmentCompose extends FragmentBase {
                                         }
                                     }, null);
                                     args.putCharSequence("spanned", spanned);
+
+                                    answerData.insertAttachments(context, id);
 
                                     db.answer().applyAnswer(answer.id, new Date().getTime());
                                 }
@@ -2639,7 +2692,58 @@ public class FragmentCompose extends FragmentBase {
         }.serial().execute(this, args, "compose:print");
     }
 
-    private void onAI() {
+    private void onAI(View anchor) {
+        new SimpleTask<List<EntityAnswer>>() {
+            @Override
+            protected List<EntityAnswer> onExecute(Context context, Bundle args) throws Throwable {
+                DB db = DB.getInstance(context);
+                return db.answer().getAiPrompts();
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, List<EntityAnswer> prompts) {
+                if (prompts == null || prompts.isEmpty())
+                    _onAi(null);
+                else {
+                    PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), anchor);
+
+                    String title = getString(etBody.length() == 0
+                            ? R.string.title_advanced_default_prompt
+                            : R.string.title_advanced_entered_text);
+                    SpannableStringBuilder ssb = new SpannableStringBuilderEx(title);
+                    ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ssb.length(), 0);
+                    popupMenu.getMenu()
+                            .add(Menu.NONE, 1, 1, ssb)
+                            .setIntent(new Intent().putExtra("id", -1L));
+
+                    for (int i = 0; i < prompts.size(); i++) {
+                        EntityAnswer prompt = prompts.get(i);
+                        popupMenu.getMenu()
+                                .add(Menu.NONE, i + 2, i + 2, prompt.name)
+                                .setIntent(new Intent().putExtra("id", prompt.id));
+                    }
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            long id = item.getIntent().getLongExtra("id", -1L);
+                            _onAi(id);
+                            return true;
+                        }
+                    });
+
+                    popupMenu.show();
+                }
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, new Bundle(), "AI:template");
+    }
+
+    private void _onAi(Long template) {
         int start = etBody.getSelectionStart();
         int end = etBody.getSelectionEnd();
         boolean selection = (start >= 0 && end > start);
@@ -2649,8 +2753,9 @@ public class FragmentCompose extends FragmentBase {
         Bundle args = new Bundle();
         args.putLong("id", working);
         args.putCharSequence("body", body);
+        args.putLong("template", template == null ? 0L : template);
 
-        new SimpleTask<String>() {
+        new SimpleTask<Spanned>() {
             @Override
             protected void onPreExecute(Bundle args) {
                 chatting = true;
@@ -2664,15 +2769,16 @@ public class FragmentCompose extends FragmentBase {
             }
 
             @Override
-            protected String onExecute(Context context, Bundle args) throws Throwable {
+            protected Spanned onExecute(Context context, Bundle args) throws Throwable {
                 long id = args.getLong("id");
                 CharSequence body = args.getCharSequence("body");
+                long template = args.getLong("template");
 
-                return AI.completeChat(context, id, body);
+                return AI.completeChat(context, id, body, template);
             }
 
             @Override
-            protected void onExecuted(Bundle args, String completion) {
+            protected void onExecuted(Bundle args, Spanned completion) {
                 if (completion == null)
                     return;
 
@@ -2692,7 +2798,8 @@ public class FragmentCompose extends FragmentBase {
                 if (index > 0 && edit.charAt(index - 1) != '\n')
                     edit.insert(index++, "\n");
 
-                edit.insert(index, completion + "\n");
+                edit.insert(index, "\n");
+                edit.insert(index, completion);
                 etBody.setSelection(index + completion.length() + 1);
 
                 StyleHelper.markAsInserted(edit, index, index + completion.length() + 1);
@@ -2708,7 +2815,7 @@ public class FragmentCompose extends FragmentBase {
             protected void onException(Bundle args, Throwable ex) {
                 Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
             }
-        }.serial().execute(this, args, "AI");
+        }.serial().execute(this, args, "AI:run");
     }
 
     private void onTranslate(View anchor) {
@@ -3024,8 +3131,8 @@ public class FragmentCompose extends FragmentBase {
         PackageManager pm = getContext().getPackageManager();
         Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
         if (intent.resolveActivity(pm) == null) { // action whitelisted
-            Snackbar snackbar = Snackbar.make(view, getString(R.string.title_no_recorder), Snackbar.LENGTH_INDEFINITE)
-                    .setGestureInsetBottomIgnored(true);
+            Snackbar snackbar = Helper.setSnackbarOptions(
+                    Snackbar.make(view, getString(R.string.title_no_recorder), Snackbar.LENGTH_INDEFINITE));
             snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -3074,8 +3181,7 @@ public class FragmentCompose extends FragmentBase {
     }
 
     private void noStorageAccessFramework() {
-        Snackbar snackbar = Snackbar.make(view, R.string.title_no_saf, Snackbar.LENGTH_LONG)
-                .setGestureInsetBottomIgnored(true);
+        Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_no_saf, Snackbar.LENGTH_LONG));
         snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -3159,8 +3265,7 @@ public class FragmentCompose extends FragmentBase {
 
                             @Override
                             public void onNothingSelected() {
-                                Snackbar snackbar = Snackbar.make(view, R.string.title_no_key, Snackbar.LENGTH_LONG)
-                                        .setGestureInsetBottomIgnored(true);
+                                Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_no_key, Snackbar.LENGTH_LONG));
                                 final Intent intent = (Build.VERSION.SDK_INT < Build.VERSION_CODES.R
                                         ? KeyChain.createInstallIntent()
                                         : new Intent(Settings.ACTION_SECURITY_SETTINGS));
@@ -3227,8 +3332,9 @@ public class FragmentCompose extends FragmentBase {
                 onPgp(intent);
             } catch (Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else {
                     Log.e(ex);
                     Log.unexpectedError(FragmentCompose.this, ex);
@@ -3310,6 +3416,10 @@ public class FragmentCompose extends FragmentBase {
                         extras.putBoolean("now", true);
                         onAction(R.id.action_send, extras, "sendnow");
                     }
+                    break;
+                case REQUEST_EDIT_ATTACHMENT:
+                    if (resultCode == RESULT_OK && data != null)
+                        onEditAttachment(data.getBundleExtra("args"));
                     break;
                 case REQUEST_REMOVE_ATTACHMENTS:
                     if (resultCode == RESULT_OK)
@@ -3556,8 +3666,8 @@ public class FragmentCompose extends FragmentBase {
             // https://developer.android.com/training/camera/photobasics
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(pm) == null) { // action whitelisted
-                Snackbar snackbar = Snackbar.make(view, getString(R.string.title_no_camera), Snackbar.LENGTH_LONG)
-                        .setGestureInsetBottomIgnored(true);
+                Snackbar snackbar = Helper.setSnackbarOptions(
+                        Snackbar.make(view, getString(R.string.title_no_camera), Snackbar.LENGTH_LONG));
                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -3769,7 +3879,7 @@ public class FragmentCompose extends FragmentBase {
                 ArrayList<Uri> images = new ArrayList<>();
                 for (Uri uri : uris)
                     try {
-                        UriInfo info = getInfo(uri, context);
+                        Helper.UriInfo info = Helper.getInfo(uri, context);
                         if (info.isImage())
                             images.add(uri);
                         else
@@ -4206,11 +4316,11 @@ public class FragmentCompose extends FragmentBase {
                 if (ex instanceof IllegalArgumentException
                         || ex instanceof GeneralSecurityException /* InvalidKeyException */) {
                     Log.i(ex);
-                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 } else if (ex instanceof OperationCanceledException) {
-                    Snackbar snackbar = Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_INDEFINITE)
-                            .setGestureInsetBottomIgnored(true);
+                    Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_INDEFINITE));
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -4567,8 +4677,8 @@ public class FragmentCompose extends FragmentBase {
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException) {
                     Log.i(ex);
-                    Snackbar snackbar = Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_INDEFINITE)
-                            .setGestureInsetBottomIgnored(true);
+                    Snackbar snackbar = Helper.setSnackbarOptions(
+                            Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_INDEFINITE));
                     Helper.setSnackbarLines(snackbar, 7);
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
@@ -4903,6 +5013,45 @@ public class FragmentCompose extends FragmentBase {
         onAction(R.id.action_delete, "delete");
     }
 
+    private void onEditAttachment(Bundle args) {
+        new SimpleTask<Void>() {
+            @Override
+            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                long id = args.getLong("id");
+                String prev = args.getString("prev");
+                String name = args.getString("name");
+
+                if (TextUtils.isEmpty(name))
+                    return null;
+
+                File source = EntityAttachment.getFile(context, id, prev);
+                File target = EntityAttachment.getFile(context, id, name);
+                if (!source.renameTo(target))
+                    throw new IllegalArgumentException("Could not rename " + source.getName() + " into " + target.getName());
+
+                DB db = DB.getInstance(context);
+                try {
+                    db.beginTransaction();
+
+                    db.attachment().setName(id, name);
+                    db.attachment().setWarning(id, name.length() < 60
+                            ? null : context.getString(R.string.title_attachment_filename));
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "attachment:edit");
+    }
+
     private void onRemoveAttachments() {
         Bundle args = new Bundle();
         args.putLong("id", working);
@@ -5018,7 +5167,7 @@ public class FragmentCompose extends FragmentBase {
         NoStreamException.check(uri, context);
 
         EntityAttachment attachment = new EntityAttachment();
-        UriInfo info = getInfo(uri, context);
+        Helper.UriInfo info = Helper.getInfo(uri, context);
 
         EntityLog.log(context, "Add attachment" +
                 " uri=" + uri + " type=" + type + " image=" + image + " resize=" + resize + " privacy=" + privacy +
@@ -5346,11 +5495,12 @@ public class FragmentCompose extends FragmentBase {
             boolean encrypt_default = prefs.getBoolean("encrypt_default", false);
             boolean receipt_default = prefs.getBoolean("receipt_default", false);
             boolean write_below = prefs.getBoolean("write_below", false);
-            boolean save_drafts = prefs.getBoolean("save_drafts", true);
+            boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
+            boolean save_drafts = prefs.getBoolean("save_drafts", perform_expunge);
             boolean auto_identity = prefs.getBoolean("auto_identity", false);
             boolean suggest_sent = prefs.getBoolean("suggest_sent", true);
             boolean suggest_received = prefs.getBoolean("suggest_received", false);
-            boolean forward_new = prefs.getBoolean("forward_new", true);
+            boolean forward_new = prefs.getBoolean("forward_new", false);
             boolean markdown = prefs.getBoolean("markdown", false);
 
             Log.i("Load draft action=" + action + " id=" + id + " reference=" + reference);
@@ -5535,6 +5685,7 @@ public class FragmentCompose extends FragmentBase {
 
                     Document document = Document.createShell("");
 
+                    EntityAnswer.Data answerData = null;
                     if (ref == null) {
                         data.draft.thread = data.draft.msgid;
 
@@ -5576,7 +5727,8 @@ public class FragmentCompose extends FragmentBase {
                             if (answer > 0)
                                 data.draft.subject = a.name;
                             if (TextUtils.isEmpty(external_body)) {
-                                Document d = JsoupEx.parse(a.getHtml(context, null));
+                                answerData = a.getData(context, null);
+                                Document d = JsoupEx.parse(answerData.getHtml());
                                 document.body().append(d.body().html());
                             }
                         }
@@ -5796,7 +5948,7 @@ public class FragmentCompose extends FragmentBase {
                                 else {
                                     db.answer().applyAnswer(receipt.id, new Date().getTime());
                                     texts = new String[0];
-                                    Document d = JsoupEx.parse(receipt.getHtml(context, null));
+                                    Document d = JsoupEx.parse(receipt.getData(context, null).getHtml());
                                     document.body().append(d.body().html());
                                 }
                             }
@@ -5854,7 +6006,8 @@ public class FragmentCompose extends FragmentBase {
                             db.answer().applyAnswer(a.id, new Date().getTime());
                             if (a.label != null && ref != null)
                                 EntityOperation.queue(context, ref, EntityOperation.LABEL, a.label, true);
-                            Document d = JsoupEx.parse(a.getHtml(context, data.draft.to));
+                            answerData = a.getData(context, data.draft.to);
+                            Document d = JsoupEx.parse(answerData.getHtml());
                             document.body().append(d.body().html());
                         }
 
@@ -6062,7 +6215,7 @@ public class FragmentCompose extends FragmentBase {
                         ArrayList<Uri> images = new ArrayList<>();
                         for (Uri uri : uris)
                             try {
-                                UriInfo info = getInfo(uri, context);
+                                Helper.UriInfo info = Helper.getInfo(uri, context);
                                 if (info.isImage())
                                     images.add(uri);
                                 else
@@ -6120,6 +6273,9 @@ public class FragmentCompose extends FragmentBase {
                                     args.putBoolean("incomplete", true);
                             }
                     }
+
+                    if (answerData != null)
+                        answerData.insertAttachments(context, data.draft.id);
 
                     if (save_drafts &&
                             (data.draft.ui_encrypt == null ||
@@ -6296,9 +6452,8 @@ public class FragmentCompose extends FragmentBase {
             bottom_navigation.getMenu().findItem(R.id.action_redo).setVisible(data.draft.revision < data.draft.revisions);
 
             if (args.getBoolean("noreply")) {
-                final Snackbar snackbar = Snackbar.make(
-                                view, R.string.title_noreply_reminder, Snackbar.LENGTH_INDEFINITE)
-                        .setGestureInsetBottomIgnored(true);
+                final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(
+                        view, R.string.title_noreply_reminder, Snackbar.LENGTH_INDEFINITE));
                 snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -6307,9 +6462,8 @@ public class FragmentCompose extends FragmentBase {
                 });
                 snackbar.show();
             } else if (args.getBoolean("incomplete")) {
-                final Snackbar snackbar = Snackbar.make(
-                                view, R.string.title_attachments_incomplete, Snackbar.LENGTH_INDEFINITE)
-                        .setGestureInsetBottomIgnored(true);
+                final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(
+                        view, R.string.title_attachments_incomplete, Snackbar.LENGTH_INDEFINITE));
                 snackbar.setAction(android.R.string.ok, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -6568,8 +6722,8 @@ public class FragmentCompose extends FragmentBase {
                             String msg = getResources().getQuantityString(
                                     R.plurals.title_notification_unseen, diff, diff);
 
-                            Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_INDEFINITE)
-                                    .setGestureInsetBottomIgnored(true);
+                            Snackbar snackbar = Helper.setSnackbarOptions(
+                                    Snackbar.make(view, msg, Snackbar.LENGTH_INDEFINITE));
                             snackbar.setAction(R.string.title_show, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -6633,8 +6787,8 @@ public class FragmentCompose extends FragmentBase {
             if (ex instanceof MessageRemovedException)
                 finish();
             else if (ex instanceof OperationCanceledException) {
-                Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE)
-                        .setGestureInsetBottomIgnored(true);
+                Snackbar snackbar = Helper.setSnackbarOptions(
+                        Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE));
                 snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -6669,8 +6823,9 @@ public class FragmentCompose extends FragmentBase {
                           at android.content.ContentResolver.openInputStream(ContentResolver.java:1187)
                           at eu.faircode.email.FragmentCompose.addAttachment(SourceFile:27)
                      */
-            Snackbar.make(view, new ThrowableWrapper(ex).toSafeString(), Snackbar.LENGTH_LONG)
-                    .setGestureInsetBottomIgnored(true).show();
+            Helper.setSnackbarOptions(
+                            Snackbar.make(view, new ThrowableWrapper(ex).toSafeString(), Snackbar.LENGTH_LONG))
+                    .show();
         } else {
             if (ex instanceof IOException &&
                     ex.getCause() instanceof ErrnoException &&
@@ -6763,7 +6918,8 @@ public class FragmentCompose extends FragmentBase {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean discard_delete = prefs.getBoolean("discard_delete", true);
             boolean write_below = prefs.getBoolean("write_below", false);
-            boolean save_drafts = prefs.getBoolean("save_drafts", true);
+            boolean perform_expunge = prefs.getBoolean("perform_expunge", true);
+            boolean save_drafts = prefs.getBoolean("save_drafts", perform_expunge);
             boolean save_revisions = prefs.getBoolean("save_revisions", true);
             int send_delayed = prefs.getInt("send_delayed", 0);
 
@@ -7568,8 +7724,9 @@ public class FragmentCompose extends FragmentBase {
             else {
                 setBusy(false);
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -7813,6 +7970,7 @@ public class FragmentCompose extends FragmentBase {
                 ivMarkdown.setVisibility(markdown ? View.VISIBLE : View.GONE);
 
                 cbSignature.setChecked(draft.signature);
+                ibSignature.setEnabled(draft.signature);
                 tvSignature.setAlpha(draft.signature ? 1.0f : Helper.LOW_LIGHT);
 
                 boolean ref_has_images = args.getBoolean("ref_has_images");
@@ -8177,67 +8335,6 @@ public class FragmentCompose extends FragmentBase {
                 onExit();
         }
     };
-
-    @NonNull
-    private static UriInfo getInfo(Uri uri, Context context) {
-        UriInfo result = new UriInfo();
-
-        // https://stackoverflow.com/questions/76094229/android-13-photo-video-picker-file-name-from-the-uri-is-garbage
-        DocumentFile dfile = null;
-        try {
-            dfile = DocumentFile.fromSingleUri(context, uri);
-            if (dfile != null) {
-                result.name = dfile.getName();
-                result.type = dfile.getType();
-                result.size = dfile.length();
-                EntityLog.log(context, "UriInfo dfile " + result + " uri=" + uri);
-            }
-        } catch (Throwable ex) {
-            Log.e(ex);
-        }
-
-        // Check name
-        if (TextUtils.isEmpty(result.name))
-            result.name = uri.getLastPathSegment();
-
-        // Check type
-        if (!TextUtils.isEmpty(result.type))
-            try {
-                new ContentType(result.type);
-            } catch (ParseException ex) {
-                Log.w(new Throwable(result.type, ex));
-                result.type = null;
-            }
-
-        if (TextUtils.isEmpty(result.type) ||
-                "*/*".equals(result.type) ||
-                "application/*".equals(result.type) ||
-                "application/octet-stream".equals(result.type))
-            result.type = Helper.guessMimeType(result.name);
-
-        if (result.size != null && result.size <= 0)
-            result.size = null;
-
-        EntityLog.log(context, "UriInfo result " + result + " uri=" + uri);
-
-        return result;
-    }
-
-    private static class UriInfo {
-        String name;
-        String type;
-        Long size;
-
-        boolean isImage() {
-            return ImageHelper.isImage(type);
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return "name=" + name + " type=" + type + " size=" + size;
-        }
-    }
 
     private static class DraftData {
         private EntityMessage draft;

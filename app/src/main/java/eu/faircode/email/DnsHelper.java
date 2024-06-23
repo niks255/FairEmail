@@ -33,7 +33,9 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import org.minidns.AbstractDnsClient;
+import org.minidns.DnsCache;
 import org.minidns.DnsClient;
+import org.minidns.cache.LruCache;
 import org.minidns.dane.DaneVerifier;
 import org.minidns.dnsmessage.DnsMessage;
 import org.minidns.dnsqueryresult.DnsQueryResult;
@@ -368,9 +370,12 @@ public class DnsHelper {
         if (!hasDnsSec())
             return;
 
+        List<String> log = new ArrayList<>();
+
         Handler handler = new Handler() {
             @Override
             public void publish(LogRecord record) {
+                log.add(record.getMessage());
                 Log.w("DANE " + record.getMessage());
             }
 
@@ -387,10 +392,21 @@ public class DnsHelper {
         try {
             Logger.getLogger(clazz).addHandler(handler);
             Log.w("DANE verify " + server + ":" + port);
-            boolean verified = new DaneVerifier().verifyCertificateChain(chain, server, port);
+
+            DnssecClient client = DnssecResolverApi.INSTANCE.getDnssecClient();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                client.setDataSource(new AndroidDataSource());
+
+            client.getDataSource().setTimeout(LOOKUP_TIMEOUT * 1000);
+
+            client.setUseHardcodedDnsServers(false);
+
+            boolean verified = new DaneVerifier(client).verifyCertificateChain(chain, server, port);
             Log.w("DANE verified=" + verified + " " + server + ":" + port);
             if (!verified)
-                throw new CertificateException("DANE missing or invalid");
+                throw new CertificateException("DANE missing or invalid",
+                        new CertificateException(TextUtils.join("\n", log)));
         } catch (CertificateException ex) {
             throw ex;
         } catch (Throwable ex) {
@@ -452,15 +468,28 @@ public class DnsHelper {
     }
 
     static void clear(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        for (String key : prefs.getAll().keySet())
-            if (key != null && key.startsWith("dns."))
-                editor.remove(key);
-        editor.apply();
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = prefs.edit();
+            for (String key : prefs.getAll().keySet())
+                if (key != null && key.startsWith("dns."))
+                    editor.remove(key);
+            editor.apply();
+
+            for (ResolverApi resolver : new ResolverApi[]{DnssecResolverApi.INSTANCE, ResolverApi.INSTANCE}) {
+                AbstractDnsClient client = resolver.getClient();
+                DnsCache cache = client.getCache();
+                if (cache instanceof LruCache)
+                    ((LruCache) cache).clear();
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
     }
 
     static boolean hasDnsSec() {
+        if (BuildConfig.PLAY_STORE_RELEASE)
+            return false;
         // DNSSEC causes crashes in libc
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O);
     }

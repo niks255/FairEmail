@@ -93,6 +93,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.IDN;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -177,6 +178,7 @@ public class MessageHelper {
     static final int DEFAULT_DOWNLOAD_SIZE = 4 * 1024 * 1024; // bytes
     static final String HEADER_CORRELATION_ID = "X-Correlation-ID";
     static final String HEADER_MICROSOFT_ORIGINAL_MESSAGE_ID = "X-Microsoft-Original-Message-ID";
+    static final String HEADER_GOOGLE_ORIGINAL_MESSAGE_ID = "X-Google-Original-Message-ID";
     static final int MAX_SUBJECT_AGE = 48; // hours
     static final int DEFAULT_THREAD_RANGE = 7; // 2^7 = 128 days
     static final int MAX_UNZIP_COUNT = 20;
@@ -340,7 +342,7 @@ public class MessageHelper {
         boolean autocrypt = prefs.getBoolean("autocrypt", true);
         boolean mutual = prefs.getBoolean("autocrypt_mutual", true);
         boolean encrypt_subject = prefs.getBoolean("encrypt_subject", false);
-        boolean forward_new = prefs.getBoolean("forward_new", true);
+        boolean forward_new = prefs.getBoolean("forward_new", false);
 
         if (identity != null && identity.receipt_type != null)
             receipt_type = identity.receipt_type;
@@ -1846,7 +1848,7 @@ public class MessageHelper {
                 refs.add(ref);
         }
 
-        boolean forward_new = prefs.getBoolean("forward_new", true);
+        boolean forward_new = prefs.getBoolean("forward_new", false);
         if (!forward_new)
             try {
                 String fwd = imessage.getHeader("X-Forwarded-Message-Id", null);
@@ -2187,20 +2189,42 @@ public class MessageHelper {
         if (headers == null || headers.length == 0)
             return null;
 
-        String v = getKeyValues(headers[0]).get(type);
-        if (v == null)
-            return null;
+        String signer = null;
+        for (String header : headers) {
+            if (signer == null)
+                signer = getSigner(header);
+            else if (!signer.equals(getSigner(header)))
+                break;
 
-        String[] val = v.split("\\s+");
-        if (val.length == 0)
-            return null;
+            String v = getKeyValues(header).get(type);
+            if (v == null)
+                continue;
 
-        if ("pass".equals(val[0]))
-            return true;
-        else if ("none".equals(val[0]))
-            return null;
-        else
-            return false; // fail, policy, neutral, temperror, permerror
+            String[] val = v.split("[^A-za-z]+");
+            if (val.length == 0)
+                continue;
+
+            String value = val[0].toLowerCase(Locale.ROOT);
+            switch (value) {
+                case "none":
+                    return null;
+                case "pass":
+                    return true;
+                case "fail":
+                case "policy":
+                    return false;
+                case "neutral":
+                    return null;
+                case "temperror":
+                    return null;
+                case "permerror":
+                    return false;
+                default: // Yahoo: unknown
+                    return null;
+            }
+        }
+
+        return null;
     }
 
     Address[] getMailFrom(String[] headers) {
@@ -2233,20 +2257,26 @@ public class MessageHelper {
         return mailfrom;
     }
 
-    String getSigner(String[] headers) {
+    static String getSigner(String[] headers) {
         if (headers == null || headers.length == 0)
             return null;
+        return getSigner(headers[0]);
+    }
 
-        int semi = headers[0].indexOf(';');
+    static String getSigner(String header) {
+        if (TextUtils.isEmpty(header))
+            return null;
+
+        int semi = header.indexOf(';');
         if (semi < 0)
             return null;
-        String signer = headers[0].substring(0, semi).trim();
+        String signer = header.substring(0, semi).trim();
 
         if (signer.toLowerCase(Locale.ROOT).startsWith("i=")) {
-            int semi2 = headers[0].indexOf(';', semi + 1);
+            int semi2 = header.indexOf(';', semi + 1);
             if (semi2 < 0)
                 return null;
-            signer = headers[0].substring(semi + 1, semi2).trim();
+            signer = header.substring(semi + 1, semi2).trim();
         }
 
         if (TextUtils.isEmpty(signer))
@@ -2255,16 +2285,38 @@ public class MessageHelper {
         return signer;
     }
 
-    boolean getSPF() throws MessagingException {
+    Boolean getSPF() throws MessagingException {
         ensureHeaders();
 
         // http://www.open-spf.org/RFC_4408/#header-field
         String[] headers = imessage.getHeader("Received-SPF");
         if (headers == null || headers.length < 1)
-            return false;
+            return null;
+
+        // header-field = "Received-SPF:" [CFWS] result FWS [comment FWS] [ key-value-list ] CRLF
+        // result = "Pass" / "Fail" / "SoftFail" / "Neutral" / "None" / "TempError" / "PermError"
 
         String spf = MimeUtility.unfold(headers[0]);
-        return (spf.trim().toLowerCase(Locale.ROOT).startsWith("pass"));
+        String[] values = spf.trim().split("[^A-Za-z]+");
+        if (values.length == 0)
+            return null;
+
+        String value = values[0].toLowerCase(Locale.ROOT);
+        switch (value) {
+            case "pass":
+                return true;
+            case "fail":
+                return false;
+            case "softfail":
+            case "neutral":
+            case "none":
+            case "temperror":
+                return null;
+            case "permerror":
+                return false;
+            default:
+                return null;
+        }
     }
 
     @NonNull
@@ -2477,6 +2529,12 @@ public class MessageHelper {
                 String[] values = (name.equals(key)
                         ? new String[]{header}
                         : amessage.getHeader(key));
+
+                if (!"google.com".equalsIgnoreCase(signer) &&
+                        "Message-ID".equalsIgnoreCase(key) &&
+                        amessage.getHeader(HEADER_GOOGLE_ORIGINAL_MESSAGE_ID, null) != null)
+                    values = amessage.getHeader(HEADER_GOOGLE_ORIGINAL_MESSAGE_ID);
+
                 if (values == null || idx > values.length) {
                     // https://datatracker.ietf.org/doc/html/rfc6376/#section-5.4
                     Log.i("DKIM missing header=" +
@@ -2598,10 +2656,23 @@ public class MessageHelper {
             // https://stackoverflow.com/a/43984402/1794097
             if (pubKey instanceof RSAPublicKey)
                 try {
-                    int keylen = ((RSAPublicKey) pubKey).getModulus().bitLength();
+                    BigInteger modulus = ((RSAPublicKey) pubKey).getModulus();
+                    int keylen = modulus.bitLength();
                     Log.i("DKIM RSA pubkey length=" + keylen);
-                    if (keylen < DKIM_MIN_KEY_LENGTH)
-                        throw new IllegalArgumentException("RSA pubkey length " + keylen + " < " + DKIM_MIN_KEY_LENGTH);
+                    if (keylen < DKIM_MIN_KEY_LENGTH) {
+                        EntityLog.log(context, EntityLog.Type.Debug5, "DKIM RSA pubkey length=" + keylen);
+                        throw new IllegalArgumentException("DKIM RSA pubkey length " + keylen + " < " + DKIM_MIN_KEY_LENGTH);
+                    }
+
+                    // https://github.com/badkeys/badkeys
+                    if (BuildConfig.DEBUG)
+                        for (int prime = 3; prime <= 65537; prime += 2)
+                            if (isPrime(prime) &&
+                                    modulus.remainder(BigInteger.valueOf(prime)).compareTo(BigInteger.ZERO) == 0) {
+                                EntityLog.log(context, EntityLog.Type.Debug5, "DKIM RSA pubkey with small prime=" + prime);
+                                throw new IllegalArgumentException("DKIM RSA pubkey with small prime=" + prime);
+                            }
+                    Log.i("DKIM RSA okay");
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
@@ -2640,6 +2711,13 @@ public class MessageHelper {
         return null;
     }
 
+    static boolean isPrime(int num) {
+        for (int i = 2; i <= num / 2; i++)
+            if ((num % i) == 0)
+                return false;
+        return true;
+    }
+
     boolean isAligned(Context context, List<String> signers, Address[] return_path, Address[] smtp_from, Address[] from) {
         List<Address> envelop = new ArrayList<>();
         if (return_path != null)
@@ -2648,14 +2726,16 @@ public class MessageHelper {
             envelop.addAll(Arrays.asList(from));
         if (smtp_from != null)
             envelop.addAll(Arrays.asList(smtp_from));
-        for (String signer : signers)
+        for (String signer : signers) {
+            String sdomain = UriHelper.getRootDomain(context, signer);
+            if (sdomain == null)
+                continue;
             for (Address a : envelop) {
-                String domain = UriHelper.getEmailDomain(((InternetAddress) a).getAddress());
-                if (signer != null && domain != null && Objects.equals(
-                        UriHelper.getRootDomain(context, signer.toLowerCase(Locale.ROOT)),
-                        UriHelper.getRootDomain(context, domain.toLowerCase(Locale.ROOT))))
+                String edomain = UriHelper.getEmailDomain(((InternetAddress) a).getAddress());
+                if (sdomain.equalsIgnoreCase(UriHelper.getRootDomain(context, edomain)))
                     return true;
             }
+        }
         return false;
     }
 
@@ -2860,7 +2940,7 @@ public class MessageHelper {
             int s = list.indexOf('<');
             int e = list.indexOf('>', s + 1);
             while (s >= 0 && e > s) {
-                String unsubscribe = list.substring(s + 1, e);
+                String unsubscribe = list.substring(s + 1, e).trim();
                 if (TextUtils.isEmpty(unsubscribe))
                     ; // Empty address
                 else if (unsubscribe.toLowerCase(Locale.ROOT).startsWith("mailto:")) {
@@ -2878,8 +2958,7 @@ public class MessageHelper {
                 else {
                     if (link == null) {
                         Uri uri = Uri.parse(unsubscribe);
-                        String scheme = uri.getScheme();
-                        if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))
+                        if (UriHelper.isHyperLink(uri))
                             link = unsubscribe;
                         else {
                             Pattern p =
@@ -3101,6 +3180,10 @@ public class MessageHelper {
         if (kv.containsKey("by")) {
             String by = kv.get("by").toString();
             if (by.matches(".*\\.google\\.com"))
+                return true;
+            if (by.toLowerCase(Locale.ROOT).contains("sendmail"))
+                return true;
+            if (by.startsWith("filterdrecv-"))
                 return true;
             if (isLocal(by)) {
                 Log.i("--- local by=" + by);

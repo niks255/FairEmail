@@ -549,7 +549,8 @@ public class FragmentFolders extends FragmentBase {
                         Collections.sort(folders, folders.get(0).getComparator(context));
 
                     for (EntityFolder folder : folders) {
-                        EntityOperation.sync(context, folder.id, true, force);
+                        if (EntityOperation.sync(context, folder.id, true, force))
+                            reload = true;
 
                         if (folder.account == null)
                             outbox = true;
@@ -569,7 +570,7 @@ public class FragmentFolders extends FragmentBase {
                 }
 
                 if (force || reload)
-                    ServiceSynchronize.reload(context, null, force, "refresh");
+                    ServiceSynchronize.reload(context, aid < 0 ? null : aid, force, "refresh");
                 else
                     ServiceSynchronize.eval(context, "refresh");
 
@@ -585,8 +586,8 @@ public class FragmentFolders extends FragmentBase {
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalStateException) {
-                    Snackbar snackbar = Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true);
+                    Snackbar snackbar = Helper.setSnackbarOptions(
+                            Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG));
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -597,8 +598,9 @@ public class FragmentFolders extends FragmentBase {
                     });
                     snackbar.show();
                 } else if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -1557,8 +1559,8 @@ public class FragmentFolders extends FragmentBase {
                             message.tls = helper.getTLS();
                             message.dkim = MessageHelper.getAuthentication("dkim", authentication);
                             message.spf = MessageHelper.getAuthentication("spf", authentication);
-                            if (message.spf == null && helper.getSPF())
-                                message.spf = true;
+                            if (message.spf == null)
+                                message.spf = helper.getSPF();
                             message.dmarc = MessageHelper.getAuthentication("dmarc", authentication);
                             message.auth = MessageHelper.getAuthentication("auth", authentication);
                             message.smtp_from = helper.getMailFrom(authentication);

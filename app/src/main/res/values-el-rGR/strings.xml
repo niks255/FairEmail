@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_password">Θέλω να εξουσιοδοτήσω έναν λογαριασμό με έναν κωδικό πρόσβασης αντί για έναν λογαριασμό στη συσκευή</string>
     <string name="title_setup_office_auth">Το σφάλμα \'ΠΙΣΤΟΠΟΙΗΣΗ απέτυχε\' μπορεί να προκληθεί επειδή το IMAP/SMTP έχει απενεργοποιηθεί από το διαχειριστή του συστήματος</string>
     <string name="title_setup_office_auth_5_7_3">Παρακαλώ, δοκιμάστε τον οδηγό γρήγορης ρύθμισης: \"Άλλος πάροχος\".</string>
+    <string name="title_setup_office_auth_5_7_139">Παρακαλώ, δοκιμάστε τον οδηγό γρήγορης ρύθμισης του Outlook/Hotmail/Live.</string>
     <string name="title_setup_oauth_rationale">Παραχωρήστε πρόσβαση στον λογαριασμό σας %1$s</string>
     <string name="title_setup_oauth_update">Εκ νέου εξουσιοδότηση ενός ήδη υπάρχοντος λογαριασμού (διαφορετικά, δημιουργήστε έναν καινούργιο λογαριασμό)</string>
     <string name="title_setup_oauth_updated">Η εξουσιοδότηση λογαριασμού ενημερώθηκε</string>
@@ -329,8 +330,7 @@
     <string name="title_setup_reset_full">Προβολή αρχικών μηνυμάτων</string>
     <string name="title_check_gmail_oauth">Οι λογαριασμοί σας Gmail θα συνεχίσουν να λειτουργούν μετά τις 30 Μαΐου 2022</string>
     <string name="title_check_gmail_password">Ορισμένοι από τους λογαριασμούς σας Gmail ενδέχεται να σταματήσουν να λειτουργούν μετά τις 30 Μαΐου 2022</string>
-    <string name="title_check_outlook_oauth">Οι λογαριασμοί σας Outlook θα εξακολουθήσουν να λειτουργούν μετά την 1η Οκτωβρίου 2022</string>
-    <string name="title_check_outlook_password">Ορισμένοι από τους λογαριασμούς σας Outlook ενδέχεται να σταματήσουν να λειτουργούν μετά την 1η Οκτωβρίου 2022</string>
+    <string name="title_check_outlook_password">Κάποιοι από τους λογαριασμούς σας Outlook/Hotmail/Live θα σταματήσουν να λειτουργούν μετά τις 16 Σεπτεμβρίου 2024</string>
     <string name="title_advanced_hint_title">Πιο προηγμένες επιλογές</string>
     <string name="title_advanced_hint_message">        Τώρα περιηγείστε στις πιο προχωρημένες ρυθμίσεις.        Όλες οι επιλογές έχουν τις πιο συνηθισμένες τυπικές τιμές, τις οποίες δεν χρειάζεται να αλλάξετε εκτός εάν έχετε μία διαφορετική προτίμηση.
     </string>
@@ -396,6 +396,7 @@
     <string name="title_advanced_send_nav_color">Χρήση του χρώματος ταυτότητας για την κάτω γραμμή ενεργειών</string>
     <string name="title_advanced_send_reminders">Εμφάνιση υπενθυμίσεων</string>
     <string name="title_advanced_send_delayed">Καθυστέρηση αποστολής μηνυμάτων</string>
+    <string name="title_advanced_send_top">Προβολή κουμπιού αποστολής στην κορυφή</string>
     <string name="title_advanced_attach_new">Δημιουργία νέου προσχεδίου μηνύματος για κοινόχρηστες διευθύνσεις και αρχεία</string>
     <string name="title_advanced_answer_caption">Ρυθμίσεις κουμπιού απάντησης</string>
     <string name="title_advanced_answer_default">Το σύντομο πάτημα στο κουμπί απάντησης θα:</string>
@@ -774,6 +775,10 @@
     <string name="title_advanced_gemini">Ενσωμάτωση Gemini</string>
     <string name="title_advanced_multi_modal">Πολυτροπικό</string>
     <string name="title_advanced_summarize_prompt">Εντολή για σύνοψη</string>
+    <string name="title_advanced_answer_prompt">Προτροπή για απάντηση</string>
+    <string name="title_advanced_system_instructions">Οδηγίες συστήματος</string>
+    <string name="title_advanced_default_prompt">Προεπιλεγμένη προτροπή</string>
+    <string name="title_advanced_entered_text">Εισηγμένο κείμενο</string>
     <string name="title_advanced_sdcard">Θέλω να χρησιμοποιήσω μια κάρτα SD</string>
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
     <string name="title_advanced_updates">Έλεγχος για ενημερώσεις στο GitHub</string>
@@ -785,6 +790,7 @@
     <string name="title_advanced_crash_reports">Αποστολή αναφοράς σφαλμάτων</string>
     <string name="title_advanced_cleanup_attachments">Διαγραφή συνημμένων από παλιά μηνύματα</string>
     <string name="title_advanced_cleanup">Καθαρισμός</string>
+    <string name="title_advanced_google_backup">Χρήση αντιγράφου ασφαλείας δεδομένων του Android</string>
     <string name="title_advanced_app">Ρυθμίσεις εφαρμογής</string>
     <string name="title_advanced_more">Περισσότερες επιλογές</string>
     <string name="title_advanced_main_log">Κύρια καταγραφή</string>
@@ -830,7 +836,7 @@
     <string name="title_advanced_metered_warning">Αν απενεργοποιηθεί, θα απενεργοποιηθούν η λήψη και η αποστολή μηνυμάτων σε κινητές συνδέσεις διαδικτύου</string>
     <string name="title_advanced_rlah_hint">Υπό την προϋπόθεση ότι δεν λαμβάνει χώρα περιαγωγή εντός της ΕΕ</string>
     <string name="title_advanced_usage_hint">Θα αυξήσει τη χρήση μπαταρίας, δεδομένων και χώρου αποθήκευσης</string>
-    <string name="title_advanced_plain_hint">Εάν ενεργοποιηθεί, θα περιοριστεί η χρήση δεδομένων, αλλά τα μηνύματα θα προβάλλονται χωρίς μορφοποίηση</string>
+    <string name="title_advanced_plain_hint">Εάν ενεργοποιηθεί, θα περιοριστεί η χρήση δεδομένων, αλλά τα μηνύματα θα προβάλλονται χωρίς μορφοποίηση και χωρίς εικόνες</string>
     <string name="title_advanced_plain_remark">Το τμήμα απλού κειμένου δεν περιέχει πάντα το πλήρες μήνυμα!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Αν ενεργοποιηθεί, μπορεί να προκαλέσει προβλήματα σύνδεσης σε ορισμένες συσκευές και ίσως αυξήσει την κατανάλωση μπαταρίας</string>
     <string name="title_advanced_validate_hint">Μπορεί να οδηγήσει σε μη συγχρονισμό μηνυμάτων, για παράδειγμα όταν χρησιμοποιείτε VPN, αλλά και σε άλλες περιπτώσεις</string>
@@ -979,6 +985,7 @@
     <string name="title_case_sensitive">Τα ονόματα χρηστών και οι κωδικοί πρόσβασης επηρεάζονται συνήθως από τις αλλαγές κεφαλαίων και μικρών γραμμάτων</string>
     <string name="title_login_before_send">Λήψη πριν από την αποστολή</string>
     <string name="title_client_certificate">Πιστοποιητικό πελάτη</string>
+    <string name="title_no_key_selected">Δεν έχει επιλεγεί κλειδί ή δεν υπάρχουν διαθέσιμα κλειδιά</string>
     <string name="title_realm">Realm</string>
     <string name="title_use_ip">Χρήση τοπικής διεύθυνσης IP αντί για το όνομα του υπολογιστή</string>
     <string name="title_ehlo">Προσαρμοσμένη ταυτοποίηση HELO/EHLO</string>
@@ -987,9 +994,12 @@
     <string name="title_primary_identity">Κύρια (προεπιλεγμένη ταυτότητα)</string>
     <string name="title_self_identity">Αφαίρεση διεύθυνσης ηλ. ταχυδρομείου κατά την απάντηση</string>
     <string name="title_leave_on_server">Να παραμένουν τα μηνύματα στον διακομιστή</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Μετά τη λήψη μηνυμάτων από τον διακομιστή, τα μηνύματα παραμένουν στον διακομιστή</string>
     <string name="title_client_delete">Ενεργή διαγραφή μηνυμάτων μετά το κατέβασμα</string>
     <string name="title_leave_deleted">Να παραμένουν τα διεγραμμένα μηνύματα στον διακομιστή</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Μετά τη διαγραφή μηνυμάτων από τη συσκευή, τα μηνύματα θα παραμείνουν στον διακομιστή</string>
     <string name="title_leave_on_device">Να παραμένουν τα μηνύματα στη συσκευή</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Όταν τα μηνύματα διαγράφονται από τον διακομιστή, τα μηνύματα παραμένουν στη συσκευή</string>
     <string name="title_max_messages">Μέγιστος αριθμός μηνυμάτων για κατέβασμα (κενό για όλα)</string>
     <string name="title_max_messages_keep">Αυτός είναι ο μέγιστος αριθμός μηνυμάτων που θα διατηρηθούν στη συσκευή</string>
     <string name="title_max_messages_remark">        Εισάγετε έναν θετικό αριθμό για να κατεβάσετε τα μηνύματα στο τέλος (το πιο συνηθισμένο)
@@ -1214,6 +1224,7 @@
     <string name="title_create_rule">Δημιουργία κανόνα &#8230;</string>
     <string name="title_full_screen">Πλήρης οθόνη</string>
     <string name="title_force_light">Υποχρεωτικό φωτεινό θέμα</string>
+    <string name="title_rename">Μετονομασία</string>
     <string name="title_share">Κοινοποίηση</string>
     <string name="title_event">Προσθήκη στο ημερολόγιο</string>
     <string name="title_pin">Προσθήκη συντόμευσης</string>
@@ -1358,8 +1369,11 @@
     <string name="title_third_party">Χρησιμοποιείτε μια έκδοση ενός τρίτου παρόχου</string>
     <string name="title_expand_warning">Αν αναπτυχθεί αυτό το μήνυμα, θα κατέβει %1$s</string>
     <string name="title_download_message">Κατεβαίνει &#8230;</string>
-    <string name="title_reformatted">        Αυτή είναι η προβολή επαναμορφοποιημένου μηνύματος.        Μπορείτε να πατήσετε στο εικονίδιο &#x26F6; για να δείτε το αρχικό μήνυμα και να κρύψετε το παρόν μήνυμα.
-        Η επαναμορφοποίηση μηνυμάτων απαιτεί λίγο χρόνο, ανάλογα με το μέγεθος του μηνύματος και την ταχύτητα της συσκευής σας.
+    <string name="title_reformatted">        Αυτή είναι η ασφαλής, επαναμορφοποιημένη προβολή μηνύματος.
+        Μπορείτε να πατήσετε το εικονίδιο &#x26F6; για να δείτε το αρχικό, λιγότερο ασφαλές μήνυμα και να κρύψετε την παρούσα ειδοποίηση.
+        Η επαναμορφοποίηση των μηνυμάτων απαιτεί λίγο χρόνο, ανάλογα με το μέγεθος του μηνύματος και την ταχύτητα της συσκευής σας.
+        Μερικές φορές απαιτείται η προβολή του αρχικού μηνύματος για να γίνουν ορατοί οι κώδικες QR.
+    
     </string>
     <string name="title_compose">Σύνταξη</string>
     <string name="title_submitter">Στάλθηκε από:</string>
@@ -1512,6 +1526,9 @@
     <string name="title_dsn_reminder">Οι σκληρές αναπηδήσεις (hard bounces) βλάπτουν την αξιοπιστία της ηλ. διεύθυνσης του αρχικού αποστολέα!</string>
     <string name="title_size_reminder">Μήνυμα (%1$s) πιο μεγάλο από το όριο του διακομιστή (%2$s)</string>
     <string name="title_attachments_missing">Δεν έχουν κατέβει όλα τα συνημμένα</string>
+    <string name="title_download_attachments">Λήψη συνημμένων</string>
+    <string name="title_attachments_download">Συνημμένα που λήφθηκαν: %1$s</string>
+    <string name="title_attachments_no_download">Αυτό δεν θα εμφανίζεται πλέον, ούτε θα γίνεται αυτόματη λήψη συνημμένων</string>
     <string name="title_dialog_hint">Ο διάλογος αυτός μπορεί να ενεργοποιηθεί πάλι από το μενού με τις τρεις τελείες στην πάνω γραμμή ενεργειών</string>
     <string name="title_draft_deleted">Το πρόχειρο απορρίφθηκε</string>
     <string name="title_draft_saved">Το πρόχειρο αποθηκεύτηκε</string>
@@ -1663,6 +1680,7 @@
     <string name="title_answer_favorite">Αγαπημένα</string>
     <string name="title_answer_snippet">Απόσπασμα</string>
     <string name="title_answer_receipt">Χρήση ως αποδεικτικού ανάγνωσης</string>
+    <string name="title_answer_ai">Χρήση ως προτροπή τεχνητής νοημοσύνης</string>
     <string name="title_answer_hide">Απόκρυψη από τα μενού</string>
     <string name="title_answer_text">Κείμενο προτύπου</string>
     <string name="title_answer_placeholder">Κρατημένη θέση</string>
@@ -1766,6 +1784,8 @@
     <string name="title_rule_tts_subject">Θέμα</string>
     <string name="title_rule_tts_content">Κείμενο</string>
     <string name="title_rule_select_sound">Επιλογή ήχου</string>
+    <string name="title_rule_select_sound_ringtone">Ήχος κλήσης</string>
+    <string name="title_rule_select_sound_audio">Αρχείο ήχου</string>
     <string name="title_rule_use_as_alarm">Να χρησιμοποιείται ως ξυπνητήρι</string>
     <string name="title_rule_alarm_hint">Αυτό θα αγνοήσει τους κανόνες \"Μην ενοχλείτε\"</string>
     <string name="title_rule_alarm_duration">Μέγιστη διάρκεια ξυπνητηριού (δευτερόλεπτα)</string>
@@ -1906,6 +1926,7 @@
     <string name="title_hint_dismiss">Μπορείτε να απορρίψετε αυτό το παράθυρο διαλόγου, για να αφαιρέσετε την ειδοποίηση.</string>
     <string name="title_hint_support">Αν έχετε μία ερώτηση ή ένα πρόβλημα, παρακαλώ χρησιμοποιήστε το μενού \"Υποστήριξη\" για να λάβετε βοήθεια</string>
     <string name="title_hint_message_actions">Σάρωση αριστερά για απορρίμματα• σάρωση δεξιά για αρχειοθέτηση (αν είναι διαθέσιμη)• μπορείτε να ρυθμίσετε τις ενέργειες σάρωσης στις ρυθμίσεις του λογαριασμού</string>
+    <string name="title_hint_outbox">Μπορείτε να σύρετε προς τα αριστερά ή δεξιά για να ακυρωθεί η αποστολή</string>
     <string name="title_hint_message_selection">Πατήστε παρατεταμένα σε ένα μήνυμα για να αρχίσετε να επιλέγετε πολλαπλά μηνύματα. Συνεχίστε το πάτημα και σύρετε προς τα πάνω ή κάτω για να επιλέξετε περισσότερα μηνύματα</string>
     <string name="title_hint_message_junk">        Ένας πελάτης ταχυδρομείου προβάλλει, ουσιαστικά, τα μηνύματα ενός διακομιστή ταχυδρομείου.
         Ένας διακομιστής ταχυδρομείου είναι υπεύθυνος για το φιλτράρισμα ανεπιθύμητων μηνυμάτων, όχι ένας πελάτης ταχυδρομείου.
@@ -1970,6 +1991,7 @@
     <string name="title_ask_what">Ερώτηση για το τι πρέπει να γίνεται</string>
     <string name="title_no_ask_again">Να μην ερωτηθώ ξανά</string>
     <string name="title_no_ask_for_again">Να μην ερωτηθώ ξανά για %1$s</string>
+    <string name="title_no_show_again">Να μην εμφανιστεί ξανά</string>
     <string name="title_undo_privacy">Αυτό μπορεί να αναιρεθεί στην καρτέλα με τις ρυθμίσεις απορρήτου</string>
     <string name="title_no_body">Δεν βρέθηκε κανένα κείμενο μηνύματος</string>
     <string name="title_large_body">Το μήνυμα αυτό είναι πολύ μεγάλο και μπορεί να προκύψουν προβλήματα!</string>
@@ -2055,6 +2077,7 @@
     <string name="title_widget_folder_unified">Φάκελοι ενοποιημένων εισερχομένων</string>
     <string name="title_widget_folder_notifying">Φάκελοι με ειδοποιήσεις νέων μηνυμάτων</string>
     <string name="title_widget_unseen">Μη αναγνωσμένα μηνύματα μόνο</string>
+    <string name="title_widget_show_unseen">Προβολή ως μη αναγνωσμένο</string>
     <string name="title_widget_flagged">Μηνύματα με αστέρι μόνο</string>
     <string name="title_widget_font_size">Μέγεθος κειμένου</string>
     <string name="title_widget_padding">Μέγεθος διαστήματος μεταξύ μηνυμάτων</string>

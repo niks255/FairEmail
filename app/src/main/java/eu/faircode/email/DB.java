@@ -70,7 +70,7 @@ import javax.mail.internet.InternetAddress;
 // https://developer.android.com/topic/libraries/architecture/room.html
 
 @Database(
-        version = 294,
+        version = 296,
         entities = {
                 EntityIdentity.class,
                 EntityAccount.class,
@@ -420,8 +420,7 @@ public abstract class DB extends RoomDatabase {
                 Log.i("Disabled view invalidation");
             } catch (ReflectiveOperationException ex) {
                 // Should never happen
-                Log.forceCrashReporting();
-                Log.e(ex);
+                Log.forceCrashReport(context, ex);
             }
 
             sInstance.getInvalidationTracker().addObserver(new InvalidationTracker.Observer(DB_TABLES) {
@@ -462,8 +461,7 @@ public abstract class DB extends RoomDatabase {
                 }
             } catch (Throwable ex) {
                 // Should never happen
-                Log.forceCrashReporting();
-                Log.e(ex);
+                Log.forceCrashReport(context, ex);
             }
             Log.i("DB critical section end");
         }
@@ -589,8 +587,7 @@ public abstract class DB extends RoomDatabase {
                                 at androidx.room.RoomDatabase.inTransaction(RoomDatabase.java:706)
                              */
                             // Should never happen
-                            Log.forceCrashReporting();
-                            Log.e(ex);
+                            Log.forceCrashReport(context, ex);
                             // FrameworkSQLiteOpenHelper.innerGetDatabase will delete the database
                             throw ex;
                         }
@@ -3009,6 +3006,18 @@ public abstract class DB extends RoomDatabase {
                     public void migrate(@NonNull SupportSQLiteDatabase db) {
                         logMigration(startVersion, endVersion);
                         db.execSQL("ALTER TABLE `identity` ADD COLUMN `login` INTEGER NOT NULL DEFAULT 0");
+                    }
+                }).addMigrations(new Migration(294, 295) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("ALTER TABLE `answer` ADD COLUMN `ai` INTEGER NOT NULL DEFAULT 0");
+                    }
+                }).addMigrations(new Migration(295, 296) {
+                    @Override
+                    public void migrate(@NonNull SupportSQLiteDatabase db) {
+                        logMigration(startVersion, endVersion);
+                        db.execSQL("UPDATE `identity` SET `use_ip` = 0 WHERE host = 'sslout.df.eu'");
                     }
                 }).addMigrations(new Migration(998, 999) {
                     @Override

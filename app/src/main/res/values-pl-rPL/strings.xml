@@ -227,6 +227,7 @@
     <string name="title_setup_gmail_password">Chcę autoryzować konto za pomocą hasła zamiast konta na urządzeniu</string>
     <string name="title_setup_office_auth">Błąd \"AUTHENTICATE failed\" może być spowodowany wyłączeniem protokołu IMAP/SMTP przez administratora systemu</string>
     <string name="title_setup_office_auth_5_7_3">Wypróbuj kreatora szybkiej konfiguracji od „innego dostawcy”.</string>
+    <string name="title_setup_office_auth_5_7_139">Wypróbuj kreator szybkiej konfiguracji „Outlook/Hotmail/Live”.</string>
     <string name="title_setup_oauth_rationale">Autoryzuj dostęp do Twojego konta %1$s</string>
     <string name="title_setup_oauth_update">Autoryzuj istniejące konto ponownie (w przeciwnym razie utwórz nowe konto)</string>
     <string name="title_setup_oauth_updated">Autoryzacja konta została zaktualizowana</string>
@@ -357,8 +358,7 @@
     <string name="title_setup_reset_full">Pokaż oryginalne wiadomości</string>
     <string name="title_check_gmail_oauth">Twoje konta Gmail będą nadal działać po 30 maja 2022</string>
     <string name="title_check_gmail_password">Niektóre z Twoich kont Gmail mogą przestać działać po 30 maja 2022</string>
-    <string name="title_check_outlook_oauth">Twoje konta Outlook będą nadal działać po 1 października 2022</string>
-    <string name="title_check_outlook_password">Niektóre z Twoich kont Outlook mogą przestać działać po 1 października 2022</string>
+    <string name="title_check_outlook_password">Niektóre Twoje konta Outlook/Hotmail/Live przestaną działać po 16 września 2024 r.</string>
     <string name="title_advanced_hint_title">Ustawienia zaawansowane</string>
     <string name="title_advanced_hint_message">        Przechodzisz do bardziej zaawansowanych opcji.         Wszystkie opcje mają powszechnie używane wartości standardowe, których nie trzeba zmieniać, chyba że masz inne preferencje.
     </string>
@@ -424,6 +424,7 @@
     <string name="title_advanced_send_nav_color">Użyj koloru identyfikatora w dolnym pasku zadań</string>
     <string name="title_advanced_send_reminders">Pokaż przypomnienia</string>
     <string name="title_advanced_send_delayed">Opóźnienie wysyłania wiadomości</string>
+    <string name="title_advanced_send_top">Pokaż przycisk wysyłania na górze</string>
     <string name="title_advanced_attach_new">Utwórz nowy szkic wiadomości dla udostępnianych adresów i plików</string>
     <string name="title_advanced_answer_caption">Ustawienia przycisku odpowiedzi</string>
     <string name="title_advanced_answer_default">Krótkie naciśnięcie przycisku odpowiedzi spowoduje:</string>
@@ -803,6 +804,10 @@
     <string name="title_advanced_gemini">Integracja z Gemini</string>
     <string name="title_advanced_multi_modal">Wielomodalny</string>
     <string name="title_advanced_summarize_prompt">Podsumowanie podpowiedzi</string>
+    <string name="title_advanced_answer_prompt">Prośba o odpowiedź</string>
+    <string name="title_advanced_system_instructions">Instrukcje systemowe</string>
+    <string name="title_advanced_default_prompt">Komunikat domyślny</string>
+    <string name="title_advanced_entered_text">Wprowadzony tekst</string>
     <string name="title_advanced_sdcard">Chcę użyć karty SD</string>
     <string name="title_advanced_watchdog">Okresowo sprawdzaj, czy FairEmail jest nadal aktywny</string>
     <string name="title_advanced_updates">Sprawdź aktualizacje GitHub</string>
@@ -815,6 +820,7 @@
     <string name="title_advanced_cleanup_attachments">Usuń załączniki starych wiadomości</string>
     <string name="title_advanced_cleanup">Oczyszczanie</string>
     <string name="title_advanced_last_cleanup">Ostatnie czyszczenie: %1$s</string>
+    <string name="title_advanced_google_backup">Używaj kopii zapasowej danych Androida</string>
     <string name="title_advanced_app">Ustawienia aplikacji</string>
     <string name="title_advanced_more">Więcej opcji</string>
     <string name="title_advanced_main_log">Logowanie główne</string>
@@ -860,7 +866,7 @@
     <string name="title_advanced_metered_warning">Wyłączenie tej opcji uniemożliwi odbieranie i wysyłanie wiadomości przy użyciu komórkowego połączenia internetowego</string>
     <string name="title_advanced_rlah_hint">Zakładając brak roamingu w UE</string>
     <string name="title_advanced_usage_hint">Zwiększy to zużycie baterii, danych i przestrzeni dyskowej</string>
-    <string name="title_advanced_plain_hint">Włączenie tej opcji ograniczy wykorzystanie danych, ale wiadomości będą wyświetlane bez stylizacji</string>
+    <string name="title_advanced_plain_hint">Włączenie tej opcji ograniczy zużycie danych, ale wiadomości będą wyświetlane bez stylizacji i obrazów</string>
     <string name="title_advanced_plain_remark">Część tekstowa nie zawsze zawiera pełną wiadomość!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Włączenie tej funkcji może powodować problemy z połączeniem na niektórych urządzeniach i może zwiększyć zużycie baterii</string>
     <string name="title_advanced_validate_hint">Może to skutkować brakiem synchronizacji wiadomości, na przykład podczas korzystania z VPN, ale również w innych sytuacjach</string>
@@ -1009,6 +1015,7 @@
     <string name="title_case_sensitive">W nazwach użytkowników i hasłach rozróżniane są małe i wielkie litery</string>
     <string name="title_login_before_send">Odbieraj przed wysyłaniem</string>
     <string name="title_client_certificate">Certyfikat klienta</string>
+    <string name="title_no_key_selected">Brak wybranego klucza lub brak dostępnych kluczy</string>
     <string name="title_realm">Realm</string>
     <string name="title_use_ip">Użyj lokalnego adresu IP zamiast nazwy hosta</string>
     <string name="title_ehlo">Własna identyfikacja HELO/EHLO</string>
@@ -1017,9 +1024,12 @@
     <string name="title_primary_identity">Podstawowe (domyślna tożsamość)</string>
     <string name="title_self_identity">Usuń adres e-mail podczas odpowiedzi</string>
     <string name="title_leave_on_server">Pozostaw wiadomości na serwerze</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Po pobraniu wiadomości z serwera wiadomości pozostają na serwerze</string>
     <string name="title_client_delete">Aktywnie usuwaj wiadomości po pobraniu</string>
     <string name="title_leave_deleted">Pozostaw usunięte wiadomości na serwerze</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Po usunięciu wiadomości z urządzenia wiadomości pozostaną na serwerze</string>
     <string name="title_leave_on_device">Pozostaw wiadomości na urządzeniu</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Gdy wiadomości zostaną usunięte z serwera, wiadomości pozostają na urządzeniu</string>
     <string name="title_max_messages">Maksymalna liczba wiadomości do pobrania (puste dla wszystkich)</string>
     <string name="title_max_messages_keep">To jest maksymalna liczba wiadomości, które będą przechowywane na urządzeniu</string>
     <string name="title_max_messages_remark">        Wpisz liczbę dodatnią, aby pobrać wiadomości na końcu (najczęściej spotykane)
@@ -1244,6 +1254,7 @@
     <string name="title_create_rule">Utwórz regułę &#8230;</string>
     <string name="title_full_screen">Pełny ekran</string>
     <string name="title_force_light">Wymuś jasny motyw</string>
+    <string name="title_rename">Zmień nazwę</string>
     <string name="title_share">Udostępnij</string>
     <string name="title_event">Dodaj do kalendarza</string>
     <string name="title_pin">Dodaj skrót</string>
@@ -1388,8 +1399,10 @@
     <string name="title_third_party">Używasz wersji od innych firm</string>
     <string name="title_expand_warning">Rozwinięcie tej wiadomości spowoduje pobranie %1$s</string>
     <string name="title_download_message">Pobieranie &#8230;</string>
-    <string name="title_reformatted">        To jest sformatowany widok wiadomości.         Możesz dotknąć &#x26F6; ikonę, aby wyświetlić oryginalną wiadomość i ukryć tę wiadomość.
-         Ponowne formatowanie wiadomości może zająć trochę czasu, w zależności od rozmiaru wiadomości i szybkości urządzenia.
+    <string name="title_reformatted">Jest to bezpieczny, sformatowany widok wiadomości.
+        Możesz dotknąć ikony &#x26F6;, aby wyświetlić mniej bezpieczną oryginalną wiadomość i ukryć tę wiadomość.
+        Ponowne formatowanie wiadomości zajmuje trochę czasu, w zależności od rozmiaru wiadomości i szybkości urządzenia.
+        Czasami konieczne jest wyświetlenie oryginalnej wiadomości, aby zobaczyć kody QR.
     </string>
     <string name="title_compose">Napisz</string>
     <string name="title_submitter">Wysłane przez:</string>
@@ -1542,6 +1555,9 @@
     <string name="title_dsn_reminder">\"Twarde odbicia\" szkodzą reputacji e-mail odbiorcy!</string>
     <string name="title_size_reminder">Wiadomość (%1$s) większa niż limit serwera (%2$s)</string>
     <string name="title_attachments_missing">Nie wszystkie załączniki zostały pobrane</string>
+    <string name="title_download_attachments">Pobierz załączniki</string>
+    <string name="title_attachments_download">Pobrane załączniki: %1$s</string>
+    <string name="title_attachments_no_download">To nie będzie już wyświetlane, również załączniki nie będą pobierane automatycznie</string>
     <string name="title_dialog_hint">To okno dialogowe można ponownie włączyć za pomocą menu z trzema kropkami na górnym pasku akcji</string>
     <string name="title_draft_deleted">Szkic odrzucony</string>
     <string name="title_draft_saved">Szkic zapisany</string>
@@ -1694,6 +1710,7 @@
     <string name="title_answer_favorite">Ulubione</string>
     <string name="title_answer_snippet">Fragment tekstu</string>
     <string name="title_answer_receipt">Użyj jako potwierdzenia przeczytania</string>
+    <string name="title_answer_ai">Używaj jako komunikatu domyślnego</string>
     <string name="title_answer_hide">Ukryj z menu</string>
     <string name="title_answer_text">Tekst szablonu</string>
     <string name="title_answer_placeholder">Symbol zastępczy</string>
@@ -1797,6 +1814,8 @@
     <string name="title_rule_tts_subject">Temat</string>
     <string name="title_rule_tts_content">Tekst</string>
     <string name="title_rule_select_sound">Wybierz dźwięk</string>
+    <string name="title_rule_select_sound_ringtone">Dzwonek</string>
+    <string name="title_rule_select_sound_audio">Plik audio</string>
     <string name="title_rule_use_as_alarm">Użyj jako alarmu</string>
     <string name="title_rule_alarm_hint">To zignoruje zasady \"nie przeszkadzać\"</string>
     <string name="title_rule_alarm_duration">Maksymalny czas trwania alarmu (sekundy)</string>
@@ -1937,6 +1956,7 @@
     <string name="title_hint_dismiss">Możesz odrzucić to okno dialogowe, aby usunąć to powiadomienie.</string>
     <string name="title_hint_support">Jeśli masz pytanie lub problem, użyj menu Pomoc, aby uzyskać pomoc</string>
     <string name="title_hint_message_actions">Przesuń w lewo, aby wyrzucić do kosza; Przesuń w prawo, aby zarchiwizować (jeśli dostępne); Działania przeciągnięcia można skonfigurować w ustawieniach konta</string>
+    <string name="title_hint_outbox">Możesz przesunąć w lewo lub w prawo, aby anulować wysyłanie</string>
     <string name="title_hint_message_selection">Naciśnij długo wiadomość, aby rozpocząć wybieranie wielu wiadomości; Przytrzymaj i przeciągnij w górę lub w dół, aby wybrać więcej wiadomości</string>
     <string name="title_hint_message_junk">        Klient poczty elektronicznej zasadniczo wyświetla wiadomości na serwerze poczty elektronicznej.
         Serwer pocztowy jest odpowiedzialny za filtrowanie spamu, a nie klient poczty.
@@ -2001,6 +2021,7 @@
     <string name="title_ask_what">Zapytaj co zrobić</string>
     <string name="title_no_ask_again">Nie pytaj ponownie</string>
     <string name="title_no_ask_for_again">Nie pytaj ponownie o %1$s</string>
+    <string name="title_no_show_again">Nie pokazuj tego ponownie</string>
     <string name="title_undo_privacy">To może zostać cofnięte na stronie ustawień prywatności</string>
     <string name="title_no_body">Nie znaleziono tekstu wiadomości</string>
     <string name="title_large_body">Ta wiadomość jest bardzo duża i może to powodować problemy!</string>
@@ -2085,6 +2106,7 @@
     <string name="title_widget_folder_unified">Foldery wspólnej skrzynki odbiorczej</string>
     <string name="title_widget_folder_notifying">Foldery z powiadomieniami o nowej wiadomości</string>
     <string name="title_widget_unseen">Tylko nieprzeczytane wiadomości</string>
+    <string name="title_widget_show_unseen">Pokaż jako nieprzeczytane</string>
     <string name="title_widget_flagged">Tylko oznaczone</string>
     <string name="title_widget_font_size">Rozmiar tekstu</string>
     <string name="title_widget_padding">Rozmiar wypełnienia</string>

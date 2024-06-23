@@ -23,12 +23,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 
 import androidx.preference.PreferenceManager;
 
 import org.json.JSONException;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,28 +44,77 @@ public class AI {
         return (OpenAI.isAvailable(context) || Gemini.isAvailable(context));
     }
 
-    static String completeChat(Context context, long id, CharSequence body) throws JSONException, IOException {
-        if (body == null || TextUtils.isEmpty(body.toString().trim()))
-            body = "?";
+    static Spanned completeChat(Context context, long id, CharSequence body, long template) throws JSONException, IOException {
+        if (body == null)
+            body = "";
 
+        String reply = null;
+        if (body.length() == 0 || template < 0L /* Default */) {
+            File file = EntityMessage.getFile(context, id);
+            if (file.exists()) {
+                Document d = JsoupEx.parse(file);
+                Elements ref = d.select("div[fairemail=reference]");
+                if (!ref.isEmpty()) {
+                    d = Document.createShell("");
+                    d.appendChildren(ref);
+
+                    HtmlHelper.removeSignatures(d);
+                    HtmlHelper.truncate(d, MAX_SUMMARIZE_TEXT_SIZE);
+
+                    reply = d.text();
+                    if (TextUtils.isEmpty(reply.trim()))
+                        reply = null;
+                }
+            }
+        }
+
+        String templatePrompt = null;
+        if (template > 0L) {
+            DB db = DB.getInstance(context);
+            EntityAnswer t = db.answer().getAnswer(template);
+            if (t != null) {
+                String html = t.getData(context, null).getHtml();
+                templatePrompt = JsoupEx.parse(html).body().text();
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (OpenAI.isAvailable(context)) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String model = prefs.getString("openai_model", OpenAI.DEFAULT_MODEL);
             float temperature = prefs.getFloat("openai_temperature", OpenAI.DEFAULT_TEMPERATURE);
             boolean multimodal = prefs.getBoolean("openai_multimodal", false);
+            String defaultPrompt = prefs.getString("openai_answer", OpenAI.DEFAULT_ANSWER_PROMPT);
+            String systemPrompt = prefs.getString("openai_system", null);
 
-            OpenAI.Message message;
-            if (body instanceof Spannable && multimodal)
-                message = new OpenAI.Message(OpenAI.USER,
-                        OpenAI.Content.get((Spannable) body, id, context));
-            else
-                message = new OpenAI.Message(OpenAI.USER, new OpenAI.Content[]{
-                        new OpenAI.Content(OpenAI.CONTENT_TEXT, body.toString())});
+            List<OpenAI.Message> messages = new ArrayList<>();
 
-            OpenAI.Message[] completions =
-                    OpenAI.completeChat(context, model, new OpenAI.Message[]{message}, temperature, 1);
+            if (!TextUtils.isEmpty(systemPrompt))
+                messages.add(new OpenAI.Message(OpenAI.SYSTEM, new OpenAI.Content[]{
+                        new OpenAI.Content(OpenAI.CONTENT_TEXT, systemPrompt)}));
 
-            StringBuilder sb = new StringBuilder();
+            if (reply == null) {
+                if (templatePrompt != null)
+                    messages.add(new OpenAI.Message(OpenAI.USER, new OpenAI.Content[]{
+                            new OpenAI.Content(OpenAI.CONTENT_TEXT, templatePrompt)}));
+                if (body instanceof Spannable && multimodal)
+                    messages.add(new OpenAI.Message(OpenAI.USER,
+                            OpenAI.Content.get((Spannable) body, id, context)));
+                else
+                    messages.add(new OpenAI.Message(OpenAI.USER, new OpenAI.Content[]{
+                            new OpenAI.Content(OpenAI.CONTENT_TEXT, body.toString())}));
+            } else {
+                if (templatePrompt == null && body.length() > 0)
+                    templatePrompt = body.toString();
+                messages.add(new OpenAI.Message(OpenAI.USER, new OpenAI.Content[]{
+                        new OpenAI.Content(OpenAI.CONTENT_TEXT, templatePrompt == null ? defaultPrompt : templatePrompt)}));
+                messages.add(new OpenAI.Message(OpenAI.USER, new OpenAI.Content[]{
+                        new OpenAI.Content(OpenAI.CONTENT_TEXT, reply)}));
+            }
+
+            OpenAI.Message[] completions = OpenAI.completeChat(context,
+                    model, messages.toArray(new OpenAI.Message[0]), temperature, 1);
+
             for (OpenAI.Message completion : completions)
                 for (OpenAI.Content content : completion.getContent())
                     if (OpenAI.CONTENT_TEXT.equals(content.getType())) {
@@ -73,17 +124,28 @@ public class AI {
                                 .replaceAll("^\\n+", "")
                                 .replaceAll("\\n+$", ""));
                     }
-            return sb.toString();
         } else if (Gemini.isAvailable(context)) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String model = prefs.getString("gemini_model", Gemini.DEFAULT_MODEL);
             float temperature = prefs.getFloat("gemini_temperature", Gemini.DEFAULT_TEMPERATURE);
+            String defaultPrompt = prefs.getString("gemini_answer", Gemini.DEFAULT_ANSWER_PROMPT);
 
-            Gemini.Message message = new Gemini.Message(Gemini.USER,
-                    new String[]{Gemini.truncateParagraphs(body.toString())});
-            Gemini.Message[] completions = Gemini.generate(context, model, new Gemini.Message[]{message}, temperature, 1);
+            List<Gemini.Message> messages = new ArrayList<>();
 
-            StringBuilder sb = new StringBuilder();
+            if (reply == null) {
+                if (templatePrompt != null)
+                    messages.add(new Gemini.Message(Gemini.USER, new String[]{templatePrompt}));
+                messages.add(new Gemini.Message(Gemini.USER,
+                        new String[]{Gemini.truncateParagraphs(body.toString())}));
+            } else {
+                if (templatePrompt == null && body.length() > 0)
+                    templatePrompt = body.toString();
+                messages.add(new Gemini.Message(Gemini.USER, new String[]{templatePrompt == null ? defaultPrompt : templatePrompt}));
+                messages.add(new Gemini.Message(Gemini.USER, new String[]{reply}));
+            }
+
+            Gemini.Message[] completions = Gemini.generate(context,
+                    model, messages.toArray(new Gemini.Message[0]), temperature, 1);
+
             for (Gemini.Message completion : completions)
                 for (String result : completion.getContent()) {
                     if (sb.length() > 0)
@@ -92,9 +154,12 @@ public class AI {
                             .replaceAll("^\\n+", "")
                             .replaceAll("\\n+$", ""));
                 }
-            return sb.toString();
         } else
             throw new IllegalArgumentException("No AI available");
+
+        String html = Markdown.toHtml(sb.toString());
+        Document d = HtmlHelper.sanitizeCompose(context, html, false);
+        return HtmlHelper.fromDocument(context, d, null, null);
     }
 
     static String getSummarizePrompt(Context context) {
@@ -107,7 +172,7 @@ public class AI {
             return context.getString(R.string.title_summarize);
     }
 
-    static String getSummaryText(Context context, EntityMessage message) throws JSONException, IOException {
+    static Spanned getSummaryText(Context context, EntityMessage message, long template) throws JSONException, IOException {
         File file = message.getFile(context);
         if (!file.exists())
             return null;
@@ -125,15 +190,27 @@ public class AI {
 
         HtmlHelper.truncate(d, MAX_SUMMARIZE_TEXT_SIZE);
 
+        String templatePrompt = null;
+        if (template > 0L) {
+            DB db = DB.getInstance(context);
+            EntityAnswer t = db.answer().getAnswer(template);
+            if (t != null) {
+                String html = t.getData(context, null).getHtml();
+                templatePrompt = JsoupEx.parse(html).body().text();
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
         if (OpenAI.isAvailable(context)) {
             String model = prefs.getString("openai_model", OpenAI.DEFAULT_MODEL);
             float temperature = prefs.getFloat("openai_temperature", OpenAI.DEFAULT_TEMPERATURE);
-            String prompt = prefs.getString("openai_summarize", OpenAI.DEFAULT_SUMMARY_PROMPT);
+            String defaultPrompt = prefs.getString("openai_summarize", OpenAI.DEFAULT_SUMMARY_PROMPT);
             boolean multimodal = prefs.getBoolean("openai_multimodal", false);
 
             List<OpenAI.Message> input = new ArrayList<>();
             input.add(new OpenAI.Message(OpenAI.USER,
-                    new OpenAI.Content[]{new OpenAI.Content(OpenAI.CONTENT_TEXT, prompt)}));
+                    new OpenAI.Content[]{new OpenAI.Content(OpenAI.CONTENT_TEXT,
+                            templatePrompt == null ? defaultPrompt : templatePrompt)}));
 
             if (!TextUtils.isEmpty(message.subject))
                 input.add(new OpenAI.Message(OpenAI.USER,
@@ -150,7 +227,6 @@ public class AI {
             OpenAI.Message[] completions =
                     OpenAI.completeChat(context, model, input.toArray(new OpenAI.Message[0]), temperature, 1);
 
-            StringBuilder sb = new StringBuilder();
             for (OpenAI.Message completion : completions)
                 for (OpenAI.Content content : completion.getContent())
                     if (OpenAI.CONTENT_TEXT.equals(content.getType())) {
@@ -158,16 +234,15 @@ public class AI {
                             sb.append('\n');
                         sb.append(content.getContent());
                     }
-            return sb.toString();
         } else if (Gemini.isAvailable(context)) {
             String model = prefs.getString("gemini_model", Gemini.DEFAULT_MODEL);
             float temperature = prefs.getFloat("gemini_temperature", Gemini.DEFAULT_TEMPERATURE);
-            String prompt = prefs.getString("gemini_summarize", Gemini.DEFAULT_SUMMARY_PROMPT);
+            String defaultPrompt = prefs.getString("gemini_summarize", Gemini.DEFAULT_SUMMARY_PROMPT);
 
             String body = d.text();
 
             List<String> texts = new ArrayList<>();
-            texts.add(prompt);
+            texts.add(templatePrompt == null ? defaultPrompt : templatePrompt);
             if (!TextUtils.isEmpty(message.subject))
                 texts.add(message.subject);
             if (!TextUtils.isEmpty(body))
@@ -177,15 +252,17 @@ public class AI {
             Gemini.Message[] completions =
                     Gemini.generate(context, model, new Gemini.Message[]{content}, temperature, 1);
 
-            StringBuilder sb = new StringBuilder();
             for (Gemini.Message completion : completions)
                 for (String result : completion.getContent()) {
                     if (sb.length() != 0)
                         sb.append('\n');
                     sb.append(result);
                 }
-            return sb.toString();
         } else
             throw new IllegalArgumentException("No AI available");
+
+        String html = Markdown.toHtml(sb.toString());
+        Document doc = HtmlHelper.sanitizeCompose(context, html, false);
+        return HtmlHelper.fromDocument(context, doc, null, null);
     }
 }

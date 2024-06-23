@@ -256,6 +256,7 @@ public class FragmentMessages extends FragmentBase
     private TextView tvSupport;
     private ImageButton ibHintSupport;
     private ImageButton ibHintSwipe;
+    private ImageButton ibHintOutbox;
     private ImageButton ibHintSelect;
     private ImageButton ibHintJunk;
     private TextView tvMod;
@@ -283,6 +284,7 @@ public class FragmentMessages extends FragmentBase
     private Group grpSupport;
     private Group grpHintSupport;
     private Group grpHintSwipe;
+    private Group grpHintOutbox;
     private Group grpHintSelect;
     private Group grpHintJunk;
     private Group grpMotd;
@@ -565,8 +567,22 @@ public class FragmentMessages extends FragmentBase
         setActionBarListener(getViewLifecycleOwner(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentDialogSelectUnifiedFolder fragment = new FragmentDialogSelectUnifiedFolder();
-                fragment.show(getParentFragmentManager(), "unified:select");
+                try {
+                    FragmentDialogSelectUnifiedFolder fragment = new FragmentDialogSelectUnifiedFolder();
+                    fragment.show(getParentFragmentManager(), "unified:select");
+                } catch (Throwable ex) {
+                    /*
+                        Exception java.lang.IllegalStateException:
+                          at androidx.fragment.app.Fragment.getParentFragmentManager (Fragment.java:1112)
+                          at eu.faircode.email.FragmentMessages$2.onClick (FragmentMessages.java:569)
+                          at android.view.View.performClick (View.java:8047)
+                          at android.view.View.performClickInternal (View.java:8024)
+                          at android.view.View.-$$Nest$mperformClickInternal
+                          at android.view.View$PerformClick.run (View.java:31890)
+                          at android.os.Handler.handleCallback (Handler.java:958)
+                     */
+                    Log.e(ex);
+                }
             }
         });
 
@@ -581,6 +597,7 @@ public class FragmentMessages extends FragmentBase
         tvSupport = view.findViewById(R.id.tvSupport);
         ibHintSupport = view.findViewById(R.id.ibHintSupport);
         ibHintSwipe = view.findViewById(R.id.ibHintSwipe);
+        ibHintOutbox = view.findViewById(R.id.ibHintOutbox);
         ibHintSelect = view.findViewById(R.id.ibHintSelect);
         ibHintJunk = view.findViewById(R.id.ibHintJunk);
         tvMod = view.findViewById(R.id.tvMotd);
@@ -609,6 +626,7 @@ public class FragmentMessages extends FragmentBase
         grpSupport = view.findViewById(R.id.grpSupport);
         grpHintSupport = view.findViewById(R.id.grpHintSupport);
         grpHintSwipe = view.findViewById(R.id.grpHintSwipe);
+        grpHintOutbox = view.findViewById(R.id.grpHintOutbox);
         grpHintSelect = view.findViewById(R.id.grpHintSelect);
         grpHintJunk = view.findViewById(R.id.grpHintJunk);
         grpMotd = view.findViewById(R.id.grpMotd);
@@ -647,7 +665,8 @@ public class FragmentMessages extends FragmentBase
 
         // Wire controls
 
-        swipeRefresh.setColorSchemeColors(Color.WHITE, Color.WHITE, Color.WHITE);
+        int c = Helper.resolveColor(getContext(), R.attr.colorInfoForeground);
+        swipeRefresh.setColorSchemeColors(c, c, c);
         swipeRefresh.setProgressBackgroundColorSchemeColor(colorPrimary);
 
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -710,6 +729,14 @@ public class FragmentMessages extends FragmentBase
             public void onClick(View v) {
                 prefs.edit().putBoolean("message_swipe", true).apply();
                 grpHintSwipe.setVisibility(View.GONE);
+            }
+        });
+
+        ibHintOutbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefs.edit().putBoolean("message_outbox", true).apply();
+                grpHintOutbox.setVisibility(View.GONE);
             }
         });
 
@@ -1602,7 +1629,7 @@ public class FragmentMessages extends FragmentBase
                 if (result == null || result.single == null || !result.single.content)
                     return;
 
-                FragmentDialogSummarize.summarize(result.single, getParentFragmentManager());
+                FragmentDialogSummarize.summarize(result.single, getParentFragmentManager(), ibSummarize, getViewLifecycleOwner());
             }
         });
 
@@ -2424,8 +2451,8 @@ public class FragmentMessages extends FragmentBase
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalStateException) {
-                    Snackbar snackbar = Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true);
+                    Snackbar snackbar = Helper.setSnackbarOptions(
+                            Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG));
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -2436,8 +2463,9 @@ public class FragmentMessages extends FragmentBase
                     });
                     snackbar.show();
                 } else if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -3548,7 +3576,7 @@ public class FragmentMessages extends FragmentBase
         private void onSwipeSummarize(final @NonNull TupleMessageEx message) {
             final Context context = getContext();
             if (AI.isAvailable(context))
-                FragmentDialogSummarize.summarize(message, getParentFragmentManager());
+                FragmentDialogSummarize.summarize(message, getParentFragmentManager(), null, getViewLifecycleOwner());
             else
                 context.startActivity(new Intent(context, ActivitySetup.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -3605,6 +3633,11 @@ public class FragmentMessages extends FragmentBase
             if (delete_asked) {
                 if (leave_deleted) {
                     new SimpleTask<Void>() {
+                        @Override
+                        protected void onPreExecute(Bundle args) {
+                            message.ui_hide = true;
+                        }
+
                         @Override
                         protected Void onExecute(Context context, Bundle args) {
                             long id = args.getLong("id");
@@ -3749,8 +3782,9 @@ public class FragmentMessages extends FragmentBase
                 @Override
                 protected void onException(Bundle args, Throwable ex) {
                     if (ex instanceof IllegalArgumentException)
-                        Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                                .setGestureInsetBottomIgnored(true).show();
+                        Helper.setSnackbarOptions(
+                                        Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                                .show();
                     else
                         Log.unexpectedError(getParentFragmentManager(), ex);
                 }
@@ -4041,15 +4075,78 @@ public class FragmentMessages extends FragmentBase
         final Context context = getContext();
         if (context == null)
             return;
+
         if (!"reply".equals(action) &&
                 !"reply_all".equals(action) &&
                 !"list".equals(action))
             selected = null;
+
         Intent reply = new Intent(context, ActivityCompose.class)
                 .putExtra("action", action)
                 .putExtra("reference", message.id)
                 .putExtra("selected", selected);
-        startActivity(reply);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean attachments_asked = prefs.getBoolean("attachments_asked", false);
+        if (attachments_asked) {
+            startActivity(reply);
+            return;
+        }
+
+        if ("reply".equals(action) || "reply_all".equals(action) ||
+                "forward".equals(action) ||
+                "resend".equals(action) ||
+                "editasnew".equals(action)) {
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+
+            new SimpleTask<List<Long>>() {
+                @Override
+                protected List<Long> onExecute(Context context, Bundle args) {
+                    long id = args.getLong("id");
+                    List<Long> download = new ArrayList<>();
+
+                    long size = 0;
+
+                    DB db = DB.getInstance(context);
+                    List<EntityAttachment> attachments = db.attachment().getAttachments(id);
+                    if (attachments != null)
+                        for (EntityAttachment attachment : attachments)
+                            if (!attachment.available &&
+                                    attachment.subsequence == null &&
+                                    !attachment.isEncryption()) {
+                                if (attachment.size != null)
+                                    size += attachment.size;
+                                download.add(attachment.id);
+                            }
+
+                    args.putLong("size", size);
+
+                    return download;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, List<Long> download) {
+                    if (download.isEmpty()) {
+                        startActivity(reply);
+                        return;
+                    }
+
+                    args.putLongArray("download", Helper.toLongArray(download));
+                    args.putParcelable("intent", reply);
+
+                    FragmentDialogDownloadAttachments dialog = new FragmentDialogDownloadAttachments();
+                    dialog.setArguments(args);
+                    dialog.show(getParentFragmentManager(), "message:attachments");
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragment(), ex);
+                }
+            }.execute(this, args, "message:attachments");
+        } else
+            startActivity(reply);
     }
 
     private void onMenuResend(TupleMessageEx message) {
@@ -4114,8 +4211,7 @@ public class FragmentMessages extends FragmentBase
             protected void onExecuted(Bundle args, List<EntityAnswer> answers) {
                 final Context context = getContext();
                 if (answers == null || answers.size() == 0) {
-                    Snackbar snackbar = Snackbar.make(view, R.string.title_no_answers, Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true);
+                    Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_no_answers, Snackbar.LENGTH_LONG));
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -5221,11 +5317,13 @@ public class FragmentMessages extends FragmentBase
         }
 
         boolean hints = (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER);
+        boolean outbox = EntityFolder.OUTBOX.equals(type);
         boolean junk = EntityFolder.JUNK.equals(type);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean app_support = prefs.getBoolean("app_support", false);
         boolean message_swipe = prefs.getBoolean("message_swipe", false);
+        boolean message_outbox = prefs.getBoolean("message_outbox", false);
         boolean message_select = prefs.getBoolean("message_select", false);
         boolean message_junk = prefs.getBoolean("message_junk", false);
         boolean motd = prefs.getBoolean("motd", false);
@@ -5233,6 +5331,7 @@ public class FragmentMessages extends FragmentBase
 
         grpHintSupport.setVisibility(app_support || !hints || junk ? View.GONE : View.VISIBLE);
         grpHintSwipe.setVisibility(message_swipe || !hints || junk ? View.GONE : View.VISIBLE);
+        grpHintOutbox.setVisibility(message_outbox || !hints || !outbox ? View.GONE : View.VISIBLE);
         grpHintSelect.setVisibility(message_select || !hints || junk ? View.GONE : View.VISIBLE);
         grpHintJunk.setVisibility(message_junk || !junk ? View.GONE : View.VISIBLE);
         grpMotd.setVisibility(motd ? View.VISIBLE : View.GONE);
@@ -5572,8 +5671,7 @@ public class FragmentMessages extends FragmentBase
         if (!redmi_note)
             return false;
 
-        final Snackbar snackbar = Snackbar.make(view, R.string.app_data_loss, Snackbar.LENGTH_INDEFINITE)
-                .setGestureInsetBottomIgnored(true);
+        final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.app_data_loss, Snackbar.LENGTH_INDEFINITE));
         snackbar.setAction(R.string.title_info, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -5603,10 +5701,9 @@ public class FragmentMessages extends FragmentBase
         if (AlarmManagerCompatEx.canScheduleExactAlarms(context))
             return false;
 
-        final Snackbar snackbar = Snackbar.make(view,
-                        R.string.title_setup_alarm_12,
-                        Snackbar.LENGTH_INDEFINITE)
-                .setGestureInsetBottomIgnored(true);
+        final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view,
+                R.string.title_setup_alarm_12,
+                Snackbar.LENGTH_INDEFINITE));
         snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -5628,8 +5725,7 @@ public class FragmentMessages extends FragmentBase
                 prefs.getBoolean("crash_reports_asked", false))
             return false;
 
-        final Snackbar snackbar = Snackbar.make(view, R.string.title_ask_help, Snackbar.LENGTH_INDEFINITE)
-                .setGestureInsetBottomIgnored(true);
+        final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_ask_help, Snackbar.LENGTH_INDEFINITE));
         snackbar.setAction(R.string.title_info, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -5676,8 +5772,7 @@ public class FragmentMessages extends FragmentBase
                 return false;
         }
 
-        final Snackbar snackbar = Snackbar.make(view, R.string.title_ask_review, Snackbar.LENGTH_INDEFINITE)
-                .setGestureInsetBottomIgnored(true);
+        final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_ask_review, Snackbar.LENGTH_INDEFINITE));
         snackbar.setAction(R.string.title_info, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -5704,8 +5799,7 @@ public class FragmentMessages extends FragmentBase
         if (prefs.getBoolean("third_party_notified", false))
             return false;
 
-        final Snackbar snackbar = Snackbar.make(view, R.string.title_third_party, Snackbar.LENGTH_INDEFINITE)
-                .setGestureInsetBottomIgnored(true);
+        final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_third_party, Snackbar.LENGTH_INDEFINITE));
         snackbar.setAction(R.string.title_info, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -5783,8 +5877,7 @@ public class FragmentMessages extends FragmentBase
                 final int resid = (passwd > 0
                         ? R.string.title_check_gmail_password
                         : R.string.title_check_gmail_oauth);
-                final Snackbar snackbar = Snackbar.make(view, resid, Snackbar.LENGTH_INDEFINITE)
-                        .setGestureInsetBottomIgnored(true);
+                final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, resid, Snackbar.LENGTH_INDEFINITE));
                 snackbar.setAction(R.string.title_info, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -5814,79 +5907,68 @@ public class FragmentMessages extends FragmentBase
     private boolean checkOutlook() {
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.getBoolean("outlook_checked", false))
-            return false;
+        long outlook_last_checked = prefs.getLong("outlook_last_checked", 0);
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MILLISECOND, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.MONTH, Calendar.OCTOBER);
-        cal.set(Calendar.YEAR, 2022);
+        cal.set(Calendar.DAY_OF_MONTH, 16);
+        cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        cal.set(Calendar.YEAR, 2024);
+        long at = cal.getTimeInMillis();
 
         long now = new Date().getTime();
-        if (now < cal.getTimeInMillis() - 30 * 24 * 3600 * 1000L)
-            return false; // Not yet
 
-        if (Helper.getInstallTime(context) > cal.getTimeInMillis()) {
-            prefs.edit().putBoolean("outlook_checked", true).apply();
+        int days;
+        if (now > at - 3 * 24 * 3600 * 1000L)
+            days = 1;
+        else if (now > at - 15 * 24 * 3600 * 1000L)
+            days = 3;
+        else if (now > at - 30 * 24 * 3600 * 1000L)
+            days = 7;
+        else
+            days = 14;
+
+        if (outlook_last_checked + days * 24 * 3600 * 1000L > now)
             return false;
-        }
-
-        cal.add(Calendar.MONTH, 2);
-
-        if (now > cal.getTimeInMillis()) {
-            prefs.edit().putBoolean("outlook_checked", true).apply();
-            return false;
-        }
 
         new SimpleTask<List<EntityAccount>>() {
             @Override
             protected List<EntityAccount> onExecute(Context context, Bundle args) throws Throwable {
                 DB db = DB.getInstance(context);
-                return db.account().getAccounts();
+                if (BuildConfig.DEBUG)
+                    return db.account().getAccounts();
+                return db.account().getSynchronizingAccounts(null);
             }
 
             @Override
             protected void onExecuted(Bundle args, List<EntityAccount> accounts) {
-                int oauth = 0;
                 int passwd = 0;
                 if (accounts != null)
                     for (EntityAccount account : accounts)
-                        if (account.isOutlook()) {
-                            String user = (account.user == null ? "" : account.user.toLowerCase(Locale.ROOT));
-                            if (user.contains("@hotmail") || user.contains("@live"))
-                                continue;
-                            if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_OAUTH)
-                                oauth++;
-                            else if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD)
-                                passwd++;
-                        }
+                        if (account.isOutlook() &&
+                                account.auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD)
+                            passwd++;
 
-                if (oauth + passwd == 0) {
-                    prefs.edit().putBoolean("outlook_checked", true).apply();
+                if (passwd == 0)
                     return;
-                }
 
-                final int resid = (passwd > 0
-                        ? R.string.title_check_outlook_password
-                        : R.string.title_check_outlook_oauth);
-                final Snackbar snackbar = Snackbar.make(view, resid, Snackbar.LENGTH_INDEFINITE)
-                        .setGestureInsetBottomIgnored(true);
+                final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_check_outlook_password, Snackbar.LENGTH_INDEFINITE));
+                Helper.setSnackbarLines(snackbar, 5);
                 snackbar.setAction(R.string.title_info, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         snackbar.dismiss();
                         Helper.viewFAQ(v.getContext(), 14);
-                        prefs.edit().putBoolean("outlook_checked", true).apply();
+                        prefs.edit().putLong("outlook_last_checked", now).apply();
                     }
                 });
                 snackbar.addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
-                        prefs.edit().putBoolean("outlook_checked", true).apply();
+                        prefs.edit().putLong("outlook_last_checked", now).apply();
                     }
                 });
                 snackbar.show();
@@ -6856,6 +6938,7 @@ public class FragmentMessages extends FragmentBase
                 lbm.sendBroadcast(
                         new Intent(ActivityView.ACTION_EDIT_FOLDER)
                                 .putExtra("id", folder.id)
+                                .putExtra("account", folder.account)
                                 .putExtra("imap", args.getBoolean("imap")));
             }
 
@@ -7196,8 +7279,8 @@ public class FragmentMessages extends FragmentBase
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
                 if (ex instanceof IllegalStateException) {
                     // No internet connection
-                    Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true);
+                    Snackbar snackbar = Helper.setSnackbarOptions(
+                            Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG));
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -7738,7 +7821,7 @@ public class FragmentMessages extends FragmentBase
 
         if (viewType == AdapterMessage.ViewType.UNIFIED ||
                 viewType == AdapterMessage.ViewType.FOLDER)
-            if (auto_hide_answer && scrolling && !accessibility)
+            if (auto_hide_answer && scrolling)
                 fabCompose.hide();
             else
                 fabCompose.show();
@@ -7749,7 +7832,7 @@ public class FragmentMessages extends FragmentBase
             return;
 
         int expanded = (values.containsKey("expanded") ? values.get("expanded").size() : 0);
-        if (auto_hide_answer && scrolling && !accessibility)
+        if (auto_hide_answer && scrolling)
             fabReply.hide();
         else {
             if (expanded == 1) {
@@ -8130,8 +8213,9 @@ public class FragmentMessages extends FragmentBase
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -8143,6 +8227,20 @@ public class FragmentMessages extends FragmentBase
         args.putParcelableArrayList("result", result);
 
         new SimpleTask<Void>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                AdapterMessage adapter = (rvMessage == null ? null : (AdapterMessage) rvMessage.getAdapter());
+                if (adapter == null)
+                    return;
+
+                ArrayList<MessageTarget> result = args.getParcelableArrayList("result");
+                for (MessageTarget target : result) {
+                    TupleMessageEx message = adapter.getItemForKey(target.id);
+                    if (message != null)
+                        message.ui_hide = true;
+                }
+            }
+
             @Override
             protected Void onExecute(Context context, Bundle args) {
                 ArrayList<MessageTarget> result = args.getParcelableArrayList("result");
@@ -8163,7 +8261,6 @@ public class FragmentMessages extends FragmentBase
                         db.message().setMessageFound(target.id, false);
                         // Prevent new message notification on undo
                         db.message().setMessageUiIgnored(target.id, true);
-                        db.message().setMessageLastAttempt(target.id, now);
                     }
 
                     db.setTransactionSuccessful();
@@ -8217,7 +8314,6 @@ public class FragmentMessages extends FragmentBase
 
                     Log.i("Move id=" + target.id + " target=" + target.targetFolder.name);
                     db.message().setMessageUiBusy(target.id, null);
-                    db.message().setMessageLastAttempt(target.id, null);
                     EntityOperation.queue(context, message, EntityOperation.MOVE, target.targetFolder.id);
                 }
 
@@ -8251,7 +8347,6 @@ public class FragmentMessages extends FragmentBase
                     db.message().setMessageUiBusy(target.id, null);
                     db.message().setMessageUiHide(target.id, false);
                     db.message().setMessageFound(target.id, target.found);
-                    db.message().setMessageLastAttempt(target.id, null);
                 }
 
                 db.setTransactionSuccessful();
@@ -8788,8 +8883,8 @@ public class FragmentMessages extends FragmentBase
         Helper.openAdvanced(context, create);
         PackageManager pm = context.getPackageManager();
         if (create.resolveActivity(pm) == null) // system whitelisted
-            Snackbar.make(view, R.string.title_no_saf, Snackbar.LENGTH_LONG)
-                    .setGestureInsetBottomIgnored(true).show();
+            Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_no_saf, Snackbar.LENGTH_LONG))
+                    .show();
         else
             startActivityForResult(Helper.getChooser(context, create), REQUEST_RAW);
     }
@@ -8847,8 +8942,7 @@ public class FragmentMessages extends FragmentBase
 
                         @Override
                         public void onNothingSelected() {
-                            Snackbar snackbar = Snackbar.make(view, R.string.title_no_key, Snackbar.LENGTH_LONG)
-                                    .setGestureInsetBottomIgnored(true);
+                            Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_no_key, Snackbar.LENGTH_LONG));
                             final Intent intent = (Build.VERSION.SDK_INT < Build.VERSION_CODES.R
                                     ? KeyChain.createInstallIntent()
                                     : new Intent(Settings.ACTION_SECURITY_SETTINGS));
@@ -9093,15 +9187,16 @@ public class FragmentMessages extends FragmentBase
 
             @Override
             protected void onExecuted(Bundle args, Void data) {
-                Snackbar.make(view, R.string.title_raw_saved, Snackbar.LENGTH_LONG)
-                        .setGestureInsetBottomIgnored(true).show();
+                Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_raw_saved, Snackbar.LENGTH_LONG))
+                        .show();
             }
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException || ex instanceof FileNotFoundException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else if (!(ex instanceof MessageRemovedException))
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -9432,8 +9527,8 @@ public class FragmentMessages extends FragmentBase
             protected void onExecuted(Bundle args, PendingIntent pi) {
                 if (args.containsKey("sigresult")) {
                     String text = args.getString("sigresult");
-                    Snackbar sb = Snackbar.make(view, text, Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true);
+                    Snackbar sb = Helper.setSnackbarOptions(
+                            Snackbar.make(view, text, Snackbar.LENGTH_LONG));
                     Helper.setSnackbarLines(sb, 7);
                     sb.show();
                 }
@@ -9460,11 +9555,11 @@ public class FragmentMessages extends FragmentBase
 
                 if (ex instanceof IllegalArgumentException) {
                     Log.i(ex);
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 } else if (ex instanceof OperationCanceledException) {
-                    Snackbar snackbar = Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_INDEFINITE)
-                            .setGestureInsetBottomIgnored(true);
+                    Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_INDEFINITE));
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -9843,8 +9938,9 @@ public class FragmentMessages extends FragmentBase
                             message = getString(R.string.title_signature_invalid);
                         else
                             message = getString(R.string.title_signature_invalid_reason, reason);
-                        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                                .setGestureInsetBottomIgnored(true).show();
+                        Helper.setSnackbarOptions(
+                                        Snackbar.make(view, message, Snackbar.LENGTH_LONG))
+                                .show();
                     } else
                         try {
                             boolean auto = args.getBoolean("auto");
@@ -9869,8 +9965,8 @@ public class FragmentMessages extends FragmentBase
                                 }
 
                             if (known && !record.isExpired(time) && match && valid)
-                                Snackbar.make(view, R.string.title_signature_valid, Snackbar.LENGTH_LONG)
-                                        .setGestureInsetBottomIgnored(true).show();
+                                Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_signature_valid, Snackbar.LENGTH_LONG))
+                                        .show();
                             else if (!auto) {
                                 LayoutInflater inflator = LayoutInflater.from(getContext());
                                 View dview = inflator.inflate(R.layout.dialog_certificate, null);
@@ -9913,7 +10009,7 @@ public class FragmentMessages extends FragmentBase
                                             sb.append(i + 1).append(") ").append(trace.get(i));
                                         }
 
-                                        new AlertDialog.Builder(getContext())
+                                        new AlertDialog.Builder(v.getContext())
                                                 .setMessage(sb.toString())
                                                 .show();
                                     }
@@ -9980,14 +10076,16 @@ public class FragmentMessages extends FragmentBase
                                 builder.show();
                             }
                         } catch (Throwable ex) {
-                            Snackbar.make(view, Log.formatThrowable(ex), Snackbar.LENGTH_LONG)
-                                    .setGestureInsetBottomIgnored(true).show();
+                            Helper.setSnackbarOptions(
+                                            Snackbar.make(view, Log.formatThrowable(ex), Snackbar.LENGTH_LONG))
+                                    .show();
                         }
                 } else if (EntityMessage.SMIME_SIGNENCRYPT.equals(type)) {
                     String algo = args.getString("algo");
                     if (!TextUtils.isEmpty(algo))
-                        Snackbar.make(view, algo, Snackbar.LENGTH_LONG)
-                                .setGestureInsetBottomIgnored(true).show();
+                        Helper.setSnackbarOptions(
+                                        Snackbar.make(view, algo, Snackbar.LENGTH_LONG))
+                                .show();
                 }
             }
 
@@ -9999,8 +10097,9 @@ public class FragmentMessages extends FragmentBase
 
                 if (ex instanceof IllegalArgumentException ||
                         ex instanceof CMSException || ex instanceof KeyChainException)
-                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -10381,8 +10480,8 @@ public class FragmentMessages extends FragmentBase
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException) {
-                    Snackbar snackbar = Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE)
-                            .setGestureInsetBottomIgnored(true);
+                    Snackbar snackbar = Helper.setSnackbarOptions(
+                            Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_INDEFINITE));
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

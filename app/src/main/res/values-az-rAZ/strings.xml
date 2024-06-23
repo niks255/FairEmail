@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_password">Cihazdakı bir hesabın əvəzinə parollu bir hesaba səlahiyyət vermək istəyirəm</string>
     <string name="title_setup_office_auth">\'AUTHENTICATE failed\' xətası, sistem administratorunun IMAP/SMTP-ni sıradan çıxartdığı üçün baş verə bilər</string>
     <string name="title_setup_office_auth_5_7_3">Zəhmət olmasa \"Digər provayder\" cəld quraşdırma sehrbazını sınayın.</string>
+    <string name="title_setup_office_auth_5_7_139">Lütfən \'Outlook/Hotmail/Live\' cəld quraşdırma sehrbazını sınayın.</string>
     <string name="title_setup_oauth_rationale">%1$s hesabınıza müraciət üçün səlahiyyət verin</string>
     <string name="title_setup_oauth_update">Mövcud bir hesaba yenidən səlahiyyət verin (əks halda yeni bir hesab yaradın)</string>
     <string name="title_setup_oauth_updated">Hesab səlahiyyətləndirmə güncəlləndi</string>
@@ -329,8 +330,7 @@
     <string name="title_setup_reset_full">Orijinal mesajları göstər</string>
     <string name="title_check_gmail_oauth">Gmail hesablarınız 30 May 2022-ci il tarixindən sonra işləməyə davam edəcək</string>
     <string name="title_check_gmail_password">Bəzi Gmail hesablarınız 30 May 2022-ci il tarixindən işləməyi dayandıra bilər</string>
-    <string name="title_check_outlook_oauth">Outlook hesablarınız 1 Oktyabr 2022-ci il tarixindən sonra işləməyə davam edəcək</string>
-    <string name="title_check_outlook_password">Bəzi Outlook hesablarınız 1 Oktyabr 2022-ci il tarixindən işləməyi dayandıra bilər</string>
+    <string name="title_check_outlook_password">Outlook/Hotmail/Live hesablarınızdan bəziləri 16 sentyabr 2024-cü il tarixindən etibarən işləməyi dayandıracaq</string>
     <string name="title_advanced_hint_title">Daha çox qabaqcıl seçimlər</string>
     <string name="title_advanced_hint_message">        Daha qabaqcıl seçimlərə gedirsiniz.
         Bütün seçimlər, fərqli bir tərcihiniz olmadığı müddətcə dəyişdirməyinizə ehtiyac olmayan və geniş istifadə olunan standart dəyərlərə sahibdir.
@@ -397,6 +397,7 @@
     <string name="title_advanced_send_nav_color">Alt əməliyyat sətri üçün kimlik rəngini istifadə et</string>
     <string name="title_advanced_send_reminders">Xatırladıcıları göstər</string>
     <string name="title_advanced_send_delayed">Göndərilən mesajların gecikməsi</string>
+    <string name="title_advanced_send_top">Göndər düyməsini ən üstdə göstər</string>
     <string name="title_advanced_attach_new">Paylaşılan ünvanlar və fayllar üçün yeni bir qaralama mesajı yaradın</string>
     <string name="title_advanced_answer_caption">Cavab düyməsi ayarları</string>
     <string name="title_advanced_answer_default">Cavab düyməsinə qısa basanda:</string>
@@ -777,6 +778,10 @@
     <string name="title_advanced_gemini">Gemini inteqrasiyası</string>
     <string name="title_advanced_multi_modal">Multimodal</string>
     <string name="title_advanced_summarize_prompt">İstəyin icmalı</string>
+    <string name="title_advanced_answer_prompt">Cavab istəyi</string>
+    <string name="title_advanced_system_instructions">Sistem təlimatları</string>
+    <string name="title_advanced_default_prompt">İlkin istək</string>
+    <string name="title_advanced_entered_text">Daxil edilən mətn</string>
     <string name="title_advanced_sdcard">SD kart istifadə etmək istəyirəm</string>
     <string name="title_advanced_watchdog">Mütəmadi olaraq \"FairEmail\"in aktivliyini yoxla</string>
     <string name="title_advanced_updates">GitHub güncəlləmələrini yoxla</string>
@@ -788,6 +793,7 @@
     <string name="title_advanced_crash_reports">Xəta hesabatlarını göndər</string>
     <string name="title_advanced_cleanup_attachments">Köhnə mesajların qoşmalarını sil</string>
     <string name="title_advanced_cleanup">Təmizlə</string>
+    <string name="title_advanced_google_backup">Android-in data nüsxələməsini istifadə et</string>
     <string name="title_advanced_app">Tətbiq ayarları</string>
     <string name="title_advanced_more">Daha çox seçim</string>
     <string name="title_advanced_main_log">Əsas jurnal qeydi</string>
@@ -833,7 +839,7 @@
     <string name="title_advanced_metered_warning">Bu seçimin sıradan çıxarılması, mobil internet bağlantılarında mesajların göndərilməsini və alınmasını dayandıracaq</string>
     <string name="title_advanced_rlah_hint">AB daxilində roaminqdə olmadığını hesab et</string>
     <string name="title_advanced_usage_hint">Bu, batareya, verilənlər və anbar sahəsi istifadəsini artıracaq</string>
-    <string name="title_advanced_plain_hint">Bunu fəallaşdırmaq verilənlər istifadəsini məhdudlaşdıracaq, ancaq mesajlar stil olmadan görünəcək</string>
+    <string name="title_advanced_plain_hint">Bunu fəallaşdırmaq data istifadəsini məhdudlaşdıracaq, ancaq mesajlar stil və təsvir olmadan görünəcək</string>
     <string name="title_advanced_plain_remark">Düz mətn hissəsi həmişə tam mesajı ehtiva etmir!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Bunu fəallaşdırmaq, bəzi cihazlarda bağlantı problemlərinə və batareya istifadəsinin artmasına səbəb ola bilər</string>
     <string name="title_advanced_validate_hint">Bu, məsələn bir VPN istifadə edəndə və digər hallarda mesajların sinxronlaşdırılmaması ilə nəticələnə bilər</string>
@@ -982,6 +988,7 @@
     <string name="title_case_sensitive">İstifadəçi adları və parollar adətən böyük-kiçik hərflərə həssasdır</string>
     <string name="title_login_before_send">Göndərməzdən əvvəl al</string>
     <string name="title_client_certificate">Müştəri sertifikatı</string>
+    <string name="title_no_key_selected">Açar seçilməyib və ya açar mövcud deyil</string>
     <string name="title_realm">Realm</string>
     <string name="title_use_ip">Host adı əvəzinə yerli IP ünvanı istifadə et</string>
     <string name="title_ehlo">Özəl HELO/EHLO kimliyi</string>
@@ -990,9 +997,12 @@
     <string name="title_primary_identity">Üstünlük verilən (ilkin kimlik)</string>
     <string name="title_self_identity">Cavablayanda e-poçt ünvanınızı çıxardın</string>
     <string name="title_leave_on_server">Mesajları serverdə burax</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Mesajları serverdən endirdikdən sonra, mesajlar serverdə qalır</string>
     <string name="title_client_delete">Endirdikdən sonra mesajları aktiv olaraq silin</string>
     <string name="title_leave_deleted">Silənən mesajları serverdə burax</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Mesajları cihazdan sildikdən sonra, mesajlar serverdə qalacaq</string>
     <string name="title_leave_on_device">Mesajları cihazda burax</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Mesajlar serverdən silindikdə, mesajlar cihazda qalır</string>
     <string name="title_max_messages">Endiriləcək mesajların maksimum sayı (hamısı üçün boş)</string>
     <string name="title_max_messages_keep">Bu, cihazda saxlanılacaq maksimum mesaj sayıdır</string>
     <string name="title_max_messages_remark">        Mesajları sonda endirmək üçün müsbət bir ədəd daxil edin (ən geniş yayılmış)
@@ -1218,6 +1228,7 @@
     <string name="title_create_rule">Qayda yarat &#8230;</string>
     <string name="title_full_screen">Tam ekran</string>
     <string name="title_force_light">Məcburi açıq tema</string>
+    <string name="title_rename">Yenidən adlandır</string>
     <string name="title_share">Paylaş</string>
     <string name="title_event">Təqvimə əlavə et</string>
     <string name="title_pin">Qısayol əlavə et</string>
@@ -1363,9 +1374,10 @@
     <string name="title_third_party">Üçüncü tərəf bir versiya istifadə edirsiniz</string>
     <string name="title_expand_warning">Bu mesajı genişləndirsəniz, %1$s endiriləcək</string>
     <string name="title_download_message">Endirilir &#8230;</string>
-    <string name="title_reformatted">        Bu, yenidən format edilmiş mesaj görünüşüdür.
-        Orijinal mesaja baxmaq və bu mesajı gizlətmək üçün &#x26F6; nişanına toxuna bilərsiniz.
-        Mesajların yenidən formatlanması, mesajların həcmindən və cihazınızın sürətindən asılı olaraq bir az vaxt apara bilər.
+    <string name="title_reformatted">        Bu, güvənli təkrar formatlanmış mesaj görünüşüdür.
+        Daha az güvənli orijinal mesaja baxmaq və bu mesajı gizlətmək üçün &#x26F6; ikonuna toxunun.
+        Mesajların təkrar formatlanması, mesajın ölçüsünə və cihazınızın sürətinə görə bir az vaxt aparır.
+        Bəzən QR kodlara baxmaq üçün orijinal mesaja baxmaq lazımdır.
     </string>
     <string name="title_compose">Yaz</string>
     <string name="title_submitter">Göndərən:</string>
@@ -1518,6 +1530,9 @@
     <string name="title_dsn_reminder">Sərt sıçrayışlar, orijinal göndərənin e-poçt nüfuzuna zərər verir!</string>
     <string name="title_size_reminder">Mesaj (%1$s) server limitindən (%2$s) böyükdür</string>
     <string name="title_attachments_missing">Bütün qoşmalar endirilmədi</string>
+    <string name="title_download_attachments">Qoşmaları endir</string>
+    <string name="title_attachments_download">Qoşmalar endirildi: %1$s</string>
+    <string name="title_attachments_no_download">Bu, artıq göstərilməyəcək, qoşmalar avtomatik endirilməyəcək</string>
     <string name="title_dialog_hint">Bu dialoq pəncərəsi, üst əməliyyat sətrindəki üç nöqtə menyusu ilə təkrar fəallaşdırıla bilər</string>
     <string name="title_draft_deleted">Qaralama silindi</string>
     <string name="title_draft_saved">Qaralama saxlanıldı</string>
@@ -1669,6 +1684,7 @@
     <string name="title_answer_favorite">Sevimli</string>
     <string name="title_answer_snippet">Fraqment</string>
     <string name="title_answer_receipt">Oxundu bildirişi kimi istifadə et</string>
+    <string name="title_answer_ai">AI istəyi kimi istifadə et</string>
     <string name="title_answer_hide">Menyulardan gizlət</string>
     <string name="title_answer_text">Şablon mətni</string>
     <string name="title_answer_placeholder">Yertutan</string>
@@ -1772,6 +1788,8 @@
     <string name="title_rule_tts_subject">Mövzu</string>
     <string name="title_rule_tts_content">Mətn</string>
     <string name="title_rule_select_sound">Səsi seç</string>
+    <string name="title_rule_select_sound_ringtone">Zəng səsi</string>
+    <string name="title_rule_select_sound_audio">Səs faylı</string>
     <string name="title_rule_use_as_alarm">Alarm kimi istifadə et</string>
     <string name="title_rule_alarm_hint">Bu, \"narahat etməyin\" qaydalarına əhəmiyyət verməyəcək</string>
     <string name="title_rule_alarm_duration">Maksimum alarm müddəti (saniyə)</string>
@@ -1912,6 +1930,7 @@
     <string name="title_hint_dismiss">Bildirişi silmək üçün bu dialoq qutusunu bağlaya bilərsiniz.</string>
     <string name="title_hint_support">Sualınız və ya probleminiz varsa, zəhmət olmasa kömək almaq üçün dəstək menyusundan faydalanın</string>
     <string name="title_hint_message_actions">Tullantıya atmaq üçün sola sürüşdürün; (əgər varsa) arxivləmək üçün sağa; Sürüşdürmə əməliyyatları hesab ayarlarında konfiqurasiya edilə bilər</string>
+    <string name="title_hint_outbox">Göndərməni ləğv etmək üçün sola və ya sağa sürüşdürün</string>
     <string name="title_hint_message_selection">Bir neçə mesajı seçməyə başlamaq üçün bir mesaja uzun basın; daha çox mesaj seçmək üçün basıb yuxarı və ya aşağı sürüşdürün</string>
     <string name="title_hint_message_junk">        Bir e-poçt müştərisi (client) mesajları əsasən e-poçt serverində göstərir.
         Spam poçtların filtrlənməsinə e-poçt serveri cavabdehdir, e-poçt müştərisi (client) yox.
@@ -1976,6 +1995,7 @@
     <string name="title_ask_what">Nə ediləcəyini soruş</string>
     <string name="title_no_ask_again">Bunu bir də soruşma</string>
     <string name="title_no_ask_for_again">%1$s üçün bunu bir də soruşma</string>
+    <string name="title_no_show_again">Bunu bir də göstərmə</string>
     <string name="title_undo_privacy">Bu, gizlilik ayarları vərəqi səhifəsindən geri alına bilər</string>
     <string name="title_no_body">Heç bir mesaj mətni tapılmadı</string>
     <string name="title_large_body">Bu mesaj çox böyükdür və problemlər yarada bilər!</string>
@@ -2062,6 +2082,7 @@
     <string name="title_widget_folder_unified">Birləşmiş gələn qutusu qovluqları</string>
     <string name="title_widget_folder_notifying">Yeni mesaj bildirişləri olan qovluqlar</string>
     <string name="title_widget_unseen">Yalnız oxunmamış mesajlar</string>
+    <string name="title_widget_show_unseen">Oxunmadı olaraq göstər</string>
     <string name="title_widget_flagged">Yalnız ulduzlu mesajlar</string>
     <string name="title_widget_font_size">Mətn ölçüsü</string>
     <string name="title_widget_padding">Boşluğun ölçüsü</string>

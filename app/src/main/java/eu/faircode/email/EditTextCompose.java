@@ -167,9 +167,9 @@ public class EditTextCompose extends FixedEditText {
                     try {
                         int order = 1000;
                         menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_brackets,
-                                order++, context.getString(R.string.title_insert_brackets));
+                                order++, "(" + context.getString(R.string.title_insert_brackets) + ")");
                         menu.add(Menu.CATEGORY_SECONDARY, R.string.title_insert_quotes,
-                                order++, context.getString(R.string.title_insert_quotes));
+                                order++, "\"" + context.getString(R.string.title_insert_quotes) + "\"");
                         menu.add(Menu.CATEGORY_SECONDARY, R.string.title_lt_add,
                                 order++, context.getString(R.string.title_lt_add));
                         menu.add(Menu.CATEGORY_SECONDARY, R.string.title_lt_delete,
@@ -207,6 +207,8 @@ public class EditTextCompose extends FixedEditText {
                             return surround("(", ")");
                         else if (id == R.string.title_insert_quotes)
                             return surround("\"", "\"");
+                        else if (id == R.string.title_lt_add)
+                            return modifyDictionary(true);
                         else if (id == R.string.title_lt_delete)
                             return modifyDictionary(false);
                     }
@@ -396,7 +398,7 @@ public class EditTextCompose extends FixedEditText {
 
                     for (EntityAnswer snippet : snippets)
                         if (snippet.id.equals(id)) {
-                            String html = snippet.getHtml(context, to);
+                            String html = snippet.getData(context, to).getHtml();
 
                             Helper.getUIExecutor().submit(new Runnable() {
                                 @Override

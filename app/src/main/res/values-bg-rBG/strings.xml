@@ -14,6 +14,10 @@
     <string name="app_cake_required">Изисквано минимум място за хранилището: %1$s</string>
     <string name="app_updated">Последно обновяване: %1$s</string>
     <string name="app_download">Изтеглено от: %1$s</string>
+    <string name="app_motd">        С бета версия на Android №14/15 понякога се появяват известия „Приложението не отговаря“.
+        Google работи по оправянето на проблема.
+        Моля, не винете приложението за този проблем в Android!
+    </string>
     <string name="channel_service">Наблюдение</string>
     <string name="channel_send">Изпращане</string>
     <string name="channel_notification">Имейл</string>
@@ -195,6 +199,7 @@
     <string name="title_setup_gmail_password">Искам да упълномощя акаунт с парола вместо акаунт на устройството</string>
     <string name="title_setup_office_auth">Грешката „УДОСТОВЕРЯВАНЕТО неуспешно“ може да се причини от изключването на IMAP/SMTP от системния администратор</string>
     <string name="title_setup_office_auth_5_7_3">Опитайте вълшебника за бърза настройка „Друг доставчик“.</string>
+    <string name="title_setup_office_auth_5_7_139">Опитайте вълшебника за бърза настройка на „Outlook/Hotmail/Live“.</string>
     <string name="title_setup_oauth_rationale">Упълномощете достъпа до своя акаунт %1$s</string>
     <string name="title_setup_oauth_update">Упълномощаване пак на съществуващ акаунт (в противен случай създаване на нов акаунт)</string>
     <string name="title_setup_oauth_updated">Обновено упълномощаване на акаунта</string>
@@ -325,8 +330,7 @@
     <string name="title_setup_reset_full">Показване на оригиналните съобщения</string>
     <string name="title_check_gmail_oauth">Вашите акаунти в Gmail ще продължат да работят след 30 май 2022г.</string>
     <string name="title_check_gmail_password">Някои от акаунтите ви в Gmail може да спрат да работят след 30 май 2022г.</string>
-    <string name="title_check_outlook_oauth">Вашите акаунти в Outlook ще продължат да работят след 1 октомври 2022г.</string>
-    <string name="title_check_outlook_password">Някои от акаунтите ви в Outlook може да спрат да работят след 1 октомври 2022г.</string>
+    <string name="title_check_outlook_password">Някои от акаунтите ви при Outlook/Hotmail/Live ще спрат да работят след 16 септември 2024г.</string>
     <string name="title_advanced_hint_title">Още разширени възможности</string>
     <string name="title_advanced_hint_message">        You are navigating to the more advanced options.        All options have commonly used standard values, which you do not need to change unless you have a different preference.
     </string>
@@ -392,6 +396,7 @@
     <string name="title_advanced_send_nav_color">Употреба на цвят за самоличност за долната лента с действия</string>
     <string name="title_advanced_send_reminders">Показване на напомняния</string>
     <string name="title_advanced_send_delayed">Отложено изпращане на съобщение</string>
+    <string name="title_advanced_send_top">Показване копчето „изпращане“ най-отгоре</string>
     <string name="title_advanced_attach_new">Сътворяване на ново черново съобщение за споделени адреси и файлове</string>
     <string name="title_advanced_answer_caption">Настройки на бутона отговор</string>
     <string name="title_advanced_answer_default">Кратко натискане на бутона за отговор ще:</string>
@@ -772,6 +777,10 @@
     <string name="title_advanced_gemini">Интегриране с Gemini</string>
     <string name="title_advanced_multi_modal">Многомодалност</string>
     <string name="title_advanced_summarize_prompt">Подкана за обобщаване</string>
+    <string name="title_advanced_answer_prompt">Подкана за отговор</string>
+    <string name="title_advanced_system_instructions">Указания на системата</string>
+    <string name="title_advanced_default_prompt">Подкана по подразбиране</string>
+    <string name="title_advanced_entered_text">Въведен текст</string>
     <string name="title_advanced_sdcard">Желая да употребявам sd карта</string>
     <string name="title_advanced_watchdog">Периодична проверка дали FairEmail е активен</string>
     <string name="title_advanced_updates">Проверка за обновяване на GitHub</string>
@@ -783,6 +792,7 @@
     <string name="title_advanced_crash_reports">Изпращане на доклад с грешки</string>
     <string name="title_advanced_cleanup_attachments">Изтрийте прикачени файлове на стари съобщения</string>
     <string name="title_advanced_cleanup">Почистване</string>
+    <string name="title_advanced_google_backup">Употреба на данните на резервно копие на Android</string>
     <string name="title_advanced_app">Настройки на приложението</string>
     <string name="title_advanced_more">Още опции</string>
     <string name="title_advanced_main_log">Главен запис в дневника</string>
@@ -828,7 +838,7 @@
     <string name="title_advanced_metered_warning">Деактивирането на тази опция ще деактивира получаването и изпращането на съобщения през мобилния интернет</string>
     <string name="title_advanced_rlah_hint">Ако не се допуска роуминг в рамките на ЕС</string>
     <string name="title_advanced_usage_hint">Това ще увеличи употребата на батерията, данните и мястото в хранилището</string>
-    <string name="title_advanced_plain_hint">Включването на това ще ограничи употребата на данните, но съобщенията ще се показват без стил</string>
+    <string name="title_advanced_plain_hint">Включването на това ще ограничи употребата на данни, но съобщенията ще се показват без стилизиране и без образи</string>
     <string name="title_advanced_plain_remark">Частта с прост текст на съобщението не винаги съдържа пълното съобщение!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Включването на това може да причини проблеми с връзката в някои устройства и да увеличи употребата на батерията</string>
     <string name="title_advanced_validate_hint">Може да доведе до това, че съобщенията не се синхронизират, например, употребявайки VPN, но също в други ситуации</string>
@@ -977,6 +987,7 @@
     <string name="title_case_sensitive">Потребителските имена и пароли обикновено различават главни от малки букви</string>
     <string name="title_login_before_send">Получаване преди изпращане</string>
     <string name="title_client_certificate">Сертификат на клиента</string>
+    <string name="title_no_key_selected">Ключ не е избран или няма налични ключове</string>
     <string name="title_realm">Област</string>
     <string name="title_use_ip">Използвай локален IP адрес вместо име на хост</string>
     <string name="title_ehlo">Персонализирана HELO/EHLO идентификация</string>
@@ -985,9 +996,12 @@
     <string name="title_primary_identity">Основна (по подразбиране идентичност)</string>
     <string name="title_self_identity">Премахване на имейл адреса при отговор</string>
     <string name="title_leave_on_server">Оставяне съобщения на сървъра</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Изтегляйки съобщения от сървъра, съобщенията остават на сървъра</string>
     <string name="title_client_delete">Дейно изтриване на съобщенията след изтегляне</string>
     <string name="title_leave_deleted">Оставяне на изтритите съобщения на сървъра</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">След изтриването на съобщенията от устройството, съобщенията ще останат на сървъра</string>
     <string name="title_leave_on_device">Запази съобщенията на устройството</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Когато съобщенията са изтрити от сървъра, съобщенията ще останат на устройството</string>
     <string name="title_max_messages">Максимален брой съобщения за изтегляне (празно за всички)</string>
     <string name="title_max_messages_keep">Това е най-големият възможен брой съобщения, които ще се съхраняват в устройството</string>
     <string name="title_max_messages_remark">        Въведете положително число за изтегляне на съобщенията в края (най-често)
@@ -1111,7 +1125,7 @@
     <string name="title_delete_operation_delete">Изтриване на операции</string>
     <string name="title_delete_operation_send">Операции за изпращане</string>
     <string name="title_delete_operation_deleted">%1$d изтрити операции</string>
-    <string name="title_delete_contacts">Изтрий локалните контакти?</string>
+    <string name="title_delete_contacts">Изтривате ли всички местни контакти?</string>
     <string name="title_delete_contacts_remark">Всички контакти, показвани и непоказвани, ще се изтрият, дори ако се търсят!</string>
     <string name="title_no_operations">Няма чакащи операции</string>
     <string name="title_check_operations">Проверяване за операции</string>
@@ -1212,6 +1226,7 @@
     <string name="title_create_rule">Създай правило &#8230;</string>
     <string name="title_full_screen">Цял екран</string>
     <string name="title_force_light">Налагам светла тема</string>
+    <string name="title_rename">Преименуване</string>
     <string name="title_share">Споделяне</string>
     <string name="title_event">Добавяне в календара</string>
     <string name="title_pin">Добавяне на пряк път</string>
@@ -1356,10 +1371,6 @@
     <string name="title_third_party">Използвате версия на трета страна</string>
     <string name="title_expand_warning">Рзширеното съобщение ще се изтегли %1$s</string>
     <string name="title_download_message">Изтегляне &#8230;</string>
-    <string name="title_reformatted">        Това е преформатиран изглед на съобщение.
-        Може да чукнете на иконата &#x26F6; за преглед на първообразното съобщение и скриване на това съобщение.
-        Преформатираните съобщения отнемат известно време в зависимост от големината на съобщението и бързината на устройството ви.
-    </string>
     <string name="title_compose">Ново съобщение</string>
     <string name="title_submitter">Изпратено от:</string>
     <string name="title_signed_by">Подписано от:</string>
@@ -1511,6 +1522,9 @@
     <string name="title_dsn_reminder">Съобщенията за твърдо отхвърляне вредят на репутацията на електронната поща на първообразния подател!</string>
     <string name="title_size_reminder">Съобщение (%1$s) по-голямо от лимита на сървъра (%2$s)</string>
     <string name="title_attachments_missing">Не всички файлове са свалени</string>
+    <string name="title_download_attachments">Изтегляне на прикачванията</string>
+    <string name="title_attachments_download">Прикачванията изтеглени: %1$s</string>
+    <string name="title_attachments_no_download">Това повече няма да се показва, нито ще се изтеглят самодейно прикачванията</string>
     <string name="title_dialog_hint">Този диалог може да бъде активиран отново чрез менюто с три точки в горния панел за действие</string>
     <string name="title_draft_deleted">Черновата отказана</string>
     <string name="title_draft_saved">Черновата запазена</string>
@@ -1662,6 +1676,7 @@
     <string name="title_answer_favorite">Любими</string>
     <string name="title_answer_snippet">Фрагмент</string>
     <string name="title_answer_receipt">Употреба като разписка за прочитане</string>
+    <string name="title_answer_ai">Употреба като подкана на ИИ</string>
     <string name="title_answer_hide">Скриване в менюто</string>
     <string name="title_answer_text">Шаблон текст</string>
     <string name="title_answer_placeholder">Контейнер</string>
@@ -1765,6 +1780,8 @@
     <string name="title_rule_tts_subject">Тема</string>
     <string name="title_rule_tts_content">Текст</string>
     <string name="title_rule_select_sound">Изберете звук</string>
+    <string name="title_rule_select_sound_ringtone">Тон на звънене</string>
+    <string name="title_rule_select_sound_audio">Звуков файл</string>
     <string name="title_rule_use_as_alarm">Употреба като будило</string>
     <string name="title_rule_alarm_hint">Това ще пренебрегне правилата \"не ме притеснявайте\"</string>
     <string name="title_rule_alarm_duration">Най-дълго времетраене на будилника (секунди)</string>
@@ -1905,6 +1922,7 @@
     <string name="title_hint_dismiss">Може да отхвърлите този диалогов прозорец, за да премахнете известието.</string>
     <string name="title_hint_support">Ако имате въпрос или проблем, то използвайте менюто поддръжка, за да получите помощ</string>
     <string name="title_hint_message_actions">Прелистване наляво за изхвърляне в кошчето; Прелистване надясно за архивирне (ако е налично); Действията по прелистване може да се конфигурират в настройките на акаунта</string>
+    <string name="title_hint_outbox">Може да прелистите наляво или надясно, за да отмените изпращане</string>
     <string name="title_hint_message_selection">Натиснете и задръжте по дълго върху съобщението, за да започнете да избирате няколко съобщения; Задръжте и прекарайте пръст нагоре или надолу, за да изберете няколко съобщения</string>
     <string name="title_hint_message_junk">        Клиентът за имейл просто показва съобщения, които са на сървъра на имейла.
         За прецеждането на спама отговаря сървъра на имейла, а не клиента.
@@ -1969,6 +1987,7 @@
     <string name="title_ask_what">Запитване за</string>
     <string name="title_no_ask_again">Без повторно питане</string>
     <string name="title_no_ask_for_again">Без ново питане за %1$s</string>
+    <string name="title_no_show_again">Без повторно показване</string>
     <string name="title_undo_privacy">Това може да се отмени в раздела „Настройки за поверителност“</string>
     <string name="title_no_body">Няма текстови съобщения</string>
     <string name="title_large_body">Съобщението е преголямо и това може да доведе до проблеми!</string>
@@ -2055,6 +2074,7 @@
     <string name="title_widget_folder_unified">Обединени входящи папки</string>
     <string name="title_widget_folder_notifying">Папки с известия за ново съобщение</string>
     <string name="title_widget_unseen">Непрочетени съобщения</string>
+    <string name="title_widget_show_unseen">Показване като непрочетено</string>
     <string name="title_widget_flagged">Само съобщения със звезда</string>
     <string name="title_widget_font_size">Големина на текста</string>
     <string name="title_widget_padding">Размер на отстъпа</string>

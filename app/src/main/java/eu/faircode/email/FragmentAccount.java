@@ -32,6 +32,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -719,8 +720,9 @@ public class FragmentAccount extends FragmentBase {
                         (ex instanceof UnknownHostException ||
                                 ex instanceof FileNotFoundException ||
                                 ex instanceof IllegalArgumentException))
-                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -883,8 +885,9 @@ public class FragmentAccount extends FragmentBase {
                 cbIdentity.setVisibility(View.GONE);
 
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else
                     showError(ex);
             }
@@ -1476,6 +1479,8 @@ public class FragmentAccount extends FragmentBase {
                 editor.putBoolean("unset." + account.id + "." + EntityFolder.JUNK, junk == null);
                 editor.apply();
 
+                FairEmailBackupAgent.dataChanged(context);
+
                 return false;
             }
 
@@ -1516,8 +1521,9 @@ public class FragmentAccount extends FragmentBase {
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else
                     showError(ex);
             }
@@ -1616,12 +1622,35 @@ public class FragmentAccount extends FragmentBase {
             protected void onExecuted(Bundle args, final EntityAccount account) {
                 // Get providers
                 final Context context = getContext();
+
+                int colorAccent = Helper.resolveColor(context, androidx.appcompat.R.attr.colorAccent);
+                int textColorSecondary = Helper.resolveColor(context, android.R.attr.textColorSecondary);
+
                 List<EmailProvider> providers = EmailProvider.getProviders(context);
                 providers.add(0, new EmailProvider(getString(R.string.title_select)));
                 providers.add(1, new EmailProvider(getString(R.string.title_custom)));
 
                 ArrayAdapter<EmailProvider> aaProvider =
-                        new ArrayAdapter<>(context, R.layout.spinner_item1, android.R.id.text1, providers);
+                        new ArrayAdapter<EmailProvider>(context, R.layout.spinner_item1, android.R.id.text1, providers) {
+                            @NonNull
+                            @Override
+                            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                                return updateView(position, super.getView(position, convertView, parent));
+                            }
+
+                            @Override
+                            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                                return updateView(position, super.getDropDownView(position, convertView, parent));
+                            }
+
+                            private View updateView(int position, View view) {
+                                TextView tv = view.findViewById(android.R.id.text1);
+                                tv.setTypeface(null, position == 1 ? Typeface.BOLD : Typeface.NORMAL);
+                                tv.setTextColor(position == 1 ? colorAccent : textColorSecondary);
+
+                                return view;
+                            }
+                        };
                 aaProvider.setDropDownViewResource(R.layout.spinner_item1_dropdown);
                 spProvider.setAdapter(aaProvider);
 

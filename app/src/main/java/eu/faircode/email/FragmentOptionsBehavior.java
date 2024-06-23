@@ -112,8 +112,6 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
     private Button btnDefaultFolder;
     private TextView tvDefaultFolder;
 
-    private boolean accessibility;
-
     final static int MAX_SWIPE_SENSITIVITY = 10;
     final static int DEFAULT_SWIPE_SENSITIVITY = 6;
 
@@ -199,8 +197,6 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
         btnDefaultFolder = view.findViewById(R.id.btnDefaultFolder);
         tvDefaultFolder = view.findViewById(R.id.tvDefaultFolder);
 
-        accessibility = Helper.isAccessibilityEnabled(getContext());
-
         setOptions();
 
         // Wire controls
@@ -237,7 +233,6 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
-        swConversationActions.setEnabled(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
         swConversationActions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -246,7 +241,6 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             }
         });
 
-        swConversationActionsReplies.setEnabled(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
         swConversationActionsReplies.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -711,8 +705,9 @@ public class FragmentOptionsBehavior extends FragmentBase implements SharedPrefe
             swSyncOnlaunch.setChecked(prefs.getBoolean("sync_on_launch", false));
             swDoubleBack.setChecked(prefs.getBoolean("double_back", false));
             swConversationActions.setChecked(prefs.getBoolean("conversation_actions", Helper.isGoogle()));
+            swConversationActions.setEnabled(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
             swConversationActionsReplies.setChecked(prefs.getBoolean("conversation_actions_replies", true));
-            swConversationActionsReplies.setEnabled(swConversationActions.isChecked());
+            swConversationActionsReplies.setEnabled(swConversationActions.isChecked() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
             swLanguageDetection.setChecked(prefs.getBoolean("language_detection", false));
 
             int default_snooze = prefs.getInt("default_snooze", 1);

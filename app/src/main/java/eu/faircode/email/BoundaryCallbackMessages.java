@@ -819,7 +819,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         }
 
         if (criteria.touched != null) {
-            if (message.last_attempt == null || message.last_attempt < new Date().getTime() - criteria.touched * 3600 * 1000L)
+            if (message.last_touched == null || message.last_touched < new Date().getTime() - criteria.touched * 3600 * 1000L)
                 return false;
         }
 
@@ -961,7 +961,8 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                close(state, true);
+                close(state, false);
+                state.reset(true);
             }
         });
     }
@@ -984,7 +985,7 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         }
 
         if (reset)
-            state.reset();
+            state.reset(false);
     }
 
     static class State {
@@ -1001,16 +1002,18 @@ public class BoundaryCallbackMessages extends PagedList.BoundaryCallback<TupleMe
         Message[] imessages = null;
 
         void getMessages(int max) throws MessagingException {
-            int total = Math.min(ifolder.getMessageCount(), max);
+            int count = ifolder.getMessageCount();
+            int total = Math.min(count, max);
+            int offset = (count > max ? count - max : 0);
             imessages = new Message[total];
             for (int i = 1; i <= total; i++)
-                imessages[i - 1] = ifolder.getMessage(i);
+                imessages[i - 1] = ifolder.getMessage(i + offset);
         }
 
-        void reset() {
-            Log.i("Boundary reset");
+        void reset(boolean _destroyed) {
+            Log.i("Boundary reset destroyed=" + _destroyed);
             queued.set(0);
-            destroyed = false;
+            destroyed = _destroyed;
             error = false;
             index = 0;
             offset = 0;

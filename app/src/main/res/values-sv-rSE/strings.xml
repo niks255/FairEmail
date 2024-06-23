@@ -14,6 +14,10 @@
     <string name="app_cake_required">Minsta nödvändiga lagringsutrymme: %1$s</string>
     <string name="app_updated">Senast uppdaterad: %1$s</string>
     <string name="app_download">Hämtad från: %1$s</string>
+    <string name="app_motd">        Med Android 14/15 beta, visas \"App svarar inte\" meddelanden ibland.
+        Google arbetar på en fix.
+        Vänligen skyll inte på appen för detta Android-problem!
+    </string>
     <string name="channel_service">Övervakning</string>
     <string name="channel_send">Skicka</string>
     <string name="channel_notification">E-post</string>
@@ -195,6 +199,7 @@
     <string name="title_setup_gmail_password">Jag vill auktorisera ett konto med ett lösenord istället för ett konto på enheten</string>
     <string name="title_setup_office_auth">Felet \"AUTHENTICATE failed\" kan orsakas av att IMAP/SMTP inaktiveras av systemadministratören</string>
     <string name="title_setup_office_auth_5_7_3">Försök med snabbinstallationsguiden \'Annan leverantör\'.</string>
+    <string name="title_setup_office_auth_5_7_139">Försök med snabbinstallationsguiden \'Outlook/Hotmail/Live\'.</string>
     <string name="title_setup_oauth_rationale">Auktorisera åtkomst till ditt %1$s konto</string>
     <string name="title_setup_oauth_update">Auktorisera ett befintligt konto igen (annars skapa ett nytt konto)</string>
     <string name="title_setup_oauth_updated">Kontoauktorisering har uppdaterats</string>
@@ -323,8 +328,7 @@
     <string name="title_setup_reset_full">Visa originalmeddelanden</string>
     <string name="title_check_gmail_oauth">Dina Gmail-konton kommer att fortsätta fungera efter den 30 maj 2022</string>
     <string name="title_check_gmail_password">Vissa av dina Gmail-konton kan sluta fungera efter den 30 maj 2022</string>
-    <string name="title_check_outlook_oauth">Dina Outlook-konton kommer att fortsätta fungera efter 1 oktober 2022</string>
-    <string name="title_check_outlook_password">Vissa av dina Outlook-konton kan sluta fungera efter 1 oktober 2022</string>
+    <string name="title_check_outlook_password">Några av dina Outlook/Hotmail/Live-konton kommer att sluta fungera efter 16 september 2024</string>
     <string name="title_advanced_hint_title">Mer avancerade alternativ</string>
     <string name="title_advanced_hint_message">Du navigerar till de mer avancerade alternativen.        Alla alternativ har använt standardvärden som kan ändras om du har en annan inställning.    </string>
     <string name="title_advanced_hint_remark">        Alternativen kategoriseras efter flik, indelade i sektioner, organiserade efter utseende eller användning och sökbara.
@@ -389,6 +393,7 @@
     <string name="title_advanced_send_nav_color">Använd identitetsfärgen för den nedre åtgärdsfältet</string>
     <string name="title_advanced_send_reminders">Visa påminnelser</string>
     <string name="title_advanced_send_delayed">Fördröj sändning av meddelanden</string>
+    <string name="title_advanced_send_top">Visa Skicka-knappen högst upp</string>
     <string name="title_advanced_attach_new">Skapa ett nytt utkast till meddelande för delade adresser och filer</string>
     <string name="title_advanced_answer_caption">Inställningar för svarsknappen</string>
     <string name="title_advanced_answer_default">Kort tryck på svarsknappen kommer:</string>
@@ -765,6 +770,8 @@
     <string name="title_advanced_gemini">Gemini-integration</string>
     <string name="title_advanced_multi_modal">Multimodal</string>
     <string name="title_advanced_summarize_prompt">Sammanfatta prompten</string>
+    <string name="title_advanced_system_instructions">Systemets instruktioner</string>
+    <string name="title_advanced_entered_text">Angiven text</string>
     <string name="title_advanced_sdcard">Jag vill använda ett SD-kort</string>
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
     <string name="title_advanced_updates">Sök efter GitHub-uppdateringar</string>
@@ -777,6 +784,7 @@
     <string name="title_advanced_cleanup_attachments">Ta bort bilagor på gamla meddelanden</string>
     <string name="title_advanced_cleanup">Rensa</string>
     <string name="title_advanced_last_cleanup">Senaste rensning: %1$s</string>
+    <string name="title_advanced_google_backup">Använd Androids säkerhetskopiering av data</string>
     <string name="title_advanced_app">App-inställningar</string>
     <string name="title_advanced_more">Fler alternativ</string>
     <string name="title_advanced_main_log">Primär loggning</string>
@@ -969,6 +977,7 @@
     <string name="title_password_storage">Hur lagras lösenord?</string>
     <string name="title_case_sensitive">Användarnamn och lösenord är oftast skiftlägeskänsliga</string>
     <string name="title_client_certificate">Klientcertifikat</string>
+    <string name="title_no_key_selected">Ingen nyckel vald eller inga nycklar tillgängliga</string>
     <string name="title_realm">Domän</string>
     <string name="title_use_ip">Använd lokal IP-adress istället för värdnamn</string>
     <string name="title_ehlo">Anpassad HELO/EHLO identifiering</string>
@@ -977,9 +986,12 @@
     <string name="title_primary_identity">Primär (standardidentitet)</string>
     <string name="title_self_identity">Ta bort e-postadresser vid svar</string>
     <string name="title_leave_on_server">Spara alla meddelanden på servern</string>
+    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Efter att meddelanden har hämtats från servern så finns de kvar på servern</string>
     <string name="title_client_delete">Ta bort meddelandena aktivt efter hämtning</string>
     <string name="title_leave_deleted">Lämna raderade meddelanden på servern</string>
+    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Efter att meddelanden har raderats från enheten så finns de kvar på servern</string>
     <string name="title_leave_on_device">Spara meddelanden på enheten</string>
+    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">När meddelanden raderas på servern så finns de kvar på enheten</string>
     <string name="title_max_messages">Maximalt antal meddelanden att ladda ner (lämna tomt för alla)</string>
     <string name="title_max_messages_keep">Detta är det maximala antalet meddelanden som kommer att lagras på enheten</string>
     <string name="title_max_messages_remark">        Ange ett positivt värde för att ladda ner meddelandena i slutet (vanligast)
@@ -1203,6 +1215,7 @@
     <string name="title_create_rule">Skapa regel &#8230;</string>
     <string name="title_full_screen">Helskärm</string>
     <string name="title_force_light">Tvinga ljust tema</string>
+    <string name="title_rename">Ändra namn</string>
     <string name="title_share">Dela</string>
     <string name="title_event">Lägg till i kalender</string>
     <string name="title_pin">Lägg till genväg</string>
@@ -1328,7 +1341,9 @@
     <string name="title_ask_show_html">Att visa det ursprungliga meddelandet kan läcka sekretesskänslig information</string>
     <string name="title_ask_show_html_remark">Att visa originalmeddelandet med en mörk bakgrund är inte möjligt eftersom det kan orsaka osynliga mörka texter och bilder</string>
     <string name="title_ask_show_html_images">Visa alltid bilder när originalmeddelanden visas</string>
+    <string name="title_ask_show_html_always">Visa originalmeddelanden som standard</string>
     <string name="title_ask_show_image">Att visa bilder kan läcka sekretesskänslig information</string>
+    <string name="title_ask_show_images_always">Visa bilder som standard</string>
     <string name="title_ask_show_image_hint">Bilder som känns igen som spårningsbilder kommer inte att visas</string>
     <string name="title_ask_show_amp">Visa AMP-variant av meddelandet?</string>
     <string name="title_ask_show_amp_hint">AMP-meddelanden är utformade för att vara dynamiska och interagera med internet och kan därför per definition användas för att spåra dig</string>
@@ -1345,9 +1360,6 @@
     <string name="title_third_party">Du använder en version av en tredje part</string>
     <string name="title_expand_warning">Utvidgningen av detta meddelande kommer att ladda ned %1$s</string>
     <string name="title_download_message">Hämtar &#8230;</string>
-    <string name="title_reformatted">        Detta är den omformaterade meddelandevyn.        Du kan trycka på &#x26F6; ikonen för att visa det ursprungliga meddelandet och för att dölja detta meddelande.
-        Omformatering av meddelanden tar lite tid, beroende på storleken på meddelandet och hastigheten på din enhet.
-    </string>
     <string name="title_compose">Skriv</string>
     <string name="title_submitter">Skickad av:</string>
     <string name="title_signed_by">Signerat av:</string>
@@ -1499,6 +1511,9 @@
     <string name="title_dsn_reminder">Hard bounce skadar den ursprungliga sändaren e-postomdömme!</string>
     <string name="title_size_reminder">Meddelande (%1$s) större än gränsen på servern (%2$s)</string>
     <string name="title_attachments_missing">Inte alla bilagor har hämtats</string>
+    <string name="title_download_attachments">Ladda ner bilagor</string>
+    <string name="title_attachments_download">Bilagor nerladdade: %1$s</string>
+    <string name="title_attachments_no_download">Detta kommer inte längre att visas, och bilagor kommer inte att laddas ner automatiskt</string>
     <string name="title_dialog_hint">Denna dialogruta kan aktiveras igen via tre-pricks-menyn i åtgärdsfältet</string>
     <string name="title_draft_deleted">Utkastet slängdes</string>
     <string name="title_draft_saved">Utkast sparat</string>
@@ -1753,6 +1768,8 @@
     <string name="title_rule_tts_subject">Ämne</string>
     <string name="title_rule_tts_content">Text</string>
     <string name="title_rule_select_sound">Välj ljud</string>
+    <string name="title_rule_select_sound_ringtone">Ringsignal</string>
+    <string name="title_rule_select_sound_audio">Ljudfil</string>
     <string name="title_rule_use_as_alarm">Använd som larm</string>
     <string name="title_rule_alarm_hint">Det här kommer att ignorera \"stör ej\"-reglerna</string>
     <string name="title_rule_alarm_duration">Maxtid för alarm (sekunder)</string>
@@ -1893,6 +1910,7 @@
     <string name="title_hint_dismiss">Du kan avfärda denna dialogruta för att ta bort meddelandet.</string>
     <string name="title_hint_support">Om du har en fråga eller ett problem, vänligen använd supportmenyn för att få hjälp</string>
     <string name="title_hint_message_actions">Dra åt vänster för att kasta; Svep åt höger för att arkivera (om tillgängligt); Svepåtgärderna kan konfigureras i kontoinställningarna</string>
+    <string name="title_hint_outbox">Du kan svepa åt vänster eller höger för att avbryta sändningen</string>
     <string name="title_hint_message_selection">Långt tryck på ett meddelande för att börja välja flera meddelanden; håll och svep uppåt eller nedåt för att välja fler meddelanden</string>
     <string name="title_hint_message_junk">        En e-postklient visar i princip meddelanden på en e-postserver.
         En e-postserver är ansvarig för att filtrera skräppost, inte en e-postklient.
@@ -1957,6 +1975,8 @@
     <string name="title_ask_what">Fråga vad du ska göra</string>
     <string name="title_no_ask_again">Fråga inte detta igen</string>
     <string name="title_no_ask_for_again">Fråga inte om %1$s igen</string>
+    <string name="title_no_show_again">Visa inte igen</string>
+    <string name="title_undo_privacy">Detta kan ångras i fliken sekretessinställningar</string>
     <string name="title_no_body">Ingen meddelandetext hittades</string>
     <string name="title_large_body">Detta meddelande är mycket stort och det kan orsaka problem!</string>
     <string name="title_no_charset">Kodningen stöds inte: %1$s</string>
@@ -2041,6 +2061,7 @@
     <string name="title_widget_folder_unified">Samlade inkorgsmappar</string>
     <string name="title_widget_folder_notifying">Mappar med aviseringar för nya meddelanden</string>
     <string name="title_widget_unseen">Endast olästa meddelanden</string>
+    <string name="title_widget_show_unseen">Visa som oläst</string>
     <string name="title_widget_flagged">Endast stjärnmärkta meddelanden</string>
     <string name="title_widget_font_size">Textstorlek</string>
     <string name="title_widget_padding">Utfyllnadsstorlek</string>

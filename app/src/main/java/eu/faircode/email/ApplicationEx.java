@@ -258,7 +258,7 @@ public class ApplicationEx extends Application
         // https://issuetracker.google.com/issues/341313071
         // https://developer.android.com/guide/navigation/custom-back/support-animations#fragments
         // https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture#opt-predictive
-        //FragmentManager.enablePredictiveBack(false);
+        FragmentManager.enablePredictiveBack(false);
 
         if (Helper.hasWebView(this))
             CookieManager.getInstance().setAcceptCookie(false);
@@ -482,8 +482,6 @@ public class ApplicationEx extends Application
 
         if (version < BuildConfig.VERSION_CODE)
             editor.remove("crash_report_count");
-        if (version < BuildConfig.VERSION_CODE && !BuildConfig.DEBUG)
-            editor.remove("third_party_notified");
 
         if (!Log.isTestRelease())
             editor.remove("test1").remove("test2").remove("test3").remove("test4").remove("test5");
@@ -860,16 +858,39 @@ public class ApplicationEx extends Application
                 editor.putBoolean("mod", true);
         } else if (version < 2170) {
             editor.putBoolean("mod", false);
-        } else if (version < 2180) {
+        }
+
+        if (version < 2180) {
             if (Helper.isAndroid15())
                 editor.putInt("last_sdk", 0);
-        } else if (version < 2187) {
-            if (!prefs.contains("hide_toolbar"))
-                editor.putBoolean("hide_toolbar", !BuildConfig.PLAY_STORE_RELEASE);
+        }
+
+        if (version < 2187) {
             if (!prefs.contains("delete_unseen"))
                 editor.putBoolean("delete_unseen", false);
             if (Helper.isPixelBeta())
                 editor.putBoolean("motd", true);
+        }
+
+        if (version < 2191) {
+            if ("a".equals(BuildConfig.REVISION))
+                editor.remove("show_changelog");
+        }
+
+        if (version < 2196) {
+            if (!prefs.contains("forward_new"))
+                editor.putBoolean("forward_new", true);
+        }
+
+        if (version < 2206) {
+            if (prefs.getInt("viewport_height", 0) == 16000 &&
+                    (Helper.isGoogle() || Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU))
+                editor.remove("viewport_height");
+        }
+
+        if (version < 2208) {
+            if (!BuildConfig.DEBUG)
+                ContactInfo.clearCache(context); // SVG scale
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)

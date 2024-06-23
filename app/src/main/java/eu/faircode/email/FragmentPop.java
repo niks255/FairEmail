@@ -750,6 +750,8 @@ public class FragmentPop extends FragmentBase {
 
                 args.putBoolean("saved", true);
 
+                FairEmailBackupAgent.dataChanged(context);
+
                 return false;
             }
 
@@ -790,8 +792,9 @@ public class FragmentPop extends FragmentBase {
             @Override
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException)
-                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG)
-                            .setGestureInsetBottomIgnored(true).show();
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 else {
                     tvError.setText(Log.formatThrowable(ex, false));
                     grpError.setVisibility(View.VISIBLE);
@@ -889,7 +892,7 @@ public class FragmentPop extends FragmentBase {
                     cbClientDelete.setChecked(account == null ? false : account.client_delete);
                     cbClientDelete.setEnabled(!cbLeaveServer.isChecked());
                     cbLeaveDeleted.setChecked(account == null ? true : account.leave_deleted);
-                    cbLeaveDevice.setChecked(account == null ? false : account.leave_on_device);
+                    cbLeaveDevice.setChecked(account == null ? true : account.leave_on_device);
 
                     if (account != null && account.max_messages != null)
                         etMax.setText(Integer.toString(account.max_messages));

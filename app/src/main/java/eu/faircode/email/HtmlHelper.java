@@ -2884,6 +2884,21 @@ public class HtmlHelper {
             return;
         }
 
+        // ms-outlook-mobile
+        quotes = d.body().select("div#divRplyFwdMsg");
+        if (quotes.size() > 0) {
+            quotes.nextAll().remove();
+            quotes.remove();
+            return;
+        }
+
+        // Microsoft Word 15
+        quotes = d.body().select("div#mail-editor-reference-message-container");
+        if (quotes.size() > 0) {
+            quotes.remove();
+            return;
+        }
+
         // Web.de: <div id="aqm-original"
         quotes = d.body().select("div#aqm-original");
         if (quotes.size() > 0) {
@@ -3808,6 +3823,8 @@ public class HtmlHelper {
                                 boolean dashed = "true".equals(element.attr("x-dashed"));
                                 float stroke = context.getResources().getDisplayMetrics().density;
                                 float dash = (dashed ? line_dash_length : 0f);
+                                if (ssb.length() > 0 && ssb.charAt(ssb.length() - 1) != '\n')
+                                    ssb.append('\n');
                                 ssb.append("\uFFFC");  // Object replacement character
                                 setSpan(ssb, new LineSpan(colorSeparator, stroke, dash), start, ssb.length());
                                 break;

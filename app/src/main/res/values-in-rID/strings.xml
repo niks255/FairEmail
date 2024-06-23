@@ -14,6 +14,10 @@
     <string name="app_cake_required">Ruang penyimpanan minimum yang dibutuhkan: %1$s</string>
     <string name="app_updated">Pembaharuan terakhir: %1$s</string>
     <string name="app_download">Mengunduh dari: %1$s</string>
+    <string name="app_motd">        Pada Android 14/15 beta, notifikasi \'Aplikasi tidak merespon\' terkadang muncul.
+        Google sedang mengupayakan perbaikannya.
+        Mohon untuk tidak menyalahkan aplikasi atas masalah Android ini!
+    </string>
     <string name="channel_service">Pemantauan</string>
     <string name="channel_send">Kirim</string>
     <string name="channel_notification">Surel</string>
@@ -310,8 +314,6 @@ Kata sandi diperlukan untuk mengimpor kembali pengaturan, harap jangan sampai lu
     <string name="title_setup_reset_full">Tampilkan pesan asli</string>
     <string name="title_check_gmail_oauth">Akun Gmail Anda akan terus berfungsi setelah tanggal 30 Mei 2022</string>
     <string name="title_check_gmail_password">Beberapa akun Gmail Anda mungkin berhenti bekerja setelah tanggal 30 Mei 2022</string>
-    <string name="title_check_outlook_oauth">Akun Outlook Anda akan terus bekerja setelah tanggal 1 Oktober 2022</string>
-    <string name="title_check_outlook_password">Beberapa akun Outlook Anda mungkin berhenti bekerja setelah tanggal 1 Oktober 2022</string>
     <string name="title_advanced_hint_title">Opsi lebih lanjut</string>
     <string name="title_advanced_hint_message">        Anda menavigasi ke opsi yang lebih canggih.
         Semua opsi umumnya menggunakan nilai standar, yang tidak perlu Anda ubah kecuali jika Anda memiliki preferensi yang berbeda.
@@ -756,6 +758,7 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_advanced_gemini">Integrasi Gemini</string>
     <string name="title_advanced_multi_modal">Multimodal</string>
     <string name="title_advanced_summarize_prompt">Ringkas permintaan</string>
+    <string name="title_advanced_answer_prompt">Jawab pertanyaan</string>
     <string name="title_advanced_sdcard">Saya ingin menggunakan sdcard</string>
     <string name="title_advanced_watchdog">Periksa secara berkala apakah FairEmail masih aktif</string>
     <string name="title_advanced_updates">Periksa pembaruan di GitHub</string>
@@ -812,7 +815,6 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_advanced_metered_warning">Menonaktifkan opsi ini akan menonaktifkan menerima dan mengirim pesan ketika memakai koneksi internet seluler</string>
     <string name="title_advanced_rlah_hint">Dengan asumsi tidak ada roaming di Uni Eropa</string>
     <string name="title_advanced_usage_hint">Akan meningkatkan penggunaan baterai, dan penyimpanan data</string>
-    <string name="title_advanced_plain_hint">Mengaktifkan ini akan membatasi penggunaan data, namun pesan akan ditampilkan tanpa pengaturan style</string>
     <string name="title_advanced_plain_remark">Bagian teks biasa tidak selalu berisi pesan lengkap!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Mengaktifkan ini dapat mengakibatkan masalah koneksi pada beberapa perangkat dan dapat meningkatkan penggunaan baterai</string>
     <string name="title_advanced_validate_hint">Ini dapat mengakibatkan pesan tidak tersinkronasi, contohnya ketika menggunakan VPN, tetapi juga dalam situasi lain</string>
@@ -1320,7 +1322,9 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_ask_show_html">Menampilkan pesan asli dapat membocorkan informasi sensitif privasi</string>
     <string name="title_ask_show_html_remark">Menampilkan pesan asli pada latar gelap tidak memungkinkan karena dapat membuat tulisan dan gambar gelap tidak terlihat</string>
     <string name="title_ask_show_html_images">Selalu tampilkan gambar saat menampilkan pesan asli</string>
+    <string name="title_ask_show_html_always">Tampilkan pesan asli sebagai bawaan</string>
     <string name="title_ask_show_image">Menampilkan gambar dapat membocorkan informasi sensitif privasi</string>
+    <string name="title_ask_show_images_always">Tampikan gambar sebagai bawaan</string>
     <string name="title_ask_show_image_hint">Gambar yang dikenali sebagai gambar pelacakan tidak akan ditampilkan</string>
     <string name="title_ask_show_amp">Tampilkan varian AMP dari pesan?</string>
     <string name="title_ask_show_amp_hint">Pesan AMP dirancang agar dinamis dan berinteraksi dengan internet dan karenanya dapat secara definisi digunakan untuk melacak Anda</string>
@@ -1337,9 +1341,6 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_third_party">Anda menggunakan versi pihak ketiga</string>
     <string name="title_expand_warning">Memperluas pesan ini akan mengunduh %1$s</string>
     <string name="title_download_message">Mengunduh &#8230;</string>
-    <string name="title_reformatted">        Ini adalah tampilan tulisan yang di format ulang.
-Anda dapat mengetuk pada ikon &#x26F6; untuk melihat pesan asli dan menyembunyikan pesan ini.
-Memformat ulang pesan perlu waktu, tergantung dari ukuran pesan dan keceoatan perangkat anda.    </string>
     <string name="title_compose">Menyusun</string>
     <string name="title_submitter">Dikirim oleh:</string>
     <string name="title_signed_by">Ditanda tangani oleh:</string>
@@ -1946,6 +1947,7 @@ Memformat ulang pesan perlu waktu, tergantung dari ukuran pesan dan keceoatan pe
     <string name="title_ask_what">Tanya apa yang harus dilakukan</string>
     <string name="title_no_ask_again">Jangan tanya ini lagi</string>
     <string name="title_no_ask_for_again">Jangan tanya ini lagi untuk %1$s</string>
+    <string name="title_undo_privacy">Hal ini dapat dibatalkan di halaman tab pengaturan privasi</string>
     <string name="title_no_body">Teks pesan tidak ditemukan</string>
     <string name="title_large_body">Pesan ini terlalu besar dan bisa menyebabkan masalah!</string>
     <string name="title_no_charset">Encoding tidak didukung: %1$s</string>
