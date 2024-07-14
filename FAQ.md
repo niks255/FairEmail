@@ -378,7 +378,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(151) Can you add backup/restore of messages?](#faq151)
 * [(152) How can I insert a contact group?](#faq152)
 * [(153) Why does permanently deleting Gmail message not work?](#faq153)
-* [~~(154) Can you add favicons as contact photos?~~](#faq154)
+* [(154) Is there support for favicons as contact photos?](#faq154)
 * [(155) What is a winmail.dat file?](#faq155)
 * [(156) How can I set up an Office 365 account?](#faq156)
 * [(157) How can I set up an Free.fr account?](#faq157)
@@ -429,6 +429,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(202) What is DNSSEC and what is DANE?](#faq202)
 * [(203) Where is my sent message?](#faq203)
 * [(204) How do I use Gemini?](#faq204)
+* [(205) How do I check the integrity of an APK file?](#faq205)
 
 [I have another question.](#get-support)
 
@@ -1273,6 +1274,14 @@ Using the search index is a pro feature.
 >
 > It takes just two minutes to be prepared.
 >
+> If the app said your Outlook accounts will continue to work, you don't need to do anything.
+>
+
+<br />
+
+>
+> tl;dr; go to settings via the navigation menu (left side menu), tap the wizard button, select Outlook/Hotmail/Live and follow the steps.
+>
 
 <br />
 
@@ -1785,6 +1794,8 @@ pm install -k --user 0 com.android.documentsui
 ```
 
 Alternatively, you might be able to enable the *Files* app again using the Android app settings.
+
+OneDrive doesn't support *view*, only *share*, which means that if you want to open an attachment in OneDrive you need to long press on an attachment.
 
 <br />
 
@@ -2804,11 +2815,17 @@ Please see [here](https://developer.android.com/reference/java/util/regex/Patter
 Note that you need to match the complete text from the first to the last character.
 You can test a regex [here](https://regexr.com/).
 
+You can use a regex condition like this to match a top-level domain (tld):
+
+```
+.*@.*\.xyz>
+```
+
 Note that a regular expression supports an *or* operator, so if you want to match multiple senders, you can do this:
 
-``
+```
 .*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*
-``
+```
 
 Note that [dot all mode](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) is enabled
 to be able to match [unfolded headers](https://tools.ietf.org/html/rfc2822#section-3.2.3).
@@ -4774,12 +4791,31 @@ On the other hand, a star set via IMAP is being shown in the web interface and c
 <br />
 
 <a name="faq154"></a>
-**~~(154) Can you add favicons as contact photos?~~**
+**(154) Is there support for favicons as contact photos?**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq154)
 
-~~Besides that a [favicon](https://en.wikipedia.org/wiki/Favicon) might be shared by many email addresses with the same domain name~~
-~~and therefore is not directly related to an email address, favicons can be used to track you.~~
+Yes, favicons can be enabled in the display-settings tab page.
+
+To reduce privacy concerns, the app fetches favicons directly from the internet using the domain name of email addresses.
+In other words, no third-party service is used.
+
+If no favicon is shown for an email address, please check for favicons via [this service](https://realfavicongenerator.net/),
+and if there are any, please [contact me](https://contact.faircode.eu/?product=fairemailsupport).
+
+Since version 1.2210 it is also possible to use DuckDuckGo's icon service (GitHub version only).
+There are concerns about [privacy](https://github.com/duckduckgo/Android/issues/527).
+
+Since version 1.2213 it is possible to configure an alternative URI to fetch favicons in the debug options
+by temporarily enabling debug mode in the miscellaneous-settings tab page.
+For example:
+
+
+```
+https://icons.duckduckgo.com/ip3/{domain}.ico
+https://www.google.com/s2/favicons?sz=128&domain={domain}
+https://favicon.yandex.net/favicon/{domain}
+```
 
 <br />
 
@@ -5929,6 +5965,8 @@ This is not a complete and exhaustive list.
 
 Please see [this article](https://www.zivver.com/blog/why-cisos-and-security-professionals-can-no-longer-rely-on-regular-email-for-the-sharing-of-personal-information) about why DANE is important.
 
+Note that DNSSEC and DANE are available in the GitHub version only.
+
 <br>
 
 <a name="faq203"></a>
@@ -5977,6 +6015,24 @@ Please read the privacy policy of [Gemini](https://support.google.com/gemini/ans
 FairEmail does not use third-party libraries to avoid being tracked when Gemini is not being used.
 
 This feature is experimental and requires version 1.2171 or later for the GitHub version and version 1.2182 or later for the Play Store version.
+
+<br>
+
+<a name="faq205"></a>
+**(205) How do I check the integrity of an APK file?**
+
+You can verify in this way that an APK file was built and signed by a GitHub workflow:
+
+1. Install the [GitHub CLI](https://cli.github.com/)
+2. Download and extract the [APK files](https://github.com/M66B/FairEmail/actions)
+3. [Verify](https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds#verifying-artifact-attestations-with-the-github-cli) attestation of an APK file
+
+
+```
+gh attestation verify xyz.apk -R M66B/FairEmail
+```
+
+Attestation of APK files is available from version 1.2209.
 
 <br>
 

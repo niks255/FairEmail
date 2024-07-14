@@ -210,6 +210,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private String type;
     private boolean found;
     private String searched;
+    private boolean searchedPartial;
     private ViewType viewType;
     private boolean compact;
     private int zoom;
@@ -1678,7 +1679,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             // Contact info
             ContactInfo[] info = ContactInfo.getCached(context,
-                    message.account, message.folderType, selector, addresses);
+                    message.account, message.folderType, selector, Boolean.TRUE.equals(message.dmarc), addresses);
             if (info == null) {
                 if (taskContactInfo != null) {
                     taskContactInfo.cancel(context);
@@ -1690,6 +1691,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 aargs.putLong("account", message.account);
                 aargs.putString("folderType", message.folderType);
                 aargs.putString("selector", selector);
+                aargs.putBoolean("dmarc", Boolean.TRUE.equals(message.dmarc));
                 aargs.putSerializable("addresses", addresses);
 
                 taskContactInfo = new SimpleTask<ContactInfo[]>() {
@@ -1698,8 +1700,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         long account = args.getLong("account");
                         String folderType = args.getString("folderType");
                         String selector = args.getString("selector");
+                        boolean dmarc = args.getBoolean("dmarc");
                         Address[] addresses = (Address[]) args.getSerializable("addresses");
-                        return ContactInfo.get(context, account, folderType, selector, addresses);
+                        return ContactInfo.get(context, account, folderType, selector, dmarc, addresses);
                     }
 
                     @Override
@@ -2334,8 +2337,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean inJunk = EntityFolder.JUNK.equals(message.folderType);
                     boolean outbox = EntityFolder.OUTBOX.equals(message.folderType);
 
-                    boolean move = !(message.folderReadOnly || message.uid == null) ||
-                            (pop && EntityFolder.TRASH.equals(message.folderType));
+                    boolean move = !(message.folderReadOnly || message.uid == null);
                     boolean archive = (move && (hasArchive && !inArchive && !inSent && !inTrash && !inJunk));
                     boolean trash = (move || outbox || debug || pop);
                     boolean inbox = (move && hasInbox && (inArchive || inTrash || inJunk) && imap) ||
@@ -3326,7 +3328,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         HtmlHelper.autoLink(document);
 
                         if (message.ui_found && found && !TextUtils.isEmpty(searched))
-                            HtmlHelper.highlightSearched(context, document, searched);
+                            HtmlHelper.highlightSearched(context, document, searched, searchedPartial);
 
                         boolean overview_mode = prefs.getBoolean("overview_mode", false);
                         HtmlHelper.setViewport(document, overview_mode);
@@ -3355,7 +3357,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         HtmlHelper.autoLink(document);
 
                         if (message.ui_found && found && !TextUtils.isEmpty(searched))
-                            HtmlHelper.highlightSearched(context, document, searched);
+                            HtmlHelper.highlightSearched(context, document, searched, searchedPartial);
 
                         // Cleanup message
                         document = HtmlHelper.sanitizeView(context, document, show_images);
@@ -4684,7 +4686,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             .putExtra("lpos", getAdapterPosition())
                             .putExtra("filter_archive", filter_archive)
                             .putExtra("found", viewType == ViewType.SEARCH)
-                            .putExtra("searched", searched);
+                            .putExtra("searched", searched)
+                            .putExtra("searchedPartial", searchedPartial);
 
                     boolean doubletap = prefs.getBoolean("doubletap", false);
 
@@ -4971,10 +4974,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         private void onShowAuth(TupleMessageEx message, String title) {
-            StringBuilder sb = new StringBuilder();
+            SpannableStringBuilder ssb = new SpannableStringBuilderEx();
 
             if (title != null)
-                sb.append(title).append('\n');
+                ssb.append(title).append('\n');
 
             List<String> result = new ArrayList<>();
             if (Boolean.FALSE.equals(message.dkim))
@@ -4989,61 +4992,67 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 result.add("MX");
 
             if (result.size() > 0)
-                sb.append(context.getString(R.string.title_authentication_failed, TextUtils.join(", ", result)))
+                ssb.append(context.getString(R.string.title_authentication_failed, TextUtils.join(", ", result)))
                         .append('\n');
 
             if (authentication_indicator) {
                 if (check_tls)
-                    sb.append("TLS: ")
+                    ssb.append("TLS: ")
                             .append(message.tls == null ? "-" : (message.tls ? "✓" : "✗")).append('\n');
-                sb.append("DKIM: ")
+                ssb.append("DKIM: ")
                         .append(message.dkim == null ? "-" : (message.dkim ? "✓" : "✗")).append('\n');
-                sb.append("SPF: ")
+                ssb.append("SPF: ")
                         .append(message.spf == null ? "-" : (message.spf ? "✓" : "✗")).append('\n');
-                sb.append("DMARC: ")
+                ssb.append("DMARC: ")
                         .append(message.dmarc == null ? "-" : (message.dmarc ? "✓" : "✗")).append('\n');
                 if (message.auth != null)
-                    sb.append("SMTP: ")
+                    ssb.append("SMTP: ")
                             .append(message.auth ? "✓" : "✗").append('\n');
                 if (check_mx)
-                    sb.append("MX: ")
+                    ssb.append("MX: ")
                             .append(message.mx == null ? "-" : (message.mx ? "✓" : "✗")).append('\n');
             }
 
             if (native_dkim && !TextUtils.isEmpty(message.signedby)) {
-                sb.append(context.getString(R.string.title_signed_by)).append(' ');
-                for (String signer : message.signedby.split(","))
-                    sb.append(signer).append('\n');
+                ssb.append(context.getString(R.string.title_signed_by)).append(' ');
+                for (String signer : message.signedby.split(",")) {
+                    int start = ssb.length();
+                    ssb.append(signer);
+                    ssb.setSpan(new StyleSpan(Typeface.BOLD), start, ssb.length(), 0);
+                    ssb.append('\n');
+                }
             }
 
             if (Boolean.TRUE.equals(message.blocklist))
-                sb.append(context.getString(R.string.title_on_blocklist)).append('\n');
+                ssb.append(context.getString(R.string.title_on_blocklist)).append('\n');
 
             if (Boolean.FALSE.equals(message.from_domain) && message.smtp_from != null)
                 for (Address smtp_from : message.smtp_from) {
                     String domain = UriHelper.getEmailDomain(((InternetAddress) smtp_from).getAddress());
                     String root = UriHelper.getRootDomain(context, domain);
                     if (root != null)
-                        sb.append(context.getString(R.string.title_via, root)).append('\n');
+                        ssb.append(context.getString(R.string.title_via, root)).append('\n');
                 }
 
             if (Boolean.FALSE.equals(message.reply_domain)) {
                 String[] warning = message.checkReplyDomain(context);
                 if (warning != null)
-                    sb.append(context.getString(R.string.title_reply_domain, warning[0], warning[1])).append('\n');
+                    ssb.append(context.getString(R.string.title_reply_domain, warning[0], warning[1])).append('\n');
             }
 
             if (message.from != null && message.from.length > 0) {
                 String email = ((InternetAddress) message.from[0]).getAddress();
                 String domain = UriHelper.getEmailDomain(email);
-                if (!TextUtils.isEmpty(domain))
-                    sb.insert(0, '\n').insert(0, domain);
+                if (!TextUtils.isEmpty(domain)) {
+                    ssb.insert(0, "\n").insert(0, domain);
+                    ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, domain.length(), 0);
+                }
             }
 
-            if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '\n')
-                sb.deleteCharAt(sb.length() - 1);
+            if (ssb.length() > 0 && ssb.charAt(ssb.length() - 1) == '\n')
+                ssb.delete(ssb.length() - 1, ssb.length());
 
-            ToastEx.makeText(context, sb.toString(), Toast.LENGTH_LONG).show();
+            ToastEx.makeText(context, ssb, Toast.LENGTH_LONG).show();
         }
 
         private void onShowPriority(TupleMessageEx message) {
@@ -6387,12 +6396,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             popupMenu.getMenu().findItem(R.id.menu_show_html).setVisible(hasWebView && message.content);
 
-            boolean canRaw = (message.uid != null ||
-                    (EntityFolder.INBOX.equals(message.folderType) &&
-                            message.accountProtocol == EntityAccount.TYPE_POP));
-            popupMenu.getMenu().findItem(R.id.menu_raw_save).setEnabled(canRaw);
-            popupMenu.getMenu().findItem(R.id.menu_raw_send_message).setEnabled(canRaw);
-            popupMenu.getMenu().findItem(R.id.menu_raw_send_thread).setEnabled(canRaw);
+            boolean popReload = (message.accountProtocol == EntityAccount.TYPE_POP &&
+                    message.accountLeaveOnServer &&
+                    EntityFolder.INBOX.equals(message.folderType));
+
+            popupMenu.getMenu().findItem(R.id.menu_raw_save).setEnabled(message.uid != null || popReload);
+            popupMenu.getMenu().findItem(R.id.menu_raw_send_message).setEnabled(message.uid != null || popReload);
+            popupMenu.getMenu().findItem(R.id.menu_raw_send_thread).setEnabled(message.uid != null || popReload);
 
             popupMenu.getMenu().findItem(R.id.menu_thread_info)
                     .setVisible(BuildConfig.DEBUG || debug);
@@ -6403,17 +6413,17 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_resync)
                     .setEnabled(message.uid != null ||
                             message.accountProtocol == EntityAccount.TYPE_POP)
-                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP ||
-                            EntityFolder.INBOX.equals(message.folderType));
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP || popReload);
             popupMenu.getMenu().findItem(R.id.menu_charset)
-                    .setEnabled(message.uid != null)
-                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
-
+                    .setEnabled(message.uid != null ||
+                            message.accountProtocol == EntityAccount.TYPE_POP)
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP || popReload);
             popupMenu.getMenu().findItem(R.id.menu_alternative)
                     .setTitle(message.isPlainOnly()
                             ? R.string.title_alternative_html : R.string.title_alternative_text)
-                    .setEnabled(message.uid != null && message.hasAlt() && !message.isEncrypted())
-                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+                    .setEnabled(message.hasAlt() && !message.isEncrypted() &&
+                            (message.uid != null || message.accountProtocol == EntityAccount.TYPE_POP))
+                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP || popReload);
 
             popupMenu.insertIcons(context);
 
@@ -7618,6 +7628,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             args.putLong("account", message.account);
             args.putString("folderType", message.folderType);
             args.putString("selector", message.bimi_selector);
+            args.putBoolean("dmarc", Boolean.TRUE.equals(message.dmarc));
             args.putSerializable("addresses", message.from);
 
             new SimpleTask<ContactInfo[]>() {
@@ -7626,8 +7637,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     long account = args.getLong("account");
                     String folderType = args.getString("folderType");
                     String selector = args.getString("selector");
+                    boolean dmarc = args.getBoolean("dmarc");
                     Address[] addresses = (Address[]) args.getSerializable("addresses");
-                    return ContactInfo.get(context, account, folderType, selector, addresses);
+                    return ContactInfo.get(context, account, folderType, selector, dmarc, addresses);
                 }
 
                 @Override
@@ -8166,7 +8178,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     }
 
     AdapterMessage(Fragment parentFragment,
-                   String type, boolean found, String searched, ViewType viewType,
+                   String type, boolean found, String searched, boolean searchedPartial, ViewType viewType,
                    boolean compact, int zoom, boolean large_buttons, String sort, boolean ascending,
                    boolean filter_duplicates, boolean filter_trash,
                    final IProperties properties) {
@@ -8174,6 +8186,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.type = type;
         this.found = found;
         this.searched = searched;
+        this.searchedPartial = searchedPartial;
         this.viewType = viewType;
         this.compact = compact;
         this.zoom = zoom;

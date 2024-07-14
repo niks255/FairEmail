@@ -4,13 +4,7 @@
 
 ### Notices
 
-Recently, there were more updates than usual, all intended to resolve side effects of changes required for Android 15.
-Google's compatibility library unfortunately does not work properly for all Android versions and all devices,
-and therefore custom bug fixes were necessary.
-
-The use of "AI" integrations is and will remain completely optional.
-"AI" is completely inert if it is not configured and not being used.
-To prevent tracking, [REST](https://en.wikipedia.org/wiki/REST) calls are used instead of third-party libraries.
+It is now possible to check the integrity of APK files, see [the FAQ](https://m66b.github.io/FairEmail/#faq205) about how.
 
 For support you can use [the contact form](https://contact.faircode.eu/?product=fairemailsupport).
 
@@ -18,7 +12,43 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Acantholipan](https://en.wikipedia.org/wiki/Acantholipan)
 
-### 1.2208 - 2024-06-22
+### 1.2213 - 2024-07-13
+
+* Added white theme
+* Small improvements and minor bug fixes
+* Updated build tools (Android Studio, gradle)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2212 - 2024-07-11
+
+* Added resizing of contact photos to avoid using a lot of memory
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2211 - 2024-07-10
+
+* Added workaround for drop-down menu focus
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2210 - 2024-07-09
+
+* Added optional DuckDuckGo favicons (GitHub version only)
+* Fixed two memory leaks
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2209 - 2024-07-03
+
+* Added account images (avatars)
+* Added APK file attestation, see [the FAQ](https://m66b.github.io/FairEmail/#faq205)
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2208 - 2024-06-22 *
 
 * Changed copy signature button into edit signature button
 * Small improvements and minor bug fixes

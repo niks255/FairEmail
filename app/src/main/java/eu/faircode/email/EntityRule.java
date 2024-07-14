@@ -182,6 +182,11 @@ public class EntityRule {
     private static boolean needs(List<EntityRule> rules, String what) {
         for (EntityRule rule : rules)
             try {
+                JSONObject jaction = new JSONObject(rule.action);
+                int type = jaction.getInt("type");
+                if (type == TYPE_SUMMARIZE)
+                    return true;
+
                 JSONObject jcondition = new JSONObject(rule.condition);
 
                 if (jcondition.has(what)) {
@@ -1579,7 +1584,8 @@ public class EntityRule {
 
         try {
             Spanned summary = AI.getSummaryText(context, message, -1L);
-            message.preview = (summary == null ? null : summary.toString());
+            if (summary != null)
+                message.preview = summary.toString().trim();
         } catch (Throwable ex) {
             message.error = Log.formatThrowable(ex);
             db.message().setMessageError(message.id, message.error);

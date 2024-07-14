@@ -190,6 +190,7 @@
     <string name="title_setup_oauth_update">重新授权现有账户（否则请新建账户）</string>
     <string name="title_setup_oauth_updated">账户授权已更新</string>
     <string name="title_setup_oauth_brave">使用 Brave 浏览器时，您必须在 Brave 的设置中启用该选项，允许在 Brave 之外的应用中打开应用链接</string>
+    <string name="title_setup_oauth_browser">授权需要一个运转正常的浏览器</string>
     <string name="title_setup_oauth_authorize">授权</string>
     <string name="title_setup_select_account">选择账户</string>
     <string name="title_setup_instructions">设置指南</string>
@@ -316,6 +317,7 @@
     <string name="title_setup_reset_full">显示原始邮件</string>
     <string name="title_check_gmail_oauth">您的 Gmail 账户在 2022 年 5 月 30 日之后可继续使用</string>
     <string name="title_check_gmail_password">您的部分 Gmail 账户可能会在 2022 年 5 月 30 日之后不可使用</string>
+    <string name="title_check_outlook_oauth">你的 Outlook 账户在2024 年9月16日之后将继续工作</string>
     <string name="title_check_outlook_password">您的一些Outlook/Hotmail/Live 账户在2024年9月16日后将停止工作</string>
     <string name="title_advanced_hint_title">更多高级选项</string>
     <string name="title_advanced_hint_message">        您正在前往更多的高级选项        所有选项默认使用常用的标准值，若有特别偏好则可更改。
@@ -444,6 +446,7 @@
     <string name="title_advanced_prefer_ip4">IPv4 优先于 IPv6</string>
     <string name="title_advanced_dns">首选的DNS服务器地址 (逗号分隔)</string>
     <string name="title_advanced_dns_custom">使用自定义 DNS 解析器</string>
+    <string name="title_advanced_dns_clear">连接更改时清除 DNS 缓存</string>
     <string name="title_advanced_ssl_update">使用更新的 SSL 提供商</string>
     <string name="title_advanced_ssl_harden">加强 SSL 连接</string>
     <string name="title_advanced_ssl_harden_strict">需要 TLS 1.3</string>
@@ -504,6 +507,8 @@
     <string name="title_advanced_color_stripe">头像前显示一条色带</string>
     <string name="title_advanced_color_stripe_wide">使用宽色条</string>
     <string name="title_advanced_avatars">显示联系人头像</string>
+    <string name="title_advanced_bimi">显示消息识别的品牌指示器 (BIMI)</string>
+    <string name="title_advanced_bimi_vmc">需要有效的 VMC 证书</string>
     <string name="title_advanced_bimi_unverified">未验证的发送者</string>
     <string name="title_advanced_bimi_verified">已验证的发送者</string>
     <string name="title_advanced_gravatars">显示 Gravatars 头像</string>
@@ -511,6 +516,8 @@
     <string name="title_advanced_favicons">显示网页图标</string>
     <string name="title_advanced_favicons_partial">只扫描网页的前 %1$s 数据</string>
     <string name="title_advanced_favicons_manifest">扫描Web应用清单</string>
+    <string name="title_advanced_ddg" comment="title_advanced_ddg&#10;Title for an option to fetch favicons via the icon service of DuckDuckGo">显示 DuckDuckGo 图标</string>
+    <string name="title_advanced_favicons_dmarc">外部图像需要 DMARC 验证</string>
     <string name="title_advanced_generated_icons">显示生成的图标</string>
     <string name="title_advanced_identicons">显示哈希头像</string>
     <string name="title_advanced_circular">使用圆形图标</string>
@@ -745,6 +752,7 @@
     <string name="title_advanced_language">界面语言</string>
     <string name="title_advanced_language_system">系统</string>
     <string name="title_advanced_integrations_hint">下面的云服务不是应用的一部分。任何付款都将直接提供给云服务，而不是应用开发者。</string>
+    <string name="title_advanced_integrations_inert">未配置的集成是完全无效的。没有使用第三方库用于防止跟踪和分析。</string>
     <string name="title_advanced_lt">LanguageTool 集成</string>
     <string name="title_advanced_lt_sentence">检查每个句子</string>
     <string name="title_advanced_lt_auto">换行后检查段落</string>
@@ -942,6 +950,7 @@
     <string name="title_account_partial_fetch_hint">仅在邮件为空或附件损坏的情况下禁用此功能</string>
     <string name="title_account_raw_fetch_hint">启用此功能会增加耗电和数据使用量</string>
     <string name="title_color">颜色</string>
+    <string name="title_avatar">图片</string>
     <string name="title_calendar">日历</string>
     <string name="title_background">背景</string>
     <string name="title_transparent">透明</string>
@@ -982,12 +991,12 @@
     <string name="title_primary_identity">主身份(默认身份)</string>
     <string name="title_self_identity">回复时去掉邮件地址</string>
     <string name="title_leave_on_server">在服务器上保留邮件</string>
-    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">从服务器下载邮件后，邮件将保留在服务器上</string>
+    <string name="title_leave_on_server_hint">从服务器下载邮件后，邮件将保留在服务器上</string>
     <string name="title_client_delete">下载后主动删除邮件</string>
     <string name="title_leave_deleted">在服务器上保留已删除邮件</string>
-    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">从设备中删除邮件后，这些邮件将保留在服务器上</string>
+    <string name="title_leave_deleted_hint">从设备中删除邮件后，这些邮件将保留在服务器上</string>
     <string name="title_leave_on_device">在设备上保留邮件</string>
-    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">从服务器中删除邮件时，邮件仍保留在设备上</string>
+    <string name="title_leave_on_device_hint">从服务器中删除邮件时，邮件仍保留在设备上</string>
     <string name="title_max_messages">下载邮件的最大数（留空则下载全部）</string>
     <string name="title_max_messages_keep">此为设备上存储的最大邮件数</string>
     <string name="title_max_messages_remark">        输入一个正数下载末尾邮件(最常见)

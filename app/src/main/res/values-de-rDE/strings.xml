@@ -205,6 +205,7 @@
     <string name="title_setup_oauth_update">Ein bestehendes Konto erneut autorisieren (oder ein neues Konto erstellen)</string>
     <string name="title_setup_oauth_updated">Kontoautorisierung wurde aktualisiert</string>
     <string name="title_setup_oauth_brave">Wenn Sie den Browser Brave verwenden, dann müssen Sie in den Datenschutz-Einstellungen »Erlauben, dass Anwendungslinks in Anwendungen außerhalb von Brave geöffnet werden« aktivieren</string>
+    <string name="title_setup_oauth_browser">Autorisierung erfordert einen funktionierenden Browser</string>
     <string name="title_setup_oauth_authorize">Autorisieren</string>
     <string name="title_setup_select_account">Konto auswählen</string>
     <string name="title_setup_instructions">Einrichtungsanleitung</string>
@@ -331,6 +332,7 @@
     <string name="title_setup_reset_full">Originalnachrichten anzeigen</string>
     <string name="title_check_gmail_oauth">Ihre Gmail-Konten werden nach dem 30. Mai 2022 weiterhin funktionieren</string>
     <string name="title_check_gmail_password">Einige Ihrer Gmail-Konten funktionieren möglicherweise nicht mehr nach dem 30. Mai 2022</string>
+    <string name="title_check_outlook_oauth">Ihre Outlook-Konten werden auch nach dem 16. September 2024 weiterhin funktionieren</string>
     <string name="title_check_outlook_password">Einige Ihrer Outlook-/Hotmail-/Live-Konten funktionieren nach dem 16. September 2024 möglicherweise nicht mehr</string>
     <string name="title_advanced_hint_title">Erweiterte Optionen</string>
     <string name="title_advanced_hint_message">        Sie navigieren zu den erweiterten Optionen.
@@ -460,6 +462,7 @@
     <string name="title_advanced_prefer_ip4">IPv4 gegenüber IPv6 bevorzugen</string>
     <string name="title_advanced_dns">Bevorzugte DNS-Server-Adressen (durch Kommas getrennt)</string>
     <string name="title_advanced_dns_custom">Benutzerdefinierten DNS-Resolver verwenden</string>
+    <string name="title_advanced_dns_clear">DNS-Cache bei Verbindungsänderungen leeren</string>
     <string name="title_advanced_ssl_update">Aktualisierten SSL-Anbieter verwenden</string>
     <string name="title_advanced_ssl_harden">SSL-Verbindungen stärken</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 voraussetzen</string>
@@ -520,6 +523,8 @@
     <string name="title_advanced_color_stripe">Farbstreifen anzeigen</string>
     <string name="title_advanced_color_stripe_wide">Breite Farbstreifen verwenden</string>
     <string name="title_advanced_avatars">Kontaktfotos anzeigen</string>
+    <string name="title_advanced_bimi">Brand Indicators for Message Identification (BIMI) anzeigen</string>
+    <string name="title_advanced_bimi_vmc">Gültiges VMC-Zertifikat voraussetzen</string>
     <string name="title_advanced_bimi_unverified">Ungeprüfter Absender</string>
     <string name="title_advanced_bimi_verified">Überprüfter Absender</string>
     <string name="title_advanced_gravatars">Gravatare anzeigen</string>
@@ -527,6 +532,8 @@
     <string name="title_advanced_favicons">Favicons anzeigen</string>
     <string name="title_advanced_favicons_partial">Nur die ersten %1$s der Webseite scannen</string>
     <string name="title_advanced_favicons_manifest">Web-App-Manifeste scannen</string>
+    <string name="title_advanced_ddg" comment="title_advanced_ddg&#10;Title for an option to fetch favicons via the icon service of DuckDuckGo">DuckDuckGo-Symbole anzeigen</string>
+    <string name="title_advanced_favicons_dmarc">DMARC-Überprüfung für externe Bilder voraussetzen</string>
     <string name="title_advanced_generated_icons">Generierte Symbole anzeigen (Anfangsbuchstaben)</string>
     <string name="title_advanced_identicons">Identicons anzeigen</string>
     <string name="title_advanced_circular">Runde Symbole anzeigen</string>
@@ -762,6 +769,7 @@
     <string name="title_advanced_language">Sprache</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_integrations_hint">Die nachfolgenden Cloud-Dienste sind nicht Teil der App. Alle Zahlungen gehen direkt an den Cloud-Dienst und nicht an den App-Entwickler.</string>
+    <string name="title_advanced_integrations_inert">Eine nicht konfigurierte Integration ist vollständig inaktiv. Um das Nachverfolgen und das Analysieren Ihres Verhaltens zu verhindern, werden keine Bibliotheken von Dritten verwendet.</string>
     <string name="title_advanced_lt">LanguageTool-Integration</string>
     <string name="title_advanced_lt_sentence">Jeden Satz prüfen</string>
     <string name="title_advanced_lt_auto">Absatz nach einer neuen Zeile prüfen</string>
@@ -841,14 +849,14 @@
     <string name="title_advanced_metered_warning">Das Deaktivieren dieser Option deaktiviert das Empfangen und Senden von Nachrichten über mobile Internetverbindungen</string>
     <string name="title_advanced_rlah_hint">Unter der Annahme, dass kein Roaming innerhalb der EU stattfindet</string>
     <string name="title_advanced_usage_hint">Dadurch wird der Akku-, Daten- und Speicherplatzverbrauch erhöht</string>
-    <string name="title_advanced_plain_hint">Das Aktivieren dieser Funktion reduziert den Datenverbrauch, aber Nachrichten werden ohne Formatierung und ohne Bilder angezeigt</string>
+    <string name="title_advanced_plain_hint">Das Aktivieren dieser Funktion begrenzt den Datenverbrauch, aber Nachrichten werden ohne Formatierung und ohne Bilder angezeigt</string>
     <string name="title_advanced_plain_remark">Der einfache Textteil enthält nicht immer die vollständige Nachricht!</string>
     <string name="title_advanced_tcp_keep_alive_hint">Das Aktivieren dieser Funktion kann bei einigen Geräten zu Verbindungsproblemen führen und den Akkuverbrauch erhöhen</string>
     <string name="title_advanced_validate_hint">Dadurch könnten Nachrichten nicht synchronisiert werden, zum Beispiel beim Verwenden eines VPNs, aber auch in anderen Situationen</string>
     <string name="title_advanced_timeout_hint">Die Zeitüberschreitung beim Lesen oder Schreiben wird auf das Doppelte der Verbindungszeitüberschreitung festgelegt. Höhere Werte führen zu einem höheren Akkuverbrauch.</string>
     <string name="title_advanced_cert_strict_hint">Das Deaktivieren dieser Option sorgt für eine weniger strenge Überprüfung von Serverzertifikaten</string>
     <string name="title_advanced_ssl_harden_hint">Das Aktivieren dieser Funktion deaktiviert schwache SSL-Protokolle und Chiffren, was zu Verbindungsproblemen führen kann</string>
-    <string name="title_advanced_open_safe_hint">Das Aktivieren dieser Funktion erfordert eine sichere Verbindung zum Herunterladen von Bildern usw.</string>
+    <string name="title_advanced_open_safe_hint">Das Aktivieren dieser Funktion setzt eine sichere Verbindung voraus, um Bilder usw. herunterzuladen</string>
     <string name="title_advanced_roaming_hint">Die Kopfzeilen der Nachrichten werden beim Roaming immer abgerufen. Sie können die Roaming-Einstellung des Geräts verwenden, um das Internet während des Roamings zu deaktivieren.</string>
     <string name="title_advanced_browse_hint">Durch Herunterziehen weitere Nachrichten abholen</string>
     <string name="title_advanced_layout_hint">Das Wechseln zu einer kompakteren Darstellung und Ändern der Nachrichtentextgröße kann im oberen Aktionsleistenmenü in der Nachrichtenansicht vorgenommen werden.</string>
@@ -959,6 +967,7 @@
     <string name="title_account_partial_fetch_hint">Nur bei Nachrichten ohne Inhalt oder beschädigten Anhängen deaktivieren</string>
     <string name="title_account_raw_fetch_hint">Das Aktivieren dieser Funktion erhöht den Akku- und Datenverbrauch</string>
     <string name="title_color">Farbe</string>
+    <string name="title_avatar">Bild</string>
     <string name="title_calendar">Kalender</string>
     <string name="title_background">Hintergrund</string>
     <string name="title_transparent">Transparent</string>
@@ -999,12 +1008,12 @@
     <string name="title_primary_identity">Hauptidentität</string>
     <string name="title_self_identity">E-Mail-Adresse beim Antworten entfernen</string>
     <string name="title_leave_on_server">Nachrichten auf Server belassen</string>
-    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Nach dem Herunterladen der Nachrichten vom Server bleiben die Nachrichten auf dem Server</string>
+    <string name="title_leave_on_server_hint">Nach dem Herunterladen der Nachrichten vom Server bleiben die Nachrichten auf dem Server</string>
     <string name="title_client_delete">Nachrichten nach dem Herunterladen aktiv löschen</string>
     <string name="title_leave_deleted">Gelöschte Nachrichten auf Server belassen</string>
-    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Nach dem Löschen der Nachrichten vom Gerät bleiben die Nachrichten auf dem Server</string>
+    <string name="title_leave_deleted_hint">Nach dem Löschen der Nachrichten vom Gerät bleiben die Nachrichten auf dem Server</string>
     <string name="title_leave_on_device">Nachrichten auf Gerät belassen</string>
-    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Wenn Nachrichten vom Server gelöscht werden, bleiben die Nachrichten auf dem Gerät</string>
+    <string name="title_leave_on_device_hint">Wenn Nachrichten vom Server gelöscht werden, bleiben die Nachrichten auf dem Gerät</string>
     <string name="title_max_messages">Maximale Anzahl der Nachrichten zum Herunterladen (leer für alle)</string>
     <string name="title_max_messages_keep">Das ist die maximale Anzahl von Nachrichten, die auf dem Gerät gespeichert werden</string>
     <string name="title_max_messages_remark">        Bitte eine positive Zahl eingeben, um die Nachrichten am Ende herunterzuladen (am häufigsten)

@@ -184,7 +184,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SeekBar sbSqliteCache;
     private ImageButton ibSqliteCache;
     private SwitchCompat swLegacyQueries;
+    private SwitchCompat swCacheLists;
     private SwitchCompat swOauthTabs;
+    private TextView tvStartDelay;
+    private SeekBar sbStartDelay;
     private TextView tvChunkSize;
     private SeekBar sbChunkSize;
     private TextView tvThreadRange;
@@ -224,6 +227,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAnimate;
     private SwitchCompat swEasyCorrect;
     private SwitchCompat swPastePlain;
+    private EditText etFaviconUri;
     private SwitchCompat swInfra;
     private SwitchCompat swTldFlags;
     private SwitchCompat swJsonLd;
@@ -288,8 +292,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "emergency_file", "work_manager", "task_description", // "external_storage",
             "sqlite_integrity_check", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_auto_vacuum", "sqlite_sync_extra", "sqlite_cache",
             "legacy_queries",
-            "oauth_tabs",
-            "chunk_size", "thread_range",
+            "cache_lists", "oauth_tabs",
+            "start_delay", "chunk_size", "thread_range",
             "autoscroll_editor", "undo_manager",
             "browser_zoom", "fake_dark",
             "ignore_formatted_size",
@@ -301,7 +305,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "exact_alarms",
             "native_dkim", "native_arc", "native_arc_whitelist", "strict_alignment",
             "webp", "animate_images",
-            "easy_correct", "paste_plain", "infra", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "save_user_flags", "mdn",
+            "easy_correct", "paste_plain", "favicon_uri", "infra", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "save_user_flags", "mdn",
             "app_chooser", "app_chooser_share", "share_task",
             "adjacent_links", "adjacent_documents", "adjacent_portrait", "adjacent_landscape",
             "delete_confirmation", "delete_notification", "global_keywords", "test_iab"
@@ -334,7 +338,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "junk_hint",
             "last_update_check", "last_announcement_check",
             "motd",
-            "outlook_last_checked"
+            "outlook_last_checked", "outlook_checked"
     };
 
     @Override
@@ -440,7 +444,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         sbSqliteCache = view.findViewById(R.id.sbSqliteCache);
         ibSqliteCache = view.findViewById(R.id.ibSqliteCache);
         swLegacyQueries = view.findViewById(R.id.swLegacyQueries);
+        swCacheLists = view.findViewById(R.id.swCacheLists);
         swOauthTabs = view.findViewById(R.id.swOauthTabs);
+        tvStartDelay = view.findViewById(R.id.tvStartDelay);
+        sbStartDelay = view.findViewById(R.id.sbStartDelay);
         tvChunkSize = view.findViewById(R.id.tvChunkSize);
         sbChunkSize = view.findViewById(R.id.sbChunkSize);
         tvThreadRange = view.findViewById(R.id.tvThreadRange);
@@ -480,6 +487,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAnimate = view.findViewById(R.id.swAnimate);
         swEasyCorrect = view.findViewById(R.id.swEasyCorrect);
         swPastePlain = view.findViewById(R.id.swPastePlain);
+        etFaviconUri = view.findViewById(R.id.etFaviconUri);
         swInfra = view.findViewById(R.id.swInfra);
         swTldFlags = view.findViewById(R.id.swTldFlags);
         swJsonLd = view.findViewById(R.id.swJsonLd);
@@ -1284,10 +1292,34 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swCacheLists.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton v, boolean checked) {
+                prefs.edit().putBoolean("cache_lists", checked).apply();
+            }
+        });
+
         swOauthTabs.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton v, boolean checked) {
                 prefs.edit().putBoolean("oauth_tabs", checked).apply();
+            }
+        });
+
+        sbStartDelay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                prefs.edit().putInt("start_delay", progress).apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Do nothing
             }
         });
 
@@ -1614,6 +1646,27 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("paste_plain", checked).apply();
+            }
+        });
+
+        etFaviconUri.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable edit) {
+                String uri = edit.toString().trim();
+                String prev = prefs.getString("favicon_uri", null);
+                prefs.edit().putString("favicon_uri", uri).apply();
+                if (uri.equals(prev))
+                    ContactInfo.clearCache(getContext());
             }
         });
 
@@ -2185,6 +2238,9 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         if ("viewport_height".equals(key))
             return;
 
+        if ("favicon_uri".equals(key))
+            return;
+
         if ("global_keywords".equals(key))
             return;
 
@@ -2380,7 +2436,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swProtocol.setChecked(prefs.getBoolean("protocol", false));
             swLogInfo.setChecked(prefs.getInt("log_level", android.util.Log.WARN) <= android.util.Log.INFO);
             swDebug.setChecked(prefs.getBoolean("debug", false));
-            swCanary.setChecked(prefs.getBoolean("leak_canary", false));
+            swCanary.setChecked(prefs.getBoolean("leak_canary", BuildConfig.TEST_RELEASE));
             swTest1.setChecked(prefs.getBoolean("test1", false));
             swTest2.setChecked(prefs.getBoolean("test2", false));
             swTest3.setChecked(prefs.getBoolean("test3", false));
@@ -2410,8 +2466,12 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             sbSqliteCache.setProgress(sqlite_cache);
 
             swLegacyQueries.setChecked(prefs.getBoolean("legacy_queries", false));
-
+            swCacheLists.setChecked(prefs.getBoolean("cache_lists", true));
             swOauthTabs.setChecked(prefs.getBoolean("oauth_tabs", true));
+
+            int start_delay = prefs.getInt("start_delay", 0);
+            tvStartDelay.setText(getString(R.string.title_advanced_start_delay, start_delay));
+            sbStartDelay.setProgress(start_delay);
 
             int chunk_size = prefs.getInt("chunk_size", Core.DEFAULT_CHUNK_SIZE);
             tvChunkSize.setText(getString(R.string.title_advanced_chunk_size, chunk_size));
@@ -2469,6 +2529,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swAnimate.setChecked(prefs.getBoolean("animate_images", true));
             swEasyCorrect.setChecked(prefs.getBoolean("easy_correct", false));
             swPastePlain.setChecked(prefs.getBoolean("paste_plain", false));
+            etFaviconUri.setText(prefs.getString("favicon_uri", null));
             swInfra.setChecked(prefs.getBoolean("infra", false));
             swTldFlags.setChecked(prefs.getBoolean("tld_flags", false));
             swJsonLd.setChecked(prefs.getBoolean("json_ld", false));

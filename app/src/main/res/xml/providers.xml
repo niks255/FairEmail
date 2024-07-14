@@ -488,7 +488,8 @@
         documentation="Is &lt;a href=&quot;https://support.gmx.com/pop-imap/toggle.html&quot;&gt;IMAP enabled&lt;/a&gt;? Two factor authentication requires &lt;a href=&quot;https://support.gmx.com/security/2fa/application-specific-passwords.html&quot;&gt;an app password&lt;/a&gt;!"
         domain="gmx\\.com,gmx\\.us"
         keepalive="12"
-        link="https://support.gmx.com/pop-imap/imap/server.html#indexlink_help_pop-imap_imap">
+        link="https://support.gmx.com/pop-imap/imap/server.html#indexlink_help_pop-imap_imap"
+        partial="true">
         <imap
             host="imap.gmx.com"
             port="993"
@@ -717,6 +718,7 @@
         appPassword="true"
         domain="icloud\\.com,me\\.com,mac\\.com"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq148"
+        noop="true"
         user="local">
         <imap
             host="imap.mail.me.com"
@@ -942,6 +944,7 @@
     <provider
         name="Mailfence"
         appPassword="true"
+        documentation="If you &lt;a href=&quot;https://kb.mailfence.com/kb/service-specific-passwords/&quot;&gt;generated service-specific passwords&lt;/a&gt;, you may need to configure an account and and identity manually."
         domain="mailfence\\.com"
         link="https://mailfence.com/en/faq.jsp"
         useip="false"
@@ -2304,5 +2307,18 @@
             host="secure.prxy.com"
             port="465"
             starttls="false" />
+    </provider>
+    <provider
+        name="Globenet.org"
+        link="https://www.globenet.org/Problemes-de-connexion-a-vos.html"
+        mx=".*\\.globenet\\.org">
+        <imap
+            host="mail.globenet.org"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.globenet.org"
+            port="587"
+            starttls="true" />
     </provider>
 </providers>

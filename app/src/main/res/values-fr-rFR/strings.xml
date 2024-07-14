@@ -204,6 +204,7 @@
     <string name="title_setup_oauth_update">Autoriser à nouveau un compte existant (sinon créer un nouveau compte)</string>
     <string name="title_setup_oauth_updated">L\'autorisation du compte a été mise à jour</string>
     <string name="title_setup_oauth_brave">Lorsque vous utilisez le navigateur Brave, vous devez activer l\'option dans les paramètres de Brave pour permettre l\'ouverture des liens des applications en dehors de Brave</string>
+    <string name="title_setup_oauth_browser">L\'autorisation requiert un navigateur fonctionnel</string>
     <string name="title_setup_oauth_authorize">Autoriser</string>
     <string name="title_setup_select_account">Sélectionner un compte</string>
     <string name="title_setup_instructions">Instructions de configuration</string>
@@ -330,6 +331,7 @@
     <string name="title_setup_reset_full">Afficher les messages originaux</string>
     <string name="title_check_gmail_oauth">Vos comptes Gmail continueront de fonctionner après le 30 mai 2022</string>
     <string name="title_check_gmail_password">Certains de vos comptes Gmail peuvent cesser de fonctionner après le 30 mai 2022</string>
+    <string name="title_check_outlook_oauth">Vos comptes Outlook continueront de fonctionner après le 16 septembre 2024</string>
     <string name="title_check_outlook_password">Certains de vos comptes Outlook/Hotmail/Live cesseront de fonctionner après le 16 septembre 2024</string>
     <string name="title_advanced_hint_title">Paramètres avancés</string>
     <string name="title_advanced_hint_message">        Vous parcourez les paramètres avancés.
@@ -459,6 +461,7 @@
     <string name="title_advanced_prefer_ip4">Préférer IPv4 à IPv6</string>
     <string name="title_advanced_dns">Adresses de serveurs DNS favoris (séparées par des virgules)</string>
     <string name="title_advanced_dns_custom">Utiliser un résolveur DNS personnalisé</string>
+    <string name="title_advanced_dns_clear">Vider le cache DNS lors d\'un changement de connectivité</string>
     <string name="title_advanced_ssl_update">Utiliser le fournisseur SSL mis à jour</string>
     <string name="title_advanced_ssl_harden">Renforcer les connexions SSL</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 requis</string>
@@ -519,6 +522,8 @@
     <string name="title_advanced_color_stripe">Afficher la bande de couleur</string>
     <string name="title_advanced_color_stripe_wide">Utiliser une bande de couleur large</string>
     <string name="title_advanced_avatars">Afficher la photo des contacts</string>
+    <string name="title_advanced_bimi">Afficher les indicateurs de marque pour l\'identification des messages (BIMI)</string>
+    <string name="title_advanced_bimi_vmc">Exiger un certificat VMC valide</string>
     <string name="title_advanced_bimi_unverified">Expéditeur non vérifié</string>
     <string name="title_advanced_bimi_verified">Expéditeur vérifié</string>
     <string name="title_advanced_gravatars">Afficher les Gravatars</string>
@@ -526,6 +531,8 @@
     <string name="title_advanced_favicons">Afficher l\'icône des sites web</string>
     <string name="title_advanced_favicons_partial">Inspecter uniquement les premiers %1$s de la page web</string>
     <string name="title_advanced_favicons_manifest">Inspecter le manifeste des applications web</string>
+    <string name="title_advanced_ddg" comment="title_advanced_ddg&#10;Title for an option to fetch favicons via the icon service of DuckDuckGo">Afficher les icônes DuckDuckGo</string>
+    <string name="title_advanced_favicons_dmarc">Exiger la vérification DMARC pour les images externes</string>
     <string name="title_advanced_generated_icons">Afficher les icônes générées automatiquement</string>
     <string name="title_advanced_identicons">Afficher les identicônes</string>
     <string name="title_advanced_circular">Afficher des icônes rondes</string>
@@ -761,6 +768,7 @@
     <string name="title_advanced_language">Langue</string>
     <string name="title_advanced_language_system">Système</string>
     <string name="title_advanced_integrations_hint">Les services cloud ci-dessous ne font pas partie de l\'application. Tous les paiements iront directement au service cloud et non au développeur de l\'application.</string>
+    <string name="title_advanced_integrations_inert">Une intégration qui n\'est pas configurée est totalement inactive. Aucune bibliothèque tierce n\'est utilisée pour éviter le pistage et les analyses d\'audience.</string>
     <string name="title_advanced_lt">Intégration de LanguageTool</string>
     <string name="title_advanced_lt_sentence">Vérifier chaque phrase</string>
     <string name="title_advanced_lt_auto">Vérifier le paragraphe après une nouvelle ligne</string>
@@ -958,6 +966,7 @@
     <string name="title_account_partial_fetch_hint">Désactiver ceci seulement dans le cas de messages vides ou de pièces jointes corrompues</string>
     <string name="title_account_raw_fetch_hint">Activer ceci augmentera l\'utilisation de la batterie et des données</string>
     <string name="title_color">Couleur</string>
+    <string name="title_avatar">Image</string>
     <string name="title_calendar">Calendrier</string>
     <string name="title_background">Arrière-plan</string>
     <string name="title_transparent">Transparent</string>
@@ -998,12 +1007,12 @@
     <string name="title_primary_identity">Principal (identité par défaut)</string>
     <string name="title_self_identity">Supprimer l\'adresse e-mail lors de la réponse</string>
     <string name="title_leave_on_server">Laisser les messages sur le serveur</string>
-    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Après avoir téléchargé des messages depuis le serveur, ceux-ci restent sur le serveur</string>
+    <string name="title_leave_on_server_hint">Après avoir téléchargé des messages depuis le serveur, ceux-ci restent sur le serveur</string>
     <string name="title_client_delete">Supprimer activement les messages après le téléchargement</string>
     <string name="title_leave_deleted">Laisser les messages supprimés sur le serveur</string>
-    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Après avoir supprimé des messages de l\'appareil, ceux-ci resteront sur le serveur</string>
+    <string name="title_leave_deleted_hint">Après avoir supprimé des messages de l\'appareil, ceux-ci resteront sur le serveur</string>
     <string name="title_leave_on_device">Laisser les messages sur l\'appareil</string>
-    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Lorsque des messages sont supprimés du serveur, ils restent sur l\'appareil</string>
+    <string name="title_leave_on_device_hint">Lorsque des messages sont supprimés du serveur, ils restent sur l\'appareil</string>
     <string name="title_max_messages">Nombre maximum de messages à télécharger (laisser vide pour tous)</string>
     <string name="title_max_messages_keep">Ceci est le nombre maximum de messages qui seront conservés sur l\'appareil</string>
     <string name="title_max_messages_remark">        Saisir un nombre positif pour télécharger les messages à la fin (le plus commun)

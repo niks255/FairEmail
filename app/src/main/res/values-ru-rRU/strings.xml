@@ -232,6 +232,7 @@
     <string name="title_setup_oauth_update">Авторизация существующей учётной записи (или создание новой)</string>
     <string name="title_setup_oauth_updated">Авторизация учётной записи обновлена</string>
     <string name="title_setup_oauth_brave">При использовании браузера Brave необходимо разрешить в его настройках открывать ссылки сторонними приложениями</string>
+    <string name="title_setup_oauth_browser">Для авторизации требуется работающий браузер</string>
     <string name="title_setup_oauth_authorize">Авторизироваться</string>
     <string name="title_setup_select_account">Выбрать учётную запись</string>
     <string name="title_setup_instructions">Инструкция по установке</string>
@@ -358,6 +359,7 @@
     <string name="title_setup_reset_full">Показывать исходные сообщения</string>
     <string name="title_check_gmail_oauth">Ваши учётные записи Gmail будут работать после 30 мая 2022 года</string>
     <string name="title_check_gmail_password">Некоторые из ваших учётных записей Gmail могут перестать работать после 30 мая 2022 года</string>
+    <string name="title_check_outlook_oauth">Ваши учётные записи Outlook будут работать после 16 сентября 2024 года</string>
     <string name="title_check_outlook_password">Некоторые из ваших учётных записей Outlook/Hotmail/Live перестанут работать после 16 сентября 2024 года</string>
     <string name="title_advanced_hint_title">Настройки для опытных</string>
     <string name="title_advanced_hint_message">        Вы переходите к настройкам для опытных пользователей.
@@ -486,6 +488,7 @@
     <string name="title_advanced_prefer_ip4">Предпочитать IPv4</string>
     <string name="title_advanced_dns">Адреса предпочтительных DNS-серверов (через запятую)</string>
     <string name="title_advanced_dns_custom">Использовать пользовательский DNS</string>
+    <string name="title_advanced_dns_clear">Очищать кэш DNS при изменении подключения</string>
     <string name="title_advanced_ssl_update">Использовать обновлённый SSL-провайдер</string>
     <string name="title_advanced_ssl_harden">Усиленные SSL-подключения</string>
     <string name="title_advanced_ssl_harden_strict">Требовать TLS 1.3</string>
@@ -546,6 +549,8 @@
     <string name="title_advanced_color_stripe">Показывать цветовую полосу</string>
     <string name="title_advanced_color_stripe_wide">Использовать широкий диапазон цветов</string>
     <string name="title_advanced_avatars">Показывать фотографии контакта</string>
+    <string name="title_advanced_bimi">Показывать индикаторы бренда для идентификации сообщений (BIMI)</string>
+    <string name="title_advanced_bimi_vmc">Требовать действующий сертификат VMC</string>
     <string name="title_advanced_bimi_unverified">Непроверенный отправитель</string>
     <string name="title_advanced_bimi_verified">Проверенный отправитель</string>
     <string name="title_advanced_gravatars">Показывать граватары</string>
@@ -553,6 +558,8 @@
     <string name="title_advanced_favicons">Показывать значки сайтов</string>
     <string name="title_advanced_favicons_partial">Сканировать только %1$s в начале веб-страницы</string>
     <string name="title_advanced_favicons_manifest">Сканировать манифесты веб-приложения</string>
+    <string name="title_advanced_ddg" comment="title_advanced_ddg&#10;Title for an option to fetch favicons via the icon service of DuckDuckGo">Показывать значки DuckDuckGo</string>
+    <string name="title_advanced_favicons_dmarc">Требовать проверку DMARC для внешних изображений</string>
     <string name="title_advanced_generated_icons">Показывать сгенерированные значки</string>
     <string name="title_advanced_identicons">Показывать идентификаторы</string>
     <string name="title_advanced_circular">Использовать круглые значки</string>
@@ -788,6 +795,7 @@
     <string name="title_advanced_language">Язык</string>
     <string name="title_advanced_language_system">Системный</string>
     <string name="title_advanced_integrations_hint">Представленные ниже облачные сервисы не являются частью приложения. Все платежи будут поступать непосредственно в облачный сервис, а не разработчику приложения.</string>
+    <string name="title_advanced_integrations_inert">Интеграция без введённых настроек полностью инертна. Никакие сторонние библиотеки не используются для предотвращения отслеживания и анализа.</string>
     <string name="title_advanced_lt">Интеграция с LanguageTool</string>
     <string name="title_advanced_lt_sentence">Проверять каждое предложение</string>
     <string name="title_advanced_lt_auto">Проверять абзац после новой строки</string>
@@ -985,6 +993,7 @@
     <string name="title_account_partial_fetch_hint">Отключайте это только в случае пустых сообщений или повреждённых вложений</string>
     <string name="title_account_raw_fetch_hint">Включение увеличит расход заряда батареи и места в хранилище</string>
     <string name="title_color">Цвет</string>
+    <string name="title_avatar">Изображение</string>
     <string name="title_calendar">Календарь</string>
     <string name="title_background">Фон</string>
     <string name="title_transparent">Прозрачность</string>
@@ -1025,12 +1034,12 @@
     <string name="title_primary_identity">Основной (идентификатор по умолчанию)</string>
     <string name="title_self_identity">Удалять адрес электронной почты при ответе</string>
     <string name="title_leave_on_server">Оставлять сообщения на сервере</string>
-    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">После загрузки сообщений с сервера они остаются на сервере</string>
+    <string name="title_leave_on_server_hint">После загрузки сообщений с сервера они остаются на сервере</string>
     <string name="title_client_delete">Активно удалять сообщения после загрузки</string>
     <string name="title_leave_deleted">Оставлять удалённые сообщения на сервере</string>
-    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">После удаления сообщений с устройства они останутся на сервере</string>
+    <string name="title_leave_deleted_hint">После удаления сообщений с устройства они останутся на сервере</string>
     <string name="title_leave_on_device">Оставлять сообщения на устройстве</string>
-    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Когда сообщения удаляются с сервера, они остаются на устройстве</string>
+    <string name="title_leave_on_device_hint">Когда сообщения удаляются с сервера, они остаются на устройстве</string>
     <string name="title_max_messages">Максимальное количество загружаемых сообщений (пусто для всех)</string>
     <string name="title_max_messages_keep">Максимальное количество сообщений, которые будут храниться на устройстве</string>
     <string name="title_max_messages_remark">        Введите положительное число для загрузки сообщений в конце (более распространённое)

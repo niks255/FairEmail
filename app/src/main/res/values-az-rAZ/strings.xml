@@ -204,6 +204,7 @@
     <string name="title_setup_oauth_update">Mövcud bir hesaba yenidən səlahiyyət verin (əks halda yeni bir hesab yaradın)</string>
     <string name="title_setup_oauth_updated">Hesab səlahiyyətləndirmə güncəlləndi</string>
     <string name="title_setup_oauth_brave">Brave brauzeri istifadə edərkən tətbiq keçidlərinin Brave xaricindəki tətbiqlərdə açılmasına icazə vermək üçün Brave-in ayarlarındakı seçimi fəallaşdırmalısınız</string>
+    <string name="title_setup_oauth_browser">Səlahiyyətləndirmə, işləyən bir brauzer tələb edir</string>
     <string name="title_setup_oauth_authorize">Səlahiyyət ver</string>
     <string name="title_setup_select_account">Hesab seç</string>
     <string name="title_setup_instructions">Quraşdırma təlimatları</string>
@@ -330,6 +331,7 @@
     <string name="title_setup_reset_full">Orijinal mesajları göstər</string>
     <string name="title_check_gmail_oauth">Gmail hesablarınız 30 May 2022-ci il tarixindən sonra işləməyə davam edəcək</string>
     <string name="title_check_gmail_password">Bəzi Gmail hesablarınız 30 May 2022-ci il tarixindən işləməyi dayandıra bilər</string>
+    <string name="title_check_outlook_oauth">Outlook hesablarınız 16 Sentyabr 2024-cü il tarixindən sonra işləməyə davam edəcək</string>
     <string name="title_check_outlook_password">Outlook/Hotmail/Live hesablarınızdan bəziləri 16 sentyabr 2024-cü il tarixindən etibarən işləməyi dayandıracaq</string>
     <string name="title_advanced_hint_title">Daha çox qabaqcıl seçimlər</string>
     <string name="title_advanced_hint_message">        Daha qabaqcıl seçimlərə gedirsiniz.
@@ -459,6 +461,7 @@
     <string name="title_advanced_prefer_ip4">IPv6 əvəzinə IPv4 tərcih et</string>
     <string name="title_advanced_dns">Tərcih edilən DNS server ünvanları (vergüllə ayrılmış)</string>
     <string name="title_advanced_dns_custom">Özəl DNS həlledici istifadə et</string>
+    <string name="title_advanced_dns_clear">Bağlantı dəyişikliyində DNS keşini təmizlə</string>
     <string name="title_advanced_ssl_update">Güncəl SSL provayderini istifadə et</string>
     <string name="title_advanced_ssl_harden">SSL bağlantılarını sağlam et</string>
     <string name="title_advanced_ssl_harden_strict">TLS 1.3 tələb et</string>
@@ -519,6 +522,8 @@
     <string name="title_advanced_color_stripe">Rəng zolağını göstər</string>
     <string name="title_advanced_color_stripe_wide">Geniş rəng zolağı istifadə et</string>
     <string name="title_advanced_avatars">Əlaqə fotolarını göstər</string>
+    <string name="title_advanced_bimi">Mesaj İdentifikasiyası üçün Marka İndikatorlarını (BIMI) göstər</string>
+    <string name="title_advanced_bimi_vmc">Yararlı bir VMC sertifikatını tələb et</string>
     <string name="title_advanced_bimi_unverified">Doğrulanmamış göndərən</string>
     <string name="title_advanced_bimi_verified">Doğrulanmış göndərən</string>
     <string name="title_advanced_gravatars">\"Gravatar\"ları göstər</string>
@@ -526,6 +531,8 @@
     <string name="title_advanced_favicons">\"Favicon\"ları göstər</string>
     <string name="title_advanced_favicons_partial">Veb səhifədəki yalnız ilk %1$s skan edilsin</string>
     <string name="title_advanced_favicons_manifest">Veb tətbiq manifestlərini skan et</string>
+    <string name="title_advanced_ddg" comment="title_advanced_ddg&#10;Title for an option to fetch favicons via the icon service of DuckDuckGo">DuckDuckGo ikonlarını göstər</string>
+    <string name="title_advanced_favicons_dmarc">Xarici təsvirlər üçün DMARC doğrulamasını tələb et</string>
     <string name="title_advanced_generated_icons">Yaradılmış nişanları göstər</string>
     <string name="title_advanced_identicons">Kimlikləri göstər</string>
     <string name="title_advanced_circular">Dairəvi nişanları göstər</string>
@@ -761,6 +768,7 @@
     <string name="title_advanced_language">Dil</string>
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_integrations_hint">Aşağıdakı bulud xidmətləri tətbiqin bir hissəsi deyil. Bütün ödənişlər birbaşa bulud xidmətinə gedir, tətbiq tərtibatçısına deyil.</string>
+    <string name="title_advanced_integrations_inert">Konfiqurasiya olunmayan inteqrasiya tamamilə təsirsizdir. İzləməni və analitikanı önləmək üçün heç bir üçüncü tərəf kitabxana istifadə edilmir.</string>
     <string name="title_advanced_lt">LanguageTool inteqrasiyası</string>
     <string name="title_advanced_lt_sentence">Hər bir cümləni yoxla</string>
     <string name="title_advanced_lt_auto">Yeni bir sətirdən sonra paraqrafı yoxla</string>
@@ -957,6 +965,7 @@
     <string name="title_account_partial_fetch_hint">Bunu yalnız boş mesajlar və ya zədəli qoşmalar olduğu halda sıradan çıxardın</string>
     <string name="title_account_raw_fetch_hint">Bunu fəallaşdırmaq batareya və internet istifadəsini artıracaq</string>
     <string name="title_color">Rəng</string>
+    <string name="title_avatar">Təsvir</string>
     <string name="title_calendar">Təqvim</string>
     <string name="title_background">Arxaplan</string>
     <string name="title_transparent">Şəffaf</string>
@@ -997,12 +1006,12 @@
     <string name="title_primary_identity">Üstünlük verilən (ilkin kimlik)</string>
     <string name="title_self_identity">Cavablayanda e-poçt ünvanınızı çıxardın</string>
     <string name="title_leave_on_server">Mesajları serverdə burax</string>
-    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Mesajları serverdən endirdikdən sonra, mesajlar serverdə qalır</string>
+    <string name="title_leave_on_server_hint">Mesajları serverdən endirdikdən sonra, mesajlar serverdə qalır</string>
     <string name="title_client_delete">Endirdikdən sonra mesajları aktiv olaraq silin</string>
     <string name="title_leave_deleted">Silənən mesajları serverdə burax</string>
-    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Mesajları cihazdan sildikdən sonra, mesajlar serverdə qalacaq</string>
+    <string name="title_leave_deleted_hint">Mesajları cihazdan sildikdən sonra, mesajlar serverdə qalacaq</string>
     <string name="title_leave_on_device">Mesajları cihazda burax</string>
-    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Mesajlar serverdən silindikdə, mesajlar cihazda qalır</string>
+    <string name="title_leave_on_device_hint">Mesajlar serverdən silindikdə, mesajlar cihazda qalır</string>
     <string name="title_max_messages">Endiriləcək mesajların maksimum sayı (hamısı üçün boş)</string>
     <string name="title_max_messages_keep">Bu, cihazda saxlanılacaq maksimum mesaj sayıdır</string>
     <string name="title_max_messages_remark">        Mesajları sonda endirmək üçün müsbət bir ədəd daxil edin (ən geniş yayılmış)

@@ -42,13 +42,12 @@ public interface DaoMessage {
     String is_drafts = "folder.type = '" + EntityFolder.DRAFTS + "'";
     String is_outbox = "folder.type = '" + EntityFolder.OUTBOX + "'";
     String is_sent = "folder.type = '" + EntityFolder.SENT + "'";
-    String is_outgoing = is_drafts + " OR " + is_outbox + " OR " + is_sent;
 
     @Transaction
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT message.*" +
             ", account.pop AS accountProtocol, account.name AS accountName, account.category AS accountCategory, COALESCE(identity.color, folder.color, account.color) AS accountColor" +
-            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
+            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_on_server AS accountLeaveOnServer, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, NULL AS folderInheritedType, folder.unified AS folderUnified, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.color AS identityColor, identity.synchronize AS identitySynchronize" +
             ", '[' || substr(group_concat(message.`from`, ','), 0, 2048) || ']' AS senders" +
@@ -71,7 +70,7 @@ public interface DaoMessage {
             ", message.priority AS ui_priority" +
             ", message.importance AS ui_importance" +
             ", MAX(CASE WHEN" +
-            "   (:found AND folder.type <> '" + EntityFolder.ARCHIVE + "' AND NOT (" + is_outgoing + "))" +
+            "   (:found AND folder.type <> '" + EntityFolder.ARCHIVE + "')" +
             "   OR (NOT :found AND :type IS NULL AND folder.unified)" +
             "   OR (NOT :found AND folder.type = :type)" +
             "   THEN message.received ELSE 0 END) AS dummy" +
@@ -126,7 +125,7 @@ public interface DaoMessage {
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT message.*" +
             ", account.pop AS accountProtocol, account.name AS accountName, account.category AS accountCategory, COALESCE(identity.color, folder.color, account.color) AS accountColor" +
-            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
+            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_on_server AS accountLeaveOnServer, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, f.inherited_type AS folderInheritedType, folder.unified AS folderUnified, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.color AS identityColor, identity.synchronize AS identitySynchronize" +
             ", '[' || substr(group_concat(message.`from`, ','), 0, 2048) || ']' AS senders" +
@@ -149,7 +148,7 @@ public interface DaoMessage {
             ", message.priority AS ui_priority" +
             ", message.importance AS ui_importance" +
             ", MAX(CASE WHEN" +
-            "   (:found AND folder.type <> '" + EntityFolder.ARCHIVE + "' AND NOT (" + is_outgoing + "))" +
+            "   (:found AND folder.type <> '" + EntityFolder.ARCHIVE + "')" +
             "   OR (NOT :found AND folder.id = :folder)" +
             "   THEN message.received ELSE 0 END) AS dummy" +
             " FROM message" +
@@ -201,7 +200,7 @@ public interface DaoMessage {
     @Transaction
     @Query("SELECT message.*" +
             ", account.pop AS accountProtocol, account.name AS accountName, account.category AS accountCategory, COALESCE(identity.color, folder.color, account.color) AS accountColor" +
-            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
+            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_on_server AS accountLeaveOnServer, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, NULL AS folderInheritedType, folder.unified AS folderUnified, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.color AS identityColor, identity.synchronize AS identitySynchronize" +
             ", message.`from` AS senders" +
@@ -518,7 +517,7 @@ public interface DaoMessage {
 
     String FETCH_MESSAGE = "SELECT message.*" +
             ", account.pop AS accountProtocol, account.name AS accountName, account.category AS accountCategory, identity.color AS accountColor" +
-            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
+            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_on_server AS accountLeaveOnServer, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, NULL AS folderInheritedType, folder.unified AS folderUnified, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.color AS identityColor, identity.synchronize AS identitySynchronize" +
             ", message.`from` AS senders" +
@@ -554,7 +553,7 @@ public interface DaoMessage {
     @Transaction
     @Query("SELECT message.*" +
             ", account.pop AS accountProtocol, account.name AS accountName, account.category AS accountCategory, COALESCE(identity.color, folder.color, account.color) AS accountColor" +
-            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
+            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_on_server AS accountLeaveOnServer, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, NULL AS folderInheritedType, folder.unified AS folderUnified, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.color AS identityColor, identity.synchronize AS identitySynchronize" +
             ", message.`from` AS senders" +
@@ -1073,7 +1072,7 @@ public interface DaoMessage {
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT message.*" +
             ", account.pop AS accountProtocol, account.name AS accountName, account.category AS accountCategory, COALESCE(identity.color, folder.color, account.color) AS accountColor" +
-            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
+            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_on_server AS accountLeaveOnServer, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, NULL AS folderInheritedType, folder.unified AS folderUnified, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.color AS identityColor, identity.synchronize AS identitySynchronize" +
             ", '[' || substr(group_concat(message.`from`, ','), 0, 2048) || ']' AS senders" +
@@ -1096,7 +1095,7 @@ public interface DaoMessage {
             ", message.priority AS ui_priority" +
             ", message.importance AS ui_importance" +
             ", MAX(CASE WHEN" +
-            "   (:found AND folder.type <> '" + EntityFolder.ARCHIVE + "' AND NOT (" + is_outgoing + "))" +
+            "   (:found AND folder.type <> '" + EntityFolder.ARCHIVE + "')" +
             "   OR (NOT :found AND :type IS NULL AND folder.unified)" +
             "   OR (NOT :found AND folder.type = :type)" +
             "   THEN message.received ELSE 0 END) AS dummy" +
@@ -1159,7 +1158,7 @@ public interface DaoMessage {
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT message.*" +
             ", account.pop AS accountProtocol, account.name AS accountName, account.category AS accountCategory, COALESCE(identity.color, folder.color, account.color) AS accountColor" +
-            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
+            ", account.notify AS accountNotify, account.summary AS accountSummary, account.leave_on_server AS accountLeaveOnServer, account.leave_deleted AS accountLeaveDeleted, account.auto_seen AS accountAutoSeen" +
             ", folder.name AS folderName, folder.color AS folderColor, folder.display AS folderDisplay, folder.type AS folderType, f.inherited_type AS folderInheritedType, folder.unified AS folderUnified, folder.read_only AS folderReadOnly" +
             ", IFNULL(identity.display, identity.name) AS identityName, identity.email AS identityEmail, identity.color AS identityColor, identity.synchronize AS identitySynchronize" +
             ", '[' || substr(group_concat(message.`from`, ','), 0, 2048) || ']' AS senders" +
@@ -1182,7 +1181,7 @@ public interface DaoMessage {
             ", message.priority AS ui_priority" +
             ", message.importance AS ui_importance" +
             ", MAX(CASE WHEN" +
-            "   (:found AND folder.type <> '" + EntityFolder.ARCHIVE + "' AND NOT (" + is_outgoing + "))" +
+            "   (:found AND folder.type <> '" + EntityFolder.ARCHIVE + "')" +
             "   OR (NOT :found AND folder.id = :folder)" +
             "   THEN message.received ELSE 0 END) AS dummy" +
             " FROM (SELECT * FROM message" +

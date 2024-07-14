@@ -42,6 +42,7 @@ import org.minidns.dnsqueryresult.DnsQueryResult;
 import org.minidns.dnsqueryresult.StandardDnsQueryResult;
 import org.minidns.dnssec.DnssecClient;
 import org.minidns.dnssec.DnssecResultNotAuthenticException;
+import org.minidns.dnssec.DnssecUnverifiedReason;
 import org.minidns.dnssec.DnssecValidationFailedException;
 import org.minidns.dnsserverlookup.AbstractDnsServerLookupMechanism;
 import org.minidns.hla.DnssecResolverApi;
@@ -76,6 +77,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -216,9 +218,10 @@ public class DnsHelper {
             throw ex;
         }
 
-        boolean secure = (data.getUnverifiedReasons() != null);
+        Set<DnssecUnverifiedReason> unverifiedReasons = data.getUnverifiedReasons();
+        boolean secure = (unverifiedReasons == null || unverifiedReasons.isEmpty());
         Log.i("DNS secure=" + secure + " dnssec=" + dnssec);
-        if (secure && dnssec) {
+        if (!secure && dnssec) {
             DnssecResultNotAuthenticException ex = data.getDnssecResultNotAuthenticException();
             if (ex != null)
                 throw ex;
@@ -670,12 +673,17 @@ public class DnsHelper {
                 ex = new IOException("interrupted");
             }
 
-            if (ex == null) {
-                Log.i("DNS Android answer=" + result);
-                return result;
-            } else {
-                Log.i(ex);
-                throw ex;
+            try {
+                if (ex == null) {
+                    Log.i("DNS Android answer=" + result);
+                    return result;
+                } else {
+                    Log.i(ex);
+                    throw ex;
+                }
+            } finally {
+                ex = null;
+                result = null;
             }
         }
     }
@@ -690,6 +698,8 @@ public class DnsHelper {
         @Override
         public DnsQueryResult query(DnsMessage message, InetAddress address, int port) throws IOException {
             DnsQueryResult result = delegate.query(message, address, port);
+            if (result == null)
+                throw new UnknownHostException();
             DnsMessage answer = new DnsMessage(result.response.toArray())
                     .asBuilder()
                     .setRecursionAvailable(true)

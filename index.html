@@ -14,6 +14,7 @@
     ul.task-list{list-style: none;}
   </style>
   <link rel="shortcut icon" href="https://raw.githubusercontent.com/M66B/FairEmail/master/app/src/main/ic_launcher-web.png">
+  <meta name="theme-color" content="#006db3">
   <style>
     body { font-family: Arial, sans-serif; }
     @media (prefers-color-scheme: light) {
@@ -367,7 +368,7 @@
 <li><a href="#faq151">(151) Can you add backup/restore of messages?</a></li>
 <li><a href="#faq152">(152) How can I insert a contact group?</a></li>
 <li><a href="#faq153">(153) Why does permanently deleting Gmail message not work?</a></li>
-<li><a href="#faq154"><del>(154) Can you add favicons as contact photos?</del></a></li>
+<li><a href="#faq154">(154) Is there support for favicons as contact photos?</a></li>
 <li><a href="#faq155">(155) What is a winmail.dat file?</a></li>
 <li><a href="#faq156">(156) How can I set up an Office 365 account?</a></li>
 <li><a href="#faq157">(157) How can I set up an Free.fr account?</a></li>
@@ -418,6 +419,7 @@
 <li><a href="#faq202">(202) What is DNSSEC and what is DANE?</a></li>
 <li><a href="#faq203">(203) Where is my sent message?</a></li>
 <li><a href="#faq204">(204) How do I use Gemini?</a></li>
+<li><a href="#faq205">(205) How do I check the integrity of an APK file?</a></li>
 </ul>
 <p><a href="#get-support">I have another question.</a></p>
 <p><a name="faq1"></a> <strong>(1) Which permissions are needed and why?</strong></p>
@@ -832,6 +834,11 @@ keyword:&lt;keyword&gt;</code></pre>
 <blockquote>
 <p><strong>IMPORTANT: If you came here via a warning in the app, you MUST take action!</strong></p>
 <p>It takes just two minutes to be prepared.</p>
+<p>If the app said your Outlook accounts will continue to work, you don’t need to do anything.</p>
+</blockquote>
+<p><br /></p>
+<blockquote>
+<p>tl;dr; go to settings via the navigation menu (left side menu), tap the wizard button, select Outlook/Hotmail/Live and follow the steps.</p>
 </blockquote>
 <p><br /></p>
 <blockquote>
@@ -1077,6 +1084,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p>You can enable the storage access framework (again) with this adb command:</p>
 <pre><code>pm install -k --user 0 com.android.documentsui</code></pre>
 <p>Alternatively, you might be able to enable the <em>Files</em> app again using the Android app settings.</p>
+<p>OneDrive doesn’t support <em>view</em>, only <em>share</em>, which means that if you want to open an attachment in OneDrive you need to long press on an attachment.</p>
 <p><br /></p>
 <p><a name="faq26"></a> <strong>(26) Can I help to translate FairEmail in my own language?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq26">Google Translate</a></p>
@@ -1530,8 +1538,10 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <pre><code>jsoup:html &gt; body &gt; div &gt; a[href=https://example.org]</code></pre>
 <p>You can use multiple rules, possibly with a <em>stop processing</em>, for an <em>or</em> or a <em>not</em> condition. Since version 1.2173 there is a <em>NOT</em> option for conditions that accept a regex.</p>
 <p>Matching is not case sensitive, unless you use <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>. Please see <a href="https://developer.android.com/reference/java/util/regex/Pattern">here</a> for the documentation of Java regular expressions. Note that you need to match the complete text from the first to the last character. You can test a regex <a href="https://regexr.com/">here</a>.</p>
+<p>You can use a regex condition like this to match a top-level domain (tld):</p>
+<pre><code>.*@.*\.xyz&gt;</code></pre>
 <p>Note that a regular expression supports an <em>or</em> operator, so if you want to match multiple senders, you can do this:</p>
-<p><code>.*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*</code></p>
+<pre><code>.*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*</code></pre>
 <p>Note that <a href="https://developer.android.com/reference/java/util/regex/Pattern#DOTALL">dot all mode</a> is enabled to be able to match <a href="https://tools.ietf.org/html/rfc2822#section-3.2.3">unfolded headers</a>.</p>
 <p><br /></p>
 <p><strong>Expressions</strong></p>
@@ -2430,9 +2440,16 @@ $NotDisplayed</code></pre>
 <pre><code>STORE &lt;message number&gt; -FLAGS (\Flagged)</code></pre>
 <p>On the other hand, a star set via IMAP is being shown in the web interface and can be removed via IMAP.</p>
 <p><br /></p>
-<p><a name="faq154"></a> <strong><del>(154) Can you add favicons as contact photos?</del></strong></p>
+<p><a name="faq154"></a> <strong>(154) Is there support for favicons as contact photos?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq154">Google Translate</a></p>
-<p><del>Besides that a <a href="https://en.wikipedia.org/wiki/Favicon">favicon</a> might be shared by many email addresses with the same domain name</del> <del>and therefore is not directly related to an email address, favicons can be used to track you.</del></p>
+<p>Yes, favicons can be enabled in the display-settings tab page.</p>
+<p>To reduce privacy concerns, the app fetches favicons directly from the internet using the domain name of email addresses. In other words, no third-party service is used.</p>
+<p>If no favicon is shown for an email address, please check for favicons via <a href="https://realfavicongenerator.net/">this service</a>, and if there are any, please <a href="https://contact.faircode.eu/?product=fairemailsupport">contact me</a>.</p>
+<p>Since version 1.2210 it is also possible to use DuckDuckGo’s icon service (GitHub version only). There are concerns about <a href="https://github.com/duckduckgo/Android/issues/527">privacy</a>.</p>
+<p>Since version 1.2213 it is possible to configure an alternative URI to fetch favicons in the debug options by temporarily enabling debug mode in the miscellaneous-settings tab page. For example:</p>
+<pre><code>https://icons.duckduckgo.com/ip3/{domain}.ico
+https://www.google.com/s2/favicons?sz=128&amp;domain={domain}
+https://favicon.yandex.net/favicon/{domain}</code></pre>
 <p><br /></p>
 <p><a name="faq155"></a> <strong>(155) What is a winmail.dat file?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq155">Google Translate</a></p>
@@ -2958,6 +2975,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 </ul>
 <p>This is not a complete and exhaustive list.</p>
 <p>Please see <a href="https://www.zivver.com/blog/why-cisos-and-security-professionals-can-no-longer-rely-on-regular-email-for-the-sharing-of-personal-information">this article</a> about why DANE is important.</p>
+<p>Note that DNSSEC and DANE are available in the GitHub version only.</p>
 <p><br></p>
 <p><a name="faq203"></a> <strong>(203) Where is my sent message?</strong></p>
 <p>When you write a message, it will be stored in the draft messages folder.</p>
@@ -2983,6 +3001,16 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>For usage instructions, please see <a href="#faq190">this FAQ</a>.</p>
 <p>Please read the privacy policy of <a href="https://support.google.com/gemini/answer/13594961">Gemini</a>. FairEmail does not use third-party libraries to avoid being tracked when Gemini is not being used.</p>
 <p>This feature is experimental and requires version 1.2171 or later for the GitHub version and version 1.2182 or later for the Play Store version.</p>
+<p><br></p>
+<p><a name="faq205"></a> <strong>(205) How do I check the integrity of an APK file?</strong></p>
+<p>You can verify in this way that an APK file was built and signed by a GitHub workflow:</p>
+<ol type="1">
+<li>Install the <a href="https://cli.github.com/">GitHub CLI</a></li>
+<li>Download and extract the <a href="https://github.com/M66B/FairEmail/actions">APK files</a></li>
+<li><a href="https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds#verifying-artifact-attestations-with-the-github-cli">Verify</a> attestation of an APK file</li>
+</ol>
+<pre><code>gh attestation verify xyz.apk -R M66B/FairEmail</code></pre>
+<p>Attestation of APK files is available from version 1.2209.</p>
 <p><br></p>
 <h2>
 <a name="get-support"></a>Get support

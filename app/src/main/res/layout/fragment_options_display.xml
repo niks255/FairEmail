@@ -112,7 +112,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnTheme" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spStartup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -405,7 +405,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPortrait2cHint" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spPortraitMinSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -482,7 +482,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvLandscapeHint" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spLandscapeMinSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -927,6 +927,19 @@
                     app:layout_constraintTop_toBottomOf="@id/swAvatars"
                     app:switchPadding="12dp" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swBimiVmc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:tag="nosuggest"
+                    android:text="@string/title_advanced_bimi_vmc"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swBimi"
+                    app:switchPadding="12dp" />
+
                 <TextView
                     android:id="@+id/tvBimiHint"
                     android:layout_width="wrap_content"
@@ -941,7 +954,7 @@
                     android:textColor="?attr/colorWarning"
                     app:drawableTint="?attr/colorWarning"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swBimi" />
+                    app:layout_constraintTop_toBottomOf="@id/swBimiVmc" />
 
                 <TextView
                     android:id="@+id/tvBimiUnverified"
@@ -1072,6 +1085,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvLibravatarsHint" />
 
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swFavicons"
                     android:layout_width="0dp"
@@ -1128,6 +1142,72 @@
                     app:layout_constraintTop_toBottomOf="@id/swFaviconsPartial"
                     app:switchPadding="12dp" />
 
+                <ImageButton
+                    android:id="@+id/ibFavicons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:contentDescription="@string/title_info"
+                    android:tag="nosuggest"
+                    android:tooltipText="@string/title_info"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/swFaviconsManifest"
+                    app:srcCompat="@drawable/twotone_info_24" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swDdg"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:tag="nosuggest"
+                    android:text="@string/title_advanced_ddg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ibFavicons"
+                    app:switchPadding="12dp" />
+
+                <TextView
+                    android:id="@+id/tvDdgHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:tag="nosuggest"
+                    android:text="@string/title_advanced_privacy_risk"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?attr/colorWarning"
+                    app:drawableTint="?attr/colorWarning"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/swDdg" />
+
+                <TextView
+                    android:id="@+id/tvDdgPrivacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:drawableEnd="@drawable/twotone_open_in_new_12"
+                    android:drawablePadding="6dp"
+                    android:tag="nosuggest"
+                    android:text="@string/title_privacy_policy"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="?android:attr/textColorLink"
+                    app:drawableTint="?android:attr/textColorLink"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDdgHint" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swFaviconsDmarc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/title_advanced_favicons_dmarc"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDdgPrivacy"
+                    app:switchPadding="12dp" />
+
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/swGeneratedIcons"
                     android:layout_width="0dp"
@@ -1137,7 +1217,7 @@
                     android:text="@string/title_advanced_generated_icons"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/swFaviconsManifest"
+                    app:layout_constraintTop_toBottomOf="@id/swFaviconsDmarc"
                     app:switchPadding="12dp" />
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -1286,7 +1366,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/vSeparatorSender" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spNameEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1377,7 +1457,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swReverseAddresses" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spFontSizeSender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1398,7 +1478,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/spFontSizeSender" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spSenderEllipsize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1489,7 +1569,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvHighlightSubjectHint" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spFontSizeSubject"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1510,7 +1590,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/spFontSizeSubject" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spSubjectEllipsize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1636,7 +1716,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/swPreviewItalic" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spPreviewLines"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1688,9 +1768,10 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:constraint_referenced_ids="
-                    swBimi,tvBimiHint,tvBimiVerified,ibBimi,
+                    swBimi,swBimiVmc,tvBimiHint,tvBimiVerified,ibBimi,
                     swGravatars,tvGravatarsHint,tvGravatarPrivacy,
-                    swLibravatars,tvLibravatarsHint,tvLibravatarPrivacy" />
+                    swLibravatars,tvLibravatarsHint,tvLibravatarPrivacy,
+                    swDdg,tvDdgHint,tvDdgPrivacy" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
@@ -1863,7 +1944,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvHyphenationHint" />
 
-                <Spinner
+                <eu.faircode.email.SpinnerEx
                     android:id="@+id/spDisplayFont"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

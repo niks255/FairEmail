@@ -2718,13 +2718,18 @@ public class MessageHelper {
         return true;
     }
 
-    boolean isAligned(Context context, List<String> signers, Address[] return_path, Address[] smtp_from, Address[] from) {
+    boolean isAligned(Context context, List<String> signers,
+                      Address[] return_path, Address[] smtp_from, Address[] from,
+                      Boolean spf) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean strict_alignment = prefs.getBoolean("strict_alignment", false);
+
         List<Address> envelop = new ArrayList<>();
         if (return_path != null)
             envelop.addAll(Arrays.asList(return_path));
         if (from != null)
             envelop.addAll(Arrays.asList(from));
-        if (smtp_from != null)
+        if (smtp_from != null && !strict_alignment)
             envelop.addAll(Arrays.asList(smtp_from));
         for (String signer : signers) {
             String sdomain = UriHelper.getRootDomain(context, signer);
@@ -2736,6 +2741,10 @@ public class MessageHelper {
                     return true;
             }
         }
+
+        if (Boolean.TRUE.equals(spf) && !strict_alignment)
+            return true;
+
         return false;
     }
 
@@ -3179,12 +3188,18 @@ public class MessageHelper {
         // Check if 'by' local address
         if (kv.containsKey("by")) {
             String by = kv.get("by").toString();
-            if (by.matches(".*\\.google\\.com"))
+            if (by.matches(".*\\.google\\.com")) {
+                Log.i("--- local by Google");
                 return true;
-            if (by.toLowerCase(Locale.ROOT).contains("sendmail"))
+            }
+            if (by.toLowerCase(Locale.ROOT).contains("sendmail")) {
+                Log.i("--- local by sendmail");
                 return true;
-            if (by.startsWith("filterdrecv-"))
+            }
+            if (by.startsWith("filterdrecv-")) {
+                Log.i("--- local by filterdrecv");
                 return true;
+            }
             if (isLocal(by)) {
                 Log.i("--- local by=" + by);
                 return true;
@@ -3222,8 +3237,10 @@ public class MessageHelper {
         int w = with.indexOf(' ');
         String protocol = (w < 0 ? with : with.substring(0, w)).toLowerCase(Locale.ROOT);
 
-        if (with.contains("TLS"))
+        if (with.contains("TLS")) {
+            Log.i("--- with TLS");
             return true;
+        }
 
         if ("local".equals(protocol)) {
             // Exim
@@ -3600,7 +3617,7 @@ public class MessageHelper {
             MimeTextPart p1 = parts.get(p);
             MimeTextPart p2 = parts.get(p + 1);
             // https://bugzilla.mozilla.org/show_bug.cgi?id=1374149
-            if (!"ISO-2022-JP".equalsIgnoreCase(p1.charset) &&
+            if (!("ISO-2022-JP".equalsIgnoreCase(p1.charset) && "B".equalsIgnoreCase(p1.encoding)) &&
                     p1.charset != null && p1.charset.equalsIgnoreCase(p2.charset) &&
                     p1.encoding != null && p1.encoding.equalsIgnoreCase(p2.encoding) &&
                     p1.text != null && !p1.text.endsWith("=")) {

@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Spinner
+        <eu.faircode.email.SpinnerEx
             android:id="@+id/spProvider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -537,6 +537,38 @@
             app:layout_constraintTop_toBottomOf="@id/tvColorHint" />
 
         <TextView
+            android:id="@+id/tvAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/title_avatar"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvColorPro" />
+
+        <Button
+            android:id="@+id/btnAvatar"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/twotone_image_24"
+            android:drawablePadding="6dp"
+            android:text="@string/title_select"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAvatar" />
+
+        <TextView
+            android:id="@+id/tvAvatarPro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/title_pro_feature"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="?android:attr/textColorLink"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnAvatar" />
+
+        <TextView
             android:id="@+id/tvCalendar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -544,7 +576,7 @@
             android:text="@string/title_calendar"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvColorPro" />
+            app:layout_constraintTop_toBottomOf="@id/tvAvatarPro" />
 
         <Button
             android:id="@+id/btnCalendar"
@@ -1004,7 +1036,7 @@
             app:barrierDirection="end"
             app:constraint_referenced_ids="tvDrafts,tvSent,tvArchive,tvTrash,tvJunk,tvLeft,tvRight,tvMove" />
 
-        <Spinner
+        <eu.faircode.email.SpinnerEx
             android:id="@+id/spDrafts"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -1025,7 +1057,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spDrafts" />
 
-        <Spinner
+        <eu.faircode.email.SpinnerEx
             android:id="@+id/spSent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -1048,7 +1080,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spSent" />
 
-        <Spinner
+        <eu.faircode.email.SpinnerEx
             android:id="@+id/spArchive"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -1059,7 +1091,7 @@
             app:layout_constraintStart_toEndOf="@id/barrier_folders"
             app:layout_constraintTop_toBottomOf="@id/tvSentWarning" />
 
-        <Spinner
+        <eu.faircode.email.SpinnerEx
             android:id="@+id/spTrash"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -1070,7 +1102,7 @@
             app:layout_constraintStart_toEndOf="@id/barrier_folders"
             app:layout_constraintTop_toBottomOf="@id/spArchive" />
 
-        <Spinner
+        <eu.faircode.email.SpinnerEx
             android:id="@+id/spJunk"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -1090,7 +1122,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spJunk" />
 
-        <Spinner
+        <eu.faircode.email.SpinnerEx
             android:id="@+id/spLeft"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -1101,7 +1133,7 @@
             app:layout_constraintStart_toEndOf="@id/barrier_folders"
             app:layout_constraintTop_toBottomOf="@id/vSeparatorSwipe" />
 
-        <Spinner
+        <eu.faircode.email.SpinnerEx
             android:id="@+id/spRight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -1121,7 +1153,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spRight" />
 
-        <Spinner
+        <eu.faircode.email.SpinnerEx
             android:id="@+id/spMove"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -1260,7 +1292,8 @@
                 btnCertificate,tvCertificate,
                 tvRealm,etRealm,
                 tvName,tvNameRemark,etName,tvCategory,etCategory,
-                tvColor,btnColor,tvColorHint,tvColorPro" />
+                tvColor,btnColor,tvColorHint,tvColorPro,
+                tvAvatar,btnAvatar,tvAvatarPro" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/grpCalendar"

@@ -86,6 +86,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -137,7 +138,8 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
     static final int DEFAULT_BACKOFF_POWER = 3; // 2^3=8 seconds (totally 8+2x20=48 seconds)
 
-    private static final long MSG_DELAY = 15 * 1000L; // milliseconds
+    private static final long MSG_START_DELAY = 15 * 1000L; // milliseconds
+    private static final long MSG_STOP_DELAY = 1000L + 500L; // milliseconds
     private static final long BACKUP_DELAY = 30 * 1000L; // milliseconds
     private static final long PURGE_DELAY = 30 * 1000L; // milliseconds
     private static final int QUIT_DELAY = 10; // seconds
@@ -292,6 +294,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
             private int lastQuitId = -1;
             private List<Long> initialized = new ArrayList<>();
             private List<TupleAccountNetworkState> accountStates = new ArrayList<>();
+            private final Map<String, Semaphore> startSerializer = new HashMap<>();
             private PowerManager pm = Helper.getSystemService(ServiceSynchronize.this, PowerManager.class);
             private PowerManager.WakeLock wl = pm.newWakeLock(
                     PowerManager.PARTIAL_WAKE_LOCK, BuildConfig.APPLICATION_ID + ":service");
@@ -555,6 +558,22 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     @Override
                     public void delegate() {
                         try {
+                            int start_delay = prefs.getInt("start_delay", 0);
+                            if (start_delay > 0) {
+                                Semaphore sem;
+                                synchronized (startSerializer) {
+                                    if (!startSerializer.containsKey(accountNetworkState.accountState.host))
+                                        startSerializer.put(accountNetworkState.accountState.host, new Semaphore(1));
+                                    sem = startSerializer.get(accountNetworkState.accountState.host);
+                                }
+                                sem.acquire();
+                                getMainHandler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        sem.release();
+                                    }
+                                }, start_delay * 1000L);
+                            }
                             monitorAccount(accountNetworkState.accountState, astate, sync, force);
                         } catch (Throwable ex) {
                             Log.e(accountNetworkState.accountState.name, ex);
@@ -754,12 +773,21 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         final TwoStateOwner cowner = new TwoStateOwner(this, "liveSynchronizing");
 
+        final Runnable updateStop = new Runnable() {
+            @Override
+            public void run() {
+                Log.i("Stop new messages");
+                cowner.stop();
+            }
+        };
+
         final Runnable updateNew = new Runnable() {
             @Override
             public void run() {
-                Log.i("Update new messages");
+                Log.i("Start new messages");
                 cowner.restart();
-                getMainHandler().postDelayed(this, MSG_DELAY);
+                getMainHandler().postDelayed(updateStop, MSG_STOP_DELAY);
+                getMainHandler().postDelayed(this, MSG_START_DELAY);
             }
         };
 
@@ -804,10 +832,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                 if (syncing == 0) {
                     getMainHandler().removeCallbacks(updateNew);
+                    getMainHandler().removeCallbacks(updateStop);
                     cowner.start();
                 } else {
                     cowner.stop();
-                    getMainHandler().postDelayed(updateNew, MSG_DELAY);
+                    if (!getMainHandler().hasCallbacks(updateNew))
+                        getMainHandler().postDelayed(updateNew, MSG_START_DELAY);
                 }
 
                 if (!changed)
@@ -1491,7 +1521,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
         onEval(intent);
 
-        ServiceSend.boot(this);
+        ServiceSend.watchdog(this);
 
         scheduleWatchdog(this);
     }

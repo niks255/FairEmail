@@ -103,6 +103,7 @@ public class ContactInfo {
     private static Map<String, Lookup> emailLookup = new ConcurrentHashMap<>();
     private static final Map<String, ContactInfo> emailContactInfo = new HashMap<>();
 
+    private static final int CONTACT_ICON_SIZE = 64; // dp
     private static final int GENERATED_ICON_SIZE = 48; // dp
     private static final int FAVICON_ICON_SIZE = 64; // dp
     private static final int FAVICON_CONNECT_TIMEOUT = 5 * 1000; // milliseconds
@@ -110,6 +111,8 @@ public class ContactInfo {
     private static final long CACHE_CONTACT_DURATION = 2 * 60 * 1000L; // milliseconds
     private static final long CACHE_FAVICON_DURATION = 2 * 7 * 24 * 60 * 60 * 1000L; // milliseconds
     private static final float MIN_FAVICON_LUMINANCE = 0.2f;
+
+    static final int AVATAR_SIZE = FAVICON_ICON_SIZE;
 
     // https://realfavicongenerator.net/faq
     private static final String[] FIXED_FAVICONS = new String[]{
@@ -219,15 +222,15 @@ public class ContactInfo {
     }
 
     @NonNull
-    static ContactInfo[] get(Context context, long account, String folderType, String selector, Address[] addresses) {
-        return get(context, account, folderType, selector, addresses, false);
+    static ContactInfo[] get(Context context, long account, String folderType, String selector, boolean dmarc, Address[] addresses) {
+        return get(context, account, folderType, selector, dmarc, addresses, false);
     }
 
-    static ContactInfo[] getCached(Context context, long account, String folderType, String selector, Address[] addresses) {
-        return get(context, account, folderType, selector, addresses, true);
+    static ContactInfo[] getCached(Context context, long account, String folderType, String selector, boolean dmarc, Address[] addresses) {
+        return get(context, account, folderType, selector, dmarc, addresses, true);
     }
 
-    private static ContactInfo[] get(Context context, long account, String folderType, String selector, Address[] addresses, boolean cacheOnly) {
+    private static ContactInfo[] get(Context context, long account, String folderType, String selector, boolean dmarc, Address[] addresses, boolean cacheOnly) {
         if (addresses == null || addresses.length == 0) {
             ContactInfo anonymous = getAnonymous(context);
             return new ContactInfo[]{anonymous == null ? new ContactInfo() : anonymous};
@@ -235,7 +238,7 @@ public class ContactInfo {
 
         ContactInfo[] result = new ContactInfo[addresses.length];
         for (int i = 0; i < addresses.length; i++) {
-            result[i] = _get(context, account, folderType, selector, (InternetAddress) addresses[i], cacheOnly);
+            result[i] = _get(context, account, folderType, selector, dmarc, (InternetAddress) addresses[i], cacheOnly);
             if (result[i] == null) {
                 if (cacheOnly)
                     return null;
@@ -257,7 +260,7 @@ public class ContactInfo {
     private static ContactInfo _get(
             Context context,
             long account, String folderType,
-            String selector, InternetAddress address, boolean cacheOnly) {
+            String selector, boolean dmarc, InternetAddress address, boolean cacheOnly) {
         String key = MessageHelper.formatAddresses(new Address[]{address});
         synchronized (emailContactInfo) {
             ContactInfo info = emailContactInfo.get(key);
@@ -275,13 +278,16 @@ public class ContactInfo {
         final String ekey = (TextUtils.isEmpty(info.email) ? null : getKey(info.email));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean favicons_dmarc = prefs.getBoolean("favicons_dmarc", false);
         boolean avatars = prefs.getBoolean("avatars", true);
         boolean prefer_contact = prefs.getBoolean("prefer_contact", false);
         boolean distinguish_contacts = prefs.getBoolean("distinguish_contacts", false);
-        boolean bimi = (prefs.getBoolean("bimi", false) && !BuildConfig.PLAY_STORE_RELEASE);
-        boolean gravatars = (prefs.getBoolean("gravatars", false) && !BuildConfig.PLAY_STORE_RELEASE);
-        boolean libravatars = (prefs.getBoolean("libravatars", false) && !BuildConfig.PLAY_STORE_RELEASE);
-        boolean favicons = prefs.getBoolean("favicons", false);
+        boolean bimi = (prefs.getBoolean("bimi", false) && (!favicons_dmarc || dmarc) && !BuildConfig.PLAY_STORE_RELEASE);
+        boolean gravatars = (prefs.getBoolean("gravatars", false) && (!favicons_dmarc || dmarc) && !BuildConfig.PLAY_STORE_RELEASE);
+        boolean libravatars = (prefs.getBoolean("libravatars", false) && (!favicons_dmarc || dmarc) && !BuildConfig.PLAY_STORE_RELEASE);
+        boolean favicons = (prefs.getBoolean("favicons", false) && (!favicons_dmarc || dmarc));
+        boolean ddg_icons = (prefs.getBoolean("ddg_icons", false) && (!favicons_dmarc || dmarc) && !BuildConfig.PLAY_STORE_RELEASE);
+        String favicon_uri = prefs.getString("favicon_uri", null);
         boolean generated = prefs.getBoolean("generated_icons", true);
         boolean identicons = prefs.getBoolean("identicons", false);
         boolean circular = prefs.getBoolean("circular", true);
@@ -316,11 +322,12 @@ public class ContactInfo {
                         long contactId = cursor.getLong(colContactId);
                         String lookupKey = cursor.getString(colLookupKey);
                         Uri lookupUri = ContactsContract.Contacts.getLookupUri(contactId, lookupKey);
+                        int px = Helper.dp2pixels(context, CONTACT_ICON_SIZE);
 
                         if (avatars)
                             try (InputStream is = ContactsContract.Contacts.openContactPhotoInputStream(
                                     resolver, lookupUri, false)) {
-                                info.bitmap = BitmapFactory.decodeStream(is);
+                                info.bitmap = ImageHelper.getScaledBitmap(is, lookupUri.toString(), null, px);
                                 info.type = "contact";
                             } catch (Throwable ex) {
                                 Log.e(ex);
@@ -471,6 +478,31 @@ public class ContactInfo {
                                 host = host.substring(dot + 1);
                             }
                         }
+
+                        if (ddg_icons && !TextUtils.isEmpty(Avatar.DDG_URI))
+                            futures.add(Helper.getDownloadTaskExecutor().submit(new Callable<Favicon>() {
+                                @Override
+                                public Favicon call() throws Exception {
+                                    String parent = UriHelper.getRootDomain(context, domain);
+                                    String uri = Avatar.DDG_URI + Uri.encode(parent) + ".ico";
+                                    Favicon ddg = getFavicon(new URL(uri), null, scaleToPixels, context);
+                                    ddg.type = "ddg";
+                                    return ddg;
+                                }
+                            }));
+
+                        if (!TextUtils.isEmpty(favicon_uri) && (!favicons_dmarc || dmarc))
+                            futures.add(Helper.getDownloadTaskExecutor().submit(new Callable<Favicon>() {
+                                @Override
+                                public Favicon call() throws Exception {
+                                    String parent = UriHelper.getRootDomain(context, domain);
+                                    String uri = favicon_uri.replace("{domain}", Uri.encode(parent));
+                                    Log.i("Favicon uri=" + uri);
+                                    Favicon alt = getFavicon(new URL(uri), null, scaleToPixels, context);
+                                    alt.type = "uri";
+                                    return alt;
+                                }
+                            }));
 
                         Throwable ex = null;
                         for (Future<Favicon> future : futures)

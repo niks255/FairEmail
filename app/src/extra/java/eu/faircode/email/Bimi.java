@@ -20,11 +20,14 @@ package eu.faircode.email;
 */
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Pair;
+
+import androidx.preference.PreferenceManager;
 
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
@@ -315,6 +318,7 @@ public class Bimi {
                         pparams.addCertStore(CertStore.getInstance("Collection", intermediates));
                         pparams.setRevocationEnabled(false);
                         pparams.setDate(null);
+                        // To ignore expired certificates: pparams.setDate(cert.getNotAfter());
 
                         CertPathBuilder builder = CertPathBuilder.getInstance("PKIX");
                         CertPathBuilderResult path = builder.build(pparams);
@@ -328,7 +332,9 @@ public class Bimi {
                         String txt = "_dmarc." + domain;
                         Log.i("BIMI fetch TXT " + txt);
                         DnsHelper.DnsRecord[] records = DnsHelper.lookup(context, txt, "txt");
-                        if (records.length == 0) {
+                        if (records.length == 0 ||
+                                records[0].response == null ||
+                                !records[0].response.toLowerCase(Locale.ROOT).contains("dmarc")) {
                             String parent = UriHelper.getParentDomain(context, domain);
                             if (parent != null) {
                                 txt = "_dmarc." + parent;
@@ -366,8 +372,13 @@ public class Bimi {
             }
         }
 
-        if (bitmap != null && !verified)
+        if (bitmap != null && !verified) {
             Log.i("BIMI unverified");
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean bimi_vmc = prefs.getBoolean("bimi_vmc", false);
+            if (bimi_vmc)
+                bitmap = null;
+        }
 
         return (bitmap == null ? null : new Pair<>(bitmap, verified));
     }

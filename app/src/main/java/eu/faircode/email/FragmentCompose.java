@@ -4409,11 +4409,14 @@ public class FragmentCompose extends FragmentBase {
                 PrivateKey privkey = KeyChain.getPrivateKey(context, alias);
                 if (privkey == null)
                     throw new IllegalArgumentException("Private key missing");
+                Log.i("S/MIME privkey algo=" + privkey.getAlgorithm());
 
                 // Get public key
                 X509Certificate[] chain = KeyChain.getCertificateChain(context, alias);
                 if (chain == null || chain.length == 0)
                     throw new IllegalArgumentException("Certificate missing");
+                for (X509Certificate cert : chain)
+                    Log.i("S/MIME cert sign algo=" + cert.getSigAlgName() + " " + cert.getSigAlgOID());
 
                 if (check_certificate) {
                     // Check public key validity
@@ -4483,10 +4486,6 @@ public class FragmentCompose extends FragmentBase {
                 String signAlgorithm = prefs.getString("sign_algo_smime", "SHA-256");
 
                 String algorithm = privkey.getAlgorithm();
-                if (TextUtils.isEmpty(algorithm) || "RSA".equals(algorithm))
-                    Log.i("Private key algorithm=" + algorithm);
-                else
-                    Log.e("Private key algorithm=" + algorithm);
 
                 if (TextUtils.isEmpty(algorithm))
                     algorithm = "RSA";
@@ -4494,7 +4493,7 @@ public class FragmentCompose extends FragmentBase {
                     algorithm = "ECDSA";
 
                 algorithm = signAlgorithm.replace("-", "") + "with" + algorithm;
-                Log.i("Sign algorithm=" + algorithm);
+                Log.i("S/MIME using sign algo=" + algorithm);
 
                 ContentSigner contentSigner = new JcaContentSignerBuilder(algorithm)
                         .build(privkey);
@@ -4553,6 +4552,9 @@ public class FragmentCompose extends FragmentBase {
                     if (acertificates != null)
                         for (EntityCertificate acertificate : acertificates) {
                             X509Certificate cert = acertificate.getCertificate();
+                            Log.i("S/MIME " + email + " sign algo=" + cert.getSigAlgName() + " " + cert.getSigAlgOID());
+                            if (!SmimeHelper.match(privkey, cert))
+                                continue;
                             try {
                                 cert.checkValidity();
                                 certs.add(cert);
@@ -4575,7 +4577,7 @@ public class FragmentCompose extends FragmentBase {
                 }
 
                 // Allow sender to decrypt own message
-                if (own)
+                if (own && SmimeHelper.match(privkey, chain[0]))
                     certs.add(chain[0]);
 
                 // Build signature
@@ -4600,6 +4602,9 @@ public class FragmentCompose extends FragmentBase {
                 // Encrypt
                 CMSEnvelopedDataGenerator cmsEnvelopedDataGenerator = new CMSEnvelopedDataGenerator();
                 if ("EC".equals(privkey.getAlgorithm())) {
+                    // openssl ecparam -name secp384r1 -genkey -out ecdsa.key
+                    // openssl req -new -x509 -days 365 -key ecdsa.key -sha256 -out ecdsa.crt
+                    // openssl pkcs12 -export -out ecdsa.pfx -inkey ecdsa.key -in ecdsa.crt
                     // https://datatracker.ietf.org/doc/html/draft-ietf-smime-3278bis
                     JceKeyAgreeRecipientInfoGenerator gen = new JceKeyAgreeRecipientInfoGenerator(
                             CMSAlgorithm.ECCDH_SHA256KDF,
@@ -4610,6 +4615,7 @@ public class FragmentCompose extends FragmentBase {
                         gen.addRecipient(cert);
                     cmsEnvelopedDataGenerator.addRecipientInfoGenerator(gen);
                     // https://security.stackexchange.com/a/53960
+                    // https://stackoverflow.com/questions/7073319/
                     // throw new IllegalArgumentException("ECDSA cannot be used for encryption");
                 } else {
                     for (X509Certificate cert : certs) {
@@ -4639,7 +4645,7 @@ public class FragmentCompose extends FragmentBase {
                     default:
                         encryptionOID = CMSAlgorithm.AES128_CBC;
                 }
-                Log.i("Encryption algorithm=" + encryptAlgorithm + " OID=" + encryptionOID);
+                Log.i("S/MIME selected encryption algo=" + encryptAlgorithm + " OID=" + encryptionOID);
 
                 OutputEncryptor encryptor = new JceCMSContentEncryptorBuilder(encryptionOID)
                         .build();
@@ -4677,84 +4683,81 @@ public class FragmentCompose extends FragmentBase {
             protected void onException(Bundle args, Throwable ex) {
                 if (ex instanceof IllegalArgumentException) {
                     Log.i(ex);
+                    String msg = new ThrowableWrapper(ex).getSafeMessage();
+                    if (ex.getCause() != null)
+                        msg += " " + new ThrowableWrapper(ex.getCause()).getSafeMessage();
                     Snackbar snackbar = Helper.setSnackbarOptions(
-                            Snackbar.make(view, new ThrowableWrapper(ex).getSafeMessage(), Snackbar.LENGTH_INDEFINITE));
+                            Snackbar.make(view, msg, Snackbar.LENGTH_INDEFINITE));
                     Helper.setSnackbarLines(snackbar, 7);
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (ex.getCause() instanceof CertificateException)
-                                v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
-                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                        .putExtra("tab", "encryption"));
-                            else {
-                                EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
+                            EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
 
-                                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchor);
-                                popupMenu.getMenu().add(Menu.NONE, R.string.title_send_dialog, 1, R.string.title_send_dialog);
-                                if (identity != null)
-                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_reset_sign_key, 2, R.string.title_reset_sign_key);
-                                popupMenu.getMenu().add(Menu.NONE, R.string.title_advanced_manage_certificates, 3, R.string.title_advanced_manage_certificates);
+                            PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), vwAnchor);
+                            popupMenu.getMenu().add(Menu.NONE, R.string.title_send_dialog, 1, R.string.title_send_dialog);
+                            if (identity != null)
+                                popupMenu.getMenu().add(Menu.NONE, R.string.title_reset_sign_key, 2, R.string.title_reset_sign_key);
+                            popupMenu.getMenu().add(Menu.NONE, R.string.title_advanced_manage_certificates, 3, R.string.title_advanced_manage_certificates);
 
-                                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(MenuItem item) {
-                                        int itemId = item.getItemId();
-                                        if (itemId == R.string.title_send_dialog) {
-                                            Helper.hideKeyboard(view);
+                            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    int itemId = item.getItemId();
+                                    if (itemId == R.string.title_send_dialog) {
+                                        Helper.hideKeyboard(view);
 
-                                            FragmentDialogSend fragment = new FragmentDialogSend();
-                                            fragment.setArguments(args);
-                                            fragment.setTargetFragment(FragmentCompose.this, REQUEST_SEND);
-                                            fragment.show(getParentFragmentManager(), "compose:send");
-                                            return true;
-                                        } else if (itemId == R.string.title_reset_sign_key) {
-                                            Bundle args = new Bundle();
-                                            args.putLong("id", identity.id);
+                                        FragmentDialogSend fragment = new FragmentDialogSend();
+                                        fragment.setArguments(args);
+                                        fragment.setTargetFragment(FragmentCompose.this, REQUEST_SEND);
+                                        fragment.show(getParentFragmentManager(), "compose:send");
+                                        return true;
+                                    } else if (itemId == R.string.title_reset_sign_key) {
+                                        Bundle args = new Bundle();
+                                        args.putLong("id", identity.id);
 
-                                            new SimpleTask<Void>() {
-                                                @Override
-                                                protected void onPostExecute(Bundle args) {
-                                                    ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+                                        new SimpleTask<Void>() {
+                                            @Override
+                                            protected void onPostExecute(Bundle args) {
+                                                ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+                                            }
+
+                                            @Override
+                                            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                                                long id = args.getLong("id");
+
+                                                DB db = DB.getInstance(context);
+                                                try {
+                                                    db.beginTransaction();
+
+                                                    db.identity().setIdentitySignKey(id, null);
+                                                    db.identity().setIdentitySignKeyAlias(id, null);
+                                                    db.identity().setIdentityEncrypt(id, 0);
+
+                                                    db.setTransactionSuccessful();
+                                                } finally {
+                                                    db.endTransaction();
                                                 }
 
-                                                @Override
-                                                protected Void onExecute(Context context, Bundle args) throws Throwable {
-                                                    long id = args.getLong("id");
+                                                return null;
+                                            }
 
-                                                    DB db = DB.getInstance(context);
-                                                    try {
-                                                        db.beginTransaction();
-
-                                                        db.identity().setIdentitySignKey(id, null);
-                                                        db.identity().setIdentitySignKeyAlias(id, null);
-                                                        db.identity().setIdentityEncrypt(id, 0);
-
-                                                        db.setTransactionSuccessful();
-                                                    } finally {
-                                                        db.endTransaction();
-                                                    }
-
-                                                    return null;
-                                                }
-
-                                                @Override
-                                                protected void onException(Bundle args, Throwable ex) {
-                                                    Log.unexpectedError(getParentFragmentManager(), ex);
-                                                }
-                                            }.execute(FragmentCompose.this, args, "identity:reset");
-                                        } else if (itemId == R.string.title_advanced_manage_certificates) {
-                                            startActivity(new Intent(getContext(), ActivitySetup.class)
-                                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                                    .putExtra("tab", "encryption"));
-                                            return true;
-                                        }
-                                        return false;
+                                            @Override
+                                            protected void onException(Bundle args, Throwable ex) {
+                                                Log.unexpectedError(getParentFragmentManager(), ex);
+                                            }
+                                        }.execute(FragmentCompose.this, args, "identity:reset");
+                                    } else if (itemId == R.string.title_advanced_manage_certificates) {
+                                        startActivity(new Intent(getContext(), ActivitySetup.class)
+                                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                                .putExtra("tab", "encryption"));
+                                        return true;
                                     }
-                                });
+                                    return false;
+                                }
+                            });
 
-                                popupMenu.show();
-                            }
+                            popupMenu.show();
                         }
                     });
                     snackbar.show();

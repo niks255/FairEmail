@@ -233,6 +233,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_setup_oauth_update">Znovu autorizovat existující účet (jinak vytvořit nový účet)</string>
     <string name="title_setup_oauth_updated">Autorizace účtu byla aktualizována</string>
     <string name="title_setup_oauth_brave">Při používání prohlížeče Brave musíte povolit v nastavení, aby se aplikace otevřela mimo prohlížeč</string>
+    <string name="title_setup_oauth_browser">Autorizace vyžaduje funkční prohlížeč</string>
     <string name="title_setup_oauth_authorize">Autorizovat</string>
     <string name="title_setup_select_account">Vybrat účet</string>
     <string name="title_setup_instructions">Pokyny pro nastavení</string>
@@ -359,6 +360,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_setup_reset_full">Zobrazit původní zprávy</string>
     <string name="title_check_gmail_oauth">Vaše Gmail účty budou fungovat i po 30. květnu 2022</string>
     <string name="title_check_gmail_password">Některé z vašich Gmail účtů mohou přestat fungovat po 30. květnu 2022</string>
+    <string name="title_check_outlook_oauth">Vaše účty Outlook budou fungovat i po 16. září 2024</string>
     <string name="title_check_outlook_password">Některé z vašich účtů Outlook/Hotmail/Live přestanou fungovat po 16. září 2024</string>
     <string name="title_advanced_hint_title">Pokročilé možnosti</string>
     <string name="title_advanced_hint_message">        Vcházíte do rozšířených možností.        Všechny volby jsou nastaveny dle běžných konvencí, tudíž je není potřeba měnit, nemáte-li odlišnou preferenci.
@@ -487,6 +489,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_prefer_ip4">Upřednostňovat IPv4 před IPv6</string>
     <string name="title_advanced_dns">Adresy preferovaných DNS serverů (oddělených čárkami)</string>
     <string name="title_advanced_dns_custom">Použít vlastní DNS resolver</string>
+    <string name="title_advanced_dns_clear">Vymazat mezipaměť DNS při změnách připojení</string>
     <string name="title_advanced_ssl_update">Použít aktualizovaného poskytovatele SSL</string>
     <string name="title_advanced_ssl_harden">Obrnit SSL připojení</string>
     <string name="title_advanced_ssl_harden_strict">Vyžadovat TLS 1.3</string>
@@ -547,6 +550,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_color_stripe">Zobrazit barevný pruh</string>
     <string name="title_advanced_color_stripe_wide">Použít široký barevný pruh</string>
     <string name="title_advanced_avatars">Zobrazit fotografie kontaktů</string>
+    <string name="title_advanced_bimi">Zobrazit Brand Indicators for Message Identification (BIMI)</string>
+    <string name="title_advanced_bimi_vmc">Vyžaduje platný certifikát VMC</string>
     <string name="title_advanced_bimi_unverified">Neověřený odesílatel</string>
     <string name="title_advanced_bimi_verified">Ověřený odesílatel</string>
     <string name="title_advanced_gravatars">Zobrazit Gravatary</string>
@@ -554,6 +559,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_favicons">Zobrazit ikony stránek</string>
     <string name="title_advanced_favicons_partial">Skenovat pouze prvních %1$s na webové stránce</string>
     <string name="title_advanced_favicons_manifest">Skenovat manifest webové aplikace</string>
+    <string name="title_advanced_favicons_dmarc">Vyžadovat ověření DMARC pro externí obrázky</string>
     <string name="title_advanced_generated_icons">Zobrazit generované ikony</string>
     <string name="title_advanced_identicons">Zobrazit identikony</string>
     <string name="title_advanced_circular">Zobrazit kulaté ikony</string>
@@ -788,6 +794,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_language">Jazyk</string>
     <string name="title_advanced_language_system">Systémový</string>
     <string name="title_advanced_integrations_hint">Níže uvedené služby nejsou součástí aplikace. Veškeré platby budou směřovat přímo na účet cloudové služby a ne pro vývojáře aplikací.</string>
+    <string name="title_advanced_integrations_inert">Integrace, která není nakonfigurována, je zcela inerční. Žádné knihovny třetích stran nejsou používány k zabránění sledování a analýze.</string>
     <string name="title_advanced_lt">Integrace LanguageTool</string>
     <string name="title_advanced_lt_sentence">Zkontrolovat každou větu</string>
     <string name="title_advanced_lt_auto">Zkontrolujte odstavec po novém řádku</string>
@@ -985,6 +992,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_account_partial_fetch_hint">Vypnout pouze v případě prázdných zpráv nebo poškozených příloh</string>
     <string name="title_account_raw_fetch_hint">Povolením této funkce se zvýší využití baterie a dat</string>
     <string name="title_color">Barva</string>
+    <string name="title_avatar">Obrázek</string>
     <string name="title_calendar">Kalendář</string>
     <string name="title_background">Pozadí</string>
     <string name="title_transparent">Průhledný</string>
@@ -1025,12 +1033,12 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_primary_identity">Hlavní (výchozí identita)</string>
     <string name="title_self_identity">Odebrat e-mailovou adresu při odpovědi</string>
     <string name="title_leave_on_server">Ponechat zprávy na serveru</string>
-    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Po stažení zpráv ze serveru na něm zprávy zůstávají</string>
+    <string name="title_leave_on_server_hint">Po stažení zpráv ze serveru na něm zprávy zůstávají</string>
     <string name="title_client_delete">Aktivně odstranit zprávy po stažení</string>
     <string name="title_leave_deleted">Ponechat smazané zprávy na serveru</string>
-    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Po odstranění zpráv ze zařízení zůstanou zprávy na serveru</string>
+    <string name="title_leave_deleted_hint">Po odstranění zpráv ze zařízení zůstanou zprávy na serveru</string>
     <string name="title_leave_on_device">Ponechat zprávy v zařízení</string>
-    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Když jsou zprávy odstraněny ze serveru, tak zůstanou v zařízení</string>
+    <string name="title_leave_on_device_hint">Když jsou zprávy odstraněny ze serveru, tak zůstanou v zařízení</string>
     <string name="title_max_messages">Maximální počet zpráv ke stažení (prázdné pro všechny)</string>
     <string name="title_max_messages_keep">Toto je maximální počet zpráv, které budou uloženy na zařízení</string>
     <string name="title_max_messages_remark">        Zadejte kladné číslo ke stažení zpráv na konci (nejvíce běžné)

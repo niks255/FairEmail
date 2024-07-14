@@ -203,6 +203,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_oauth_update">Autoriseer een bestaand account opnieuw (anders een nieuwe account aanmaken)</string>
     <string name="title_setup_oauth_updated">Accountautorisatie is bijgewerkt</string>
     <string name="title_setup_oauth_brave">Bij het gebruik van Brave browser, moet u de optie in de instellingen van Brave\'s inschakelen om app links te laten openen in apps buiten Brave</string>
+    <string name="title_setup_oauth_browser">Autorisatie vereist een werkende browser</string>
     <string name="title_setup_oauth_authorize">Autoriseren</string>
     <string name="title_setup_select_account">Selecteer account</string>
     <string name="title_setup_instructions">Installatie-instructies</string>
@@ -329,6 +330,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_reset_full">Toon originele berichten</string>
     <string name="title_check_gmail_oauth">Uw Gmail accounts zullen blijven werken na 30 mei 2022</string>
     <string name="title_check_gmail_password">Sommige van uw Gmail accounts werken mogelijk niet meer na 30 mei 2022</string>
+    <string name="title_check_outlook_oauth">Uw Outlook accounts zullen blijven werken na 16 september 2024</string>
     <string name="title_check_outlook_password">Sommige van uw Outlook/Hotmail/Live accounts zullen na 16 september 2024 niet meer werken</string>
     <string name="title_advanced_hint_title">Meer geavanceerde opties</string>
     <string name="title_advanced_hint_message">        U navigeert naar de meer geavanceerde opties.        Alle opties hebben vaak gebruikte standaardwaarden die je niet hoeft te wijzigen tenzij je een andere voorkeur hebt.
@@ -457,6 +459,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_prefer_ip4">Geef de voorkeur aan IPv4 boven IPv6</string>
     <string name="title_advanced_dns">Voorkeurs DNS serveradressen (komma gescheiden)</string>
     <string name="title_advanced_dns_custom">Gebruik aangepaste DNS-resolver</string>
+    <string name="title_advanced_dns_clear">DNS-cache wissen bij verandering van connectiviteit</string>
     <string name="title_advanced_ssl_update">Gebruik bijgewerkte SSL provider</string>
     <string name="title_advanced_ssl_harden">Verhard SSL-verbindingen</string>
     <string name="title_advanced_ssl_harden_strict">Vereis TLS 1.3</string>
@@ -517,6 +520,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_color_stripe">Toon kleurenstreep</string>
     <string name="title_advanced_color_stripe_wide">Gebruik brede kleurenstreep</string>
     <string name="title_advanced_avatars">Toon foto\'s contacten</string>
+    <string name="title_advanced_bimi">Toon Brand Indicators for Message Identification (BIMI)</string>
+    <string name="title_advanced_bimi_vmc">Vereis een geldig VMC-certificaat</string>
     <string name="title_advanced_bimi_unverified">Niet-geverifieerde afzender</string>
     <string name="title_advanced_bimi_verified">Geverifieerde afzender</string>
     <string name="title_advanced_gravatars">Toon Gravatars</string>
@@ -524,6 +529,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_favicons">Toon favicons</string>
     <string name="title_advanced_favicons_partial">Alleen de eerste %1$s van de webpagina scannen</string>
     <string name="title_advanced_favicons_manifest">Scan webapp-manifesten</string>
+    <string name="title_advanced_ddg" comment="title_advanced_ddg&#10;Title for an option to fetch favicons via the icon service of DuckDuckGo">Toon DuckDuckGo iconen</string>
+    <string name="title_advanced_favicons_dmarc">Vereis DMARC-verificatie voor externe afbeeldingen</string>
     <string name="title_advanced_generated_icons">Toon gegenereerde pictogrammen</string>
     <string name="title_advanced_identicons">Toon identicons</string>
     <string name="title_advanced_circular">Toon ronde pictogrammen</string>
@@ -757,6 +764,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_language">Taal</string>
     <string name="title_advanced_language_system">Systeem</string>
     <string name="title_advanced_integrations_hint">De onderstaande cloudservices maken geen deel uit van de app. Alle betalingen gaan direct naar de cloudservice en niet naar de app-ontwikkelaar.</string>
+    <string name="title_advanced_integrations_inert">Een integratie die niet is geconfigureerd is volledig inert. Er worden geen externe bibliotheken gebruikt om tracking en analytics te voorkomen.</string>
     <string name="title_advanced_lt">LanguageTool integratie</string>
     <string name="title_advanced_lt_sentence">Controleer elke zin</string>
     <string name="title_advanced_lt_auto">Controleer alinea na een nieuwe regel</string>
@@ -954,6 +962,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_account_partial_fetch_hint">Schakel dit alleen uit in het geval van lege berichten of corrupte bijlagen</string>
     <string name="title_account_raw_fetch_hint">Dit inschakelen zal het batterij- en gegevensverbruik verhogen</string>
     <string name="title_color">Kleur</string>
+    <string name="title_avatar">Afbeelding</string>
     <string name="title_calendar">Agenda</string>
     <string name="title_background">Achtergrond</string>
     <string name="title_transparent">Doorzichtig</string>
@@ -994,12 +1003,12 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_primary_identity">Primaire identiteit (standaard identiteit)</string>
     <string name="title_self_identity">Verwijder e-mailadres bij antwoorden</string>
     <string name="title_leave_on_server">Laat berichten achter op de server</string>
-    <string name="title_leave_on_server_hint" comment="title_leave_on_server_hint&#10;Remark text for the POP3 option &quot;Leave messages on the server&quot;">Na het downloaden van berichten van de server, blijven de berichten op de server</string>
+    <string name="title_leave_on_server_hint">Na het downloaden van berichten van de server, blijven de berichten op de server</string>
     <string name="title_client_delete">Actief berichten verwijderen na downloaden</string>
     <string name="title_leave_deleted">Laat verwijderde berichten achter op de server</string>
-    <string name="title_leave_deleted_hint" comment="title_leave_deleted_hint&#10;Remark text for the POP3 option &quot;Leave deleted messages on the server&quot;">Na het verwijderen van berichten van het apparaat blijven de berichten op de server</string>
+    <string name="title_leave_deleted_hint">Na het verwijderen van berichten van het apparaat blijven de berichten op de server</string>
     <string name="title_leave_on_device">Laat berichten achter op apparaat</string>
-    <string name="title_leave_on_device_hint" comment="title_leave_on_device_hint&#10;Remark text for the POP3 option &quot;Leave messages on the device&quot;">Wanneer berichten van de server worden verwijderd, blijven de berichten op het apparaat</string>
+    <string name="title_leave_on_device_hint">Wanneer berichten van de server worden verwijderd, blijven de berichten op het apparaat</string>
     <string name="title_max_messages">Maximum aantal berichten om te downloaden (leeg voor allen)</string>
     <string name="title_max_messages_keep">Dit is het maximale aantal berichten dat op het apparaat zal worden bewaard</string>
     <string name="title_max_messages_remark">        Voer een positief getal in om berichten aan het einde te downloaden (meest gebruikelijk)

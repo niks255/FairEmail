@@ -2234,31 +2234,40 @@ class Core {
     }
 
     private static void onBody(Context context, JSONArray jargs, EntityFolder folder, EntityMessage message, POP3Folder ifolder, POP3Store istore) throws MessagingException, IOException {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean download_plain = prefs.getBoolean("download_plain", false);
+
+        boolean plain_text = jargs.optBoolean(0, download_plain);
+        String charset = (jargs.isNull(1) ? null : jargs.optString(1, null));
+
         if (!EntityFolder.INBOX.equals(folder.type))
             throw new IllegalArgumentException("Not INBOX");
+
+        if (message.content && message.isPlainOnly() == plain_text && charset == null)
+            return;
 
         Map<EntityMessage, Message> map = findMessages(context, folder, Arrays.asList(message), istore, ifolder);
         if (map.get(message) == null)
             throw new IllegalArgumentException("Message not found msgid=" + message.msgid);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean download_plain = prefs.getBoolean("download_plain", false);
-
         MessageHelper helper = new MessageHelper((MimeMessage) map.entrySet().iterator().next().getValue(), context);
         MessageHelper.MessageParts parts = helper.getMessageParts();
 
-        String body = parts.getHtml(context, download_plain);
+        String body = parts.getHtml(context, plain_text, charset);
         File file = message.getFile(context);
         Helper.writeText(file, body);
         String text = HtmlHelper.getFullText(body, true);
         message.preview = HtmlHelper.getPreview(text);
         message.language = HtmlHelper.getLanguage(context, message.subject, text);
+        Integer plain_only = parts.isPlainOnly();
+        if (plain_text)
+            plain_only = 1 | (plain_only == null ? 0 : plain_only & 0x80);
 
         DB db = DB.getInstance(context);
         db.message().setMessageContent(message.id,
                 true,
                 message.language,
-                parts.isPlainOnly(download_plain),
+                plain_only,
                 message.preview,
                 parts.getWarnings(message.warning));
     }
@@ -3514,28 +3523,8 @@ class Core {
                             List<String> signers = helper.verifyDKIM(context);
                             message.dkim = !signers.isEmpty();
                             message.signedby = (signers.isEmpty() ? null : TextUtils.join(",", signers));
-                            if (message.dkim) {
-                                boolean aligned = helper.isAligned(context, signers, message.return_path, message.smtp_from, message.from);
-                                if (aligned)
-                                    message.dmarc = true;
-                                else if (message.dmarc != null) {
-                                    boolean found = false;
-                                    if (!strict_alignment) {
-                                        String asigner = helper.getSigner(authentication);
-                                        String adomain = UriHelper.getRootDomain(context, asigner);
-                                        if (adomain != null)
-                                            for (String signer : signers) {
-                                                String sdomain = UriHelper.getRootDomain(context, signer);
-                                                if (adomain.equalsIgnoreCase(sdomain)) {
-                                                    found = true;
-                                                    break;
-                                                }
-                                            }
-                                    }
-                                    if (!found)
-                                        message.dmarc = false;
-                                }
-                            }
+                            message.dmarc = helper.isAligned(context, signers,
+                                    message.return_path, message.smtp_from, message.from, helper.getSPF());
                         }
 
                         if (message.size == null && message.total != null)
@@ -4721,28 +4710,8 @@ class Core {
                 List<String> signers = helper.verifyDKIM(context);
                 message.dkim = !signers.isEmpty();
                 message.signedby = (signers.isEmpty() ? null : TextUtils.join(",", signers));
-                if (message.dkim) {
-                    boolean aligned = helper.isAligned(context, signers, message.return_path, message.smtp_from, message.from);
-                    if (aligned)
-                        message.dmarc = true;
-                    else if (message.dmarc != null) {
-                        boolean found = false;
-                        if (!strict_alignment) {
-                            String asigner = helper.getSigner(authentication);
-                            String adomain = UriHelper.getRootDomain(context, asigner);
-                            if (adomain != null)
-                                for (String signer : signers) {
-                                    String sdomain = UriHelper.getRootDomain(context, signer);
-                                    if (adomain.equalsIgnoreCase(sdomain)) {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                        }
-                        if (!found)
-                            message.dmarc = false;
-                    }
-                }
+                message.dmarc = helper.isAligned(context, signers,
+                        message.return_path, message.smtp_from, message.from, helper.getSPF());
             }
 
             // Borrow reply name from sender name

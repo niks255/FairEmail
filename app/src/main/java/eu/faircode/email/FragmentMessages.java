@@ -327,6 +327,7 @@ public class FragmentMessages extends FragmentBase
     private boolean filter_archive;
     private boolean found;
     private String searched;
+    private boolean searchedPartial;
     private boolean pinned;
     private String msgid;
     private BoundaryCallbackMessages.SearchCriteria criteria = null;
@@ -471,11 +472,14 @@ public class FragmentMessages extends FragmentBase
         filter_archive = args.getBoolean("filter_archive", true);
         found = args.getBoolean("found", false);
         searched = args.getString("searched");
+        searchedPartial = args.getBoolean("searchedPartial");
         pinned = args.getBoolean("pinned", false);
         msgid = args.getString("msgid");
         criteria = (BoundaryCallbackMessages.SearchCriteria) args.getSerializable("criteria");
-        if (criteria != null)
+        if (criteria != null) {
             searched = criteria.query;
+            searchedPartial = criteria.isPartial();
+        }
         pane = args.getBoolean("pane", false);
         primary = args.getLong("primary", -1);
         connected = args.getBoolean("connected", false);
@@ -1260,7 +1264,7 @@ public class FragmentMessages extends FragmentBase
             filter_trash = false;
 
         adapter = new AdapterMessage(
-                this, type, found, searched, viewType,
+                this, type, found, searched, searchedPartial, viewType,
                 compact, zoom, large_buttons, sort, ascending,
                 filter_duplicates, filter_trash,
                 iProperties);
@@ -3898,7 +3902,7 @@ public class FragmentMessages extends FragmentBase
 
                 args.putInt("answers", db.answer().getAnswerCount(false));
 
-                result.identities = db.identity().getComposableIdentities(message.account);
+                result.identities = db.identity().getComposableIdentities(null);
                 result.answers = db.answer().getAnswersByFavorite(true);
 
                 return result;
@@ -3926,16 +3930,11 @@ public class FragmentMessages extends FragmentBase
                 boolean experiments = prefs.getBoolean("experiments", false);
 
                 boolean canBounce = false;
-                if (message.return_path != null && message.return_path.length == 1) {
+                if (message.return_path != null && message.return_path.length > 0) {
                     canBounce = true;
-                    for (EntityIdentity identity : data.identities)
-                        if (identity.similarAddress(message.return_path[0])) {
-                            canBounce = false;
-                            break;
-                        }
-                    if (canBounce)
-                        for (Address recipient : recipients)
-                            if (MessageHelper.equalEmail(recipient, message.return_path[0])) {
+                    for (Address return_path : message.return_path)
+                        for (EntityIdentity identity : data.identities)
+                            if (identity.similarAddress(return_path)) {
                                 canBounce = false;
                                 break;
                             }
@@ -5908,6 +5907,7 @@ public class FragmentMessages extends FragmentBase
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         long outlook_last_checked = prefs.getLong("outlook_last_checked", 0);
+        boolean outlook_checked = prefs.getBoolean("outlook_checked", false);
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MILLISECOND, 0);
@@ -5945,30 +5945,43 @@ public class FragmentMessages extends FragmentBase
 
             @Override
             protected void onExecuted(Bundle args, List<EntityAccount> accounts) {
+                int oauth = 0;
                 int passwd = 0;
                 if (accounts != null)
                     for (EntityAccount account : accounts)
-                        if (account.isOutlook() &&
-                                account.auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD)
-                            passwd++;
+                        if (account.isOutlook())
+                            if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_OAUTH)
+                                oauth++;
+                            else if (account.auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD)
+                                passwd++;
 
-                if (passwd == 0)
+                if (oauth + passwd == 0)
                     return;
 
-                final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_check_outlook_password, Snackbar.LENGTH_INDEFINITE));
+                if (oauth > 0 && passwd == 0 && outlook_checked)
+                    return;
+
+                boolean checked = (passwd == 0);
+                int resid = (checked ? R.string.title_check_outlook_oauth : R.string.title_check_outlook_password);
+                final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, resid, Snackbar.LENGTH_INDEFINITE));
                 Helper.setSnackbarLines(snackbar, 5);
-                snackbar.setAction(R.string.title_info, new View.OnClickListener() {
+                snackbar.setAction(checked ? android.R.string.ok : R.string.title_info, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         snackbar.dismiss();
-                        Helper.viewFAQ(v.getContext(), 14);
-                        prefs.edit().putLong("outlook_last_checked", now).apply();
+                        prefs.edit().putBoolean("outlook_checked", true).apply();
+                        if (!checked) {
+                            prefs.edit().putLong("outlook_last_checked", now).apply();
+                            Helper.viewFAQ(v.getContext(), 14);
+                        }
                     }
                 });
                 snackbar.addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
-                        prefs.edit().putLong("outlook_last_checked", now).apply();
+                        prefs.edit().putBoolean("outlook_checked", true).apply();
+                        if (!checked)
+                            prefs.edit().putLong("outlook_last_checked", now).apply();
                     }
                 });
                 snackbar.show();
@@ -8087,6 +8100,7 @@ public class FragmentMessages extends FragmentBase
                         nargs.putInt("lpos", forward ^ reversed ? lpos + 1 : lpos - 1);
                 nargs.putBoolean("found", found);
                 nargs.putString("searched", searched);
+                nargs.putBoolean("searchedPartial", searchedPartial);
                 nargs.putBoolean("pane", pane);
                 nargs.putLong("primary", primary);
                 nargs.putBoolean("connected", connected);
@@ -11139,6 +11153,7 @@ public class FragmentMessages extends FragmentBase
         Boolean isDrafts;
         boolean hasImap;
         boolean hasPop;
+        Boolean leave_on_server;
         Boolean leave_deleted;
         boolean read_only;
         List<Long> folders;
@@ -11182,7 +11197,7 @@ public class FragmentMessages extends FragmentBase
         boolean canMove() {
             if (read_only)
                 return false;
-            return (imapAccounts.size() > 0);
+            return (!hasPop || Boolean.TRUE.equals(leave_on_server)) && (imapAccounts.size() > 0);
         }
 
         static MoreResult get(Context context, long[] ids, boolean threading, boolean all) {
@@ -11305,6 +11320,12 @@ public class FragmentMessages extends FragmentBase
                     hasJunk = (junk != null && junk.selectable);
                 } else {
                     result.hasPop = true;
+
+                    if (result.leave_on_server == null)
+                        result.leave_on_server = account.leave_on_server;
+                    else
+                        result.leave_on_server = (result.leave_on_server && account.leave_on_server);
+
                     if (result.leave_deleted == null)
                         result.leave_deleted = account.leave_deleted;
                     else
