@@ -767,6 +767,7 @@
     <string name="title_advanced_language">Език</string>
     <string name="title_advanced_language_system">Система</string>
     <string name="title_advanced_integrations_hint">Облачните услуги долу не са част от приложението. Всякакви плащания ще отидат направо в облачната услуга, а не при разработчика на приложението.</string>
+    <string name="title_advanced_integrations_inert">Интегриране, което не е конфигурирано, е напълно инертно. Не се употребяват библиотеки от трети страни за предотвратяване на проследяване и анализ.</string>
     <string name="title_advanced_lt">Интегриране с LanguageTool</string>
     <string name="title_advanced_lt_sentence">Проверка на всяко изречение</string>
     <string name="title_advanced_lt_auto">Проверка на абзаца след новия ред</string>
@@ -1995,7 +1996,7 @@
     <string name="title_ask_what">Запитване за</string>
     <string name="title_no_ask_again">Без повторно питане</string>
     <string name="title_no_ask_for_again">Без ново питане за %1$s</string>
-    <string name="title_no_show_again">Без повторно показване</string>
+    <string name="title_no_show_again">Без показване пак</string>
     <string name="title_undo_privacy">Това може да се отмени в раздела „Настройки за поверителност“</string>
     <string name="title_no_body">Няма текстови съобщения</string>
     <string name="title_large_body">Съобщението е преголямо и това може да доведе до проблеми!</string>

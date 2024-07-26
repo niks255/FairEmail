@@ -1239,6 +1239,7 @@
     </provider>
     <provider
         name="Laposte.net"
+        documentation="Vous devez utiliser votre adresse e-mail principale. Il n'est plus possible d'utiliser une adresse alias pour authentifier un compte!"
         domain="laposte\\.net"
         link="https://aide.laposte.net/contents/comment-parametrer-un-logiciel-de-messagerie-pour-envoyer-et-recevoir-mes-courriers-electroniques">
         <imap
@@ -2318,6 +2319,19 @@
             starttls="false" />
         <smtp
             host="mail.globenet.org"
+            port="587"
+            starttls="true" />
+    </provider>
+    <provider
+        name="emailn.de"
+        domain="emailn\\.de"
+        link="https://www.emailn.de/blog/imap-einrichten">
+        <imap
+            host="imap.emailn.de"
+            port="143"
+            starttls="true" />
+        <smtp
+            host="smtp.emailn.de"
             port="587"
             starttls="true" />
     </provider>

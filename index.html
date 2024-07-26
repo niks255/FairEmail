@@ -8,10 +8,19 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="shortcut icon" href="https://raw.githubusercontent.com/M66B/FairEmail/master/app/src/main/ic_launcher-web.png">
   <meta name="theme-color" content="#006db3">
@@ -778,8 +787,8 @@ openssl pkcs12 -export -legacy -in certbag.pem &gt;legacy.p12</code></pre>
 <pre><code>openssl smime -verify &lt;xxx.eml</code></pre>
 <p>You can decode S/MIME signatures, etc, <a href="https://lapo.it/asn1js/">here</a>.</p>
 <p><br /></p>
-<p><em>pretty Easy privacy</em></p>
-<p>There is still <a href="https://tools.ietf.org/id/draft-birk-pep-00.html">no approved standard</a> for pretty Easy privacy (p≡p) and not many people are using it.</p>
+<p><em>Planck Security</em> (formerly: <em>pretty Easy privacy</em> or p≡p)</p>
+<p>There is still no approved standard for p≡p and not many people are using it.</p>
 <p>However, FairEmail can send and receive PGP encrypted messages, which are compatible with p≡p. Also, FairEmail understands incoming p≡p messages since version 1.1519, so the encrypted subject will be shown and the embedded message text will be shown more nicely.</p>
 <p><br /></p>
 <p>S/MIME sign/encrypt is a pro feature, but all other PGP and S/MIME operations are free to use.</p>
@@ -2389,6 +2398,7 @@ $NotDisplayed</code></pre>
 <p>If you have a problem with the F-Droid build, please check if there is a newer GitHub version first.</p>
 <p>You can see the source of the app in <em>About</em> of the navigation menu (left side menu), either <em>Play store</em>, <em>GitHub</em>, <em>F-Droid</em>, or <em>?</em> (for example in the case of a custom build).</p>
 <p><a href="https://apt.izzysoft.de/fdroid/">IzzyOnDroid</a> hosts the GitHub release of the app. <a href="https://f-droid.org/packages/com.aurora.store/">Aurora Store</a> hosts the Play store version of the app, even though the Aurora Store app was downloaded from F-Droid.</p>
+<p>Please <a href="https://forum.f-droid.org/t/help-wanted-how-to-create-a-reproducible-build-fairemail/8860">see here</a> why reproducible F-Droid builds are not an option. Instead, you can check the integrity of an APK file produced by a GitHub workflow, <a href="#faq205">see here</a> on how.</p>
 <p><br /></p>
 <p><a name="faq148"></a> <strong>(148) How can I use an Apple iCloud account?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq148">Google Translate</a></p>
@@ -2551,6 +2561,7 @@ https://favicon.yandex.net/favicon/{domain}</code></pre>
 <p>The <a href="https://material.io/blog/announcing-material-you">Material You</a> theme, a more dynamic theme based on the selected background image (“Monet”), which was introduced in Android 12 on Google Pixel devices, is supported and can be selected in the theme selection dialog (via the three-dots menu of the start screen).</p>
 <p>The theme colors are based on the color circle of <a href="https://en.wikipedia.org/wiki/Johannes_Itten">Johannes Itten</a>.</p>
 <p>The <em>Solarized</em> theme is described in <a href="https://en.wikipedia.org/wiki/Solarized_(color_scheme)">this article</a>.</p>
+<p>The beige background is in fact <a href="https://en.wikipedia.org/wiki/Cosmic_latte">Cosmic Latte</a>, the average color of the galaxies of the universe as perceived from the Earth</p>
 <p><br /></p>
 <p><a name="faq165"></a> <strong>(165) Is Android Auto supported?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq165">Google Translate</a></p>

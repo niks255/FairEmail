@@ -1134,9 +1134,9 @@ You can decode S/MIME signatures, etc, [here](https://lapo.it/asn1js/).
 
 <br />
 
-*pretty Easy privacy*
+*Planck Security* (formerly: *pretty Easy privacy* or p≡p)
 
-There is still [no approved standard](https://tools.ietf.org/id/draft-birk-pep-00.html) for pretty Easy privacy (p≡p) and not many people are using it.
+There is still no approved standard for p≡p and not many people are using it.
 
 However, FairEmail can send and receive PGP encrypted messages, which are compatible with p≡p.
 Also, FairEmail understands incoming p≡p messages since version 1.1519,
@@ -4677,6 +4677,9 @@ either *Play store*, *GitHub*, *F-Droid*, or *?* (for example in the case of a c
 [Aurora Store](https://f-droid.org/packages/com.aurora.store/) hosts the Play store version of the app,
 even though the Aurora Store app was downloaded from F-Droid.
 
+Please [see here](https://forum.f-droid.org/t/help-wanted-how-to-create-a-reproducible-build-fairemail/8860) why reproducible F-Droid builds are not an option.
+Instead, you can check the integrity of an APK file produced by a GitHub workflow, [see here](#faq205) on how.
+
 <br />
 
 <a name="faq148"></a>
@@ -5059,6 +5062,9 @@ is supported and can be selected in the theme selection dialog (via the three-do
 The theme colors are based on the color circle of [Johannes Itten](https://en.wikipedia.org/wiki/Johannes_Itten).
 
 The *Solarized* theme is described in [this article](https://en.wikipedia.org/wiki/Solarized_(color_scheme)).
+
+The beige background is in fact [Cosmic Latte](https://en.wikipedia.org/wiki/Cosmic_latte),
+the average color of the galaxies of the universe as perceived from the Earth
 
 <br />
 
