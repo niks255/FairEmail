@@ -907,8 +907,6 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                     }
 
                     if (import_accounts) {
-                        EntityAccount primary = db.account().getPrimaryAccount();
-
                         // Accounts
                         JSONArray jaccounts = jimport.getJSONArray("accounts");
                         for (int a = 0; a < jaccounts.length(); a++) {
@@ -949,6 +947,10 @@ public class FragmentOptionsBackup extends FragmentBase implements SharedPrefere
                             Long aid = account.id;
                             account.id = null;
 
+                            if (jaccounts.length() == 1)
+                                account.primary = true;
+
+                            EntityAccount primary = db.account().getPrimaryAccount();
                             if (primary != null)
                                 account.primary = false;
 

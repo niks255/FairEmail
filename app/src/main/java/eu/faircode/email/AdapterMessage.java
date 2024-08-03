@@ -248,6 +248,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private int colorVerified;
     private int colorEncrypt;
     private int colorSeparator;
+    private int colorBookmark;
     private int colorWarning;
     private int colorError;
     private int colorControlNormal;
@@ -1610,7 +1611,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     tvCount.setText(NF.format(message.visible));
 
                 if (selected)
-                    ivThread.setColorFilter(colorAccent);
+                    ivThread.setColorFilter(colorBookmark);
                 else
                     ivThread.clearColorFilter();
             }
@@ -3428,8 +3429,12 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                         },
                                         s, s + 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE | Spanned.SPAN_USER);
                             } else {
-                                for (Object span : ssb.getSpans(s, e, Object.class))
-                                    ssb.removeSpan(span);
+                                for (Object span : ssb.getSpans(s, e, Object.class)) {
+                                    int s0 = ssb.getSpanStart(span);
+                                    int e0 = ssb.getSpanEnd(span);
+                                    if (s0 >= s && e0 <= e)
+                                        ssb.removeSpan(span);
+                                }
                                 ssb.delete(s, e);
                                 ssb.insert(s - 1, "\n ");
                                 ssb.setSpan(
@@ -5221,6 +5226,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 intent.putExtra("account", message.account);
                 intent.putExtra("protocol", message.accountProtocol);
                 intent.putExtra("auth_type", ServiceAuthenticator.AUTH_TYPE_GRAPH);
+                intent.putExtra("host", "");
                 intent.putExtra("identity", message.identity);
                 intent.putExtra("personal", message.identityName);
                 intent.putExtra("address", message.identityEmail);
@@ -8236,6 +8242,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.colorVerified = Helper.resolveColor(context, R.attr.colorVerified);
         this.colorEncrypt = Helper.resolveColor(context, R.attr.colorEncrypt);
         this.colorSeparator = Helper.resolveColor(context, R.attr.colorSeparator);
+        this.colorBookmark = Helper.resolveColor(context, R.attr.colorBookmark);
         this.colorError = Helper.resolveColor(context, androidx.appcompat.R.attr.colorError);
         this.colorWarning = Helper.resolveColor(context, R.attr.colorWarning);
         this.colorControlNormal = Helper.resolveColor(context, androidx.appcompat.R.attr.colorControlNormal);

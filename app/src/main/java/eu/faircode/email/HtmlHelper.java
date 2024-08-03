@@ -2468,8 +2468,10 @@ public class HtmlHelper {
                         Uri uri = FileProviderEx.getUri(context, BuildConfig.APPLICATION_ID, file, attachment.name);
                         img.attr("src", uri.toString());
                         Log.i("Inline image uri=" + uri);
-                    } else
+                    } else {
                         img.attr("src", ImageHelper.getDataUri(file, attachment.type));
+                        Log.i("Inline image type=" + attachment.type);
+                    }
                 }
             }
         }
@@ -2479,43 +2481,39 @@ public class HtmlHelper {
         // https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_meta_tag
         // https://drafts.csswg.org/css-device-adapt/#viewport-meta
         Elements meta = document.select("meta").select("[name=viewport]");
+        if (meta.size() != 1)
+            return;
+
         // Note that the browser will recognize meta elements in the body too
-        if (overview) {
+        if (overview && false) {
             // fit width
             meta.remove();
             document.head().prependElement("meta")
                     .attr("name", "viewport")
                     .attr("content", "width=device-width");
         } else {
-            if (meta.size() == 1) {
-                String content = meta.attr("content");
-                String[] param = content.split("[;,]");
-                for (int i = 0; i < param.length; i++) {
-                    String[] kv = param[i].split("=");
-                    if (kv.length == 2) {
-                        String key = kv[0]
-                                .replaceAll("\\s+", "")
-                                .toLowerCase(Locale.ROOT);
-                        switch (key) {
-                            case "user-scalable":
-                                kv[1] = "yes";
-                                param[i] = TextUtils.join("=", kv);
-                                break;
-                            case "minimum-scale":
-                            case "maximum-scale":
-                                kv[0] = "disabled-scaling";
-                                param[i] = TextUtils.join("=", kv);
-                                break;
-                        }
+            String content = meta.attr("content");
+            String[] param = content.split("[;,]");
+            for (int i = 0; i < param.length; i++) {
+                String[] kv = param[i].split("=");
+                if (kv.length == 2) {
+                    String key = kv[0]
+                            .replaceAll("\\s+", "")
+                            .toLowerCase(Locale.ROOT);
+                    switch (key) {
+                        case "user-scalable":
+                            kv[1] = "yes";
+                            param[i] = TextUtils.join("=", kv);
+                            break;
+                        case "minimum-scale":
+                        case "maximum-scale":
+                            kv[0] = "disabled-scaling";
+                            param[i] = TextUtils.join("=", kv);
+                            break;
                     }
                 }
-                meta.attr("content", TextUtils.join(",", param));
-            } else {
-                meta.remove();
-                document.head().prependElement("meta")
-                        .attr("name", "viewport")
-                        .attr("content", "width=device-width, initial-scale=1.0");
             }
+            meta.attr("content", TextUtils.join(",", param));
         }
 
         if (BuildConfig.DEBUG)
@@ -3912,7 +3910,7 @@ public class HtmlHelper {
                             case "pre":
                             case "tt":
                                 // Signature
-                                setSpan(ssb, StyleHelper.getTypefaceSpan("Cousine", context), start, ssb.length());
+                                setSpan(ssb, StyleHelper.getTypefaceSpan("monospace", context), start, ssb.length());
                                 break;
                             case "style":
                                 // signatures
@@ -3972,7 +3970,7 @@ public class HtmlHelper {
 
                         if (monospaced_pre &&
                                 "true".equals(element.attr("x-plain")))
-                            setSpan(ssb, StyleHelper.getTypefaceSpan("Cousine", context), start, ssb.length());
+                            setSpan(ssb, StyleHelper.getTypefaceSpan("monospace", context), start, ssb.length());
                     } catch (Throwable ex) {
                         Log.e(ex);
                     }

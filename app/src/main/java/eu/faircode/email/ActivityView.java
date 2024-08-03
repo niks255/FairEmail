@@ -2483,6 +2483,8 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
             if (unified && "unified".equals(startup)) {
                 getSupportFragmentManager().popBackStack("unified", 0);
+                if (!drawerLayout.isLocked(drawerContainer))
+                    drawerLayout.closeDrawer(drawerContainer);
                 return;
             } else {
                 getSupportFragmentManager().popBackStack("thread", FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -2502,6 +2504,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
         Bundle args = new Bundle();
         args.putString("type", intent.getStringExtra("type"));
+        args.putString("category", intent.getStringExtra("category"));
         args.putLong("account", intent.getLongExtra("account", -1));
         args.putLong("folder", intent.getLongExtra("folder", -1));
 

@@ -404,7 +404,7 @@
     <string name="title_advanced_sync_shared_folders">Синхронізувати список спільних тек</string>
     <string name="title_advanced_sync_added">Увімкнути синхронізацію для нових тек користувача</string>
     <string name="title_advanced_subscriptions">Керувати підписками на теки</string>
-    <string name="title_advanced_check_authentication">Перевірити автентичність повідомлення</string>
+    <string name="title_advanced_check_authentication">Перевіряти автентичність повідомлення</string>
     <string name="title_advanced_check_tls">Перевіряти захист на транспортному рівні (TLS)</string>
     <string name="title_advanced_check_reply_domain">Перевіряти адреси електронної пошти для відповіді при синхронізації повідомлень</string>
     <string name="title_advanced_check_mx">Перевіряти адреси електронної пошти відправника при синхронізації повідомлень</string>
@@ -559,7 +559,7 @@
     <string name="title_advanced_favicons">Показати піктограми сайтів</string>
     <string name="title_advanced_favicons_partial">Просканувати у вебсторінці тільки перші %1$s</string>
     <string name="title_advanced_favicons_manifest">Сканувати маніфести веб-додатків</string>
-    <string name="title_advanced_ddg" comment="title_advanced_ddg&#10;Title for an option to fetch favicons via the icon service of DuckDuckGo">Показати іконки від DuckDuckGo</string>
+    <string name="title_advanced_ddg">Показати іконки від DuckDuckGo</string>
     <string name="title_advanced_favicons_dmarc">Вимагати перевірку DMARC для зовнішніх зображень</string>
     <string name="title_advanced_generated_icons">Показувати згенеровані іконки</string>
     <string name="title_advanced_identicons">Показувати ідентикони</string>
@@ -669,6 +669,7 @@
     <string name="title_advanced_autounstar">Автоматично прибирати повідомлення з обраних при їх переміщенні</string>
     <string name="title_advanced_reset_importance">Скидати важливість повідомлення при його переміщені</string>
     <string name="title_advanced_star_snoozed">Автоматично додавати відкладені повідомлення до обраних</string>
+    <string name="title_advanced_star_unsnoozed">Автоматично видаляти повідомлення з обраних при скасуванні відкладення</string>
     <string name="title_advanced_auto_important">Автоматично робити важливими повідомлення, відмічені як обрані</string>
     <string name="title_advanced_cancel_snooze">Скасовувати відкладення при переміщенні повідомлень</string>
     <string name="title_advanced_auto_block_sender">Автоматично блокувати відправника при інформуванні про спам</string>
@@ -677,6 +678,7 @@
     <string name="title_advanced_move_thread_all">При переміщенні обраних розмов, переміщати всі повідомлення</string>
     <string name="title_advanced_move_thread_sent">При переміщенні розмови також перемістити й надіслані повідомлення</string>
     <string name="title_advanced_swipe_trash_all">При змахуванні розмови до кошика, видалити всі повідомлення</string>
+    <string name="title_advanced_gmail_delete_all">При остаточному видаленні повідомлення видаляти всі мітки Gmail</string>
     <string name="title_advanced_default_snooze">Час повторного нагадування за замовчуванням</string>
     <string name="title_advanced_default_folder">Вибрати теку за замовчуванням</string>
     <string name="title_advanced_notifications">Керування сповіщеннями</string>
@@ -759,6 +761,7 @@
     <string name="title_advanced_sign_default">Підписувати за замовчуванням</string>
     <string name="title_advanced_encrypt_default">Шифрувати за замовчуванням</string>
     <string name="title_advanced_encrypt_auto">Автоматично шифрувати при доступності всіх ключів одержувачів</string>
+    <string name="title_advanced_encrypt_reply" comment="title_advanced_encrypt_reply&#10;Title for an option in the encryption settings tab page to always encrypt when replying to an encrypted message, even though the keys are not available (yet).">Автоматично шифрувати при відповіді на зашифроване повідомлення</string>
     <string name="title_advanced_auto_verify">Автоматично перевіряти підписані повідомлення</string>
     <string name="title_advanced_auto_decrypt">Автоматично розшифровувати повідомлення</string>
     <string name="title_advanced_auto_undo_decrypt">Скасовувати розшифрування при закритті розмови</string>

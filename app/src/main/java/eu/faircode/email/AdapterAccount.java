@@ -239,9 +239,9 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                                     throw new FileNotFoundException(avatar);
                             }
 
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                            boolean circular = prefs.getBoolean("circular", true);
-                            bm = ImageHelper.makeCircular(bm, circular ? null : Helper.dp2pixels(context, 3));
+                            //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                            //boolean circular = prefs.getBoolean("circular", true);
+                            //bm = ImageHelper.makeCircular(bm, circular ? null : Helper.dp2pixels(context, 3));
 
                             return bm;
                         }
@@ -456,6 +456,7 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                     intent.putExtra("account", account.id);
                     intent.putExtra("protocol", account.protocol);
                     intent.putExtra("auth_type", account.auth_type);
+                    intent.putExtra("host", account.host);
                     intent.putExtra("personal", "personal");
                     intent.putExtra("address", "address");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -916,6 +917,7 @@ public class AdapterAccount extends RecyclerView.Adapter<AdapterAccount.ViewHold
                     intent.putExtra("account", account.id);
                     intent.putExtra("protocol", account.protocol);
                     intent.putExtra("auth_type", account.auth_type);
+                    intent.putExtra("host", account.host);
                     intent.putExtra("personal", "personal");
                     intent.putExtra("address", "address");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

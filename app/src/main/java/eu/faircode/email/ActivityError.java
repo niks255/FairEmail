@@ -95,6 +95,7 @@ public class ActivityError extends ActivityBase {
         long identity = intent.getLongExtra("identity", -1L);
         int protocol = intent.getIntExtra("protocol", -1);
         int auth_type = intent.getIntExtra("auth_type", -1);
+        String host = intent.getStringExtra("host");
         int faq = intent.getIntExtra("faq", -1);
 
         boolean isCertificateException = (message != null && message.contains("CertificateException"));
@@ -108,8 +109,12 @@ public class ActivityError extends ActivityBase {
                         ? View.VISIBLE : View.GONE);
 
         boolean password = (auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD);
+        boolean outlook = ("outlook.office365.com".equalsIgnoreCase(host) ||
+                "smtp.office365.com".equalsIgnoreCase(host) ||
+                "imap-mail.outlook.com".equalsIgnoreCase(host) ||
+                "smtp-mail.outlook.com".equalsIgnoreCase(host));
 
-        btnPassword.setText(password ? R.string.title_password : R.string.title_setup_oauth_authorize);
+        btnPassword.setText(password && !outlook ? R.string.title_password : R.string.title_setup_oauth_authorize);
         btnPassword.setCompoundDrawablesRelativeWithIntrinsicBounds(
                 0, 0,
                 password ? R.drawable.twotone_edit_24 : R.drawable.twotone_check_24, 0);
@@ -142,11 +147,12 @@ public class ActivityError extends ActivityBase {
                         startActivity(new Intent(ActivityError.this, ActivitySetup.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                     }
-                } else if (auth_type == ServiceAuthenticator.AUTH_TYPE_GRAPH)
+                } else if (auth_type == ServiceAuthenticator.AUTH_TYPE_GRAPH ||
+                        (auth_type == ServiceAuthenticator.AUTH_TYPE_PASSWORD && outlook))
                     startActivity(new Intent(ActivityError.this, ActivitySetup.class)
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             .putExtra("target", "oauth")
-                            .putExtra("id", provider)
+                            .putExtra("id", "outlookgraph")
                             .putExtra("name", "Outlook")
                             .putExtra("askAccount", true)
                             .putExtra("askTenant", true)
@@ -199,6 +205,11 @@ public class ActivityError extends ActivityBase {
                 sb.append("auth_type=")
                         .append(ServiceAuthenticator.getAuthTypeName(auth_type))
                         .append("\n");
+
+                if (!TextUtils.isEmpty(host))
+                    sb.append("host=")
+                            .append(host)
+                            .append("\n");
 
                 if (account > 0)
                     sb.append("protocol=")

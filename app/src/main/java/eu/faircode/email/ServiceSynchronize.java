@@ -1380,15 +1380,19 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 }
                             }
 
-                            // Show thread
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSynchronize.this);
                             boolean threading = prefs.getBoolean("threading", true);
+                            boolean flag_unsnoozed = prefs.getBoolean("flag_unsnoozed", false);
+
+                            // Show thread
                             List<EntityMessage> messages = db.message().getMessagesByThread(
                                     message.account, message.thread, threading ? null : message.id, null);
                             for (EntityMessage threaded : messages)
                                 db.message().setMessageSnoozed(threaded.id, null);
 
                             db.message().setMessageUnsnoozed(message.id, true);
+                            if (flag_unsnoozed)
+                                EntityOperation.queue(ServiceSynchronize.this, message, EntityOperation.FLAG, false);
                             EntityOperation.queue(ServiceSynchronize.this, message, EntityOperation.SEEN, false, false);
                         }
 
@@ -1585,6 +1589,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
         intent.putExtra("account", account.id);
         intent.putExtra("protocol", account.protocol);
         intent.putExtra("auth_type", account.auth_type);
+        intent.putExtra("host", account.host);
         intent.putExtra("address", account.user);
         intent.putExtra("faq", 23);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

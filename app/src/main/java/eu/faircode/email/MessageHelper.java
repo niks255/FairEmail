@@ -88,6 +88,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FilterInputStream;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -179,6 +180,7 @@ public class MessageHelper {
     static final String HEADER_CORRELATION_ID = "X-Correlation-ID";
     static final String HEADER_MICROSOFT_ORIGINAL_MESSAGE_ID = "X-Microsoft-Original-Message-ID";
     static final String HEADER_GOOGLE_ORIGINAL_MESSAGE_ID = "X-Google-Original-Message-ID";
+    static final String HEADER_MODIFIED_TIME = "X-Modified-Time";
     static final int MAX_SUBJECT_AGE = 48; // hours
     static final int DEFAULT_THREAD_RANGE = 7; // 2^7 = 128 days
     static final int MAX_UNZIP_COUNT = 20;
@@ -3037,6 +3039,11 @@ public class MessageHelper {
 
         long size = imessage.getSize();
         return (size < 0 ? null : size);
+    }
+
+    boolean isModified() throws MessagingException {
+        ensureHeaders();
+        return (imessage.getHeader(HEADER_MODIFIED_TIME) != null);
     }
 
     Long getReceived() throws MessagingException {
@@ -6130,6 +6137,47 @@ public class MessageHelper {
         }
     }
 
+    static class StripStream extends FilterInputStream {
+        protected StripStream(InputStream in) {
+            super(in);
+        }
+
+        @Override
+        public int read() throws IOException {
+            int b = super.read();
+            if (b == ' ') {
+                super.mark(1000);
+                while (true) {
+                    b = super.read();
+                    if (b != ' ') {
+                        if (b == '\r' || b == '\n')
+                            return b;
+                        else {
+                            super.reset();
+                            return ' ';
+                        }
+                    }
+                }
+            } else
+                return b;
+        }
+
+        @Override
+        public int read(byte[] b) throws IOException {
+            for (int i = 0; i < b.length; i++) {
+                b[i] = (byte) read();
+                if (b[i] < 0)
+                    return i;
+            }
+            return b.length;
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     static class CanonicalizingStream extends FilterOutputStream {
         private OutputStream os;
         private int content;
@@ -6208,7 +6256,7 @@ public class MessageHelper {
                         return false;
                 }
 
-                if (EntityAttachment.PGP_CONTENT.equals(content) || boundary == null)
+                if (/*EntityAttachment.PGP_CONTENT.equals(content) ||*/ boundary == null)
                     line = line.replaceAll(" +$", "");
 
                 os.write(line.getBytes(StandardCharsets.ISO_8859_1));

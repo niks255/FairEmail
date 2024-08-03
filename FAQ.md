@@ -882,7 +882,7 @@ if your provider allows this. Considering the email address test@example.org you
 * "*@extra*" will result in the email address "*test@extra.example.org*"
 * "*Some name, username*" will result in the email address "*Some name, &lt;username@example.org&gt;*" (since version 1.2032)
 
-You can configure a default CC or BCC address in the advanced identity settings.
+You can configure a default CC, BCC and/or reply-to address in the advanced identity settings.
 
 FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.
 
@@ -1272,7 +1272,11 @@ Using the search index is a pro feature.
 >
 > **IMPORTANT: If you came here via a warning in the app, you MUST take action!**
 >
-> It takes just two minutes to be prepared.
+> **IMPORTANT: Microsoft seems to disable (app) passwords ahead of schedule for more and more accounts, resulting in "*Authentication failed*" error messages.**
+>
+<br />
+
+> It takes just two minutes to be prepared (and to resolve "*Authentication failed*" errors).
 >
 > If the app said your Outlook accounts will continue to work, you don't need to do anything.
 >
@@ -1784,6 +1788,9 @@ FairEmail does not request storage permissions, so this framework is required to
 No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to *all* files.
 Moreover, recent Android versions disallow access to all files for apps, except, under specific conditions, for file managers.
 
+To resolve this problem, the system component Google Play Services may need to be updated.
+Please [see here](https://support.google.com/googleplay/answer/9037938?hl=en) on how.
+
 The storage access framework is provided by the package *com.android.documentsui*,
 which is visible as *Files* app on some Android versions (notably OxygenOS).
 
@@ -1954,7 +1961,8 @@ and that identities of other accounts will not be considered.
 Matching will be done only once on receiving a message, so changing the configuration will not change existing messages.
 You could clear local messages by long pressing a folder in the folder list and synchronize the messages again, though.
 
-It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the identity settings
+It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expression) in the advanced identity settings
+(Navigation menu > Settings > Manual setup and account options > Identities > tap the identity > Advanced)
 to match **the username** of an email address (the part before the @ sign).
 
 Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
@@ -3492,9 +3500,10 @@ You can enable/disable [authentication verification](https://en.wikipedia.org/wi
 The feature depends on the header [Authentication-Results](https://datatracker.ietf.org/doc/html/rfc7601), which the receiving email server should add.
 The shield will be green only if DMARC passes (=alignment)
 and either [SPF](https://en.wikipedia.org/wiki/Sender_Policy_Framework) or [DKIM](https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail) passes.
+
 If the email server doesn't add an *Authentication-Results* header, which is optional,
 you can enable native DKIM in the debug panel, which appears when you enable debug mode in the miscellaneous settings tab page (last option).
-In this case, the shield will be green only when DKIM passes and the signer domain matches that of the sender.
+In this case, the shield will be green only when DKIM passes and the signer domain matches that of the sender (=alignment).
 Please be aware that this option will increase both data and battery usage.
 
 FairEmail can show a warning flag too if the domain name of the (reply) email address of the sender does not define an MX record pointing to an email server.
@@ -3867,7 +3876,7 @@ Which email provider is best for you depends on your wishes/requirements.
 Please see these websites for lists of privacy oriented email providers with advantages and disadvantages:
 
 * [Restore privacy](https://restoreprivacy.com/secure-email/)
-* [Privacy Guides](https://www.privacyguides.org/email/)
+* [Privacy Guides](https://www.privacyguides.org/en/email/)
 * [Privacy Tools](https://www.privacytools.io/providers/email/)
 
 **Important**: Some providers, like ProtonMail and Tutanota, use proprietary email protocols, which make it impossible to use third party email apps.
@@ -4772,16 +4781,21 @@ You can define contact groups with the Android contacts app, please see [here](h
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq153)
 
-You might need to change [the Gmail IMAP settings](https://mail.google.com/mail/u/0/#settings/fwdandpop) on a desktop browser to make it work:
+~~You might need to change [the Gmail IMAP settings](https://mail.google.com/mail/u/0/#settings/fwdandpop) on a desktop browser to make it work:~~
 
-* When I mark a message in IMAP as deleted: Auto-Expunge off - Wait for the client to update the server.
-* When a message is marked as deleted and expunged from the last visible IMAP folder: Immediately delete the message forever
+* ~~When I mark a message in IMAP as deleted: Auto-Expunge off - Wait for the client to update the server.~~
+* ~~When a message is marked as deleted and expunged from the last visible IMAP folder: Immediately delete the message forever~~
 
-<img alt="External image" src="https://raw.githubusercontent.com/M66B/FairEmail/master/images/Gmail_IMAP_delete_settings.png" width="600" height="333" />
+~~Note that archived messages can be deleted only by moving them to the trash folder first.~~
 
-Note that archived messages can be deleted only by moving them to the trash folder first.
+~~Some background: Gmail seems to have an additional message view for IMAP, which can be different from the main message view.~~
 
-Some background: Gmail seems to have an additional message view for IMAP, which can be different from the main message view.
+Unfortunately, the above doesn't work anymore.
+
+Since version 1.2216 there is an option *When permanently deleting a message, delete all Gmail labels* in the behavior-settings tab page,
+which will result in permanently deleting a message from all folders (=labels), including the archive (=all messages) folder.
+
+<br />
 
 Another oddity is that a star (favorite message) set via the web interface cannot be removed with the IMAP command
 
@@ -5135,6 +5149,9 @@ The error *403 forbidden* means that the key and/or plan in invalid.
 
 Note that when reading a message, you can use the horizontal three-dots menu to translate too.
 If you use this frequently, you can configure a button for this.
+
+Some people have asked to add Google Translate on the assumption that it is free to use, but that is not the case if it is integrated into an app.
+Apart from that, DeepL is much easier to configure and the translations are of better quality.
 
 <br />
 
@@ -6026,6 +6043,11 @@ This feature is experimental and requires version 1.2171 or later for the GitHub
 
 <a name="faq205"></a>
 **(205) How do I check the integrity of an APK file?**
+
+"*Artifact attestations enable you to create unfalsifiable provenance and integrity guarantees for the software you build.*
+*In turn, people who consume your software can verify where and how your software was built.*"
+
+Please [see here](https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds) for details.
 
 You can verify in this way that an APK file was built and signed by a GitHub workflow:
 

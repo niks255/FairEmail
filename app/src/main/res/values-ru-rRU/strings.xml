@@ -558,7 +558,7 @@
     <string name="title_advanced_favicons">Показывать значки сайтов</string>
     <string name="title_advanced_favicons_partial">Сканировать только %1$s в начале веб-страницы</string>
     <string name="title_advanced_favicons_manifest">Сканировать манифесты веб-приложения</string>
-    <string name="title_advanced_ddg" comment="title_advanced_ddg&#10;Title for an option to fetch favicons via the icon service of DuckDuckGo">Показывать значки DuckDuckGo</string>
+    <string name="title_advanced_ddg">Показывать значки DuckDuckGo</string>
     <string name="title_advanced_favicons_dmarc">Требовать проверку DMARC для внешних изображений</string>
     <string name="title_advanced_generated_icons">Показывать сгенерированные значки</string>
     <string name="title_advanced_identicons">Показывать идентификаторы</string>
@@ -668,6 +668,7 @@
     <string name="title_advanced_autounstar">Автоматически удалять отметку избранного при перемещении сообщений</string>
     <string name="title_advanced_reset_importance">Сбрасывать важность при перемещении сообщений</string>
     <string name="title_advanced_star_snoozed">Автоматически добавлять в избранное при откладывании сообщений</string>
+    <string name="title_advanced_star_unsnoozed">Автоматически удалять из избранного при отмене откладывания сообщений</string>
     <string name="title_advanced_auto_important">Автоматически помечать избранные сообщения важными</string>
     <string name="title_advanced_cancel_snooze">Отменять откладывание при перемещении сообщений</string>
     <string name="title_advanced_auto_block_sender">Автоматически блокировать отправителя при сообщении о спаме</string>
@@ -676,6 +677,7 @@
     <string name="title_advanced_move_thread_all">При перемещении выбранных диалогов перемещаются все сообщения</string>
     <string name="title_advanced_move_thread_sent">При перемещении диалога также перемещаются отправленные сообщения</string>
     <string name="title_advanced_swipe_trash_all">При смахивании диалога в корзину туда попадают все сообщения</string>
+    <string name="title_advanced_gmail_delete_all">При окончательном удалении сообщения удалять все ярлыки Gmail</string>
     <string name="title_advanced_default_snooze">Время повтора/задержки по умолчанию</string>
     <string name="title_advanced_default_folder">Выбрать папку по умолчанию</string>
     <string name="title_advanced_notifications">Настроить уведомления</string>
@@ -758,6 +760,7 @@
     <string name="title_advanced_sign_default">Подписывать по умолчанию</string>
     <string name="title_advanced_encrypt_default">Шифровать по умолчанию</string>
     <string name="title_advanced_encrypt_auto">Автоматически шифровать, если доступны ключи всех получателей</string>
+    <string name="title_advanced_encrypt_reply" comment="title_advanced_encrypt_reply&#10;Title for an option in the encryption settings tab page to always encrypt when replying to an encrypted message, even though the keys are not available (yet).">Автоматически шифровать при ответе на зашифрованное сообщение</string>
     <string name="title_advanced_auto_verify">Автоматически проверять подписанные сообщения</string>
     <string name="title_advanced_auto_decrypt">Автоматически расшифровывать сообщения</string>
     <string name="title_advanced_auto_undo_decrypt">Убирать расшифрованное при закрытии диалога</string>
