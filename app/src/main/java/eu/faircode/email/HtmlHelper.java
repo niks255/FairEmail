@@ -58,6 +58,7 @@ import android.text.style.UnderlineSpan;
 import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
+import android.view.inputmethod.BaseInputConnection;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -2481,39 +2482,43 @@ public class HtmlHelper {
         // https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_meta_tag
         // https://drafts.csswg.org/css-device-adapt/#viewport-meta
         Elements meta = document.select("meta").select("[name=viewport]");
-        if (meta.size() != 1)
-            return;
-
         // Note that the browser will recognize meta elements in the body too
-        if (overview && false) {
+        if (overview) {
             // fit width
             meta.remove();
             document.head().prependElement("meta")
                     .attr("name", "viewport")
                     .attr("content", "width=device-width");
         } else {
-            String content = meta.attr("content");
-            String[] param = content.split("[;,]");
-            for (int i = 0; i < param.length; i++) {
-                String[] kv = param[i].split("=");
-                if (kv.length == 2) {
-                    String key = kv[0]
-                            .replaceAll("\\s+", "")
-                            .toLowerCase(Locale.ROOT);
-                    switch (key) {
-                        case "user-scalable":
-                            kv[1] = "yes";
-                            param[i] = TextUtils.join("=", kv);
-                            break;
-                        case "minimum-scale":
-                        case "maximum-scale":
-                            kv[0] = "disabled-scaling";
-                            param[i] = TextUtils.join("=", kv);
-                            break;
+            if (meta.size() == 1) {
+                String content = meta.attr("content");
+                String[] param = content.split("[;,]");
+                for (int i = 0; i < param.length; i++) {
+                    String[] kv = param[i].split("=");
+                    if (kv.length == 2) {
+                        String key = kv[0]
+                                .replaceAll("\\s+", "")
+                                .toLowerCase(Locale.ROOT);
+                        switch (key) {
+                            case "user-scalable":
+                                kv[1] = "yes";
+                                param[i] = TextUtils.join("=", kv);
+                                break;
+                            case "minimum-scale":
+                            case "maximum-scale":
+                                kv[0] = "disabled-scaling";
+                                param[i] = TextUtils.join("=", kv);
+                                break;
+                        }
                     }
                 }
+                meta.attr("content", TextUtils.join(",", param));
+            } else {
+                meta.remove();
+                document.head().prependElement("meta")
+                        .attr("name", "viewport")
+                        .attr("content", "width=device-width, initial-scale=1.0");
             }
-            meta.attr("content", TextUtils.join(",", param));
         }
 
         if (BuildConfig.DEBUG)
@@ -4135,6 +4140,12 @@ public class HtmlHelper {
         if (view == null)
             return;
         view.clearComposingText();
+    }
+
+    static void clearComposingText(Spannable text) {
+        if (text == null)
+            return;
+        BaseInputConnection.removeComposingSpans(text);
     }
 
     static Spanned fromHtml(@NonNull String html, Context context) {

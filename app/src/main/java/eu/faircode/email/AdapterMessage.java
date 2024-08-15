@@ -46,6 +46,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.text.LineBreaker;
 import android.net.Uri;
 import android.os.Build;
@@ -271,7 +272,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private boolean threading_unread;
     private boolean indentation;
     private boolean avatars;
-    private boolean color_stripe;
+    private int account_color;
     private boolean check_authentication;
     private boolean native_dkim;
     private boolean check_tls;
@@ -364,6 +365,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private View view;
         private View header;
 
+        private ImageView ivBadge;
         private View vwColor;
         private ImageButton ibExpander;
         private ImageView ibFlagged;
@@ -737,6 +739,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             view = itemView.findViewById(R.id.clItem);
             header = itemView.findViewById(R.id.inHeader);
 
+            ivBadge = itemView.findViewById(R.id.ivBadge);
             vwColor = itemView.findViewById(R.id.vwColor);
             ibExpander = itemView.findViewById(R.id.ibExpander);
             ibFlagged = itemView.findViewById(R.id.ibFlagged);
@@ -772,7 +775,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 tvError.setAutoLinkMask(Linkify.EMAIL_ADDRESSES | Linkify.WEB_URLS);
             ibError = itemView.findViewById(R.id.ibError);
 
-            if (vwColor != null)
+            if (account_color == 1 && vwColor != null)
                 vwColor.getLayoutParams().width = colorStripeWidth;
 
             if (tvFrom != null) {
@@ -1380,11 +1383,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             int colorBackground =
                     (message.accountColor == null || !ActivityBilling.isPro(context)
                             ? colorSeparator : message.accountColor);
-            if (!Objects.equals(vwColor.getTag() == null, colorBackground)) {
+
+            if (account_color == 2 &&
+                    !Objects.equals(ivBadge.getTag(), colorBackground)) {
+                ivBadge.setTag(colorBackground);
+                Helper.setColor(ivBadge.getDrawable(), colorBackground);
+            }
+            ivBadge.setVisibility(account_color == 2 ? View.VISIBLE : View.GONE);
+
+            if (account_color == 1 &&
+                    !Objects.equals(vwColor.getTag(), colorBackground)) {
                 vwColor.setTag(colorBackground);
                 vwColor.setBackgroundColor(colorBackground);
             }
-            vwColor.setVisibility(color_stripe ? View.VISIBLE : View.GONE);
+            vwColor.setVisibility(account_color == 1 ? View.VISIBLE : View.GONE);
 
             // Expander
             if (!Objects.equals(ibExpander.getTag(), expanded)) {
@@ -3660,6 +3672,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                         private void onReply() {
                             Intent reply = new Intent(context, ActivityCompose.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     .putExtra("action", "reply")
                                     .putExtra("reference", message.id)
                                     .putExtra("text", action.getTextReply());
@@ -4253,6 +4266,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                             Helper.share(context, (File) result, "text/calendar", status + ".ics");
                         else {
                             Intent reply = new Intent(context, ActivityCompose.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     .putExtra("action", "participation")
                                     .putExtra("reference", args.getLong("id"))
                                     .putExtra("ics", (File) result)
@@ -4676,6 +4690,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt)) {
                     context.startActivity(
                             new Intent(context, ActivityCompose.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                     .putExtra("action", "edit")
                                     .putExtra("id", message.id));
                     properties.setValue("selected", message.id, true);
@@ -5310,6 +5325,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ToastEx.makeText(context, R.string.title_legend_receipt, Toast.LENGTH_LONG).show();
             else {
                 Intent reply = new Intent(context, ActivityCompose.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         .putExtra("action", "dsn")
                         .putExtra("dsn", EntityMessage.DSN_RECEIPT)
                         .putExtra("reference", message.id);
@@ -5497,6 +5513,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt))
                 context.startActivity(
                         new Intent(context, ActivityCompose.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                 .putExtra("action", "edit")
                                 .putExtra("id", message.id));
             else {
@@ -5995,7 +6012,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 @Override
                 protected String onExecute(Context context, Bundle args) throws Throwable {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                    boolean overview_mode = prefs.getBoolean("overview_mode", false);
                     boolean disable_tracking = prefs.getBoolean("disable_tracking", true);
                     boolean monospaced_pre = prefs.getBoolean("monospaced_pre", false);
 
@@ -6008,7 +6024,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         HtmlHelper.restorePre(document);
                     HtmlHelper.guessSchemes(document);
                     HtmlHelper.autoLink(document);
-                    HtmlHelper.setViewport(document, overview_mode);
                     HtmlHelper.embedInlineImages(context, message.id, document, true);
                     HtmlHelper.markText(document);
                     if (disable_tracking)
@@ -7964,6 +7979,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                     boolean expanded = properties.getValue("expanded", message.id);
 
+                    ivBadge.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
                     vwColor.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
 
                     if (ibExpander.getVisibility() == View.VISIBLE)
@@ -8274,7 +8290,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.indentation = prefs.getBoolean("indentation", false);
 
         this.avatars = (contacts && avatars) || (bimi || gravatars || libravatars || favicons || generated);
-        this.color_stripe = prefs.getBoolean("color_stripe", true);
+        this.account_color = prefs.getInt("account_color", 1);
         this.check_authentication = prefs.getBoolean("check_authentication", true);
         this.native_dkim = prefs.getBoolean("native_dkim", false);
         this.check_tls = prefs.getBoolean("check_tls", true);

@@ -70,6 +70,8 @@ import android.text.TextUtils;
 import android.view.Display;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
+import android.view.textservice.SpellCheckerInfo;
+import android.view.textservice.TextServicesManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -316,6 +318,17 @@ public class DebugHelper {
             for (int i = 0; i < ll.size(); i++)
                 sb.append(String.format("System: %s\r\n", ll.get(i)));
         }
+
+        if (false && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            try {
+                TextServicesManager tsm = (TextServicesManager) context.getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
+                SpellCheckerInfo sci = (tsm == null ? null : tsm.getCurrentSpellCheckerInfo());
+                if (sci != null)
+                    for (int i = 0; i < sci.getSubtypeCount(); i++)
+                        sb.append(String.format("Spell: %s\r\n", sci.getSubtypeAt(i).getLocale()));
+            } catch (Throwable ex) {
+                sb.append(ex).append("\r\n");
+            }
 
         sb.append("\r\n");
 
@@ -1603,6 +1616,28 @@ public class DebugHelper {
                     size += write(os, String.format("Default launcher=%s\r\n", (rid == null ? null : rid.activityInfo.packageName)));
                 } catch (Throwable ex) {
                     size += write(os, String.format("%s\r\n", ex));
+                }
+                size += write(os, "\r\n");
+
+                try {
+                    Intent open = new Intent(Intent.ACTION_GET_CONTENT);
+                    open.addCategory(Intent.CATEGORY_OPENABLE);
+                    open.setType("*/*");
+
+                    ResolveInfo main = pm.resolveActivity(open, 0);
+
+                    List<ResolveInfo> ris = pm.queryIntentActivities(open, flags);
+                    size += write(os, "File selectors=" + (ris == null ? null : ris.size()) + "\r\n");
+                    if (ris != null)
+                        for (ResolveInfo ri : ris) {
+                            boolean p = Objects.equals(main == null ? null : main.activityInfo.packageName, ri.activityInfo.packageName);
+                            CharSequence label = pm.getApplicationLabel(ri.activityInfo.applicationInfo);
+                            size += write(os, String.format("File selector %s%s (%s)\r\n",
+                                    ri.activityInfo.packageName, p ? "*" : "", label == null ? null : label.toString()));
+                        }
+
+                } catch (Throwable ex) {
+                    size += write(os, "\r\n");
                 }
                 size += write(os, "\r\n");
 

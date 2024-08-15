@@ -12,6 +12,36 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Acantholipan](https://en.wikipedia.org/wiki/Acantholipan)
 
+### 1.2221 - 2024-08-13
+
+* Fixed bug in JavaMail causing iCloud sync issues
+* Fixed back navigation for older Android versions
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2220 - 2024-08-07 *
+
+* Fixed verifying PGP signature in some cases
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2219 - 2024-08-04
+
+* Fixed right-to-left script support
+* Small improvements and minor bug fixes
+* Updated libraries, including [EvalEx](https://github.com/ezylang/EvalEx/releases) (rule expressions)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2218 - 2024-08-03
+
+* Fixed rule expression conditions
+* Added option for color dot instead of color stripe
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2217 - 2024-08-02
 
 * Added inbox per account category to navigation menu (optional)

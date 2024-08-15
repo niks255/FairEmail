@@ -223,6 +223,8 @@
     <string name="title_setup_gmail_permissions">Google יבקש לקרוא, לכתוב, לשלוח, ולמחוק את כל ההודעות שלך לצמיתות. Fairmail לעולם לא ימחק ללא הסכמתך המפורשת.</string>
     <string name="title_setup_gmail_login">אם נכנסת לחשבון ב־Chrome אפשר להוסיף חשבון חדש רק דרך Android. אפשר להימנע מזה על ידי יציאה מהחשבון ב־Chrome דרך הגדרות הסנכרון של Chrome.</string>
     <string name="title_setup_gmail_max">אם מופיעה הודעת השגיאה „נכנסת לכמות המרבית של חשבונות”, יש להוציא את הדפדפן מכל חשבונות Google.</string>
+    <string name="title_setup_outlook_hint">אם זאת כתובת כינוי, עדיף להשתמש באשף Office 365.</string>
+    <string name="title_setup_outlook_modern">עקב שינויים במדיניות האבטחה של Microsoft, החל מ־16 בספטמבר, 2024, רק אשף Outlook/Hotmail/Live יפעל.</string>
     <string name="title_setup_gmail_on_device">מדוע עלי לבחור בחשבון שכבר מחובר במכשיר?</string>
     <string name="title_setup_gmail_password">ארצה לאמת חשבון עם סיסמה במקום חשבון פנימי במכשיר</string>
     <string name="title_setup_office_auth">השגיאה ‚AUTHENTICATE נכשל’ עלולה להיגרם עקב IMAP/SMTP שהושבתו על ידי הנהלת המערכת</string>
@@ -547,7 +549,7 @@
     <string name="title_advanced_threading_unread">הצגת מספר ההודעות שלא נקראו בדיונים</string>
     <string name="title_advanced_indentation">הזחה שמאלית/ימנית להודעות שהתקבלו/נשלחו בדיונים</string>
     <string name="title_advanced_highlight_unread">הדגשת הודעות שלא נקראו</string>
-    <string name="title_advanced_color_stripe">הצגת פס צבע</string>
+    <string name="title_advanced_account_color" comment="title_advanced_account_color&#10;Title for an option in the display settings tab page to select none, color stripe or color dot">הצגת פס או נקודת צבע</string>
     <string name="title_advanced_color_stripe_wide">להשתמש בפס צבע רחב</string>
     <string name="title_advanced_avatars">הצגת תמונות אנשי קשר</string>
     <string name="title_advanced_bimi">הצגת בוררי מיתוג לזיהוי הודעה (BIMI)</string>
@@ -761,7 +763,7 @@
     <string name="title_advanced_sign_default">חתימה כברירת מחדל</string>
     <string name="title_advanced_encrypt_default">הצפנה כברירת מחדל</string>
     <string name="title_advanced_encrypt_auto">להצפין אוטומטית כשכל מפתחות הנמענים זמינים</string>
-    <string name="title_advanced_encrypt_reply" comment="title_advanced_encrypt_reply&#10;Title for an option in the encryption settings tab page to always encrypt when replying to an encrypted message, even though the keys are not available (yet).">להצפין אוטומטית בעת כתיבת תשובה להודעה מוצפנת</string>
+    <string name="title_advanced_encrypt_reply">להצפין אוטומטית בעת כתיבת תשובה להודעה מוצפנת</string>
     <string name="title_advanced_auto_verify">לאמת הודעות חתומות אוטומטית</string>
     <string name="title_advanced_auto_decrypt">פענוח הודעות אוטומטית</string>
     <string name="title_advanced_auto_undo_decrypt">להשתמש בפענוח עם סגירת דיון</string>
@@ -2339,6 +2341,11 @@
         <item>בינוני</item>
         <item>גודל</item>
         <item>גדול במיוחד</item>
+    </string-array>
+    <string-array name="accountColorNames">
+        <item>בלי</item>
+        <item comment="accountColorNames&#10;Title for selecting a color stripe (display-settings tab page)">פס</item>
+        <item comment="accountColorNames&#10;Title for selecting a color dot (display-settings tab page)">נקודה</item>
     </string-array>
     <string-array name="contactTypes">
         <item>נמען</item>
