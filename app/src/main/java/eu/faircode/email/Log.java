@@ -419,7 +419,7 @@ public class Log {
 
             ErrorTypes etypes = new ErrorTypes();
             etypes.setUnhandledExceptions(true);
-            etypes.setAnrs(!BuildConfig.PLAY_STORE_RELEASE);
+            etypes.setAnrs(false);
             etypes.setNdkCrashes(false);
             config.setEnabledErrorTypes(etypes);
             config.setMaxBreadcrumbs(BuildConfig.PLAY_STORE_RELEASE ? 250 : 500);
@@ -1258,6 +1258,21 @@ public class Log {
                         at android.content.BroadcastReceiver$PendingResult.sendFinished(BroadcastReceiver.java:347)
                         at android.content.BroadcastReceiver$PendingResult.finish(BroadcastReceiver.java:302)
                         at android.app.ActivityThread.handleReceiver(ActivityThread.java:4352)
+                 */
+            return false;
+
+        if (ex instanceof NullPointerException &&
+                stack.length > 0 &&
+                "android.widget.Editor$ActionPinnedPopupWindow".equals(stack[0].getClassName()) &&
+                "computeLocalPosition".equals(stack[0].getMethodName()))
+                /*
+                    java.lang.NullPointerException: Attempt to invoke virtual method 'float android.text.Layout.getPrimaryHorizontal(int)' on a null object reference
+                        at android.widget.Editor$ActionPinnedPopupWindow.computeLocalPosition(Editor.java:4134)
+                        at android.widget.Editor$PinnedPopupWindow.show(Editor.java:3737)
+                        at android.widget.Editor$ActionPinnedPopupWindow.show(Editor.java:4282)
+                        at android.widget.Editor$ActionPopupWindow.show(Editor.java:5224)
+                        at android.widget.Editor$HandleView$2.run(Editor.java:6783)
+                        at android.os.Handler.handleCallback(Handler.java:938)
                  */
             return false;
 

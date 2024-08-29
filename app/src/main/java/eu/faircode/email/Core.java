@@ -1454,6 +1454,8 @@ class Core {
                 Message imessage = ifolder.getMessageByUID(message.uid);
                 if (imessage == null)
                     throw new MessageRemovedException("move without message");
+                if (imessage.isExpunged())
+                    throw new MessageRemovedException("move of expunged message");
                 map.put(imessage, message);
             } catch (MessageRemovedException ex) {
                 Log.e(ex);
@@ -1574,6 +1576,11 @@ class Core {
                 try {
                     imessage.setFlag(Flags.Flag.DELETED, true);
                     deleted.add(imessage);
+                    if (!folder.synchronize || folder.poll || !MessageHelper.hasCapability(ifolder, "IDLE")) {
+                        EntityMessage m = map.get(imessage);
+                        if (m != null && m.uid != null)
+                            EntityOperation.queue(context, folder, EntityOperation.FETCH, m.uid, false, true);
+                    }
                 } catch (MessageRemovedException ex) {
                     Log.w(ex);
                 }
@@ -2137,7 +2144,7 @@ class Core {
         String body = parts.getHtml(context, plain_text, charset);
         File file = message.getFile(context);
         Helper.writeText(file, body);
-        String text = HtmlHelper.getFullText(body, true);
+        String text = HtmlHelper.getFullText(context, body);
         message.preview = HtmlHelper.getPreview(text);
         message.language = HtmlHelper.getLanguage(context, message.subject, text);
         Integer plain_only = parts.isPlainOnly();
@@ -2317,7 +2324,7 @@ class Core {
         String body = parts.getHtml(context, plain_text, charset);
         File file = message.getFile(context);
         Helper.writeText(file, body);
-        String text = HtmlHelper.getFullText(body, true);
+        String text = HtmlHelper.getFullText(context, body);
         message.preview = HtmlHelper.getPreview(text);
         message.language = HtmlHelper.getLanguage(context, message.subject, text);
         Integer plain_only = parts.isPlainOnly();
@@ -3679,7 +3686,7 @@ class Core {
 
                         File file = message.getFile(context);
                         Helper.writeText(file, body);
-                        String text = HtmlHelper.getFullText(body, true);
+                        String text = HtmlHelper.getFullText(context, body);
                         message.preview = HtmlHelper.getPreview(text);
                         message.language = HtmlHelper.getLanguage(context, message.subject, text);
                         db.message().setMessageContent(message.id,
@@ -3946,7 +3953,8 @@ class Core {
             // Delete old local messages
             long delete_time = new Date().getTime() - 3600 * 1000L;
             if (auto_delete) {
-                List<Long> tbds = db.message().getMessagesBefore(folder.id, delete_time, keep_time, keep_unread_time, delete_unseen);
+                List<Long> tbds = db.message().getMessagesBefore(folder.id, delete_time, keep_time,
+                        !delete_unseen || sync_unseen ? 0 : keep_unread_time);
                 Log.i(folder.name + " local tbd=" + tbds.size());
                 EntityFolder trash = db.folder().getFolderByType(folder.account, EntityFolder.TRASH);
                 for (Long tbd : tbds) {
@@ -3960,7 +3968,7 @@ class Core {
                 }
             } else {
                 int old = db.message().deleteMessagesBefore(folder.id, delete_time, keep_time,
-                        sync_unseen ? 0 : keep_unread_time, delete_unseen && !sync_unseen);
+                        !delete_unseen || sync_unseen ? 0 : keep_unread_time);
                 Log.i(folder.name + " local old=" + old);
             }
 
@@ -4983,7 +4991,7 @@ class Core {
                                 body = parts.getHtml(context, download_plain);
                             File file = message.getFile(context);
                             Helper.writeText(file, body);
-                            String text = HtmlHelper.getFullText(body, true);
+                            String text = HtmlHelper.getFullText(context, body);
                             message.content = true;
                             message.preview = HtmlHelper.getPreview(text);
                             message.language = HtmlHelper.getLanguage(context, message.subject, text);
@@ -5254,9 +5262,9 @@ class Core {
                 uidExpunge(context, ifolder, uids);
                 Log.i(ifolder.getName() + " expunged " + TextUtils.join(",", uids));
             } else {
-                Log.i(ifolder.getName() + " expunging all");
+                Log.i(ifolder.getName() + " expunging all=" + messages.size());
                 ifolder.expunge();
-                Log.i(ifolder.getName() + " expunged all");
+                Log.i(ifolder.getName() + " expunged all=" + messages.size());
             }
 
             return true;
@@ -5503,7 +5511,7 @@ class Core {
                     String body = parts.getHtml(context);
                     File file = message.getFile(context);
                     Helper.writeText(file, body);
-                    String text = HtmlHelper.getFullText(body, true);
+                    String text = HtmlHelper.getFullText(context, body);
                     message.preview = HtmlHelper.getPreview(text);
                     message.language = HtmlHelper.getLanguage(context, message.subject, text);
                     db.message().setMessageContent(message.id,

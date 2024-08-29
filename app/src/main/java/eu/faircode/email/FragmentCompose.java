@@ -1560,6 +1560,16 @@ public class FragmentCompose extends FragmentBase {
                         draft.ui_encrypt = null;
                 }
 
+                if (!PgpHelper.isOpenKeychainInstalled(context) &&
+                        (EntityMessage.PGP_SIGNONLY.equals(draft.ui_encrypt) ||
+                                EntityMessage.PGP_SIGNENCRYPT.equals(draft.ui_encrypt)))
+                    draft.ui_encrypt = null;
+
+                if (!ActivityBilling.isPro(context) &&
+                        (EntityMessage.SMIME_SIGNONLY.equals(draft.ui_encrypt) ||
+                                EntityMessage.SMIME_SIGNENCRYPT.equals(draft.ui_encrypt)))
+                    draft.ui_encrypt = null;
+
                 db.message().setMessageUiEncrypt(draft.id, draft.ui_encrypt);
 
                 db.message().setMessageSensitivity(draft.id, identity.sensitivity < 1 ? null : identity.sensitivity);
@@ -2635,7 +2645,7 @@ public class FragmentCompose extends FragmentBase {
     private void onMenuPrint() {
         Bundle extras = new Bundle();
         extras.putBoolean("silent", true);
-        onAction(R.id.action_save, extras, "paragraph");
+        onAction(R.id.action_save, extras, "print");
 
         CharSequence selected = null;
         int start = etBody.getSelectionStart();
@@ -3663,7 +3673,7 @@ public class FragmentCompose extends FragmentBase {
         Context context = getContext();
         PackageManager pm = context.getPackageManager();
         if (photo) {
-            // https://developer.android.com/training/camera/photobasics
+            // https://developer.android.com/reference/android/provider/MediaStore#ACTION_IMAGE_CAPTURE
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(pm) == null) { // action whitelisted
                 Snackbar snackbar = Helper.setSnackbarOptions(
@@ -5670,15 +5680,21 @@ public class FragmentCompose extends FragmentBase {
                             data.draft.plain_only = 1;
 
                         if (encrypt_default || selected.encrypt_default)
-                            if (selected.encrypt == 0)
-                                data.draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
-                            else
-                                data.draft.ui_encrypt = EntityMessage.SMIME_SIGNENCRYPT;
+                            if (selected.encrypt == 0) {
+                                if (PgpHelper.isOpenKeychainInstalled(context))
+                                    data.draft.ui_encrypt = EntityMessage.PGP_SIGNENCRYPT;
+                            } else {
+                                if (ActivityBilling.isPro(context))
+                                    data.draft.ui_encrypt = EntityMessage.SMIME_SIGNENCRYPT;
+                            }
                         else if (sign_default || selected.sign_default)
-                            if (selected.encrypt == 0)
-                                data.draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
-                            else
-                                data.draft.ui_encrypt = EntityMessage.SMIME_SIGNONLY;
+                            if (selected.encrypt == 0) {
+                                if (PgpHelper.isOpenKeychainInstalled(context))
+                                    data.draft.ui_encrypt = EntityMessage.PGP_SIGNONLY;
+                            } else {
+                                if (ActivityBilling.isPro(context))
+                                    data.draft.ui_encrypt = EntityMessage.SMIME_SIGNONLY;
+                            }
                     }
 
                     if (receipt_default)
@@ -6120,9 +6136,10 @@ public class FragmentCompose extends FragmentBase {
                                 e.tagName("p");
                             reply.appendChild(e);
 
-                            if (wb && data.draft.wasforwardedfrom == null)
+                            if (wb && data.draft.wasforwardedfrom == null) {
+                                reply.appendElement("br");
                                 document.body().prependChild(reply);
-                            else
+                            } else
                                 document.body().appendChild(reply);
 
                             addSignature(context, document, data.draft, selected);
@@ -6178,7 +6195,7 @@ public class FragmentCompose extends FragmentBase {
                     Helper.writeText(data.draft.getFile(context), html);
                     Helper.writeText(data.draft.getFile(context, data.draft.revision), html);
 
-                    String text = HtmlHelper.getFullText(html, true);
+                    String text = HtmlHelper.getFullText(context, html);
                     data.draft.preview = HtmlHelper.getPreview(text);
                     data.draft.language = HtmlHelper.getLanguage(context, data.draft.subject, text);
                     db.message().setMessageContent(data.draft.id,
@@ -6368,7 +6385,7 @@ public class FragmentCompose extends FragmentBase {
                         Helper.writeText(file, html);
                         Helper.writeText(data.draft.getFile(context, data.draft.revision), html);
 
-                        String text = HtmlHelper.getFullText(html, true);
+                        String text = HtmlHelper.getFullText(context, html);
                         data.draft.preview = HtmlHelper.getPreview(text);
                         data.draft.language = HtmlHelper.getLanguage(context, data.draft.subject, text);
                         db.message().setMessageContent(data.draft.id,
@@ -7235,7 +7252,7 @@ public class FragmentCompose extends FragmentBase {
                     if (f.length() > MAX_REASONABLE_SIZE)
                         args.putBoolean("large", true);
 
-                    String full = HtmlHelper.getFullText(body, true);
+                    String full = HtmlHelper.getFullText(context, body);
                     draft.preview = HtmlHelper.getPreview(full);
                     draft.language = HtmlHelper.getLanguage(context, draft.subject, full);
                     db.message().setMessageContent(draft.id,
@@ -7659,16 +7676,17 @@ public class FragmentCompose extends FragmentBase {
 
             } else if (action == R.id.action_save) {
                 boolean autosave = extras.getBoolean("autosave");
+                boolean silent = extras.getBoolean("silent");
                 boolean finish = extras.getBoolean("finish");
 
                 if (finish)
                     finish();
-                else
+                else if (!autosave && !silent)
                     setFocus(
                             args.getInt("focus"),
                             args.getInt("start", -1),
                             args.getInt("end", -1),
-                            args.getBoolean("ime") && !autosave);
+                            args.getBoolean("ime"));
 
             } else if (action == R.id.action_check) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());

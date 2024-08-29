@@ -41,9 +41,12 @@ public class TTSHelper {
             @NonNull final Context context,
             @NonNull final String utteranceId,
             @NonNull final String text,
-            @NonNull final Locale locale) {
+            final String language,
+            final boolean flush) {
 
-        Runnable speak = new Runnable() {
+        Locale locale = (language == null ? Locale.getDefault() : new Locale(language));
+
+        final Runnable speak = new Runnable() {
             @Override
             public void run() {
                 try {
@@ -53,7 +56,7 @@ public class TTSHelper {
                             " available=" + available +
                             " utterance=" + utteranceId +
                             " text=" + text);
-                    instance.speak(text, TextToSpeech.QUEUE_ADD, null, utteranceId);
+                    instance.speak(text, flush ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD, null, utteranceId);
                 } catch (Throwable ex) {
                     Log.e(ex);
                 }
@@ -86,20 +89,6 @@ public class TTSHelper {
                     }
             } else if (status == TextToSpeech.SUCCESS)
                 speak.run();
-        }
-    }
-
-    static void shutdown() {
-        synchronized (lock) {
-            if (instance != null)
-                try {
-                    Log.i("TTS shutdown");
-                    instance.shutdown();
-                    instance = null;
-                } catch (Throwable ex) {
-                    Log.e(ex);
-                }
-            status = null;
         }
     }
 }

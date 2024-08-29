@@ -774,6 +774,7 @@ openssl pkcs12 -export -legacy -in certbag.pem &gt;legacy.p12</code></pre>
 <p>Please see <a href="https://support.google.com/pixelphone/answer/2844832?hl=en">here</a> how you can import certificates into the Android key store.</p>
 <p>The use of expired keys, inline encrypted/signed messages and hardware security tokens is not supported.</p>
 <p>If you are looking for a free (test) S/MIME certificate, see <a href="http://kb.mozillazine.org/Getting_an_SMIME_certificate">here</a> for the options. Please be sure to <a href="https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219">read this first</a> if you want to request an S/MIME Actalis certificate.</p>
+<p>Posteo offers cheap certificates, <a href="https://posteo.de/blog/neu-bei-posteo-smime-zertifikate-erstellen-und-sofort-nutzen">see here</a> (German).</p>
 <p>How to extract a public key from a S/MIME certificate:</p>
 <pre><code>openssl pkcs12 -in filename.pfx/p12 -clcerts -nokeys -out cert.pem</code></pre>
 <p>You can verify the signature of a raw message file (EML file) like this:</p>
@@ -1675,9 +1676,10 @@ $$aligned$ (since version 1.2049)</code></pre>
 <p>The automation action will broadcast the intent <em>eu.faircode.email.AUTOMATION</em> with the following string extras:</p>
 <ul>
 <li><em>rule</em></li>
+<li><em>received</em> (ISO 8601 date/time)</li>
 <li><em>sender</em></li>
 <li><em>subject</em></li>
-<li><em>received</em> (ISO 8601 date/time)</li>
+<li><em>preview</em> (since version 1.2222)</li>
 </ul>
 <p>An app like Tasker can listen for this intent and perform some action. Please <a href="https://tasker.joaoapps.com/userguide/en/intents.html">see here</a> about receiving intents in Tasker.</p>
 <p><br /></p>
@@ -3040,7 +3042,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>A change will be considered only if more than a few people ask for it. Changes in the past resulted too often in lots of complaints of other people.</p>
 <p>Requested features should:</p>
 <ul>
-<li>within the scope of the app</li>
+<li>be within the scope of the app</li>
 <li>be useful to more than a few people</li>
 <li>fit logically and consistently within the app</li>
 <li>fit within the philosophy of the app (privacy-oriented, security-minded)</li>
@@ -3050,7 +3052,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>Features unrelated to email, including reading newsgroups and reading RSS feeds, fall outside the scope of the project.</p>
 <p>The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.</p>
 <p>There are requests daily to change the appearance in this or that way, but the problem is that these requests are more often than not conflicting. To prevent making other people unhappy, changes in the appearance always need to clearly and objectively contribute to the usability of the app to be considered.</p>
-<p>A feature will be considered useful to most people if more than 0.1% of the users request a feature, which in practice means about 500 people.</p>
+<p>A feature will be considered useful to most people if more than 0.5% of the users request a feature, which in practice means about 2500 people.</p>
 <p>Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible. Please see also this Wikipedia article about <a href="https://en.wikipedia.org/wiki/Feature_creep">feature creep</a>.</p>
 <p>Note that there are already more features and options in FairEmail than in any other Android email client.</p>
 <p><a name="quick-support"></a></p>

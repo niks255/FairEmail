@@ -421,6 +421,7 @@
     <string name="title_advanced_prefix_count">Adicionar contador ao prefixo de resposta</string>
     <string name="title_advanced_separate_reply">Insira uma linha horizontal antes de um cabeçalho de resposta/redirecionamento</string>
     <string name="title_advanced_extended_reply">Usar cabeçalho de resposta/encaminhamento extendido</string>
+    <string name="title_advanced_template_reply">Responder/Encaminhar modelo do cabeçalho</string>
     <string name="title_advanced_write_above">Escreva acima do texto do remetente</string>
     <string name="title_advanced_write_below">Escreva abaixo do texto do remetente</string>
     <string name="title_advanced_quote_reply">Citar texto respondido</string>
@@ -522,7 +523,7 @@
     <string name="title_advanced_threading_unread">Mostrar número de mensagens não lidas nas conversas</string>
     <string name="title_advanced_indentation">Indentação esquerda/direita para mensagens recebidas/enviadas em conversas</string>
     <string name="title_advanced_highlight_unread">Destacar mensagens não lidas</string>
-    <string name="title_advanced_account_color" comment="title_advanced_account_color&#10;Title for an option in the display settings tab page to select none, color stripe or color dot">Mostrar uma faixa de cor ou ponto de cor</string>
+    <string name="title_advanced_account_color">Mostrar uma faixa de cor ou ponto de cor</string>
     <string name="title_advanced_color_stripe_wide">Usar ampla faixa de cores</string>
     <string name="title_advanced_avatars">Mostrar fotos de contactos</string>
     <string name="title_advanced_bimi">Mostrar indicadores de marca para identificação da mensagem (BIMI)</string>
@@ -845,6 +846,7 @@
     <string name="title_advanced_send_reminders_hint">Mostrar um aviso quando o texto da mensagem ou o assunto estiver vazio ou quando um anexo estar ausente</string>
     <string name="title_advanced_reply_move_hint">O servidor de correio electrónico ainda pode adicionar as mensagens à pasta de mensagens enviadas</string>
     <string name="title_advanced_compose_color_hint">Cores muito claras ou muito escuras resultarão em mensagens ilegíveis do lado dos destinatários</string>
+    <string name="title_advanced_template_reply_hint">HTML permitido. Espaços reservados disponíveis: %1$s</string>
     <string name="title_advanced_write_below_hint">Um destinatário pode perder a sua resposta, por exemplo, quando uma mensagem mais longa estiver sendo encurtada</string>
     <string name="title_advanced_attach_new_hint">Caso contrário, adicionar endereços ou arquivos partilhados à mensagem rascunho atual</string>
     <string name="title_advanced_usenet_hint">Coloca \'-- \' entre o texto e a assinatura</string>
@@ -1938,10 +1940,12 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_hint_folder_actions">Toque prolongadamente numa pasta para aceder às opções, como adicionar uma pasta ao menu de navegação para um acesso rápido</string>
     <string name="title_hint_folder_sync">Para limitar o uso de bateria e rede, por predefinição, nem todas as pastas e mensagens serão sincronizadas</string>
     <string name="title_hint_airplane">O modo de avião está ligado</string>
+    <string name="title_hint_vpn_active">VPN ativa</string>
     <string name="title_hint_notifications">Sem permissão de notificação</string>
     <string name="title_hint_notifications_remark">Permissões de notificação são também necessárias para alertas de (conta). Notificações para novas mensagens podem ser desativadas nas configurações.</string>
     <string name="title_hint_battery_optimizations">Otimizações da bateria continuam ativadas</string>
     <string name="title_hint_data_saver">Se a economia de dados estiver ativada, a app não será capaz de sincronizar em segundo plano e poderão ocorrer erros de ligação.</string>
+    <string name="title_hint_vpn">Os servidores de e-mail geralmente bloqueiam ligações através de uma VPN. Apenas o provedor de e-mail pode resolver isso.</string>
     <string name="title_hint_dismiss">Pode dispensar esta caixa de diálogo para remover a notificação.</string>
     <string name="title_hint_support">Se tiver alguma questão ou um problema, por favor utilize o menu de suporte para obter ajuda</string>
     <string name="title_hint_message_actions">Deslize para a esquerda para o lixo; Deslize para a direita para o arquivo (se disponível); As acções de deslizar pode ser configuradas nas definições de conta</string>
@@ -2315,8 +2319,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     </string-array>
     <string-array name="accountColorNames">
         <item>Nenhuma</item>
-        <item comment="accountColorNames&#10;Title for selecting a color stripe (display-settings tab page)">Lista</item>
-        <item comment="accountColorNames&#10;Title for selecting a color dot (display-settings tab page)">Ponto</item>
+        <item>Lista</item>
+        <item>Ponto</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Destinatário</item>

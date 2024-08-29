@@ -26,8 +26,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -147,10 +145,11 @@ public class EntityRule {
 
     static final String ACTION_AUTOMATION = BuildConfig.APPLICATION_ID + ".AUTOMATION";
     static final String EXTRA_RULE = "rule";
+    static final String EXTRA_RECEIVED = "received";
     static final String EXTRA_SENDER = "sender";
     static final String EXTRA_NAME = "name";
     static final String EXTRA_SUBJECT = "subject";
-    static final String EXTRA_RECEIVED = "received";
+    static final String EXTRA_PREVIEW = "preview";
 
     static final String[] EXTRA_ALL = new String[]{
             EXTRA_RULE, EXTRA_SENDER, EXTRA_NAME, EXTRA_SUBJECT, EXTRA_RECEIVED
@@ -436,7 +435,7 @@ public class EntityRule {
 
                 Document d = JsoupEx.parse(html);
                 if (skip_quotes)
-                    HtmlHelper.removeQuotes(d);
+                    HtmlHelper.removeQuotes(d, true);
                 if (jsoup) {
                     String selector = value.substring(JSOUP_PREFIX.length());
                     if (d.select(selector).isEmpty() != not)
@@ -1197,7 +1196,7 @@ public class EntityRule {
 
         File file = reply.getFile(context);
         Helper.writeText(file, body);
-        String text = HtmlHelper.getFullText(body, true);
+        String text = HtmlHelper.getFullText(context, body);
         reply.preview = HtmlHelper.getPreview(text);
         reply.language = HtmlHelper.getLanguage(context, reply.subject, text);
         db.message().setMessageContent(reply.id,
@@ -1246,10 +1245,11 @@ public class EntityRule {
 
         Intent automation = new Intent(ACTION_AUTOMATION);
         automation.putExtra(EXTRA_RULE, name);
+        automation.putExtra(EXTRA_RECEIVED, DTF.format(message.received));
         automation.putExtra(EXTRA_SENDER, iaddr == null ? null : iaddr.getAddress());
         automation.putExtra(EXTRA_NAME, iaddr == null ? null : iaddr.getPersonal());
         automation.putExtra(EXTRA_SUBJECT, message.subject);
-        automation.putExtra(EXTRA_RECEIVED, DTF.format(message.received));
+        automation.putExtra(EXTRA_PREVIEW, message.preview);
 
         List<String> extras = Log.getExtras(automation.getExtras());
         EntityLog.log(context, EntityLog.Type.Rules, message,
@@ -1294,32 +1294,26 @@ public class EntityRule {
         if (message.ui_seen)
             return;
 
-        Locale locale = (message.language == null ? Locale.getDefault() : new Locale(message.language));
-
-        Configuration configuration = new Configuration(context.getResources().getConfiguration());
-        configuration.setLocale(locale);
-        Resources res = context.createConfigurationContext(configuration).getResources();
-
         StringBuilder sb = new StringBuilder();
-        sb.append(res.getString(R.string.title_rule_tts_prefix)).append(". ");
+        sb.append(context.getString(R.string.title_rule_tts_prefix)).append(". ");
 
         if (message.from != null && message.from.length > 0)
-            sb.append(res.getString(R.string.title_rule_tts_from))
+            sb.append(context.getString(R.string.title_rule_tts_from))
                     .append(' ').append(MessageHelper.formatAddressesShort(message.from)).append(". ");
 
         if (!TextUtils.isEmpty(message.subject))
-            sb.append(res.getString(R.string.title_rule_tts_subject))
+            sb.append(context.getString(R.string.title_rule_tts_subject))
                     .append(' ').append(message.subject).append(". ");
 
         String body = Helper.readText(message.getFile(context));
-        String text = HtmlHelper.getFullText(body, false);
+        String text = HtmlHelper.getFullText(context, body);
         String preview = HtmlHelper.getPreview(text);
 
         if (!TextUtils.isEmpty(preview))
-            sb.append(res.getString(R.string.title_rule_tts_content))
+            sb.append(context.getString(R.string.title_rule_tts_content))
                     .append(' ').append(preview);
 
-        TTSHelper.speak(context, "rule:" + message.id, sb.toString(), locale);
+        TTSHelper.speak(context, "rule:" + message.id, sb.toString(), message.language, false);
     }
 
     private boolean onActionSnooze(Context context, EntityMessage message, JSONObject jargs) throws JSONException {

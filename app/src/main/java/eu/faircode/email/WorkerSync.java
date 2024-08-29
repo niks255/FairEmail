@@ -92,13 +92,14 @@ public class WorkerSync extends Worker {
 
                 EntityLog.log(context, EntityLog.Type.Cloud,
                         "Queuing " + getName() + " delay=" + (delay / (60 * 1000L)) + "m");
+                WorkManager.getInstance(context).cancelUniqueWork(getName());
                 PeriodicWorkRequest.Builder builder =
                         new PeriodicWorkRequest.Builder(WorkerSync.class, 1, TimeUnit.DAYS)
                                 .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                                 .setConstraints(new Constraints.Builder()
                                         .setRequiredNetworkType(NetworkType.CONNECTED).build());
                 WorkManager.getInstance(context)
-                        .enqueueUniquePeriodicWork(getName(), ExistingPeriodicWorkPolicy.UPDATE, builder.build());
+                        .enqueueUniquePeriodicWork(getName(), ExistingPeriodicWorkPolicy.KEEP, builder.build());
                 Log.i("Queued " + getName());
             } else {
                 EntityLog.log(context, EntityLog.Type.Cloud,

@@ -2615,53 +2615,66 @@ public class HtmlHelper {
         return truncate(preview, PREVIEW_SIZE);
     }
 
-    static String getFullText(String body, boolean hidden) {
+    static String getFullText(Context context, String body) {
         try {
             if (body == null)
                 return null;
             Document d = JsoupEx.parse(body);
-            return _getText(d, hidden);
+            return _getText(context, d);
         } catch (OutOfMemoryError ex) {
             Log.e(ex);
             return null;
         }
     }
 
-    static String getFullText(File file, boolean hidden) throws IOException {
+    static String getFullText(Context context, File file) throws IOException {
         try {
             Document d = JsoupEx.parse(file);
-            return _getText(d, hidden);
+            return _getText(context, d);
         } catch (OutOfMemoryError ex) {
             Log.e(ex);
             return null;
         }
     }
 
-    private static String _getText(Document d, boolean hidden) {
+    private static String _getText(Context context, Document d) {
         truncate(d, MAX_FULL_TEXT_SIZE);
 
-        for (Element e : d.select("*")) {
-            String style = e.attr("style");
-            if (TextUtils.isEmpty(style))
-                continue;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean preview_hidden = prefs.getBoolean("preview_hidden", true);
+        boolean preview_quotes = prefs.getBoolean("preview_quotes", true);
 
-            String[] params = style.split(";");
-            for (String param : params) {
-                int colon = param.indexOf(':');
-                if (colon <= 0)
+        if (!preview_hidden)
+            for (Element e : d.select("*")) {
+                String style = e.attr("style");
+                if (TextUtils.isEmpty(style))
                     continue;
-                String key = param.substring(0, colon)
-                        .trim()
-                        .toLowerCase(Locale.ROOT);
-                String value = param.substring(colon + 1)
-                        .replace("!important", "")
-                        .trim()
-                        .toLowerCase(Locale.ROOT)
-                        .replaceAll("\\s+", " ");
-                if (!hidden && "display".equals(key) && "none".equals(value)) {
-                    e.remove();
-                    break;
+
+                String[] params = style.split(";");
+                for (String param : params) {
+                    int colon = param.indexOf(':');
+                    if (colon <= 0)
+                        continue;
+                    String key = param.substring(0, colon)
+                            .trim()
+                            .toLowerCase(Locale.ROOT);
+                    String value = param.substring(colon + 1)
+                            .replace("!important", "")
+                            .trim()
+                            .toLowerCase(Locale.ROOT)
+                            .replaceAll("\\s+", " ");
+                    if ("display".equals(key) && "none".equals(value)) {
+                        e.remove();
+                        break;
+                    }
                 }
+            }
+
+        if (!preview_quotes) {
+            if (!removeQuotes(d, false)) {
+                Element top = d.select("blockquote").first();
+                if (top != null && top.previousElementSibling() == null)
+                    top.remove();
             }
         }
 
@@ -2810,8 +2823,8 @@ public class HtmlHelper {
 
         // <div class="moz-signature">
         // <pre class="moz-signature" cols="72">
-        d.body().select("div.moz-signature").remove();
-        d.body().select("pre.moz-signature").remove();
+        //d.body().select("div.moz-signature").remove();
+        //d.body().select("pre.moz-signature").remove();
 
         // Apple: <br id="lineBreakAtBeginningOfSignature"> <div dir="ltr">
         for (Element br : d.body().select("br#lineBreakAtBeginningOfSignature")) {
@@ -2865,51 +2878,54 @@ public class HtmlHelper {
         });
     }
 
-    static void removeQuotes(Document d) {
+    static boolean removeQuotes(Document d, boolean all) {
         Elements quotes = d.body().select(".fairemail_quote");
-        if (quotes.size() > 0) {
+        if (!quotes.isEmpty()) {
             quotes.remove();
-            return;
+            return true;
         }
 
         // Gmail
         quotes = d.body().select(".gmail_quote");
-        if (quotes.size() > 0) {
+        if (!quotes.isEmpty()) {
             quotes.remove();
-            return;
+            return true;
         }
 
         // Outlook: <div id="appendonsend">
         quotes = d.body().select("div#appendonsend");
-        if (quotes.size() > 0) {
+        if (!quotes.isEmpty()) {
             quotes.nextAll().remove();
             quotes.remove();
-            return;
+            return true;
         }
 
         // ms-outlook-mobile
         quotes = d.body().select("div#divRplyFwdMsg");
-        if (quotes.size() > 0) {
+        if (!quotes.isEmpty()) {
             quotes.nextAll().remove();
             quotes.remove();
-            return;
+            return true;
         }
 
         // Microsoft Word 15
         quotes = d.body().select("div#mail-editor-reference-message-container");
-        if (quotes.size() > 0) {
+        if (!quotes.isEmpty()) {
             quotes.remove();
-            return;
+            return true;
         }
 
         // Web.de: <div id="aqm-original"
         quotes = d.body().select("div#aqm-original");
-        if (quotes.size() > 0) {
+        if (!quotes.isEmpty()) {
             quotes.remove();
-            return;
+            return true;
         }
 
-        d.select("blockquote").remove();
+        if (!all)
+            return false;
+
+        return !d.select("blockquote").remove().isEmpty();
     }
 
     static String truncate(String text, int at) {
