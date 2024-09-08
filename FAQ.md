@@ -5,16 +5,16 @@
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F)
 
 &#x1F1EC;&#x1F1E7; If you have a question, please check the following frequently asked questions first.
-[At the bottom](#quick-support),
+[At the bottom](#get-support),
 you can find out how to ask other questions, request features, and report bugs.
 You will receive an answer in your own language.
 
 &#x1F1E9;&#x1F1EA; Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die folgenden häufig gestellten Fragen.
-[Unten](#quick-support) erfahren Sie, wie Sie andere Fragen stellen, Funktionen anfordern und Fehler melden können.
+[Unten](#get-support) erfahren Sie, wie Sie andere Fragen stellen, Funktionen anfordern und Fehler melden können.
 Sie erhalten eine Antwort in Ihrer eigenen Sprache.
 
 &#x1F1EB;&#x1F1F7; Si vous avez une question, veuillez d'abord vérifier les questions fréquemment posées suivantes.
-[En bas](#quick-support), vous pouvez découvrir comment poser d'autres questions, demander des fonctionnalités et signaler des bogues.
+[En bas](#get-support), vous pouvez découvrir comment poser d'autres questions, demander des fonctionnalités et signaler des bogues.
 Vous recevrez une réponse dans votre propre langue.
 
 <br>
@@ -2883,6 +2883,8 @@ Example conditions:
 
 ```!onBlocklist() && hasMx() && attachments() > 0```
 
+```(received + 7*24*60*60*1000) < DT_DATE_TO_EPOCH(DT_NOW())```
+
 <br>
 
 **Actions**
@@ -5145,7 +5147,7 @@ DeepL offers free translation of 500,000 characters (~100,000 words; ~250 pages)
 1. Make sure you have the latest version of the app installed
 1. Check if [DeepL](https://www.deepl.com/) supports your language
 1. Enable DeepL support in the integration settings
-1. [Subscribe to](https://www.deepl.com/pro#developer) the DeepL API Free (credit card required; won't be charged)
+1. [Sign up](https://www.deepl.com/en/signup) to use **DeepL API Free** (credit card required for verification; won't be charged)
 1. [Copy](https://www.deepl.com/pro-account/plan) the authentication key
 1. In the message composer tap on the translate button (文A) in the top action bar, select *Configure* and paste the key
 
@@ -5790,6 +5792,17 @@ Note that starred (favorite) messages will be kept on your device "forever".
 
 Instead of downloading many messages to your device, consider [searching for messages on the email server](#faq13).
 
+Longer explanation: the app has a sync and a keep window per folder.
+The *Fetch more messages* menu item is, in fact, a mini wizard to change the keep window of one or more folders at the same time,
+and to initiate a corresponding synchronization operation.
+If you long press on a folder in the folder list and select *Edit properties*, you can change the sync and keep window of the folder.
+The sync window determines which messages will be checked with a standard sync operation (default 7 days),
+and the keep window determines how long messages will be kept on the device (default 30 days).
+If you sync another time within 30 seconds, all messages in the keep window will be checked,
+which is useful when you have been moving around messages with another email client, for example on your desktop computer.
+It is mostly pointless to check all messages all the time, especially considering that this will use battery power,
+which is why there is a separate sync and keep window, and why the app checks messages younger than a week only.
+
 <br>
 
 <a name="faq192"></a>
@@ -6111,14 +6124,13 @@ There are requests daily to change the appearance in this or that way, but the p
 To prevent making other people unhappy, changes in the appearance always need to clearly and objectively contribute to the usability of the app to be considered.
 
 A feature will be considered useful to most people if more than 0.5% of the users request a feature, which in practice means about 2500 people.
+Assuming that only 10% of the app's users will ask for a new feature, about 250 requests are needed to add a new feature.
 
 Features not fulfilling these requirements will likely be rejected.
 This is also to keep maintenance and support in the long term feasible.
 Please see also this Wikipedia article about [feature creep](https://en.wikipedia.org/wiki/Feature_creep).
 
 Note that there are already more features and options in FairEmail than in any other Android email client.
-
-<a name="quick-support"></a>
 
 <br />
 

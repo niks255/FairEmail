@@ -1440,14 +1440,6 @@ public class FragmentMessages extends FragmentBase
             }
         });
 
-        if (prefs.getBoolean("updown", true)) {
-            boolean reversed = prefs.getBoolean("reversed", false);
-            bottom_navigation.getMenu().findItem(R.id.action_prev)
-                    .setIcon(reversed ? R.drawable.twotone_north_24 : R.drawable.twotone_south_24);
-            bottom_navigation.getMenu().findItem(R.id.action_next)
-                    .setIcon(reversed ? R.drawable.twotone_south_24 : R.drawable.twotone_north_24);
-        }
-
         bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -2030,6 +2022,7 @@ public class FragmentMessages extends FragmentBase
         ibSnoozed.setVisibility(View.GONE);
         bottom_navigation.getMenu().findItem(R.id.action_prev).setEnabled(false);
         bottom_navigation.getMenu().findItem(R.id.action_next).setEnabled(false);
+        updateNavPrevNext();
         bottom_navigation.setVisibility(actionbar && viewType == AdapterMessage.ViewType.THREAD ? View.INVISIBLE : View.GONE);
         grpReady.setVisibility(View.GONE);
         pbWait.setVisibility(View.VISIBLE);
@@ -2084,6 +2077,7 @@ public class FragmentMessages extends FragmentBase
                         prev = id;
                     bottom_navigation.getMenu().findItem(R.id.action_prev).setEnabled(prev != null);
                     bottom_navigation.getMenu().findItem(R.id.action_next).setEnabled(next != null);
+                    updateNavPrevNext();
                 }
 
                 @Override
@@ -2095,6 +2089,7 @@ public class FragmentMessages extends FragmentBase
                         next = id;
                     bottom_navigation.getMenu().findItem(R.id.action_prev).setEnabled(prev != null);
                     bottom_navigation.getMenu().findItem(R.id.action_next).setEnabled(next != null);
+                    updateNavPrevNext();
                 }
 
                 @Override
@@ -3639,7 +3634,7 @@ public class FragmentMessages extends FragmentBase
             iProperties.setValue("tts", message.id, !tts);
 
             if (tts) {
-                TTSHelper.speak(getContext(), "tts:" + message.id, "", message.language, true);
+                TTSHelper.speak(getContext(), "tts:" + message.id, "", message.language, true, null);
                 return;
             }
 
@@ -3674,6 +3669,9 @@ public class FragmentMessages extends FragmentBase
                     String body = Helper.readText(message.getFile(context));
                     String text = HtmlHelper.getFullText(context, body);
 
+                    // Avoid: Not enough namespace quota ... for ...
+                    text = HtmlHelper.truncate(text, TTSHelper.getMaxTextSize() / 3);
+
                     if (!TextUtils.isEmpty(text))
                         sb.append(context.getString(R.string.title_rule_tts_content))
                                 .append(' ').append(text);
@@ -3684,7 +3682,13 @@ public class FragmentMessages extends FragmentBase
                 @Override
                 protected void onExecuted(Bundle args, String text) {
                     if (text != null)
-                        TTSHelper.speak(getContext(), "tts:" + message.id, text, message.language, true);
+                        TTSHelper.speak(getContext(), "tts:" + message.id, text, message.language, true,
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        iProperties.setValue("tts", message.id, false);
+                                    }
+                                });
                 }
 
                 @Override
@@ -7956,6 +7960,29 @@ public class FragmentMessages extends FragmentBase
         }
 
         return false;
+    }
+
+    private void updateNavPrevNext() {
+        MenuItem prev = bottom_navigation.getMenu().findItem(R.id.action_prev);
+        MenuItem next = bottom_navigation.getMenu().findItem(R.id.action_next);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if (prefs.getBoolean("updown", true)) {
+            boolean reversed = prefs.getBoolean("reversed", false);
+            prev.setIcon(prev.isEnabled()
+                    ? (reversed ? R.drawable.twotone_north_24 : R.drawable.twotone_south_24)
+                    : R.drawable.twotone_horizontal_rule_24);
+            next.setIcon(next.isEnabled()
+                    ? (reversed ? R.drawable.twotone_south_24 : R.drawable.twotone_north_24)
+                    : R.drawable.twotone_horizontal_rule_24);
+        } else {
+            prev.setIcon(prev.isEnabled()
+                    ? R.drawable.twotone_play_arrow_back_24
+                    : R.drawable.twotone_horizontal_rule_24);
+            next.setIcon(next.isEnabled()
+                    ? R.drawable.twotone_play_arrow_24
+                    : R.drawable.twotone_horizontal_rule_24);
+        }
     }
 
     private void updateCompose() {

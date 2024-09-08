@@ -20,6 +20,25 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Acantholipan](https://en.wikipedia.org/wiki/Acantholipan)
 
+### 1.2229 - 2024-09-07
+
+* Fixed foreground service permission
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2228 - 2024-09-07
+
+* Accessibility improvements (thanks @pvagner)
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2227 - 2024-08-31 *
+
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2226 - 2024-08-27
 
 * Added Fastmail OAuth

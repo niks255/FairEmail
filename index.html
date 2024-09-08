@@ -45,9 +45,9 @@
 <p><a name="top"></a></p>
 <h1 id="fairemail-support">FairEmail support</h1>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F">Google Translate</a></p>
-<p>🇬🇧 If you have a question, please check the following frequently asked questions first. <a href="#quick-support">At the bottom</a>, you can find out how to ask other questions, request features, and report bugs. You will receive an answer in your own language.</p>
-<p>🇩🇪 Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die folgenden häufig gestellten Fragen. <a href="#quick-support">Unten</a> erfahren Sie, wie Sie andere Fragen stellen, Funktionen anfordern und Fehler melden können. Sie erhalten eine Antwort in Ihrer eigenen Sprache.</p>
-<p>🇫🇷 Si vous avez une question, veuillez d’abord vérifier les questions fréquemment posées suivantes. <a href="#quick-support">En bas</a>, vous pouvez découvrir comment poser d’autres questions, demander des fonctionnalités et signaler des bogues. Vous recevrez une réponse dans votre propre langue.</p>
+<p>🇬🇧 If you have a question, please check the following frequently asked questions first. <a href="#get-support">At the bottom</a>, you can find out how to ask other questions, request features, and report bugs. You will receive an answer in your own language.</p>
+<p>🇩🇪 Wenn Sie eine Frage haben, überprüfen Sie bitte zuerst die folgenden häufig gestellten Fragen. <a href="#get-support">Unten</a> erfahren Sie, wie Sie andere Fragen stellen, Funktionen anfordern und Fehler melden können. Sie erhalten eine Antwort in Ihrer eigenen Sprache.</p>
+<p>🇫🇷 Si vous avez une question, veuillez d’abord vérifier les questions fréquemment posées suivantes. <a href="#get-support">En bas</a>, vous pouvez découvrir comment poser d’autres questions, demander des fonctionnalités et signaler des bogues. Vous recevrez une réponse dans votre propre langue.</p>
 <p><br></p>
 <p><strong>Important</strong></p>
 <p>There is a lot of technical information in this FAQ, mostly for specific problems or specific use cases. For other more common questions, please see the tutorials below or contact me via <em>Get support</em> below.</p>
@@ -1583,6 +1583,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p>Example conditions:</p>
 <p><code>header("X-Mailer") contains "Open-Xchange" &amp;&amp; from matches ".*service@.*"</code></p>
 <p><code>!onBlocklist() &amp;&amp; hasMx() &amp;&amp; attachments() &gt; 0</code></p>
+<p><code>(received + 7*24*60*60*1000) &lt; DT_DATE_TO_EPOCH(DT_NOW())</code></p>
 <p><br></p>
 <p><strong>Actions</strong></p>
 <p>You can select one of these actions to apply to matching messages:</p>
@@ -2594,7 +2595,7 @@ https://favicon.yandex.net/favicon/{domain}</code></pre>
 <li>Make sure you have the latest version of the app installed</li>
 <li>Check if <a href="https://www.deepl.com/">DeepL</a> supports your language</li>
 <li>Enable DeepL support in the integration settings</li>
-<li><a href="https://www.deepl.com/pro#developer">Subscribe to</a> the DeepL API Free (credit card required; won’t be charged)</li>
+<li><a href="https://www.deepl.com/en/signup">Sign up</a> to use <strong>DeepL API Free</strong> (credit card required for verification; won’t be charged)</li>
 <li><a href="https://www.deepl.com/pro-account/plan">Copy</a> the authentication key</li>
 <li>In the message composer tap on the translate button (文A) in the top action bar, select <em>Configure</em> and paste the key</li>
 </ol>
@@ -2901,6 +2902,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>You can download and keep older messages in the unified inbox folders by using <em>Fetch more messages</em> in the three-dots overflow menu of the start screen. For other folders, you can long press the folder in the folder list of the account (tap on the account name in the navigation menu = left side menu). When you long press on a parent folder, there will be a subfolders option with a menu item to fetch more messages for all child folders. Please read the remark in the confirmation dialog box.</p>
 <p>Note that starred (favorite) messages will be kept on your device “forever”.</p>
 <p>Instead of downloading many messages to your device, consider <a href="#faq13">searching for messages on the email server</a>.</p>
+<p>Longer explanation: the app has a sync and a keep window per folder. The <em>Fetch more messages</em> menu item is, in fact, a mini wizard to change the keep window of one or more folders at the same time, and to initiate a corresponding synchronization operation. If you long press on a folder in the folder list and select <em>Edit properties</em>, you can change the sync and keep window of the folder. The sync window determines which messages will be checked with a standard sync operation (default 7 days), and the keep window determines how long messages will be kept on the device (default 30 days). If you sync another time within 30 seconds, all messages in the keep window will be checked, which is useful when you have been moving around messages with another email client, for example on your desktop computer. It is mostly pointless to check all messages all the time, especially considering that this will use battery power, which is why there is a separate sync and keep window, and why the app checks messages younger than a week only.</p>
 <p><br></p>
 <p><a name="faq192"></a> <strong>(192) How can I resolve ‘Couldn’t connect to host, port: …; timeout …;’ ?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq192">Google Translate</a></p>
@@ -3052,10 +3054,9 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>Features unrelated to email, including reading newsgroups and reading RSS feeds, fall outside the scope of the project.</p>
 <p>The goal of the design is to be minimalistic (no unnecessary menus, buttons, etc) and non distracting (no fancy colors, animations, etc). All displayed things should be useful in one or another way and should be carefully positioned for easy usage. Fonts, sizes, colors, etc should be material design whenever possible.</p>
 <p>There are requests daily to change the appearance in this or that way, but the problem is that these requests are more often than not conflicting. To prevent making other people unhappy, changes in the appearance always need to clearly and objectively contribute to the usability of the app to be considered.</p>
-<p>A feature will be considered useful to most people if more than 0.5% of the users request a feature, which in practice means about 2500 people.</p>
+<p>A feature will be considered useful to most people if more than 0.5% of the users request a feature, which in practice means about 2500 people. Assuming that only 10% of the app’s users will ask for a new feature, about 250 requests are needed to add a new feature.</p>
 <p>Features not fulfilling these requirements will likely be rejected. This is also to keep maintenance and support in the long term feasible. Please see also this Wikipedia article about <a href="https://en.wikipedia.org/wiki/Feature_creep">feature creep</a>.</p>
 <p>Note that there are already more features and options in FairEmail than in any other Android email client.</p>
-<p><a name="quick-support"></a></p>
 <p><br /></p>
 <p>🛟 🛟 🛟 🛟 🛟</p>
 <p>🇬🇧 If you have a question, want to request a feature or report a bug, <strong>please use <a href="https://contact.faircode.eu/?product=fairemailsupport">this form</a></strong>.</p>

@@ -416,6 +416,7 @@
     <string name="title_advanced_prefix_count">Lägg till antal svar till svarsprefix</string>
     <string name="title_advanced_separate_reply">Infoga en horisontell linje innan ett svar/framåt sidhuvud</string>
     <string name="title_advanced_extended_reply">Använd förlängd svars-/framåtriktad sidhuvud</string>
+    <string name="title_advanced_template_reply">Mall för svar/vidarebefordran</string>
     <string name="title_advanced_write_above">Skriv ovanför avsändarens text</string>
     <string name="title_advanced_write_below">Skriv under avsändarens text</string>
     <string name="title_advanced_quote_reply">Citera svarstext</string>
@@ -835,6 +836,7 @@
     <string name="title_advanced_send_reminders_hint">Visa en varning när meddelandetexten eller ämnet är tomt eller när en bilaga kanske saknas</string>
     <string name="title_advanced_reply_move_hint">E-postservern kan fortfarande lägga till meddelanden till skickade mail mappen</string>
     <string name="title_advanced_compose_color_hint">Mycket ljusa eller mycket mörka färger kommer att resultera i oläsliga meddelanden på mottagarsidan</string>
+    <string name="title_advanced_template_reply_hint">HTML är tillåten. Tillgängliga platshållare: %1$s</string>
     <string name="title_advanced_write_below_hint">En mottagare kan missa ditt svar, till exempel när ett längre meddelande trunkeras</string>
     <string name="title_advanced_attach_new_hint">Annars, lägg till delade adresser eller filer till det aktuella utkastet</string>
     <string name="title_advanced_usenet_hint">Infoga \'-- \' mellan texten och signaturen</string>
@@ -1917,10 +1919,12 @@
     <string name="title_hint_folder_actions">Tryck länge på en mapp för alternativ, som att lägga till en mapp till navigationsmenyn för snabb åtkomst</string>
     <string name="title_hint_folder_sync">För att begränsa batteri- och nätverksanvändning synkroniseras inte alla mappar och inte alla meddelanden som standard</string>
     <string name="title_hint_airplane">Flygplansläge är på</string>
+    <string name="title_hint_vpn_active">VPN aktivt</string>
     <string name="title_hint_notifications">Inga aviseringsbehörigheter</string>
     <string name="title_hint_notifications_remark">Aviseringsbehörigheter krävs för (konto) varningar också. Aviseringar för nya meddelanden kan stängas av i inställningarna.</string>
     <string name="title_hint_battery_optimizations">Batterioptimeringar är fortfarande aktiverade</string>
     <string name="title_hint_data_saver">Om dataspararen är aktiverad kommer appen inte att kunna synkronisera i bakgrunden och anslutningsfel kan uppstå.</string>
+    <string name="title_hint_vpn">E-postservrar blockerar ofta anslutningar via ett VPN. Endast e-postleverantören kan lösa detta.</string>
     <string name="title_hint_dismiss">Du kan avfärda denna dialogruta för att ta bort meddelandet.</string>
     <string name="title_hint_support">Om du har en fråga eller ett problem, vänligen använd supportmenyn för att få hjälp</string>
     <string name="title_hint_message_actions">Dra åt vänster för att kasta; Svep åt höger för att arkivera (om tillgängligt); Svepåtgärderna kan konfigureras i kontoinställningarna</string>
