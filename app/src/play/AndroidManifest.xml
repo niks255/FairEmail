@@ -116,7 +116,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:description="@string/app_name"
         android:enableOnBackInvokedCallback="true"
-        android:extractNativeLibs="false"
+
         android:forceDarkAllowed="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"

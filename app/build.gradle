@@ -131,7 +131,7 @@ android {
         jniLibs {
             // https://issuetracker.google.com/issues/127691101
             // https://developer.android.com/guide/practices/page-sizes#build
-            useLegacyPackaging = true
+            useLegacyPackaging = false
             excludes += [
                     'org/apache/**'
             ]
