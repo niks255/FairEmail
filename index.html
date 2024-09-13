@@ -27,6 +27,7 @@
       a:hover { color: #039BE5; }
       a:active { color: #039BE5; }
       img { filter: invert(0%); }
+      blockquote { border-left: 3px solid #333; padding-left: 12px; margin-inline-start: 12px; }
     }
     @media (prefers-color-scheme: dark) {
       body {
@@ -38,6 +39,7 @@
       a:hover { color: #01579B; }
       a:active { color: #01579B; }
       img { filter: invert(75%); }
+      blockquote { border-left: 3px solid #ddd; padding-left: 12px; margin-inline-start: 12px; }
     }
   </style>
 </head>
@@ -429,7 +431,8 @@
 <li><em>have full network access</em> (INTERNET): to send and receive via the internet</li>
 <li><em>view network connections</em> (ACCESS_NETWORK_STATE): to monitor connectivity changes (mobile data, WiFi)</li>
 <li><em>run at startup</em> (RECEIVE_BOOT_COMPLETED): to start sending and receiving on device start</li>
-<li><em>run foreground service</em> (FOREGROUND_SERVICE/DATA_SYNC): to run a foreground service on Android 9 Pie and later, see also the next question</li>
+<li><em>run foreground service</em> (FOREGROUND_SERVICE/DATA_SYNC/SPECIAL_USE): to run a foreground service on Android 9 Pie and later, see also the next question</li>
+<li><em>run foreground service</em> (FOREGROUND_SERVICE_MEDIA_PLAYBACK): for text-to-speech</li>
 <li><em>schedule exact alarm</em> (SCHEDULE_EXACT_ALARM): to use exact alarm scheduling (Android 12 and later), for example to snooze messages</li>
 <li><em>prevent device from sleeping</em> (WAKE_LOCK): to keep the device awake while performing actions, like synchronization of messages</li>
 <li><em>use fingerprint hardware</em> (USE_FINGERPRINT) and <em>use biometric hardware</em> (USE_BIOMETRIC): to use biometric authentication (fingerprint, face unlock, etc)</li>
@@ -619,6 +622,8 @@
 <p>Note that an app specific password is required when two factor authentication is enabled. After enabling two factor authentication there will be this error message:</p>
 <p><em>[ALERT] Application-specific password required: https://support.google.com/mail/accounts/answer/185833 (Failure)</em></p>
 <p>The error message “<em>Authentication failed - Invalid credentials</em>” or <em>Token refresh required</em> means that the Android account manager was not able to refresh the access token, or that getting an access token was not allowed, for example when the account is a <a href="https://support.google.com/families/answer/7101025">Family Link</a> account, in which case you can use the Gmail app only. A common cause for this problem is using a VPN, a firewall app or an ad blocker which blocks internet access for the Android account manager. Please make sure permissions were granted to the app via setup step 2. You can try to workaround this issue by using the quick setup wizard <em>Gmail (Oauth)</em> or by using an app password.</p>
+<p><em>[ALERT] IMAP access is not allowed for this account.</em></p>
+<p>This means that it is a <a href="https://families.google.com/familylink/">Google Family Link</a> account for a child under the age of 13. Please see <a href="https://www.reddit.com/r/ios/comments/x0dklz/i_give_up_adding_google_email_account_to_my/">here</a> for a solution.</p>
 <p><br /></p>
 <p><a name="faq6-app"></a></p>
 <p><em>App specific password</em></p>
@@ -837,8 +842,14 @@ keyword:&lt;keyword&gt;</code></pre>
 <blockquote>
 <p><strong>IMPORTANT: If you came here via a warning in the app, you MUST take action!</strong></p>
 <p><strong>IMPORTANT: Microsoft seems to disable (app) passwords ahead of schedule for more and more accounts, resulting in “<em>Authentication failed</em>” error messages.</strong></p>
-<p><br /></p>
 </blockquote>
+<p><br /></p>
+<blockquote>
+<p>🇬🇧 In short: go to settings via the navigation menu (left side menu), tap the wizard button, select Outlook/Hotmail/Live and follow the steps.</p>
+<p>🇩🇪 Kurz gesagt: Gehen Sie über das Navigationsmenü (Menü auf der linken Seite) zu den Einstellungen, tippen Sie auf die Schaltfläche Assistent, wählen Sie Outlook/Hotmail/Live und folgen Sie den Schritten.</p>
+<p>🇫🇷 En bref : allez dans les paramètres via le menu de navigation (menu de gauche), appuyez sur le bouton de l’assistant, sélectionnez Outlook/Hotmail/Live et suivez les étapes.</p>
+</blockquote>
+<p><br /></p>
 <blockquote>
 <p>It takes just two minutes to be prepared (and to resolve “<em>Authentication failed</em>” errors).</p>
 <p>If the app said your Outlook accounts will continue to work, you don’t need to do anything.</p>
@@ -846,6 +857,7 @@ keyword:&lt;keyword&gt;</code></pre>
 <p><br /></p>
 <blockquote>
 <p>tl;dr; go to settings via the navigation menu (left side menu), tap the wizard button, select Outlook/Hotmail/Live and follow the steps.</p>
+<p><sub>If you don’t use the account anymore, you can delete it via a button in the “extra” section at the bottom of the main settings screen.</sub></p>
 </blockquote>
 <p><br /></p>
 <blockquote>

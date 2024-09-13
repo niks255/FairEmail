@@ -2392,13 +2392,13 @@ class Core {
                 " messages=" + (imessages == null ? null : imessages.length));
 
         if (account.isOutlook() && (imessages == null || imessages.length == 0)) {
+            imessages = ifolder.search(
+                    new HeaderTerm(MessageHelper.HEADER_MICROSOFT_ORIGINAL_MESSAGE_ID, message.msgid));
             EntityLog.log(context, folder.name + " exists alt" +
                     " retry=" + retry +
                     " host=" + account.host +
                     " outlook=" + account.isOutlook() +
                     " messages=" + (imessages == null ? null : imessages.length));
-            imessages = ifolder.search(
-                    new HeaderTerm(MessageHelper.HEADER_MICROSOFT_ORIGINAL_MESSAGE_ID, message.msgid));
         }
 
         // Searching for random header:
@@ -2446,7 +2446,10 @@ class Core {
                 Log.e(folder.name + " EXISTS messages=" + imessages.length + " retry=" + retry);
             EntityLog.log(context, folder.name +
                     " EXISTS messages=" + (imessages == null ? null : imessages.length));
-            EntityOperation.queue(context, message, EntityOperation.ADD);
+            if (account.isYahoo())
+                EntityOperation.sync(context, folder.id, false);
+            else
+                EntityOperation.queue(context, message, EntityOperation.ADD);
         }
     }
 
