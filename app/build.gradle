@@ -157,14 +157,14 @@ android {
     // https://developer.android.com/reference/tools/gradle-api/4.2/com/android/build/api/dsl/SigningConfig
     signingConfigs {
         release {
-
-                storeFile file(ANDROID_KEY_STORE)
-                storePassword ANDROID_KEY_STORE_PASSWORD
-                keyAlias ANDROID_KEY_ALIAS
-                keyPassword ANDROID_KEY_PASSWORD
+            if (rootProject.file("keystore.properties").exists()) {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
                 v1SigningEnabled true
                 v2SigningEnabled true
-
+            }
         }
     }
 
