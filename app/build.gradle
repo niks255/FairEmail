@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2230 }
+def getVersionCode = { -> return 2232 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Acantholipan" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -24,9 +24,9 @@ android {
     // https://apilevels.com/
     defaultConfig {
         applicationId "eu.faircode.email"
-        compileSdk 34
+        compileSdk 35
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 35
         //targetSdkPreview "VanillaIceCream"
         versionCode getVersionCode()
         versionName "1." + getVersionCode()

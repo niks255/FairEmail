@@ -683,6 +683,7 @@ public class FragmentMessages extends FragmentBase
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                Helper.performHapticFeedback(swipeRefresh, HapticFeedbackConstants.CONFIRM);
                 onSwipeRefresh();
             }
         });
@@ -9016,7 +9017,8 @@ public class FragmentMessages extends FragmentBase
                     return AnimationUtils.loadAnimation(getContext(), left ? R.anim.leave_to_right : R.anim.leave_to_left);
                 }
             }
-        }
+        } else if (false)
+            return AnimationUtils.loadAnimation(getContext(), enter ? android.R.anim.fade_in : android.R.anim.fade_out);
 
         return super.onCreateAnimation(transit, enter, nextAnim);
     }
