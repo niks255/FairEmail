@@ -191,6 +191,7 @@
     <string name="title_setup_oauth_rationale">授权访问您的 %1$s 账户</string>
     <string name="title_setup_oauth_update">重新授权现有账户（否则请新建账户）</string>
     <string name="title_setup_oauth_updated">账户授权已更新</string>
+    <string name="title_setup_oauth_edge">当使用 Edge 浏览器时，请确保“隐私、安全和服务”设置中的“阻止打开外部应用程序”为“关闭”</string>
     <string name="title_setup_oauth_brave">使用 Brave 浏览器时，您必须在 Brave 的设置中启用该选项，允许在 Brave 之外的应用中打开应用链接</string>
     <string name="title_setup_oauth_browser">授权需要一个运转正常的浏览器</string>
     <string name="title_setup_oauth_authorize">授权</string>
@@ -386,6 +387,7 @@
     <string name="title_advanced_send_nav_color">将身份颜色用于底部操作栏</string>
     <string name="title_advanced_send_reminders">显示提醒</string>
     <string name="title_advanced_send_delayed">延迟发送邮件</string>
+    <string name="title_advanced_send_undo">显示撤销发送选项</string>
     <string name="title_advanced_send_top">在顶部显示发送按钮</string>
     <string name="title_advanced_attach_new">为分享的地址和文件新建邮件草稿</string>
     <string name="title_advanced_answer_caption">回复按钮设置</string>
@@ -447,7 +449,7 @@
     <string name="title_advanced_vpn_only">仅通过 VPN 连接</string>
     <string name="title_advanced_timeout">连接超时 (秒)</string>
     <string name="title_advanced_prefer_ip4">IPv4 优先于 IPv6</string>
-    <string name="title_advanced_prefer_ip6" comment="title_advanced_prefer_ip6&#10;Title for an option in the connection settings tab page. There is a similar option to prefer IPv4 over IPv6. Please translate this option in a similar way.">IPv6 优先于 IPv4</string>
+    <string name="title_advanced_prefer_ip6">IPv6 优先于 IPv4</string>
     <string name="title_advanced_dns">首选的DNS服务器地址 (逗号分隔)</string>
     <string name="title_advanced_dns_custom">使用自定义 DNS 解析器</string>
     <string name="title_advanced_dns_clear">连接更改时清除 DNS 缓存</string>
@@ -1331,6 +1333,7 @@
     <string name="title_too_large">邮件内容太多，无法完全重新格式化</string>
     <string name="title_truncated">邮件内容太多，无法完全显示</string>
     <string name="title_insufficient_memory">邮件过大，内存不足（可用内存为 %1$d）</string>
+    <string name="title_screen_recording">正在录制屏幕！</string>
     <string name="title_show_full">显示完整邮件</string>
     <string name="title_fullscreen">全屏显示</string>
     <string name="title_fit_width">自适应宽度</string>
@@ -1403,6 +1406,7 @@
     <string name="title_save">保存</string>
     <string name="title_send">发送</string>
     <string name="title_sending">发送中 &#8230;</string>
+    <string name="title_sending_to">正在发送给 %1$s</string>
     <string name="title_send_now">立即发送</string>
     <string name="title_send_via">发送方式</string>
     <string name="title_send_at">发送于 &#8230;</string>
@@ -1926,7 +1930,7 @@
     <string name="title_hint_notifications_remark">(账户) 提醒也需要通知权限。新邮件的通知可以在设置中关闭。</string>
     <string name="title_hint_battery_optimizations">电池优化仍已启用</string>
     <string name="title_hint_data_saver">如果启用数据节省，应用将无法在后台同步，可能发生连接错误。</string>
-    <string name="title_hint_vpn" comment="title_hint_vpn&#10;Notice about possible problems when using a VPN">电子邮件服务器有时会阻止VPN连接。如果发生这种情况，只有电子邮件提供者可以解决这个问题。</string>
+    <string name="title_hint_vpn">电子邮件服务器有时会阻止VPN连接。如果发生这种情况，只有电子邮件提供者可以解决这个问题。</string>
     <string name="title_hint_dismiss">您可以关闭此对话框来删除消息。</string>
     <string name="title_hint_support">如果您要提问或有疑问，请使用支持选项获取帮助</string>
     <string name="title_hint_message_actions">向左滑移动到回收站；向右滑存档（如果支持） ；可在账户设置中配置滑动操作</string>
@@ -2082,6 +2086,7 @@
     <string name="title_widget_unseen">仅未读邮件</string>
     <string name="title_widget_show_unseen">显示为未读</string>
     <string name="title_widget_flagged">仅带有星标的邮件</string>
+    <string name="title_widget_show_flagged">显示星标</string>
     <string name="title_widget_font_size">文本大小</string>
     <string name="title_widget_padding">内边距尺寸</string>
     <string name="title_widget_separator_lines">显示分隔符行</string>
@@ -2132,7 +2137,7 @@
     <string name="title_accessibility_view_help">查看帮助</string>
     <string name="title_accessibility_selected">已选</string>
     <string name="title_accessibility_answered">已回复</string>
-    <string name="title_accessibility_forwarded" comment="title_accessibility_forwarded&#10;Text to be read by accessibility tools to say that a message was forwarded">已转发</string>
+    <string name="title_accessibility_forwarded">已转发</string>
     <string name="title_accessibility_scroll_down">向下滚动</string>
     <string name="title_accessibility_scroll_up">向上滚动</string>
     <string name="title_accessibility_filter_out_seen">切换已读邮件过滤器</string>
@@ -2158,6 +2163,8 @@
     </string-array>
     <string-array name="sendDelayedNames">
         <item>否</item>
+        <item>5 秒</item>
+        <item>10 秒</item>
         <item>15秒</item>
         <item>30秒</item>
         <item>1分钟</item>

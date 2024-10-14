@@ -111,7 +111,7 @@ Related questions:
 * Delete a contact: please [see this FAQ](#faq171)
 * Store sent messages in the inbox: please [see this FAQ](#faq142)
 * Change system folders: (Main) Settings, tap Manual setup, tap Accounts, tap account, at the bottom
-* Export/import settings: (Main) Settings, navigation (left side) menu
+* Export/import settings: via the backup settings tab page (last tab page)
 
 (*) Swipe actions for individual and POP3 accounts can be configured in the account setting: (Main) Settings, tap Manual setup, tap Accounts, tap account
 
@@ -1419,6 +1419,10 @@ Mobile connections are almost always metered and some (paid) Wi-Fi hotspots are 
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq16)
 
+Synchronization problems are seldom the fault of the app, but are almost always caused by internet connectivity or email server problems.
+The first thing to check is whether battery optimizations are **disabled** via setup step 3 in the main settings screen.
+If you can't solve the problem, [please contact me](#get-support), and I'll explain how to send the debug info for a proper anaylysis.
+
 Possible causes of messages not being synchronized (sent or received) are:
 
 * The account or folder(s) are not set to synchronize
@@ -1819,6 +1823,7 @@ Moreover, recent Android versions disallow access to all files for apps, except,
 
 To resolve this problem, the system component Google Play Services may need to be updated.
 Please [see here](https://support.google.com/googleplay/answer/9037938?hl=en) on how.
+Please note that you will need to restart your device after the update!
 
 The storage access framework is provided by the package *com.android.documentsui*,
 which is visible as *Files* app on some Android versions (notably OxygenOS).
@@ -3093,6 +3098,22 @@ This website might be useful for testing webhooks:
 
 <br />
 
+<a name="autoanswer">
+**Auto reply/answer**
+
+First, create a template with the text to reply/answer with via the navigation menu (left side menu).
+
+After creating a template text, go to the rules via the navigation menu (left side menu), and create a rule for the inbox like this:
+
+* **Name**: anything you like to find back the rule later
+* **Sender contains**: @ (this will match all senders)
+* **Action**: Reply/forward
+* **Identity**: select the email address to reply with
+* **Reply template**: select the created text template
+* **Save** the rule with the button in the bottom action bar
+
+<br />
+
 Using rules is a pro feature.
 
 <br />
@@ -3191,6 +3212,23 @@ so there is little room for performance improvements.
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq78)
 
 In the receive settings you can enable scheduling and set a time period and the days of the week *when* messages should be *received*.
+
+The schedule section shows two parts, *Workdays* and *Weekend*.
+Each of them has a start time and a finish time.
+Pressing on any one of these means the time can be edited.
+
+Below these sections, there is a list of day names, *Sunday* through to *Saturday*.
+Some of these may be in bold text.
+The ones that are in bold are set using the cog next to the *Weekend* section.
+If you press the cog, you can choose which days you define to be the weekend.
+Typically, it will be *Sunday* and *Saturday*, but you can choose any day.
+Ticking one of these means that that will now be shown as bold in the list of days.
+
+The times under the *Weekend* section apply to those days which are in bold.
+The days which are not in bold are regarded as the workdays.
+
+You can untick any of the days in the list of days and that means that the schedule will not apply to those days.
+
 Note that an end time equal to or earlier than the start time is considered to be 24 hours later.
 
 Since version 1.1880 is is possible to exclude accounts from scheduling in the advanced account settings.
@@ -5170,9 +5208,11 @@ DeepL offers free translation of 500,000 characters (~100,000 words; ~250 pages)
 1. Make sure you have the latest version of the app installed
 1. Check if [DeepL](https://www.deepl.com/) supports your language
 1. Enable DeepL support in the integration settings
-1. [Sign up](https://www.deepl.com/en/signup) to use **DeepL API Free** (credit card required for verification; won't be charged)
-1. [Copy](https://www.deepl.com/pro-account/plan) the authentication key
+1. [Sign up](https://www.deepl.com/en/signup) to use [DeepL API Free](https://www.deepl.com/en/pro-api) "*Get started for free*" (credit card required for verification; won't be charged)
+1. [Copy](https://www.deepl.com/en/your-account/keys) the authentication key
 1. In the message composer tap on the translate button (文A) in the top action bar, select *Configure* and paste the key
+
+Note that DeepL seems to be hiding the DeepL API Free plan. It is still there, though!
 
 This feature requires an internet connection.
 
@@ -6026,6 +6066,8 @@ Some email providers known to support DANE for client-to-server traffic:
 * [Freenet.de](https://email.freenet.de/)
 * [Mailbox.org](https://mailbox.org/)
 * [Posteo.de](https://posteo.de/)
+* [web.de](https://web.de/email/)
+* [GMX](https://www.gmx.net/mail)
 
 This is not a complete and exhaustive list.
 
@@ -6072,6 +6114,8 @@ To use [Gemini](https://gemini.google.com/), please follow these steps:
 1. Get an API key via [here](https://ai.google.dev/tutorials/setup)
 1. Enter the API key in the integration settings tab page
 1. Enable Gemini integration in the integration settings tab page
+
+Please note that connections through a VPN are mostly refused.
 
 <br>
 

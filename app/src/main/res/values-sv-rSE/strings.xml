@@ -205,6 +205,7 @@
     <string name="title_setup_oauth_rationale">Auktorisera åtkomst till ditt %1$s konto</string>
     <string name="title_setup_oauth_update">Auktorisera ett befintligt konto igen (annars skapa ett nytt konto)</string>
     <string name="title_setup_oauth_updated">Kontoauktorisering har uppdaterats</string>
+    <string name="title_setup_oauth_edge">När du använder Edge webbläsare, se till att \"Blockera öppna externa appar\" i inställningarna \"Sekretess, säkerhet och tjänster\" är \"Av\"</string>
     <string name="title_setup_oauth_brave">När du använder webbläsaren Brave så måste du aktivera alternativet i Braves inställningar för att tillåta att applänkar öppnas i appar utanför Brave</string>
     <string name="title_setup_oauth_browser">Auktorisering kräver en fungerande webbläsare</string>
     <string name="title_setup_oauth_authorize">Auktorisera</string>
@@ -397,6 +398,7 @@
     <string name="title_advanced_send_nav_color">Använd identitetsfärgen för den nedre åtgärdsfältet</string>
     <string name="title_advanced_send_reminders">Visa påminnelser</string>
     <string name="title_advanced_send_delayed">Fördröj sändning av meddelanden</string>
+    <string name="title_advanced_send_undo">Visa alternativ för ångra skicka</string>
     <string name="title_advanced_send_top">Visa Skicka-knappen högst upp</string>
     <string name="title_advanced_attach_new">Skapa ett nytt utkast till meddelande för delade adresser och filer</string>
     <string name="title_advanced_answer_caption">Inställningar för svarsknappen</string>
@@ -458,7 +460,7 @@
     <string name="title_advanced_vpn_only">Anslut endast via VPN</string>
     <string name="title_advanced_timeout">Timeout för anslutning (sekunder)</string>
     <string name="title_advanced_prefer_ip4">Föredra IPv4 över IPv6</string>
-    <string name="title_advanced_prefer_ip6" comment="title_advanced_prefer_ip6&#10;Title for an option in the connection settings tab page. There is a similar option to prefer IPv4 over IPv6. Please translate this option in a similar way.">Föredra IPv6 över IPv4</string>
+    <string name="title_advanced_prefer_ip6">Föredra IPv6 över IPv4</string>
     <string name="title_advanced_dns">Föredragna DNS-serveradresser (kommaseparerade)</string>
     <string name="title_advanced_dns_custom">Använd anpassad DNS-resolver</string>
     <string name="title_advanced_dns_clear">Rensa DNS-cache vid ändringar i anslutning</string>
@@ -1336,6 +1338,7 @@
     <string name="title_too_large">Meddelandet är för stort för att omformatera</string>
     <string name="title_truncated">Meddelandet är för stort för att visas helt</string>
     <string name="title_insufficient_memory">Meddelande för stort för tillgängligt minne (%1$d)</string>
+    <string name="title_screen_recording">Skärmen spelas in!</string>
     <string name="title_show_full">Visa hela meddelandet</string>
     <string name="title_fullscreen">Visa i helskärmsläge</string>
     <string name="title_fit_width">Anpassa till bredd</string>
@@ -1403,6 +1406,7 @@
     <string name="title_save">Spara</string>
     <string name="title_send">Skicka</string>
     <string name="title_sending">Skickar &#8230;</string>
+    <string name="title_sending_to">Skickar till %1$s</string>
     <string name="title_send_now">Skicka nu</string>
     <string name="title_send_via">Skicka via</string>
     <string name="title_send_at">Skickad &#8230;</string>
@@ -1925,7 +1929,7 @@
     <string name="title_hint_notifications_remark">Aviseringsbehörigheter krävs för (konto) varningar också. Aviseringar för nya meddelanden kan stängas av i inställningarna.</string>
     <string name="title_hint_battery_optimizations">Batterioptimeringar är fortfarande aktiverade</string>
     <string name="title_hint_data_saver">Om dataspararen är aktiverad kommer appen inte att kunna synkronisera i bakgrunden och anslutningsfel kan uppstå.</string>
-    <string name="title_hint_vpn" comment="title_hint_vpn&#10;Notice about possible problems when using a VPN">E-postservrar blockerar ibland anslutningar via ett VPN. Om detta händer kan endast e-postleverantören lösa detta.</string>
+    <string name="title_hint_vpn">E-postservrar blockerar ibland anslutningar via ett VPN. Om detta händer kan endast e-postleverantören lösa detta.</string>
     <string name="title_hint_dismiss">Du kan avfärda denna dialogruta för att ta bort meddelandet.</string>
     <string name="title_hint_support">Om du har en fråga eller ett problem, vänligen använd supportmenyn för att få hjälp</string>
     <string name="title_hint_message_actions">Dra åt vänster för att kasta; Svep åt höger för att arkivera (om tillgängligt); Svepåtgärderna kan konfigureras i kontoinställningarna</string>
@@ -2082,6 +2086,7 @@
     <string name="title_widget_unseen">Endast olästa meddelanden</string>
     <string name="title_widget_show_unseen">Visa som oläst</string>
     <string name="title_widget_flagged">Endast stjärnmärkta meddelanden</string>
+    <string name="title_widget_show_flagged">Visa stjärnor</string>
     <string name="title_widget_font_size">Textstorlek</string>
     <string name="title_widget_padding">Utfyllnadsstorlek</string>
     <string name="title_widget_separator_lines">Visa avgränsare</string>
@@ -2133,7 +2138,7 @@
     <string name="title_accessibility_view_help">Se hjälp</string>
     <string name="title_accessibility_selected">Vald</string>
     <string name="title_accessibility_answered">Svarade</string>
-    <string name="title_accessibility_forwarded" comment="title_accessibility_forwarded&#10;Text to be read by accessibility tools to say that a message was forwarded">Vidarebefordrad</string>
+    <string name="title_accessibility_forwarded">Vidarebefordrad</string>
     <string name="title_accessibility_scroll_down">Skrolla ner</string>
     <string name="title_accessibility_scroll_up">Skrolla upp</string>
     <string name="title_accessibility_filter_out_seen">Växla filter för lästa meddelanden</string>
@@ -2159,6 +2164,8 @@
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Nej</item>
+        <item>5 sekunder</item>
+        <item>10 sekunder</item>
         <item>15 sekunder</item>
         <item>30 sekunder</item>
         <item>1 minut</item>

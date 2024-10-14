@@ -2131,6 +2131,7 @@
     <string name="title_widget_unseen">Толькі непрачытаныя паведамленні</string>
     <string name="title_widget_show_unseen">Паказваць як непрачытаныя</string>
     <string name="title_widget_flagged">Толькі пазначаныя паведамленні</string>
+    <string name="title_widget_show_flagged">Паказваць пазначаныя</string>
     <string name="title_widget_font_size">Памер тэксту</string>
     <string name="title_widget_padding">Памер водступу</string>
     <string name="title_widget_separator_lines">Паказаць раздзяляльныя лініі</string>
@@ -2209,12 +2210,14 @@
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Не</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
         <item>15 секунд</item>
         <item>30 секунд</item>
         <item>1 хвіліна</item>
         <item>2 хвіліны</item>
         <item>5 хвілін</item>
-        <item>10 хвілін</item>
+        <item>10 minutes</item>
     </string-array>
     <string-array name="startupNames">
         <item>Агульная паштовая скрыня</item>

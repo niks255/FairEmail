@@ -1316,6 +1316,7 @@
     <string name="title_widget_folder_unified">Felles Innboks mapper</string>
     <string name="title_widget_unseen">Bare uleste meldinger</string>
     <string name="title_widget_flagged">Bare stjerne merkede meldinger</string>
+    <string name="title_widget_show_flagged">Vis stjerner</string>
     <string name="title_widget_font_size">Tekststørrelse</string>
     <string name="title_widget_padding">Polstring</string>
     <string name="title_widget_semi_transparent">Halvt gjennomsiktig bakgrunn</string>
@@ -1371,6 +1372,8 @@
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Nei</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
         <item>15 sekunder</item>
         <item>30 sekunder</item>
         <item>1 minutt</item>

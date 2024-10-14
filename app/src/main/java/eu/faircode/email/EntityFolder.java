@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.text.Collator;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -836,12 +837,10 @@ public class EntityFolder extends EntityOrder implements Serializable {
                 if (c != 0)
                     return c;
 
-                if (context == null)
-                    return collator.compare(f1.name, f2.name);
-
-                String name1 = f1.getDisplayName(context);
-                String name2 = f2.getDisplayName(context);
-                return collator.compare(name1, name2);
+                String name1 = (context == null ? f1.name : f1.getDisplayName(context));
+                String name2 = (context == null ? f2.name : f2.getDisplayName(context));
+                return Normalizer.normalize(name1, Normalizer.Form.NFD).compareToIgnoreCase(
+                        Normalizer.normalize(name2, Normalizer.Form.NFD));
             }
         };
     }

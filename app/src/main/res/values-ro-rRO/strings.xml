@@ -219,6 +219,7 @@
     <string name="title_setup_oauth_rationale">Autorizare acces la contul %1$s</string>
     <string name="title_setup_oauth_update">Autorizați din nou un cont existent (în caz contrar, creați un cont nou)</string>
     <string name="title_setup_oauth_updated">Autorizarea contului a fost actualizată</string>
+    <string name="title_setup_oauth_edge">Atunci când utilizați browser-ul Edge, asigurați-vă că \'Blocarea deschiderii aplicațiilor externe\' în setările \'Confidențialitate, securitate și servicii\' este oprită</string>
     <string name="title_setup_oauth_brave">Când folosiți browserul Brave, trebuie să activați opțiunea din setările Brave pentru a permite adreselor din aplicației să fie deschide de aplicații din afara Brave</string>
     <string name="title_setup_oauth_browser">Autorizarea necesită un browser funcțional</string>
     <string name="title_setup_oauth_authorize">Autorizare</string>
@@ -414,6 +415,7 @@
     <string name="title_advanced_send_nav_color">Utilizați culoarea de identitate pentru bara de acțiune de jos</string>
     <string name="title_advanced_send_reminders">Arată mementouri</string>
     <string name="title_advanced_send_delayed">Amână trimiterea mesajelor</string>
+    <string name="title_advanced_send_undo">Arată opțiunea de anulare a trimiterii</string>
     <string name="title_advanced_send_top">Arată butonul de trimitere în partea de sus</string>
     <string name="title_advanced_attach_new">Creați un mesaj ciornă nou pentru adresele și fișierele partajate</string>
     <string name="title_advanced_answer_caption">Setări buton de răspuns</string>
@@ -475,7 +477,7 @@
     <string name="title_advanced_vpn_only">Conectați-vă numai prin intermediul unui VPN</string>
     <string name="title_advanced_timeout">Expirarea conexiunii (secunde)</string>
     <string name="title_advanced_prefer_ip4">Preferă IPv4 înaintea IPv6</string>
-    <string name="title_advanced_prefer_ip6" comment="title_advanced_prefer_ip6&#10;Title for an option in the connection settings tab page. There is a similar option to prefer IPv4 over IPv6. Please translate this option in a similar way.">Preferă IPv6 înaintea IPv4</string>
+    <string name="title_advanced_prefer_ip6">Preferă IPv6 înaintea IPv4</string>
     <string name="title_advanced_dns">Adrese server DNS preferate (separate prin virgulă)</string>
     <string name="title_advanced_dns_custom">Folosiți un server DNS personalizat</string>
     <string name="title_advanced_dns_clear">Șterge cache-ul DNS la modificările de conectivitate</string>
@@ -1361,6 +1363,7 @@
     <string name="title_too_large">Mesaj prea mare pentru a fi complet reformatat</string>
     <string name="title_truncated">Mesaj prea mare pentru a-l putea afișa complet</string>
     <string name="title_insufficient_memory">Mesaj prea mare pentru memoria disponibilă (%1$d)</string>
+    <string name="title_screen_recording">Ecranul este înregistrat!</string>
     <string name="title_show_full">Arată mesajul întreg</string>
     <string name="title_fullscreen">Afișează pe ecranul complet</string>
     <string name="title_fit_width">Potrivește lățimea</string>
@@ -1433,6 +1436,7 @@
     <string name="title_save">Salvează</string>
     <string name="title_send">Trimite</string>
     <string name="title_sending">Se trimite &#8230;</string>
+    <string name="title_sending_to">Trimite la %1$s</string>
     <string name="title_send_now">Trimite acum</string>
     <string name="title_send_via">Trimite prin</string>
     <string name="title_send_at">Trimite la &#8230;</string>
@@ -1956,7 +1960,7 @@
     <string name="title_hint_notifications_remark">Permisiunile de notificare sunt necesare și pentru alerte (cont). Notificările pentru mesaje noi pot fi dezactivate în setări.</string>
     <string name="title_hint_battery_optimizations">Optimizările bateriei sunt încă activate</string>
     <string name="title_hint_data_saver">Dacă economizorul de date este activat, aplicația nu va putea sincroniza în fundal și pot apărea erori de conexiune.</string>
-    <string name="title_hint_vpn" comment="title_hint_vpn&#10;Notice about possible problems when using a VPN">Uneori, serverele de e-mail blochează conexiunile prin intermediul unui VPN. Dacă se întâmplă acest lucru, numai furnizorul de e-mail poate rezolva acest lucru.</string>
+    <string name="title_hint_vpn">Uneori, serverele de e-mail blochează conexiunile prin intermediul unui VPN. Dacă se întâmplă acest lucru, numai furnizorul de e-mail poate rezolva acest lucru.</string>
     <string name="title_hint_dismiss">Puteți respinge această casetă de dialog pentru a elimina notificarea.</string>
     <string name="title_hint_support">Dacă aveți o întrebare sau o problemă, vă rugăm să utilizați meniul de suport tehnic pentru a obține ajutor</string>
     <string name="title_hint_message_actions">Glisați stânga pentru Gunoi sau dreapta pentru Arhivă (dacă este disponibilă). Acțiunile de glisare se pot configura în setările contului</string>
@@ -2113,6 +2117,7 @@
     <string name="title_widget_unseen">Numai mesajele necitite</string>
     <string name="title_widget_show_unseen">Arată ca necitit</string>
     <string name="title_widget_flagged">Numai mesajele cu stea</string>
+    <string name="title_widget_show_flagged">Arată cu stea</string>
     <string name="title_widget_font_size">Mărime text</string>
     <string name="title_widget_padding">Mărime spațiu liber</string>
     <string name="title_widget_separator_lines">Arată liniile separatoare</string>
@@ -2165,7 +2170,7 @@
     <string name="title_accessibility_view_help">Vizualizare ajutor</string>
     <string name="title_accessibility_selected">Selectat</string>
     <string name="title_accessibility_answered">Răspuns</string>
-    <string name="title_accessibility_forwarded" comment="title_accessibility_forwarded&#10;Text to be read by accessibility tools to say that a message was forwarded">Redirecționat</string>
+    <string name="title_accessibility_forwarded">Redirecționat</string>
     <string name="title_accessibility_scroll_down">Derulează în jos</string>
     <string name="title_accessibility_scroll_up">Derulează în sus</string>
     <string name="title_accessibility_filter_out_seen">Comută filtrarea mesajelor citite</string>
@@ -2191,6 +2196,8 @@
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Fără</item>
+        <item>5 secunde</item>
+        <item>10 secunde</item>
         <item>15 secunde</item>
         <item>30 de secunde</item>
         <item>1 minut</item>

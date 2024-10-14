@@ -18,6 +18,39 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 <br>
 
+### [Barsboldia](https://en.wikipedia.org/wiki/Barsboldia)
+
+### 1.2236 2024-10-08
+
+* Disabled workaround for Gmail
+* Fixed sort order folders
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2235 2024-10-05
+
+* Added option to show stars in message list widgets (requires Android 12 or later)
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2234 2024-09-28 *
+
+* Added option for undo send bar/action
+* Small improvements and minor bug fixes
+* Updated libraries
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2233 2024-09-26
+
+* Improved foldable devices support
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### [Acantholipan](https://en.wikipedia.org/wiki/Acantholipan)
 
 ### 1.2232 2024-09-16

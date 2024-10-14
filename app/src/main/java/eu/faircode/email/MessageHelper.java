@@ -1142,7 +1142,7 @@ public class MessageHelper {
                                         ContactsContract.Contacts._ID,
                                         ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
                                 }, null, null, null)) {
-                            if (cursor.moveToFirst()) {
+                            if (cursor != null && cursor.moveToFirst()) {
                                 String contactId = cursor.getString(0);
                                 String display = cursor.getString(1);
 
@@ -4988,6 +4988,8 @@ public class MessageHelper {
 
                     if (content instanceof String)
                         content = tryParseMultipart((String) content, part.getContentType());
+                    else if (content instanceof com.sun.mail.imap.IMAPInputStream)
+                        content = tryParseMultipart(Helper.readStream((com.sun.mail.imap.IMAPInputStream) content), part.getContentType());
 
                     if (content instanceof Multipart) {
                         Multipart mp = (Multipart) content;
@@ -5029,6 +5031,8 @@ public class MessageHelper {
 
                         if (content instanceof String)
                             content = tryParseMultipart((String) content, part.getContentType());
+                        else if (content instanceof com.sun.mail.imap.IMAPInputStream)
+                            content = tryParseMultipart(Helper.readStream((com.sun.mail.imap.IMAPInputStream) content), part.getContentType());
 
                         if (content instanceof Multipart) {
                             Multipart multipart = (Multipart) content;
@@ -5079,6 +5083,8 @@ public class MessageHelper {
 
                         if (content instanceof String)
                             content = tryParseMultipart((String) content, part.getContentType());
+                        else if (content instanceof com.sun.mail.imap.IMAPInputStream)
+                            content = tryParseMultipart(Helper.readStream((com.sun.mail.imap.IMAPInputStream) content), part.getContentType());
 
                         if (content instanceof Multipart) {
                             Multipart multipart = (Multipart) content;
@@ -5196,6 +5202,8 @@ public class MessageHelper {
 
                 if (content instanceof String)
                     content = tryParseMultipart((String) content, part.getContentType());
+                else if (content instanceof com.sun.mail.imap.IMAPInputStream)
+                    content = tryParseMultipart(Helper.readStream((com.sun.mail.imap.IMAPInputStream) content), part.getContentType());
 
                 if (content instanceof Multipart) {
                     multipart = (Multipart) content;

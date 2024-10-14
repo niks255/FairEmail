@@ -936,6 +936,7 @@
     <string name="title_widget_folder_unified">Обједињене фасцикле пријемног сандучета</string>
     <string name="title_widget_unseen">Само непрочитане поруке</string>
     <string name="title_widget_flagged">Само озвездане поруке</string>
+    <string name="title_widget_show_flagged">Прикажи звездице</string>
     <string name="title_widget_font_size">Величина текста</string>
     <string name="title_widget_padding">Величина размака</string>
     <!-- Thunderbird -->
@@ -982,6 +983,8 @@
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Не</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
         <item>15 секунди</item>
         <item>30 секунди</item>
         <item>1 минут</item>

@@ -2086,6 +2086,7 @@ Tämä voi epäonnistua, minkä takia vanha viesti siirretään roskakoriin talt
     <string name="title_widget_unseen">Vain lukemattomat viestit</string>
     <string name="title_widget_show_unseen">Näytä lukemattomana</string>
     <string name="title_widget_flagged">Vain tähdelliset viestit</string>
+    <string name="title_widget_show_flagged">Näytä tähdet</string>
     <string name="title_widget_font_size">Tekstin koko</string>
     <string name="title_widget_padding">Tyhjän tilan koko</string>
     <string name="title_widget_separator_lines">Näytä erotinrivit</string>
@@ -2162,6 +2163,8 @@ Tämä voi epäonnistua, minkä takia vanha viesti siirretään roskakoriin talt
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Ei</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
         <item>15 sekuntia</item>
         <item>30 sekuntia</item>
         <item>1 minuutti</item>

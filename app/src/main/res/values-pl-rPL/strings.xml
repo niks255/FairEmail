@@ -233,6 +233,7 @@
     <string name="title_setup_oauth_rationale">Autoryzuj dostęp do Twojego konta %1$s</string>
     <string name="title_setup_oauth_update">Autoryzuj istniejące konto ponownie (w przeciwnym razie utwórz nowe konto)</string>
     <string name="title_setup_oauth_updated">Autoryzacja konta została zaktualizowana</string>
+    <string name="title_setup_oauth_edge">Korzystając z przeglądarki Edge, upewnij się, że opcja „Blokuj otwieranie zewnętrznych aplikacji” w ustawieniach „Prywatność, bezpieczeństwo i usługi” jest wyłączona</string>
     <string name="title_setup_oauth_brave">Podczas korzystania z przeglądarki Brave, musisz włączyć opcję w jej ustawieniach, aby umożliwić otwieranie linków w innych aplikacjach</string>
     <string name="title_setup_oauth_browser">Autoryzacja wymaga działającej przeglądarki</string>
     <string name="title_setup_oauth_authorize">Autoryzuj</string>
@@ -428,6 +429,7 @@
     <string name="title_advanced_send_nav_color">Użyj koloru identyfikatora w dolnym pasku zadań</string>
     <string name="title_advanced_send_reminders">Pokaż przypomnienia</string>
     <string name="title_advanced_send_delayed">Opóźnienie wysyłania wiadomości</string>
+    <string name="title_advanced_send_undo">Pokazuj opcję cofnięcia wysyłania</string>
     <string name="title_advanced_send_top">Pokaż przycisk wysyłania na górze</string>
     <string name="title_advanced_attach_new">Utwórz nowy szkic wiadomości dla udostępnianych adresów i plików</string>
     <string name="title_advanced_answer_caption">Ustawienia przycisku odpowiedzi</string>
@@ -489,7 +491,7 @@
     <string name="title_advanced_vpn_only">Połącz tylko przez VPN</string>
     <string name="title_advanced_timeout">Limit czasu połączenia (sekundy)</string>
     <string name="title_advanced_prefer_ip4">Preferuj IPv4 nad IPv6</string>
-    <string name="title_advanced_prefer_ip6" comment="title_advanced_prefer_ip6&#10;Title for an option in the connection settings tab page. There is a similar option to prefer IPv4 over IPv6. Please translate this option in a similar way.">Preferuj IPv6 nad IPv4</string>
+    <string name="title_advanced_prefer_ip6">Preferuj IPv6 nad IPv4</string>
     <string name="title_advanced_dns">Preferowane adresy serwera DNS (oddzielone przecinkami)</string>
     <string name="title_advanced_dns_custom">Użyj własnego mechanizmu rozwiązywania DNS</string>
     <string name="title_advanced_dns_clear">Wyczyść pamięć podręczną DNS przy zmianach połączenia</string>
@@ -1375,6 +1377,7 @@
     <string name="title_too_large">Wiadomość jest zbyt duża, aby całkowicie sformatować</string>
     <string name="title_truncated">Wiadomość jest za duża, aby wyświetlić ją w całości</string>
     <string name="title_insufficient_memory">Wiadomość jest zbyt duża dla dostępnej pamięci (%1$d)</string>
+    <string name="title_screen_recording">Ekran jest nagrywany!</string>
     <string name="title_show_full">Pokaż pełną wiadomość</string>
     <string name="title_fullscreen">Pokaż na pełnym ekranie</string>
     <string name="title_fit_width">Dopasuj szerokość</string>
@@ -1447,6 +1450,7 @@
     <string name="title_save">Zapisz</string>
     <string name="title_send">Wyślij</string>
     <string name="title_sending">Wysyłanie&#8230;</string>
+    <string name="title_sending_to">Wysyłanie do %1$s</string>
     <string name="title_send_now">Wyślij teraz</string>
     <string name="title_send_via">Wyślij przez</string>
     <string name="title_send_at">Wysłać o &#8230;</string>
@@ -1971,7 +1975,7 @@
     <string name="title_hint_notifications_remark">Uprawnienia powiadomień są również wymagane dla ostrzeżeń dotyczących konta. Powiadomienia dla nowych wiadomości mogą być wyłączone w ustawieniach.</string>
     <string name="title_hint_battery_optimizations">Optymalizacja baterii jest nadal włączona</string>
     <string name="title_hint_data_saver">Jeśli oszczędzanie danych jest włączone, aplikacja nie będzie w stanie wykonywać synchronizacji w tle i mogą wystąpić błędy z połączeniem.</string>
-    <string name="title_hint_vpn" comment="title_hint_vpn&#10;Notice about possible problems when using a VPN">Serwery poczty e-mail czasami blokują połączenia przez VPN. W takim przypadku tylko dostawca poczty e-mail może rozwiązać ten problem.</string>
+    <string name="title_hint_vpn">Serwery poczty e-mail czasami blokują połączenia przez VPN. W takim przypadku tylko dostawca poczty e-mail może rozwiązać ten problem.</string>
     <string name="title_hint_dismiss">Możesz odrzucić to okno dialogowe, aby usunąć to powiadomienie.</string>
     <string name="title_hint_support">Jeśli masz pytanie lub problem, użyj menu Pomoc, aby uzyskać pomoc</string>
     <string name="title_hint_message_actions">Przesuń w lewo, aby wyrzucić do kosza; Przesuń w prawo, aby zarchiwizować (jeśli dostępne); Działania przeciągnięcia można skonfigurować w ustawieniach konta</string>
@@ -2127,6 +2131,7 @@
     <string name="title_widget_unseen">Tylko nieprzeczytane wiadomości</string>
     <string name="title_widget_show_unseen">Pokaż jako nieprzeczytane</string>
     <string name="title_widget_flagged">Tylko oznaczone</string>
+    <string name="title_widget_show_flagged">Pokaż gwiazdki</string>
     <string name="title_widget_font_size">Rozmiar tekstu</string>
     <string name="title_widget_padding">Rozmiar wypełnienia</string>
     <string name="title_widget_separator_lines">Pokaż linie rozdzielające</string>
@@ -2180,7 +2185,7 @@
     <string name="title_accessibility_view_help">Zobacz pomoc</string>
     <string name="title_accessibility_selected">Wybrane</string>
     <string name="title_accessibility_answered">Odpowiedziane</string>
-    <string name="title_accessibility_forwarded" comment="title_accessibility_forwarded&#10;Text to be read by accessibility tools to say that a message was forwarded">Przekazana dalej</string>
+    <string name="title_accessibility_forwarded">Przekazana dalej</string>
     <string name="title_accessibility_scroll_down">Przewiń w dół</string>
     <string name="title_accessibility_scroll_up">Przewiń w górę</string>
     <string name="title_accessibility_filter_out_seen">Przełącz filtr przeczytanych wiadomości</string>
@@ -2206,6 +2211,8 @@
     </string-array>
     <string-array name="sendDelayedNames">
         <item>Brak</item>
+        <item>5 sekund</item>
+        <item>10 sekund</item>
         <item>15 sekund</item>
         <item>30 sekund</item>
         <item>1 minuta</item>

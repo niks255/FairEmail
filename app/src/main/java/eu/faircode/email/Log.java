@@ -991,13 +991,13 @@ public class Log {
                   at android.app.ActivityThread.handleUnbindService(ActivityThread.java:4352)
 
                 java.lang.RuntimeException: Could not get application info.
-                  at CH0.a(PG:11)
-                  at org.chromium.content.browser.ChildProcessLauncherHelperImpl.a(PG:34)
-                  at Fn2.run(PG:5)
-                  at android.os.Handler.handleCallback(Handler.java:874)
-                  at android.os.Handler.dispatchMessage(Handler.java:100)
-                  at android.os.Looper.loop(Looper.java:198)
-                  at android.os.HandlerThread.run(HandlerThread.java:65)
+                  at CH0.a(PG:11)
+                  at org.chromium.content.browser.ChildProcessLauncherHelperImpl.a(PG:34)
+                  at Fn2.run(PG:5)
+                  at android.os.Handler.handleCallback(Handler.java:874)
+                  at android.os.Handler.dispatchMessage(Handler.java:100)
+                  at android.os.Looper.loop(Looper.java:198)
+                  at android.os.HandlerThread.run(HandlerThread.java:65)
 
                 java.lang.RuntimeException: Unable to create service eu.faircode.email.ServiceSynchronize: java.lang.NullPointerException: Attempt to invoke interface method 'java.util.List android.os.IUserManager.getProfiles(int, boolean)' on a null object reference
                   at android.app.ActivityThread.handleCreateService(ActivityThread.java:2739)
@@ -1276,6 +1276,11 @@ public class Log {
                  */
             return false;
 
+        if (ex instanceof NullPointerException)
+            for (StackTraceElement ste : stack)
+                if ("java.lang.Daemons$FinalizerWatchdogDaemon".equals(ste.getClassName()))
+                    return false;
+
         if (ex instanceof IndexOutOfBoundsException &&
                 stack.length > 0 &&
                 "android.text.SpannableStringInternal".equals(stack[0].getClassName()) &&
@@ -1301,6 +1306,29 @@ public class Log {
                   at android.widget.PopupWindow$PopupDecorView.dispatchTouchEvent(PopupWindow.java:2407)
                   at android.view.View.dispatchPointerEvent(View.java:12789)
              */
+            return false;
+
+        if (ex instanceof IndexOutOfBoundsException &&
+                stack.length > 0 &&
+                "android.text.PackedIntVector".equals(stack[0].getClassName()) &&
+                "getValue".equals(stack[0].getMethodName()))
+            /*
+                java.lang.IndexOutOfBoundsException: 2, 1
+                    at android.text.PackedIntVector.getValue(PackedIntVector.java:75)
+                    at android.text.DynamicLayout.getLineTop(DynamicLayout.java:1001)
+                    at android.text.Layout.getLineBottom(Layout.java:1652)
+                    at android.widget.Editor.getCurrentLineAdjustedForSlop(Editor.java:6851)
+                    at android.widget.Editor.access$8700(Editor.java:175)
+                    at android.widget.Editor$InsertionHandleView.updatePosition(Editor.java:6317)
+                    at android.widget.Editor$HandleView.onTouchEvent(Editor.java:5690)
+                    at android.widget.Editor$InsertionHandleView.onTouchEvent(Editor.java:6235)
+                    at android.view.View.dispatchTouchEvent(View.java:13484)
+                    at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3222)
+                    at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2904)
+                    at android.view.ViewGroup.dispatchTransformedTouchEvent(ViewGroup.java:3222)
+                    at android.view.ViewGroup.dispatchTouchEvent(ViewGroup.java:2904)
+                    at android.widget.PopupWindow$PopupDecorView.dispatchTouchEvent(PopupWindow.java:2700)
+            */
             return false;
 
         if (ex instanceof IndexOutOfBoundsException) {

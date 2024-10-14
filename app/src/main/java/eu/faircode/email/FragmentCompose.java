@@ -128,6 +128,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -1280,7 +1281,7 @@ public class FragmentCompose extends FragmentBase {
                                         " OR LOWER(" + ContactsContract.Contacts.DISPLAY_NAME + ") GLOB ?" +
                                         " OR " + ContactsContract.CommonDataKinds.Email.DATA + " LIKE ?)",
                                 new String[]{wildcard, glob, wildcard},
-                                null)) {
+                                ContactsContract.Contacts.DISPLAY_NAME)) {
 
                             while (cursor != null && cursor.moveToNext()) {
                                 EntityContact item = new EntityContact();
@@ -3479,7 +3480,7 @@ public class FragmentCompose extends FragmentBase {
                                 ContactsContract.CommonDataKinds.Email.ADDRESS,
                                 ContactsContract.Contacts.DISPLAY_NAME
                         },
-                        null, null, null)) {
+                        null, null, ContactsContract.Contacts.DISPLAY_NAME)) {
                     // https://issuetracker.google.com/issues/118400813
                     // https://developer.android.com/guide/topics/providers/content-provider-basics#DisplayResults
                     if (cursor != null && cursor.getCount() == 0)
@@ -4867,7 +4868,7 @@ public class FragmentCompose extends FragmentBase {
                                     },
                                     ContactsContract.Data.CONTACT_ID + " = ?",
                                     new String[]{cursor.getString(0)},
-                                    null)) {
+                                    ContactsContract.Contacts.DISPLAY_NAME)) {
                                 if (contact != null && contact.moveToNext()) {
                                     String name = contact.getString(0);
                                     String email = contact.getString(1);
@@ -5303,8 +5304,9 @@ public class FragmentCompose extends FragmentBase {
             if (resize > 0)
                 resizeAttachment(context, attachment, resize);
 
-            if (privacy && resize == 0)
+            if (privacy)
                 try {
+                    Log.i("Removing meta tags");
                     ExifInterface exif = new ExifInterface(file);
 
                     exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, null);
@@ -7540,6 +7542,15 @@ public class FragmentCompose extends FragmentBase {
                         EntityMessage tbd = db.message().getMessage(did);
                         if (tbd != null)
                             EntityOperation.queue(context, tbd, EntityOperation.DELETE);
+
+                        if (draft.ui_snoozed != null) {
+                            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(context);
+                            Intent sent = new Intent(ActivityView.ACTION_SENT_MESSAGE);
+                            sent.putExtra("id", draft.id);
+                            sent.putExtra("at", draft.ui_snoozed);
+                            sent.putExtra("to", MessageHelper.formatAddressesShort(draft.to));
+                            lbm.sendBroadcast(sent);
+                        }
 
                         final String feedback;
                         if (draft.ui_snoozed == null) {

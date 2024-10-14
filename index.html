@@ -124,7 +124,7 @@
 <li>Delete a contact: please <a href="#faq171">see this FAQ</a></li>
 <li>Store sent messages in the inbox: please <a href="#faq142">see this FAQ</a></li>
 <li>Change system folders: (Main) Settings, tap Manual setup, tap Accounts, tap account, at the bottom</li>
-<li>Export/import settings: (Main) Settings, navigation (left side) menu</li>
+<li>Export/import settings: via the backup settings tab page (last tab page)</li>
 </ul>
 <p>(*) Swipe actions for individual and POP3 accounts can be configured in the account setting: (Main) Settings, tap Manual setup, tap Accounts, tap account</p>
 <p><br /></p>
@@ -919,6 +919,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p><br /></p>
 <p><a name="faq16"></a> <strong>(16) Why are messages not being synchronized?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq16">Google Translate</a></p>
+<p>Synchronization problems are seldom the fault of the app, but are almost always caused by internet connectivity or email server problems. The first thing to check is whether battery optimizations are <strong>disabled</strong> via setup step 3 in the main settings screen. If you can’t solve the problem, <a href="#get-support">please contact me</a>, and I’ll explain how to send the debug info for a proper anaylysis.</p>
 <p>Possible causes of messages not being synchronized (sent or received) are:</p>
 <ul>
 <li>The account or folder(s) are not set to synchronize</li>
@@ -1100,7 +1101,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq25">Google Translate</a></p>
 <p>When a menu item to select/open/save a file is disabled (dimmed) or when you get the message <em>Storage access framework not available</em>, the <a href="https://developer.android.com/guide/topics/providers/document-provider">storage access framework</a>, a standard Android component, is probably not present. This might be because your custom ROM does not include it or because it was actively removed (debloated). Note that this will result in similar problems in other apps too.</p>
 <p>FairEmail does not request storage permissions, so this framework is required to select files and folders. No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to <em>all</em> files. Moreover, recent Android versions disallow access to all files for apps, except, under specific conditions, for file managers.</p>
-<p>To resolve this problem, the system component Google Play Services may need to be updated. Please <a href="https://support.google.com/googleplay/answer/9037938?hl=en">see here</a> on how.</p>
+<p>To resolve this problem, the system component Google Play Services may need to be updated. Please <a href="https://support.google.com/googleplay/answer/9037938?hl=en">see here</a> on how. Please note that you will need to restart your device after the update!</p>
 <p>The storage access framework is provided by the package <em>com.android.documentsui</em>, which is visible as <em>Files</em> app on some Android versions (notably OxygenOS).</p>
 <p>You can enable the storage access framework (again) with this adb command:</p>
 <pre><code>pm install -k --user 0 com.android.documentsui</code></pre>
@@ -1711,6 +1712,18 @@ $$aligned$ (since version 1.2049)</code></pre>
 <p>This website might be useful for testing webhooks:</p>
 <p><a href="https://webhook.site/">https://webhook.site/</a></p>
 <p><br /></p>
+<p><a name="autoanswer"> <strong>Auto reply/answer</strong></p>
+<p>First, create a template with the text to reply/answer with via the navigation menu (left side menu).</p>
+<p>After creating a template text, go to the rules via the navigation menu (left side menu), and create a rule for the inbox like this:</p>
+<ul>
+<li><strong>Name</strong>: anything you like to find back the rule later</li>
+<li><strong>Sender contains</strong>: @ (this will match all senders)</li>
+<li><strong>Action</strong>: Reply/forward</li>
+<li><strong>Identity</strong>: select the email address to reply with</li>
+<li><strong>Reply template</strong>: select the created text template</li>
+<li><strong>Save</strong> the rule with the button in the bottom action bar</li>
+</ul>
+<p><br /></p>
 <p>Using rules is a pro feature.</p>
 <p><br /></p>
 <p><a name="faq72"></a> <strong>(72) What are primary accounts/identities?</strong></p>
@@ -1749,7 +1762,12 @@ $$aligned$ (since version 1.2049)</code></pre>
 <p><br /></p>
 <p><a name="faq78"></a> <strong>(78) How do I use schedules?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq78">Google Translate</a></p>
-<p>In the receive settings you can enable scheduling and set a time period and the days of the week <em>when</em> messages should be <em>received</em>. Note that an end time equal to or earlier than the start time is considered to be 24 hours later.</p>
+<p>In the receive settings you can enable scheduling and set a time period and the days of the week <em>when</em> messages should be <em>received</em>.</p>
+<p>The schedule section shows two parts, <em>Workdays</em> and <em>Weekend</em>. Each of them has a start time and a finish time. Pressing on any one of these means the time can be edited.</p>
+<p>Below these sections, there is a list of day names, <em>Sunday</em> through to <em>Saturday</em>. Some of these may be in bold text. The ones that are in bold are set using the cog next to the <em>Weekend</em> section. If you press the cog, you can choose which days you define to be the weekend. Typically, it will be <em>Sunday</em> and <em>Saturday</em>, but you can choose any day. Ticking one of these means that that will now be shown as bold in the list of days.</p>
+<p>The times under the <em>Weekend</em> section apply to those days which are in bold. The days which are not in bold are regarded as the workdays.</p>
+<p>You can untick any of the days in the list of days and that means that the schedule will not apply to those days.</p>
+<p>Note that an end time equal to or earlier than the start time is considered to be 24 hours later.</p>
 <p>Since version 1.1880 is is possible to exclude accounts from scheduling in the advanced account settings. This means you can synchronize a business account during business hours only and make an exception for personal accounts.</p>
 <p>Automation, see below, can be used for more advanced schedules, like for example multiple synchronization periods per day or different synchronization periods for different days.</p>
 <p>It is possible to install FairEmail in multiple user profiles, for example a personal and a work profile, and to configure FairEmail differently in each profile, which is another possibility to have different synchronization schedules and to synchronize a different set of accounts.</p>
@@ -2608,10 +2626,11 @@ https://favicon.yandex.net/favicon/{domain}</code></pre>
 <li>Make sure you have the latest version of the app installed</li>
 <li>Check if <a href="https://www.deepl.com/">DeepL</a> supports your language</li>
 <li>Enable DeepL support in the integration settings</li>
-<li><a href="https://www.deepl.com/en/signup">Sign up</a> to use <strong>DeepL API Free</strong> (credit card required for verification; won’t be charged)</li>
-<li><a href="https://www.deepl.com/pro-account/plan">Copy</a> the authentication key</li>
+<li><a href="https://www.deepl.com/en/signup">Sign up</a> to use <a href="https://www.deepl.com/en/pro-api">DeepL API Free</a> “<em>Get started for free</em>” (credit card required for verification; won’t be charged)</li>
+<li><a href="https://www.deepl.com/en/your-account/keys">Copy</a> the authentication key</li>
 <li>In the message composer tap on the translate button (文A) in the top action bar, select <em>Configure</em> and paste the key</li>
 </ol>
+<p>Note that DeepL seems to be hiding the DeepL API Free plan. It is still there, though!</p>
 <p>This feature requires an internet connection.</p>
 <p>Note that you can’t use <a href="https://www.deepl.com/pro">the regular pro plans</a>. The error <em>403 forbidden</em> means that the key and/or plan in invalid.</p>
 <p>Note that when reading a message, you can use the horizontal three-dots menu to translate too. If you use this frequently, you can configure a button for this.</p>
@@ -3002,6 +3021,8 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <li><a href="https://email.freenet.de/">Freenet.de</a></li>
 <li><a href="https://mailbox.org/">Mailbox.org</a></li>
 <li><a href="https://posteo.de/">Posteo.de</a></li>
+<li><a href="https://web.de/email/">web.de</a></li>
+<li><a href="https://www.gmx.net/mail">GMX</a></li>
 </ul>
 <p>This is not a complete and exhaustive list.</p>
 <p>Please see <a href="https://www.zivver.com/blog/why-cisos-and-security-professionals-can-no-longer-rely-on-regular-email-for-the-sharing-of-personal-information">this article</a> about why DANE is important.</p>
@@ -3027,6 +3048,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <li>Enter the API key in the integration settings tab page</li>
 <li>Enable Gemini integration in the integration settings tab page</li>
 </ol>
+<p>Please note that connections through a VPN are mostly refused.</p>
 <p><br></p>
 <p>For usage instructions, please see <a href="#faq190">this FAQ</a>.</p>
 <p>Please read the privacy policy of <a href="https://support.google.com/gemini/answer/13594961">Gemini</a>. FairEmail does not use third-party libraries to avoid being tracked when Gemini is not being used.</p>
