@@ -71,6 +71,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -103,7 +104,7 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
     }
 
     @Override
-    public void setContentView(View view) {
+    public void setContentView(@NonNull View view) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean hide_toolbar = prefs.getBoolean("hide_toolbar", !BuildConfig.PLAY_STORE_RELEASE);
         boolean edge_to_edge = prefs.getBoolean("edge_to_edge", false);
@@ -151,6 +152,25 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         holder.removeView(placeholder);
         holder.addView(view, placeholder.getLayoutParams());
 
+        if (edge_to_edge)
+            holder.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                private boolean has = false;
+
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    try {
+                        Snackbar.SnackbarLayout sl = Helper.findSnackbarLayout(v.getRootView());
+                        boolean h = (sl != null);
+                        if (has != h) {
+                            has = h;
+                            v.requestApplyInsets();
+                        }
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+                }
+            });
+
         int abh = Helper.getActionBarHeight(this);
         appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -169,6 +189,10 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
         });
 
         FragmentDialogTheme.setBackground(this, holder, this instanceof ActivityCompose);
+
+        View cf = view.findViewById(R.id.content_frame);
+        View content = (cf == null ? view : cf);
+        int cpad = content.getPaddingBottom();
 
         ViewCompat.setOnApplyWindowInsetsListener(holder, (v, windowInsets) -> {
             try {
@@ -207,13 +231,22 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
                         v.setPaddingRelative(0, 0, 0, 0);
                 }
 
-                if (edge_to_edge)
-                    for (View child : Helper.getViewsWithTag(v, "inset")) {
-                        mlp = (ViewGroup.MarginLayoutParams) child.getLayoutParams();
-                        mlp.bottomMargin = insets.bottom;
-                        child.setLayoutParams(mlp);
+                if (edge_to_edge) {
+                    Insets nav = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
+                    int pad = Math.max(0, cpad + (nav.bottom - nav.top));
+                    Snackbar.SnackbarLayout sl = Helper.findSnackbarLayout(content.getRootView());
+                    if (sl != null) {
+                        pad = cpad;
+                        if (sl.getPaddingBottom() != nav.bottom - nav.top)
+                            sl.setPaddingRelative(
+                                    sl.getPaddingStart(), sl.getPaddingTop(),
+                                    sl.getPaddingEnd(), nav.bottom - nav.top);
                     }
-
+                    if (pad != content.getPaddingBottom())
+                        content.setPaddingRelative(
+                                content.getPaddingStart(), content.getPaddingTop(),
+                                content.getPaddingEnd(), pad);
+                }
             } catch (Throwable ex) {
                 Log.e(ex);
             }

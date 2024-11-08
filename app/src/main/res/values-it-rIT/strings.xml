@@ -207,13 +207,14 @@
     <string name="title_setup_oauth_updated">Autorizzazione dell\'account aggiornata</string>
     <string name="title_setup_oauth_edge">Se si usa il browser Edge, assicurarsi che sia disattivata l\'opzione «Blocca l\'apertura di app esterne» nelle impostazioni di «Privacy, sicurezza e servizi»</string>
     <string name="title_setup_oauth_brave">Se si usa il browser Brave, è necessario abilitare l\'opzione nelle sue impostazioni per consentire ai link dell\'app di essere aperti in app esterne a Brave</string>
-    <string name="title_setup_oauth_browser">L\'autorizzazione richiede un browser funzionante</string>
+    <string name="title_setup_oauth_browser">L\'autorizzazione richiede un browser funzionante che consenta di aprire i link delle app (spesso si tratta di un\'impostazione di sicurezza), in modo che alla fine il token di autorizzazione possa essere trasferito all\'app</string>
     <string name="title_setup_oauth_authorize">Autorizza</string>
     <string name="title_setup_select_account">Selezionare un account</string>
     <string name="title_setup_instructions">Istruzioni di configurazione</string>
     <string name="title_setup_no_settings">Nessuna impostazione trovata per il dominio «%1$s»</string>
     <string name="title_setup_no_settings_hint">Provare a configurare manualmente un account usando le impostazioni fornite dal proprio provider di email</string>
     <string name="title_setup_no_auth_hint">Ricontrollare l\'indirizzo email e la password e assicurarsi che l\'accesso esterno (IMAP/SMTP) sia abilitato per il proprio account</string>
+    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">È necessario utilizzare la procedura guidata di configurazione rapida di Outlook / Office 365 per questo account (richiesto da Microsoft)</string>
     <string name="title_setup_app_password_hint">Questo provider richiede una password dell\'app invece di quella dell\'account. Verificare le istruzioni del proprio provider</string>
     <string name="title_setup_no_inbox">Posta in arrivo non trovata</string>
     <string name="title_setup_advanced_protection">Quando iscritto al programma di protezione avanzata è impossibile usare un\'app email di terze parti. Questa è una restrizione imposta da Google.</string>
@@ -423,8 +424,8 @@
     <string name="title_advanced_separate_reply">Inserire una riga orizzontale prima dell\'intestazione di risposta o di inoltro</string>
     <string name="title_advanced_extended_reply">Usare l\'intestazione estesa di risposta e di inoltro</string>
     <string name="title_advanced_template_reply">Modello di intestazione per risposta e inoltro</string>
-    <string name="title_advanced_write_above">Scrivere sopra il testo del mittente</string>
-    <string name="title_advanced_write_below">Scrivere sotto il testo del mittente</string>
+    <string name="title_advanced_write_above">Scrivi sopra il testo del mittente</string>
+    <string name="title_advanced_write_below">Scrivi sotto il testo del mittente</string>
     <string name="title_advanced_quote_reply">Citare il testo cui si risponde</string>
     <string name="title_advanced_limit_reply">Limitare il numero di citazioni nidificate</string>
     <string name="title_advanced_resize_reply">Ridimensionare le immagini nel testo di risposta</string>
@@ -496,6 +497,7 @@
     <string name="title_advanced_close_pane">Comprimere la riga o la colonna chiudendo una conversazione</string>
     <string name="title_advanced_column_width">Larghezza colonna/altezza riga del messaggio: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Nascondere la barra degli strumenti superiore scorrendo i messaggi</string>
+    <string name="title_advanced_edge_to_edge">Usare il colore dello sfondo dell\'app per la barra di navigazione Android</string>
     <string name="title_advanced_nav_options">Mostrare le opzioni del menu di navigazione</string>
     <string name="title_advanced_nav_categories">Mostrare le categorie degli account nel menu di navigazione</string>
     <string name="title_advanced_nav_pin">Fissare il menu di navigazione</string>
@@ -1696,6 +1698,7 @@
     <string name="title_edit_signature_image_hint">        Quando si invia un messaggio, l\'immagine viene copiata nel messaggio dalla posizione selezionata.
         Quindi, non eliminare il file immagine!
     </string>
+    <string name="title_edit_signature_delete">Eliminare la firma?</string>
     <string name="title_answer_define_name">Nome</string>
     <string name="title_answer_define_value">Valore</string>
     <string name="title_answer_caption">Modifica modello</string>
@@ -1992,6 +1995,7 @@
     <string name="title_no">No</string>
     <string name="title_later">Più tardi</string>
     <string name="title_paste_plain">Incolla come testo semplice</string>
+    <string name="title_paste_as_quote">Incolla come citazione</string>
     <string name="title_undo">Annulla</string>
     <string name="title_redo">Ripristina</string>
     <string name="title_insert_line">Inserisci riga</string>
@@ -2045,7 +2049,7 @@
     <string name="title_global_default">Usa valori predefiniti globali</string>
     <string name="title_not_existing">Questo messaggio non esiste più sul server dell\'email</string>
     <string name="title_conversation_actions">Azioni</string>
-    <string name="title_conversation_action_reply">Rispondi con: \'%1$s\'</string>
+    <string name="title_conversation_action_reply">Rispondi con: «%1$s»</string>
     <string name="title_conversation_action_copy">Copia: \'%1$s\'</string>
     <string name="title_icalendar_accept">Accetta</string>
     <string name="title_icalendar_decline">Nega</string>
@@ -2310,6 +2314,8 @@
         <item>7,5 s</item>
         <item>10 s</item>
         <item>15 s</item>
+        <item>30 sec.</item>
+        <item>60 sec.</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Cursive</item>

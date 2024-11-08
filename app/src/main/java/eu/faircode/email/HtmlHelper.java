@@ -544,7 +544,7 @@ public class HtmlHelper {
             sheets = parseStyles(parsed.head().select("style"));
 
         Safelist safelist = Safelist.relaxed()
-                .addTags("hr", "abbr", "big", "font", "dfn", "ins", "del", "s", "tt", "mark", "address", "input")
+                .addTags("hr", "abbr", "big", "font", "dfn", "ins", "del", "s", "tt", "mark", "address", "input", "samp")
                 .addAttributes(":all", "class")
                 .addAttributes(":all", "style")
                 .addAttributes("span", "dir")
@@ -801,8 +801,11 @@ public class HtmlHelper {
                                     }
                                 }
 
-                                if (color != null)
-                                    element.attr("x-color", "true");
+                                if (color != null) {
+                                    double lum = ColorUtils.calculateLuminance(color);
+                                    if (dark ? lum > 1 - MIN_LUMINANCE_VIEW : lum < MIN_LUMINANCE_VIEW)
+                                        element.attr("x-color", "true");
+                                }
                             } else /* background */ {
                                 if (color != null && !hasColor(color))
                                     color = Color.TRANSPARENT;
@@ -1187,7 +1190,8 @@ public class HtmlHelper {
 
         // Pre formatted text
         // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/pre
-        for (Element pre : document.select("pre")) {
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/samp
+        for (Element pre : document.select("pre,samp")) {
             NodeTraversor.traverse(new NodeVisitor() {
                 private int index = 0;
                 private boolean inElement = false;
@@ -1764,9 +1768,18 @@ public class HtmlHelper {
                         String style = e.attr("style");
                         e.attr("style", mergeStyles(style, "text-decoration:line-through;"));
                     }
-                } else {
+                } else if (TextUtils.isEmpty(e.text()) && !"\u00a0".equals(e.wholeText())) {
+                    // <meta name=Generator content="Microsoft Word 15 (filtered medium)">
+                    // <p class=MsoNormal>
+                    //    <span style='font-family:"Calibri",sans-serif'>
+                    //       <o:p>&nbsp;</o:p>
+                    //    </span>
+                    // </p>
                     e.remove();
-                    Log.i("Removed tag=" + tag + " ns=" + ns + " content=" + e.text());
+                    Log.i("Removed tag=" + tag + " ns=" + ns +
+                            " content=" + Helper.getPrintableString(e.wholeText(), true));
+                } else {
+                    // Leave tag with unknown namespace to ensure all text is being displayed
                 }
             } else if (!"html".equals(tag) && !"body".equals(tag) && !"w".equals(tag)) {
                 String xmlns = e.attr("xmlns").toLowerCase(Locale.ROOT);
@@ -2813,7 +2826,7 @@ public class HtmlHelper {
         d.body().select("div#ms-outlook-mobile-signature").remove();
 
         // Yahoo/Android: <div id="ymail_android_signature">
-        d.body().select("div#ymail_android_signature").remove();
+        //d.body().select("div#`ymail_android_signature").remove();
 
         // Spark: <div name="messageSignatureSection">
         d.body().select("div[name=messageSignatureSection]").remove();
@@ -3930,6 +3943,7 @@ public class HtmlHelper {
                                 break;
                             case "pre":
                             case "tt":
+                            case "samp":
                                 // Signature
                                 setSpan(ssb, StyleHelper.getTypefaceSpan("monospace", context), start, ssb.length());
                                 break;
@@ -4155,7 +4169,27 @@ public class HtmlHelper {
     static void clearComposingText(TextView view) {
         if (view == null)
             return;
-        view.clearComposingText();
+
+        CharSequence edit = view.getText();
+        if (!(edit instanceof Spannable))
+            return;
+
+        // Copied from BaseInputConnection.removeComposingSpans
+        Spannable text = (Spannable) edit;
+        Object[] sps = text.getSpans(0, text.length(), Object.class);
+        if (sps != null) {
+            for (int i = sps.length - 1; i >= 0; i--) {
+                Object o = sps[i];
+                if (o instanceof ImageSpan) {
+                    String source = ((ImageSpan) o).getSource();
+                    if (source != null && source.startsWith("cid:"))
+                        continue;
+                }
+                if ((text.getSpanFlags(o) & Spanned.SPAN_COMPOSING) != 0) {
+                    text.removeSpan(o);
+                }
+            }
+        }
     }
 
     static void clearComposingText(Spannable text) {

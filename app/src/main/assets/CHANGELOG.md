@@ -20,6 +20,63 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Barsboldia](https://en.wikipedia.org/wiki/Barsboldia)
 
+### 1.2244 2024-11-01
+
+* Fixed deleting old unread messages
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2243 2024-11-01
+
+* Added AI interference to [expression conditions](https://m66b.github.io/FairEmail/#faq71)
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2242 2024-10-29
+
+* Updated MiniDNS to version 1.1.1
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2241 2024-10-24
+
+* Fixed interaction sharing email / biometric authentication
+* Added trash/archive to swipe/ask popup menu
+* Added confirmation for signature deletion
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2240 2024-10-19
+
+* Fixed newlines for messages sent with Outlook 2024
+
+### 1.2239 2024-10-18
+
+* Fixed workaround for invalid PGP messages
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2238 2024-10-17
+
+* Fixed zooming with always shown inline images
+* Added copying of POP3 accounts
+* Removed inline build of MiniDNS
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2237 2024-10-14
+
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2236 2024-10-08
 
 * Disabled workaround for Gmail

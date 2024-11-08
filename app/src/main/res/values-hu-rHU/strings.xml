@@ -100,7 +100,7 @@
     <string name="title_unblock_all_hint">Vegye figyelembe, hogy az alkalmazás nem tudja megakadályozni, hogy a szerver az üzeneteket a levélszemét mappába tegye!</string>
     <plurals name="title_ask_block_sender">
         <item quantity="one">Letiltja az üzenet küldőjét?</item>
-        <item quantity="other">Letiltja az %1$s üzenet küldőjét?</item>
+        <item quantity="other">Letiltja %1$s üzenet küldőjét?</item>
     </plurals>
     <plurals name="title_hours">
         <item quantity="one">%1$s óra</item>
@@ -206,13 +206,14 @@
     <string name="title_setup_oauth_updated">A fiókhitelesítés frissült</string>
     <string name="title_setup_oauth_edge">Edge böngésző használatakor győződjön meg, hogy a \"Külső alkalmazások megnyitásának tiltása\" az \"Adatvédelem, biztonság és szolgáltatások\" beállításnál \"Ki\" van kapcsolva</string>
     <string name="title_setup_oauth_brave">Ha Brave böngészőt használ, engedélyeznie kell a Brave beállításaiban az alkalmazás-hivatkozások megnyitását külső alkalmazásban</string>
-    <string name="title_setup_oauth_browser">A hitelesítés működő böngészőt igényel</string>
+    <string name="title_setup_oauth_browser">A hitelesítés működő böngészőt igényel, melyben megnyithatók az alkalmazás hivatkozásai (mely gyakran egy biztonsági beállítás), azért, hogy végül a hitelesítő token eljusson az alkalmazáshoz</string>
     <string name="title_setup_oauth_authorize">Engedélyezés</string>
     <string name="title_setup_select_account">Válasszon fiókot</string>
     <string name="title_setup_instructions">Telepítési útmutató</string>
     <string name="title_setup_no_settings">Nem találhatók beállítások a következő domainhez: %1$s</string>
     <string name="title_setup_no_settings_hint">Próbálj meg beállítani egy fiókot kézileg az e-mail szolgáltatód által megadott adatokkal</string>
     <string name="title_setup_no_auth_hint">Ellenőrizze az email címét és jelszavát, illetve bizonyosodjon meg róla hogy a fiókja elérhető SMTP/IMAP protokollokon keresztül</string>
+    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">Ehhez a fiókhoz az Outlook / Office 365 gyorsbeállítás varázslót kell használnia (a Microsoft megköveteli)</string>
     <string name="title_setup_app_password_hint">Ez a szolgáltó alkalmazásjelszót igényel a fiók jelszava helyett, kérlek ellenőrizd a szolgáltatód instrukcióit</string>
     <string name="title_setup_no_inbox">Bejövő mappa nem található</string>
     <string name="title_setup_advanced_protection">Az \"Advanced Protection\" programban részt vevők fiókjaihoz való hozzáférést a Google letiltotta minden harmadik féltől származó app számára.</string>
@@ -494,6 +495,7 @@
     <string name="title_advanced_close_pane">Sor vagy oszlop összecsukása beszélgetés bezárásánál</string>
     <string name="title_advanced_column_width">Üzenet oszlopszélesség / sormagasság: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Felső eszköztár elrejtése üzenetek görgetésekor</string>
+    <string name="title_advanced_edge_to_edge">Az alkalmazás háttérszínét alkalmazza az Android navigációs sávra is</string>
     <string name="title_advanced_nav_options">Navigációs menü opciók mutatása</string>
     <string name="title_advanced_nav_categories">Fiókkategória mutatása a navigációs menüben</string>
     <string name="title_advanced_nav_pin">Navigációs menü kitűzése</string>
@@ -1688,6 +1690,7 @@
     <string name="title_edit_signature_image_hint">        Üzenet küldésekor a képet beemeljük az üzenetbe a kijelölt helyről.
         Úgyhogy, ne törölje le a kép fájlt!
     </string>
+    <string name="title_edit_signature_delete">Aláírás törlése?</string>
     <string name="title_answer_define_name">Név</string>
     <string name="title_answer_define_value">Érték</string>
     <string name="title_answer_caption">Sablon szerkesztése</string>
@@ -1984,6 +1987,7 @@
     <string name="title_no">Nem</string>
     <string name="title_later">Később</string>
     <string name="title_paste_plain">Beillesztés egyszerű szövegként</string>
+    <string name="title_paste_as_quote">Beillesztés idézetként</string>
     <string name="title_undo">Visszavonás</string>
     <string name="title_redo">Mégis</string>
     <string name="title_insert_line">Sor beszúrása</string>
@@ -2301,6 +2305,8 @@
         <item>7,5 mp</item>
         <item>10 mp</item>
         <item>15 mp</item>
+        <item>30 mp</item>
+        <item>60 mp</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Folyóírás</item>
@@ -2326,8 +2332,8 @@
     </string-array>
     <string-array name="accountColorNames">
         <item>Egyik sem</item>
-        <item>Stripe</item>
-        <item>Dot</item>
+        <item>Csík</item>
+        <item>Pötty</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Címzett</item>

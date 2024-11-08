@@ -156,7 +156,7 @@
     </provider>
     <provider
         name="Outlook"
-        description="Office 365"
+        description="Outlook/Office 365"
         id="office365pcke"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
         maxtls="1.2"
@@ -196,6 +196,7 @@
     </provider>
     <provider
         name="Outlook"
+        alt="true"
         description="Outlook/Hotmail/Live"
         id="outlookgraph"
         link="https://github.com/M66B/FairEmail/blob/master/FAQ.md#user-content-faq14"
@@ -2362,14 +2363,27 @@
     </provider>
     <provider
         name="Mijn domein"
+        link="https://mijndomein.zendesk.com/hc/nl/articles/200448252-E-mail-instellen-in-een-eigen-e-mailprogramma-met-IMAP"
         mx=".*mijndomein\\.nl">
-        link="https://mijndomein.zendesk.com/hc/nl/articles/200448252-E-mail-instellen-in-een-eigen-e-mailprogramma-met-IMAP">
         <imap
             host="mail.mijndomein.nl"
             port="993"
             starttls="false" />
         <smtp
             host="mail.mijndomein.nl"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Mittwald"
+        link="https://www.mittwald.de/faq/e-mail/webmailer/e-mail-einrichtung-thunderbird"
+        mx=".*agenturserver\\.de">
+        <imap
+            host="mail.agenturserver.de"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.agenturserver.de"
             port="465"
             starttls="false" />
     </provider>

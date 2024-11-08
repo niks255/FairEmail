@@ -568,6 +568,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         float scale = (textSize == 0 ? 1.0f : size / (textSize * message_zoom / 100f));
                         boolean show_images = properties.getValue("images", message.id);
 
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        boolean inline = prefs.getBoolean("inline_images", false);
+
                         if (scale > 10)
                             return true;
 
@@ -578,11 +581,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         // Image size
                         Spanned spanned = (Spanned) tvBody.getText();
                         for (ImageSpan img : spanned.getSpans(0, spanned.length(), ImageSpan.class)) {
+                            String source = img.getSource();
+                            boolean embedded = (source != null && source.startsWith("cid:"));
                             Drawable d = img.getDrawable();
                             int w = 0;
                             int h = 0;
                             if (img instanceof ImageSpanEx) {
-                                if (show_images) {
+                                if (show_images || (embedded && inline)) {
                                     w = ((ImageSpanEx) img).getWidth();
                                     h = ((ImageSpanEx) img).getHeight();
                                 } else {
@@ -4201,9 +4206,15 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                                   at biweekly.ICalendar.write(SourceFile:2)
                              */
                             if (!TextUtils.isEmpty(email))
-                                email = email.replaceAll("\\s+", "");
+                                email = email
+                                        .replace("\n", " ")
+                                        .replace("\r", " ")
+                                        .replace("\"", "'");
                             if (!TextUtils.isEmpty(name))
-                                name = name.replaceAll("\\s+", " ");
+                                name = name
+                                        .replace("\n", " ")
+                                        .replace("\r", " ")
+                                        .replace("\"", "'");
 
                             Attendee attendee = new Attendee(name, email);
                             //attendee.setCalendarUserType(CalendarUserType.INDIVIDUAL);

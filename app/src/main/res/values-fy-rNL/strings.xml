@@ -205,13 +205,14 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_setup_oauth_updated">Accountautorisaasje is bywurke</string>
     <string name="title_setup_oauth_edge">As jo de Edge-browser bruke, soargje der dan foar dat ‘Het openen van externe apps blokkeren’ yn de ynstellingen foar ‘Privacy, beveiliging en services’ op \'Uit\' stiet</string>
     <string name="title_setup_oauth_brave">By it gebrûk fan de Brave-browser, moatte jo de opsje yn de ynstellingen fan Brave om app-keppelingen yn apps bûten Brave iepenje te litten ynskeakelje</string>
-    <string name="title_setup_oauth_browser">Autorisaasje fereasket in wurkjende browser</string>
+    <string name="title_setup_oauth_browser">Autorisaasje fereasket in wurkjende browser dy’t app-keppelingen iepenje kin (faaks in befeiligingsynstelling), sadat oan de app oan it ein de autorisaasjetoken oerdroegen wurde kin</string>
     <string name="title_setup_oauth_authorize">Autorisearje</string>
     <string name="title_setup_select_account">Selektearje account</string>
     <string name="title_setup_instructions">Ynstallaasjeynstruksjes</string>
     <string name="title_setup_no_settings">Gjin ynstellingen fûn foar domein ‘%1$s’</string>
     <string name="title_setup_no_settings_hint">Probearje in account hânmjittich yn te stellen mei de ynstellingen fan jo e-mailprovider</string>
     <string name="title_setup_no_auth_hint">Kontrolearje jo e-mailadres en wachtwurd en soargje derfoar dat eksterne tagong (IMAP/SMTP) ynskeakele is foar jo account</string>
+    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">Jo moatte de Outlook / Office 365-flugge-ynstel-wizard foar dizze account brûke (fereaske troch Microsoft)</string>
     <string name="title_setup_app_password_hint">Dizze provider fereasket in appwachtwurd yn stee fan it accountwachtwurd, kontrolearje de ynstruksjes fan jo provider</string>
     <string name="title_setup_no_inbox">Postfek YN net fûn</string>
     <string name="title_setup_advanced_protection">Wannear’t jo ynskreaun binne foar it avansearre befeiligingsprogramma, is it net mooglik om in e-mail-app fan tredden te brûken. Dit is in troch Google opleine beheining.</string>
@@ -494,6 +495,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_close_pane">Rige of kolom ynklappe by it sluten fan in petear</string>
     <string name="title_advanced_column_width">Berjochtkolombreedte / rigehichte: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Boppeste arkbalke ferstopje by it skowen fan berjochten</string>
+    <string name="title_advanced_edge_to_edge">Eftergrûnkleur van de app voor Android-navigaasjebalke brûke</string>
     <string name="title_advanced_nav_options">Navigaasjemenuopties</string>
     <string name="title_advanced_nav_categories">Accountkategoryen yn it navigaasjemenu toane</string>
     <string name="title_advanced_nav_pin">Navigaasjemenu fêstsette</string>
@@ -1688,6 +1690,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_edit_signature_image">Ofbylding ynfoegje</string>
     <string name="title_edit_signature_image_hint">By it ferstjoeren fan in berjocht wurdt de ôfbylding fan de selektearre lokaasje ôf nei it berjocht kopiearre.
          Smyt it ôfbyldingsbestân dus net fuort!    </string>
+    <string name="title_edit_signature_delete">Hantekening fuortsmite?</string>
     <string name="title_answer_define_name">Namme</string>
     <string name="title_answer_define_value">Wearde</string>
     <string name="title_answer_caption">Sjabloan bewurkje</string>
@@ -1984,6 +1987,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_no">Nee</string>
     <string name="title_later">Letter</string>
     <string name="title_paste_plain">As platte tekst plakke</string>
+    <string name="title_paste_as_quote">As sitaat plakke</string>
     <string name="title_undo">Ungedien meitsje</string>
     <string name="title_redo">Opnij</string>
     <string name="title_insert_line">Rigel ynfoegje</string>
@@ -2301,6 +2305,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
         <item>7,5 s</item>
         <item>10 s</item>
         <item>15 s</item>
+        <item>30 s</item>
+        <item>60 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Kursyf</item>

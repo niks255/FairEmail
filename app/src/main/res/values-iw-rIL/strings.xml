@@ -233,14 +233,16 @@
     <string name="title_setup_oauth_rationale">להרשות גישה לחשבון %1$s שלך</string>
     <string name="title_setup_oauth_update">אימות חשבון קיים שוב (אחרת ליצור חשבון חדש)</string>
     <string name="title_setup_oauth_updated">אישור החשבון עודכן</string>
+    <string name="title_setup_oauth_edge">בעת שימוש בדפדפן Edge, חשוב שההגדרה ‚חסימת פתיחה ביישומונים חיצוניים’ תחת ‚פרטיות, אבטחה ושירותים’ תהיה ‚כבויה’</string>
     <string name="title_setup_oauth_brave">בעת שימוש בדפדפן Brave יש להפעיל את האפשרות בהגדרות של Brave לאפשר לקישורי יישומים להיפתח ביישומים מחוץ ל־Brave</string>
-    <string name="title_setup_oauth_browser">אימות דורש דפדפן מתפקד</string>
+    <string name="title_setup_oauth_browser">אימות דורש דפדפן עובד שמאפשר לפתוח קישורי יישומונים (בדרך כלל הגדרת אבטחה), כדי שבסוף יועבר אסימון אימות ליישומון</string>
     <string name="title_setup_oauth_authorize">להרשות</string>
     <string name="title_setup_select_account">בחירת חשבון</string>
     <string name="title_setup_instructions">הנחיות הגדרה</string>
     <string name="title_setup_no_settings">אין הגדרת לשם התחום ‚%1$s’</string>
     <string name="title_setup_no_settings_hint">כדי להגדיר חשבון ידנית באמצעות ההגדרות שסופקו על ידי ספק הדוא״ל שלך</string>
     <string name="title_setup_no_auth_hint">נא לבדוק היטב את כתובת הדוא״ל ואת הסיסמה שלך כמו גם שהגישה החיצונית לחשבון שלך (IMAP/SMTP) זמינה</string>
+    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">חובה להשתמש באשף ההגדרה המהיר של Outlook / Office 365 עבור החשבון הזה (דרישה של Microsoft)</string>
     <string name="title_setup_app_password_hint">הספק הזה דורש סיסמת יישומון במקום את סיסמת החשבון, נא לבדוק מה ההנחיות של הספק שלך</string>
     <string name="title_setup_no_inbox">לא נמצא תיבת דואר נכנס</string>
     <string name="title_setup_advanced_protection">רישום לתכנית ההגנה המתקדמת מונעת שימוש ביישומון דוא״ל מגורמי צד־שלישי. זאת הגבלה שנאכפת על ידי Google.</string>
@@ -523,6 +525,7 @@
     <string name="title_advanced_close_pane">לצמצם שורה או עמודה בעת סגירת דיון</string>
     <string name="title_advanced_column_width">רוחב עמודה / גובה שורה של הודעה: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">להסתיר את סרגל הכלים בעת גלילה בין הודעות</string>
+    <string name="title_advanced_edge_to_edge">להשתמש בצבע הרקע של היישום לסרגל הניווט של Android</string>
     <string name="title_advanced_nav_options">הצגת אפשרויות תפריט הניווט</string>
     <string name="title_advanced_nav_categories">להציג את קטגוריות החשבונות בתפריט הניווט</string>
     <string name="title_advanced_nav_pin">נעיצת תפריט הניווט</string>
@@ -1722,6 +1725,7 @@
     <string name="title_edit_signature_image_hint">        בעת שליחת הודעה, התמונה מועתקת להודעה מהמיקום הנבחר.
         לכן, אין למחוק את קובץ התמונה!
     </string>
+    <string name="title_edit_signature_delete">למחוק חתימה?</string>
     <string name="title_answer_define_name">שם</string>
     <string name="title_answer_define_value">ערך</string>
     <string name="title_answer_caption">עריכת תבנית</string>
@@ -2018,6 +2022,7 @@
     <string name="title_no">לא</string>
     <string name="title_later">אחר כך</string>
     <string name="title_paste_plain">הדבקה כטקסט פשוט</string>
+    <string name="title_paste_as_quote">הדבקה כציטוט</string>
     <string name="title_undo">ביטול</string>
     <string name="title_redo">ביצוע מחדש</string>
     <string name="title_insert_line">הוספת שורה</string>
@@ -2215,7 +2220,7 @@
     <string-array name="sendDelayedNames">
         <item>לא</item>
         <item>5 שניות</item>
-        <item>10 seconds</item>
+        <item>10 שניות</item>
         <item>15 שניות</item>
         <item>חצי דקה</item>
         <item>דקה</item>
@@ -2331,6 +2336,8 @@
         <item>7.5 שנ׳</item>
         <item>10 שנ׳</item>
         <item>15 שנ׳</item>
+        <item>30 שניות</item>
+        <item>60 שניות</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>מחובר</item>

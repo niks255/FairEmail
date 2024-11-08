@@ -119,6 +119,7 @@ import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.MenuCompat;
+import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.exifinterface.media.ExifInterface;
@@ -5130,13 +5131,15 @@ public class FragmentCompose extends FragmentBase {
         EntityIdentity identity = (EntityIdentity) spIdentity.getSelectedItem();
 
         View focus = view.findFocus();
+
         boolean ime = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-            try {
-                ime = view.getRootWindowInsets().isVisible(WindowInsetsCompat.Type.ime());
-            } catch (Throwable ex) {
-                Log.e(ex);
-            }
+        try {
+            WindowInsetsCompat insets = ViewCompat.getRootWindowInsets(focus);
+            if (insets != null)
+                ime = insets.isVisible(WindowInsetsCompat.Type.ime());
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
 
         // Workaround underlines left by Android
         HtmlHelper.clearComposingText(etBody);
@@ -6427,6 +6430,7 @@ public class FragmentCompose extends FragmentBase {
             if (activity != null) {
                 Intent intent = activity.getIntent();
                 if (intent != null) {
+                    intent.setAction(null);
                     intent.putExtra("id", data.draft.id);
                     intent.putExtra("action", "edit");
                 }
@@ -7434,7 +7438,7 @@ public class FragmentCompose extends FragmentBase {
                                 else if (attachment.isAttachment())
                                     attached++;
                                 String ext = Helper.getExtension(attachment.name);
-                                if (Helper.DANGEROUS_EXTENSIONS.contains(ext))
+                                if (EntityAttachment.DANGEROUS_EXTENSIONS.contains(ext))
                                     dangerous.add(attachment.name);
                             }
                             if (dangerous.size() > 0)

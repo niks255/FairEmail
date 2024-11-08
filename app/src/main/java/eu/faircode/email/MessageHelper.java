@@ -1382,19 +1382,22 @@ public class MessageHelper {
 
         for (EntityAttachment attachment : attachments)
             if (attachment.available &&
-                    "text/calendar".equals(attachment.type)) {
-                File file = attachment.getFile(context);
-                ICalendar icalendar = CalendarHelper.parse(context, file);
-                Method method = (icalendar == null ? null : icalendar.getMethod());
-                if (method != null && method.isReply()) {
-                    // https://www.rfc-editor.org/rfc/rfc6047#section-2.4
-                    BodyPart calPart = new MimeBodyPart();
-                    calPart.setContent(icalendar.write(), attachment.type + ";" +
-                            " method=" + method.getValue() + ";" +
-                            " charset=UTF-8;");
-                    altMultiPart.addBodyPart(calPart);
+                    "text/calendar".equals(attachment.type))
+                try {
+                    File file = attachment.getFile(context);
+                    ICalendar icalendar = CalendarHelper.parse(context, file);
+                    Method method = (icalendar == null ? null : icalendar.getMethod());
+                    if (method != null && method.isReply()) {
+                        // https://www.rfc-editor.org/rfc/rfc6047#section-2.4
+                        BodyPart calPart = new MimeBodyPart();
+                        calPart.setContent(icalendar.write(), attachment.type + ";" +
+                                " method=" + method.getValue() + ";" +
+                                " charset=UTF-8;");
+                        altMultiPart.addBodyPart(calPart);
+                    }
+                } catch (Throwable ex) {
+                    Log.w(ex);
                 }
-            }
 
         int availableAttachments = 0;
         boolean hasInline = false;
@@ -4995,10 +4998,15 @@ public class MessageHelper {
                         Multipart mp = (Multipart) content;
                         for (int i = 0; i < mp.getCount(); i++) {
                             BodyPart bp = mp.getBodyPart(i);
-                            if (isMimeType(bp, "multipart/signed") || isMimeType(bp, "multipart/encrypted")) {
+                            if (isMimeType(bp, "multipart/encrypted")) {
+                                for (int j = 0; j < mp.getCount(); j++)
+                                    if (j != i)
+                                        getMessageParts(part, mp.getBodyPart(j), parts, null);
                                 part = (MimePart) bp;
                                 break;
                             } else if (isMimeType(bp, "application/pgp-encrypted") && i + 1 < mp.getCount()) {
+                                for (int j = 0; j < i; j++)
+                                    getMessageParts(part, mp.getBodyPart(j), parts, null);
                                 // Workaround Outlook problem
                                 //  --_xxxoutlookfr_
                                 // Content-Type: text/plain; charset="us-ascii"

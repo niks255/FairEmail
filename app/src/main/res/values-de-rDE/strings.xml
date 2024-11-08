@@ -208,13 +208,14 @@
     <string name="title_setup_oauth_updated">Kontoautorisierung wurde aktualisiert</string>
     <string name="title_setup_oauth_edge">Wenn Sie den Edge-Browser verwenden, vergewissern Sie sich, dass in den Einstellungen »Datenschutz und Sicherheit« die Einstellung »Öffnen externer Apps blockieren« auf »Aus« gestellt ist</string>
     <string name="title_setup_oauth_brave">Wenn Sie den Brave-Browser verwenden, dann müssen Sie in den Datenschutz-Einstellungen »Erlauben, dass Anwendungslinks in Anwendungen außerhalb von Brave geöffnet werden« aktivieren</string>
-    <string name="title_setup_oauth_browser">Autorisierung erfordert einen funktionierenden Browser</string>
+    <string name="title_setup_oauth_browser">Die Autorisierung erfordert einen funktionierenden Browser, der das Öffnen von App-Links (oft eine Sicherheitseinstellung) erlaubt, damit am Ende der Autorisierungstoken an die App übertragen werden kann</string>
     <string name="title_setup_oauth_authorize">Autorisieren</string>
     <string name="title_setup_select_account">Konto auswählen</string>
     <string name="title_setup_instructions">Einrichtungsanleitung</string>
     <string name="title_setup_no_settings">Keine Einstellungen für Domain \'%1$s\' gefunden</string>
     <string name="title_setup_no_settings_hint">Versuchen Sie, ein Konto manuell einzurichten, indem Sie die Einstellungen Ihres E-Mail-Anbieters verwenden</string>
     <string name="title_setup_no_auth_hint">Bitte überprüfen Sie Ihre E-Mail-Adresse und Ihr Passwort und stellen Sie sicher, dass der externe Zugriff (IMAP/SMTP) für Ihr Konto aktiviert ist</string>
+    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">Sie müssen den Assistenten »Outlook/Office 365« für dieses Konto verwenden (wird von Microsoft vorausgesetzt)</string>
     <string name="title_setup_app_password_hint">Dieser Anbieter verlangt ein App-Passwort anstelle des Kontenpassworts. Bitte folgen Sie den Anweisungen Ihres Anbieters.</string>
     <string name="title_setup_no_inbox">Posteingang nicht gefunden</string>
     <string name="title_setup_advanced_protection">Wenn Sie sich in das erweiterte Sicherheitsprogramm eingeschrieben haben, ist es nicht möglich, eine andere E-Mail-App von Dritten zu verwenden. Dies ist eine von Google auferlegte Einschränkung.</string>
@@ -497,6 +498,7 @@
     <string name="title_advanced_close_pane">Zeile oder Spalte beim Schließen einer Unterhaltung zusammenklappen</string>
     <string name="title_advanced_column_width">Spaltenbreite/Zeilenhöhe der Nachricht: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Obere Symbolleiste beim Scrollen von Nachrichten ausblenden</string>
+    <string name="title_advanced_edge_to_edge">App-Hintergrundfarbe für die Android-Navigationsleiste verwenden</string>
     <string name="title_advanced_nav_options">Optionen im Navigationsmenü anzeigen</string>
     <string name="title_advanced_nav_categories">Kontokategorien im Navigationsmenü anzeigen</string>
     <string name="title_advanced_nav_pin">Navigationsmenü anheften</string>
@@ -1697,6 +1699,7 @@
     <string name="title_edit_signature_image_hint">        Erst beim Versenden einer Nachricht wird die Bilddatei vom gewählten Speicherort in die Nachricht kopiert.
         Löschen Sie deshalb nicht die Bilddatei, bevor die Nachricht gesendet wurde!
     </string>
+    <string name="title_edit_signature_delete">Signatur löschen?</string>
     <string name="title_answer_define_name">Name</string>
     <string name="title_answer_define_value">Inhalt</string>
     <string name="title_answer_caption">Vorlage bearbeiten</string>
@@ -1993,6 +1996,7 @@
     <string name="title_no">Nein</string>
     <string name="title_later">Später</string>
     <string name="title_paste_plain">Als einfachen Text einfügen</string>
+    <string name="title_paste_as_quote">Als Zitat einfügen</string>
     <string name="title_undo">Rückgängig</string>
     <string name="title_redo">Wiederherstellen</string>
     <string name="title_insert_line">Linie einfügen</string>
@@ -2306,17 +2310,19 @@
     </string-array>
     <string-array name="undoNames">
         <item>Aus</item>
-        <item>2,5 Sekunden</item>
-        <item>5 Sekunden</item>
-        <item>7,5 Sekunden</item>
-        <item>10 Sekunden</item>
-        <item>15 Sekunden</item>
+        <item>2,5 s</item>
+        <item>5 s</item>
+        <item>7,5 s</item>
+        <item>10 s</item>
+        <item>15 s</item>
+        <item>30 s</item>
+        <item>60 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Kursiv</item>
         <item>Serife</item>
         <item>Serifenlos</item>
-        <item>Festbreitenschriftart</item>
+        <item>Festbreitenschrift</item>
         <item>Fantasie</item>
     </string-array>
     <!-- https://www.w3.org/TR/css-fonts-4/#generic-font-families -->

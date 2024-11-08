@@ -124,6 +124,7 @@ import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 
 class Core {
+    static final int DEFAULT_RANGE_SIZE = 1000;
     static final int DEFAULT_CHUNK_SIZE = 50;
 
     private static final int SYNC_BATCH_SIZE = 20;
@@ -1612,7 +1613,12 @@ class Core {
 
                         Long uid = findUid(context, account, itarget, msgid);
                         if (uid == null)
-                            throw new IllegalArgumentException("move: uid not found");
+                            if (duplicate || !EntityFolder.TRASH.equals(folder.type))
+                                throw new IllegalArgumentException("move: uid not found");
+                            else {
+                                Log.w("move: uid not found");
+                                continue;
+                            }
 
                         if (draft || duplicate) {
                             Message icopy = itarget.getMessageByUID(uid);
@@ -3931,7 +3937,8 @@ class Core {
             cal_keep.set(Calendar.MILLISECOND, 0);
 
             Calendar cal_keep_unread = Calendar.getInstance();
-            cal_keep_unread.add(Calendar.DAY_OF_MONTH, -Math.max(keep_days * 6, EntityFolder.DEFAULT_KEEP * 6));
+            cal_keep_unread.add(Calendar.DAY_OF_MONTH,
+                    delete_unseen ? -keep_days * 6 : -Math.max(keep_days * 6, EntityFolder.DEFAULT_KEEP * 6));
             cal_keep_unread.set(Calendar.HOUR_OF_DAY, 0);
             cal_keep_unread.set(Calendar.MINUTE, 0);
             cal_keep_unread.set(Calendar.SECOND, 0);
@@ -4140,6 +4147,10 @@ class Core {
                             public Object doCommand(IMAPProtocol protocol) throws ProtocolException {
                                 protocol.select(folder.name);
 
+                                // Yahoo range size: 2000
+                                // https://help.yahoo.com/kb/download-email-yahoo-mail-third-party-sln28681.html
+                                int range_size = prefs.getInt("range_size", DEFAULT_RANGE_SIZE);
+
                                 // Build ranges
                                 List<Pair<Long, Long>> ranges = new ArrayList<>();
                                 long first = -1;
@@ -4147,7 +4158,7 @@ class Core {
                                 for (long uid : uids)
                                     if (first < 0)
                                         first = uid;
-                                    else if ((last < 0 ? first : last) + 1 == uid)
+                                    else if ((last < 0 ? first : last) + 1 == uid && (uid - first + 1 <= range_size))
                                         last = uid;
                                     else {
                                         ranges.add(new Pair<>(first, last < 0 ? first : last));
@@ -4162,13 +4173,28 @@ class Core {
                                 if (chunk_size < 200 &&
                                         (account.isGmail() || account.isOutlook()))
                                     chunk_size = 200;
-                                List<List<Pair<Long, Long>>> chunks = Helper.chunkList(ranges, chunk_size);
+
+                                List<List<Pair<Long, Long>>> chunks = new ArrayList<>();
+
+                                int s = 0;
+                                List<Pair<Long, Long>> r = new ArrayList<>();
+                                for (Pair<Long, Long> range : ranges) {
+                                    long n = range.second - range.first + 1;
+                                    if (s + n > range_size) {
+                                        chunks.addAll(Helper.chunkList(r, chunk_size));
+                                        s = 0;
+                                        r.clear();
+                                    }
+                                    s += n;
+                                    r.add(range);
+                                }
+                                chunks.addAll(Helper.chunkList(r, chunk_size));
 
                                 Log.i(folder.name + " executing uid fetch count=" + uids.size() +
-                                        " ranges=" + ranges.size() + " chunks=" + chunks.size());
+                                        " ranges=" + ranges.size() + " chunks=" + chunks.size() +
+                                        " range_size=" + range_size + " chunk_size=" + chunk_size);
                                 for (int c = 0; c < chunks.size(); c++) {
                                     List<Pair<Long, Long>> chunk = chunks.get(c);
-                                    Log.i(folder.name + " chunk #" + c + " size=" + chunk.size());
 
                                     StringBuilder sb = new StringBuilder();
                                     for (Pair<Long, Long> range : chunk) {
@@ -4179,6 +4205,8 @@ class Core {
                                         else
                                             sb.append(range.first).append(':').append(range.second);
                                     }
+                                    Log.i(folder.name + " chunk #" + c + " " + sb);
+
                                     String command = "UID FETCH " + sb + " (UID FLAGS)";
                                     Response[] responses = protocol.command(command, null);
 

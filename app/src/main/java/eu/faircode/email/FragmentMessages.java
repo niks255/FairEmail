@@ -3420,158 +3420,197 @@ public class FragmentMessages extends FragmentBase
         }
 
         private void onSwipeAsk(final @NonNull TupleMessageEx message, @NonNull View anchor) {
-            // Make sure animations are done
-            rvMessage.post(new Runnable() {
+            Bundle args = new Bundle();
+            args.putLong("account", message.account);
+
+            new SimpleTask<Pair<EntityFolder, EntityFolder>>() {
                 @Override
-                public void run() {
-                    try {
-                        final Context context = getContext();
+                protected Pair<EntityFolder, EntityFolder> onExecute(Context context, Bundle args) throws Throwable {
+                    long account = args.getLong("account");
 
-                        int order = 1;
-                        PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), anchor);
-
-                        if (message.ui_seen)
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_unseen, order++, R.string.title_unseen)
-                                    .setIcon(R.drawable.twotone_mail_24);
-                        else
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_seen, order++, R.string.title_seen)
-                                    .setIcon(R.drawable.twotone_drafts_24);
-
-                        popupMenu.getMenu().add(Menu.NONE, R.string.title_snooze, order++, R.string.title_snooze)
-                                .setIcon(R.drawable.twotone_timelapse_24);
-
-                        if (message.ui_snoozed == null)
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_hide, order++, R.string.title_hide)
-                                    .setIcon(R.drawable.twotone_visibility_off_24);
-                        else if (message.ui_snoozed == Long.MAX_VALUE)
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_unhide, order++, R.string.title_unhide)
-                                    .setIcon(R.drawable.twotone_visibility_24);
-
-                        if (message.ui_flagged)
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_unflag, order++, R.string.title_unflag)
-                                    .setIcon(R.drawable.twotone_star_border_24);
-                        else
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_flag, order++, R.string.title_flag)
-                                    .setIcon(R.drawable.twotone_star_24);
-
-                        popupMenu.getMenu().add(Menu.NONE, R.string.title_flag_color, order++, R.string.title_flag_color)
-                                .setIcon(R.drawable.twotone_auto_awesome_24);
-
-                        SubMenu importance = popupMenu.getMenu()
-                                .addSubMenu(Menu.NONE, Menu.NONE, order++, R.string.title_set_importance)
-                                .setIcon(R.drawable.twotone_north_24);
-                        importance.add(Menu.NONE, R.string.title_importance_high, 1, R.string.title_importance_high)
-                                .setIcon(R.drawable.twotone_north_24)
-                                .setEnabled(!EntityMessage.PRIORITIY_HIGH.equals(message.importance));
-                        importance.add(Menu.NONE, R.string.title_importance_normal, 2, R.string.title_importance_normal)
-                                .setIcon(R.drawable.twotone_horizontal_rule_24)
-                                .setEnabled(!EntityMessage.PRIORITIY_NORMAL.equals(message.importance));
-                        importance.add(Menu.NONE, R.string.title_importance_low, 3, R.string.title_importance_low)
-                                .setIcon(R.drawable.twotone_south_24)
-                                .setEnabled(!EntityMessage.PRIORITIY_LOW.equals(message.importance));
-
-                        if (AI.isAvailable(context))
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_summarize, order++, R.string.title_summarize)
-                                    .setIcon(R.drawable.twotone_smart_toy_24);
-
-                        if (message.accountProtocol == EntityAccount.TYPE_IMAP) {
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_move, order++, R.string.title_move)
-                                    .setIcon(R.drawable.twotone_drive_file_move_24);
-                            popupMenu.getMenu().add(Menu.NONE, R.string.title_report_spam, order++, R.string.title_report_spam)
-                                    .setIcon(R.drawable.twotone_report_24);
-                        }
-                        popupMenu.getMenu().add(Menu.NONE, R.string.title_delete_permanently, order++, R.string.title_delete_permanently)
-                                .setIcon(R.drawable.twotone_delete_forever_24);
-
-                        popupMenu.insertIcons(context);
-
-                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem target) {
-                                int itemId = target.getItemId();
-                                if (itemId == R.string.title_seen) {
-                                    onActionSeenSelection(true, message.id, false);
-                                    return true;
-                                } else if (itemId == R.string.title_unseen) {
-                                    onActionSeenSelection(false, message.id, false);
-                                    return true;
-                                } else if (itemId == R.string.title_snooze) {
-                                    onMenuSnooze();
-                                    return true;
-                                } else if (itemId == R.string.title_hide || itemId == R.string.title_unhide) {
-                                    onActionHide(message);
-                                    return true;
-                                } else if (itemId == R.string.title_flag) {
-                                    onActionFlagSelection(true, Color.TRANSPARENT, message.id, false);
-                                    return true;
-                                } else if (itemId == R.string.title_unflag) {
-                                    onActionFlagSelection(false, Color.TRANSPARENT, message.id, false);
-                                    return true;
-                                } else if (itemId == R.string.title_flag_color) {
-                                    onMenuColor();
-                                    return true;
-                                } else if (itemId == R.string.title_importance_low) {
-                                    onActionSetImportanceSelection(EntityMessage.PRIORITIY_LOW, message.id, false);
-                                    return true;
-                                } else if (itemId == R.string.title_importance_normal) {
-                                    onActionSetImportanceSelection(EntityMessage.PRIORITIY_NORMAL, message.id, false);
-                                    return true;
-                                } else if (itemId == R.string.title_importance_high) {
-                                    onActionSetImportanceSelection(EntityMessage.PRIORITIY_HIGH, message.id, false);
-                                    return true;
-                                } else if (itemId == R.string.title_summarize) {
-                                    onSwipeSummarize(message);
-                                    return true;
-                                } else if (itemId == R.string.title_move) {
-                                    onSwipeMove(message);
-                                    return true;
-                                } else if (itemId == R.string.title_report_spam) {
-                                    onSwipeJunk(message);
-                                    return true;
-                                } else if (itemId == R.string.title_delete_permanently) {
-                                    onSwipeDelete(message, null);
-                                    return true;
-                                }
-                                return false;
-                            }
-
-                            private void onMenuSnooze() {
-                                Bundle args = new Bundle();
-                                args.putString("title", getString(R.string.title_snooze));
-                                args.putLong("account", message.account);
-                                args.putString("thread", message.thread);
-                                args.putLong("id", message.id);
-                                if (message.ui_snoozed != null)
-                                    args.putLong("time", message.ui_snoozed);
-                                args.putBoolean("finish", false);
-
-                                FragmentDialogDuration fragment = new FragmentDialogDuration();
-                                fragment.setArguments(args);
-                                fragment.setTargetFragment(FragmentMessages.this, REQUEST_MESSAGE_SNOOZE);
-                                fragment.show(getParentFragmentManager(), "message:snooze");
-                            }
-
-                            private void onMenuColor() {
-                                Bundle args = new Bundle();
-                                args.putLong("id", message.id);
-                                args.putInt("color", message.color == null ? Color.TRANSPARENT : message.color);
-                                args.putString("title", getString(R.string.title_flag_color));
-                                args.putBoolean("reset", true);
-                                args.putInt("faq", 187);
-
-                                FragmentDialogColor fragment = new FragmentDialogColor();
-                                fragment.setArguments(args);
-                                fragment.setTargetFragment(FragmentMessages.this, REQUEST_MESSAGE_COLOR);
-                                fragment.show(getParentFragmentManager(), "message:color");
-                            }
-                        });
-
-                        popupMenu.show();
-                    } catch (Throwable ex) {
-                        Log.e(ex);
-                    }
+                    DB db = DB.getInstance(context);
+                    return new Pair(
+                            db.folder().getFolderByType(account, EntityFolder.ARCHIVE),
+                            db.folder().getFolderByType(account, EntityFolder.TRASH));
                 }
-            });
+
+                @Override
+                protected void onExecuted(Bundle args, Pair<EntityFolder, EntityFolder> data) {
+                    // Make sure animations are done
+                    rvMessage.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                final Context context = getContext();
+
+                                int order = 1;
+                                PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(context, getViewLifecycleOwner(), anchor);
+
+                                if (message.ui_seen)
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_unseen, order++, R.string.title_unseen)
+                                            .setIcon(R.drawable.twotone_mail_24);
+                                else
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_seen, order++, R.string.title_seen)
+                                            .setIcon(R.drawable.twotone_drafts_24);
+
+                                popupMenu.getMenu().add(Menu.NONE, R.string.title_snooze, order++, R.string.title_snooze)
+                                        .setIcon(R.drawable.twotone_timelapse_24);
+
+                                if (message.ui_snoozed == null)
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_hide, order++, R.string.title_hide)
+                                            .setIcon(R.drawable.twotone_visibility_off_24);
+                                else if (message.ui_snoozed == Long.MAX_VALUE)
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_unhide, order++, R.string.title_unhide)
+                                            .setIcon(R.drawable.twotone_visibility_24);
+
+                                if (message.ui_flagged)
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_unflag, order++, R.string.title_unflag)
+                                            .setIcon(R.drawable.twotone_star_border_24);
+                                else
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_flag, order++, R.string.title_flag)
+                                            .setIcon(R.drawable.twotone_star_24);
+
+                                popupMenu.getMenu().add(Menu.NONE, R.string.title_flag_color, order++, R.string.title_flag_color)
+                                        .setIcon(R.drawable.twotone_auto_awesome_24);
+
+                                SubMenu importance = popupMenu.getMenu()
+                                        .addSubMenu(Menu.NONE, Menu.NONE, order++, R.string.title_set_importance)
+                                        .setIcon(R.drawable.twotone_north_24);
+                                importance.add(Menu.NONE, R.string.title_importance_high, 1, R.string.title_importance_high)
+                                        .setIcon(R.drawable.twotone_north_24)
+                                        .setEnabled(!EntityMessage.PRIORITIY_HIGH.equals(message.importance));
+                                importance.add(Menu.NONE, R.string.title_importance_normal, 2, R.string.title_importance_normal)
+                                        .setIcon(R.drawable.twotone_horizontal_rule_24)
+                                        .setEnabled(!EntityMessage.PRIORITIY_NORMAL.equals(message.importance));
+                                importance.add(Menu.NONE, R.string.title_importance_low, 3, R.string.title_importance_low)
+                                        .setIcon(R.drawable.twotone_south_24)
+                                        .setEnabled(!EntityMessage.PRIORITIY_LOW.equals(message.importance));
+
+                                if (AI.isAvailable(context))
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_summarize, order++, R.string.title_summarize)
+                                            .setIcon(R.drawable.twotone_smart_toy_24);
+
+                                if (data.first != null && data.first.id != null)
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_archive, order++, R.string.title_archive)
+                                            .setIcon(R.drawable.twotone_archive_24)
+                                            .setIntent(new Intent().putExtra("folder", data.first.id));
+                                if (data.second != null && data.second.id != null)
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_trash, order++, R.string.title_trash)
+                                            .setIcon(R.drawable.twotone_delete_24)
+                                            .setIntent(new Intent().putExtra("folder", data.second.id));
+
+                                if (message.accountProtocol == EntityAccount.TYPE_IMAP) {
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_move, order++, R.string.title_move)
+                                            .setIcon(R.drawable.twotone_drive_file_move_24);
+                                    popupMenu.getMenu().add(Menu.NONE, R.string.title_report_spam, order++, R.string.title_report_spam)
+                                            .setIcon(R.drawable.twotone_report_24);
+                                }
+                                popupMenu.getMenu().add(Menu.NONE, R.string.title_delete_permanently, order++, R.string.title_delete_permanently)
+                                        .setIcon(R.drawable.twotone_delete_forever_24);
+
+                                popupMenu.insertIcons(context);
+
+                                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem target) {
+                                        int itemId = target.getItemId();
+                                        if (itemId == R.string.title_seen) {
+                                            onActionSeenSelection(true, message.id, false);
+                                            return true;
+                                        } else if (itemId == R.string.title_unseen) {
+                                            onActionSeenSelection(false, message.id, false);
+                                            return true;
+                                        } else if (itemId == R.string.title_snooze) {
+                                            onMenuSnooze();
+                                            return true;
+                                        } else if (itemId == R.string.title_hide || itemId == R.string.title_unhide) {
+                                            onActionHide(message);
+                                            return true;
+                                        } else if (itemId == R.string.title_flag) {
+                                            onActionFlagSelection(true, Color.TRANSPARENT, message.id, false);
+                                            return true;
+                                        } else if (itemId == R.string.title_unflag) {
+                                            onActionFlagSelection(false, Color.TRANSPARENT, message.id, false);
+                                            return true;
+                                        } else if (itemId == R.string.title_flag_color) {
+                                            onMenuColor();
+                                            return true;
+                                        } else if (itemId == R.string.title_importance_low) {
+                                            onActionSetImportanceSelection(EntityMessage.PRIORITIY_LOW, message.id, false);
+                                            return true;
+                                        } else if (itemId == R.string.title_importance_normal) {
+                                            onActionSetImportanceSelection(EntityMessage.PRIORITIY_NORMAL, message.id, false);
+                                            return true;
+                                        } else if (itemId == R.string.title_importance_high) {
+                                            onActionSetImportanceSelection(EntityMessage.PRIORITIY_HIGH, message.id, false);
+                                            return true;
+                                        } else if (itemId == R.string.title_summarize) {
+                                            onSwipeSummarize(message);
+                                            return true;
+                                        } else if (itemId == R.string.title_archive || itemId == R.string.title_trash) {
+                                            Intent intent = target.getIntent();
+                                            long folder = (intent == null ? -1L : intent.getLongExtra("folder", -1L));
+                                            if (folder < 0)
+                                                return false;
+                                            swipeFolder(message, folder);
+                                            return true;
+                                        } else if (itemId == R.string.title_move) {
+                                            onSwipeMove(message);
+                                            return true;
+                                        } else if (itemId == R.string.title_report_spam) {
+                                            onSwipeJunk(message);
+                                            return true;
+                                        } else if (itemId == R.string.title_delete_permanently) {
+                                            onSwipeDelete(message, null);
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+
+                                    private void onMenuSnooze() {
+                                        Bundle args = new Bundle();
+                                        args.putString("title", getString(R.string.title_snooze));
+                                        args.putLong("account", message.account);
+                                        args.putString("thread", message.thread);
+                                        args.putLong("id", message.id);
+                                        if (message.ui_snoozed != null)
+                                            args.putLong("time", message.ui_snoozed);
+                                        args.putBoolean("finish", false);
+
+                                        FragmentDialogDuration fragment = new FragmentDialogDuration();
+                                        fragment.setArguments(args);
+                                        fragment.setTargetFragment(FragmentMessages.this, REQUEST_MESSAGE_SNOOZE);
+                                        fragment.show(getParentFragmentManager(), "message:snooze");
+                                    }
+
+                                    private void onMenuColor() {
+                                        Bundle args = new Bundle();
+                                        args.putLong("id", message.id);
+                                        args.putInt("color", message.color == null ? Color.TRANSPARENT : message.color);
+                                        args.putString("title", getString(R.string.title_flag_color));
+                                        args.putBoolean("reset", true);
+                                        args.putInt("faq", 187);
+
+                                        FragmentDialogColor fragment = new FragmentDialogColor();
+                                        fragment.setArguments(args);
+                                        fragment.setTargetFragment(FragmentMessages.this, REQUEST_MESSAGE_COLOR);
+                                        fragment.show(getParentFragmentManager(), "message:color");
+                                    }
+                                });
+
+                                popupMenu.show();
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(getParentFragment(), ex);
+                }
+            }.execute(FragmentMessages.this, args, "swipe:ask");
         }
 
         private void onSwipeSnooze(TupleMessageEx message, RecyclerView.ViewHolder viewHolder) {
@@ -5606,6 +5645,15 @@ public class FragmentMessages extends FragmentBase
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
         cm.registerNetworkCallback(builder.build(), networkCallback);
+        /*
+            android.net.ConnectivityManager$TooManyRequestsException
+                at android.net.ConnectivityManager.convertServiceException(ConnectivityManager.java:3771)
+                at android.net.ConnectivityManager.sendRequestForNetwork(ConnectivityManager.java:3960)
+                at android.net.ConnectivityManager.sendRequestForNetwork(ConnectivityManager.java:3967)
+                at android.net.ConnectivityManager.registerNetworkCallback(ConnectivityManager.java:4349)
+                at android.net.ConnectivityManager.registerNetworkCallback(ConnectivityManager.java:4319)
+                at eu.faircode.email.FragmentMessages.onResume(SourceFile:69)
+         */
 
         updateAirplaneMode(ConnectionHelper.airplaneMode(context));
         ContextCompat.registerReceiver(context,
@@ -8144,17 +8192,67 @@ public class FragmentMessages extends FragmentBase
         if (seen_delay == 0)
             return;
 
+        Bundle dargs = new Bundle();
+        dargs.putLong("id", id);
+        dargs.putBoolean("seen", true);
+
         view.postDelayed(new RunnableEx("seen_delay") {
             @Override
             public void delegate() {
-                if (values.containsKey("expanded") && values.get("expanded").contains(id)) {
-                    Bundle dargs = new Bundle();
-                    dargs.putLong("id", id);
-                    dargs.putBoolean("seen", true);
+                if (values.containsKey("expanded") && values.get("expanded").contains(id))
                     taskExpand.execute(FragmentMessages.this, dargs, "messages:seen_delay");
-                }
             }
         }, seen_delay);
+
+        new SimpleTask<Void>() {
+            @Override
+            protected Void onExecute(Context context, Bundle args) {
+                long id = args.getLong("id");
+
+                Long reload = null;
+
+                DB db = DB.getInstance(context);
+                try {
+                    db.beginTransaction();
+
+                    EntityMessage message = db.message().getMessageEx(id);
+                    if (message == null)
+                        return null;
+
+                    EntityFolder folder = db.folder().getFolder(message.folder);
+                    if (folder == null || folder.account == null)
+                        return null;
+
+                    EntityAccount account = db.account().getAccount(folder.account);
+                    if (account == null)
+                        return null;
+
+                    if (!"connected".equals(account.state) && !account.isTransient(context))
+                        reload = account.id;
+
+                    if (account.protocol != EntityAccount.TYPE_IMAP || message.uid != null) {
+                        if (!message.content)
+                            EntityOperation.queue(context, message, EntityOperation.BODY);
+                    }
+
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                if (reload == null)
+                    ServiceSynchronize.eval(context, "expand");
+                else
+                    ServiceSynchronize.reload(context, reload, false, "expand");
+
+                return null;
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.setLog(false).execute(this, dargs, "messages:expand");
     }
 
     private void handleAutoClose() {
