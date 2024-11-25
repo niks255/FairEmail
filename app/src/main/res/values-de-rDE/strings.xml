@@ -203,6 +203,9 @@
     <string name="title_setup_office_auth">Der Fehler »AUTHENTICATE failed« kann dadurch verursacht werden, dass IMAP/SMTP vom Systemverwalter deaktiviert wurde</string>
     <string name="title_setup_office_auth_5_7_3">Bitte probieren Sie den Assistenten »Anderer Anbieter« für die Schnelleinrichtung.</string>
     <string name="title_setup_office_auth_5_7_139">Bitte probieren Sie den Assistenten »Outlook/Hotmail/Live« für die Schnelleinrichtung.</string>
+    <string name="title_setup_office_not_connected">        Der Fehler „User is authenticated but not connected“ deutet meist darauf hin, dass IMAP deaktiviert ist.
+        Bei einem privaten Outlook-Konto gehen Sie bitte auf die Outlook-Website, tippen Sie auf das Einstellungsrad oben rechts, wählen Sie „Mail“, wählen Sie „Weiterleitung und IMAP“, und aktivieren Sie im Abschnitt „POP und IMAP“ die Option „Geräte und Anwendungen IMAP verwenden lassen“.
+        Im Falle eines Firmen- oder Schulkontos usw. wenden Sie sich bitte an den Systemadministrator des E-Mail-Servers.</string>
     <string name="title_setup_oauth_rationale">Zugriff auf Ihr %1$s -Konto autorisieren</string>
     <string name="title_setup_oauth_update">Ein bestehendes Konto erneut autorisieren (oder ein neues Konto erstellen)</string>
     <string name="title_setup_oauth_updated">Kontoautorisierung wurde aktualisiert</string>
@@ -215,7 +218,7 @@
     <string name="title_setup_no_settings">Keine Einstellungen für Domain \'%1$s\' gefunden</string>
     <string name="title_setup_no_settings_hint">Versuchen Sie, ein Konto manuell einzurichten, indem Sie die Einstellungen Ihres E-Mail-Anbieters verwenden</string>
     <string name="title_setup_no_auth_hint">Bitte überprüfen Sie Ihre E-Mail-Adresse und Ihr Passwort und stellen Sie sicher, dass der externe Zugriff (IMAP/SMTP) für Ihr Konto aktiviert ist</string>
-    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">Sie müssen den Assistenten »Outlook/Office 365« für dieses Konto verwenden (wird von Microsoft vorausgesetzt)</string>
+    <string name="title_setup_no_auth_outlook">Sie müssen den Assistenten »Outlook/Office 365« für dieses Konto verwenden (wird von Microsoft vorausgesetzt)</string>
     <string name="title_setup_app_password_hint">Dieser Anbieter verlangt ein App-Passwort anstelle des Kontenpassworts. Bitte folgen Sie den Anweisungen Ihres Anbieters.</string>
     <string name="title_setup_no_inbox">Posteingang nicht gefunden</string>
     <string name="title_setup_advanced_protection">Wenn Sie sich in das erweiterte Sicherheitsprogramm eingeschrieben haben, ist es nicht möglich, eine andere E-Mail-App von Dritten zu verwenden. Dies ist eine von Google auferlegte Einschränkung.</string>
@@ -1242,6 +1245,7 @@
     <string name="title_unimportant">Unwichtig</string>
     <string name="title_search_in_text">Im Text suchen &#8230;</string>
     <string name="title_forward">Weiterleiten</string>
+    <string name="title_forward_to">Weiterleiten an</string>
     <string name="title_resend">Umleiten</string>
     <string name="title_fetching_headers">Nachrichtenkopfzeilen werden heruntergeladen &#8230;</string>
     <string name="title_new_message">Neue Nachricht</string>

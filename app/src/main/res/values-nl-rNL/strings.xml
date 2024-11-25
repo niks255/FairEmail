@@ -201,6 +201,9 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_office_auth">De fout \'AUTHENTICATE failed\' kan worden veroorzaakt doordat IMAP/SMTP door de systeemadministrator is uitgeschakeld</string>
     <string name="title_setup_office_auth_5_7_3">Probeer a. u. b. de \'Andere provider\' wizard.</string>
     <string name="title_setup_office_auth_5_7_139">Probeer a. u. b. de \'Outlook/Hotmail/Live\' wizard.</string>
+    <string name="title_setup_office_not_connected">De foutmelding \'User is authenticated but not connected\' betekent meestal dat IMAP is uitgeschakeld.
+        Ga in het geval van een Outlook-account voor consumenten naar de Outlook-website, tik op het instellingenwiel rechtsboven, selecteer \'Mail\', selecteer \'Forwarding en IMAP\' en in de sectie \'POP en IMAP\' schakel \'Laat apparaten en apps IMAP gebruiken\' in.
+        Neem in het geval van een bedrijfs-, onderwijs-, enz. account contact op met de systeembeheerder van de mailserver.    </string>
     <string name="title_setup_oauth_rationale">Autoriseer toegang tot uw %1$s account</string>
     <string name="title_setup_oauth_update">Autoriseer een bestaand account opnieuw (anders een nieuwe account aanmaken)</string>
     <string name="title_setup_oauth_updated">Accountautorisatie is bijgewerkt</string>
@@ -213,7 +216,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_no_settings">Geen instellingen gevonden voor domein \'%1$s\'</string>
     <string name="title_setup_no_settings_hint">Probeer een account handmatig in te stellen met de instellingen van uw e-mailprovider</string>
     <string name="title_setup_no_auth_hint">Controleer a.u.b. uw e-mailadres en wachtwoord en zorg ervoor dat externe toegang (IMAP/SMTP) is ingeschakeld voor uw account</string>
-    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">U moet de Outlook / Office 365 snelle setup-wizard voor dit account gebruiken (vereist door Microsoft)</string>
+    <string name="title_setup_no_auth_outlook">U moet de Outlook / Office 365 snelle setup-wizard voor dit account gebruiken (vereist door Microsoft)</string>
     <string name="title_setup_app_password_hint">Deze provider vereist een app-wachtwoord in plaats van het wachtwoord van uw account, controleer a.u.b. de instructies van uw provider</string>
     <string name="title_setup_no_inbox">Postvak in niet gevonden</string>
     <string name="title_setup_advanced_protection">Wanneer u bent ingeschreven voor het geavanceerde beveiligingsprogramma, is het niet mogelijk om een e-mailapp van derden te gebruiken. Dit is een door Google opgelegde beperking.</string>
@@ -1234,6 +1237,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_unimportant">Onbelangrijk</string>
     <string name="title_search_in_text">Zoek in tekst &#8230;</string>
     <string name="title_forward">Doorsturen</string>
+    <string name="title_forward_to">Doorsturen naar</string>
     <string name="title_resend">Verstuur opnieuw</string>
     <string name="title_fetching_headers">Berichtkoppen downloaden &#8230;</string>
     <string name="title_new_message">Nieuw bericht</string>

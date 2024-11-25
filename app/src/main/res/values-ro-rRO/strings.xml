@@ -216,6 +216,10 @@
     <string name="title_setup_office_auth">Eroarea \'Autentificare eșuată\' poate fi cauzată de dezactivarea administrativă a IMAP/SMTP</string>
     <string name="title_setup_office_auth_5_7_3">Vă rugăm să încercați expertul de configurare rapidă \'Alt furnizor\'.</string>
     <string name="title_setup_office_auth_5_7_139">Vă rugăm să încercați asistentul \"Outlook/Hotmail/Live\" pentru configurare rapidă.</string>
+    <string name="title_setup_office_not_connected">        Eroarea \'Utilizatorul este autentificat dar nu este conectat\' în general înseamnă că IMAP este dezactivat.
+        În cazul unui cont Outlook deutilizator, vă rugăm să mergeți la pagina web Outlook, apăsați pe setările din partea dreaptă sus, selectați \'Mail\', selectați \'Redirecționare și IMAP\', iar în secțiunea \'POP și IMAP\' activați \'Permiteți dispozitivelor și aplicațiilor să utilizeze IMAP\'.
+        În cazul unui cont de corporație, educație etc, vă rugăm să contactați administratorul de sistem al serverului de e-mail.
+    </string>
     <string name="title_setup_oauth_rationale">Autorizare acces la contul %1$s</string>
     <string name="title_setup_oauth_update">Autorizați din nou un cont existent (în caz contrar, creați un cont nou)</string>
     <string name="title_setup_oauth_updated">Autorizarea contului a fost actualizată</string>
@@ -228,7 +232,7 @@
     <string name="title_setup_no_settings">Nu s-au găsit setări pentru domeniul \'%1$s\'</string>
     <string name="title_setup_no_settings_hint">Încercați să configurați manual un cont folosind setările furnizate de furnizorul dumneavoastră de e-mail</string>
     <string name="title_setup_no_auth_hint">Vă rugăm să verificați iar adresa de e-mail și parola și asigurați-vă că accesul extern (IMAP/SMTP) este activat pentru contul dumneavoastră</string>
-    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">Trebuie să utilizați expertul de configurare rapidă Outlook / Office 365 pentru acest cont (solicitat de Microsoft)</string>
+    <string name="title_setup_no_auth_outlook">Trebuie să utilizați expertul de configurare rapidă Outlook / Office 365 pentru acest cont (solicitat de Microsoft)</string>
     <string name="title_setup_app_password_hint">Acest furnizor necesită o parolă de aplicație în locul parolei contului, vă rugăm să verificați instrucțiunile furnizorului dumneavoastră</string>
     <string name="title_setup_no_inbox">Dosarul Primite nu a fost găsit</string>
     <string name="title_setup_advanced_protection">Când sunteți înscris în programul avansat de protecție, nu este posibilă utilizarea unei aplicații de e-mail a unei terțe părți. Aceasta este o restricție impusă de Google.</string>
@@ -1252,6 +1256,7 @@
     <string name="title_unimportant">Neimportant</string>
     <string name="title_search_in_text">Caută în text &#8230;</string>
     <string name="title_forward">Redirecționează</string>
+    <string name="title_forward_to">Redirecţionează către</string>
     <string name="title_resend">Retrimite</string>
     <string name="title_fetching_headers">Descărcarea antetelor de mesaj &#8230;</string>
     <string name="title_new_message">Mesaj nou</string>

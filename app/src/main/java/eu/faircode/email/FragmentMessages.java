@@ -193,6 +193,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -315,6 +316,7 @@ public class FragmentMessages extends FragmentBase
     private ImageButton ibDelete;
     private ImageButton ibJunk;
     private ImageButton ibInbox;
+    private ImageButton ibKeywords;
     private ImageButton ibMoreSettings;
     private FloatingActionButton fabSearch;
     private FloatingActionButton fabError;
@@ -418,6 +420,7 @@ public class FragmentMessages extends FragmentBase
     private static final int MAX_MORE = 100; // messages
     private static final int MAX_SEND_RAW = 50; // messages
     private static final int ITEM_CACHE_SIZE = 10; // Default: 2 items
+    private static final long MAX_FORWARD_ADDRESS_AGE = 7 * 24 * 3600 * 1000L; // milliseconds
 
     private static final int REQUEST_RAW = 1;
     private static final int REQUEST_OPENPGP = 4;
@@ -448,6 +451,7 @@ public class FragmentMessages extends FragmentBase
     static final int REQUEST_CALENDAR = 29;
     static final int REQUEST_EDIT_SUBJECT = 30;
     private static final int REQUEST_ANSWER_SETTINGS = 31;
+    private static final int REQUEST_DESELECT = 32;
 
     static final String ACTION_STORE_RAW = BuildConfig.APPLICATION_ID + ".STORE_RAW";
     static final String ACTION_VERIFYDECRYPT = BuildConfig.APPLICATION_ID + ".VERIFYDECRYPT";
@@ -666,6 +670,7 @@ public class FragmentMessages extends FragmentBase
         ibDelete = view.findViewById(R.id.ibDelete);
         ibJunk = view.findViewById(R.id.ibJunk);
         ibInbox = view.findViewById(R.id.ibInbox);
+        ibKeywords = view.findViewById(R.id.ibKeywords);
         ibMoreSettings = view.findViewById(R.id.ibMoreSettings);
         fabSearch = view.findViewById(R.id.fabSearch);
         fabError = view.findViewById(R.id.fabError);
@@ -1828,6 +1833,14 @@ public class FragmentMessages extends FragmentBase
                     onActionJunkSelection();
 
                 return true;
+            }
+        });
+
+        ibKeywords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean more_clear = prefs.getBoolean("more_clear", true);
+                onActionManageKeywords(more_clear);
             }
         });
 
@@ -3259,7 +3272,7 @@ public class FragmentMessages extends FragmentBase
 
                 if (expanded && swipe_reply) {
                     redraw(viewHolder);
-                    onMenuReply(message, "reply", null);
+                    onMenuReply(message, "reply", null, null);
                     return;
                 }
 
@@ -4061,6 +4074,9 @@ public class FragmentMessages extends FragmentBase
             protected ReplyData onExecute(Context context, Bundle args) {
                 long id = args.getLong("id");
 
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean experiments = prefs.getBoolean("experiments", false);
+
                 ReplyData result = new ReplyData();
 
                 DB db = DB.getInstance(context);
@@ -4073,6 +4089,17 @@ public class FragmentMessages extends FragmentBase
 
                 result.identities = db.identity().getComposableIdentities(null);
                 result.answers = db.answer().getAnswersByFavorite(true);
+
+                result.forwarded = new ArrayList<>();
+                if (experiments) {
+                    long last = new Date().getTime() - MAX_FORWARD_ADDRESS_AGE;
+                    List<String> fwds = db.message().getForwardAddresses(message.account, last);
+                    if (fwds != null)
+                        for (String fwd : fwds)
+                            for (Address address : DB.Converters.decodeAddresses(fwd))
+                                if (address instanceof InternetAddress)
+                                    result.forwarded.add((InternetAddress) address);
+                }
 
                 return result;
             }
@@ -4165,6 +4192,21 @@ public class FragmentMessages extends FragmentBase
                     }
                 }
 
+                if (data.forwarded.isEmpty())
+                    popupMenu.getMenu().findItem(R.id.menu_forward_to).setVisible(false);
+                else {
+                    int order = 200;
+                    for (InternetAddress fwd : data.forwarded) {
+                        order++;
+                        popupMenu.getMenu().findItem(R.id.menu_forward_to).getSubMenu()
+                                .add(2, order, order,
+                                        MessageHelper.formatAddressesShort(new InternetAddress[]{fwd}))
+                                .setIntent(new Intent()
+                                        .putExtra("email", fwd.getAddress())
+                                        .putExtra("name", fwd.getPersonal()));
+                    }
+                }
+
                 popupMenu.insertIcons(context);
 
                 MenuCompat.setGroupDividerEnabled(popupMenu.getMenu(), true);
@@ -4182,15 +4224,28 @@ public class FragmentMessages extends FragmentBase
                             return true;
                         }
 
+                        if (target.getGroupId() == 2) {
+                            try {
+                                InternetAddress fwd = new InternetAddress(
+                                        target.getIntent().getStringExtra("email"),
+                                        target.getIntent().getStringExtra("name"));
+                                onMenuReply(message, "forward", fwd, null);
+                            } catch (UnsupportedEncodingException ex) {
+                                Log.e(ex);
+                                onMenuReply(message, "forward");
+                            }
+                            return true;
+                        }
+
                         int itemId = target.getItemId();
                         if (itemId == R.id.menu_reply_to_sender) {
-                            onMenuReply(message, "reply", selected);
+                            onMenuReply(message, "reply", null, selected);
                             return true;
                         } else if (itemId == R.id.menu_reply_to_all) {
-                            onMenuReply(message, "reply_all", selected);
+                            onMenuReply(message, "reply_all", null, selected);
                             return true;
                         } else if (itemId == R.id.menu_reply_list) {
-                            onMenuReply(message, "list", selected);
+                            onMenuReply(message, "list", null, selected);
                             return true;
                         } else if (itemId == R.id.menu_reply_receipt) {
                             onMenuDsn(message, EntityMessage.DSN_RECEIPT);
@@ -4237,10 +4292,10 @@ public class FragmentMessages extends FragmentBase
     }
 
     private void onMenuReply(TupleMessageEx message, String action) {
-        onMenuReply(message, action, null);
+        onMenuReply(message, action, null, null);
     }
 
-    private void onMenuReply(TupleMessageEx message, String action, CharSequence selected) {
+    private void onMenuReply(TupleMessageEx message, String action, InternetAddress to, CharSequence selected) {
         final Context context = getContext();
         if (context == null)
             return;
@@ -4255,6 +4310,9 @@ public class FragmentMessages extends FragmentBase
                 .putExtra("action", action)
                 .putExtra("reference", message.id)
                 .putExtra("selected", selected);
+
+        if (to != null)
+            reply.putExtra("to", MessageHelper.formatAddressesCompose(new InternetAddress[]{to}));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean attachments_asked = prefs.getBoolean("attachments_asked", false);
@@ -4610,6 +4668,10 @@ public class FragmentMessages extends FragmentBase
                     popupMenu.getMenu().add(Menu.FIRST, R.string.title_copy_to, order++, R.string.title_copy_to)
                             .setIcon(R.drawable.twotone_file_copy_24);
 
+                if (!result.hasPop && result.hasImap)
+                    popupMenu.getMenu().add(Menu.FIRST, R.string.title_manage_keywords, order++, R.string.title_manage_keywords)
+                            .setIcon(R.drawable.twotone_label_important_24);
+
                 if (ids.length == 1)
                     popupMenu.getMenu().add(Menu.FIRST, R.string.title_search_sender, order++, R.string.title_search_sender)
                             .setIcon(R.drawable.twotone_search_24);
@@ -4680,6 +4742,9 @@ public class FragmentMessages extends FragmentBase
                             return true;
                         } else if (itemId == R.string.title_copy_to) {
                             onActionMoveSelectionAccount(result.copyto.id, true, result.folders);
+                            return true;
+                        } else if (itemId == R.string.title_manage_keywords) {
+                            onActionManageKeywords(false);
                             return true;
                         } else if (itemId == R.string.title_search_sender) {
                             long[] ids = getSelection();
@@ -5179,6 +5244,17 @@ public class FragmentMessages extends FragmentBase
         fragment.setArguments(args);
         fragment.setTargetFragment(FragmentMessages.this, REQUEST_MESSAGES_MOVE);
         fragment.show(getParentFragmentManager(), "messages:move");
+    }
+
+    private void onActionManageKeywords(boolean clear) {
+        Bundle args = new Bundle();
+        args.putLongArray("ids", getSelection());
+
+        FragmentDialogKeywordManage fragment = new FragmentDialogKeywordManage();
+        fragment.setArguments(args);
+        if (clear)
+            fragment.setTargetFragment(FragmentMessages.this, REQUEST_DESELECT);
+        fragment.show(getParentFragmentManager(), "keyword:manage");
     }
 
     private void onActionMoveSelection(Bundle args) {
@@ -7279,6 +7355,7 @@ public class FragmentMessages extends FragmentBase
                         boolean more_trash = prefs.getBoolean("more_trash", true);
                         boolean more_delete = prefs.getBoolean("more_delete", false);
                         boolean more_move = prefs.getBoolean("more_move", true);
+                        boolean more_keywords = prefs.getBoolean("more_keywords", false);
 
                         boolean inTrash = EntityFolder.TRASH.equals(type);
                         boolean inJunk = EntityFolder.JUNK.equals(type);
@@ -7313,6 +7390,10 @@ public class FragmentMessages extends FragmentBase
 
                         boolean inbox = ((more_inbox || (more_junk && inJunk)) && count < FragmentDialogQuickActions.MAX_QUICK_ACTIONS && result.canInbox());
                         if (inbox)
+                            count++;
+
+                        boolean keywords = (more_keywords && count < FragmentDialogQuickActions.MAX_QUICK_ACTIONS && !result.hasPop && result.hasImap);
+                        if (keywords)
                             count++;
 
                         boolean importance_high = (more_importance_high && count < FragmentDialogQuickActions.MAX_QUICK_ACTIONS &&
@@ -7386,6 +7467,7 @@ public class FragmentMessages extends FragmentBase
                         ibDelete.setVisibility(delete ? View.VISIBLE : View.GONE);
                         ibJunk.setVisibility(junk ? View.VISIBLE : View.GONE);
                         ibInbox.setVisibility(inbox ? View.VISIBLE : View.GONE);
+                        ibKeywords.setVisibility(keywords ? View.VISIBLE : View.GONE);
                         cardMore.setTag(fabMore.isOrWillBeShown() ? result : null);
                         cardMore.setVisibility(fabMore.isOrWillBeShown() ? View.VISIBLE : View.GONE);
                     }
@@ -8151,10 +8233,14 @@ public class FragmentMessages extends FragmentBase
                                 db.message().setMessageUiIgnored(message.id, true);
                         }
 
-                        if (account.protocol != EntityAccount.TYPE_IMAP || message.uid != null) {
-                            if (account.auto_seen)
+                        if (account.auto_seen)
+                            if (account.protocol != EntityAccount.TYPE_IMAP || message.uid != null)
                                 EntityOperation.queue(context, message, EntityOperation.SEEN, true);
-                        }
+                            else if (false)
+                                for (EntityMessage similar : db.message().getMessagesBySimilarity(message.account, message.id, message.msgid, message.hash)) {
+                                    db.message().setMessageSeen(similar.id, true);
+                                    db.message().setMessageUiSeen(similar.id, true);
+                                }
                     }
 
                     if (account.protocol != EntityAccount.TYPE_IMAP || message.uid != null) {
@@ -9412,6 +9498,10 @@ public class FragmentMessages extends FragmentBase
                 case REQUEST_ANSWER_SETTINGS:
                     if (resultCode == RESULT_OK)
                         updateAnswerIcon();
+                    break;
+                case REQUEST_DESELECT:
+                    if (selectionTracker != null)
+                        selectionTracker.clearSelection();
                     break;
             }
         } catch (Throwable ex) {
@@ -11436,6 +11526,7 @@ public class FragmentMessages extends FragmentBase
     private class ReplyData {
         List<TupleIdentityEx> identities;
         List<EntityAnswer> answers;
+        List<InternetAddress> forwarded;
     }
 
     private static class MoreResult {

@@ -19,8 +19,8 @@ mil.ac
 org.ac
 
 // ad : https://www.iana.org/domains/root/db/ad.html
+// Confirmed by Amadeu Abril i Abril (CORE) <amadeu.abril@corenic.org> 2024-11-17
 ad
-nom.ad
 
 // ae : https://tdra.gov.ae/en/aeda/ae-policies
 ae
@@ -234,6 +234,7 @@ sth.ac.at
 
 // au : https://www.iana.org/domains/root/db/au.html
 // http://www.auda.org.au/
+// Confirmed by registry <general@auda.org.au> 2024-11-17
 au
 // 2LDs
 com.au
@@ -244,7 +245,6 @@ gov.au
 asn.au
 id.au
 // Historic 2LDs (closed to new registration, but sites still exist)
-info.au
 conf.au
 oz.au
 // CGDNs - http://www.cgdn.org.au/
@@ -698,6 +698,7 @@ of.by
 // bz : https://www.iana.org/domains/root/db/bz.html
 // http://www.belizenic.bz/
 bz
+co.bz
 com.bz
 net.bz
 org.bz
@@ -1463,14 +1464,8 @@ sch.ir
 ايران.ir
 
 // is : http://www.isnic.is/domain/rules.php
-// Confirmed by registry <marius@isgate.is> 2008-12-06
+// Confirmed by registry <marius@isgate.is> 2024-11-17
 is
-net.is
-com.is
-edu.is
-gov.is
-org.is
-int.is
 
 // it : https://www.iana.org/domains/root/db/it.html
 it
@@ -12650,10 +12645,6 @@ jozi.biz
 // Submitted by Norbert Auler <mail@dnshome.de>
 dnshome.de
 
-// dnstrace.pro : https://dnstrace.pro/
-// Submitted by Chris Partridge <chris@partridge.tech>
-bci.dnstrace.pro
-
 // DotArai : https://www.dotarai.com/
 // Submitted by Atsadawat Netcharadsang <atsadawat@dotarai.co.th>
 online.th
@@ -13009,11 +13000,6 @@ easypanel.host
 // EasyWP : https://www.easywp.com
 // Submitted by <infracloudteam@namecheap.com>
 *.ewp.live
-
-// ECG Robotics, Inc : https://ecgrobotics.org
-// Submitted by <frc1533@ecgrobotics.org>
-onred.one
-staging.onred.one
 
 // eDirect Corp. : https://hosting.url.com.tw/
 // Submitted by C.S. chang <cschang@corp.url.com.tw>
@@ -13392,11 +13378,10 @@ gentlentapis.com
 lab.ms
 cdn-edges.net
 
-// Getlocalcert: https://www.getlocalcert.net
-// Submitted by Robert Alexander <support@getlocalcert.net>
+// GetLocalCert : https://getlocalcert.net
+// Submitted by William Harrison <psl@getlocalcert.net>
 localcert.net
 localhostcert.net
-corpnet.work
 
 // GignoSystemJapan: http://gsj.bz
 // Submitted by GignoSystemJapan <kakutou-ec@gsj.bz>
@@ -13685,7 +13670,6 @@ häkkinen.fi
 
 // Harrison Network : https://hrsn.net
 // Submitted by William Harrison <psl@hrsn.net>
-wdh.app
 hrsn.dev
 
 // Hashbang : https://hashbang.sh
@@ -13706,8 +13690,9 @@ hatenadiary.jp
 hatenadiary.org
 
 // Heilbronn University of Applied Sciences - Faculty Informatics (GitLab Pages): https://www.hs-heilbronn.de
-// Submitted by Richard Zowalla <mi-admin@hs-heilbronn.de>
+// Submitted by Richard Zowalla <it-admin@hs-heilbronn.de>
 pages.it.hs-heilbronn.de
+pages-research.it.hs-heilbronn.de
 
 // HeiyuSpace: https://lazycat.cloud
 // Submitted by Xia Bin <admin@lazycat.cloud>
@@ -13726,6 +13711,11 @@ hepforge.org
 // Submitted by Tom Maher <tmaher@heroku.com>
 herokuapp.com
 herokussl.com
+
+// Heyflow : https://www.heyflow.com
+// Submitted by Mirko Nitschke <tech@heyflow.com>
+heyflow.page
+heyflow.site
 
 // Hibernating Rhinos
 // Submitted by Oren Eini <oren@ravendb.net>
@@ -14117,6 +14107,15 @@ ggff.net
 // Localcert : https://localcert.dev
 // Submitted by Lann Martin <security@localcert.dev>
 *.user.localcert.dev
+
+// Lodz University of Technology LODMAN regional domains https://www.man.lodz.pl/dns
+// Submitted by Piotr Wilk <dns@man.lodz.pl>
+lodz.pl
+pabianice.pl
+plock.pl
+sieradz.pl
+skierniewice.pl
+zgierz.pl
 
 // Log'in Line : https://www.loginline.com/
 // Submitted by Rémi Mach <remi.mach@loginline.com>
@@ -15636,6 +15635,10 @@ pages.wiardweb.com
 toolforge.org
 wmcloud.org
 wmflabs.org
+
+// William Harrison : https://wdh.gg
+// Submitted by William Harrison <william@harrison.id.au>
+wdh.app
 
 // WISP : https://wisp.gg
 // Submitted by Stepan Fedotov <stepan@wisp.gg>

@@ -430,6 +430,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(203) Where is my sent message?](#faq203)
 * [(204) How do I use Gemini?](#faq204)
 * [(205) How do I check the integrity of an APK file?](#faq205)
+* [(206) How can I move or copy messages from one account to another?](#faq206)
 
 [I have another question.](#get-support)
 
@@ -1278,6 +1279,10 @@ Using the search index is a pro feature.
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq14)
 
 <br />
+
+In the case of the error '*User is authenticated but not connected*', please see [this FAQ](#faq139).
+
+<br>
 
 >
 > **IMPORTANT: If you came here via a warning in the app, you MUST take action!**
@@ -4267,6 +4272,13 @@ See [this FAQ](#faq71)
 
 <br />
 
+*Fast forward to (1.2226+)*
+
+Show (fast) *Forward to* in the answer menu, with addresses recently used for forwarding messages (if any).
+You can show the answer menu by tapping on the answer button at the bottom right of an opened/expanded message.
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my smartwatch?**
 
@@ -4451,7 +4463,7 @@ or by multiple selecting messages in the message list.
 
 Alternatively, you can disable AUTO EXPUNGE, which will result in marking messages being deleted on the server (by setting the *deleted* flag), but not expunging (deleting) them.
 You can find this option in the debug panel, which can be shown by (temporarily) enabling debug mode in the miscellaneous settings.
-Note that with AUTO EXPUNGE enabled, all messages in all folders of all accounts will remain on the email server (with the deleted flag set),
+Note that with AUTO EXPUNGE disabled, all messages in all folders of all accounts will remain on the email server (with the deleted flag set),
 also in the draft-messages folder and when emptying the trash-messages or spam-messages folder.
 You'll need to manually perform the EXPUNGE command, which you can do by long pressing on a folder, or via the three-dots overflow menu of a messages list.
 
@@ -4530,6 +4542,22 @@ Note that FairEmail does support replying to calendar invites (a pro feature) an
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq139)
 
 The confusing Microsoft specific server error *User is authenticated but not connected* might occur if:
+
+**Consumer Outlook/Hotmail/Live account**
+
+* IMAP is disabled, which is the default for new Outlook accounts now
+
+To fix this:
+
+* Go to the [Outlook website](https://outlook.live.com/)
+* Tap on the settings wheel at the top right
+* Select '*Mail*'
+* Select '*Forwarding and IMAP*'
+* In the section '*POP and IMAP*' enable '*Let devices and apps use IMAP*'
+
+<br>
+
+**Corporate, education, etc. account**
 
 * External access is administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules) about how an administrator can enable it again
 * Access by third-party apps is administratively disabled or allowed for specific apps only
@@ -5023,7 +5051,7 @@ because both email servers and not all people can handle this, risking unexpecte
 A complicating factor is that not all email servers support [UID EXPUNGE](https://tools.ietf.org/html/rfc4315).
 
 Since version 1.1485 it is possible to temporarily enable debug mode in the miscellaneous settings to disable auto expunging messages.
-Note that messages with a *\Deleted* flag will not be shown if auto EXPUNGE is enabled.
+Note that messages with a *\Deleted* flag will not be shown if AUTO EXPUNGE is enabled.
 
 In the debug panel, it is also possible to disable permanent delete confirmation and enable permanent delete from notifications (since version 1.2163).
 
@@ -5292,7 +5320,8 @@ There are no commands to access any other folder.
 
 Creating a local folder only and storing messages on your device only is a bad idea
 because losing or breaking your device would mean losing your messages.
-Therefore this isn't supportable.
+Imagine you've put a lot of time organizing your messages, and you need to reinstall the app on another device, only to discover all the work you did was a waste of time.
+Therefore, this isn't supportable.
 
 Please note that FairEmail doesn't store a copy of your messages in the cloud for privacy reasons.
 
@@ -5302,6 +5331,14 @@ so that there is always a copy of the messages on the email server.
 You could register, for example, a Gmail account, and configure Gmail to import messages from a POP3 account,
 automatically label them (=put them in a folder), and configure the Gmail account in FairEmail.
 Please [see here](https://support.google.com/mail/answer/21289?hl=en&co=GENIE.Platform%3DDesktop) for instructions.
+
+If you are concerned about deleting messages, with IMAP messages are moved to the trash messages folder first, which means that deleted messages can be restored.
+You can also hide instead of delete messages, please [see this FAQ](#faq134).
+
+Some people believe POP3 is safer than IMAP, but security wise, there is no difference between POP3 and IMAP.
+The connection to the email server is always encrypted, and the account is protected by a password in both cases.
+
+If your email provider only offers POP3 access, tell them the POP3 protocol is 40+ years old ([defined in 1984](https://datatracker.ietf.org/doc/html/rfc918)).
 
 <br />
 
@@ -6152,6 +6189,18 @@ gh attestation verify xyz.apk -R M66B/FairEmail
 ```
 
 Attestation of APK files is available from version 1.2209.
+
+<br>
+
+<a name="faq206"></a>
+**(206) How can I move or copy messages from one account to another?**
+
+There are two options for this:
+
+1. Long press a message in the message list to select it, tap the three-dot button that appears, scroll to the bottom of the pop-up menu and select the target account.
+2. Long press the move-to button just above the message text to select the target account first.
+
+To copy a message to another account, long press the target folder.
 
 <br>
 

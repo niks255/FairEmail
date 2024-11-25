@@ -207,12 +207,14 @@
     <string name="title_setup_oauth_updated">Обновено упълномощаване на акаунта</string>
     <string name="title_setup_oauth_edge">Употребявайки браузъра Edge, уверете се, че е изключено \'Блокиране на отваряне във външни приложения\' от настройките при \'Поверителност, сигурност и услуги\'</string>
     <string name="title_setup_oauth_brave">Употребявайки браузъра Brave, трябва да включите възможността в настройките му да позволите на връзките в приложението да се отварят в приложения извън Brave</string>
+    <string name="title_setup_oauth_browser">Упълномощаването изисква работещ браузър, позволяващ отваряне на връзки (често настройката за сигурност), така че накрая маркерът за упълномощаване да може да бъде прехвърлен към приложението</string>
     <string name="title_setup_oauth_authorize">Упълномощявам</string>
     <string name="title_setup_select_account">Избор на акаунт</string>
     <string name="title_setup_instructions">Указания за настройка</string>
     <string name="title_setup_no_settings">Няма намерени настройки за домейна %1$s</string>
     <string name="title_setup_no_settings_hint">Опитайте ръчна настройка на акаунта, употребявайки настройките, предоставени от доставчика на имейла ви</string>
     <string name="title_setup_no_auth_hint">Проверете дваж своите имейл адрес и парола и се уверете, че външен достъп (IMAP/SMTP) е включен за акаунта ви</string>
+    <string name="title_setup_no_auth_outlook">Трябва да употребявате вълшебника за бърза настройка на Outlook / Office 365 за този акаунт (изисква се от Microsoft)</string>
     <string name="title_setup_app_password_hint">Доставчикът изисква парола за приложение вместо паролата за акаунта, проверете указанията на доставчика си</string>
     <string name="title_setup_no_inbox">Не е намерена входяща кутия</string>
     <string name="title_setup_advanced_protection">Участвайки в програмата за разширена защита, не е възможно да използвате имейл приложение на трета страна. Това ограничение е наложено от Google.</string>
@@ -494,6 +496,7 @@
     <string name="title_advanced_close_pane">Свиване на реда или колоната при затваряне на разговора</string>
     <string name="title_advanced_column_width">Ширина на колоната на съобщението / височина на реда: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Скриване на връхната лента с инструменти, превъртайки съобщения</string>
+    <string name="title_advanced_edge_to_edge">Употреба на фоновия цвят на приложението за навигационния панел на Android</string>
     <string name="title_advanced_nav_options">Показване на възможности на менюто за навигиране</string>
     <string name="title_advanced_nav_categories">Показване на категориите на акаунта в менюто за навигация</string>
     <string name="title_advanced_nav_pin">Закачане на менюто за навигиране</string>
@@ -1235,6 +1238,7 @@
     <string name="title_unimportant">Неважно</string>
     <string name="title_search_in_text">Търсене в текст &#8230;</string>
     <string name="title_forward">Препрати</string>
+    <string name="title_forward_to">Препращане до</string>
     <string name="title_resend">Изпращане пак</string>
     <string name="title_fetching_headers">Изтегляне на заглавките на съобщението&#8230;</string>
     <string name="title_new_message">Ново съобщение</string>
@@ -1691,6 +1695,7 @@
     <string name="title_edit_signature_image_hint">        Изпращайки съобщение, образът се копира в него от избраното местоположение.
         Затова не трийте файлът с образа!
     </string>
+    <string name="title_edit_signature_delete">Изтривате ли подписа?</string>
     <string name="title_answer_define_name">Име</string>
     <string name="title_answer_define_value">Стойност</string>
     <string name="title_answer_caption">Промяна на образец</string>
@@ -2306,8 +2311,8 @@
         <item>7,5 с</item>
         <item>10 с</item>
         <item>15 с</item>
-        <item>30 s</item>
-        <item>60 s</item>
+        <item>30 сек.</item>
+        <item>60 сек.</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Курсив</item>

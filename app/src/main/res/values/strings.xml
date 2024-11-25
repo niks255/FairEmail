@@ -254,6 +254,11 @@
     <string name="title_setup_office_auth">The error \'AUTHENTICATE failed\' can be caused by IMAP/SMTP being disabled by the system administrator</string>
     <string name="title_setup_office_auth_5_7_3">Please try the \'Other provider\' quick setup wizard.</string>
     <string name="title_setup_office_auth_5_7_139">Please try the \'Outlook/Hotmail/Live\' quick setup wizard.</string>
+    <string name="title_setup_office_not_connected">
+        The error \'User is authenticated but not connected\' mostly means that IMAP is disabled.
+        In the case of a consumer Outlook account, please go to the Outlook website, tap on the settings wheel at the top right, select \'Mail\', select \'Forwarding and IMAP\', and in the section \'POP and IMAP\' enable \'Let devices and apps use IMAP\'.
+        In the case of a corporate, education, etc. account, please contact the system administrator of the email server.
+    </string>
     <string name="title_setup_oauth_rationale">Authorize access to your %1$s account</string>
     <string name="title_setup_oauth_update">Authorize an existing account again (otherwise create a new account)</string>
     <string name="title_setup_oauth_updated">Account authorization was updated</string>
@@ -1533,6 +1538,7 @@
     <string name="title_unimportant">Unimportant</string>
     <string name="title_search_in_text">Search in text &#8230;</string>
     <string name="title_forward">Forward</string>
+    <string name="title_forward_to">Forward to</string>
     <string name="title_resend">Resend</string>
     <string name="title_fetching_headers">Downloading message headers &#8230;</string>
     <string name="title_new_message">New message</string>
@@ -2420,7 +2426,7 @@
     <string name="title_fetching_again">Fetching message again from the server</string>
     <string name="title_go_back">Go back</string>
     <string name="title_global_default">Use global default</string>
-    <string name="title_not_existing">This message no longer exists on the mail server</string>
+    <string name="title_not_existing">This message no longer exists on the email server</string>
 
     <string name="title_conversation_actions">Actions</string>
     <string name="title_conversation_action_reply">Reply with: \'%1$s\'</string>

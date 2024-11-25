@@ -201,6 +201,9 @@
     <string name="title_setup_office_auth">Az \'AUTHENTICATE failed\' hibának oka lehet hogy a rendszeradminisztrátor kikapcsolta az IMAP/SMTP-t</string>
     <string name="title_setup_office_auth_5_7_3">Kérem próbálja meg az \"Egyéb szolgáltató\" gyorsbeállítás varázslót.</string>
     <string name="title_setup_office_auth_5_7_139">Kérem, próbálja meg az \"Outlook/Hotmail/Live\" gyorsbeállítás varázslót.</string>
+    <string name="title_setup_office_not_connected">        A  \'User is authenticated but not connected\' többnyire azt jelenti, hogy az IMAP ki van kapcsolva.
+        Magánszemélyként használt Outlook fiók esetén, nyissa meg az Outlook weboldalt, kattintson a Beállításokra a jobb felső sarokban, válassza a \"Levelezés\", majd a \"Továbbítás és IMAP\" menüpontot, és a \"POP és IMAP\" résznél kattintson az \"Engedélyezze az eszközök és alkalmazások számára az IMAP használatát\" pontra.
+       Vállalati, oktatási, stb. fiók esetén, kérem a levelezőszerver rendszergazdájával vegye fel a kapcsolatot.    </string>
     <string name="title_setup_oauth_rationale">Engedélyezze a hozzáférést a %1$s fiókjához</string>
     <string name="title_setup_oauth_update">Ismételt bejelentkezés egy már meglevő fiókba (vagy új fiók létrehozása)</string>
     <string name="title_setup_oauth_updated">A fiókhitelesítés frissült</string>
@@ -213,7 +216,7 @@
     <string name="title_setup_no_settings">Nem találhatók beállítások a következő domainhez: %1$s</string>
     <string name="title_setup_no_settings_hint">Próbálj meg beállítani egy fiókot kézileg az e-mail szolgáltatód által megadott adatokkal</string>
     <string name="title_setup_no_auth_hint">Ellenőrizze az email címét és jelszavát, illetve bizonyosodjon meg róla hogy a fiókja elérhető SMTP/IMAP protokollokon keresztül</string>
-    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">Ehhez a fiókhoz az Outlook / Office 365 gyorsbeállítás varázslót kell használnia (a Microsoft megköveteli)</string>
+    <string name="title_setup_no_auth_outlook">Ehhez a fiókhoz az Outlook / Office 365 gyorsbeállítás varázslót kell használnia (a Microsoft megköveteli)</string>
     <string name="title_setup_app_password_hint">Ez a szolgáltó alkalmazásjelszót igényel a fiók jelszava helyett, kérlek ellenőrizd a szolgáltatód instrukcióit</string>
     <string name="title_setup_no_inbox">Bejövő mappa nem található</string>
     <string name="title_setup_advanced_protection">Az \"Advanced Protection\" programban részt vevők fiókjaihoz való hozzáférést a Google letiltotta minden harmadik féltől származó app számára.</string>
@@ -1235,6 +1238,7 @@
     <string name="title_unimportant">Nem fontos</string>
     <string name="title_search_in_text">Keresés a szövegben &#8230;</string>
     <string name="title_forward">Továbbítás</string>
+    <string name="title_forward_to">Továbbítás neki...</string>
     <string name="title_resend">Újraküldés</string>
     <string name="title_fetching_headers">Üzenetfejlécek letöltése &#8230;</string>
     <string name="title_new_message">Új üzenet</string>

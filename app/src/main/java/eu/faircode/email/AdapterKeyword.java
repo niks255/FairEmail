@@ -55,7 +55,7 @@ public class AdapterKeyword extends RecyclerView.Adapter<AdapterKeyword.ViewHold
     private LayoutInflater inflater;
     private SharedPreferences prefs;
 
-    private long id;
+    private long[] ids;
     private List<TupleKeyword> all = new ArrayList<>();
 
     public class ViewHolder extends RecyclerView.ViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
@@ -98,6 +98,10 @@ public class AdapterKeyword extends RecyclerView.Adapter<AdapterKeyword.ViewHold
         private void bindTo(TupleKeyword keyword) {
             cbKeyword.setText(getTitle(keyword.name));
             cbKeyword.setChecked(keyword.selected);
+            if (keyword.partial)
+                cbKeyword.setButtonDrawable(R.drawable.ic_indeterminate);
+            else
+                cbKeyword.setButtonDrawable(keyword.selected ? R.drawable.ic_checked : R.drawable.ic_unchecked);
             btnColor.setColor(keyword.color, true);
             grpNotEdit.setVisibility(View.VISIBLE);
             grpEdit.setVisibility(View.GONE);
@@ -111,26 +115,36 @@ public class AdapterKeyword extends RecyclerView.Adapter<AdapterKeyword.ViewHold
 
             TupleKeyword keyword = all.get(pos);
             keyword.selected = isChecked;
+            cbKeyword.setButtonDrawable(keyword.selected ? R.drawable.ic_checked : R.drawable.ic_unchecked);
 
             Bundle args = new Bundle();
-            args.putLong("id", id);
+            args.putLongArray("ids", ids);
             args.putString("name", keyword.name);
             args.putBoolean("set", keyword.selected);
 
             new SimpleTask<Void>() {
                 @Override
                 protected Void onExecute(Context context, Bundle args) {
-                    long id = args.getLong("id");
+                    long[] ids = args.getLongArray("ids");
                     String name = args.getString("name");
                     boolean set = args.getBoolean("set");
 
                     DB db = DB.getInstance(context);
 
-                    EntityMessage message = db.message().getMessage(id);
-                    if (message == null)
-                        return null;
+                    try {
+                        db.beginTransaction();
 
-                    EntityOperation.queue(context, message, EntityOperation.KEYWORD, name, set);
+                        if (ids != null)
+                            for (long id : ids) {
+                                EntityMessage message = db.message().getMessage(id);
+                                if (message != null)
+                                    EntityOperation.queue(context, message, EntityOperation.KEYWORD, name, set);
+                            }
+
+                        db.setTransactionSuccessful();
+                    } finally {
+                        db.endTransaction();
+                    }
 
                     return null;
                 }
@@ -245,12 +259,12 @@ public class AdapterKeyword extends RecyclerView.Adapter<AdapterKeyword.ViewHold
         setHasStableIds(false);
     }
 
-    public void set(long id, @NonNull List<TupleKeyword> keywords) {
-        Log.i("Set id=" + id + " keywords=" + keywords.size());
+    public void set(long[] ids, @NonNull List<TupleKeyword> keywords) {
+        Log.i("Set ids=" + ids.length + " keywords=" + keywords.size());
 
         DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffCallback(all, keywords), false);
 
-        this.id = id;
+        this.ids = ids;
         this.all = keywords;
 
         diff.dispatchUpdatesTo(new ListUpdateCallback() {

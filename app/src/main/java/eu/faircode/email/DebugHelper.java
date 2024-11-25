@@ -624,6 +624,11 @@ public class DebugHelper {
             try (OutputStream os = new BufferedOutputStream(new FileOutputStream(file))) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
+                for (String key : new String[]{"confirm_images", "ask_images", "confirm_html", "ask_html"})
+                    size += write(os, String.format("%s=%b\r\n", key, prefs.getBoolean(key, true)));
+
+                size += write(os, "\r\n");
+
                 Map<String, ?> settings = prefs.getAll();
                 List<String> keys = new ArrayList<>(settings.keySet());
                 Collections.sort(keys);
@@ -1467,6 +1472,13 @@ public class DebugHelper {
                     options.append("\r\n");
                     size += write(os, options.toString());
                 }
+
+                List<EntityAccount> accounts = db.account().getAccounts();
+                for (EntityAccount account : accounts) {
+                    size += write(os, String.format("%d %s notify=%b\r\n",
+                            account.id, account.name, account.notify));
+                }
+                size += write(os, "\r\n");
 
                 for (NotificationChannel channel : nm.getNotificationChannels())
                     try {

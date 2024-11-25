@@ -26,6 +26,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
+import androidx.room.Ignore;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import java.util.Objects;
 public class TupleKeyword {
     public String name;
     public boolean selected;
+    public boolean partial;
     public Integer color;
 
     @Override
@@ -54,7 +56,18 @@ public class TupleKeyword {
 
     public static class Persisted {
         public String[] selected;
+        @Ignore
+        public String[] all_selected;
         public String[] available;
+
+        public Persisted() {
+        }
+
+        public Persisted(List<String> selected, List<String> all, List<String> available) {
+            this.selected = selected.toArray(new String[0]);
+            this.all_selected = all.toArray(new String[0]);
+            this.available = available.toArray(new String[0]);
+        }
     }
 
     static List<TupleKeyword> from(Context context, Persisted data) {
@@ -66,9 +79,10 @@ public class TupleKeyword {
         List<TupleKeyword> result = new ArrayList<>();
 
         List<String> all = new ArrayList<>();
-        List<String> selected = Arrays.asList(data.selected);
+        List<String> some = Arrays.asList(data.selected);
+        List<String> selected = Arrays.asList(data.all_selected == null ? data.selected : data.all_selected);
 
-        for (String keyword : data.selected)
+        for (String keyword : selected)
             if (!all.contains(keyword))
                 all.add(keyword);
 
@@ -77,6 +91,12 @@ public class TupleKeyword {
                 all.add(keyword);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        String global = prefs.getString("global_keywords", null);
+        if (global != null)
+            for (String kw : global.split(" "))
+                if (!all.contains(kw))
+                    all.add(kw);
 
         final Collator collator = Collator.getInstance(Locale.getDefault());
         collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
@@ -94,6 +114,7 @@ public class TupleKeyword {
             TupleKeyword k = new TupleKeyword();
             k.name = keyword;
             k.selected = selected.contains(keyword);
+            k.partial = (k.selected && !some.contains(keyword));
 
             String c1 = "kwcolor." + keyword;
             String c2 = "keyword." + keyword; // legacy

@@ -2823,7 +2823,7 @@ public class HtmlHelper {
         d.body().select("div#Signature").select("[data-lt-sig-active]").remove();
 
         // Outlook/mobile <div id="ms-outlook-mobile-signature" dir="auto">
-        d.body().select("div#ms-outlook-mobile-signature").remove();
+        //d.body().select("div#ms-outlook-mobile-signature").remove();
 
         // Yahoo/Android: <div id="ymail_android_signature">
         //d.body().select("div#`ymail_android_signature").remove();
@@ -4199,7 +4199,8 @@ public class HtmlHelper {
     }
 
     static Spanned fromHtml(@NonNull String html, Context context) {
-        Document document = JsoupEx.parse(html);
+        Document parsed = JsoupEx.parse(html);
+        Document document = sanitizeView(context, parsed, false);
         return fromDocument(context, document, null, null);
     }
 

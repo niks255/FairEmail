@@ -188,6 +188,10 @@
     <string name="title_setup_office_auth">“认证失败”的错误可能是由于 IMAP/SMTP 被系统管理员禁用导致的</string>
     <string name="title_setup_office_auth_5_7_3">请尝试\'其他提供商\'快速设置向导。</string>
     <string name="title_setup_office_auth_5_7_139">请尝试“Outlook/Hotmail/Live”快速设置向导。</string>
+    <string name="title_setup_office_not_connected">        错误信息 \'User is authenticated but not connected\' 主要表示禁用了 IMAP。
+        如果是消费者 Outlook 账户，请前往 Outlook 网站， 点按右上角的设置齿轮，选择 \'邮件\' ，选择 ‘转发和IMAP\'，在 \'POP 和 IMAP\' 部分启用\'让设备和应用启用IMAP\'。
+        如果是企业、教育账户，请联系电子邮件服务器的系统管理员。
+    </string>
     <string name="title_setup_oauth_rationale">授权访问您的 %1$s 账户</string>
     <string name="title_setup_oauth_update">重新授权现有账户（否则请新建账户）</string>
     <string name="title_setup_oauth_updated">账户授权已更新</string>
@@ -200,7 +204,7 @@
     <string name="title_setup_no_settings">找不到域名\"%1$s\"的设置</string>
     <string name="title_setup_no_settings_hint">尝试使用电子邮件供应商提供的设置手动设置一个帐户</string>
     <string name="title_setup_no_auth_hint">请仔细检查您的电子邮件地址和密码，并确保您的账户启用外部访问 (IMAP/SMTP)</string>
-    <string name="title_setup_no_auth_outlook" comment="title_setup_no_auth_outlook&#10;Remark for when using the &quot;other provider&quot; wizard to configure an Outlook / Office 365 account.">此账户您必须使用 Outlook / Office 365 快速设置向导 (微软要求)</string>
+    <string name="title_setup_no_auth_outlook">此账户您必须使用 Outlook / Office 365 快速设置向导 (微软要求)</string>
     <string name="title_setup_app_password_hint">此供应商需要应用密码而不是帐户密码，请查看供应商的说明</string>
     <string name="title_setup_no_inbox">未找到收件箱</string>
     <string name="title_setup_advanced_protection">当加入了高级保护程序后，将无法使用第三方电子邮件APP, 这是 Google 强加的限制</string>
@@ -1222,6 +1226,7 @@
     <string name="title_unimportant">不重要</string>
     <string name="title_search_in_text">在文本中搜索 &#8230;</string>
     <string name="title_forward">转发</string>
+    <string name="title_forward_to">转发给</string>
     <string name="title_resend">重新发送</string>
     <string name="title_fetching_headers">正在下载邮件标头 &#8230;</string>
     <string name="title_new_message">新邮件</string>
@@ -2291,7 +2296,7 @@
         <item>7.5 秒</item>
         <item>10 秒</item>
         <item>15 秒</item>
-        <item>30秒</item>
+        <item>30 秒</item>
         <item>60 秒</item>
     </string-array>
     <string-array name="fontNameNames">

@@ -338,6 +338,17 @@ public interface DaoMessage {
             " ORDER BY message.received DESC")
     List<Long> getMessageIdsByFolder(Long folder);
 
+    @Query("SELECT `to` FROM message" +
+            " JOIN folder_view AS folder ON folder.id = message.folder" +
+            " WHERE message.account = :account" +
+            " AND folder.type = '" + EntityFolder.SENT + "'" +
+            " AND message.sent > :after" +
+            " AND message.wasforwardedfrom IS NOT NULL" +
+            " GROUP BY `to`" +
+            " ORDER BY COUNT(*) DESC" +
+            " LIMIT 20")
+    List<String> getForwardAddresses(long account, long after);
+
     @Query("SELECT identity, COUNT(*) AS count" +
             " FROM message" +
             " WHERE folder = :folder" +
@@ -374,7 +385,7 @@ public interface DaoMessage {
             " AND (:folder IS NULL OR folder = :folder)" +
             " AND (NOT :unseen OR NOT ui_seen)" +
             " AND (NOT :flagged OR ui_flagged)" +
-            " AND (NOT :hidden OR NOT ui_snoozed IS NULL)" +
+            " AND (NOT :hidden OR NOT ui_snoozed IS NULL OR ui_unsnoozed)" +
             " AND (NOT :encrypted OR ui_encrypt > 0)" +
             " AND (NOT :with_attachments OR attachments > 0)" +
             " AND (NOT :with_notes OR NOT `notes` IS NULL)" +
@@ -548,11 +559,16 @@ public interface DaoMessage {
     @Query(FETCH_MESSAGE)
     TupleMessageEx getMessageEx(long id);
 
-    @Query("SELECT message.keywords AS selected, folder.keywords AS available" +
+    String FETCH_KEYWORDS = "SELECT message.keywords AS selected, folder.keywords AS available" +
             " FROM message" +
             " JOIN folder ON folder.id = message.folder" +
-            " WHERE message.id = :id")
+            " WHERE message.id = :id";
+
+    @Query(FETCH_KEYWORDS)
     LiveData<TupleKeyword.Persisted> liveMessageKeywords(long id);
+
+    @Query(FETCH_KEYWORDS)
+    TupleKeyword.Persisted getMessageKeywords(long id);
 
     @Transaction
     @Query("SELECT message.*" +

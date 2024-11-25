@@ -4,6 +4,13 @@
 
 ### Notices
 
+Google requires FairEmail to undergo an annual [CASA](https://appdefensealliance.dev/casa) security audit,
+which must be conducted by an authorized assessor (this year [TAC Security](https://casa.tacsecurity.com/site/home)).
+Besides being time-consuming, this is no longer free as of this year.
+This is one of the reasons why the app cannot be completely free.
+
+<br>
+
 People keep asking me to add new, often exotic, features to the app, to whom I often say "no", and other people complain about too many features.
 Both groups of people leave bad reviews for this, which is frustrating, also because there are already enough bad reviews for the wrong reasons
 (email server problems, which unfortunately happen too often, etc.).
@@ -19,6 +26,39 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 <br>
 
 ### [Barsboldia](https://en.wikipedia.org/wiki/Barsboldia)
+
+### 1.2249 2024-11-20 *
+
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2248 2024-11-17
+
+* Fixed crash on removing privacy sensitive info from images (reverted to previous EXIF library)
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2247 2024-11-16
+
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2246 2024-11-13
+
+* Added fast *forward to*, see [the FAQ](https://m66b.github.io/FairEmail/#faq125)
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2245 2024-11-08
+
+* Added manage keywords for multiple selected messages
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
 
 ### 1.2244 2024-11-01
 
