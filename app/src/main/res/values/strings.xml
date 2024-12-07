@@ -1837,7 +1837,7 @@
     <string name="title_openai" translatable="false">OpenAI (ChatGPT)</string>
     <string name="title_translate_configure">Configure &#8230;</string>
     <string name="title_translate_key">Enter key</string>
-    <string name="title_translating">Translating &#8230;</string>
+    <string name="title_translating">Translating to %1$s &#8230;</string>
     <string name="title_translate_formal">Use formal form</string>
     <string name="title_translate_small">Use a small font for the source text</string>
     <string name="title_translate_replace">Replace source text by translated text</string>
@@ -2597,6 +2597,8 @@
 
     <string-array name="pollIntervalNames">
         <item>Always</item>
+        <item>Every minute</item>
+        <item>Every 2 minutes</item>
         <item>Every 5 minutes</item>
         <item>Every 10 minutes</item>
         <item>Every 15 minutes</item>
@@ -2610,6 +2612,8 @@
 
     <integer-array name="pollIntervalValues" translatable="false">
         <item>0</item>
+        <item>1</item>
+        <item>2</item>
         <item>5</item>
         <item>10</item>
         <item>15</item>

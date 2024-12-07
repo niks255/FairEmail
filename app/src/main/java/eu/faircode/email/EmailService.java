@@ -526,8 +526,14 @@ public class EmailService implements AutoCloseable {
                     Throwable cause = ex1.getCause();
                     if (cause == null)
                         Log.e(ex1);
-                    else
-                        Log.e(new Throwable(ex1.getMessage() + " error=" + cause.getMessage(), ex1));
+                    else {
+                        String msg = cause.getMessage();
+                        // AADSTS70000: The provided value for the input parameter 'refresh_token' or 'assertion' is not valid. Trace ID: <guid> Correlation ID: <guid> Timestamp: <date time>
+                        if (msg != null && msg.contains("AADSTS70000"))
+                            Log.i(new Throwable(ex1.getMessage() + " error=" + msg, ex1));
+                        else
+                            Log.e(new Throwable(ex1.getMessage() + " error=" + msg, ex1));
+                    }
 
                     String msg = ex.getMessage();
                     if (auth == AUTH_TYPE_GMAIL &&
@@ -882,6 +888,9 @@ public class EmailService implements AutoCloseable {
                 }
 
             // Verizon
+            // https://senders.yahooinc.com/developer/documentation/#imap-modes-limited
+            // https://www.ietf.org/archive/id/draft-melnikov-imap-uidonly-00.html
+            // https://answers.microsoft.com/en-us/outlook_com/forum/all/why-is-an-imap-inbox-only-displaying-10000-items/6d15de5f-9047-4b41-9b58-1d8345bbd002
             if (false && istore.hasCapability("X-UIDONLY") && istore.hasCapability("ENABLE"))
                 try {
                     istore.enable("X-UIDONLY");

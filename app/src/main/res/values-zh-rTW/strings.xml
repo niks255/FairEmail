@@ -1485,7 +1485,6 @@
     <string name="title_summarize">總結</string>
     <string name="title_translate_configure">配置 &#8230;</string>
     <string name="title_translate_key">輸入密鑰</string>
-    <string name="title_translating">正在翻譯 &#8230;</string>
     <string name="title_translate_formal">使用正式形式</string>
     <string name="title_translate_small">源文字採用小號字型</string>
     <string name="title_translate_replace">用翻譯後的文字取代原文</string>
@@ -2152,8 +2151,10 @@ FairEmail 會顯示一則小訊息提醒你這點，購買專業功能後該訊�
     <string name="title_accessibility_to">接收者</string>
     <string-array name="pollIntervalNames">
         <item>時時</item>
-        <item>每 5 分鐘</item>
-        <item>每 10 分鐘</item>
+        <item>Every minute</item>
+        <item>Every 2 minutes</item>
+        <item>Every 5 minutes</item>
+        <item>Every 10 minutes</item>
         <item>每 15 分鐘</item>
         <item>每 30 分鐘</item>
         <item>每 1 小時</item>

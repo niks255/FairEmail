@@ -7,7 +7,8 @@
 Google requires FairEmail to undergo an annual [CASA](https://appdefensealliance.dev/casa) security audit,
 which must be conducted by an authorized assessor (this year [TAC Security](https://casa.tacsecurity.com/site/home)).
 Besides being time-consuming, this is no longer free as of this year.
-This is one of the reasons why the app cannot be completely free.
+This is one of the reasons why the app cannot be completely free, meaning some features must be paid for in order to pay for an annual security audit.
+To be clear, nothing will be changed for now.
 
 <br>
 
@@ -26,6 +27,16 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 <br>
 
 ### [Barsboldia](https://en.wikipedia.org/wiki/Barsboldia)
+
+### 1.2250 2024-12-05
+
+* Fixed all reported bugs
+* Added long press folder - mark all read
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
 
 ### 1.2249 2024-11-20 *
 

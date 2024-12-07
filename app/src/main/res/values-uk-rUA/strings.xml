@@ -1537,7 +1537,7 @@
     <string name="title_summarize">Підсумувати</string>
     <string name="title_translate_configure">Налаштувати &#8230;</string>
     <string name="title_translate_key">Введіть ключ</string>
-    <string name="title_translating">Переклад &#8230;</string>
+    <string name="title_translating" comment="title_translating&#10;Translating to &lt;language&gt; ...&#10;Please leave the language marker (%1$s) in place as it is.">Переклад на: %1$s &#8230;</string>
     <string name="title_translate_formal">Використовувати формальний стиль</string>
     <string name="title_translate_small">Використовувати малий шрифт для початкового тексту</string>
     <string name="title_translate_replace">Замінити вихідний текст на перекладений текст</string>
@@ -2210,6 +2210,8 @@
     <string name="title_accessibility_to">Одержувач</string>
     <string-array name="pollIntervalNames">
         <item>Завжди</item>
+        <item>Кожної хвилини</item>
+        <item>Кожні 2 хвилини</item>
         <item>Кожні 5 хвилин</item>
         <item>Кожні 10 хвилин</item>
         <item>Кожні 15 хвилин</item>

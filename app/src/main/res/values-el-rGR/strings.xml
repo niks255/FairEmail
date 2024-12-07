@@ -1503,7 +1503,6 @@
     <string name="title_summarize">Σύνοψη</string>
     <string name="title_translate_configure">Ρύθμιση &#8230;</string>
     <string name="title_translate_key">Εισαγωγή κλειδιού</string>
-    <string name="title_translating">Μεταφράζεται &#8230;</string>
     <string name="title_translate_formal">Χρήση επίσημου ύφους</string>
     <string name="title_translate_small">Χρήση μιας μικρής γραμματοσειράς για το πηγαίο κείμενο</string>
     <string name="title_translate_replace">Αντικατάσταση πηγαίου κειμένου από μεταφρασμένο κείμενο</string>
@@ -2173,6 +2172,8 @@
     <string name="title_accessibility_to">Παραλήπτης</string>
     <string-array name="pollIntervalNames">
         <item>Πάντα</item>
+        <item>Κάθε λεπτό</item>
+        <item>Κάθε 2 λεπτά</item>
         <item>Κάθε 5 λεπτά</item>
         <item>Κάθε 10 λεπτά</item>
         <item>Κάθε 15 λεπτά</item>

@@ -101,6 +101,7 @@ Related questions:
 * Set a default CC or BCC address: (Main) Settings, tap Manual setup, tap Identities, tap identity, tap Advanced.
 * Add CC and BCC addresses: tap the people's icon at the end of the subject
 * Go to the next/previous message on archive/delete: in the behavior settings disable *Automatically close conversations* and select *Go to next/previous conversation* for *On closing a conversation*
+* Create a folder: tap the account name in the navigation menu (left side menu) and tap the button at the bottom right
 * Add a folder to the unified inbox: long press the folder in the folder list and tick *Show in unified inbox*
 * Add a folder to the navigation menu: long press the folder in the folder list and tick *Show in navigation menu*
 * Load more messages: long press a folder in the folder list, select *Fetch more messages*
@@ -4033,10 +4034,11 @@ Moreover, setting up an account/identity with the quick setup wizard is simple, 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq117)
 
 Firstly, a purchase will be available on all devices logged into the same Google account,
-*if* (this is important) the app is installed via the same Google account too.
+*if* (this is important!) the app is installed via the same Google account too.
 You can select the account in the Play store app by tapping on the avatar at the top right, but only *before* installing the app.
 It is not possible to change the linked Google account after the app has been installed.
 Google doesn't support moving a Play Store purchase from one to another account either.
+This means you have to reinstall the app if it was installed under a different Google account.
 
 Google manages all purchases, so as a developer I have little control over purchases.
 So, basically, the only thing I can do, is suggest some things:
@@ -4346,6 +4348,7 @@ You can reset asked questions via the three dots overflow menu in the miscellane
 **ProtonMail** uses a proprietary email protocol
 and [does not directly support IMAP](https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/),
 so you cannot use FairEmail or any other Android email client to access ProtonMail.
+Unfortunately, Proton has no plans to add [a mail bridge for Android](https://github.com/ProtonMail/proton-bridge/issues/427).
 
 **Tutanota** uses a proprietary email protocol
 and [does not support IMAP](https://tutanota.com/faq/#imap),
@@ -6008,7 +6011,6 @@ Note that the reference time is the time the message was first stored on the dev
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq197)
 
-
 You can print a message, both to a PDF or a printer, by tapping on the horizontal three-dots button just above the message text near the left side.
 You might need to tap on the '>' button to show the message actions again.
 
@@ -6016,6 +6018,7 @@ Note that you can configure a button for printing via the same pop-up menu.
 
 Printing is managed by Android for all apps. You should be able to select the paper size, etc.
 You might need to update or install a driver app for your printer via the Play Store.
+For example, for [HP printers](https://play.google.com/store/apps/details?id=com.hp.android.printservice).
 
 A message is printed as-is, which means that the sender of the message determines the margins, etc.
 

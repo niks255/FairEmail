@@ -202,6 +202,10 @@
     <string name="title_setup_office_auth">Vea \"AUTHENTICATE failed\" põhjuseks võib olla, et IMAP/SMTP on süsteemi administraatori poolt keelatud</string>
     <string name="title_setup_office_auth_5_7_3">Palun proovi kiirseadistamise võlurit \"Muu teenusepakkuja\".</string>
     <string name="title_setup_office_auth_5_7_139">Palun proovi \"Outlooki/Hotmaili/Live\" kiirseadistamise abilist.</string>
+    <string name="title_setup_office_not_connected">        Viga \'User is authenticated but not connected\' tähendab enamasti, et IMAP on välja lülitatud.
+        Kui tegu on tavakasutaja Outlooki kontoga, mine palun Outlooki veebilehele, toksa paremal üleval oleval seadete rattal, vali \'Mail\', vali \'Forwarding and IMAP\', ja sektsioonis \'POP and IMAP\' luba \'Let devices and apps use IMAP\' (luba seadmetel ja rakendustel kasutavad IMAPi).
+        Kui tegu on ettevõtte, kooli vms kontoga, võta palun ühendust meiliserveri süsteemiadministraatoriga.
+    </string>
     <string name="title_setup_oauth_rationale">Autoriseeri ligipääs %1$s kontole</string>
     <string name="title_setup_oauth_update">Autoriseeri uuesti olemasolev konto (muul juhul loo uus konto)</string>
     <string name="title_setup_oauth_updated">Konto autoriseering on uuendatud</string>
@@ -1500,7 +1504,6 @@
     <string name="title_summarize">Kokkuvõte</string>
     <string name="title_translate_configure">Häälestamine &#8230;</string>
     <string name="title_translate_key">Sisesta võti</string>
-    <string name="title_translating">Tõlkimine &#8230;</string>
     <string name="title_translate_formal">Kasuta ametlikku vormi</string>
     <string name="title_translate_small">Kasuta lähteteksti puhul väikest fonti</string>
     <string name="title_translate_replace">Asenda lähtetekst tõlgitud tekstiga</string>
@@ -2169,6 +2172,8 @@
     <string name="title_accessibility_to">Saaja</string>
     <string-array name="pollIntervalNames">
         <item>Pidevalt</item>
+        <item>Every minute</item>
+        <item>Every 2 minutes</item>
         <item>5 minuti tagant</item>
         <item>10 minuti tagant</item>
         <item>15 minuti tagant</item>

@@ -160,6 +160,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
     private static final int FETCH_YIELD_DURATION = 50; // milliseconds
     private static final long WATCHDOG_INTERVAL = 60 * 60 * 1000L; // milliseconds
     private static final long MAX_QUOTA = 1000 * 1000 * 1000L; // KB
+    private static final int YAHOO_RESTART_INTERVAL = 120; // seconds
 
     private static final String ACTION_NEW_MESSAGE_COUNT = BuildConfig.APPLICATION_ID + ".NEW_MESSAGE_COUNT";
 
@@ -1671,7 +1672,11 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                 if (account.keep_alive_noop) {
                     int timeout = prefs.getInt("timeout", EmailService.DEFAULT_CONNECT_TIMEOUT);
-                    iservice.setRestartIdleInterval(timeout * 2 * 6); // 20 x 2 x 6 = 4 min
+                    if (account.isYahoo() && timeout < YAHOO_RESTART_INTERVAL) {
+                        int factor = YAHOO_RESTART_INTERVAL / timeout;
+                        iservice.setRestartIdleInterval(timeout * factor);
+                    } else
+                        iservice.setRestartIdleInterval(timeout * 2 * 6); // 20 x 2 x 6 = 4 min
                 }
 
                 final Date lastStillHere = new Date(0);

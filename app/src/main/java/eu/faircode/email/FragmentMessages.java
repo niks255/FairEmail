@@ -1197,6 +1197,8 @@ public class FragmentMessages extends FragmentBase
                         public void onLongPress(@NonNull MotionEvent e) {
                             if (!getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
                                 return;
+                            if (swiping)
+                                return;
 
                             int x = Math.round(e.getX());
                             int y = Math.round(e.getY());
@@ -1230,7 +1232,13 @@ public class FragmentMessages extends FragmentBase
                                 cal.set(Calendar.SECOND, 0);
                                 cal.set(Calendar.MILLISECOND, 0);
 
-                                cal.add(Calendar.DATE, 1);
+                                if (date_week) {
+                                    cal.setMinimalDaysInFirstWeek(4); // ISO 8601
+                                    cal.setFirstDayOfWeek(Calendar.MONDAY);
+                                    cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                                    cal.add(Calendar.DATE, 7);
+                                } else
+                                    cal.add(Calendar.DATE, 1);
                                 long to = cal.getTimeInMillis();
 
                                 cal.add(Calendar.DATE, date_week ? -7 : -1);
@@ -3247,10 +3255,23 @@ public class FragmentMessages extends FragmentBase
             }
         }
 
+        private Runnable disableSwiping = new Runnable() {
+            @Override
+            public void run() {
+                swiping = false;
+                Log.i("Swiping ended");
+            }
+        };
+
         @Override
         public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
             super.onSelectedChanged(viewHolder, actionState);
-            swiping = (actionState == ItemTouchHelper.ACTION_STATE_SWIPE);
+            getMainHandler().removeCallbacks(disableSwiping);
+            if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                swiping = true;
+                Log.i("Swiping started");
+            } else
+                getMainHandler().postDelayed(disableSwiping, ViewConfiguration.getLongPressTimeout() + 100);
         }
 
         @Override
@@ -4095,10 +4116,13 @@ public class FragmentMessages extends FragmentBase
                     long last = new Date().getTime() - MAX_FORWARD_ADDRESS_AGE;
                     List<String> fwds = db.message().getForwardAddresses(message.account, last);
                     if (fwds != null)
-                        for (String fwd : fwds)
-                            for (Address address : DB.Converters.decodeAddresses(fwd))
-                                if (address instanceof InternetAddress)
-                                    result.forwarded.add((InternetAddress) address);
+                        for (String fwd : fwds) {
+                            Address[] afwds = DB.Converters.decodeAddresses(fwd);
+                            if (afwds != null)
+                                for (Address address : afwds)
+                                    if (address instanceof InternetAddress)
+                                        result.forwarded.add((InternetAddress) address);
+                        }
                 }
 
                 return result;
@@ -6996,7 +7020,7 @@ public class FragmentMessages extends FragmentBase
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean all_read_asked = prefs.getBoolean("all_read_asked", false);
         if (all_read_asked) {
-            markAllRead();
+            markAllRead(FragmentMessages.this, type, folder, viewType);
             return;
         }
 
@@ -7022,16 +7046,18 @@ public class FragmentMessages extends FragmentBase
         fragmentTransaction.commit();
     }
 
-    private void markAllRead() {
+    static void markAllRead(Fragment fragment, String type, long folder, AdapterMessage.ViewType viewType) {
         Bundle args = new Bundle();
         args.putString("type", type);
         args.putLong("folder", folder);
+        args.putString("viewType", viewType.name());
 
         new SimpleTask<Void>() {
             @Override
             protected Void onExecute(Context context, Bundle args) throws Throwable {
                 String type = args.getString("type");
                 long folder = args.getLong("folder");
+                AdapterMessage.ViewType viewType = AdapterMessage.ViewType.valueOf(args.getString("viewType"));
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean filter_unflagged = prefs.getBoolean(getFilter(context, "unflagged", viewType, type), false);
@@ -7065,9 +7091,9 @@ public class FragmentMessages extends FragmentBase
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
+                Log.unexpectedError(fragment.getParentFragmentManager(), ex);
             }
-        }.execute(FragmentMessages.this, args, "messages:allread");
+        }.execute(fragment, args, "messages:allread");
     }
 
     private void onSaveSearch(Bundle args) {
@@ -9471,7 +9497,7 @@ public class FragmentMessages extends FragmentBase
                     break;
                 case REQUEST_ALL_READ:
                     if (resultCode == RESULT_OK)
-                        markAllRead();
+                        markAllRead(FragmentMessages.this, type, folder, viewType);
                     break;
                 case REQUEST_SAVE_SEARCH:
                     if (resultCode == RESULT_OK && data != null)

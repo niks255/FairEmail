@@ -114,6 +114,7 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.search.AndTerm;
 import javax.mail.search.ComparisonTerm;
 import javax.mail.search.FlagTerm;
 import javax.mail.search.HeaderTerm;
@@ -299,7 +300,8 @@ class Core {
                                             account.protocol == EntityAccount.TYPE_IMAP) {
                                         JSONArray jnext = new JSONArray(next.args);
                                         // Same target
-                                        if (jargs.getLong(0) == jnext.getLong(0) &&
+                                        if (Objects.equals(op.account, next.account) &&
+                                                jargs.getLong(0) == jnext.getLong(0) &&
                                                 jargs.optBoolean(4) == jnext.optBoolean(4)) {
                                             EntityMessage m = db.message().getMessage(next.message);
                                             if (m != null && m.uid != null)
@@ -677,6 +679,7 @@ class Core {
                             // Move: NO [CANNOT] Operation is not supported on mailbox
                             // Move: NO [CANNOT] Can't save messages to this virtual mailbox (0.001 + 0.000 secs).
                             // Move: NO [ALREADYEXISTS] Mailbox already exists
+                            // Move: NO Permission denied
                             // Copy: NO Client tried to access nonexistent namespace. (Mailbox name should probably be prefixed with: INBOX.) (n.nnn + n.nnn secs).
                             // Copy: NO Message not found
                             // Add: BAD Data length exceeds limit
@@ -688,6 +691,7 @@ class Core {
                             // Add: NO APPEND failed
                             // Add: BAD [TOOBIG] Message too large.
                             // Add: NO Permission denied
+                            // Add: NO Message size exceeds fixed maximum message size. Size: xxx KB, Max size: yyy KB
                             // Delete: NO [CANNOT] STORE It's not possible to perform specified operation
                             // Delete: NO [UNAVAILABLE] EXPUNGE Backend error
                             // Delete: NO mailbox selected READ-ONLY
@@ -816,7 +820,7 @@ class Core {
 
         DB db = DB.getInstance(context);
 
-        Long uid = findUid(context, account, ifolder, message.msgid);
+        Long uid = findUid(context, account, ifolder, message.msgid, null);
         if (uid == null) {
             if (EntityOperation.MOVE.equals(op.name) &&
                     EntityFolder.DRAFTS.equals(folder.type))
@@ -838,13 +842,13 @@ class Core {
         message.uid = uid;
     }
 
-    private static Long findUid(Context context, EntityAccount account, IMAPFolder ifolder, String msgid) throws MessagingException, IOException {
+    private static Long findUid(Context context, EntityAccount account, IMAPFolder ifolder, String msgid, Long from) throws MessagingException, IOException {
         String name = ifolder.getFullName();
         Log.i(name + " searching for msgid=" + msgid);
 
         Long uid = null;
 
-        Message[] imessages = findMsgId(context, account, ifolder, msgid);
+        Message[] imessages = findMsgId(context, account, ifolder, msgid, from);
         if (imessages != null)
             for (Message iexisting : imessages)
                 try {
@@ -863,16 +867,29 @@ class Core {
         return uid;
     }
 
-    private static Message[] findMsgId(Context context, EntityAccount account, IMAPFolder ifolder, String msgid) throws MessagingException, IOException {
+    private static Message[] findMsgId(Context context, EntityAccount account, IMAPFolder ifolder, String msgid, Long from) throws MessagingException, IOException {
         // https://stackoverflow.com/questions/18891509/how-to-get-message-from-messageidterm-for-yahoo-imap-profile
-        if (account.isYahooJp()) {
-            Message[] itemps = ifolder.search(new ReceivedDateTerm(ComparisonTerm.GE, new Date()));
+        if (account.isYahooJp() || from != null) {
+            if (from == null)
+                from = new Date().getTime();
+            from -= 24 * 3600 * 1000L;
+            long to = from + 3 * 24 * 3600 * 1000L;
+
+            Message[] itemps = ifolder.search(
+                    new AndTerm(
+                            new ReceivedDateTerm(ComparisonTerm.GE, new Date(from)),
+                            new ReceivedDateTerm(ComparisonTerm.LE, new Date(to))));
             List<Message> tmp = new ArrayList<>();
             for (Message itemp : itemps) {
                 MessageHelper helper = new MessageHelper((MimeMessage) itemp, context);
                 if (msgid.equals(helper.getMessageID()))
                     tmp.add(itemp);
             }
+            Log.w("Fallback search by" +
+                    " msgid=" + msgid +
+                    " host=" + account.host +
+                    " from=" + new Date(from) + " to=" + new Date(to) +
+                    " found=" + tmp.size());
             return tmp.toArray(new Message[0]);
         } else
             return ifolder.search(new MessageIDTerm(msgid));
@@ -1296,7 +1313,7 @@ class Core {
                     }
 
                 Log.i(folder.name + " searching for added msgid=" + message.msgid);
-                Message[] imessages = findMsgId(context, account, ifolder, message.msgid);
+                Message[] imessages = findMsgId(context, account, ifolder, message.msgid, null);
                 if (imessages != null) {
                     Long found = newuid;
 
@@ -1355,7 +1372,7 @@ class Core {
             int count = 0;
             Long found = newuid;
             while (found == null && count++ < FIND_RETRY_COUNT) {
-                found = findUid(context, account, ifolder, message.msgid);
+                found = findUid(context, account, ifolder, message.msgid, count > 1 ? message.received : null);
                 if (found == null)
                     try {
                         Thread.sleep(FIND_RETRY_DELAY);
@@ -1369,7 +1386,7 @@ class Core {
 
                 if (found == null) {
                     db.message().setMessageError(message.id,
-                            "Message not found in target folder " + account.name + "/" + folder.name);
+                            "Message not found in target folder " + account.name + "/" + folder.name + " msgid=" + message.msgid);
                     db.message().setMessageUiHide(message.id, false);
                 } else {
                     // Mark source read
@@ -1611,7 +1628,7 @@ class Core {
                         if (TextUtils.isEmpty(msgid))
                             throw new IllegalArgumentException("move: msgid missing");
 
-                        Long uid = findUid(context, account, itarget, msgid);
+                        Long uid = findUid(context, account, itarget, msgid, null);
                         if (uid == null)
                             if (duplicate || !EntityFolder.TRASH.equals(folder.type))
                                 throw new IllegalArgumentException("move: uid not found");
@@ -1927,7 +1944,7 @@ class Core {
                 if (!TextUtils.isEmpty(message.msgid) &&
                         (!found || EntityFolder.DRAFTS.equals(folder.type)))
                     try {
-                        Message[] imessages = findMsgId(context, account, ifolder, message.msgid);
+                        Message[] imessages = findMsgId(context, account, ifolder, message.msgid, null);
                         if (imessages != null)
                             for (Message iexisting : imessages)
                                 try {
@@ -2242,7 +2259,7 @@ class Core {
 
         ifolder.appendMessages(new Message[]{icopy});
 
-        Long uid = findUid(context, account, ifolder, msgid);
+        Long uid = findUid(context, account, ifolder, msgid, null);
         if (uid != null) {
             JSONArray fargs = new JSONArray();
             fargs.put(uid);
@@ -3265,7 +3282,7 @@ class Core {
 
         ifolder.appendMessages(new Message[]{icopy});
 
-        Long uid = findUid(context, account, ifolder, msgid);
+        Long uid = findUid(context, account, ifolder, msgid, null);
         if (uid != null) {
             JSONArray fargs = new JSONArray();
             fargs.put(uid);

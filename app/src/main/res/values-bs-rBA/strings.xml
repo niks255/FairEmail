@@ -515,6 +515,7 @@
     <string name="title_advanced_close_pane">Suzi red ili kolonu pri zatvaranju konverzacije</string>
     <string name="title_advanced_column_width">Širina kolone / visina reda poruka: %1$s %%</string>
     <string name="title_advanced_hide_toolbar">Sakrij gornju alatnu traku pri skrolanju poruka</string>
+    <string name="title_advanced_edge_to_edge">Koristi pozadinsku boju aplikacije za navigacijsku traku Androida</string>
     <string name="title_advanced_nav_options">Prikaži opcije navigacijskog menija</string>
     <string name="title_advanced_nav_categories">Prikaži kategorije računa u navigacijskom meniju</string>
     <string name="title_advanced_nav_pin">Zakači navigacijski meni</string>
@@ -1524,7 +1525,6 @@
     <string name="title_summarize">Sažetak</string>
     <string name="title_translate_configure">Podesi &#8230;</string>
     <string name="title_translate_key">Unesite ključ</string>
-    <string name="title_translating">Prevođenje &#8230;</string>
     <string name="title_translate_formal">Koristi formalni oblik</string>
     <string name="title_translate_small">Koristi mali font za izvorni tekst</string>
     <string name="title_translate_replace">Zamijeni izvorni tekst prevedenim tekstom</string>
@@ -2196,6 +2196,8 @@
     <string name="title_accessibility_to">Primalac</string>
     <string-array name="pollIntervalNames">
         <item>Uvijek</item>
+        <item>Svake minute</item>
+        <item>Svake 2 minute</item>
         <item>Svakih 5 minuta</item>
         <item>Svakih 10 minuta</item>
         <item>Svakih 15 minuta</item>
