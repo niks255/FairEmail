@@ -1130,6 +1130,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p><a name="faq28"></a> <strong>(28) How can I manage status bar notifications?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq28">Google Translate</a></p>
 <p>In the notification settings you’ll find a button <em>Manage notifications</em> to directly navigate to the Android notifications settings for FairEmail.</p>
+<p>Samsung / One UI: you need to enable: Notification &gt; Advanced settings &gt; Manage notification categories for each app</p>
 <p>On Android 8.0 Oreo and later you can manage the properties of the individual notification channels, for example to set a specific notification sound or to show notifications on the lock screen.</p>
 <p>FairEmail has the following notification channels:</p>
 <ul>
@@ -1185,7 +1186,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p>Note that identities need to be enabled to be able to be matched and that identities of other accounts will not be considered.</p>
 <p>Matching will be done only once on receiving a message, so changing the configuration will not change existing messages. You could clear local messages by long pressing a folder in the folder list and synchronize the messages again, though.</p>
 <p>It is possible to configure a <a href="https://en.wikipedia.org/wiki/Regular_expression">regex</a> in the advanced identity settings (Navigation menu &gt; Settings &gt; Manual setup and account options &gt; Identities &gt; tap the identity &gt; Advanced) to match <strong>the username</strong> of an email address (the part before the @ sign).</p>
-<p>Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity. Since version 1.1640 it is possible to match the full email address with a regex, which can be useful for matching alias domain names.</p>
+<p>Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity. This also implies that the username will be copied from a received message only if it matches the domain name of the matched identity. Since version 1.1640, it is possible to match the full email address with a regex by including the @ character in the regex, which can be useful for matching alias domain names. The username will not be copied in this case because the domain name of the <em>from</em> address and the the domain name of the identity must be the same. If you want the username to be copied, you should define an identity for each domain, which will allow you to send new messages from a specific domain name too.</p>
 <p>If you want to match a catch-all email address, this regex is usually fine, provided all usernames for the domain are yours:</p>
 <pre><code>.*</code></pre>
 <p>The username of a message being replied to will be used as the default username when editing of usernames is enabled in the advanced identity settings.</p>
@@ -2121,6 +2122,7 @@ category:promotions</code></pre>
 <p>You can also try to clear the cache of the Play store app via the Android apps settings. Restarting the device might be necessary to let the Play store recognize the purchase correctly.</p>
 <p>Note that:</p>
 <ul>
+<li>If you did not yet configure an email account in the app, you can long press <em>About</em> in the navigation menu (left side menu) of the settings screen to go to the pro features screen</li>
 <li>If you get <em>ITEM_ALREADY_OWNED</em>, the Play store app probably needs to be updated, please <a href="https://support.google.com/googleplay/answer/1050566?hl=en">see here</a></li>
 <li>If you get <em>BILLING_UNAVAILABLE Google Play In-app Billing API version is less than 3</em>, the Play store app might not be logged into the account used to install the app</li>
 <li>Purchases are stored in the Google cloud and cannot get lost</li>
@@ -2753,7 +2755,7 @@ DNS lookup 108.27.250.142.zen.spamhaus.org -&gt;
 <p>Example DNS records (SRV=record type, 0=priority, 1=weight, 993/587=port number):</p>
 <pre><code>_imaps._tcp SRV 0 1 993 imap.example.com.
 _submission._tcp SRV 0 1 587 smtp.example.com.</code></pre>
-<p><a href="https://wiki.mozilla.org/Thunderbird:Autoconfiguration">Mozilla’s autoconfiguration</a> is supported too, but only if the configuration file is accessible via a secure (https) connection.</p>
+<p><a href="https://wiki.mozilla.org/Thunderbird:Autoconfiguration">Mozilla’s autoconfiguration</a> is supported too, but only if the configuration file is accessible via a secure (https) connection. The Play Store version of the app will query Mozilla’s database only to comply with Play Store policies. If you want to query your own server on your own domain name, you should install or update to the GitHub version of the app.</p>
 <p>FairEmail will also check the <a href="https://en.wikipedia.org/wiki/MX_record">MX record</a> and if common email ports (143/993, 465/587) are open.</p>
 <p>There is no auto discovery for POP3.</p>
 <p><br /></p>
@@ -2942,6 +2944,13 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>If you exceed <a href="https://platform.openai.com/docs/guides/rate-limits">your usage limit</a>, there will be an error message like this:</p>
 <p><em>Error 429: Too Many Requests insufficient_quota: You exceeded your current quota, please check your plan and billing details</em></p>
 <p>Note that you are required to switch to a <a href="https://openai.com/api/pricing/">paid plan</a> after the testing period.</p>
+<p><br></p>
+<p>An alternative to OpenAI is using <a href="https://groq.com/">Groq</a>.</p>
+<ul>
+<li>Endpoint: <strong>https://api.groq.com/openai/v1/</strong></li>
+<li>Suggested <a href="https://console.groq.com/docs/models">model</a>: <strong>gemma2-9b-it</strong> or <strong>llama-3.3-70b-versatile</strong></li>
+</ul>
+<p>It’s faster and free to use for now.</p>
 <p><br></p>
 <p>You can select the <a href="https://platform.openai.com/docs/models/overview">model</a>, and configure the <a href="https://platform.openai.com/docs/api-reference/chat/create#chat/create-temperature">temperature</a>.</p>
 <p>Please read the <a href="https://openai.com/policies/privacy-policy">privacy policy</a> of OpenAI, and perhaps <a href="https://katedowninglaw.com/2023/03/10/openais-massive-data-grab/">this article</a> and <a href="https://www.ncsc.gov.uk/blog-post/chatgpt-and-large-language-models-whats-the-risk">this article</a> too.</p>

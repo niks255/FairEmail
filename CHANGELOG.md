@@ -10,6 +10,8 @@ Besides being time-consuming, this is no longer free as of this year.
 This is one of the reasons why the app cannot be completely free, meaning some features must be paid for in order to pay for an annual security audit.
 To be clear, nothing will be changed for now.
 
+The security audit revealed no problems, so Google accounts [can continue to be used](https://support.google.com/cloud/answer/13464325) as usual next year.
+
 <br>
 
 People keep asking me to add new, often exotic, features to the app, to whom I often say "no", and other people complain about too many features.
@@ -27,6 +29,22 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 <br>
 
 ### [Barsboldia](https://en.wikipedia.org/wiki/Barsboldia)
+
+### 1.2252 2024-12-18
+
+* Fixed in-app changelog
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2251 2024-12-14
+
+* Added S/MIME UTF-8 support
+* Updated Brave's debounce list
+* Improved internationalized email address support
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
 
 ### 1.2250 2024-12-05
 

@@ -1888,6 +1888,8 @@ Note that downloading external images from a remote server can be used to record
 
 In the notification settings you'll find a button *Manage notifications* to directly navigate to the Android notifications settings for FairEmail.
 
+Samsung / One UI: you need to enable: Notification > Advanced settings > Manage notification categories for each app
+
 On Android 8.0 Oreo and later you can manage the properties of the individual notification channels,
 for example to set a specific notification sound or to show notifications on the lock screen.
 
@@ -2007,7 +2009,10 @@ It is possible to configure a [regex](https://en.wikipedia.org/wiki/Regular_expr
 to match **the username** of an email address (the part before the @ sign).
 
 Note that the domain name (the parts after the @ sign) always needs to be equal to the domain name of the identity.
-Since version 1.1640 it is possible to match the full email address with a regex, which can be useful for matching alias domain names.
+This also implies that the username will be copied from a received message only if it matches the domain name of the matched identity.
+Since version 1.1640, it is possible to match the full email address with a regex by including the @ character in the regex, which can be useful for matching alias domain names.
+The username will not be copied in this case because the domain name of the *from* address and the the domain name of the identity must be the same.
+If you want the username to be copied, you should define an identity for each domain, which will allow you to send new messages from a specific domain name too.
 
 If you want to match a catch-all email address, this regex is usually fine, provided all usernames for the domain are yours:
 
@@ -4055,6 +4060,7 @@ Restarting the device might be necessary to let the Play store recognize the pur
 
 Note that:
 
+* If you did not yet configure an email account in the app, you can long press *About* in the navigation menu (left side menu) of the settings screen to go to the pro features screen
 * If you get *ITEM_ALREADY_OWNED*, the Play store app probably needs to be updated, please [see here](https://support.google.com/googleplay/answer/1050566?hl=en)
 * If you get *BILLING_UNAVAILABLE Google Play In-app Billing API version is less than 3*, the Play store app might not be logged into the account used to install the app
 * Purchases are stored in the Google cloud and cannot get lost
@@ -5446,6 +5452,8 @@ _submission._tcp SRV 0 1 587 smtp.example.com.
 
 [Mozilla's autoconfiguration](https://wiki.mozilla.org/Thunderbird:Autoconfiguration) is supported too,
 but only if the configuration file is accessible via a secure (https) connection.
+The Play Store version of the app will query Mozilla's database only to comply with Play Store policies.
+If you want to query your own server on your own domain name, you should install or update to the GitHub version of the app.
 
 FairEmail will also check the [MX record](https://en.wikipedia.org/wiki/MX_record) and if common email ports (143/993, 465/587) are open.
 
@@ -5860,6 +5868,15 @@ If you exceed [your usage limit](https://platform.openai.com/docs/guides/rate-li
 *Error 429: Too Many Requests insufficient_quota: You exceeded your current quota, please check your plan and billing details*
 
 Note that you are required to switch to a [paid plan](https://openai.com/api/pricing/) after the testing period.
+
+<br>
+
+An alternative to OpenAI is using [Groq](https://groq.com/).
+
+* Endpoint: **https://api.groq.com/openai/v1/**
+* Suggested [model](https://console.groq.com/docs/models): **gemma2-9b-it** or **llama-3.3-70b-versatile**
+
+It's faster and free to use for now.
 
 <br>
 

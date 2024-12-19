@@ -192,21 +192,27 @@ public class EntityCertificate {
             Collection<List<?>> altNames = certificate.getSubjectAlternativeNames();
             if (altNames != null)
                 for (List altName : altNames)
-                    if (altName.get(0).equals(GeneralName.rfc822Name))
-                        result.add((String) altName.get(1));
-                    else if (altName.get(0).equals(GeneralName.otherName) && altName.get(1) instanceof byte[])
-                        try {
-                            ASN1InputStream decoder = new ASN1InputStream((byte[]) altName.get(1));
-                            DLTaggedObject encoded = (DLTaggedObject) decoder.readObject();
-                            String othername = DERUTF8String.getInstance(
-                                    ((DLTaggedObject) ((DLSequence) encoded.getBaseObject())
-                                            .getObjectAt(1)).getBaseObject()).getString();
-                            if (Helper.EMAIL_ADDRESS.matcher(othername).matches())
-                                result.add(othername);
-                        } catch (Throwable ex) {
-                            Log.w(ex);
-                        }
-                    else
+                    if (altName.get(0).equals(GeneralName.rfc822Name)) {
+                        if (altName.get(1) instanceof String)
+                            result.add(MessageHelper.fromPunyCode((String) altName.get(1)));
+                    } else if (altName.get(0).equals(GeneralName.otherName)) {
+                        if (altName.get(1) instanceof byte[])
+                            try {
+                                ASN1InputStream decoder = new ASN1InputStream((byte[]) altName.get(1));
+                                DLTaggedObject encoded = (DLTaggedObject) decoder.readObject();
+                                String otherName = DERUTF8String.getInstance(
+                                        ((DLTaggedObject) ((DLSequence) encoded.getBaseObject())
+                                                .getObjectAt(1)).getBaseObject()).getString();
+                                int at = otherName.indexOf('@');
+                                int dot = otherName.lastIndexOf('.');
+                                if (at >= 0 && dot > at) // UTF-8 accepted, so basic test only
+                                    result.add(MessageHelper.fromPunyCode(otherName));
+                                else
+                                    Log.w("Ignoring otherName=" + otherName);
+                            } catch (Throwable ex) {
+                                Log.w(ex);
+                            }
+                    } else
                         Log.i("Alt type=" + altName.get(0) + " data=" + altName.get(1));
         } catch (CertificateParsingException ex) {
             Log.e(ex);
@@ -218,7 +224,9 @@ public class EntityCertificate {
                 List<RDN> rdns = new ArrayList<>();
                 rdns.addAll(Arrays.asList(name.getRDNs(BCStyle.CN)));
                 rdns.addAll(Arrays.asList(name.getRDNs(BCStyle.EmailAddress)));
-                for (RDN rdn : rdns)
+                for (RDN rdn : rdns) {
+                    if (rdn == null)
+                        continue;
                     for (AttributeTypeAndValue tv : rdn.getTypesAndValues()) {
                         ASN1Encodable enc = tv.getValue();
                         if (enc == null)
@@ -228,8 +236,9 @@ public class EntityCertificate {
                             continue;
                         if (!Helper.EMAIL_ADDRESS.matcher(email).matches())
                             continue;
-                        result.add(email);
+                        result.add(MessageHelper.fromPunyCode(email));
                     }
+                }
             }
         } catch (Throwable ex) {
             Log.e(ex);
@@ -248,9 +257,10 @@ public class EntityCertificate {
 
         for (List altName : altNames)
             try {
-                if (altName.get(0).equals(GeneralName.dNSName))
-                    result.add((String) altName.get(1));
-                else if (altName.get(0).equals(GeneralName.iPAddress))
+                if (altName.get(0).equals(GeneralName.dNSName)) {
+                    if (altName.get(1) instanceof String)
+                        result.add((String) altName.get(1));
+                } else if (altName.get(0).equals(GeneralName.iPAddress))
                     if (altName.get(1) instanceof String)
                         result.add((String) altName.get(1));
                     else {

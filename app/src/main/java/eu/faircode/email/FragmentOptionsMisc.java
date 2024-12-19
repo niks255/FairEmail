@@ -194,6 +194,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SeekBar sbChunkSize;
     private TextView tvThreadRange;
     private SeekBar sbThreadRange;
+    private TextView tvRestartInterval;
+    private SeekBar sbRestartInterval;
     private SwitchCompat swAutoScroll;
     private SwitchCompat swUndoManager;
     private SwitchCompat swBrowserZoom;
@@ -233,6 +235,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swPastePlain;
     private SwitchCompat swPasteQuote;
     private EditText etFaviconUri;
+    private SwitchCompat swEmailJunk;
     private SwitchCompat swInfra;
     private SwitchCompat swTldFlags;
     private SwitchCompat swJsonLd;
@@ -298,7 +301,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "sqlite_integrity_check", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_auto_vacuum", "sqlite_sync_extra", "sqlite_cache",
             "legacy_queries",
             "cache_lists", "oauth_tabs",
-            "start_delay", "range_size", "chunk_size", "thread_range",
+            "start_delay", "range_size", "chunk_size", "thread_range", "restart_interval",
             "autoscroll_editor", "undo_manager",
             "browser_zoom", "fake_dark",
             "ignore_formatted_size",
@@ -311,7 +314,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "native_dkim", "native_arc", "native_arc_whitelist", "strict_alignment",
             "webp", "animate_images",
             "preview_hidden", "preview_quotes",
-            "easy_correct", "paste_plain", "paste_quote", "favicon_uri", "infra", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "save_user_flags", "mdn",
+            "easy_correct", "paste_plain", "paste_quote", "favicon_uri", "email_junk", "infra", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "save_user_flags", "mdn",
             "app_chooser", "app_chooser_share", "share_task",
             "adjacent_links", "adjacent_documents", "adjacent_portrait", "adjacent_landscape",
             "delete_confirmation", "delete_notification", "global_keywords", "test_iab"
@@ -461,6 +464,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         sbChunkSize = view.findViewById(R.id.sbChunkSize);
         tvThreadRange = view.findViewById(R.id.tvThreadRange);
         sbThreadRange = view.findViewById(R.id.sbThreadRange);
+        tvRestartInterval = view.findViewById(R.id.tvRestartInterval);
+        sbRestartInterval = view.findViewById(R.id.sbRestartInterval);
         swAutoScroll = view.findViewById(R.id.swAutoScroll);
         swUndoManager = view.findViewById(R.id.swUndoManager);
         swBrowserZoom = view.findViewById(R.id.swBrowserZoom);
@@ -500,6 +505,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swPastePlain = view.findViewById(R.id.swPastePlain);
         swPasteQuote = view.findViewById(R.id.swPasteQuote);
         etFaviconUri = view.findViewById(R.id.etFaviconUri);
+        swEmailJunk = view.findViewById(R.id.swEmailJunk);
         swInfra = view.findViewById(R.id.swInfra);
         swTldFlags = view.findViewById(R.id.swTldFlags);
         swJsonLd = view.findViewById(R.id.swJsonLd);
@@ -1394,6 +1400,23 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        sbRestartInterval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                prefs.edit().putInt("restart_interval", progress * 10).apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Do nothing
+            }
+        });
+
         swAutoScroll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1721,6 +1744,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                 prefs.edit().putString("favicon_uri", uri).apply();
                 if (uri.equals(prev))
                     ContactInfo.clearCache(getContext());
+            }
+        });
+
+        swEmailJunk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("email_junk", checked).apply();
             }
         });
 
@@ -2540,6 +2570,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             tvThreadRange.setText(getString(R.string.title_advanced_thread_range, range));
             sbThreadRange.setProgress(thread_range);
 
+            int restart_interval = prefs.getInt("restart_interval", EmailService.DEFAULT_RESTART_INTERVAL);
+            tvRestartInterval.setText(getString(R.string.title_advanced_restart_interval, restart_interval));
+            sbRestartInterval.setProgress(restart_interval / 10);
+
             swAutoScroll.setChecked(prefs.getBoolean("autoscroll_editor", false));
             swUndoManager.setChecked(prefs.getBoolean("undo_manager", false));
             swBrowserZoom.setChecked(prefs.getBoolean("browser_zoom", false));
@@ -2592,6 +2626,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swPasteQuote.setChecked(prefs.getBoolean("paste_quote", false));
             etFaviconUri.setText(prefs.getString("favicon_uri", null));
             swInfra.setChecked(prefs.getBoolean("infra", false));
+            swEmailJunk.setChecked(prefs.getBoolean("email_junk", false));
             swTldFlags.setChecked(prefs.getBoolean("tld_flags", false));
             swJsonLd.setChecked(prefs.getBoolean("json_ld", false));
             swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));

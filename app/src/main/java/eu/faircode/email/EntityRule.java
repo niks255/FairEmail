@@ -770,7 +770,7 @@ public class EntityRule {
                 } else {
                     EntityAnswer answer = db.answer().getAnswer(aid);
                     if (answer == null)
-                        throw new IllegalArgumentException("Template not found");
+                        throw new IllegalArgumentException(context.getString(R.string.title_rule_answer_missing));
                 }
                 return;
             case TYPE_TTS:
@@ -1010,12 +1010,24 @@ public class EntityRule {
         boolean resend = jargs.optBoolean("resend");
         boolean attached = jargs.optBoolean("attached");
         boolean attachments = jargs.optBoolean("attachments");
+        boolean checks = jargs.optBoolean("checks", true);
 
-        if (TextUtils.isEmpty(to) &&
-                message.auto_submitted != null && message.auto_submitted) {
-            EntityLog.log(context, EntityLog.Type.Rules, message,
-                    "Auto submitted rule=" + name);
-            return false;
+        if (TextUtils.isEmpty(to)) {
+            if (checks && Boolean.TRUE.equals(message.auto_submitted)) {
+                EntityLog.log(context, EntityLog.Type.Rules, message, "Auto submitted rule=" + name);
+                return false;
+            }
+
+            Address[] recipients = (message.reply == null || message.reply.length == 0 ? message.from : message.reply);
+            if (recipients.length == 0) {
+                EntityLog.log(context, EntityLog.Type.Rules, message, "No recipients rule=" + name);
+                return false;
+            }
+
+            if (checks && MessageHelper.isNoReply(recipients)) {
+                EntityLog.log(context, EntityLog.Type.Rules, message, "No-reply rule=" + name);
+                return false;
+            }
         }
 
         boolean complete = true;

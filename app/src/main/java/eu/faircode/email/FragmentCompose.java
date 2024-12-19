@@ -800,6 +800,8 @@ public class FragmentCompose extends FragmentBase {
                                     return;
 
                                 Layout layout = etBody.getLayout();
+                                if (layout == null)
+                                    return;
                                 int line = layout.getLineForOffset(pos);
                                 int y = layout.getLineTop(line + 1);
 
@@ -4386,6 +4388,7 @@ public class FragmentCompose extends FragmentBase {
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean check_certificate = prefs.getBoolean("check_certificate", true);
+                boolean check_key_usage = prefs.getBoolean("check_key_usage", false);
 
                 File tmp = Helper.ensureExists(context, "encryption");
 
@@ -4453,8 +4456,24 @@ public class FragmentCompose extends FragmentBase {
                     // Check public key validity
                     try {
                         chain[0].checkValidity();
-                        // TODO: check digitalSignature/nonRepudiation key usage
-                        // https://datatracker.ietf.org/doc/html/rfc3850#section-4.4.2
+
+                        if (check_key_usage) {
+                            // Signing Key: Key Usage: Digital Signature, Non-Repudiation
+                            // Encrypting Key: Key Usage: Key Encipherment, Data Encipherment
+
+                            boolean[] usage = chain[0].getKeyUsage();
+                            if (usage != null && usage.length > 0) {
+                                // https://datatracker.ietf.org/doc/html/rfc3280#section-4.2.1.3
+                                // https://datatracker.ietf.org/doc/html/rfc3850#section-4.4.2
+                                boolean digitalSignature = usage[0];
+
+                                if (!digitalSignature &&
+                                        (EntityMessage.SMIME_SIGNONLY.equals(type) ||
+                                                EntityMessage.SMIME_SIGNENCRYPT.equals(type)))
+                                    throw new IllegalAccessException("Invalid key usage:" +
+                                            " digitalSignature=" + digitalSignature);
+                            }
+                        }
                     } catch (CertificateException ex) {
                         String msg = ex.getMessage();
                         throw new IllegalArgumentException(
@@ -4715,8 +4734,11 @@ public class FragmentCompose extends FragmentBase {
                 if (ex instanceof IllegalArgumentException) {
                     Log.i(ex);
                     String msg = new ThrowableWrapper(ex).getSafeMessage();
-                    if (ex.getCause() != null)
-                        msg += " " + new ThrowableWrapper(ex.getCause()).getSafeMessage();
+                    if (ex.getCause() != null) {
+                        String cause = new ThrowableWrapper(ex.getCause()).getSafeMessage();
+                        if (cause != null)
+                            msg += " " + cause;
+                    }
                     Snackbar snackbar = Helper.setSnackbarOptions(
                             Snackbar.make(view, msg, Snackbar.LENGTH_INDEFINITE));
                     Helper.setSnackbarLines(snackbar, 7);
