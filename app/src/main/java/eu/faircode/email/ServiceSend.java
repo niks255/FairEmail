@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import static eu.faircode.email.ServiceAuthenticator.AUTH_TYPE_GRAPH;
@@ -129,6 +129,7 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
         final Runnable quit = new RunnableEx("send:quit") {
             @Override
             protected void delegate() {
+                EntityLog.log(ServiceSend.this, "Send quit");
                 stopSelf();
             }
         };
@@ -150,10 +151,6 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                     } catch (Throwable ex) {
                         Log.w(ex);
                     }
-
-                    getMainHandler().removeCallbacks(quit);
-                    if (unsent == null || unsent.count == 0)
-                        getMainHandler().postDelayed(quit, STOP_DELAY);
                 }
             }
         });
@@ -174,6 +171,15 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
                     ops.add(op.id);
                 }
                 handling = ops;
+
+                if (handling.isEmpty()) {
+                    if (!getMainHandler().hasCallbacks(quit)) {
+                        long at = new Date().getTime() + STOP_DELAY;
+                        EntityLog.log(ServiceSend.this, "Send quit at " + new Date(at));
+                        getMainHandler().postDelayed(quit, STOP_DELAY);
+                    }
+                } else
+                    getMainHandler().removeCallbacks(quit);
 
                 if (process.size() > 0) {
                     EntityLog.log(ServiceSend.this,
@@ -1105,8 +1111,16 @@ public class ServiceSend extends ServiceBase implements SharedPreferences.OnShar
 
                     EntityFolder outbox = db.folder().getOutbox();
                     if (outbox != null) {
-                        int operations = db.operation().getOperations(EntityOperation.SEND).size();
-                        if (operations > 0)
+                        List<EntityOperation> operations = db.operation().getOperations(EntityOperation.SEND);
+                        EntityLog.log(context, "Start send service ops=" + operations.size());
+                        for (EntityOperation operation : operations)
+                            Log.i("Send operation id=" + operation.id +
+                                    " tries=" + operation.tries +
+                                    " state=" + operation.state +
+                                    " error=" + operation.error +
+                                    " created=" + new Date(operation.created));
+
+                        if (!operations.isEmpty())
                             start(context);
                         else {
                             db.folder().setFolderState(outbox.id, null);

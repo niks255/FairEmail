@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Activity;
@@ -78,7 +78,6 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 import androidx.work.WorkManager;
 
@@ -183,7 +182,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private TextView tvSqliteCache;
     private SeekBar sbSqliteCache;
     private ImageButton ibSqliteCache;
-    private SwitchCompat swLegacyQueries;
     private SwitchCompat swCacheLists;
     private SwitchCompat swOauthTabs;
     private TextView tvStartDelay;
@@ -199,7 +197,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAutoScroll;
     private SwitchCompat swUndoManager;
     private SwitchCompat swBrowserZoom;
-    private SwitchCompat swFakeDark;
     private EditText etViewportHeight;
     private SwitchCompat swIgnoreFormattedSize;
     private SwitchCompat swShowRecent;
@@ -227,6 +224,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swNativeArc;
     private EditText etNativeArcWhitelist;
     private SwitchCompat swStrictAlignment;
+    private SwitchCompat swSvg;
     private SwitchCompat swWebp;
     private SwitchCompat swAnimate;
     private SwitchCompat swPreviewHidden;
@@ -299,11 +297,10 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "test1", "test2", "test3", "test4", "test5",
             "emergency_file", "work_manager", "task_description", // "external_storage",
             "sqlite_integrity_check", "wal", "sqlite_checkpoints", "sqlite_analyze", "sqlite_auto_vacuum", "sqlite_sync_extra", "sqlite_cache",
-            "legacy_queries",
             "cache_lists", "oauth_tabs",
             "start_delay", "range_size", "chunk_size", "thread_range", "restart_interval",
             "autoscroll_editor", "undo_manager",
-            "browser_zoom", "fake_dark",
+            "browser_zoom",
             "ignore_formatted_size",
             "show_recent",
             "use_modseq", "preamble", "uid_command", "perform_expunge", "uid_expunge",
@@ -312,7 +309,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "max_backoff_power", "logarithmic_backoff",
             "exact_alarms",
             "native_dkim", "native_arc", "native_arc_whitelist", "strict_alignment",
-            "webp", "animate_images",
+            "svg", "webp", "animate_images",
             "preview_hidden", "preview_quotes",
             "easy_correct", "paste_plain", "paste_quote", "favicon_uri", "email_junk", "infra", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "save_user_flags", "mdn",
             "app_chooser", "app_chooser_share", "share_task",
@@ -453,7 +450,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         tvSqliteCache = view.findViewById(R.id.tvSqliteCache);
         sbSqliteCache = view.findViewById(R.id.sbSqliteCache);
         ibSqliteCache = view.findViewById(R.id.ibSqliteCache);
-        swLegacyQueries = view.findViewById(R.id.swLegacyQueries);
         swCacheLists = view.findViewById(R.id.swCacheLists);
         swOauthTabs = view.findViewById(R.id.swOauthTabs);
         tvStartDelay = view.findViewById(R.id.tvStartDelay);
@@ -469,7 +465,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAutoScroll = view.findViewById(R.id.swAutoScroll);
         swUndoManager = view.findViewById(R.id.swUndoManager);
         swBrowserZoom = view.findViewById(R.id.swBrowserZoom);
-        swFakeDark = view.findViewById(R.id.swFakeDark);
         etViewportHeight = view.findViewById(R.id.etViewportHeight);
         swIgnoreFormattedSize = view.findViewById(R.id.swIgnoreFormattedSize);
         swShowRecent = view.findViewById(R.id.swShowRecent);
@@ -497,6 +492,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swNativeArc = view.findViewById(R.id.swNativeArc);
         etNativeArcWhitelist = view.findViewById(R.id.etNativeArcWhitelist);
         swStrictAlignment = view.findViewById(R.id.swStrictAlignment);
+        swSvg = view.findViewById(R.id.swSvg);
         swWebp = view.findViewById(R.id.swWebp);
         swAnimate = view.findViewById(R.id.swAnimate);
         swPreviewHidden = view.findViewById(R.id.swPreviewHidden);
@@ -1301,15 +1297,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
-        swLegacyQueries.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton v, boolean checked) {
-                prefs.edit().putBoolean("legacy_queries", checked).apply();
-                ViewModelMessages model = new ViewModelProvider(getActivity()).get(ViewModelMessages.class);
-                model.clear();
-            }
-        });
-
         swCacheLists.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton v, boolean checked) {
@@ -1436,13 +1423,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("browser_zoom", checked).apply();
-            }
-        });
-
-        swFakeDark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                prefs.edit().putBoolean("fake_dark", checked).apply();
             }
         });
 
@@ -1674,6 +1654,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("strict_alignment", checked).apply();
+            }
+        });
+
+        swSvg.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("svg", checked).apply();
             }
         });
 
@@ -2549,7 +2536,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
                     Helper.humanReadableByteCount(cache_size * 1024L)));
             sbSqliteCache.setProgress(sqlite_cache);
 
-            swLegacyQueries.setChecked(prefs.getBoolean("legacy_queries", false));
             swCacheLists.setChecked(prefs.getBoolean("cache_lists", true));
             swOauthTabs.setChecked(prefs.getBoolean("oauth_tabs", true));
 
@@ -2577,7 +2563,6 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swAutoScroll.setChecked(prefs.getBoolean("autoscroll_editor", false));
             swUndoManager.setChecked(prefs.getBoolean("undo_manager", false));
             swBrowserZoom.setChecked(prefs.getBoolean("browser_zoom", false));
-            swFakeDark.setChecked(prefs.getBoolean("fake_dark", false));
 
             int dvh = WebViewEx.getDefaultViewportHeight(getContext());
             int vh = prefs.getInt("viewport_height", dvh);
@@ -2617,6 +2602,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             etNativeArcWhitelist.setText(prefs.getString("native_arc_whitelist", null));
             swStrictAlignment.setEnabled(swNativeDkim.isEnabled() && swNativeDkim.isChecked());
             swStrictAlignment.setChecked(prefs.getBoolean("strict_alignment", false));
+            swSvg.setChecked(prefs.getBoolean("svg", true));
             swWebp.setChecked(prefs.getBoolean("webp", true));
             swAnimate.setChecked(prefs.getBoolean("animate_images", true));
             swPreviewHidden.setChecked(prefs.getBoolean("preview_hidden", true));
@@ -2630,7 +2616,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swTldFlags.setChecked(prefs.getBoolean("tld_flags", false));
             swJsonLd.setChecked(prefs.getBoolean("json_ld", false));
             swDupMsgId.setChecked(prefs.getBoolean("dup_msgids", false));
-            swThreadByRef.setChecked(prefs.getBoolean("thread_byref", true));
+            swThreadByRef.setChecked(prefs.getBoolean("thread_byref", !Helper.isPlayStoreInstall()));
             swSaveUserFlags.setChecked(prefs.getBoolean("save_user_flags", false));
             swMdn.setChecked(prefs.getBoolean("mdn", swExperiments.isChecked()));
             swAppChooser.setChecked(prefs.getBoolean("app_chooser", false));

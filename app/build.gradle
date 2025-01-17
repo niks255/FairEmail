@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2252 }
+def getVersionCode = { -> return 2259 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Barsboldia" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -63,7 +63,7 @@ android {
 
         // https://developer.android.com/ndk/downloads
         // https://developer.android.com/guide/practices/page-sizes
-        ndkVersion "26.3.11579264" // r26d
+        ndkVersion "27.2.12479018" // r27c
         ndk {
             // Bugsnag, sqlite
             // https://developer.android.com/ndk/guides/abis                                  
@@ -226,7 +226,7 @@ android {
             buildConfigField "boolean", "FDROID_RELEASE", "false"
             buildConfigField "boolean", "AMAZON_RELEASE", "false"
             buildConfigField "String", "PRO_FEATURES_URI", "\"https://email.faircode.eu/donate/\""
-            buildConfigField "String", "CHANGELOG", "\"https://github.com/M66B/FairEmail/releases/\""
+            buildConfigField "String", "CHANGELOG", "\"https://github.com/niks255/FairEmail/releases/\""
             buildConfigField "String", "GITHUB_LATEST_API", "\"https://api.github.com/repos/niks255/FairEmail/releases/latest\""
             buildConfigField "String", "GITHUB_LATEST_URI", "\"https://github.com/niks255/FairEmail/releases\""
             buildConfigField "String", "BITBUCKET_DOWNLOADS_API", "\"https://api.bitbucket.org/2.0/repositories/M66B/fairemail-test/downloads\""
@@ -569,12 +569,12 @@ dependencies {
     def appcompat_version = "1.7.0"
     def emoji_version = "1.5.0"
     def flatbuffers_version = "2.0.0"
-    def activity_version = " 1.9.3" // 1.10.0-rc01
+    def activity_version = " 1.10.0"
     def fragment_version = "1.8.5"
-    def windows_version = "1.3.0" // 1.4.0-alpha05
-    def webkit_version = "1.12.0" // 1.13.0-alpha02
-    def recyclerview_version = "1.3.2" // 1.4.0-rc01
-    def coordinatorlayout_version = "1.2.0" // 1.3.0-alpha02
+    def windows_version = "1.3.0" // 1.4.0-beta01
+    def webkit_version = "1.12.0" // 1.13.0-alpha03
+    def recyclerview_version = "1.4.0"
+    def coordinatorlayout_version = "1.2.0" // 1.3.0-alpha03
     def constraintlayout_version = "2.2.0"
     def viewpager_version = "1.1.0-beta01" // 1.1.0
     def material_version = "1.12.0" // 1.13.0-alpha03
@@ -590,27 +590,27 @@ dependencies {
     def paging_version = "2.1.2" // 3.3.5
     def preference_version = "1.2.1"
     def work_version = "2.10.0"
-    def exif_version = "1.3.7" // 1.4.0-alpha01
+    def exif_version = "1.4.0-beta01"
     def biometric_version = "1.2.0-alpha05" // 1.4.0-alpha02
     def billingclient_version = "6.0.1" // 6.2.0
-    def playservicesbasement_version = "18.4.0";
-    def transparency_version = "2.5.49"
+    def playservicesbasement_version = "18.5.0";
+    def transparency_version = "2.5.70"
     def javamail_version = "1.6.7"
-    def jsoup_version = "1.18.1"
+    def jsoup_version = "1.18.3"
     def jsonpath_version = "2.9.0"
     def css_version = "0.9.30"
     def jax_version = "2.3.0-jaxb-1.0.6"
     def minidns_version = "1.0.5"
     def openpgp_version = "12.0"
     def badge_version = "1.1.22"
-    def bugsnag_version = "6.7.0"
+    def bugsnag_version = "6.10.0"
     def biweekly_version = "0.6.8"
     def vcard_version = "0.12.1"
     def relinker_version = "1.4.5"
     def markwon_version = "4.6.2"
     def commonmark_version = "0.22.0"
     def flexmark_version = "0.64.8"
-    def bouncycastle_version = "1.78.1"
+    def bouncycastle_version = "1.79"
     def colorpicker_version = "0.0.15"
     def overscroll_version = "1.1.1"
     def appauth_version = "0.11.1"
@@ -627,6 +627,7 @@ dependencies {
     def tinylog_version = "2.7.0"
     def zxing_version = "3.5.3"
     def evalex_version = "3.3.0"
+    def image_cropper_version = "4.6.0"
 
     // https://mvnrepository.com/artifact/com.android.tools/desugar_jdk_libs?repo=google
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_version"
@@ -848,7 +849,7 @@ dependencies {
     // https://search.maven.org/artifact/io.github.everythingme/overscroll-decor-android
     implementation "io.github.everythingme:overscroll-decor-android:$overscroll_version"
 
-    // https://www.bouncycastle.org/latest_releases.html
+    // https://www.bouncycastle.org/news/
     // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15to18
     // https://mvnrepository.com/artifact/org.bouncycastle/bctls-jdk15to18
     implementation "org.bouncycastle:bcpkix-jdk15to18:$bouncycastle_version"
@@ -910,4 +911,8 @@ dependencies {
 
     // https://github.com/ezylang/EvalEx
     implementation "com.ezylang:EvalEx:$evalex_version"
+
+    // https://github.com/CanHub/Android-Image-Cropper
+    // https://mvnrepository.com/artifact/com.vanniktech/android-image-cropper
+    implementation "com.vanniktech:android-image-cropper:$image_cropper_version"
 }

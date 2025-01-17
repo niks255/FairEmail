@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ import androidx.preference.PreferenceManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class FragmentDialogUnblockAll extends FragmentDialogBase {
@@ -83,10 +86,14 @@ public class FragmentDialogUnblockAll extends FragmentDialogBase {
 
                                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                                 SharedPreferences.Editor editor = prefs.edit();
-                                for (String pref : new String[]{"check_blocklist", "auto_block_sender"})
-                                    if (prefs.getBoolean(pref, false)) {
-                                        editor.putBoolean(pref, false);
-                                        EntityLog.log(context, "Disabled option=" + pref);
+                                List<Pair<String, Boolean>> settings = Collections.unmodifiableList(Arrays.asList(
+                                        new Pair<>("check_blocklist", false),
+                                        new Pair<>("auto_block_sender", true)
+                                ));
+                                for (Pair<String, Boolean> setting : settings)
+                                    if (prefs.getBoolean(setting.first, setting.second)) {
+                                        editor.putBoolean(setting.first, false);
+                                        EntityLog.log(context, "Disabled option=" + setting.first);
                                     }
                                 editor.apply();
 

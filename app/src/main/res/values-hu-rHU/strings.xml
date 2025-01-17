@@ -757,7 +757,7 @@
         Az legtöbbet használt alap algoritmus az SHA256 és AES128.
     </string>
     <string name="title_advanced_check_certificate">Nyilvános kulcs ellenőrzése küldéskor</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">Küldéskor ellenőrizze a kulcshasználat indikátort</string>
+    <string name="title_advanced_check_key_usage">Küldéskor ellenőrizze a kulcshasználat indikátort</string>
     <string name="title_advanced_manage_certificates">Nyilvános kulcsok kezelése</string>
     <string name="title_advanced_import_key">Privát kulcs importálása</string>
     <string name="title_advanced_manage_keys">Privát kulcsok kezelése</string>
@@ -801,6 +801,10 @@
     <string name="title_advanced_answer_prompt">Válasz prompt</string>
     <string name="title_advanced_system_instructions">Rendszer utasításai</string>
     <string name="title_advanced_default_prompt">Alap prompt</string>
+    <string name="title_advanced_ai">MI</string>
+    <string name="title_advanced_ai_input_system">Rendszer prompt használata</string>
+    <string name="title_advanced_ai_input_body">Az üzenet szövegének bevitele</string>
+    <string name="title_advanced_ai_input_reply">A kapott üzenet szövegének bevitele</string>
     <string name="title_advanced_entered_text">Bevitt szöveg</string>
     <string name="title_advanced_sdcard">SD kártyát akarok használni</string>
     <string name="title_advanced_watchdog">A FairEmail futásának időszakos ellenőrzése</string>
@@ -851,6 +855,7 @@
     <string name="title_advanced_send_reminders_hint">Figyelmeztetés megjelenítése, ha az üzenet szövege vagy a tárgy üres, illetve ha a melléklet feltehetőleg hiányzik</string>
     <string name="title_advanced_reply_move_hint">Az e-mail szerver továbbra is felveheti az üzeneteket az elküldött üzenetek mappájába</string>
     <string name="title_advanced_compose_color_hint">Nagyon világos vagy sötét szín választása a címzett számára olvashatatlan üzenetet eredményezhet</string>
+    <string name="title_advanced_compose_font_hint">Az alapértelmezett követi a fogadó által beállított betűtípust</string>
     <string name="title_advanced_template_reply_hint">HTML használható. Elérhető helyőrzők: %1$s</string>
     <string name="title_advanced_write_below_hint">A címzett így lemaradhat az ön válaszáról, például ha hosszú üzenetváltást rövidebbre metszenek</string>
     <string name="title_advanced_attach_new_hint">Vagy, a megosztás során kapott címet vagy fájlokat adja hozzá a jelenlegi vázlathoz</string>
@@ -917,6 +922,7 @@
     <string name="title_advanced_notify_car_hint">A kapcsolódás ebben az esetben az app felé való kivetítést jelenti, mint például a navigációs térképnél</string>
     <string name="title_advanced_notify_remove_hint">Az új üzenet értesitések mindig törlődnek azok oldalra csúsztatásával, vagy az üzenet olvasottként való megjelölésével</string>
     <string name="title_advanced_notify_manage_hint">Koppintson a csatorna nevére a tulajdonságai beállításához</string>
+    <string name="title_advanced_notify_samsung_hint">Az értesítési csatornák kezeléséhez lehetséges, hogy engedélyeznie kell ezt az Android beállítást: Értesítések, Haladó beállítások, Alkalmazásonkénti értesítési kategóriák kezelése</string>
     <string name="title_advanced_notify_manage_default_hint">Alapértelmezett hang beállítása, stb</string>
     <string name="title_advanced_notify_manage_service_hint">A \'figyelés\' értesítés kikapcsolásához</string>
     <string name="title_advanced_notify_separate_hint">Hogyan állítom be a fiók, könyvtár és küldő specifikus értesítéseket?</string>
@@ -1201,7 +1207,7 @@
     <string name="title_folder_unified">Összesített bejövő mappa</string>
     <string name="title_folder_inbox">Bejövő mappa</string>
     <string name="title_folder_outbox">Kimenő mappa</string>
-    <string name="title_folder_all">Archívált</string>
+    <string name="title_folder_all">Archivált</string>
     <string name="title_folder_drafts">Piszkozatok</string>
     <string name="title_folder_trash">Kuka</string>
     <string name="title_folder_junk">Spam</string>
@@ -1251,6 +1257,7 @@
     <string name="title_force_light">Világos téma erőltetése</string>
     <string name="title_rename">Átnevez</string>
     <string name="title_share">Megosztás</string>
+    <string name="title_analyze">Elemzés</string>
     <string name="title_event">Hozzáadás naptárhoz</string>
     <string name="title_pin">Parancsikon hozzáadása</string>
     <string name="title_pin_label">Hivatkozás címe</string>
@@ -1365,6 +1372,7 @@
     <string name="title_attachment_saved">A melléklet mentve</string>
     <string name="title_attachments_saved">A mellékletek mentve</string>
     <string name="title_attachments_incomplete">Néhány kép vagy melléklet letöltése nem sikerült, így hozzáadásuk meghiúsult</string>
+    <string name="title_report_remark">Ez a jelentés egy különlegesen formázott email, melyet az email kiszolgáló küldött, mivel a küldött üzenet nem volt kézbesíthető, például mert a postaláda betelt, vagy mert az email cím (már) nem létezik.</string>
     <string name="title_ask_save">Menti a módosításokat?</string>
     <string name="title_ask_delete">Véglegesen törli az üzenetet?</string>
     <string name="title_ask_delete_accept">Megértettem, hogy a végleges törlés nem visszafordítható</string>
@@ -1593,6 +1601,7 @@
     <string name="title_signature_email">Aláírás címe</string>
     <string name="title_signature_mismatch">Az email címe az üzenetnek és az aláírásnak nem ugyanaz</string>
     <string name="title_signature_algorithm">Algoritmus</string>
+    <string name="title_signature_public_key">Nyilvános kulcs</string>
     <string name="title_signature_subject">Tárgy</string>
     <string name="title_signature_validity">Érvényesség</string>
     <string name="title_signature_outdated">Ez a nyilvános kulcs jelenleg nem érvényes</string>
@@ -1656,6 +1665,7 @@
     <string name="title_sort_on_starred_unread">Csillagozott, olvasatlan</string>
     <string name="title_sort_on_priority">Prioritás</string>
     <string name="title_sort_on_sender">Feladó</string>
+    <string name="title_sort_on_sender_name">Küldő neve</string>
     <string name="title_sort_on_subject">Tárgy</string>
     <string name="title_sort_on_size">Méret</string>
     <string name="title_sort_on_attachments">Mellékletek</string>
@@ -1813,6 +1823,7 @@
     <string name="title_rule_select_sound">Hang kiválasztása</string>
     <string name="title_rule_select_sound_ringtone">Csengőhang</string>
     <string name="title_rule_select_sound_audio">Hangfájl</string>
+    <string name="title_rule_loop_sound">Hang lejátszása</string>
     <string name="title_rule_use_as_alarm">Ébresztőként használni</string>
     <string name="title_rule_alarm_hint">Figyelmen kívűl hagyja a \"ne zavarjon\" szabályokat</string>
     <string name="title_rule_alarm_duration">Maximális ébresztő időtartam (másodperc)</string>
@@ -1970,7 +1981,9 @@
     <string name="title_hint_junk">A spam szűrés a levelező szervereken futó erőforrás igényes feladat. Képtelenség hatékonyan kivitelezni egy akkumlátorról üzemelő eszközön.</string>
     <string name="title_hint_junk_learn">Az üzenetek a levélszemét mappából való ki és be helyezésével az email szerver \"megtanulja\" mi számít szemétnek</string>
     <string name="title_hint_contact_actions">Nyomja hosszan a további opciókért</string>
-    <string name="title_hint_eml">Ez a nyers üzenetfájl tartalmának összefoglalása. Mentsd a nyers üzenetfájlt a műveletmenü mentés ikonjával a teljes tartalom megtekintéséhez.</string>
+    <string name="title_hint_eml">        Ez egy nyers üzenetfájl tartalmi összefoglalója.
+        A jobb alsó gombbal lementheti az üzenetet a beérkező üzenetek közé a teljes tartalom megtekintéséhez.
+    </string>
     <string name="title_open_link">Link megnyitása</string>
     <string name="title_image_link">Kép link</string>
     <string name="title_different_link">A link neve és a címe különbözik</string>

@@ -756,7 +756,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
         De standaard algoritmen SHA256 en AES128 worden meestal ondersteund.
     </string>
     <string name="title_advanced_check_certificate">Controleer de publieke sleutel bij verzenden</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">Indicaties voor sleutelgebruik (key usage flags) bij verzenden controleren</string>
+    <string name="title_advanced_check_key_usage">Indicaties voor sleutelgebruik (key usage flags) bij verzenden controleren</string>
     <string name="title_advanced_manage_certificates">Publieke sleutels beheren</string>
     <string name="title_advanced_import_key">Importeer privé sleutel</string>
     <string name="title_advanced_manage_keys">Privé sleutels beheren</string>
@@ -800,6 +800,10 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_answer_prompt">Opdracht antwoorden</string>
     <string name="title_advanced_system_instructions">Systeem instructies</string>
     <string name="title_advanced_default_prompt">Standaard prompt</string>
+    <string name="title_advanced_ai">AI</string>
+    <string name="title_advanced_ai_input_system">Systeemprompt invoeren</string>
+    <string name="title_advanced_ai_input_body">De tekst van uw bericht invoeren</string>
+    <string name="title_advanced_ai_input_reply">De tekst van het beantwoorde bericht invoeren</string>
     <string name="title_advanced_entered_text">Ingevoerde tekst</string>
     <string name="title_advanced_sdcard">Ik wil een SD-kaart gebruiken</string>
     <string name="title_advanced_watchdog">Periodiek controleren of FairEmail nog actief is</string>
@@ -851,6 +855,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_send_reminders_hint">Toon een waarschuwing wanneer de berichttekst of het onderwerp leeg is of wanneer een bijlage zou kunnen ontbreken</string>
     <string name="title_advanced_reply_move_hint">De e-mailserver kan de berichten nog steeds toevoegen aan de map met verzonden berichten</string>
     <string name="title_advanced_compose_color_hint">Zeer lichte of zeer donkere kleuren leiden tot onleesbare berichten aan de kant van de ontvanger</string>
+    <string name="title_advanced_compose_font_hint">Standaard betekent dat het lettertype zoals geselecteerd aan de kant van de ontvanger wordt gerespecteerd</string>
     <string name="title_advanced_template_reply_hint">HTML is toegestaan. Beschikbare plaatsvervangers: %1$s</string>
     <string name="title_advanced_write_below_hint">Een ontvanger mist mogelijk uw antwoord, bijvoorbeeld wanneer een langer bericht wordt ingekort</string>
     <string name="title_advanced_attach_new_hint">Voeg anders gedeelde adressen of bestanden toe aan het huidige conceptbericht</string>
@@ -917,6 +922,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_notify_car_hint">Verbonden betekent dat er iets wordt geprojecteerd, zoals een kaart voor navigatie</string>
     <string name="title_advanced_notify_remove_hint">Meldingen van nieuwe berichten worden altijd verwijderd als ze worden weggeveegd en als berichten worden gemarkeerd als gelezen</string>
     <string name="title_advanced_notify_manage_hint">Tik op de kanaalnaam om de kanaaleigenschappen in te stellen</string>
+    <string name="title_advanced_notify_samsung_hint">Om meldingskanalen te beheren, moet u mogelijk deze Android-instelling inschakelen: Melding, Geavanceerde instellingen, Beheer meldingscategorieën voor elke app</string>
     <string name="title_advanced_notify_manage_default_hint">Om het standaardgeluid, etc in te stellen</string>
     <string name="title_advanced_notify_manage_service_hint">Om de bewakingsmelding uit te schakelen</string>
     <string name="title_advanced_notify_separate_hint">Hoe stel ik meldingen in voor accounts, mappen en afzenders?</string>
@@ -1250,6 +1256,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_force_light">Forceer licht thema</string>
     <string name="title_rename">Hernoemen</string>
     <string name="title_share">Delen</string>
+    <string name="title_analyze">Analyseer</string>
     <string name="title_event">Toevoegen aan agenda</string>
     <string name="title_pin">Snelkoppeling toevoegen</string>
     <string name="title_pin_label">Snelkoppeling titel</string>
@@ -1363,6 +1370,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_attachment_saved">Bijlage opgeslagen</string>
     <string name="title_attachments_saved">Bijlagen opgeslagen</string>
     <string name="title_attachments_incomplete">Sommige bijlagen of afbeeldingen zijn niet gedownload en konden niet worden toegevoegd</string>
+    <string name="title_report_remark">Dit rapport, een speciaal opgemaakte e-mailbericht, werd verzonden door een mailserver, omdat een verzonden bericht niet aan de ontvanger kon worden afgeleverd, bijvoorbeeld omdat de mailbox vol is, of omdat het e-mailadres niet (meer) bestaat.</string>
     <string name="title_ask_save">Wijzigingen opslaan?</string>
     <string name="title_ask_delete">Verwijder bericht definitief?</string>
     <string name="title_ask_delete_accept">Ik begrijp dat permanent verwijderen van berichten onomkeerbaar is</string>
@@ -1591,6 +1599,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_signature_email">Adres van de handtekening</string>
     <string name="title_signature_mismatch">Het e-mailadres van de afzender en de handtekening komen niet overeen</string>
     <string name="title_signature_algorithm">Algoritme</string>
+    <string name="title_signature_public_key">Publieke sleutel</string>
     <string name="title_signature_subject">Onderwerp</string>
     <string name="title_signature_validity">Geldigheid</string>
     <string name="title_signature_outdated">Deze publieke sleutel is momenteel niet geldig</string>
@@ -1652,6 +1661,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_sort_on_starred_unread">Met ster, ongelezen</string>
     <string name="title_sort_on_priority">Prioriteit</string>
     <string name="title_sort_on_sender">Afzender</string>
+    <string name="title_sort_on_sender_name">Afzendernaam</string>
     <string name="title_sort_on_subject">Onderwerp</string>
     <string name="title_sort_on_size">Grootte</string>
     <string name="title_sort_on_attachments">Bijlagen</string>
@@ -1808,6 +1818,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_rule_select_sound">Selecteer geluid</string>
     <string name="title_rule_select_sound_ringtone">Beltoon</string>
     <string name="title_rule_select_sound_audio">Audiobestand</string>
+    <string name="title_rule_loop_sound">Herhaal geluid</string>
     <string name="title_rule_use_as_alarm">Als alarm gebruiken</string>
     <string name="title_rule_alarm_hint">Dit zal \"niet storen\" regels negeren</string>
     <string name="title_rule_alarm_duration">Maximale alarmduur (seconden)</string>
@@ -1965,7 +1976,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_hint_junk">Spamfiltering zou door de e-mailserver gedaan moeten worden en kan niet op een apparaat met beperkte mogelijkheden betrouwbaar gedaan worden.</string>
     <string name="title_hint_junk_learn">Door berichten te verplaatsen van en naar de spam-map \"leert\" de e-mailserver wat spam is</string>
     <string name="title_hint_contact_actions">Druk lang voor opties</string>
-    <string name="title_hint_eml">Dit is een samenvatting van de inhoud van een ruw berichtbestand. Sla het ruwe bericht op met het \'bewaar\' icoon in de actiebalk om alle inhoud te bekijken.</string>
+    <string name="title_hint_eml">Dit is een samenvatting van de inhoud van een ruw berichtenbestand.
+ U kunt de knop rechtsonder gebruiken om het bericht op te slaan in het postvak IN om alle inhoud te bekijken.    </string>
     <string name="title_open_link">Koppeling openen</string>
     <string name="title_image_link">Afbeeldingskoppeling</string>
     <string name="title_different_link">De titel en het link-adres zijn verschillend</string>

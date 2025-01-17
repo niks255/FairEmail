@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.app.NotificationManager;
@@ -77,7 +77,7 @@ public class ActivityCompose extends ActivityBase implements FragmentManager.OnB
             Intent intent = getIntent();
 
             String action = intent.getAction();
-            boolean shared = (isShared(action) && !intent.hasExtra("fair:account"));
+            boolean shared = (intent.hasExtra("fair:shared") && !intent.hasExtra("fair:account"));
             boolean widget = (action != null && action.startsWith("widget:"));
 
             String[] tos = intent.getStringArrayExtra(Intent.EXTRA_EMAIL);
@@ -309,6 +309,7 @@ public class ActivityCompose extends ActivityBase implements FragmentManager.OnB
         }
 
         if (isShared(action)) {
+            intent.putExtra("fair:shared", true);
             args.putString("action", "new");
             args.putLong("account",
                     intent.getLongExtra("fair:account", -1L));

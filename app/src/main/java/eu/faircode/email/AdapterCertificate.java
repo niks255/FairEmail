@@ -16,15 +16,17 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +70,7 @@ public class AdapterCertificate extends RecyclerView.Adapter<AdapterCertificate.
         private TextView tvEmail;
         private ImageView ivIntermediate;
         private TextView tvSubject;
+        private TextView tvKeyUsage;
         private TextView tvAfter;
         private TextView tvBefore;
         private TextView tvExpired;
@@ -81,6 +84,7 @@ public class AdapterCertificate extends RecyclerView.Adapter<AdapterCertificate.
             tvEmail = itemView.findViewById(R.id.tvEmail);
             ivIntermediate = itemView.findViewById(R.id.ivIntermediate);
             tvSubject = itemView.findViewById(R.id.tvSubject);
+            tvKeyUsage = itemView.findViewById(R.id.tvKeyUsage);
             tvAfter = itemView.findViewById(R.id.tvAfter);
             tvBefore = itemView.findViewById(R.id.tvBefore);
             tvExpired = itemView.findViewById(R.id.tvExpired);
@@ -102,7 +106,9 @@ public class AdapterCertificate extends RecyclerView.Adapter<AdapterCertificate.
             popupMenu.getMenu().add(Menu.NONE, 0, 0, ss).setEnabled(false);
 
             popupMenu.getMenu().add(Menu.NONE, R.string.title_share, 1, R.string.title_share);
-            popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, 2, R.string.title_delete);
+            if (!Helper.isPlayStoreInstall())
+                popupMenu.getMenu().add(Menu.NONE, R.string.title_analyze, 2, R.string.title_analyze);
+            popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, 3, R.string.title_delete);
 
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
@@ -110,6 +116,9 @@ public class AdapterCertificate extends RecyclerView.Adapter<AdapterCertificate.
                     int id = item.getItemId();
                     if (id == R.string.title_share) {
                         onActionShare();
+                        return true;
+                    } else if (id == R.string.title_analyze) {
+                        onActionAnalyze();
                         return true;
                     } else if (id == R.string.title_delete) {
                         onActionDelete();
@@ -146,6 +155,35 @@ public class AdapterCertificate extends RecyclerView.Adapter<AdapterCertificate.
                                 return;
                             // application/x-pem-file is generally unsupported
                             Helper.share(context, file, "application/*", file.getName());
+                        }
+
+                        @Override
+                        protected void onException(Bundle args, Throwable ex) {
+                            Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                        }
+                    }.execute(context, owner, args, "certificate:share");
+                }
+
+                private void onActionAnalyze() {
+                    Bundle args = new Bundle();
+                    args.putLong("id", certificate.id);
+
+                    new SimpleTask<String>() {
+                        @Override
+                        protected String onExecute(Context context, Bundle args) throws CertificateException, IOException {
+                            long id = args.getLong("id");
+
+                            DB db = DB.getInstance(context);
+                            EntityCertificate certificate = db.certificate().getCertificate(id);
+                            if (certificate == null)
+                                return null;
+
+                            return Base64.encodeToString(certificate.getCertificate().getEncoded(), Base64.URL_SAFE);
+                        }
+
+                        @Override
+                        protected void onExecuted(Bundle args, String cert) {
+                            Helper.view(context, Uri.parse("https://lapo.it/asn1js/#" + cert), true);
                         }
 
                         @Override
@@ -193,12 +231,27 @@ public class AdapterCertificate extends RecyclerView.Adapter<AdapterCertificate.
 
         private void bindTo(EntityCertificate certificate) {
             tvEmail.setText(certificate.email);
+            tvEmail.setTypeface(certificate.intermediate ? Typeface.DEFAULT : Typeface.DEFAULT_BOLD);
             ivIntermediate.setVisibility(certificate.intermediate ? View.VISIBLE : View.INVISIBLE);
+
             String subject = certificate.subject;
             String algo = certificate.getSigAlgName();
             if (algo != null)
-                subject = algo + " " + subject;
+                subject = algo.replaceAll("(?i)With", "/") + " " + subject;
             tvSubject.setText(subject);
+
+            List<String> keyUsage = certificate.getKeyUsage();
+            StringBuilder sb = new StringBuilder();
+            if (certificate.isSelfSigned())
+                sb.append("(selfSigned)");
+            for (String usage : keyUsage) {
+                if (sb.length() > 0)
+                    sb.append(' ');
+                sb.append('(').append(usage).append(')');
+            }
+            tvKeyUsage.setText(sb.toString());
+            tvKeyUsage.setVisibility(sb.length() > 0 ? View.VISIBLE : View.GONE);
+
             tvAfter.setText(certificate.after == null ? null : TF.format(certificate.after));
             tvBefore.setText(certificate.before == null ? null : TF.format(certificate.before));
             tvExpired.setVisibility(certificate.isExpired() ? View.VISIBLE : View.GONE);

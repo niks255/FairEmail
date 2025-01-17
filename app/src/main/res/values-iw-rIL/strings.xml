@@ -788,6 +788,7 @@
         האלגוריתמים כברירת המחדל SHA256 ו־AES128 בדרך כלל נתמכים.
     </string>
     <string name="title_advanced_check_certificate">לבדוק את המפתח הציבורי עם השליחה</string>
+    <string name="title_advanced_check_key_usage">לבדוק חיווי שימוש במפתחות במהלך השליחה</string>
     <string name="title_advanced_manage_certificates">ניהול מפתחות ציבוריים</string>
     <string name="title_advanced_import_key">ייבוא מפתח פרטי</string>
     <string name="title_advanced_manage_keys">ניהול מפתחות פרטיים</string>
@@ -882,6 +883,7 @@
     <string name="title_advanced_send_reminders_hint">להציג אזהרה כאשר טקסט ההודעה או הנושא ריקים או כאשר קובץ לא צורף לכאורה</string>
     <string name="title_advanced_reply_move_hint">שרת הדוא״ל עדיין יכול להוסיף את ההודעות לתיקיית ההודעות שנשלחו</string>
     <string name="title_advanced_compose_color_hint">צבעים בהירים או כהים מדי יובילו להודעות בלתי קריאות בצד המקבל</string>
+    <string name="title_advanced_compose_font_hint">המשמעות של ברירת מחדל היא לכבד את הגופן שנברר כברירת מחדל בצד המקבל</string>
     <string name="title_advanced_template_reply_hint">מותר HTML. ממלאי מקום זמינים: %1$s</string>
     <string name="title_advanced_write_below_hint">נמענים עלולים להחמיץ את התגובה שלך, למשל כאשר הודעה ארוכה יותר מקוצרת</string>
     <string name="title_advanced_attach_new_hint">אם לא, להוסיף כתובות או קבצים משותפים להודעת הטיוטה הנוכחית</string>
@@ -948,6 +950,7 @@
     <string name="title_advanced_notify_car_hint">מחובר כלומר שמשהו מוקרן כגון מפה לניווט</string>
     <string name="title_advanced_notify_remove_hint">התראות על הודעות חשבות תמיד תוסרנה עם החלקה כלפי חוץ ועם סימון הודעות כנקראו</string>
     <string name="title_advanced_notify_manage_hint">יש לגעת בשם הערוץ כדי להגדיר את מאפייניו</string>
+    <string name="title_advanced_notify_samsung_hint">כדי לנהל ערוצי התראות, כנראה שיהיה עליך להפעיל את הגדרת ה־Android הזאת: התראה, הגדרות מתקדמות, ניהול קטגוריות התראה לכל יישום</string>
     <string name="title_advanced_notify_manage_default_hint">כדי להגדיר את צלילי ברירת המחדל וכו׳.</string>
     <string name="title_advanced_notify_manage_service_hint">כדי להשבית את התראת ה‚מעקב’</string>
     <string name="title_advanced_notify_separate_hint">איך אפשר להגדיר התראות לחשבונות, תיקיות ומוענים?</string>
@@ -1284,6 +1287,7 @@
     <string name="title_force_light">אילוץ ערכת נושא בהירה</string>
     <string name="title_rename">שינוי שם</string>
     <string name="title_share">שיתוף</string>
+    <string name="title_analyze">ניתוח</string>
     <string name="title_event">הוספה ללוח השנה</string>
     <string name="title_pin">הוספת קיצור דרך</string>
     <string name="title_pin_label">כותרת קיצור הדרך</string>
@@ -1399,6 +1403,7 @@
     <string name="title_attachment_saved">הקובץ המצורף נשמר</string>
     <string name="title_attachments_saved">הקבצים המצורפים נשמרו</string>
     <string name="title_attachments_incomplete">חלק מהקבצים המצורפים או התמונות לא התקבלו ולא ניתן להוסיף אותם</string>
+    <string name="title_report_remark">הדוח הזה, הודעה שעוצבה במיוחד, נשלח על ידי שרת דוא״ל כי אי אפשר להעביר את ההודעה שנשלחה לנמען, למשל כיוון שתיבת הדוא״ל מלאה או כיוון שכתובת הדוא״ל לא קיימת (עוד).</string>
     <string name="title_ask_save">לשמור את השינויים?</string>
     <string name="title_ask_delete">למחוק הודעה לצמיתות?</string>
     <string name="title_ask_delete_accept">ברור לי שמחיקת הודעות לצמיתות היא בלתי הפיכה</string>
@@ -1628,6 +1633,7 @@
     <string name="title_signature_email">כתובת החתימה</string>
     <string name="title_signature_mismatch">כתובת דוא״ל המוען והחתימה אינם תואמים</string>
     <string name="title_signature_algorithm">אלגוריתם</string>
+    <string name="title_signature_public_key">מפתח ציבורי</string>
     <string name="title_signature_subject">נושא</string>
     <string name="title_signature_validity">תוקף</string>
     <string name="title_signature_outdated">המפתח הציבורי אינו תקף כרגע</string>
@@ -1691,6 +1697,7 @@
     <string name="title_sort_on_starred_unread">מסומן בכוכב, לא נקרא</string>
     <string name="title_sort_on_priority">עדיפות</string>
     <string name="title_sort_on_sender">מוען</string>
+    <string name="title_sort_on_sender_name">שם השולח</string>
     <string name="title_sort_on_subject">נושא</string>
     <string name="title_sort_on_size">גודל</string>
     <string name="title_sort_on_attachments">קבצים מצורפים</string>
@@ -2005,7 +2012,9 @@
     <string name="title_hint_junk">סינון הספאם צריך להתבצע מצד שרת הדוא״ל ולא ניתן לבצע אותו על מכשיר שמופעל על סוללה עם יכולות מוגבלות.</string>
     <string name="title_hint_junk_learn">העברת הודעות אל תיקיית הספאם וממנה, „מלמדת” את שרת הדוא״ל מה זה ספאם</string>
     <string name="title_hint_contact_actions">לחיצה ארוכה לאפשרויות</string>
-    <string name="title_hint_eml">זה תקציר תוכן קובץ ההודעה הגולמית. שמירת ההודעה הגולמית באמצעות כפתור השמירה בסרגל הפעולות תאפשר צפייה בכל תוכנו.</string>
+    <string name="title_hint_eml">        זה תקציר התוכן של קובץ הודעה גולמי.
+        אפשר להשתמש בכפתור שמשמאל למטה כדי לשמור הודעות לדואר הנכנס כדי לצפות בכל התוכן.
+    </string>
     <string name="title_open_link">פתיחת קישור</string>
     <string name="title_image_link">קישור לתמונה</string>
     <string name="title_different_link">הכותרת וכתובת הקישור שונים</string>

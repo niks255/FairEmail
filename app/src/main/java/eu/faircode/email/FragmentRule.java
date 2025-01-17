@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -173,6 +173,7 @@ public class FragmentRule extends FragmentBase {
     private Button btnTtsData;
 
     private Button btnSound;
+    private CheckBox cbLoop;
     private CheckBox cbAlarm;
     private EditText etAlarmDuration;
 
@@ -183,6 +184,7 @@ public class FragmentRule extends FragmentBase {
 
     private Spinner spUrlMethod;
     private EditText etUrl;
+    private EditText etContent;
     private TextView tvUrlHint;
 
     private BottomNavigationView bottom_navigation;
@@ -247,6 +249,7 @@ public class FragmentRule extends FragmentBase {
             "$$dkim$",
             "$$spf$",
             "$$dmarc$",
+            "$$auth$",
             "$$mx$",
             "$$blocklist$",
             "$$replydomain$",
@@ -379,6 +382,7 @@ public class FragmentRule extends FragmentBase {
         btnTtsData = view.findViewById(R.id.btnTtsData);
 
         btnSound = view.findViewById(R.id.btnSound);
+        cbLoop = view.findViewById(R.id.cbLoop);
         cbAlarm = view.findViewById(R.id.cbAlarm);
         etAlarmDuration = view.findViewById(R.id.etAlarmDuration);
 
@@ -389,6 +393,7 @@ public class FragmentRule extends FragmentBase {
 
         spUrlMethod = view.findViewById(R.id.spUrlMethod);
         etUrl = view.findViewById(R.id.etUrl);
+        etContent = view.findViewById(R.id.etContent);
         tvUrlHint = view.findViewById(R.id.tvUrlHint);
 
         bottom_navigation = view.findViewById(R.id.bottom_navigation);
@@ -890,6 +895,27 @@ public class FragmentRule extends FragmentBase {
                 fragment.setArguments(args);
                 fragment.setTargetFragment(FragmentRule.this, REQUEST_COLOR_NOTES);
                 fragment.show(getParentFragmentManager(), "rule:color:notes");
+            }
+        });
+
+        etContent.setEnabled(false);
+        spUrlMethod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String method = null;
+                try {
+                    String[] methods = getResources().getStringArray(R.array.httpMethodNames);
+                    if (position >= 0 && position < methods.length)
+                        method = methods[position];
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+                etContent.setEnabled("POST".equals(method) || "PUT".equals(method));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                etContent.setEnabled(false);
             }
         });
 
@@ -1454,8 +1480,10 @@ public class FragmentRule extends FragmentBase {
                                 case EntityRule.TYPE_SOUND:
                                     if (jaction.has("uri"))
                                         FragmentRule.this.sound = Uri.parse(jaction.getString("uri"));
+                                    boolean loop = jaction.optBoolean("loop");
                                     boolean alarm = jaction.optBoolean("alarm");
                                     int duration = jaction.optInt("duration", 0);
+                                    cbLoop.setChecked(loop);
                                     cbAlarm.setChecked(alarm);
                                     etAlarmDuration.setEnabled(alarm);
                                     etAlarmDuration.setText(duration == 0 ? null : Integer.toString(duration));
@@ -1470,6 +1498,7 @@ public class FragmentRule extends FragmentBase {
 
                                 case EntityRule.TYPE_URL:
                                     etUrl.setText(jaction.getString("url"));
+                                    etContent.setText(jaction.getString("body"));
                                     String method = jaction.optString("method");
                                     if (TextUtils.isEmpty(method))
                                         method = "GET";
@@ -1883,9 +1912,11 @@ public class FragmentRule extends FragmentBase {
                     break;
 
                 case EntityRule.TYPE_SOUND:
+                    boolean loop = cbLoop.isChecked();
                     boolean alarm = cbAlarm.isChecked();
                     String duration = etAlarmDuration.getText().toString();
                     jaction.put("uri", sound);
+                    jaction.put("loop", loop);
                     jaction.put("alarm", alarm);
                     if (alarm && !TextUtils.isEmpty(duration))
                         try {
@@ -1904,6 +1935,7 @@ public class FragmentRule extends FragmentBase {
 
                 case EntityRule.TYPE_URL:
                     jaction.put("url", etUrl.getText().toString().trim());
+                    jaction.put("body", etContent.getText().toString());
                     int pos = spUrlMethod.getSelectedItemPosition();
                     String[] methods = getResources().getStringArray(R.array.httpMethodNames);
                     if (pos >= 0 && pos < methods.length)

@@ -760,7 +760,7 @@
         Les algorithmes par défaut SHA256 et AES128 sont couramment pris en charge.
     </string>
     <string name="title_advanced_check_certificate">Vérifier la clé publique lors de l\'envoi</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">Vérifier les indications d\'utilisation des clés lors de l\'envoi</string>
+    <string name="title_advanced_check_key_usage">Vérifier les indications d\'utilisation des clés lors de l\'envoi</string>
     <string name="title_advanced_manage_certificates">Gérer les clés publiques</string>
     <string name="title_advanced_import_key">Importer une clé privée</string>
     <string name="title_advanced_manage_keys">Gérer les clés privées</string>
@@ -805,6 +805,10 @@
     <string name="title_advanced_answer_prompt">Invite pour répondre</string>
     <string name="title_advanced_system_instructions">Instructions système</string>
     <string name="title_advanced_default_prompt">Invite par défaut</string>
+    <string name="title_advanced_ai">IA</string>
+    <string name="title_advanced_ai_input_system">Invite d\'entrée du système</string>
+    <string name="title_advanced_ai_input_body">Utiliser le texte de votre message</string>
+    <string name="title_advanced_ai_input_reply">Utiliser le texte du message répondu</string>
     <string name="title_advanced_entered_text">Texte saisi</string>
     <string name="title_advanced_sdcard">Je veux utiliser une carte SD</string>
     <string name="title_advanced_watchdog">Vérifier périodiquement si FairEmail est toujours actif</string>
@@ -856,6 +860,7 @@
     <string name="title_advanced_send_reminders_hint">Afficher un avertissement quand le texte du message ou l’objet sont vides ou quand une pièce jointe semble avoir été oubliée</string>
     <string name="title_advanced_reply_move_hint">Le serveur de messagerie pourrait tout de même ajouter les messages au dossier des messages envoyés</string>
     <string name="title_advanced_compose_color_hint">Les couleurs très claires ou très sombres rendront les messages illisibles par les destinataires</string>
+    <string name="title_advanced_compose_font_hint">Par défaut signifie respecter la police de caractères choisie par le destinataire</string>
     <string name="title_advanced_template_reply_hint">HTML est autorisé. Espaces réservés disponibles : %1$s</string>
     <string name="title_advanced_write_below_hint">Un destinataire peut manquer votre réponse, par exemple lorsqu\'un message trop long est tronqué</string>
     <string name="title_advanced_attach_new_hint">Sinon, ajouter les adresses ou fichiers partagés au message brouillon actuel</string>
@@ -922,6 +927,7 @@
     <string name="title_advanced_notify_car_hint">Connecté signifie que quelque chose est projeté, comme une carte pour la navigation</string>
     <string name="title_advanced_notify_remove_hint">Les notifications de nouveau message seront toujours supprimées lors de leur balayage et du marquage des messages comme lus</string>
     <string name="title_advanced_notify_manage_hint">Appuyez sur le nom d’un canal pour définir ses propriétés</string>
+    <string name="title_advanced_notify_samsung_hint">Pour gérer les canaux de notification, vous devrez peut-être activer ce paramètre Android : Notifications, Paramètres avancés, Gérer les catégories de notifications pour chaque application</string>
     <string name="title_advanced_notify_manage_default_hint">Pour définir le son par défaut, etc.</string>
     <string name="title_advanced_notify_manage_service_hint">Pour désactiver la notification « Surveillance »</string>
     <string name="title_advanced_notify_separate_hint">Comment configurer les notifications pour les comptes, dossiers et expéditeurs?</string>
@@ -1258,6 +1264,7 @@
     <string name="title_force_light">Forcer le thème clair</string>
     <string name="title_rename">Renommer</string>
     <string name="title_share">Partager</string>
+    <string name="title_analyze">Analyser</string>
     <string name="title_event">Ajouter au calendrier</string>
     <string name="title_pin">Ajouter un raccourci</string>
     <string name="title_pin_label">Nom du raccourci</string>
@@ -1373,6 +1380,7 @@
     <string name="title_attachment_saved">Pièce jointe enregistrée</string>
     <string name="title_attachments_saved">Pièces jointes enregistrées</string>
     <string name="title_attachments_incomplete">Certaines pièces jointes ou images n’ont pas été téléchargées et n’ont pas pu être ajoutées</string>
+    <string name="title_report_remark">Ce rapport, un e-mail spécialement formaté, a été envoyé par un serveur de messagerie car un message envoyé n\'a pas pu être remis au destinataire, par exemple parce que la boîte aux lettres est pleine ou parce que l\'adresse e-mail n\'existe pas / plus.</string>
     <string name="title_ask_save">Enregistrer les modifications?</string>
     <string name="title_ask_delete">Supprimer ce message définitivement?</string>
     <string name="title_ask_delete_accept">Je comprends que la suppression définitive des messages est irréversible</string>
@@ -1602,6 +1610,7 @@
     <string name="title_signature_email">Adresse de la signature</string>
     <string name="title_signature_mismatch">Les adresses courriel de l\'expéditeur et de la signature ne correspondent pas</string>
     <string name="title_signature_algorithm">Algorithme</string>
+    <string name="title_signature_public_key">Clé publique</string>
     <string name="title_signature_subject">Objet</string>
     <string name="title_signature_validity">Validité</string>
     <string name="title_signature_outdated">Cette clé publique n’est actuellement pas valide</string>
@@ -1665,6 +1674,7 @@
     <string name="title_sort_on_starred_unread">Suivis, non lus</string>
     <string name="title_sort_on_priority">Priorité</string>
     <string name="title_sort_on_sender">Expéditeur</string>
+    <string name="title_sort_on_sender_name">Nom de l\'expéditeur</string>
     <string name="title_sort_on_subject">Objet</string>
     <string name="title_sort_on_size">Taille</string>
     <string name="title_sort_on_attachments">Pièces jointes</string>
@@ -1822,6 +1832,7 @@
     <string name="title_rule_select_sound">Choisir un son</string>
     <string name="title_rule_select_sound_ringtone">Sonnerie</string>
     <string name="title_rule_select_sound_audio">Fichier audio</string>
+    <string name="title_rule_loop_sound">Son en boucle</string>
     <string name="title_rule_use_as_alarm">Utiliser en tant qu\'alarme</string>
     <string name="title_rule_alarm_hint">Ceci ignorera les règles « Ne pas déranger »</string>
     <string name="title_rule_alarm_duration">Durée maximale de l\'alarme (secondes)</string>
@@ -1979,7 +1990,9 @@
     <string name="title_hint_junk">Le filtrage du pourriel devrait être fait par le serveur de messagerie et ne peut pas être fait de manière fiable sur un appareil ayant des capacités limitées et alimenté par une pile.</string>
     <string name="title_hint_junk_learn">En déplaçant les messages vers et depuis le dossier des indésirables, le serveur de messagerie \"apprend\" ce qu\'est le courrier indésirable</string>
     <string name="title_hint_contact_actions">Appui long pour les options</string>
-    <string name="title_hint_eml">Ceci est l’aperçu d’un fichier contenant un message original. Enregistrez le message original au moyen de l’icône de sauvegarde dans la barre d’action pour afficher tout son contenu.</string>
+    <string name="title_hint_eml">        Ceci est un extrait du contenu d\'un fichier de message original.
+        Vous pouvez utiliser le bouton situé en bas à droite pour enregistrer le message dans la boîte de réception afin de visualiser tout le contenu.
+    </string>
     <string name="title_open_link">Ouvrir le lien</string>
     <string name="title_image_link">Lien de l\'image</string>
     <string name="title_different_link">Le titre et l’adresse du lien sont différents</string>
@@ -2120,7 +2133,7 @@
     <string name="title_widget_show_unseen">Afficher comme non lu</string>
     <string name="title_widget_flagged">Messages suivis seulement</string>
     <string name="title_widget_show_flagged">Afficher les étoiles de suivi</string>
-    <string name="title_widget_font_size">Taille de police</string>
+    <string name="title_widget_font_size">Taille du texte</string>
     <string name="title_widget_padding">Espacement des messages</string>
     <string name="title_widget_separator_lines">Afficher des lignes de séparation</string>
     <string name="title_widget_semi_transparent">Arrière-plan semi-transparent</string>

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Intent;
@@ -38,7 +38,7 @@ public class ApplicationSecure extends ApplicationEx implements ProviderInstalle
     public void onCreate() {
         super.onCreate();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean ssl_update = prefs.getBoolean("ssl_update", true);
+        boolean ssl_update = prefs.getBoolean("ssl_update", Helper.isPlayStoreInstall());
         if (ssl_update) {
             Log.i("Security provider check");
             ProviderInstaller.installIfNeededAsync(this, this);

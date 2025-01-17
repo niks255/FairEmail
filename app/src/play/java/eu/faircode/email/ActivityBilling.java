@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.annotation.SuppressLint;
@@ -608,8 +608,11 @@ public class ActivityBilling extends ActivityBase implements
         else {
             message = getBillingResponseText(result);
 
-            if (result.getResponseCode() == BillingClient.BillingResponseCode.BILLING_UNAVAILABLE)
+            if (result.getResponseCode() == BillingClient.BillingResponseCode.ERROR ||
+                    result.getResponseCode() == BillingClient.BillingResponseCode.BILLING_UNAVAILABLE)
                 message += " Is the Play Store app logged into the account used to install the app?";
+            else if (result.getResponseCode() == BillingClient.BillingResponseCode.NETWORK_ERROR)
+                message += " Is there a working internet connection?";
 
             String debug = result.getDebugMessage();
             if (!TextUtils.isEmpty(debug))

@@ -86,7 +86,7 @@
     </string>
     <string name="title_blocked_senders">ブロックした差出人</string>
     <string name="title_unblock_all">すべてブロック解除</string>
-    <string name="title_unblock_all_remark">送信者をブロックするリストとオプションをすべてリセットします</string>
+    <string name="title_unblock_all_remark">差出人をブロックするリストとオプションをすべてリセットします</string>
     <string name="title_unblock_all_hint">アプリは、メールサーバーによる迷惑メールフォルダーへのメッセージ移動を停止できません！</string>
     <plurals name="title_ask_block_sender">
         <item quantity="other">メッセージ %1$s 通の差出人をブロックしますか？</item>
@@ -746,7 +746,7 @@
         デフォルトのアルゴリズム SHA256 と AES128 は一般的に対応されています。
     </string>
     <string name="title_advanced_check_certificate">送信するときに公開鍵を確認する</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">送信するときに鍵用途の状態を確認する</string>
+    <string name="title_advanced_check_key_usage">送信するときに鍵用途の状態を確認する</string>
     <string name="title_advanced_manage_certificates">公開鍵を管理</string>
     <string name="title_advanced_import_key">秘密鍵をインポート</string>
     <string name="title_advanced_manage_keys">秘密鍵を管理</string>
@@ -841,6 +841,7 @@
     <string name="title_advanced_send_reminders_hint">本文または件名が空の場合、またはファイルの添付に失敗した可能性がある場合に警告を表示します</string>
     <string name="title_advanced_reply_move_hint">メールサーバーはこの設定を無視してメッセージを送信済みフォルダーに追加できます</string>
     <string name="title_advanced_compose_color_hint">極端に明るいまたは暗い色を設定すると、受信者がメッセージを判読できなくなることがあります</string>
+    <string name="title_advanced_compose_font_hint">デフォルトでは受信側で選択されているフォントを尊重します</string>
     <string name="title_advanced_template_reply_hint">HTML を使用できます。使用できるプレースホルダー: %1$s</string>
     <string name="title_advanced_write_below_hint">受信者が長いメッセージをよく読まないなどの理由で、あなたの返信が見落とされる場合があります</string>
     <string name="title_advanced_attach_new_hint">OFF にすると、作成中の下書きメッセージに共有されたアドレスやファイルを追加します</string>
@@ -907,6 +908,7 @@
     <string name="title_advanced_notify_car_hint">接続とは地図など何かが投影されている状態を意味します</string>
     <string name="title_advanced_notify_remove_hint">新着メッセージ通知はこの設定に関係なく、スワイプしたり、メッセージを既読にすると削除されます</string>
     <string name="title_advanced_notify_manage_hint">チャンネル名をタップして、チャンネルのプロパティを設定します</string>
+    <string name="title_advanced_notify_samsung_hint">通知チャンネルを管理するには、Android の設定で: 通知 > 詳細設定 > 各アプリの[通知カテゴリ]を管理 を有効にする必要がある場合があります</string>
     <string name="title_advanced_notify_manage_default_hint">デフォルトの音などを設定します</string>
     <string name="title_advanced_notify_manage_service_hint">「モニター」通知を無効にします</string>
     <string name="title_advanced_notify_separate_hint">アカウント、フォルダ、差出人の通知を設定するにはどうすればよいですか？</string>
@@ -919,7 +921,7 @@
     <string name="title_advanced_notify_no_grouping">この Android バージョンは通知のグループ化に対応していません</string>
     <string name="title_advanced_notify_no_channels">この Android バージョンは通知チャンネルに対応していません</string>
     <string name="title_advanced_fts_hint">有効にすると、検索パフォーマンスが向上しますが、バッテリー使用量とストレージ使用量も増加します</string>
-    <string name="title_advanced_english_hint">アプリが再起動されます</string>
+    <string name="title_advanced_english_hint">アプリが再起動します</string>
     <string name="title_advanced_experiments_hint">現在の実験機能リスト</string>
     <string name="title_advanced_protocol_hint">これにより、バッテリー使用量とストレージの使用量が大幅に増加します！</string>
     <string name="title_advanced_debug_hint">さまざまな場所でデバッグ情報が表示され、デザインが崩れます</string>
@@ -1243,6 +1245,7 @@
     <string name="title_force_light">ライトテーマを強制</string>
     <string name="title_rename">名前を変更</string>
     <string name="title_share">共有</string>
+    <string name="title_analyze">分析</string>
     <string name="title_event">カレンダーに追加</string>
     <string name="title_pin">ショートカットを追加</string>
     <string name="title_pin_label">ショートカットのタイトル</string>
@@ -1358,6 +1361,7 @@
     <string name="title_attachment_saved">添付ファイルを保存しました</string>
     <string name="title_attachments_saved">添付ファイルを保存しました</string>
     <string name="title_attachments_incomplete">一部の添付ファイルまたは画像がダウンロードされず、追加されませんでした</string>
+    <string name="title_report_remark">このレポートは、宛先のメールボックスが満杯やアドレスが存在しない (しなくなった) ような、宛先にメッセージが配信できない場合にメールサーバーから送信される特別なフォーマットのメールです。</string>
     <string name="title_ask_save">変更内容を保存しますか？</string>
     <string name="title_ask_delete">メッセージを完全に削除しますか？</string>
     <string name="title_ask_delete_accept">メッセージを完全に削除すると元に戻せませんが、本当によろしいですか？</string>
@@ -1587,6 +1591,7 @@
     <string name="title_signature_email">デジタル署名のメールアドレス</string>
     <string name="title_signature_mismatch">差出人のメールアドレスがデジタル署名と一致しません</string>
     <string name="title_signature_algorithm">アルゴリズム</string>
+    <string name="title_signature_public_key">公開鍵</string>
     <string name="title_signature_subject">サブジェクト</string>
     <string name="title_signature_validity">有効期間</string>
     <string name="title_signature_outdated">現在、この公開鍵は無効です</string>
@@ -1650,6 +1655,7 @@
     <string name="title_sort_on_starred_unread">スター付き、未読</string>
     <string name="title_sort_on_priority">重要度</string>
     <string name="title_sort_on_sender">差出人</string>
+    <string name="title_sort_on_sender_name">差出人名</string>
     <string name="title_sort_on_subject">件名</string>
     <string name="title_sort_on_size">サイズ</string>
     <string name="title_sort_on_attachments">添付ファイル</string>
@@ -1964,7 +1970,9 @@
     <string name="title_hint_junk">迷惑メールフィルタリングはメールサーバーで実行すべきもので、機能に制限があるバッテリー駆動のモバイル端末では十分に実行できません。</string>
     <string name="title_hint_junk_learn">迷惑メールフォルダーにメッセージを移動することで、メールサーバーは何が迷惑メールかを学習します</string>
     <string name="title_hint_contact_actions">長押ししてオプションへ</string>
-    <string name="title_hint_eml">これは元のメッセージファイルの内容の要約です。すべてのコンテンツを表示するにはアクションバーから元のメッセージを保存します</string>
+    <string name="title_hint_eml">        これは元のメッセージファイルの内容の要約です。
+        右下のボタンからメッセージを受信トレイに保存すると、すべてのコンテンツを表示できます。
+    </string>
     <string name="title_open_link">リンクを開く</string>
     <string name="title_image_link">画像リンク</string>
     <string name="title_different_link">タイトルとリンクアドレスが異なります</string>

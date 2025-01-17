@@ -787,7 +787,7 @@
         Powszechnie obsługiwane są domyślne algorytmy SHA256 i AES128.
     </string>
     <string name="title_advanced_check_certificate">Sprawdź klucz publiczny podczas wysyłania</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">Sprawdź wskazania użycia klucza przy wysyłaniu</string>
+    <string name="title_advanced_check_key_usage">Sprawdź wskazania użycia klucza przy wysyłaniu</string>
     <string name="title_advanced_manage_certificates">Zarządzaj kluczami publicznymi</string>
     <string name="title_advanced_import_key">Importuj klucz prywatny</string>
     <string name="title_advanced_manage_keys">Zarządzaj kluczami prywatnymi</string>
@@ -831,6 +831,10 @@
     <string name="title_advanced_answer_prompt">Prośba o odpowiedź</string>
     <string name="title_advanced_system_instructions">Instrukcje systemowe</string>
     <string name="title_advanced_default_prompt">Komunikat domyślny</string>
+    <string name="title_advanced_ai">SI</string>
+    <string name="title_advanced_ai_input_system">Wiersz poleceń</string>
+    <string name="title_advanced_ai_input_body">Wprowadź tekst wiadomości</string>
+    <string name="title_advanced_ai_input_reply">Wprowadź tekst w odpowiedzi na wiadomość</string>
     <string name="title_advanced_entered_text">Wprowadzony tekst</string>
     <string name="title_advanced_sdcard">Chcę użyć karty SD</string>
     <string name="title_advanced_watchdog">Okresowo sprawdzaj, czy FairEmail jest nadal aktywny</string>
@@ -882,6 +886,7 @@
     <string name="title_advanced_send_reminders_hint">Pokaż ostrzeżenie, gdy tekst wiadomości lub temat jest pusty lub gdy może brakować załącznika</string>
     <string name="title_advanced_reply_move_hint">Serwer e-mail może nadal dodawać wiadomości do folderu wysłanych wiadomości</string>
     <string name="title_advanced_compose_color_hint">Bardzo jasne lub bardzo ciemne kolory spowodują, że wiadomości po stronie odbiorcy będą nieczytelne</string>
+    <string name="title_advanced_compose_font_hint">Domyślny oznacza przestrzeganie czcionki wybranej po stronie odbiorcy</string>
     <string name="title_advanced_template_reply_hint">HTML jest dozwolony. Dostępne symbole zastępcze: %1$s</string>
     <string name="title_advanced_write_below_hint">Odbiorca może przegapić Twoją odpowiedź, np. gdy dłuższa wiadomość zostanie skrócona</string>
     <string name="title_advanced_attach_new_hint">W innym przypadku dodaj udostępniane adresy lub pliki do aktualnej wersji roboczej wiadomości</string>
@@ -948,6 +953,7 @@
     <string name="title_advanced_notify_car_hint">Połączony oznacza, że coś jest wyświetlane, na przykład mapa do nawigacji</string>
     <string name="title_advanced_notify_remove_hint">Powiadomienia o nowych wiadomościach będą zawsze usuwane po przesunięciu i oznaczeniu wiadomości jako przeczytane</string>
     <string name="title_advanced_notify_manage_hint">Dotknij nazwę kanału, aby ustawić właściwości kanału</string>
+    <string name="title_advanced_notify_samsung_hint">Aby zarządzać kanałami powiadomień, może być konieczne włączenie tego ustawienia w systemie Android: Powiadomienia, Zaawansowane ustawienia, Zarządzaj kategoriami powiadomień dla każdej aplikacji</string>
     <string name="title_advanced_notify_manage_default_hint">Aby ustawić domyślny dźwięk, itp.</string>
     <string name="title_advanced_notify_manage_service_hint">Aby wyłączyć powiadomienie \"monitorowanie\"</string>
     <string name="title_advanced_notify_separate_hint">Jak skonfigurować powiadomienia dla kont, folderów i nadawców?</string>
@@ -1283,6 +1289,7 @@
     <string name="title_force_light">Wymuś jasny motyw</string>
     <string name="title_rename">Zmień nazwę</string>
     <string name="title_share">Udostępnij</string>
+    <string name="title_analyze">Analizuj</string>
     <string name="title_event">Dodaj do kalendarza</string>
     <string name="title_pin">Dodaj skrót</string>
     <string name="title_pin_label">Tytuł skrótu</string>
@@ -1398,6 +1405,7 @@
     <string name="title_attachment_saved">Załącznik zapisany</string>
     <string name="title_attachments_saved">Załączniki zapisane</string>
     <string name="title_attachments_incomplete">Niektóre załączniki lub obrazy nie zostały pobrane i nie można ich dodać</string>
+    <string name="title_report_remark">Ten raport, specjalnie sformatowana wiadomość e-mail, został wysłany przez serwer poczty e-mail, ponieważ wysłana wiadomość nie mogła zostać dostarczona do odbiorcy, na przykład z powodu zapełnienia skrzynki pocztowej lub dlatego, że adres e-mail już nie istnieje.</string>
     <string name="title_ask_save">Zapisać zmiany?</string>
     <string name="title_ask_delete">Usunąć wiadomość bezpowrotnie?</string>
     <string name="title_ask_delete_accept">Rozumiem, że trwałe usuwanie wiadomości jest nieodwracalne</string>
@@ -1626,6 +1634,7 @@
     <string name="title_signature_email">Adres podpisu</string>
     <string name="title_signature_mismatch">Adres e-mail nadawcy i podpis nie są zgodne</string>
     <string name="title_signature_algorithm">Algorytm</string>
+    <string name="title_signature_public_key">Klucz publiczny</string>
     <string name="title_signature_subject">Temat</string>
     <string name="title_signature_validity">Ważność</string>
     <string name="title_signature_outdated">Ten klucz publiczny jest obecnie nieprawidłowy</string>
@@ -1689,6 +1698,7 @@
     <string name="title_sort_on_starred_unread">Z gwiazdką, nieprzeczytane</string>
     <string name="title_sort_on_priority">Priorytet</string>
     <string name="title_sort_on_sender">Nadawca</string>
+    <string name="title_sort_on_sender_name">Nazwa nadawcy</string>
     <string name="title_sort_on_subject">Temat</string>
     <string name="title_sort_on_size">Rozmiar</string>
     <string name="title_sort_on_attachments">Załączniki</string>
@@ -1847,6 +1857,7 @@
     <string name="title_rule_select_sound">Wybierz dźwięk</string>
     <string name="title_rule_select_sound_ringtone">Dzwonek</string>
     <string name="title_rule_select_sound_audio">Plik audio</string>
+    <string name="title_rule_loop_sound">Zapętl dźwięk</string>
     <string name="title_rule_use_as_alarm">Użyj jako alarmu</string>
     <string name="title_rule_alarm_hint">To zignoruje zasady \"nie przeszkadzać\"</string>
     <string name="title_rule_alarm_duration">Maksymalny czas trwania alarmu (sekundy)</string>
@@ -2004,7 +2015,9 @@
     <string name="title_hint_junk">Filtrowanie spamu powinno być wykonywane przez serwer poczty e-mail i nie może być wykonywane niezawodnie na urządzeniu o ograniczonych możliwościach i zasilanym z baterii.</string>
     <string name="title_hint_junk_learn">Przesyłając wiadomości do i z folderu spam, serwer e-mail \"uczy się\" czym jest spam</string>
     <string name="title_hint_contact_actions">Przytrzymaj, aby uzyskać więcej opcji</string>
-    <string name="title_hint_eml">To jest podsumowanie zawartości nieprzetworzonego pliku wiadomości. Zapisz nieprzetworzoną wiadomość używając ikony zapisu na pasku akcji, aby wyświetlić całą zawartość.</string>
+    <string name="title_hint_eml">        To jest podsumowanie zawartości nieprzetworzonego pliku wiadomości.
+        Możesz użyć prawego dolnego przycisku, aby zapisać wiadomość w skrzynce odbiorczej i wyświetlić całą zawartość.
+    </string>
     <string name="title_open_link">Otwórz link</string>
     <string name="title_image_link">Link do obrazu</string>
     <string name="title_different_link">Tytuł i adres linku są różne</string>

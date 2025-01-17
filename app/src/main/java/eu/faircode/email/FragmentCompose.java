@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_FIRST_USER;
@@ -79,6 +79,7 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.URLSpan;
 import android.util.Pair;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -88,6 +89,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.MimeTypeMap;
@@ -128,6 +130,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
@@ -325,7 +328,6 @@ public class FragmentCompose extends FragmentBase {
     private int searchIndex = 0;
 
     static final int REDUCED_IMAGE_SIZE = 1440; // pixels
-    private static final int REDUCED_IMAGE_QUALITY = 90; // percent
     // http://regex.info/blog/lightroom-goodies/jpeg-quality
     private static final int COPY_ATTACHMENT_TIMEOUT = 60; // seconds
 
@@ -350,6 +352,8 @@ public class FragmentCompose extends FragmentBase {
     private static final int REQUEST_SEND = 16;
     static final int REQUEST_EDIT_ATTACHMENT = 17;
     private static final int REQUEST_REMOVE_ATTACHMENTS = 18;
+    private static final int REQUEST_EDIT_IMAGE = 19;
+    private static final int REQUEST_AI = 20;
 
     ActivityResultLauncher<PickVisualMediaRequest> pickImages;
 
@@ -815,6 +819,69 @@ public class FragmentCompose extends FragmentBase {
                     } finally {
                         inserted = false;
                     }
+            }
+        });
+
+        etBody.setOnTouchListener(new View.OnTouchListener() {
+            private final GestureDetector gestureDetector = new GestureDetector(getContext(),
+                    new GestureDetector.SimpleOnGestureListener() {
+                        private String lastSource = null;
+                        private Long lastTime = null;
+
+                        @Override
+                        public boolean onSingleTapConfirmed(@NonNull MotionEvent event) {
+                            try {
+                                Editable buffer = etBody.getText();
+                                if (buffer == null)
+                                    return false;
+
+                                int off = Helper.getOffset(etBody, buffer, event);
+                                ImageSpan[] image = buffer.getSpans(off, off, ImageSpan.class);
+                                if (image == null || image.length == 0)
+                                    return false;
+
+                                String source = image[0].getSource();
+                                if (source == null || !source.startsWith("cid:"))
+                                    return false;
+
+                                long now = new Date().getTime();
+                                long delta = now - (lastTime == null ? now : lastTime);
+                                long timeout = ViewConfiguration.getLongPressTimeout(); /* Typically: 400 ms */
+                                if (!source.equals(lastSource) || delta < timeout || delta > timeout * 5) {
+                                    lastSource = source;
+                                    lastTime = now;
+                                    return false;
+                                }
+
+                                Helper.hideKeyboard(etBody);
+
+                                long id = Long.parseLong(source.substring(source.lastIndexOf('.') + 1));
+
+                                int start = buffer.getSpanStart(image[0]);
+                                int end = buffer.getSpanEnd(image[0]);
+
+                                Bundle args = new Bundle();
+                                args.putLong("id", id);
+                                args.putString("source", source);
+                                args.putInt("start", start);
+                                args.putInt("end", end);
+
+                                FragmentDialogEditImage fragment = new FragmentDialogEditImage();
+                                fragment.setArguments(args);
+                                fragment.setTargetFragment(FragmentCompose.this, REQUEST_EDIT_IMAGE);
+                                fragment.show(getParentFragmentManager(), "edit:image");
+
+                                return true;
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                                return false;
+                            }
+                        }
+                    });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
             }
         });
 
@@ -1909,8 +1976,15 @@ public class FragmentCompose extends FragmentBase {
         ibAI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (AI.isAvailable(context))
-                    onAI(view);
+                if (AI.isAvailable(context)) {
+                    Bundle args = new Bundle();
+                    args.putBoolean("has_body", !TextUtils.isEmpty(etBody.getText().toString().trim()));
+                    args.putBoolean("has_reply", tvReference.getVisibility() == View.VISIBLE);
+                    FragmentDialogAI fragment = new FragmentDialogAI();
+                    fragment.setArguments(args);
+                    fragment.setTargetFragment(FragmentCompose.this, REQUEST_AI);
+                    fragment.show(getParentFragmentManager(), "do:ai");
+                }
             }
         });
         ibAI.setOnLongClickListener(new View.OnLongClickListener() {
@@ -2706,132 +2780,6 @@ public class FragmentCompose extends FragmentBase {
         }.serial().execute(this, args, "compose:print");
     }
 
-    private void onAI(View anchor) {
-        new SimpleTask<List<EntityAnswer>>() {
-            @Override
-            protected List<EntityAnswer> onExecute(Context context, Bundle args) throws Throwable {
-                DB db = DB.getInstance(context);
-                return db.answer().getAiPrompts();
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, List<EntityAnswer> prompts) {
-                if (prompts == null || prompts.isEmpty())
-                    _onAi(null);
-                else {
-                    PopupMenuLifecycle popupMenu = new PopupMenuLifecycle(getContext(), getViewLifecycleOwner(), anchor);
-
-                    String title = getString(etBody.length() == 0
-                            ? R.string.title_advanced_default_prompt
-                            : R.string.title_advanced_entered_text);
-                    SpannableStringBuilder ssb = new SpannableStringBuilderEx(title);
-                    ssb.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_SMALL), 0, ssb.length(), 0);
-                    popupMenu.getMenu()
-                            .add(Menu.NONE, 1, 1, ssb)
-                            .setIntent(new Intent().putExtra("id", -1L));
-
-                    for (int i = 0; i < prompts.size(); i++) {
-                        EntityAnswer prompt = prompts.get(i);
-                        popupMenu.getMenu()
-                                .add(Menu.NONE, i + 2, i + 2, prompt.name)
-                                .setIntent(new Intent().putExtra("id", prompt.id));
-                    }
-
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            long id = item.getIntent().getLongExtra("id", -1L);
-                            _onAi(id);
-                            return true;
-                        }
-                    });
-
-                    popupMenu.show();
-                }
-            }
-
-            @Override
-            protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
-            }
-        }.execute(this, new Bundle(), "AI:template");
-    }
-
-    private void _onAi(Long template) {
-        int start = etBody.getSelectionStart();
-        int end = etBody.getSelectionEnd();
-        boolean selection = (start >= 0 && end > start);
-        Editable edit = etBody.getText();
-        CharSequence body = (selection ? edit.subSequence(start, end) : edit);
-
-        Bundle args = new Bundle();
-        args.putLong("id", working);
-        args.putCharSequence("body", body);
-        args.putLong("template", template == null ? 0L : template);
-
-        new SimpleTask<Spanned>() {
-            @Override
-            protected void onPreExecute(Bundle args) {
-                chatting = true;
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            protected void onPostExecute(Bundle args) {
-                chatting = false;
-                invalidateOptionsMenu();
-            }
-
-            @Override
-            protected Spanned onExecute(Context context, Bundle args) throws Throwable {
-                long id = args.getLong("id");
-                CharSequence body = args.getCharSequence("body");
-                long template = args.getLong("template");
-
-                return AI.completeChat(context, id, body, template);
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, Spanned completion) {
-                if (completion == null)
-                    return;
-
-                Editable edit = etBody.getText();
-                int start = etBody.getSelectionStart();
-                int end = etBody.getSelectionEnd();
-
-                int index;
-                if (etBody.hasSelection()) {
-                    edit.delete(start, end);
-                    index = start;
-                } else
-                    index = etBody.length();
-
-                if (index < 0)
-                    index = 0;
-                if (index > 0 && edit.charAt(index - 1) != '\n')
-                    edit.insert(index++, "\n");
-
-                edit.insert(index, "\n");
-                edit.insert(index, completion);
-                etBody.setSelection(index + completion.length() + 1);
-
-                StyleHelper.markAsInserted(edit, index, index + completion.length() + 1);
-
-                if (args.containsKey("used") && args.containsKey("granted")) {
-                    double used = args.getDouble("used");
-                    double granted = args.getDouble("granted");
-                    ToastEx.makeText(getContext(), String.format("$%.2f/%.2f", used, granted), Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
-            }
-        }.serial().execute(this, args, "AI:run");
-    }
-
     private void onTranslate(View anchor) {
         final Context context = anchor.getContext();
 
@@ -3426,7 +3374,7 @@ public class FragmentCompose extends FragmentBase {
                     break;
                 case REQUEST_SELECT_IDENTITY:
                     if (resultCode == RESULT_OK && data != null)
-                        onSelectIdentity(data.getBundleExtra("args"));
+                        onSelectIdentity(getContext(), getViewLifecycleOwner(), getParentFragmentManager(), data.getBundleExtra("args"));
                     break;
                 case REQUEST_PRINT:
                     if (resultCode == RESULT_OK && data != null)
@@ -3458,6 +3406,15 @@ public class FragmentCompose extends FragmentBase {
                 case REQUEST_REMOVE_ATTACHMENTS:
                     if (resultCode == RESULT_OK)
                         onRemoveAttachments();
+                    break;
+                case REQUEST_EDIT_IMAGE:
+                    if (resultCode == RESULT_OK && data != null)
+                        onEditImage(data.getBundleExtra("args"));
+                    break;
+
+                case REQUEST_AI:
+                    if (resultCode == RESULT_OK && data != null)
+                        onAI(data.getBundleExtra("args"));
                     break;
             }
         } catch (Throwable ex) {
@@ -5003,10 +4960,10 @@ public class FragmentCompose extends FragmentBase {
         }.serial().execute(this, args, "compose:picked");
     }
 
-    private void onSelectIdentity(Bundle args) {
+    static void onSelectIdentity(Context context, LifecycleOwner owner, FragmentManager fm, Bundle args) {
         long id = args.getLong("id");
         if (id < 0) {
-            getContext().startActivity(new Intent(getContext(), ActivitySetup.class)
+            context.startActivity(new Intent(context, ActivitySetup.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     .putExtra("manual", true)
                     .putExtra("scroll", true));
@@ -5041,14 +4998,14 @@ public class FragmentCompose extends FragmentBase {
 
             @Override
             protected void onExecuted(Bundle args, EntityIdentity identity) {
-                ToastEx.makeText(getContext(), R.string.title_completed, Toast.LENGTH_LONG).show();
+                ToastEx.makeText(context, R.string.title_completed, Toast.LENGTH_LONG).show();
             }
 
             @Override
             protected void onException(Bundle args, Throwable ex) {
-                Log.unexpectedError(getParentFragmentManager(), ex);
+                Log.unexpectedError(fm, ex);
             }
-        }.serial().execute(this, args, "select:identity");
+        }.serial().execute(context, owner, args, "select:identity");
     }
 
     private void onPrint(Bundle args) {
@@ -5128,6 +5085,130 @@ public class FragmentCompose extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.serial().execute(FragmentCompose.this, args, "attachments:remove");
+    }
+
+    private void onEditImage(Bundle args) {
+        args.putInt("zoom", zoom);
+        args.putLong("working", working);
+
+        new SimpleTask<Drawable>() {
+            @Override
+            protected Drawable onExecute(Context context, Bundle args) throws Throwable {
+                String source = args.getString("source");
+                int zoom = args.getInt("zoom");
+                long working = args.getLong("working");
+
+                return ImageHelper.decodeImage(context, working, source, true, zoom, 1.0f, etBody);
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Drawable d) {
+                if (d == null)
+                    return;
+
+                String source = args.getString("source");
+                int start = args.getInt("start");
+                int end = args.getInt("end");
+
+                Editable buffer = etBody.getText();
+                if (buffer == null)
+                    return;
+
+                ImageSpan[] image = buffer.getSpans(start, end, ImageSpan.class);
+                if (image == null || image.length == 0)
+                    return;
+
+                int flags = buffer.getSpanFlags(image[0]);
+                buffer.removeSpan(image[0]);
+                buffer.setSpan(new ImageSpan(d, source), start, end, flags);
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragment(), ex);
+            }
+        }.execute(this, args, "update:image");
+    }
+
+    private void onAI(Bundle args) {
+        args.putLong("id", working);
+        args.putCharSequence("body", etBody.getText());
+
+        new SimpleTask<Spanned>() {
+            @Override
+            protected void onPreExecute(Bundle args) {
+                chatting = true;
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            protected void onPostExecute(Bundle args) {
+                chatting = false;
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            protected Spanned onExecute(Context context, Bundle args) throws Throwable {
+                long id = args.getLong("id");
+                boolean input_system = args.getBoolean("input_system");
+                boolean input_body = args.getBoolean("input_body");
+                boolean input_reply = args.getBoolean("input_reply");
+                String prompt = args.getString("prompt");
+
+                CharSequence body = null;
+                if (input_body)
+                    body = args.getCharSequence("body");
+
+                String reply = null;
+                if (input_reply) {
+                    File file = EntityMessage.getFile(context, id);
+                    if (file.exists()) {
+                        Document d = JsoupEx.parse(file);
+                        Elements ref = d.select("div[fairemail=reference]");
+                        if (!ref.isEmpty()) {
+                            d = Document.createShell("");
+                            d.appendChildren(ref);
+
+                            HtmlHelper.removeSignatures(d);
+                            HtmlHelper.truncate(d, AI.MAX_SUMMARIZE_TEXT_SIZE);
+
+                            reply = d.text();
+                            if (TextUtils.isEmpty(reply.trim()))
+                                reply = null;
+                        }
+                    }
+                }
+
+                return AI.completeChat(context, id, input_system, body, reply, prompt);
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Spanned completion) {
+                if (completion == null)
+                    return;
+
+                Editable edit = etBody.getText();
+                if (edit == null)
+                    return;
+
+                int index = etBody.getSelectionEnd();
+                if (index < 0)
+                    index = 0;
+                if (index > 0 && edit.charAt(index - 1) != '\n')
+                    edit.insert(index++, "\n");
+
+                edit.insert(index, "\n");
+                edit.insert(index, completion);
+                etBody.setSelection(index + completion.length() + 1);
+
+                StyleHelper.markAsInserted(edit, index, index + completion.length() + 1);
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex, !(ex instanceof IOException));
+            }
+        }.serial().execute(this, args, "AI:run");
     }
 
     private void onExit() {
@@ -5384,7 +5465,7 @@ public class FragmentCompose extends FragmentBase {
                     exif.setAttribute(ExifInterface.TAG_DATETIME_ORIGINAL, null);
                     exif.setAttribute(ExifInterface.TAG_DATETIME_DIGITIZED, null);
 
-                    exif.setAttribute(ExifInterface.TAG_XMP, null);
+                    exif.setAttribute(ExifInterface.TAG_XMP, "");
                     exif.setAttribute(ExifInterface.TAG_IMAGE_DESCRIPTION, null);
                     //exif.setAttribute(ExifInterface.TAG_MAKE, null);
                     //exif.setAttribute(ExifInterface.TAG_MODEL, null);
@@ -5400,6 +5481,8 @@ public class FragmentCompose extends FragmentBase {
                     exif.saveAttributes();
                 } catch (IOException ex) {
                     Log.i(ex);
+                } catch (Throwable ex) {
+                    Log.e(ex);
                 }
 
             // https://www.rfc-editor.org/rfc/rfc2231
@@ -5476,7 +5559,7 @@ public class FragmentCompose extends FragmentBase {
 
                 File tmp = new File(file.getAbsolutePath() + ".tmp");
                 try (OutputStream out = new BufferedOutputStream(new FileOutputStream(tmp))) {
-                    if (!resized.compress(format, REDUCED_IMAGE_QUALITY, out))
+                    if (!resized.compress(format, ImageHelper.DEFAULT_PNG_COMPRESSION, out))
                         throw new IOException("compress");
                 } catch (Throwable ex) {
                     Log.w(ex);
@@ -7616,7 +7699,7 @@ public class FragmentCompose extends FragmentBase {
                             public void delegate() {
                                 if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
                                     Helper.performHapticFeedback(view, HapticFeedbackConstants.CONFIRM);
-                                ToastEx.makeText(context, feedback, Toast.LENGTH_LONG).show();
+                                ToastEx.makeText(context, feedback, Toast.LENGTH_SHORT).show();
                             }
                         });
 

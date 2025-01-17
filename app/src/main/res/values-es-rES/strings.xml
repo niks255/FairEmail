@@ -759,7 +759,7 @@
         Los algoritmos por defecto SHA256 y AES128 son generalmente soportados.
     </string>
     <string name="title_advanced_check_certificate">Comprobar clave pública al enviar</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">Comprobar las indicaciones de uso de la llave al enviar</string>
+    <string name="title_advanced_check_key_usage">Comprobar las indicaciones de uso de la llave al enviar</string>
     <string name="title_advanced_manage_certificates">Administrar claves públicas</string>
     <string name="title_advanced_import_key">Importar clave privada</string>
     <string name="title_advanced_manage_keys">Administrar claves privadas</string>
@@ -803,6 +803,10 @@
     <string name="title_advanced_answer_prompt">Indicación de respuesta</string>
     <string name="title_advanced_system_instructions">Instrucciones del sistema</string>
     <string name="title_advanced_default_prompt">Indicación por defecto</string>
+    <string name="title_advanced_ai">IA</string>
+    <string name="title_advanced_ai_input_system">Indicador del sistema de entrada</string>
+    <string name="title_advanced_ai_input_body">Introducir el texto de su mensaje</string>
+    <string name="title_advanced_ai_input_reply">Introducir el texto del mensaje de respuesta</string>
     <string name="title_advanced_entered_text">Texto ingresado</string>
     <string name="title_advanced_sdcard">Quiero usar una tarjeta SD</string>
     <string name="title_advanced_watchdog">Comprobar periódicamente si FairEmail sigue activo</string>
@@ -854,6 +858,7 @@
     <string name="title_advanced_send_reminders_hint">Mostrar una advertencia cuando el texto del mensaje o el asunto estén vacíos o cuando un archivo adjunto pueda estar ausente</string>
     <string name="title_advanced_reply_move_hint">El servidor de correo electrónico todavía puede añadir los mensajes a la carpeta de mensajes enviados</string>
     <string name="title_advanced_compose_color_hint">Los colores muy claros o muy oscuros resultarán en mensajes ilegibles en el lado de los destinatarios</string>
+    <string name="title_advanced_compose_font_hint">Por defecto significa respetar la fuente seleccionada en el lado receptor</string>
     <string name="title_advanced_template_reply_hint">HTML está permitido. Marcadores de posición disponibles: %1$s</string>
     <string name="title_advanced_write_below_hint">Un destinatario puede perderse su respuesta, por ejemplo cuando un mensaje más largo está siendo truncado</string>
     <string name="title_advanced_attach_new_hint">De lo contrario, añadir direcciones compartidas o archivos al mensaje de borrador actual</string>
@@ -920,6 +925,7 @@
     <string name="title_advanced_notify_car_hint">Conectado significa que algo está siendo proyectado, como un mapa para la navegación</string>
     <string name="title_advanced_notify_remove_hint">Las notificaciones de nuevos mensajes siempre serán eliminadas al deslizarlas y al marcar mensajes como leídos</string>
     <string name="title_advanced_notify_manage_hint">Toca en el nombre del canal para establecer las propiedades del canal</string>
+    <string name="title_advanced_notify_samsung_hint">Para administrar los canales de notificación, puede que necesite habilitar esta configuración de Android: Notificaciones, Configuración Avanzada, Gestionar categorías de notificaciones para cada aplicación</string>
     <string name="title_advanced_notify_manage_default_hint">Para configurar el sonido por defecto, etc</string>
     <string name="title_advanced_notify_manage_service_hint">Para desactivar la notificación de \'monitoreo\'</string>
     <string name="title_advanced_notify_separate_hint">¿Cómo puedo configurar las notificaciones de cuentas, carpetas y remitentes?</string>
@@ -1255,6 +1261,7 @@
     <string name="title_force_light">Forzar tema claro</string>
     <string name="title_rename">Renombrar</string>
     <string name="title_share">Compartir</string>
+    <string name="title_analyze">Analizar</string>
     <string name="title_event">Añadir al calendario</string>
     <string name="title_pin">Añadir acceso directo</string>
     <string name="title_pin_label">Título del acceso directo</string>
@@ -1370,6 +1377,7 @@
     <string name="title_attachment_saved">Adjunto guardado</string>
     <string name="title_attachments_saved">Adjuntos guardados</string>
     <string name="title_attachments_incomplete">Algunos adjuntos o imágenes no fueron descargados y no pudieron añadirse</string>
+    <string name="title_report_remark">Este informe, un correo electrónico con formato especial, fue enviado por un servidor de correo electrónico porque un mensaje enviado no pudo ser enviado al destinatario, por ejemplo porque el buzón está lleno, o porque la dirección de correo electrónico (ya) no existe.</string>
     <string name="title_ask_save">¿Guardar cambios?</string>
     <string name="title_ask_delete">¿Eliminar mensaje permanentemente?</string>
     <string name="title_ask_delete_accept">Entiendo que la eliminación permanente de mensajes es irreverible</string>
@@ -1598,6 +1606,7 @@
     <string name="title_signature_email">Dirección de la firma</string>
     <string name="title_signature_mismatch">La dirección de correo electrónico del remitente y la firma no coinciden</string>
     <string name="title_signature_algorithm">Algorítmo</string>
+    <string name="title_signature_public_key">Clave pública</string>
     <string name="title_signature_subject">Asunto</string>
     <string name="title_signature_validity">Validez</string>
     <string name="title_signature_outdated">Esta clave pública no es válida actualmente</string>
@@ -1660,6 +1669,7 @@
     <string name="title_sort_on_starred_unread">Destacado, no leído</string>
     <string name="title_sort_on_priority">Prioridad</string>
     <string name="title_sort_on_sender">Remitente</string>
+    <string name="title_sort_on_sender_name">Nombre del remitente</string>
     <string name="title_sort_on_subject">Asunto</string>
     <string name="title_sort_on_size">Tamaño</string>
     <string name="title_sort_on_attachments">Adjuntos</string>
@@ -1817,6 +1827,7 @@
     <string name="title_rule_select_sound">Seleccionar sonido</string>
     <string name="title_rule_select_sound_ringtone">Tono de notificación</string>
     <string name="title_rule_select_sound_audio">Archivo de audio</string>
+    <string name="title_rule_loop_sound">Repetir en bucle</string>
     <string name="title_rule_use_as_alarm">Usar como alarma</string>
     <string name="title_rule_alarm_hint">Esto ignorará las reglas \"no molestar\"</string>
     <string name="title_rule_alarm_duration">Duración máxima de la alarma (segundos)</string>
@@ -1974,7 +1985,9 @@
     <string name="title_hint_junk">El filtrado de spam debería ser hecho por el servidor de correo electrónico y no se puede hacer de forma confiable en un dispositivo alimentado con batería y de capacidades limitadas.</string>
     <string name="title_hint_junk_learn">Al mover los mensajes hacia y desde la carpeta de spam, el servidor de correo electrónico \"aprende\" qué es spam</string>
     <string name="title_hint_contact_actions">Mantenga pulsado para opciones</string>
-    <string name="title_hint_eml">Este es un resumen del contenido de un archivo de mensajes sin procesar. Guarde el mensaje sin procesar con el icono de guardar en la barra de acciones para ver todo el contenido.</string>
+    <string name="title_hint_eml">        Este es un resumen de los contenidos de un archivo de mensaje sin procesar.
+        Puede usar el botón de abajo a la derecha para guardar el mensaje en la bandeja de entrada y ver todo el contenido.
+    </string>
     <string name="title_open_link">Abrir enlace</string>
     <string name="title_image_link">Enlace de imagen</string>
     <string name="title_different_link">El título y la dirección del enlace son diferentes</string>

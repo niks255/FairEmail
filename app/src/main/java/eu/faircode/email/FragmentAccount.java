@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -79,7 +79,9 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class FragmentAccount extends FragmentBase {
@@ -1450,25 +1452,29 @@ public class FragmentAccount extends FragmentBase {
                         }
                     }
 
+                    Map<String, EntityFolder> current = new HashMap<>();
+                    for (EntityFolder folder : db.folder().getFolders(account.id, false, false))
+                        current.put(folder.name, folder);
+
                     db.folder().setFoldersUser(account.id);
 
                     for (EntityFolder folder : folders) {
-                        Log.i("Checking folder=" + folder.name + " type=" + folder.type);
-                        EntityFolder existing = db.folder().getFolderByName(account.id, folder.name);
+                        Log.i("Checking folder=" + folder.name + ":" + folder.type);
+                        EntityFolder existing = current.get(folder.name);
                         if (existing == null) {
                             folder.id = null;
                             folder.account = account.id;
                             folder.setSpecials(account);
                             folder.id = db.folder().insertFolder(folder);
-                            EntityLog.log(context, "Added folder=" + folder.name + " type=" + folder.type);
-                            if (folder.synchronize)
+                            EntityLog.log(context, "Added folder=" + folder.name + ":" + folder.type);
+                            if (folder.synchronize && account.synchronize)
                                 EntityOperation.sync(context, folder.id, true);
                         } else {
-                            EntityLog.log(context, "Updated folder=" + folder.name + " type=" + folder.type);
                             db.folder().setFolderType(existing.id, folder.type);
-                            if (folder.synchronize &&
+                            if (folder.synchronize && account.synchronize &&
                                     !Objects.equals(existing.type, folder.type)) {
-                                EntityLog.log(context, "Updated folder=" + folder.name + " sync=" + folder.type);
+                                EntityLog.log(context, "Updated folder=" + folder.name + ":" + folder.type +
+                                        " existing=" + existing.name + ":" + existing.type);
                                 db.folder().setFolderSynchronize(existing.id, true);
                                 EntityOperation.sync(context, existing.id, true);
                             }

@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_FIRST_USER;
@@ -39,6 +39,7 @@ import static me.everything.android.ui.overscroll.OverScrollBounceEffectDecorato
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -166,7 +167,7 @@ import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.CMSProcessableFile;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSTypedData;
-import org.bouncycastle.cms.KeyTransRecipientId;
+import org.bouncycastle.cms.PKIXRecipientId;
 import org.bouncycastle.cms.RecipientInformation;
 import org.bouncycastle.cms.SignerId;
 import org.bouncycastle.cms.SignerInformation;
@@ -196,6 +197,7 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.KeyStore;
+import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.cert.CertPathBuilder;
 import java.security.cert.CertPathBuilderResult;
@@ -2899,8 +2901,8 @@ public class FragmentMessages extends FragmentBase
             onReply(message, selected, anchor);
         }
 
-        public void startSearch(TextView view) {
-            FragmentMessages.this.startSearch(view);
+        public void startSearch(TextView view, String term) {
+            FragmentMessages.this.startSearch(view, term);
         }
 
         public void endSearch() {
@@ -6425,10 +6427,14 @@ public class FragmentMessages extends FragmentBase
                 menu.findItem(R.id.menu_sort_on_unread_starred).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_starred_unread).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_sender).setVisible(false);
+                menu.findItem(R.id.menu_sort_on_sender_name).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_subject).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_size).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_attachments).setVisible(false);
                 menu.findItem(R.id.menu_sort_on_snoozed).setVisible(false);
+            } else {
+                if (!DB.hasJson())
+                    menu.findItem(R.id.menu_sort_on_sender_name).setVisible(false);
             }
 
             boolean unselected = (selectionTracker == null || !selectionTracker.hasSelection());
@@ -6449,6 +6455,8 @@ public class FragmentMessages extends FragmentBase
                 menu.findItem(R.id.menu_sort_on_priority).setChecked(true);
             else if ("sender".equals(sort))
                 menu.findItem(R.id.menu_sort_on_sender).setChecked(true);
+            else if ("sender_name".equals(sort))
+                menu.findItem(R.id.menu_sort_on_sender_name).setChecked(true);
             else if ("subject".equals(sort))
                 menu.findItem(R.id.menu_sort_on_subject).setChecked(true);
             else if ("size".equals(sort))
@@ -6604,6 +6612,10 @@ public class FragmentMessages extends FragmentBase
         } else if (itemId == R.id.menu_sort_on_sender) {
             item.setChecked(true);
             onMenuSort("sender");
+            return true;
+        } else if (itemId == R.id.menu_sort_on_sender_name) {
+            item.setChecked(true);
+            onMenuSort("sender_name");
             return true;
         } else if (itemId == R.id.menu_sort_on_subject) {
             item.setChecked(true);
@@ -8868,7 +8880,7 @@ public class FragmentMessages extends FragmentBase
         }
     }
 
-    private void startSearch(TextView view) {
+    private void startSearch(TextView view, String term) {
         searchView = view;
 
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
@@ -8884,10 +8896,13 @@ public class FragmentMessages extends FragmentBase
             }
         });
 
-        etSearch.setText(null);
+        etSearch.setText(term);
         etSearch.setVisibility(View.VISIBLE);
-        etSearch.requestFocus();
-        Helper.showKeyboard(etSearch);
+        if (term == null) {
+            etSearch.requestFocus();
+            Helper.showKeyboard(etSearch);
+        } else
+            performSearch(false);
     }
 
     private void endSearch() {
@@ -9323,12 +9338,14 @@ public class FragmentMessages extends FragmentBase
     private void onVerifyDecrypt(Intent intent) {
         long id = intent.getLongExtra("id", -1);
         boolean auto = intent.getBooleanExtra("auto", false);
+        boolean info = intent.getBooleanExtra("info", false);
         int type = intent.getIntExtra("type", EntityMessage.ENCRYPT_NONE);
 
         final Bundle args = new Bundle();
         args.putLong("id", id);
         args.putInt("type", type);
         args.putBoolean("auto", auto);
+        args.putBoolean("info", info);
 
         if (EntityMessage.SMIME_SIGNONLY.equals(type))
             onSmime(args);
@@ -10133,13 +10150,16 @@ public class FragmentMessages extends FragmentBase
                                 };
 
                                 if (s.verify(verifier)) {
-                                    boolean known = true;
                                     String fingerprint = EntityCertificate.getFingerprintSha256(cert);
                                     List<String> emails = EntityCertificate.getEmailAddresses(cert);
+                                    boolean known = false;
                                     for (String email : emails) {
                                         EntityCertificate record = db.certificate().getCertificate(fingerprint, email);
                                         if (record == null)
-                                            known = false;
+                                            continue;
+
+                                        known = true;
+                                        break;
                                     }
 
                                     String sender = null;
@@ -10149,15 +10169,18 @@ public class FragmentMessages extends FragmentBase
                                     args.putString("sender", sender);
                                     args.putBoolean("known", known);
 
-                                    String algo;
+                                    // Sign algorithm
+                                    String algo = null;
+                                    String algooid = null;
                                     try {
+                                        algooid = s.getDigestAlgOID();
                                         DefaultAlgorithmNameFinder af = new DefaultAlgorithmNameFinder();
-                                        algo = af.getAlgorithmName(new ASN1ObjectIdentifier(s.getEncryptionAlgOID()));
+                                        algo = af.getAlgorithmName(new ASN1ObjectIdentifier(algooid));
                                     } catch (Throwable ex) {
                                         Log.e(ex);
-                                        algo = s.getEncryptionAlgOID();
                                     }
                                     args.putString("algo", algo);
+                                    args.putString("algooid", algooid);
 
                                     List<X509Certificate> certs = new ArrayList<>();
                                     try {
@@ -10325,7 +10348,8 @@ public class FragmentMessages extends FragmentBase
                             if (count < 0) {
                                 BigInteger serialno = chain[0].getSerialNumber();
                                 for (RecipientInformation recipientInfo : recipients) {
-                                    KeyTransRecipientId recipientId = (KeyTransRecipientId) recipientInfo.getRID();
+                                    // KeyTransRecipientId or KeyAgreeRecipientId
+                                    PKIXRecipientId recipientId = (PKIXRecipientId) recipientInfo.getRID();
                                     if (serialno != null && serialno.equals(recipientId.getSerialNumber())) {
                                         try {
                                             InputStream is = recipientInfo.getContentStream(recipient).getContentStream();
@@ -10398,14 +10422,18 @@ public class FragmentMessages extends FragmentBase
                     } else
                         try {
                             boolean auto = args.getBoolean("auto");
+                            boolean info = args.getBoolean("info");
                             String sender = args.getString("sender");
                             Date time = (Date) args.getSerializable("time");
                             boolean known = args.getBoolean("known");
                             boolean valid = args.getBoolean("valid");
                             String reason = args.getString("reason");
                             String algo = args.getString("algo");
+                            String algooid = args.getString("algooid");
                             final ArrayList<String> trace = args.getStringArrayList("trace");
                             EntityCertificate record = EntityCertificate.from(cert, null);
+                            String keyalgo = record.getSigAlgName();
+                            String keyalgoid = cert.getSigAlgOID();
 
                             if (time == null)
                                 time = new Date();
@@ -10418,11 +10446,12 @@ public class FragmentMessages extends FragmentBase
                                     break;
                                 }
 
-                            if (known && !record.isExpired(time) && match && valid)
+                            if (!info && known && !record.isExpired(time) && match && valid)
                                 Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_signature_valid, Snackbar.LENGTH_LONG))
                                         .show();
                             else if (!auto) {
-                                LayoutInflater inflator = LayoutInflater.from(getContext());
+                                Context context = getContext();
+                                LayoutInflater inflator = LayoutInflater.from(context);
                                 View dview = inflator.inflate(R.layout.dialog_certificate, null);
                                 TextView tvCertificateInvalid = dview.findViewById(R.id.tvCertificateInvalid);
                                 TextView tvCertificateReason = dview.findViewById(R.id.tvCertificateReason);
@@ -10435,6 +10464,8 @@ public class FragmentMessages extends FragmentBase
                                 TextView tvBefore = dview.findViewById(R.id.tvBefore);
                                 TextView tvExpired = dview.findViewById(R.id.tvExpired);
                                 TextView tvAlgorithm = dview.findViewById(R.id.tvAlgorithm);
+                                TextView tvKeyAlgorithm = dview.findViewById(R.id.tvKeyAlgorithm);
+                                TextView tvKeyIssuer = dview.findViewById(R.id.tvKeyIssuer);
 
                                 tvCertificateInvalid.setVisibility(valid ? View.GONE : View.VISIBLE);
                                 tvCertificateReason.setText(reason);
@@ -10444,39 +10475,46 @@ public class FragmentMessages extends FragmentBase
                                 tvEmailInvalid.setVisibility(match ? View.GONE : View.VISIBLE);
                                 tvSubject.setText(record.subject);
 
-                                DateFormat TF = Helper.getDateTimeInstance(getContext(), SimpleDateFormat.SHORT, SimpleDateFormat.SHORT);
+                                DateFormat TF = Helper.getDateTimeInstance(context, SimpleDateFormat.SHORT, SimpleDateFormat.SHORT);
                                 tvAfter.setText(record.after == null ? null : TF.format(record.after));
                                 tvBefore.setText(record.before == null ? null : TF.format(record.before));
                                 tvExpired.setVisibility(record.isExpired(time) ? View.VISIBLE : View.GONE);
 
+                                SpannableStringBuilderEx a = new SpannableStringBuilderEx();
+                                SpannableStringBuilderEx ka = new SpannableStringBuilderEx();
                                 if (!TextUtils.isEmpty(algo))
-                                    algo = algo.replace("WITH", "/");
-                                tvAlgorithm.setText(algo);
+                                    a.append(algo.replaceAll("(?i)With", "/"));
+                                if (!TextUtils.isEmpty(keyalgo))
+                                    ka.append(keyalgo.replaceAll("(?i)With", "/"));
 
-                                ibInfo.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        StringBuilder sb = new StringBuilder();
-                                        for (int i = 0; i < trace.size(); i++) {
-                                            if (i > 0)
-                                                sb.append("\n\n");
-                                            sb.append(i + 1).append(") ").append(trace.get(i));
-                                        }
+                                if (info) {
+                                    if (a.length() > 0)
+                                        a.append(' ');
+                                    if (ka.length() > 0)
+                                        ka.append(' ');
 
-                                        new AlertDialog.Builder(v.getContext())
-                                                .setMessage(sb.toString())
-                                                .show();
-                                    }
-                                });
-                                ibInfo.setVisibility(trace != null && trace.size() > 0 ? View.VISIBLE : View.GONE);
+                                    int start = a.length();
+                                    a.append(algooid);
+                                    a.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_XSMALL), start, a.length(), 0);
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                    start = ka.length();
+                                    ka.append(keyalgoid);
+                                    ka.setSpan(new RelativeSizeSpan(HtmlHelper.FONT_XSMALL), start, ka.length(), 0);
+                                }
+
+                                tvAlgorithm.setText(a);
+                                tvKeyAlgorithm.setText(ka);
+
+                                Principal issuer = cert.getIssuerDN();
+                                tvKeyIssuer.setText(issuer == null ? null : issuer.getName());
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context)
                                         .setView(dview)
                                         .setNegativeButton(android.R.string.cancel, null)
                                         .setNeutralButton(R.string.title_info, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                Helper.viewFAQ(getContext(), 12);
+                                                Helper.viewFAQ(context, 12);
                                             }
                                         });
 
@@ -10527,7 +10565,36 @@ public class FragmentMessages extends FragmentBase
                                         }
                                     });
 
-                                builder.show();
+                                Dialog dialog = builder.create();
+
+                                ibInfo.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        StringBuilder sb = new StringBuilder();
+                                        for (int i = 0; i < trace.size(); i++) {
+                                            if (i > 0)
+                                                sb.append("\n\n");
+                                            sb.append(i + 1).append(") ").append(trace.get(i));
+                                        }
+
+                                        dialog.dismiss();
+
+                                        new AlertDialog.Builder(v.getContext())
+                                                .setMessage(sb.toString())
+                                                .setPositiveButton(R.string.title_advanced_manage_certificates, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+                                                        fragmentTransaction.replace(R.id.content_frame, new FragmentCertificates()).addToBackStack("certificates");
+                                                        fragmentTransaction.commit();
+                                                    }
+                                                })
+                                                .show();
+                                    }
+                                });
+                                ibInfo.setVisibility(trace != null && trace.size() > 0 ? View.VISIBLE : View.GONE);
+
+                                dialog.show();
                             }
                         } catch (Throwable ex) {
                             Helper.setSnackbarOptions(
@@ -10667,30 +10734,15 @@ public class FragmentMessages extends FragmentBase
                 for (Certificate c : certs)
                     try {
                         X509Certificate cert = (X509Certificate) c;
-                        boolean[] usage = cert.getKeyUsage();
-                        boolean digitalSignature = (usage != null && usage.length > 0 && usage[0]);
-                        boolean nonRepudiation = (usage != null && usage.length > 1 && usage[1]);
-                        boolean keyEncipherment = (usage != null && usage.length > 2 && usage[2]);
-                        boolean dataEncipherment = (usage != null && usage.length > 3 && usage[4]);
-                        boolean keyAgreement = (usage != null && usage.length > 4 && usage[4]);
-                        boolean keyCertSign = (usage != null && usage.length > 5 && usage[5]);
-                        boolean cRLSign = (usage != null && usage.length > 6 && usage[6]);
-                        boolean encipherOnly = (usage != null && usage.length > 7 && usage[7]);
-                        boolean decipherOnly = (usage != null && usage.length > 8 && usage[8]);
-                        boolean selfSigned = cert.getIssuerX500Principal().equals(cert.getSubjectX500Principal());
                         EntityCertificate record = EntityCertificate.from(cert, null);
-                        trace.add(record.subject +
-                                " (" + (selfSigned ? "selfSigned" : cert.getIssuerX500Principal()) + ")" +
-                                (digitalSignature ? " (digitalSignature)" : "") +
-                                (nonRepudiation ? " (nonRepudiation)" : "") +
-                                (keyEncipherment ? " (keyEncipherment)" : "") +
-                                (dataEncipherment ? " (dataEncipherment)" : "") +
-                                (keyAgreement ? " (keyAgreement)" : "") +
-                                (keyCertSign ? " (keyCertSign)" : "") +
-                                (cRLSign ? " (cRLSign)" : "") +
-                                (encipherOnly ? " (encipherOnly)" : "") +
-                                (decipherOnly ? " (decipherOnly)" : "") +
-                                (ks != null && ks.getCertificateAlias(cert) != null ? " (Android)" : ""));
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(record.subject);
+                        sb.append(" (").append(record.isSelfSigned() ? "selfSigned" : cert.getIssuerX500Principal()).append(")");
+                        for (String usage : record.getKeyUsage())
+                            sb.append(" (").append(usage).append(")");
+                        if (ks != null && ks.getCertificateAlias(cert) != null)
+                            sb.append(" (Android)");
+                        trace.add(sb.toString());
                     } catch (Throwable ex) {
                         Log.e(ex);
                         trace.add(new ThrowableWrapper(ex).toSafeString());
@@ -10905,8 +10957,17 @@ public class FragmentMessages extends FragmentBase
                     if (junk == null)
                         throw new IllegalArgumentException(context.getString(R.string.title_no_junk_folder));
 
-                    if (!message.folder.equals(junk.id))
+                    if (!message.folder.equals(junk.id)) {
                         EntityOperation.queue(context, message, EntityOperation.MOVE, junk.id, null, null, true);
+
+                        if (!Helper.isPlayStoreInstall()) {
+                            List<EntityMessage> similar = db.message().getMessagesBySender(message.folder, message.sender);
+                            if (similar != null)
+                                for (EntityMessage m : similar)
+                                    if (!message.id.equals(m.id))
+                                        EntityOperation.queue(context, m, EntityOperation.MOVE, junk.id, null, null, true);
+                        }
+                    }
 
                     if (block_domain) {
                         List<EntityRule> rules = EntityRule.blockSender(context, message, junk, block_domain);

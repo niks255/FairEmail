@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_INDIVIDUAL;
@@ -137,6 +137,10 @@ public class HtmlHelper {
     // 16 px
     static final float FONT_LARGE = 1.25f; // 20px=1.2
     static final float FONT_XLARGE = 1.50f; // 24px=1.5
+
+    static final String[] fontSizeNames = new String[]{
+            "x-small", "small", "medium", "large", "x-large"
+    };
 
     static final int MAX_FULL_TEXT_SIZE = 1024 * 1024; // characters
     static final int MAX_SHARE_TEXT_SIZE = 50 * 1024; // characters
@@ -2045,7 +2049,7 @@ public class HtmlHelper {
         return null;
     }
 
-    private static Float getFontSize(String value, float current) {
+    static Float getFontSize(String value, float current) {
         // https://developer.mozilla.org/en-US/docs/Web/CSS/font-size
         if (TextUtils.isEmpty(value))
             return null;

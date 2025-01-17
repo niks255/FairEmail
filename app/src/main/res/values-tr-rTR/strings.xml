@@ -198,9 +198,14 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_office_auth">\'AUTHENTICATE failed\' hatası, sistem yöneticinizin IMAP/SMTP protokollerini engellemesinden kaynaklanıyor olabilir</string>
     <string name="title_setup_office_auth_5_7_3">Lütfen \'Diğer sağlayıcı\' hızlı kurulum sihirbazını deneyin.</string>
     <string name="title_setup_office_auth_5_7_139">Lütfen \'Outlook/Hotmail/Live\' hızlı kurulum sihirbazını deneyin.</string>
+    <string name="title_setup_office_not_connected">        \'Kullanıcının kimliği doğrulandı ancak bağlı değil\' hatası çoğunlukla IMAP\'in devre dışı olduğu anlamına gelir.
+        Bir kişisel Outlook hesabı söz konusu olduğunda, lütfen Outlook web sitesine gidin, sağ üstteki ayarlar tekerleğine dokunun, \'Posta\'yı seçin, \'Yönlendirme ve IMAP\'i seçin ve \'POP ve IMAP\' bölümünde \'Cihazların ve uygulamaların IMAP kullanmasına izin ver\'i etkinleştirin.
+        Kurumsal, eğitim vb. bir hesap söz konusu olduğunda, lütfen e-posta sunucusunun sistem yöneticisine başvurun.
+    </string>
     <string name="title_setup_oauth_rationale">%1$s hesabınıza erişim için yetkilendirin</string>
     <string name="title_setup_oauth_update">Mevcut bir hesabı yeniden yetkilendir (aksi takdirde yeni bir hesap oluştur)</string>
     <string name="title_setup_oauth_updated">Hesap yetkilendirme güncellendi</string>
+    <string name="title_setup_oauth_edge">Edge tarayıcısını kullanırken, \'Gizlilik, güvenlik ve hizmetler\' ayarlarında \'Harici uygulamaların açılmasını engelle\' seçeneğinin \'Kapalı\' olduğundan emin olun</string>
     <string name="title_setup_oauth_brave">Brave tarayıcısını kullanırken uygulama bağlantılarının Brave dışındaki uygulamalarda açılmasına izin vermek için Brave\'in ayarlarındaki seçeneği etkinleştirmeniz gerekir</string>
     <string name="title_setup_oauth_browser">Yetkilendirme, uygulama bağlantılarının açılmasına izin veren çalışan bir tarayıcı gerektirir (genellikle bir güvenlik ayarı), böylece sonunda yetkilendirme belirteci uygulamaya aktarılabilir</string>
     <string name="title_setup_oauth_authorize">Yetkilendir</string>
@@ -750,6 +755,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
         Varsayılan algoritmalar SHA256 ve AES128 yaygın olarak desteklenir.
     </string>
     <string name="title_advanced_check_certificate">Göndermeden önce genel anahtarı kontrol et</string>
+    <string name="title_advanced_check_key_usage">Gönderimde anahtar kullanım göstergelerini kontrol edin</string>
     <string name="title_advanced_manage_certificates">Genel anahtarları yönet</string>
     <string name="title_advanced_import_key">Özel anahtarı içe aktar</string>
     <string name="title_advanced_manage_keys">Özel anahtarları yönet</string>
@@ -844,6 +850,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_send_reminders_hint">Mesaj metni veya konu boş olduğunda veya bir ek eksik olduğunda bir uyarı göster</string>
     <string name="title_advanced_reply_move_hint">E-posta sunucusu, iletileri gönderilen ileti klasörüne eklemeye devam edebilir</string>
     <string name="title_advanced_compose_color_hint">Çok açık veya çok koyu renkler, alıcı tarafında okunaksız mesajlara neden olur</string>
+    <string name="title_advanced_compose_font_hint">Varsayılan, alıcı tarafında seçilen yazı tipine uyulması anlamına gelir</string>
     <string name="title_advanced_template_reply_hint">HTML\'ye izin verildi. Kullanılabilir yer tutucular: %1$s</string>
     <string name="title_advanced_write_below_hint">Bir alıcı, örneğin daha uzun bir mesaj kesilirken yanıtınızı kaçırabilir</string>
     <string name="title_advanced_attach_new_hint">Aksi takdirde, paylaşılan adresleri veya dosyaları mevcut taslak mesaja ekle</string>
@@ -910,6 +917,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_notify_car_hint">Bağlandı, bir şeyin yansıtıldığı anlamına gelir, navigasyon için bir harita gibi</string>
     <string name="title_advanced_notify_remove_hint">Kaydırıldığında ya da mesajlar okundu olarak işaretlendiğinde yeni mesaj bildirimleri her zaman kaldırılacaktır</string>
     <string name="title_advanced_notify_manage_hint">Kanal özelliklerini ayarlamak için kanal adına dokunun</string>
+    <string name="title_advanced_notify_samsung_hint">Bildirim kanallarını yönetmek için bu Android ayarını etkinleştirmeniz gerekebilir: Bildirim, Gelişmiş ayarlar, Her uygulama için bildirim kategorilerini yönet</string>
     <string name="title_advanced_notify_manage_default_hint">Varsayılan sesi ayarlamak için, vs</string>
     <string name="title_advanced_notify_manage_service_hint">\'İzleme\' bildirimini devre dışı bırakmak için</string>
     <string name="title_advanced_notify_separate_hint">Hesaplar, klasörler ve gönderenler için bildirimleri nasıl yapılandırırım?</string>
@@ -1242,6 +1250,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_force_light">Aydınlık temasını zorla</string>
     <string name="title_rename">Yeniden Adlandır</string>
     <string name="title_share">Paylaş</string>
+    <string name="title_analyze">Analiz</string>
     <string name="title_event">Takvime ekle</string>
     <string name="title_pin">Kısayol ekle</string>
     <string name="title_pin_label">Kısayol başlığı</string>
@@ -1356,6 +1365,7 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_attachment_saved">Ek kaydedildi</string>
     <string name="title_attachments_saved">Ekler kaydedildi</string>
     <string name="title_attachments_incomplete">Bazı ekler veya resimler indirilemedi ve eklenemedi</string>
+    <string name="title_report_remark">Özel olarak biçimlendirilmiş bir e-posta olan bu rapor, gönderilen bir mesaj alıcıya teslim edilemediği için, örneğin posta kutusu dolu olduğu için veya e-posta adresi mevcut olmadığı için (artık) bir e-posta sunucusu tarafından gönderilmiştir.</string>
     <string name="title_ask_save">Değişiklikler kaydedilsin mi?</string>
     <string name="title_ask_delete">İleti kalıcı olarak silinsin mi?</string>
     <string name="title_ask_delete_accept">İletileri kalıcı olarak silmenin geri alınamayacağını anlıyorum</string>
@@ -1583,6 +1593,7 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_signature_email">İmzanın adresi</string>
     <string name="title_signature_mismatch">Gönderenin ve imzanın e-posta adresi eşleşmiyor</string>
     <string name="title_signature_algorithm">Algoritma</string>
+    <string name="title_signature_public_key">Genel Anahtar</string>
     <string name="title_signature_subject">Konu</string>
     <string name="title_signature_validity">Geçerlilik</string>
     <string name="title_signature_outdated">Bu genel anahtar şu anda geçerli değil</string>
@@ -1645,6 +1656,7 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_sort_on_starred_unread">Yıldızlı, okunmamış</string>
     <string name="title_sort_on_priority">Öncelik</string>
     <string name="title_sort_on_sender">Gönderen</string>
+    <string name="title_sort_on_sender_name">Gönderici adı</string>
     <string name="title_sort_on_subject">Konu</string>
     <string name="title_sort_on_size">Boyut</string>
     <string name="title_sort_on_attachments">Ekler</string>
@@ -1770,6 +1782,7 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_rule_resend">Tekrar gönder</string>
     <string name="title_rule_attached">Ham mesaj dosyasını ekle</string>
     <string name="title_rule_cc">CC adreslerini yanıtlayın</string>
+    <string name="title_rule_checks">Otomatik olarak gönderilen mesajları, yanıt verilmeyen adresleri vb. kontrol edin.</string>
     <string name="title_rule_with_attachments">Eklerle Birlikte</string>
     <string name="title_rule_answer_remark">Cevap döngülerinden kaçınmak için herhangi bir konuşma için yalnızca bir cevap gönderilecektir</string>
     <string name="title_rule_name_missing">Kural adı eksik</string>
@@ -1801,6 +1814,7 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_rule_select_sound">Ses seç</string>
     <string name="title_rule_select_sound_ringtone">Zil sesi</string>
     <string name="title_rule_select_sound_audio">Ses dosyası</string>
+    <string name="title_rule_loop_sound">Döngü sesi</string>
     <string name="title_rule_use_as_alarm">Alarm olarak kullan</string>
     <string name="title_rule_alarm_hint">Bu, \"rahatsız etmeyin\" kurallarını yok sayar</string>
     <string name="title_rule_alarm_duration">Maksimum alarm süresi (saniye)</string>
@@ -1958,7 +1972,8 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_hint_junk">Spam filtreleme e-posta sunucusu tarafından yapılmalıdır ve sınırlı özelliklere sahip pille çalışan bir cihazda güvenilir bir şekilde yapılamaz.</string>
     <string name="title_hint_junk_learn">İletileri spam klasörüne ve klasöründen taşıyarak, e-posta sunucusu spam\'in ne olduğunu \"öğrenir\"</string>
     <string name="title_hint_contact_actions">Seçenekler için uzun basın</string>
-    <string name="title_hint_eml">Bu, ham mesaj dosyasının içeriğinin bir özetidir. Tüm içeriği görüntülemek için ham iletiyi işlem çubuğundaki kaydet simgesiyle kaydedin.</string>
+    <string name="title_hint_eml">Bu, ham mesaj dosyasının içeriğinin bir özetidir.
+        Tüm içeriği görüntülemek üzere mesajı gelen kutusuna kaydetmek için sağ alttaki düğmeyi kullanabilirsiniz.    </string>
     <string name="title_open_link">Bağlantıyı aç</string>
     <string name="title_image_link">Görsel bağlantısı</string>
     <string name="title_different_link">Başlık ve link adresi farklı</string>
@@ -2178,7 +2193,7 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string-array name="sendDelayedNames">
         <item>Hayır</item>
         <item>5 saniye</item>
-        <item>10 seconds</item>
+        <item>10 saniye</item>
         <item>15 saniye</item>
         <item>30 saniye</item>
         <item>1 dakika</item>

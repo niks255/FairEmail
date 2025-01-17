@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Activity;
@@ -37,7 +37,6 @@ import android.os.strictmode.Violation;
 import android.text.TextUtils;
 import android.util.Printer;
 import android.view.ContextThemeWrapper;
-import android.webkit.CookieManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -160,6 +159,25 @@ public class ApplicationEx extends Application
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(@NonNull Thread thread, @NonNull Throwable ex) {
+                // java.lang.IllegalStateException: Unable to create layer for WebViewEx, size 768x4864 max size 8192 color type 4 has context 1
+                //        at android.os.MessageQueue.nativePollOnce(MessageQueue.java:-2)
+                //        at android.os.MessageQueue.next(MessageQueue.java:326)
+                //        at android.os.Looper.loop(Looper.java:183)
+                //        at android.app.ActivityThread.main(ActivityThread.java:7266)
+                if (ex instanceof IllegalStateException &&
+                        ex.getMessage() != null &&
+                        ex.getMessage().contains("Unable to create layer for WebView")) {
+                    int viewport_height = prefs.getInt("viewport_height", WebViewEx.DEFAULT_VIEWPORT_HEIGHT);
+                    if (viewport_height > WebViewEx.DEFAULT_VIEWPORT_HEIGHT) {
+                        prefs.edit().putInt("viewport_height", WebViewEx.DEFAULT_VIEWPORT_HEIGHT).apply();
+
+                        Log.setCrashReporting(true);
+                        Log.e(ex);
+                        System.exit(1);
+                        return;
+                    }
+                }
+
                 if (!crash_reports && Log.isOwnFault(ex)) {
                     Log.e(ex);
 
@@ -272,9 +290,6 @@ public class ApplicationEx extends Application
         // https://developer.android.com/guide/navigation/custom-back/support-animations#fragments
         // https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture#opt-predictive
         FragmentManager.enablePredictiveBack(false);
-
-        if (Helper.hasWebView(this))
-            CookieManager.getInstance().setAcceptCookie(false);
 
         // https://issuetracker.google.com/issues/233525229
         Log.i("Load emoji=" + load_emoji);
@@ -1070,6 +1085,9 @@ public class ApplicationEx extends Application
             if (you && beige)
                 editor.putBoolean("beige", false);
         }
+
+        if (version < 2259)
+            editor.putBoolean("thread_byref", true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !BuildConfig.DEBUG)
             editor.remove("background_service");

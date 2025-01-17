@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED;
@@ -153,6 +153,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -2793,13 +2794,13 @@ public class Helper {
     }
 
     static boolean isEndChar(char c) {
-        return (isSentenceChar(c) ||
-                c == ',' || c == ':' || c == ';');
+        return (isSentenceChar(c) || c == ',');
     }
 
     static boolean isSentenceChar(char c) {
         return (c == '.' /* Latin */ ||
                 c == '。' /* Chinese */ ||
+                c == ':' || c == ';' ||
                 c == '?' || c == '!');
     }
 
@@ -3848,5 +3849,50 @@ public class Helper {
     static void clearAll(Context context) {
         ActivityManager am = Helper.getSystemService(context, ActivityManager.class);
         am.clearApplicationUserData();
+    }
+
+    static class MaximumLengthStream extends FilterInputStream {
+        private int max;
+        private int count = 0;
+
+        protected MaximumLengthStream(InputStream in, int max) {
+            super(in);
+            this.max = max;
+        }
+
+        @Override
+        public int read() throws IOException {
+            int b = super.read();
+            if (b >= 0) {
+                count++;
+                checkLength();
+            }
+            return b;
+        }
+
+        @Override
+        public int read(byte[] b) throws IOException {
+            int read = super.read(b);
+            if (read > 0) {
+                count += read;
+                checkLength();
+            }
+            return read;
+        }
+
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            int read = super.read(b, off, len);
+            if (read > 0) {
+                count += read;
+                checkLength();
+            }
+            return read;
+        }
+
+        private void checkLength() throws IOException {
+            if (count > max)
+                throw new IOException("Stream larger than " + max + " bytes");
+        }
     }
 }

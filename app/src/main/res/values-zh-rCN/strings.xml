@@ -745,7 +745,7 @@
         通常支持默认算法 SHA256 和 AES128。
     </string>
     <string name="title_advanced_check_certificate">发送时检查公钥</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">发送时检查密钥使用指示</string>
+    <string name="title_advanced_check_key_usage">发送时检查密钥使用指示</string>
     <string name="title_advanced_manage_certificates">管理公钥</string>
     <string name="title_advanced_import_key">导入私钥</string>
     <string name="title_advanced_manage_keys">管理私钥</string>
@@ -789,6 +789,10 @@
     <string name="title_advanced_answer_prompt">回答提示</string>
     <string name="title_advanced_system_instructions">系统指南</string>
     <string name="title_advanced_default_prompt">默认提示</string>
+    <string name="title_advanced_ai">AI</string>
+    <string name="title_advanced_ai_input_system">输入系统提示</string>
+    <string name="title_advanced_ai_input_body">输入您信息的文本</string>
+    <string name="title_advanced_ai_input_reply">输入回复消息的文本</string>
     <string name="title_advanced_entered_text">输入的文本</string>
     <string name="title_advanced_sdcard">我想使用 SD 卡</string>
     <string name="title_advanced_watchdog">定期检查 FairEmail 是否仍在运行</string>
@@ -840,6 +844,7 @@
     <string name="title_advanced_send_reminders_hint">当邮件文本或主题为空或缺少附件时显示警告</string>
     <string name="title_advanced_reply_move_hint">邮件服务器仍可能将邮件添加到“已发送”文件夹</string>
     <string name="title_advanced_compose_color_hint">颜色太浅或太深会导致收件人难以辨认邮件</string>
+    <string name="title_advanced_compose_font_hint">默认意味着尊重接收方选择的字体</string>
     <string name="title_advanced_template_reply_hint">允许 HTML。可用的占位符： %1$s</string>
     <string name="title_advanced_write_below_hint">收件人可能会错过您的回复，例如当邮件较长被截断时</string>
     <string name="title_advanced_attach_new_hint">否则，将共享地址或文件添加到当前草稿邮件中</string>
@@ -906,6 +911,7 @@
     <string name="title_advanced_notify_car_hint">已连接意味着正在投影某些东西，例如用于导航的地图</string>
     <string name="title_advanced_notify_remove_hint">滑走或标为已读时将总会移除新邮件通知</string>
     <string name="title_advanced_notify_manage_hint">点击频道名称来设置频道属性</string>
+    <string name="title_advanced_notify_samsung_hint">要管理通知渠道，您可能需要启用此 Android 设置：通知、高级设置、管理每个应用的通知类别</string>
     <string name="title_advanced_notify_manage_default_hint">设置默认声音等</string>
     <string name="title_advanced_notify_manage_service_hint">禁用“监视”通知</string>
     <string name="title_advanced_notify_separate_hint">如何配置账户、文件夹和发送者的通知？</string>
@@ -1239,6 +1245,7 @@
     <string name="title_force_light">强制使用浅色主题</string>
     <string name="title_rename">重命名</string>
     <string name="title_share">分享</string>
+    <string name="title_analyze">分析</string>
     <string name="title_event">添加到日历</string>
     <string name="title_pin">添加快捷方式</string>
     <string name="title_pin_label">快捷方式标题</string>
@@ -1354,6 +1361,7 @@
     <string name="title_attachment_saved">附件已保存</string>
     <string name="title_attachments_saved">附件已保存</string>
     <string name="title_attachments_incomplete">一些附件或图像没有下载，且无法添加</string>
+    <string name="title_report_remark">这份报告是一封特别格式的电子邮件，由电子邮件服务器发送，因为发送的邮件无法发送给收件人， 例如，因为邮箱已满，或因为电子邮件地址不存在 (不再存在)。</string>
     <string name="title_ask_save">保存更改？</string>
     <string name="title_ask_delete">确定要永久删除邮件吗？</string>
     <string name="title_ask_delete_accept">我明白永久删除邮件是不可逆的</string>
@@ -1582,6 +1590,7 @@
     <string name="title_signature_email">签名地址</string>
     <string name="title_signature_mismatch">发件人和签名的电子邮件地址不匹配</string>
     <string name="title_signature_algorithm">算法</string>
+    <string name="title_signature_public_key">公钥</string>
     <string name="title_signature_subject">主题</string>
     <string name="title_signature_validity">有效性</string>
     <string name="title_signature_outdated">此公钥当前无效</string>
@@ -1645,6 +1654,7 @@
     <string name="title_sort_on_starred_unread">星标，未读</string>
     <string name="title_sort_on_priority">优先级</string>
     <string name="title_sort_on_sender">发件人</string>
+    <string name="title_sort_on_sender_name">发件人名称</string>
     <string name="title_sort_on_subject">主题</string>
     <string name="title_sort_on_size">大小</string>
     <string name="title_sort_on_attachments">附件</string>
@@ -1802,6 +1812,7 @@
     <string name="title_rule_select_sound">选择声音</string>
     <string name="title_rule_select_sound_ringtone">铃声</string>
     <string name="title_rule_select_sound_audio">音频文件</string>
+    <string name="title_rule_loop_sound">循环声音</string>
     <string name="title_rule_use_as_alarm">用作警报</string>
     <string name="title_rule_alarm_hint">这将忽略“勿扰”规则</string>
     <string name="title_rule_alarm_duration">警报最长持续时间 (秒)</string>
@@ -1959,7 +1970,9 @@
     <string name="title_hint_junk">过滤垃圾邮件属于邮件服务器的工作，单凭客户端设备根本无力胜任</string>
     <string name="title_hint_junk_learn">将邮件移入或移出垃圾邮件文件夹会让电子邮件服务器“得知”什么是垃圾邮件</string>
     <string name="title_hint_contact_actions">长按以显示更多选项</string>
-    <string name="title_hint_eml">这是原始邮件文件内容的摘要。使用操作栏中的保存图标保存原始邮件以查看所有内容。</string>
+    <string name="title_hint_eml">        这是一个原始消息文件内容的摘要。
+        您可以使用右下角按钮保存消息到收件箱查看所有内容。
+    </string>
     <string name="title_open_link">打开链接</string>
     <string name="title_image_link">图片链接</string>
     <string name="title_different_link">标题和链接地址不同</string>

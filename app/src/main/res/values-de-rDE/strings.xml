@@ -761,7 +761,7 @@
         Die Standardalgorithmen SHA256 und AES128 werden üblicherweise unterstützt.
     </string>
     <string name="title_advanced_check_certificate">Öffentlichen Schlüssel beim Senden überprüfen</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">Überprüfung der Schlüsselverwendungsangaben beim Senden</string>
+    <string name="title_advanced_check_key_usage">Beim Senden die Anweisungen zum Gebrauch der Schlüssel prüfen</string>
     <string name="title_advanced_manage_certificates">Öffentliche Schlüssel verwalten</string>
     <string name="title_advanced_import_key">Privaten Schlüssel importieren</string>
     <string name="title_advanced_manage_keys">Private Schlüssel verwalten</string>
@@ -806,6 +806,10 @@
     <string name="title_advanced_answer_prompt">Antwort-Prompt</string>
     <string name="title_advanced_system_instructions">Systemanweisungen</string>
     <string name="title_advanced_default_prompt">Standard-Prompt</string>
+    <string name="title_advanced_ai">KI</string>
+    <string name="title_advanced_ai_input_system">Eingabeaufforderung</string>
+    <string name="title_advanced_ai_input_body">Text der Nachricht eingeben</string>
+    <string name="title_advanced_ai_input_reply">Text der Antwort eingeben</string>
     <string name="title_advanced_entered_text">Eingegebener Text</string>
     <string name="title_advanced_sdcard">Ich möchte eine SD-Karte verwenden</string>
     <string name="title_advanced_watchdog">Regelmäßig prüfen, ob FairEmail noch aktiv ist</string>
@@ -857,6 +861,7 @@
     <string name="title_advanced_send_reminders_hint">Eine Warnung anzeigen, wenn der Nachrichtentext oder der Betreff leer ist oder wenn ein Anhang zu fehlen scheint</string>
     <string name="title_advanced_reply_move_hint">Der E-Mail-Server könnte die Nachrichten trotzdem in den Ordner für gesendete Nachrichten hinzufügen</string>
     <string name="title_advanced_compose_color_hint">Sehr helle oder sehr dunkle Farben führen zu unleserlichen Nachrichten auf der Seite des Empfängers</string>
+    <string name="title_advanced_compose_font_hint">Standard bedeutet, dass die auf der Empfängerseite gewählte Schriftart beibehalten wird</string>
     <string name="title_advanced_template_reply_hint">HTML wird zugelassen. Verfügbare Platzhalter: %1$s</string>
     <string name="title_advanced_write_below_hint">Ein Empfänger könnte Ihre Antwort verpassen, wenn zum Beispiel eine längere Nachricht abgeschnitten wird</string>
     <string name="title_advanced_attach_new_hint">Anderenfalls dem aktuellen Nachrichtenentwurf freigegebene Adressen oder Dateien hinzufügen</string>
@@ -923,6 +928,7 @@
     <string name="title_advanced_notify_car_hint">Verbunden bedeutet, dass etwas projiziert wird, zum Beispiel eine Karte für die Navigation</string>
     <string name="title_advanced_notify_remove_hint">Eingangsbenachrichtigungen werden immer entfernt, wenn sie weggewischt oder als gelesen gekennzeichnet werden</string>
     <string name="title_advanced_notify_manage_hint">Auf den Kanalnamen tippen, um die Kanaleigenschaften festzulegen</string>
+    <string name="title_advanced_notify_samsung_hint">Um Benachrichtigungskanäle verwalten zu können, müssen Sie möglicherweise diese Android-Einstellung aktivieren: Benachrichtigung ➔ Erweiterte Einstellungen ➔ Benachrichtigungskategorien für jede App verwalten</string>
     <string name="title_advanced_notify_manage_default_hint">Zum Einstellen des Standardtons usw.</string>
     <string name="title_advanced_notify_manage_service_hint">Zum Deaktivieren der Benachrichtigung für die App-Überwachung</string>
     <string name="title_advanced_notify_separate_hint">Wie konfiguriere ich Benachrichtigungen für Konten, Ordner und Absender?</string>
@@ -1259,6 +1265,7 @@
     <string name="title_force_light">Helles Farbschema erzwingen</string>
     <string name="title_rename">Umbenennen</string>
     <string name="title_share">Teilen</string>
+    <string name="title_analyze">Analysieren</string>
     <string name="title_event">Zum Kalender hinzufügen</string>
     <string name="title_pin">Verknüpfung hinzufügen</string>
     <string name="title_pin_label">Verknüpfungsname</string>
@@ -1374,6 +1381,7 @@
     <string name="title_attachment_saved">Anhang gespeichert</string>
     <string name="title_attachments_saved">Anhänge gespeichert</string>
     <string name="title_attachments_incomplete">Einige Anhänge oder Bilder wurden nicht heruntergeladen und konnten nicht hinzugefügt werden</string>
+    <string name="title_report_remark">Dieser Bericht, eine speziell formatierte E-Mail, wurde von einem E-Mail-Server gesendet, weil eine gesendete Nachricht nicht an den Empfänger zugestellt werden konnte. Möglicherweise ist das Postfach voll oder die E-Mail-Adresse existiert nicht (mehr).</string>
     <string name="title_ask_save">Änderungen speichern?</string>
     <string name="title_ask_delete">Nachricht dauerhaft löschen?</string>
     <string name="title_ask_delete_accept">Ich verstehe, dass das Löschen von Nachrichten unwiderruflich ist</string>
@@ -1603,6 +1611,7 @@
     <string name="title_signature_email">E-Mail-Adresse der Signatur</string>
     <string name="title_signature_mismatch">Die E-Mail-Adresse des Absenders und der Signatur stimmen nicht überein</string>
     <string name="title_signature_algorithm">Algorithmus</string>
+    <string name="title_signature_public_key">Öffentlicher Schlüssel</string>
     <string name="title_signature_subject">Betreff</string>
     <string name="title_signature_validity">Gültigkeit</string>
     <string name="title_signature_outdated">Dieser öffentliche Schlüssel ist derzeit nicht gültig</string>
@@ -1666,6 +1675,7 @@
     <string name="title_sort_on_starred_unread">Markiert, ungelesen</string>
     <string name="title_sort_on_priority">Priorität</string>
     <string name="title_sort_on_sender">Absender</string>
+    <string name="title_sort_on_sender_name">Absendername</string>
     <string name="title_sort_on_subject">Betreff</string>
     <string name="title_sort_on_size">Größe</string>
     <string name="title_sort_on_attachments">Anhänge</string>
@@ -1791,7 +1801,7 @@
     <string name="title_rule_resend">Umleiten</string>
     <string name="title_rule_attached">Nachricht-Quelltext anhängen</string>
     <string name="title_rule_cc">Den CC-Adressen antworten</string>
-    <string name="title_rule_checks">Auf automatisch gesendete Nachrichten, keine-Antwort-Adressen usw. prüfen.</string>
+    <string name="title_rule_checks">Auf automatisch gesendete Nachrichten, Nicht-Antworten-Adressen usw. prüfen</string>
     <string name="title_rule_with_attachments">Mit Anhängen</string>
     <string name="title_rule_answer_remark">Für jede Unterhaltung wird per Antwortregel nur eine Antwort gesendet, um Antwortschleifen zu vermeiden</string>
     <string name="title_rule_name_missing">Regelname fehlt</string>
@@ -1823,6 +1833,7 @@
     <string name="title_rule_select_sound">Ton auswählen</string>
     <string name="title_rule_select_sound_ringtone">Klingelton</string>
     <string name="title_rule_select_sound_audio">Audiodatei</string>
+    <string name="title_rule_loop_sound">Ton wiederholen</string>
     <string name="title_rule_use_as_alarm">Als Wecker verwenden</string>
     <string name="title_rule_alarm_hint">Dies ignoriert die Nicht-stören-Regeln</string>
     <string name="title_rule_alarm_duration">Maximale Alarmdauer (Sekunden)</string>
@@ -1974,13 +1985,15 @@
     <string name="title_hint_important">Wichtig</string>
     <string name="title_hint_sync">Das Herunterladen von E-Mails kann einige Zeit in Anspruch nehmen – abhängig von der Geschwindigkeit des Anbieters, der Internetverbindung, des Geräts und der Anzahl der E-Mails. Beim Herunterladen der E-Mails kann die App träge reagieren.</string>
     <string name="title_hint_sync_note">Standardmäßig werden nicht alle Nachrichten heruntergeladen, um Speicherplatz, Akku- und Datenverbrauch zu begrenzen. Sie können dies ändern, indem Sie lange auf einen Ordner in der Ordnerliste drücken und »Weitere Nachrichten abrufen« auswählen.</string>
-    <string name="title_hint_battery">Da FairEmail standardmäßig immer bereit ist, Nachrichten zu erhalten, meldet Android FairEmail als immer aktiv. Daher mag es so aussehen, als ob FairEmail immer Akkuladung verbraucht, aber das ist nicht der Fall.</string>
+    <string name="title_hint_battery">Da FairEmail standardmäßig immer bereit ist, Nachrichten zu erhalten, meldet Android FairEmail als durchgehend aktiv. Deshalb kann es so aussehen, als ob FairEmail immer Akkuladung verbraucht, aber das ist nicht der Fall.</string>
     <string name="title_hint_reformat">Standardmäßig formatiert FairEmail Nachrichten aus Datenschutz- und Sicherheitsgründen neu. Um die Originalnachricht anzuzeigen, tippen Sie über dem Nachrichtentext auf das Vollbildsymbol »Original anzeigen«.</string>
     <string name="title_hint_design">Das Design ist bewusst nicht ablenkend, sondern sehr funktional gestaltet. Es gibt viele Optionen, um das Erscheinungsbild anzupassen, aber bitte haben Sie Verständnis dafür, dass es unmöglich ist, alle zufriedenzustellen.</string>
     <string name="title_hint_junk">Das Filtern von Spam sollte durch den E-Mail-Server erfolgen und kann auf einem akkubetriebenen Gerät mit begrenzten Kapazitäten nicht zuverlässig durchgeführt werden.</string>
     <string name="title_hint_junk_learn">Durch das Verschieben von Nachrichten in und aus dem Spam-Ordner „erlernt” der E-Mail-Server, welche Nachrichten Spam sind</string>
     <string name="title_hint_contact_actions">Gedrückt halten für weitere Optionen</string>
-    <string name="title_hint_eml">Das ist eine Zusammenfassung des Inhalts einer Rohnachrichtendatei. Speichern Sie die Rohnachricht mit dem Speichernsymbol in der Aktionsleiste, um alle Inhalte anzuzeigen.</string>
+    <string name="title_hint_eml">        Dies ist eine Zusammenfassung des Inhalts einer Rohnachrichtendatei.
+        Über die Schaltfläche unten rechts können Sie die Nachricht im Posteingang speichern, um den gesamten Inhalt anzuzeigen.
+    </string>
     <string name="title_open_link">Link öffnen</string>
     <string name="title_image_link">Bild-Link</string>
     <string name="title_different_link">Titel und Linkadresse sind unterschiedlich</string>
@@ -2068,7 +2081,7 @@
     <string name="title_pro_purchase">Kaufen</string>
     <string name="title_pro_one_time">%1$s (einmaliger Kauf)</string>
     <string name="title_pro_no_play">Play Store konnte nicht aufgerufen werden</string>
-    <string name="title_pro_info">        Die Entwicklung von FairEmail hat buchstäblich tausende Stunden gedauert und trotzdem sind die meisten Funktionen kostenlos nutzbar.
+    <string name="title_pro_info">        Die Entwicklung von FairEmail hat buchstäblich tausende Stunden gedauert, und trotzdem sind die meisten Funktionen kostenlos nutzbar.
         FairEmail nimmt Ihre Privatsphäre ernst, zeigt keine Werbung an und verwendet keine Verfolgungs- oder Analysefunktionen, um damit Geld zu verdienen.
         Um FairEmail auf lange Sicht zu erhalten und zu unterstützen, sind einige Komfort- und erweiterte Funktionen nicht kostenlos verwendbar.
         Zur Erinnerung daran zeigt FairEmail einen kleinen Hinweis an, dieser verschwindet beim Kauf der Pro-Funktionen.
@@ -2076,7 +2089,7 @@
     <string name="title_pro_whichever">Welche Funktionen auch immer als Pro-Funktionen ausgewählt werden, es gibt immer jemanden, der sich beschwert, dass eine Funktion frei sein sollte. Bitte seien Sie nicht diese Person.</string>
     <string name="title_pro_google">FairEmail initiiert einen Kauf im Play Store, aber letztendlich verwaltet Google den gesamten Kaufprozess. Bitte machen Sie nicht die App dafür verantwortlich, wenn es Probleme gibt!</string>
     <string name="title_pro_hide">Kleinen Hinweis für %1$d Wochen ausblenden</string>
-    <string name="title_pro_hint">Der Erwerb der Pro-Funktionen erlaubt es Ihnen, alle momentan und zukünftig verfügbaren Pro-Funktionen zu verwenden und ermöglicht die Weiterentwicklung und Pflege der App.</string>
+    <string name="title_pro_hint">Der Erwerb der Pro-Funktionen erlaubt es Ihnen, alle momentan und zukünftig verfügbaren Pro-Funktionen zu verwenden, und ermöglicht die Weiterentwicklung und Pflege der App.</string>
     <string name="title_pro_price">Warum sind die Pro-Funktionen so teuer?</string>
     <string name="title_pro_family">Kann ich die Google-Play-Familienmediathek verwenden?</string>
     <string name="title_pro_restore">Wie kann ich einen Kauf wiederherstellen (auf einem anderen Gerät)?</string>
@@ -2084,7 +2097,7 @@
     <string name="title_pro_activated">Alle Pro-Funktionen sind aktiviert</string>
     <string name="title_pro_valid">Alle Pro-Funktionen aktiviert</string>
     <string name="title_pro_invalid">Ungültige Antwort</string>
-    <string name="title_pro_support">FairEmail ist auf Ihre Hilfe angewiesen. Bitte tippen Sie auf Kaufen, um die Pro-Funktionen zu erwerben, damit das Projekt fortgeführt werden kann oder deaktivieren Sie diese Meldung.</string>
+    <string name="title_pro_support">FairEmail ist auf Ihre Hilfe angewiesen. Bitte tippen Sie auf Kaufen, um die Pro-Funktionen zu erwerben, damit das Projekt fortgeführt werden kann, oder deaktivieren Sie diese Meldung.</string>
     <string name="title_boundary_error">Fehler beim Herunterladen der Nachrichten vom E-Mail-Server</string>
     <string name="title_boundary_retry">Erneut versuchen</string>
     <string name="title_unexpected_error">Unerwarteter Fehler</string>

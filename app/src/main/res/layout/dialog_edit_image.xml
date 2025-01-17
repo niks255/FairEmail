@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp">
+
+    <com.canhub.cropper.CropImageView
+        android:id="@+id/civ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        app:layout_constraintBottom_toTopOf="@+id/ibRotate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ibRotate"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="12dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/ic_rotate_right_24"
+        android:scaleType="fitCenter"
+        android:tooltipText="@string/ic_rotate_right_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/civ"
+        app:srcCompat="@drawable/twotone_rotate_right_24"
+        app:tint="?attr/colorAccent" />
+
+    <ImageButton
+        android:id="@+id/ibFlipHorizontally"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="12dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/ic_flip_24_horizontally"
+        android:scaleType="fitCenter"
+        android:tooltipText="@string/ic_flip_24_horizontally"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ibRotate"
+        app:layout_constraintTop_toBottomOf="@id/civ"
+        app:srcCompat="@drawable/twotone_swap_horiz_24"
+        app:tint="?attr/colorAccent" />
+
+    <ImageButton
+        android:id="@+id/ibFlipVertically"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="12dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/ic_flip_24_vertically"
+        android:scaleType="fitCenter"
+        android:tooltipText="@string/ic_flip_24_vertically"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ibFlipHorizontally"
+        app:layout_constraintTop_toBottomOf="@id/civ"
+        app:srcCompat="@drawable/twotone_swap_vert_24"
+        app:tint="?attr/colorAccent" />
+
+    <ImageButton
+        android:id="@+id/ibResize"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="12dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/title_add_image_resize"
+        android:scaleType="fitCenter"
+        android:tooltipText="@string/title_add_image_resize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ibFlipVertically"
+        app:layout_constraintTop_toBottomOf="@id/civ"
+        app:srcCompat="@drawable/twotone_open_in_full_24"
+        app:tint="?attr/colorAccent" />
+
+    <ImageButton
+        android:id="@+id/ibCancel"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="12dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@android:string/cancel"
+        android:scaleType="fitCenter"
+        android:tooltipText="@android:string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ibResize"
+        app:layout_constraintTop_toBottomOf="@id/civ"
+        app:srcCompat="@drawable/twotone_close_24" />
+
+    <ImageButton
+        android:id="@+id/ibSave"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="12dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/title_save"
+        android:scaleType="fitCenter"
+        android:tooltipText="@string/title_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/civ"
+        app:srcCompat="@drawable/twotone_save_alt_24"
+        app:tint="?attr/colorAccent" />
+
+    <eu.faircode.email.ContentLoadingProgressBar
+        android:id="@+id/pbWait"
+        style="@style/Base.Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:show_delay="0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

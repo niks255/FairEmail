@@ -759,7 +759,7 @@
         Алгоритмите по подразбиране (SHA-256 и AES-128) обикновено се поддържат.
     </string>
     <string name="title_advanced_check_certificate">Проверете публичния ключ при изпращане</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">Проверка на показателите за употреба на ключ при изпращане</string>
+    <string name="title_advanced_check_key_usage">Проверка на показателите за употреба на ключ при изпращане</string>
     <string name="title_advanced_manage_certificates">Управление на публични ключове</string>
     <string name="title_advanced_import_key">Импортиране на частен ключ</string>
     <string name="title_advanced_manage_keys">Управление на частни ключове</string>
@@ -854,6 +854,7 @@
     <string name="title_advanced_send_reminders_hint">Показва предупреждение когато текстът на съобщението или темата е празна или когато прикаченият файл липсва</string>
     <string name="title_advanced_reply_move_hint">Сървърът на имейла все още би могъл да добавя съобщения в папката изпратено съобщение</string>
     <string name="title_advanced_compose_color_hint">Много светлите или много тъмните цветове ще доведе до нечетливи съобщения от страна на получателите</string>
+    <string name="title_advanced_compose_font_hint">По подразбиране означава уважаване на шрифта като избран от страна на получателя</string>
     <string name="title_advanced_template_reply_hint">HTML е позволен. Налични заместващи знаци: %1$s</string>
     <string name="title_advanced_write_below_hint">Получателят може да пропусне отговора ви, например, съкращавайки предълго съобщение</string>
     <string name="title_advanced_attach_new_hint">В противен случай добавете споделени адреси или файлове към текущата чернова на съобщението</string>
@@ -1255,6 +1256,7 @@
     <string name="title_force_light">Налагам светла тема</string>
     <string name="title_rename">Преименуване</string>
     <string name="title_share">Споделяне</string>
+    <string name="title_analyze">Анализиране</string>
     <string name="title_event">Добавяне в календара</string>
     <string name="title_pin">Добавяне на пряк път</string>
     <string name="title_pin_label">Заглавие на прекия път</string>
@@ -1598,6 +1600,7 @@
     <string name="title_signature_email">Подписът е адрес</string>
     <string name="title_signature_mismatch">Не съвпадат адресът на имейла на подателя и подписа</string>
     <string name="title_signature_algorithm">Алгоритъм</string>
+    <string name="title_signature_public_key">Публичен ключ</string>
     <string name="title_signature_subject">Тема</string>
     <string name="title_signature_validity">Валидност</string>
     <string name="title_signature_outdated">Към момента този публичен ключ не е валиден</string>
@@ -1661,6 +1664,7 @@
     <string name="title_sort_on_starred_unread">Озвездено, непрочетено</string>
     <string name="title_sort_on_priority">Приоритет</string>
     <string name="title_sort_on_sender">Подател</string>
+    <string name="title_sort_on_sender_name">Име на изпращач</string>
     <string name="title_sort_on_subject">Тема</string>
     <string name="title_sort_on_size">Големина</string>
     <string name="title_sort_on_attachments">Прикачени файлове</string>
@@ -1818,6 +1822,7 @@
     <string name="title_rule_select_sound">Изберете звук</string>
     <string name="title_rule_select_sound_ringtone">Тон на звънене</string>
     <string name="title_rule_select_sound_audio">Звуков файл</string>
+    <string name="title_rule_loop_sound">Зацикляне на звука</string>
     <string name="title_rule_use_as_alarm">Употреба като будило</string>
     <string name="title_rule_alarm_hint">Това ще пренебрегне правилата \"не ме притеснявайте\"</string>
     <string name="title_rule_alarm_duration">Най-дълго времетраене на будилника (секунди)</string>
@@ -1975,7 +1980,9 @@
     <string name="title_hint_junk">Прецеждането на спама би трябвало да се върши от сървъра на имейла и не може да се извърши надеждно на захранвано от батерии устройство с ограничени възможности.</string>
     <string name="title_hint_junk_learn">Премествайки съобщения от и до папка спам, сървърът се \"учи\" какво е спам</string>
     <string name="title_hint_contact_actions">Натиснете продължително за повече опции</string>
-    <string name="title_hint_eml">Това е обобщение на съдържанието на необработен файл със съобщение. Запишете необработеното съобщение с иконата за запис в панела за действие, за да видите цялото съдържание.</string>
+    <string name="title_hint_eml">        Това е обобщение на файла с необработено съобщение.
+        Може да употребявате бутона долу вдясно, за да запазите съобщението във входящи за преглед на цялото съдържание.
+    </string>
     <string name="title_open_link">Отваряне не връзката</string>
     <string name="title_image_link">Връзка на образа</string>
     <string name="title_different_link">Адресът на домейна и адресът на връзката са различни</string>

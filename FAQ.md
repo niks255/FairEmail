@@ -140,7 +140,8 @@ Related questions:
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
 * A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
 * Search suggestions causes the keyboard losing focus on Android 12L.
-* [A bug](https://techcommunity.microsoft.com/t5/outlook/outlook-office-365-imap-idle-is-broken/m-p/3616242) in the Outlook IMAP server causes delayed new message notifications.
+* ~~[A bug](https://techcommunity.microsoft.com/t5/outlook/outlook-office-365-imap-idle-is-broken/m-p/3616242) in the Outlook IMAP server causes delayed new message notifications.~~
+* Updating the Material You colors sometimes require restarting the app / the device, which is caused by [a bug](https://issuetracker.google.com/issues/386671298) in the Android WebView.
 
 <a name="redmi"></a>
 <a name="realme"></a>
@@ -153,7 +154,8 @@ Related questions:
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23redmi)
 
-On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices running Android 12 and some Oppo devices running Android 12 the database occasionally gets corrupted, especially after an update,
+On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices, some Oppo devices, and some Samsung devices running Android 12,
+the database occasionally gets corrupted, especially after installing an update,
 resulting in total data loss (on the device only, unless you are using a POP3 account with the option *Leave messages on server* disabled).
 
 The cause of this problem are disk I/O errors due to an Android bug (more likely) or maybe a hardware issue (less likely),
@@ -161,7 +163,7 @@ please [see here](https://www.sqlite.org/rescode.html#ioerr_write).
 
 "*This error might result from a hardware malfunction or because a filesystem came unmounted while the file was open.*"
 
-This can't be fixed by the app and should be fixed by the device manufacturer.
+This can't be fixed by the app and must be fixed by the device manufacturer with an Android update.
 
 **Please do not blame the app for this!**
 
@@ -178,7 +180,8 @@ android.database.sqlite.SQLiteDiskIOException: disk I/O error (code 778)
 	at androidx.room.RoomDatabase.endTransaction(RoomDatabase:584)
 ```
 
-The cause might be [changes in Android 7 Nougat](https://ericsink.com/entries/sqlite_android_n.html), which is why sqlite isn't bundled anymore since version 1.1970.
+This will affect other apps which use a local database intensively too.
+Most apps store their data in the cloud instead of on the device, which is why this isn't occurring frequently.
 
 <br />
 
@@ -1033,10 +1036,11 @@ Signed-only messages are supported, and encrypted-only messages are supported si
 
 Common errors:
 
-* *No key*: there is no PGP key available for one of the listed email addresses
+* *No key*: there is no PGP key available for one of the listed email addresses.
 * *No key found!*: the PGP key stored in the identity probably doesn't exist anymore. Resetting the key (see above) will probably fix this problem.
 * *Missing key for encryption*: there is probably a key selected in FairEmail that does not exist in the OpenKeychain app anymore. Resetting the key (see above) will probably fix this problem.
 * *Key for signature verification is missing*: the public key for the sender is not available in the OpenKeychain app. This can also be caused by Autocrypt being disabled in the encryption settings or by the Autocrypt header not being sent.
+* *Message signature valid but not confirmed*: the signature is okay, but the public key still needs to be confirmed in the OpenKeychain app.
 * *OpenPgp error 0: null* / *OpenPgp error 0: General error*: please check the key in the OpenKeychain app and make sure there are no conflicting identities for the key and make sure the email address exactly matches the key, including lower/upper case. Also, make sure the key can be used to sign/encrypt and isn't for encrypting/signing only.
 * *OpenPgp error 0: Encountered an error reading input data!*: your public key has the [AEAD](https://en.wikipedia.org/wiki/Authenticated_encryption) flag set, but the message was encrypted in the older MDC (Modification Detection Code) mode by the sender. For example the Posteo email server does this erroneously. Workaround: [remove the AEAD flag](https://github.com/keybase/keybase-issues/issues/4025#issuecomment-853933127) from the key.
 
@@ -3007,6 +3011,8 @@ You can enable downloading message headers in the connection settings and check 
 Some common header conditions (regex):
 
 * *.&ast;To:.&ast;undisclosed-recipients.&ast;*
+* *.&ast;Cc:.&ast;test@example.com.&ast;*
+* *.&ast;Envelope-to:.&ast;test@example.com.&ast;*
 * *.&ast;Auto-Submitted:.&ast;* [RFC3834](https://tools.ietf.org/html/rfc3834)
 * *.&ast;List-Unsubscribe:.&ast;* [RFC3834](https://datatracker.ietf.org/doc/html/rfc2369)
 * *.&ast;Content-Type:.&ast;multipart/report.&ast;* [RFC3462](https://tools.ietf.org/html/rfc3462)
@@ -3113,7 +3119,7 @@ This website might be useful for testing webhooks:
 
 <br />
 
-<a name="autoanswer">
+<a name="autoanswer"></a>
 **Auto reply/answer**
 
 First, create a template with the text to reply/answer with via the navigation menu (left side menu).
@@ -3665,6 +3671,8 @@ see [here](https://developer.android.com/preview/privacy/scoped-storage) and [he
 
 If you use MIUI, please make sure [MIUI optimization](https://android.stackexchange.com/questions/191228/what-is-miui-optimization) is enabled in the developer settings.
 You can enable the developer options by tapping a few times on the MIUI version number in the settings, About phone.
+
+See also [this FAQ](#faq25).
 
 <br />
 
@@ -4287,6 +4295,18 @@ You can show the answer menu by tapping on the answer button at the bottom right
 
 <br />
 
+*Force light for reformatted message view (1.2254+)*
+
+Show force light menu item / button (when configured) to force a light theme for reformatted messages.
+
+<br />
+
+*Basic image editor (1.2257+)*
+
+Display a basic image editor when tapping an inserted image.
+
+<br />
+
 <a name="faq126"></a>
 **(126) Can message previews be sent to my smartwatch?**
 
@@ -4766,6 +4786,7 @@ the F-Droid build, but **only if** the version number of the F-Droid build is th
 
 F-Droid builds irregularly, which can be problematic if there is an important update.
 Therefore you are advised to switch to the GitHub release.
+F-Droid isn't as secure as you might think anyway, [see here](https://privsec.dev/posts/android/f-droid-security-issues/).
 
 Note that developers have no control over F-Droid builds and the F-Droid infrastructure (apps, forums, etc.).
 
@@ -5835,10 +5856,9 @@ OpenAI can only be used if configured and enabled.
 
 *Editor*
 
-Tap on the robot button in the top action bar of the message editor.
-If the text in the message editor is empty, the message being replied to will be answered (using the configured answer prompt),
-else the entered text will be sent, which could be a question or command.
-If you select entered text, it will be replaced by the answer.
+Tap the robot button in the top action bar of the message editor.
+A dialog box will appear (since version 1.2259).
+You can select the prompt and select whether to input the message you typed and/or the message you are replying to.
 
 For example: create a new draft and enter the text "*How far is the sun?*", and tap on the robot button in the top action bar.
 
@@ -5897,6 +5917,10 @@ It is possible to use **DeepInfra** too (since version 1.2132).
 * In the integration settings enter the URI https://api.deepinfra.com/v1/openai, an API key and the model name
 
 <br>
+
+<br>
+
+If you are looking for Google Gemini support, please see [this FAQ](#faq204).
 
 This feature is experimental and requires version 1.2053 or later for the GitHub version and version 1.2182 or later for the Play Store version.
 

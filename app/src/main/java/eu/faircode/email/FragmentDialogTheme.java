@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Dialog;
@@ -663,8 +663,8 @@ public class FragmentDialogTheme extends FragmentDialogBase {
 
         Integer color = null;
         if (cards) {
-            if (you && (!dark || !black) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                if (beige)
+            if (you && !black && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                if (!dark && beige)
                     color = ContextCompat.getColor(context, R.color.lightColorBackground_cards_beige);
                 else
                     color = ContextCompat.getColor(context, dark

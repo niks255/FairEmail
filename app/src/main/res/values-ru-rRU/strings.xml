@@ -13,12 +13,12 @@
     <string name="app_cake_remaining">Оставшееся место на устройстве: %1$s</string>
     <string name="app_cake_required">Минимально необходимое место: %1$s</string>
     <string name="app_updated">Последнее обновление: %1$s</string>
-    <string name="app_download">Скачано с: %1$s</string>
+    <string name="app_download">Загружено из: %1$s</string>
     <string name="app_motd">        На Android 14/15 beta иногда появляется уведомление \"Приложение не отвечает\".
         Google работает над исправлением данной ошибки.
         Пожалуйста, не вините приложение из-за проблемы в Android!
     </string>
-    <string name="channel_service">Наблюдение</string>
+    <string name="channel_service">Отслеживание</string>
     <string name="channel_send">Отправка</string>
     <string name="channel_notification">Эл. почта</string>
     <string name="channel_progress">Выполнение</string>
@@ -787,7 +787,7 @@
         Алгоритмы по умолчанию (SHA-256 и AES-128) обычно поддерживаются.
     </string>
     <string name="title_advanced_check_certificate">Проверять публичный ключ при отправке</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">Проверять использование ключей при отправке</string>
+    <string name="title_advanced_check_key_usage">Проверять использование ключей при отправке</string>
     <string name="title_advanced_manage_certificates">Управление публичными ключами</string>
     <string name="title_advanced_import_key">Импортировать приватный ключ</string>
     <string name="title_advanced_manage_keys">Управление приватными ключами</string>
@@ -832,6 +832,10 @@
     <string name="title_advanced_answer_prompt">Запрос для ответа</string>
     <string name="title_advanced_system_instructions">Системные инструкции</string>
     <string name="title_advanced_default_prompt">Запрос по умолчанию</string>
+    <string name="title_advanced_ai">ИИ</string>
+    <string name="title_advanced_ai_input_system">Введите системный запрос</string>
+    <string name="title_advanced_ai_input_body">Введите текст сообщения</string>
+    <string name="title_advanced_ai_input_reply">Введите текст ответного сообщения</string>
     <string name="title_advanced_entered_text">Введённый текст</string>
     <string name="title_advanced_sdcard">Я хочу использовать SD-карту</string>
     <string name="title_advanced_watchdog">Регулярно проверять, активен ли FairEmail</string>
@@ -883,6 +887,7 @@
     <string name="title_advanced_send_reminders_hint">Показывать предупреждение, если отсутствует текст сообщения, тема или, возможно, отсутствует вложение</string>
     <string name="title_advanced_reply_move_hint">Сервер электронной почты всё ещё может добавлять сообщения в папку отправленных</string>
     <string name="title_advanced_compose_color_hint">Очень светлые или очень тёмные цвета сделают сообщение неразборчивым для получателя</string>
+    <string name="title_advanced_compose_font_hint">Значение по умолчанию означает соответствие шрифту, выбранному получателем</string>
     <string name="title_advanced_template_reply_hint">Использование HTML разрешено. Доступные заполнители: %1$s</string>
     <string name="title_advanced_write_below_hint">Получатель может пропустить ваш ответ, например, при сокращении длинного сообщения</string>
     <string name="title_advanced_attach_new_hint">В противном случае общие адреса или файлы добавляются к текущему черновику</string>
@@ -949,6 +954,7 @@
     <string name="title_advanced_notify_car_hint">Подключение означает отображение чего-либо, например, навигационной карты</string>
     <string name="title_advanced_notify_remove_hint">Уведомления о новых о сообщениях всегда будут удаляться при смахивании сообщения и пометке о прочтении</string>
     <string name="title_advanced_notify_manage_hint">Нажмите на название канала, чтобы установить его свойства</string>
+    <string name="title_advanced_notify_samsung_hint">Для управления каналами уведомлений может потребоваться включить данную настройку Android: Уведомления → Дополнительные настройки → Управление категориями уведомлений для каждого приложения</string>
     <string name="title_advanced_notify_manage_default_hint">Для установки звука по умолчанию и т.д.</string>
     <string name="title_advanced_notify_manage_service_hint">Для отключения контролирующего уведомления</string>
     <string name="title_advanced_notify_separate_hint">Как настроить уведомления для учётных записей, папок и отправителей?</string>
@@ -1285,6 +1291,7 @@
     <string name="title_force_light">Принудительно использовать светлую тему</string>
     <string name="title_rename">Переименовать</string>
     <string name="title_share">Поделиться</string>
+    <string name="title_analyze">Анализ</string>
     <string name="title_event">Добавить в календарь</string>
     <string name="title_pin">Добавить ярлык</string>
     <string name="title_pin_label">Имя ярлыка</string>
@@ -1306,7 +1313,7 @@
     <string name="title_show_inline">Показывать встроенные вложения</string>
     <string name="title_download_all">Загрузить все</string>
     <string name="title_save_all">Сохранить все</string>
-    <string name="title_save_eml">Сохранить оригинальный файл сообщения</string>
+    <string name="title_save_eml">Сохранить исходный файл сообщения</string>
     <string name="title_save_file">Сохранить файл</string>
     <string name="title_eml_remark">Для пересылки исходные (оригинальные) сообщения необходимо загрузить с сервера электронной почты. Это требует подключения к интернету, а сами сообщения должны храниться на сервере.</string>
     <string name="title_eml_option">Это можно предотвратить, включив загрузку исходных сообщений в настройках подключения</string>
@@ -1395,11 +1402,12 @@
     <string name="title_monospaced_pre">Моноширинный &lt;pre&gt;</string>
     <string name="title_unused_inline">Неиспользуемые встроенные изображения будут удалены при отправке</string>
     <string name="title_accross_remark">Сообщения, перемещаемые между учётными записями, будут загружены заново, порождая дополнительный трафик</string>
-    <string name="title_raw_saved">Оригинал сообщения сохранён</string>
+    <string name="title_raw_saved">Исходное сообщение сохранено</string>
     <string name="title_attachment_eml">Прикреплённое сообщение</string>
     <string name="title_attachment_saved">Вложение сохранено</string>
     <string name="title_attachments_saved">Вложения сохранены</string>
     <string name="title_attachments_incomplete">Некоторые вложения или изображения не были загружены и не могут быть добавлены</string>
+    <string name="title_report_remark">Этот отчёт, являющийся электронным письмом специального формата, был отправлен почтовым сервером, поскольку отправленное сообщение невозможно доставить получателю, например, из-за переполнения почтового ящика или из-за того, что адрес электронной почты (больше) не существует.</string>
     <string name="title_ask_save">Сохранить изменения?</string>
     <string name="title_ask_delete">Удалить сообщение навсегда?</string>
     <string name="title_ask_delete_accept">Я понимаю, что окончательное удаление сообщений необратимо</string>
@@ -1629,6 +1637,7 @@
     <string name="title_signature_email">Адрес подписи</string>
     <string name="title_signature_mismatch">Адреса электронной почты отправителя и подписи не совпадают</string>
     <string name="title_signature_algorithm">Алгоритм</string>
+    <string name="title_signature_public_key">Публичный ключ</string>
     <string name="title_signature_subject">Тема</string>
     <string name="title_signature_validity">Достоверность</string>
     <string name="title_signature_outdated">Этот публичный ключ недействителен в настоящее время</string>
@@ -1692,6 +1701,7 @@
     <string name="title_sort_on_starred_unread">Избранное, не прочитано</string>
     <string name="title_sort_on_priority">Приоритет</string>
     <string name="title_sort_on_sender">Отправитель</string>
+    <string name="title_sort_on_sender_name">Имя отправителя</string>
     <string name="title_sort_on_subject">Тема</string>
     <string name="title_sort_on_size">Размер</string>
     <string name="title_sort_on_attachments">Вложения</string>
@@ -1815,7 +1825,7 @@
     <string name="title_rule_original_text">Включить текст исходного сообщения</string>
     <string name="title_rule_forward_to">Переслать</string>
     <string name="title_rule_resend">Перенаправить</string>
-    <string name="title_rule_attached">Прикрепить оригинальный файл сообщения</string>
+    <string name="title_rule_attached">Прикрепить исходный файл сообщения</string>
     <string name="title_rule_cc">Ответить на адреса копий (CC)</string>
     <string name="title_rule_checks">Проверить наличие автоматически отправленных сообщений, адресов не для ответа и т. д.</string>
     <string name="title_rule_with_attachments">С вложениями</string>
@@ -1849,6 +1859,7 @@
     <string name="title_rule_select_sound">Выбрать звук</string>
     <string name="title_rule_select_sound_ringtone">Мелодия</string>
     <string name="title_rule_select_sound_audio">Аудиофайл</string>
+    <string name="title_rule_loop_sound">Повтор звука</string>
     <string name="title_rule_use_as_alarm">Использовать как будильник</string>
     <string name="title_rule_alarm_hint">Это игнорирует правила \"не беспокоить\"</string>
     <string name="title_rule_alarm_duration">Максимальная длительность будильника (в секундах)</string>
@@ -2006,7 +2017,9 @@
     <string name="title_hint_junk">Фильтрация спама должна выполняться почтовым сервером и не может быть надёжно выполнена на устройстве с ограниченными возможностями и питанием от батареи.</string>
     <string name="title_hint_junk_learn">Перемещая сообщения в/из папки \"Спам\", сервер электронной почты \"изучает\", что такое спам</string>
     <string name="title_hint_contact_actions">Длительное нажатие откроет другие действия.</string>
-    <string name="title_hint_eml">Это обзор содержимого файла оригинального сообщения. Сохраните его с помощью значка \"Сохранить\" на панели действий, чтобы просмотреть содержимое полностью.</string>
+    <string name="title_hint_eml">        Это сводка содержимого файла исходного сообщения.
+        Можно использовать кнопку в правом нижнем углу, чтобы сохранить сообщение в папке \"Входящие\" для просмотра всего содержимого.
+    </string>
     <string name="title_open_link">Открыть ссылку</string>
     <string name="title_image_link">Ссылка на изображение</string>
     <string name="title_different_link">Заголовок и адрес ссылки отличаются</string>

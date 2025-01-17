@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.content.ContentResolver;
@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.Group;
@@ -381,7 +382,9 @@ public class ActivityCode extends ActivityBase {
 
             @Override
             protected void onExecuted(Bundle args, String code) {
-                getSupportActionBar().setSubtitle(args.getString("subject"));
+                ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null)
+                    actionBar.setSubtitle(args.getString("subject"));
 
                 String clazz = "language-html";
                 if (lines)

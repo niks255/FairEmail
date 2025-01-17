@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
@@ -658,12 +658,14 @@ class Core {
                             // Fetch UID: NO [LIMIT] UID FETCH Rate limit hit.
                             // Fetch UID: NO Server Unavailable. 15
                             // Fetch UID: NO [UNAVAILABLE] Failed to open mailbox
+                            // Fetch UID: NO [UNAVAILABLE] UID FETCH completed
                             // Fetch UID: NO [TEMPFAIL] SELECT completed
                             // Fetch UID: NO Internal error. Try again later... (MARKER:xxx)
                             // Fetch UID: BAD Serious error while processing UID FETCH (NioRecvFail (nn/nn))
                             // Fetch UID: NO SELECT: libmapper: Internal error: No servers available or value handling error!
                             // Fetch UID: BAD Serious error while processing UID FETCH (CassdbDatabaseError (nnn/n))
                             // Move: NO Over quota
+                            // Move: NO [OVERQUOTA] quota exceeded
                             // Move: NO No matching messages
                             // Move: NO [EXPUNGEISSUED] Some of the requested messages no longer exist (n.nnn + n.nnn + n.nnn secs)
                             // Move: BAD parse error: invalid message sequence number:
@@ -691,6 +693,7 @@ class Core {
                             // Add: NO [OVERQUOTA] Quota exceeded (mailbox for user is full) (n.nnn + n.nnn secs).
                             // Add: NO APPEND failed
                             // Add: BAD [TOOBIG] Message too large.
+                            // Add: BAD Cannot upload message, TOOBIG (took x ms)
                             // Add: NO Permission denied
                             // Add: NO Message size exceeds fixed maximum message size. Size: xxx KB, Max size: yyy KB
                             // Add: NO Message size exceeds maximum message size limit
@@ -2998,6 +3001,8 @@ class Core {
                             EntityOperation.sync(context, folder.id, false);
                     } else {
                         Log.i(folder.name + " exists type=" + folder.type);
+                        if (!Objects.equals(type, folder.type))
+                            EntityLog.log(context, "Folder name=" + folder.name + " type old=" + folder.type + " new=" + type);
 
                         folder.namespace = ifolder.first.getFullName();
                         folder.separator = ifolder.first.getSeparator();
@@ -4912,7 +4917,7 @@ class Core {
 
             if (mdn && helper.isReport())
                 try {
-                    MessageHelper.Report r = parts.getReport();
+                    MessageHelper.Report r = parts.getReport(context);
                     boolean client_id = prefs.getBoolean("client_id", true);
                     String we = "dns;" + (client_id ? EmailService.getDefaultEhlo() : "example.com");
                     if (r != null && !we.equals(r.reporter)) {

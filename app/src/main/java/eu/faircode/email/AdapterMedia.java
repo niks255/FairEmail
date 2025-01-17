@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -197,11 +197,7 @@ public class AdapterMedia extends RecyclerView.Adapter<AdapterMedia.ViewHolder> 
                             }
                         } else {
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                            boolean webp = prefs.getBoolean("webp", true);
                             boolean barcode_preview = prefs.getBoolean("barcode_preview", true);
-
-                            if ("image/webp".equalsIgnoreCase(type) && !webp)
-                                return context.getDrawable(R.drawable.twotone_image_not_supported_24);
 
                             try {
                                 BitmapFactory.Options options = new BitmapFactory.Options();
@@ -243,8 +239,7 @@ public class AdapterMedia extends RecyclerView.Adapter<AdapterMedia.ViewHolder> 
                                 }
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P &&
-                                    !"image/svg+xml".equals(type) &&
-                                    !"svg".equals(Helper.getExtension(file.getName())))
+                                    !"image/svg+xml".equalsIgnoreCase(type))
                                 try {
                                     return ImageHelper.getScaledDrawable(context, file, type, max);
                                 } catch (Throwable ex) {

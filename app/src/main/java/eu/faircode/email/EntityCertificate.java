@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import android.text.TextUtils;
@@ -49,11 +49,13 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -119,9 +121,56 @@ public class EntityCertificate {
     }
 
     String getSigAlgName() {
+        StringBuilder sb = new StringBuilder();
         try {
-            return getCertificate().getSigAlgName();
+            X509Certificate cert = getCertificate();
+            sb.append(cert.getSigAlgName());
+            PublicKey pubkey = cert.getPublicKey();
+            if (pubkey instanceof RSAPublicKey)
+                sb.append(((RSAPublicKey) pubkey).getModulus().bitLength());
         } catch (Throwable ex) {
+            Log.w(ex);
+        }
+        return (sb.length() == 0 ? null : sb.toString());
+    }
+
+    List<String> getKeyUsage() {
+        List<String> result = new ArrayList<>();
+        try {
+            X509Certificate cert = getCertificate();
+            boolean[] usage = cert.getKeyUsage();
+            if (usage == null)
+                return result;
+            if (usage.length > 0 && usage[0])
+                result.add("digitalSignature");
+            if (usage.length > 1 && usage[1])
+                result.add("nonRepudiation");
+            if (usage.length > 2 && usage[2])
+                result.add("keyEncipherment");
+            if (usage.length > 3 && usage[3])
+                result.add("dataEncipherment");
+            if (usage.length > 4 && usage[4])
+                result.add("keyAgreement");
+            if (usage.length > 5 && usage[5])
+                result.add("keyCertSign");
+            if (usage.length > 6 && usage[6])
+                result.add("cRLSign");
+            if (usage.length > 7 && usage[7])
+                result.add("encipherOnly");
+            if (usage.length > 8 && usage[8])
+                result.add("decipherOnly");
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+        return result;
+    }
+
+    Boolean isSelfSigned() {
+        try {
+            X509Certificate cert = getCertificate();
+            return (cert.getIssuerX500Principal().equals(cert.getSubjectX500Principal()));
+        } catch (Throwable ex) {
+            Log.e(ex);
             return null;
         }
     }

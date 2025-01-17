@@ -773,7 +773,7 @@
         Algoritmii impliciți SHA256 și AES128 sunt suportați în mod obișnuit.
     </string>
     <string name="title_advanced_check_certificate">Verifică cheia publică la trimitere</string>
-    <string name="title_advanced_check_key_usage" comment="title_advanced_check_key_usage&#10;Title for an option to check the key-usage flags of an S/MIME certification when sending a message. Background: some certificates are supposed to be used for signing only and not encryption, or the other way around.">Verificați indicațiile de utilizare a cheii la trimitere</string>
+    <string name="title_advanced_check_key_usage">Verificați indicațiile de utilizare a cheii la trimitere</string>
     <string name="title_advanced_manage_certificates">Gestionare chei publice</string>
     <string name="title_advanced_import_key">Importare cheie privată</string>
     <string name="title_advanced_manage_keys">Gestionare chei private</string>
@@ -817,6 +817,10 @@
     <string name="title_advanced_answer_prompt">Introducere răspuns</string>
     <string name="title_advanced_system_instructions">Instrucțiuni sistem</string>
     <string name="title_advanced_default_prompt">Solicitare implicită</string>
+    <string name="title_advanced_ai">IA</string>
+    <string name="title_advanced_ai_input_system">Câmp de introducere de sistem</string>
+    <string name="title_advanced_ai_input_body">Introduceți textul mesajului dvs</string>
+    <string name="title_advanced_ai_input_reply">Introduceți textul mesajului la care se răspunde</string>
     <string name="title_advanced_entered_text">Text introdus</string>
     <string name="title_advanced_sdcard">Vreau să folosesc un sdcard</string>
     <string name="title_advanced_watchdog">Verifică periodic dacă FairEmail este încă activ</string>
@@ -868,6 +872,7 @@
     <string name="title_advanced_send_reminders_hint">Arată o avertizare atunci când textul mesajului sau subiectul e gol sau când atașamentul s-ar putea să lipsească</string>
     <string name="title_advanced_reply_move_hint">Serverul de e-mail ar putea adăuga mesajele la folderul de mesaje trimise</string>
     <string name="title_advanced_compose_color_hint">Culorile foarte deschise sau foarte închise vor avea ca rezultat mesaje ilizibile pe partea destinatarilor</string>
+    <string name="title_advanced_compose_font_hint">Implicit înseamnă respectarea fontului ca fiind selectat pe partea destinatarului</string>
     <string name="title_advanced_template_reply_hint">HTML este permis. Substituenți disponibili: %1$s</string>
     <string name="title_advanced_write_below_hint">Un destinatar poate rata răspunsul dvs., de exemplu atunci când un mesaj mai lung este trunchiat</string>
     <string name="title_advanced_attach_new_hint">În caz contrar, adăugați adrese sau fișiere partajate la proiectul de mesaj curent</string>
@@ -934,6 +939,7 @@
     <string name="title_advanced_notify_car_hint">Conectat înseamnă că se proiectează ceva, cum ar fi o hartă pentru navigare</string>
     <string name="title_advanced_notify_remove_hint">Notificările de mesaj nou vor fi mereu eliminate dacă sunt glisate la o parte sau când mesajele sunt marcate drept citite</string>
     <string name="title_advanced_notify_manage_hint">Atingeți numele canalului pentru a-l configura</string>
+    <string name="title_advanced_notify_samsung_hint">Pentru a gestiona canalele de notificare, ar putea fi necesar să activați această setare Android: Notificare, Setări avansate, Gestionare categorii de notificări pentru fiecare aplicație</string>
     <string name="title_advanced_notify_manage_default_hint">Pentru a configura sunetul implicit etc</string>
     <string name="title_advanced_notify_manage_service_hint">Pentru a dezactiva notificarea de „monitorizare”</string>
     <string name="title_advanced_notify_separate_hint">Cum pot configura notificările pentru conturi, dosare și expeditori?</string>
@@ -1269,6 +1275,7 @@
     <string name="title_force_light">Tema forțată a luminii</string>
     <string name="title_rename">Redenumire</string>
     <string name="title_share">Partajează</string>
+    <string name="title_analyze">Analiză</string>
     <string name="title_event">Adaugă în calendar</string>
     <string name="title_pin">Adaugă scurtătură</string>
     <string name="title_pin_label">Titlu scurt</string>
@@ -1384,6 +1391,7 @@
     <string name="title_attachment_saved">Atașament salvat</string>
     <string name="title_attachments_saved">Atașamente salvate</string>
     <string name="title_attachments_incomplete">Unele atașamente sau imagini nu au fost descărcate și nu s-au putut adăuga</string>
+    <string name="title_report_remark">Acest raport, un e-mail special formatat, a fost trimis de un server de e-mail deoarece un mesaj trimis nu a putut fi livrat destinatarului, de exemplu, pentru că acea căsuța poștală este plină sau pentru că adresa de e-mail nu mai există (acum).</string>
     <string name="title_ask_save">Salvează modificările?</string>
     <string name="title_ask_delete">Ștergeți definitiv mesajul?</string>
     <string name="title_ask_delete_accept">Înțeleg că ștergerea permanentă a mesajelor este ireversibilă</string>
@@ -1612,6 +1620,7 @@
     <string name="title_signature_email">Adresa semnăturii</string>
     <string name="title_signature_mismatch">Adresa email a expeditorului și semnătura nu corespund</string>
     <string name="title_signature_algorithm">Algoritm</string>
+    <string name="title_signature_public_key">Cheie publică</string>
     <string name="title_signature_subject">Subiect</string>
     <string name="title_signature_validity">Valabilitate</string>
     <string name="title_signature_outdated">Această cheie publică nu este validă în acest moment</string>
@@ -1675,6 +1684,7 @@
     <string name="title_sort_on_starred_unread">Cu stea, necitit</string>
     <string name="title_sort_on_priority">Prioritate</string>
     <string name="title_sort_on_sender">Expeditor</string>
+    <string name="title_sort_on_sender_name">Nume expeditor</string>
     <string name="title_sort_on_subject">Subiect</string>
     <string name="title_sort_on_size">Mărime</string>
     <string name="title_sort_on_attachments">Atașamente</string>
@@ -1832,6 +1842,7 @@
     <string name="title_rule_select_sound">Alege sunet</string>
     <string name="title_rule_select_sound_ringtone">Sunet de notificare</string>
     <string name="title_rule_select_sound_audio">Fişier audio</string>
+    <string name="title_rule_loop_sound">Sunet în buclă</string>
     <string name="title_rule_use_as_alarm">Utilizează ca alarmă</string>
     <string name="title_rule_alarm_hint">Acest lucru va ignora regulile \"nu deranjați\"</string>
     <string name="title_rule_alarm_duration">Durata maximă a alarmei (secunde)</string>
@@ -1989,7 +2000,9 @@
     <string name="title_hint_junk">Filtrarea spam-ului ar trebui să fie efectuată de către serverul de e-mail și nu poate fi efectuată în mod fiabil pe un dispozitiv alimentat cu baterie și cu capacități limitate.</string>
     <string name="title_hint_junk_learn">Prin mutarea mesajelor în și din folderul de spam, serverul de e-mail \"învață\" ce este un spam</string>
     <string name="title_hint_contact_actions">Atingeți lung pentru opțiuni</string>
-    <string name="title_hint_eml">Acesta este sumarul conținutului unui fișier cu mesajul original. Salvați mesajul original folosind iconița de salvare din bara de acțiuni pentru a putea vizualiza tot conținutul.</string>
+    <string name="title_hint_eml">        Acesta este un sumar al conținutului unui fișier de mesaj brut.
+        Puteți folosi butonul de jos dreapta pentru a salva mesajul în căsuța poștală pentru a vizualiza tot conținutul.
+    </string>
     <string name="title_open_link">Deschide legătura</string>
     <string name="title_image_link">Legătură imagine</string>
     <string name="title_different_link">Titlul legăturii este diferit de adresa legăturii</string>

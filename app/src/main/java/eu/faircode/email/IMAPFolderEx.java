@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import com.sun.mail.iap.Argument;
@@ -141,9 +141,11 @@ public class IMAPFolderEx extends IMAPFolder {
                         p.copy(ms, folder.getFullName());
                 } catch (CommandFailedException cfx) {
                     if (cfx.getMessage() != null &&
-                            cfx.getMessage().contains("TRYCREATE"))
+                            cfx.getMessage().contains("TRYCREATE")) {
+                        Log.w(cfx);
                         throw new FolderNotFoundException(folder,
                                 folder.getFullName() + " does not exist");
+                    }
                     else
                         throw new MessagingException(cfx.getMessage(), cfx);
                 } catch (ConnectionException cex) {

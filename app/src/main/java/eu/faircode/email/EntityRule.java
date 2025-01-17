@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2024 by Marcel Bokhorst (M66B)
+    Copyright 2018-2025 by Marcel Bokhorst (M66B)
 */
 
 import static androidx.room.ForeignKey.CASCADE;
@@ -1428,9 +1428,10 @@ public class EntityRule {
 
     private boolean onActionSound(Context context, EntityMessage message, JSONObject jargs) throws JSONException {
         Uri uri = (jargs.has("uri") ? Uri.parse(jargs.getString("uri")) : null);
+        boolean loop = jargs.getBoolean("loop");
         boolean alarm = jargs.getBoolean("alarm");
         int duration = jargs.optInt("duration", MediaPlayerHelper.DEFAULT_ALARM_DURATION);
-        Log.i("Sound uri=" + uri + " alarm=" + alarm + " duration=" + duration);
+        Log.i("Sound uri=" + uri + " loop=" + loop + " alarm=" + alarm + " duration=" + duration);
 
         DB db = DB.getInstance(context);
 
@@ -1438,7 +1439,7 @@ public class EntityRule {
         db.message().setMessageUiSilent(message.id, message.ui_silent);
 
         if (uri != null)
-            MediaPlayerHelper.queue(context, uri, alarm, duration);
+            MediaPlayerHelper.queue(context, uri, loop, alarm, duration);
 
         return true;
     }
@@ -1513,6 +1514,7 @@ public class EntityRule {
     private boolean onActionUrl(Context context, EntityMessage message, JSONObject jargs, String html) throws JSONException, IOException {
         String url = jargs.getString("url");
         String method = jargs.optString("method");
+        String body = (jargs.isNull("body") ? null : jargs.optString("body"));
 
         if (TextUtils.isEmpty(method))
             method = "GET";
@@ -1533,11 +1535,12 @@ public class EntityRule {
         url = url.replace("$" + EXTRA_SUBJECT + "$", Uri.encode(message.subject == null ? "" : message.subject));
         url = url.replace("$" + EXTRA_RECEIVED + "$", Uri.encode(DTF.format(message.received)));
 
-        String body = null;
-        if ("POST".equals(method) || "PUT".equals(method)) {
-            Uri u = Uri.parse(url);
-            body = u.getQuery();
-            url = u.buildUpon().clearQuery().build().toString();
+        if (!TextUtils.isEmpty(body)) {
+            body = body.replace("$" + EXTRA_RULE + "$", name == null ? "" : name);
+            body = body.replace("$" + EXTRA_SENDER + "$", address == null ? "" : address);
+            body = body.replace("$" + EXTRA_NAME + "$", personal == null ? "" : personal);
+            body = body.replace("$" + EXTRA_SUBJECT + "$", message.subject == null ? "" : message.subject);
+            body = body.replace("$" + EXTRA_RECEIVED + "$", DTF.format(message.received));
         }
 
         Log.i("GET " + url);
