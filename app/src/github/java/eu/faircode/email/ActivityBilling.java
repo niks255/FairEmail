@@ -255,10 +255,12 @@ public class ActivityBilling extends ActivityBase implements
         }
     }
 
-    static boolean isPro(Context context) {
-//      if (BuildConfig.DEBUG && false)
+    static boolean isPro(Context context) { return true;
+/*      if (BuildConfig.DEBUG && false)
             return true;
-/*      return PreferenceManager.getDefaultSharedPreferences(context)
+        if (context == null)
+            return false;
+        return PreferenceManager.getDefaultSharedPreferences(context)
                 .getBoolean("pro", false); */
     }
 

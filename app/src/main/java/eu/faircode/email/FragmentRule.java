@@ -25,7 +25,6 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.media.RingtoneManager;
@@ -65,7 +64,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Lifecycle;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -135,6 +133,7 @@ public class FragmentRule extends FragmentBase {
     private CheckBox cbEveryDay;
     private EditText etYounger;
 
+    private ImageButton ibExpression;
     private EditText etExpression;
 
     private Spinner spAction;
@@ -191,7 +190,6 @@ public class FragmentRule extends FragmentBase {
     private ContentLoadingProgressBar pbWait;
 
     private Group grpReady;
-    private Group grpExpression;
     private Group grpAge;
     private Group grpSnooze;
     private Group grpFlag;
@@ -344,6 +342,7 @@ public class FragmentRule extends FragmentBase {
         cbEveryDay = view.findViewById(R.id.cbEveryDay);
         etYounger = view.findViewById(R.id.etYounger);
 
+        ibExpression = view.findViewById(R.id.ibExpression);
         etExpression = view.findViewById(R.id.etExpression);
 
         spAction = view.findViewById(R.id.spAction);
@@ -401,7 +400,6 @@ public class FragmentRule extends FragmentBase {
         pbWait = view.findViewById(R.id.pbWait);
 
         grpReady = view.findViewById(R.id.grpReady);
-        grpExpression = view.findViewById(R.id.grpExpression);
         grpAge = view.findViewById(R.id.grpAge);
         grpSnooze = view.findViewById(R.id.grpSnooze);
         grpFlag = view.findViewById(R.id.grpFlag);
@@ -685,6 +683,13 @@ public class FragmentRule extends FragmentBase {
             }
         });
 
+        ibExpression.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewFAQ(v.getContext(), "expression_conditions");
+            }
+        });
+
         List<Action> actions = new ArrayList<>();
         actions.add(new Action(EntityRule.TYPE_NOOP, getString(R.string.title_rule_noop), R.drawable.twotone_remove_circle_outline_24));
         actions.add(new Action(EntityRule.TYPE_SEEN, getString(R.string.title_rule_seen), R.drawable.twotone_drafts_24));
@@ -697,8 +702,7 @@ public class FragmentRule extends FragmentBase {
         actions.add(new Action(EntityRule.TYPE_SNOOZE, getString(R.string.title_rule_snooze), R.drawable.twotone_timelapse_24));
         actions.add(new Action(EntityRule.TYPE_FLAG, getString(R.string.title_rule_flag), R.drawable.twotone_star_24));
         actions.add(new Action(EntityRule.TYPE_IMPORTANCE, getString(R.string.title_rule_importance), R.drawable.twotone_north_24));
-        if (protocol == EntityAccount.TYPE_IMAP)
-            actions.add(new Action(EntityRule.TYPE_KEYWORD, getString(R.string.title_rule_keyword), R.drawable.twotone_label_important_24));
+        actions.add(new Action(EntityRule.TYPE_KEYWORD, getString(R.string.title_rule_keyword), R.drawable.twotone_label_important_24));
         actions.add(new Action(EntityRule.TYPE_NOTES, getString(R.string.title_rule_notes), R.drawable.twotone_sticky_note_2_24));
         actions.add(new Action(EntityRule.TYPE_MOVE, getString(R.string.title_rule_move), R.drawable.twotone_drive_file_move_24));
         if (protocol == EntityAccount.TYPE_IMAP)
@@ -946,7 +950,6 @@ public class FragmentRule extends FragmentBase {
         tvFolder.setText(null);
         bottom_navigation.setVisibility(View.GONE);
         grpReady.setVisibility(View.GONE);
-        grpExpression.setVisibility(View.GONE);
         grpAge.setVisibility(View.GONE);
         grpSnooze.setVisibility(View.GONE);
         grpFlag.setVisibility(View.GONE);
@@ -1532,10 +1535,6 @@ public class FragmentRule extends FragmentBase {
                         if (action != null)
                             showActionParameters(action.type);
                     }
-
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                    boolean experiments = prefs.getBoolean("experiments", false);
-                    grpExpression.setVisibility(experiments ? View.VISIBLE : View.GONE);
                 } catch (Throwable ex) {
                     Log.e(ex);
                 } finally {

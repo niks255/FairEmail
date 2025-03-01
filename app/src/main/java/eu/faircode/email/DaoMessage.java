@@ -488,6 +488,9 @@ public interface DaoMessage {
             " OR (NOT :hash IS NULL AND message.hash IS :hash))")
     List<EntityMessage> getMessagesBySimilarity(long account, long id, String msgid, String hash);
 
+    @Query("SELECT DISTINCT keywords FROM message WHERE folder = :folder")
+    List<String[]> getKeywords(long folder);
+
     @Query("SELECT COUNT(*) FROM message" +
             " WHERE folder = :folder" +
             " AND msgid = :msgid" +
@@ -1031,6 +1034,7 @@ public interface DaoMessage {
     @Query("DELETE FROM message" +
             " WHERE folder = :folder" +
             " AND uid IS NULL" +
+            " AND NOT ui_hide" +
             " AND (ui_busy IS NULL OR ui_busy < :now)" +
             " AND NOT EXISTS" +
             "  (SELECT * FROM operation" +
@@ -1048,6 +1052,7 @@ public interface DaoMessage {
     @Query("SELECT * FROM message" +
             " WHERE folder = :folder" +
             " AND uid IS NULL" +
+            " AND NOT ui_hide" +
             " AND NOT EXISTS" +
             "  (SELECT * FROM operation" +
             "  WHERE operation.message = message.id)")
@@ -1056,6 +1061,7 @@ public interface DaoMessage {
     @Query("SELECT * FROM message" +
             " WHERE folder = :folder" +
             " AND uid IS NULL" +
+            " AND NOT ui_hide" +
             " AND NOT EXISTS" +
             "  (SELECT * FROM operation" +
             "  WHERE operation.message = message.id" +

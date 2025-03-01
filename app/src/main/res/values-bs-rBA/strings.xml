@@ -393,6 +393,7 @@
     <string name="title_advanced_kept_removed">Provjeri da li su stare poruke izbrisane sa servera</string>
     <string name="title_advanced_gmail_thread">Gmail stil grupisanja poruka za Gmail račune</string>
     <string name="title_advanced_subject_threading">Grupisanje poruka prema pošiljaocu i predmetu</string>
+    <string name="title_advanced_outlook_categories">Sinhronizacija Outlook-ovih kategorija</string>
     <string name="title_advanced_sync_folders">Sinhronizuj spisak foldera</string>
     <string name="title_advanced_sync_folders_poll">Aktivno sinhronizuj spisak foldera</string>
     <string name="title_advanced_sync_shared_folders">Sinhronizuj spisak dijeljenih foldera</string>
@@ -408,6 +409,7 @@
     <string name="title_advanced_tune_keep_alive">Automatski podesi interval provjere konekcije</string>
     <string name="title_advanced_blocklist_warning">Liste blokiranja nisu savršene i mogu blokirati osim spama i druge poruke!</string>
     <string name="title_advanced_keyboard">Prikaži tastaturu po zadanom</string>
+    <string name="title_advanced_keyboard_margin">Dodaj marginu iznad tastature</string>
     <string name="title_advanced_keyboard_no_fullscreen">Spriječi tastaturu preko cijelog ekrana</string>
     <string name="title_advanced_suggest_names">Prikaži imena i e-mail adrese</string>
     <string name="title_advanced_suggest_local">Predloži lokalne kontakte</string>
@@ -523,6 +525,7 @@
     <string name="title_advanced_nav_hide_message">Možete ponovo omogućiti opcije na postavkama ekrana</string>
     <string name="title_advanced_nav_last_sync">Prikazati vrijeme posljednje sinhronizacije u navigacijskom meniju</string>
     <string name="title_advanced_nav_message_count">Prikaži broj lokalno spašenih poruka u navigacijskom meniju</string>
+    <string name="title_advanced_nav_unseen">Prikaži broj nepročitanih poruka u navigacijskom meniju</string>
     <string name="title_advanced_nav_unseen_drafts">Prikaži broj nepročitanih nacrta u navigacijskom meniju</string>
     <string name="title_advanced_nav_pinned_count">Prikaži broj nepročitanih poruka u fiksiranom navigacijskom meniju</string>
     <string name="title_advanced_show_unexposed">Prikaži zvjezdicu za račune/foldere s novim nepročitanim porukama</string>
@@ -722,6 +725,7 @@
     <string name="title_advanced_notify_screen_on">Kratko uključi ekran za obavještenja o novim porukama</string>
     <string name="title_advanced_notifications_background">Koristi pozadinski servis za sinhronizaciju poruka</string>
     <string name="title_advanced_notifications_background_hint">Android može zaustaviti pozadinski servis bilo kada, ali on ne zahtijeva obavještenje na statusnoj traci</string>
+    <string name="title_advanced_rate_limit">Ograniči zvukove obavještenja o novim porukama jednom u:</string>
     <string name="title_advanced_confirm_links">Potvrdi linkove na otvaranju</string>
     <string name="title_advanced_confirm_files">Potvrda pregleda datoteka</string>
     <string name="title_advanced_sanitize_links">Ukloni parametre \'praćenja\' po default-u</string>
@@ -857,6 +861,7 @@
     <string name="title_advanced_sync_kept_hint">Ovo će transferirati dodatne podatke i trošiti više baterije, posebno ako se na uređaju čuva dosta poruka</string>
     <string name="title_advanced_gmail_thread_hint">Ovo se primjenjuje samo na novoprimljene poruke i može razlomiti postojeće grupe</string>
     <string name="title_advanced_subject_threading_hint">Samo poruke primljene zadnja(ih) %1$d sata(i)</string>
+    <string name="title_advanced_outlook_categories_hint">Outlook-ove kategorije mogu se samo dohvatiti, ali ne i automatski osvježavati zbog ograničenja Outlook IMAP servera</string>
     <string name="title_advanced_sync_folders_hint">Isključivanjem ove opcije smanjit će se donekle potrošnja podataka i baterije, ali će se također isključiti i ažuriranje spiska foldera</string>
     <string name="title_advanced_poll_folders_hint">Periodično sinhronizuj spisak foldera, nakon povezivanja na račun</string>
     <string name="title_advanced_check_authentication_hint">Ovo će provjeriti rezultate DKIM, SPF i DMARC provjere koje se izvode na e-mail serveru</string>
@@ -1243,6 +1248,7 @@
     <string name="title_filters_active">Jedan ili više filtera je aktivno</string>
     <string name="title_duplicate_in">Dupliciraj poruku u %1$s</string>
     <string name="title_trashed_from">Izbrisana poruka od %1$s</string>
+    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Pošalji poruku %1$s</string>
     <string name="title_subject_reply">Odg: %1$s</string>
     <string name="title_subject_forward">Pro: %1$s</string>
     <string name="title_subject_reply_alt">Odg: %1$s</string>
@@ -1294,6 +1300,7 @@
     <string name="title_raw_send_message">Poruka</string>
     <string name="title_raw_send_thread">Konverzacija</string>
     <string name="title_manage_keywords">Upravljaj ključnim riječima</string>
+    <string name="title_manage_keywords_pop">Kod POP3 protokola, ključne riječi se nemogu čuvati na serveru!</string>
     <string name="title_manage_labels">Upravljaj Gmail-ovim oznakama</string>
     <string name="title_add_keyword">Dodaj ključnu riječ</string>
     <string name="title_show_inline">Prikaži poravnate priloge</string>
@@ -1704,6 +1711,7 @@
     <string name="title_filter_hidden">Skrivenom</string>
     <string name="title_filter_deleted">Izbrisano</string>
     <string name="title_filter_duplicates">Duplikati</string>
+    <string name="title_filter_sent">Poslano</string>
     <string name="title_filter_trash">Otpad</string>
     <string name="title_compact">Kompaktni izgled</string>
     <string name="title_zoom">Veličina teksta</string>
@@ -2323,6 +2331,7 @@
         <item>Samo PGP šifriranje</item>
         <item>PGP potpisani i šifrirani</item>
         <item>Samo S/MIME potpisani</item>
+        <item>S/MIME šif.-jedino</item>
         <item>S/MIME potpisani i šifrirani</item>
     </string-array>
     <string-array name="sizeNames">

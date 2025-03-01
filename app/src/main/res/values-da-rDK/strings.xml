@@ -379,6 +379,7 @@
     <string name="title_advanced_kept_removed">Tjek, om gamle beskeder er fjernet fra serveren</string>
     <string name="title_advanced_gmail_thread">Gmail- beskedgrupperingsstil for Gmail-konti</string>
     <string name="title_advanced_subject_threading">Gruppér beskeder efter afsender og emne</string>
+    <string name="title_advanced_outlook_categories">Synkronisér Outlook-kategorier</string>
     <string name="title_advanced_sync_folders">Synkronisér mappeliste</string>
     <string name="title_advanced_sync_folders_poll">Synk aktivt mappeliste</string>
     <string name="title_advanced_sync_shared_folders">Synkronisér delte mappelister</string>
@@ -394,6 +395,7 @@
     <string name="title_advanced_tune_keep_alive">Justér automatisk hold i live intervallet</string>
     <string name="title_advanced_blocklist_warning">Bloklister er ikke perfekt og kan blokere mere end blot spam!</string>
     <string name="title_advanced_keyboard">Vis tastatur som standard</string>
+    <string name="title_advanced_keyboard_margin">Tilføj en margin over tastaturet</string>
     <string name="title_advanced_keyboard_no_fullscreen">Forhindr fuldskærmstastatur</string>
     <string name="title_advanced_suggest_names">Brug navne og e-mailadresser</string>
     <string name="title_advanced_suggest_local">Foreslå lokalt lagrede kontakter</string>
@@ -509,6 +511,7 @@
     <string name="title_advanced_nav_hide_message">Indstillingerne kan genaktiveres via skærmindstillingerne</string>
     <string name="title_advanced_nav_last_sync">Vis den sidste synktid i navigeringsmenuen</string>
     <string name="title_advanced_nav_message_count">Vis antal lokalt gemte beskeder i navigationsmenuen</string>
+    <string name="title_advanced_nav_unseen">Vis antallet af ulæste udkast i navigeringsmenuen</string>
     <string name="title_advanced_nav_unseen_drafts">Vis antallet af ulæste udkast i navigeringsmenuen</string>
     <string name="title_advanced_nav_pinned_count">Vis antallet af ulæste udkast i den fastgjorte navigeringsmenu</string>
     <string name="title_advanced_show_unexposed">Vis en stjerne for konti/mapper med nyligt modtagne, ulæste beskeder</string>
@@ -708,6 +711,7 @@
     <string name="title_advanced_notify_screen_on">Tænd kortvarigt skærmen ved nye beskednotifikationer</string>
     <string name="title_advanced_notifications_background">Benyt baggrundstjeneste til beskedsynkronisering</string>
     <string name="title_advanced_notifications_background_hint">En baggrundstjeneste kan til enhver tid stoppes af Android, men behøver ingen statusbjælkenotifikation</string>
+    <string name="title_advanced_rate_limit">Begræns notifikationslyde for nye beskeder til en gang pr.:</string>
     <string name="title_advanced_confirm_links">Bekræft åbning af links</string>
     <string name="title_advanced_confirm_files">Bekræft visning af filer</string>
     <string name="title_advanced_sanitize_links">Fjern som standard sporingsparametre</string>
@@ -844,6 +848,7 @@
     <string name="title_advanced_sync_kept_hint">Dette vil overføre ekstra data og forbruge ekstra strøm, især hvis der er mange beskeder lagret på enheden</string>
     <string name="title_advanced_gmail_thread_hint">Dette gælder kun for nyligt modtagne beskeder og kan ødelægge eksisterende grupper</string>
     <string name="title_advanced_subject_threading_hint">Kun beskeder modtaget i de seneste %1$d timer</string>
+    <string name="title_advanced_outlook_categories_hint">Outlook-kategorier kan kun hentes, men ikke opdateres automatisk, grundet Outlook IMAP-serverbegrænsninger</string>
     <string name="title_advanced_sync_folders_hint">Deaktivering af dette reducerer data- og strømforbruget noget, men deaktiverer også mappelisteopdatering</string>
     <string name="title_advanced_poll_folders_hint">Synk periodisk mappelisten ud over efter kontotilslutning</string>
     <string name="title_advanced_check_authentication_hint">Dette vil tjekke resultaterne af DKIM-, SPF- og DMARC-godkendelser udført af e-mailserveren</string>
@@ -1230,6 +1235,7 @@
     <string name="title_filters_active">Ét eller flere filtre er aktive</string>
     <string name="title_duplicate_in">Dubletbeskeder i %1$s</string>
     <string name="title_trashed_from">Slettede beskeder fra %1$s</string>
+    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Sendte besked til %1$s</string>
     <string name="title_subject_reply">Sv: %1$s</string>
     <string name="title_subject_forward">Vs: %1$s</string>
     <string name="title_subject_reply_alt">Sv: %1$s</string>
@@ -1281,6 +1287,7 @@
     <string name="title_raw_send_message">Besked</string>
     <string name="title_raw_send_thread">Samtale</string>
     <string name="title_manage_keywords">Håndtér stikord</string>
+    <string name="title_manage_keywords_pop">Med POP3 kan søgeord ikke gemmes på e-mailserveren!</string>
     <string name="title_manage_labels">Håndtér Gmail-etiketter</string>
     <string name="title_add_keyword">Tilføj stikord</string>
     <string name="title_show_inline">Vis indlejrede vedhæftninger</string>
@@ -1691,6 +1698,7 @@
     <string name="title_filter_hidden">Skjult</string>
     <string name="title_filter_deleted">Slettet</string>
     <string name="title_filter_duplicates">Dubletter</string>
+    <string name="title_filter_sent">Sendt</string>
     <string name="title_filter_trash">Slettet</string>
     <string name="title_compact">Kompaktvisning</string>
     <string name="title_zoom">Tekststørrelse</string>
@@ -2316,6 +2324,7 @@
         <item>Kun PGP-kryptering</item>
         <item>PGP-signering + kryptering</item>
         <item>Kun S/MIME-signering</item>
+        <item>Kun S/MIME-kryptering</item>
         <item>S/MIME-signering + kryptering</item>
     </string-array>
     <string-array name="sizeNames">

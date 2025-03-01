@@ -58,7 +58,6 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
     private IWebView intf;
     private Runnable onPageLoaded;
     private String hash;
-    private Boolean images;
 
     private static String userAgent = null;
 
@@ -247,6 +246,10 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
 
     void setImages(boolean show_images, boolean inline) {
         WebSettings settings = getSettings();
+
+        if (settings.getLoadsImagesAutomatically() != (show_images || inline))
+            this.hash = null;
+
         settings.setLoadsImagesAutomatically(show_images || inline);
         settings.setBlockNetworkLoads(!show_images);
         settings.setBlockNetworkImage(!show_images);
@@ -256,14 +259,10 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
     public void loadDataWithBaseURL(String baseUrl, String data, String mimeType, String encoding, String historyUrl) {
         try {
             // Prevent flickering
-            boolean i = getSettings().getLoadsImagesAutomatically();
-            if (Objects.equals(this.images, i)) {
-                String h = (data == null ? null : Helper.md5(data.getBytes()));
-                if (Objects.equals(this.hash, h))
-                    return;
-                this.hash = h;
-            } else
-                this.images = i;
+            String h = (data == null ? null : Helper.md5(data.getBytes()));
+            if (Objects.equals(this.hash, h))
+                return;
+            this.hash = h;
         } catch (Throwable ex) {
             Log.w(ex);
         }
@@ -279,7 +278,11 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        // Unable to create layer for WebViewEx, size 1088x16384 max size 16383 color type 4 has context 1)
+        // java.lang.IllegalStateException: Unable to create layer for WebViewEx, size 768x4864 max size 8192 color type 4 has context 1
+        //        at android.os.MessageQueue.nativePollOnce(MessageQueue.java:-2)
+        //        at android.os.MessageQueue.next(MessageQueue.java:326)
+        //        at android.os.Looper.loop(Looper.java:183)
+        //        at android.app.ActivityThread.main(ActivityThread.java:7266)
         if (viewportHeight == 0)
             heightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         else
@@ -481,9 +484,6 @@ public class WebViewEx extends WebView implements DownloadListener, View.OnLongC
     }
 
     static int getDefaultViewportHeight(Context context) {
-        if (!Helper.isPlayStoreInstall())
-            return 0;
-
         if (Helper.isGoogle() && Build.VERSION.SDK_INT > Build.VERSION_CODES.UPSIDE_DOWN_CAKE /* Android 14 */)
             return DEFAULT_VIEWPORT_HEIGHT * 2;
         else

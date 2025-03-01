@@ -111,6 +111,7 @@ public class EntityOperation {
 
     private static final int MAX_FETCH = 100; // operations
     private static final long FORCE_WITHIN = 30 * 1000; // milliseconds
+    private static final long ACROSS_BUSY = 2 * 3600 * 1000L; // milliseconds
 
     static void queue(Context context, EntityMessage message, String name, Object... values) {
         DB db = DB.getInstance(context);
@@ -157,7 +158,7 @@ public class EntityOperation {
                 if (auto_important && jargs.optBoolean(2, true)) {
                     db.message().setMessageImportance(message.id, flagged ? EntityMessage.PRIORITIY_HIGH : null);
                     queue(context, message, KEYWORD, MessageHelper.FLAG_LOW_IMPORTANCE, false);
-                    queue(context, message, KEYWORD, MessageHelper.FLAG_HIGH_IMPORTANCE, true);
+                    queue(context, message, KEYWORD, MessageHelper.FLAG_HIGH_IMPORTANCE, flagged);
                 }
 
                 return;
@@ -203,6 +204,24 @@ public class EntityOperation {
                         Collections.sort(fkeywords);
                         db.folder().setFolderKeywords(folder.id,
                                 DB.Converters.fromStringArray(fkeywords.toArray(new String[0])));
+                    }
+                } else {
+                    EntityAccount account = db.account().getAccount(message.account);
+                    if (account != null && account.protocol == EntityAccount.TYPE_POP) {
+                        EntityFolder folder = db.folder().getFolder(message.folder);
+                        if (folder != null) {
+                            List<String> fkeywords = new ArrayList<>();
+                            List<String[]> mkeywords = db.message().getKeywords(folder.id);
+                            if (mkeywords != null)
+                                for (String[] kws : mkeywords) {
+                                    for (String kw : kws)
+                                        if (!fkeywords.contains(kw))
+                                            fkeywords.add(kw);
+                                }
+                            Collections.sort(fkeywords);
+                            db.folder().setFolderKeywords(folder.id,
+                                    DB.Converters.fromStringArray(fkeywords.toArray(new String[0])));
+                        }
                     }
                 }
 
@@ -354,6 +373,11 @@ public class EntityOperation {
                         Log.i("Move: hide other=" + message.id);
                         if (!message.ui_deleted)
                             db.message().setMessageUiHide(message.id, true);
+                    }
+                } else {
+                    if (!message.ui_deleted) {
+                        db.message().setMessageUiHide(message.id, true);
+                        db.message().setMessageUiBusy(message.id, new Date().getTime() + ACROSS_BUSY);
                     }
                 }
 

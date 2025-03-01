@@ -583,12 +583,12 @@ See also [this FAQ](#faq16).
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq4)
 
-**Since version 1.2137:
+<!-- **Since version 1.2137:
 Due to [Google's Play Store policies](https://support.google.com/faqs/answer/6346016),
 it is no longer possible to support insecure connections to email servers with certificate issues
 for the version of FairEmail distributed in the Play Store.
 Therefore, this issue can only be resolved by your email provider,
-or by installing the GitHub version of the app (as an update) and enabling insecure connections in the account/identity settings.**
+or by installing the GitHub version of the app (as an update) and enabling insecure connections in the account/identity settings.** -->
 
 *... Untrusted ... not in certificate ...*<br />
 *... Invalid security certificate (Can't verify identity of server) ...*<br />
@@ -884,6 +884,8 @@ tap on *Manual setup and account options*, tap on *Identities*, long press the m
 For more options, you can copy the main identity by long pressing on it, and change the email address and perhaps the (display) name.
 You should not change the username!
 
+Note that you can select the default sending address via the three-dots overflow menu at the top right of the message editor (not the start screen!).
+
 **Important**: In the case of an Outlook account, you should first authenticate the account again with the "Office 365" wizard. You don't need to remove the account for this.
 
 **In many cases, an alias address must first be verified via the website of the mail provider**
@@ -1123,6 +1125,12 @@ Your certificate > zero or more intermediate certificates > CA (root) certificat
 
 Note that a certificate chain will always be invalid when no anchor certificate can be found in the Android key store,
 which is fundamental to S/MIME certificate validation.
+This means that your private key should include all intermediate certificates (but not the root certificate).
+This command might be useful for that:
+
+```
+openssl pkcs12 -export -in certificatechain.crt -inkey private.key -out certificate.pfx
+```
 
 Please see [here](https://support.google.com/pixelphone/answer/2844832?hl=en) how you can import certificates into the Android key store.
 
@@ -1298,11 +1306,11 @@ In the case of the error '*User is authenticated but not connected*', please see
 <br />
 
 >
-> &#x1F1EC;&#x1F1E7; In short: go to settings via the navigation menu (left side menu), tap the wizard button, select Outlook/Hotmail/Live and follow the steps.
+> &#x1F1EC;&#x1F1E7; In short: go to settings via the navigation menu (left side menu), tap the wizard button, select "*Outlook/Office 365 (OAuth)*" and follow the steps.
 >
-> &#x1F1E9;&#x1F1EA; Kurz gesagt: Gehen Sie über das Navigationsmenü (Menü auf der linken Seite) zu den Einstellungen, tippen Sie auf die Schaltfläche Assistent, wählen Sie Outlook/Hotmail/Live und folgen Sie den Schritten.
+> &#x1F1E9;&#x1F1EA; Kurz gesagt: Gehen Sie über das Navigationsmenü (Menü auf der linken Seite) zu den Einstellungen, tippen Sie auf die Schaltfläche Assistent, wählen Sie "*Outlook/Office 365 (OAuth)*" und folgen Sie den Schritten.
 >
-> &#x1F1EB;&#x1F1F7; En bref : allez dans les paramètres via le menu de navigation (menu de gauche), appuyez sur le bouton de l'assistant, sélectionnez Outlook/Hotmail/Live et suivez les étapes.
+> &#x1F1EB;&#x1F1F7; En bref : allez dans les paramètres via le menu de navigation (menu de gauche), appuyez sur le bouton de l'assistant, sélectionnez "*Outlook/Office 365 (OAuth)*" et suivez les étapes.
 >
 
 <br />
@@ -1315,7 +1323,7 @@ In the case of the error '*User is authenticated but not connected*', please see
 <br />
 
 >
-> tl;dr; go to settings via the navigation menu (left side menu), tap the wizard button, select Outlook/Hotmail/Live and follow the steps.
+> tl;dr; go to settings via the navigation menu (left side menu), tap the wizard button, select "*Outlook/Office 365 (OAuth)*" and follow the steps.
 >
 > <sub>If you don't use the account anymore, you can delete it via a button in the "extra" section at the bottom of the main settings screen.</sub>
 >
@@ -1361,7 +1369,7 @@ In the case of the error '*User is authenticated but not connected*', please see
 > How to fix:
 >
 > * Go to the *Settings* via the navigation menu (left side menu)
-> * Tap on the *Wizard* button and select *Outlook/Hotmail/Live (OAuth)* or *Office 365 (OAuth)*.
+> * Tap on the *Wizard* button and select "*Outlook/Office 365 (OAuth)*".
 > * Tick the checkbox to authenticate an existing account (else you'll create a new account!)
 > * Fill in the fields and follow the steps
 > * Repeat for each account
@@ -1369,7 +1377,7 @@ In the case of the error '*User is authenticated but not connected*', please see
 
 <br />
 
-An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting *Outlook/Hotmail/Live (OAuth)* or *Office 365 (OAuth)*.
+An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting "*Outlook/Office 365 (OAuth)*".
 
 **Important**: a personal and a business account can have the same email address, but have different mailboxes (folders). So, please make sure you select the right option.
 
@@ -1411,7 +1419,7 @@ The message text of larger messages is not being pre-fetched on metered connecti
 The message text will keep loading if there is no connection to the account, see also the next question,
 or if there other operations, like synchronizing messages, are being executed.
 
-You can check the account and folder list for the account and folder state (see the legend for the meaning of the icons)
+You can check the account and folder list for the account and folder state (see the legend in the navigation menu for the meaning of the icons)
 and the operation list accessible via the main navigation menu for pending operations (see [this FAQ](#faq3) for the meaning of the operations).
 
 If FairEmail is holding off because of prior connectivity issues, please see [this FAQ](#faq123), you can force synchronization via the three dots menu.
@@ -1846,6 +1854,15 @@ pm install -k --user 0 com.android.documentsui
 ```
 
 Alternatively, you might be able to enable the *Files* app again using the Android app settings.
+
+<br />
+
+In the case of the error *com.android.externalstorage has no access to content://...*,
+please enable this Android option for *com.android.externalstorage* and *com.android.sharedstorage*:
+
+*Settings* > *Privacy* > *Permission management* > *Files and media* > *See more apps that can access all files*
+
+<br />
 
 OneDrive doesn't support *view*, only *share*, which means that if you want to open an attachment in OneDrive you need to long press on an attachment.
 
@@ -2367,7 +2384,7 @@ when trying to decrypt a message with a public key. To fix this you'll need to i
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq46)
 
 If you see a 'spinner' at the top of the message list, the folder is still being synchronized with the remote server.
-You can see the progress of the synchronization in the folder list. See the legend about what the icons and numbers mean.
+You can see the progress of the synchronization in the folder list. See the legend in the navigation menu about what the icons and numbers mean.
 
 The speed of your device and internet connection and the number of days to synchronize messages determine how long synchronization will take.
 Note that you shouldn't set the number of days to synchronize messages to more than one day in most cases, see also [this FAQ](#faq39).
@@ -2890,11 +2907,20 @@ to be able to match [unfolded headers](https://tools.ietf.org/html/rfc2822#secti
 
 <br />
 
+<a name="expression_conditions"></a>
 **Expressions**
 
-Since version 1.2174 it is possible to use expression conditions, which is [experimental](#faq125) for now.
+Since version 1.2174 it is possible to use expression conditions like:
+
+```from contains "@example.com" && subject contains "Example"```
+
+```subject contains "This" || subject contains "That"```
+
+Note that there is a separate input field for expression conditions. You can use newlines for more clarity.
 
 Please [see here](https://ezylang.github.io/EvalEx/references/references.html) about which constants, operators and functions are available.
+Commonly used are && (=and) and || (=or).
+
 
 The following extra variables are available:
 
@@ -3550,6 +3576,9 @@ Servers generally have more memory and computing power, so they are much better 
 Also, you'll want spam filtered for all your email clients, possibly including web email, not just for one email client on one device.
 Moreover, email servers have access to information, like the IP address, etc. of the connecting server, which an email client has no access to.
 Furthermore, an email server can inspect all messages of all email accounts, while an email client can inspect messages in your email account only.
+
+Spammers today use large spam networks with many servers and e-mail addresses and AI to create messages that slip through spam filters.
+This means that only powerful servers running a neural network fed with many messages can filter spam properly. A smartphone simply cannot do that anymore.
 
 If you are receiving a significant amount of spam, the first thing you should do is consider switching to another email provider.
 Some email servers excell at filtering spam, and others are really bad at it.
@@ -4282,12 +4311,6 @@ Composing messages using [Markdown](https://en.wikipedia.org/wiki/Markdown) can 
 
 <br />
 
-*Rule expression condition (1.2174+)*
-
-See [this FAQ](#faq71)
-
-<br />
-
 *Fast forward to (1.2226+)*
 
 Show (fast) *Forward to* in the answer menu, with addresses recently used for forwarding messages (if any).
@@ -4335,8 +4358,8 @@ If you use a Samsung smartwatch with the Galaxy smartwatch (Samsung Gear) app, y
 when the setting *Notifications*, *Apps installed in the future* is turned off in this app.
 
 Some companion apps ignore [local only](https://developer.android.com/training/wearables/notifications/bridger#non-bridged) notifications,
-causing the summary notification (*nnn new messages*) to be bridged.
-Unfortunately, it is not possible to workaround this problem.
+causing (only) the summary notification (*nnn new messages*) to be bridged.
+You can try to disable the option *Group notifications* in the notification settings tab page to workaround this.
 
 Some smartwatches do not display notifications with non-[ASCII](https://en.wikipedia.org/wiki/ASCII) characters,
 in which can you can enable the option *ASCII text only* in the display settings tab page.
@@ -5352,6 +5375,11 @@ Creating a local folder only and storing messages on your device only is a bad i
 because losing or breaking your device would mean losing your messages.
 Imagine you've put a lot of time organizing your messages, and you need to reinstall the app on another device, only to discover all the work you did was a waste of time.
 Therefore, this isn't supportable.
+
+An alternative is to use keywords, which is possible since version 1.2263, but please be aware that keywords can't be stored on the email server with POP3, only on the device.
+You can search on keywords via "*More options*" in the search dialog box, and save the search via a button in the top action bar,
+which basically means you can have virtual folders in the navigation menu.
+Keywords can be added and messages can be hidden (in the inbox) automatically with rules, see [this FAQ](#faq71).
 
 Please note that FairEmail doesn't store a copy of your messages in the cloud for privacy reasons.
 

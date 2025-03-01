@@ -528,7 +528,12 @@
 <p><br /></p>
 <p><a name="faq4"></a> <strong>(4) How can I use an invalid security certificate / empty password / plain text connection?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq4">Google Translate</a></p>
-<p><strong>Since version 1.2137: Due to <a href="https://support.google.com/faqs/answer/6346016">Google’s Play Store policies</a>, it is no longer possible to support insecure connections to email servers with certificate issues for the version of FairEmail distributed in the Play Store. Therefore, this issue can only be resolved by your email provider, or by installing the GitHub version of the app (as an update) and enabling insecure connections in the account/identity settings.</strong></p>
+<!-- **Since version 1.2137:
+Due to [Google's Play Store policies](https://support.google.com/faqs/answer/6346016),
+it is no longer possible to support insecure connections to email servers with certificate issues
+for the version of FairEmail distributed in the Play Store.
+Therefore, this issue can only be resolved by your email provider,
+or by installing the GitHub version of the app (as an update) and enabling insecure connections in the account/identity settings.** -->
 <p><em>… Untrusted … not in certificate …</em><br /> <em>… Invalid security certificate (Can’t verify identity of server) …</em><br /> <em>… Chain validation failed … timestamp check failed … Certificate expired at …</em><br /></p>
 <p>This can be caused by using an incorrect host name, so first double-check the host name in the advanced identity/account settings (tap <em>Manual setup and account options</em>). Please see the documentation of the email provider about the right host name. Sometimes the right host name is in the error message.</p>
 <p>You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">man-in-the-middle attacks</a>. If money is an obstacle, you can get free security certificates from <a href="https://letsencrypt.org">Let’s Encrypt</a>.</p>
@@ -670,6 +675,7 @@
 <p>Some providers allow you to have multiple aliases addresses.</p>
 <p>The easiest way to create an alias address is to use the mini <em>Create alias</em> wizard. For this, please go to the settings via the navigation menu (left side menu), tap on <em>Manual setup and account options</em>, tap on <em>Identities</em>, long press the main identity, and select <em>Create alias</em>.</p>
 <p>For more options, you can copy the main identity by long pressing on it, and change the email address and perhaps the (display) name. You should not change the username!</p>
+<p>Note that you can select the default sending address via the three-dots overflow menu at the top right of the message editor (not the start screen!).</p>
 <p><strong>Important</strong>: In the case of an Outlook account, you should first authenticate the account again with the “Office 365” wizard. You don’t need to remove the account for this.</p>
 <p><strong>In many cases, an alias address must first be verified via the website of the mail provider</strong></p>
 <p>Alternatively, you can enable <em>Allow editing sender address</em> in the advanced settings of an existing identity to edit the username when composing a new message, if your provider allows this. Considering the email address test@example.org you can use these special username formats:</p>
@@ -778,7 +784,8 @@ openssl pkcs12 -export -legacy -in certbag.pem &gt;legacy.p12</code></pre>
 <p>In case the certificate chain is incorrect, you can tap on the little info button to show the all certificates. After the certificate details the issuer or “selfSign” is shown. A certificate is self signed when the subject and the issuer are the same. Certificates from a certificate authority (CA) are marked with “<a href="https://tools.ietf.org/html/rfc5280#section-4.2.1.3">keyCertSign</a>”. You can find the description of other key usage bits, like <em>cRLSign</em>, via this same link. Certificates found in the Android key store are marked with “Android”.</p>
 <p>A valid chain looks like this:</p>
 <pre><code>Your certificate &gt; zero or more intermediate certificates &gt; CA (root) certificate marked with &quot;Android&quot;</code></pre>
-<p>Note that a certificate chain will always be invalid when no anchor certificate can be found in the Android key store, which is fundamental to S/MIME certificate validation.</p>
+<p>Note that a certificate chain will always be invalid when no anchor certificate can be found in the Android key store, which is fundamental to S/MIME certificate validation. This means that your private key should include all intermediate certificates (but not the root certificate). This command might be useful for that:</p>
+<pre><code>openssl pkcs12 -export -in certificatechain.crt -inkey private.key -out certificate.pfx</code></pre>
 <p>Please see <a href="https://support.google.com/pixelphone/answer/2844832?hl=en">here</a> how you can import certificates into the Android key store.</p>
 <p>The use of expired keys, inline encrypted/signed messages and hardware security tokens is not supported.</p>
 <p>If you are looking for a free (test) S/MIME certificate, see <a href="http://kb.mozillazine.org/Getting_an_SMIME_certificate">here</a> for the options. Please be sure to <a href="https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219">read this first</a> if you want to request an S/MIME Actalis certificate.</p>
@@ -850,9 +857,9 @@ keyword:&lt;keyword&gt;</code></pre>
 </blockquote>
 <p><br /></p>
 <blockquote>
-<p>🇬🇧 In short: go to settings via the navigation menu (left side menu), tap the wizard button, select Outlook/Hotmail/Live and follow the steps.</p>
-<p>🇩🇪 Kurz gesagt: Gehen Sie über das Navigationsmenü (Menü auf der linken Seite) zu den Einstellungen, tippen Sie auf die Schaltfläche Assistent, wählen Sie Outlook/Hotmail/Live und folgen Sie den Schritten.</p>
-<p>🇫🇷 En bref : allez dans les paramètres via le menu de navigation (menu de gauche), appuyez sur le bouton de l’assistant, sélectionnez Outlook/Hotmail/Live et suivez les étapes.</p>
+<p>🇬🇧 In short: go to settings via the navigation menu (left side menu), tap the wizard button, select “<em>Outlook/Office 365 (OAuth)</em>” and follow the steps.</p>
+<p>🇩🇪 Kurz gesagt: Gehen Sie über das Navigationsmenü (Menü auf der linken Seite) zu den Einstellungen, tippen Sie auf die Schaltfläche Assistent, wählen Sie “<em>Outlook/Office 365 (OAuth)</em>” und folgen Sie den Schritten.</p>
+<p>🇫🇷 En bref : allez dans les paramètres via le menu de navigation (menu de gauche), appuyez sur le bouton de l’assistant, sélectionnez “<em>Outlook/Office 365 (OAuth)</em>” et suivez les étapes.</p>
 </blockquote>
 <p><br /></p>
 <blockquote>
@@ -861,7 +868,7 @@ keyword:&lt;keyword&gt;</code></pre>
 </blockquote>
 <p><br /></p>
 <blockquote>
-<p>tl;dr; go to settings via the navigation menu (left side menu), tap the wizard button, select Outlook/Hotmail/Live and follow the steps.</p>
+<p>tl;dr; go to settings via the navigation menu (left side menu), tap the wizard button, select “<em>Outlook/Office 365 (OAuth)</em>” and follow the steps.</p>
 <p><sub>If you don’t use the account anymore, you can delete it via a button in the “extra” section at the bottom of the main settings screen.</sub></p>
 </blockquote>
 <p><br /></p>
@@ -894,14 +901,14 @@ keyword:&lt;keyword&gt;</code></pre>
 <p>How to fix:</p>
 <ul>
 <li>Go to the <em>Settings</em> via the navigation menu (left side menu)</li>
-<li>Tap on the <em>Wizard</em> button and select <em>Outlook/Hotmail/Live (OAuth)</em> or <em>Office 365 (OAuth)</em>.</li>
+<li>Tap on the <em>Wizard</em> button and select “<em>Outlook/Office 365 (OAuth)</em>”.</li>
 <li>Tick the checkbox to authenticate an existing account (else you’ll create a new account!)</li>
 <li>Fill in the fields and follow the steps</li>
 <li>Repeat for each account</li>
 </ul>
 </blockquote>
 <p><br /></p>
-<p>An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting <em>Outlook/Hotmail/Live (OAuth)</em> or <em>Office 365 (OAuth)</em>.</p>
+<p>An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting “<em>Outlook/Office 365 (OAuth)</em>”.</p>
 <p><strong>Important</strong>: a personal and a business account can have the same email address, but have different mailboxes (folders). So, please make sure you select the right option.</p>
 <p>Microsoft said “<em>We have turned off SMTP AUTH for millions of tenants not using it</em>”, which can result in this error message:</p>
 <pre><code>535 5.7.139 Authentication unsuccessful, SmtpClientAuthentication is disabled for the Tenant.
@@ -917,7 +924,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p><a name="faq15"></a> <strong>(15) Why does the message text keep loading?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq15">Google Translate</a></p>
 <p>The message header and message body are fetched separately from the server. The message text of larger messages is not being pre-fetched on metered connections and will be fetched on demand on expanding a message. The message text will keep loading if there is no connection to the account, see also the next question, or if there other operations, like synchronizing messages, are being executed.</p>
-<p>You can check the account and folder list for the account and folder state (see the legend for the meaning of the icons) and the operation list accessible via the main navigation menu for pending operations (see <a href="#faq3">this FAQ</a> for the meaning of the operations).</p>
+<p>You can check the account and folder list for the account and folder state (see the legend in the navigation menu for the meaning of the icons) and the operation list accessible via the main navigation menu for pending operations (see <a href="#faq3">this FAQ</a> for the meaning of the operations).</p>
 <p>If FairEmail is holding off because of prior connectivity issues, please see <a href="#faq123">this FAQ</a>, you can force synchronization via the three dots menu.</p>
 <p>In the receive settings you can set the maximum size for automatically downloading of messages on metered connections.</p>
 <p>Mobile connections are almost always metered and some (paid) Wi-Fi hotspots are too.</p>
@@ -1112,6 +1119,10 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p>You can enable the storage access framework (again) with this adb command:</p>
 <pre><code>pm install -k --user 0 com.android.documentsui</code></pre>
 <p>Alternatively, you might be able to enable the <em>Files</em> app again using the Android app settings.</p>
+<p><br /></p>
+<p>In the case of the error <em>com.android.externalstorage has no access to content://…</em>, please enable this Android option for <em>com.android.externalstorage</em> and <em>com.android.sharedstorage</em>:</p>
+<p><em>Settings</em> &gt; <em>Privacy</em> &gt; <em>Permission management</em> &gt; <em>Files and media</em> &gt; <em>See more apps that can access all files</em></p>
+<p><br /></p>
 <p>OneDrive doesn’t support <em>view</em>, only <em>share</em>, which means that if you want to open an attachment in OneDrive you need to long press on an attachment.</p>
 <p><br /></p>
 <p><a name="faq26"></a> <strong>(26) Can I help to translate FairEmail in my own language?</strong></p>
@@ -1335,7 +1346,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p><br /></p>
 <p><a name="faq46"></a> <strong>(46) Why does the message list keep refreshing?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq46">Google Translate</a></p>
-<p>If you see a ‘spinner’ at the top of the message list, the folder is still being synchronized with the remote server. You can see the progress of the synchronization in the folder list. See the legend about what the icons and numbers mean.</p>
+<p>If you see a ‘spinner’ at the top of the message list, the folder is still being synchronized with the remote server. You can see the progress of the synchronization in the folder list. See the legend in the navigation menu about what the icons and numbers mean.</p>
 <p>The speed of your device and internet connection and the number of days to synchronize messages determine how long synchronization will take. Note that you shouldn’t set the number of days to synchronize messages to more than one day in most cases, see also <a href="#faq39">this FAQ</a>.</p>
 <p><br /></p>
 <p><a name="faq47"></a> <strong>(47) How do I solve the error ‘No primary account or no drafts folder’?</strong></p>
@@ -1573,9 +1584,12 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <pre><code>.*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*</code></pre>
 <p>Note that <a href="https://developer.android.com/reference/java/util/regex/Pattern#DOTALL">dot all mode</a> is enabled to be able to match <a href="https://tools.ietf.org/html/rfc2822#section-3.2.3">unfolded headers</a>.</p>
 <p><br /></p>
-<p><strong>Expressions</strong></p>
-<p>Since version 1.2174 it is possible to use expression conditions, which is <a href="#faq125">experimental</a> for now.</p>
-<p>Please <a href="https://ezylang.github.io/EvalEx/references/references.html">see here</a> about which constants, operators and functions are available.</p>
+<p><a name="expression_conditions"></a> <strong>Expressions</strong></p>
+<p>Since version 1.2174 it is possible to use expression conditions like:</p>
+<p><code>from contains "@example.com" &amp;&amp; subject contains "Example"</code></p>
+<p><code>subject contains "This" || subject contains "That"</code></p>
+<p>Note that there is a separate input field for expression conditions. You can use newlines for more clarity.</p>
+<p>Please <a href="https://ezylang.github.io/EvalEx/references/references.html">see here</a> about which constants, operators and functions are available. Commonly used are &amp;&amp; (=and) and || (=or).</p>
 <p>The following extra variables are available:</p>
 <ul>
 <li><em>received</em> (long, unix epoch in milliseconds; since version 1.2179)</li>
@@ -1911,6 +1925,7 @@ Y1 OK CAPABILITY completed</code></pre>
 <p><a name="faq92"></a> <strong>(92) Can you add spam filtering, verification of the DKIM signature and SPF authorization?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq92">Google Translate</a></p>
 <p>Spam filtering, verification of the <a href="https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail">DKIM</a> signature and <a href="https://en.wikipedia.org/wiki/Sender_Policy_Framework">SPF</a> authorization is a task of email servers, not of an email client, which is basically a viewer for messages on an email server. Servers generally have more memory and computing power, so they are much better suited to this task than battery-powered devices. Also, you’ll want spam filtered for all your email clients, possibly including web email, not just for one email client on one device. Moreover, email servers have access to information, like the IP address, etc. of the connecting server, which an email client has no access to. Furthermore, an email server can inspect all messages of all email accounts, while an email client can inspect messages in your email account only.</p>
+<p>Spammers today use large spam networks with many servers and e-mail addresses and AI to create messages that slip through spam filters. This means that only powerful servers running a neural network fed with many messages can filter spam properly. A smartphone simply cannot do that anymore.</p>
 <p>If you are receiving a significant amount of spam, the first thing you should do is consider switching to another email provider. Some email servers excell at filtering spam, and others are really bad at it. Switching to another e-mail provider is no fun, but neither is wading through piles of spam on a daily basis.</p>
 <p>Spam filtering based on message headers might have been feasible, but unfortunately this technique is <a href="https://patents.google.com/patent/US7543076">patented by Microsoft</a>.</p>
 <p>Recent versions of FairEmail can filter spam to a certain extent using a message classifier. Please see <a href="#faq163">this FAQ</a> for more information about this.</p>
@@ -2228,9 +2243,6 @@ $NotDisplayed</code></pre>
 <p><em>Markdown (1.2061+)</em></p>
 <p>Composing messages using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> can be enabled via the three-dots overflow menu of the message editor.</p>
 <p><br /></p>
-<p><em>Rule expression condition (1.2174+)</em></p>
-<p>See <a href="#faq71">this FAQ</a></p>
-<p><br /></p>
 <p><em>Fast forward to (1.2226+)</em></p>
 <p>Show (fast) <em>Forward to</em> in the answer menu, with addresses recently used for forwarding messages (if any). You can show the answer menu by tapping on the answer button at the bottom right of an opened/expanded message.</p>
 <p><br /></p>
@@ -2252,7 +2264,7 @@ $NotDisplayed</code></pre>
 <p>If you think this is good enough, you can enable the notification option <em>Only send notifications with a message preview to smartwatches</em> and if this does not work, you can try to enable the notification option <em>Show notifications with a preview text only</em>. Note that this applies to smartwatches not showing a preview text too, even when the Android Wear app says the notification has been sent (bridged).</p>
 <p>If you want to have the full message text sent to your smartwatch, you can enable the notification option <em>Preview all text</em>. Note that some smartwatches are known to crash with this option enabled.</p>
 <p>If you use a Samsung smartwatch with the Galaxy smartwatch (Samsung Gear) app, you might need to enable notifications for FairEmail when the setting <em>Notifications</em>, <em>Apps installed in the future</em> is turned off in this app.</p>
-<p>Some companion apps ignore <a href="https://developer.android.com/training/wearables/notifications/bridger#non-bridged">local only</a> notifications, causing the summary notification (<em>nnn new messages</em>) to be bridged. Unfortunately, it is not possible to workaround this problem.</p>
+<p>Some companion apps ignore <a href="https://developer.android.com/training/wearables/notifications/bridger#non-bridged">local only</a> notifications, causing (only) the summary notification (<em>nnn new messages</em>) to be bridged. You can try to disable the option <em>Group notifications</em> in the notification settings tab page to workaround this.</p>
 <p>Some smartwatches do not display notifications with non-<a href="https://en.wikipedia.org/wiki/ASCII">ASCII</a> characters, in which can you can enable the option <em>ASCII text only</em> in the display settings tab page.</p>
 <p>Ongoing notifications shouldn’t be bridged, but some companion apps bridge all notifications. This results in the “monitoring” status bar notification to be bridged. The workaround is to disable this notification, see <a href="#faq2">this FAQ</a>.</p>
 <p><br /></p>
@@ -2704,6 +2716,7 @@ DNS lookup 108.27.250.142.zen.spamhaus.org -&gt;
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq170">Google Translate</a></p>
 <p>The POP3 protocol has commands to download and delete messages from the inbox only. There are no commands to access any other folder.</p>
 <p>Creating a local folder only and storing messages on your device only is a bad idea because losing or breaking your device would mean losing your messages. Imagine you’ve put a lot of time organizing your messages, and you need to reinstall the app on another device, only to discover all the work you did was a waste of time. Therefore, this isn’t supportable.</p>
+<p>An alternative is to use keywords, which is possible since version 1.2263, but please be aware that keywords can’t be stored on the email server with POP3, only on the device. You can search on keywords via “<em>More options</em>” in the search dialog box, and save the search via a button in the top action bar, which basically means you can have virtual folders in the navigation menu. Keywords can be added and messages can be hidden (in the inbox) automatically with rules, see <a href="#faq71">this FAQ</a>.</p>
 <p>Please note that FairEmail doesn’t store a copy of your messages in the cloud for privacy reasons.</p>
 <p>If you want to store messages in folders, please use IMAP, so that there is always a copy of the messages on the email server.</p>
 <p>You could register, for example, a Gmail account, and configure Gmail to import messages from a POP3 account, automatically label them (=put them in a folder), and configure the Gmail account in FairEmail. Please <a href="https://support.google.com/mail/answer/21289?hl=en&amp;co=GENIE.Platform%3DDesktop">see here</a> for instructions.</p>

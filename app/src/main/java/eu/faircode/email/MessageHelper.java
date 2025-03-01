@@ -253,6 +253,7 @@ public class MessageHelper {
     static final String FLAG_LOW_IMPORTANCE = "$LowImportance";
     static final String FLAG_HIGH_IMPORTANCE = "$HighImportance";
     static final String FLAG_PHISHING = "$Phishing"; // Gmail
+    static final String CATEGORY_PREFIX = "$category:";
 
     // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
     // Not black listed: Gmail $Phishing
@@ -1544,10 +1545,19 @@ public class MessageHelper {
     }
 
     @NonNull
-    String[] getKeywords() throws MessagingException {
+    String[] getKeywords(boolean outlook) throws MessagingException {
         List<String> keywords = new ArrayList<>(Arrays.asList(imessage.getFlags().getUserFlags()));
+
+        if (outlook) {
+            String categories = imessage.getHeader("Keywords", null);
+            if (!TextUtils.isEmpty(categories))
+                for (String category : categories.split(","))
+                    keywords.add(CATEGORY_PREFIX + category);
+        }
+
         while (keywords.size() > MAX_KEYWORDS)
             keywords.remove(keywords.size() - 1);
+
         Collections.sort(keywords);
         return keywords.toArray(new String[0]);
     }
@@ -2639,7 +2649,7 @@ public class MessageHelper {
 
             String length = kv.get("l");
             if (!TextUtils.isEmpty(length))
-                throw new IllegalArgumentException("Length l=" + length);
+                throw new IllegalArgumentException("Length l=" + length + " body=" + body.length());
 
             Log.i("DKIM body=" + body.replace("\r\n", "|"));
 
@@ -3195,6 +3205,7 @@ public class MessageHelper {
         // (qmail nnn invoked by uid nnn); 1 Jan 2022 00:00:00 -0000
         // Postfix: by <host name> (<name>, from userid nnn)
         if (header.matches(".*\\(qmail \\d+ invoked by uid \\d+\\).*") ||
+                header.matches(".*\\(nullmailer pid \\d+ invoked by uid \\d+\\).*") ||
                 header.matches(".*\\(.*, from userid \\d+\\).*")) {
             Log.i("--- phrase");
             return true;

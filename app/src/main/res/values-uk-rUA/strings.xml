@@ -407,6 +407,7 @@
     <string name="title_advanced_kept_removed">Перевіряти, чи були старі повідомлення видалені з сервера</string>
     <string name="title_advanced_gmail_thread">Використовувати для облікових записів Gmail стиль групування повідомлень, притаманний для Gmail</string>
     <string name="title_advanced_subject_threading">Групувати повідомлення за відправником та темою</string>
+    <string name="title_advanced_outlook_categories">Синхронізувати категорії Outlook</string>
     <string name="title_advanced_sync_folders">Синхронізувати список тек</string>
     <string name="title_advanced_sync_folders_poll">Активно синхронізувати список тек</string>
     <string name="title_advanced_sync_shared_folders">Синхронізувати список спільних тек</string>
@@ -422,6 +423,7 @@
     <string name="title_advanced_tune_keep_alive">Автоматично налаштовувати інтервал keep-alive</string>
     <string name="title_advanced_blocklist_warning">Списки заблокованих неідеальні та можуть блокувати більше ніж просто спам!</string>
     <string name="title_advanced_keyboard">Показувати клавіатуру за замовчуванням</string>
+    <string name="title_advanced_keyboard_margin">Додати відступ над клавіатурою</string>
     <string name="title_advanced_keyboard_no_fullscreen">Заборонити повноекранну клавіатуру</string>
     <string name="title_advanced_suggest_names">Використовувати імена та адреси електронної пошти</string>
     <string name="title_advanced_suggest_local">Пропонувати локально збережені контакти</string>
@@ -537,6 +539,7 @@
     <string name="title_advanced_nav_hide_message">Ви можете знову увімкнути ці опції в налаштуваннях перегляду</string>
     <string name="title_advanced_nav_last_sync">Показувати час останньої синхронізації в меню навігації</string>
     <string name="title_advanced_nav_message_count">Показувати кількість локально збережених повідомлень в меню навігації</string>
+    <string name="title_advanced_nav_unseen">Показувати кількість непрочитаних повідомлень у меню навігації</string>
     <string name="title_advanced_nav_unseen_drafts">Показувати кількість непрочитаних чернеток у меню навігації</string>
     <string name="title_advanced_nav_pinned_count">Показувати кількість непрочитаних повідомлень у закріпленому навігаційному меню</string>
     <string name="title_advanced_show_unexposed">Показувати зірочку для аккаунтів/папок, що мають нещодавно отримані непрочитані повідомлення</string>
@@ -736,6 +739,7 @@
     <string name="title_advanced_notify_screen_on">Коротко увімкнути екран для показу сповіщення про нові повідомлення</string>
     <string name="title_advanced_notifications_background">Використовувати фонову службу для синхронізації повідомлень</string>
     <string name="title_advanced_notifications_background_hint">Фоновий сервіс може бути зупинений Android в будь-який час, що не вимагає сповіщення в рядку стану</string>
+    <string name="title_advanced_rate_limit">Обмежити звукові сповіщення про нові повідомлення одним на:</string>
     <string name="title_advanced_confirm_links">Підтверджувати відкриття посилань</string>
     <string name="title_advanced_confirm_files">Підтверджувати перегляд файлів</string>
     <string name="title_advanced_sanitize_links">Видаляти параметри відстеження за замовчуванням</string>
@@ -870,6 +874,7 @@
     <string name="title_advanced_sync_kept_hint">Це призведе до передачі додаткових даних та більшого споживання заряду акумулятора, особливо якщо багато повідомлень зберігаються на пристрої</string>
     <string name="title_advanced_gmail_thread_hint">Це відноситься тільки до нових повідомлень і може не стосуватися існуючих груп</string>
     <string name="title_advanced_subject_threading_hint">Лише повідомлення, отримані за останні %1$d годин</string>
+    <string name="title_advanced_outlook_categories_hint">Категорії Outlook можна лише отримати, і вони не можуть бути автоматично оновлені через обмеження IMAP-сервера Outlook</string>
     <string name="title_advanced_sync_folders_hint">Вимкнення цього призведе до зменшення споживання даних та використання акумулятора, але також вимкне оновлення списку тек</string>
     <string name="title_advanced_poll_folders_hint">Періодично синхронізувати список тек після підключення до облікового запису</string>
     <string name="title_advanced_check_authentication_hint">Це перевірить результати автентифікації DKIM, SPF і DMARC, які були здійснені сервером електронної пошти</string>
@@ -1256,6 +1261,7 @@
     <string name="title_filters_active">Один або кілька фільтрів активні</string>
     <string name="title_duplicate_in">Дублікат повідомлення, що знаходиться в теці «%1$s»</string>
     <string name="title_trashed_from">Видалене повідомлення від %1$s</string>
+    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Повідомлення для %1$s відправлено</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -1307,6 +1313,7 @@
     <string name="title_raw_send_message">Повідомлення</string>
     <string name="title_raw_send_thread">Розмова</string>
     <string name="title_manage_keywords">Керувати ключовими словами</string>
+    <string name="title_manage_keywords_pop">При використанні POP3 ключові слова не можуть зберігатися на поштовому сервері!</string>
     <string name="title_manage_labels">Керування мітками Gmail</string>
     <string name="title_add_keyword">Додати ключове слово</string>
     <string name="title_show_inline">Показати вбудовані вкладення</string>
@@ -1716,6 +1723,7 @@
     <string name="title_filter_hidden">Приховані</string>
     <string name="title_filter_deleted">Видалені</string>
     <string name="title_filter_duplicates">Дублікати</string>
+    <string name="title_filter_sent">Надіслані</string>
     <string name="title_filter_trash">Видалені</string>
     <string name="title_compact">Компактний вигляд</string>
     <string name="title_zoom">Розмір тексту</string>
@@ -2343,6 +2351,7 @@
         <item>Тільки шифрування PGP</item>
         <item>Підпис+шифрування PGP</item>
         <item>Тільки підпис S/MIME</item>
+        <item>Тільки шифрування S/MIME</item>
         <item>Підпис+шифрування S/MIME</item>
     </string-array>
     <string-array name="sizeNames">

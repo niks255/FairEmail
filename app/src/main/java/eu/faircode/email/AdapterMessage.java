@@ -218,6 +218,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     private String sort;
     private boolean ascending;
     private boolean filter_duplicates;
+    private boolean filter_sent;
     private boolean filter_trash;
     private IProperties properties;
 
@@ -2367,7 +2368,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean trash = (move || outbox || debug || pop);
                     boolean inbox = (move && hasInbox && (inArchive || inTrash || inJunk) && imap) ||
                             (pop && message.accountLeaveDeleted && inTrash);
-                    boolean keywords = (message.uid != null && imap);
+                    boolean keywords = (message.uid != null || pop);
                     boolean labels = (data.isGmail && move && !inTrash && !inJunk && !outbox);
                     boolean seen = (message.uid != null || pop);
 
@@ -6459,8 +6460,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_create_rule).setVisible(!message.folderReadOnly);
 
             popupMenu.getMenu().findItem(R.id.menu_manage_keywords)
-                    .setEnabled(message.uid != null)
-                    .setVisible(message.accountProtocol == EntityAccount.TYPE_IMAP);
+                    .setEnabled(message.uid != null || message.accountProtocol == EntityAccount.TYPE_POP);
 
             popupMenu.getMenu().findItem(R.id.menu_search_in_text).setEnabled(message.content && !full);
             popupMenu.getMenu().findItem(R.id.menu_translate).setVisible(
@@ -7315,7 +7315,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                         db.message().deleteMessage(id);
 
                         if (account.protocol == EntityAccount.TYPE_IMAP)
-                            EntityOperation.queue(context, folder, EntityOperation.FETCH, message.uid);
+                            EntityOperation.queue(context, folder, EntityOperation.FETCH, message.uid, true);
 
                         db.setTransactionSuccessful();
                     } finally {
@@ -7550,6 +7550,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void onMenuManageKeywords(TupleMessageEx message) {
             Bundle args = new Bundle();
             args.putLongArray("ids", new long[]{message.id});
+            args.putBoolean("pop", message.accountProtocol == EntityAccount.TYPE_POP);
 
             FragmentDialogKeywordManage fragment = new FragmentDialogKeywordManage();
             fragment.setArguments(args);
@@ -8338,7 +8339,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
     AdapterMessage(Fragment parentFragment,
                    String type, boolean found, String searched, boolean searchedPartial, ViewType viewType,
                    boolean compact, int zoom, boolean large_buttons, String sort, boolean ascending,
-                   boolean filter_duplicates, boolean filter_trash,
+                   boolean filter_duplicates, boolean filter_sent, boolean filter_trash,
                    final IProperties properties) {
         this.parentFragment = parentFragment;
         this.type = type;
@@ -8352,6 +8353,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.sort = sort;
         this.ascending = ascending;
         this.filter_duplicates = filter_duplicates;
+        this.filter_sent = filter_sent;
         this.filter_trash = filter_trash;
         this.properties = properties;
 
@@ -8508,8 +8510,26 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             @Override
             public boolean areContentsTheSame(
                     @NonNull TupleMessageEx prev, @NonNull TupleMessageEx next) {
-                boolean same = true;
+                if (next.uid != null &&
+                        properties.getValue("expanded", next.id)) {
+                    // Mark seen when needed
+                    if (next.accountAutoSeen && !Boolean.TRUE.equals(next.ui_seen) &&
+                            !properties.getValue("auto_seen", next.id)) {
+                        properties.setValue("auto_seen", next.id, true);
+                        EntityOperation.queue(context, next, EntityOperation.SEEN, true);
+                        EntityLog.log(context, EntityLog.Type.Debug3, "Auto seen id=" + next.id);
+                    }
 
+                    // Download body when needed
+                    if (!next.content &&
+                            !properties.getValue("auto_body", next.id)) {
+                        properties.setValue("auto_body", next.id, true);
+                        EntityOperation.queue(context, next, EntityOperation.BODY);
+                        EntityLog.log(context, EntityLog.Type.Debug3, "Auto body id=" + next.id);
+                    }
+                }
+
+                boolean same = true;
                 // id
                 // account
                 // folder
@@ -8522,17 +8542,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (!Objects.equals(prev.uid, next.uid)) {
                     same = false;
                     log("uid changed", next.id);
-
-                    if (prev.uid == null && next.uid != null && // once only
-                            properties.getValue("expanded", next.id)) {
-                        // Mark seen when needed
-                        if (!Boolean.TRUE.equals(next.ui_seen) && next.accountAutoSeen)
-                            EntityOperation.queue(context, next, EntityOperation.SEEN, true);
-
-                        // Download body when needed
-                        if (!next.content)
-                            EntityOperation.queue(context, next, EntityOperation.BODY);
-                    }
                 }
                 if (!Objects.equals(prev.msgid, next.msgid)) {
                     // debug info
@@ -9201,6 +9210,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
     }
 
+    void setFilterSent(boolean filter_sent) {
+        if (this.filter_sent != filter_sent) {
+            this.filter_sent = filter_sent;
+            properties.refresh();
+        }
+    }
+
     void setFilterTrash(boolean filter_trash) {
         if (this.filter_trash != filter_trash) {
             this.filter_trash = filter_trash;
@@ -9240,7 +9256,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         if (filter_duplicates && message.duplicate)
             return R.layout.item_message_duplicate;
 
-        if (filter_trash && EntityFolder.TRASH.equals(message.folderType) && !allTrashed())
+        if (filter_sent && EntityFolder.SENT.equals(message.folderType) && !all(EntityFolder.SENT))
+            return R.layout.item_message_duplicate;
+
+        if (filter_trash && EntityFolder.TRASH.equals(message.folderType) && !all(EntityFolder.TRASH))
             return R.layout.item_message_duplicate;
 
         return (compact ? R.layout.item_message_compact : R.layout.item_message_normal);
@@ -9303,16 +9322,20 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         }
 
         if ((filter_duplicates && message.duplicate) ||
-                (filter_trash && EntityFolder.TRASH.equals(message.folderType) && !allTrashed())) {
+                (filter_sent && EntityFolder.SENT.equals(message.folderType) && !all(EntityFolder.SENT)) ||
+                (filter_trash && EntityFolder.TRASH.equals(message.folderType) && !all(EntityFolder.TRASH))) {
             holder.card.setCardBackgroundColor(message.folderColor == null
                     ? Color.TRANSPARENT
                     : ColorUtils.setAlphaComponent(message.folderColor, 128));
             if (filter_duplicates && message.duplicate)
                 holder.tvFolder.setText(context.getString(R.string.title_duplicate_in,
                         message.getFolderName(context)));
-            else
+            else if (filter_trash && EntityFolder.TRASH.equals(message.folderType) && !all(EntityFolder.TRASH))
                 holder.tvFolder.setText(context.getString(R.string.title_trashed_from,
                         MessageHelper.formatAddresses(message.from, false, false)));
+            else
+                holder.tvFolder.setText(context.getString(R.string.title_sent_to,
+                        MessageHelper.formatAddresses(message.to, false, false)));
             holder.tvFolder.setTypeface(message.unseen > 0 ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
             holder.tvFolder.setTextColor(message.unseen > 0 ? colorUnread : colorRead);
             holder.tvFolder.setAlpha(Helper.LOW_LIGHT);
@@ -9330,13 +9353,13 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         holder.wire();
     }
 
-    private boolean allTrashed() {
+    private boolean all(@NonNull String type) {
         if (differ.getItemCount() == 1)
             return true;
 
         for (int i = 0; i < differ.getItemCount(); i++) {
             TupleMessageEx m = differ.getItem(i);
-            if (m == null || !EntityFolder.TRASH.equals(m.folderType))
+            if (m == null || !type.equals(m.folderType))
                 return false;
         }
 

@@ -1288,15 +1288,18 @@ public class FragmentMessages extends FragmentBase
         boolean outbox = EntityFolder.OUTBOX.equals(type);
         boolean ascending = prefs.getBoolean(getSortOrder(getContext(), viewType, type), outbox);
         boolean filter_duplicates = prefs.getBoolean("filter_duplicates", true);
+        boolean filter_sent = prefs.getBoolean("filter_sent", false);
         boolean filter_trash = prefs.getBoolean("filter_trash", false);
 
-        if (viewType != AdapterMessage.ViewType.THREAD)
+        if (viewType != AdapterMessage.ViewType.THREAD) {
+            filter_sent = false;
             filter_trash = false;
+        }
 
         adapter = new AdapterMessage(
                 this, type, found, searched, searchedPartial, viewType,
                 compact, zoom, large_buttons, sort, ascending,
-                filter_duplicates, filter_trash,
+                filter_duplicates, filter_sent, filter_trash,
                 iProperties);
         if (viewType == AdapterMessage.ViewType.THREAD)
             adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT);
@@ -1851,8 +1854,9 @@ public class FragmentMessages extends FragmentBase
         ibKeywords.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MoreResult result = (MoreResult) cardMore.getTag();
                 boolean more_clear = prefs.getBoolean("more_clear", true);
-                onActionManageKeywords(more_clear);
+                onActionManageKeywords(more_clear, (result != null && result.hasPop));
             }
         });
 
@@ -4696,9 +4700,8 @@ public class FragmentMessages extends FragmentBase
                     popupMenu.getMenu().add(Menu.FIRST, R.string.title_copy_to, order++, R.string.title_copy_to)
                             .setIcon(R.drawable.twotone_file_copy_24);
 
-                if (!result.hasPop && result.hasImap)
-                    popupMenu.getMenu().add(Menu.FIRST, R.string.title_manage_keywords, order++, R.string.title_manage_keywords)
-                            .setIcon(R.drawable.twotone_label_important_24);
+                popupMenu.getMenu().add(Menu.FIRST, R.string.title_manage_keywords, order++, R.string.title_manage_keywords)
+                        .setIcon(R.drawable.twotone_label_important_24);
 
                 if (ids.length == 1)
                     popupMenu.getMenu().add(Menu.FIRST, R.string.title_search_sender, order++, R.string.title_search_sender)
@@ -4773,7 +4776,7 @@ public class FragmentMessages extends FragmentBase
                             onActionMoveSelectionAccount(result.copyto.id, true, result.folders);
                             return true;
                         } else if (itemId == R.string.title_manage_keywords) {
-                            onActionManageKeywords(false);
+                            onActionManageKeywords(false, result.hasPop);
                             return true;
                         } else if (itemId == R.string.title_search_sender) {
                             long[] ids = getSelection();
@@ -5296,9 +5299,10 @@ public class FragmentMessages extends FragmentBase
         fragment.show(getParentFragmentManager(), "messages:move");
     }
 
-    private void onActionManageKeywords(boolean clear) {
+    private void onActionManageKeywords(boolean clear, boolean pop) {
         Bundle args = new Bundle();
         args.putLongArray("ids", getSelection());
+        args.putBoolean("pop", pop);
 
         FragmentDialogKeywordManage fragment = new FragmentDialogKeywordManage();
         fragment.setArguments(args);
@@ -6371,6 +6375,7 @@ public class FragmentMessages extends FragmentBase
             boolean filter_snoozed = prefs.getBoolean(getFilter(context, "snoozed", viewType, type), true);
             boolean filter_deleted = prefs.getBoolean(getFilter(context, "deleted", viewType, type), false);
             boolean filter_duplicates = prefs.getBoolean("filter_duplicates", true);
+            boolean filter_sent = prefs.getBoolean("filter_sent", false);
             boolean filter_trash = prefs.getBoolean("filter_trash", false);
             boolean language_detection = prefs.getBoolean("language_detection", false);
             String filter_language = prefs.getString("filter_language", null);
@@ -6474,6 +6479,7 @@ public class FragmentMessages extends FragmentBase
             menu.findItem(R.id.menu_filter_snoozed).setVisible(folder && !drafts);
             menu.findItem(R.id.menu_filter_deleted).setVisible(folder && !perform_expunge);
             menu.findItem(R.id.menu_filter_duplicates).setVisible(viewType == AdapterMessage.ViewType.THREAD);
+            menu.findItem(R.id.menu_filter_sent).setVisible(viewType == AdapterMessage.ViewType.THREAD);
             menu.findItem(R.id.menu_filter_trash).setVisible(viewType == AdapterMessage.ViewType.THREAD);
 
             menu.findItem(R.id.menu_filter_seen).setChecked(filter_seen);
@@ -6483,6 +6489,7 @@ public class FragmentMessages extends FragmentBase
             menu.findItem(R.id.menu_filter_deleted).setChecked(filter_deleted);
             menu.findItem(R.id.menu_filter_language).setVisible(language_detection && folder);
             menu.findItem(R.id.menu_filter_duplicates).setChecked(filter_duplicates);
+            menu.findItem(R.id.menu_filter_sent).setChecked(filter_sent);
             menu.findItem(R.id.menu_filter_trash).setChecked(filter_trash);
 
             SpannableStringBuilder ssbZoom = new SpannableStringBuilder(getString(R.string.title_zoom));
@@ -6656,6 +6663,9 @@ public class FragmentMessages extends FragmentBase
             return true;
         } else if (itemId == R.id.menu_filter_duplicates) {
             onMenuFilterDuplicates(!item.isChecked());
+            return true;
+        } else if (itemId == R.id.menu_filter_sent) {
+            onMenuFilterSent(!item.isChecked());
             return true;
         } else if (itemId == R.id.menu_filter_trash) {
             onMenuFilterTrash(!item.isChecked());
@@ -6942,6 +6952,13 @@ public class FragmentMessages extends FragmentBase
         prefs.edit().putBoolean("filter_duplicates", filter).apply();
         invalidateOptionsMenu();
         adapter.setFilterDuplicates(filter);
+    }
+
+    private void onMenuFilterSent(boolean filter) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        prefs.edit().putBoolean("filter_sent", filter).apply();
+        invalidateOptionsMenu();
+        adapter.setFilterSent(filter);
     }
 
     private void onMenuFilterTrash(boolean filter) {
@@ -7454,7 +7471,7 @@ public class FragmentMessages extends FragmentBase
                         if (inbox)
                             count++;
 
-                        boolean keywords = (more_keywords && count < FragmentDialogQuickActions.MAX_QUICK_ACTIONS && !result.hasPop && result.hasImap);
+                        boolean keywords = (more_keywords && count < FragmentDialogQuickActions.MAX_QUICK_ACTIONS);
                         if (keywords)
                             count++;
 

@@ -442,8 +442,17 @@ public class EmailProvider implements Parcelable {
                 for (EmailProvider provider : providers)
                     if (provider.mx != null)
                         for (String mx : provider.mx)
-                            if (record.response.matches(mx))
+                            if (record.response.matches(mx)) {
+                                try {
+                                    // There could be a name server for hosting only, so prefer rfc6186 discovery
+                                    EmailProvider dns = fromDNS(context, domain, Discover.ALL, intf);
+                                    EntityLog.log(context, "NS rfc6186 imap=" + dns.imap + " smtp=" + dns.smtp);
+                                    continue;
+                                } catch (Throwable ex) {
+                                    Log.w(ex);
+                                }
                                 return Arrays.asList(provider);
+                            }
         } catch (Throwable ex) {
             Log.w(ex);
         }
@@ -561,7 +570,7 @@ public class EmailProvider implements Parcelable {
         if (candidates.size() == 0)
             throw new UnknownHostException(context.getString(R.string.title_setup_no_settings, domain));
 
-        for (EmailProvider candidate : candidates) {
+        for (EmailProvider candidate : new ArrayList<>(candidates)) {
             // Always prefer built-in profiles
             // - ISPDB is not always correct
             // - documentation links
@@ -570,13 +579,21 @@ public class EmailProvider implements Parcelable {
                         provider.imap.host.equals(candidate.imap.host) ||
                         provider.smtp.host.equals(candidate.smtp.host)) {
                     EntityLog.log(context, "Replacing auto config host by profile=" + provider.name);
-                    return Arrays.asList(provider);
+                    EmailProvider copy = provider.copy();
+                    copy.imap.score = candidate.imap.score;
+                    copy.smtp.score = candidate.smtp.score;
+                    candidates.add(copy);
+                    candidates.remove(candidate);
                 } else if (provider.enabled && provider.mx != null)
                     for (String mx : provider.mx)
                         if ((candidate.imap.host != null && candidate.imap.host.matches(mx)) ||
                                 (candidate.smtp.host != null && candidate.smtp.host.matches(mx))) {
-                            EntityLog.log(context, "Replacing auto config MC by profile=" + provider.name);
-                            return Arrays.asList(provider);
+                            EntityLog.log(context, "Replacing auto config MX by profile=" + provider.name);
+                            EmailProvider copy = provider.copy();
+                            copy.imap.score = candidate.imap.score;
+                            copy.smtp.score = candidate.smtp.score;
+                            candidates.add(copy);
+                            candidates.remove(candidate);
                         }
 
             // https://help.dreamhost.com/hc/en-us/articles/214918038-Email-client-configuration-overview
@@ -1341,6 +1358,20 @@ public class EmailProvider implements Parcelable {
     @Override
     public int hashCode() {
         return Objects.hash(imap, smtp);
+    }
+
+    public EmailProvider copy() {
+        Parcel parcel = null;
+        try {
+            parcel = Parcel.obtain();
+            this.writeToParcel(parcel, 0);
+            parcel.setDataPosition(0);
+            return EmailProvider.CREATOR.createFromParcel(parcel);
+        } finally {
+            if (parcel != null) {
+                parcel.recycle();
+            }
+        }
     }
 
     @NonNull

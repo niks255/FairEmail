@@ -407,6 +407,7 @@
     <string name="title_advanced_kept_removed">לבדוק אם הודעות ישנות הוסרו מהשרת</string>
     <string name="title_advanced_gmail_thread">סגנון קיבוץ הודעות ב־Gmail לחשבונות Gmail</string>
     <string name="title_advanced_subject_threading">קיבוץ הודעות לפי מוען ונושא</string>
+    <string name="title_advanced_outlook_categories">סנכרון קטגוריות Outlook</string>
     <string name="title_advanced_sync_folders">סנכרון רשימת התיקיות</string>
     <string name="title_advanced_sync_folders_poll">סנכרון רשימת התיקיות באופן פעיל</string>
     <string name="title_advanced_sync_shared_folders">סנכרון רשימות תיקיות משותפות</string>
@@ -422,6 +423,7 @@
     <string name="title_advanced_tune_keep_alive">כוונון משך ה־keep-alive אוטומטית</string>
     <string name="title_advanced_blocklist_warning">רשימות החסימה אינן מושלמות והן עלולות לחסום הודעות תמימות!</string>
     <string name="title_advanced_keyboard">הצגת מקלדת כברירת מחדל</string>
+    <string name="title_advanced_keyboard_margin">הוספת מרווח מעל המקלדת</string>
     <string name="title_advanced_keyboard_no_fullscreen">מניעת מקלדת במסך מלא</string>
     <string name="title_advanced_suggest_names">שמות משתמשים וכתובות דוא״ל</string>
     <string name="title_advanced_suggest_local">להציע אנשי קשר שאוחסנו מקומית</string>
@@ -537,6 +539,7 @@
     <string name="title_advanced_nav_hide_message">אפשר להפעיל את האפשרויות שוב בהגדרות התצוגה</string>
     <string name="title_advanced_nav_last_sync">להציג את מועד הסנכרון האחרון בתפריט הניווט</string>
     <string name="title_advanced_nav_message_count">להציג את מספר ההודעות שמאוחסנות מקומית בתפריט הניווט</string>
+    <string name="title_advanced_nav_unseen">להציג את מספר ההודעות שלא נקראו בתפריט הניווט</string>
     <string name="title_advanced_nav_unseen_drafts">להציג את מספר הטיוטות שלא נקראו בתפריט הניווט</string>
     <string name="title_advanced_nav_pinned_count">להציג את מספר ההודעות שלא נקראו בתפריט הניווט הנעוץ</string>
     <string name="title_advanced_show_unexposed">הצגת כוכב לחשבונות/תיקיות עם הודעות חדשות שהתקבלו וטרם נקראו</string>
@@ -736,6 +739,7 @@
     <string name="title_advanced_notify_screen_on">להפעיל את המסך לזמן קצר עבור התראות על הודעות חדשות</string>
     <string name="title_advanced_notifications_background">להשתמש בשירות רקע לסנכרון הודעות</string>
     <string name="title_advanced_notifications_background_hint">שירות רקע יכול להיעצר על ידי Android בכל רגע נתון, אך אינו דורש התראה בשורת המצב</string>
+    <string name="title_advanced_rate_limit">להגביל צלילי התראות של הודעות חדשות לאחת כל:</string>
     <string name="title_advanced_confirm_links">אישור פתיחת קישור</string>
     <string name="title_advanced_confirm_files">אישור צפייה בקבצים</string>
     <string name="title_advanced_sanitize_links">הסרת משתני מעקב כברירת מחדל</string>
@@ -833,6 +837,10 @@
     <string name="title_advanced_answer_prompt">בקשת תשובה</string>
     <string name="title_advanced_system_instructions">הנחיות מערכת</string>
     <string name="title_advanced_default_prompt">בקשת ברירת מחדל</string>
+    <string name="title_advanced_ai">בינה מלאכותית</string>
+    <string name="title_advanced_ai_input_system">מילוי בקשת המערכת</string>
+    <string name="title_advanced_ai_input_body">מילוי טקסט ההודעה שלך</string>
+    <string name="title_advanced_ai_input_reply">מילוי טקסט ההודעה שזכתה לתגובה</string>
     <string name="title_advanced_entered_text">טקסט שהוקלד</string>
     <string name="title_advanced_sdcard">ארצה להשתמש בכרטיס SD</string>
     <string name="title_advanced_watchdog">לבדוק מדי פעם אם FairEmail עדיין פעיל</string>
@@ -867,6 +875,7 @@
     <string name="title_advanced_sync_kept_hint">יגרום להעברה של יותר נתונים וצריכה גבוהה יותר של סוללה, במיוחד אם הודעות רבות מאוחסנות במכשיר</string>
     <string name="title_advanced_gmail_thread_hint">חל רק על הודעות חדשות שמתקבלות ועלול לפגום בקבוצות קיימות</string>
     <string name="title_advanced_subject_threading_hint">רק הודעות שהתקבלו ב־%1$d השעות האחרונות</string>
+    <string name="title_advanced_outlook_categories_hint">אפשר למשוך קטגוריות Outlook אך לא לעדכן אותן אוטומטית עקב מגבלות שרת ה־IMAP של Outlook</string>
     <string name="title_advanced_sync_folders_hint">השבתת האפשרות הזאת תצמצם את צריכת הנתונים והסוללהבמידה מסוימת אך תשבית גם את עדכון רשימת התיקיות</string>
     <string name="title_advanced_poll_folders_hint">לסנכרן את רשימת התיקיות מדי פעם בנוסף לסנכרון שאחרי ההתחברות לחשבון</string>
     <string name="title_advanced_check_authentication_hint">אפשרות זו תבדוק את תוצאות אימות DKIM,‏ SPF ו־DMARC כפי שמבוצעות על ידי שרת הדוא״ל</string>
@@ -1714,6 +1723,7 @@
     <string name="title_filter_hidden">מוסתר</string>
     <string name="title_filter_deleted">נמחקו</string>
     <string name="title_filter_duplicates">כפילויות</string>
+    <string name="title_filter_sent">נשלח</string>
     <string name="title_filter_trash">באשפה</string>
     <string name="title_compact">תצוגה מצומצמת</string>
     <string name="title_zoom">גודל טקסט</string>
@@ -1855,6 +1865,7 @@
     <string name="title_rule_select_sound">בחירת צליל</string>
     <string name="title_rule_select_sound_ringtone">צלצול</string>
     <string name="title_rule_select_sound_audio">קובץ שמע</string>
+    <string name="title_rule_loop_sound">השמעה בלולאה</string>
     <string name="title_rule_use_as_alarm">להשתמש כהתראה</string>
     <string name="title_rule_alarm_hint">יתעלם מכללי „לא להפריע”</string>
     <string name="title_rule_alarm_duration">משך ההתראה המרבי (שניות)</string>
@@ -2333,6 +2344,7 @@
         <item>הצפנת PGP בלבד</item>
         <item>חתימה והצפנה עם PGP</item>
         <item>חתימה בלבד עם S/MIME</item>
+        <item>S/MIME encrypt-only</item>
         <item>חתימה והצפנה עם S/MIME</item>
     </string-array>
     <string-array name="sizeNames">

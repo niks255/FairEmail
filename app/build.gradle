@@ -3,7 +3,7 @@ apply plugin: 'com.bugsnag.android.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2259 }
+def getVersionCode = { -> return 2263 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Barsboldia" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -447,11 +447,11 @@ tasks.register('updatePrivacy', Exec) {
     commandLine 'sh', '-c', 'pandoc --standalone --metadata title="FairEmail - privacy" --variable=title="FairEmail" --metadata-file privacy/privacy.yaml PRIVACY.md -o privacy/index.html'
 }
 
-tasks.register('updateCrowdin', Exec) {
+tasks.register('downloadCrowdin', Exec) {
     // https://crowdin.github.io/crowdin-cli/
     // https://developer.crowdin.com/configuration-file/
     workingDir "${rootDir}"
-    commandLine 'sh', '-c', 'crowdin download --branch=master'
+    commandLine 'sh', '-c', 'crowdin download --branch=master && grep -RPl "\\xa0" app/src/main/res/values* | xargs xargs sed -i -e "s/\\xc2\\xa0/ /g"'
 }
 
 tasks.register('downloadPSL', Download) {
@@ -565,36 +565,36 @@ dependencies {
     def desugar_version = "2.0.4"
     def startup_version = "1.2.0"
     def annotation_version_experimental = "1.4.1" // 1.5.0-alpha01
-    def core_version = "1.15.0" // 1.16.0-alpha01
+    def core_version = "1.15.0" // 1.16.0-beta01
     def appcompat_version = "1.7.0"
     def emoji_version = "1.5.0"
     def flatbuffers_version = "2.0.0"
     def activity_version = " 1.10.0"
-    def fragment_version = "1.8.5"
-    def windows_version = "1.3.0" // 1.4.0-beta01
-    def webkit_version = "1.12.0" // 1.13.0-alpha03
+    def fragment_version = "1.8.6"
+    def windows_version = "1.3.0" // 1.4.0-beta02
+    def webkit_version = "1.12.0" // 1.13.0-beta01
     def recyclerview_version = "1.4.0"
-    def coordinatorlayout_version = "1.2.0" // 1.3.0-alpha03
+    def coordinatorlayout_version = "1.2.0" // 1.3.0-rc01
     def constraintlayout_version = "2.2.0"
     def viewpager_version = "1.1.0-beta01" // 1.1.0
     def material_version = "1.12.0" // 1.13.0-alpha03
-    def browser_version = "1.8.0"
+    def browser_version = "1.8.0" // 1.9.0-alpha01
     def lbm_version = "1.1.0"
-    def swiperefresh_version = "1.2.0-alpha01"
+    def swiperefresh_version = "1.2.0-beta01"
     def documentfile_version = "1.1.0-alpha01"
-    def lifecycle_version = "2.8.6" // 2.8.7/2.9.0-alpha08
+    def lifecycle_version = "2.8.6" // 2.8.7/2.9.0-alpha10
     def lifecycle_extensions_version = "2.2.0"
-    def room_version = "2.4.3" // 2.5.2/2.6.1/2.7.0-alpha12
-    def sqlite_version = "2.4.0" // 2.5.0-alpha12
+    def room_version = "2.4.3" // 2.5.2/2.6.1/2.7.0-beta01
+    def sqlite_version = "2.4.0" // 2.5.0-beta01
     def requery_version = "3.39.2"
-    def paging_version = "2.1.2" // 3.3.5
+    def paging_version = "2.1.2" // 3.3.6
     def preference_version = "1.2.1"
     def work_version = "2.10.0"
-    def exif_version = "1.4.0-beta01"
+    def exif_version = "1.4.0-rc01"
     def biometric_version = "1.2.0-alpha05" // 1.4.0-alpha02
     def billingclient_version = "6.0.1" // 6.2.0
     def playservicesbasement_version = "18.5.0";
-    def transparency_version = "2.5.70"
+    def transparency_version = "2.5.73"
     def javamail_version = "1.6.7"
     def jsoup_version = "1.18.3"
     def jsonpath_version = "2.9.0"
@@ -620,13 +620,13 @@ dependencies {
     def reactivestreams_version = "1.0.3"
     def rxjava2_version = "2.2.21"
     def svg_version = "1.4"
-    def compress_version = "1.26.2"
-    def ipaddress_version = "5.5.0"
+    def compress_version = "1.27.1"
+    def ipaddress_version = "5.5.1"
     def canary_version = "2.14"
     def ws_version = "2.14"
     def tinylog_version = "2.7.0"
     def zxing_version = "3.5.3"
-    def evalex_version = "3.3.0"
+    def evalex_version = "3.4.0"
     def image_cropper_version = "4.6.0"
 
     // https://mvnrepository.com/artifact/com.android.tools/desugar_jdk_libs?repo=google

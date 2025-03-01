@@ -365,6 +365,7 @@
     <string name="title_advanced_kept_removed">古いメッセージがサーバーから削除されたか確認する</string>
     <string name="title_advanced_gmail_thread">Gmail のメッセージグループ表示 (Gmail アカウントのみ)</string>
     <string name="title_advanced_subject_threading">差出人と件名でメッセージをグループ化する</string>
+    <string name="title_advanced_outlook_categories">Outlook のカテゴリーを同期する</string>
     <string name="title_advanced_sync_folders">フォルダーリストを同期する</string>
     <string name="title_advanced_sync_folders_poll">フォルダーリストをアクティブに同期する</string>
     <string name="title_advanced_sync_shared_folders">共有フォルダーリストを同期する</string>
@@ -380,6 +381,7 @@
     <string name="title_advanced_tune_keep_alive">キープアライブ間隔を自動で調整する</string>
     <string name="title_advanced_blocklist_warning">ブロックリストは常に完璧に迷惑メールをブロックできるわけではなく、迷惑メール以外をブロックする可能性もあります！</string>
     <string name="title_advanced_keyboard">デフォルトでキーボードを表示する</string>
+    <string name="title_advanced_keyboard_margin">キーボードの上部に余白を追加する</string>
     <string name="title_advanced_keyboard_no_fullscreen">全画面キーボードを無効にする</string>
     <string name="title_advanced_suggest_names">名前とメールアドレスを候補に表示する</string>
     <string name="title_advanced_suggest_local">ローカルに保存された連絡先を候補に表示する</string>
@@ -495,6 +497,7 @@
     <string name="title_advanced_nav_hide_message">表示設定からもう一度オプションを表示できます</string>
     <string name="title_advanced_nav_last_sync">ナビゲーションメニューに最終同期日時を表示する</string>
     <string name="title_advanced_nav_message_count">ナビゲーションメニューにローカルに保存されたメッセージの数を表示する</string>
+    <string name="title_advanced_nav_unseen">ナビゲーションメニューに未読メッセージ数を表示する</string>
     <string name="title_advanced_nav_unseen_drafts">ナビゲーションメニューに未読の下書きの数を表示する</string>
     <string name="title_advanced_nav_pinned_count">ピン留めしたナビゲーションメニューに未読の数を表示する</string>
     <string name="title_advanced_show_unexposed">新着の未読メッセージがあるアカウント/フォルダーに星印を表示する</string>
@@ -694,6 +697,7 @@
     <string name="title_advanced_notify_screen_on">画面を一時オンにして新着メッセージ通知を表示する</string>
     <string name="title_advanced_notifications_background">メッセージの同期にバックグラウンドサービスを使用</string>
     <string name="title_advanced_notifications_background_hint">バックグラウンドサービスは Android によって停止される可能性がありますが、ステータスバーに通知が表示されなくなります</string>
+    <string name="title_advanced_rate_limit">一度に鳴らす新着メッセージの通知音の回数を制限する:</string>
     <string name="title_advanced_confirm_links">リンクを開く前に確認を表示する</string>
     <string name="title_advanced_confirm_files">ファイルを開く前に確認を表示する</string>
     <string name="title_advanced_sanitize_links">デフォルトでトラッキングパラメーターを削除する</string>
@@ -791,6 +795,10 @@
     <string name="title_advanced_answer_prompt">返信プロンプト</string>
     <string name="title_advanced_system_instructions">システムへの指定</string>
     <string name="title_advanced_default_prompt">デフォルトのプロンプト</string>
+    <string name="title_advanced_ai">AI</string>
+    <string name="title_advanced_ai_input_system">システムプロンプトを入力</string>
+    <string name="title_advanced_ai_input_body">メッセージを入力</string>
+    <string name="title_advanced_ai_input_reply">返信されたメッセージを入力</string>
     <string name="title_advanced_entered_text">入力テキスト</string>
     <string name="title_advanced_sdcard">SD カードを使用できますか？</string>
     <string name="title_advanced_watchdog">FairEmail がアクティブか定期的に確認する</string>
@@ -825,6 +833,7 @@
     <string name="title_advanced_sync_kept_hint">特に大量のメッセージが端末に保存されている場合、バッテリー使用量とデータ使用量が大幅に増加することがあります</string>
     <string name="title_advanced_gmail_thread_hint">新しく受信したメッセージにのみ適用されます。また、既存のグループを壊す可能性があります</string>
     <string name="title_advanced_subject_threading_hint">過去 %1$d 時間以内に受信したメッセージのみに適用されます</string>
+    <string name="title_advanced_outlook_categories_hint">Outlook のカテゴリーは読み取り用に取得のみ可能で、Outlook の IMAP サーバーの制約により自動的に再取得することはできません</string>
     <string name="title_advanced_sync_folders_hint">無効にするとデータ使用量とバッテリー使用量がわずかに減少しますが、フォルダーリストの更新も無効になります</string>
     <string name="title_advanced_poll_folders_hint">アカウントに接続したあと、さらにフォルダーリストを定期的に同期します</string>
     <string name="title_advanced_check_authentication_hint">メールサーバーで実行された DKIM、SPF、DMARC 認証の結果を確認します</string>
@@ -1211,6 +1220,7 @@
     <string name="title_filters_active">1 つ以上のフィルターがアクティブです</string>
     <string name="title_duplicate_in">%1$s でメッセージが重複しています</string>
     <string name="title_trashed_from">メッセージを %1$s からごみ箱に移動しました</string>
+    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">メッセージを %1$s に送信しました</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">RE: %1$s</string>
@@ -1262,6 +1272,7 @@
     <string name="title_raw_send_message">メッセージ</string>
     <string name="title_raw_send_thread">会話スレッド</string>
     <string name="title_manage_keywords">キーワードを管理</string>
+    <string name="title_manage_keywords_pop">POP3 ではキーワードはサーバーに保存できません！</string>
     <string name="title_manage_labels">Gmail ラベルを管理</string>
     <string name="title_add_keyword">キーワードを追加</string>
     <string name="title_show_inline">インライン添付ファイルを表示する</string>
@@ -1672,6 +1683,7 @@
     <string name="title_filter_hidden">非表示のメッセージ</string>
     <string name="title_filter_deleted">削除済み</string>
     <string name="title_filter_duplicates">重複</string>
+    <string name="title_filter_sent">送信済み</string>
     <string name="title_filter_trash">ごみ箱</string>
     <string name="title_compact">簡易表示</string>
     <string name="title_zoom">テキストサイズ</string>
@@ -1813,6 +1825,7 @@
     <string name="title_rule_select_sound">音声を選択</string>
     <string name="title_rule_select_sound_ringtone">通知音</string>
     <string name="title_rule_select_sound_audio">音声ファイル</string>
+    <string name="title_rule_loop_sound">音声をループ</string>
     <string name="title_rule_use_as_alarm">アラームに設定</string>
     <string name="title_rule_alarm_hint">サイレントモードを無視します</string>
     <string name="title_rule_alarm_duration">自動消音時間 (秒)</string>
@@ -2295,6 +2308,7 @@
         <item>PGP 暗号化のみ</item>
         <item>PGP 暗号化 + デジタル署名</item>
         <item>S/MIME デジタル署名のみ</item>
+        <item>S/MIME 暗号化のみ</item>
         <item>S/MIME 暗号化 + デジタル署名</item>
     </string-array>
     <string-array name="sizeNames">

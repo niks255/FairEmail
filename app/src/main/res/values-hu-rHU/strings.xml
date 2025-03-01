@@ -376,6 +376,7 @@
     <string name="title_advanced_kept_removed">Régi üzenetek szerverről való törlésének ellenőrzése</string>
     <string name="title_advanced_gmail_thread">Gmail stílusú üzenetcsoportosítás a Gmail fiókokhoz</string>
     <string name="title_advanced_subject_threading">Csoport üzenetek küldő és tárgy szerint</string>
+    <string name="title_advanced_outlook_categories">Outlook kategóriák szinkronizálása</string>
     <string name="title_advanced_sync_folders">Mappák listájának szinkronizálása</string>
     <string name="title_advanced_sync_folders_poll">Mappa lista aktív szinkronizálása</string>
     <string name="title_advanced_sync_shared_folders">Szinkronizált mappák listája</string>
@@ -391,6 +392,7 @@
     <string name="title_advanced_tune_keep_alive">Az ébrentartás időtartamának automatikus hangolása</string>
     <string name="title_advanced_blocklist_warning">A blokkolási listák nem tökéletesek, és nem csak a spameket blokkolhatják!</string>
     <string name="title_advanced_keyboard">Billentyűzet alapértelmezett megjelenítése</string>
+    <string name="title_advanced_keyboard_margin">Legyen margó a billentyűzet fölött</string>
     <string name="title_advanced_keyboard_no_fullscreen">Teljes képernyős billentyűzet letiltása</string>
     <string name="title_advanced_suggest_names">Nevek és e-mail címek használata</string>
     <string name="title_advanced_suggest_local">Helyileg tárolt névjegyek felajánlása</string>
@@ -506,6 +508,7 @@
     <string name="title_advanced_nav_hide_message">Újra be tudja kapcsolni a kijelző opciókban</string>
     <string name="title_advanced_nav_last_sync">Utolsó szinkronizálás idejének mutatása a navigációs menüben</string>
     <string name="title_advanced_nav_message_count">Mutassa a helyileg elmentett üzeneteket a navigációs menüben</string>
+    <string name="title_advanced_nav_unseen">Olvasatlan üzenetek számának mutatása a navigációs menüben</string>
     <string name="title_advanced_nav_unseen_drafts">Elküldetlen piszkozatok számának megjelenítése a navigációs menüben</string>
     <string name="title_advanced_nav_pinned_count">Olvasatlan üzenetek számának mutatása a kitűzött navigációs menüben</string>
     <string name="title_advanced_show_unexposed">Csillaggal jelölje az újonnan érkezett, olvasatlan üzeneketet tartalmazó fiókokat/mappákat</string>
@@ -705,6 +708,7 @@
     <string name="title_advanced_notify_screen_on">Rövid időre kapcsolja be a képernyőt az új üzeneteknél</string>
     <string name="title_advanced_notifications_background">Háttérfolyamat használata üzenetek szinkronizálásához</string>
     <string name="title_advanced_notifications_background_hint">Egy háttérfolyamat leállítható az Android által bármikor, de nem szükséges státusz sor értesítés hozzá</string>
+    <string name="title_advanced_rate_limit">Új üzenet értesítés megjelenítése ennyi üzenetenként:</string>
     <string name="title_advanced_confirm_links">Hivatkozások megnyitásának jóváhagyása</string>
     <string name="title_advanced_confirm_files">Fájlmegtekintés jóváhagyása</string>
     <string name="title_advanced_sanitize_links">Alapértelmezetten a követő kódok eltávolítása</string>
@@ -839,6 +843,7 @@
     <string name="title_advanced_sync_kept_hint">Ez megnövekedett adatforgalom- és akkumulátorhasználatot eredményez, különösen ha sok üzenet található a készüléken</string>
     <string name="title_advanced_gmail_thread_hint">Ez csak új üzenetekre lesz alkalmazva és elronthat meglévő csoportokat</string>
     <string name="title_advanced_subject_threading_hint">Csak az elmúlt %1$d órában érkezett üzenetek</string>
+    <string name="title_advanced_outlook_categories_hint">Az Outlook kategóriákat csak lekérni lehet, nem frissülnek automatikusan, az Outlook IMAP kiszolgáló korlátai miatt</string>
     <string name="title_advanced_sync_folders_hint">Kikapcsolása valamelyest csökkentheti az adatforgalom- és akkumulátorhasználatot, de egyúttal a mappák listájának frissítését is megakadályozza</string>
     <string name="title_advanced_poll_folders_hint">A fiókhoz csatlakozást követően időszakosan szinkronizálja a mappa listát</string>
     <string name="title_advanced_check_authentication_hint">Ellenőrzi az email szerver által végzett DKIM, SPF és DMARC hitelesítések eredményét</string>
@@ -1223,6 +1228,7 @@
     <string name="title_filters_active">Egy vagy több szűrő aktív</string>
     <string name="title_duplicate_in">Duplikált üzenet a(z) %1$s mappában</string>
     <string name="title_trashed_from">%1$s-től törölve</string>
+    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Üzenetet elküldve a következőnek: %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -1274,6 +1280,7 @@
     <string name="title_raw_send_message">Üzenet</string>
     <string name="title_raw_send_thread">Beszélgetés</string>
     <string name="title_manage_keywords">Kulcsszavak kezelése</string>
+    <string name="title_manage_keywords_pop">POP3 esetén a kulcsszavak nem tárolhatók az email kiszolgálón!</string>
     <string name="title_manage_labels">Gmail címkék kezelése</string>
     <string name="title_add_keyword">Kulcsszó hozzáadása</string>
     <string name="title_show_inline">Beágyazott mellékletek megjelenítése</string>
@@ -1682,6 +1689,7 @@
     <string name="title_filter_hidden">Rejtett</string>
     <string name="title_filter_deleted">Törölt</string>
     <string name="title_filter_duplicates">Másolatok</string>
+    <string name="title_filter_sent">Elküldött</string>
     <string name="title_filter_trash">Kukázott</string>
     <string name="title_compact">Kompakt nézet</string>
     <string name="title_zoom">Szövegméret</string>
@@ -2306,6 +2314,7 @@
         <item>PGP csak titkosítás</item>
         <item>PGP aláírás+titkosítás</item>
         <item>S/MIME csak aláírás</item>
+        <item>S/MIME - csak titkosítás</item>
         <item>S/MIME aláírás+titkosítás</item>
     </string-array>
     <string-array name="sizeNames">

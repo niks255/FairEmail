@@ -126,14 +126,17 @@
 
                 <item
                     android:id="@+id/menu_filter_language"
-                    android:title="@string/title_select_language">
-                    <menu />
-                </item>
+                    android:title="@string/title_select_language" />
 
                 <item
                     android:id="@+id/menu_filter_duplicates"
                     android:checkable="true"
                     android:title="@string/title_filter_duplicates" />
+
+                <item
+                    android:id="@+id/menu_filter_sent"
+                    android:checkable="true"
+                    android:title="@string/title_filter_sent" />
 
                 <item
                     android:id="@+id/menu_filter_trash"
@@ -174,9 +177,7 @@
             android:id="@+id/menu_theme"
             android:icon="@drawable/twotone_palette_24"
             android:title="@string/title_setup_theme"
-            app:showAsAction="never">
-            <menu />
-        </item>
+            app:showAsAction="never" />
 
         <item
             android:id="@+id/menu_confirm_links"
@@ -223,9 +224,7 @@
             android:id="@+id/menu_sync_more"
             android:icon="@drawable/twotone_save_alt_24"
             android:title="@string/title_synchronize_more"
-            app:showAsAction="never">
-            <menu />
-        </item>
+            app:showAsAction="never" />
 
         <item
             android:id="@+id/menu_force_sync"
@@ -249,8 +248,6 @@
             android:id="@+id/menu_edit_properties"
             android:icon="@drawable/twotone_edit_24"
             android:title="@string/title_edit_properties"
-            app:showAsAction="never">
-            <menu />
-        </item>
+            app:showAsAction="never" />
     </group>
 </menu>

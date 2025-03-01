@@ -125,7 +125,7 @@
     <string name="menu_attribution">Atribusi</string>
     <string name="menu_privacy">Privasi</string>
     <string name="menu_about">Tentang</string>
-    <string name="menu_pro">Fitur Pro</string>
+    <string name="menu_pro">Fitur Pro</string>
     <string name="menu_rate">Beri nilai aplikasi ini</string>
     <string name="title_welcome">Selamat Datang</string>
     <string name="title_eula">Perjanjian lisensi pengguna akhir</string>
@@ -1645,6 +1645,7 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_filter_hidden">Tersembunyi</string>
     <string name="title_filter_deleted">Dihapus</string>
     <string name="title_filter_duplicates">Duplikat</string>
+    <string name="title_filter_sent">Terkirim</string>
     <string name="title_filter_trash">Sudah dibuang</string>
     <string name="title_compact">Tampilan ringkas</string>
     <string name="title_zoom">Ukuran teks</string>
@@ -2258,6 +2259,7 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
         <item>Hanya enkirpsi PGP</item>
         <item>PGP sign+encrypt</item>
         <item>S/MIME sign-only</item>
+        <item>S/MIME encrypt-only</item>
         <item>S/MIME sign+encrypt</item>
     </string-array>
     <string-array name="sizeNames">

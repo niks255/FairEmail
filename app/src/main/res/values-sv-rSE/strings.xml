@@ -375,6 +375,7 @@
     <string name="title_advanced_kept_removed">Kontrollera om gamla meddelanden har tagits bort från servern</string>
     <string name="title_advanced_gmail_thread">Använd Gmails stil för gruppering av meddelande på Gmail-konton</string>
     <string name="title_advanced_subject_threading">Gruppera meddelanden efter avsändare och ämne</string>
+    <string name="title_advanced_outlook_categories">Synkronisera Outlookkategorier</string>
     <string name="title_advanced_sync_folders">Synkronisera mapplistan</string>
     <string name="title_advanced_sync_folders_poll">Synkronisera mapplistan aktivt</string>
     <string name="title_advanced_sync_shared_folders">Synkronisera delade mapplistor</string>
@@ -390,6 +391,7 @@
     <string name="title_advanced_tune_keep_alive">Justera automatiskt keep-alive intervallet</string>
     <string name="title_advanced_blocklist_warning">Blocklistor är inte perfekta och kan blockera mer än bara skräppost!</string>
     <string name="title_advanced_keyboard">Visa tangentbord som standard</string>
+    <string name="title_advanced_keyboard_margin">Lägg till marginal ovanför tangentbordet</string>
     <string name="title_advanced_keyboard_no_fullscreen">Förhindra helskärmstangentbord</string>
     <string name="title_advanced_suggest_names">Visa namn och e-postadresser</string>
     <string name="title_advanced_suggest_local">Föreslå lokalt lagrade kontakter</string>
@@ -505,6 +507,7 @@
     <string name="title_advanced_nav_hide_message">Du kan aktivera alternativen igen i visningsinställningarna</string>
     <string name="title_advanced_nav_last_sync">Visa den senaste synkroniseringstiden i navigeringsmenyn</string>
     <string name="title_advanced_nav_message_count">Visa antalet lokalt lagrade meddelanden i navigeringsmenyn</string>
+    <string name="title_advanced_nav_unseen">Visa antalet olästa meddelanden i navigeringsmenyn</string>
     <string name="title_advanced_nav_unseen_drafts">Visa antal olästa utkast i navigeringsmenyn</string>
     <string name="title_advanced_nav_pinned_count">Visa antalet olästa meddelanden i navigeringsmenyn</string>
     <string name="title_advanced_show_unexposed">Visa en stjärna för konton/mappar med nyligen mottagna olästa meddelanden</string>
@@ -704,6 +707,7 @@
     <string name="title_advanced_notify_screen_on">Slå på skärmen en kort stund när det kommer nya meddelanden</string>
     <string name="title_advanced_notifications_background">Använd en bakgrundstjänst för att synkronisera meddelanden</string>
     <string name="title_advanced_notifications_background_hint">En bakgrundstjänst kan stoppas av Android när som helst, men kräver inte ett meddelande i statusfältet</string>
+    <string name="title_advanced_rate_limit">Begränsa aviseringsljud för nya meddelanden till en gång per:</string>
     <string name="title_advanced_confirm_links">Bekräfta att länkar öppnas</string>
     <string name="title_advanced_confirm_files">Bekräfta visning av filer</string>
     <string name="title_advanced_sanitize_links">Ta bort spårningsparametrar som standard</string>
@@ -795,6 +799,10 @@
     <string name="title_advanced_multi_modal">Multimodal</string>
     <string name="title_advanced_summarize_prompt">Sammanfatta prompten</string>
     <string name="title_advanced_system_instructions">Systemets instruktioner</string>
+    <string name="title_advanced_ai">AI</string>
+    <string name="title_advanced_ai_input_system">Använd AI systemprompt</string>
+    <string name="title_advanced_ai_input_body">Använd din meddelandetext</string>
+    <string name="title_advanced_ai_input_reply">Använd den ursprungliga meddelandetexten</string>
     <string name="title_advanced_entered_text">Angiven text</string>
     <string name="title_advanced_sdcard">Jag vill använda ett SD-kort</string>
     <string name="title_advanced_watchdog">Kontrollera regelbundet om FairEmail fortfarande är aktiv</string>
@@ -830,6 +838,7 @@
     <string name="title_advanced_sync_kept_hint">Detta kommer att överföra extra data och förbruka extra batterikraft, speciellt om många meddelanden lagras på enheten</string>
     <string name="title_advanced_gmail_thread_hint">Detta gäller endast för nyligen mottagna meddelanden och kan bryta befintliga grupper</string>
     <string name="title_advanced_subject_threading_hint">Endast meddelanden mottagna under de senaste %1$d timmarna</string>
+    <string name="title_advanced_outlook_categories_hint">Outlookkategorier kan endast hämtas och kan inte uppdateras automatiskt på grund av begränsningar för Outlook IMAP server</string>
     <string name="title_advanced_sync_folders_hint">Inaktivering av detta kommer att minska data och batterianvändning något, men kommer att inaktivera uppdatering av listan över mappar också</string>
     <string name="title_advanced_poll_folders_hint">Synkronisera mapplistan periodiskt utöver när du har anslutit till ett konto</string>
     <string name="title_advanced_check_authentication_hint">Detta kommer att kontrollera resultaten av DKIM, SPF och DMARC-autentisering som utförs av e-postservern</string>
@@ -913,6 +922,7 @@
     <string name="title_advanced_notify_car_hint">Ansluten innebär att något projekteras, till exempel en karta för navigering</string>
     <string name="title_advanced_notify_remove_hint">Nya meddelandeaviseringar kommer alltid att tas bort när de sveps bort och när meddelanden markeras som lästa</string>
     <string name="title_advanced_notify_manage_hint">Tryck på kanalens namn för att ange kanalens egenskaper</string>
+    <string name="title_advanced_notify_samsung_hint">För att hantera aviseringskanaler kan du behöva aktivera den här Android-inställningen: Avisering, Avancerade inställningar, Hantera aviseringskategorier för varje app</string>
     <string name="title_advanced_notify_manage_default_hint">För att ställa in standardljudet, etc</string>
     <string name="title_advanced_notify_manage_service_hint">För att inaktivera meddelandet \"övervakning\"</string>
     <string name="title_advanced_notify_separate_hint">Hur konfigurerar jag aviseringar för konton, mappar och avsändare?</string>
@@ -1245,6 +1255,7 @@
     <string name="title_force_light">Tvinga ljust tema</string>
     <string name="title_rename">Ändra namn</string>
     <string name="title_share">Dela</string>
+    <string name="title_analyze">Analysera</string>
     <string name="title_event">Lägg till i kalender</string>
     <string name="title_pin">Lägg till genväg</string>
     <string name="title_pin_label">Rubrik för genväg</string>
@@ -1261,6 +1272,7 @@
     <string name="title_raw_send_message">Meddelande</string>
     <string name="title_raw_send_thread">Konversation</string>
     <string name="title_manage_keywords">Hantera nyckelord</string>
+    <string name="title_manage_keywords_pop">Med POP3 kan sökord inte lagras på e-postservern!</string>
     <string name="title_manage_labels">Hantera Gmail-etiketter</string>
     <string name="title_add_keyword">Lägg till nyckelord</string>
     <string name="title_show_inline">Visa infogade bilagor</string>
@@ -1648,6 +1660,7 @@
     <string name="title_sort_on_starred_unread">Stjärnmärkta, olästa</string>
     <string name="title_sort_on_priority">Prioritet</string>
     <string name="title_sort_on_sender">Avsändaren</string>
+    <string name="title_sort_on_sender_name">Avsändarens namn</string>
     <string name="title_sort_on_subject">Ämne</string>
     <string name="title_sort_on_size">Storlek</string>
     <string name="title_sort_on_attachments">Bilagor</string>
@@ -1664,6 +1677,7 @@
     <string name="title_filter_hidden">Dold</string>
     <string name="title_filter_deleted">Raderad</string>
     <string name="title_filter_duplicates">Dubbletter</string>
+    <string name="title_filter_sent">Skickat</string>
     <string name="title_filter_trash">Kastade</string>
     <string name="title_compact">Kompakt vy</string>
     <string name="title_zoom">Textstorlek</string>
@@ -1804,6 +1818,7 @@
     <string name="title_rule_select_sound">Välj ljud</string>
     <string name="title_rule_select_sound_ringtone">Ringsignal</string>
     <string name="title_rule_select_sound_audio">Ljudfil</string>
+    <string name="title_rule_loop_sound">Loopa ljud</string>
     <string name="title_rule_use_as_alarm">Använd som larm</string>
     <string name="title_rule_alarm_hint">Det här kommer att ignorera \"stör ej\"-reglerna</string>
     <string name="title_rule_alarm_duration">Maxtid för alarm (sekunder)</string>
@@ -2283,7 +2298,8 @@
         <item>Endast PGP-kryptering</item>
         <item>PGP-signering + kryptering</item>
         <item>S/MIME signering</item>
-        <item>S/MIME signera+kryptera</item>
+        <item>Kryptera enbart (S/MIME)</item>
+        <item>Signera och kryptera (S/MIME)</item>
     </string-array>
     <string-array name="sizeNames">
         <item>0 B</item>

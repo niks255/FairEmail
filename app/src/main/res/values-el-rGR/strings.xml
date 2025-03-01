@@ -374,6 +374,7 @@
     <string name="title_advanced_kept_removed">Έλεγχος αν τα παλιά μηνύματα έχουν διαγραφεί από τον διακομιστή</string>
     <string name="title_advanced_gmail_thread">Ομαδοποίηση μηνυμάτων με το στιλ του Gmail για λογαριασμούς Google</string>
     <string name="title_advanced_subject_threading">Ομαδοποίηση μηνυμάτων κατά αποστολέα και θέμα</string>
+    <string name="title_advanced_outlook_categories">Συγχρονισμός κατηγοριών Outlook</string>
     <string name="title_advanced_sync_folders">Συγχρονισμός της λίστας φακέλων</string>
     <string name="title_advanced_sync_folders_poll">Ενεργός συγχρονισμός της λίστας φακέλων</string>
     <string name="title_advanced_sync_shared_folders">Συγχρονισμός της λίστας κοινών φακέλων</string>
@@ -389,6 +390,7 @@
     <string name="title_advanced_tune_keep_alive">Αυτόματη ρύθμιση του χρονικού διαστήματος για διατήρηση ενεργής σύνδεσης</string>
     <string name="title_advanced_blocklist_warning">Οι λίστες αποκλεισμού δεν είναι τέλειες και ενδέχεται να μπλοκάρουν και άλλα μηνύματα πέρα από τα ανεπιθύμητα!</string>
     <string name="title_advanced_keyboard">Εμφάνιση του πληκτρολογίου από προεπιλογή</string>
+    <string name="title_advanced_keyboard_margin">Προσθήκη περιθωρίου πάνω από το πληκτρολόγιο</string>
     <string name="title_advanced_keyboard_no_fullscreen">Να μην προβάλλεται το πληκτρολόγιο σε πλήρη οθόνη</string>
     <string name="title_advanced_suggest_names">Χρήση ονομάτων και διευθύνσεων ηλεκτρονικού ταχυδρομείου</string>
     <string name="title_advanced_suggest_local">Προτείνονται τοπικά αποθηκευμένες επαφές</string>
@@ -504,6 +506,7 @@
     <string name="title_advanced_nav_hide_message">Μπορείτε να ενεργοποιήσετε ξανά τις επιλογές στις ρυθμίσεις εμφάνισης</string>
     <string name="title_advanced_nav_last_sync">Προβολής της ώρας του τελευταίου συγχρονισμού στο μενού πλοήγησης</string>
     <string name="title_advanced_nav_message_count">Να προβάλλεται ο αριθμός των τοπικά αποθηκευμένων μηνυμάτων στο μενού πλοήγησης</string>
+    <string name="title_advanced_nav_unseen">Να προβάλλεται ο αριθμός των μη αναγνωσμένων μηνυμάτων στο μενού πλοήγησης</string>
     <string name="title_advanced_nav_unseen_drafts">Να προβάλλεται ο αριθμός των μη αναγνωσμένων προχείρων στο μενού πλοήγησης</string>
     <string name="title_advanced_nav_pinned_count">Να προβάλλεται ο αριθμός των μη αναγνωσμένων μηνυμάτων στο καρφιτσωμένο μενού πλοήγησης</string>
     <string name="title_advanced_show_unexposed">Προβολή ενός αστεριού για λογαριασμούς/φακέλους με μηνύματα που λήφθηκαν πρόσφατα και δεν έχουν αναγνωσθεί</string>
@@ -798,6 +801,10 @@
     <string name="title_advanced_answer_prompt">Προτροπή για απάντηση</string>
     <string name="title_advanced_system_instructions">Οδηγίες συστήματος</string>
     <string name="title_advanced_default_prompt">Προεπιλεγμένη προτροπή</string>
+    <string name="title_advanced_ai">Τεχνητή Νοημοσύνη</string>
+    <string name="title_advanced_ai_input_system">Εισαγάγετε τις οδηγίες συστήματος</string>
+    <string name="title_advanced_ai_input_body">Εισαγωγή του κειμένου του μηνύματός σας</string>
+    <string name="title_advanced_ai_input_reply">Εισαγωγή του κειμένου του απαντηθέντος μηνύματος</string>
     <string name="title_advanced_entered_text">Εισηγμένο κείμενο</string>
     <string name="title_advanced_sdcard">Θέλω να χρησιμοποιήσω μια κάρτα SD</string>
     <string name="title_advanced_watchdog">Περιοδικός έλεγχος για το αν το FairEmail είναι ακόμη ενεργό</string>
@@ -832,6 +839,7 @@
     <string name="title_advanced_sync_kept_hint">Μεταφέρει πρόσθετα δεδομένα και καταναλώνει επιπλέον μπαταρία, ιδίως αν είναι αποθηκευμένα στη συσκευή πολλά μηνύματα</string>
     <string name="title_advanced_gmail_thread_hint">Αυτό εφαρμόζεται μόνον σε μηνύματα που λήφθηκαν πρόσφατα και μπορεί να διαλύσει υπάρχουσες ομάδες</string>
     <string name="title_advanced_subject_threading_hint">Μόνο μηνύματα που ελήφθησαν τις τελευταίες %1$d ώρες</string>
+    <string name="title_advanced_outlook_categories_hint">Οι κατηγορίες Outlook μπορούν μόνο να ανακτηθούν και όχι να ανανεωθούν αυτόματα εξαιτίας περιορισμών του διακομιστή IMAP του Outlook</string>
     <string name="title_advanced_sync_folders_hint">Αν απενεργοποιηθεί, θα μειωθεί κάπως η χρήση δεδομένων και μπαταρίας, αλλά θα απενεργοποιηθεί και ο συγχρονισμός της λίστας των φακέλων επίσης</string>
     <string name="title_advanced_poll_folders_hint">Περιοδικός συγχρονισμός της λίστας φακέλων, επιπρόσθετα στον αρχικό συγχρονισμό μετά από τη σύνδεση σε έναν λογαριασμό</string>
     <string name="title_advanced_check_authentication_hint">Αυτό θα ελέγξει τα αποτελέσματα της ταυτοποίησης DKIM, SPF και DMARC, όπως εκτελείται από τον διακομιστή ηλ. ταχυδρομείου</string>
@@ -1678,6 +1686,7 @@
     <string name="title_filter_hidden">Κρυφά</string>
     <string name="title_filter_deleted">Διαγραμμένο</string>
     <string name="title_filter_duplicates">Διπλότυπα</string>
+    <string name="title_filter_sent">Απεσταλμένα</string>
     <string name="title_filter_trash">Διαγράφηκε</string>
     <string name="title_compact">Συνεπτυγμένη προβολή</string>
     <string name="title_zoom">Μέγεθος κειμένου</string>
@@ -1819,6 +1828,7 @@
     <string name="title_rule_select_sound">Επιλογή ήχου</string>
     <string name="title_rule_select_sound_ringtone">Ήχος κλήσης</string>
     <string name="title_rule_select_sound_audio">Αρχείο ήχου</string>
+    <string name="title_rule_loop_sound">Επαναλαμβανόμενος ήχος</string>
     <string name="title_rule_use_as_alarm">Να χρησιμοποιείται ως ξυπνητήρι</string>
     <string name="title_rule_alarm_hint">Αυτό θα αγνοήσει τους κανόνες \"Μην ενοχλείτε\"</string>
     <string name="title_rule_alarm_duration">Μέγιστη διάρκεια ξυπνητηριού (δευτερόλεπτα)</string>
@@ -2301,6 +2311,7 @@
         <item>Κρυπτογράφηση PGP μόνο</item>
         <item>Υπογραφή και κρυπτογράφηση PGP</item>
         <item>Υπογραφή S/MIME μόνο</item>
+        <item>S/MIME encrypt-only</item>
         <item>Υπογραφή + κρυπτογράφηση S/MIME</item>
     </string-array>
     <string-array name="sizeNames">
