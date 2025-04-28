@@ -190,7 +190,7 @@
     <string name="title_setup_intro">Założenie konta to tylko trzy kroki, po których możesz wysyłać i odbierać wiadomości e-mail</string>
     <string name="title_setup_simple">Nie ma potrzeby zmiany innych opcji</string>
     <string name="title_setup_issue">FairEmail został stworzony po to, aby chronić Twoją prywatność, i reprezentuje dosłownie tysiące godzin pracy. Jeśli masz jakieś problemy, najpierw skontaktuj się ze mną, zanim zostawisz złą recenzję. Chętnie pomogę!</string>
-    <string name="title_setup_analytics">FairEmail nie wyświetla reklam, nie śledzi ani nie analizuje Twojego zachowania. Bugsnag jest używany do raportowania błędów i jest domyślnie wyłączony.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail nie wyświetla reklam i nie śledzi ani nie analizuje zachowania użytkownika.</string>
     <string name="title_setup_quick_accounts">Dodaj lub zmień konta</string>
     <string name="title_setup_quick_support">Niektórzy dostawcy utrudniają dodanie konta. To nie jest wina FairEmail. W razie problemów poproś o pomoc.</string>
     <string name="title_setup_quick_hint">Wprowadzony adres e-mail jest używany do odpytywania serwera poczty e-mail i autoconfig.thunderbird.net o informacje dotyczące konfiguracji</string>
@@ -373,6 +373,10 @@
     <string name="title_advanced_hint_message">        Przechodzisz do bardziej zaawansowanych opcji.         Wszystkie opcje mają powszechnie używane wartości standardowe, których nie trzeba zmieniać, chyba że masz inne preferencje.
     </string>
     <string name="title_advanced_hint_remark">Opcje są podzielone na kategorie według zakładek, podzielone na sekcje, uporządkowane według wyglądu lub użycia i można je przeszukiwać.
+    </string>
+    <string name="title_advanced_hint_options">        Nie będziesz potrzebować większości opcji, ponieważ niektóre z nich są dość specyficzne.
+        Nie zostawiaj złej recenzji tylko z powodu ilości opcji lub niezrozumienia działania ich wszystkich od razu.
+        Są użytkownicy, którzy korzystają ze wszystkich opcji i być może Ty również użyjesz ich w przyszłości.
     </string>
     <string name="title_advanced_hint_setup">Konto możesz skonfigurować, dotykając przycisku kreatora na głównym ekranie konfiguracji.</string>
     <string name="title_advanced_section_main">Główne</string>
@@ -562,7 +566,7 @@
     <string name="title_advanced_indentation">Otrzymane/wysłane wiadomości z lewej/prawej strony konwersacji</string>
     <string name="title_advanced_highlight_unread">Podświetl nieprzeczytane wiadomości</string>
     <string name="title_advanced_account_color">Pokaż kolorowy pasek lub kolorową kropkę</string>
-    <string name="title_advanced_color_stripe_wide">Użyj szerokiego kolorowego paska</string>
+    <string name="title_advanced_account_color_size">Szerokość paska kolorów</string>
     <string name="title_advanced_avatars">Pokaż zdjęcia kontaktu</string>
     <string name="title_advanced_bimi">Pokazuj \"Brand Indicators for Message Identification (BIMI)\"</string>
     <string name="title_advanced_bimi_vmc">Wymagaj ważnego certyfikatu VMC</string>
@@ -684,6 +688,7 @@
     <string name="title_advanced_reset_importance">Resetuj ważność przy przenoszeniu wiadomości</string>
     <string name="title_advanced_star_snoozed">Automatycznie dodawaj gwiazdkę przy usypianiu wiadomości</string>
     <string name="title_advanced_star_unsnoozed">Automatycznie usuń gwiazdkę przy odkładaniu wiadomości</string>
+    <string name="title_advanced_important_unsnoozed">Automatycznie oznaczaj nieuśpione wiadomości jako ważne</string>
     <string name="title_advanced_auto_important">Wiadomości oznaczone gwiazdką automatycznie ustaw jako ważne</string>
     <string name="title_advanced_cancel_snooze">Anuluj drzemkę przy przenoszeniu wiadomości</string>
     <string name="title_advanced_auto_block_sender">Automatycznie blokuj nadawcę podczas zgłaszania spamu</string>
@@ -709,6 +714,7 @@
     <string name="title_advanced_notify_suppress_in_call">Opóźnij powiadomienia podczas połączenia</string>
     <string name="title_advanced_notify_suppress_in_car">Opóźnij powiadomienia, gdy Android Auto jest połączony</string>
     <string name="title_advanced_notify_summary">Pokaż tylko podsumowanie</string>
+    <string name="title_advanced_notify_subject">Pokazuj temat w powiadomieniach</string>
     <string name="title_advanced_notify_preview">Pokaż podgląd wiadomości w powiadomieniach</string>
     <string name="title_advanced_notify_preview_all">Podgląd całego tekstu</string>
     <string name="title_advanced_notify_preview_only">Pokaż powiadomienia tylko z podglądem tekstu</string>
@@ -811,6 +817,7 @@
     <string name="title_advanced_class_min_difference">Minimalna różnica klasy: %1$s %%</string>
     <string name="title_advanced_show_filtered">Pokaż ikonę filtrowania podczas stosowania reguł</string>
     <string name="title_advanced_haptic_feedback">Wibracyjne informacje zwrotne dotyczące ważnych działań</string>
+    <string name="title_advanced_haptic_feedback_swipe">Wibracja przy przesuwaniu w lewo/prawo</string>
     <string name="title_advanced_language">Język</string>
     <string name="title_advanced_language_system">Systemowy</string>
     <string name="title_advanced_integrations_hint">Poniższe usługi w chmurze nie są częścią aplikacji. Wszelkie płatności zostaną przekazane bezpośrednio do usługi w chmurze, a nie do twórcy aplikacji.</string>
@@ -1197,6 +1204,7 @@
     <string name="title_hint_operations">Usuwanie operacji może spowodować znikanie wiadomości i problemy z synchronizacją</string>
     <string name="title_op_title_headers">Pobieranie nagłówków</string>
     <string name="title_op_title_raw">Pobieranie nieprzetworzonej wiadomości</string>
+    <string name="title_op_title_add">Przesyłanie wiadomości</string>
     <string name="title_folder_name">Nazwa folderu</string>
     <string name="title_display_name">Nazwa wyświetlana</string>
     <string name="title_show_folders">Pokaż ukryte foldery</string>
@@ -1260,7 +1268,7 @@
     <string name="title_filters_active">Jeden lub więcej filtrów jest aktywnych</string>
     <string name="title_duplicate_in">Duplikat wiadomości w %1$s</string>
     <string name="title_trashed_from">Wiadomość usunięta od %1$s</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Wyślij wiadomość do %1$s</string>
+    <string name="title_sent_to">Wyślij wiadomość do %1$s</string>
     <string name="title_subject_reply">Odp: %1$s</string>
     <string name="title_subject_forward">Pd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -2399,6 +2407,11 @@
         <item>Żaden</item>
         <item>Pasek</item>
         <item>Kropka</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Wąski</item>
+        <item>Średni</item>
+        <item>Szeroki</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Adresat</item>

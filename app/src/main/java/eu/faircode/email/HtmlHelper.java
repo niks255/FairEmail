@@ -159,6 +159,7 @@ public class HtmlHelper {
     private static final int MAX_FORMAT_TEXT_SIZE = 100 * 1024; // characters
     private static final int SMALL_IMAGE_SIZE = 5; // pixels
     private static final int TRACKING_PIXEL_SURFACE = 25; // pixels
+    private static final int TRACKING_INDICATOR_SIZE = 18; // pixels
     private static final float[] HEADING_SIZES = {1.5f, 1.4f, 1.3f, 1.2f, 1.1f, 1f};
     private static final String LINE = "----------------------------------------";
     private static final String W3NS = /* http/https */ "://www.w3.org/";
@@ -583,16 +584,6 @@ public class HtmlHelper {
             safelist.addAttributes(":all", "x-computed");
 
         final Document document = new Cleaner(safelist).clean(parsed);
-
-        if (BuildConfig.DEBUG)
-            for (Element e : document.select("span:matchesOwn(^UUID: " + Helper.REGEX_UUID + ")")) {
-                String t = e.text();
-                int sp = t.indexOf(' ');
-                if (sp < 0)
-                    continue;
-                String uuid = t.substring(sp + 1);
-                e.html("UUID: <a href='" + BuildConfig.BUGSNAG_URI + uuid + "'>" + uuid + "</a>");
-            }
 
         // Remove tracking pixels
         if (disable_tracking)
@@ -1456,8 +1447,7 @@ public class HtmlHelper {
             }
 
             // Remove spacer, etc
-            if (!show_images && !(inline_images && isInline) &&
-                    TextUtils.isEmpty(img.attr("x-tracking"))) {
+            if (!show_images && !(inline_images && isInline) && TextUtils.isEmpty(tracking)) {
                 Integer width = Helper.parseInt(img.attr("width").trim());
                 Integer height = Helper.parseInt(img.attr("height").trim());
                 if (width != null && height != null) {
@@ -2441,11 +2431,14 @@ public class HtmlHelper {
 
             if (isTrackingPixel(img) || isTrackingHost(context, host, disconnect_images)) {
                 uris.add(uri);
+                String px = Integer.toString(TRACKING_INDICATOR_SIZE);
                 img.attr("src", sb.toString());
                 img.attr("alt", context.getString(R.string.title_legend_tracking_pixel));
-                img.attr("height", "24");
-                img.attr("width", "24");
-                img.attr("style", "display:block !important; width:24px !important; height:24px !important;");
+                img.attr("height", px);
+                img.attr("width", px);
+                img.attr("style", "display:block !important;" +
+                        " width:" + px + "px !important;" +
+                        " height:" + px + "px !important;");
                 img.attr("x-tracking", src);
             }
         }
@@ -4193,8 +4186,14 @@ public class HtmlHelper {
         if (!(edit instanceof Spannable))
             return;
 
+        clearComposingText((Spannable) edit);
+    }
+
+    static void clearComposingText(Spannable text) {
+        if (text == null)
+            return;
+
         // Copied from BaseInputConnection.removeComposingSpans
-        Spannable text = (Spannable) edit;
         Object[] sps = text.getSpans(0, text.length(), Object.class);
         if (sps != null) {
             for (int i = sps.length - 1; i >= 0; i--) {
@@ -4209,12 +4208,6 @@ public class HtmlHelper {
                 }
             }
         }
-    }
-
-    static void clearComposingText(Spannable text) {
-        if (text == null)
-            return;
-        BaseInputConnection.removeComposingSpans(text);
     }
 
     static Spanned fromHtml(@NonNull String html, Context context) {

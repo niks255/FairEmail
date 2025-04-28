@@ -20,6 +20,7 @@ package eu.faircode.email;
 */
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -46,15 +47,20 @@ public class ServiceTTS extends ServiceBase {
     static final String EXTRA_TEXT = "text";
     static final String EXTRA_LANGUAGE = "language";
     static final String EXTRA_UTTERANCE_ID = "utterance";
+    static final String EXTRA_MESSAGE = "message";
+    static final String EXTRA_GROUP = "group";
 
     static final String ACTION_TTS_COMPLETED = BuildConfig.APPLICATION_ID + ".TTS";
+
+    static final int PI_TTS = 1;
+    static final int PI_FLUSH = 2;
 
     @Override
     public void onCreate() {
         Log.i("Service TTS create");
         super.onCreate();
         try {
-            startForeground(NotificationHelper.NOTIFICATION_TTS, getNotification());
+            startForeground(NotificationHelper.NOTIFICATION_TTS, getNotification("tts:0"));
         } catch (Throwable ex) {
             if (Helper.isPlayStoreInstall())
                 Log.i(ex);
@@ -88,15 +94,6 @@ public class ServiceTTS extends ServiceBase {
 
         super.onStartCommand(intent, flags, startId);
 
-        try {
-            startForeground(NotificationHelper.NOTIFICATION_TTS, getNotification());
-        } catch (Throwable ex) {
-            if (Helper.isPlayStoreInstall())
-                Log.i(ex);
-            else
-                Log.e(ex);
-        }
-
         if (intent == null)
             return START_NOT_STICKY;
 
@@ -111,13 +108,13 @@ public class ServiceTTS extends ServiceBase {
         return null;
     }
 
-    private Notification getNotification() {
+    private Notification getNotification(String utteranceId) {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this, "progress")
                         .setForegroundServiceBehavior(Notification.FOREGROUND_SERVICE_DEFAULT)
-                        .setSmallIcon(R.drawable.twotone_play_arrow_24)
+                        .setSmallIcon(R.drawable.twotone_stop_24)
                         .setContentTitle(getString(R.string.title_rule_tts))
-                        .setContentIntent(getPendingIntent(this))
+                        .setContentIntent(getPendingIntent(this, utteranceId))
                         .setAutoCancel(false)
                         .setShowWhen(false)
                         .setDefaults(0) // disable sound on pre Android 8
@@ -132,12 +129,15 @@ public class ServiceTTS extends ServiceBase {
         return notification;
     }
 
-    private static PendingIntent getPendingIntent(Context context) {
-        Intent view = new Intent(context, ActivityView.class);
-        view.setAction("unified");
-        view.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        return PendingIntentCompat.getActivity(
-                context, ActivityView.PI_UNIFIED, view, PendingIntent.FLAG_UPDATE_CURRENT);
+    private static PendingIntent getPendingIntent(Context context, String utteranceId) {
+        Intent flush = new Intent(context, ServiceTTS.class)
+                .setAction("tts:" + 0)
+                .putExtra(ServiceTTS.EXTRA_FLUSH, true)
+                .putExtra(ServiceTTS.EXTRA_TEXT, "")
+                .putExtra(ServiceTTS.EXTRA_LANGUAGE, (String) null)
+                .putExtra(ServiceTTS.EXTRA_UTTERANCE_ID, utteranceId);
+        return PendingIntentCompat.getService(
+                context, PI_FLUSH, flush, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     void onTts(Intent intent) {
@@ -145,8 +145,38 @@ public class ServiceTTS extends ServiceBase {
         final String text = intent.getStringExtra(EXTRA_TEXT);
         final String language = intent.getStringExtra(EXTRA_LANGUAGE);
         final String utteranceId = intent.getStringExtra(EXTRA_UTTERANCE_ID);
+        final long group = intent.getLongExtra(EXTRA_GROUP, 0);
+        final long message = intent.getLongExtra(EXTRA_MESSAGE, -1L);
 
         final Locale locale = (language == null ? Locale.getDefault() : new Locale(language));
+
+        if (message > 0) {
+            String tag = "unseen." + group + "." + message;
+            NotificationManager nm = Helper.getSystemService(this, NotificationManager.class);
+            nm.cancel(tag, NotificationHelper.NOTIFICATION_TAGGED);
+
+            Helper.getSerialExecutor().submit(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String body = Helper.readText(EntityMessage.getFile(ServiceTTS.this, message));
+                        String text = HtmlHelper.getFullText(ServiceTTS.this, body);
+
+                        // Avoid: Not enough namespace quota ... for ...
+                        text = HtmlHelper.truncate(text, getMaxTextSize() / 3);
+
+                        intent.putExtra(EXTRA_TEXT, text);
+                        intent.removeExtra(EXTRA_GROUP);
+                        intent.removeExtra(EXTRA_MESSAGE);
+                        onTts(intent);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
+                }
+            });
+
+            return;
+        }
 
         final Runnable speak = new RunnableEx("tts") {
             @Override
@@ -178,6 +208,14 @@ public class ServiceTTS extends ServiceBase {
                                     @Override
                                     public void onStart(String utteranceId) {
                                         Log.i("TTS start=" + utteranceId);
+                                        try {
+                                            startForeground(NotificationHelper.NOTIFICATION_TTS, getNotification(utteranceId));
+                                        } catch (Throwable ex) {
+                                            if (Helper.isPlayStoreInstall())
+                                                Log.i(ex);
+                                            else
+                                                Log.e(ex);
+                                        }
                                     }
 
                                     @Override

@@ -191,7 +191,7 @@
     <string name="title_setup_intro">Налаштування облікового запису займе лише три кроки, і після цього ви зможете відправляти та отримувати листи</string>
     <string name="title_setup_simple">Нема потреби змінювати будь-які інші параметри</string>
     <string name="title_setup_issue">FairEmail створено для захисту ваших особистих даних, на його розробку було витрачено тисячі годин роботи. Якщо у вас виникнуть проблеми з додатком, перш ніж залишити поганий відгук, зв\'яжіться, будь ласка, зі мною. Буду радий допомогти!</string>
-    <string name="title_setup_analytics">FairEmail не показує рекламу і не відстежує та не аналізує вашу поведінку. Для звітування про помилки використовується Bugsnag, що вимкнено за замовчуванням.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail не показує рекламу, не відстежує та не аналізує вашу поведінку.</string>
     <string name="title_setup_quick_accounts">Додавання/зміна облікових записів</string>
     <string name="title_setup_quick_support">Деякі провайдери ускладнюють додавання рахунку. Будь ласка, не звинувачуйте у цьому Fairemail, а попросіть допомогу у Вашій службі підтримки.</string>
     <string name="title_setup_quick_hint">Введена адреса електронної пошти використовується для запиту на сервер електронної пошти та для запиту конфігураційної інформації з autoconfig.thunderbird.net</string>
@@ -374,6 +374,11 @@
     <string name="title_advanced_hint_message">        Ви переходите до більш розширених параметрів.        Всі параметри мають загальновизнані стандартні значення, які не треба змінювати, якщо ви не маєте інших уподобань.
     </string>
     <string name="title_advanced_hint_remark">       Параметри класифіковані за вкладками, розділені на секції, організовані за зовнішнім виглядом або за використанням, та доступні для пошуку.
+    </string>
+    <string name="title_advanced_hint_options">        Більшість опцій Вам не знадобляться, а оскільки деякі з них досить специфічні,
+        цілком зрозуміло, якщо функціонування не всіх опцій буде не одразу зрозумілим.
+        Будь ласка, не залишайте поганий відгук лише за кількість опцій або за те, що Ви не зрозуміли всі опції одразу.
+        Всі опції корисні для багатьох людей, але, можливо, не для вас (поки що).
     </string>
     <string name="title_advanced_hint_setup">Ви можете налаштувати обліковий запис, натиснувши на кнопку майстра на головній сторінці конфігурації.</string>
     <string name="title_advanced_section_main">Загальні</string>
@@ -563,7 +568,7 @@
     <string name="title_advanced_indentation">Відступати ліворуч чи праворуч для отриманих або надісланих повідомлень у розмовах</string>
     <string name="title_advanced_highlight_unread">Підсвічувати непрочитані повідомлення</string>
     <string name="title_advanced_account_color">Показувати кольорову смугу або кольорову крапку</string>
-    <string name="title_advanced_color_stripe_wide">Використовувати широку кольорову смугу</string>
+    <string name="title_advanced_account_color_size">Ширина кольорової смуги</string>
     <string name="title_advanced_avatars">Показувати фото контактів</string>
     <string name="title_advanced_bimi">Показувати індикатори брендів для ідентифікації повідомлень (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Вимагати чинного сертифіката VMC</string>
@@ -685,7 +690,8 @@
     <string name="title_advanced_reset_importance">Скидати важливість повідомлення при його переміщені</string>
     <string name="title_advanced_star_snoozed">Автоматично додавати відкладені повідомлення до обраних</string>
     <string name="title_advanced_star_unsnoozed">Автоматично видаляти повідомлення з обраних при скасуванні відкладення</string>
-    <string name="title_advanced_auto_important">Автоматично робити важливими повідомлення, відмічені як обрані</string>
+    <string name="title_advanced_important_unsnoozed">Автоматично відмічати повідомлення як важливі при скасуванні відкладення</string>
+    <string name="title_advanced_auto_important">Автоматично відмічати обрані повідомлення як важливі</string>
     <string name="title_advanced_cancel_snooze">Скасовувати відкладення при переміщенні повідомлень</string>
     <string name="title_advanced_auto_block_sender">Автоматично блокувати відправника при інформуванні про спам</string>
     <string name="title_advanced_auto_hide_answer">Автоматично приховувати кнопку відповіді при прокручуванні</string>
@@ -710,6 +716,7 @@
     <string name="title_advanced_notify_suppress_in_call">Відкладати сповіщення під час розмови</string>
     <string name="title_advanced_notify_suppress_in_car">Затримувати сповіщення, допоки наявне підключення до Android Auto</string>
     <string name="title_advanced_notify_summary">Показувати лише підсумкове сповіщення</string>
+    <string name="title_advanced_notify_subject">Показувати тему в сповіщеннях</string>
     <string name="title_advanced_notify_preview">Показувати попередній перегляд повідомлення у сповіщеннях</string>
     <string name="title_advanced_notify_preview_all">Попередній перегляд всього тексту</string>
     <string name="title_advanced_notify_preview_only">Показувати сповіщення тільки з попереднім переглядом тексту</string>
@@ -812,6 +819,7 @@
     <string name="title_advanced_class_min_difference">Мінімальна відмінність між класами: %1$s %%</string>
     <string name="title_advanced_show_filtered">Показувати значок фільтру коли правила застосовані</string>
     <string name="title_advanced_haptic_feedback">Вібровідгук на важливі дії</string>
+    <string name="title_advanced_haptic_feedback_swipe">Вібровідгук при проведенні пальцем вліво/вправо</string>
     <string name="title_advanced_language">Мова</string>
     <string name="title_advanced_language_system">Системи</string>
     <string name="title_advanced_integrations_hint">Хмарні сервіси, вказані внизу, не є частиною застосунку. Будь-які платежі потраплять безпосередньо до хмарного сервісу, а не до розробника застосунку.</string>
@@ -1197,6 +1205,7 @@
     <string name="title_hint_operations">Видалення операцій може призвести до зникнення повідомлень та проблем з синхронізацією</string>
     <string name="title_op_title_headers">Завантаження заголовків</string>
     <string name="title_op_title_raw">Завантаження raw-повідомлень</string>
+    <string name="title_op_title_add">Надсилання повідомлення</string>
     <string name="title_folder_name">Ім\'я теки</string>
     <string name="title_display_name">Показувати ім\'я</string>
     <string name="title_show_folders">Показувати приховані теки</string>
@@ -1261,7 +1270,7 @@
     <string name="title_filters_active">Один або кілька фільтрів активні</string>
     <string name="title_duplicate_in">Дублікат повідомлення, що знаходиться в теці «%1$s»</string>
     <string name="title_trashed_from">Видалене повідомлення від %1$s</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Повідомлення для %1$s відправлено</string>
+    <string name="title_sent_to">Повідомлення для %1$s відправлено</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -2401,6 +2410,11 @@
         <item>Нічого</item>
         <item>Смуга</item>
         <item>Крапка</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Вузька</item>
+        <item>Середня</item>
+        <item>Широка</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Одержувач</item>

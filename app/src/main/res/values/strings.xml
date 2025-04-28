@@ -211,7 +211,7 @@
     <string name="title_setup_intro">Setting up an account is just three steps and after that you can send and receive emails</string>
     <string name="title_setup_simple">There is no need to change any other options</string>
     <string name="title_setup_issue">FairEmail was developed to help you protect your privacy and represents literally thousands of hours of work. If you have any problems, please contact me first for support before leaving a bad review. I am happy to help!</string>
-    <string name="title_setup_analytics">FairEmail does not display ads and does not track or analyze your behavior. Bugsnag is used for error reporting and is disabled by default.</string>
+    <string name="title_setup_analytics">FairEmail does not display ads and does not track or analyze your behavior.</string>
     <string name="title_setup_quick_accounts">Add or change accounts</string>
     <string name="title_setup_quick_support">Some providers make it difficult to add an account. Please do not blame FairEmail for this, but ask for support instead.</string>
     <string name="title_setup_quick_hint">The entered email address is used to query the email server and autoconfig.thunderbird.net for configuration information</string>
@@ -419,6 +419,12 @@
     <string name="title_advanced_hint_remark">
         The options are categorized by tab, divided into sections, organized by appearance or use, and searchable.
     </string>
+    <string name="title_advanced_hint_options">
+        You will not need most of the options and since some options are quite specific,
+        it is understandable if the functioning of not all options is not immediately clear.
+        Please do not leave a bad review for just the number of options or for not understanding all the options right away.
+        All options are useful for more than a few people, but maybe not for you (yet).
+    </string>
     <string name="title_advanced_hint_setup">You can configure an account by tapping the wizard button on the main configuration screen.</string>
 
     <string name="title_advanced_section_main">Main</string>
@@ -623,7 +629,7 @@
     <string name="title_advanced_indentation">Left/right indent received/sent messages in conversations</string>
     <string name="title_advanced_highlight_unread">Highlight unread messages</string>
     <string name="title_advanced_account_color">Show a color stripe or color dot</string>
-    <string name="title_advanced_color_stripe_wide">Use wide color stripe</string>
+    <string name="title_advanced_account_color_size">Color stripe width</string>
     <string name="title_advanced_avatars">Show contact photos</string>
     <string name="title_advanced_bimi">Show Brand Indicators for Message Identification (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Require a valid VMC certificate</string>
@@ -751,6 +757,7 @@
     <string name="title_advanced_reset_importance">Reset importance on moving messages</string>
     <string name="title_advanced_star_snoozed">Automatically add star on snoozing messages</string>
     <string name="title_advanced_star_unsnoozed">Automatically remove star on unsnoozing messages</string>
+    <string name="title_advanced_important_unsnoozed">Automatically make unsnoozing messages important</string>
     <string name="title_advanced_auto_important">Automatically make starred messages important</string>
     <string name="title_advanced_cancel_snooze">Cancel snooze on moving messages</string>
     <string name="title_advanced_auto_block_sender">Automatically block the sender when reporting spam</string>
@@ -778,6 +785,7 @@
     <string name="title_advanced_notify_suppress_in_call">Delay notifications while on a call</string>
     <string name="title_advanced_notify_suppress_in_car">Delay notifications while Android Auto is connected</string>
     <string name="title_advanced_notify_summary">Show summary notification only</string>
+    <string name="title_advanced_notify_subject">Show subject in notifications</string>
     <string name="title_advanced_notify_preview">Show message preview in notifications</string>
     <string name="title_advanced_notify_preview_all">Preview all text</string>
     <string name="title_advanced_notify_preview_only">Show notifications with a preview text only</string>
@@ -899,6 +907,7 @@
     <string name="title_advanced_class_min_difference">Minimum class difference: %1$s %%</string>
     <string name="title_advanced_show_filtered">Show a filter icon when rules were applied</string>
     <string name="title_advanced_haptic_feedback">Haptic feedback on important actions</string>
+    <string name="title_advanced_haptic_feedback_swipe">Haptic feedback when swiping left/right</string>
     <string name="title_advanced_language">Language</string>
     <string name="title_advanced_language_system">System</string>
     <string name="title_advanced_integrations_hint">The cloud services below are not part of the app. Any payments will go directly to the cloud service and not to the app developer.</string>
@@ -1460,6 +1469,7 @@
     <string name="title_hint_operations">Deleting operations can result in disappearing messages and synchronization problems</string>
     <string name="title_op_title_headers">Downloading headers</string>
     <string name="title_op_title_raw">Downloading raw message</string>
+    <string name="title_op_title_add">Uploading message</string>
 
     <string name="title_folder_name">Folder name</string>
     <string name="title_display_name">Display name</string>
@@ -1566,7 +1576,7 @@
     <string name="title_rename">Rename</string>
     <string name="title_share">Share</string>
     <string name="title_analyze">Analyze</string>
-    <string name="title_share_link" translatable="false">Share link</string>
+    <string name="title_share_link">Share link</string>
     <string name="title_share_link_open" translatable="false">Open message</string>
     <string name="title_zip" translatable="false">ZIP</string>
     <string name="title_event">Add to calendar</string>
@@ -2956,6 +2966,12 @@
         <item>None</item>
         <item>Stripe</item>
         <item>Dot</item>
+    </string-array>
+
+    <string-array name="accountColorSizes">
+        <item>Narrow</item>
+        <item>Medium</item>
+        <item>Wide</item>
     </string-array>
 
     <string-array name="answerValues" translatable="false">

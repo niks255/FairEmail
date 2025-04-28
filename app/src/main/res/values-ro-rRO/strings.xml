@@ -176,7 +176,7 @@
     <string name="title_setup_intro">Configurarea unui cont are doar trei pași și după aceea puteți trimite și primi e-mailuri</string>
     <string name="title_setup_simple">Nu este nevoie să schimbați alte opțiuni</string>
     <string name="title_setup_issue">FairEmail a fost dezvoltat pentru a vă ajuta să vă protejați confidențialitatea și reprezintă literalmente mii de ore de muncă. Dacă aveți probleme, vă rog să mă contactați mai întâi pentru asistență înainte de a lăsa o recenzie proastă. Sunt bucuros să vă ajut!</string>
-    <string name="title_setup_analytics">FairEmail nu afișează reclame și nu urmărește sau analizează comportamentul dumneavoastră. Bugsnag este utilizat pentru raportarea erorilor și este dezactivat în mod implicit.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail nu afișează reclame și nu urmărește sau analizează comportamentul dvs.</string>
     <string name="title_setup_quick_accounts">Adăugați sau modificați conturi</string>
     <string name="title_setup_quick_support">Unii furnizori fac dificilă adăugarea unui cont. Vă rugăm să nu dați vina pe FairEmail pentru acest lucru, dar solicitați asistență în schimb.</string>
     <string name="title_setup_quick_hint">Adresa de e-mail introdusă este utilizată pentru a interoga serverul de e-mail și autoconfig.thunderbird.net pentru informații de configurare</string>
@@ -359,6 +359,11 @@
     <string name="title_advanced_hint_message">        Navigați la opțiunile mai avansate.        Toate opțiunile au utilizat în mod obișnuit valori standard, pe care nu trebuie să o schimbați decât dacă aveți o preferință diferită.
     </string>
     <string name="title_advanced_hint_remark">        Opțiunile sunt clasificate pe file, împărțite în secțiuni, organizate în funcție de aspect sau utilizare și pot fi căutate.
+    </string>
+    <string name="title_advanced_hint_options">        Nu veți avea nevoie de majoritatea opțiunilor și deoarece unele opțiuni sunt destul de specifice,
+        este de înțeles dacă funcționarea lor nu este imediat clară.
+        Vă rugăm să nu lăsați o recenzie cu notă mică doar pentru numărul de opțiuni sau pentru neînțelegerea imediată a tuturor opțiunilor.
+        Toate opțiunile sunt utile pentru mai mult de câțiva oameni, dar poate nu pentru tine (încă).
     </string>
     <string name="title_advanced_hint_setup">Puteți configura un cont apăsând pe butonul asistent din ecranul principal de configurare.</string>
     <string name="title_advanced_section_main">Principal</string>
@@ -548,7 +553,7 @@
     <string name="title_advanced_indentation">Aliniere mesaje primite/trimise în stânga/dreapta în conversații</string>
     <string name="title_advanced_highlight_unread">Evidențiază mesajele necitite</string>
     <string name="title_advanced_account_color">Arată o bandă de culoare sau un punct de culoare</string>
-    <string name="title_advanced_color_stripe_wide">Utilizați bandă largă de culoare</string>
+    <string name="title_advanced_account_color_size">Lățimea benzii de culoare</string>
     <string name="title_advanced_avatars">Arată pozele contactelor</string>
     <string name="title_advanced_bimi">Arată Brand Indicators for Message Identification (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Solicitați un certificat VMC valabil</string>
@@ -670,6 +675,7 @@
     <string name="title_advanced_reset_importance">Resetează importanța la mutarea mesajelor</string>
     <string name="title_advanced_star_snoozed">Adaugă automat stea la mesajele amânate</string>
     <string name="title_advanced_star_unsnoozed">Elimină automat steaua mesajelor neamânate</string>
+    <string name="title_advanced_important_unsnoozed">Marchează automat mesajele fără amânare ca importante</string>
     <string name="title_advanced_auto_important">Marcheză automat mesajele cu stea ca importante</string>
     <string name="title_advanced_cancel_snooze">Anulează amânarea la mutarea mesajelor</string>
     <string name="title_advanced_auto_block_sender">Blochează automat expeditorul când raportezi spam-ul</string>
@@ -695,6 +701,7 @@
     <string name="title_advanced_notify_suppress_in_call">Amânare notificări în timpul unui apel</string>
     <string name="title_advanced_notify_suppress_in_car">Întârziere notificări în timp ce Android Auto este conectat</string>
     <string name="title_advanced_notify_summary">Arată doar sumarul în notificare</string>
+    <string name="title_advanced_notify_subject">Arată subiectul în notificări</string>
     <string name="title_advanced_notify_preview">Arată previzualizare mesaj în notificare</string>
     <string name="title_advanced_notify_preview_all">Previzualizează tot textul</string>
     <string name="title_advanced_notify_preview_only">Arată notificări doar cu un text de previzualizare</string>
@@ -797,6 +804,7 @@
     <string name="title_advanced_class_min_difference">Diferenţa minimă a clasei: %1$s %%</string>
     <string name="title_advanced_show_filtered">Arată o pictogramă filtru atunci când regulile au fost aplicate</string>
     <string name="title_advanced_haptic_feedback">Feedback tactil cu privire la acțiuni importante</string>
+    <string name="title_advanced_haptic_feedback_swipe">Feedback tactil când glisați spre stânga/dreapta</string>
     <string name="title_advanced_language">Limba</string>
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_integrations_hint">Serviciile cloud de mai jos nu fac parte din aplicație. Orice plăți vor merge direct la serviciul cloud și nu la dezvoltatorul aplicației.</string>
@@ -1183,6 +1191,7 @@
     <string name="title_hint_operations">Ștergerea de operațiuni poate duce la dispariția mesajelor și la probleme de sincronizare</string>
     <string name="title_op_title_headers">Descărcarea antetelor</string>
     <string name="title_op_title_raw">Descărcarea mesajului original</string>
+    <string name="title_op_title_add">Se încarcă mesajul</string>
     <string name="title_folder_name">Nume dosar</string>
     <string name="title_display_name">Nume afișat</string>
     <string name="title_show_folders">Arată dosarele ascunse</string>
@@ -1246,6 +1255,7 @@
     <string name="title_filters_active">Unul sau mai multe filtre active</string>
     <string name="title_duplicate_in">Mesaj duplicat în %1$s</string>
     <string name="title_trashed_from">Mesaj aruncat de la %1$s</string>
+    <string name="title_sent_to">Mesaj trimis către %1$s</string>
     <string name="title_subject_reply">Răsp: %1$s</string>
     <string name="title_subject_forward">Redir: %1$s</string>
     <string name="title_subject_reply_alt">Răsp: %1$s</string>
@@ -2383,6 +2393,11 @@
         <item>Fără</item>
         <item>Benzi</item>
         <item>Punct</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Îngustă</item>
+        <item>Medie</item>
+        <item>Lată</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Destinatar</item>

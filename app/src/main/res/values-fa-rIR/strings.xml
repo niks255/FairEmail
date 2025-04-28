@@ -146,7 +146,7 @@
     <string name="title_setup_intro">تنظیم کردن حساب تنها سه مرحله دارد و پس از آن شما می‌توانید ایمیل بفرستید یا دریافت کنید</string>
     <string name="title_setup_simple">نیازی به تغییر هیچ یک از تنظیمات نیست</string>
     <string name="title_setup_issue">FairEmail به منظور حفاظت از حریم شخصی شما توسعه پیدا کرده و حاصل هزاران ساعت کار و تلاش است. در صورت مواجهه با هرگونه مشکلی، لطفا پیش از نوشتن نظرات منفی، با من تماس بگیرید. خوشحال می‌شوم که کمکتان کنم!</string>
-    <string name="title_setup_analytics">FairEmail تبلیغات نشان نمی‌دهد و رفتار شما را دنبال یا بررسی نمی‌کند. برای گزارش اشکالات از Bugsnag استفاده می‌شود که به طور پیش‌فرض غیرفعال است.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail تبلیغات نشان نمی‌دهد و رفتار شما را رهگیری و بررسی نمی‌کند.</string>
     <string name="title_setup_quick_accounts">افزودن یا تغییر حساب‌ها</string>
     <string name="title_setup_quick_support">برخی از ارائه‌دهندگان ایمیل، افزودن حساب را دشوار می‌کنند. لطفا تقصیر را گردن FairEmail نیاندازید و به جای آن خواستار پشتیبانی شوید.</string>
     <string name="title_setup_quick_hint">آدرس ایمیل وارد شده برای پرس و جوی سرور و autoconfig.thunderbird.net استفاده می‌شود تا اطلاعات پیکربندی شوند</string>
@@ -309,6 +309,11 @@
     <string name="title_advanced_hint_title">گزینه‌های پیشرفته بیشتر</string>
     <string name="title_advanced_hint_message">        You are navigating to the more advanced options.        All options have commonly used standard values, which you do not need to change unless you have a different preference.
     </string>
+    <string name="title_advanced_hint_options">        شما به بیشتر گزینه‌ها نیاز نخواهید داشت و از آنجایی که برخی از گزینه‌ها کاملا خاص هستند،
+        اگر عملکرد همه گزینه‌ها بلافاصله مشخص نباشد قابل درک است.
+        لطفاً فقط به دلیل تعداد گزینه‌ها یا برای اینکه همه گزینه‌ها را فورا متوجه نشده‌اید، نظر بدی نگذارید.
+        همه گزینه‌ها برای بیش از چند نفر مفید هستند، اما شاید برای شما (هنوز) مفید نباشند.
+    </string>
     <string name="title_advanced_section_main">اصلی</string>
     <string name="title_advanced_section_synchronize">دریافت</string>
     <string name="title_advanced_section_send">ارسال</string>
@@ -463,7 +468,7 @@
     <string name="title_advanced_indentation">تورفتگی چپ/راست پیام‌های دریافت/فرستاده شده در مکالمات</string>
     <string name="title_advanced_highlight_unread">برجسته‌سازی پیام‌های خوانده نشده</string>
     <string name="title_advanced_account_color">نمایش یک نوار رنگی یا نقطه رنگی</string>
-    <string name="title_advanced_color_stripe_wide">استفاده از نوار رنگی پهن</string>
+    <string name="title_advanced_account_color_size">عرض نوار رنگی</string>
     <string name="title_advanced_avatars">نمایش تصویر مخاطبین</string>
     <string name="title_advanced_bimi">نمایش نشانگرهای برند برای شناسایی پیام (BIMI)</string>
     <string name="title_advanced_bimi_vmc">نیازمند گواهینامه VMC معتبر</string>
@@ -557,6 +562,7 @@
     <string name="title_advanced_autoread">به طور خودکار پیام‌های انتقال یافته به عنوان خوانده شده علامت گذاری شود</string>
     <string name="title_advanced_autounstar">هنگام انتقال پیام‌ها ستاره‌ها را خودکار از پیام‌ها حذف کن</string>
     <string name="title_advanced_star_unsnoozed">حذف خودکار ستاره پیام‌های از تعلیق درآمده</string>
+    <string name="title_advanced_important_unsnoozed">پیام‌های به تعویق نیوفتاده را به‌ طور خودکار مهم در نظر بگیر</string>
     <string name="title_advanced_move_thread_all">هنگام جابجا کردن مکالمات انتخابی، کل پیام‌ها منتقل شود</string>
     <string name="title_advanced_move_thread_sent">به هنگام انتقال یک مکالمه، پیام‌های ارسالی را هم منتقل کن</string>
     <string name="title_advanced_swipe_trash_all">حذف همه پیام‌ها هنگام کشیدن مکالمه به سطل زباله</string>
@@ -569,6 +575,7 @@
     <string name="title_advanced_notify_known">اعلان‌ها را تنها برای مخاطبین نمایش بده</string>
     <string name="title_advanced_notify_suppress_in_call">در صورت مکالمه تلفنی، اعلان‌های اطلاع‌رسانی را به عقب بیانداز</string>
     <string name="title_advanced_notify_summary">تنها چکیده اعلان را نمایش بده</string>
+    <string name="title_advanced_notify_subject">نمایش موضوع در اعلان‌ها</string>
     <string name="title_advanced_notify_preview">پیش‌نمایش پیام را در اعلان‌ها نمایش بده</string>
     <string name="title_advanced_notify_preview_all">پیش‌نمایش تمام متن</string>
     <string name="title_advanced_notify_transliterate">ترجمه به الفبای لاتین</string>
@@ -626,6 +633,7 @@
     <string name="title_advanced_fts">ساخت شاخص جستجو</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d پیام ایندکس شد (%3$s)</string>
     <string name="title_advanced_show_filtered">آیکون فیلتر را زمانی که قاعده‌ای اعمال می‌شود نشان بده</string>
+    <string name="title_advanced_haptic_feedback_swipe">بازخورد لمسی هنگام کشیدن انگشت به چپ/راست</string>
     <string name="title_advanced_language">زبان</string>
     <string name="title_advanced_language_system">سیستم</string>
     <string name="title_advanced_integrations_hint">سرویس‌های ابری زیر بخشی از اپلیکیشن نیستند. هرگونه پرداختی مستقیما به ارائه‌دهنده سرویس ابری و نه توسعه‌دهنده اپلیکیشن واریز خواهد شد.</string>
@@ -815,6 +823,7 @@
     <string name="title_delete_contacts_remark">تمام مخاطبین نشان داده شده و نشده حذف خواهند شد، حتی اگر جستجو شوند!</string>
     <string name="title_no_operations">عملیاتی در انتظار وجود ندارد </string>
     <string name="title_hint_operations">عملیات‌های حذف می‌تواند موجب ناپدید شدن پیام‌ها و مشکلات همگام‌سازی شود</string>
+    <string name="title_op_title_add">در حال بارگذاری پیام</string>
     <string name="title_folder_name">نام پوشه</string>
     <string name="title_display_name">نامی که نمایش داده می شود</string>
     <string name="title_show_folders">نمایش پوشه‌های پنهان</string>
@@ -865,7 +874,7 @@
     <string name="title_no_messages">پیامی موجود نیست</string>
     <string name="title_filters_active">یک یا چند فیلتر فعالند</string>
     <string name="title_duplicate_in">پیام را در %1$s تکثیر کن</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">پیام فرستاده شد به %1$s</string>
+    <string name="title_sent_to">پیام فرستاده شد به %1$s</string>
     <string name="title_subject_reply">پاسخ: %1$s</string>
     <string name="title_subject_forward">هدایت: %1$s</string>
     <string name="title_subject_reply_alt">پاسخ: %1$s</string>
@@ -1261,6 +1270,7 @@
     <string name="title_rule_folder">پوشه</string>
     <string name="title_rule_identity">هویت</string>
     <string name="title_rule_template">الگوی پاسخ</string>
+    <string name="title_rule_forward_to">فوروارد به</string>
     <string name="title_rule_resend">ارسال مجدد</string>
     <string name="title_rule_attached">الصاق فایل پیام خام</string>
     <string name="title_rule_cc">پاسخ به نشانی گیرنده رونوشت</string>
@@ -1711,6 +1721,11 @@
         <item>هیچکدام</item>
         <item>نوار</item>
         <item>نقطه</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>باريک</item>
+        <item>متوسط</item>
+        <item>پهن</item>
     </string-array>
     <string-array name="contactTypes">
         <item>گیرنده</item>

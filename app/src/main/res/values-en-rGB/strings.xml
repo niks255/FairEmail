@@ -8,7 +8,7 @@
     <string name="title_list_accounts">Accounts</string>
     <string name="title_list_identities">Identities</string>
     <string name="title_setup_quick">Quick setup</string>
-    <string name="title_setup_analytics">FairEmail does not display ads and does not track or analyse your behaviour. Bugsnag is used for error reporting and is disabled by default.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail does not display ads and does not track or analyse your behaviour.</string>
     <string name="title_setup_account_identity_hint">You can configure the name, colour and swipe actions in the account settings, and configure a signature in the identity settings</string>
     <string name="title_setup_gmail_support">Authorising Google accounts will work in the Play Store and GitHub version only because Android checks the digital app signature</string>
     <string name="title_setup_outlook_modern">Due to changes in Microsoft\'s security policies, from 16 September 2024, only the Outlook/Hotmail/Live wizard will work.</string>
@@ -28,6 +28,7 @@
     <string name="title_setup_theme_reverse">Swap colours</string>
     <string name="title_setup_theme_you_hint">The Material You colours can be configured in the Android Wallpaper &amp; style settings</string>
     <string name="title_setup_theme_more_colors">I want more colours</string>
+    <string name="title_setup_reset_images">Reset show pictures</string>
     <string name="title_check_outlook_oauth">Your Outlook accounts will continue to work after 16 September 2024</string>
     <string name="title_check_outlook_password">Some of your Outlook/Hotmail/Live accounts will stop working after 16 September 2024</string>
     <string name="title_advanced_hint_remark">        The options are categorised by tab, divided into sections, organised by appearance or use, and searchable.
@@ -54,7 +55,7 @@
     <string name="title_advanced_cards_shadow_highlight">Use highlight colour instead of accent colour</string>
     <string name="title_advanced_tabular_unread_bg">Use a grey background colour for unread messages when using table style</string>
     <string name="title_advanced_account_color">Show a colour stripe or colour dot</string>
-    <string name="title_advanced_color_stripe_wide">Use wide colour stripe</string>
+    <string name="title_advanced_account_color_size">Colour stripe width</string>
     <string name="title_advanced_color_threshold">Threshold letter colour: %1$s %%</string>
     <string name="title_advanced_highlight_color">Highlight colour</string>
     <string name="title_advanced_flags_background">Show coloured background instead of coloured stars</string>
@@ -66,6 +67,7 @@
     <string name="title_advanced_pull_all">Synchronise all folders</string>
     <string name="title_advanced_swipe_trash_all">When swiping a conversation to the bin, delete all messages</string>
     <string name="title_advanced_notify_action_trash">Delete</string>
+    <string name="title_advanced_notify_action_delete">Remove</string>
     <string name="title_advanced_notifications_background">Use background service to synchronise messages</string>
     <string name="title_advanced_tracking">Attempt to recognise and disable tracking images</string>
     <string name="title_advanced_disconnect_images">Use lists to recognise tracking images</string>

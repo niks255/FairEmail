@@ -646,6 +646,10 @@ class NotificationHelper {
                                     " sort=" + notification.getSortKey());
                     try {
                         if (NotificationHelper.areNotificationsEnabled(nm)) {
+                            // https://github.com/leolin310148/ShortcutBadger/wiki/Xiaomi-Device-Support
+                            if (id == 0 && badge && Helper.isXiaomi())
+                                ShortcutBadgerAlt.applyNotification(context, notification, current);
+
                             nm.notify(tag, NotificationHelper.NOTIFICATION_TAGGED, notification);
                             if (update.contains(id))
                                 try {
@@ -656,9 +660,6 @@ class NotificationHelper {
                                 }
                         }
 
-                        // https://github.com/leolin310148/ShortcutBadger/wiki/Xiaomi-Device-Support
-                        if (id == 0 && badge && Helper.isXiaomi())
-                            ShortcutBadgerAlt.applyNotification(context, notification, current);
                     } catch (Throwable ex) {
                         Log.w(ex);
                     }
@@ -706,6 +707,7 @@ class NotificationHelper {
         boolean flags = prefs.getBoolean("flags", true);
         boolean notify_messaging = prefs.getBoolean("notify_messaging", false);
         boolean notify_subtext = prefs.getBoolean("notify_subtext", true);
+        boolean notify_subject = prefs.getBoolean("notify_subject", true);
         boolean notify_preview = prefs.getBoolean("notify_preview", true);
         boolean notify_preview_all = prefs.getBoolean("notify_preview_all", false);
         boolean wearable_preview = prefs.getBoolean("wearable_preview", false);
@@ -719,6 +721,7 @@ class NotificationHelper {
         boolean notify_seen = (prefs.getBoolean("notify_seen", true) || !pro);
         boolean notify_hide = (prefs.getBoolean("notify_hide", false) && pro);
         boolean notify_snooze = (prefs.getBoolean("notify_snooze", false) && pro);
+        boolean notify_tts = (prefs.getBoolean("notify_tts", false) && pro);
         boolean notify_remove = prefs.getBoolean("notify_remove", true);
         boolean light = prefs.getBoolean("light", false);
         String sound = prefs.getString("sound", null);
@@ -871,7 +874,7 @@ class NotificationHelper {
                         Address[] afrom = messageFrom.get(message.id);
                         String from = MessageHelper.formatAddresses(afrom, email_format, false);
                         sb.append("<strong>").append(Html.escapeHtml(from)).append("</strong>");
-                        if (!TextUtils.isEmpty(message.subject))
+                        if (!TextUtils.isEmpty(message.subject) && notify_subject)
                             sb.append(": ").append(Html.escapeHtml(message.subject));
                         sb.append(" ").append(Html.escapeHtml(DTF.format(message.received)));
                         sb.append("<br>");
@@ -995,7 +998,7 @@ class NotificationHelper {
 
                 NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(me.build());
 
-                if (!TextUtils.isEmpty(message.subject))
+                if (!TextUtils.isEmpty(message.subject) && notify_subject)
                     messagingStyle.setConversationTitle(message.subject);
 
                 messagingStyle.addMessage(
@@ -1041,7 +1044,7 @@ class NotificationHelper {
 
                 // Wearables
                 StringBuilder sb = new StringBuilder();
-                if (!TextUtils.isEmpty(message.subject))
+                if (!TextUtils.isEmpty(message.subject) && notify_subject)
                     sb.append(TextHelper.normalizeNotification(context, message.subject));
                 if (wearable_preview && !TextUtils.isEmpty(preview)) {
                     if (sb.length() > 0)
@@ -1060,7 +1063,7 @@ class NotificationHelper {
                             if (keyword.startsWith("!"))
                                 sbm.append(Html.escapeHtml(keyword)).append(": ");
 
-                    if (!TextUtils.isEmpty(message.subject))
+                    if (!TextUtils.isEmpty(message.subject) && notify_subject)
                         sbm.append("<em>").append(Html.escapeHtml(message.subject)).append("</em>").append("<br>");
 
                     if (!TextUtils.isEmpty(preview))
@@ -1069,14 +1072,14 @@ class NotificationHelper {
                     if (sbm.length() > 0) {
                         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle()
                                 .bigText(HtmlHelper.fromHtml(sbm.toString(), context));
-                        if (!TextUtils.isEmpty(message.subject))
+                        if (!TextUtils.isEmpty(message.subject) && notify_subject)
                             bigText.setSummaryText(message.subject);
 
                         mbuilder.setStyle(bigText);
                     }
                 }
             } else {
-                if (!TextUtils.isEmpty(message.subject))
+                if (!TextUtils.isEmpty(message.subject) && notify_subject)
                     mbuilder.setContentText(TextHelper.normalizeNotification(context, message.subject));
             }
 
@@ -1331,6 +1334,28 @@ class NotificationHelper {
                 mbuilder.addAction(actionSnooze.build());
 
                 wactions.add(actionSnooze.build());
+            }
+
+            if (message.content && notify_tts) {
+                Intent tts = new Intent(context, ServiceTTS.class)
+                        .setAction("tts:" + message.id)
+                        .putExtra(ServiceTTS.EXTRA_FLUSH, true)
+                        .putExtra(ServiceTTS.EXTRA_TEXT, "")
+                        .putExtra(ServiceTTS.EXTRA_LANGUAGE, message.language)
+                        .putExtra(ServiceTTS.EXTRA_UTTERANCE_ID, "tts:" + message.id)
+                        .putExtra(ServiceTTS.EXTRA_GROUP, group)
+                        .putExtra(ServiceTTS.EXTRA_MESSAGE, message.id);
+                PendingIntent piTts = PendingIntentCompat.getService(
+                        context, ServiceTTS.PI_TTS, tts, PendingIntent.FLAG_UPDATE_CURRENT);
+                NotificationCompat.Action.Builder actionTts = new NotificationCompat.Action.Builder(
+                        R.drawable.twotone_play_arrow_24,
+                        context.getString(R.string.title_rule_tts),
+                        piTts)
+                        .setShowsUserInterface(false)
+                        .setAllowGeneratedReplies(false);
+                mbuilder.addAction(actionTts.build());
+
+                wactions.add(actionTts.build());
             }
 
             // https://developer.android.com/training/wearables/notifications

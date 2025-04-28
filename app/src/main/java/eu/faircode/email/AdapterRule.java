@@ -78,6 +78,7 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
     private NumberFormat NF = NumberFormat.getNumberInstance();
 
     private int protocol = -1;
+    private String type = null;
     private String sort;
     private String search = null;
     private List<TupleRuleEx> all = new ArrayList<>();
@@ -264,8 +265,10 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                     if (TextUtils.isEmpty(method))
                         method = "GET";
                     setAction(getAction(type), method + " " + url);
-                } else
-                    setAction(getAction(type), null);
+                } else {
+                    boolean seen = jaction.optBoolean("seen");
+                    setAction(getAction(type), seen ? context.getString(R.string.title_rule_seen) : null, null);
+                }
 
                 if (type == EntityRule.TYPE_MOVE || type == EntityRule.TYPE_COPY ||
                         (type == EntityRule.TYPE_ANSWER && TextUtils.isEmpty(to))) {
@@ -302,7 +305,9 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                             if (id != AdapterRule.this.getItemId(pos))
                                 return;
 
-                            setAction(getAction(args.getInt("type")), value);
+                            boolean seen = jaction.optBoolean("seen");
+                            setAction(getAction(args.getInt("type")),
+                                    seen ? context.getString(R.string.title_rule_seen) : null, value);
                         }
 
                         @Override
@@ -332,8 +337,9 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                     new Intent(ActivityView.ACTION_EDIT_RULE)
                             .putExtra("id", rule.id)
                             .putExtra("account", rule.account)
+                            .putExtra("protocol", protocol)
                             .putExtra("folder", rule.folder)
-                            .putExtra("protocol", protocol));
+                            .putExtra("type", type));
         }
 
         @Override
@@ -463,7 +469,7 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                                         continue;
 
                                     if (rule.matches(context, message, null, null))
-                                        if (rule.execute(context, message, null))
+                                        if (rule.execute(context, message, false, null))
                                             applied++;
 
                                     db.setTransactionSuccessful();
@@ -565,16 +571,24 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
         }
 
         private void setAction(int resid, String value) {
-            if (TextUtils.isEmpty(value))
+            setAction(resid, null, value);
+        }
+
+        private void setAction(int resid, String extra, String value) {
+            if (TextUtils.isEmpty(extra) && TextUtils.isEmpty(value))
                 tvAction.setText(resid);
             else {
                 SpannableStringBuilder ssb = new SpannableStringBuilderEx();
                 ssb.append(context.getString(resid));
-                ssb.append(" \"");
-                int start = ssb.length();
-                ssb.append(value);
-                ssb.setSpan(new StyleSpan(Typeface.ITALIC), start, ssb.length(), 0);
-                ssb.append("\"");
+                if (extra != null)
+                    ssb.append('+').append(extra);
+                if (value != null) {
+                    ssb.append(" \"");
+                    int start = ssb.length();
+                    ssb.append(value);
+                    ssb.setSpan(new StyleSpan(Typeface.ITALIC), start, ssb.length(), 0);
+                    ssb.append("\"");
+                }
                 tvAction.setText(ssb);
             }
         }
@@ -666,10 +680,11 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
         });
     }
 
-    public void set(int protocol, String sort, @NonNull List<TupleRuleEx> rules) {
+    public void set(int protocol, String type, String sort, @NonNull List<TupleRuleEx> rules) {
         this.protocol = protocol;
+        this.type = type;
         this.sort = sort;
-        Log.i("Set protocol=" + protocol + " rules=" + rules.size() + " sort=" + sort + " search=" + search);
+        Log.i("Set protocol=" + protocol + " type=" + type + " rules=" + rules.size() + " sort=" + sort + " search=" + search);
 
         final Collator collator = Collator.getInstance(Locale.getDefault());
         collator.setStrength(Collator.SECONDARY); // Case insensitive, process accents etc
@@ -751,14 +766,14 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
 
     public void setSort(String sort) {
         this.sort = sort;
-        set(protocol, sort, all);
+        set(protocol, type, sort, all);
         notifyDataSetChanged();
     }
 
     public void search(String query) {
         Log.i("Rules query=" + query);
         search = query;
-        set(protocol, sort, all);
+        set(protocol, type, sort, all);
     }
 
     private static class DiffCallback extends DiffUtil.Callback {

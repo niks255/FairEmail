@@ -190,7 +190,7 @@
     <string name="title_setup_intro">Настройте учётную запись всего за три шага и сможете отправлять и получать письма</string>
     <string name="title_setup_simple">Нет необходимости менять другие параметры</string>
     <string name="title_setup_issue">FairEmail был разработан для того, чтобы помочь вам защитить вашу конфиденциальность и представляет буквально тысячи часов работы. Если у вас возникли проблемы, пожалуйста, свяжитесь со мной для поддержки перед тем, как оставлять плохие отзывы. Я рад помочь!</string>
-    <string name="title_setup_analytics">FairEmail не показывает рекламу, не отслеживает и не анализирует ваше поведение. Bugsnag используется для сообщений об ошибках и по умолчанию отключён.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail не показывает рекламу, не отслеживает и не анализирует ваше поведение.</string>
     <string name="title_setup_quick_accounts">Добавить или изменить учётные записи</string>
     <string name="title_setup_quick_support">Некоторые провайдеры затрудняют добавление учётной записи. Пожалуйста, не обвиняйте в этом FairEmail, а попросите поддержку.</string>
     <string name="title_setup_quick_hint">Введённый адрес электронной почты используется для запроса почтового сервера и autoconfig.thunderbird.net для получения сведений о конфигурации</string>
@@ -373,6 +373,11 @@
     <string name="title_advanced_hint_message">        Вы переходите к настройкам для опытных пользователей.
         Все параметры обычно имеют стандартные значения, которые можно изменить, если у вас есть другие предпочтения.    </string>
     <string name="title_advanced_hint_remark">        Параметры сгруппированы по вкладкам, поделены на разделы, организованы по внешнему виду или использованию и доступны через поиск.
+    </string>
+    <string name="title_advanced_hint_options">        Большинство функций вам не понадобятся, а некоторые из них довольно специфичны,
+        поэтому возможно, что функционирование всех вариантов будет понятно не сразу.
+        Пожалуйста, не оставляйте плохой отзыв только из-за обилия имеющихся функций или из-за того, что вы не сразу поняли все варианты их действия.
+        Все имеющиеся функции полезны многим людям, но, возможно, (пока) не вам.
     </string>
     <string name="title_advanced_hint_setup">Можно настроить учётную запись, нажав кнопку мастера на главном экране настроек.</string>
     <string name="title_advanced_section_main">Основные</string>
@@ -562,7 +567,7 @@
     <string name="title_advanced_indentation">Левый/правый отступ для полученных/отправленных сообщений в диалогах</string>
     <string name="title_advanced_highlight_unread">Выделять непрочитанные сообщения</string>
     <string name="title_advanced_account_color">Показывать цветные полоски или точки</string>
-    <string name="title_advanced_color_stripe_wide">Использовать широкий диапазон цветов</string>
+    <string name="title_advanced_account_color_size">Ширина цветной полосы</string>
     <string name="title_advanced_avatars">Показывать фотографии контакта</string>
     <string name="title_advanced_bimi">Показывать индикаторы бренда для идентификации сообщений (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Требовать действующий сертификат VMC</string>
@@ -684,6 +689,7 @@
     <string name="title_advanced_reset_importance">Сбрасывать важность при перемещении сообщений</string>
     <string name="title_advanced_star_snoozed">Автоматически добавлять в избранное при откладывании сообщений</string>
     <string name="title_advanced_star_unsnoozed">Автоматически удалять из избранного при отмене откладывания сообщений</string>
+    <string name="title_advanced_important_unsnoozed">Автоматически помечать сообщения важными при отмене откладывания</string>
     <string name="title_advanced_auto_important">Автоматически помечать избранные сообщения важными</string>
     <string name="title_advanced_cancel_snooze">Отменять откладывание при перемещении сообщений</string>
     <string name="title_advanced_auto_block_sender">Автоматически блокировать отправителя при сообщении о спаме</string>
@@ -709,6 +715,7 @@
     <string name="title_advanced_notify_suppress_in_call">Откладывать уведомления во время вызова</string>
     <string name="title_advanced_notify_suppress_in_car">Откладывать уведомления при подключении Android Auto</string>
     <string name="title_advanced_notify_summary">Показывать только сводное уведомление</string>
+    <string name="title_advanced_notify_subject">Показывать тему в уведомлениях</string>
     <string name="title_advanced_notify_preview">Предпросмотр сообщений в уведомлениях</string>
     <string name="title_advanced_notify_preview_all">Предпросмотр всего текста</string>
     <string name="title_advanced_notify_preview_only">Показывать уведомления только с предпросмотром текста</string>
@@ -812,6 +819,7 @@
     <string name="title_advanced_class_min_difference">Минимальная разница между классами: %1$s %%</string>
     <string name="title_advanced_show_filtered">Показывать значок фильтра при применении правил</string>
     <string name="title_advanced_haptic_feedback">Вибрация при выполнении важных действий</string>
+    <string name="title_advanced_haptic_feedback_swipe">Вибрация при жестах влево/вправо</string>
     <string name="title_advanced_language">Язык</string>
     <string name="title_advanced_language_system">Системный</string>
     <string name="title_advanced_integrations_hint">Представленные ниже облачные сервисы не являются частью приложения. Все платежи будут поступать непосредственно в облачный сервис, а не разработчику приложения.</string>
@@ -1198,6 +1206,7 @@
     <string name="title_hint_operations">Удаление операций может привести к исчезновению сообщений и проблемам синхронизации.</string>
     <string name="title_op_title_headers">Загрузка заголовков</string>
     <string name="title_op_title_raw">Загрузка оригинала сообщения</string>
+    <string name="title_op_title_add">Отправка сообщения</string>
     <string name="title_folder_name">Название папки</string>
     <string name="title_display_name">Отображаемое имя</string>
     <string name="title_show_folders">Показывать скрытые папки</string>
@@ -1262,7 +1271,7 @@
     <string name="title_filters_active">Один или несколько фильтров активны</string>
     <string name="title_duplicate_in">Дубликат сообщения в %1$s</string>
     <string name="title_trashed_from">Мусорное сообщение от %1$s</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Сообщение для %1$s отправлено</string>
+    <string name="title_sent_to">Сообщение для %1$s отправлено</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -2403,6 +2412,11 @@
         <item>Ничего</item>
         <item>Полоска</item>
         <item>Точка</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Узкая</item>
+        <item>Средняя</item>
+        <item>Широкая</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Получатель</item>

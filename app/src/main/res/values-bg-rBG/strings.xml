@@ -162,7 +162,6 @@
     <string name="title_setup_intro">Настройването на акаунта е просто три крачки и след това може да изпращате и получавате е-писма</string>
     <string name="title_setup_simple">Няма нужда да променяте никакви други възможности</string>
     <string name="title_setup_issue">FairEmail е развито, за да ви помогне да защитите поверителността си и представлява буквално хиляди часове работа. Ако имате проблеми, то се свържете първо с мен за поддръжка преди да оставите лош отзив. Радвам се да помогна!</string>
-    <string name="title_setup_analytics">FairEmail не показва реклами и не проследява или анализира поведението ви. Bugsnag се употребява за докладване на грешки и по подразбиране е изключено.</string>
     <string name="title_setup_quick_accounts">Добавяне или промяна на акаунтите</string>
     <string name="title_setup_quick_support">Някои доставчици затрудняват добавянето на акаунт. Не винете FairEmail за това, а вместо това искайте поддръжка.</string>
     <string name="title_setup_quick_hint">Въведеният имейл адрес се употребява към опашката на сървъра за имейл и autoconfig.thunderbird.net за конфигуриране на сведенията</string>
@@ -378,6 +377,7 @@
     <string name="title_advanced_kept_removed">Проверете дали старите съобщения са премахнати от сървъра</string>
     <string name="title_advanced_gmail_thread">Стил на Gmail за групиране на съобщенията за акаунти в Gmail</string>
     <string name="title_advanced_subject_threading">Групови съобщения от подателя и тема</string>
+    <string name="title_advanced_outlook_categories">Синхронизиране на категориите на Outlook</string>
     <string name="title_advanced_sync_folders">Синхронизиране на списъка с папки</string>
     <string name="title_advanced_sync_folders_poll">Активно синхро. на списъка с папки</string>
     <string name="title_advanced_sync_shared_folders">Синхронизиране на споделени списъци с папки</string>
@@ -393,6 +393,7 @@
     <string name="title_advanced_tune_keep_alive">Автоматично настройване на онлайн интервала</string>
     <string name="title_advanced_blocklist_warning">Списъците с блокирани не са съвършени и може да блокират повече отколкото просто спам!</string>
     <string name="title_advanced_keyboard">Показване на клавиатурата по подразбиране</string>
+    <string name="title_advanced_keyboard_margin">Добавяне на отстъп над клавиатурата</string>
     <string name="title_advanced_keyboard_no_fullscreen">Избягване на клавиатура при цял екран</string>
     <string name="title_advanced_suggest_names">Употреба на имена и адреси на е-поща</string>
     <string name="title_advanced_suggest_local">Предложи локални контакти</string>
@@ -508,6 +509,7 @@
     <string name="title_advanced_nav_hide_message">Може да включите опцията пак в настройките за показване</string>
     <string name="title_advanced_nav_last_sync">Показване на последното синхро в менюто навигация</string>
     <string name="title_advanced_nav_message_count">Показване на броя локално съхранени съобщения в менюто навигация</string>
+    <string name="title_advanced_nav_unseen">Показване на броя непрочетени съобщения в менюто за навигиране</string>
     <string name="title_advanced_nav_unseen_drafts">Показване на броя на непрочетените чернови в менюто за навигиране</string>
     <string name="title_advanced_nav_pinned_count">Показване на броя непрочетени съобщения в менюто закачени на навигиране</string>
     <string name="title_advanced_show_unexposed">Показване на звезда за акаунти/папки с новополучени непрочетени съобщения</string>
@@ -531,7 +533,7 @@
     <string name="title_advanced_indentation">Ляв/десен отстъп на получени/изпратени съобщения в разговори</string>
     <string name="title_advanced_highlight_unread">Маркирай непрочетените съобщения</string>
     <string name="title_advanced_account_color">Показване на цветна ивица или точка</string>
-    <string name="title_advanced_color_stripe_wide">Употреба на широка гама цветове</string>
+    <string name="title_advanced_account_color_size">Ширина на цветната ивица</string>
     <string name="title_advanced_avatars">Показване на снимки на контакт</string>
     <string name="title_advanced_bimi">Показване на „Brand Indicators for Message Identification“ (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Изисква се действащо удостоверение на VMC</string>
@@ -653,6 +655,7 @@
     <string name="title_advanced_reset_importance">Нулирай важността при преместване на съобщения</string>
     <string name="title_advanced_star_snoozed">Автоматично добавяне на звезда при отхвърлени съобщения</string>
     <string name="title_advanced_star_unsnoozed">Автоматично премахване на звезда при неотложени съобщения</string>
+    <string name="title_advanced_important_unsnoozed">Автоматично прави неотложените съобщенията важни</string>
     <string name="title_advanced_auto_important">Автоматично прави съобщенията със звезда важни</string>
     <string name="title_advanced_cancel_snooze">Отмяна на отлагането при премествани съобщения</string>
     <string name="title_advanced_auto_block_sender">Автоматично блокиране на подателя, докладвайки спам</string>
@@ -678,6 +681,7 @@
     <string name="title_advanced_notify_suppress_in_call">Отлагане на известия по време на обаждане</string>
     <string name="title_advanced_notify_suppress_in_car">Отлагане на известия, докато Android Auto има свързване</string>
     <string name="title_advanced_notify_summary">Показване на обобщено известие</string>
+    <string name="title_advanced_notify_subject">Показване на тема в известията</string>
     <string name="title_advanced_notify_preview">Визуализация на съобщението в известията</string>
     <string name="title_advanced_notify_preview_all">Визуализирай целия текст</string>
     <string name="title_advanced_notify_preview_only">Показване на известия само с онагледен текст</string>
@@ -707,6 +711,7 @@
     <string name="title_advanced_notify_screen_on">Включете за кратко екрана за известия на ново съобщение</string>
     <string name="title_advanced_notifications_background">Използвайте фонова услуга за синхронизиране на съобщения</string>
     <string name="title_advanced_notifications_background_hint">Услугата за фон може да бъде спряна от Android по всяко време, но не изисква известие за лентата на състоянието</string>
+    <string name="title_advanced_rate_limit">Ограничаване звуците за известие на нови съобщения до веднъж на:</string>
     <string name="title_advanced_confirm_links">Потвърдете отварянето на връзката</string>
     <string name="title_advanced_confirm_files">Потвърждаване преглеждане на файловете</string>
     <string name="title_advanced_sanitize_links">Премахване на параметрите за проследяване по подразбиране</string>
@@ -780,6 +785,7 @@
     <string name="title_advanced_class_min_difference">Минимум разлика на класа: %1$s %%</string>
     <string name="title_advanced_show_filtered">Иконата на филтъра на показ при приложени правила</string>
     <string name="title_advanced_haptic_feedback">Тактилна обратна връзка при важни действия</string>
+    <string name="title_advanced_haptic_feedback_swipe">Вибриране, прелиствайки наляво/надясно</string>
     <string name="title_advanced_language">Език</string>
     <string name="title_advanced_language_system">Система</string>
     <string name="title_advanced_integrations_hint">Облачните услуги долу не са част от приложението. Всякакви плащания ще отидат направо в облачната услуга, а не при разработчика на приложението.</string>
@@ -842,6 +848,7 @@
     <string name="title_advanced_sync_kept_hint">Това ще прехвърли допълнителни данни и ще консумира допълнително батерията, особено ако на устройството се съхраняват много съобщения</string>
     <string name="title_advanced_gmail_thread_hint">Това се прилага само за новополучените съобщения и може да разбие съществуващите групи</string>
     <string name="title_advanced_subject_threading_hint">Само съобщенията получени през последните %1$d часа</string>
+    <string name="title_advanced_outlook_categories_hint">Категориите на Outlook може само да се извличат и не може автоматично да се опресняват заради ограниченията на IMAP сървъра на Outlook</string>
     <string name="title_advanced_sync_folders_hint">Деактивирането на това ще намали донякъде използването на данни и батерията, но ще деактивира и актуализирането на списъка с папки</string>
     <string name="title_advanced_poll_folders_hint">Периодичен синхрон на списъка с папки в допълнение към синхрото след свързване към акаунта</string>
     <string name="title_advanced_check_authentication_hint">Това ще провери резултатите от удостоверяване на DKIM, SPF и DMARC като изпълнени от сървъра на имейла</string>
@@ -1164,6 +1171,7 @@
     <string name="title_hint_operations">Изтриването на операции може да доведе до изчезване на съобщения и проблеми със синхронизацията</string>
     <string name="title_op_title_headers">Изтегляне на заглавките</string>
     <string name="title_op_title_raw">Изтегляне на необработено съобщение</string>
+    <string name="title_op_title_add">Качване на съобщение</string>
     <string name="title_folder_name">Име на папка</string>
     <string name="title_display_name">Показвано име</string>
     <string name="title_show_folders">Показвана не скрити папки</string>
@@ -1227,6 +1235,7 @@
     <string name="title_filters_active">Един или повече филтри са активирани</string>
     <string name="title_duplicate_in">Дублиращо съобщение в %1$s</string>
     <string name="title_trashed_from">Изхвърлено съобщение от %1$s</string>
+    <string name="title_sent_to">Изпратено съобщение до %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -1278,6 +1287,7 @@
     <string name="title_raw_send_message">Съобщение</string>
     <string name="title_raw_send_thread">Разговор</string>
     <string name="title_manage_keywords">Управление по ключови думи</string>
+    <string name="title_manage_keywords_pop">Употребявайки POP3 ключовите думи не може да се съхраняват на сървъра на е-поща!</string>
     <string name="title_manage_labels">Управлявайте етикетите на Gmail</string>
     <string name="title_add_keyword">Добавяне на ключова дума</string>
     <string name="title_show_inline">Показване на вградените прикачени файлове</string>
@@ -2313,7 +2323,7 @@
         <item>Само криптиране PGP</item>
         <item>PGP подписване+криптиране</item>
         <item>S/MIME само подписване</item>
-        <item>S/MIME encrypt-only</item>
+        <item>Само шифриране S/MIME</item>
         <item>S/MIME подписване+криптиране</item>
     </string-array>
     <string-array name="sizeNames">
@@ -2363,6 +2373,11 @@
         <item>Нищо</item>
         <item>Ивица</item>
         <item>Точка</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Стеснено</item>
+        <item>Среден</item>
+        <item>Широко</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Получател</item>

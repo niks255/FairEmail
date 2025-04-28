@@ -59,7 +59,7 @@
 <p><br /></p>
 <h2 id="index">Index</h2>
 <ul>
-<li><a href="#authorizing-accounts">Authorizing accounts</a></li>
+<li><a href="#authorizing-accounts">Configuring accounts</a></li>
 <li><a href="#howto">How to …?</a></li>
 <li><a href="#known-problems">Known problems</a></li>
 <li><a href="#planned-features">Planned features</a></li>
@@ -68,7 +68,7 @@
 </ul>
 <p><br /></p>
 <h2>
-<a name="authorizing-accounts"></a>Authorizing accounts
+<a name="authorizing-accounts"></a>Configuring accounts
 </h2>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23authorizing-accounts">Google Translate</a></p>
 <p>In most cases, the quick setup wizard will be able to automatically identify the correct configuration.</p>
@@ -86,6 +86,7 @@
 <li>Free.fr, see <a href="#faq157">question 157</a></li>
 <li>Posteo: please check if <a href="https://posteo.de/en/help/activating-additional-email-account-protection">additional email account protection</a> (<a href="https://posteo.de/hilfe/zusaetzlichen-postfachschutz-deaktivieren">German</a>) isn’t enabled</li>
 <li>Posteo: not that there is <a href="https://posteo.de/en/help/how-does-the-posteo-spam-filter-work">no spam folder</a> (<a href="https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter">German</a>)</li>
+<li>Posteo: if you want to synchronize contacts, please <a href="https://posteo.de/en/help/how-do-i-set-up-synchronisation-of-contacts-with-an-android-address-book">see here</a></li>
 <li>Web.de: please check if <a href="https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html">IMAP is enabled</a></li>
 <li>Web.de: with two factor authentication you’ll need to use <a href="https://web.de/email/sicherheit/zwei-faktor-authentifizierung/">an app password</a></li>
 <li>Web.de: if you are missing the spam messages folder, you should enable spam filtering via the website of web.de again</li>
@@ -96,14 +97,14 @@
 <li>Yandex: please check if <a href="https://yandex.com/support/mail/mail-clients/others.html">IMAP is enabled</a></li>
 <li>Comcast/Xfinity: please check if <a href="https://www.xfinity.com/support/articles/third-party-email-access">third party email access</a> is enabled</li>
 </ul>
-<p>Please see <a href="#faq22">here</a> for common error messages and solutions.</p>
+<p>Please see <a href="#faq22">this FAQ</a> for common error messages and solutions, and please see <a href="#faq207">this FAQ</a> in case of ‘<em>Authentication failed</em>’ or similar.</p>
 <p>Related questions:</p>
 <ul>
 <li><a href="#faq111">Is OAuth supported?</a></li>
 <li><a href="#faq133">Why is ActiveSync ™ not supported?</a></li>
 </ul>
 <p><br /></p>
-<p><a name="howto"></p>
+<p><a name="howto"></a></p>
 <h2 id="how-to">How to …?</h2>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23howto">Google Translate</a></p>
 <ul>
@@ -120,7 +121,7 @@
 <li>Load more messages: long press a folder in the folder list, select <em>Fetch more messages</em></li>
 <li>Delete a message, skipping trash: long press the trash icon</li>
 <li>Delete an account/identity: (Main) Settings, tap Manual setup, tap Accounts/Identities, tap the account/identity, tap the trash icon in the top right corner</li>
-<li>Delete a folder: long press the folder in the folder list, Edit properties, tap the trash icon in the top right corner</li>
+<li>Delete a folder: long press the folder in the folder list, Edit properties, tap the trash icon in the top right corner. Note that you can’t delete folders which still have sub folders.</li>
 <li>Undo send: Outbox, swipe the message in the list left or right</li>
 <li>Delete a contact: please <a href="#faq171">see this FAQ</a></li>
 <li>Store sent messages in the inbox: please <a href="#faq142">see this FAQ</a></li>
@@ -322,7 +323,7 @@
 <li><a href="#faq101">(101) What does the blue/orange dot at the bottom of the conversations mean?</a></li>
 <li><a href="#faq102">(102) How can I enable auto rotation of images?</a></li>
 <li><a href="#faq158">(103) How can I record audio?</a></li>
-<li><a href="#faq104">(104) What do I need to know about error reporting?</a></li>
+<li><a href="#faq104"><del>(104) What do I need to know about error reporting?</del></a></li>
 <li><a href="#faq105">(105) How does the roam-like-at-home option work?</a></li>
 <li><a href="#faq106">(106) Which launchers can show a badge count with the number of unread messages?</a></li>
 <li><a href="#faq107">(107) How do I use colored stars?</a></li>
@@ -425,6 +426,8 @@
 <li><a href="#faq204">(204) How do I use Gemini?</a></li>
 <li><a href="#faq205">(205) How do I check the integrity of an APK file?</a></li>
 <li><a href="#faq206">(206) How can I move or copy messages from one account to another?</a></li>
+<li><a href="#faq207">(207) What does ‘Authentication failed’ mean?</a></li>
+<li><a href="#faq208">(208) What does ‘about:blank#blocked’ mean when I click on a link?</a></li>
 </ul>
 <p><a href="#get-support">I have another question.</a></p>
 <p><a name="faq1"></a> <strong>(1) Which permissions are needed and why?</strong></p>
@@ -468,6 +471,9 @@
 <li><em>com.huawei.android.launcher.permission.CHANGE_BADGE</em></li>
 <li><em>com.huawei.android.launcher.permission.READ_SETTINGS</em></li>
 <li><em>com.huawei.android.launcher.permission.WRITE_SETTINGS</em></li>
+<li><em>com.hihonor.android.launcher.permission.CHANGE_BADGE</em></li>
+<li><em>com.hihonor.android.launcher.permission.READ_SETTINGS</em></li>
+<li><em>com.hihonor.android.launcher.permission.WRITE_SETTINGS</em></li>
 <li><em>android.permission.READ_APP_BADGE</em></li>
 <li><em>com.oppo.launcher.permission.READ_SETTINGS</em></li>
 <li><em>com.oppo.launcher.permission.WRITE_SETTINGS</em></li>
@@ -769,7 +775,7 @@ openssl pkcs12 -export -legacy -in certbag.pem &gt;legacy.p12</code></pre>
 <p>If you renewed a certificate, you should import the renewed certificate and reset the key. This can be done by long pressing an identity in the list of identities (Settings, tap Manual setup, tap Identities).</p>
 <p>Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with asymmetric algorithms only, which means in practice using RSA.</p>
 <p>The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You can long press on the send button to change the encryption method for an identity. If you use both PGP and S/MIME encryption for the same email address, it might be useful to copy the identity, so you can change the encryption method by selecting one of the two identities. You can long press an identity in the list of identities (via manual setup in the main setup screen) to copy an identity.</p>
-<p>To allow different private keys for the same email address, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.</p>
+<p>To allow different private keys for the same email address, for example, a key for signing and a key for encryption, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.</p>
 <p>Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the encryption settings (PEM or DER format).</p>
 <p>FairEmail verifies both the signature and the complete certificate chain.</p>
 <p>Common errors:</p>
@@ -1657,8 +1663,12 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 $week$
 $month$
 $year$
+$user$ (since version 1.2265)
+$extra$ (since version 1.2265)
 $domain$
 $group$ (since version 1.2030)</code></pre>
+<p><span class="math inline"><em>u</em><em>s</em><em>e</em><em>r</em></span> is the domain name of the ‘from’ email address, and <span class="math inline"><em>d</em><em>o</em><em>m</em><em>a</em><em>i</em><em>n</em></span> is the domain name of the ‘from’ email address: <em>user@domain</em>.</p>
+<p><span class="math inline"><em>e</em><em>x</em><em>t</em><em>r</em><em>a</em></span> is the part after the plus sign if the username: <em>user+extra$example.org</em>.</p>
 <p><span class="math inline"><em>g</em><em>r</em><em>o</em><em>u</em><em>p</em></span> will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only. Note that the Android contact provider isn’t very fast, so using this placeholder can slow down fetching messages.</p>
 <p><br /></p>
 <p>Since version 1.2132 it is possible to use the following placeholders in keywords:</p>
@@ -2023,8 +2033,9 @@ category:promotions</code></pre>
 <p>Images will automatically be rotated when automatic resizing of images is enabled in the settings (enabled by default). However, automatic rotating depends on the <a href="https://en.wikipedia.org/wiki/Exif">Exif</a> information to be present and to be correct, which is not always the case. Particularly not when taking a photo with a camara app from FairEmail.</p>
 <p>Note that only <a href="https://en.wikipedia.org/wiki/JPEG">JPEG</a> and <a href="https://en.wikipedia.org/wiki/Portable_Network_Graphics">PNG</a> images can contain Exif information.</p>
 <p><br /></p>
-<p><a name="faq104"></a> <strong>(104) What do I need to know about error reporting?</strong></p>
+<p><a name="faq104"></a> <strong><del>(104) What do I need to know about error reporting?</del></strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq104">Google Translate</a></p>
+<p>Error reporting with Bugsnag was removed in version 1.2273.</p>
 <ul>
 <li>Error reports will help improve FairEmail</li>
 <li>Error reporting is optional and opt-in</li>
@@ -2347,7 +2358,7 @@ $NotDisplayed</code></pre>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq138">Google Translate</a></p>
 <p>Calendar, contact, task and note management can better be done by a separate, specialized app. Note that FairEmail is a specialized email app, not an office suite.</p>
 <p>Also, I prefer to do a few things very well, instead of many things only half. Moreover, from a security perspective, it is not a good idea to grant many permissions to a single app.</p>
-<p>You are advised to use the excellent, open source <a href="https://f-droid.org/packages/at.bitfire.davdroid/">DAVx⁵</a> app to synchronize/manage your calendars/contacts.</p>
+<p>You are advised to use the excellent, open source <a href="https://f-droid.org/packages/at.bitfire.davdroid/">DAVx⁵</a> app to synchronize/manage your calendars/contacts. If you need a CalDAV/CardDAV server, take a look at <a href="https://sabre.io/baikal/">Baïkal</a>.</p>
 <p>If you want to synchronize Outlook contacts and you have access to Google Workspace, please <a href="https://support.google.com/a/users/answer/156595">see here</a> about how you can set up contact syncing.</p>
 <p>Most providers support exporting your contacts. Please <a href="https://support.google.com/contacts/answer/1069522">see here</a> about how you can import contacts if synchronizing is not possible.</p>
 <p>Note that FairEmail does support replying to calendar invites (a pro feature) and adding calendar invites to your personal calendar.</p>
@@ -2516,6 +2527,7 @@ $NotDisplayed</code></pre>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq152">Google Translate</a></p>
 <p>You can insert the email addresses of all contacts in a contact group via the three dots menu of the message composer. You can also long press the person-add icon at the end of the to/cc/bcc/field.</p>
 <p>You can define contact groups with the Android contacts app, please see <a href="https://support.google.com/contacts/answer/30970">here</a> for instructions.</p>
+<p>Please be aware that your email provider might block a message to many recipients. If you want to send newsletters to many people, you should use a transaction email service.</p>
 <p><br /></p>
 <p><a name="faq153"></a> <strong>(153) Why does permanently deleting Gmail message not work?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq153">Google Translate</a></p>
@@ -3090,6 +3102,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>Note that DNSSEC and DANE are available in the GitHub version only.</p>
 <p><br></p>
 <p><a name="faq203"></a> <strong>(203) Where is my sent message?</strong></p>
+<p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq203">Google Translate</a></p>
 <p>When you write a message, it will be stored in the draft messages folder.</p>
 <p>When you send a message, it will be in the outbox first and later in the sent messages folder.</p>
 <p>The outbox is a queue of messages to be transferred to the email server of your email provider. After a message has been transferred to the email server, it will be stored in the sent messages folder.</p>
@@ -3099,6 +3112,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>Basically, an outgoing message is either in the draft messages folder, the outbox, or the sent messages folder.</p>
 <p><br></p>
 <p><a name="faq204"></a> <strong>(204) How do I use Gemini?</strong></p>
+<p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq204">Google Translate</a></p>
 <p>Gemini can only be used if configured and enabled.</p>
 <p><strong>Note that using Gemini is not free (anymore) !</strong></p>
 <p><br></p>
@@ -3116,6 +3130,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>This feature is experimental and requires version 1.2171 or later for the GitHub version and version 1.2182 or later for the Play Store version.</p>
 <p><br></p>
 <p><a name="faq205"></a> <strong>(205) How do I check the integrity of an APK file?</strong></p>
+<p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq205">Google Translate</a></p>
 <p>“<em>Artifact attestations enable you to create unfalsifiable provenance and integrity guarantees for the software you build.</em> <em>In turn, people who consume your software can verify where and how your software was built.</em>”</p>
 <p>Please <a href="https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds">see here</a> for details.</p>
 <p>You can verify in this way that an APK file was built and signed by a GitHub workflow:</p>
@@ -3128,12 +3143,29 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>Attestation of APK files is available from version 1.2209.</p>
 <p><br></p>
 <p><a name="faq206"></a> <strong>(206) How can I move or copy messages from one account to another?</strong></p>
+<p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq206">Google Translate</a></p>
 <p>There are two options for this:</p>
 <ol type="1">
 <li>Long press a message in the message list to select it, tap the three-dot button that appears, scroll to the bottom of the pop-up menu and select the target account.</li>
 <li>Long press the move-to button just above the message text to select the target account first.</li>
 </ol>
 <p>To copy a message to another account, long press the target folder.</p>
+<p><br></p>
+<p><a name="faq207"></a> <strong>(207) What does ‘Authentication failed’ mean?</strong></p>
+<p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq207">Google Translate</a></p>
+<p>Basically, ‘<em>Authentication failed</em>’, or similar, means that the email server of your email provider doesn’t accept the login (anymore).</p>
+<p>The first thing you should check whether you can still login via the website of the email provider. If you can’t login via the website of the email provider, you’ll need to contact the email provider for support. In any case, in that situation, no email app can login either.</p>
+<p>The obvious reason is that the username (generally the email address, but not always) or the password is incorrect. There are other possible causes too, like connecting from a suspicious network (according to the email provider), connecting from abroad, or using a VPN. Some email providers are more critical than other email provider regarding accepting connections.</p>
+<p>If you are using a VPN, please turn it off, or make an exception for FairEmail. With a VPN you share a network address with many other people, possibly not all behaving nicely. If an email server detects ‘unwanted’ behavior, like somebody trying to send spam messages, an email server often automatically blocks network addresses as a protection measure.</p>
+<p>You can try to switch to Wi-Fi or mobile data because this will result in using another (local) network address. Turning flight mode on for a while and turning it back off will mostly result in another network address being assigned. So, this is worth trying as well.</p>
+<p>Email providers like Google, Microsoft, and Yahoo/AOL require <a href="https://en.wikipedia.org/wiki/OAuth">OAuth</a> for logging in, which means it is not possible to configure an account manually, and that you <em>must</em> use the quick setup wizard to configure an account.</p>
+<p>Some email providers use account-specific host (server) names. So, please take care you use the correct host name when manually configuring an account.</p>
+<p><br></p>
+<p><a name="faq208"></a> <strong>(208) What does ‘about:blank#blocked’ mean when I click on a link?</strong></p>
+<p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq208">Google Translate</a></p>
+<p>If you get ‘<em>about:blank#blocked</em>’ when you click on a link, for some reason the installed browser has blocked the link.</p>
+<p>Note that the original message view is displayed by the installed browser. It may look like it’s part of the app, but it’s not.</p>
+<p>You can probably workaround this by switching back to the reformatted message view via the ‘] [’ button just above the message text on the right.</p>
 <p><br></p>
 <h2>
 <a name="get-support"></a>Get support

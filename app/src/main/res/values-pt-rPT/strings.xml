@@ -162,7 +162,7 @@
     <string name="title_setup_intro">A configuração de uma conta consiste em três passos podendo, logo após isso, enviar e receber e-mails</string>
     <string name="title_setup_simple">Não é necessária a alteração doutras opções</string>
     <string name="title_setup_issue">O FairEmail foi desenvolvido para o ajudar a proteger a sua privacidade e representa, literalmente, milhares de horas de trabalho. Caso tenha algum problema, peço que me contacte primeiro para assistência antes de deixar uma avaliação negativa. Tenho todo o gosto em ajudar!</string>
-    <string name="title_setup_analytics">O FairEmail não exibe anúncios e não monitoriza ou analisa o seu comportamento. O Bugsnag é usado para comunicar erros e está desactivado por defeito.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail não exibe anúncios e não rastreia ou analisa o seu comportamento.</string>
     <string name="title_setup_quick_accounts">Adicionar ou alterar contas</string>
     <string name="title_setup_quick_support">Alguns provedores tornam difícil adicionar uma conta. Por favor, não culpe o FairEmail por isso, peça-lhes suporte.</string>
     <string name="title_setup_quick_hint">O endereço de e-mail inserido é usado para consultar o servidor de e-mail e autoconfig.thunderbird.net para informações de configuração</string>
@@ -347,6 +347,10 @@
     </string>
     <string name="title_advanced_hint_remark">        As opções são categorizadas por separador, divididas em secções, organizadas por aspeto ou uso, e pesquisáveis.
     </string>
+    <string name="title_advanced_hint_options">Não precisará da maioria das opções e, como algumas opções são bastante específicas, 
+     é compreensível se o funcionamento de todas as opções não seja imediatamente claro.
+         Por favor, não deixe uma crítica negativa apenas pelo número de opções ou por não compreender todas as opções de imediato.
+         Todas as opções são úteis para mais do que algumas pessoas, mas talvez não para si (ainda).    </string>
     <string name="title_advanced_hint_setup">Pode configurar uma conta selecionando o botão Assistente no ecrã de configuração principal.</string>
     <string name="title_advanced_section_main">Principal</string>
     <string name="title_advanced_section_synchronize">Receber</string>
@@ -535,7 +539,7 @@
     <string name="title_advanced_indentation">Indentação esquerda/direita para mensagens recebidas/enviadas em conversas</string>
     <string name="title_advanced_highlight_unread">Destacar mensagens não lidas</string>
     <string name="title_advanced_account_color">Mostrar uma faixa de cor ou ponto de cor</string>
-    <string name="title_advanced_color_stripe_wide">Usar ampla faixa de cores</string>
+    <string name="title_advanced_account_color_size">Largura da faixa colorida</string>
     <string name="title_advanced_avatars">Mostrar fotos de contactos</string>
     <string name="title_advanced_bimi">Mostrar indicadores de marca para identificação da mensagem (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Requer um certificado VMC válido</string>
@@ -657,6 +661,7 @@
     <string name="title_advanced_reset_importance">Reverter importância ao mover mensagens</string>
     <string name="title_advanced_star_snoozed">Adicionar estrela automaticamente ao adiar mensagens</string>
     <string name="title_advanced_star_unsnoozed">Remover automaticamente a estrela de mensagens suspensas</string>
+    <string name="title_advanced_important_unsnoozed">Tornar automaticamente importantes as mensagens que não são adiadas</string>
     <string name="title_advanced_auto_important">Marcar automaticamente mensagens com estrela como importantes</string>
     <string name="title_advanced_cancel_snooze">Cancelar a função \'adiar\' ao mover mensagens</string>
     <string name="title_advanced_auto_block_sender">Bloquear automaticamente o remetente quando denunciar spam</string>
@@ -682,6 +687,7 @@
     <string name="title_advanced_notify_suppress_in_call">Atrasar notificações enquanto está numa chamada</string>
     <string name="title_advanced_notify_suppress_in_car">Atrasar notificações enquanto o Android Auto está ligado</string>
     <string name="title_advanced_notify_summary">Mostrar apenas resumo na notificação</string>
+    <string name="title_advanced_notify_subject">Mostrar assunto nas notificações</string>
     <string name="title_advanced_notify_preview">Mostrar pré-visualização de mensagem nas notificações</string>
     <string name="title_advanced_notify_preview_all">Pré-visualizar todo o texto</string>
     <string name="title_advanced_notify_preview_only">Mostrar notificações apenas com pré-visualização do texto</string>
@@ -785,6 +791,7 @@
     <string name="title_advanced_class_min_difference">Diferença mínima de classe: %1$s %%</string>
     <string name="title_advanced_show_filtered">Mostrar um ícone de filtro quando as regras forem aplicadas</string>
     <string name="title_advanced_haptic_feedback">Vibração tátil em ações importantes</string>
+    <string name="title_advanced_haptic_feedback_swipe">Reação tátil ao deslizar para a esquerda/direita</string>
     <string name="title_advanced_language">Idioma</string>
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_integrations_hint">Os serviços de nuvem abaixo não fazem parte da aplicação. Quaisquer pagamentos irão diretamente para o serviço de nuvem e não para o desenvolvedor da aplicação.</string>
@@ -1170,6 +1177,7 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_hint_operations">Eliminar operações pode resultar no desaparecimento de mensagens e problemas de sincronização</string>
     <string name="title_op_title_headers">A transferir cabeçalhos</string>
     <string name="title_op_title_raw">A transferir mensagem em bruto (raw)</string>
+    <string name="title_op_title_add">Enviando mensagem</string>
     <string name="title_folder_name">Nome da pasta</string>
     <string name="title_display_name">Nome a apresentar</string>
     <string name="title_show_folders">Mostrar pastas ocultas</string>
@@ -1234,7 +1242,7 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_filters_active">Um ou mais filtros activos</string>
     <string name="title_duplicate_in">Mensagem duplicada em %1$s</string>
     <string name="title_trashed_from">Mensagem de %1$s colocada no lixo</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Mensagem enviada para %1$s</string>
+    <string name="title_sent_to">Mensagem enviada para %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -2366,6 +2374,11 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
         <item>Nenhuma</item>
         <item>Lista</item>
         <item>Ponto</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Estreito</item>
+        <item>Médio</item>
+        <item>Largo</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Destinatário</item>

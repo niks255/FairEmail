@@ -229,6 +229,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
@@ -402,12 +403,13 @@ public class FragmentMessages extends FragmentBase
     private Long lastSync = null;
 
     private Integer lastUnseen;
+    private Integer lastUnified;
     private Boolean lastRefreshing;
     private Boolean lastFolderErrors;
     private Boolean lastAccountErrors;
 
-    final private Map<String, String> kv = new HashMap<>();
-    final private Map<String, List<Long>> values = new HashMap<>();
+    final private Map<String, String> kv = new ConcurrentHashMap<>();
+    final private Map<String, List<Long>> values = new ConcurrentHashMap<>();
     final private LongSparseArray<Float> sizes = new LongSparseArray<>();
     final private LongSparseArray<Integer> heights = new LongSparseArray<>();
     final private LongSparseArray<Pair<Integer, Integer>> positions = new LongSparseArray<>();
@@ -2652,6 +2654,8 @@ public class FragmentMessages extends FragmentBase
                 message.ui_unsnoozed = false;
             }
 
+            if (seen_delay != 0)
+                setValue("auto_seen", message.id, true);
             setValue("expanded", message.id, value);
             if (scroll)
                 setValue("scroll", message.id, true);
@@ -3035,7 +3039,8 @@ public class FragmentMessages extends FragmentBase
 
             if (message.uid == null &&
                     message.accountProtocol == EntityAccount.TYPE_IMAP &&
-                    EntityFolder.DRAFTS.equals(message.folderType))
+                    (EntityFolder.DRAFTS.equals(message.folderType) ||
+                            EntityFolder.SENT.equals(message.folderType)))
                 return makeMovementFlags(0,
                         (EntityFolder.TRASH.equals(swipes.left_type) ? ItemTouchHelper.LEFT : 0) |
                                 (EntityFolder.TRASH.equals(swipes.right_type) ? ItemTouchHelper.RIGHT : 0));
@@ -3141,7 +3146,8 @@ public class FragmentMessages extends FragmentBase
 
             if (message.uid == null &&
                     message.accountProtocol == EntityAccount.TYPE_IMAP &&
-                    EntityFolder.DRAFTS.equals(message.folderType)) {
+                    (EntityFolder.DRAFTS.equals(message.folderType) ||
+                            EntityFolder.SENT.equals(message.folderType))) {
                 boolean right = EntityFolder.TRASH.equals(swipes.right_type);
                 boolean left = EntityFolder.TRASH.equals(swipes.left_type);
                 swipes = new TupleAccountSwipes();
@@ -3301,11 +3307,13 @@ public class FragmentMessages extends FragmentBase
 
                 if (expanded && swipe_reply) {
                     redraw(viewHolder);
+                    swipeFeedback();
                     onMenuReply(message, "reply", null, null);
                     return;
                 }
 
                 if (EntityFolder.OUTBOX.equals(message.folderType)) {
+                    swipeFeedback();
                     if (message.warning == null)
                         ActivityCompose.undoSend(message.id, getContext(), getViewLifecycleOwner(), getParentFragmentManager());
                     else
@@ -3335,7 +3343,8 @@ public class FragmentMessages extends FragmentBase
 
                 if (message.uid == null &&
                         message.accountProtocol == EntityAccount.TYPE_IMAP &&
-                        EntityFolder.DRAFTS.equals(message.folderType) &&
+                        (EntityFolder.DRAFTS.equals(message.folderType) ||
+                                EntityFolder.SENT.equals(message.folderType)) &&
                         EntityFolder.TRASH.equals(actionType)) {
                     action = EntityMessage.SWIPE_ACTION_DELETE;
                     actionType = null;
@@ -3346,6 +3355,8 @@ public class FragmentMessages extends FragmentBase
                         " type=" + actionType +
                         " message=" + message.id +
                         " folder=" + message.folderType);
+
+                swipeFeedback();
 
                 if (EntityMessage.SWIPE_ACTION_ASK.equals(action)) {
                     rvMessage.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
@@ -3425,6 +3436,13 @@ public class FragmentMessages extends FragmentBase
                 return null;
 
             return message;
+        }
+
+        private void swipeFeedback() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean haptic_feedback_swipe = prefs.getBoolean("haptic_feedback_swipe", false);
+            if (haptic_feedback_swipe)
+                Helper.performHapticFeedback(view, HapticFeedbackConstants.GESTURE_END);
         }
 
         private void redraw(RecyclerView.ViewHolder vh) {
@@ -3718,11 +3736,12 @@ public class FragmentMessages extends FragmentBase
             iProperties.setValue("tts", message.id, !tts);
 
             if (tts) {
-                Intent intent = new Intent(getContext(), ServiceTTS.class);
-                intent.putExtra(ServiceTTS.EXTRA_FLUSH, true);
-                intent.putExtra(ServiceTTS.EXTRA_TEXT, "");
-                intent.putExtra(ServiceTTS.EXTRA_LANGUAGE, message.language);
-                intent.putExtra(ServiceTTS.EXTRA_UTTERANCE_ID, "tts:" + message.id);
+                Intent intent = new Intent(getContext(), ServiceTTS.class)
+                        .setAction("tts:" + message.id)
+                        .putExtra(ServiceTTS.EXTRA_FLUSH, true)
+                        .putExtra(ServiceTTS.EXTRA_TEXT, "")
+                        .putExtra(ServiceTTS.EXTRA_LANGUAGE, message.language)
+                        .putExtra(ServiceTTS.EXTRA_UTTERANCE_ID, "tts:" + message.id);
                 getContext().startService(intent);
                 return;
             }
@@ -3773,11 +3792,12 @@ public class FragmentMessages extends FragmentBase
                     if (text == null)
                         return;
 
-                    Intent intent = new Intent(getContext(), ServiceTTS.class);
-                    intent.putExtra(ServiceTTS.EXTRA_FLUSH, true);
-                    intent.putExtra(ServiceTTS.EXTRA_TEXT, text);
-                    intent.putExtra(ServiceTTS.EXTRA_LANGUAGE, message.language);
-                    intent.putExtra(ServiceTTS.EXTRA_UTTERANCE_ID, "tts:" + message.id);
+                    Intent intent = new Intent(getContext(), ServiceTTS.class)
+                            .setAction("tts:" + message.id)
+                            .putExtra(ServiceTTS.EXTRA_FLUSH, true)
+                            .putExtra(ServiceTTS.EXTRA_TEXT, text)
+                            .putExtra(ServiceTTS.EXTRA_LANGUAGE, message.language)
+                            .putExtra(ServiceTTS.EXTRA_UTTERANCE_ID, "tts:" + message.id);
                     getContext().startService(intent);
                 }
 
@@ -5557,9 +5577,15 @@ public class FragmentMessages extends FragmentBase
         outState.putInt("fair:autoCloseCount", autoCloseCount);
         outState.putInt("fair:lastSentCount", lastSentCount);
 
-        outState.putStringArray("fair:values", values.keySet().toArray(new String[0]));
-        for (String name : values.keySet())
-            outState.putLongArray("fair:name:" + name, Helper.toLongArray(values.get(name)));
+        List<String> keys = new ArrayList<>();
+        for (String name : values.keySet()) {
+            List<Long> ids = values.get(name);
+            if (ids != null) {
+                keys.add(name);
+                outState.putLongArray("fair:name:" + name, Helper.toLongArray(ids));
+            }
+        }
+        outState.putStringArray("fair:values", keys.toArray(new String[0]));
 
         if (rvMessage != null) {
             Parcelable rv = rvMessage.getLayoutManager().onSaveInstanceState();
@@ -6035,7 +6061,7 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkReporting() {
-        if (viewType != AdapterMessage.ViewType.UNIFIED)
+        if (viewType != AdapterMessage.ViewType.UNIFIED || true)
             return false;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -6257,8 +6283,6 @@ public class FragmentMessages extends FragmentBase
             @Override
             protected List<EntityAccount> onExecute(Context context, Bundle args) throws Throwable {
                 DB db = DB.getInstance(context);
-                if (BuildConfig.DEBUG)
-                    return db.account().getAccounts();
                 return db.account().getSynchronizingAccounts(null);
             }
 
@@ -6386,6 +6410,7 @@ public class FragmentMessages extends FragmentBase
             int zoom = prefs.getInt("view_zoom", compact ? 0 : 1);
             int padding = prefs.getInt("view_padding", compact || !cards ? 0 : 1);
             boolean quick_filter = prefs.getBoolean("quick_filter", false);
+            boolean all_read_asked = prefs.getBoolean("all_read_asked", false);
 
             boolean folder =
                     (viewType == AdapterMessage.ViewType.UNIFIED ||
@@ -6521,7 +6546,9 @@ public class FragmentMessages extends FragmentBase
 
             menu.findItem(R.id.menu_select_all).setVisible(folder);
             menu.findItem(R.id.menu_select_found).setVisible(viewType == AdapterMessage.ViewType.SEARCH);
-            menu.findItem(R.id.menu_mark_all_read).setVisible(folder);
+            menu.findItem(R.id.menu_mark_all_read)
+                    .setVisible(folder)
+                    .setShowAsAction(all_read_asked ? MenuItem.SHOW_AS_ACTION_NEVER : MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             menu.findItem(R.id.menu_view_thread).setVisible(viewType == AdapterMessage.ViewType.THREAD && !threading);
 
@@ -7313,11 +7340,14 @@ public class FragmentMessages extends FragmentBase
 
         // Get state
         int unseen = 0;
+        int unified = 0;
         boolean refreshing = false;
         boolean folderErrors = false;
         boolean accountErrors = false;
         for (TupleFolderEx folder : folders) {
             unseen += folder.unseen;
+            if (folder.unified)
+                unified++;
 
             if (folder.sync_state != null &&
                     !"downloading".equals(folder.sync_state) &&
@@ -7336,6 +7366,7 @@ public class FragmentMessages extends FragmentBase
 
         if (refreshing == swipeRefresh.isRefreshing() &&
                 Objects.equals(lastUnseen, unseen) &&
+                Objects.equals(lastUnified, unified) &&
                 Objects.equals(lastRefreshing, refreshing) &&
                 Objects.equals(lastFolderErrors, folderErrors) &&
                 Objects.equals(lastAccountErrors, accountErrors)) {
@@ -7344,6 +7375,7 @@ public class FragmentMessages extends FragmentBase
         }
 
         lastUnseen = unseen;
+        lastUnified = unified;
         lastRefreshing = refreshing;
         lastFolderErrors = folderErrors;
         lastAccountErrors = accountErrors;

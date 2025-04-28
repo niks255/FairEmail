@@ -160,7 +160,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_setup_intro">In account tafoegje kin al yn trije stappen, dêrnei kinne jo e-mailberjochten ferstjoere en ûntfange.</string>
     <string name="title_setup_simple">Dêr is gjin needsaak om oare opsjes te wizigjen</string>
     <string name="title_setup_issue">FairEmail is ûntwikkele om jo te helpen jo privacy te beskermjen en fertsjintwurdiget tûzenen oeren wurk. As jo swierrichheden hawwe, nim dan earst kontakt op mei my foar stipe, eardat jo in minne beoardieling efterlitte. Ik help jo graach!</string>
-    <string name="title_setup_analytics">FairEmail toant gjin advertinsjes en folget of analysearret jo gedrach net. Bugsnag wurdt brûkt foar flatermeldingen en is standert útskeakele.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail toant gjin advertinsjes en folget of analysearret jo gedrach net.</string>
     <string name="title_setup_quick_accounts">Accounts tafoegje of wizigje</string>
     <string name="title_setup_quick_support">Guon providers meitsje it dreech om in account ta te foegjen. Jou FairEmail hjir gjin skuld foar, mar freegje yn stee derfan om stipe.</string>
     <string name="title_setup_quick_hint">It ynfierde e-mailadres wurdt brûkt om de e-mailserver en autoconfig.thunderbird.net om konfiguraasje-ynformaasje te freegjen</string>
@@ -343,6 +343,9 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
         Alle opsjes hawwe faak standertwearden brûkt dy’t wizige wurde kinne as jo in oare foarkar hawwe.
     </string>
     <string name="title_advanced_hint_remark">        De opsjes binne kategorisearre op ljepblêd, ferdield yn seksjes, organisearre op uterlik of gebrûk en trochsykber.
+    </string>
+    <string name="title_advanced_hint_options">Jo sille de measte opsjes net nedich hawwe en omdat guon opsjes frij spesifyk binne, is it begryplik as de wurking fan net alle opsjes net daliks dúdlik is. Lit gjin minne beoardieling foar allinnich it oantal opsjes of foar it net begripen fan alle opsjes efter.
+        Alle opsjes binne nuttich foar mear as in pear minsken, mar miskien (noch) net foar jo.
     </string>
     <string name="title_advanced_hint_setup">Jo kinne in account konfigurearje troch op de wizardknop op it haadkonfiguraasjeskerm te tikken.</string>
     <string name="title_advanced_section_main">Start</string>
@@ -532,7 +535,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_indentation">Links/rjochts ynspringe fan ûntfongen/ferstjoerde berjochten yn petearen</string>
     <string name="title_advanced_highlight_unread">Net-lêzen berjochten markearje</string>
     <string name="title_advanced_account_color">In kleurestreek of kleurestip toane</string>
-    <string name="title_advanced_color_stripe_wide">Brede kleurestreep brûke</string>
+    <string name="title_advanced_account_color_size">Breedte kleurstreek</string>
     <string name="title_advanced_avatars">Kontaktfoto’s toane</string>
     <string name="title_advanced_bimi">Brand Indicators for Message Identification (BIMI) toane</string>
     <string name="title_advanced_bimi_vmc">Jildich VMC-sertifikaat fereaskje</string>
@@ -654,6 +657,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_reset_importance">By ferpleatsen fan berjochten wichtichheid opnij ynstelle</string>
     <string name="title_advanced_star_snoozed">By slommerjen fan berjochten automatysk stjer tafoegje</string>
     <string name="title_advanced_star_unsnoozed">Stjer automatysk fuorthelje by it ûntweitsjen fan berjochten</string>
+    <string name="title_advanced_important_unsnoozed">Berjochten dy’t ûntweitsje automatyske wichtich meitsje</string>
     <string name="title_advanced_auto_important">Berjochten mei stjer automatyske wichtich meitsje</string>
     <string name="title_advanced_cancel_snooze">By it ferpleatsen fan berjochten it slommerjen annulearje</string>
     <string name="title_advanced_auto_block_sender">By it rapportearjen fan net-winske de ôfstjoerder automatysk blokkearje</string>
@@ -679,6 +683,7 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_advanced_notify_suppress_in_call">Notifikaasjes wylst in petear útstelle</string>
     <string name="title_advanced_notify_suppress_in_car">Meldingen útstelle as Android Auto ferbûn is</string>
     <string name="title_advanced_notify_summary">Allinnich melding mei gearfetting toane</string>
+    <string name="title_advanced_notify_subject">Underwerp yn meldingen toane</string>
     <string name="title_advanced_notify_preview">Foarbyld fan berjocht yn notifikaasjes toane</string>
     <string name="title_advanced_notify_preview_all">Foarbyld fan alle tekst</string>
     <string name="title_advanced_notify_preview_only">Notifikaasjes allinnich mei in foarbyldtekst toane</string>
@@ -710,6 +715,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_advanced_notify_screen_on">Skeakelje it skerm koart yn foar nije berjochtmeldingen</string>
     <string name="title_advanced_notifications_background">Eftergrûntsjinst brûke om berjochten te syngronisearjen</string>
     <string name="title_advanced_notifications_background_hint">In eftergrûntsjinst kin op elk momint stoppe wurde troch Android, mar hat gjin steatbalkenotifikaasje nedich</string>
+    <string name="title_advanced_rate_limit">Behein meldingslûden fan nije berjochten ta ien per:</string>
     <string name="title_advanced_confirm_links">It iepenjen fan keppelingen befêstigje</string>
     <string name="title_advanced_confirm_files">Besjen fan bestannen befêstigje</string>
     <string name="title_advanced_sanitize_links">Standert trackingparameters fuortsmite</string>
@@ -781,6 +787,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_advanced_class_min_difference">Minimum klasse ferskil: %1$s %%</string>
     <string name="title_advanced_show_filtered">In filterpiktogram toane wannear’t rigels tapast waarden</string>
     <string name="title_advanced_haptic_feedback">Haptysk kommentaar by wichtige aksjes</string>
+    <string name="title_advanced_haptic_feedback_swipe">Haptyske feedback by feien nei links/rjochts</string>
     <string name="title_advanced_language">Taal</string>
     <string name="title_advanced_language_system">Systeem</string>
     <string name="title_advanced_integrations_hint">De ûndersteande cloudtsjinsten binne gjin ûnderdiel fan de app. Alle betellingen geane daliks nei de cloudtsjinst en net nei de app-ûntwikkeler.</string>
@@ -1164,6 +1171,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_hint_operations">Fuortsmiten fan bewurkingen kin resultearje yn ferdwine berjochten en syngronisaasjeproblemen</string>
     <string name="title_op_title_headers">Kopteksten downloade</string>
     <string name="title_op_title_raw">Rûch berjocht downloade</string>
+    <string name="title_op_title_add">Berjocht oplade</string>
     <string name="title_folder_name">Mapnamme</string>
     <string name="title_display_name">Werjeftenamme</string>
     <string name="title_show_folders">Ferstoppe mappen toane</string>
@@ -1227,6 +1235,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_filters_active">Ien of mear filters aktyf</string>
     <string name="title_duplicate_in">Dûbeld berjocht yn %1$s</string>
     <string name="title_trashed_from">Fuortsmiten berjocht fan %1$s</string>
+    <string name="title_sent_to">Berjocht nei %1$s ferstjoerd</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -1278,6 +1287,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_raw_send_message">Berjocht</string>
     <string name="title_raw_send_thread">Konversaasje</string>
     <string name="title_manage_keywords">Kaaiwurden beheare</string>
+    <string name="title_manage_keywords_pop">Mei POP3 kinne kaaiwurden net op de mailserver bewarre wurde!</string>
     <string name="title_manage_labels">Gmail-labels beheare</string>
     <string name="title_add_keyword">Kaaiwurd tafoegje</string>
     <string name="title_show_inline">Inline bylagen toane</string>
@@ -2310,7 +2320,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
         <item>PGP allinnich fersifering</item>
         <item>PGP-ûndertekening+-fersifering</item>
         <item>S/MIME allinnich ûndertekening</item>
-        <item>S/MIME encrypt-only</item>
+        <item>S/MIME allinnich fersifering</item>
         <item>S/MIME-ûndertekening+-fersifering</item>
     </string-array>
     <string-array name="sizeNames">
@@ -2360,6 +2370,11 @@ https://en.wikipedia.org/wiki/ASCII</string>
         <item>Gjin</item>
         <item>Streek</item>
         <item>Stip</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Smel</item>
+        <item>Gemiddeld</item>
+        <item>Breed</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Untfanger</item>

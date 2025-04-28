@@ -162,7 +162,6 @@
     <string name="title_setup_intro">Bir hesabın hazırlanması üç addımdan ibarətdir və bundan sonra e-poçtları göndərə və ala bilərsiniz</string>
     <string name="title_setup_simple">Başqa hər hansısa bir seçimi dəyişdirməyə ehtiyac yoxdur</string>
     <string name="title_setup_issue">FairEmail, gizliliyinizi qorumağa kömək etməsi üçün təkmilləşdirildi və sözün əsl mənasında minlərlə saatlıq çalışmanı təmsil edir. Əgər tətbiqlə bağlı hər hansısa probleminiz varsa, mənfi bir rəy bildirməzdən əvvəl zəhmət olmasa dəstək üçün mənimlə əlaqə saxlayın. Məmnuniyyətlə kömək edərəm!</string>
-    <string name="title_setup_analytics">FairEmail, reklam göstərmir, davranışınızı izləmir və ya təhlil etmir. Bugsnag, xəta hesabatı üçün istifadə olunur və ilkin olaraq görüntülənir.</string>
     <string name="title_setup_quick_accounts">Hesab əlavə et və ya dəyişdir</string>
     <string name="title_setup_quick_support">Bəzi provayderlər hesab əlavə etməyi çətinləşdirir. Xahiş edirik, buna görə \"FairEmail\"i günahlandırmayın, əvəzində dəstək istəyin.</string>
     <string name="title_setup_quick_hint">Daxil edilmiş e-poçt ünvanı, konfiqurasiya məlumatları üçün e-poçt serverini və autoconfig.thunderbird.net-i sorğulamaq üçün istifadə olunur</string>
@@ -346,6 +345,11 @@
         Bütün seçimlər, fərqli bir tərcihiniz olmadığı müddətcə dəyişdirməyinizə ehtiyac olmayan və geniş istifadə olunan standart dəyərlərə sahibdir.
     </string>
     <string name="title_advanced_hint_remark">        Seçimlər, vərəqlərə görə kateqoriyalandırılıb, bölmələrə ayrılıb, görünüş və ya istifadəyə görə sinifləndirilib və axtarıla biləndir.
+    </string>
+    <string name="title_advanced_hint_options">        Variantların əksəriyyətinə ehtiyacınız olmayacaq və bəzi variantlar olduqca spesifik olduğundan,
+        bütün variantların işləməsi dərhal aydın deyilsə, başa düşüləndir.
+        Lütfən sadəcə variant sayına görə və ya bütün variantları dərhal anlamadığınıza görə aşağı bir qiymət verməyin.
+        Bütün variantlar bir çox insan üçün faydalıdır, lakin bəlkə də sizin üçün (hələ) faydalı olmaya bilər.
     </string>
     <string name="title_advanced_hint_setup">Əsas konfiqurasiya ekranındakı sehrbaz düyməsinə toxunaraq bir hesabı konfiqurasiya edə bilərsiniz.</string>
     <string name="title_advanced_section_main">Əsas</string>
@@ -535,7 +539,7 @@
     <string name="title_advanced_indentation">Danışıqlarda alınan/göndərilən mesajların sol/sağ boşluğu</string>
     <string name="title_advanced_highlight_unread">Oxunmamış mesajları vurğula</string>
     <string name="title_advanced_account_color">Rəngli bir zolaq və ya rəngli nöqtə göstər</string>
-    <string name="title_advanced_color_stripe_wide">Geniş rəng zolağı istifadə et</string>
+    <string name="title_advanced_account_color_size">Rəng zolağının eni</string>
     <string name="title_advanced_avatars">Əlaqə fotolarını göstər</string>
     <string name="title_advanced_bimi">Mesaj İdentifikasiyası üçün Marka İndikatorlarını (BIMI) göstər</string>
     <string name="title_advanced_bimi_vmc">Yararlı bir VMC sertifikatını tələb et</string>
@@ -657,6 +661,7 @@
     <string name="title_advanced_reset_importance">Mesajları köçürəndə vacibliyi sıfırla</string>
     <string name="title_advanced_star_snoozed">Mesajları ertələyəndə avtomatik ulduz əlavə et</string>
     <string name="title_advanced_star_unsnoozed">Ertələnməyi ləğv edilən mesajlarda ulduzu avtomatik sil</string>
+    <string name="title_advanced_important_unsnoozed">Ertələnməsi ləğv edilən mesajları avtomatik vacib et</string>
     <string name="title_advanced_auto_important">Ulduzlu mesajları avtomatik olaraq vacib et</string>
     <string name="title_advanced_cancel_snooze">Hərəkətli mesajlarda ertələməni ləğv et</string>
     <string name="title_advanced_auto_block_sender">Spam bildirirkən göndərəni avtomatik əngəllə</string>
@@ -682,6 +687,7 @@
     <string name="title_advanced_notify_suppress_in_call">Zəng əsnasında bildirişləri gecikdirmə</string>
     <string name="title_advanced_notify_suppress_in_car">Android Auto ilə bağlantı qurularkən bildirişləri gecikdir</string>
     <string name="title_advanced_notify_summary">Yalnız icmal bildirişini göstər</string>
+    <string name="title_advanced_notify_subject">Mövzunu bildirişlərdə göstər</string>
     <string name="title_advanced_notify_preview">Bildirişlərdə mesaja önbaxışı göstər</string>
     <string name="title_advanced_notify_preview_all">Mətnin hamısına önbaxış</string>
     <string name="title_advanced_notify_preview_only">Bildirişləri yalnız önbaxış mətni ilə göstər</string>
@@ -785,6 +791,7 @@
     <string name="title_advanced_class_min_difference">Minimum sinif fərqi: %1$s %%</string>
     <string name="title_advanced_show_filtered">Qaydalar tətbiq olunduqda bir filtr nişanı göstər</string>
     <string name="title_advanced_haptic_feedback">Vacib əməliyyatlarda toxunuş əks-əlaqəsi</string>
+    <string name="title_advanced_haptic_feedback_swipe">Sola/sağa sürüşdürərkən toxunuş əks-əlaqəsi</string>
     <string name="title_advanced_language">Dil</string>
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_integrations_hint">Aşağıdakı bulud xidmətləri tətbiqin bir hissəsi deyil. Bütün ödənişlər birbaşa bulud xidmətinə gedir, tətbiq tərtibatçısına deyil.</string>
@@ -1170,6 +1177,7 @@
     <string name="title_hint_operations">Əməliyyatların silinməsi, mesajların görünməməsi və sinxronlaşdırma problemlərinin yaranması ilə nəticələnə bilər</string>
     <string name="title_op_title_headers">Başlıqlar endirilir</string>
     <string name="title_op_title_raw">Xam mesaj endirilir</string>
+    <string name="title_op_title_add">Mesaj yüklənir</string>
     <string name="title_folder_name">Qovluq adı</string>
     <string name="title_display_name">Ekran adı</string>
     <string name="title_show_folders">Gizli qovluqları göstər</string>
@@ -1234,7 +1242,7 @@
     <string name="title_filters_active">Bir və ya daha çox filtr aktivdir</string>
     <string name="title_duplicate_in">%1$s qovluğunda mesajı kopyala</string>
     <string name="title_trashed_from">%1$s tərəfindən tullantı qovluğuna atılan mesaj</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">%1$s - mesaj göndərildi</string>
+    <string name="title_sent_to">%1$s - mesaj göndərildi</string>
     <string name="title_subject_reply">Cvb: %1$s</string>
     <string name="title_subject_forward">Ynlndr: %1$s</string>
     <string name="title_subject_reply_alt">Cvb: %1$s</string>
@@ -2366,6 +2374,11 @@
         <item>Heç biri</item>
         <item>Zolaq</item>
         <item>Nöqtə</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Dar</item>
+        <item>Orta</item>
+        <item>Geniş</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Alıcı</item>

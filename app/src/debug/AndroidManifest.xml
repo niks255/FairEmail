@@ -127,7 +127,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:description="@string/app_name"
         android:enableOnBackInvokedCallback="true"
-
+        android:extractNativeLibs="true"
         android:forceDarkAllowed="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -165,9 +165,6 @@
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/car" />
         <!-- https://play.google.com/about/auto/developer-distribution-agreement-addendum/ -->
-        <meta-data
-            android:name="com.bugsnag.android.API_KEY"
-            android:value="9d2d57476a0614974449a3ec33f2604a" />
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="unused" />

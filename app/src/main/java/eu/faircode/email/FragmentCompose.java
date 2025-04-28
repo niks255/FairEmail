@@ -4353,6 +4353,7 @@ public class FragmentCompose extends FragmentBase {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean check_certificate = prefs.getBoolean("check_certificate", true);
                 boolean check_key_usage = prefs.getBoolean("check_key_usage", false);
+                boolean experiments = prefs.getBoolean("experiments", false);
 
                 File tmp = Helper.ensureExists(context, "encryption");
 
@@ -4416,12 +4417,12 @@ public class FragmentCompose extends FragmentBase {
                 for (X509Certificate cert : chain)
                     Log.i("S/MIME cert sign algo=" + cert.getSigAlgName() + " " + cert.getSigAlgOID());
 
-                if (check_certificate) {
+                if (check_certificate && !EntityMessage.SMIME_ENCRYPTONLY.equals(type)) {
                     // Check public key validity
                     try {
                         chain[0].checkValidity();
 
-                        if (check_key_usage) {
+                        if (check_key_usage && experiments) {
                             // Signing Key: Key Usage: Digital Signature, Non-Repudiation
                             // Encrypting Key: Key Usage: Key Encipherment, Data Encipherment
 
@@ -7268,8 +7269,11 @@ public class FragmentCompose extends FragmentBase {
                             !EntityAttachment.equals(last_attachments, attachments))
                         dirty = true;
 
-                    last_plain_only = draft.plain_only;
-                    last_attachments = attachments;
+                    if (!silent) {
+                        // Not saved on server
+                        last_plain_only = draft.plain_only;
+                        last_attachments = attachments;
+                    }
 
                     if (dirty) {
                         // Update draft
@@ -7812,10 +7816,8 @@ public class FragmentCompose extends FragmentBase {
             if (args.getBoolean("large"))
                 ToastEx.makeText(getContext(), R.string.title_large_body, Toast.LENGTH_LONG).show();
 
-            if (args.getBundle("extras").getBoolean("silent")) {
-                etBody.setTag(null);
+            if (args.getBundle("extras").getBoolean("silent"))
                 return;
-            }
 
             boolean needsEncryption = args.getBoolean("needsEncryption");
             int action = args.getInt("action");

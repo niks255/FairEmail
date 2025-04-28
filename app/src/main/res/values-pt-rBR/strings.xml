@@ -162,7 +162,7 @@
     <string name="title_setup_intro">A criação de uma conta tem apenas três passos e, depois disso, você poderá enviar e receber e-mails</string>
     <string name="title_setup_simple">Não há necessidade de alteração de nenhuma das opções</string>
     <string name="title_setup_issue">O FairEmail foi desenvolvido para ajudar a proteger sua privacidade e representa literalmente milhares de horas de trabalho. Se você tiver qualquer problema, por favor, entre em contato comigo antes de deixar uma análise ruim. Ficarei feliz em ajudar!</string>
-    <string name="title_setup_analytics">FairEmail não exibe anúncios e não rastreia ou analisa seu comportamento. Bugsnag é usado para relatório de erros e é desativado por padrão.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">O FairEmail não exibe anúncios e não rastreia nem analisa seu comportamento.</string>
     <string name="title_setup_quick_accounts">Adicionar ou alterar contas</string>
     <string name="title_setup_quick_support">Alguns fornecedores dificultam a adição de uma conta. Por favor, não culpe a FairEmail por isso, mas peça apoio em seu lugar.</string>
     <string name="title_setup_quick_hint">O endereço de e-mail inserido é usado para consultar o servidor de e-mail e autoconfig.thunderbird.net para informações de configuração</string>
@@ -346,6 +346,10 @@
     </string>
     <string name="title_advanced_hint_remark">        As opções são categorizadas por aba, divididas em seções, organizadas por aparência ou uso, e pesquisáveis.
     </string>
+    <string name="title_advanced_hint_options">        Você não precisará da maioria das opções e, como algumas opções são bastante específicas,
+        é compreensível se o funcionamento de nem todas as opções não estiverem claro imediatamente.
+        Por favor, não deixe uma revisão ruim apenas para o número de opções ou para não entender todas as opções imediatamente.
+        Todas as opções são úteis para mais do que algumas pessoas, mas talvez ainda não para você (ainda).    </string>
     <string name="title_advanced_hint_setup">Você pode configurar uma conta tocando no botão do assistente na tela de configuração principal.</string>
     <string name="title_advanced_section_main">Principal</string>
     <string name="title_advanced_section_synchronize">﻿Receber</string>
@@ -534,7 +538,7 @@
     <string name="title_advanced_indentation">Indentatação esquerda/direita para mensagens recebido/enviado em conversas</string>
     <string name="title_advanced_highlight_unread">Destacar mensagens não lidas</string>
     <string name="title_advanced_account_color">Mostrar uma faixa colorida ou um ponto colorido</string>
-    <string name="title_advanced_color_stripe_wide">Use faixa de cores largas</string>
+    <string name="title_advanced_account_color_size">Largura da faixa de cores</string>
     <string name="title_advanced_avatars">Mostrar fotos de contatos</string>
     <string name="title_advanced_bimi">Mostrar Indicadores de Marca para Identificação de Mensagens (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Exigir um certificado VMC válido</string>
@@ -656,6 +660,7 @@
     <string name="title_advanced_reset_importance">Redefinir importância de mensagens em movimento</string>
     <string name="title_advanced_star_snoozed">Adicionar estrela automaticamente ao adiar mensagens</string>
     <string name="title_advanced_star_unsnoozed">Remover automaticamente a estrela em mensagens suspensas</string>
+    <string name="title_advanced_important_unsnoozed">Tornar automaticamente importantes as mensagens de cancelamento de soneca</string>
     <string name="title_advanced_auto_important">Torne as mensagens com estrela automaticamente importantes</string>
     <string name="title_advanced_cancel_snooze">Cancelar soneca em mensagens em movimento</string>
     <string name="title_advanced_auto_block_sender">Bloquear automaticamente o remetente ao denunciar spam</string>
@@ -681,6 +686,7 @@
     <string name="title_advanced_notify_suppress_in_call">Atrasar notificações durante uma chamada</string>
     <string name="title_advanced_notify_suppress_in_car">Atrasar notificações enquanto o Android Auto está conectado</string>
     <string name="title_advanced_notify_summary">Mostrar apenas notificação de resumo</string>
+    <string name="title_advanced_notify_subject">Mostrar assunto nas notificações</string>
     <string name="title_advanced_notify_preview">Mostrar pré-visualização de mensagem nas notificações</string>
     <string name="title_advanced_notify_preview_all">Pré-visualizar todo o texto</string>
     <string name="title_advanced_notify_preview_only">Mostrar notificações apenas com pré-visualização de texto</string>
@@ -783,6 +789,7 @@
     <string name="title_advanced_class_min_difference">Diferença mínima da classe: %1$s %%</string>
     <string name="title_advanced_show_filtered">Mostrar um ícone de filtro quando as regras forem aplicadas</string>
     <string name="title_advanced_haptic_feedback">Feedback tátil sobre ações importantes</string>
+    <string name="title_advanced_haptic_feedback_swipe">Feedback tátil ao deslizar para a esquerda/direita</string>
     <string name="title_advanced_language">Idioma</string>
     <string name="title_advanced_language_system">Sistema</string>
     <string name="title_advanced_integrations_hint">Os serviços em nuvem abaixo não fazem parte do aplicativo. Quaisquer pagamentos irão diretamente para o serviço em nuvem e não para o desenvolvedor do aplicativo.</string>
@@ -1169,6 +1176,7 @@
     <string name="title_hint_operations">Excluir operações pode resultar no desaparecimento de mensagens e problemas de sincronização</string>
     <string name="title_op_title_headers">Baixando cabeçalho</string>
     <string name="title_op_title_raw">Baixando mensagem bruta</string>
+    <string name="title_op_title_add">Enviando mensagem</string>
     <string name="title_folder_name">Nome da pasta</string>
     <string name="title_display_name">Nome de exibição</string>
     <string name="title_show_folders">Mostrar pastas ocultas</string>
@@ -1232,7 +1240,7 @@
     <string name="title_filters_active">Um ou mais filtros ativos</string>
     <string name="title_duplicate_in">Duplicar mensagem em %1$s</string>
     <string name="title_trashed_from">Mensagem destruída de %1$s</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Mensagem enviada para %1$s</string>
+    <string name="title_sent_to">Mensagem enviada para %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Enc: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -2369,6 +2377,11 @@
         <item>Nenhuma</item>
         <item>Listra</item>
         <item>Ponto</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Estreito</item>
+        <item>Médio</item>
+        <item>Largo</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Destinatário</item>

@@ -161,7 +161,7 @@
     <string name="title_setup_intro">A fiók létrehozása csak három lépésből áll és ezt követően e-maileket küldhet és fogadhat</string>
     <string name="title_setup_simple">Nincs szükség egyéb lehetőségek megváltoztatására</string>
     <string name="title_setup_issue">A FairEmail az Ön adatainak védelmére került fejlesztésre, és több ezer munkaóra eredménye. Ha bármilyen problémája van, kérem vegye fel velem a kapcsolatot mielőtt egy negatív értékelést írna. Örömmel segítek!</string>
-    <string name="title_setup_analytics">FairEmail nem jeneít meg reklámokat, és nem követi vagy analizálja az Ön viselkedését. A Bugsnag kizárólag hibajelentésre szolgál, és alapból ki is van kapcsolva.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">A FairEmail nem mutat reklámokat, nem követi önt, és nem elemzi a viselkedését.</string>
     <string name="title_setup_quick_accounts">Fiókok hozzáadása vagy módosítása</string>
     <string name="title_setup_quick_support">Egyes szolgáltatók megbonyolították a fiókok elérését. Ha emiatt nehézségekkel találkozol, inkább kérj segítséget reklamáció helyett.</string>
     <string name="title_setup_quick_hint">A megadott email-címmel lekérjük az email-kiszolgáló és az autoconfig.thunderbird.net beállításait</string>
@@ -344,6 +344,10 @@
     </string>
     <string name="title_advanced_hint_remark">        Az opciók fülekre vannak osztva, és azok tovább szekciókra, kinézet szerint rendezve, és mind kereshető.
     </string>
+    <string name="title_advanced_hint_options">        A legtöbb beállításra nem lesz szüksége, és mivel egyes beállítások elég specifikusak,
+        így teljesen érthető, ha az összes beállítás működése nen világos azonnal.
+        Kérem, ne adjon rossz értékelést csupán a beállítások mennyisége miatt, vagy mert nem világos egyből minden beállítás.
+        A számtalan beállítás hasznos jó pár embernek, ha talán önnek (még) nem is.    </string>
     <string name="title_advanced_hint_setup">Beállíthatja fiókját a fő konfigurációs képernyőn a varázsló gombra nyomva.</string>
     <string name="title_advanced_section_main">Alapbeállítások</string>
     <string name="title_advanced_section_synchronize">Fogadás</string>
@@ -532,7 +536,7 @@
     <string name="title_advanced_indentation">Beérkezett/elküldött üzenetek balra/jobbra tördelése a beszélgetésekben</string>
     <string name="title_advanced_highlight_unread">Olvasatlan üzenetek kiemelése</string>
     <string name="title_advanced_account_color">Színes sáv, vagy pötty mutatása</string>
-    <string name="title_advanced_color_stripe_wide">Széles színcsík használata</string>
+    <string name="title_advanced_account_color_size">Színes csík szélesség</string>
     <string name="title_advanced_avatars">Névjegyzék fényképeinek megjelenítése</string>
     <string name="title_advanced_bimi">Mutassa a Márkajelzést Üzenetazonosításhoz (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Érvényes VMC tanúsítvány megkövetelése</string>
@@ -654,6 +658,7 @@
     <string name="title_advanced_reset_importance">Fontosság törlése áthelyezéskor</string>
     <string name="title_advanced_star_snoozed">Automatikusan csillagozza meg az üzenetet halasztáskor</string>
     <string name="title_advanced_star_unsnoozed">Csillag automatikus eltávolítása az üzenet szundi kikapcsolásakor</string>
+    <string name="title_advanced_important_unsnoozed">Halasztás megszűnésekor az üzenetet automatikusan jelölje meg fontosnak</string>
     <string name="title_advanced_auto_important">Automatikusan csináljon csillagozott üzeneteket fontossá</string>
     <string name="title_advanced_cancel_snooze">Szundi kikapcsolása üzenetek áthelyezésekor</string>
     <string name="title_advanced_auto_block_sender">Küldő automatikus letiltása levélszemét jelentésekor</string>
@@ -679,6 +684,7 @@
     <string name="title_advanced_notify_suppress_in_call">Értesítések késleltetése hívás közben</string>
     <string name="title_advanced_notify_suppress_in_car">Értesítések halasztása amíg az Android Auto csatlakoztatva van</string>
     <string name="title_advanced_notify_summary">Csak összegző értesítések megjelnítése</string>
+    <string name="title_advanced_notify_subject">Mutatása a tárgyat az értesítésben</string>
     <string name="title_advanced_notify_preview">Üzenet előnézetének megjelnítése az értesítésben</string>
     <string name="title_advanced_notify_preview_all">Összes szöveg előnézete</string>
     <string name="title_advanced_notify_preview_only">Az értesítések csak a szöveg előnézete jelenjen meg</string>
@@ -781,6 +787,7 @@
     <string name="title_advanced_class_min_difference">Legalacsonyabb mappa különbség: %1$s %%</string>
     <string name="title_advanced_show_filtered">Szűrőikon mutatása ha szabályt alkalmaztunk</string>
     <string name="title_advanced_haptic_feedback">Rezgés fontos műveleteknél</string>
+    <string name="title_advanced_haptic_feedback_swipe">Rezgés jobbra/balra húzáskor</string>
     <string name="title_advanced_language">Nyelv</string>
     <string name="title_advanced_language_system">Rendszer</string>
     <string name="title_advanced_integrations_hint">Az alábbi felhőszolgáltatások nem az alkalmazás részei. Az esetleges kifizetések közvetlenül a felhőszolgáltatónak történnek, nem az alkalmazás fejlesztőjének.</string>
@@ -1165,6 +1172,7 @@
     <string name="title_hint_operations">Műveletek törlése eltűnő üzeneteket és szinkronizálási problémákat okozhat</string>
     <string name="title_op_title_headers">Fejlécek letöltése</string>
     <string name="title_op_title_raw">Nyers üzenet letöltése</string>
+    <string name="title_op_title_add">Üzenet feltöltés</string>
     <string name="title_folder_name">Mappanév</string>
     <string name="title_display_name">Megjelenítendő név</string>
     <string name="title_show_folders">Rejtett mappák megjelenításe</string>
@@ -1228,7 +1236,7 @@
     <string name="title_filters_active">Egy vagy több szűrő aktív</string>
     <string name="title_duplicate_in">Duplikált üzenet a(z) %1$s mappában</string>
     <string name="title_trashed_from">%1$s-től törölve</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Üzenetet elküldve a következőnek: %1$s</string>
+    <string name="title_sent_to">Üzenetet elküldve a következőnek: %1$s</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -2364,6 +2372,11 @@
         <item>Egyik sem</item>
         <item>Csík</item>
         <item>Pötty</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Keskeny</item>
+        <item>Közepes</item>
+        <item>Széles</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Címzett</item>

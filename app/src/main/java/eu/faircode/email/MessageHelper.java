@@ -5267,6 +5267,9 @@ public class MessageHelper {
                 // https://en.wikipedia.org/wiki/MIME#Multipart_subtypes
                 if ("multipart".equals(ct.getPrimaryType()) &&
                         !("mixed".equalsIgnoreCase(ct.getSubType()) ||
+                                "none".equalsIgnoreCase(ct.getSubType()) ||
+                                "signed".equalsIgnoreCase(ct.getSubType()) ||
+                                "alternate".equalsIgnoreCase(ct.getSubType()) ||
                                 "alternative".equalsIgnoreCase(ct.getSubType()) ||
                                 "related".equalsIgnoreCase(ct.getSubType()) ||
                                 "relative".equalsIgnoreCase(ct.getSubType()) || // typo?
@@ -5636,7 +5639,10 @@ public class MessageHelper {
 
             return count;
         } catch (Throwable ex) {
-            Log.e(ex);
+            if (BuildConfig.PLAY_STORE_RELEASE)
+                Log.i(ex);
+            else
+                Log.e(ex);
             return -1;
         }
     }
@@ -6238,6 +6244,7 @@ public class MessageHelper {
 
         private String getType() {
             // manual-action/MDN-sent-manually; displayed
+            // automatic-action/MDN-sent-automatically; deleted
             if (disposition == null)
                 return null;
             int semi = disposition.lastIndexOf(';');

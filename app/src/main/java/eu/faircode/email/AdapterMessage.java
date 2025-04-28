@@ -120,6 +120,7 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.text.method.LinkMovementMethodCompat;
 import androidx.core.view.MenuCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -485,6 +486,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private ImageButton ibSearchText;
         private ImageButton ibSearch;
         private ImageButton ibTranslate;
+        private ImageButton ibTts;
         private ImageButton ibSummarize;
         private ImageButton ibFullScreen;
         private ImageButton ibForceLight;
@@ -947,6 +949,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSearchText = vsBody.findViewById(R.id.ibSearchText);
             ibSearch = vsBody.findViewById(R.id.ibSearch);
             ibTranslate = vsBody.findViewById(R.id.ibTranslate);
+            ibTts = vsBody.findViewById(R.id.ibTts);
             ibSummarize = vsBody.findViewById(R.id.ibSummarize);
             ibFullScreen = vsBody.findViewById(R.id.ibFullScreen);
             ibForceLight = vsBody.findViewById(R.id.ibForceLight);
@@ -983,6 +986,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                     tvBody.setBreakStrategy(LineBreaker.BREAK_STRATEGY_HIGH_QUALITY);
             }
+            ViewCompat.enableAccessibleClickableSpanSupport(tvBody);
             wvBody = vsBody.findViewById(R.id.wvBody);
             pbBody = vsBody.findViewById(R.id.pbBody);
             vwRipple = vsBody.findViewById(R.id.vwRipple);
@@ -1123,6 +1127,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibSearch.setOnClickListener(this);
                 ibTranslate.setOnClickListener(this);
                 ibTranslate.setOnLongClickListener(this);
+                ibTts.setOnClickListener(this);
                 ibSummarize.setOnClickListener(this);
                 ibSummarize.setOnLongClickListener(this);
                 ibFullScreen.setOnClickListener(this);
@@ -1250,6 +1255,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 ibSearch.setOnClickListener(null);
                 ibTranslate.setOnClickListener(null);
                 ibTranslate.setOnLongClickListener(null);
+                ibTts.setOnClickListener(null);
                 ibSummarize.setOnClickListener(null);
                 ibSummarize.setOnLongClickListener(null);
                 ibFullScreen.setOnClickListener(null);
@@ -1886,6 +1892,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSearchText.setVisibility(View.GONE);
             ibSearch.setVisibility(View.GONE);
             ibTranslate.setVisibility(View.GONE);
+            ibTts.setVisibility(View.GONE);
             ibSummarize.setVisibility(View.GONE);
             ibFullScreen.setVisibility(View.GONE);
             ibForceLight.setVisibility(View.GONE);
@@ -2185,6 +2192,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             ibSearchText.setVisibility(View.GONE);
             ibSearch.setVisibility(View.GONE);
             ibTranslate.setVisibility(View.GONE);
+            ibTts.setVisibility(View.GONE);
             ibSummarize.setVisibility(View.GONE);
             ibFullScreen.setVisibility(View.GONE);
             ibForceLight.setVisibility(View.GONE);
@@ -2412,6 +2420,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     boolean button_hide = prefs.getBoolean("button_hide", false);
                     boolean button_importance = prefs.getBoolean("button_importance", false);
                     boolean button_translate = prefs.getBoolean("button_translate", true);
+                    boolean button_tts = prefs.getBoolean("button_tts", false);
                     boolean button_summarize = prefs.getBoolean("button_summarize", false);
                     boolean button_full_screen = prefs.getBoolean("button_full_screen", false);
                     boolean button_force_light = prefs.getBoolean("button_force_light", true);
@@ -2454,6 +2463,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     ibSearchText.setVisibility(tools && !outbox && button_search_text && message.content ? View.VISIBLE : View.GONE);
                     ibSearch.setVisibility(tools && !outbox && button_search && (froms > 0 || tos > 0) ? View.VISIBLE : View.GONE);
                     ibTranslate.setVisibility(tools && !outbox && button_translate && DeepL.isAvailable(context) && message.content ? View.VISIBLE : View.GONE);
+                    ibTts.setVisibility(tools && !outbox && button_tts && message.content ? View.VISIBLE : View.GONE);
                     ibSummarize.setVisibility(tools && !outbox && button_summarize && AI.isAvailable(context) && message.content ? View.VISIBLE : View.GONE);
                     ibFullScreen.setVisibility(tools && full && button_full_screen && message.content ? View.VISIBLE : View.GONE);
                     ibForceLight.setVisibility(tools && (full || experiments) && dark && button_force_light && message.content ? View.VISIBLE : View.GONE);
@@ -4650,6 +4660,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     onSearchContact(message, false);
                 } else if (id == R.id.ibTranslate) {
                     onActionTranslate(message);
+                } else if (id == R.id.ibTts) {
+                    onActionTts(message);
                 } else if (id == R.id.ibSummarize) {
                     onActionSummarize(message, ibSummarize);
                 } else if (id == R.id.ibFullScreen)
@@ -4719,7 +4731,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                     card.setClickable(false);
                 }
 
-                if (EntityFolder.DRAFTS.equals(message.folderType) && message.visible == 1 &&
+                if (EntityFolder.DRAFTS.equals(message.folderType) && message.drafts == 1 &&
                         !EntityMessage.PGP_SIGNENCRYPT.equals(message.encrypt) &&
                         !EntityMessage.SMIME_SIGNENCRYPT.equals(message.encrypt)) {
                     context.startActivity(
@@ -6472,7 +6484,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             popupMenu.getMenu().findItem(R.id.menu_force_light).setChecked(force_light);
 
             popupMenu.getMenu().findItem(R.id.menu_share).setEnabled(message.content);
-            popupMenu.getMenu().findItem(R.id.menu_share_link).setVisible(BuildConfig.DEBUG);
+            popupMenu.getMenu().findItem(R.id.menu_share_link).setVisible(!BuildConfig.PLAY_STORE_RELEASE);
             popupMenu.getMenu().findItem(R.id.menu_pin).setVisible(pin);
             popupMenu.getMenu().findItem(R.id.menu_event).setEnabled(message.content);
             popupMenu.getMenu().findItem(R.id.menu_print).setEnabled(Helper.hasWebView(context) && message.content);
@@ -7491,6 +7503,64 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             }
         }
 
+        private void onActionTts(TupleMessageEx message) {
+            boolean tts = properties.getValue("tts", message.id, false);
+            properties.setValue("tts", message.id, !tts);
+
+            if (tts) {
+                Intent intent = new Intent(context, ServiceTTS.class)
+                        .setAction("tts:" + message.id)
+                        .putExtra(ServiceTTS.EXTRA_FLUSH, true)
+                        .putExtra(ServiceTTS.EXTRA_TEXT, "")
+                        .putExtra(ServiceTTS.EXTRA_LANGUAGE, message.language)
+                        .putExtra(ServiceTTS.EXTRA_UTTERANCE_ID, "tts:" + message.id);
+                context.startService(intent);
+                return;
+            }
+
+            Bundle args = new Bundle();
+            args.putLong("id", message.id);
+
+            new SimpleTask<String>() {
+                @Override
+                protected String onExecute(Context context, Bundle args) throws Throwable {
+                    long id = args.getLong("id");
+
+                    DB db = DB.getInstance(context);
+                    EntityMessage message = db.message().getMessage(id);
+                    if (message == null)
+                        return null;
+
+                    String body = Helper.readText(message.getFile(context));
+                    String text = HtmlHelper.getFullText(context, body);
+
+                    // Avoid: Not enough namespace quota ... for ...
+                    text = HtmlHelper.truncate(text, ServiceTTS.getMaxTextSize() / 3);
+
+                    return text;
+                }
+
+                @Override
+                protected void onExecuted(Bundle args, String text) {
+                    if (text == null)
+                        return;
+
+                    Intent intent = new Intent(context, ServiceTTS.class)
+                            .setAction("tts:" + message.id)
+                            .putExtra(ServiceTTS.EXTRA_FLUSH, true)
+                            .putExtra(ServiceTTS.EXTRA_TEXT, text)
+                            .putExtra(ServiceTTS.EXTRA_LANGUAGE, message.language)
+                            .putExtra(ServiceTTS.EXTRA_UTTERANCE_ID, "tts:" + message.id);
+                    context.startService(intent);
+                }
+
+                @Override
+                protected void onException(Bundle args, Throwable ex) {
+                    Log.unexpectedError(parentFragment.getParentFragmentManager(), ex);
+                }
+            }.execute(context, owner, args, "tts");
+        }
+
         private void onActionSummarize(TupleMessageEx message, View anchor) {
             FragmentDialogSummarize.summarize(message, parentFragment.getParentFragmentManager(), anchor, owner);
         }
@@ -7534,8 +7604,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         private void onMenuCreateRule(TupleMessageEx message) {
             Intent rule = new Intent(ActivityView.ACTION_EDIT_RULE);
             rule.putExtra("account", message.account);
-            rule.putExtra("folder", message.folder);
             rule.putExtra("protocol", message.accountProtocol);
+            rule.putExtra("folder", message.folder);
+            rule.putExtra("type", message.folderType);
             if (message.from != null && message.from.length > 0)
                 rule.putExtra("sender", ((InternetAddress) message.from[0]).getAddress());
             if (message.to != null && message.to.length > 0)
@@ -8177,6 +8248,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 result.add(context.getString(
                         message.unseen > 0 ? R.string.title_accessibility_unseen : R.string.title_accessibility_seen));
 
+                if (message.accountColor != null && !TextUtils.isEmpty(message.accountName))
+                    result.add(message.accountName);
+
                 if (tvCount.getVisibility() == View.VISIBLE) {
                     result.add(context.getResources().getQuantityString(
                             R.plurals.title_accessibility_messages, message.visible, message.visible));
@@ -8377,8 +8451,8 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
         this.unmetered = state.isUnmetered();
 
         this.colorCardBackground = Helper.resolveColor(context, R.attr.colorCardBackground);
-        boolean color_stripe_wide = prefs.getBoolean("color_stripe_wide", false);
-        this.colorStripeWidth = Helper.dp2pixels(context, color_stripe_wide ? 12 : 6);
+        int account_color_size = prefs.getInt("account_color_size", 6);
+        this.colorStripeWidth = Helper.dp2pixels(context, account_color_size);
         this.colorAccent = Helper.resolveColor(context, androidx.appcompat.R.attr.colorAccent);
         this.textColorPrimary = Helper.resolveColor(context, android.R.attr.textColorPrimary);
         this.textColorPrimaryInverse = Helper.resolveColor(context, android.R.attr.textColorPrimaryInverse);
@@ -8513,16 +8587,19 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 if (next.uid != null &&
                         properties.getValue("expanded", next.id)) {
                     // Mark seen when needed
-                    if (next.accountAutoSeen && !Boolean.TRUE.equals(next.ui_seen) &&
-                            !properties.getValue("auto_seen", next.id)) {
-                        properties.setValue("auto_seen", next.id, true);
-                        EntityOperation.queue(context, next, EntityOperation.SEEN, true);
-                        EntityLog.log(context, EntityLog.Type.Debug3, "Auto seen id=" + next.id);
-                    }
+                    if (next.accountAutoSeen)
+                        if (Boolean.TRUE.equals(next.ui_seen))
+                            properties.setValue("auto_seen", next.id, true);
+                        else if (!properties.getValue("auto_seen", next.id)) {
+                            properties.setValue("auto_seen", next.id, true);
+                            EntityOperation.queue(context, next, EntityOperation.SEEN, true);
+                            EntityLog.log(context, EntityLog.Type.Debug3, "Auto seen id=" + next.id);
+                        }
 
                     // Download body when needed
-                    if (!next.content &&
-                            !properties.getValue("auto_body", next.id)) {
+                    if (next.content)
+                        properties.setValue("auto_body", next.id, true);
+                    else if (!properties.getValue("auto_body", next.id)) {
                         properties.setValue("auto_body", next.id, true);
                         EntityOperation.queue(context, next, EntityOperation.BODY);
                         EntityLog.log(context, EntityLog.Type.Debug3, "Auto body id=" + next.id);

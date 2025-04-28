@@ -176,7 +176,7 @@
     <string name="title_setup_intro">Postavljanje računa odvija se u samo tri koraka i nakon toga možete slati i primati e-poštu</string>
     <string name="title_setup_simple">Nije potrebno mijenjati druge opcije</string>
     <string name="title_setup_issue">FairEmail je razvijen kako bi zaštitio vašu privatnost i predstavlja djelo u koje je doslovno uloženo na hiljade sati. Ukoliko imate nekih problema, molim da me prvo kontaktirate za podršku, prije nego ostavite lošu recenziju. Rado ću Vam pomoći!</string>
-    <string name="title_setup_analytics">FairEmail ne prikazuje reklame i ne prati niti analizira Vaše ponašanje. Bugsnag se koristi za prijavljivanje grešaka i isključen je po zadanom.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail ne prikazuje reklame niti prati ili analizira vaše ponašanje.</string>
     <string name="title_setup_quick_accounts">Dodaj ili ukloni račune</string>
     <string name="title_setup_quick_support">Neki provajderi (poslužitelji) otežavaju način za dodavanje računa. Molimo da ne krivite FairEmail zbog toga, nego da zatražite podršku.</string>
     <string name="title_setup_quick_hint">Unesena adresa e-pošte koristi se za slanje upita e-mail serveru i za konfiguracijske informacije s autoconfig.thunderbird.net </string>
@@ -360,6 +360,11 @@
         Sve opcije imaju postavljene uobičajene standardne vrijednosti, koje ne trebate mijenjati osim ako ne preferirate drugačije.
     </string>
     <string name="title_advanced_hint_remark">        Opcije su kategorisane prema kartici (tabu), podijeljene u odjeljke, organizovane prema izgledu ili upotrebi i mogu se pretraživati.
+    </string>
+    <string name="title_advanced_hint_options">        Nećete trebati većinu opcija i zbog toga što su neke opcije vrlo specifične,
+        razumljivo je da Vam funkcioniranje svih opcija neće biti sasvim jasno.
+        Molimo da ne ostavljate lošu recenziju zbog brojnih opcija ili zbog momentalnog nerazumijevanja svih opcija.
+        Sve opcije su korisne nekolicini ljudi, ali možda još (uvijek) nisu za Vas.
     </string>
     <string name="title_advanced_hint_setup">Možete podesiti račun dodirom na dugme \'čarobnjak\' na početnom ekranu postavki.</string>
     <string name="title_advanced_section_main">Početni ekran</string>
@@ -549,7 +554,7 @@
     <string name="title_advanced_indentation">Lijevo/desno poravnanje primljenih/poslanih poruka u konverzacijama</string>
     <string name="title_advanced_highlight_unread">Markiraj nepročitane poruke</string>
     <string name="title_advanced_account_color">Prikaži obojenu traku ili tačku</string>
-    <string name="title_advanced_color_stripe_wide">Koristi široku traku s bojama</string>
+    <string name="title_advanced_account_color_size">Širina obojene trake</string>
     <string name="title_advanced_avatars">Prikaži fotografije kontakata</string>
     <string name="title_advanced_bimi">Brand Indicators for Message Identification (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Zahtjevaj važeći VMC certifikat</string>
@@ -671,6 +676,7 @@
     <string name="title_advanced_reset_importance">Resetuj važnost pri premještanju poruka</string>
     <string name="title_advanced_star_snoozed">Automatski dodaj zvjezdicu za odložene poruke</string>
     <string name="title_advanced_star_unsnoozed">Automatski ukloni zvjezdicu za neodgođene poruke</string>
+    <string name="title_advanced_important_unsnoozed">Automatski označi neodložene poruke kao važne</string>
     <string name="title_advanced_auto_important">Automatski označi poruke sa zvjezdicom kao važne</string>
     <string name="title_advanced_cancel_snooze">Otkaži odgađanje pri premještanju poruka</string>
     <string name="title_advanced_auto_block_sender">Automatski blokiraj pošiljaoca kada se prijavljuje spam</string>
@@ -696,6 +702,7 @@
     <string name="title_advanced_notify_suppress_in_call">Odgodi obavještenja tokom poziva</string>
     <string name="title_advanced_notify_suppress_in_car">Odgodi obavještenja kada je spojen Android Auto</string>
     <string name="title_advanced_notify_summary">Prikaži samo obavještenja sa sažetkom</string>
+    <string name="title_advanced_notify_subject">Prikaži predmet u obavještenjima</string>
     <string name="title_advanced_notify_preview">Prikaži pregled poruke u obavještenjima</string>
     <string name="title_advanced_notify_preview_all">Prikaz cijelog teksta</string>
     <string name="title_advanced_notify_preview_only">Prikaži obavještenja samo sa pregledom poruka</string>
@@ -799,6 +806,7 @@
     <string name="title_advanced_class_min_difference">Minimalna razlika klasa: %1$s %%</string>
     <string name="title_advanced_show_filtered">Prikaži ikonicu za filtriranje kada su pravila primijenjena</string>
     <string name="title_advanced_haptic_feedback">Haptičke povratne informacije za važne radnje</string>
+    <string name="title_advanced_haptic_feedback_swipe">Haptička povr. info. pri prevlačenju lijevo/desno</string>
     <string name="title_advanced_language">Jezik</string>
     <string name="title_advanced_language_system">Sistemski</string>
     <string name="title_advanced_integrations_hint">Dolje navedene cloud usluge nisu dio ove aplikacije. Bilo kakva plaćanja idu direktno ka usluzi u oblaku, a ne programeru aplikacije.</string>
@@ -1184,6 +1192,7 @@
     <string name="title_hint_operations">Brisanje operacija može prouzrokovati nestanak poruka i probleme sa sinhronizacijom</string>
     <string name="title_op_title_headers">Preuzimanje zaglavlja</string>
     <string name="title_op_title_raw">Preuziamanje raw poruke</string>
+    <string name="title_op_title_add">Prijenos poruke</string>
     <string name="title_folder_name">Naziv foldera</string>
     <string name="title_display_name">Prikazano ime</string>
     <string name="title_show_folders">Prikaži skrivene foldere</string>
@@ -1248,7 +1257,7 @@
     <string name="title_filters_active">Jedan ili više filtera je aktivno</string>
     <string name="title_duplicate_in">Dupliciraj poruku u %1$s</string>
     <string name="title_trashed_from">Izbrisana poruka od %1$s</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Pošalji poruku %1$s</string>
+    <string name="title_sent_to">Pošalji poruku %1$s</string>
     <string name="title_subject_reply">Odg: %1$s</string>
     <string name="title_subject_forward">Pro: %1$s</string>
     <string name="title_subject_reply_alt">Odg: %1$s</string>
@@ -2381,6 +2390,11 @@
         <item>Nijedno</item>
         <item>Traka</item>
         <item>Tačka</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Uska</item>
+        <item>Srednji</item>
+        <item>Široka</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Primalac</item>

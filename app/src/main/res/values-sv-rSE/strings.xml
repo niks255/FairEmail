@@ -162,7 +162,6 @@
     <string name="title_setup_intro">Att lägga till ett konto tar bara tre steg och efter det kan du skicka och ta emot e-post</string>
     <string name="title_setup_simple">Det finns ingen anledning att ändra några andra inställningar</string>
     <string name="title_setup_issue">FairEmail har utvecklats för att hjälpa dig att skydda din integritet och representerar bokstavligen tusentals timmars arbete. Om du har några problem, vängligen kontakta mig först för support innan du lämnar en dålig recension. Jag hjälper gärna till!</string>
-    <string name="title_setup_analytics">FairEmail visar inte annonser och spårar inte eller analyserar ditt beteende. Bugsnag används för felrapportering och är inaktiverat som standard.</string>
     <string name="title_setup_quick_accounts">Lägg till eller byt konton</string>
     <string name="title_setup_quick_support">Vissa leverantörer gör det svårt att lägga till ett konto. Vänligen skyll inte på FairEmail för det, be om support istället.</string>
     <string name="title_setup_quick_hint">Den angivna e-postadressen används för att fråga e-postservern och autoconfig.thunderbird.net för konfigurationsinformation</string>
@@ -531,7 +530,7 @@
     <string name="title_advanced_indentation">Vänster/höger indrag mottaget/skickade meddelanden i konversationer</string>
     <string name="title_advanced_highlight_unread">Markera olästa meddelanden</string>
     <string name="title_advanced_account_color">Visa en färgrand eller färgpunkt</string>
-    <string name="title_advanced_color_stripe_wide">Använd bred färgrand</string>
+    <string name="title_advanced_account_color_size">Bredd på färgband</string>
     <string name="title_advanced_avatars">Visa kontaktfoton</string>
     <string name="title_advanced_bimi">Visa varumärkesindikatorer för meddelandeidentifiering (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Kräv ett giltigt VMC-certifikat</string>
@@ -653,6 +652,7 @@
     <string name="title_advanced_reset_importance">Återställ betydelsen när du flyttar meddelanden</string>
     <string name="title_advanced_star_snoozed">Stjärnmarkera automatiskt vid slumring av meddelanden</string>
     <string name="title_advanced_star_unsnoozed">Ta automatiskt bort stjärnmarkering när meddelanden inte längre är vilande</string>
+    <string name="title_advanced_important_unsnoozed">Gör automatiskt uppväckta meddelanden viktiga</string>
     <string name="title_advanced_auto_important">Gör automatiskt stjärnmärkta meddelanden viktiga</string>
     <string name="title_advanced_cancel_snooze">Avbryt snooze när meddelanden flyttas</string>
     <string name="title_advanced_auto_block_sender">Blockera avsändaren automatiskt vid rapportering av skräppost</string>
@@ -1158,6 +1158,7 @@
     <string name="title_hint_operations">Att ta bort pågående åtgärder kan resultera i försvinnande meddelanden och synkroniseringsproblem</string>
     <string name="title_op_title_headers">Laddar ner rubriker</string>
     <string name="title_op_title_raw">Hämtar rådata för meddelande</string>
+    <string name="title_op_title_add">Laddar upp meddelande</string>
     <string name="title_folder_name">Mappnamn</string>
     <string name="title_display_name">Visningsnamn</string>
     <string name="title_show_folders">Visa dolda mappar</string>
@@ -1221,6 +1222,7 @@
     <string name="title_filters_active">Ett eller flera filter är aktiva</string>
     <string name="title_duplicate_in">Duplicerade meddelande i %1$s</string>
     <string name="title_trashed_from">Kastat meddelande från %1$s</string>
+    <string name="title_sent_to">Skickade meddelandet till %1$s</string>
     <string name="title_subject_reply">Sv: %1$s</string>
     <string name="title_subject_forward">Vb: %1$s</string>
     <string name="title_subject_reply_alt">Sv: %1$s</string>
@@ -2348,6 +2350,11 @@
         <item>Ingen</item>
         <item>Färgrand</item>
         <item>Punkt</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Smal</item>
+        <item>Medel</item>
+        <item>Bred</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Mottagare</item>

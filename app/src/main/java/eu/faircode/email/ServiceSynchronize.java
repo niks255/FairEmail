@@ -983,7 +983,6 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                 last = stats;
 
-                EntityLog.log(ServiceSynchronize.this, "Widget update");
                 Widget.update(ServiceSynchronize.this);
 
                 boolean badge = prefs.getBoolean("badge", true);
@@ -1382,6 +1381,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ServiceSynchronize.this);
                             boolean threading = prefs.getBoolean("threading", true);
                             boolean flag_unsnoozed = prefs.getBoolean("flag_unsnoozed", false);
+                            boolean important_unsnoozed = prefs.getBoolean("important_unsnoozed", false);
 
                             // Show thread
                             List<EntityMessage> messages = db.message().getMessagesByThread(
@@ -1392,6 +1392,12 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                             db.message().setMessageUnsnoozed(message.id, true);
                             if (flag_unsnoozed)
                                 EntityOperation.queue(ServiceSynchronize.this, message, EntityOperation.FLAG, false);
+                            if (important_unsnoozed) {
+                                db.message().setMessageImportance(message.id, EntityMessage.PRIORITIY_HIGH);
+                                EntityOperation.queue(ServiceSynchronize.this, message, EntityOperation.KEYWORD,
+                                        MessageHelper.FLAG_HIGH_IMPORTANCE, true);
+
+                            }
                             EntityOperation.queue(ServiceSynchronize.this, message, EntityOperation.SEEN, false, false);
                         }
 
@@ -1792,7 +1798,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                     if (NotificationHelper.areNotificationsEnabled(nm))
                                         nm.notify("receive:" + account.id,
                                                 NotificationHelper.NOTIFICATION_TAGGED,
-                                                Core.getNotificationError(this, "error", account, 0, ex)
+                                                Core.getNotificationError(this, "error", account, null, null, ex)
                                                         .build());
                                 } catch (Throwable ex1) {
                                     Log.w(ex1);
@@ -2343,7 +2349,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
 
                                                                 try {
                                                                     ifolder = iservice.getStore().getFolder(folder.name);
-                                                                } catch (IllegalStateException ex) {
+                                                                } catch (IllegalStateException | MessagingException ex) {
                                                                     if ("Not connected".equals(ex.getMessage())) {
                                                                         Log.i(ex);
                                                                         return; // Store closed
@@ -2687,7 +2693,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                 if (NotificationHelper.areNotificationsEnabled(nm))
                                     nm.notify("receive:" + account.id,
                                             NotificationHelper.NOTIFICATION_TAGGED,
-                                            Core.getNotificationError(this, "warning", account, 0, warning)
+                                            Core.getNotificationError(this, "warning", account, null, null, warning)
                                                     .build());
                             } catch (Throwable ex1) {
                                 Log.w(ex1);

@@ -190,7 +190,7 @@
     <string name="title_setup_intro">Nastavení účtu jsou jen tři kroky a poté již můžete posílat a přijímat e-maily</string>
     <string name="title_setup_simple">Není třeba měnit žádné další volby</string>
     <string name="title_setup_issue">FairEmail byl vyvinut tak, aby Vám pomohl chránit vaše soukromí a zabral doslova tisíce hodin práce. Pokud máte nějaké problémy, prosím kontaktujte s Vašimi dotazy nejprve mě, než se rozhodnete pro špatné hodnocení. S radostí Vám pomůžu!</string>
-    <string name="title_setup_analytics">FairEmail nezobrazuje reklamy a nezaznamenává ani neanalyzuje vaše chování. Bugsnag se používá pro hlášení chyb a je ve výchozím nastavení vypnut.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail nezobrazuje reklamy a nesleduje ani neanalyzuje vaše chování.</string>
     <string name="title_setup_quick_accounts">Přidat nebo upravit účty</string>
     <string name="title_setup_quick_support">Někteří poskytovatelé činí přidání účtu zbytečně obtížným. Nekřivděte prosím kvůli tomu FairEmailu, namísto toho požádejte o podporu.</string>
     <string name="title_setup_quick_hint">Zadaná e-mailová adresa se použije k dotazu na e-mailový server a autoconfig.thunderbird.net pro získání konfiguračních informací</string>
@@ -374,6 +374,11 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_hint_message">        Vcházíte do rozšířených možností.        Všechny volby jsou nastaveny dle běžných konvencí, tudíž je není potřeba měnit, nemáte-li odlišnou preferenci.
     </string>
     <string name="title_advanced_hint_remark">        Možnosti jsou rozděleny podle karty, rozděleny do sekcí, uspořádány podle vzhledu nebo použití a vyhledávatelné.
+    </string>
+    <string name="title_advanced_hint_options">        Nebudete potřebovat většinu voleb, a protože některé jsou docela specifické,
+        je pochopitelné, pokud není fungování všech voleb okamžitě jasné.
+        Nenechávejte prosím špatnou recenzi jen pro jejich množství nebo pokud je hned všechny nepochopíte.
+        Všechny volby jsou užitečné pro více než jen několik lidí, ale možná pro vás (zatím) ne.
     </string>
     <string name="title_advanced_hint_setup">Účet můžete nakonfigurovat klepnutím na tlačítko průvodce na hlavní obrazovce nastavení.</string>
     <string name="title_advanced_section_main">Hlavní</string>
@@ -563,7 +568,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_indentation">Levé/pravé odsazení přijatých/odeslaných zpráv v konverzacích</string>
     <string name="title_advanced_highlight_unread">Zvýraznit nepřečtené zprávy</string>
     <string name="title_advanced_account_color">Zobrazit barevný pruh nebo barevný bod</string>
-    <string name="title_advanced_color_stripe_wide">Použít široký barevný pruh</string>
+    <string name="title_advanced_account_color_size">Šířka barevného pruhu</string>
     <string name="title_advanced_avatars">Zobrazit fotografie kontaktů</string>
     <string name="title_advanced_bimi">Zobrazit Brand Indicators for Message Identification (BIMI)</string>
     <string name="title_advanced_bimi_vmc">Vyžaduje platný certifikát VMC</string>
@@ -685,6 +690,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_reset_importance">Obnovit důležitost při přesunu zpráv</string>
     <string name="title_advanced_star_snoozed">Při odložení zpráv přidat hvězdičku automaticky</string>
     <string name="title_advanced_star_unsnoozed">Automaticky odebrat hvězdičku po zrušení odložení zpráv</string>
+    <string name="title_advanced_important_unsnoozed">Automaticky nastavit odložené zprávy důležitými</string>
     <string name="title_advanced_auto_important">Automaticky činit zprávy s hvězdičkou důležitými</string>
     <string name="title_advanced_cancel_snooze">Zrušit odložení při přesunu zpráv</string>
     <string name="title_advanced_auto_block_sender">Automaticky zablokovat odesílatele při hlášení spamu</string>
@@ -710,6 +716,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_notify_suppress_in_call">Zpoždění upozornění během hovoru</string>
     <string name="title_advanced_notify_suppress_in_car">Zpoždění oznámení při připojení Android Auto</string>
     <string name="title_advanced_notify_summary">Zobrazit pouze souhrnné oznámení</string>
+    <string name="title_advanced_notify_subject">Zobrazit předmět v oznámeních</string>
     <string name="title_advanced_notify_preview">Zobrazit náhled zprávy v oznámení</string>
     <string name="title_advanced_notify_preview_all">Náhled na celý text</string>
     <string name="title_advanced_notify_preview_only">Zobrazit pouze oznámení s náhledem textu</string>
@@ -812,6 +819,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_class_min_difference">Minimální rozdíl pro klasifikaci: %1$s %%</string>
     <string name="title_advanced_show_filtered">Zobrazit ikonu filtru při použití pravidel</string>
     <string name="title_advanced_haptic_feedback">Hmatová odezva na důležité akce</string>
+    <string name="title_advanced_haptic_feedback_swipe">Hmatová odezva při posunutí doleva/doprava</string>
     <string name="title_advanced_language">Jazyk</string>
     <string name="title_advanced_language_system">Systémový</string>
     <string name="title_advanced_integrations_hint">Níže uvedené služby nejsou součástí aplikace. Veškeré platby budou směřovat přímo na účet cloudové služby a ne pro vývojáře aplikací.</string>
@@ -1198,6 +1206,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_hint_operations">Odstranění operací může mít za následek mizení zpráv a problémy se synchronizací</string>
     <string name="title_op_title_headers">Stahování záhlaví</string>
     <string name="title_op_title_raw">Stahování zdrojové zprávy</string>
+    <string name="title_op_title_add">Nahrávání zprávy</string>
     <string name="title_folder_name">Název složky</string>
     <string name="title_display_name">Zobrazované jméno</string>
     <string name="title_show_folders">Zobrazit skryté složky</string>
@@ -1261,7 +1270,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_filters_active">Jeden nebo více filtrů aktivních</string>
     <string name="title_duplicate_in">Duplikát zprávy v %1$s</string>
     <string name="title_trashed_from">Zpráva v koši od %1$s</string>
-    <string name="title_sent_to" comment="title_sent_to&#10;Text to tell that a message was sent to someone">Zpráva pro %1$s byla odeslána</string>
+    <string name="title_sent_to">Zpráva pro %1$s byla odeslána</string>
     <string name="title_subject_reply">Re: %1$s</string>
     <string name="title_subject_forward">Fwd: %1$s</string>
     <string name="title_subject_reply_alt">Re: %1$s</string>
@@ -2400,6 +2409,11 @@ v prohlížeči ze všech Google účtů.</string>
         <item>Žádné</item>
         <item>Pruh</item>
         <item>Tečka</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Úzký</item>
+        <item>Střední</item>
+        <item>Široký</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Příjemce</item>

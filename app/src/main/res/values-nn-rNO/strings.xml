@@ -1523,6 +1523,11 @@
         <item>Stripe</item>
         <item>Dot</item>
     </string-array>
+    <string-array name="accountColorSizes">
+        <item>Narrow</item>
+        <item>Middels</item>
+        <item>Wide</item>
+    </string-array>
     <string-array name="contactTypes">
         <item>Mottaker</item>
         <item>Avsender</item>

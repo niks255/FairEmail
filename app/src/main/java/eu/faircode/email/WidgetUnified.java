@@ -271,6 +271,7 @@ public class WidgetUnified extends AppWidgetProvider {
             try {
                 int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, WidgetUnified.class));
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.lv);
+                EntityLog.log(context, "Updated widget data count=" + appWidgetIds.length);
             } catch (Throwable ex) {
                 Log.e(ex);
             /*

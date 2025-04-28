@@ -158,7 +158,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_setup_intro">Bir hesap oluşturmak sadece üç adımdan oluşur ve bundan sonra e-posta gönderip alabilirsiniz</string>
     <string name="title_setup_simple">Başka herhangi bir ayarı değiştirmeye gerek yoktur</string>
     <string name="title_setup_issue">FairEmail, gizliliğinizi korumanıza yardımcı olmak için geliştirildi ve kelimenin tam anlamıyla binlerce saatlik çalışmayı temsil ediyor. Herhangi bir sorununuz varsa, lütfen kötü bir yorum bırakmadan önce destek için benimle iletişime geçin. Yardım etmekten mutluluk duyarim!</string>
-    <string name="title_setup_analytics">FairEmail reklam göstermez ve davranışınızı izlemez veya analiz etmez. Bugsnag, hata raporlama için kullanılır ve varsayılan olarak devre dışıdır.</string>
+    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail reklam göstermez ve davranışlarınızı izlemez veya analiz etmez.</string>
     <string name="title_setup_quick_accounts">Hesap ekle veya değiştir</string>
     <string name="title_setup_quick_support">Bazı sağlayıcılar hesap eklemeyi zorlaştırır. Lütfen bunun için FairEmail\'i suçlamayın, bunun yerine destek isteyin.</string>
     <string name="title_setup_quick_hint">Girilen e-posta adresi, yapılandırma bilgileri için e-posta sunucusunu ve autoconfig.thunderbird.net\'i sorgulamak için kullanılır</string>
@@ -341,6 +341,11 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_hint_message">        Daha gelişmiş seçeneklere gidiyorsunuz.        Tüm seçenekler, farklı bir tercihiniz olmadığı sürece değiştirmenizin gerekmediği yaygın kullanılan varsayılan değerlere sahiptir.
     </string>
     <string name="title_advanced_hint_remark">Seçenekler sekmeye göre sınıflandırılmış, bölümlere ayrılmış, görünüm veya kullanıma göre düzenlenmiş ve aranabilir.
+    </string>
+    <string name="title_advanced_hint_options">        Çoğu seçeneğe ihtiyacınız olmayacak ve bazı seçenekler oldukça spesifik olduğundan,
+        Tüm seçeneklerin işleyişinin hemen net olmaması anlaşılabilir bir durumdur.
+        Lütfen sadece seçenek sayısı nedeniyle veya tüm seçenekleri hemen anlamadığınız için kötü yorum bırakmayın.
+        Tüm seçenekler birkaç kişiden fazlası için yararlıdır, ancak sizin için (henüz) yararlı olmayabilir.
     </string>
     <string name="title_advanced_hint_setup">Ana yapılandırma ekranındaki sihirbaz düğmesine dokunarak bir hesabı yapılandırabilirsiniz.</string>
     <string name="title_advanced_section_main">Ana</string>
@@ -530,7 +535,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_indentation">Sohbetlerde alınan/gönderilen mesajları sola/sağa girintile</string>
     <string name="title_advanced_highlight_unread">Okunmamış iletileri vurgula</string>
     <string name="title_advanced_account_color">Bir renk şeridi veya renk noktası göster</string>
-    <string name="title_advanced_color_stripe_wide">Geniş renkli şerit kullanın</string>
+    <string name="title_advanced_account_color_size">Renk şeridi genişliği</string>
     <string name="title_advanced_avatars">Kişi fotoğraflarını göster</string>
     <string name="title_advanced_bimi">Brand Indicators for Message Identification (BIMI) Göster</string>
     <string name="title_advanced_bimi_vmc">Geçerli bir VMC sertifikası gerektirir</string>
@@ -652,6 +657,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_reset_importance">Mesajları taşırken önem derecesini sıfırla</string>
     <string name="title_advanced_star_snoozed">Ertelenen mesajlara otomatik olarak yıldız ekle</string>
     <string name="title_advanced_star_unsnoozed">Ertelenmeyen mesajlardaki yıldızı otomatik olarak kaldırın</string>
+    <string name="title_advanced_important_unsnoozed">Çözülmemiş mesajları otomatik olarak önemli hale getirin</string>
     <string name="title_advanced_auto_important">Yıldızlanan mesajları otomatik olarak önemli hale getir</string>
     <string name="title_advanced_cancel_snooze">Hareketli mesajlarda ertelemeyi iptal et</string>
     <string name="title_advanced_auto_block_sender">Spam bildirirken göndereni otomatik olarak engelle</string>
@@ -677,6 +683,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_notify_suppress_in_call">Görüşme sırasında bildirimleri geciktir</string>
     <string name="title_advanced_notify_suppress_in_car">Android Oto bağlıyken bildirimleri ertele</string>
     <string name="title_advanced_notify_summary">Sadece özet bildirimini göster</string>
+    <string name="title_advanced_notify_subject">Show subject in notifications</string>
     <string name="title_advanced_notify_preview">Bildirimlerde ileti önizlemesini göster</string>
     <string name="title_advanced_notify_preview_all">Tüm metni ön izle</string>
     <string name="title_advanced_notify_preview_only">Bildirimleri sadece özet olarak göster</string>
@@ -779,6 +786,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_class_min_difference">En düşük sınıflandırma farkı: %1$s %%</string>
     <string name="title_advanced_show_filtered">Kurallar uygulandığında bir filtre simgesi göster</string>
     <string name="title_advanced_haptic_feedback">Önemli eylemler hakkında dokunsal geri bildirim</string>
+    <string name="title_advanced_haptic_feedback_swipe">Sola/sağa kaydırırken dokunsal geri bildirim</string>
     <string name="title_advanced_language">Dil</string>
     <string name="title_advanced_language_system">Sistem</string>
     <string name="title_advanced_integrations_hint">Aşağıdaki bulut hizmetleri uygulamanın bir parçası değildir. Herhangi bir ödeme, uygulama geliştiricisine değil, doğrudan bulut hizmetine gidecektir.</string>
@@ -1163,6 +1171,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_hint_operations">İşlemleri silmek mesajların kaybolmasına ve senkronizasyon sorunlarına neden olabilir</string>
     <string name="title_op_title_headers">Başlıklar İndiriliyor</string>
     <string name="title_op_title_raw">Ham mesaj indiriliyor</string>
+    <string name="title_op_title_add">Mesaj yükleme</string>
     <string name="title_folder_name">Klasör adı</string>
     <string name="title_display_name">Görünen ad</string>
     <string name="title_show_folders">Gizli klasörleri göster</string>
@@ -1225,6 +1234,7 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_filters_active">Bir ya da daha fazla filtre aktif</string>
     <string name="title_duplicate_in">Mesajı %1$s klasörüne kopyala</string>
     <string name="title_trashed_from">%1$s tarafından çöpe atılan mesaj</string>
+    <string name="title_sent_to">%1$s\'e mesaj gönderildi</string>
     <string name="title_subject_reply">Ynt: %1$s</string>
     <string name="title_subject_forward">İlet: %1$s</string>
     <string name="title_subject_reply_alt">Ynt: %1$s</string>
@@ -2357,6 +2367,11 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
         <item>Şifreleme kapalı</item>
         <item>Şerit</item>
         <item>Nokta</item>
+    </string-array>
+    <string-array name="accountColorSizes">
+        <item>Dar</item>
+        <item>Orta</item>
+        <item>Geniş</item>
     </string-array>
     <string-array name="contactTypes">
         <item>Alıcı</item>

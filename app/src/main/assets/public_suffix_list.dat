@@ -203,6 +203,7 @@ musica.ar
 mutual.ar
 net.ar
 org.ar
+seg.ar
 senasa.ar
 tur.ar
 
@@ -3805,14 +3806,18 @@ rep.kp
 tra.kp
 
 // kr : https://www.iana.org/domains/root/db/kr.html
-// see also: http://domain.nida.or.kr/eng/registration.jsp
+// see also: https://krnic.kisa.or.kr/jsp/infoboard/law/domBylawsReg.jsp
 kr
 ac.kr
+ai.kr
 co.kr
 es.kr
 go.kr
 hs.kr
+io.kr
+it.kr
 kg.kr
+me.kr
 mil.kr
 ms.kr
 ne.kr
@@ -6742,7 +6747,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-02-28T15:18:00Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2025-03-28T15:18:17Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -9080,7 +9085,7 @@ marriott
 // https://www.iana.org/domains/root/db/marshalls.html
 marshalls
 
-// mattel : Mattel Sites, Inc.
+// mattel : Mattel IT Services, Inc.
 // https://www.iana.org/domains/root/db/mattel.html
 mattel
 
@@ -11388,7 +11393,7 @@ cloudfront.net
 
 // Amazon Cognito
 // Submitted by AWS Security <psl-maintainers@amazon.com>
-// Reference: cb38c251-c93d-4cda-81ec-e72c4f0fdb72
+// Reference: eb4652f0-20f0-43f5-b323-e6cc6ae02ad7
 auth.af-south-1.amazoncognito.com
 auth.ap-east-1.amazoncognito.com
 auth.ap-northeast-1.amazoncognito.com
@@ -11400,6 +11405,7 @@ auth.ap-southeast-1.amazoncognito.com
 auth.ap-southeast-2.amazoncognito.com
 auth.ap-southeast-3.amazoncognito.com
 auth.ap-southeast-4.amazoncognito.com
+auth.ap-southeast-5.amazoncognito.com
 auth.ca-central-1.amazoncognito.com
 auth.ca-west-1.amazoncognito.com
 auth.eu-central-1.amazoncognito.com
@@ -11418,6 +11424,7 @@ auth.us-east-1.amazoncognito.com
 auth-fips.us-east-1.amazoncognito.com
 auth.us-east-2.amazoncognito.com
 auth-fips.us-east-2.amazoncognito.com
+auth-fips.us-gov-east-1.amazoncognito.com
 auth-fips.us-gov-west-1.amazoncognito.com
 auth.us-west-1.amazoncognito.com
 auth-fips.us-west-1.amazoncognito.com
@@ -11994,6 +12001,11 @@ analytics-gateway.us-east-1.amazonaws.com
 analytics-gateway.us-east-2.amazonaws.com
 analytics-gateway.us-west-2.amazonaws.com
 
+// Appwrite : https://appwrite.io
+// Submitted by Steven Nguyen <security@appwrite.io>
+appwrite.global
+*.appwrite.run
+
 // AWS Amplify
 // Submitted by AWS Security <psl-maintainers@amazon.com>
 // Reference: c35bed18-6f4f-424f-9298-5756f2f7d72b
@@ -12490,6 +12502,8 @@ cdn.cloudflareglobal.net
 cust.cloudscale.ch
 objects.lpg.cloudscale.ch
 objects.rma.cloudscale.ch
+lpg.objectstorage.ch
+rma.objectstorage.ch
 
 // Clovyr : https://clovyr.io
 // Submitted by Patrick Nielsen <patrick@clovyr.io>
@@ -12523,6 +12537,10 @@ preview.csb.app
 co.nl
 co.no
 
+// Cognition AI, Inc. : https://cognition.ai
+// Submitted by Philip Papurt <domains@cognition.ai>
+*.devinapps.com
+
 // Combell.com : https://www.combell.com
 // Submitted by Thomas Wouters <thomas.wouters@combellgroup.com>
 webhosting.be
@@ -12534,6 +12552,8 @@ ctfcloud.net
 
 // Convex : https://convex.dev/
 // Submitted by James Cowling <security@convex.dev>
+convex.app
+convex.cloud
 convex.site
 
 // Coordination Center for TLD RU and XN--P1AI : https://cctld.ru/en/domains/domens_ru/reserved/
@@ -12641,6 +12661,7 @@ definima.net
 // Submitted by Luca Casonato <hostmaster@deno.com>
 deno.dev
 deno-staging.dev
+deno.net
 
 // deSEC : https://desec.io/
 // Submitted by Peter Thomassen <peter@desec.io>
@@ -12668,6 +12689,7 @@ ondigitalocean.app
 // DigitalPlat : https://www.digitalplat.org/
 // Submitted by Edward Hsing <contact@digitalplat.org>
 us.kg
+dpdns.org
 
 // Discord Inc : https://discord.com
 // Submitted by Sahn Lam <slam@discordapp.com>
@@ -13063,10 +13085,11 @@ en-root.fr
 mytuleap.com
 tuleap-partners.com
 
-// Encoretivity AB : https://encore.dev
-// Submitted by André Eriksson <andre@encore.dev>
+// Encoretivity AB : https://encore.cloud
+// Submitted by André Eriksson <security@encore.cloud>
 encr.app
 encoreapi.com
+lp.dev
 
 // encoway GmbH : https://www.encoway.de
 // Submitted by Marcel Daus <cloudops@encoway.de>
@@ -13287,6 +13310,11 @@ mydobiss.com
 // Submitted by Robin Naundorf <r.naundorf@fh-muenster.de>
 fh-muenster.io
 
+// Figma : https://www.figma.com
+// Submitted by Nick Frost <psl@figma.com>
+figma.site
+preview.site
+
 // Filegear Inc. : https://www.filegear.com
 // Submitted by Jason Zhu <jason@owtware.com>
 filegear.me
@@ -13317,6 +13345,10 @@ edgeapp.net
 // Submitted by Roderick Parr <roderick.parr@forgerock.com>
 forgeblocks.com
 id.forgerock.io
+
+// FoundryLabs, Inc : https://e2b.dev/
+// Submitted by Jiri Sveceny <security@e2b.dev>
+e2b.app
 
 // Framer : https://www.framer.com
 // Submitted by Koen Rouwhorst <security@framer.com>
@@ -13704,10 +13736,6 @@ ltd.ng
 ngo.ng
 plc.ng
 
-// HostFly : https://www.ie.ua
-// Submitted by Bohdan Dub <support@hostfly.com.ua>
-ie.ua
-
 // HostyHosting : https://hostyhosting.com
 hostyhosting.io
 
@@ -13766,6 +13794,10 @@ in-dsl.net
 in-vpn.net
 in-dsl.org
 in-vpn.org
+
+// Inferno Communications : https://inferno.co.uk
+// Submitted by Connor McFarlane <noc@inferno.co.uk>
+oninferno.net
 
 // info.at : http://www.info.at/
 biz.at
@@ -13837,7 +13869,9 @@ iopsys.se
 
 // IPFS Project : https://ipfs.tech/
 // Submitted by Interplanetary Shipyard <domains@ipshipyard.com>
+*.inbrowser.dev
 *.dweb.link
+*.inbrowser.link
 
 // IPiFony Systems, Inc. : https://www.ipifony.com/
 // Submitted by Matthew Hardeman <mhardeman@ipifony.com>
@@ -14154,6 +14188,11 @@ barsy.support
 barsy.uk
 barsy.co.uk
 barsyonline.co.uk
+
+// Luyani Inc. : https://luyani.com/
+// Submitted by Umut Gumeli <public-suffix-list@luyani.com>
+luyani.app
+luyani.net
 
 // Magento Commerce
 // Submitted by Damien Tournoud <dtournoud@magento.cloud>
@@ -14726,6 +14765,17 @@ xen.prgmr.com
 // Submitted by registry <lendl@nic.at>
 priv.at
 
+// PROJECT ELIV : https://eliv.kr/
+// Submitted by PROJECT ELIV Domain Team <team@eliv.kr>
+c01.kr
+eliv-dns.kr
+mmv.kr
+vki.kr
+
+// project-study : https://project-study.com
+// Submitted by yumenewa <admin@project-study.com>
+dev.project-study.com
+
 // Protonet GmbH : http://protonet.io
 // Submitted by Martin Meier <admin@protonet.io>
 protonet.io
@@ -15266,6 +15316,11 @@ researched.cx
 tests.cx
 surveys.so
 
+// Storacha Network : https://storacha.network
+// Submitted by Alan Shaw <support@storacha.network>
+ipfs.storacha.link
+ipfs.w3s.link
+
 // Storebase : https://www.storebase.io
 // Submitted by Tony Schirmer <tony@storebase.io>
 storebase.store
@@ -15471,7 +15526,7 @@ diskstation.org
 typedream.app
 
 // Typeform : https://www.typeform.com
-// Submitted by Sergi Ferriz <sergi.ferriz@typeform.com>
+// Submitted by Typeform <ops@typeform.com>
 pro.typeform.com
 
 // Uberspace : https://uberspace.de
@@ -15536,7 +15591,7 @@ v.ua
 
 // Val Town, Inc : https://val.town/
 // Submitted by Tom MacWright <security@val.town>
-express.val.run
+val.run
 web.val.run
 
 // Vercel, Inc : https://vercel.com/
@@ -15551,13 +15606,13 @@ now.sh
 // Submitted by Danko Aleksejevs <danko@very.lv>
 2038.io
 
-// Viprinet Europe GmbH : http://www.viprinet.com
-// Submitted by Simon Kissel <hostmaster@viprinet.com>
-router.management
-
 // Virtual-Info : https://www.virtual-info.info/
 // Submitted by Adnan RIHAN <hostmaster@v-info.info>
 v-info.info
+
+// Viva Republica, Inc. : https://toss.im/
+// Submitted by Deus Team <deus@toss.im>
+deus-canvas.com
 
 // Voorloper.com : https://voorloper.com
 // Submitted by Nathan van Bakel <info@voorloper.com>
@@ -15622,6 +15677,11 @@ wmflabs.org
 // William Harrison : https://wharrison.com.au
 // Submitted by William Harrison <psl@wharrison.com.au>
 wdh.app
+
+// Windsurf : https://windsurf.com
+// Submitted by Douglas Chen <psl@windsurf.com>
+windsurf.app
+windsurf.build
 
 // WISP : https://wisp.gg
 // Submitted by Stepan Fedotov <stepan@wisp.gg>

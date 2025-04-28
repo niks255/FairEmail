@@ -562,6 +562,12 @@ class Core {
                     } catch (Throwable ex) {
                         iservice.dump(account.name + "/" + folder.name);
                         if (ex instanceof OperationCanceledException ||
+                                (ex instanceof IOException &&
+                                        "NIL".equals(ex.getMessage())) ||
+                                (ex instanceof IOException &&
+                                        context.getString(R.string.app_cake).equals(ex.getMessage())) ||
+                                (ex instanceof MessagingException &&
+                                        "Cannot load header".equals(ex.getMessage())) ||
                                 (ex instanceof IllegalArgumentException &&
                                         ex.getMessage() != null &&
                                         ex.getMessage().startsWith("Message not found for")))
@@ -720,7 +726,10 @@ class Core {
                                     (op.tries > 1 ||
                                             ex.getCause() instanceof BadCommandException ||
                                             ex.getCause() instanceof CommandFailedException))
-                                Log.e(new Throwable(msg, ex));
+                                if (BuildConfig.PLAY_STORE_RELEASE)
+                                    Log.i(new Throwable(msg, ex));
+                                else
+                                    Log.e(new Throwable(msg, ex));
 
                             try {
                                 db.beginTransaction();
@@ -752,10 +761,13 @@ class Core {
                                         "title_op_title_" + op.name,
                                         "string",
                                         context.getPackageName());
+                                if (EntityOperation.ADD.equals(op.name) &&
+                                        (!EntityFolder.SENT.equals(folder.name) || Helper.isPlayStoreInstall()))
+                                    resid = 0;
                                 String title = (resid == 0 ? null : context.getString(resid));
                                 if (title != null) {
                                     NotificationCompat.Builder builder =
-                                            getNotificationError(context, "warning", account, message.id, new Throwable(title, ex));
+                                            getNotificationError(context, "warning", account, folder, message, new Throwable(title, ex));
                                     if (NotificationHelper.areNotificationsEnabled(nm))
                                         nm.notify(op.name + ":" + op.message,
                                                 NotificationHelper.NOTIFICATION_TAGGED,
@@ -1554,7 +1566,8 @@ class Core {
                     }
 
                     for (Flags.Flag flag : imessage.getFlags().getSystemFlags())
-                        icopy.setFlag(flag, true);
+                        if (flag != Flags.Flag.DRAFT || EntityFolder.DRAFTS.equals(target.type))
+                            icopy.setFlag(flag, true);
 
                     icopies.add(icopy);
                 }
@@ -1629,7 +1642,7 @@ class Core {
         }
 
         // Fetch appended/copied when needed
-        boolean fetch = (copy || delete ||
+        boolean fetch = (copy || delete || !canMove ||
                 !"connected".equals(target.state) ||
                 !MessageHelper.hasCapability(ifolder, "IDLE"));
         if (draft || fetch)
@@ -1657,7 +1670,8 @@ class Core {
                                 continue;
                             }
 
-                        if (draft || duplicate) {
+                        if (draft || duplicate || !canMove) {
+                            // https://datatracker.ietf.org/doc/html/rfc3501#section-6.4.7
                             Message icopy = itarget.getMessageByUID(uid);
                             if (icopy == null)
                                 throw new IllegalArgumentException("move: gone uid=" + uid);
@@ -3005,10 +3019,13 @@ class Core {
                         folder.setProperties();
                         folder.setSpecials(account);
 
-                        if (selectable)
+                        if (selectable) {
                             folder.inheritFrom(parent);
-                        if (user && sync_added_folders && EntityFolder.USER.equals(type))
-                            folder.synchronize = true;
+                            if (user && sync_added_folders && EntityFolder.USER.equals(type)) {
+                                folder.synchronize = true;
+                                folder.notify = true;
+                            }
+                        }
 
                         folder.id = db.folder().insertFolder(folder);
                         Log.i(folder.name + " added type=" + folder.type + " sync=" + folder.synchronize);
@@ -3250,10 +3267,11 @@ class Core {
             db.beginTransaction();
 
             long id = jargs.getLong(0);
+            boolean browsed = jargs.optBoolean(1);
             if (id < 0) {
                 EntityLog.log(context, "Executing deferred daily rules for message=" + message.id);
                 List<EntityRule> rules = db.rule().getEnabledRules(message.folder, true);
-                EntityRule.run(context, rules, message, null, null);
+                EntityRule.run(context, rules, message, browsed, null, null);
             } else {
                 EntityRule rule = db.rule().getRule(id);
                 if (rule == null)
@@ -3263,7 +3281,7 @@ class Core {
                     throw new IllegalArgumentException("Message without content id=" + rule.id + ":" + rule.name);
 
                 rule.async = true;
-                rule.execute(context, message, null);
+                rule.execute(context, message, browsed, null);
             }
 
             db.setTransactionSuccessful();
@@ -3724,7 +3742,7 @@ class Core {
                                 attachment.id = db.attachment().insertAttachment(attachment);
                             }
 
-                            runRules(context, headers, body, account, folder, message, rules);
+                            runRules(context, headers, body, account, folder, message, false, rules);
                             reportNewMessage(context, account, folder, message);
 
                             db.setTransactionSuccessful();
@@ -5011,7 +5029,7 @@ class Core {
                     attachment.id = db.attachment().insertAttachment(attachment);
                 }
 
-                runRules(context, headers, body, account, folder, message, rules);
+                runRules(context, headers, body, account, folder, message, browsed, rules);
 
                 if (message.blocklist != null && message.blocklist) {
                     boolean use_blocklist = prefs.getBoolean("use_blocklist", false);
@@ -5255,7 +5273,7 @@ class Core {
                     db.message().updateMessage(message);
 
                     if (process)
-                        runRules(context, headers, body, account, folder, message, rules);
+                        runRules(context, headers, body, account, folder, message, browsed, rules);
 
                     db.setTransactionSuccessful();
                 } finally {
@@ -5455,7 +5473,7 @@ class Core {
 
     private static void runRules(
             Context context, List<Header> headers, String html,
-            EntityAccount account, EntityFolder folder, EntityMessage message,
+            EntityAccount account, EntityFolder folder, EntityMessage message, boolean browsed,
             List<EntityRule> rules) {
 
         if (EntityFolder.INBOX.equals(folder.type)) {
@@ -5475,7 +5493,7 @@ class Core {
         try {
             boolean executed = false;
             if (pro) {
-                int applied = EntityRule.run(context, rules, message, headers, html);
+                int applied = EntityRule.run(context, rules, message, browsed, headers, html);
                 executed = (applied > 0);
             }
 
@@ -5697,25 +5715,39 @@ class Core {
     // MailConnectException
     // - on connectivity problems when connecting to store
 
-    static NotificationCompat.Builder getNotificationError(Context context, String channel, EntityAccount account, long id, Throwable ex) {
+    static NotificationCompat.Builder getNotificationError(
+            Context context, String channel, EntityAccount account, EntityFolder folder, EntityMessage message, Throwable ex) {
         String title = context.getString(R.string.title_notification_failed, account.name);
-        String message = Log.formatThrowable(ex, "\n", false);
+        String msg = Log.formatThrowable(ex, "\n", false);
 
         // Build pending intent
-        Intent intent = new Intent(context, ActivityError.class);
-        intent.setAction(channel + ":" + account.id + ":" + id);
-        intent.putExtra("title", title);
-        intent.putExtra("message", message);
-        intent.putExtra("provider", account.provider);
-        intent.putExtra("account", account.id);
-        intent.putExtra("protocol", account.protocol);
-        intent.putExtra("auth_type", account.auth_type);
-        intent.putExtra("host", account.host);
-        intent.putExtra("address", account.user);
-        intent.putExtra("faq", 22);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pi = PendingIntentCompat.getActivity(
-                context, ActivityError.PI_ERROR, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi;
+        if (message == null) {
+            Intent intent = new Intent(context, ActivityError.class);
+            intent.setAction(channel + ":" + account.id);
+            intent.putExtra("title", title);
+            intent.putExtra("message", msg);
+            intent.putExtra("provider", account.provider);
+            intent.putExtra("account", account.id);
+            intent.putExtra("protocol", account.protocol);
+            intent.putExtra("auth_type", account.auth_type);
+            intent.putExtra("host", account.host);
+            intent.putExtra("address", account.user);
+            intent.putExtra("faq", 22);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            pi = PendingIntentCompat.getActivity(
+                    context, ActivityError.PI_ERROR, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        } else {
+            Intent thread = new Intent(context, ActivityView.class);
+            thread.setAction("thread:" + message.id);
+            thread.putExtra("account", message.account);
+            thread.putExtra("folder", message.folder);
+            thread.putExtra("type", folder.type);
+            thread.putExtra("thread", message.thread);
+            thread.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            pi = PendingIntentCompat.getActivity(
+                    context, ActivityView.PI_THREAD, thread, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
 
         // Build notification
         NotificationCompat.Builder builder =
@@ -5724,13 +5756,13 @@ class Core {
                         .setContentTitle(title)
                         .setContentText(Log.formatThrowable(ex, false))
                         .setContentIntent(pi)
-                        .setAutoCancel(false)
+                        .setAutoCancel(message != null)
                         .setShowWhen(true)
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .setOnlyAlertOnce(true)
                         .setCategory(NotificationCompat.CATEGORY_ERROR)
                         .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(msg));
 
         return builder;
     }

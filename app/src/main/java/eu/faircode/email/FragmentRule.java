@@ -139,6 +139,8 @@ public class FragmentRule extends FragmentBase {
     private Spinner spAction;
     private TextView tvActionRemark;
 
+    private CheckBox cbHideSeen;
+
     private NumberPicker npDuration;
     private CheckBox cbScheduleEnd;
     private CheckBox cbSnoozeSeen;
@@ -191,6 +193,7 @@ public class FragmentRule extends FragmentBase {
 
     private Group grpReady;
     private Group grpAge;
+    private Group grpHide;
     private Group grpSnooze;
     private Group grpFlag;
     private Group grpImportance;
@@ -218,6 +221,7 @@ public class FragmentRule extends FragmentBase {
     private long account = -1;
     private int protocol = -1;
     private long folder = -1;
+    private String type = null;
     private Uri sound = null;
 
     private DateFormat DF;
@@ -274,6 +278,7 @@ public class FragmentRule extends FragmentBase {
         account = args.getLong("account", -1);
         protocol = args.getInt("protocol", EntityAccount.TYPE_IMAP);
         folder = args.getLong("folder", -1);
+        type = args.getString("type");
 
         if (savedInstanceState != null)
             sound = savedInstanceState.getParcelable("fair:sound");
@@ -348,6 +353,8 @@ public class FragmentRule extends FragmentBase {
         spAction = view.findViewById(R.id.spAction);
         tvActionRemark = view.findViewById(R.id.tvActionRemark);
 
+        cbHideSeen = view.findViewById(R.id.cbHideSeen);
+
         npDuration = view.findViewById(R.id.npDuration);
         cbScheduleEnd = view.findViewById(R.id.cbScheduleEnd);
         cbSnoozeSeen = view.findViewById(R.id.cbSnoozeSeen);
@@ -401,6 +408,7 @@ public class FragmentRule extends FragmentBase {
 
         grpReady = view.findViewById(R.id.grpReady);
         grpAge = view.findViewById(R.id.grpAge);
+        grpHide = view.findViewById(R.id.grpHide);
         grpSnooze = view.findViewById(R.id.grpSnooze);
         grpFlag = view.findViewById(R.id.grpFlag);
         grpImportance = view.findViewById(R.id.grpImportance);
@@ -704,7 +712,8 @@ public class FragmentRule extends FragmentBase {
         actions.add(new Action(EntityRule.TYPE_IMPORTANCE, getString(R.string.title_rule_importance), R.drawable.twotone_north_24));
         actions.add(new Action(EntityRule.TYPE_KEYWORD, getString(R.string.title_rule_keyword), R.drawable.twotone_label_important_24));
         actions.add(new Action(EntityRule.TYPE_NOTES, getString(R.string.title_rule_notes), R.drawable.twotone_sticky_note_2_24));
-        actions.add(new Action(EntityRule.TYPE_MOVE, getString(R.string.title_rule_move), R.drawable.twotone_drive_file_move_24));
+        if (protocol == EntityAccount.TYPE_IMAP || EntityFolder.INBOX.equals(type))
+            actions.add(new Action(EntityRule.TYPE_MOVE, getString(R.string.title_rule_move), R.drawable.twotone_drive_file_move_24));
         if (protocol == EntityAccount.TYPE_IMAP)
             actions.add(new Action(EntityRule.TYPE_COPY, getString(R.string.title_rule_copy), R.drawable.twotone_file_copy_24));
         actions.add(new Action(EntityRule.TYPE_DELETE, getString(R.string.title_rule_delete), R.drawable.twotone_delete_forever_24));
@@ -951,6 +960,7 @@ public class FragmentRule extends FragmentBase {
         bottom_navigation.setVisibility(View.GONE);
         grpReady.setVisibility(View.GONE);
         grpAge.setVisibility(View.GONE);
+        grpHide.setVisibility(View.GONE);
         grpSnooze.setVisibility(View.GONE);
         grpFlag.setVisibility(View.GONE);
         grpImportance.setVisibility(View.GONE);
@@ -1417,6 +1427,10 @@ public class FragmentRule extends FragmentBase {
                         } else {
                             int type = jaction.getInt("type");
                             switch (type) {
+                                case EntityRule.TYPE_HIDE:
+                                    cbHideSeen.setChecked(jaction.optBoolean("seen", false));
+                                    break;
+
                                 case EntityRule.TYPE_SNOOZE:
                                     npDuration.setValue(jaction.optInt("duration", 0));
                                     cbScheduleEnd.setChecked(jaction.optBoolean("schedule_end", false));
@@ -1554,6 +1568,7 @@ public class FragmentRule extends FragmentBase {
     }
 
     private void showActionParameters(int type) {
+        grpHide.setVisibility(type == EntityRule.TYPE_HIDE ? View.VISIBLE : View.GONE);
         grpSnooze.setVisibility(type == EntityRule.TYPE_SNOOZE ? View.VISIBLE : View.GONE);
         grpFlag.setVisibility(type == EntityRule.TYPE_FLAG ? View.VISIBLE : View.GONE);
         grpImportance.setVisibility(type == EntityRule.TYPE_IMPORTANCE ? View.VISIBLE : View.GONE);
@@ -1671,7 +1686,15 @@ public class FragmentRule extends FragmentBase {
                         }
                     }
 
-                    if (jsender == null &&
+                    int age = 0;
+                    if (daily) {
+                        JSONObject jgeneral = jcondition.optJSONObject("general");
+                        if (jgeneral != null)
+                            age = jgeneral.optInt("age");
+                    }
+
+                    if (age == 0 &&
+                            jsender == null &&
                             jrecipient == null &&
                             jsubject == null &&
                             !jcondition.optBoolean("attachments") &&
@@ -1863,6 +1886,10 @@ public class FragmentRule extends FragmentBase {
         if (action != null) {
             jaction.put("type", action.type);
             switch (action.type) {
+                case EntityRule.TYPE_HIDE:
+                    jaction.put("seen", cbHideSeen.isChecked());
+                    break;
+
                 case EntityRule.TYPE_SNOOZE:
                     jaction.put("duration", npDuration.getValue());
                     jaction.put("schedule_end", cbScheduleEnd.isChecked());
