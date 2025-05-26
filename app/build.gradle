@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'de.undercouch.download'
 
-def getVersionCode = { -> return 2274 }
+def getVersionCode = { -> return 2276 }
 def getRevision = { -> return "a" }
 def getReleaseName = { -> return "Ceratonykus" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
@@ -470,6 +470,13 @@ tasks.register('downloadAdguard', Download) {
 
 tasks.register('downloadBrave') {
     dependsOn("downloadBraveClean", "downloadBraveDebouce")
+}
+
+tasks.register('downloadSmime', Download) {
+    // https://wiki.mozilla.org/CA/Included_Certificates
+    src "https://ccadb.my.salesforce-sites.com/mozilla/IncludedRootsPEMTxt?TrustBitsInclude=Email"
+    dest new File(new File("${rootDir}", "app/src/main/assets/smime"), "MozillaCA.pem")
+    overwrite true
 }
 
 tasks.register('extractSignature', Exec) {

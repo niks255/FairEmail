@@ -3064,6 +3064,13 @@ public class FragmentMessages extends FragmentBase
                     swipes.swipe_right = null;
             }
 
+            if (Helper.isPlayStoreInstall()) {
+                if (EntityMessage.SWIPE_ACTION_TTS.equals(swipes.swipe_left))
+                    swipes.swipe_left = null;
+                if (EntityMessage.SWIPE_ACTION_TTS.equals(swipes.swipe_right))
+                    swipes.swipe_right = null;
+            }
+
             if (message.accountProtocol != EntityAccount.TYPE_IMAP)
                 return makeMovementFlags(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
 
@@ -9947,11 +9954,9 @@ public class FragmentMessages extends FragmentBase
                                             }
                                         }
 
-                                        boolean pep = checkPep(message, remotes, context);
-
                                         encrypt = parts.getEncryption();
                                         db.message().setMessageEncrypt(message.id, encrypt);
-                                        db.message().setMessageRevision(message.id, pep || protect_subject == null ? 1 : -1);
+                                        db.message().setMessageRevision(message.id, protect_subject == null ? 1 : -1);
                                         db.message().setMessageStored(message.id, new Date().getTime());
                                         db.message().setMessageFts(message.id, false);
 
@@ -10244,8 +10249,7 @@ public class FragmentMessages extends FragmentBase
                                     KeyStore ks = null;
                                     try {
                                         // https://tools.ietf.org/html/rfc3852#section-10.2.3
-                                        ks = KeyStore.getInstance("AndroidCAStore");
-                                        ks.load(null, null);
+                                        ks = SmimeHelper.getCAStore(context);
 
                                         // https://docs.oracle.com/javase/7/docs/technotes/guides/security/certpath/CertPathProgGuide.html
                                         X509CertSelector target = new X509CertSelector();
@@ -10755,11 +10759,9 @@ public class FragmentMessages extends FragmentBase
                             }
                     }
 
-                    boolean pep = checkPep(message, remotes, context);
-
                     db.message().setMessageEncrypt(message.id,
                             signedData ? EntityMessage.SMIME_SIGNONLY : parts.getEncryption());
-                    db.message().setMessageRevision(message.id, pep || protect_subject == null ? 1 : -1);
+                    db.message().setMessageRevision(message.id, protect_subject == null ? 1 : -1);
                     db.message().setMessageStored(message.id, new Date().getTime());
                     db.message().setMessageFts(message.id, false);
 
@@ -10799,51 +10801,6 @@ public class FragmentMessages extends FragmentBase
                 return trace;
             }
         }.serial().execute(this, args, "decrypt:s/mime");
-    }
-
-    private static boolean checkPep(EntityMessage message, List<EntityAttachment> remotes, Context context) {
-        DB db = DB.getInstance(context);
-        for (EntityAttachment remote : remotes)
-            if ("message/rfc822".equals(remote.getMimeType()))
-                try {
-                    Properties props = MessageHelper.getSessionProperties(true);
-                    Session isession = Session.getInstance(props, null);
-
-                    MimeMessage imessage;
-                    try (InputStream fis = new FileInputStream(remote.getFile(context))) {
-                        imessage = new MimeMessage(isession, fis);
-                    }
-
-                    String[] xpep = imessage.getHeader("X-pEp-Wrapped-Message-Info");
-                    if (xpep == null || xpep.length == 0 || !"INNER".equalsIgnoreCase(xpep[0]))
-                        continue;
-
-                    MessageHelper helper = new MessageHelper(imessage, context);
-                    String subject = helper.getSubject();
-                    String html = helper.getMessageParts().getHtml(context);
-
-                    if (!TextUtils.isEmpty(html))
-                        Helper.writeText(message.getFile(context), html);
-
-                    try {
-                        db.beginTransaction();
-
-                        if (!TextUtils.isEmpty(subject))
-                            db.message().setMessageSubject(message.id, subject);
-
-                        // Prevent showing the embedded message
-                        db.attachment().setType(remote.id, "application/octet-stream");
-
-                        db.setTransactionSuccessful();
-                    } finally {
-                        db.endTransaction();
-                    }
-
-                    return true;
-                } catch (Throwable ex) {
-                    Log.e(ex);
-                }
-        return false;
     }
 
     private void onDelete(long id) {
