@@ -199,7 +199,6 @@
     <string name="title_setup_oauth_permission">E-poštni ponudnik je OAuth odobril samo za različico iz Trgovine Play in GitHuba.</string>
     <string name="title_setup_gmail_support">Overjanje računov Google bo delovalo samo v različici iz Trgovine Play in GitHuba, ker Android preveri digitalni podpis programa.</string>
     <string name="title_setup_gmail_rationale">Odobrite dovoljenja za izbiro računa in branje vašega imena.</string>
-    <string name="title_setup_gmail_permissions">Google vas bo vprašal za dovoljenje za branje, sestavljanje, pošiljanje in trajno brisanje vaše e-pošte.  FairEmail brez vašega izrecnega dovoljenja ne bo nikoli izbrisal sporočil.</string>
     <string name="title_setup_gmail_login">Če ste v Chromeu prijavljeni v račun, lahko nov račun dodate samo preko Androida.  Temu se lahko izognete z odjavo v Chromeu v Chromeovih nastavitvah snhronizacije.</string>
     <string name="title_setup_gmail_max">V primeru sporočila o napaki \"Vpisani ste v največjo dovoljeno število računov\" se morate odjaviti iz vseh Googlovih računov v brskalniku.</string>
     <string name="title_setup_gmail_on_device">Zakaj moram izbrati sistemski račun?</string>
@@ -775,7 +774,6 @@
     <string name="title_advanced_default_folder_hint">        Android vas bo morda vprašal za dovoljenje za dostop do izbrane mape čeprav ga program ne potrebuje.
         Pogovorno okno za izbiro lahko prekličete, da obnovite privzeto mapo (običanjo je to mapa \'Prenosi\').
     </string>
-    <string name="title_advanced_restore_on_launch_hint">Obnovi zadnje stanje programa, ko je ponovno zagnan z ikono zaganjalnika v %1$d-h minutah.</string>
     <string name="title_advanced_autoexpand_hint">Samodejno odpri sporočilo, ko je v pogovoru samo eno sporočilo ali eno neprebrano sporočilo.</string>
     <string name="title_advanced_expandall_hint">Gumb za odgovor ne bo prikazan, kadar je razširjenih več sporočil, ker potem ni jasno, za katero sporočilo to velja.</string>
     <string name="title_advanced_autoseen_hint">Samodejno označevanje sporočil kot prebranih ob razširitvi lahko onemogočite v naprednih nastavitvah za posamezni račun.</string>

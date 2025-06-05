@@ -439,6 +439,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(206) How can I move or copy messages from one account to another?](#faq206)
 * [(207) What does 'Authentication failed' mean?](#faq207)
 * [(208) What does 'about:blank#blocked' mean when I click on a link?](#faq208)
+* [(209) Why is using a VPN often problematic?](#faq209)
 
 [I have another question.](#get-support)
 
@@ -1104,6 +1105,10 @@ You can long press an identity in the list of identities (via manual setup in th
 
 To allow different private keys for the same email address, for example, a key for signing and a key for encryption,
 FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.
+
+From version 1.2278 the app can store a sign and an encryption key.
+To configure this properly, please reset the keys (see above for about how to),
+sign a message and select the signing key, and encrypt a message, and select the encryption key.
 
 Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the encryption settings (PEM or DER format).
 
@@ -2103,7 +2108,7 @@ Since the images are downloaded from the source server [in real-time](https://bl
 this is even less secure, because Google is involved, too, without providing much benefit.
 
 You can show images and original messages by default for trusted senders on a case-by-case basis by checking *Do not ask this again for ...*.
-You might need to reset the questions via a button in the miscellaneous-settings tab page.
+You might need to reset the questions via a button in the miscellaneous-settings tab page, as well as to disable *Remove tracking parameters by default*.
 
 <br />
 
@@ -2955,6 +2960,7 @@ The following extra functions are available:
 * *Size(array)* (returns the number of items in an array; since version 1.2179)
 * *knownContact()* (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)
 * *AI(prompt)* (perform interference with the configured AI model using the specified prompt, returning the result as a string; since version 1.2243)
+* *Is(flag)* (flag is one of seen, answered, flagged, deleted; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)
 
 Example conditions:
 
@@ -2988,7 +2994,7 @@ You can select one of these actions to apply to matching messages:
 * Delete permanently (since version 1.1801)
 * Play sound (since version 1.1803; experimental)
 * Answer/forward (with template)
-* Text-to-speech (sender and subject)
+* Text-to-speech (sender and subject, not available in the Play Store version due to Play Store policies)
 * Automation (Tasker, etc)
 * Webhook (since version 1.2107)
 
@@ -3146,6 +3152,8 @@ Since version 1.2061 it is possible to execute rules with an automation app, lik
 ```
 (adb shell) am start-foreground-service -a eu.faircode.email.RULE --es account <account name> -es rule <unique rule name>
 ```
+
+**Note**: Due to Play Store policies, automation intents are not available in the Play Store version of the app.
 
 <br />
 
@@ -3374,6 +3382,8 @@ Extras: account:Gmail
 ```
 
 Account names are case sensitive.
+
+**Note**: Due to Play Store policies, automation intents are not available in the Play Store version of the app.
 
 Scheduling is a pro feature.
 
@@ -5102,6 +5112,8 @@ This command can be sent to FairEmail from an automation app to update the prote
 Updating once a week will probably be sufficient,
 please see [here](https://github.com/disconnectme/disconnect-tracking-protection/commits/master) for recent lists changes.
 
+**Note**: Due to Play Store policies, automation intents are not available in the Play Store version of the app.
+
 <br />
 
 <a name="faq160"></a>
@@ -5634,6 +5646,8 @@ Since version 1.2068 it is possible to send a template message with an intent:
 
 **Important**: you need to configure a display name for the identity, and use this to identify the identity.
 
+**Note**: Due to Play Store policies, automation intents are not available in the Play Store version of the app.
+
 <br />
 
 <a name="faq180"></a>
@@ -5984,7 +5998,7 @@ This feature is experimental and requires version 1.2053 or later for the GitHub
 
 You can download and keep older messages in the unified inbox folders by using *Fetch more messages* in the three-dots overflow menu of the start screen.
 For other folders, you can long press the folder in the folder list of the account (tap on the account name in the navigation menu = left side menu).
-When you long press on a parent folder, there will be a subfolders option with a menu item to fetch more messages for all child folders.
+When you long press on a parent folder, there will be a subfolders sub-menu with a fetch more messages option for all child folders.
 Please read the remark in the confirmation dialog box.
 
 Note that starred (favorite) messages will be kept on your device "forever".
@@ -6349,6 +6363,18 @@ If you get '*about:blank#blocked*' when you click on a link, for some reason the
 Note that the original message view is displayed by the installed browser. It may look like it's part of the app, but it's not.
 
 You can probably workaround this by switching back to the reformatted message view via the '\] \[' button just above the message text on the right.
+
+<br>
+
+<a name="faq209"></a>
+**(209) Why is using a VPN often problematic?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq209)
+
+When you use a VPN, you share one network address with many people and not all those people will always behave nicely.
+Email servers often automatically block network addresses (IP addresses) when abuse is detected, for example when someone tries to send spam messages.
+The result is that logins are blocked for everyone using the same network address and the email server issues an error message such as "*Authentication failed*".
+This is also why the app warns against using a VPN.
 
 <br>
 

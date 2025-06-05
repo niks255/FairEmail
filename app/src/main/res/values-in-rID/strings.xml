@@ -148,6 +148,7 @@
     <string name="title_setup_intro">Menyiapkan akun hanya dengan tiga langkah dan setelah itu Anda sudah bisa mengirim dan menerima surel</string>
     <string name="title_setup_simple">Tidak perlu melakukan perubahan pada opsi lain</string>
     <string name="title_setup_issue">FairEmail dikembangkan untuk melindungi privasi dan secara harfiah mewakili ribuan jam kerja. Jika Anda mengalami kendala, silakan hubungi saya terlebih dahulu untuk membantu anda sebelum memberikan tinjauan buruk. Saya senang membantu Anda!</string>
+    <string name="title_setup_analytics">FairEmail does not display ads and does not track or analyze your behavior.</string>
     <string name="title_setup_quick_accounts">Tambah atau ganti akun</string>
     <string name="title_setup_quick_support">Beberapa penyedia layanan email mempersulit penambahan akun. Mohon jangan menyalahkan FairEmail untuk ini, tetapi mintalah dukungan sebagai gantinya.</string>
     <string name="title_setup_quick_hint">Alamat email yang dimasukkan digunakan untuk meminta server email dan autoconfig.thunderbird.net untuk informasi konfigurasi</string>
@@ -177,7 +178,6 @@
     <string name="title_setup_oauth_permission">Pengelola surel ini telah menerima OAuth hanya untuk aplikasi versi Play Store dan GitHub</string>
     <string name="title_setup_gmail_support">Memberi otorisasi pada akun Google hanya akan berfungsi pada versi Play Store dan GitHub karena Android memeriksa tanda tangan aplikasi</string>
     <string name="title_setup_gmail_rationale">Mohon berikan izin untuk memilih akun dan membaca nama Anda.</string>
-    <string name="title_setup_gmail_permissions">Google akan meminta izin untuk membaca, menulis, mengirim dan menghapus semua email Anda secara permanen. FairEmail tidak akan pernah menghapus pesan tanpa persetujuan tegas dari Anda.</string>
     <string name="title_setup_gmail_login">Jika Chrome masuk ke akun, hanya akun baru yang dapat ditambahkan melalui Android. Ini dapat dihindari dengan keluar dari Chrome melalui pengaturan sinkronisasi Chrome.</string>
     <string name="title_setup_gmail_max">Jika muncul pesan error \"Anda masuk dengan jumlah akun maksimum\", Anda harus keluar dari semua akun Google di peramban.</string>
     <string name="title_setup_outlook_hint">Dalam kasus alamat alias, panduan Office 365 mungkin harus digunakan.</string>
@@ -871,7 +871,6 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_advanced_default_folder_hint">        Android mungkin akan menanyakan untuk perizinan untuk mengakses folder yang dipilih, meskipun aplikasi tidak membutuhkannya.
         Anda dapat membatalkan dialog pemilihan untuk mengembalikan folder default (biasanya folder \'Download\').
     </string>
-    <string name="title_advanced_restore_on_launch_hint">Pulihkan status aplikasi terakhir saat dimulai ulang melalui ikon peluncur di dalamnya %1$d menit</string>
     <string name="title_advanced_autoexpand_hint">Secara otomatis membuka pesan ketika hanya ada satu pesan atau hanya satu pesan yang belum dibaca dalam percakapan</string>
     <string name="title_advanced_expandall_hint">Tombol balas tidak ditampilkan saat beberapa pesan dilebarkan karena tombol pesan menjadi tidak jelas pesan mana yang dituju</string>
     <string name="title_advanced_autoseen_hint">Secara otomatis menandai pesan sebagai telah dibaca ketika memperluasnya, bisa dinonaktifkan pada pengaturan akun setiap individu</string>

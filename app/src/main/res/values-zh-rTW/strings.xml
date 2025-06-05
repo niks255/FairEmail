@@ -177,7 +177,6 @@
     <string name="title_setup_oauth_permission">電子郵件提供商僅批准 Play 商店和 GitHub 版本使用 OAuth</string>
     <string name="title_setup_gmail_support">因為 Android 會檢查程式的數字簽名，所以只有 FairEmail 在 Play Store 和 GitHub 發布的版本支持授權 Google 帳戶</string>
     <string name="title_setup_gmail_rationale">請授予權限以選擇帳戶並讀取您的姓名</string>
-    <string name="title_setup_gmail_permissions">Google 會請求權限以讀取、撰寫、傳送及永久刪除您的電子郵件。FairEmail 永遠不會在您未予明確同意的前提下刪除您的訊息。</string>
     <string name="title_setup_gmail_login">如果 Chrome 已登入帳戶，則只能透過 Android 新增新帳戶。可透過 Chrome 同步設定登出來避免這個問題。</string>
     <string name="title_setup_gmail_max">若出現「您已登入最大數量的帳戶」錯誤訊息，您需要從所有 Google 帳戶中登出瀏覽器。</string>
     <string name="title_setup_outlook_hint">在使用別名地址的情況下，應使用 Office 365 精靈。</string>
@@ -898,7 +897,6 @@
     <string name="title_advanced_parse_classes_hint">訊息顯示更精準，但可能會延後</string>
     <string name="title_advanced_default_folder_hint">Android 可能會要求訪問所選資料夾的權限，儘管應用程式並不需要該權限。
 您可以取消選擇對話框以恢復預設資料夾（通常是「下載」資料夾）。    </string>
-    <string name="title_advanced_restore_on_launch_hint">在 %1$d 分鐘內透過啟動器圖示重新啟動時，恢復上次的應用程式狀態</string>
     <string name="title_advanced_autoexpand_hint">當會話中只有一則訊息或僅一則未讀時自動開啟訊息</string>
     <string name="title_advanced_expandall_hint">當展開多封訊息時，不會顯示回覆按鈕，因為這樣會無法確定回覆的是哪個訊息</string>
     <string name="title_advanced_autoseen_hint">展開時自動標記訊息為已讀功能可於各帳戶進階帳戶設定中停用</string>

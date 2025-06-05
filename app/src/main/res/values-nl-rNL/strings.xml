@@ -161,7 +161,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_intro">Het instellen van een account is slechts drie stappen en daarna kunt u e-mails verzenden en ontvangen</string>
     <string name="title_setup_simple">Het is niet nodig om enige andere opties te wijzigen</string>
     <string name="title_setup_issue">FairEmail is ontwikkeld om u te helpen uw privacy te beschermen en vertegenwoordigt letterlijk duizenden uren werk. Als u problemen ondervindt, neem dan eerst contact met mij op voor ondersteuning voordat u een slechte beoordeling achterlaat. Ik help graag!</string>
-    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail toont geen advertenties en volgt of analyseert uw gedrag niet.</string>
+    <string name="title_setup_analytics">FairEmail toont geen advertenties en volgt of analyseert uw gedrag niet.</string>
     <string name="title_setup_quick_accounts">Accounts toevoegen of wijzigen</string>
     <string name="title_setup_quick_support">Sommige providers maken het moeilijk om een account toe te voegen. Geef a.u.b. FairEmail hiervoor niet de schuld, maar vraag om ondersteuning.</string>
     <string name="title_setup_quick_hint">Het ingevoerde mailadres wordt gebruikt om de mailserver en autoconfig.thunderbird.net om configuratie-informatie te vragen</string>
@@ -191,7 +191,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_oauth_permission">De e-mailprovider heeft OAuth alleen goedgekeurd voor de Play Store en GitHub versie</string>
     <string name="title_setup_gmail_support">Autoriseren van Google accounts werkt alleen in de Play Store en GitHub versie omdat Android de digitale app handtekening controleert</string>
     <string name="title_setup_gmail_rationale">Geef a.u.b. toestemming om een account te selecteren en uw naam te lezen</string>
-    <string name="title_setup_gmail_permissions">Google zal machtigingen vragen om al uw e-mail te lezen, op te stellen, te verzenden en definitief te verwijderen. FairEmail zal uw berichten nooit verwijderen zonder uw expliciete toestemming.</string>
+    <string name="title_setup_gmail_permissions">Google vraagt toestemming om je mails te lezen (om berichten aan je te tonen), samen te stellen (om conceptberichten op te slaan), te versturen en om al je mails definitief te verwijderen. FairEmail zal nooit jouw berichten verwijderen zonder jouw expliciete toestemming. Alleen jij en niemand anders heeft toegang tot jouw berichten.</string>
     <string name="title_setup_gmail_login">Als Chrome is aangemeld bij een account, kan een nieuwe account alleen via Android worden toegevoegd. Dit kan worden voorkomen door uit te loggen uit Chrome via de Chrome synchronisatie-instellingen.</string>
     <string name="title_setup_gmail_max">In het geval van de foutmelding \"U bent aangemeld bij het maximale aantal accounts\", moet de browser worden uitgelogd van alle Google-accounts.</string>
     <string name="title_setup_outlook_hint">In het geval van een alias adres moet waarschijnlijk de Office 365 wizard worden gebruikt.</string>
@@ -912,7 +912,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_default_folder_hint">        Android kan toestemming vragen voor toegang tot de geselecteerde map, ook al heeft de app dit niet nodig.
         U kunt het selectievenster annuleren om de standaard map te herstellen (meestal de \'Download\' map).
     </string>
-    <string name="title_advanced_restore_on_launch_hint">Herstel laatste app-status bij herstart via het start-pictogram binnen %1$d minuten</string>
+    <string name="title_advanced_restore_on_launch_hint">Herstel indien mogelijk de laatste app-status wanneer opnieuw opgestart via het launcher-pictogram</string>
     <string name="title_advanced_autoexpand_hint">Bericht automatisch openen als er slechts één bericht of slechts één ongelezen bericht in een gesprek is</string>
     <string name="title_advanced_expandall_hint">De antwoordknop zal niet worden weergegeven wanneer meerdere berichten worden opengeklapt omdat het dan onduidelijk is op welk bericht de knop van toepassing is</string>
     <string name="title_advanced_autoseen_hint">Automatisch berichten markeren als gelezen bij uitvouwen kan worden uitgeschakeld in de geavanceerde accountinstellingen van elk account</string>

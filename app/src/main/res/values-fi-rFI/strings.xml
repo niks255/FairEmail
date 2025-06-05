@@ -191,7 +191,6 @@
     <string name="title_setup_oauth_permission">Sähköpostipalveluntarjoaja on hyväksynyt OAuthin vain Play Kaupan ja GitHubin versioille</string>
     <string name="title_setup_gmail_support">Google-tilien valtuutus toimii vain Play Kaupan ja GitHubin versioissa, koska Android tarkistaa sovelluksen digitaalisen allekirjoituksen</string>
     <string name="title_setup_gmail_rationale">Ole hyvä ja myönnä oikeudet tilin valitsemiseksi ja nimesi lukemiseksi</string>
-    <string name="title_setup_gmail_permissions">Google kysyy oikeuksia lukea, kirjoittaa, lähettää ja poistaa viestejäsi pysyvästi. FairEmail ei koskaan poista viestejäsi ilman yksiselitteistä hyväksyntääsi.</string>
     <string name="title_setup_gmail_login">Uusi tili voidaan lisätä vain Androidin kautta, jos Chrome on kirjautunut tilille. Tämä voidaan välttää kirjautumalla ulos Chromesta sen synkronointiasetuksissa.</string>
     <string name="title_setup_gmail_max">Sinun täytyy kirjautua ulos kaikilta Google-tileiltäsi selaimessa, jos saat virheen \"Olet kirjautunut sisään suurimpaan mahdolliseen määrään tilejä\".</string>
     <string name="title_setup_outlook_hint">Jos kyseessä on alias osoite, olisi todennäköisesti käytettävä Office 365 -avustajaa.</string>
@@ -908,7 +907,6 @@
     <string name="title_advanced_default_folder_hint">        Android voi pyytää lupaa käyttää valittua kansiota, vaikka sovellus ei tarvitse sitä.
         Voit sulkea valintaikkunan palauttaaksesi oletuskansion (yleensä \'Lataukset\'-kansio).
     </string>
-    <string name="title_advanced_restore_on_launch_hint">Palauta viimeisin sovelluksen tila, kun käynnistetään uudelleen käynnistyskuvakkeella %1$d minuutin kuluessa</string>
     <string name="title_advanced_autoexpand_hint">Avaa viesti automaattisesti, kun keskustelussa on vain yksi viesti tai vain yksi on lukematon</string>
     <string name="title_advanced_expandall_hint">Vastauspainiketta ei näytetä, kun useita viestejä on laajennettuna, koska on epäselvää, mihin viestiin halutaan vastata</string>
     <string name="title_advanced_autoseen_hint">Viestien merkitseminen luetuksi laajennettaessa voidaan kytkeä erikseen pois tilien edistyneissä asetuksissa</string>

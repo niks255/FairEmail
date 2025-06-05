@@ -28,7 +28,23 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### [Ceratonykus](https://en.wikipedia.org/wiki/Ceratonykus)
 
-### 1.2276 2025-05-07
+### 1.2278 2025-06-05
+
+* Added option to limit the width only when resizing images
+* Added support for separate S/MIME sign/encrypt certificates, see [the FAQ](https://m66b.github.io/FairEmail/#faq12) for details
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2277 2025-05-28
+
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2276 2025-05-07 *
 
 * Removed TTS from the Play Store version (only) due to Play Store policies
 * Removed external intents from the Play Store version (only) due to Play Store policies

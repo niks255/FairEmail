@@ -4,17 +4,17 @@
     <string name="app_send_self">Enviar a sí mismo</string>
     <string name="app_changelog">Registro de cambios</string>
     <string name="app_welcome">FairEmail es una aplicación de correo electrónico de código abierto centrada en la privacidad y la seguridad. Por esta razón, algunas funciones pueden comportarse de manera diferente a lo que esté acostumbrado.</string>
-    <string name="app_limitations">Por ejemplo, los mensajes se reformatean por defecto para eliminar elementos no seguros y mejorar la legibilidad, y la apertura de enlaces debe ser confirmada por seguridad. Ambos pueden ser desactivados si se desea.</string>
+    <string name="app_limitations">Por ejemplo, los mensajes se reformatean por defecto para eliminar elementos no seguros y mejorar la legibilidad, y la apertura de enlaces debe ser confirmada por seguridad. Ambas opciones pueden ser desactivadas si se desea.</string>
     <string name="app_unsupported">Los bugs en la versión Android de este dispositivo en particular causan fallos</string>
     <string name="app_data_loss">Pueden perderse todos los datos</string>
     <string name="app_continue">Continuar de todas formas</string>
-    <string name="app_exit">Volver \'atrás\' para salir</string>
+    <string name="app_exit">Volver \'atrás\' de nuevo para salir</string>
     <string name="app_cake">Espacio de almacenamiento insuficiente</string>
     <string name="app_cake_remaining">Espacio de almacenamiento restante en el dispositivo: %1$s</string>
     <string name="app_cake_required">Espacio de almacenamiento mínimo requerido: %1$s</string>
     <string name="app_updated">Última actualización: %1$s</string>
     <string name="app_download">Descargado de: %1$s</string>
-    <string name="app_motd">        En Android 14/15 beta, pueden aparecer notificaciones de \'La app no está respondiendo\'.
+    <string name="app_motd">        En Android 14/15 beta, pueden aparecer ocasionalmente notificaciones de \'La app no está respondiendo\'.
         Google está trabajando en una solución.
         ¡Por favor no culpe a la app por este problema de Android!
     </string>
@@ -162,7 +162,7 @@
     <string name="title_setup_intro">Configurar una cuenta son sólo tres pasos y después puede enviar y recibir correos electrónicos</string>
     <string name="title_setup_simple">No hay necesidad de cambiar ninguna otra opción</string>
     <string name="title_setup_issue">FairEmail fue desarrollado para ayudarle a proteger su privacidad y representa literalmente miles de horas de trabajo. Si tiene algún problema, por favor contácteme primero para obtener ayuda antes de dejar una mala revisión. ¡Estoy encantado de ayudar!</string>
-    <string name="title_setup_analytics" comment="title_setup_analytics&#10;Notice text in the welcome section of the main settings screen.&#10;The remark about Bugsnag was removed because Bugsnag was removed.">FairEmail no muestra anuncios y no rastrea ni analiza su comportamiento.</string>
+    <string name="title_setup_analytics">FairEmail no muestra anuncios y no rastrea ni analiza su comportamiento.</string>
     <string name="title_setup_quick_accounts">Añadir o cambiar cuentas</string>
     <string name="title_setup_quick_support">Algunos proveedores hacen difícil añadir una cuenta. Por favor, no culpe a FairEmail por esto, en su lugar pida ayuda.</string>
     <string name="title_setup_quick_hint">La dirección de correo electrónico ingresada se utiliza para consultar al servidor de correo electrónico y autoconfig.thunderbird.net para obtener información de configuración</string>
@@ -192,7 +192,6 @@
     <string name="title_setup_oauth_permission">El proveedor de correo electrónico ha aprobado OAuth sólo para las versiones de Play Store y GitHub</string>
     <string name="title_setup_gmail_support">Autorizar cuentas de Google sólo funcionará en las versiones de Play Store y GitHub porque Android comprueba la firma digital de la aplicación</string>
     <string name="title_setup_gmail_rationale">Por favor, conceda permisos para seleccionar una cuenta y leer su nombre</string>
-    <string name="title_setup_gmail_permissions">Google solicitará permisos para leer, redactar, enviar y eliminar permanentemente todo su correo electrónico. FairEmail nunca eliminará sus mensajes sin su consentimiento explícito.</string>
     <string name="title_setup_gmail_login">Si Chrome ha iniciado sesión en una cuenta, sólo se puede añadir una nueva cuenta a través de Android. Esto se puede evitar desconectando Chrome a través de los ajustes de sincronización de Chrome.</string>
     <string name="title_setup_gmail_max">En el caso del mensaje de error \"Has iniciado sesión con el número máximo de cuentas\", tú necesitas cerrar sesión en el navegador de todas las cuentas de Google.</string>
     <string name="title_setup_outlook_hint">En el caso de una dirección alias, probablemente debería utilizar el asistente de Office 365.</string>
@@ -917,7 +916,6 @@
     <string name="title_advanced_default_folder_hint">        Puede que Android solicite permiso para acceder a la carpeta seleccionada, aunque la aplicación no lo necesite.
         Puede cancelar el diálogo de selección para restaurar la carpeta predeterminada (por lo general la carpeta \'Descargas\').
     </string>
-    <string name="title_advanced_restore_on_launch_hint">Restaurar el último estado de la aplicación cuando se reinicie mediante el icono del lanzador dentro de los %1$d minutos</string>
     <string name="title_advanced_autoexpand_hint">Abrir mensaje automáticamente cuando haya solo un mensaje o uno no leído en una conversación</string>
     <string name="title_advanced_expandall_hint">El botón de respuesta no se mostrará cuando se expandan varios mensajes porque no está claro a qué mensaje aplica el botón</string>
     <string name="title_advanced_autoseen_hint">Marcar automáticamente los mensajes como leídos al expandir puede desactivarse en la configuración avanzada de cada cuenta</string>

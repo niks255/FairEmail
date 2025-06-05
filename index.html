@@ -437,6 +437,7 @@
 <li><a href="#faq206">(206) How can I move or copy messages from one account to another?</a></li>
 <li><a href="#faq207">(207) What does ‘Authentication failed’ mean?</a></li>
 <li><a href="#faq208">(208) What does ‘about:blank#blocked’ mean when I click on a link?</a></li>
+<li><a href="#faq209">(209) Why is using a VPN often problematic?</a></li>
 </ul>
 <p><a href="#get-support">I have another question.</a></p>
 <p><a name="faq1"></a> <strong>(1) Which permissions are needed and why?</strong></p>
@@ -785,6 +786,7 @@ openssl pkcs12 -export -legacy -in certbag.pem &gt;legacy.p12</code></pre>
 <p>Note that S/MIME signing with other algorithms than RSA is supported, but be aware that other email clients might not support this. S/MIME encryption is possible with asymmetric algorithms only, which means in practice using RSA.</p>
 <p>The default encryption method is PGP, but the last used encryption method will be remembered for the selected identity for the next time. You can long press on the send button to change the encryption method for an identity. If you use both PGP and S/MIME encryption for the same email address, it might be useful to copy the identity, so you can change the encryption method by selecting one of the two identities. You can long press an identity in the list of identities (via manual setup in the main setup screen) to copy an identity.</p>
 <p>To allow different private keys for the same email address, for example, a key for signing and a key for encryption, FairEmail will always let you select a key when there are multiple identities with the same email address for the same account.</p>
+<p>From version 1.2278 the app can store a sign and an encryption key. To configure this properly, please reset the keys (see above for about how to), sign a message and select the signing key, and encrypt a message, and select the encryption key.</p>
 <p>Public keys are stored by FairEmail and can be imported when verifying a signature for the first time or via the encryption settings (PEM or DER format).</p>
 <p>FairEmail verifies both the signature and the complete certificate chain.</p>
 <p>Common errors:</p>
@@ -1241,7 +1243,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p>FairEmail formats messages again, causing messages to look different from the original, but also uncovering phishing links, etc.</p>
 <p>Note that reformatted messages are often easier to read than original messages because the margins are removed, and font colors and sizes are standardized.</p>
 <p>The Gmail app shows images by default by downloading the images through a Google proxy server. Since the images are downloaded from the source server <a href="https://blog.filippo.io/how-the-new-gmail-image-proxy-works-and-what-this-means-for-you/">in real-time</a>, this is even less secure, because Google is involved, too, without providing much benefit.</p>
-<p>You can show images and original messages by default for trusted senders on a case-by-case basis by checking <em>Do not ask this again for …</em>. You might need to reset the questions via a button in the miscellaneous-settings tab page.</p>
+<p>You can show images and original messages by default for trusted senders on a case-by-case basis by checking <em>Do not ask this again for …</em>. You might need to reset the questions via a button in the miscellaneous-settings tab page, as well as to disable <em>Remove tracking parameters by default</em>.</p>
 <p><br /></p>
 <p><a name="faq36"></a> <strong>(36) How are settings files encrypted?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq36">Google Translate</a></p>
@@ -1630,6 +1632,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <li><em>Size(array)</em> (returns the number of items in an array; since version 1.2179)</li>
 <li><em>knownContact()</em> (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)</li>
 <li><em>AI(prompt)</em> (perform interference with the configured AI model using the specified prompt, returning the result as a string; since version 1.2243)</li>
+<li><em>Is(flag)</em> (flag is one of seen, answered, flagged, deleted; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)</li>
 </ul>
 <p>Example conditions:</p>
 <p><code>header("X-Mailer") contains "Open-Xchange" &amp;&amp; from matches ".*service@.*"</code></p>
@@ -1656,7 +1659,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <li>Delete permanently (since version 1.1801)</li>
 <li>Play sound (since version 1.1803; experimental)</li>
 <li>Answer/forward (with template)</li>
-<li>Text-to-speech (sender and subject)</li>
+<li>Text-to-speech (sender and subject, not available in the Play Store version due to Play Store policies)</li>
 <li>Automation (Tasker, etc)</li>
 <li>Webhook (since version 1.2107)</li>
 </ul>
@@ -1751,6 +1754,7 @@ $$aligned$ (since version 1.2049)</code></pre>
 <p><br /></p>
 <p>Since version 1.2061 it is possible to execute rules with an automation app, like for example Tasker.</p>
 <pre><code>(adb shell) am start-foreground-service -a eu.faircode.email.RULE --es account &lt;account name&gt; -es rule &lt;unique rule name&gt;</code></pre>
+<p><strong>Note</strong>: Due to Play Store policies, automation intents are not available in the Play Store version of the app.</p>
 <p><br /></p>
 <p>Since version 1.2107 it is possible to executed webhooks. The supported HTTP methods are GET, HEAD, OPTIONS, POST and POST. The query parameters will be sent as body in the case of POST and PUT. Note that execution of webhooks won’t be retried. So, don’t use this for anything critical.</p>
 <p>This website might be useful for testing webhooks:</p>
@@ -1849,6 +1853,7 @@ Target: Service</code></pre>
 <p>To enable/disable an account with the name <em>Gmail</em>:</p>
 <pre><code>Extras: account:Gmail</code></pre>
 <p>Account names are case sensitive.</p>
+<p><strong>Note</strong>: Due to Play Store policies, automation intents are not available in the Play Store version of the app.</p>
 <p>Scheduling is a pro feature.</p>
 <p><br /></p>
 <p><a name="faq79"></a> <strong>(79) How do I use synchronize on demand (manual)?</strong></p>
@@ -2606,6 +2611,7 @@ https://favicon.yandex.net/favicon/{domain}</code></pre>
 <p>This command can be sent to FairEmail from an automation app to update the protection lists:</p>
 <pre><code>(adb shell) am start-foreground-service -a eu.faircode.email.DISCONNECT.ME</code></pre>
 <p>Updating once a week will probably be sufficient, please see <a href="https://github.com/disconnectme/disconnect-tracking-protection/commits/master">here</a> for recent lists changes.</p>
+<p><strong>Note</strong>: Due to Play Store policies, automation intents are not available in the Play Store version of the app.</p>
 <p><br /></p>
 <p><a name="faq160"></a> <strong>(160) Can you add permanent deletion of messages without confirmation?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq160">Google Translate</a></p>
@@ -2864,6 +2870,7 @@ _submission._tcp SRV 0 1 587 smtp.example.com.</code></pre>
 <p>Since version 1.2068 it is possible to send a template message with an intent:</p>
 <pre><code>(adb shell) am start-foreground-service -a eu.faircode.email.TEMPLATE --es template &lt;template name&gt; --es identity &lt;identity display name&gt; --es to &lt;email address&gt; --es cc &lt;email address&gt; --es subject &lt;subject&gt;</code></pre>
 <p><strong>Important</strong>: you need to configure a display name for the identity, and use this to identify the identity.</p>
+<p><strong>Note</strong>: Due to Play Store policies, automation intents are not available in the Play Store version of the app.</p>
 <p><br /></p>
 <p><a name="faq180"></a> <strong>(180) How do I use LanguageTool?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq180">Google Translate</a></p>
@@ -3014,7 +3021,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p><br></p>
 <p><a name="faq191"></a> <strong>(191) How do I download and keep older messages on my device?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq191">Google Translate</a></p>
-<p>You can download and keep older messages in the unified inbox folders by using <em>Fetch more messages</em> in the three-dots overflow menu of the start screen. For other folders, you can long press the folder in the folder list of the account (tap on the account name in the navigation menu = left side menu). When you long press on a parent folder, there will be a subfolders option with a menu item to fetch more messages for all child folders. Please read the remark in the confirmation dialog box.</p>
+<p>You can download and keep older messages in the unified inbox folders by using <em>Fetch more messages</em> in the three-dots overflow menu of the start screen. For other folders, you can long press the folder in the folder list of the account (tap on the account name in the navigation menu = left side menu). When you long press on a parent folder, there will be a subfolders sub-menu with a fetch more messages option for all child folders. Please read the remark in the confirmation dialog box.</p>
 <p>Note that starred (favorite) messages will be kept on your device “forever”.</p>
 <p>Instead of downloading many messages to your device, consider <a href="#faq13">searching for messages on the email server</a>.</p>
 <p>Longer explanation: the app has a sync and a keep window per folder. The <em>Fetch more messages</em> menu item is, in fact, a mini wizard to change the keep window of one or more folders at the same time, and to initiate a corresponding synchronization operation. If you long press on a folder in the folder list and select <em>Edit properties</em>, you can change the sync and keep window of the folder. The sync window determines which messages will be checked with a standard sync operation (default 7 days), and the keep window determines how long messages will be kept on the device (default 30 days). If you sync another time within 30 seconds, all messages in the keep window will be checked, which is useful when you have been moving around messages with another email client, for example on your desktop computer. It is mostly pointless to check all messages all the time, especially considering that this will use battery power, which is why there is a separate sync and keep window, and why the app checks messages younger than a week only.</p>
@@ -3176,6 +3183,10 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>If you get ‘<em>about:blank#blocked</em>’ when you click on a link, for some reason the installed browser has blocked the link.</p>
 <p>Note that the original message view is displayed by the installed browser. It may look like it’s part of the app, but it’s not.</p>
 <p>You can probably workaround this by switching back to the reformatted message view via the ‘] [’ button just above the message text on the right.</p>
+<p><br></p>
+<p><a name="faq209"></a> <strong>(209) Why is using a VPN often problematic?</strong></p>
+<p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq209">Google Translate</a></p>
+<p>When you use a VPN, you share one network address with many people and not all those people will always behave nicely. Email servers often automatically block network addresses (IP addresses) when abuse is detected, for example when someone tries to send spam messages. The result is that logins are blocked for everyone using the same network address and the email server issues an error message such as “<em>Authentication failed</em>”. This is also why the app warns against using a VPN.</p>
 <p><br></p>
 <h2>
 <a name="get-support"></a>Get support

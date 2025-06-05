@@ -244,7 +244,7 @@
     <string name="title_setup_oauth_permission">The email provider has approved OAuth only for the Play Store and GitHub version</string>
     <string name="title_setup_gmail_support">Authorizing Google accounts will work in the Play Store and GitHub version only because Android checks the digital app signature</string>
     <string name="title_setup_gmail_rationale">Please grant permissions to select an account and read your name</string>
-    <string name="title_setup_gmail_permissions">Google will ask for permissions to read, compose, send and permanently delete all your email. FairEmail will never delete your messages without your explicit consent.</string>
+    <string name="title_setup_gmail_permissions">Google will ask for permissions to read (to show messages to you), compose (to save draft messages), send and permanently delete all your email. FairEmail will never delete your messages without your explicit consent. Only you and no one else has access to your messages.</string>
     <string name="title_setup_gmail_login">If Chrome is signed in to an account, a new account can only be added through Android. This can be avoided by logging out of Chrome via the Chrome sync settings.</string>
     <string name="title_setup_gmail_max">In case of the error message \"You\'re signed in to the maximum number of accounts\", you need to log out the browser from all Google accounts.</string>
     <string name="title_setup_outlook_hint">In the case of an alias address, the Office 365 wizard should probably be used.</string>
@@ -1150,7 +1150,7 @@
         Android may ask for permission to access the selected folder, even though the app doesn\'t need it.
         You can cancel the selection dialog to restore the default folder (usually the \'Download\' folder).
     </string>
-    <string name="title_advanced_restore_on_launch_hint">Restore last app state when restarted via the launcher icon within %1$d minutes</string>
+    <string name="title_advanced_restore_on_launch_hint">Restore last app state if possible when restarted via the launcher icon</string>
     <string name="title_advanced_autoexpand_hint">Automatically open message when there is just one message or just one unread message in a conversation</string>
     <string name="title_advanced_expandall_hint">The answer button will not be shown when multiple messages are expanded because it is unclear which message the button applies to</string>
     <string name="title_advanced_autoseen_hint">Automatically marking messages as read on expanding can be disabled in the advanced account settings of each account</string>
@@ -1836,6 +1836,7 @@
     <string name="title_add_image_inline">Insert</string>
     <string name="title_add_image_attach">Attach</string>
     <string name="title_add_image_resize">Resize</string>
+    <string name="title_add_image_resize_width_only">Limit width only</string>
     <string name="title_add_image_privacy">Remove privacy sensitive data</string>
     <string name="title_add_image_privacy_remark">Geographic location, serial numbers, file names, etc.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
