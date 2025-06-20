@@ -519,7 +519,6 @@
     <string name="title_advanced_quote_reply">Quote replied text</string>
     <string name="title_advanced_limit_reply">Limit the number of nested quotes</string>
     <string name="title_advanced_resize_reply">Resize images in replied text</string>
-    <string name="title_advanced_resize_paste">Resize pasted images</string>
     <string name="title_advanced_signature_location">Signature position</string>
     <string name="title_advanced_signature_new">Use signature for new messages</string>
     <string name="title_advanced_signature_reply">Use signature when replying</string>
@@ -900,6 +899,7 @@
     <string name="title_advanced_external_answer" translatable="false">Provide reply templates to other apps</string>
     <string name="title_advanced_shortcuts">Show frequently used contacts in Android share menu</string>
     <string name="title_advanced_ical_tentative">Store received invitations as tentative</string>
+    <string name="title_advanced_ical_email">Store email addresses of attendees</string>
     <string name="title_advanced_fts">Build search index</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d messages indexed (%3$s)</string>
     <string name="title_advanced_classification">Classify messages</string>
@@ -2447,6 +2447,7 @@
     <string name="title_via">Via: %1$s</string>
     <string name="title_1hour">1 hour</string>
     <string name="title_1day">1 day</string>
+    <string name="title_snooze_doze">Please disable battery optimizations via step 3 of the main settings screen</string>
     <string name="title_more_overflow">More &#8230;</string>
     <string name="title_today_at">Today at %1$s</string>
     <string name="title_tomorrow_at">Tomorrow at %1$s</string>

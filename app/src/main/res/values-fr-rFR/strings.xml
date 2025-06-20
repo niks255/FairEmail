@@ -192,7 +192,7 @@
     <string name="title_setup_oauth_permission">Le fournisseur de messagerie a approuvé OAuth uniquement pour les versions Play Store et GitHub</string>
     <string name="title_setup_gmail_support">L\'autorisation des comptes Google fonctionnera uniquement avec les versions Play Store et GitHub parce qu\'Android vérifie la signature numérique de l\'application</string>
     <string name="title_setup_gmail_rationale">Veuillez accorder les autorisations pour sélectionner un compte et lire votre nom</string>
-    <string name="title_setup_gmail_permissions">Google demandera l\'autorisation de lire (pour vous afficher les messages), de rédiger (pour enregistrer les brouillons de messages), d\'envoyer et de supprimer définitivement tous vos e-mails. FairEmail ne supprimera jamais vos messages sans votre consentement explicite. Seul vous et personne d\'autre a accès à vos messages.</string>
+    <string name="title_setup_gmail_permissions">Google demandera l\'autorisation de lire (pour afficher les messages), de rédiger (pour enregistrer les brouillons de messages), d\'envoyer et de supprimer définitivement tous vos e-mails. FairEmail ne supprimera jamais vos messages sans votre consentement explicite. Seul vous et personne d\'autre avez accès à vos messages.</string>
     <string name="title_setup_gmail_login">Si Chrome est connecté à un compte, un nouveau compte ne peut être ajouté que via Android. Ceci peut être évité en vous déconnectant de Chrome via les paramètres de synchronisation de Chrome.</string>
     <string name="title_setup_gmail_max">En cas de message d\'erreur \"Vous êtes connecté au nombre maximum de comptes\", vous devez vous déconnecter de tous les comptes Google dans le navigateur.</string>
     <string name="title_setup_outlook_hint">Dans le cas d\'une adresse alias, l\'assistant Office 365 devrait probablement être utilisé.</string>
@@ -440,7 +440,6 @@
     <string name="title_advanced_quote_reply">Citer le texte répondu</string>
     <string name="title_advanced_limit_reply">Limiter le nombre de citations imbriquées</string>
     <string name="title_advanced_resize_reply">Redimensionner les images dans le texte de la réponse</string>
-    <string name="title_advanced_resize_paste">Redimensionner les images collées</string>
     <string name="title_advanced_signature_location">Emplacement de la signature</string>
     <string name="title_advanced_signature_new">Utiliser la signature pour les nouveaux messages</string>
     <string name="title_advanced_signature_reply">Utiliser la signature lors de la réponse</string>
@@ -785,6 +784,7 @@
     <string name="title_advanced_sort_answers">Trier les modèles de réponse par fréquence d\'utilisation</string>
     <string name="title_advanced_shortcuts">Afficher les contacts fréquemment utilisés dans le menu « Partager » d’Android</string>
     <string name="title_advanced_ical_tentative">Enregistrer les invitations reçues comme provisoires</string>
+    <string name="title_advanced_ical_email">Enregistrer l\'adresse e-mail des participants</string>
     <string name="title_advanced_fts">Construire l\'index de recherche</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d messages indexés (%3$s)</string>
     <string name="title_advanced_classification">Classer les messages</string>
@@ -1511,6 +1511,7 @@
     <string name="title_add_image_inline">Inclure</string>
     <string name="title_add_image_attach">Joindre</string>
     <string name="title_add_image_resize">Redimensionner</string>
+    <string name="title_add_image_resize_width_only">Redimensionner seulement sur la largeur</string>
     <string name="title_add_image_privacy">Supprimer les informations confidentielles sensibles</string>
     <string name="title_add_image_privacy_remark">Emplacement géographique, numéros de série, noms de fichiers, etc.</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>
@@ -2068,6 +2069,7 @@
     <string name="title_via">Via : %1$s</string>
     <string name="title_1hour">1 heure</string>
     <string name="title_1day">1 jour</string>
+    <string name="title_snooze_doze">Veuillez désactiver les optimisations de batterie via l\'étape 3 de l\'écran principal des paramètres</string>
     <string name="title_more_overflow">Plus&#8230;</string>
     <string name="title_today_at">Aujourd\'hui à %1$s</string>
     <string name="title_tomorrow_at">Demain à %1$s</string>

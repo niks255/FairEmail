@@ -435,7 +435,6 @@ Gönderen etki alanını engellemek, profesyonel bir özellik olan filtre kurall
     <string name="title_advanced_quote_reply">Cevap metnini alıntıla</string>
     <string name="title_advanced_limit_reply">İç içe geçmiş tekliflerin sayısını sınırlayın</string>
     <string name="title_advanced_resize_reply">Yanıtlanan metindeki görselleri boyutlandır</string>
-    <string name="title_advanced_resize_paste">Yapıştırılan görüntüleri yeniden boyutlandır</string>
     <string name="title_advanced_signature_location">İmza konumu</string>
     <string name="title_advanced_signature_new">Yeni mesajlar için imzayı kullan</string>
     <string name="title_advanced_signature_reply">Yanıtlarken imza kullan</string>
@@ -1498,6 +1497,9 @@ Bu işlem başarısız olabileceği için eski mesaj çöp kutusuna taşınacak.
     <string name="title_add_image_inline">Ekle</string>
     <string name="title_add_image_attach">Ekle</string>
     <string name="title_add_image_resize">Yeniden boyutlandır</string>
+    <string name="title_add_image_resize_width_only">Başlık resim ekle yalnızca genişliği yeniden boyutlandır
+Görüntü ekleme iletişim kutusunda yalnızca görüntünün genişliğine göre yeniden boyutlandırma seçeneği (onay kutusu) için başlık.
+Dosya: strings. xml</string>
     <string name="title_add_image_privacy">Mahremiyetiniz için önemli verileri sil</string>
     <string name="title_add_image_privacy_remark">Coğrafi konum, seri numaraları, dosya adları vb</string>
     <string name="title_add_resize_pixels">&lt; %1$d piksel</string>

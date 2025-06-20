@@ -178,6 +178,7 @@
     <string name="title_setup_oauth_permission">OAuth 認証はメールプロバイダーより Play ストア版と GitHub版でのみ承認されています</string>
     <string name="title_setup_gmail_support">Android がアプリの署名を確認するため、Google アカウントで認可する機能は Play ストア版と GitHub 版でのみ動作します</string>
     <string name="title_setup_gmail_rationale">アカウントを選択してアクセス権限を付与してください</string>
+    <string name="title_setup_gmail_permissions">Google はすべてのメールの読み取り (あなたに送信されたメッセージを表示する)、新規作成 (メッセージの下書きを保存する)、送信、完全削除の許可を求めます。FairEmail が明示的な同意なしにメッセージを削除することはありません。メッセージにアクセスできるのはあなたのみで、他人がメッセージにアクセスすることはありません。</string>
     <string name="title_setup_gmail_login">Chrome でアカウントにログインしている場合、新しいアカウントは Android の設定から追加する必要があります。Chrome の同期設定からログアウトすると回避できます。</string>
     <string name="title_setup_gmail_max">「最大ログイン アカウント数に達しています」というエラーメッセージが表示される場合、ブラウザーのすべての Google アカウントからログアウトする必要があります。</string>
     <string name="title_setup_outlook_hint">エイリアスの場合、Office 365 ウィザードを使用する必要があります。</string>
@@ -425,7 +426,6 @@
     <string name="title_advanced_quote_reply">引用したテキストに引用符を付けて返信する</string>
     <string name="title_advanced_limit_reply">入れ子になった引用の数を制限する</string>
     <string name="title_advanced_resize_reply">引用した本文の画像の大きさを調整する</string>
-    <string name="title_advanced_resize_paste">貼り付けた画像の大きさを調整する</string>
     <string name="title_advanced_signature_location">署名の位置</string>
     <string name="title_advanced_signature_new">新規メッセージに署名を使用する</string>
     <string name="title_advanced_signature_reply">返信に署名を使用する</string>
@@ -1495,6 +1495,7 @@
     <string name="title_add_image_inline">挿入</string>
     <string name="title_add_image_attach">添付</string>
     <string name="title_add_image_resize">リサイズ</string>
+    <string name="title_add_image_resize_width_only">幅のみ合わせる</string>
     <string name="title_add_image_privacy">プライバシーデータを削除する</string>
     <string name="title_add_image_privacy_remark">位置情報、シリアル番号、ファイル名など</string>
     <string name="title_add_resize_pixels">&lt; %1$d ピクセル</string>

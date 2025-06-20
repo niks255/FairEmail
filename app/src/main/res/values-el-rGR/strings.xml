@@ -192,6 +192,7 @@
     <string name="title_setup_oauth_permission">Ο πάροχος ηλ. ταχυδρομείου έχει εγκρίνει OAuth μόνον για την έκδοση του Play Store και του GitHub</string>
     <string name="title_setup_gmail_support">Η εξουσιοδότηση λογαριασμών Google θα λειτουργήσει μόνον στην έκδοση του Play Store και του GitHub, επειδή το Android ελέγχει την ψηφιακή υπογραφή της εφαρμογής</string>
     <string name="title_setup_gmail_rationale">Παρακαλώ, παραχωρήστε τις απαιτούμενες άδειες για την επιλογή ενός λογαριασμού και την ανάγνωση του ονόματός σας</string>
+    <string name="title_setup_gmail_permissions">Η Google θα σας ζητήσει δικαιώματα ανάγνωσης (για να προβάλλει τα μηνύματα), σύνθεσης (για να σώζει τα προσχέδια), αποστολής και οριστικής διαγραφής για τα μηνύματα του ηλ. ταχυδρομείου σας. Το FairEmail δεν θα διαγράψει ποτέ τα μηνύματά σας χωρίς τη ρητή συγκατάθεσή σας. Μόνο εσείς έχετε πρόσβαση στα μηνύματά σας, κανένας άλλος.</string>
     <string name="title_setup_gmail_login">Εάν το Chrome είναι συνδεδεμένο με έναν λογαριασμό, μπορεί να προστεθεί ένας καινούργιος λογαριασμός μόνον μέσα από το Android. Αυτό μπορεί να αποφευχθεί, εάν αποσυνδεθείτε από το Chrome μέσω των ρυθμίσεων συγχρονισμού στο Chrome.</string>
     <string name="title_setup_gmail_max">Σε περίπτωση μηνύματος σφάλματος \"Είστε συνδεδεμένοι στον μέγιστο αριθμό λογαριασμών\", πρέπει να αποσυνδεθείτε από όλους τους λογαριασμούς Google στον περιηγητή.</string>
     <string name="title_setup_outlook_hint">Σε περίπτωση μιας ψευδώνυμης διεύθυνσης, θα πρέπει πιθανώς να χρησιμοποιηθεί ο οδηγός του Office 365.</string>
@@ -438,7 +439,6 @@
     <string name="title_advanced_quote_reply">Παράθεση του προς απάντηση κειμένου</string>
     <string name="title_advanced_limit_reply">Περιορισμός του αριθμού των ιεραρχημένων παραθεμάτων</string>
     <string name="title_advanced_resize_reply">Αναπροσαρμογή των εικόνων στο προς απάντηση κείμενο</string>
-    <string name="title_advanced_resize_paste">Αλλαγή μεγέθους επικολλημένων εικόνων</string>
     <string name="title_advanced_signature_location">Θέση της υπογραφής</string>
     <string name="title_advanced_signature_new">Χρήση υπογραφής για νέα μηνύματα</string>
     <string name="title_advanced_signature_reply">Χρήση υπογραφής κατά την απάντηση</string>
@@ -1505,6 +1505,7 @@
     <string name="title_add_image_inline">Εισαγωγή</string>
     <string name="title_add_image_attach">Επισύναψη</string>
     <string name="title_add_image_resize">Προσαρμογή μεγέθους</string>
+    <string name="title_add_image_resize_width_only">Όριο πλάτους μόνο</string>
     <string name="title_add_image_privacy">Αφαίρεση ευαίσθητων προσωπικών δεδομένων</string>
     <string name="title_add_image_privacy_remark">Γεωγραφική θέση, σειριακοί αριθμοί, ονόματα αρχείων, κλπ</string>
     <string name="title_add_resize_pixels">&lt; %1$d pixels</string>

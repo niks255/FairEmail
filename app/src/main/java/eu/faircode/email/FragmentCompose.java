@@ -82,6 +82,7 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.URLSpan;
 import android.util.Pair;
 import android.util.TypedValue;
+import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -121,8 +122,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.view.DragAndDropPermissionsCompat;
 import androidx.core.view.MenuCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -393,7 +396,7 @@ public class FragmentCompose extends FragmentBase {
         pickImages =
                 registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(max), uris -> {
                     if (!uris.isEmpty())
-                        onAddImageFile(UriType.getList(uris), false);
+                        onAddImageFile(UriType.getList(uris, null), false);
                 });
     }
 
@@ -651,16 +654,41 @@ public class FragmentCompose extends FragmentBase {
             @Override
             public void onInputContent(Uri uri, String type) {
                 Log.i("Received input uri=" + uri);
-                boolean resize_paste = prefs.getBoolean("resize_paste", true);
-                int resize = prefs.getInt("resize", FragmentCompose.REDUCED_IMAGE_SIZE);
-                boolean resize_width_only = prefs.getBoolean("resize_width_only", false);
-                onAddAttachment(
-                        Arrays.asList(new UriType(uri, type)),
-                        true,
-                        resize_paste ? resize : 0,
-                        resize_width_only,
-                        false,
-                        false);
+                UriType uriType = new UriType(uri, type, null);
+                onSharedAttachments(new ArrayList<>(Arrays.asList(uriType)));
+            }
+        });
+
+        // https://developer.android.com/develop/ui/views/touch-and-input/drag-drop/multi-window
+        etBody.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View view, DragEvent event) {
+                try {
+                    switch (event.getAction()) {
+                        case DragEvent.ACTION_DROP:
+                            FragmentActivity activity = getActivity();
+                            if (activity == null)
+                                return false;
+                            ClipData data = event.getClipData();
+                            if (data == null)
+                                return false;
+                            ClipData.Item item = data.getItemAt(0);
+                            Uri uri = item.getUri();
+                            if (uri == null)
+                                return false;
+                            DragAndDropPermissionsCompat permissions = ActivityCompat.requestDragAndDropPermissions(activity, event);
+                            if (permissions == null)
+                                return false;
+                            UriType uriType = new UriType(uri, event.getClipDescription(), activity);
+                            onSharedAttachments(new ArrayList<>(Arrays.asList(uriType)));
+                            return true;
+                        default:
+                            return false;
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                    return false;
+                }
             }
         });
 
@@ -3382,7 +3410,7 @@ public class FragmentCompose extends FragmentBase {
                 case REQUEST_TAKE_PHOTO:
                     if (resultCode == RESULT_OK) {
                         if (photoURI != null)
-                            onAddImageFile(Arrays.asList(new UriType(photoURI, null)), false);
+                            onAddImageFile(Arrays.asList(new UriType(photoURI, (String) null, null)), false);
                     }
                     break;
                 case REQUEST_ATTACHMENT:
@@ -3944,15 +3972,14 @@ public class FragmentCompose extends FragmentBase {
         if (clipData == null) {
             Uri uri = data.getData();
             if (uri != null)
-                result.add(new UriType(uri, data.getType()));
+                result.add(new UriType(uri, data.getType(), getContext()));
         } else {
             ClipDescription description = clipData.getDescription();
             for (int i = 0; i < clipData.getItemCount(); i++) {
                 ClipData.Item item = clipData.getItemAt(i);
                 Uri uri = item.getUri();
                 if (uri != null)
-                    result.add(new UriType(uri,
-                            description != null && i < description.getMimeTypeCount() ? description.getMimeType(i) : null));
+                    result.add(new UriType(uri, description, getContext()));
             }
         }
 
@@ -3962,7 +3989,7 @@ public class FragmentCompose extends FragmentBase {
         if (result.size() == 0 && data.hasExtra("media-uri-list"))
             try {
                 List<Uri> uris = data.getParcelableArrayListExtra("media-uri-list");
-                result.addAll(UriType.getList(uris));
+                result.addAll(UriType.getList(uris, null));
             } catch (Throwable ex) {
                 Log.e(ex);
             }
@@ -4276,6 +4303,8 @@ public class FragmentCompose extends FragmentBase {
                                 throw new IllegalStateException("Unknown action=" + data.getAction());
 
                         case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED:
+                            if (OpenPgpApi.ACTION_GET_KEY.equals(data.getAction()))
+                                db.identity().setIdentitySignKey(identity.id, null);
                             args.putBoolean("interactive", largs.getBoolean("interactive"));
                             return result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
 
