@@ -100,6 +100,13 @@ public class MediaPlayerHelper {
 
         MediaPlayer mediaPlayer = new MediaPlayer();
         try {
+            mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    Log.e("mediaPlayer error what=" + what + " extra=" + extra);
+                    return false;
+                }
+            });
             mediaPlayer.setAudioAttributes(attrs);
             mediaPlayer.setDataSource(context.getApplicationContext(), uri);
             mediaPlayer.setLooping(loop);
@@ -171,12 +178,20 @@ public class MediaPlayerHelper {
 
     static void startMusic(Context context, Uri uri, Runnable onCompleted) throws IOException {
         synchronized (lock) {
+            Log.i("startMusic uri=" + uri);
             stopMusic(context);
 
             MediaPlayerHelper.uri = uri;
             MediaPlayerHelper.onCompleted = onCompleted;
 
             MediaPlayerHelper.player = new MediaPlayer();
+            MediaPlayerHelper.player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    Log.e("startMusic error what=" + what + " extra=" + extra);
+                    return false;
+                }
+            });
             MediaPlayerHelper.player.setAudioAttributes(
                     new AudioAttributes.Builder()
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -189,12 +204,14 @@ public class MediaPlayerHelper {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     // https://issuetracker.google.com/issues/36921987
+                    Log.i("startMusic prepared");
                     mp.start();
                 }
             });
             MediaPlayerHelper.player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+                    Log.i("startMusic completed");
                     stopMusic(context);
                 }
             });
@@ -214,6 +231,7 @@ public class MediaPlayerHelper {
                 }
             MediaPlayerHelper.uri = null;
             if (MediaPlayerHelper.onCompleted != null) {
+                Log.i("startMusic onCompletion");
                 MediaPlayerHelper.onCompleted.run();
                 MediaPlayerHelper.onCompleted = null;
             }

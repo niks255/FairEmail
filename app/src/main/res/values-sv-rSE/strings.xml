@@ -921,7 +921,6 @@
     <string name="title_advanced_notify_remove_hint">Nya meddelandeaviseringar kommer alltid att tas bort när de sveps bort och när meddelanden markeras som lästa</string>
     <string name="title_advanced_notify_manage_hint">Tryck på kanalens namn för att ange kanalens egenskaper</string>
     <string name="title_advanced_notify_samsung_hint">För att hantera aviseringskanaler kan du behöva aktivera den här Android-inställningen: Avisering, Avancerade inställningar, Hantera aviseringskategorier för varje app</string>
-    <string name="title_advanced_notify_manage_default_hint">För att ställa in standardljudet, etc</string>
     <string name="title_advanced_notify_manage_service_hint">För att inaktivera meddelandet \"övervakning\"</string>
     <string name="title_advanced_notify_separate_hint">Hur konfigurerar jag aviseringar för konton, mappar och avsändare?</string>
     <string name="title_advanced_notify_preview_all_hint">För handburna enheter som kan visa fulltext (upp till 5000 tecken)</string>
@@ -1672,6 +1671,8 @@
     <string name="title_sort_on_last_applied">Senast tillämpad</string>
     <string name="title_filter">Filtrera bort</string>
     <string name="title_filter_seen">Läst</string>
+    <string name="title_filter_unseen">Olästa</string>
+    <string name="title_filter_flagged">Stjärnmärkta</string>
     <string name="title_filter_unflagged">Utan stjärnmärkning</string>
     <string name="title_filter_unknown">Okända avsändare</string>
     <string name="title_filter_hidden">Dold</string>

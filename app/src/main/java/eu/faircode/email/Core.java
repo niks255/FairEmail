@@ -1863,7 +1863,7 @@ class Core {
         }
 
         try {
-            if (account.isGmail() && gmail_delete_all) {
+            if (perform_expunge && account.isGmail() && gmail_delete_all) {
                 EntityFolder trash = db.folder().getFolderByType(account.id, EntityFolder.TRASH);
                 if (trash != null) {
                     Map<String, Long> folders = new HashMap<>();
@@ -2992,7 +2992,10 @@ class Core {
                 try {
                     db.beginTransaction();
 
-                    folder = db.folder().getFolderByName(account.id, fullName);
+                    if (EntityFolder.INBOX.equals(type)) // Case insensitive
+                        folder = db.folder().getFolderByNameAndType(account.id, fullName, type);
+                    else
+                        folder = db.folder().getFolderByName(account.id, fullName);
                     if (folder == null) {
                         EntityFolder parent = null;
                         char separator = ifolder.first.getSeparator();

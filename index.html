@@ -165,11 +165,11 @@
 <li><del><a href="https://techcommunity.microsoft.com/t5/outlook/outlook-office-365-imap-idle-is-broken/m-p/3616242">A bug</a> in the Outlook IMAP server causes delayed new message notifications.</del></li>
 <li>Updating the Material You colors sometimes require restarting the app / the device, which is caused by <a href="https://issuetracker.google.com/issues/386671298">a bug</a> in the Android WebView.</li>
 </ul>
-<p><a name="redmi"></a> <a name="realme"></a> <a name="oneplus"></a> <a name="oppo"></a></p>
+<p><a name="redmi"></a> <a name="realme"></a> <a name="oneplus"></a> <a name="oppo"></a> <a name="sony"></a> <a name="motorola"></a></p>
 <p><br /></p>
-<p><strong>Xiaomi Redmi / Realme / OnePlus / Oppo</strong></p>
+<p><strong>Xiaomi Redmi / Realme / OnePlus / Oppo / Sony / Motorola</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23redmi">Google Translate</a></p>
-<p>On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices, some Oppo devices, and some Samsung devices running Android 12, the database occasionally gets corrupted, especially after installing an update, resulting in total data loss (on the device only, unless you are using a POP3 account with the option <em>Leave messages on server</em> disabled).</p>
+<p>On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices, some Oppo devices, some Samsung devices, some Sony (Xperia) devices, some Motorola devices, and possibly other devices running Android 12, the database occasionally gets corrupted, especially after installing an update, resulting in total data loss (on the device only, unless you are using a POP3 account with the option <em>Leave messages on server</em> disabled).</p>
 <p>The cause of this problem are disk I/O errors due to an Android bug (more likely) or maybe a hardware issue (less likely), please <a href="https://www.sqlite.org/rescode.html#ioerr_write">see here</a>.</p>
 <p>“<em>This error might result from a hardware malfunction or because a filesystem came unmounted while the file was open.</em>”</p>
 <p>This can’t be fixed by the app and must be fixed by the device manufacturer with an Android update.</p>
@@ -552,6 +552,7 @@ Therefore, this issue can only be resolved by your email provider,
 or by installing the GitHub version of the app (as an update) and enabling insecure connections in the account/identity settings.** -->
 <p><em>… Untrusted … not in certificate …</em><br /> <em>… Invalid security certificate (Can’t verify identity of server) …</em><br /> <em>… Chain validation failed … timestamp check failed … Certificate expired at …</em><br /></p>
 <p>This can be caused by using an incorrect host name, so first double-check the host name in the advanced identity/account settings (tap <em>Manual setup and account options</em>). Please see the documentation of the email provider about the right host name. Sometimes the right host name is in the error message.</p>
+<p>Another possible cause is <a href="https://github.com/appmattus/certificatetransparency">Certificate transparency</a> failing, so try disabling it in the connection settings tab page.</p>
 <p>You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">man-in-the-middle attacks</a>. If money is an obstacle, you can get free security certificates from <a href="https://letsencrypt.org">Let’s Encrypt</a>.</p>
 <p>The quick, but unsafe solution (not advised), is to enable <em>Insecure connections</em> in the advanced identity settings (navigation menu, tap <em>Settings</em>, tap <em>Manual setup</em>, tap <em>Identities</em>, tap the identity, tap <em>Advanced</em>).</p>
 <p>Alternatively, you can accept the fingerprint of invalid server certificates like this:</p>
@@ -983,6 +984,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p><strong>FairEmail ist grundsätzlich kostenlos</strong> und nur einige erweiterte Funktionen müssen gekauft werden.</p>
 <p><strong>FairEmail est au fond gratuit</strong> et seulement quelques fonctionnalités avancées doivent être achetés.</p>
 <p>Please see the Play store description of the app or <a href="https://email.faircode.eu/#pro">see here</a> for a complete list of pro features.</p>
+<p>Note that all current and future pro features can be purchased with a one-time payment, and that there is no subscription.</p>
 <p>The right question is “<em>why are there so many taxes and fees?</em>”:</p>
 <ul>
 <li>VAT: 25 % (depending on your country)</li>
@@ -991,8 +993,9 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <li><sub>Paypal fee: 5-10 % depending on the country/amount</sub></li>
 </ul>
 <p>So, what is left for the developer is just a fraction of what you pay.</p>
+<p>In addition, there are significant recurring costs associated with the project. For example, Google requires a rather expensive annual security assesment.</p>
 <p>Also note that most free apps will appear not to be sustainable in the end, whereas FairEmail is properly maintained and supported, and that free apps may have a catch, like sending privacy sensitive information to the internet. There are no privacy violating ads in the app either.</p>
-<p>I have been working on FairEmail almost every day for more than four years, so I think the price is more than reasonable. For this reason there won’t be discounts either.</p>
+<p>I have been working on FairEmail almost every day for more than five years, so I think the price is more than reasonable. For this reason there won’t be discounts either.</p>
 <p><br /></p>
 <p><a name="faq20"></a> <strong>(20) Can I get a refund?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq20">Google Translate</a></p>
@@ -1130,12 +1133,13 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p><a name="faq25"></a> <strong>(25) Why can’t I select/open/save an image, attachment or a file?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq25">Google Translate</a></p>
 <p>When a menu item to select/open/save a file is disabled (dimmed) or when you get the message <em>Storage access framework not available</em>, the <a href="https://developer.android.com/guide/topics/providers/document-provider">storage access framework</a>, a standard Android component, is probably not present. This might be because your custom ROM does not include it or because it was actively removed (debloated). Note that this will result in similar problems in other apps too.</p>
-<p>FairEmail does not request storage permissions, so this framework is required to select files and folders. No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to <em>all</em> files. Moreover, recent Android versions disallow access to all files for apps, except, under specific conditions, for file managers.</p>
+<p>Try restarting your device first as this often solves the problem after updates are installed (see also the next paragraph).</p>
 <p>To resolve this problem, the system component Google Play Services may need to be updated. Please <a href="https://support.google.com/googleplay/answer/9037938?hl=en">see here</a> on how. Please note that you will need to restart your device after the update!</p>
 <p>The storage access framework is provided by the package <em>com.android.documentsui</em>, which is visible as <em>Files</em> app on some Android versions (notably OxygenOS).</p>
 <p>You can enable the storage access framework (again) with this adb command:</p>
 <pre><code>pm install -k --user 0 com.android.documentsui</code></pre>
 <p>Alternatively, you might be able to enable the <em>Files</em> app again using the Android app settings.</p>
+<p>FairEmail does not request storage permissions, so this framework is required to select files and folders. No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to <em>all</em> files. Moreover, recent Android versions disallow access to all files for apps, except, under specific conditions, for file managers.</p>
 <p><br /></p>
 <p>In the case of the error <em>com.android.externalstorage has no access to content://…</em>, please enable this Android option for <em>com.android.externalstorage</em> and <em>com.android.sharedstorage</em>:</p>
 <p><em>Settings</em> &gt; <em>Privacy</em> &gt; <em>Permission management</em> &gt; <em>Files and media</em> &gt; <em>See more apps that can access all files</em></p>
@@ -1629,7 +1633,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <li><em>blocklist()</em> (version 1.2176-1.2178; deprecated, use <em>onBlocklist()</em> instead)</li>
 <li><em>onBlocklist()</em> (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2179)</li>
 <li><em>hasMx()</em> (returns a boolean indicating if the from/reply-to address has an associated MX record; since version 1.2179)</li>
-<li><em>attachments(regex)</em> (returns an integer indicating number of attachments; since version 1.2179; optional regex since version 1.2194)</li>
+<li><em>attachments(regex)</em> (returns an integer indicating number of attachments; since version 1.2179; optional regex to select the names since version 1.2194)</li>
 <li><em>Jsoup()</em> (returns an array of selected strings; since version 1.2179)</li>
 <li><em>Size(array)</em> (returns the number of items in an array; since version 1.2179)</li>
 <li><em>knownContact()</em> (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)</li>
@@ -1681,8 +1685,8 @@ $user$ (since version 1.2265)
 $extra$ (since version 1.2265)
 $domain$
 $group$ (since version 1.2030)</code></pre>
-<p><span class="math inline"><em>u</em><em>s</em><em>e</em><em>r</em></span> is the domain name of the ‘from’ email address, and <span class="math inline"><em>d</em><em>o</em><em>m</em><em>a</em><em>i</em><em>n</em></span> is the domain name of the ‘from’ email address: <em>user@domain</em>.</p>
-<p><span class="math inline"><em>e</em><em>x</em><em>t</em><em>r</em><em>a</em></span> is the part after the plus sign if the username: <em>user+extra$example.org</em>.</p>
+<p><span class="math inline"><em>u</em><em>s</em><em>e</em><em>r</em></span> is the user name of the ‘from’ email address, and <span class="math inline"><em>d</em><em>o</em><em>m</em><em>a</em><em>i</em><em>n</em></span> is the domain name of the ‘from’ email address: <em>user@domain</em>.</p>
+<p><span class="math inline"><em>e</em><em>x</em><em>t</em><em>r</em><em>a</em></span> is the part after the plus sign if the username: <em>user+extra@example.org</em>.</p>
 <p><span class="math inline"><em>g</em><em>r</em><em>o</em><em>u</em><em>p</em></span> will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only. Note that the Android contact provider isn’t very fast, so using this placeholder can slow down fetching messages.</p>
 <p><br /></p>
 <p>Since version 1.2132 it is possible to use the following placeholders in keywords:</p>

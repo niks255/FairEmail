@@ -781,6 +781,7 @@
     <string name="title_advanced_sort_answers">Ταξινόμηση προτύπων απάντησης κατά συχνότητα χρήσης</string>
     <string name="title_advanced_shortcuts">Προβολή των πιο συχνά χρησιμοποιούμενων επαφών στο μενού \"Κοινοποίηση\" του Android</string>
     <string name="title_advanced_ical_tentative">Αποθήκευση των ειλημμένων προσκλήσεων ως ανεπιβεβαίωτων</string>
+    <string name="title_advanced_ical_email">Να αποθηκεύονται οι διευθύνσεις ηλ. ταχυδρομείου των συμμετεχόντων</string>
     <string name="title_advanced_fts">Κατασκευή ευρετηρίου αναζήτησης</string>
     <string name="title_advanced_fts_indexed">%1$d / %2$d μηνύματα ευρετηριασμένα (%3$s)</string>
     <string name="title_advanced_classification">Ταξινόμηση μηνυμάτων</string>
@@ -936,7 +937,6 @@
     <string name="title_advanced_notify_remove_hint">Οι ειδοποιήσεις νέων μηνυμάτων θα απομακρύνονται πάντα, όταν σαρώνονται με το δάχτυλο και όταν τα μηνύματα επισημαίνονται ως αναγνωσμένα</string>
     <string name="title_advanced_notify_manage_hint">Πατήστε στο όνομα ενός καναλιού για να ορίσετε τις ιδιότητές του</string>
     <string name="title_advanced_notify_samsung_hint">Για να διαχειριστείτε τα κανάλια ειδοποιήσεων, ίσως χρειαστεί να ενεργοποιήσετε αυτήν τη ρύθμιση Android: Ειδοποίηση, Ρυθμίσεις για προχωρημένους, Διαχείριση κατηγοριών ειδοποιήσεων για κάθε εφαρμογή</string>
-    <string name="title_advanced_notify_manage_default_hint">Για τον ορισμό του προκαθορισμένου ήχου, κτλ</string>
     <string name="title_advanced_notify_manage_service_hint">Για να απενεργοποιηθεί η ειδοποίηση: \"Χ λογαριασμοί παρακολουθούνται\"</string>
     <string name="title_advanced_notify_separate_hint">Πώς ρυθμίζω τις ειδοποιήσεις για λογαριασμούς, φακέλους και αποστολείς;</string>
     <string name="title_advanced_notify_preview_all_hint">Για φορετές συσκευές που μπορούν να προβάλλουν ολόκληρο το κείμενο (μέχρι 5.000 χαρακτήρες)</string>
@@ -1697,6 +1697,8 @@
     <string name="title_sort_on_last_applied">Τελευταία εφαρμογή</string>
     <string name="title_filter">Φιλτράρισμα (αποκλεισμός)</string>
     <string name="title_filter_seen">Αναγνωσμένα</string>
+    <string name="title_filter_unseen">Μη αναγνωσμένο</string>
+    <string name="title_filter_flagged">Με αστέρι</string>
     <string name="title_filter_unflagged">Χωρίς αστέρι</string>
     <string name="title_filter_unknown">Άγνωστοι αποστολείς</string>
     <string name="title_filter_hidden">Κρυφά</string>
@@ -2063,6 +2065,7 @@
     <string name="title_via">Μέσω: %1$s</string>
     <string name="title_1hour">1 ώρα</string>
     <string name="title_1day">1 ημέρα</string>
+    <string name="title_snooze_doze">Παρακαλούμε, απενεργοποιήστε τις βελτιστοποιήσεις μπαταρίας μέσω του βήματος 3 από την κύρια οθόνη ρυθμίσεων</string>
     <string name="title_more_overflow">Περισσότερα &#8230;</string>
     <string name="title_today_at">Σήμερα στις/στη %1$s</string>
     <string name="title_tomorrow_at">Αύριο στις/στη %1$s</string>

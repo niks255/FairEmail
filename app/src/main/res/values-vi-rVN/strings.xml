@@ -707,7 +707,6 @@
     <string name="title_advanced_notify_car_hint">Kết nối nghĩa là có gì đó đang được chiếu như là bản đồ</string>
     <string name="title_advanced_notify_remove_hint">Các thông báo thư mới sẽ luôn được xoá khi được vuốt đi và khi đánh dấu thư là đã đọc</string>
     <string name="title_advanced_notify_manage_hint">Nhấn vào tên kênh để đặt thuộc tính kênh</string>
-    <string name="title_advanced_notify_manage_default_hint">Để đặt âm thanh mặc định, v.v.</string>
     <string name="title_advanced_notify_manage_service_hint">Để tắt thông báo \'đang giám sát\'</string>
     <string name="title_advanced_notify_separate_hint">Tôi thiết lập thông báo cho các tài khoản, thư mục và người gửi như thế nào?</string>
     <string name="title_advanced_notify_preview_all_hint">Dành cho các thiết bị đeo có thể hiện văn bản đầy đủ (nhiều nhất 5,000 kí tự)</string>
@@ -1337,6 +1336,8 @@
     <string name="title_sort_on_order">Thứ tự</string>
     <string name="title_filter">Lọc ra</string>
     <string name="title_filter_seen">Đã đọc</string>
+    <string name="title_filter_unseen">Chưa đọc</string>
+    <string name="title_filter_flagged">Được gắn sao</string>
     <string name="title_filter_unflagged">Chưa gắn sao</string>
     <string name="title_filter_unknown">Người gửi không xác định</string>
     <string name="title_filter_hidden">Ẩn</string>

@@ -149,14 +149,16 @@ Related questions:
 <a name="realme"></a>
 <a name="oneplus"></a>
 <a name="oppo"></a>
+<a name="sony"></a>
+<a name="motorola"></a>
 
 <br />
 
-**Xiaomi Redmi / Realme / OnePlus / Oppo**
+**Xiaomi Redmi / Realme / OnePlus / Oppo / Sony / Motorola**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23redmi)
 
-On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices, some Oppo devices, and some Samsung devices running Android 12,
+On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices, some Oppo devices, some Samsung devices, some Sony (Xperia) devices, some Motorola devices, and possibly other devices running Android 12,
 the database occasionally gets corrupted, especially after installing an update,
 resulting in total data loss (on the device only, unless you are using a POP3 account with the option *Leave messages on server* disabled).
 
@@ -605,6 +607,8 @@ or by installing the GitHub version of the app (as an update) and enabling insec
 This can be caused by using an incorrect host name, so first double-check the host name in the advanced identity/account settings (tap *Manual setup and account options*).
 Please see the documentation of the email provider about the right host name.
 Sometimes the right host name is in the error message.
+
+Another possible cause is [Certificate transparency](https://github.com/appmattus/certificatetransparency) failing, so try disabling it in the connection settings tab page.
 
 You should try to fix this by contacting your provider or by getting a valid security certificate
 because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack).
@@ -1518,6 +1522,8 @@ See also [this FAQ](#faq15).
 
 Please see the Play store description of the app or [see here](https://email.faircode.eu/#pro) for a complete list of pro features.
 
+Note that all current and future pro features can be purchased with a one-time payment, and that there is no subscription.
+
 The right question is "*why are there so many taxes and fees?*":
 
 * VAT: 25 % (depending on your country)
@@ -1527,11 +1533,14 @@ The right question is "*why are there so many taxes and fees?*":
 
 So, what is left for the developer is just a fraction of what you pay.
 
+In addition, there are significant recurring costs associated with the project.
+For example, Google requires a rather expensive annual security assesment.
+
 Also note that most free apps will appear not to be sustainable in the end, whereas FairEmail is properly maintained and supported,
 and that free apps may have a catch, like sending privacy sensitive information to the internet.
 There are no privacy violating ads in the app either.
 
-I have been working on FairEmail almost every day for more than four years, so I think the price is more than reasonable.
+I have been working on FairEmail almost every day for more than five years, so I think the price is more than reasonable.
 For this reason there won't be discounts either.
 
 <br />
@@ -1849,9 +1858,7 @@ the [storage access framework](https://developer.android.com/guide/topics/provid
 This might be because your custom ROM does not include it or because it was actively removed (debloated).
 Note that this will result in similar problems in other apps too.
 
-FairEmail does not request storage permissions, so this framework is required to select files and folders.
-No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to *all* files.
-Moreover, recent Android versions disallow access to all files for apps, except, under specific conditions, for file managers.
+Try restarting your device first as this often solves the problem after updates are installed (see also the next paragraph).
 
 To resolve this problem, the system component Google Play Services may need to be updated.
 Please [see here](https://support.google.com/googleplay/answer/9037938?hl=en) on how.
@@ -1867,6 +1874,10 @@ pm install -k --user 0 com.android.documentsui
 ```
 
 Alternatively, you might be able to enable the *Files* app again using the Android app settings.
+
+FairEmail does not request storage permissions, so this framework is required to select files and folders.
+No app, except maybe file managers, targeting Android 4.4 KitKat or later should ask for storage permissions because it would allow access to *all* files.
+Moreover, recent Android versions disallow access to all files for apps, except, under specific conditions, for file managers.
 
 <br />
 
@@ -2959,7 +2970,7 @@ The following extra functions are available:
 * *blocklist()* (version 1.2176-1.2178; deprecated, use *onBlocklist()* instead)
 * *onBlocklist()* (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2179)
 * *hasMx()* (returns a boolean indicating if the from/reply-to address has an associated MX record; since version 1.2179)
-* *attachments(regex)* (returns an integer indicating number of attachments; since version 1.2179; optional regex since version 1.2194)
+* *attachments(regex)* (returns an integer indicating number of attachments; since version 1.2179; optional regex to select the names since version 1.2194)
 * *Jsoup()* (returns an array of selected strings; since version 1.2179)
 * *Size(array)* (returns the number of items in an array; since version 1.2179)
 * *knownContact()* (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)
@@ -3034,10 +3045,10 @@ $domain$
 $group$ (since version 1.2030)
 ```
 
-$user$ is the domain name of the 'from' email address,
+$user$ is the user name of the 'from' email address,
 and $domain$ is the domain name of the 'from' email address: *user@domain*.
 
-$extra$ is the part after the plus sign if the username: *user+extra$example.org*.
+$extra$ is the part after the plus sign if the username: *user+extra@example.org*.
 
 $group$ will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only.
 Note that the Android contact provider isn't very fast, so using this placeholder can slow down fetching messages.

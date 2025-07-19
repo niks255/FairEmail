@@ -968,7 +968,6 @@
     <string name="title_advanced_notify_remove_hint">Уведомления о новых о сообщениях всегда будут удаляться при смахивании сообщения и пометке о прочтении</string>
     <string name="title_advanced_notify_manage_hint">Нажмите на название канала, чтобы установить его свойства</string>
     <string name="title_advanced_notify_samsung_hint">Для управления каналами уведомлений может потребоваться включить данную настройку Android: Уведомления → Дополнительные настройки → Управление категориями уведомлений для каждого приложения</string>
-    <string name="title_advanced_notify_manage_default_hint">Для установки звука по умолчанию и т.д.</string>
     <string name="title_advanced_notify_manage_service_hint">Для отключения контролирующего уведомления</string>
     <string name="title_advanced_notify_separate_hint">Как настроить уведомления для учётных записей, папок и отправителей?</string>
     <string name="title_advanced_notify_preview_all_hint">Для носимых устройств, которые могут показывать полный текст (до 5000 символов)</string>
@@ -1730,10 +1729,12 @@
     <string name="title_sort_on_last_applied">Последнее применение</string>
     <string name="title_filter">Фильтр</string>
     <string name="title_filter_seen">Прочитанные</string>
+    <string name="title_filter_unseen">Не прочитанные</string>
+    <string name="title_filter_flagged">Избранные</string>
     <string name="title_filter_unflagged">Не избранные</string>
     <string name="title_filter_unknown">Неизвестные отправители</string>
     <string name="title_filter_hidden">Скрытые</string>
-    <string name="title_filter_deleted">Удалено</string>
+    <string name="title_filter_deleted">Удалённые</string>
     <string name="title_filter_duplicates">Дубликаты</string>
     <string name="title_filter_sent">Отправленные</string>
     <string name="title_filter_trash">Мусор</string>
