@@ -417,7 +417,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(182) How can I select how a link should be opened?](#faq182)
 * [(183) How do I use Send?](#faq183)
 * [(184) How do I password protect content?](#faq184)
-* [(185) Can I install FairEmail on Windows?](#faq185)
+* [~~(185) Can I install FairEmail on Windows?~~](#faq185)
 * [(186) How can I let the app auto store iCalendar invitations?](#faq186)
 * [(187) Are colored stars synchronized across devices?](#faq187)
 * [~~(188) Why is Google backup disabled?~~](#faq188)
@@ -2966,20 +2966,20 @@ The following extra operators are available:
 
 The following extra functions are available:
 
-* *header(name)* (returns an array of header values for the named header)
+* *header("name")* (returns an array of header values for the named header)
 * *blocklist()* (version 1.2176-1.2178; deprecated, use *onBlocklist()* instead)
 * *onBlocklist()* (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2179)
 * *hasMx()* (returns a boolean indicating if the from/reply-to address has an associated MX record; since version 1.2179)
-* *attachments(regex)* (returns an integer indicating number of attachments; since version 1.2179; optional regex to select the names since version 1.2194)
+* *attachments("regex")* (returns an integer indicating number of attachments; since version 1.2179; optional regex to select the names since version 1.2194)
 * *Jsoup()* (returns an array of selected strings; since version 1.2179)
 * *Size(array)* (returns the number of items in an array; since version 1.2179)
 * *knownContact()* (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)
 * *AI(prompt)* (perform interference with the configured AI model using the specified prompt, returning the result as a string; since version 1.2243)
-* *Is(flag)* (flag is one of seen, answered, flagged, deleted; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)
+* *Is("flag")* (flag is one of seen, answered, flagged, deleted; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)
 
 Example conditions:
 
-```header("X-Mailer") contains "Open-Xchange" && from matches ".*service@.*"```
+```header("X-Mailer") contains "Open-Xchange" && from matches ".*service@.*" && Is("seen")```
 
 ```!onBlocklist() && hasMx() && attachments() > 0```
 
@@ -3042,6 +3042,9 @@ $year$
 $user$ (since version 1.2265)
 $extra$ (since version 1.2265)
 $domain$
+$user:to$ (since version 1.2289)
+$extra:to$ (since version 1.2289)
+$domain:to$ (since version 1.2289)
 $group$ (since version 1.2030)
 ```
 
@@ -4636,6 +4639,13 @@ Note that FairEmail does support replying to calendar invites (a pro feature) an
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq139)
 
+<br>
+
+Firstly, please check if the *Tenant ID* field below the email address field is empty,
+and when you need to use it, please ensure the correct Tennant ID is entered.
+
+<br>
+
 The confusing Microsoft specific server error *User is authenticated but not connected* might occur if:
 
 **Consumer Outlook/Hotmail/Live account**
@@ -5796,13 +5806,15 @@ Sending protected content is a pro feature, decrypting protected content is a fr
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq185)
 
-Yes, you can if you use Windows 11 or later and install the [Windows Subsystem for Android](https://learn.microsoft.com/en-us/windows/android/wsa/).
+**Starting March 5, 2025, Windows Subsystem for Android™ and the Amazon Appstore are no longer available in the Microsoft Store.**
 
-You'll need to [download the GitHub version](https://github.com/M66B/FairEmail/releases) of the app and sideload it,
-which means that you need to enable developer mode, please [see here](https://learn.microsoft.com/en-us/windows/android/wsa/#test-and-debug),
-and that you need to install adb (platform tools), [see here](https://developer.android.com/studio/command-line/adb).
+~~Yes, you can if you use Windows 11 or later and install the [Windows Subsystem for Android](https://learn.microsoft.com/en-us/windows/android/wsa/).~~
 
-You can install the app via the Windows command line like this:
+~~You'll need to [download the GitHub version](https://github.com/M66B/FairEmail/releases) of the app and sideload it,~~
+~~which means that you need to enable developer mode, please [see here](https://learn.microsoft.com/en-us/windows/android/wsa/#test-and-debug),~~
+~~and that you need to install adb (platform tools), [see here](https://developer.android.com/studio/command-line/adb).~~
+
+~~You can install the app via the Windows command line like this:~~
 
 ```
 cd /path/to/platform-tools
@@ -5810,7 +5822,7 @@ adb connect 127.0.0.1:58526
 adb install /path/to/FairEmail-xxx.apk
 ```
 
-It is also possible to install the Play Store, but this is more complicated.
+~~It is also possible to install the Play Store, but this is more complicated.~~
 
 The app isn't available in the Amazon store because Amazon rebuilds all Android apps, and unfortunately, the app doesn't work correctly after rebuilding anymore.
 Amazon never responded to an issue reported about this.

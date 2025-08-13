@@ -413,7 +413,7 @@
 <li><a href="#faq182">(182) How can I select how a link should be opened?</a></li>
 <li><a href="#faq183">(183) How do I use Send?</a></li>
 <li><a href="#faq184">(184) How do I password protect content?</a></li>
-<li><a href="#faq185">(185) Can I install FairEmail on Windows?</a></li>
+<li><a href="#faq185"><del>(185) Can I install FairEmail on Windows?</del></a></li>
 <li><a href="#faq186">(186) How can I let the app auto store iCalendar invitations?</a></li>
 <li><a href="#faq187">(187) Are colored stars synchronized across devices?</a></li>
 <li><a href="#faq188"><del>(188) Why is Google backup disabled?</del></a></li>
@@ -1629,19 +1629,19 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 </ul>
 <p>The following extra functions are available:</p>
 <ul>
-<li><em>header(name)</em> (returns an array of header values for the named header)</li>
+<li><em>header(“name”)</em> (returns an array of header values for the named header)</li>
 <li><em>blocklist()</em> (version 1.2176-1.2178; deprecated, use <em>onBlocklist()</em> instead)</li>
 <li><em>onBlocklist()</em> (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2179)</li>
 <li><em>hasMx()</em> (returns a boolean indicating if the from/reply-to address has an associated MX record; since version 1.2179)</li>
-<li><em>attachments(regex)</em> (returns an integer indicating number of attachments; since version 1.2179; optional regex to select the names since version 1.2194)</li>
+<li><em>attachments(“regex”)</em> (returns an integer indicating number of attachments; since version 1.2179; optional regex to select the names since version 1.2194)</li>
 <li><em>Jsoup()</em> (returns an array of selected strings; since version 1.2179)</li>
 <li><em>Size(array)</em> (returns the number of items in an array; since version 1.2179)</li>
 <li><em>knownContact()</em> (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)</li>
 <li><em>AI(prompt)</em> (perform interference with the configured AI model using the specified prompt, returning the result as a string; since version 1.2243)</li>
-<li><em>Is(flag)</em> (flag is one of seen, answered, flagged, deleted; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)</li>
+<li><em>Is(“flag”)</em> (flag is one of seen, answered, flagged, deleted; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)</li>
 </ul>
 <p>Example conditions:</p>
-<p><code>header("X-Mailer") contains "Open-Xchange" &amp;&amp; from matches ".*service@.*"</code></p>
+<p><code>header("X-Mailer") contains "Open-Xchange" &amp;&amp; from matches ".*service@.*" &amp;&amp; Is("seen")</code></p>
 <p><code>!onBlocklist() &amp;&amp; hasMx() &amp;&amp; attachments() &gt; 0</code></p>
 <p><code>(received + 7*24*60*60*1000) &lt; DT_DATE_TO_EPOCH(DT_NOW())</code></p>
 <p><code>AI("Is the message below a scam? Answer in English with just yes or no.") contains "yes"</code></p>
@@ -1684,6 +1684,9 @@ $year$
 $user$ (since version 1.2265)
 $extra$ (since version 1.2265)
 $domain$
+$user:to$ (since version 1.2289)
+$extra:to$ (since version 1.2289)
+$domain:to$ (since version 1.2289)
 $group$ (since version 1.2030)</code></pre>
 <p><span class="math inline"><em>u</em><em>s</em><em>e</em><em>r</em></span> is the user name of the ‘from’ email address, and <span class="math inline"><em>d</em><em>o</em><em>m</em><em>a</em><em>i</em><em>n</em></span> is the domain name of the ‘from’ email address: <em>user@domain</em>.</p>
 <p><span class="math inline"><em>e</em><em>x</em><em>t</em><em>r</em><em>a</em></span> is the part after the plus sign if the username: <em>user+extra@example.org</em>.</p>
@@ -2385,6 +2388,9 @@ $NotDisplayed</code></pre>
 <p><br /></p>
 <p><a name="faq83"></a> <a name="faq139"></a> <strong>(139) How do I fix ‘User is authenticated but not connected’?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq139">Google Translate</a></p>
+<p><br></p>
+<p>Firstly, please check if the <em>Tenant ID</em> field below the email address field is empty, and when you need to use it, please ensure the correct Tennant ID is entered.</p>
+<p><br></p>
 <p>The confusing Microsoft specific server error <em>User is authenticated but not connected</em> might occur if:</p>
 <p><strong>Consumer Outlook/Hotmail/Live account</strong></p>
 <ul>
@@ -2926,13 +2932,14 @@ _submission._tcp SRV 0 1 587 smtp.example.com.</code></pre>
 <p><br /></p>
 <p><a name="faq185"></a> <strong>(185) Can I install FairEmail on Windows?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq185">Google Translate</a></p>
-<p>Yes, you can if you use Windows 11 or later and install the <a href="https://learn.microsoft.com/en-us/windows/android/wsa/">Windows Subsystem for Android</a>.</p>
-<p>You’ll need to <a href="https://github.com/M66B/FairEmail/releases">download the GitHub version</a> of the app and sideload it, which means that you need to enable developer mode, please <a href="https://learn.microsoft.com/en-us/windows/android/wsa/#test-and-debug">see here</a>, and that you need to install adb (platform tools), <a href="https://developer.android.com/studio/command-line/adb">see here</a>.</p>
-<p>You can install the app via the Windows command line like this:</p>
+<p><strong>Starting March 5, 2025, Windows Subsystem for Android™ and the Amazon Appstore are no longer available in the Microsoft Store.</strong></p>
+<p><del>Yes, you can if you use Windows 11 or later and install the <a href="https://learn.microsoft.com/en-us/windows/android/wsa/">Windows Subsystem for Android</a>.</del></p>
+<p><del>You’ll need to <a href="https://github.com/M66B/FairEmail/releases">download the GitHub version</a> of the app and sideload it,</del> <del>which means that you need to enable developer mode, please <a href="https://learn.microsoft.com/en-us/windows/android/wsa/#test-and-debug">see here</a>,</del> <del>and that you need to install adb (platform tools), <a href="https://developer.android.com/studio/command-line/adb">see here</a>.</del></p>
+<p><del>You can install the app via the Windows command line like this:</del></p>
 <pre><code>cd /path/to/platform-tools
 adb connect 127.0.0.1:58526
 adb install /path/to/FairEmail-xxx.apk</code></pre>
-<p>It is also possible to install the Play Store, but this is more complicated.</p>
+<p><del>It is also possible to install the Play Store, but this is more complicated.</del></p>
 <p>The app isn’t available in the Amazon store because Amazon rebuilds all Android apps, and unfortunately, the app doesn’t work correctly after rebuilding anymore. Amazon never responded to an issue reported about this.</p>
 <p><br /></p>
 <p><a name="faq186"></a> <strong>(186) How can I let the app auto store iCalendar invitations?</strong></p>

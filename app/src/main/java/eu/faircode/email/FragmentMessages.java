@@ -185,6 +185,7 @@ import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -456,6 +457,7 @@ public class FragmentMessages extends FragmentBase
     static final int REQUEST_EDIT_SUBJECT = 30;
     private static final int REQUEST_ANSWER_SETTINGS = 31;
     private static final int REQUEST_DESELECT = 32;
+    static final int REQUEST_PROMPT = 33;
 
     static final String ACTION_STORE_RAW = BuildConfig.APPLICATION_ID + ".STORE_RAW";
     static final String ACTION_VERIFYDECRYPT = BuildConfig.APPLICATION_ID + ".VERIFYDECRYPT";
@@ -1660,7 +1662,7 @@ public class FragmentMessages extends FragmentBase
                 if (result == null || result.single == null || !result.single.content)
                     return;
 
-                FragmentDialogSummarize.summarize(result.single, getParentFragmentManager(), ibSummarize, getViewLifecycleOwner());
+                FragmentDialogSummarize.summarize(result.single, getParentFragmentManager(), ibSummarize, getViewLifecycleOwner(), null);
             }
         });
 
@@ -3818,7 +3820,7 @@ public class FragmentMessages extends FragmentBase
         private void onSwipeSummarize(final @NonNull TupleMessageEx message) {
             final Context context = getContext();
             if (AI.isAvailable(context))
-                FragmentDialogSummarize.summarize(message, getParentFragmentManager(), null, getViewLifecycleOwner());
+                FragmentDialogSummarize.summarize(message, getParentFragmentManager(), null, getViewLifecycleOwner(), null);
             else
                 context.startActivity(new Intent(context, ActivitySetup.class)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -5060,7 +5062,7 @@ public class FragmentMessages extends FragmentBase
                             continue;
 
                         List<EntityMessage> messages = db.message().getMessagesByThread(
-                                message.account, message.thread, threading ? null : id, message.folder);
+                                message.account, message.thread, threading ? null : id, null);
                         for (EntityMessage threaded : messages) {
                             db.message().setMessageImportance(threaded.id, importance);
 
@@ -9661,6 +9663,10 @@ public class FragmentMessages extends FragmentBase
                     if (selectionTracker != null)
                         selectionTracker.clearSelection();
                     break;
+                case REQUEST_PROMPT:
+                    if (resultCode == RESULT_OK)
+                        onActionSummarize(data.getBundleExtra("args"));
+                    break;
             }
         } catch (Throwable ex) {
             Log.e(ex);
@@ -10389,6 +10395,18 @@ public class FragmentMessages extends FragmentBase
                                 ? "Signature could not be verified"
                                 : "Certificates and signatures do not match");
 
+                    if (sdata && result != null) {
+                        String fingerprint = EntityCertificate.getFingerprintSha256(result);
+                        List<String> emails = EntityCertificate.getEmailAddresses(result);
+                        for (String email : emails) {
+                            EntityCertificate record = db.certificate().getCertificate(fingerprint, email);
+                            if (record == null) {
+                                args.putBoolean("signed_data", true);
+                                break;
+                            }
+                        }
+                    }
+
                     if (is != null)
                         decodeMessage(context, is, message, args);
                 } else {
@@ -10515,6 +10533,7 @@ public class FragmentMessages extends FragmentBase
                             Date time = (Date) args.getSerializable("time");
                             boolean known = args.getBoolean("known");
                             boolean valid = args.getBoolean("valid");
+                            boolean signed_data = args.getBoolean("signed_data");
                             String reason = args.getString("reason");
                             String algo = args.getString("algo");
                             String algooid = args.getString("algooid");
@@ -10534,10 +10553,10 @@ public class FragmentMessages extends FragmentBase
                                     break;
                                 }
 
-                            if (!info && known && !record.isExpired(time) && match && valid)
+                            if (!info && known && !record.isExpired(time) && match && valid && !signed_data)
                                 Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_signature_valid, Snackbar.LENGTH_LONG))
                                         .show();
-                            else if (!auto) {
+                            else if (!auto || signed_data) {
                                 Context context = getContext();
                                 LayoutInflater inflator = LayoutInflater.from(context);
                                 View dview = inflator.inflate(R.layout.dialog_certificate, null);
@@ -10800,6 +10819,14 @@ public class FragmentMessages extends FragmentBase
                     db.message().setMessageRevision(message.id, protect_subject == null ? 1 : -1);
                     db.message().setMessageStored(message.id, new Date().getTime());
                     db.message().setMessageFts(message.id, false);
+
+                    if (BuildConfig.DEBUG || debug) {
+                        File raw = message.getRawFile(context);
+                        try (OutputStream os = new BufferedOutputStream(new FileOutputStream(raw))) {
+                            imessage.writeTo(os);
+                        }
+                        db.message().setMessageRaw(message.id, true);
+                    }
 
                     if (alias != null && !duplicate && message.identity != null) {
                         EntityIdentity identity = db.identity().getIdentity(message.identity);
@@ -11189,6 +11216,29 @@ public class FragmentMessages extends FragmentBase
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "edit:subject");
+    }
+
+    private void onActionSummarize(Bundle args) {
+        new SimpleTask<EntityMessage>() {
+            @Override
+            protected EntityMessage onExecute(Context context, Bundle args) throws Throwable {
+                long id = args.getLong("id");
+                DB db = DB.getInstance(context);
+                return db.message().getMessage(id);
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, EntityMessage message) {
+                if (message == null)
+                    return;
+                FragmentDialogSummarize.summarize(message, getParentFragmentManager(), null, getViewLifecycleOwner(), args.getString("prompt"));
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, args, "prompt");
     }
 
     private void onMoveAskAcross(final ArrayList<MessageTarget> result) {
@@ -11847,7 +11897,7 @@ public class FragmentMessages extends FragmentBase
                                 result.color = Color.TRANSPARENT;
                     }
 
-                    int i = (message.importance == null ? EntityMessage.PRIORITIY_NORMAL : message.importance);
+                    int i = (threaded.importance == null ? EntityMessage.PRIORITIY_NORMAL : threaded.importance);
                     if (result.importance == null)
                         result.importance = i;
                     else if (!result.importance.equals(i))
