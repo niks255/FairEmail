@@ -18,6 +18,7 @@
     <string name="app_updated">Last update: %1$s</string>
     <string name="app_download">Downloaded from: %1$s</string>
     <string name="app_dmarc" translatable="false">DMARC</string>
+    <string name="app_error">Most error messages have external causes (network, server, etc.) or are caused by an incorrect, often non-standard, configuration. A bad review does not solve such problems. Requesting support is almost always more effective.</string>
 
     <string name="app_motd">
         With Android 14/15 beta, \'App not responding\' notifications occasionally occur.
@@ -1639,6 +1640,7 @@
     <string name="title_keywords_btn">Keywords</string>
     <string name="title_labels_btn">Labels (Gmail only)</string>
     <string name="title_unsubscribe">Unsubscribe</string>
+    <string name="title_unsubscribe_error">The unsubscribe link in the message does not work. Error %1$s</string>
     <string name="title_message_rule">Create rule</string>
     <string name="title_no_junk">Not spam</string>
     <string name="title_edit_subject">Edit subject &#8230;</string>

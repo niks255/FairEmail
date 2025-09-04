@@ -30,10 +30,19 @@ Ceratonykus
 
 Next version (Work in progress)
 
+* One-click unsubscribe improvements
+* Small improvements and minor bug fixes
+* Updated Public Suffix List
+* Updated translations
+
+1.2292 2025-08-18 *
+
+* Fixed unchanged external drafts being saved
+* Added support for "one-click" unsubscribe
 * Small improvements and minor bug fixes
 * Updated AndroidX
 
-1.2291 2025-08-13 *
+1.2291 2025-08-13
 
 * Small improvements and minor bug fixes
 * Updated Public Suffix List

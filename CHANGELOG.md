@@ -30,7 +30,33 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### Next version (Work in progress)
 
-### 1.2291 2025-08-13 *
+### 1.2295 2025-09-01 *
+
+* Fixed scroll issues with delayed marking read
+* Fixed selecting messages when swiping a message
+
+### 1.2294 2025-08-30
+
+* One-click unsubscribe improvements
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2293 2025-08-25
+
+* One-click unsubscribe improvements
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2292 2025-08-18 *
+
+* Fixed unchanged external drafts being saved
+* Added support for "one-click" unsubscribe
+* Small improvements and minor bug fixes
+* Updated [AndroidX](https://developer.android.com/jetpack/androidx/versions/all-channel)
+
+### 1.2291 2025-08-13
 
 * Small improvements and minor bug fixes
 * Updated [Public Suffix List](https://github.com/publicsuffix/list)

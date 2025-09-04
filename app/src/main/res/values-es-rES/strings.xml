@@ -14,6 +14,7 @@
     <string name="app_cake_required">Espacio de almacenamiento mínimo requerido: %1$s</string>
     <string name="app_updated">Última actualización: %1$s</string>
     <string name="app_download">Descargado de: %1$s</string>
+    <string name="app_error">La mayoría de los mensajes de error tienen causas externas (red, servidor, etc.) o son causados por una configuración incorrecta, a menudo no estándar. Una mala reseña no resuelve esos problemas. Solicitar apoyo es casi siempre más eficaz.</string>
     <string name="app_motd">        En Android 14/15 beta, pueden aparecer ocasionalmente notificaciones de \'La app no está respondiendo\'.
         Google está trabajando en una solución.
         ¡Por favor no culpe a la app por este problema de Android!
@@ -752,7 +753,7 @@
         El método de cifrado puede ser seleccionado antes de enviar en el diálogo de opciones de envío (mantener pulsado botón de enviar).
     </string>
     <string name="title_advanced_sign_default">Firmar por defecto</string>
-    <string name="title_advanced_encrypt_default">Cifrar por defecto</string>
+    <string name="title_advanced_encrypt_default">Firmar y cifrar por defecto</string>
     <string name="title_advanced_encrypt_auto">Cifrar automáticamente cuando las claves de todos los destinatarios están disponibles</string>
     <string name="title_advanced_encrypt_reply">Cifrar automáticamente al responder a un mensaje cifrado</string>
     <string name="title_advanced_auto_verify">Verificar automáticamente mensajes firmados</string>
@@ -939,7 +940,7 @@
     <string name="title_advanced_notify_remove_hint">Las notificaciones de nuevos mensajes siempre serán eliminadas al deslizarlas y al marcar mensajes como leídos</string>
     <string name="title_advanced_notify_manage_hint">Toca en el nombre del canal para establecer las propiedades del canal</string>
     <string name="title_advanced_notify_samsung_hint">Para administrar los canales de notificación, puede que necesite habilitar esta configuración de Android: Notificaciones, Configuración Avanzada, Gestionar categorías de notificaciones para cada aplicación</string>
-    <string name="title_advanced_notify_manage_default_hint" comment="title_advanced_notify_manage_default_hint&#10;Remark for the default notification channel settings button">Para establecer el sonido por defecto, configure DND (no molestar), etc.</string>
+    <string name="title_advanced_notify_manage_default_hint">Para establecer el sonido por defecto, configure DND (no molestar), etc.</string>
     <string name="title_advanced_notify_manage_service_hint">Para desactivar la notificación de \'monitoreo\'</string>
     <string name="title_advanced_notify_separate_hint">¿Cómo puedo configurar las notificaciones de cuentas, carpetas y remitentes?</string>
     <string name="title_advanced_notify_preview_all_hint">Para los wearables que pueden mostrar el texto completo (hasta 5.000 caracteres)</string>
@@ -1332,6 +1333,7 @@
     <string name="title_keywords_btn">Palabras clave</string>
     <string name="title_labels_btn">Etiquetas (sólo Gmail)</string>
     <string name="title_unsubscribe">Darse de baja</string>
+    <string name="title_unsubscribe_error" comment="title_unsubscribe_error&#10;Error message for when an unsubscribe link doesn't work. At the end, the http response code will be filled in for diagnostic purposes.">El enlace de desuscripción en el mensaje no funciona. Error %1$s</string>
     <string name="title_message_rule">Crear regla</string>
     <string name="title_no_junk">No es Spam</string>
     <string name="title_edit_subject">Editar asunto &#8230;</string>
