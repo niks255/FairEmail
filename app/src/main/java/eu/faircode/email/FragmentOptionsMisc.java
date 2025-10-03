@@ -303,6 +303,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "start_delay", "range_size", "chunk_size", "thread_range", "restart_interval",
             "autoscroll_editor", "undo_manager",
             "browser_zoom",
+            "viewport_height",
             "ignore_formatted_size",
             "show_recent",
             "use_modseq", "preamble", "uid_command", "perform_expunge", "uid_expunge",
@@ -313,7 +314,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "native_dkim", "native_arc", "native_arc_whitelist", "strict_alignment",
             "svg", "webp", "animate_images",
             "preview_hidden", "preview_quotes",
-            "easy_correct", "paste_plain", "paste_quote", "favicon_uri", "email_junk", "infra", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "save_user_flags", "mdn",
+            "easy_correct", "paste_plain", "paste_quote", "favicon_uri", "infra", "email_junk", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "save_user_flags", "mdn",
             "app_chooser", "app_chooser_share", "share_task",
             "adjacent_links", "adjacent_documents", "adjacent_portrait", "adjacent_landscape",
             "delete_confirmation", "delete_notification", "global_keywords", "test_iab"
@@ -2361,7 +2362,14 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_default) {
-            FragmentOptions.reset(getContext(), RESET_OPTIONS, null);
+            Context context = getContext();
+            Helper.enableComponent(context, ServicePowerControl.class, false);
+            Helper.enableComponent(context, ActivitySendSelf.class, false);
+            Helper.enableComponent(context, ActivitySearch.class, BuildConfig.DEBUG);
+            Helper.enableComponent(context, ActivityAnswer.class, false);
+            Helper.enableComponent(context, ReceiverAutoStart.class, true);
+            Helper.enableComponent(context, ActivityDMARC.class, !Helper.isPlayStoreInstall());
+            FragmentOptions.reset(context, RESET_OPTIONS, null);
             return true;
         }
         return super.onOptionsItemSelected(item);

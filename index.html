@@ -689,7 +689,7 @@ or by installing the GitHub version of the app (as an update) and enabling insec
 <p><a name="faq9"></a> <strong>(9) What are identities / how do I add an alias / configure a default CC or BCC address?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq9">Google Translate</a></p>
 <p>Identities represent email addresses you are sending <em>from</em> via an email (SMTP) server.</p>
-<p>Some providers allow you to have multiple aliases addresses.</p>
+<p>Some providers allow you to have multiple aliases addresses. Unfortunately, an email app cannot automatically discover alias email addresses, which means you have to configure them yourself.</p>
 <p>The easiest way to create an alias address is to use the mini <em>Create alias</em> wizard. For this, please go to the settings via the navigation menu (left side menu), tap on <em>Manual setup and account options</em>, tap on <em>Identities</em>, long press the main identity, and select <em>Create alias</em>.</p>
 <p>For more options, you can copy the main identity by long pressing on it, and change the email address and perhaps the (display) name. You should not change the username!</p>
 <p>Note that you can select the default sending address via the three-dots overflow menu at the top right of the message editor (not the start screen!).</p>
@@ -1039,6 +1039,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p>The errors <em>… BYE Logging out …</em>, <em>… Connection reset …</em> mean that the email server or something between the email server and the app, for example a router or a firewall (app), actively terminated an existing connection.</p>
 <p>The error <em>… Connection closed by peer …</em> means that the email server actively closed the connection. This might be caused by a not updated Exchange server, see <a href="https://blogs.technet.microsoft.com/pki/2010/09/30/sha2-and-windows/">here</a> for more information.</p>
 <p>The errors <em>… Read error …</em> (sometimes combined with <em>BAD_DECRYPT</em> / <em>DECRYPTION_FAILED_OR_BAD_RECORD_MAC</em>), <em>… Write error …</em>, <em>… Read timed out …</em>, <em>… Broken pipe …</em> mean that the email server is not responding anymore or that the internet connection is bad.</p>
+<p>The error <em>…ENETUNREACH (Network is unreachable) …</em>” means that no route to the target network exists. The local network the email server (the target network) is using might be offline, for example, due to a power cut, or the local network your device is using (the source network) might have internet connectivity issues.</p>
 <p><a name="connectiondropped"></a> The error <em>… Connection dropped by server? …</em> means that the email server unexpectedly terminated the connection. This sometimes happen when there were too many (simultaneous) connections in a too short time or when a wrong password was used too often. In this case, please make sure your password is correct and disable receiving in the receive settings for about 30 minutes and try again. If needed, see <a href="#faq23">this FAQ</a> about how you can reduce the number of connections.</p>
 <p>The error <em>… Unexpected end of zlib input stream …</em> means that not all data was received, possibly due to a bad or interrupted connection.</p>
 <p>The error <em>… connection failure …</em> could indicate <a href="#faq23">Too many simultaneous connections</a>.</p>
@@ -1325,6 +1326,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p>The error ‘<em>Handshake failed … HANDSHAKE_FAILURE_ON_CLIENT_HELLO …</em>’ might be caused by the provider still using RC4, which isn’t supported since <a href="https://developer.android.com/about/versions/nougat/android-7.0-changes.html#tls-ssl">Android 7</a> anymore.</p>
 <p>The error ‘<em>Handshake failed SSL handshake terminated … SSLV3_ALERT_HANDSHAKE_FAILURE … HANDSHAKE_FAILURE_ON_CLIENT_HELLO</em>’ can be caused by <a href="https://issuetracker.google.com/issues/37122132">this Android 7.0 bug</a>. This can unfortunately not be fixed by FairEmail.</p>
 <p>The error ‘<em>Handshake failed … UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION or SSLV3_ALERT_HANDSHAKE_FAILURE …</em>’ might be caused by enabling <strong>hardening connections</strong> or <strong>Bouncy Castle</strong> in the connection settings tab page, or by Android not supporting older protocols anymore, like SSLv3 and TLSv1.</p>
+<p>The error ‘<em>Handshake failed … UNSUPPORTED_PROTOCOL …</em>’ means that the email server and Android do not have a common SSL/TLS protocol or a common cipher. The cipher set the server offers might be limited or the server might support the old (and insecure) SSL protocols only.</p>
 <p>The error ‘<em>javax.net.ssl.SSLHandshakeException: Read error: … CERT_LENGTH_MISMATCH</em>’ means that there is something wrong with the email server setup. Try to switch to port 993 (IMAP) or 465 (SMTP) with SSL/TLS.</p>
 <p>Android 8 Oreo and later <a href="https://developer.android.com/about/versions/oreo/android-8.0-changes#security-all">do not support</a> SSLv3 anymore. There is no way to workaround lacking RC4 and SSLv3 support because it has completely been removed from Android (which should say something). Since version 1.2121 the Bouncy Castle secure socket provider (<a href="https://en.wikipedia.org/wiki/Java_Secure_Socket_Extension">JSSE</a>) is bundled. Enabling this socket provider in the connection-settings tab and enabling ‘<em>Allow insecure connections</em>’ in the account/identity settings <em>might</em> solve this problem.</p>
 <p>The error ‘<em>javax.net.ssl.SSLHandshakeException: Read error: … TLSV1_ALERT_INTERNAL_ERROR</em>’ means that Android and the email server share no common protocol versions and/or common ciphers.</p>
@@ -2173,7 +2175,7 @@ category:promotions</code></pre>
 <li>Open the Play store app and wait at least a minute to give it time to synchronize with the Google servers</li>
 <li>Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases; sometimes it helps to tap the <em>buy</em> button</li>
 </ul>
-<p>You can also try to clear the cache of the Play store app via the Android apps settings. Restarting the device might be necessary to let the Play store recognize the purchase correctly.</p>
+<p>You can also try to clear the cache of the Play store app via the Android apps settings (Android Settings → Apps → Google Play Store → Storage → Clear Cache). Restarting the device might be necessary to let the Play store recognize the purchase correctly.</p>
 <p>Note that:</p>
 <ul>
 <li>If you did not yet configure an email account in the app, you can long press <em>About</em> in the navigation menu (left side menu) of the settings screen to go to the pro features screen</li>
@@ -2465,6 +2467,7 @@ $NotDisplayed</code></pre>
 <p><br /></p>
 <p><a name="faq145"></a> <strong>(145) How can I set a notification sound for an account, folder, sender or condition?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq145">Google Translate</a></p>
+<p><strong>Note that Android 16 always groups notifications, which is a choice of Google and something the app can’t change.</strong> <strong>Android 16 also <a href="https://www.reddit.com/r/android_beta/comments/1ks3nc5/android_16_qpr1_beta_1_removed_notification_icon/">removed notification icon theming</a>, which means account colors won’t be shown anymore.</strong></p>
 <p>Account:</p>
 <ul>
 <li><del>Version 1.1927-: enable <em>Separate notifications</em> in the advanced account settings</del></li>

@@ -255,6 +255,18 @@ public class MessageHelper {
     static final String FLAG_PHISHING = "$Phishing"; // Gmail
     static final String CATEGORY_PREFIX = "$category:";
 
+    // https://documentation.open-xchange.com/7.10.6/middleware/mail/mail_flagging.html
+    static final String FLAG_OPENX_RED = "$cl_1";
+    static final String FLAG_OPENX_BLUE = "$cl_2";
+    static final String FLAG_OPENX_GREEN = "$cl_3";
+    static final String FLAG_OPENX_GRAY = "$cl_4";
+    static final String FLAG_OPENX_PURPLE = "$cl_5"; // Violet
+    static final String FLAG_OPENX_LIGHT_GREEN = "$cl_6";
+    static final String FLAG_OPENX_ORANGE = "$cl_7";
+    static final String FLAG_OPENX_PINK = "$cl_8";
+    static final String FLAG_OPENX_LIGHT_BLUE = "$cl_9"; // Cyan
+    static final String FLAG_OPENX_YELLOW = "$cl_10";
+
     // https://www.iana.org/assignments/imap-jmap-keywords/imap-jmap-keywords.xhtml
     // Not black listed: Gmail $Phishing
     private static final List<String> FLAG_BLACKLIST = Collections.unmodifiableList(Arrays.asList(
@@ -1475,8 +1487,8 @@ public class MessageHelper {
                         attachmentPart.setDisposition(attachment.disposition);
                     if (attachment.cid != null)
                         attachmentPart.setHeader("Content-ID", attachment.cid);
-                    if ("message/rfc822".equals(attachment.type))
-                        attachmentPart.setHeader("Content-Transfer-Encoding", "base64");
+                    //if ("message/rfc822".equals(attachment.type))
+                    //    attachmentPart.setHeader("Content-Transfer-Encoding", "base64");
 
                     if (attachment.isInline())
                         relatedMultiPart.addBodyPart(attachmentPart);
@@ -1651,15 +1663,15 @@ public class MessageHelper {
     String getDeliveredTo() throws MessagingException {
         ensureHeaders();
 
-        String header = imessage.getHeader("Delivered-To", null);
-        if (header == null)
-            header = imessage.getHeader("X-Delivered-To", null);
-        if (header == null)
-            header = imessage.getHeader("Envelope-To", null);
+        String header = imessage.getHeader("Envelope-To", null);
         if (header == null)
             header = imessage.getHeader("X-Envelope-To", null);
         if (header == null)
             header = imessage.getHeader("X-Original-To", null);
+        if (header == null)
+            header = imessage.getHeader("Delivered-To", null);
+        if (header == null)
+            header = imessage.getHeader("X-Delivered-To", null);
 
         return (header == null ? null : MimeUtility.unfold(header));
     }
@@ -2227,37 +2239,28 @@ public class MessageHelper {
         if (headers == null || headers.length == 0)
             return null;
 
-        String signer = null;
         for (String header : headers) {
             String v = getKeyValues(header).get(type);
             if (v == null)
                 continue;
-
-            if (signer == null)
-                signer = getSigner(header);
-            else {
-                String signer2 = getSigner(header);
-                if (!signer.equals(signer2)) {
-                    Log.i("Different signer=" + signer + "/" + signer2);
-                    break;
-                }
-            }
 
             String[] val = v.split("[^A-za-z]+");
             if (val.length == 0)
                 continue;
 
             String value = val[0].toLowerCase(Locale.ROOT);
+            if (!"pass".equals(value))
+                Log.i("Authentication " + type + "=" + value + " header=" + header);
             switch (value) {
                 case "none":
-                    return null;
+                    break;
                 case "pass":
                     return true;
                 case "fail":
                 case "policy":
                     return false;
                 case "neutral":
-                    return null;
+                    break;
                 case "temperror":
                     return null;
                 case "permerror":

@@ -2706,11 +2706,11 @@ public class FragmentCompose extends FragmentBase {
                                         etBody.getText().append(spanned);
                                     } else
                                         etBody.getText().insert(start, spanned);
-
-                                    int pos = getAutoPos(start, spanned.length());
-                                    if (pos >= 0)
-                                        etBody.setSelection(pos);
                                 }
+
+                                int pos = getAutoPos(start, spanned.length());
+                                if (pos >= 0)
+                                    etBody.setSelection(pos);
 
                                 StyleHelper.markAsInserted(etBody.getText(), start, start + spanned.length());
                             }
@@ -3740,7 +3740,11 @@ public class FragmentCompose extends FragmentBase {
             if (photo_picker && Helper.hasPhotoPicker())
                 try {
                     Log.i("Using photo picker");
-                    pickImages.launch(new PickVisualMediaRequest.Builder()
+                    int colorAccent = Helper.resolveColor(context, androidx.appcompat.R.attr.colorAccent);
+                    pickImages.launch(new PickVisualMediaRequest
+                            .Builder()
+                            .setAccentColor(colorAccent)
+                            .setOrderedSelection(true)
                             .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                             .build());
                     return;
@@ -5994,16 +5998,16 @@ public class FragmentCompose extends FragmentBase {
                                             similar = from;
                                     }
 
-                                    //if (ref.deliveredto != null)
-                                    //    try {
-                                    //        Address deliveredto = new InternetAddress(ref.deliveredto);
-                                    //        if (same == null && recognized.sameAddress(deliveredto))
-                                    //            same = deliveredto;
-                                    //        if (similar == null && recognized.similarAddress(deliveredto))
-                                    //            similar = deliveredto;
-                                    //    } catch (AddressException ex) {
-                                    //        Log.w(ex);
-                                    //    }
+                                    if (same == null && similar == null && ref.deliveredto != null)
+                                        try {
+                                            Address deliveredto = new InternetAddress(ref.deliveredto);
+                                            if (same == null && recognized.sameAddress(deliveredto))
+                                                same = deliveredto;
+                                            if (similar == null && recognized.similarAddress(deliveredto))
+                                                similar = deliveredto;
+                                        } catch (AddressException ex) {
+                                            Log.w(ex);
+                                        }
 
                                     EntityLog.log(context, "From=" + MessageHelper.formatAddresses(data.draft.from) +
                                             " delivered-to=" + ref.deliveredto +

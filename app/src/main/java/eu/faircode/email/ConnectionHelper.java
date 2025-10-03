@@ -73,6 +73,7 @@ import javax.mail.MessagingException;
 import javax.net.SocketFactory;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -504,6 +505,17 @@ public class ConnectionHelper {
         return false;
     }
 
+    static boolean isUnsupportedProtocol(Throwable ex) {
+        while (ex != null) {
+            if (ex instanceof SSLHandshakeException &&
+                    ex.getMessage() != null &&
+                    ex.getMessage().contains("UNSUPPORTED_PROTOCOL"))
+                return true;
+            ex = ex.getCause();
+        }
+        return false;
+    }
+
     static boolean isAborted(Throwable ex) {
         while (ex != null) {
             String msg = ex.getMessage();
@@ -926,7 +938,7 @@ public class ConnectionHelper {
         }
     }
 
-    static SSLSocket starttls(Socket socket, String host, int port, Context context) throws IOException {
+    static SSLSocket starttls(SSLSocketFactory sslFactory, Socket socket, String host, int port, Context context) throws IOException {
         String response;
         String command;
         boolean has = false;
@@ -994,7 +1006,6 @@ public class ConnectionHelper {
             } while (response != null &&
                     !(response.startsWith("A001 OK") || response.startsWith("220 ")));
 
-            SSLSocketFactory sslFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
             return (SSLSocket) sslFactory.createSocket(socket, host, port, false);
         } else
             throw new SocketException("No STARTTLS");

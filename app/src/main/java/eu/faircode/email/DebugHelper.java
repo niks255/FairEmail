@@ -171,6 +171,11 @@ public class DebugHelper {
             "networkaddress.cache.negative.ttl"
     ));
 
+    private static final List<String> SECURITY_PROPS = Collections.unmodifiableList(Arrays.asList(
+            "jdk.tls.disabledAlgorithms",
+            "jdk.tls.client.protocols"
+    ));
+
     static boolean isAvailable() {
         return true;
     }
@@ -264,12 +269,21 @@ public class DebugHelper {
 
         PackageManager pm = context.getPackageManager();
 
+        int vmajor = 0;
+        int vminor = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            vmajor = Build.getMajorSdkVersion(Build.VERSION.SDK_INT_FULL);
+            vminor = Build.getMinorSdkVersion(Build.VERSION.SDK_INT_FULL);
+        }
+
         // Get version info
         sb.append(String.format("%s %s\r\n", context.getString(R.string.app_name), getVersionInfo(context)));
         sb.append(String.format("Package: %s uid: %d\r\n",
                 BuildConfig.APPLICATION_ID, android.os.Process.myUid()));
-        sb.append(String.format("Android: %s (SDK device=%d target=%d)\r\n",
-                Build.VERSION.RELEASE, Build.VERSION.SDK_INT, Helper.getTargetSdk(context)));
+        sb.append(String.format("Android: %s (SDK device=%d target=%d full=%d.%d)\r\n",
+                Build.VERSION.RELEASE,
+                Build.VERSION.SDK_INT, Helper.getTargetSdk(context),
+                vmajor, vminor));
 
         String miui = Helper.getMIUIVersion();
         sb.append(String.format("MIUI: %s\r\n", miui == null ? "-" : miui));
@@ -1786,6 +1800,14 @@ public class DebugHelper {
                 for (String prop : NETWORK_PROPS)
                     size += write(os, prop + "=" + System.getProperty(prop) + "\r\n");
                 size += write(os, "\r\n");
+
+                try {
+                    for (String prop : SECURITY_PROPS)
+                        size += write(os, prop + "=" + Security.getProperty(prop) + "\r\n");
+                    size += write(os, "\r\n");
+                } catch (Throwable ex) {
+                    size += write(os, String.format("%s\r\n", ex));
+                }
 
                 ApplicationInfo ai = context.getApplicationInfo();
                 if (ai != null)

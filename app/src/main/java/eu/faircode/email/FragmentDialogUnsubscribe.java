@@ -25,6 +25,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -37,13 +38,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Lifecycle;
 
-import java.net.ConnectException;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class FragmentDialogUnsubscribe extends FragmentDialogBase {
     private TextView tvNoInternet;
@@ -106,7 +106,7 @@ public class FragmentDialogUnsubscribe extends FragmentDialogBase {
                         do {
                             Log.i("Unsubscribe request=" + request + " uri=" + uri);
 
-                            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                             connection.setRequestMethod("POST");
                             connection.setDoInput(true);
                             connection.setDoOutput(true);
@@ -162,12 +162,14 @@ public class FragmentDialogUnsubscribe extends FragmentDialogBase {
                         dialog.dismiss();
                         if (ex instanceof IllegalStateException)
                             ToastEx.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
-                        else if (ex instanceof IllegalArgumentException || ex instanceof ConnectException)
-                            ToastEx.makeText(context,
-                                    context.getString(R.string.title_unsubscribe_error, ex.getMessage()),
-                                    Toast.LENGTH_LONG).show();
-                        else
-                            Log.unexpectedError(getParentFragmentManager(), ex);
+                        else if (ex instanceof IllegalArgumentException || ex instanceof IOException)
+                            if (!(ex instanceof UnknownHostException)) {
+                                ToastEx.makeText(context,
+                                        context.getString(R.string.title_unsubscribe_error,
+                                                Log.formatThrowable(ex, false)),
+                                        Toast.LENGTH_LONG).show();
+                            } else
+                                Log.unexpectedError(getParentFragmentManager(), ex);
                     }
                 }.execute(FragmentDialogUnsubscribe.this, args, "unsubscribe");
             }

@@ -62,6 +62,7 @@ import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.PrivateKey;
+import java.security.Security;
 import java.security.cert.CertPathValidatorException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -167,6 +168,14 @@ public class EmailService implements AutoCloseable {
 
     // TLS_FALLBACK_SCSV https://tools.ietf.org/html/rfc7507
     // TLS_EMPTY_RENEGOTIATION_INFO_SCSV https://tools.ietf.org/html/rfc5746
+
+    static {
+        // https://downloads.bouncycastle.org/fips-java/docs/BC-FJA-%28D%29TLSUserGuide-1.0.4.pdf
+        Security.setProperty("jdk.tls.disabledAlgorithms", "");
+        Security.setProperty("jdk.tls.client.protocols", "TLSv1.3,TLSv1.2,TLSv1.1,TLSv1,SSLv3");
+        System.setProperty("org.bouncycastle.jsse.client.dh.unrestrictedGroups", "true");
+        System.setProperty("org.bouncycastle.jsse.client.dh.minimumPrimeBits", "1024");
+    }
 
     private EmailService() {
         // Prevent instantiation
@@ -736,80 +745,100 @@ public class EmailService implements AutoCloseable {
                     ((ErrnoException) ex.getCause().getCause()).errno == OsConstants.EACCES)
                 throw new SecurityException("EACCES Please check 'Restrict data usage' in the Android app settings", ex);
 
-            boolean ioError = false;
-            Throwable ce = ex;
-            while (ce != null) {
-                if (factory != null &&
-                        (ce instanceof CertificateException ||
-                                ce instanceof CertPathValidatorException))
-                    throw new UntrustedException(ex, factory.certificate);
-                if (ce instanceof IOException)
-                    ioError = true;
-                ce = ce.getCause();
-            }
-
-            if (ioError) {
+            if (Helper.isPlayStoreInstall() && ConnectionHelper.isUnsupportedProtocol(ex)) {
                 EntityLog.log(context, EntityLog.Type.Network, "Connect ex=" +
                         ex.getClass().getName() + ":" +
                         ex + "\n" + android.util.Log.getStackTraceString(ex));
                 try {
-                    // Some devices resolve IPv6 addresses while not having IPv6 connectivity
-                    InetAddress[] iaddrs = DnsHelper.getAllByName(context, host, dnssec);
-                    int ip4 = (main instanceof Inet4Address ? 1 : 0);
-                    int ip6 = (main instanceof Inet6Address ? 1 : 0);
+                    factory = new SSLSocketFactoryService(context,
+                            host, port, true, false,
+                            false, false, false, false,
+                            false,
+                            true, false,
+                            factory.key, factory.chain, factory.trustedFingerprint);
+                    properties.put("mail." + protocol + ".ssl.socketFactory", factory);
+                    _connect(main, port, require_id, user, factory);
+                    return;
+                } catch (GeneralSecurityException ex1) {
+                    Log.e(ex1);
+                }
+                return;
+            } else {
+                boolean ioError = false;
+                Throwable ce = ex;
+                while (ce != null) {
+                    if (factory != null &&
+                            (ce instanceof CertificateException ||
+                                    ce instanceof CertPathValidatorException))
+                        throw new UntrustedException(ex, factory.certificate);
+                    if (ce instanceof IOException)
+                        ioError = true;
+                    ce = ce.getCause();
+                }
 
-                    boolean[] has46 = ConnectionHelper.has46(context);
+                if (ioError) {
+                    EntityLog.log(context, EntityLog.Type.Network, "Connect ex=" +
+                            ex.getClass().getName() + ":" +
+                            ex + "\n" + android.util.Log.getStackTraceString(ex));
+                    try {
+                        // Some devices resolve IPv6 addresses while not having IPv6 connectivity
+                        InetAddress[] iaddrs = DnsHelper.getAllByName(context, host, dnssec);
+                        int ip4 = (main instanceof Inet4Address ? 1 : 0);
+                        int ip6 = (main instanceof Inet6Address ? 1 : 0);
 
-                    boolean prefer_ip4 = prefs.getBoolean("prefer_ip4", true);
-                    boolean prefer_ip6 = !prefer_ip4 && prefs.getBoolean("prefer_ip6", false);
+                        boolean[] has46 = ConnectionHelper.has46(context);
 
-                    EntityLog.log(context, EntityLog.Type.Network, "Address main=" + main +
-                            " count=" + iaddrs.length +
-                            " ip4=" + ip4 + " max4=" + MAX_IPV4 + " has4=" + has46[0] + " pref4=" + prefer_ip4 +
-                            " ip6=" + ip6 + " max6=" + MAX_IPV6 + " has6=" + has46[1] + " pref6=" + prefer_ip6);
+                        boolean prefer_ip4 = prefs.getBoolean("prefer_ip4", true);
+                        boolean prefer_ip6 = !prefer_ip4 && prefs.getBoolean("prefer_ip6", false);
 
-                    if (prefer_ip4 || prefer_ip6)
-                        Arrays.sort(iaddrs, new Comparator<InetAddress>() {
-                            @Override
-                            public int compare(InetAddress a1, InetAddress a2) {
-                                int s = Boolean.compare(a1 instanceof Inet4Address, a2 instanceof Inet4Address);
-                                if (prefer_ip4)
-                                    s = -s;
-                                return s;
+                        EntityLog.log(context, EntityLog.Type.Network, "Address main=" + main +
+                                " count=" + iaddrs.length +
+                                " ip4=" + ip4 + " max4=" + MAX_IPV4 + " has4=" + has46[0] + " pref4=" + prefer_ip4 +
+                                " ip6=" + ip6 + " max6=" + MAX_IPV6 + " has6=" + has46[1] + " pref6=" + prefer_ip6);
+
+                        if (prefer_ip4 || prefer_ip6)
+                            Arrays.sort(iaddrs, new Comparator<InetAddress>() {
+                                @Override
+                                public int compare(InetAddress a1, InetAddress a2) {
+                                    int s = Boolean.compare(a1 instanceof Inet4Address, a2 instanceof Inet4Address);
+                                    if (prefer_ip4)
+                                        s = -s;
+                                    return s;
+                                }
+                            });
+
+                        for (InetAddress iaddr : iaddrs) {
+                            EntityLog.log(context, EntityLog.Type.Network, "Address resolved=" + iaddr);
+
+                            if (iaddr.equals(main))
+                                continue;
+
+                            if (iaddr instanceof Inet4Address) {
+                                if (!has46[0] || ip4 >= MAX_IPV4)
+                                    continue;
+                                ip4++;
                             }
-                        });
 
-                    for (InetAddress iaddr : iaddrs) {
-                        EntityLog.log(context, EntityLog.Type.Network, "Address resolved=" + iaddr);
+                            if (iaddr instanceof Inet6Address) {
+                                if (!has46[1] || ip6 >= MAX_IPV6)
+                                    continue;
+                                ip6++;
+                            }
 
-                        if (iaddr.equals(main))
-                            continue;
-
-                        if (iaddr instanceof Inet4Address) {
-                            if (!has46[0] || ip4 >= MAX_IPV4)
-                                continue;
-                            ip4++;
+                            try {
+                                EntityLog.log(context, EntityLog.Type.Network, "Falling back to " + iaddr);
+                                _connect(iaddr, port, require_id, user, factory);
+                                return;
+                            } catch (MessagingException ex1) {
+                                ex = ex1;
+                                EntityLog.log(context, EntityLog.Type.Network, "Fallback ex=" +
+                                        ex1.getClass().getName() + ":" +
+                                        ex1 + " " + android.util.Log.getStackTraceString(ex1));
+                            }
                         }
-
-                        if (iaddr instanceof Inet6Address) {
-                            if (!has46[1] || ip6 >= MAX_IPV6)
-                                continue;
-                            ip6++;
-                        }
-
-                        try {
-                            EntityLog.log(context, EntityLog.Type.Network, "Falling back to " + iaddr);
-                            _connect(iaddr, port, require_id, user, factory);
-                            return;
-                        } catch (MessagingException ex1) {
-                            ex = ex1;
-                            EntityLog.log(context, EntityLog.Type.Network, "Fallback ex=" +
-                                    ex1.getClass().getName() + ":" +
-                                    ex1 + " " + android.util.Log.getStackTraceString(ex1));
-                        }
+                    } catch (IOException ex1) {
+                        throw new MessagingException(ex1.getMessage(), ex1);
                     }
-                } catch (IOException ex1) {
-                    throw new MessagingException(ex1.getMessage(), ex1);
                 }
             }
 
@@ -1098,13 +1127,15 @@ public class EmailService implements AutoCloseable {
         }
     }
 
-    private static class SSLSocketFactoryService extends SSLSocketFactory {
+    static class SSLSocketFactoryService extends SSLSocketFactory {
         // openssl s_client -connect host:port < /dev/null 2>/dev/null | openssl x509 -fingerprint -noout -in /dev/stdin
         // nmap --script ssl-enum-ciphers -Pn -p port host
         private String server;
         private boolean secure;
         private boolean ssl_harden;
         private boolean ssl_harden_strict;
+        private PrivateKey key;
+        private X509Certificate[] chain;
         private String trustedFingerprint;
         private SSLSocketFactory factory;
         private X509Certificate certificate;
@@ -1119,6 +1150,8 @@ public class EmailService implements AutoCloseable {
             this.secure = !insecure;
             this.ssl_harden = ssl_harden;
             this.ssl_harden_strict = ssl_harden_strict;
+            this.key = key;
+            this.chain = chain;
             this.trustedFingerprint = fingerprint;
 
             TrustManager[] tms = SSLHelper.getTrustManagers(
@@ -1165,8 +1198,7 @@ public class EmailService implements AutoCloseable {
 
         @Override
         public Socket createSocket() throws IOException {
-            Log.e("createSocket");
-            throw new IOException("createSocket");
+            return configure(factory.createSocket());
         }
 
         @Override

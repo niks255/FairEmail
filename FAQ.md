@@ -888,6 +888,7 @@ Please see [this FAQ](#faq111) about OAuth support.
 Identities represent email addresses you are sending *from* via an email (SMTP) server.
 
 Some providers allow you to have multiple aliases addresses.
+Unfortunately, an email app cannot automatically discover alias email addresses, which means you have to configure them yourself.
 
 The easiest way to create an alias address is to use the mini *Create alias* wizard.
 For this, please go to the settings via the navigation menu (left side menu),
@@ -1668,6 +1669,10 @@ This might be caused by a not updated Exchange server, see [here](https://blogs.
 The errors *... Read error ...* (sometimes combined with *BAD_DECRYPT* / *DECRYPTION_FAILED_OR_BAD_RECORD_MAC*),
 *... Write error ...*, *... Read timed out ...*, *... Broken pipe ...* mean that the email server is not responding anymore or that the internet connection is bad.
 
+The error *...ENETUNREACH (Network is unreachable) ...*" means that no route to the target network exists.
+The local network the email server (the target network) is using might be offline, for example, due to a power cut,
+or the local network your device is using (the source network) might have internet connectivity issues.
+
 <a name="connectiondropped"></a>
 The error *... Connection dropped by server? ...* means that the email server unexpectedly terminated the connection.
 This sometimes happen when there were too many (simultaneous) connections in a too short time or when a wrong password was used too often.
@@ -2317,6 +2322,9 @@ can be caused by [this Android 7.0 bug](https://issuetracker.google.com/issues/3
 The error '*Handshake failed ... UNSUPPORTED_PROTOCOL or TLSV1_ALERT_PROTOCOL_VERSION or SSLV3_ALERT_HANDSHAKE_FAILURE ...*'
 might be caused by enabling **hardening connections** or **Bouncy Castle** in the connection settings tab page,
 or by Android not supporting older protocols anymore, like SSLv3 and TLSv1.
+
+The error '*Handshake failed ... UNSUPPORTED_PROTOCOL ...*' means that the email server and Android do not have a common SSL/TLS protocol or a common cipher.
+The cipher set the server offers might be limited or the server might support the old (and insecure) SSL protocols only.
 
 The error '*javax.net.ssl.SSLHandshakeException: Read error: ... CERT_LENGTH_MISMATCH*' means that there is something wrong with the email server setup.
 Try to switch to port 993 (IMAP) or 465 (SMTP) with SSL/TLS.
@@ -4137,7 +4145,7 @@ So, basically, the only thing I can do, is suggest some things:
 * Open the Play store app and wait at least a minute to give it time to synchronize with the Google servers
 * Open FairEmail and navigate to the pro features screen to let FairEmail check the purchases; sometimes it helps to tap the *buy* button
 
-You can also try to clear the cache of the Play store app via the Android apps settings.
+You can also try to clear the cache of the Play store app via the Android apps settings (Android Settings → Apps → Google Play Store → Storage → Clear Cache).
 Restarting the device might be necessary to let the Play store recognize the purchase correctly.
 
 Note that:
@@ -4795,6 +4803,9 @@ Voice notes will automatically be attached.
 **(145) How can I set a notification sound for an account, folder, sender or condition?**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq145)
+
+**Note that Android 16 always groups notifications, which is a choice of Google and something the app can't change.**
+**Android 16 also [removed notification icon theming](https://www.reddit.com/r/android_beta/comments/1ks3nc5/android_16_qpr1_beta_1_removed_notification_icon/), which means account colors won't be shown anymore.**
 
 Account:
 
