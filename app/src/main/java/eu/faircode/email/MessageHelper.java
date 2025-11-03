@@ -3976,7 +3976,9 @@ public class MessageHelper {
                     }
             }
 
-            parts.addAll(extra);
+            for (PartHolder part : extra)
+                if (!part.isMarkdown() || text.isEmpty())
+                    parts.add(part);
 
             boolean first = true;
             for (PartHolder h : parts) {
@@ -5076,7 +5078,7 @@ public class MessageHelper {
                     if (content instanceof String)
                         content = tryParseMultipart((String) content, part.getContentType());
                     else if (content instanceof com.sun.mail.imap.IMAPInputStream)
-                        content = tryParseMultipart(Helper.readStream((com.sun.mail.imap.IMAPInputStream) content), part.getContentType());
+                        content = tryParseMultipart((com.sun.mail.imap.IMAPInputStream) content, part.getContentType());
 
                     if (content instanceof Multipart) {
                         Multipart mp = (Multipart) content;
@@ -5124,7 +5126,7 @@ public class MessageHelper {
                         if (content instanceof String)
                             content = tryParseMultipart((String) content, part.getContentType());
                         else if (content instanceof com.sun.mail.imap.IMAPInputStream)
-                            content = tryParseMultipart(Helper.readStream((com.sun.mail.imap.IMAPInputStream) content), part.getContentType());
+                            content = tryParseMultipart((com.sun.mail.imap.IMAPInputStream) content, part.getContentType());
 
                         if (content instanceof Multipart) {
                             Multipart multipart = (Multipart) content;
@@ -5176,7 +5178,7 @@ public class MessageHelper {
                         if (content instanceof String)
                             content = tryParseMultipart((String) content, part.getContentType());
                         else if (content instanceof com.sun.mail.imap.IMAPInputStream)
-                            content = tryParseMultipart(Helper.readStream((com.sun.mail.imap.IMAPInputStream) content), part.getContentType());
+                            content = tryParseMultipart((com.sun.mail.imap.IMAPInputStream) content, part.getContentType());
 
                         if (content instanceof Multipart) {
                             Multipart multipart = (Multipart) content;
@@ -5213,13 +5215,31 @@ public class MessageHelper {
                         // https://datatracker.ietf.org/doc/html/rfc2634#section-2
                     } else {
                         if (TextUtils.isEmpty(smimeType)) {
-                            String name = ct.getParameter("name");
-                            if ("smime.p7m".equalsIgnoreCase(name)) {
-                                getMessageParts(null, part, parts, EntityAttachment.SMIME_MESSAGE);
-                                return parts;
-                            } else if ("smime.p7s".equalsIgnoreCase(name)) {
-                                getMessageParts(null, part, parts, EntityAttachment.SMIME_SIGNED_DATA);
-                                return parts;
+                            String xmailer = imessage.getHeader("X-Mailer", null);
+                            if (xmailer != null && xmailer.contains("Kerio Outlook Connector")) {
+                                Object content = tryParseMultipart(part.getInputStream(), part.getContentType());
+                                if (content instanceof Multipart) {
+                                    Multipart multipart = (Multipart) content;
+                                    int count = multipart.getCount();
+                                    for (int i = 0; i < count; i++)
+                                        try {
+                                            BodyPart child = multipart.getBodyPart(i);
+                                            getMessageParts(part, child, parts, null);
+                                        } catch (ParseException ex) {
+                                            Log.w(ex);
+                                            parts.warnings.add(Log.formatThrowable(ex, false));
+                                        }
+                                    return parts;
+                                }
+                            } else {
+                                String name = ct.getParameter("name");
+                                if ("smime.p7m".equalsIgnoreCase(name)) {
+                                    getMessageParts(null, part, parts, EntityAttachment.SMIME_MESSAGE);
+                                    return parts;
+                                } else if ("smime.p7s".equalsIgnoreCase(name)) {
+                                    getMessageParts(null, part, parts, EntityAttachment.SMIME_SIGNED_DATA);
+                                    return parts;
+                                }
                             }
                         }
                         StringBuilder sb = new StringBuilder();
@@ -5298,7 +5318,7 @@ public class MessageHelper {
                 if (content instanceof String)
                     content = tryParseMultipart((String) content, part.getContentType());
                 else if (content instanceof com.sun.mail.imap.IMAPInputStream)
-                    content = tryParseMultipart(Helper.readStream((com.sun.mail.imap.IMAPInputStream) content), part.getContentType());
+                    content = tryParseMultipart((com.sun.mail.imap.IMAPInputStream) content, part.getContentType());
 
                 if (content instanceof Multipart) {
                     multipart = (Multipart) content;
@@ -5397,13 +5417,18 @@ public class MessageHelper {
                 contentType = new ContentType(Helper.guessMimeType(filename));
             }
 
+            boolean attach = false;
             String ct = contentType.getBaseType();
             if (("text/plain".equalsIgnoreCase(ct) || "text/html".equalsIgnoreCase(ct)) &&
-                    TextUtils.isEmpty(filename) &&
                     !Part.ATTACHMENT.equalsIgnoreCase(disposition) &&
                     (size <= MAX_MESSAGE_SIZE || size == Integer.MAX_VALUE)) {
                 parts.text.add(new PartHolder(part, contentType));
-            } else {
+                if ("text/plain".equalsIgnoreCase(ct) && !TextUtils.isEmpty(filename))
+                    attach = true;
+            } else
+                attach = true;
+
+            if (attach) {
                 // Workaround for NIL message content type
                 if ("application/octet-stream".equals(ct) && part instanceof MimeMessage) {
                     ContentType plain = new ContentType("text/plain");
@@ -5517,11 +5542,15 @@ public class MessageHelper {
     }
 
     private Object tryParseMultipart(String text, String contentType) {
+        return tryParseMultipart(new ByteArrayInputStream(text.getBytes(StandardCharsets.ISO_8859_1)), contentType);
+    }
+
+    private Object tryParseMultipart(InputStream is, String contentType) {
         try {
             return new MimeMultipart(new DataSource() {
                 @Override
                 public InputStream getInputStream() throws IOException {
-                    return new ByteArrayInputStream(text.getBytes(StandardCharsets.ISO_8859_1));
+                    return is;
                 }
 
                 @Override
@@ -5541,7 +5570,7 @@ public class MessageHelper {
             });
         } catch (MessagingException ex) {
             Log.e(ex);
-            return text;
+            return ex;
         }
     }
 

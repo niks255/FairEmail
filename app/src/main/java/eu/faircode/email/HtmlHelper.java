@@ -727,8 +727,10 @@ public class HtmlHelper {
                             if (us >= 0 && ue > us) {
                                 url = url.substring(us + 4, ue);
                                 if ((url.startsWith("'") && url.endsWith("'")) ||
-                                        (url.startsWith("\"") && url.endsWith("\"")))
-                                    url = url.substring(1, url.length() - 1);
+                                        (url.startsWith("\"") && url.endsWith("\""))) {
+                                    if (url.length() > 1)
+                                        url = url.substring(1, url.length() - 1);
+                                }
                                 Element img = document.createElement("img")
                                         .attr("src", url);
                                 element.prependElement("br");
@@ -2453,6 +2455,22 @@ public class HtmlHelper {
 
         String width = img.attr("width").replace("px", "").trim();
         String height = img.attr("height").replace("px", "").trim();
+        String style = img.attr("style"); // style="max-width: 1px; width: 100%;"
+
+        if (!TextUtils.isEmpty(style))
+            for (String param : style.split(";")) {
+                int colon = param.indexOf(':');
+                if (colon < 0)
+                    continue;
+
+                String key = param.substring(0, colon).trim().toLowerCase(Locale.ROOT);
+                String value = param.substring(colon + 1).trim().toLowerCase(Locale.ROOT);
+                if (value.endsWith("px") && ("max-width".equals(key) || "max-height".equals(key))) {
+                    Integer w = Helper.parseInt(value.replace("px", ""));
+                    if (w != null && w <= 1)
+                        return true;
+                }
+            }
 
         if (TextUtils.isEmpty(width) || TextUtils.isEmpty(height))
             return false;
@@ -3246,8 +3264,10 @@ public class HtmlHelper {
 
             StringBuilder sb = new StringBuilder();
             for (String word : query.trim().split("\\s+")) {
-                if (word.startsWith("+") || word.startsWith("-"))
+                if (word.startsWith("-"))
                     continue;
+                if (word.startsWith("+"))
+                    word = word.substring(1);
                 for (String w : Fts4DbHelper.breakText(word).split("\\s+")) {
                     if (sb.length() > 0)
                         sb.append("\\s*");
@@ -4258,6 +4278,9 @@ public class HtmlHelper {
                 switch (key) {
                     case "text-align":
                         sb.append(" display:block;");
+                        Element next = span.nextElementSibling();
+                        if (next != null && next.tagName().equals("br"))
+                            next.remove();
                         // fall through
                     default:
                         sb.append(param).append(';');

@@ -22,9 +22,11 @@ package eu.faircode.email;
 import static androidx.room.ForeignKey.CASCADE;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -211,7 +213,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
         put("Wszystkie", new TypeScore(EntityFolder.ARCHIVE, 100)); // Polish
         put("Arkiv", new TypeScore(EntityFolder.ARCHIVE, 100)); // Norwegian
 
-        put("draft", new TypeScore(EntityFolder.DRAFTS, 100));
+        put("draft", new TypeScore(EntityFolder.DRAFTS, 100)); // mailo.com: draftbox
         put("concept", new TypeScore(EntityFolder.DRAFTS, 100));
         put("Entwurf", new TypeScore(EntityFolder.DRAFTS, 100));
         put("brouillon", new TypeScore(EntityFolder.DRAFTS, 100));
@@ -241,6 +243,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
         put("Indesiderata", new TypeScore(EntityFolder.JUNK, 100));
         put("indésirable", new TypeScore(EntityFolder.JUNK, 100));
         put("Wiadomości-śmieci", new TypeScore(EntityFolder.JUNK, 100)); // Polish
+        put("unsolbox", new TypeScore(EntityFolder.JUNK, 50)); // mailo.com
 
         put("sent", new TypeScore(EntityFolder.SENT, 100));
         put("Gesendet", new TypeScore(EntityFolder.SENT, 100));
@@ -330,7 +333,7 @@ public class EntityFolder extends EntityOrder implements Serializable {
             display = "Envoyés";
     }
 
-    void inheritFrom(EntityFolder parent) {
+    void inheritFrom(EntityFolder parent, Context context) {
         if (parent == null)
             return;
         if (!EntityFolder.USER.equals(type))
@@ -343,6 +346,11 @@ public class EntityFolder extends EntityOrder implements Serializable {
         this.sync_days = parent.sync_days;
         this.keep_days = parent.keep_days;
         this.notify = parent.notify;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean auto_folder_nav = prefs.getBoolean("auto_folder_nav", false);
+        if (auto_folder_nav)
+            this.navigation = true;
     }
 
     static boolean shouldPoll(String type) {

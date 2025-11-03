@@ -259,6 +259,8 @@ public class FragmentCompose extends FragmentBase {
     private EditText etSubject;
     private ImageButton ibCcBcc;
     private ImageButton ibRemoveAttachments;
+    private ImageButton ibExpanderAttachments;
+    private TextView tvAttachments;
     private RecyclerView rvAttachment;
     private TextView tvNoInternetAttachments;
     private TextView tvDsn;
@@ -293,6 +295,7 @@ public class FragmentCompose extends FragmentBase {
     private Group grpReferenceHint;
 
     private ContentResolver resolver;
+    private TwoStateOwner ownerAttachment;
     private AdapterAttachment adapter;
     private MarkwonEditorTextWatcher markwonWatcher;
 
@@ -420,6 +423,8 @@ public class FragmentCompose extends FragmentBase {
         etSubject = view.findViewById(R.id.etSubject);
         ibCcBcc = view.findViewById(R.id.ibCcBcc);
         ibRemoveAttachments = view.findViewById(R.id.ibRemoveAttachments);
+        ibExpanderAttachments = view.findViewById(R.id.ibExpanderAttachments);
+        tvAttachments = view.findViewById(R.id.tvAttachments);
         rvAttachment = view.findViewById(R.id.rvAttachment);
         tvNoInternetAttachments = view.findViewById(R.id.tvNoInternetAttachments);
         tvDsn = view.findViewById(R.id.tvDsn);
@@ -1518,6 +1523,35 @@ public class FragmentCompose extends FragmentBase {
             }
         });
 
+        ownerAttachment = new TwoStateOwner(getViewLifecycleOwner(), "attachments");
+        ownerAttachment.start();
+        ibExpanderAttachments.setTag(prefs.getBoolean("compose_hide_attachments", false));
+        ibExpanderAttachments.setVisibility(View.GONE);
+        ibExpanderAttachments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean hide_attachments = !Boolean.TRUE.equals(ibExpanderAttachments.getTag());
+                ibExpanderAttachments.setTag(hide_attachments);
+                ibExpanderAttachments.setImageLevel(hide_attachments ? 1 /* more */ : 0 /* less */);
+                ownerAttachment.restart();
+                if (!hide_attachments)
+                    prefs.edit().remove("compose_hide_attachments").apply();
+            }
+        });
+        ibExpanderAttachments.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                boolean hide_attachments = !Boolean.TRUE.equals(ibExpanderAttachments.getTag());
+                ibExpanderAttachments.setTag(hide_attachments);
+                ibExpanderAttachments.setImageLevel(hide_attachments ? 1 /* more */ : 0 /* less */);
+                ownerAttachment.restart();
+                prefs.edit().putBoolean("compose_hide_attachments", hide_attachments).apply();
+                return true;
+            }
+        });
+
+        tvAttachments.setVisibility(View.GONE);
+
         rvAttachment.setHasFixedSize(false);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rvAttachment.setLayoutManager(llm);
@@ -1841,6 +1875,8 @@ public class FragmentCompose extends FragmentBase {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        draftLoader.sync();
+
         outState.putLong("fair:working", working);
         outState.putBoolean("fair:show_images", show_images);
         outState.putParcelable("fair:photo", photoURI);
@@ -4727,7 +4763,8 @@ public class FragmentCompose extends FragmentBase {
                             chain[0].getPublicKey(),
                             CMSAlgorithm.AES128_WRAP);
                     for (X509Certificate cert : certs)
-                        gen.addRecipient(cert);
+                        if (SmimeHelper.match(privkey, cert))
+                            gen.addRecipient(cert);
                     cmsEnvelopedDataGenerator.addRecipientInfoGenerator(gen);
                     // https://security.stackexchange.com/a/53960
                     // https://stackoverflow.com/questions/7073319/
@@ -4763,6 +4800,7 @@ public class FragmentCompose extends FragmentBase {
                 Log.i("S/MIME selected encryption algo=" + encryptAlgorithm + " OID=" + encryptionOID);
 
                 OutputEncryptor encryptor = new JceCMSContentEncryptorBuilder(encryptionOID)
+                        //.setEnableSha256HKdf(true)
                         .build();
                 CMSEnvelopedData cmsEnvelopedData = cmsEnvelopedDataGenerator
                         .generate(msg, encryptor);
@@ -6587,6 +6625,7 @@ public class FragmentCompose extends FragmentBase {
 
             ServiceSynchronize.eval(context, "compose/draft");
 
+            working = data.draft.id;
             return data;
         }
 
@@ -6679,14 +6718,22 @@ public class FragmentCompose extends FragmentBase {
                 for (EntityAttachment attachment : last_attachments)
                     map.put(attachment.id, attachment);
 
-            db.attachment().liveAttachments(data.draft.id).observe(getViewLifecycleOwner(),
+            db.attachment().liveAttachments(data.draft.id).observe(ownerAttachment,
                     new Observer<List<EntityAttachment>>() {
+                        private Integer lastAttachments = null;
+
                         @Override
                         public void onChanged(@Nullable List<EntityAttachment> attachments) {
                             if (attachments == null)
                                 attachments = new ArrayList<>();
 
-                            List<EntityAttachment> a = new ArrayList<>(attachments);
+                            if (lastAttachments != null && attachments.size() > lastAttachments)
+                                ibExpanderAttachments.setTag(false);
+                            lastAttachments = attachments.size();
+
+                            boolean hide_attachments = Boolean.TRUE.equals(ibExpanderAttachments.getTag());
+
+                            List<EntityAttachment> a = (hide_attachments ? new ArrayList<>() : new ArrayList<>(attachments));
                             rvAttachment.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -6717,7 +6764,12 @@ public class FragmentCompose extends FragmentBase {
                                 }
                             });
 
-                            ibRemoveAttachments.setVisibility(attachments.size() > 2 ? View.VISIBLE : View.GONE);
+                            ibRemoveAttachments.setVisibility(attachments.size() > 2 && !hide_attachments ? View.VISIBLE : View.GONE);
+                            ibExpanderAttachments.setVisibility(attachments.size() > 1 ? View.VISIBLE : View.GONE);
+                            ibExpanderAttachments.setImageLevel(hide_attachments ? 1 /* more */ : 0 /* less */);
+                            tvAttachments.setText(getResources()
+                                    .getQuantityString(R.plurals.title_attachments, attachments.size(), attachments.size()));
+                            tvAttachments.setVisibility(attachments.size() > 0 && hide_attachments ? View.VISIBLE : View.GONE);
                             grpAttachments.setVisibility(attachments.size() > 0 ? View.VISIBLE : View.GONE);
 
                             boolean downloading = false;

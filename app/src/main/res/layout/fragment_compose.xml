@@ -89,6 +89,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="6dp"
                     android:background="@null"
+                    android:completionThreshold="2"
                     android:dropDownVerticalOffset="0dp"
                     android:hint="@string/title_to"
                     android:imeOptions="actionNext"
@@ -150,6 +151,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="6dp"
                     android:background="@null"
+                    android:completionThreshold="2"
                     android:dropDownVerticalOffset="0dp"
                     android:hint="@string/title_cc"
                     android:imeOptions="actionNext"
@@ -196,6 +198,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="6dp"
                     android:background="@null"
+                    android:completionThreshold="2"
                     android:dropDownVerticalOffset="0dp"
                     android:hint="@string/title_bcc"
                     android:imeOptions="actionNext"
@@ -249,6 +252,19 @@
                     app:layout_constraintTop_toBottomOf="@id/etSubject" />
 
                 <ImageButton
+                    android:id="@+id/ibExpanderAttachments"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="6dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/title_legend_expander"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/vSeparatorAttachments"
+                    app:srcCompat="@drawable/expander" />
+
+                <ImageButton
                     android:id="@+id/ibRemoveAttachments"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
@@ -262,13 +278,26 @@
                     app:layout_constraintTop_toBottomOf="@+id/vSeparatorAttachments"
                     app:srcCompat="@drawable/twotone_delete_24" />
 
+
+                <TextView
+                    android:id="@+id/tvAttachments"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="10 attachments"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ibExpanderAttachments" />
+
                 <eu.faircode.email.FixedRecyclerView
                     android:id="@+id/rvAttachment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ibRemoveAttachments"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAttachments"
                     app:layout_goneMarginTop="6dp" />
 
                 <TextView

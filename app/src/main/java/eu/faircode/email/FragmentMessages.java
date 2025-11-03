@@ -10479,6 +10479,44 @@ public class FragmentMessages extends FragmentBase
                             JceKeyTransRecipient recipient = new JceKeyTransEnvelopedRecipient(privkey);
                             Collection<RecipientInformation> recipients = envelopedData.getRecipientInfos().getRecipients(); // KeyTransRecipientInformation
 
+                            EntityLog.log(context, "s/mime private key" +
+                                    " algo=" + privkey.getAlgorithm() +
+                                    " serial=" + chain[0].getSerialNumber() +
+                                    " class=" + recipient.getClass());
+                            for (RecipientInformation recipientInfo : recipients) {
+                                String algo;
+                                try {
+                                    DefaultAlgorithmNameFinder af = new DefaultAlgorithmNameFinder();
+                                    algo = af.getAlgorithmName(recipientInfo.getKeyEncryptionAlgorithm());
+                                } catch (Throwable ex) {
+                                    Log.e(ex);
+                                    algo = recipientInfo.getKeyEncryptionAlgOID();
+                                }
+                                String serial;
+                                try {
+                                    PKIXRecipientId recipientId = (PKIXRecipientId) recipientInfo.getRID();
+                                    serial = recipientId.getSerialNumber().toString();
+                                } catch (Throwable ex) {
+                                    serial = null;
+                                }
+                                EntityLog.log(context, "s/mime recipient" +
+                                        " algo=" + algo +
+                                        " serial=" + serial +
+                                        " class=" + recipientInfo.getClass());
+                            }
+
+                            String malgo;
+                            try {
+                                DefaultAlgorithmNameFinder af = new DefaultAlgorithmNameFinder();
+                                malgo = af.getAlgorithmName(envelopedData.getContentEncryptionAlgorithm());
+                            } catch (Throwable ex) {
+                                Log.e(ex);
+                                malgo = envelopedData.getEncryptionAlgOID();
+                            }
+                            EntityLog.log(context, "s/mime message" +
+                                    " algo=" + malgo +
+                                    " class=" + envelopedData.getClass());
+
                             // Find recipient
                             if (count < 0) {
                                 BigInteger serialno = chain[0].getSerialNumber();
@@ -10490,19 +10528,16 @@ public class FragmentMessages extends FragmentBase
                                             InputStream is = recipientInfo.getContentStream(recipient).getContentStream();
                                             decodeMessage(context, is, message, args);
                                             decoded = true;
-
-                                            String algo;
-                                            try {
-                                                DefaultAlgorithmNameFinder af = new DefaultAlgorithmNameFinder();
-                                                algo = af.getAlgorithmName(envelopedData.getContentEncryptionAlgorithm());
-                                            } catch (Throwable ex) {
-                                                Log.e(ex);
-                                                algo = envelopedData.getEncryptionAlgOID();
-                                            }
-                                            Log.i("Encryption algo=" + algo);
-                                            args.putString("algo", algo);
+                                            Log.i("Encryption algo=" + malgo);
+                                            args.putString("algo", malgo);
                                         } catch (CMSException ex) {
                                             Log.w(ex);
+                                            last = ex;
+                                        } catch (Throwable ex) {
+                                            // java.lang.ClassCastException: org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient cannot be cast to org.bouncycastle.cms.KeyAgreeRecipient
+                                            //    at org.bouncycastle.cms.KeyAgreeRecipientInformation.getRecipientOperator(Unknown Source:1)
+                                            //    at org.bouncycastle.cms.RecipientInformation.getContentStream(Unknown Source:0)
+                                            Log.e(ex);
                                             last = ex;
                                         }
                                         break; // only one try
@@ -10519,6 +10554,12 @@ public class FragmentMessages extends FragmentBase
                                         break;
                                     } catch (CMSException ex) {
                                         Log.w(ex);
+                                        last = ex;
+                                    } catch (Throwable ex) {
+                                        // java.lang.ClassCastException: org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient cannot be cast to org.bouncycastle.cms.KeyAgreeRecipient
+                                        //    at org.bouncycastle.cms.KeyAgreeRecipientInformation.getRecipientOperator(Unknown Source:1)
+                                        //    at org.bouncycastle.cms.RecipientInformation.getContentStream(Unknown Source:0)
+                                        Log.e(ex);
                                         last = ex;
                                     }
                                 } else

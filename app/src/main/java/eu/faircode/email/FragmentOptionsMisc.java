@@ -207,6 +207,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swUid;
     private SwitchCompat swExpunge;
     private SwitchCompat swUidExpunge;
+    private SwitchCompat swImapCompress;
     private SwitchCompat swAuthPlain;
     private SwitchCompat swAuthLogin;
     private SwitchCompat swAuthNtlm;
@@ -252,6 +253,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
     private SwitchCompat swAdjacentLandscape;
     private SwitchCompat swDeleteConfirmation;
     private SwitchCompat swDeleteNotification;
+    private SwitchCompat swAutoFolderNav;
     private SwitchCompat swDmarcViewer;
     private EditText etKeywords;
     private SwitchCompat swTestIab;
@@ -307,7 +309,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "ignore_formatted_size",
             "show_recent",
             "use_modseq", "preamble", "uid_command", "perform_expunge", "uid_expunge",
-            "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", "use_top", "forget_top",
+            "imap_compress", "auth_plain", "auth_login", "auth_ntlm", "auth_sasl", "auth_apop", "use_top", "forget_top",
             "keep_alive_poll", "empty_pool", "idle_done", "fast_fetch",
             "max_backoff_power", "logarithmic_backoff",
             "exact_alarms",
@@ -317,7 +319,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "easy_correct", "paste_plain", "paste_quote", "favicon_uri", "infra", "email_junk", "tld_flags", "json_ld", "dup_msgids", "thread_byref", "save_user_flags", "mdn",
             "app_chooser", "app_chooser_share", "share_task",
             "adjacent_links", "adjacent_documents", "adjacent_portrait", "adjacent_landscape",
-            "delete_confirmation", "delete_notification", "global_keywords", "test_iab"
+            "delete_confirmation", "delete_notification", "auto_folder_nav", "global_keywords", "test_iab"
     ));
 
     private final static String[] RESET_QUESTIONS = new String[]{
@@ -348,7 +350,8 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             "last_update_check", "last_announcement_check",
             "motd",
             "outlook_last_checked", "outlook_checked",
-            "send_archive"
+            "send_archive",
+            "compose_hide_attachments"
     };
 
     @Override
@@ -478,6 +481,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swUid = view.findViewById(R.id.swUid);
         swExpunge = view.findViewById(R.id.swExpunge);
         swUidExpunge = view.findViewById(R.id.swUidExpunge);
+        swImapCompress = view.findViewById(R.id.swImapCompress);
         swAuthPlain = view.findViewById(R.id.swAuthPlain);
         swAuthLogin = view.findViewById(R.id.swAuthLogin);
         swAuthNtlm = view.findViewById(R.id.swAuthNtlm);
@@ -523,6 +527,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
         swAdjacentLandscape = view.findViewById(R.id.swAdjacentLandscape);
         swDeleteConfirmation = view.findViewById(R.id.swDeleteConfirmation);
         swDeleteNotification = view.findViewById(R.id.swDeleteNotification);
+        swAutoFolderNav = view.findViewById(R.id.swAutoFolderNav);
         swDmarcViewer = view.findViewById(R.id.swDmarcViewer);
         etKeywords = view.findViewById(R.id.etKeywords);
         swTestIab = view.findViewById(R.id.swTestIab);
@@ -1531,6 +1536,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             }
         });
 
+        swImapCompress.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("imap_compress", checked).apply();
+            }
+        });
+
         swAuthPlain.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -1874,6 +1886,13 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("delete_notification", checked).apply();
+            }
+        });
+
+        swAutoFolderNav.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                prefs.edit().putBoolean("auto_folder_nav", checked).apply();
             }
         });
 
@@ -2612,6 +2631,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swUid.setChecked(prefs.getBoolean("uid_command", false));
             swExpunge.setChecked(prefs.getBoolean("perform_expunge", true));
             swUidExpunge.setChecked(prefs.getBoolean("uid_expunge", false));
+            swImapCompress.setChecked(prefs.getBoolean("imap_compress", true));
             swAuthPlain.setChecked(prefs.getBoolean("auth_plain", true));
             swAuthLogin.setChecked(prefs.getBoolean("auth_login", true));
             swAuthNtlm.setChecked(prefs.getBoolean("auth_ntlm", true));
@@ -2665,6 +2685,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swAdjacentLandscape.setChecked(prefs.getBoolean("adjacent_landscape", false));
             swDeleteConfirmation.setChecked(prefs.getBoolean("delete_confirmation", true));
             swDeleteNotification.setChecked(prefs.getBoolean("delete_notification", false));
+            swAutoFolderNav.setChecked(prefs.getBoolean("auto_folder_nav", false));
             swDmarcViewer.setChecked(Helper.isComponentEnabled(getContext(), ActivityDMARC.class));
             etKeywords.setText(prefs.getString("global_keywords", null));
             swTestIab.setChecked(prefs.getBoolean("test_iab", false));
