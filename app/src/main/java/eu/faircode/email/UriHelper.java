@@ -195,7 +195,11 @@ public class UriHelper {
         if (plus < 0)
             return null;
 
-        return email.substring(plus + 1);
+        int at = email.indexOf('@', plus + 1);
+        if (at < 0)
+            return null;
+
+        return email.substring(plus + 1, at);
     }
 
     static String getEmailDomain(String address) {
@@ -344,9 +348,12 @@ public class UriHelper {
             url = (changed ? result : uri);
         } else if (uri.getHost() != null && uri.getHost().endsWith(".awstrack.me")) {
             // https://docs.aws.amazon.com/ses/latest/dg/configure-custom-open-click-domains.html
-            String path = uri.getPath();
+            String path = uri.getEncodedPath();
             int s = (path == null ? -1 : path.indexOf('/', 1));
-            Uri result = (s > 0 ? Uri.parse(path.substring(s + 1)) : null);
+            int e = (path == null ? -1 : path.indexOf('/', s + 1));
+            if (e < 0 && path != null)
+                e = path.length();
+            Uri result = (s > 0 && e > s ? Uri.parse(Uri.decode(path.substring(s + 1, e))) : null);
             changed = (result != null && isHyperLink(result));
             url = (changed ? result : uri);
         } else {

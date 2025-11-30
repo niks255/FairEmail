@@ -1699,6 +1699,9 @@ The error *... Invalid ID Token Issued at time is more than 10 minutes before or
 means that the clock time of the device deviates too much from the clock time of the email server.
 Please make sure the clock time, including the time zone, of the device is correct.
 
+The error *... No close_notify alert received before connection closed ...* means that the email server or something between the email server and the app didn't proper close a secure connection.
+This is an error in the SSL/TLS protocol implementation. It is typically caused by a faulty VPN implementation. So, if there is a VPN app active, please try to disable it.
+
 Please [see here](#faq4) for the errors *... Untrusted ... not in certificate ...*, *... Invalid security certificate (Can't verify identity of server) ...* or *... Trust anchor for certification path not found ...*
 
 Please [see here](#faq127) for the error *... Syntactically invalid HELO argument(s) ...*.
@@ -2208,6 +2211,10 @@ so that the mechanism as described in [this FAQ](#faq123) is used faster.
 [On some devices](https://dontkillmyapp.com/) it is necessary to *disable* battery optimizations (setup step 3) to keep connections to email servers open.
 In fact, leaving battery optimizations enabled can result in extra battery usage for all devices, even though this sounds contradictory!
 
+The Adaptive Battery feature in recent Android versions stops apps running in the background, even when battery optimizations are disabled.
+When the app is stopped, it will no longer receive new messages.
+When the app is manually restarted, a full sync is forced, but Android will later stop the app again because Android AI deems this to be better for battery usage.
+
 Most of the battery usage, not considering viewing messages, is due to synchronization (receiving and sending) of messages.
 So, to reduce the battery usage, set the number of days to synchronize message for to a lower value,
 especially if there are a lot of recent messages in a folder.
@@ -2261,6 +2268,9 @@ an account will automatically be switched to periodically checking for new messa
 * Says '*Still here*' within 3 minutes
 * The email server does not support push messages
 * The keep-alive interval is lower than 12 minutes
+
+Some people are asking for [UnifiedPush](https://unifiedpush.org/) to be added to reduce battery consumption.
+However, the app can only receive push notifications if the email server sends them.
 
 <br />
 
@@ -2983,7 +2993,7 @@ The following extra functions are available:
 * *Size(array)* (returns the number of items in an array; since version 1.2179)
 * *knownContact()* (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)
 * *AI(prompt)* (perform interference with the configured AI model using the specified prompt, returning the result as a string; since version 1.2243)
-* *Is("flag")* (flag is one of seen, answered, flagged, deleted; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)
+* *Is("flag")* (flag is one of seen, answered, flagged, deleted or an IMAP keyword; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)
 
 Example conditions:
 
@@ -3060,6 +3070,7 @@ $user$ is the user name of the 'from' email address,
 and $domain$ is the domain name of the 'from' email address: *user@domain*.
 
 $extra$ is the part after the plus sign if the username: *user+extra@example.org*.
+The 'to' user, extra and domain placeholders apply to the 'to' email address and the other placeholders apply to 'from' email address.
 
 $group$ will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only.
 Note that the Android contact provider isn't very fast, so using this placeholder can slow down fetching messages.
@@ -6241,7 +6252,7 @@ Alternatively, see [this Wikipedia article](https://en.wikipedia.org/wiki/DNS-ba
 
 You can use [this tool](https://ssl-tools.net/tlsa-generator) to generate TLSA DNS records for DANE (select either PKIX-EE or DANE-EE).
 
-You can enable enforcing DNSSEC and/or DANA in the (advanced) account and identity settings (since version 1.2149).
+You can enable enforcing DNSSEC and/or DANE in the (advanced) account and identity settings (since version 1.2149).
 
 Note that only some email providers support DANE and that only a limited number of DNS servers support DNSSEC (January 2024: ~30%), which is required for DANE.
 Most private DNS providers support DNSSEC, though. You can configure private DNS in the Android network settings (since Android 9).
@@ -6261,7 +6272,7 @@ This is not a complete and exhaustive list.
 
 Please see [this article](https://www.zivver.com/blog/why-cisos-and-security-professionals-can-no-longer-rely-on-regular-email-for-the-sharing-of-personal-information) about why DANE is important.
 
-Note that DNSSEC and DANE are available in the GitHub version only.
+Note that DNSSEC and DANE are available in the GitHub version only and require Android 8.0 or later.
 
 <br>
 

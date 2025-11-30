@@ -1048,6 +1048,7 @@ Visit https://aka.ms/smtp_auth_disabled for more information.</code></pre>
 <p>The error <em>… NO mailbox selected READ-ONLY …</em> indicates <a href="https://sebastian.marsching.com/wiki/Network/Zimbra#Mailbox_Selected_READ-ONLY_Error_in_Thunderbird">this Zimbra problem</a>.</p>
 <p>The Outlook specific error <em>… Command Error. 10 …</em> probably means that the OAuth token expired or was invalidated. Authenticating the account again with the quick setup wizard will probably resolve this condition. Another possible cause is a bug in an older Exchange version, please <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=886261">see here</a>. In this case the system administrator needs to update the server software.</p>
 <p>The error <em>… Invalid ID Token Issued at time is more than 10 minutes before or after the current time …</em> means that the clock time of the device deviates too much from the clock time of the email server. Please make sure the clock time, including the time zone, of the device is correct.</p>
+<p>The error <em>… No close_notify alert received before connection closed …</em> means that the email server or something between the email server and the app didn’t proper close a secure connection. This is an error in the SSL/TLS protocol implementation. It is typically caused by a faulty VPN implementation. So, if there is a VPN app active, please try to disable it.</p>
 <p>Please <a href="#faq4">see here</a> for the errors <em>… Untrusted … not in certificate …</em>, <em>… Invalid security certificate (Can’t verify identity of server) …</em> or <em>… Trust anchor for certification path not found …</em></p>
 <p>Please <a href="#faq127">see here</a> for the error <em>… Syntactically invalid HELO argument(s) …</em>.</p>
 <p>Please <a href="#faq41">see here</a> for the error <em>… Handshake failed …</em>.</p>
@@ -1282,6 +1283,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p>Reconnecting to an email server will use extra battery power, so an unstable internet connection will result in extra battery usage. Also, some email servers prematurely terminate idle connections, while <a href="https://tools.ietf.org/html/rfc2177">the standard</a> says that an idle connection should be kept open for 29 minutes. In these cases you might want to synchronize periodically, for example each hour, instead of continuously. Note that polling frequently (more than every 30-60 minutes) will likely use more battery power than synchronizing always because connecting to the server and comparing the local and remote messages are expensive operations.</p>
 <p>If you know that the connection (reception) is bad, it might be worthwhile to decrease the timeout value in the connection-settings tab page to 10–20 seconds, so that the app discovers earlier that no connection is possible, so that the mechanism as described in <a href="#faq123">this FAQ</a> is used faster.</p>
 <p><a href="https://dontkillmyapp.com/">On some devices</a> it is necessary to <em>disable</em> battery optimizations (setup step 3) to keep connections to email servers open. In fact, leaving battery optimizations enabled can result in extra battery usage for all devices, even though this sounds contradictory!</p>
+<p>The Adaptive Battery feature in recent Android versions stops apps running in the background, even when battery optimizations are disabled. When the app is stopped, it will no longer receive new messages. When the app is manually restarted, a full sync is forced, but Android will later stop the app again because Android AI deems this to be better for battery usage.</p>
 <p>Most of the battery usage, not considering viewing messages, is due to synchronization (receiving and sending) of messages. So, to reduce the battery usage, set the number of days to synchronize message for to a lower value, especially if there are a lot of recent messages in a folder. Long press a folder name in the folders list and select <em>Edit properties</em> to access this setting.</p>
 <p>If you have at least once a day internet connectivity, it is sufficient to synchronize messages just for one day.</p>
 <p>Note that you can set the number of days to <em>keep</em> messages for to a higher number than to <em>synchronize</em> messages for. You could for example initially synchronize messages for a large number of days and after this has been completed reduce the number of days to synchronize messages, but leave the number of days to keep messages. After decreasing the number of days to keep messages, you might want to run the cleanup in the miscellaneous settings to remove old files.</p>
@@ -1300,6 +1302,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <li>The email server does not support push messages</li>
 <li>The keep-alive interval is lower than 12 minutes</li>
 </ul>
+<p>Some people are asking for <a href="https://unifiedpush.org/">UnifiedPush</a> to be added to reduce battery consumption. However, the app can only receive push notifications if the email server sends them.</p>
 <p><br /></p>
 <p><a name="faq40"></a> <strong>(40) How can I reduce the data usage of FairEmail?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq40">Google Translate</a></p>
@@ -1640,7 +1643,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <li><em>Size(array)</em> (returns the number of items in an array; since version 1.2179)</li>
 <li><em>knownContact()</em> (returns a boolean indicating that the from/reply-to address is in the Android address book or in the local contacts database)</li>
 <li><em>AI(prompt)</em> (perform interference with the configured AI model using the specified prompt, returning the result as a string; since version 1.2243)</li>
-<li><em>Is(“flag”)</em> (flag is one of seen, answered, flagged, deleted; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)</li>
+<li><em>Is(“flag”)</em> (flag is one of seen, answered, flagged, deleted or an IMAP keyword; to check if a message is read (seen), starred (flagged), etc.; since version 1.2277)</li>
 </ul>
 <p>Example conditions:</p>
 <p><code>header("X-Mailer") contains "Open-Xchange" &amp;&amp; from matches ".*service@.*" &amp;&amp; Is("seen")</code></p>
@@ -1691,7 +1694,7 @@ $extra:to$ (since version 1.2289)
 $domain:to$ (since version 1.2289)
 $group$ (since version 1.2030)</code></pre>
 <p><span class="math inline"><em>u</em><em>s</em><em>e</em><em>r</em></span> is the user name of the ‘from’ email address, and <span class="math inline"><em>d</em><em>o</em><em>m</em><em>a</em><em>i</em><em>n</em></span> is the domain name of the ‘from’ email address: <em>user@domain</em>.</p>
-<p><span class="math inline"><em>e</em><em>x</em><em>t</em><em>r</em><em>a</em></span> is the part after the plus sign if the username: <em>user+extra@example.org</em>.</p>
+<p><span class="math inline"><em>e</em><em>x</em><em>t</em><em>r</em><em>a</em></span> is the part after the plus sign if the username: <em>user+extra@example.org</em>. The ‘to’ user, extra and domain placeholders apply to the ‘to’ email address and the other placeholders apply to ‘from’ email address.</p>
 <p><span class="math inline"><em>g</em><em>r</em><em>o</em><em>u</em><em>p</em></span> will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only. Note that the Android contact provider isn’t very fast, so using this placeholder can slow down fetching messages.</p>
 <p><br /></p>
 <p>Since version 1.2132 it is possible to use the following placeholders in keywords:</p>
@@ -3118,7 +3121,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>Please see <a href="https://en.wikipedia.org/wiki/Domain_Name_System_Security_Extensions">this Wikipedia article</a> about what DNSSEC is.</p>
 <p>Please see <a href="https://github.com/internetstandards/toolbox-wiki/blob/main/DANE-for-SMTP-how-to.md">this article</a> about what DANE is. Alternatively, see <a href="https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">this Wikipedia article</a>.</p>
 <p>You can use <a href="https://ssl-tools.net/tlsa-generator">this tool</a> to generate TLSA DNS records for DANE (select either PKIX-EE or DANE-EE).</p>
-<p>You can enable enforcing DNSSEC and/or DANA in the (advanced) account and identity settings (since version 1.2149).</p>
+<p>You can enable enforcing DNSSEC and/or DANE in the (advanced) account and identity settings (since version 1.2149).</p>
 <p>Note that only some email providers support DANE and that only a limited number of DNS servers support DNSSEC (January 2024: ~30%), which is required for DANE. Most private DNS providers support DNSSEC, though. You can configure private DNS in the Android network settings (since Android 9). To be sure that private DNS is being used, better configure a host name like <em>dns.google</em>, <em>1dot1dot1dot1.cloudflare-dns.com</em> or <em>dns.quad9.net</em>. An alternative is using Certificate Transparency, see the previous FAQ.</p>
 <p>Some email providers known to support DANE for client-to-server traffic:</p>
 <ul>
@@ -3131,7 +3134,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 </ul>
 <p>This is not a complete and exhaustive list.</p>
 <p>Please see <a href="https://www.zivver.com/blog/why-cisos-and-security-professionals-can-no-longer-rely-on-regular-email-for-the-sharing-of-personal-information">this article</a> about why DANE is important.</p>
-<p>Note that DNSSEC and DANE are available in the GitHub version only.</p>
+<p>Note that DNSSEC and DANE are available in the GitHub version only and require Android 8.0 or later.</p>
 <p><br></p>
 <p><a name="faq203"></a> <strong>(203) Where is my sent message?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq203">Google Translate</a></p>
