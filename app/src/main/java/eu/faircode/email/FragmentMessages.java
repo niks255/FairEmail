@@ -355,6 +355,7 @@ public class FragmentMessages extends FragmentBase
     private boolean date_bold;
     private boolean threading;
     private boolean swipenav;
+    private int spacing;
     private boolean seekbar;
     private boolean move_thread_all;
     private boolean move_thread_sent;
@@ -518,6 +519,7 @@ public class FragmentMessages extends FragmentBase
         threading = (prefs.getBoolean("threading", true) ||
                 args.getBoolean("force_threading"));
         swipenav = prefs.getBoolean("swipenav", true);
+        spacing = Helper.dp2pixels(getContext(), prefs.getInt("spacing", 0) * 12);
         seekbar = prefs.getBoolean("seekbar", false);
         move_thread_all = prefs.getBoolean("move_thread_all", false);
         move_thread_sent = (move_thread_all || prefs.getBoolean("move_thread_sent", false));
@@ -988,6 +990,21 @@ public class FragmentMessages extends FragmentBase
             vFixedSeparator.setVisibility(View.GONE);
         if (date_bold)
             tvFixedDate.setTypeface(Typeface.DEFAULT_BOLD);
+
+        DividerItemDecoration spacingDecorator = new DividerItemDecoration(getContext(), llm.getOrientation()) {
+            @Override
+            public void onDraw(@NonNull Canvas canvas, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            }
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                int pos = parent.getChildAdapterPosition(view);
+                if (pos > 0)
+                    outRect.top += spacing;
+            }
+        };
+        rvMessage.addItemDecoration(spacingDecorator);
 
         DividerItemDecoration dateDecorator = new DividerItemDecoration(getContext(), llm.getOrientation()) {
             @Override
