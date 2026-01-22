@@ -5128,6 +5128,9 @@ The following apps are open source cameras and audio recorders:
 * [Open Camera](https://play.google.com/store/apps/details?id=net.sourceforge.opencamera) ([F-Droid](https://f-droid.org/en/packages/net.sourceforge.opencamera/))
 * [Audio Recorder version 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
 
+To take photos, the camera app needs to support [MediaStore.ACTION_IMAGE_CAPTURE](https://developer.android.com/media/camera/camera-intents#take_a_photo_with_a_camera_app).
+Not all camera apps support this, unfortunately.
+
 To record voice notes, etc, the audio recorder needs to support
 [MediaStore.Audio.Media.RECORD_SOUND_ACTION](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media#RECORD_SOUND_ACTION).
 Oddly, most audio recorders seem not to support this standard Android action.
@@ -5391,6 +5394,12 @@ If you use this frequently, you can configure a button for this.
 Some people have asked to add Google Translate on the assumption that it is free to use,
 but [that is not the case](https://cloud.google.com/translate/pricing) if it is integrated into an app.
 Apart from that, DeepL is much easier to configure and the translations are of better quality.
+
+All translation services, including Google Translate, require a credit card, which is to prevent abuse. So, that's something that can't be avoided.
+
+Note that the app is basically provided for free and therefore it isn't possible to offer free translation services.
+In fact, translation services for more than personal usage (in an app for many people) are rather expensive.
+It can't be financed with a one-time purchase by a fraction of a percent of the users of the app.
 
 <br />
 
@@ -6275,6 +6284,9 @@ This is not a complete and exhaustive list.
 Please see [this article](https://www.zivver.com/blog/why-cisos-and-security-professionals-can-no-longer-rely-on-regular-email-for-the-sharing-of-personal-information) about why DANE is important.
 
 Note that DNSSEC and DANE are available in the GitHub version only and require Android 8.0 or later.
+
+Android doesn't support DNSSEC and therefore the MiniDNS library is used for this.
+You can report issues [here](https://github.com/MiniDNS/minidns/issues).
 
 <br>
 
