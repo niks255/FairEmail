@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2025 by Marcel Bokhorst (M66B)
+    Copyright 2018-2026 by Marcel Bokhorst (M66B)
 */
 
 import static android.system.OsConstants.ENOSPC;
@@ -554,7 +554,10 @@ public class MessageHelper {
 
             // Delivery/read request
             if (message.receipt_request != null && message.receipt_request) {
-                String to = (identity.replyto == null ? identity.email : identity.replyto);
+                String email = identity.email;
+                if (ourFrom instanceof InternetAddress)
+                    email = ((InternetAddress) ourFrom).getAddress();
+                String to = (identity.replyto == null ? email : identity.replyto);
 
                 // 0=Read receipt
                 // 1=Delivery receipt
@@ -1487,8 +1490,10 @@ public class MessageHelper {
                         attachmentPart.setDisposition(attachment.disposition);
                     if (attachment.cid != null)
                         attachmentPart.setHeader("Content-ID", attachment.cid);
-                    //if ("message/rfc822".equals(attachment.type))
-                    //    attachmentPart.setHeader("Content-Transfer-Encoding", "base64");
+
+                    // Prevent transformation of newlines
+                    if ("text/plain".equals(attachment.type))
+                        attachmentPart.setHeader("Content-Transfer-Encoding", "base64");
 
                     if (attachment.isInline())
                         relatedMultiPart.addBodyPart(attachmentPart);

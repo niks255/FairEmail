@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2025 by Marcel Bokhorst (M66B)
+    Copyright 2018-2026 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -354,6 +354,14 @@ public class UriHelper {
             if (e < 0 && path != null)
                 e = path.length();
             Uri result = (s > 0 && e > s ? Uri.parse(Uri.decode(path.substring(s + 1, e))) : null);
+            changed = (result != null && isHyperLink(result));
+            url = (changed ? result : uri);
+        } else if (uri.getHost() != null && uri.getHost().equalsIgnoreCase("urldefense.com")) {
+            // https://urldefense.com/v3/__<url>__;!!
+            String path = uri.toString();
+            int s = path.indexOf("/v3/__");
+            int e = path.indexOf("__;", s + 6);
+            Uri result = (s >= 0 && e > s ? Uri.parse(Uri.decode(path.substring(s + 6, e))) : null);
             changed = (result != null && isHyperLink(result));
             url = (changed ? result : uri);
         } else {

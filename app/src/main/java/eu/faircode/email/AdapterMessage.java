@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2025 by Marcel Bokhorst (M66B)
+    Copyright 2018-2026 by Marcel Bokhorst (M66B)
 */
 
 import static android.app.Activity.RESULT_OK;
@@ -9161,12 +9161,9 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 keyPosition.put(message.id, i);
                 positionKey.put(i, message.id);
 
-                addExtra(message.from, message.extra);
-
                 if (threading) {
                     message.senders = merge(message.from, message.senders);
                     message.recipients = merge(message.to, message.recipients);
-                    addExtra(message.senders, message.extra);
                 } else {
                     message.senders = message.from;
                     message.recipients = message.to;
@@ -9213,29 +9210,6 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
                 result.add(a);
             }
         return result.toArray(new Address[0]);
-    }
-
-    static void addExtra(Address[] addresses, String extra) {
-        if (addresses == null || addresses.length == 0)
-            return;
-        if (extra == null)
-            return;
-
-        String email = ((InternetAddress) addresses[0]).getAddress();
-        if (email == null)
-            return;
-
-        Pair<String, String> p = MessageHelper.getExtra(email, extra);
-
-        if (p.first != null)
-            try {
-                ((InternetAddress) addresses[0]).setPersonal(p.first);
-            } catch (Throwable ex) {
-                Log.e(ex);
-            }
-
-        if (p.second != null)
-            ((InternetAddress) addresses[0]).setAddress(p.second);
     }
 
     PagedList<TupleMessageEx> getCurrentList() {

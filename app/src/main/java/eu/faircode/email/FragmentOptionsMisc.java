@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2025 by Marcel Bokhorst (M66B)
+    Copyright 2018-2026 by Marcel Bokhorst (M66B)
 */
 
 import android.app.Activity;
@@ -2582,7 +2582,7 @@ public class FragmentOptionsMisc extends FragmentBase implements SharedPreferenc
             swAutostart.setChecked(Helper.isComponentEnabled(getContext(), ReceiverAutoStart.class));
             swEmergency.setChecked(prefs.getBoolean("emergency_file", true));
             swWorkManager.setChecked(prefs.getBoolean("work_manager", true));
-            swTaskDescription.setChecked(prefs.getBoolean("task_description", true));
+            swTaskDescription.setChecked(prefs.getBoolean("task_description", false));
             swExternalStorage.setChecked(prefs.getBoolean("external_storage", false));
 
             swIntegrity.setChecked(prefs.getBoolean("sqlite_integrity_check", false));

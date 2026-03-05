@@ -102,9 +102,10 @@
 <li>GMX: please check if <a href="https://support.gmx.com/pop-imap/toggle.html">IMAP is enabled</a> (<a href="https://hilfe.gmx.net/pop-imap/einschalten.html">German</a>). Reportedly, you need to do this on a desktop computer.</li>
 <li>GMX: with two factor authentication you’ll need to use <a href="https://support.gmx.com/security/2fa/application-specific-passwords.html">an app password</a> (<a href="https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html">German</a>). Not that enabling two-factor authentication does not automatically enable IMAP.</li>
 <li>T-online.de: please make sure you use <a href="https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-adresse-passwoerter-und-sicherheit/passwort-fuer-e-mail-programme-einrichten">an email password</a> (German) and not your account password</li>
-<li>Ionos (1und1): please make sure you use <a href="https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-11-ionos-aendern/">an email password</a> (German) and not your account password</li>
+<li>Ionos (1und1): please make sure you use <a href="https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-ionos-aendern/">an email password</a> (German) and not your account password</li>
 <li>Yandex: please check if <a href="https://yandex.com/support/mail/mail-clients/others.html">IMAP is enabled</a></li>
 <li>Comcast/Xfinity: please check if <a href="https://www.xfinity.com/support/articles/third-party-email-access">third party email access</a> is enabled</li>
+<li>Mailbox.org: with two factor authentication you’ll need to use <a href="https://kb.mailbox.org/en/private/security-and-privacy/application-passwords-for-external-programs/">an app password</a> (<a href="https://kb.mailbox.org/de/privat/sicherheit-und-privatsphaere/applikationspasswoerter-fuer-externe-programme/">German</a>)</li>
 </ul>
 <p>Please see <a href="#faq22">this FAQ</a> for common error messages and solutions, and please see <a href="#faq207">this FAQ</a> in case of ‘<em>Authentication failed</em>’ or similar.</p>
 <p>Related questions:</p>
@@ -550,7 +551,7 @@ it is no longer possible to support insecure connections to email servers with c
 for the version of FairEmail distributed in the Play Store.
 Therefore, this issue can only be resolved by your email provider,
 or by installing the GitHub version of the app (as an update) and enabling insecure connections in the account/identity settings.** -->
-<p><em>… Untrusted … not in certificate …</em><br /> <em>… Invalid security certificate (Can’t verify identity of server) …</em><br /> <em>… Chain validation failed … timestamp check failed … Certificate expired at …</em><br /></p>
+<p><em>… Untrusted … not in certificate …</em><br /> <em>… Untrusted … Unacceptable certificate …</em><br /> <em>… Invalid security certificate (Can’t verify identity of server) …</em><br /> <em>… Chain validation failed … timestamp check failed … Certificate expired at …</em><br /></p>
 <p>This can be caused by using an incorrect host name, so first double-check the host name in the advanced identity/account settings (tap <em>Manual setup and account options</em>). Please see the documentation of the email provider about the right host name. Sometimes the right host name is in the error message.</p>
 <p>Another possible cause is <a href="https://github.com/appmattus/certificatetransparency">Certificate transparency</a> failing, so try disabling it in the connection settings tab page.</p>
 <p>You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">man-in-the-middle attacks</a>. If money is an obstacle, you can get free security certificates from <a href="https://letsencrypt.org">Let’s Encrypt</a>.</p>
@@ -2605,7 +2606,11 @@ https://favicon.yandex.net/favicon/{domain}</code></pre>
 <p><a name="faq157"></a> <strong>(157) How can I set up an Free.fr account?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq157">Google Translate</a></p>
 <p>Veuillez <a href="https://free.fr/assistance/597.html">voir ici</a> pour les instructions.</p>
-<p><strong>SMTP est désactivé par défaut</strong>, veuillez <a href="https://free.fr/assistance/2406.html">voir ici</a> comment il peut être activé.</p>
+<p><strong>SMTP est désactivé par défaut!</strong> Pour activer l’authentification SMTP:</p>
+<ul>
+<li>Rendez-vous sur l’interface de gestion de l’adresse eMail désirée, l’identifiant (login) étant ici ce qui précède <span class="citation" data-cites="free.fr">@free.fr</span> et non un numéro Freebox.</li>
+<li>Cliquez sur Gestion du SMTP authentifié puis sur Activer.</li>
+</ul>
 <p>Veuillez <a href="http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/configurer-smtp-free-fr">voir ici</a> pour un guide détaillé.</p>
 <p><br /></p>
 <p><a name="faq103"></a> <a name="faq158"></a> <strong>(158) Which camera / audio recorder do you recommend?</strong></p>
@@ -3035,6 +3040,11 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <ul>
 <li>Create an account on the <a href="https://deepinfra.com/">DeepInfra website</a> and deploy a model, for example, <em>meta-llama/Llama-2-13b-chat-hf</em></li>
 <li>In the integration settings enter the URI https://api.deepinfra.com/v1/openai, an API key and the model name</li>
+</ul>
+<p>You can also use <strong>Mistral</strong>:</p>
+<ul>
+<li>Create an account <a href="https://console.mistral.ai">via here</a></li>
+<li>In the integration settings enter the URI https://api.mistral.ai/v1/, an API key and the model name</li>
 </ul>
 <p><br></p>
 <p><br></p>

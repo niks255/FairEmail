@@ -76,9 +76,10 @@ For authorizing:
 * GMX: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html)). Reportedly, you need to do this on a desktop computer.
 * GMX: with two factor authentication you'll need to use [an app password](https://support.gmx.com/security/2fa/application-specific-passwords.html) ([German](https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html)). Not that enabling two-factor authentication does not automatically enable IMAP.
 * T-online.de: please make sure you use [an email password](https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-adresse-passwoerter-und-sicherheit/passwort-fuer-e-mail-programme-einrichten) (German) and not your account password
-* Ionos (1und1): please make sure you use [an email password](https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-11-ionos-aendern/) (German) and not your account password
+* Ionos (1und1): please make sure you use [an email password](https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-ionos-aendern/) (German) and not your account password
 * Yandex: please check if [IMAP is enabled](https://yandex.com/support/mail/mail-clients/others.html)
 * Comcast/Xfinity: please check if [third party email access](https://www.xfinity.com/support/articles/third-party-email-access) is enabled
+* Mailbox.org: with two factor authentication you'll need to use [an app password](https://kb.mailbox.org/en/private/security-and-privacy/application-passwords-for-external-programs/) ([German](https://kb.mailbox.org/de/privat/sicherheit-und-privatsphaere/applikationspasswoerter-fuer-externe-programme/))
 
 Please see [this FAQ](#faq22) for common error messages and solutions,
 and please see [this FAQ](#faq207) in case of '*Authentication failed*' or similar.
@@ -601,6 +602,7 @@ Therefore, this issue can only be resolved by your email provider,
 or by installing the GitHub version of the app (as an update) and enabling insecure connections in the account/identity settings.** -->
 
 *... Untrusted ... not in certificate ...*<br />
+*... Untrusted ... Unacceptable certificate ...*<br />
 *... Invalid security certificate (Can't verify identity of server) ...*<br />
 *... Chain validation failed ... timestamp check failed ... Certificate expired at ...*<br />
 
@@ -5110,7 +5112,10 @@ Please [see here](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-i
 
 Veuillez [voir ici](https://free.fr/assistance/597.html) pour les instructions.
 
-**SMTP est désactivé par défaut**, veuillez [voir ici](https://free.fr/assistance/2406.html) comment il peut être activé.
+**SMTP est désactivé par défaut!** Pour activer l'authentification SMTP:
+
+* Rendez-vous sur l'interface de gestion de l'adresse eMail désirée, l'identifiant (login) étant ici ce qui précède @free.fr et non un numéro Freebox.
+* Cliquez sur Gestion du SMTP authentifié puis sur Activer.
 
 Veuillez [voir ici](http://jc.etiemble.free.fr/abc/index.php/trucs-astuces/configurer-smtp-free-fr) pour un guide détaillé.
 
@@ -6040,6 +6045,11 @@ It is possible to use **DeepInfra** too (since version 1.2132).
 
 * Create an account on the [DeepInfra website](https://deepinfra.com/) and deploy a model, for example, *meta-llama/Llama-2-13b-chat-hf*
 * In the integration settings enter the URI https://api.deepinfra.com/v1/openai, an API key and the model name
+
+You can also use **Mistral**:
+
+* Create an account [via here](https://console.mistral.ai)
+* In the integration settings enter the URI https://api.mistral.ai/v1/, an API key and the model name
 
 <br>
 

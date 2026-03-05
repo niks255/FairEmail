@@ -16,7 +16,7 @@ package eu.faircode.email;
     You should have received a copy of the GNU General Public License
     along with FairEmail.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2018-2025 by Marcel Bokhorst (M66B)
+    Copyright 2018-2026 by Marcel Bokhorst (M66B)
 */
 
 import android.content.Context;
@@ -103,6 +103,7 @@ public class Adguard {
                 while (dollar > 0 && line.charAt(dollar - 1) == '\\')
                     dollar = line.indexOf('$', dollar + 1);
                 if (dollar < 0) {
+                    // ||https-filtering-check.adtidy.org^
                     if (!line.contains("##"))
                         Log.w("Adguard command missing line=" + line);
                     continue;
