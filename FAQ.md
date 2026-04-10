@@ -68,6 +68,7 @@ For authorizing:
 * Apple iCloud, see [question 148](#faq148) ([German](https://support.apple.com/de-de/HT204397))
 * Free.fr, see [question 157](#faq157)
 * Posteo: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) ([German](https://posteo.de/hilfe/zusaetzlichen-postfachschutz-deaktivieren)) isn't enabled
+* Posteo: in some cases you need to use [an app password](https://posteo.de/en/help/app-passwords) ([German](https://posteo.de/hilfe/anwendungs-passwoerter))
 * Posteo: not that there is [no spam folder](https://posteo.de/en/help/how-does-the-posteo-spam-filter-work) ([German](https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter))
 * Posteo: if you want to synchronize contacts, please [see here](https://posteo.de/en/help/how-do-i-set-up-synchronisation-of-contacts-with-an-android-address-book)
 * Web.de: please check if [IMAP is enabled](https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html)
@@ -4806,7 +4807,7 @@ This requires a compatible audio recorder app to be installed.
 In particular [this common intent](https://developer.android.com/reference/android/provider/MediaStore.Audio.Media.html#RECORD_SOUND_ACTION)
 needs to be supported.
 
-For example [this audio recorder](https://f-droid.org/app/com.github.axet.audiorecorder) is compatible.
+For example [this audio recorder](https://f-droid.org/en/packages/io.github.leonidius20.recorder.lite/) is compatible.
 
 Voice notes will automatically be attached.
 
@@ -5131,7 +5132,7 @@ To take photos and to record audio a camera and an audio recorder app are needed
 The following apps are open source cameras and audio recorders:
 
 * [Open Camera](https://play.google.com/store/apps/details?id=net.sourceforge.opencamera) ([F-Droid](https://f-droid.org/en/packages/net.sourceforge.opencamera/))
-* [Audio Recorder version 3.3.24+](https://play.google.com/store/apps/details?id=com.github.axet.audiorecorder) ([F-Droid](https://f-droid.org/packages/com.github.axet.audiorecorder/))
+* [Recording Studio Lite](https://f-droid.org/en/packages/io.github.leonidius20.recorder.lite/)
 
 To take photos, the camera app needs to support [MediaStore.ACTION_IMAGE_CAPTURE](https://developer.android.com/media/camera/camera-intents#take_a_photo_with_a_camera_app).
 Not all camera apps support this, unfortunately.
