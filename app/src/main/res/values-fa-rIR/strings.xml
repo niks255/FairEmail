@@ -520,7 +520,7 @@
     <string name="title_advanced_message_text_zoom2">بزرگ‌نمایی پیش‌فرض متن پیام: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">متن پیام را نیز در ویرایشگر پیام بزرگنمایی کنید</string>
     <string name="title_advanced_overview_mode">بزرگنمایی پیام‌های اصلی متناسب با اندازه صفحه</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">فاصله خطوط: %1$s %%</string>
+    <string name="title_advanced_line_spacing">فاصله خطوط: %1$s %%</string>
     <string name="title_advanced_hyphenation">از خط تیره گذاری خودکار استفاده کن</string>
     <string name="title_advanced_contrast">از کنتراست زیاد برای متن پیام استفاده کن</string>
     <string name="title_advanced_monospaced">استفاده از فونت تک‌فاصله (monospaced) برای متن پیام به طور پیش‌فرض</string>
@@ -1704,6 +1704,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>خاموش</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1.25 s</item>
         <item>2.5 s</item>
         <item>5 s</item>
         <item>7.5 s</item>

@@ -47,8 +47,10 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.mail.Authenticator;
 import javax.mail.MessagingException;
@@ -62,6 +64,8 @@ public class ServiceAuthenticator extends Authenticator {
     private String password;
     private IAuthenticated intf;
 
+    private static final ConcurrentHashMap<String, ReentrantLock> locks = new ConcurrentHashMap<>();
+
     static final int AUTH_TYPE_PASSWORD = 1;
     static final int AUTH_TYPE_GMAIL = 2;
     static final int AUTH_TYPE_OAUTH = 3;
@@ -69,7 +73,7 @@ public class ServiceAuthenticator extends Authenticator {
 
     static final long MIN_REFRESH_INTERVAL = 15 * 60 * 1000L;
     static final long MIN_FORCE_REFRESH_INTERVAL = 15 * 60 * 1000L;
-    static final long FORCE_REFRESH_INTERVAL = 60 * 60 * 1000L;
+    static final long FORCE_REFRESH_INTERVAL = 15 * 60 * 1000L;
     static final int MAX_TOKEN_WAIT = 90; // seconds
 
     ServiceAuthenticator(
@@ -164,6 +168,8 @@ public class ServiceAuthenticator extends Authenticator {
 
     static void OAuthRefresh(Context context, String id, int auth_type, String user, AuthState authState, boolean forceRefresh)
             throws MessagingException {
+        ReentrantLock lock = locks.computeIfAbsent(id, k -> new ReentrantLock());
+        lock.lock();
         try {
             long now = new Date().getTime();
 
@@ -180,7 +186,7 @@ public class ServiceAuthenticator extends Authenticator {
                 needsRefresh = true;
 
             if (!needsRefresh && forceRefresh &&
-                    (last_force < 0 || last_force + FORCE_REFRESH_INTERVAL > now)) {
+                    (last_force < 0 || last_force + FORCE_REFRESH_INTERVAL < now)) {
                 needsRefresh = true;
                 prefs.edit().putLong(key_last_force, new Date().getTime()).apply();
             }
@@ -254,6 +260,8 @@ public class ServiceAuthenticator extends Authenticator {
             }
         } catch (Exception ex) {
             throw new MessagingException("OAuth refresh provider=" + id + ":" + getAuthTypeName(auth_type), ex);
+        } finally {
+            lock.unlock();
         }
     }
 

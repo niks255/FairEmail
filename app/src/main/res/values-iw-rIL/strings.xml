@@ -622,7 +622,7 @@
     <string name="title_advanced_message_text_zoom2">תקריב טקסט ההודעות כברירת מחדל: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">התמקדות על טקסט ההודעה גם בעורך ההודעות</string>
     <string name="title_advanced_overview_mode">התאמת התקריב של ההודעות המקוריות לגודל המסך</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">ריווח שורות: %1$s %%</string>
+    <string name="title_advanced_line_spacing">ריווח שורות: %1$s %%</string>
     <string name="title_advanced_hyphenation">להשתמש במיקוף אוטומטי</string>
     <string name="title_advanced_contrast">להשתמש בניגודיות גבוהה לטקסט ההודעות</string>
     <string name="title_advanced_monospaced">להשתמש בגופן ברוחב אחיד לטקסט ההודעה כברירת מחדל</string>
@@ -2384,11 +2384,12 @@
     </string-array>
     <string-array name="undoNames">
         <item>כבוי</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1.25 s</item>
         <item>2.5 שנ׳</item>
         <item>5 שנ׳</item>
         <item>7.5 שנ׳</item>
         <item>10 שנ׳</item>
-        <item>15 שנ׳</item>
+        <item>15 s</item>
         <item>30 שניות</item>
         <item>60 שניות</item>
     </string-array>

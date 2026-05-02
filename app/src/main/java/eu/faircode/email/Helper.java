@@ -3010,6 +3010,13 @@ public class Helper {
                 "application/octet-stream".equals(result.type))
             result.type = Helper.guessMimeType(result.name);
 
+        if (result.type != null && result.type.startsWith("multipart/"))
+            result.type = "application/octet-stream";
+
+        String ext = getExtension(result.name);
+        if ("mht".equalsIgnoreCase(ext) || "mhtml".equalsIgnoreCase(ext))
+            result.type = "application/x-mimearchive";
+
         if (result.size != null && result.size <= 0)
             result.size = null;
 

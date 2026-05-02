@@ -210,6 +210,7 @@ public class MessageHelper {
     private static final String GOOGLE_DKIM_SIGNATURE = "X-Google-DKIM-Signature";
     private static final String ARC_SEAL = "ARC-Seal";
     private static final String AUTHENTICATION_RESULTS = "Authentication-Results";
+    private static final String ANON_AUTHENTICATION_RESULTS = "X-AnonAddy-Authentication-Results";
     private static final String ARC_AUTHENTICATION_RESULTS = "ARC-Authentication-Results";
     private static final String ARC_MESSAGE_SIGNATURE = "ARC-Message-Signature";
 
@@ -924,7 +925,7 @@ public class MessageHelper {
         // https://en.wikipedia.org/wiki/International_email
         for (Address address : addresses) {
             String email = ((InternetAddress) address).getAddress();
-            email = toPunyCode(email, false);
+            email = toPunyCode(email, false, identity != null && identity.unicode);
             ((InternetAddress) address).setAddress(email);
         }
         return addresses;
@@ -2224,6 +2225,10 @@ public class MessageHelper {
         if (results != null)
             all.addAll(Arrays.asList(results));
 
+        String[] anonresults = imessage.getHeader(ANON_AUTHENTICATION_RESULTS);
+        if (anonresults != null)
+            all.addAll(Arrays.asList(anonresults));
+
         String[] aresults = imessage.getHeader(ARC_AUTHENTICATION_RESULTS);
         if (aresults != null)
             all.addAll(Arrays.asList(aresults));
@@ -2849,7 +2854,7 @@ public class MessageHelper {
             if (email != null) {
                 email = decodeMime(email);
                 email = fromPunyCode(email);
-                email = toPunyCode(email, true);
+                email = toPunyCode(email, true, false);
 
                 iaddress.setAddress(email);
             }
@@ -3256,6 +3261,10 @@ public class MessageHelper {
                 Log.i("--- local by sendmail");
                 return true;
             }
+            if (by.toLowerCase(Locale.ROOT).contains("postfix")) {
+                Log.i("--- local by Postfix");
+                return true;
+            }
             if (by.startsWith("filterdrecv-")) {
                 Log.i("--- local by filterdrecv");
                 return true;
@@ -3634,7 +3643,7 @@ public class MessageHelper {
         return email;
     }
 
-    static String toPunyCode(String email, boolean single) {
+    static String toPunyCode(String email, boolean single, boolean unicode) {
         int at = email.indexOf('@');
         if (at > 0) {
             String user = email.substring(0, at);
@@ -3645,11 +3654,12 @@ public class MessageHelper {
                     TextHelper.isSingleScript(domain))
                 return email;
 
-            try {
-                user = IDN.toASCII(user, IDN.ALLOW_UNASSIGNED);
-            } catch (Throwable ex) {
-                Log.i(ex);
-            }
+            if (!unicode)
+                try {
+                    user = IDN.toASCII(user, IDN.ALLOW_UNASSIGNED);
+                } catch (Throwable ex) {
+                    Log.i(ex);
+                }
 
             String[] parts = domain.split("\\.");
             for (int p = 0; p < parts.length; p++)
@@ -4269,7 +4279,7 @@ public class MessageHelper {
                                 StandardCharsets.US_ASCII.equals(cs) ||
                                 StandardCharsets.ISO_8859_1.equals(cs))
                             result = new String(result.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                        result = (first ? "" : "<br><hr>") + Markdown.toHtml(result);
+                        result = (first ? "" : "<br><hr>") + Markdown.toHtml(result, context);
                     } catch (Throwable ex) {
                         Log.e(ex);
                         result = HtmlHelper.formatPlainText(result);

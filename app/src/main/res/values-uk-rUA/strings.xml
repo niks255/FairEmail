@@ -622,7 +622,7 @@
     <string name="title_advanced_message_text_zoom2">Масштаб тексту повідомлень за замовчуванням: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Масштабувати текст повідомлення також і в редакторі повідомлень</string>
     <string name="title_advanced_overview_mode">Масштабувати оригінальні повідомлення відповідно до розміру екрана</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Міжрядковий інтервал: %1$s %%</string>
+    <string name="title_advanced_line_spacing">Міжрядковий інтервал: %1$s %%</string>
     <string name="title_advanced_hyphenation">Використовувати автоматичне розставляння переносів</string>
     <string name="title_advanced_contrast">Використовувати висококонтрастний текст для повідомлень</string>
     <string name="title_advanced_monospaced">Використовувати моноширинний шрифт для тексту повідомлень за замовчуванням</string>
@@ -2389,6 +2389,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Вимкнено</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1,25 с</item>
         <item>2,5 с</item>
         <item>5 с</item>
         <item>7,5 с</item>

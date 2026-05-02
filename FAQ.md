@@ -58,6 +58,9 @@ Searching for *IMAP* and the name of the provider is mostly sufficient to find t
 In some cases, you'll need to enable external access to your account and/or to use a special (app) password,
 for instance when two-factor authentication is enabled.
 
+When you copy and paste a password, make sure you do not copy any whitespace (spaces, etc.).
+Please also keep in mind that a password manager may fill in an old password and overwrite what you have pasted or typed, without this being visible.
+
 For authorizing:
 
 * Gmail / G suite, see [question 6](#faq6)
@@ -72,15 +75,23 @@ For authorizing:
 * Posteo: not that there is [no spam folder](https://posteo.de/en/help/how-does-the-posteo-spam-filter-work) ([German](https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter))
 * Posteo: if you want to synchronize contacts, please [see here](https://posteo.de/en/help/how-do-i-set-up-synchronisation-of-contacts-with-an-android-address-book)
 * Web.de: please check if [IMAP is enabled](https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html)
-* Web.de: with two factor authentication you'll need to use [an app password](https://web.de/email/sicherheit/zwei-faktor-authentifizierung/)
+* Web.de: with two factor authentication you must use [an app password](https://web.de/email/sicherheit/zwei-faktor-authentifizierung/)
 * Web.de: if you are missing the spam messages folder, you should enable spam filtering via the website of web.de again
 * GMX: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html)). Reportedly, you need to do this on a desktop computer.
-* GMX: with two factor authentication you'll need to use [an app password](https://support.gmx.com/security/2fa/application-specific-passwords.html) ([German](https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html)). Not that enabling two-factor authentication does not automatically enable IMAP.
+* GMX: with two-factor authentication, and sometimes in other cases as well, for example when traveling or using a VPN, you must use [an app password](https://support.gmx.com/security/2fa/application-specific-passwords.html) ([German](https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html)). Not that enabling two-factor authentication does not automatically enable IMAP.
 * T-online.de: please make sure you use [an email password](https://www.telekom.de/hilfe/festnetz-internet-tv/e-mail/e-mail-adresse-passwoerter-und-sicherheit/passwort-fuer-e-mail-programme-einrichten) (German) and not your account password
 * Ionos (1und1): please make sure you use [an email password](https://www.ionos.de/hilfe/e-mail/problemloesungen-mail-basicmail-business/passwort-fuer-e-mail-konto-bei-ionos-aendern/) (German) and not your account password
 * Yandex: please check if [IMAP is enabled](https://yandex.com/support/mail/mail-clients/others.html)
 * Comcast/Xfinity: please check if [third party email access](https://www.xfinity.com/support/articles/third-party-email-access) is enabled
 * Mailbox.org: with two factor authentication you'll need to use [an app password](https://kb.mailbox.org/en/private/security-and-privacy/application-passwords-for-external-programs/) ([German](https://kb.mailbox.org/de/privat/sicherheit-und-privatsphaere/applikationspasswoerter-fuer-externe-programme/))
+
+**Important:**
+
+*There is a good reason why the app warns against using a VPN:*
+With a VPN, you share a single network address with many people, and not all of those people will behave properly all the time.
+Most email servers automatically block network addresses when abuse is detected, for example, when someone tries to send spam.
+That is why a VPN is often problematic for email. Someone else's misconduct can affect you.
+So if there are authentication problems while using a VPN, either when configuring or using an account, try turning off the VPN, or create an exception for FairEmail in the VPN app.
 
 Please see [this FAQ](#faq22) for common error messages and solutions,
 and please see [this FAQ](#faq207) in case of '*Authentication failed*' or similar.
@@ -142,7 +153,7 @@ Related questions:
 * A [bug in Android 6.0](https://issuetracker.google.com/issues/37068143) causes a crash with *... Invalid offset: ... Valid range is ...* when text is selected and tapping outside of the selected text. This bug has been fixed in Android 6.0.1.
 * Internal (anchor) links will not work because original messages are shown in an embedded WebView in a scrolling view (the conversation list). This is an Android limitation which cannot be fixed or worked around.
 * Language detection [is not working anymore](https://issuetracker.google.com/issues/173337263) on Pixel devices with (upgraded to?) Android 11
-* A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.
+* ~~A [bug in OpenKeychain](https://github.com/open-keychain/open-keychain/issues/2688) causes invalid PGP signatures when using a hardware token.~~
 * Search suggestions causes the keyboard losing focus on Android 12L.
 * ~~[A bug](https://techcommunity.microsoft.com/t5/outlook/outlook-office-365-imap-idle-is-broken/m-p/3616242) in the Outlook IMAP server causes delayed new message notifications.~~
 * Updating the Material You colors sometimes require restarting the app / the device, which is caused by [a bug](https://issuetracker.google.com/issues/386671298) in the Android WebView.
@@ -902,7 +913,8 @@ You should not change the username!
 
 Note that you can select the default sending address via the three-dots overflow menu at the top right of the message editor (not the start screen!).
 
-**Important**: In the case of an Outlook account, you should first authenticate the account again with the "Office 365" wizard. You don't need to remove the account for this.
+**Important**: In the case of an Outlook (consumer) account, you should first authenticate the account again with the "Outlook/Office" wizard,
+else there will probably the error '... *NoPrimarySmtpAddress* ...'.
 
 **In many cases, an alias address must first be verified via the website of the mail provider**
 
@@ -1061,6 +1073,7 @@ Common errors:
 * *Message signature valid but not confirmed*: the signature is okay, but the public key still needs to be confirmed in the OpenKeychain app.
 * *OpenPgp error 0: null* / *OpenPgp error 0: General error*: please check the key in the OpenKeychain app and make sure there are no conflicting identities for the key and make sure the email address exactly matches the key, including lower/upper case. Also, make sure the key can be used to sign/encrypt and isn't for encrypting/signing only.
 * *OpenPgp error 0: Encountered an error reading input data!*: your public key has the [AEAD](https://en.wikipedia.org/wiki/Authenticated_encryption) flag set, but the message was encrypted in the older MDC (Modification Detection Code) mode by the sender. For example the Posteo email server does this erroneously. Workaround: [remove the AEAD flag](https://github.com/keybase/keybase-issues/issues/4025#issuecomment-853933127) from the key.
+* *OpenPGP error 0: An OpenPGP exception occurred during an operation."*: an imported private key is probably incompatible with the OpenKeychain app.
 
 **Important**: if *Don't keep activities* is enabled in the Android developer options,
 FairEmail and the OpenKeychain app cannot run at the same time, causing PGP operations to fail.
@@ -1400,6 +1413,10 @@ In the case of the error '*User is authenticated but not connected*', please see
 
 An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting "*Outlook/Office 365 (OAuth)*".
 
+To use third-party email apps for consumer Outlook accounts, IMAP must be enabled.
+For this, please go to the Outlook website, tap on the settings wheel at the top right,
+select 'Mail', select 'Forwarding and IMAP', and in the section 'POP and IMAP' enable 'Let devices and apps use IMAP'.
+
 **Important**: a personal and a business account can have the same email address, but have different mailboxes (folders). So, please make sure you select the right option.
 
 Microsoft said "*We have turned off SMTP AUTH for millions of tenants not using it*", which can result in this error message:
@@ -1715,6 +1732,7 @@ See [here](https://linux.die.net/man/3/connect) for what error codes like EHOSTU
 
 The error *... connect failed: EACCES (Permission denied) ...* means that  *Restrict data usage* was disabled in the Android MIUI app settings for FairEmail.
 On Samsung, and possible other devices, also check: Android settings > Battery > Battery manager / Unmonitored apps.
+Another possible cause is using a VPN with the Android VPN option "*Block connections without VPN*" enabled.
 
 Possible causes are:
 

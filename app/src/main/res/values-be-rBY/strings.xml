@@ -623,7 +623,7 @@
     <string name="title_advanced_message_text_zoom2">Стандартны маштаб тэксту паведамлення: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Павялічваць тэкст паведамлення таксама ў рэдактары паведамленняў</string>
     <string name="title_advanced_overview_mode">Павялічваць маштаб арыгінальных паведамленняў пад памер экрана</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Міжрадковы інтэрвал: %1$s %%</string>
+    <string name="title_advanced_line_spacing">Міжрадковы інтэрвал: %1$s %%</string>
     <string name="title_advanced_hyphenation">Выкарыстоўваць аўтаматычны перанос</string>
     <string name="title_advanced_contrast">Ужываць высокі кантраст да тэксту паведамлення</string>
     <string name="title_advanced_monospaced">Выкарыстоўваць шрыфт аднолькавай шырыні для тэксту паведамлення па змаўчанні</string>
@@ -2387,6 +2387,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Выкл.</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1.25 s</item>
         <item>2,5 с</item>
         <item>5 с</item>
         <item>7,5 с</item>

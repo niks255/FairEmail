@@ -30,10 +30,20 @@ Diuqin
 
 Next version (Work in progress)
 
+* Fixed all reported bugs
+* Limit the width of images to the screen width on the receiver side
+* Small improvements and minor bug fixes
+* Updated CommonMark
+
+1.2314 2026-03-28
+
+* Fixed all reported bugs
 * Added EXTERNAL authentication method
 * Small improvements and minor bug fixes
+* Updated BouncyCastle
 * Updated translations
 * Updated Public Suffix List
+* Updated Brave's debounce list
 
 1.2313 2026-03-08
 

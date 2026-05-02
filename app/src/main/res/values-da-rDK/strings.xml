@@ -594,7 +594,7 @@
     <string name="title_advanced_message_text_zoom2">Standard beskedtekstzoom %1$s%%</string>
     <string name="title_advanced_editor_text_zoom">Zoom også beskedtekst i besked-editoren</string>
     <string name="title_advanced_overview_mode">Zoom originale beskeder for skærmtilpasning</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Linjeafstand: %1$s%%</string>
+    <string name="title_advanced_line_spacing">Linjeafstand: %1$s%%</string>
     <string name="title_advanced_hyphenation">Brug automatisk orddeling</string>
     <string name="title_advanced_contrast">Benyt høj kontrast til beskedtekst</string>
     <string name="title_advanced_monospaced">Benyt som standard monospatieret skrifttype til beskedtekst</string>
@@ -944,7 +944,7 @@
     <string name="title_advanced_notify_remove_hint">Nye beskednotifikationer fjernes altid, når de stryges væk samt ved markering af beskeder som læste</string>
     <string name="title_advanced_notify_manage_hint">Tryk på kanalnavnet for at opsætte kanalegenskaberne</string>
     <string name="title_advanced_notify_samsung_hint">For at håndtere meddelelseskanaler kan man være nødt til at aktivere denne Android-indstilling: Notifikation, Avancerede indstillinger, Håndtér meddelelseskategorier for hver app</string>
-    <string name="title_advanced_notify_manage_default_hint">For at indstille standardlyden skal du konfigurere DND (forstyr ikke) osv.</string>
+    <string name="title_advanced_notify_manage_default_hint">For at indstille standardlyden, opsæt DND (forstyr ikke) mv.</string>
     <string name="title_advanced_notify_manage_service_hint">For at deaktivere \'overvågningsnotifikationen\'</string>
     <string name="title_advanced_notify_separate_hint">Hvordan opsættes notifikationer for konti, mapper og afsendere?</string>
     <string name="title_advanced_notify_preview_all_hint">For wearables, som kan vise den fulde tekst (op til 5.000 tegn)</string>
@@ -2362,6 +2362,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Fra</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1,25 s</item>
         <item>2,5 s</item>
         <item>5 s</item>
         <item>7,5 s</item>

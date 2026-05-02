@@ -613,6 +613,7 @@ public class FragmentCompose extends FragmentBase {
                 }
 
                 // https://developer.android.com/guide/topics/providers/contacts-provider#Intents
+                // https://android-developers.googleblog.com/2026/03/contact-picker-privacy-first-contact.html
                 Intent pick = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
                 pick.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(Helper.getChooser(getContext(), pick), request);
@@ -7286,13 +7287,13 @@ public class FragmentCompose extends FragmentBase {
             if (markdown) {
                 String html = (convertMarkdown
                         ? HtmlHelper.toHtml(spanned, context)
-                        : Markdown.toHtml(spanned.toString()));
+                        : Markdown.toHtml(spanned.toString(), context));
                 Document doc = JsoupEx.parse(html);
                 doc.body().attr("markdown", Boolean.toString(markdown));
                 body = doc.html();
             } else
                 body = (convertMarkdown
-                        ? Markdown.toHtml(spanned.toString())
+                        ? Markdown.toHtml(spanned.toString(), context)
                         : HtmlHelper.toHtml(spanned, context));
             if (convertMarkdown)
                 dirty = true;
@@ -8278,7 +8279,7 @@ public class FragmentCompose extends FragmentBase {
 
                 Spanned spannedBody;
                 if (markdown) {
-                    String md = Markdown.fromHtml(doc.body().html());
+                    String md = Markdown.fromHtml(doc.body().html(), context);
                     spannedBody = new SpannableStringBuilder(md);
                 } else {
                     HtmlHelper.clearAnnotations(doc); // Legacy left-overs

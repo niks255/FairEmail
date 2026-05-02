@@ -2911,6 +2911,7 @@
 
     <string-array name="undoNames">
         <item>Off</item>
+        <item>1.25 s</item>
         <item>2.5 s</item>
         <item>5 s</item>
         <item>7.5 s</item>
@@ -2922,6 +2923,7 @@
 
     <integer-array name="undoValues" translatable="false">
         <item>0</item>
+        <item>1500</item>
         <item>2500</item>
         <item>5000</item>
         <item>7500</item>

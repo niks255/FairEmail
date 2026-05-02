@@ -590,7 +590,7 @@
     <string name="title_advanced_message_text_zoom2">Szöveg nagyítás alapértelmezett érték: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Az üzenetszerkesztőben is állítható a szöveg nagyítása</string>
     <string name="title_advanced_overview_mode">Eredeti üzenetek kinagyítására teljes képernyőre</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Sorköz: %1$s %%</string>
+    <string name="title_advanced_line_spacing">Sorköz: %1$s %%</string>
     <string name="title_advanced_hyphenation">Automatikus elválasztás használata</string>
     <string name="title_advanced_contrast">Magas kontraszt használata az üzenetek szövegéhez</string>
     <string name="title_advanced_monospaced">Fix szélességű betűtípus használata az üzenetek szövegéhez</string>
@@ -2351,6 +2351,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Ki</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1,25 mp</item>
         <item>2,5 mp</item>
         <item>5 mp</item>
         <item>7,5 mp</item>

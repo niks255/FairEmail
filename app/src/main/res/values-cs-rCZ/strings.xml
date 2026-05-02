@@ -622,7 +622,7 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_message_text_zoom2">Výchozí zvětšení textu zprávy: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Změnit přiblížení textu zprávy také v editoru zpráv</string>
     <string name="title_advanced_overview_mode">Přizpůsobit zobrazení původních zpráv šířce obrazovky</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Řádkování: %1$s %%</string>
+    <string name="title_advanced_line_spacing">Řádkování: %1$s %%</string>
     <string name="title_advanced_hyphenation">Použít automatický rozdělovník</string>
     <string name="title_advanced_contrast">Použít vysoký kontrast pro text zprávy</string>
     <string name="title_advanced_monospaced">Automaticky použít neproporcionální písmo pro text zprávy</string>
@@ -2388,6 +2388,7 @@ v prohlížeči ze všech Google účtů.</string>
     </string-array>
     <string-array name="undoNames">
         <item>Vyp.</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1.25 s</item>
         <item>2,5 s</item>
         <item>5 s</item>
         <item>7,5 s</item>

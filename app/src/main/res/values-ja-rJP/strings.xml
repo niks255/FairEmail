@@ -580,6 +580,7 @@
     <string name="title_advanced_message_text_zoom2">デフォルトの本文のテキスト拡大率: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">メッセージ編集画面でも、テキストを拡大する</string>
     <string name="title_advanced_overview_mode">画面に合わせて元のメッセージを拡大する</string>
+    <string name="title_advanced_line_spacing">行間: %1$s %%</string>
     <string name="title_advanced_hyphenation">自動ハイフンを使用する</string>
     <string name="title_advanced_contrast">本文にハイコントラストテーマを使用する</string>
     <string name="title_advanced_monospaced">デフォルトで本文に等幅フォントを使用する</string>
@@ -595,7 +596,7 @@
     <string name="title_advanced_image_placeholders">画像のプレースホルダーを表示する</string>
     <string name="title_advanced_images_inline">インライン画像を自動で表示する</string>
     <string name="title_advanced_button_extra">メッセージの下部に追加ボタンを表示する</string>
-    <string name="title_advanced_spacing">メッセージ間のスペース</string>
+    <string name="title_advanced_spacing">メッセージと会話の間のスペース</string>
     <string name="title_advanced_seekbar">ドットで相対的な会話スレッドの位置を表示する</string>
     <string name="title_advanced_actionbar">会話スレッド アクションバーを表示する</string>
     <string name="title_advanced_actionbar_swap">ごみ箱とアーカイブのボタンを入れ替える</string>
@@ -2345,11 +2346,12 @@
     </string-array>
     <string-array name="undoNames">
         <item>オフ</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1.25 s</item>
         <item>2.5 秒</item>
         <item>5 秒</item>
         <item>7.5 秒</item>
         <item>10 秒</item>
-        <item>15 秒</item>
+        <item>15 s</item>
         <item>30 秒</item>
         <item>60 秒</item>
     </string-array>

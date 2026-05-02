@@ -126,7 +126,7 @@ public class AI {
         } else
             throw new IllegalArgumentException("No AI available");
 
-        String html = Markdown.toHtml(sb.toString());
+        String html = Markdown.toHtml(sb.toString(), context);
         Document d = HtmlHelper.sanitizeCompose(context, html, false);
         return HtmlHelper.fromDocument(context, d, null, null);
     }
@@ -239,8 +239,8 @@ public class AI {
         } else
             throw new IllegalArgumentException("No AI available");
 
-        String html = Markdown.toHtml(sb.toString());
-        Document doc = HtmlHelper.sanitizeCompose(context, html, false);
+        String html = Markdown.toHtml(sb.toString(), context);
+        Document doc = HtmlHelper.sanitizeView(context, JsoupEx.parse(html), false);
         return HtmlHelper.fromDocument(context, doc, null, null);
     }
 }

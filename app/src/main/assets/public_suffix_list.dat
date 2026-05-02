@@ -6821,7 +6821,7 @@ org.zw
 
 // newGTLDs
 
-// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2026-02-18T15:51:43Z
+// List of new gTLDs imported from https://www.icann.org/resources/registries/gtlds/v2/gtlds.json on 2026-04-15T16:04:02Z
 // This list is auto-generated, don't edit it manually.
 // aaa : American Automobile Association, Inc.
 // https://www.iana.org/domains/root/db/aaa.html
@@ -7563,7 +7563,7 @@ church
 // https://www.iana.org/domains/root/db/cipriani.html
 cipriani
 
-// circle : Amazon Registry Services, Inc.
+// circle : Jolly Host, LLC
 // https://www.iana.org/domains/root/db/circle.html
 circle
 
@@ -8415,7 +8415,7 @@ google
 // https://www.iana.org/domains/root/db/gop.html
 gop
 
-// got : Amazon Registry Services, Inc.
+// got : Jolly Host, LLC
 // https://www.iana.org/domains/root/db/got.html
 got
 
@@ -8787,7 +8787,7 @@ jnj
 // https://www.iana.org/domains/root/db/joburg.html
 joburg
 
-// jot : Amazon Registry Services, Inc.
+// jot : Jolly Host, LLC
 // https://www.iana.org/domains/root/db/jot.html
 jot
 
@@ -9923,7 +9923,7 @@ saarland
 // https://www.iana.org/domains/root/db/safe.html
 safe
 
-// safety : Safety Registry Services, LLC.
+// safety : Jolly Host, LLC
 // https://www.iana.org/domains/root/db/safety.html
 safety
 
@@ -12333,9 +12333,17 @@ eero-stage.online
 
 // concludes Amazon
 
+// Anomaly : https://opencode.ai
+// Submitted by Dax Raad <security@anoma.ly>
+opentunnel.xyz
+
 // Antagonist B.V. : https://www.antagonist.nl/
 // Submitted by Sander Hoentjen <systeembeheer@antagonist.nl>
 antagonist.cloud
+
+// Anthropic : https://www.anthropic.com/
+// Submitted by Sid Bidasaria <security@anthropic.com>
+claude.app
 
 // Apigee : https://apigee.com/
 // Submitted by Apigee Security Team <security@apigee.com>
@@ -12416,7 +12424,10 @@ sweetpepper.org
 myasustor.com
 
 // Atlassian : https://atlassian.com
-// Submitted by Sam Smyth <devloop@atlassian.com>
+// Submitted by Benjamin McAlary <edge-services@atlassian.com>
+*.atlassian-3p.com
+*.atlassian-3p-us-gov-mod.com
+*.atlassian-isolated-3p.com
 cdn.prod.atlassian-dev.net
 
 // AVM : https://avm.de
@@ -12885,6 +12896,12 @@ deno.dev
 deno-staging.dev
 deno.net
 sandbox.deno.net
+
+// DeployAgent : https://deployagent.com
+// Submitted by Danny <security@deployagent.com>
+deployagent.com
+piebox.site
+deployagent.space
 
 // deSEC : https://desec.io/
 // Submitted by Peter Thomassen <peter@desec.io>
@@ -13450,14 +13467,24 @@ us-4.evennode.com
 relay.evervault.app
 relay.evervault.dev
 
+// Exe : https://exe.dev
+// Submitted by Josh Bleecher Snyder <security@exe.dev>
+exe.xyz
+
 // Expo : https://expo.dev/
-// Submitted by James Ide <psl@expo.dev>
+// Submitted by Phil Pluckthun <psl@expo.dev>
 expo.app
+on.expo.app
 staging.expo.app
+on.staging.expo.app
 
 // Fabrica Technologies, Inc. : https://www.fabrica.dev/
 // Submitted by Eric Jiang <eric@fabrica.dev>
 onfabrica.com
+
+// fachschaften.org: https://fachschaften.org/
+// Submitted by Felix Schäfer <security@fachschaften.org>
+fspages.org
 
 // FAITID : https://faitid.org/
 // Submitted by Maxim Alzoba <tech.contact@faitid.org>
@@ -13591,6 +13618,7 @@ fh-muenster.io
 
 // Figma : https://www.figma.com
 // Submitted by Nick Frost <psl@figma.com>
+payload.dev
 figma.site
 figma-gov.site
 preview.site
@@ -13905,11 +13933,6 @@ goupile.fr
 // Submitted by Richard Baker <richard.baker@digital.cabinet-office.gov.uk>
 pymnt.uk
 
-// GOV.UK Platform as a Service : https://www.cloud.service.gov.uk/
-// Submitted by Tom Whitwell <gov-uk-paas-support@digital.cabinet-office.gov.uk>
-cloudapps.digital
-london.cloudapps.digital
-
 // Government of the Netherlands : https://www.government.nl
 // Submitted by <domeinnaam@minaz.nl>
 gov.nl
@@ -14014,6 +14037,10 @@ homesklep.pl
 *.kin.one
 *.id.pub
 *.kin.pub
+
+// HOOC AG : https://www.hooc.ch
+// Submitted by Fabrizio Steiner <info@hooc.ch>
+seprox.hooc.me
 
 // Hoplix : https://www.hoplix.com
 // Submitted by Danilo De Franco<info@hoplix.shop>
@@ -14299,13 +14326,21 @@ us1-plenit.com
 webadorsite.com
 jouwweb.site
 
-// Joyent : https://www.joyent.com/
-// Submitted by Brian Bennett <brian.bennett@joyent.com>
-*.triton.zone
-
 // JS.ORG : http://dns.js.org
 // Submitted by Stefan Keim <admin@js.org>
 js.org
+
+// K2 Cloud : https://k2.cloud/
+// Submitted by K2 Cloud <compliance@k2.cloud>
+elastic.k2.cloud
+lb.ru-msk.k2.cloud
+s3.ru-msk.k2.cloud
+website.ru-msk.k2.cloud
+lb.ru-spb.k2.cloud
+s3.ru-spb.k2.cloud
+website.ru-spb.k2.cloud
+s3.k2.cloud
+website.k2.cloud
 
 // KaasHosting : http://www.kaashosting.nl/
 // Submitted by Wouter Bakker <hostmaster@kaashosting.nl>
@@ -14594,6 +14629,7 @@ messerli.app
 // Submitted by Jacob Cordero <public-suffix@meta.com>
 atmeta.com
 apps.fbsbx.com
+*.metaaiusercontent.com
 
 // MetaCentrum, CESNET z.s.p.o. : https://www.metacentrum.cz/en/
 // Submitted by Zdeněk Šustr <zdenek.sustr@cesnet.cz> and Radim Janča <janca@cesnet.cz>
@@ -14889,6 +14925,35 @@ noop.app
 *.database.run
 *.migration.run
 
+// Northwest Nexus dba NuOz : https://nuoz.net/
+// An RFC 1480 locality domain delegate host
+// Submitted by Peter Briggs on behalf of NuOz <domainsadmin@nuoz.com>
+aberdeen.wa.us
+bainbridge-isl.wa.us
+bellevue.wa.us
+bremerton.wa.us
+centralia.wa.us
+chehalis.wa.us
+forks.wa.us
+gig-harbor.wa.us
+hoquiam.wa.us
+keyport.wa.us
+kingston.wa.us
+olympia.wa.us
+port-angeles.wa.us
+port-ludlow.wa.us
+port-orchard.wa.us
+port-townsend.wa.us
+poulsbo.wa.us
+redmond.wa.us
+renton.wa.us
+sea.wa.us
+seattle.wa.us
+sequim.wa.us
+shelton.wa.us
+silverdale.wa.us
+yarrow-point.wa.us
+
 // Noticeable : https://noticeable.io
 // Submitted by Laurent Pellegrino <security@noticeable.io>
 noticeable.news
@@ -15058,10 +15123,6 @@ oy.lc
 // Submitted by Derek Myers <derek@pagefog.com>
 pgfog.com
 
-// PageXL : https://pagexl.com
-// Submitted by Yann Guichard <yann@pagexl.com>
-pagexl.com
-
 // Pantheon Systems, Inc. : https://pantheon.io/
 // Submitted by Gary Dylina <gary@pantheon.io>
 gotpantheon.com
@@ -15083,6 +15144,10 @@ gl.srv.us
 // Peplink | Pepwave : http://peplink.com/
 // Submitted by Steve Leung <steveleung@peplink.com>
 mypep.link
+
+// Perplexity AI : https://www.perplexity.ai/
+// Submitted by Alec Xiang <security@perplexity.ai>
+pplx.app
 
 // Perspecta : https://perspecta.com/
 // Submitted by Kenneth Van Alstyne <kvanalstyne@perspecta.com>
@@ -15744,6 +15809,7 @@ stackit.zone
 
 // Stackryze : https://stackryze.com
 // Submitted by Sudheer Bhuvana <security@stackryze.com>
+sryze.cc
 indevs.in
 
 // Staclar : https://staclar.com
@@ -15978,6 +16044,10 @@ lima.zone
 site.transip.me
 *.transurl.nl
 
+// Triton Data Center project : https://tritondatacenter.com
+// Submitted by Triton Data Center staff <tickets@tritondatacenter.com>
+*.triton.zone
+
 // Tunnelmole: https://tunnelmole.com
 // Submitted by Robbie Cahill <support@tunnelmole.com>
 tunnelmole.net
@@ -16086,6 +16156,11 @@ vistablog.ir
 // Viva Republica, Inc. : https://toss.im/
 // Submitted by Deus Team <deus@toss.im>
 deus-canvas.com
+
+// vivenu GmbH : https://vivenu.com/
+// Submitted by Marvin Frick <ops@vivenu.com>
+vivenushop.com
+vivenushop.dev
 
 // Voorloper.com : https://voorloper.com
 // Submitted by Nathan van Bakel <info@voorloper.com>

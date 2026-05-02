@@ -52,7 +52,7 @@ public class HtmlEx {
 
     private static final int TO_HTML_PARAGRAPH_FLAG = 0x00000001;
 
-    public HtmlEx(Context context){
+    public HtmlEx(Context context) {
         this.context = context;
     }
 
@@ -69,9 +69,9 @@ public class HtmlEx {
      * made to add HTML tags corresponding to spans. Also note that HTML metacharacters
      * (such as "&lt;" and "&amp;") within the input text are escaped.
      *
-     * @param text input text to convert
+     * @param text   input text to convert
      * @param option one of {@link #TO_HTML_PARAGRAPH_LINES_CONSECUTIVE} or
-     *     {@link #TO_HTML_PARAGRAPH_LINES_INDIVIDUAL}
+     *               {@link #TO_HTML_PARAGRAPH_LINES_INDIVIDUAL}
      * @return string containing input converted to HTML
      */
     public /* static */ String toHtml(Spanned text, int option) {
@@ -109,7 +109,7 @@ public class HtmlEx {
             String elements = " ";
             boolean needDiv = false;
 
-            for(int j = 0; j < style.length; j++) {
+            for (int j = 0; j < style.length; j++) {
                 if (style[j] instanceof AlignmentSpan) {
                     Layout.Alignment align =
                             ((AlignmentSpan) style[j]).getAlignment();
@@ -136,7 +136,7 @@ public class HtmlEx {
     }
 
     private /* static */ void withinDiv(StringBuilder out, Spanned text, int start, int end,
-                                  int option) {
+                                        int option) {
         int next;
         for (int i = start; i < end; i = next) {
             int n1 = nextSpanTransition(text, i, end, QuoteSpan.class);
@@ -188,7 +188,7 @@ public class HtmlEx {
     }
 
     private /* static */ String getTextStyles(Spanned text, int start, int end,
-                                        boolean forceNoVerticalMargin, boolean includeTextAlign) {
+                                              boolean forceNoVerticalMargin, boolean includeTextAlign) {
         String margin = null;
         String textAlign = null;
 
@@ -232,7 +232,7 @@ public class HtmlEx {
     }
 
     private /* static */ void withinBlockquote(StringBuilder out, Spanned text, int start, int end,
-                                         int option) {
+                                               int option) {
         if ((option & TO_HTML_PARAGRAPH_FLAG) == TO_HTML_PARAGRAPH_LINES_CONSECUTIVE) {
             withinBlockquoteConsecutive(out, text, start, end);
         } else {
@@ -241,7 +241,7 @@ public class HtmlEx {
     }
 
     private /* static */ void withinBlockquoteIndividual(StringBuilder out, Spanned text, int start,
-                                                   int end) {
+                                                         int end) {
         List<Boolean> levels = new ArrayList<>();
 
         int next = -1;
@@ -337,7 +337,7 @@ public class HtmlEx {
     }
 
     private /* static */ void withinBlockquoteConsecutive(StringBuilder out, Spanned text, int start,
-                                                    int end) {
+                                                          int end) {
         out.append("<span").append(getTextDirection(text, start, end)).append(">");
 
         int next;
@@ -465,6 +465,8 @@ public class HtmlEx {
                         out.append(((ImageSpan) style[j]).getSource());
                         out.append("\"");
 
+                        out.append("style=\"max-width: 100%; height: auto;\"");
+
                         if (style[j] instanceof ImageSpanEx) {
                             ImageSpanEx img = (ImageSpanEx) style[j];
                             int w = img.getWidth();
@@ -546,7 +548,7 @@ public class HtmlEx {
 
     //@UnsupportedAppUsage
     private /* static */ void withinStyle(StringBuilder out, CharSequence text,
-                                    int start, int end) {
+                                          int start, int end) {
         for (int i = start; i < end; i++) {
             try {
                 char c = text.charAt(i);

@@ -621,7 +621,7 @@
     <string name="title_advanced_message_text_zoom2">Масштаб текста сообщения по умолчанию: %1$s%%</string>
     <string name="title_advanced_editor_text_zoom">Масштабировать текст сообщения в редакторе</string>
     <string name="title_advanced_overview_mode">Изменять масштаб исходных сообщений к размеру экрана</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Межстрочный интервал: %1$s %%</string>
+    <string name="title_advanced_line_spacing">Межстрочный интервал: %1$s %%</string>
     <string name="title_advanced_hyphenation">Автоматическая расстановка переносов</string>
     <string name="title_advanced_contrast">Использовать высокий контраст для текста сообщений</string>
     <string name="title_advanced_monospaced">Использовать моноширинный шрифт для текста сообщения по умолчанию</string>
@@ -2391,6 +2391,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Выкл.</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1,25 сек.</item>
         <item>2,5 сек.</item>
         <item>5 сек.</item>
         <item>7,5 сек.</item>

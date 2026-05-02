@@ -30,6 +30,26 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### Next version (Work in progress)
 
+### 1.2315 2026-04-27
+
+* Fixed all reported bugs
+* Limit the width of images to the screen width on the receiver side
+* Small improvements and minor bug fixes
+* Updated [CommonMark](https://github.com/commonmark/commonmark-java)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [S/MIME root certificates](https://wiki.mozilla.org/CA/Included_Certificates)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2314 2026-03-28
+
+* Fixed all reported bugs
+* Added [EXTERNAL](https://datatracker.ietf.org/doc/html/rfc4959) authentication method
+* Small improvements and minor bug fixes
+* Updated [BouncyCastle](https://www.bouncycastle.org/)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [Brave's debounce list](https://github.com/brave/brave-browser/wiki/Debouncing)
+
 ### 1.2313 2026-03-08
 
 * Fixed all reported bugs

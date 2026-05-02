@@ -594,7 +594,7 @@
     <string name="title_advanced_message_text_zoom2">İlkin mesajın mətn yaxınlaşdırması: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Mesajın mətnini redaktorda da yaxınlaşdır</string>
     <string name="title_advanced_overview_mode">Orijinal mesajı tam ekrana qədər yaxınlaşdır</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Sətir boşluğu: %1$s %%</string>
+    <string name="title_advanced_line_spacing">Sətir boşluğu: %1$s %%</string>
     <string name="title_advanced_hyphenation">Avto-defis istifadə et</string>
     <string name="title_advanced_contrast">Mesaj mətni üçün yüksək ziddiyyət istifadə et</string>
     <string name="title_advanced_monospaced">Mesaj mətni üçün ilkin olaraq tək boşluqlu şrift istifadə et</string>
@@ -2354,6 +2354,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Bağlı</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1.25 s</item>
         <item>2.5 s</item>
         <item>5 s</item>
         <item>7.5 s</item>

@@ -493,6 +493,8 @@ public class EmailService implements AutoCloseable {
 
             boolean bc = prefs.getBoolean("bouncy_castle", false);
             boolean fips = prefs.getBoolean("bc_fips", false);
+            if (host.endsWith(".gmail.com"))
+                bc = false;
             factory = new SSLSocketFactoryService(
                     context, host, port, insecure, dane,
                     ssl_harden, strict, cert_strict, cert_transparency, check_names,
@@ -713,6 +715,11 @@ public class EmailService implements AutoCloseable {
         } catch (MessagingException ex) {
             crumb.put("exception", ex + "\n" + android.util.Log.getStackTraceString(ex));
             Log.breadcrumb("Connection failed", crumb);
+
+            if (ex.getMessage() != null &&
+                    (ex.getMessage().contains("Session invalidated") ||
+                            ex.getMessage().contains("Command Error. 12")))
+                throw new AuthenticationFailedException(ex.getMessage(), ex);
 
             /*
                 com.sun.mail.util.MailConnectException: Couldn't connect to host, port: 74.125.140.108, 993; timeout 20000;

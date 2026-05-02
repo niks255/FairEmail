@@ -594,7 +594,7 @@
     <string name="title_advanced_message_text_zoom2">Ingrandimento predefinito del testo del messaggio %1$s%%</string>
     <string name="title_advanced_editor_text_zoom">Ingrandisci il testo del messaggio anche nell\'editor dei messaggi</string>
     <string name="title_advanced_overview_mode">Ingrandisci i messaggi originali per adattarsi allo schermo</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Spaziatura interlinea: %1$s %%</string>
+    <string name="title_advanced_line_spacing">Spaziatura interlinea: %1$s %%</string>
     <string name="title_advanced_hyphenation">Usa la sillabazione automatica</string>
     <string name="title_advanced_contrast">Usa il contrasto elevato per il testo del messaggio</string>
     <string name="title_advanced_monospaced">Usa sempre caratteri monospaziati per il testo del messaggio</string>
@@ -2362,13 +2362,14 @@
     </string-array>
     <string-array name="undoNames">
         <item>Off</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1,25 s</item>
         <item>2,5 s</item>
         <item>5 s</item>
         <item>7,5 s</item>
         <item>10 s</item>
         <item>15 s</item>
-        <item>30 sec.</item>
-        <item>60 sec.</item>
+        <item>30 s</item>
+        <item>60 s</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>Cursive</item>

@@ -594,7 +594,7 @@
     <string name="title_advanced_message_text_zoom2">Zoom du texte du message par défaut : %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Zoomer le texte du message également dans l\'éditeur de message</string>
     <string name="title_advanced_overview_mode">Zoomer sur les messages originaux pour les adapter à l\'écran</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Interligne : %1$s %%</string>
+    <string name="title_advanced_line_spacing">Interligne : %1$s %%</string>
     <string name="title_advanced_hyphenation">Utiliser la césure automatique</string>
     <string name="title_advanced_contrast">Utiliser un contraste élevé pour le texte du message</string>
     <string name="title_advanced_monospaced">Utiliser une police à espacement fixe pour le texte du message</string>
@@ -2362,6 +2362,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Désactivé</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1,25 s</item>
         <item>2,5 s</item>
         <item>5 s</item>
         <item>7,5 s</item>

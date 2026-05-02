@@ -579,7 +579,7 @@
     <string name="title_advanced_message_text_zoom2">기본 메시지 글자 배율: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">메시지 글자 배율을 메시지 편집기에도 적용</string>
     <string name="title_advanced_overview_mode">화면에 맞춰 원본 메시지를 조정하기</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">줄 간격: %1$s %%</string>
+    <string name="title_advanced_line_spacing">줄 간격: %1$s %%</string>
     <string name="title_advanced_hyphenation">하이픈 자동 삽입</string>
     <string name="title_advanced_contrast">메시지 텍스트에 고대비 적용</string>
     <string name="title_advanced_monospaced">기본적으로 메시지 텍스트에 고정폭 글꼴 사용</string>
@@ -2155,13 +2155,14 @@
     </string-array>
     <string-array name="undoNames">
         <item>끄기</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1.25초</item>
         <item>2.5초</item>
         <item>5초</item>
         <item>7.5초</item>
         <item>10초</item>
         <item>15초</item>
-        <item>30 s</item>
-        <item>60 s</item>
+        <item>30초</item>
+        <item>60초</item>
     </string-array>
     <string-array name="fontNameNames">
         <item>필기체</item>

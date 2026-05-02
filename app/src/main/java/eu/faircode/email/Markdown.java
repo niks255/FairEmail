@@ -19,6 +19,11 @@ package eu.faircode.email;
     Copyright 2018-2026 by Marcel Bokhorst (M66B)
 */
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
+
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 import com.vladsch.flexmark.util.data.DataHolder;
 import com.vladsch.flexmark.util.data.MutableDataSet;
@@ -41,7 +46,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Markdown {
-    static String toHtml(String markdown) {
+    static String toHtml(String markdown, Context context) {
         // https://github.com/commonmark/commonmark-java#usage
         // https://github.com/commonmark/commonmark-java/issues/294
         markdown = markdown.replace('\u00a0', ' ');
@@ -59,14 +64,18 @@ public class Markdown {
                 .extensions(extensions)
                 .build();
         String html = r.render(d);
-        if (BuildConfig.DEBUG) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean debug = prefs.getBoolean("debug", false);
+        if (BuildConfig.DEBUG || debug) {
             Log.i("Markdown md=" + markdown.replace('\n', '|'));
             Log.i("Markdown html=" + html.replace('\n', '|'));
         }
+
         return html;
     }
 
-    static String fromHtml(String html) {
+    static String fromHtml(String html, Context context) {
         // https://github.com/vsch/flexmark-java/wiki/Extensions#html-to-markdown
         Map<String, String> specialCharsMap = new HashMap<>();
         //specialCharsMap.put("“", "\"");
@@ -123,7 +132,9 @@ public class Markdown {
                 .build()
                 .convert(doc.html());
 
-        if (BuildConfig.DEBUG) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean debug = prefs.getBoolean("debug", false);
+        if (BuildConfig.DEBUG || debug) {
             Log.i("Markdown html=" + html.replace('\n', '|'));
             Log.i("Markdown md=" + markdown.replace('\n', '|'));
         }

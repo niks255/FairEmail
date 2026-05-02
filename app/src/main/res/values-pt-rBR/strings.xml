@@ -592,7 +592,7 @@
     <string name="title_advanced_message_text_zoom2">Zoom padrão da mensagem: %1$s %%</string>
     <string name="title_advanced_editor_text_zoom">Amplie o texto da mensagem também no editor de mensagens</string>
     <string name="title_advanced_overview_mode">Ampliar as mensagens originais para adequar à tela</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">Espaçamento da linha: %1$s %%</string>
+    <string name="title_advanced_line_spacing">Espaçamento da linha: %1$s %%</string>
     <string name="title_advanced_hyphenation">Usar hifenização automática</string>
     <string name="title_advanced_contrast">Usar alto contraste para o texto da mensagem</string>
     <string name="title_advanced_monospaced">Usar a fonte mono-espaçada para o texto da mensagem por padrão</string>
@@ -2356,6 +2356,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Desl.</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1,25 s</item>
         <item>2,5 s</item>
         <item>5 s</item>
         <item>7,5 s</item>

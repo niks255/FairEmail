@@ -1222,10 +1222,10 @@ public class Log {
                         "isBoundary".equals(elm.getMethodName()))
                     return false;
 
-        if (ex instanceof IllegalArgumentException && ex.getCause() != null) {
+        if (ex instanceof RuntimeException && ex.getCause() instanceof IllegalArgumentException) {
             for (StackTraceElement ste : ex.getCause().getStackTrace())
-                if ("android.view.textclassifier.TextClassifierImpl".equals(ste.getClassName()) &&
-                        "validateInput".equals(ste.getMethodName()))
+                if ("android.view.textclassifier.TextClassifier".equals(ste.getClassName()) ||
+                        "android.view.textclassifier.TextClassifierImpl".equals(ste.getClassName()))
                     return true;
             /*
                 java.lang.RuntimeException: An error occurred while executing doInBackground()
@@ -1253,7 +1253,28 @@ public class Log {
                         at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1162)
                         at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:636)
                         at java.lang.Thread.run(Thread.java:764)
-             */
+
+                Xiaomi - Android 15
+                java.lang.RuntimeException: An error occurred while executing doInBackground()
+                at android.os.AsyncTask$4.done(AsyncTask.java:415)
+                at java.util.concurrent.FutureTask.finishCompletion(FutureTask.java:434)
+                at java.util.concurrent.FutureTask.setException(FutureTask.java:303)
+                at java.util.concurrent.FutureTask.run(FutureTask.java:322)
+                at android.os.AsyncTask$SerialExecutor$1.run(AsyncTask.java:305)
+                at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1154)
+                at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:652)
+                at java.lang.Thread.run(Thread.java:1564)
+                Caused by: java.lang.IllegalArgumentException
+                at com.android.internal.util.Preconditions.checkArgument(Preconditions.java:47)
+                at android.view.textclassifier.TextClassifier$Utils.checkArgument(TextClassifier.java:684)
+                at android.view.textclassifier.TextSelection$Request$Builder.<init>(TextSelection.java:398)
+                at android.widget.SelectionActionModeHelper$TextClassificationHelper.suggestSelection(SelectionActionModeHelper.java:1140)
+                at android.widget.SelectionActionModeHelper$$ExternalSyntheticLambda2.get(D8$$SyntheticClass:0)
+                at android.widget.SelectionActionModeHelper$TextClassificationAsyncTask.doInBackground(SelectionActionModeHelper.java:1041)
+                at android.widget.SelectionActionModeHelper$TextClassificationAsyncTask.doInBackground(SelectionActionModeHelper.java:1002)
+                at android.os.AsyncTask$3.call(AsyncTask.java:394)
+                at java.util.concurrent.FutureTask.run(FutureTask.java:317)
+            */
         }
 
         if (ex instanceof NullPointerException &&

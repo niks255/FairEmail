@@ -6678,7 +6678,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             try {
                 uri = Uri.parse(uri.toString().trim().replaceAll("[\r\n]", ""));
                 if (UriHelper.isHyperLink(uri))
-                    uri = Uri.parse(uri.toString().replaceAll("\\s+", "+"));
+                    uri = Uri.parse(uri.toString().replaceAll("\\s+", "%20"));
 
                 if (ProtectedContent.isProtectedContent(uri)) {
                     Bundle args = new Bundle();

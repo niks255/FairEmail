@@ -579,7 +579,7 @@
     <string name="title_advanced_message_text_zoom2">默认邮件文本缩放：%1$s %%</string>
     <string name="title_advanced_editor_text_zoom">同时也在邮件编辑窗中缩放内容文本</string>
     <string name="title_advanced_overview_mode">缩放原始邮件以适应屏幕</string>
-    <string name="title_advanced_line_spacing" comment="title_advanced_line_spacing Title with value (a percentage) for line spacing of the message text">行间距: %1$s %%</string>
+    <string name="title_advanced_line_spacing">行间距: %1$s %%</string>
     <string name="title_advanced_hyphenation">使用自动连字符</string>
     <string name="title_advanced_contrast">对邮件文本使用高对比度颜色</string>
     <string name="title_advanced_monospaced">默认对邮件文本使用等宽字体</string>
@@ -2340,6 +2340,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>关闭</item>
+        <item comment="undoNames Number of seconds to show the undo popup">1.25 秒</item>
         <item>2.5 秒</item>
         <item>5 秒</item>
         <item>7.5 秒</item>
