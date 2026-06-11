@@ -591,8 +591,21 @@ public class FragmentMessages extends FragmentBase
             @Override
             public void onClick(View v) {
                 try {
-                    FragmentDialogSelectUnifiedFolder fragment = new FragmentDialogSelectUnifiedFolder();
-                    fragment.show(getParentFragmentManager(), "unified:select");
+                    if (viewType == AdapterMessage.ViewType.SEARCH) {
+                        Bundle args = new Bundle();
+                        args.putLong("account", account);
+                        args.putLong("folder", folder);
+                        args.putString("type", type);
+                        args.putSerializable("criteria", criteria);
+                        args.putBoolean("server", server);
+
+                        FragmentDialogSearch fragment = new FragmentDialogSearch();
+                        fragment.setArguments(args);
+                        fragment.show(getParentFragmentManager(), "search");
+                    } else {
+                        FragmentDialogSelectUnifiedFolder fragment = new FragmentDialogSelectUnifiedFolder();
+                        fragment.show(getParentFragmentManager(), "unified:select");
+                    }
                 } catch (Throwable ex) {
                     /*
                         Exception java.lang.IllegalStateException:
@@ -2093,6 +2106,7 @@ public class FragmentMessages extends FragmentBase
         if (viewType != AdapterMessage.ViewType.SEARCH ||
                 criteria == null ||
                 criteria.with_hidden ||
+                criteria.with_importance != null ||
                 criteria.with_encrypted ||
                 criteria.with_attachments ||
                 criteria.with_notes ||
@@ -2920,6 +2934,15 @@ public class FragmentMessages extends FragmentBase
         @Override
         public int getSelectionCount() {
             return getSelection().length;
+        }
+
+        @Override
+        public boolean select(long id, boolean unselect) {
+            if (selectionTracker == null)
+                return false;
+            if (unselect)
+                selectionTracker.clearSelection();
+            return selectionTracker.select(id);
         }
 
         @Override
@@ -7100,7 +7123,11 @@ public class FragmentMessages extends FragmentBase
     private void onMenuCompact() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         boolean compact = !prefs.getBoolean("compact", false);
-        prefs.edit().putBoolean("compact", compact).apply();
+        prefs.edit()
+                .putBoolean("compact", compact)
+                .putString("sender_ellipsize", compact ? "end" : "full")
+                .putString("subject_ellipsize", "full")
+                .apply();
 
         int zoom = (compact ? 0 : 1);
         int padding = (compact || !cards ? 0 : 1);
@@ -9218,6 +9245,10 @@ public class FragmentMessages extends FragmentBase
                     if (viewType == AdapterMessage.ViewType.THREAD)
                         return (down && onScroll(context, false, 0.125f));
                     break;
+                case KeyEvent.KEYCODE_FORWARD_DEL:
+                    if (viewType == AdapterMessage.ViewType.UNIFIED || viewType == AdapterMessage.ViewType.FOLDER)
+                        return (up && onTrashSelection(context));
+                    break;
             }
 
             if (!up)
@@ -9302,6 +9333,14 @@ public class FragmentMessages extends FragmentBase
         private boolean onScroll(Context context, boolean up, float percent) {
             int h = context.getResources().getDisplayMetrics().heightPixels;
             rvMessage.scrollBy(0, Math.round((up ? -1 : 1) * h * percent));
+            return true;
+        }
+
+        private boolean onTrashSelection(Context context) {
+            long[] selected = getSelection();
+            if (selected.length == 0)
+                return false;
+            onActionMoveSelection(EntityFolder.TRASH, false);
             return true;
         }
     };

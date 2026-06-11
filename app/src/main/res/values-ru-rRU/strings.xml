@@ -95,7 +95,7 @@
         <item quantity="other">Удалить %1$d сообщений навсегда?</item>
     </plurals>
     <plurals name="title_attachments">
-        <item quantity="one">Одно вложение</item>
+        <item quantity="one">%1$d вложение</item>
         <item quantity="few">%1$d вложения</item>
         <item quantity="many">%1$d вложений</item>
         <item quantity="other">%1$d вложений</item>
@@ -373,6 +373,9 @@
     <string name="title_advanced_hint_title">Настройки для опытных</string>
     <string name="title_advanced_hint_message">        Вы переходите к настройкам для опытных пользователей.
         Все параметры обычно имеют стандартные значения, которые можно изменить, если у вас есть другие предпочтения.    </string>
+    <string name="title_advanced_hint_configure">        Необязательно настраивать учётную запись здесь. Лучше воспользуйтесь для этого кнопкой мастера быстрой настройки.
+        Мастер быстрой настройки работает почти всегда, но если это не так, можно воспользоваться классической ручной настройкой, расположенной чуть ниже кнопки мастера.
+    </string>
     <string name="title_advanced_hint_remark">        Параметры сгруппированы по вкладкам, поделены на разделы, организованы по внешнему виду или использованию и доступны через поиск.
     </string>
     <string name="title_advanced_hint_options">        Большинство функций вам не понадобятся, а некоторые из них довольно специфичны,
@@ -516,6 +519,7 @@
     <string name="title_advanced_open_safe">Только безопасные подключения</string>
     <string name="title_advanced_http_redirect">Разрешать перенаправление подключений</string>
     <string name="title_advanced_bouncy_castle">Использовать провайдера защищённых сокетов Bouncy Castle (JSSE)</string>
+    <string name="title_advanced_local_network">Доступ к локальной сети</string>
     <string name="title_advanced_manage_connectivity">Управление подключением</string>
     <string name="title_advanced_caption_general">По умолчанию</string>
     <string name="title_advanced_caption_navigation">Навигация</string>
@@ -1351,6 +1355,7 @@
     <string name="title_quick_actions_snooze">Отложить</string>
     <string name="title_quick_actions_clear">Очистить выбор после действия</string>
     <string name="title_trash">Корзина</string>
+    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Удалить диалог</string>
     <string name="title_trash_selection">Удалить выбранное</string>
     <string name="title_copy">Копировать&#8230;</string>
     <string name="title_copy_to">Копировать в&#8230;</string>
@@ -1686,13 +1691,14 @@
     <string name="title_search_with_unseen">Не прочитано</string>
     <string name="title_search_with_flagged">Избранное</string>
     <string name="title_search_with_hidden">Скрыто (только на устройстве)</string>
+    <string name="title_search_with_importance">Важное (только на устройстве)</string>
     <string name="title_search_with_encrypted">Зашифровано (только на устройстве)</string>
     <string name="title_search_with_attachments">С вложениями (только на устройстве)</string>
     <string name="title_search_with_size">Размер сообщения больше</string>
     <string name="title_search_in_trash">В корзине</string>
     <string name="title_search_in_junk">В спаме</string>
     <string name="title_search_with_range">Период</string>
-    <string name="title_search_with_before">Перед</string>
+    <string name="title_search_with_before">До</string>
     <string name="title_search_with_after">После</string>
     <string name="title_search_device_first">Сначала поиск на устройстве</string>
     <string name="title_search_flag_unseen">не прочитано</string>
@@ -2391,7 +2397,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Выкл.</item>
-        <item comment="undoNames Number of seconds to show the undo popup">1,25 сек.</item>
+        <item>1,25 сек.</item>
         <item>2,5 сек.</item>
         <item>5 сек.</item>
         <item>7,5 сек.</item>

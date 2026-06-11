@@ -536,7 +536,7 @@
     </select-->
     <provider
         name="gmx.de"
-        documentation="Ist &lt;a href=&quot;https://hilfe.gmx.net/pop-imap/einschalten.html&quot;&gt;IMAP aktiviert&lt;/a&gt;? Die Zwei-Faktor-Authentifizierung erfordert &lt;a href=&quot;https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html&quot;&gt;ein App-Passwort&lt;/a&gt;!"
+        documentation="Ist &lt;a href=&quot;https://hilfe.gmx.net/pop-imap/einschalten.html&quot;&gt;IMAP aktiviert&lt;/a&gt;? In vielen Fällen ist nun &lt;a href=&quot;https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html&quot;&gt;ein App-Passwort&lt;/a&gt; erforderlich!"
         domain="gmx\\.de,gmx\\.net,mein\\.gmx,gmx\\.at,gmx\\.ch,mail\\.gmx,email\\.gmx,gmx\\.eu,gmx\\.org,gmx\\.info,gmx\\.biz"
         keepalive="12"
         link="https://hilfe.gmx.net/pop-imap/imap/imap-serverdaten.html#indexlink_help_pop-imap_imap">
@@ -1296,7 +1296,7 @@
     <provider
         name="Vodafone.de/Arcor"
         appPassword="true"
-        domain="arcor\\.de,vodafone\\.de,vodafonemail\\.de,nexgo\\.de"
+        domain="arcor\\.de,vodafone\\.de,vodafonemail\\.de,unity-mail\\.de,nexgo\\.de"
         link="https://www.vodafone.de/hilfe/vodafone-e-mail-cloud.html?tab=servereinstellungen&amp;icmp=hilfe:email:tab2:abrufen:servereinstellungen"
         partial="true">
         <imap
@@ -2502,5 +2502,45 @@
             host="email.gwdg.de"
             port="587"
             starttls="true" />
+    </provider>
+    <provider
+        name="Soverin"
+        link="https://soverin.nl/help/setup"
+        mx=".*\\.soverin\\.net">
+        <imap
+            host="imap.soverin.net"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.soverin.net"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Hosteurope"
+        documentation="Sie müssen dieses Konto manuell einrichten (über „Manuelle Einrichtung und Kontooptionen“ direkt unter der Schaltfläche „Assistent“), da die Serveradressen kontospezifisch sind!"
+        link="https://www.hosteurope.de/faq/e-mail/mailprogramme/welchemailserver"
+        specific="True">
+        <imap
+            host="wp-xxxxxxx.mail.server-he.de"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="wp-xxxxxxx.mailout.server-he.de"
+            port="465"
+            starttls="false" />
+    </provider>
+    <provider
+        name="Hostinger"
+        link="https://www.hostinger.com/support/4768584-how-to-set-up-hostinger-email-on-mozilla-thunderbird-desktop-windows/"
+        mx=".*\\.hostinger\\.com">
+        <imap
+            host="imap.hostinger.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="smtp.hostinger.com"
+            port="465"
+            starttls="false" />
     </provider>
 </providers>

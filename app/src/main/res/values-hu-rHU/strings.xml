@@ -343,6 +343,8 @@
     <string name="title_advanced_hint_title">További haladó opciók</string>
     <string name="title_advanced_hint_message">        A haladó beállításokhoz navigálsz.        Minden opciónak van gyakran használt alapértéke, amit nem kell változtatnod, kivéve, ha más opciókat preferálsz.
     </string>
+    <string name="title_advanced_hint_configure">        A fiók konfigurálásához nem szükséges itt bármit beállítani. Kerem, ehhez a gyorsbeállítás varázsló gombot használja.
+        A gyorsbeállítás varázsló szinte mindig működik, de ha mégsem, akkor használhatja a hagyományos kézi beállítást, kicsivel a varázsló gombja alatt.    </string>
     <string name="title_advanced_hint_remark">        Az opciók fülekre vannak osztva, és azok tovább szekciókra, kinézet szerint rendezve, és mind kereshető.
     </string>
     <string name="title_advanced_hint_options">        A legtöbb beállításra nem lesz szüksége, és mivel egyes beállítások elég specifikusak,
@@ -485,6 +487,7 @@
     <string name="title_advanced_open_safe">Csak biztonságos kapcsolatok megnyitása</string>
     <string name="title_advanced_http_redirect">Engedélyezi a kapcsolat-átirányítást</string>
     <string name="title_advanced_bouncy_castle">A Bouncy Castle biztonságos kapcsolat szolgáltatást (JSSE) használja</string>
+    <string name="title_advanced_local_network">Helyi hálózat elérése</string>
     <string name="title_advanced_manage_connectivity">Adatkapcsolat kezelése</string>
     <string name="title_advanced_caption_general">Általános</string>
     <string name="title_advanced_caption_navigation">Navigáció</string>
@@ -1316,6 +1319,7 @@
     <string name="title_quick_actions_snooze">Szundi</string>
     <string name="title_quick_actions_clear">Kijelölés megszüntetése a művelet után</string>
     <string name="title_trash">Kuka</string>
+    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Beszélgetés törlése</string>
     <string name="title_trash_selection">Kijelöltek törlése</string>
     <string name="title_copy">Másolás &#8230;</string>
     <string name="title_copy_to">Másolás ide &#8230;</string>
@@ -1649,6 +1653,7 @@
     <string name="title_search_with_unseen">Olvasatlan</string>
     <string name="title_search_with_flagged">Csillagozott</string>
     <string name="title_search_with_hidden">Rejtett (csak az eszközön)</string>
+    <string name="title_search_with_importance">Fontosság (csak az eszközön)</string>
     <string name="title_search_with_encrypted">Titkosított (csak az eszközön)</string>
     <string name="title_search_with_attachments">Melléklete van (csak az eszközön)</string>
     <string name="title_search_with_size">Üzenetméret nagyobb, mint</string>
@@ -2351,7 +2356,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Ki</item>
-        <item comment="undoNames Number of seconds to show the undo popup">1,25 mp</item>
+        <item>1,25 mp</item>
         <item>2,5 mp</item>
         <item>5 mp</item>
         <item>7,5 mp</item>

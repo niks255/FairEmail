@@ -72,7 +72,7 @@ For authorizing:
 * Free.fr, see [question 157](#faq157)
 * Posteo: please check if [additional email account protection](https://posteo.de/en/help/activating-additional-email-account-protection) ([German](https://posteo.de/hilfe/zusaetzlichen-postfachschutz-deaktivieren)) isn't enabled
 * Posteo: in some cases you need to use [an app password](https://posteo.de/en/help/app-passwords) ([German](https://posteo.de/hilfe/anwendungs-passwoerter))
-* Posteo: not that there is [no spam folder](https://posteo.de/en/help/how-does-the-posteo-spam-filter-work) ([German](https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter))
+* Posteo: note that there is [no spam folder](https://posteo.de/en/help/how-does-the-posteo-spam-filter-work) ([German](https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter))
 * Posteo: if you want to synchronize contacts, please [see here](https://posteo.de/en/help/how-do-i-set-up-synchronisation-of-contacts-with-an-android-address-book)
 * Web.de: please check if [IMAP is enabled](https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html)
 * Web.de: with two factor authentication you must use [an app password](https://web.de/email/sicherheit/zwei-faktor-authentifizierung/)
@@ -171,7 +171,7 @@ Related questions:
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23redmi)
 
-On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices, some Oppo devices, some Samsung devices, some Sony (Xperia) devices, some Motorola devices, and possibly other devices running Android 12,
+On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices, some Oppo devices, some Samsung devices, some Sony (Xperia) devices, some Motorola devices, and possibly other devices running Android 12 or 13,
 the database occasionally gets corrupted, especially after installing an update,
 resulting in total data loss (on the device only, unless you are using a POP3 account with the option *Leave messages on server* disabled).
 
@@ -476,6 +476,7 @@ The following Android permissions are **required**:
 * *ask to ignore battery optimizations* (REQUEST_IGNORE_BATTERY_OPTIMIZATIONS): to disable battery optimizations, please see [this FAQ](#faq175) for more information
 * *allow the app to show notifications* (POST_NOTIFICATIONS): to show new message notifications and (account) warnings and errors (Android 13 and later only)
 * *Google Play (in-app) billing service* (BILLING): for in-app purchases
+* *Nearby devices* (ACCESS_LOCAL_NETWORK): to access email servers via local network addresses (Android 17 and later only; not available in the Play Store release)
 
 <br />
 
@@ -1293,6 +1294,8 @@ This will result in searching in the subject or text (only) like this:
 ("apple" AND "banana" AND NOT "cherry") OR "nuts"
 ```
 
+<br>
+
 Since version 1.1980 it is possible to use these prefixes as a search expression:
 
 ```
@@ -1304,6 +1307,10 @@ keyword:<keyword>
 ```
 
 There should be <ins>no space</ins> between the prefix and the search term, which will be applied as an AND-condition.
+
+This will **only** work for searching on the server!
+
+<br>
 
 Only AND conditions (+) and NOT conditions (-) can be used for on-device searching (since version 1.1981).
 If you try to use other search expressions, you get the error *Select a folder for a complex search*,
@@ -1328,6 +1335,9 @@ Using the search index is a pro feature.
 <br />
 
 In the case of the error '*User is authenticated but not connected*', please see [this FAQ](#faq139).
+
+In the case of the error '... *The user could not be authenticated as the grant is expired. The user must sign in again.* ...',
+please go to the settings via the navigation menu (left side menu), tap on the wizard button, select *Outlook/Office* and follow the steps to authenticate the account again.
 
 <br>
 
@@ -3709,6 +3719,9 @@ you can enable native DKIM in the debug panel, which appears when you enable deb
 In this case, the shield will be green only when DKIM passes and the signer domain matches that of the sender (=alignment).
 Please be aware that this option will increase both data and battery usage.
 
+Note that a service like [mail tester](https://mail-tester.com/) basically performs the same checks as an email server can but not must do to populate the *Authentication-Results* header.
+This means that such a service can say 'all okay' while the app reports 'inconclusive' because the email server didn't perform the checks.
+
 FairEmail can show a warning flag too if the domain name of the (reply) email address of the sender does not define an MX record pointing to an email server.
 This can be enabled in the receive settings. Be aware that this will slow down synchronization of messages significantly.
 
@@ -5595,6 +5608,9 @@ Since apps can't update themselves, updates can't be automatically installed.
 However, you can easily install an update via a button in the update available notification.
 You could use the [IzzyOnDroid F-Droid Repository](https://apt.izzysoft.de/fdroid/) to manage GitHub updates.
 
+The GitHub "[large](https://developer.android.com/guide/topics/manifest/application-element#largeHeap)" version will request more working memory from Android,
+which may be necessary when more than 10-20 accounts are configured.
+
 <br />
 
 <a name="faq174"></a>
@@ -6268,6 +6284,7 @@ visible as a short delay between tapping on a link and the link confirmation dia
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq201)
 
+**Unfortunately, the Certificate Transparency library isn't maintained anymore, and therefore Certificate Transparency has been disabled in version 1.2320.**
 
 Please see [this article](https://certificate.transparency.dev/howctworks/) about what certificate transparency is.
 Alternatively, see [this Wikipedia article](https://en.wikipedia.org/wiki/Certificate_Transparency).

@@ -672,7 +672,7 @@ public abstract class SelectionTracker<K> {
          *
          * @param toolTypes the tool types to be used
          * @return this
-         * @deprecated GestureSelection is best bound to {@link MotionEvent#TOOL_TYPE_FINGER},
+         * deprecated GestureSelection is best bound to {@link MotionEvent#TOOL_TYPE_FINGER},
          * and only that tool type. This method will be removed in a future release.
          */
         //@Deprecated
@@ -710,7 +710,7 @@ public abstract class SelectionTracker<K> {
          *
          * @param toolTypes the tool types to be used
          * @return this
-         * @deprecated PointerSelection is best bound to {@link MotionEvent#TOOL_TYPE_MOUSE},
+         * deprecated PointerSelection is best bound to {@link MotionEvent#TOOL_TYPE_MOUSE},
          * and only that tool type. This method will be removed in a future release.
          */
         //@Deprecated

@@ -4,6 +4,9 @@
     android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.ACCESS_LOCAL_NETWORK"
+        android:minSdkVersion="37" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -20,9 +23,9 @@
     <uses-permission android:name="android.permission.DETECT_SCREEN_RECORDING" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
-<!--
-    <uses-permission android:name="com.android.vending.BILLING" /> 
--->
+
+    <uses-permission android:name="com.android.vending.BILLING" />
+
     <!-- OAuth -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission
@@ -124,8 +127,6 @@
         android:backupAgent=".FairEmailBackupAgent"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:description="@string/app_name"
-        android:enableOnBackInvokedCallback="true"
-        android:extractNativeLibs="true"
         android:forceDarkAllowed="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"

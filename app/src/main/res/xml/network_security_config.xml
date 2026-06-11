@@ -7,5 +7,6 @@
             <certificates src="system" />
             <certificates src="user" />
         </trust-anchors>
+        <certificateTransparency enabled="false" />
     </base-config>
 </network-security-config>

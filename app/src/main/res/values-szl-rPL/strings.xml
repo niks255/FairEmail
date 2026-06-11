@@ -373,6 +373,9 @@
     <string name="title_advanced_hint_title">Ustawienia zaawansowane</string>
     <string name="title_advanced_hint_message">        Przechodzisz do bardziej zaawansowanych opcji.         Wszystkie opcje mają powszechnie używane wartości standardowe, których nie trzeba zmieniać, chyba że masz inne preferencje.
     </string>
+    <string name="title_advanced_hint_configure">Nie musisz być tutaj, aby skonfigurować konto. W tym celu skorzystaj z przycisku kreatora szybkiej konfiguracji.
+        Kreator szybkiej konfiguracji działa prawie zawsze, ale jeśli tak się nie stanie, możesz skorzystać z klasycznej konfiguracji ręcznej, dostępnej nieco poniżej przycisku kreatora.
+    </string>
     <string name="title_advanced_hint_remark">Opcje są podzielone na kategorie według zakładek, podzielone na sekcje, uporządkowane według wyglądu lub użycia i można je przeszukiwać.
     </string>
     <string name="title_advanced_hint_options">        Nie będziesz potrzebować większości opcji, ponieważ niektóre z nich są dość specyficzne.
@@ -515,6 +518,7 @@
     <string name="title_advanced_open_safe">Otwieraj tylko bezpieczne połączenia</string>
     <string name="title_advanced_http_redirect">Zezwalaj na przekierowanie połączenia</string>
     <string name="title_advanced_bouncy_castle">Używaj dostawcy bezpiecznych gniazd Bouncy Castle (JSSE)</string>
+    <string name="title_advanced_local_network">Uprawnienia sieci lokalnej</string>
     <string name="title_advanced_manage_connectivity">Zarządzaj połączeniami</string>
     <string name="title_advanced_caption_general">Ogólne</string>
     <string name="title_advanced_caption_navigation">Nawigacja</string>
@@ -1348,6 +1352,7 @@
     <string name="title_quick_actions_snooze">Odłóż</string>
     <string name="title_quick_actions_clear">Wyczyść zaznaczenie po akcji</string>
     <string name="title_trash">Kosz</string>
+    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Usuń rozmowę</string>
     <string name="title_trash_selection">Wybór kosza</string>
     <string name="title_copy">Kopiuj &#8230;</string>
     <string name="title_copy_to">Kopiuj do &#8230;</string>
@@ -1682,6 +1687,7 @@
     <string name="title_search_with_unseen">Nieprzeczytane</string>
     <string name="title_search_with_flagged">Oznaczone</string>
     <string name="title_search_with_hidden">Ukryte (tylko na urządzeniu)</string>
+    <string name="title_search_with_importance">Znaczenie (tylko na urządzeniu)</string>
     <string name="title_search_with_encrypted">Zaszyfrowane (tylko na urządzeniu)</string>
     <string name="title_search_with_attachments">Z załącznikami (tylko na urządzeniu)</string>
     <string name="title_search_with_size">Rozmiar wiadomości większy niż</string>
@@ -2386,7 +2392,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Wył.</item>
-        <item comment="undoNames Number of seconds to show the undo popup">1,25 s</item>
+        <item>1,25 s</item>
         <item>2,5 s</item>
         <item>5 s</item>
         <item>7,5 s</item>

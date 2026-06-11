@@ -62,6 +62,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public class FragmentDialogSearch extends FragmentDialogBase {
     private static final int MAX_SUGGESTIONS = 3;
@@ -74,6 +75,9 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         final long account = args.getLong("account", -1);
         final long folder = args.getLong("folder", -1);
         final String type = args.getString("type");
+
+        final BoundaryCallbackMessages.SearchCriteria criteria = args.getSerializable("criteria", BoundaryCallbackMessages.SearchCriteria.class);
+        final boolean server = args.getBoolean("server");
 
         final Context context = getContext();
         final boolean pro = ActivityBilling.isPro(context);
@@ -126,6 +130,8 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         final CheckBox cbUnseen = dview.findViewById(R.id.cbUnseen);
         final CheckBox cbFlagged = dview.findViewById(R.id.cbFlagged);
         final CheckBox cbHidden = dview.findViewById(R.id.cbHidden);
+        final CheckBox cbImportance = dview.findViewById(R.id.cbImportance);
+        final Spinner spImportance = dview.findViewById(R.id.spImportance);
         final CheckBox cbEncrypted = dview.findViewById(R.id.cbEncrypted);
         final CheckBox cbAttachments = dview.findViewById(R.id.cbAttachments);
         final Spinner spMessageSize = dview.findViewById(R.id.spMessageSize);
@@ -428,29 +434,113 @@ public class FragmentDialogSearch extends FragmentDialogBase {
         });
 
         ibMore.setImageLevel(1);
-        cbSearchIndex.setChecked(last_fts && fts && pro);
-        cbSearchIndex.setEnabled(fts && pro);
-        cbSenders.setChecked(last_search_senders);
-        cbRecipients.setChecked(last_search_recipients);
-        cbSubject.setChecked(last_search_subject);
-        cbKeywords.setChecked(last_search_keywords);
-        cbMessage.setChecked(last_search_message);
-        tvSearchTextUnsupported.setText(getString(R.string.title_search_text_unsupported,
-                "full text search not supported"));
-        cbNotes.setChecked(last_search_notes);
-        cbFileNames.setChecked(last_search_filenames);
-        cbSearchTrash.setChecked(last_search_trash);
-        cbSearchJunk.setChecked(last_search_junk);
-        tvAfter.setText(null);
-        tvBefore.setText(null);
-        cbSearchDevice.setChecked(last_search_device);
-        cbSearchDevice.setEnabled(account > 0 && folder > 0);
+
+        if (criteria == null) {
+            cbSearchIndex.setChecked(last_fts && fts && pro);
+            cbSearchIndex.setEnabled(fts && pro);
+            cbSenders.setChecked(last_search_senders);
+            cbRecipients.setChecked(last_search_recipients);
+            cbSubject.setChecked(last_search_subject);
+            cbKeywords.setChecked(last_search_keywords);
+            cbMessage.setChecked(last_search_message);
+            tvSearchTextUnsupported.setText(getString(R.string.title_search_text_unsupported,
+                    "full text search not supported"));
+            cbNotes.setChecked(last_search_notes);
+            cbFileNames.setChecked(last_search_filenames);
+            cbSearchTrash.setChecked(last_search_trash);
+            cbSearchJunk.setChecked(last_search_junk);
+            spImportance.setSelection(1);
+            tvAfter.setText(null);
+            tvBefore.setText(null);
+            cbSearchDevice.setChecked(last_search_device);
+            cbSearchDevice.setEnabled(account > 0 && folder > 0);
+        } else {
+            etQuery.setText(criteria.query);
+            cbSearchIndex.setChecked(criteria.fts);
+            cbSenders.setChecked(criteria.in_senders);
+            cbRecipients.setChecked(criteria.in_recipients);
+            cbSubject.setChecked(criteria.in_subject);
+            cbKeywords.setChecked(criteria.in_keywords);
+            cbMessage.setChecked(criteria.in_message);
+            cbNotes.setChecked(criteria.in_notes);
+            cbFileNames.setChecked(criteria.in_filenames);
+            cbHeaders.setChecked(criteria.in_headers);
+            cbHtml.setChecked(criteria.in_html);
+            // criteria.with_folder_type
+            cbUnseen.setChecked(criteria.with_unseen);
+            cbFlagged.setChecked(criteria.with_flagged);
+            cbHidden.setChecked(criteria.with_hidden);
+            cbImportance.setChecked(criteria.with_importance != null);
+            spImportance.setSelection(criteria.with_importance == null ? 0 : criteria.with_importance);
+            cbEncrypted.setChecked(criteria.with_encrypted);
+            cbAttachments.setChecked(criteria.with_attachments);
+
+            if (criteria.with_size != null) {
+                int[] sizes = getResources().getIntArray(R.array.sizeValues);
+                for (int pos = 0; pos < sizes.length; pos++)
+                    if (Objects.equals(sizes[pos], criteria.with_size)) {
+                        spMessageSize.setSelection(pos);
+                        break;
+                    }
+            }
+
+            cbSearchTrash.setChecked(criteria.in_trash);
+            cbSearchJunk.setChecked(criteria.in_junk);
+
+            DateFormat DF = Helper.getDateInstance(getContext());
+
+            if (criteria.after == null) {
+                tvAfter.setText(null);
+                tvAfter.setTag(null);
+            } else {
+                tvAfter.setText(DF.format(criteria.after));
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(criteria.after);
+                tvAfter.setTag(cal);
+            }
+
+            if (criteria.before == null) {
+                tvBefore.setText(null);
+                tvBefore.setTag(null);
+            } else {
+                tvBefore.setText(DF.format(criteria.before));
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(criteria.before);
+                tvBefore.setTag(cal);
+            }
+
+            cbSearchDevice.setChecked(!server);
+        }
 
         grpMore.setVisibility(View.GONE);
         cbHeaders.setVisibility(View.GONE);
         cbHtml.setVisibility(View.GONE);
         cbSearchTrash.setVisibility(View.GONE);
         cbSearchJunk.setVisibility(View.GONE);
+
+        final Runnable checkOnDevice = new RunnableEx("checkOnDevice") {
+            @Override
+            protected void delegate() {
+                boolean device = cbSearchDevice.isChecked();
+                cbNotes.setEnabled(device);
+                cbFileNames.setEnabled(device);
+                cbHeaders.setEnabled(device);
+                cbHtml.setEnabled(device);
+                cbHidden.setEnabled(device);
+                cbImportance.setEnabled(device);
+                spImportance.setEnabled(device);
+                cbEncrypted.setEnabled(device);
+                cbAttachments.setEnabled(device);
+            }
+        };
+
+        checkOnDevice.run();
+        cbSearchDevice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull CompoundButton buttonView, boolean isChecked) {
+                checkOnDevice.run();
+            }
+        });
 
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(dview)
@@ -478,6 +568,7 @@ public class FragmentDialogSearch extends FragmentDialogBase {
                             criteria.with_unseen = cbUnseen.isChecked();
                             criteria.with_flagged = cbFlagged.isChecked();
                             criteria.with_hidden = cbHidden.isChecked();
+                            criteria.with_importance = (cbImportance.isChecked() ? spImportance.getSelectedItemPosition() : null);
                             criteria.with_encrypted = cbEncrypted.isChecked();
                             criteria.with_attachments = cbAttachments.isChecked();
 

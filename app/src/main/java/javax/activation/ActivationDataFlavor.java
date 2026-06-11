@@ -209,7 +209,7 @@ public class ActivationDataFlavor /*extends DataFlavor*/ {
      * @param parameterName	the parameter name
      * @param parameterValue	the parameter value
      * @return			the normalized parameter value
-     * @deprecated
+     * deprecated
      */
     protected String normalizeMimeTypeParameter(String parameterName,
 						String parameterValue) {
@@ -226,7 +226,7 @@ public class ActivationDataFlavor /*extends DataFlavor*/ {
      *
      * @param mimeType	the MIME type
      * @return		the normalized MIME type
-     * @deprecated
+     * deprecated
      */
     protected String normalizeMimeType(String mimeType) {
 	return mimeType;

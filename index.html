@@ -96,7 +96,7 @@
 <li>Free.fr, see <a href="#faq157">question 157</a></li>
 <li>Posteo: please check if <a href="https://posteo.de/en/help/activating-additional-email-account-protection">additional email account protection</a> (<a href="https://posteo.de/hilfe/zusaetzlichen-postfachschutz-deaktivieren">German</a>) isn’t enabled</li>
 <li>Posteo: in some cases you need to use <a href="https://posteo.de/en/help/app-passwords">an app password</a> (<a href="https://posteo.de/hilfe/anwendungs-passwoerter">German</a>)</li>
-<li>Posteo: not that there is <a href="https://posteo.de/en/help/how-does-the-posteo-spam-filter-work">no spam folder</a> (<a href="https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter">German</a>)</li>
+<li>Posteo: note that there is <a href="https://posteo.de/en/help/how-does-the-posteo-spam-filter-work">no spam folder</a> (<a href="https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter">German</a>)</li>
 <li>Posteo: if you want to synchronize contacts, please <a href="https://posteo.de/en/help/how-do-i-set-up-synchronisation-of-contacts-with-an-android-address-book">see here</a></li>
 <li>Web.de: please check if <a href="https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html">IMAP is enabled</a></li>
 <li>Web.de: with two factor authentication you must use <a href="https://web.de/email/sicherheit/zwei-faktor-authentifizierung/">an app password</a></li>
@@ -174,7 +174,7 @@
 <p><br /></p>
 <p><strong>Xiaomi Redmi / Realme / OnePlus / Oppo / Sony / Motorola</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23redmi">Google Translate</a></p>
-<p>On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices, some Oppo devices, some Samsung devices, some Sony (Xperia) devices, some Motorola devices, and possibly other devices running Android 12, the database occasionally gets corrupted, especially after installing an update, resulting in total data loss (on the device only, unless you are using a POP3 account with the option <em>Leave messages on server</em> disabled).</p>
+<p>On some Xiaomi Redmi (Note) devices, some Realme devices, some OnePlus devices, some Oppo devices, some Samsung devices, some Sony (Xperia) devices, some Motorola devices, and possibly other devices running Android 12 or 13, the database occasionally gets corrupted, especially after installing an update, resulting in total data loss (on the device only, unless you are using a POP3 account with the option <em>Leave messages on server</em> disabled).</p>
 <p>The cause of this problem are disk I/O errors due to an Android bug (more likely) or maybe a hardware issue (less likely), please <a href="https://www.sqlite.org/rescode.html#ioerr_write">see here</a>.</p>
 <p>“<em>This error might result from a hardware malfunction or because a filesystem came unmounted while the file was open.</em>”</p>
 <p>This can’t be fixed by the app and must be fixed by the device manufacturer with an Android update.</p>
@@ -460,6 +460,7 @@
 <li><em>ask to ignore battery optimizations</em> (REQUEST_IGNORE_BATTERY_OPTIMIZATIONS): to disable battery optimizations, please see <a href="#faq175">this FAQ</a> for more information</li>
 <li><em>allow the app to show notifications</em> (POST_NOTIFICATIONS): to show new message notifications and (account) warnings and errors (Android 13 and later only)</li>
 <li><em>Google Play (in-app) billing service</em> (BILLING): for in-app purchases</li>
+<li><em>Nearby devices</em> (ACCESS_LOCAL_NETWORK): to access email servers via local network addresses (Android 17 and later only; not available in the Play Store release)</li>
 </ul>
 <p><br /></p>
 <p>The following Android permissions are <strong>optional</strong>:</p>
@@ -858,6 +859,7 @@ openssl pkcs12 -export -legacy -in certbag.pem &gt;legacy.p12</code></pre>
 <pre><code>apple +banana -cherry ?nuts</code></pre>
 <p>This will result in searching in the subject or text (only) like this:</p>
 <pre><code>(&quot;apple&quot; AND &quot;banana&quot; AND NOT &quot;cherry&quot;) OR &quot;nuts&quot;</code></pre>
+<p><br></p>
 <p>Since version 1.1980 it is possible to use these prefixes as a search expression:</p>
 <pre><code>from:&lt;email address&gt;
 to:&lt;email address&gt;
@@ -865,6 +867,8 @@ cc:&lt;email address&gt;
 bcc:&lt;email address&gt;
 keyword:&lt;keyword&gt;</code></pre>
 <p>There should be <ins>no space</ins> between the prefix and the search term, which will be applied as an AND-condition.</p>
+<p>This will <strong>only</strong> work for searching on the server!</p>
+<p><br></p>
 <p>Only AND conditions (+) and NOT conditions (-) can be used for on-device searching (since version 1.1981). If you try to use other search expressions, you get the error <em>Select a folder for a complex search</em>, which means that a folder in an account’s folder list must be selected in order to perform the search on the server.</p>
 <p><br></p>
 <p>Since version 1.1733 it is possible to save searches, which means that a named entry in the navigation menu will be created to repeat the same search later. You can save a search after searching by tapping on the save button in the top action bar. After repeating a search there will be a delete button at the same place to delete a saved search again. A saved search might be useful to quickly search for starred messages, or for messages from a specific email address, etc.</p>
@@ -874,6 +878,7 @@ keyword:&lt;keyword&gt;</code></pre>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq14">Google Translate</a></p>
 <p><br /></p>
 <p>In the case of the error ‘<em>User is authenticated but not connected</em>’, please see <a href="#faq139">this FAQ</a>.</p>
+<p>In the case of the error ‘… <em>The user could not be authenticated as the grant is expired. The user must sign in again.</em> …’, please go to the settings via the navigation menu (left side menu), tap on the wizard button, select <em>Outlook/Office</em> and follow the steps to authenticate the account again.</p>
 <p><br></p>
 <blockquote>
 <p><strong>IMPORTANT: If you came here via a warning in the app, you MUST take action!</strong></p>
@@ -1989,6 +1994,7 @@ Y1 OK CAPABILITY completed</code></pre>
 <p>If you receive a lot of spam messages in your inbox, the best you can do is to contact the email provider to ask if spam filtering can be improved.</p>
 <p>Also, FairEmail can show a small red warning flag when DKIM, SPF or <a href="https://en.wikipedia.org/wiki/DMARC">DMARC</a> authentication failed on the receiving server. You can enable/disable <a href="https://en.wikipedia.org/wiki/Email_authentication">authentication verification</a> in the display settings. The feature depends on the header <a href="https://datatracker.ietf.org/doc/html/rfc7601">Authentication-Results</a>, which the receiving email server should add. The shield will be green only if DMARC passes (=alignment) and either <a href="https://en.wikipedia.org/wiki/Sender_Policy_Framework">SPF</a> or <a href="https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail">DKIM</a> passes.</p>
 <p>If the email server doesn’t add an <em>Authentication-Results</em> header, which is optional, you can enable native DKIM in the debug panel, which appears when you enable debug mode in the miscellaneous settings tab page (last option). In this case, the shield will be green only when DKIM passes and the signer domain matches that of the sender (=alignment). Please be aware that this option will increase both data and battery usage.</p>
+<p>Note that a service like <a href="https://mail-tester.com/">mail tester</a> basically performs the same checks as an email server can but not must do to populate the <em>Authentication-Results</em> header. This means that such a service can say ‘all okay’ while the app reports ‘inconclusive’ because the email server didn’t perform the checks.</p>
 <p>FairEmail can show a warning flag too if the domain name of the (reply) email address of the sender does not define an MX record pointing to an email server. This can be enabled in the receive settings. Be aware that this will slow down synchronization of messages significantly.</p>
 <p>If the domain name of the sender and the domain name of the reply address differ, the warning flag will be shown too because this is most often the case with phishing messages. If desired, this can be disabled in the receive settings (since version 1.1506).</p>
 <p>If legitimate messages are failing authentication, you should notify the sender because this will result in a high risk of messages ending up in the spam folder. Moreover, without proper authentication there is a risk the sender will be impersonated. The sender might use <a href="https://www.mail-tester.com/">this tool</a> to check authentication and other things.</p>
@@ -2830,6 +2836,7 @@ DNS lookup 108.27.250.142.zen.spamhaus.org -&gt;
 <p>The Play store and GitHub version are signed with the <a href="https://github.com/M66B/FairEmail#downloads">same digital signature</a> (security certificate). The F-Droid build is signed by the F-Droid organization with a different digital key. This means you can’t update the F-Droid build with the Play store or GitHub version or the other way around without reinstalling. However, it is possible to install the GitHub version over the Play store version, and the Play store app will do the same, when auto-updating isn’t disabled for the app in the app description.</p>
 <p>The version in the <a href="https://play.google.com/apps/testing/eu.faircode.email">Play Store test program</a> is more often updated, but not all GitHub releases will be released as Play Store test version.</p>
 <p>The GitHub version will automatically check for updates and notify you when there is an update available. Since apps can’t update themselves, updates can’t be automatically installed. However, you can easily install an update via a button in the update available notification. You could use the <a href="https://apt.izzysoft.de/fdroid/">IzzyOnDroid F-Droid Repository</a> to manage GitHub updates.</p>
+<p>The GitHub “<a href="https://developer.android.com/guide/topics/manifest/application-element#largeHeap">large</a>” version will request more working memory from Android, which may be necessary when more than 10-20 accounts are configured.</p>
 <p><br /></p>
 <p><a name="faq174"></a> <strong>(174) Is auto discovery supported?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq174">Google Translate</a></p>
@@ -3132,6 +3139,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p><br></p>
 <p><a name="faq201"></a> <strong>(201) What is certificate transparency?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq201">Google Translate</a></p>
+<p><strong>Unfortunately, the Certificate Transparency library isn’t maintained anymore, and therefore Certificate Transparency has been disabled in version 1.2320.</strong></p>
 <p>Please see <a href="https://certificate.transparency.dev/howctworks/">this article</a> about what certificate transparency is. Alternatively, see <a href="https://en.wikipedia.org/wiki/Certificate_Transparency">this Wikipedia article</a>.</p>
 <p>When certificate transparency is enabled in the connection-settings tab page of the app, the <a href="https://github.com/GoogleChrome/CertificateTransparency/blob/master/ct_policy.md">Chrome Certificate Transparency Policy</a> will be applied. The CT log will be downloaded from <a href="https://www.gstatic.com/ct/log_list/v3/all_logs_list.json">https://www.gstatic.com/</a>.</p>
 <p>FairEmail uses <a href="https://github.com/appmattus/certificatetransparency">this library</a> to implement certificate transparency via a custom trust manager.</p>

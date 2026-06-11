@@ -20,6 +20,7 @@ package eu.faircode.email;
 */
 
 import static android.app.ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED;
+import static android.app.ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOW_ALWAYS;
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
 import static com.google.android.material.textfield.TextInputLayout.END_ICON_NONE;
@@ -2128,8 +2129,10 @@ public class Helper {
             ActivityOptions options = ActivityOptions.makeBasic();
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
                 options.setPendingIntentBackgroundActivityLaunchAllowed(true);
-            else
+            else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA)
                 options.setPendingIntentBackgroundActivityStartMode(MODE_BACKGROUND_ACTIVITY_START_ALLOWED);
+            else
+                options.setPendingIntentBackgroundActivityStartMode(MODE_BACKGROUND_ACTIVITY_START_ALLOW_ALWAYS);
             return options.toBundle();
         }
     }
@@ -3158,12 +3161,20 @@ public class Helper {
     }
 
     static long getAvailableStorageSpace() {
-        StatFs stats = new StatFs(Environment.getDataDirectory().getAbsolutePath());
-        return stats.getAvailableBlocksLong() * stats.getBlockSizeLong();
+        return getAvailableStorageSpace(Environment.getDataDirectory().getAbsolutePath());
+    }
+
+    static long getAvailableStorageSpace(String dir) {
+        StatFs stats = new StatFs(dir);
+        return stats.getAvailableBytes();
     }
 
     static long getTotalStorageSpace() {
-        StatFs stats = new StatFs(Environment.getDataDirectory().getAbsolutePath());
+        return getTotalStorageSpace(Environment.getDataDirectory().getAbsolutePath());
+    }
+
+    static long getTotalStorageSpace(String dir) {
+        StatFs stats = new StatFs(dir);
         return stats.getTotalBytes();
     }
 

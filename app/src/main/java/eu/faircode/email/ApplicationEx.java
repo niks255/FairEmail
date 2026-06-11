@@ -1127,6 +1127,14 @@ public class ApplicationEx extends Application
                 editor.putInt("viewport_height", 0);
         }
 
+        if (version < 2317 && "a".equals(BuildConfig.REVISION)) {
+            boolean compact = prefs.getBoolean("compact", false);
+            if (!compact) {
+                editor.remove("sender_ellipsize");
+                editor.remove("subject_ellipsize");
+            }
+        }
+
         if (version < BuildConfig.VERSION_CODE)
             editor.putInt("previous_version", version);
         editor.putInt("version", BuildConfig.VERSION_CODE);
@@ -1135,6 +1143,10 @@ public class ApplicationEx extends Application
         if (Helper.isAndroid15() && last_sdk <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
             editor.remove("setup_reminder");
         editor.putInt("last_sdk", Build.VERSION.SDK_INT);
+
+        String onclose = prefs.getString("onclose", null);
+        if ("none".equals(onclose))
+            editor.remove("onclose");
 
         editor.apply();
     }

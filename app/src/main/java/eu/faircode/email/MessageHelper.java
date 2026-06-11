@@ -302,6 +302,13 @@ public class MessageHelper {
             "$social" // mailbox.org
     ));
 
+    private static final List<String> FLAG_USER = Collections.unmodifiableList(Arrays.asList(
+            FLAG_CLASSIFIED,
+            FLAG_FILTERED,
+            FLAG_LOW_IMPORTANCE,
+            FLAG_HIGH_IMPORTANCE
+    ));
+
     // https://tools.ietf.org/html/rfc4021
 
     static void setSystemProperties(Context context) {
@@ -1589,6 +1596,22 @@ public class MessageHelper {
                 return false;
 
         return true;
+    }
+
+    static boolean hasUserKeywords(String[] keywords) {
+        if (keywords == null)
+            return false;
+        for (String keyword : keywords) {
+            if (TextUtils.isEmpty(keyword))
+                continue;
+            if (FLAG_USER.contains(keyword))
+                return true;
+            if (FLAG_BLACKLIST.contains(keyword))
+                continue;
+            if (!keyword.startsWith("$"))
+                return true;
+        }
+        return false;
     }
 
     String getMessageID() throws MessagingException {
@@ -2900,6 +2923,9 @@ public class MessageHelper {
         if (sender == null)
             sender = getAddressHeader("X-SimpleLogin-Original-From");
         if (sender == null)
+            // X-AnonAddy-Original-Sender: <email>
+            // X-AnonAddy-Original-Envelope-From: <email>
+            // X-AnonAddy-Original-From-Header: <name>
             sender = getAddressHeader("X-AnonAddy-Original-From-Header");
         if (sender == null)
             sender = getAddressHeader("Sender");
@@ -3025,8 +3051,7 @@ public class MessageHelper {
                     mailto = "mailto:" + unsubscribe;
                 else {
                     if (link == null) {
-                        Uri uri = Uri.parse(unsubscribe);
-                        if (UriHelper.isHyperLink(uri))
+                        if (UriHelper.isHyperLink(unsubscribe))
                             link = unsubscribe;
                         else {
                             Pattern p =

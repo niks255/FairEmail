@@ -1,10 +1,11 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'de.undercouch.download'
+plugins {
+    id 'com.android.application'
+    id 'de.undercouch.download'
+}
 
-def getVersionCode = { -> return 2315 }
+def getVersionCode = { -> return 2320 }
 def getRevision = { -> return "a" }
-def getReleaseName = { -> return "Diuqin" }
+def getReleaseName = { -> return "Elopteryx" }
 // https://en.wikipedia.org/wiki/List_of_dinosaur_genera
 
 def keystoreProperties = new Properties()
@@ -24,9 +25,9 @@ android {
     // https://developer.android.com/studio/releases#api-level-support
     defaultConfig {
         applicationId "eu.faircode.email"
-        compileSdk = 36
-        minSdkVersion 21
-        targetSdkVersion 36
+        compileSdk = 37
+        minSdkVersion 23
+        targetSdkVersion 37
         //targetSdkPreview "VanillaIceCream"
         versionCode getVersionCode()
         versionName "1." + getVersionCode()
@@ -63,7 +64,7 @@ android {
 
         // https://developer.android.com/ndk/downloads
         // https://developer.android.com/guide/practices/page-sizes
-        ndkVersion = "27.2.12479018" // r27c
+        ndkVersion = "27.3.13750724" // r27d
         ndk {
             // sqlite
             // https://developer.android.com/ndk/guides/abis
@@ -109,11 +110,12 @@ android {
         // https://developer.android.com/studio/write/java8-support#groovy
         // sudo update-alternatives --install /usr/bin/java java /usr/local/android-studio/jbr/bin/java 1
         coreLibraryDesugaringEnabled = true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
     }
 
     externalNativeBuild {
@@ -186,7 +188,7 @@ android {
         release {
             debuggable = false
             minifyEnabled = true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             zipAlignEnabled = true
             signingConfig = signingConfigs.release
             buildConfigField "String", "TX_URI", "\"\""
@@ -198,7 +200,7 @@ android {
             applicationIdSuffix '.debug'
             debuggable = true
             minifyEnabled = false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "TX_URI", localProperties.getProperty("paypal.uri", "\"\"")
             buildConfigField "String", "GPA_URI", localProperties.getProperty("gpa.uri", "\"\"")
             buildConfigField "String", "INFO_URI", localProperties.getProperty("info.uri", "\"\"")
@@ -358,41 +360,17 @@ android {
         }
     }
 
-    variantFilter { variant ->
-        def flavors = variant.flavors*.name
-        // Builds: release, debug
-        // Flavors: github, large, fdroid, play
-        if (variant.buildType.name == "debug" &&
-                (flavors.contains("amazon") ||
-                        flavors.contains("fdroid") ||
-                        flavors.contains("large") ||
-                        flavors.contains("play"))) {
-            setIgnore(true)
+    androidComponents {
+        beforeVariants(selector().all()) { variantBuilder ->
+            def flavors = variantBuilder.productFlavors.collect { it.second }
+            if (variantBuilder.buildType == "debug" &&
+                    (flavors.contains("amazon") ||
+                            flavors.contains("fdroid") ||
+                            flavors.contains("large") ||
+                            flavors.contains("play"))) {
+                variantBuilder.enable = false
+            }
         }
-    }
-
-    // https://stackoverflow.com/questions/28948538/
-    applicationVariants.configureEach { variant ->
-        if (variant.buildType.name == "debug")
-            variant.buildConfigField "String", "MXTOOLBOX_URI", "\"https://mxtoolbox.com\""
-        else
-            variant.buildConfigField "String", "MXTOOLBOX_URI", "\"\""
-
-        //if (variant.getBuildType().isMinifyEnabled())
-        //    variant.assembleProvider.get().doLast {
-        //        for (file in variant.getMappingFileProvider().get().files)
-        //            if (file != null && file.exists()) {
-        //                def dir = "${rootDir}/app/schemas/mapping"
-        //                def name = "$archivesBaseName-$variant.baseName-$file.name"
-        //                def target = new File(dir, name)
-        //                if (!target.exists())
-        //                    copy {
-        //                        from file
-        //                        into dir
-        //                        rename { String fileName -> name }
-        //                    }
-        //            }
-        //    }
     }
 }
 
@@ -497,14 +475,6 @@ tasks.register('upload', Exec) {
             "filename=FairEmail-v1." + getVersionCode() + getRevision() + "-" + target + "-release.apk"
 }
 
-repositories {
-    google()
-    mavenCentral()
-    maven { url = "https://jitpack.io" }
-    //maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    //maven { url "https://jakarta.oss.sonatype.org/content/repositories/snapshots/" }
-}
-
 configurations.configureEach {
     // Workaround https://issuetracker.google.com/issues/138441698
     // Support @69c481c39a17d4e1e44a4eb298bb81c48f226eef
@@ -537,7 +507,7 @@ configurations.configureEach {
         } else if (details.requested.group == "androidx.lifecycle" &&
                 details.requested.name != "lifecycle-extensions") {
             //print("Pinning " + details.requested.group + ":" + details.requested.name + "\n")
-            details.useVersion "2.8.6"
+            details.useVersion "2.10.0"
         } else if (details.requested.group == "org.apache.poi") {
             //print("Pinning " + details.requested.group + ":" + details.requested.name + "\n")
             details.useVersion "3.17"
@@ -556,38 +526,38 @@ dependencies {
 
     def desugar_version = "2.0.4"
     def startup_version = "1.2.0"
-    def annotation_version_experimental = "1.5.0" // 1.6.0 (requires min SDK 23)
-    def core_version = "1.17.0" // 1.18.0/1.19.0-alpha01 (requires min SDK 23)
+    def annotation_version_experimental = "1.6.0"
+    def core_version = "1.19.0"
     def core_remoteviews_version = "1.1.0"
     def appcompat_version = "1.7.1" // 1.8.0-alpha01
     def emoji_version = "1.6.0"
     def flatbuffers_version = "2.0.0"
-    def activity_version = "1.11.0" // 1.13.0 (depends on life-cycle 2.9.4)
+    def activity_version = "1.13.0"
     def fragment_version = "1.8.9"
-    def windows_version = "1.4.0" // 1.5.1 (requires min SDK 23)
-    def webkit_version = "1.14.0" // 1.15.0/1.16.0-beta01 (requires min SDK 23)
+    def windows_version = "1.5.1" // 1.6.0-alpha03
+    def webkit_version = "1.15.0" // 1.16.0 (requires min SDK 24)
     def recyclerview_version = "1.4.0"
     def coordinatorlayout_version = "1.2.0" // 1.3.0-rc01
     def constraintlayout_version = "2.2.0"
     def viewpager_version = "1.1.0-beta01" // 1.1.0
     def material_version = "1.12.0" // 1.13.0-alpha03
-    def browser_version = "1.9.0" // 1.10.0 (requires min SDK 23)
+    def browser_version = "1.10.0"
     def lbm_version = "1.1.0"
     def swiperefresh_version = "1.2.0-beta01" // 1.2.0
     def documentfile_version = "1.1.0"
-    def lifecycle_version = "2.8.6" // 2.8.7/2.9.3/2.10.0/2.11.0-alpha03
+    def lifecycle_version = "2.10.0" // 2.11.0-rc01
     def lifecycle_extensions_version = "2.2.0"
-    def room_version = "2.4.3" // 2.5.2/2.6.1/2.7.2/2.8.4/3.0.0-alpha03
-    def sqlite_version = "2.5.1" // 2.5.2/2.6.2/2.7.0-alpha03
+    def room_version = "2.4.3" // 2.5.2/2.6.1/2.7.2/2.8.4/3.0.0-alpha04
+    def sqlite_version = "2.5.1" // 2.5.2/2.6.2/2.7.0-alpha06
     def requery_version = "3.39.2"
-    def paging_version = "2.1.2" // 3.3.6/3.4.1/3.5.0-beta01
+    def paging_version = "2.1.2" // 3.3.6/3.4.1/3.5.0
     def preference_version = "1.2.1"
-    def work_version = "2.10.5" // 2.11.2 (requires min SDK 23)
+    def work_version = "2.10.5" // 2.11.2 (requires ROOM update)
     def exif_version = "1.4.2"
-    def biometric_version = "1.2.0-alpha05" // Version 1.4.0-alpha05
+    def biometric_version = "1.2.0-alpha05" // 1.4.0-alpha07
     def billingclient_version = "7.1.1" // 8.0.0
-    def playservicesbasement_version = "18.5.0";
-    def transparency_version = "2.7.0"
+    def playservicesbasement_version = "18.10.0";
+    def transparency_version = "2.8.20"
     def javamail_version = "1.6.7"
     def jsoup_version = "1.18.3"
     def jsonpath_version = "2.9.0"
@@ -602,7 +572,7 @@ dependencies {
     def markwon_version = "4.6.2"
     def commonmark_version = "0.28.0"
     def flexmark_version = "0.64.8"
-    def bouncycastle_version = "1.83"
+    def bouncycastle_version = "1.84"
     def colorpicker_version = "0.0.15"
     def overscroll_version = "1.1.1"
     def appauth_version = "0.11.1"

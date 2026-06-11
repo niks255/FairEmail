@@ -331,23 +331,6 @@ public class DnsBlockList {
         return null;
     }
 
-    static void show(Context context, String received) {
-        String host = DnsBlockList.getFromHost(MimeUtility.unfold(received));
-        if (host == null)
-            return;
-
-        if (host.startsWith("[") && host.endsWith("]"))
-            host = host.substring(1, host.length() - 1);
-
-        Uri uri = Uri.parse(BuildConfig.MXTOOLBOX_URI)
-                .buildUpon()
-                .appendPath("/SuperTool.aspx")
-                .appendQueryParameter("action", "blacklist:" + host)
-                .appendQueryParameter("run", "toolpage")
-                .build();
-        Helper.view(context, uri, true);
-    }
-
     private static class CacheEntry {
         private final long time;
         private final boolean blocked;

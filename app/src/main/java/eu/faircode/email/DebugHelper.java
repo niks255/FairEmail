@@ -59,8 +59,11 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.LocaleList;
 import android.os.PowerManager;
+import android.os.StatFs;
 import android.os.SystemClock;
 import android.os.ext.SdkExtensions;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.security.NetworkSecurityPolicy;
@@ -378,9 +381,10 @@ public class DebugHelper {
                     if (info.getTimestamp() > from &&
                             info.getImportance() >= ActivityManager.RunningAppProcessInfo.IMPORTANCE_GONE) {
                         exits = true;
-                        sb.append(String.format("%s: %s\r\n",
+                        sb.append(String.format("%s: %s - %s\r\n",
                                 new Date(info.getTimestamp()),
-                                Helper.getExitReason(info.getReason())));
+                                Helper.getExitReason(info.getReason()),
+                                info.getDescription()));
                     }
                 if (!exits)
                     sb.append("No crashes\r\n");
@@ -466,10 +470,42 @@ public class DebugHelper {
         long storage_available = Helper.getAvailableStorageSpace();
         long storage_total = Helper.getTotalStorageSpace();
         long storage_used = Helper.getSizeUsed(context.getFilesDir());
-        sb.append(String.format("Storage space: %s/%s App: %s\r\n",
+        sb.append(String.format("Storage space: %s/%s App: %s Dir: %s\r\n",
                 Helper.humanReadableByteCount(storage_total - storage_available),
                 Helper.humanReadableByteCount(storage_total),
-                Helper.humanReadableByteCount(storage_used)));
+                Helper.humanReadableByteCount(storage_used),
+                Environment.getDataDirectory().getAbsolutePath()));
+
+        String ext = Environment.getExternalStorageDirectory().getAbsolutePath();
+        long ext_storage_available = Helper.getAvailableStorageSpace(ext);
+        long ext_storage_total = Helper.getTotalStorageSpace(ext);
+        sb.append(String.format("External storage space: %s/%s Dir: %s\r\n",
+                Helper.humanReadableByteCount(ext_storage_total - ext_storage_available),
+                Helper.humanReadableByteCount(ext_storage_total),
+                ext));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            try {
+                StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+                List<StorageVolume> volumes = storageManager.getStorageVolumes();
+
+                for (StorageVolume volume : volumes) {
+                    File dir = volume.getDirectory();
+                    StatFs stats = (dir == null ? null : new StatFs(dir.getAbsolutePath()));
+                    long total = (stats == null ? 0 : stats.getTotalBytes());
+                    long available = (stats == null ? 0 : stats.getAvailableBytes());
+                    sb.append(String.format("%s: %s/%s mounted=%b readonly=%b removable=%b path=%s\r\n",
+                            volume.getDescription(context),
+                            Helper.humanReadableByteCount(total - available),
+                            Helper.humanReadableByteCount(total),
+                            volume.getState().equals(Environment.MEDIA_MOUNTED),
+                            volume.getState().equals(Environment.MEDIA_MOUNTED_READ_ONLY),
+                            volume.isRemovable(),
+                            (dir == null ? "?" : dir.getAbsolutePath())));
+                }
+            } catch (Throwable ex) {
+                sb.append(ex).append("\r\n");
+            }
 
         long cache_used = Helper.getSizeUsed(context.getCacheDir());
         long cache_quota = Helper.getCacheQuota(context);
@@ -1175,7 +1211,7 @@ public class DebugHelper {
                 boolean ssl_harden = prefs.getBoolean("ssl_harden", false);
                 boolean ssl_harden_strict = (ssl_harden && prefs.getBoolean("ssl_harden_strict", false));
                 boolean cert_strict = prefs.getBoolean("cert_strict", true);
-                boolean cert_transparency = prefs.getBoolean("cert_transparency", false);
+                boolean cert_transparency = (prefs.getBoolean("cert_transparency", false) && false);
                 boolean open_safe = prefs.getBoolean("open_safe", false);
 
                 size += write(os, "timeout=" + timeout + "s" + (timeout == EmailService.DEFAULT_CONNECT_TIMEOUT ? "" : " !!!") + "\r\n");
@@ -1985,11 +2021,11 @@ public class DebugHelper {
                         List<ApplicationExitInfo> infos = am.getHistoricalProcessExitReasons(
                                 context.getPackageName(), 0, 100);
                         for (ApplicationExitInfo info : infos)
-                            size += write(os, String.format("%s: %s %s/%s reason=%s status=%d importance=%d\r\n",
+                            size += write(os, String.format("%s: %s %s/%s reason=%s status=%d importance=%d %s\r\n",
                                     new Date(info.getTimestamp()), info.getDescription(),
                                     Helper.humanReadableByteCount(info.getPss() * 1024L),
                                     Helper.humanReadableByteCount(info.getRss() * 1024L),
-                                    Helper.getExitReason(info.getReason()), info.getStatus(), info.getImportance()));
+                                    Helper.getExitReason(info.getReason()), info.getStatus(), info.getImportance(), info.getDescription()));
                     } catch (Throwable ex) {
                         size += write(os, String.format("%s\r\n", ex));
                     }

@@ -19,6 +19,7 @@ package eu.faircode.email;
     Copyright 2018-2026 by Marcel Bokhorst (M66B)
 */
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -115,6 +116,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
     private SwitchCompat swBouncyCastle;
     private SwitchCompat swFipsMode;
     private ImageButton ibBouncyCastle;
+    private Button btnLocalNetwork;
     private Button btnManage;
     private TextView tvNetworkMetered;
     private TextView tvNetworkRoaming;
@@ -189,6 +191,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         swBouncyCastle = view.findViewById(R.id.swBouncyCastle);
         swFipsMode = view.findViewById(R.id.swFipsMode);
         ibBouncyCastle = view.findViewById(R.id.ibBouncyCastle);
+        btnLocalNetwork = view.findViewById(R.id.btnLocalNetwork);
         btnManage = view.findViewById(R.id.btnManage);
 
         tvNetworkMetered = view.findViewById(R.id.tvNetworkMetered);
@@ -208,6 +211,9 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         grpCustomDns = view.findViewById(R.id.grpCustomDns);
         grpBC = view.findViewById(R.id.grpBC);
         grpCustomSsl = view.findViewById(R.id.grpCustomSsl);
+
+        etHost.setText("imap.vodafonemail.de");
+        etPort.setText("993");
 
         setOptions();
 
@@ -449,6 +455,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             }
         });
 
+        swCertTransparency.setEnabled(false);
         swCertTransparency.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
@@ -503,6 +510,16 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             @Override
             public void onClick(View v) {
                 Helper.view(v.getContext(), Uri.parse("https://www.bouncycastle.org/"), true);
+            }
+        });
+
+        btnLocalNetwork.setVisibility(BuildConfig.PLAY_STORE_RELEASE || Build.VERSION.SDK_INT < Build.VERSION_CODES.CINNAMON_BUN
+                ? View.GONE : View.VISIBLE);
+        btnLocalNetwork.setEnabled(!Helper.hasPermission(getContext(), Manifest.permission.ACCESS_LOCAL_NETWORK));
+        btnLocalNetwork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK}, REQUEST_PERMISSIONS);
             }
         });
 
@@ -586,7 +603,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
                         boolean ssl_harden = prefs.getBoolean("ssl_harden", false);
                         boolean ssl_harden_strict = prefs.getBoolean("ssl_harden_strict", false);
                         boolean cert_strict = prefs.getBoolean("cert_strict", true);
-                        boolean cert_transparency = prefs.getBoolean("cert_transparency", false);
+                        boolean cert_transparency = (prefs.getBoolean("cert_transparency", false) && false);
                         boolean check_names = prefs.getBoolean("check_names", !BuildConfig.PLAY_STORE_RELEASE);
                         boolean bc = prefs.getBoolean("bouncy_castle", false);
                         boolean fips = prefs.getBoolean("bc_fips", false);
@@ -766,6 +783,11 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        btnLocalNetwork.setEnabled(!Helper.hasPermission(getContext(), Manifest.permission.ACCESS_LOCAL_NETWORK));
+    }
+
     private void setOptions() {
         try {
             if (view == null || getContext() == null)
@@ -817,7 +839,7 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             swSslHardenStrict.setChecked(prefs.getBoolean("ssl_harden_strict", false));
             swSslHardenStrict.setEnabled(swSslHarden.isChecked());
             swCertStrict.setChecked(prefs.getBoolean("cert_strict", true));
-            swCertTransparency.setChecked(prefs.getBoolean("cert_transparency", false));
+            swCertTransparency.setChecked(prefs.getBoolean("cert_transparency", false) && false);
             swCheckNames.setChecked(prefs.getBoolean("check_names", !BuildConfig.PLAY_STORE_RELEASE));
             swOpenSafe.setChecked(prefs.getBoolean("open_safe", false));
             swHttpRedirect.setChecked(prefs.getBoolean("http_redirect", true));

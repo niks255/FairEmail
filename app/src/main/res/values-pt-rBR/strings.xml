@@ -345,6 +345,9 @@
     <string name="title_advanced_hint_title">Opções mais avançadas</string>
     <string name="title_advanced_hint_message">        Você está navegando para as opções mais avançadas.        Todas as opções têm comumente usados valores padrão, que você não precisa mudar a menos que você tenha uma preferência diferente.
     </string>
+    <string name="title_advanced_hint_configure">        Você não precisa estar aqui para configurar uma conta. Use o botão do assistente de configuração rápida para isso.
+        O assistente de configuração rápida quase sempre funciona, mas se não funcionar, você pode usar a configuração manual clássica um pouco abaixo do botão do assistente.
+    </string>
     <string name="title_advanced_hint_remark">        As opções são categorizadas por aba, divididas em seções, organizadas por aparência ou uso, e pesquisáveis.
     </string>
     <string name="title_advanced_hint_options">        Você não precisará da maioria das opções e, como algumas opções são bastante específicas,
@@ -487,6 +490,7 @@
     <string name="title_advanced_open_safe">Abrir apenas conexões seguras</string>
     <string name="title_advanced_http_redirect">Permitir redirecionamento de conexão</string>
     <string name="title_advanced_bouncy_castle">Use o provedor de soquete seguro (JSSE) do Bouncy Castle</string>
+    <string name="title_advanced_local_network">Permissões de rede local</string>
     <string name="title_advanced_manage_connectivity">Gerenciar conectividade</string>
     <string name="title_advanced_caption_general">Geral</string>
     <string name="title_advanced_caption_navigation">Navegação</string>
@@ -1320,6 +1324,7 @@
     <string name="title_quick_actions_snooze">Soneca</string>
     <string name="title_quick_actions_clear">Limpar seleção após ação</string>
     <string name="title_trash">Lixeira</string>
+    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Conversa Fiada</string>
     <string name="title_trash_selection">Seleção para o lixo</string>
     <string name="title_copy">Copiar &#8230;</string>
     <string name="title_copy_to">Copiar para &#8230;</string>
@@ -1654,6 +1659,7 @@
     <string name="title_search_with_unseen">Não lida(s)</string>
     <string name="title_search_with_flagged">Favorita(s)</string>
     <string name="title_search_with_hidden">Ocultas (apenas no dispositivo)</string>
+    <string name="title_search_with_importance">Importância (apenas no dispositivo)</string>
     <string name="title_search_with_encrypted">Criptografadas (apenas no dispositivo)</string>
     <string name="title_search_with_attachments">Com anexos (apenas no dispositivo)</string>
     <string name="title_search_with_size">Tamanho da mensagem maior que</string>
@@ -2356,7 +2362,7 @@
     </string-array>
     <string-array name="undoNames">
         <item>Desl.</item>
-        <item comment="undoNames Number of seconds to show the undo popup">1,25 s</item>
+        <item>1,25 s</item>
         <item>2,5 s</item>
         <item>5 s</item>
         <item>7,5 s</item>
