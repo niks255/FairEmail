@@ -681,6 +681,7 @@ public final class TableInfo {
         /**
          * @deprecated Use {@link #Index(String, boolean, List, List)}
          */
+        @Deprecated
         public Index(String name, boolean unique, List<String> columns) {
             this(name, unique, columns, null);
         }

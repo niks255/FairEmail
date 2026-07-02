@@ -1523,7 +1523,7 @@ public class HtmlHelper {
 
     private static void insertImage(String url, Element element, Document document) {
         Element img = document.createElement("img").attr("src", url);
-        if ("table".equals(element.tagName()))
+        if ("table".equals(element.tagName()) && element.parent() != null)
             element.before(img);
         else if ("tr".equals(element.tagName()))
             element.prependElement("td").prependChild(img);

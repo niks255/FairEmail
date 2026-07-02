@@ -505,6 +505,7 @@
     <string name="title_advanced_open_safe">Deschideți numai conexiuni sigure</string>
     <string name="title_advanced_http_redirect">Permite redirectionarea conexiunii</string>
     <string name="title_advanced_bouncy_castle">Folosește furnizorul de socket securizat Bouncy Castle (JSSE)</string>
+    <string name="title_advanced_local_network">Permisiuni de rețea locală</string>
     <string name="title_advanced_manage_connectivity">Gestionare conexiuni</string>
     <string name="title_advanced_caption_general">Generale</string>
     <string name="title_advanced_caption_navigation">Navigaţie</string>

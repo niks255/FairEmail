@@ -623,9 +623,12 @@ public class EditTextCompose extends FixedEditText {
 
                 Uri uri = item.getUri();
                 if (inputContentListener != null && uri != null && "content".equals(uri.getScheme())) {
-                    String type = Helper.guessMimeType(uri.getLastPathSegment());
-                    inputContentListener.onInputContent(uri, type);
-                    return true;
+                    if (item.getText() == null && item.getHtmlText() == null) {
+                        String type = Helper.guessMimeType(uri.getLastPathSegment());
+                        Log.i("Primary clip uri=" + uri + " type=" + type);
+                        inputContentListener.onInputContent(uri, type);
+                        return true;
+                    }
                 }
 
                 final String html;

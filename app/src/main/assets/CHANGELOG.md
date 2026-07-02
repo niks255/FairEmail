@@ -30,6 +30,30 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### Next version (Work in progress)
 
+### 1.2324 2026-06-30
+
+* Fixed regression in reformatted message view
+* Small improvements and minor bug fixes
+
+### 1.2323 2026-06-29
+
+* Fixed insets of two row/column mode and undo bar
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [S/MIME root certificates](https://wiki.mozilla.org/CA/Included_Certificates)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2322 2026-06-15
+
+* Updated [IPAddress library](https://seancfoley.github.io/IPAddress/) to fix an issue
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2321 2026-06-11
+
+* Fixed search dialog crashing on Android 12 and before
+
 ### 1.2320 2026-06-10
 
 * Disabled Certificate Transparency because of [unsupported library](https://github.com/appmattus/certificatetransparency) causing errors

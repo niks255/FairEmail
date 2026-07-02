@@ -506,6 +506,7 @@
     <string name="title_advanced_open_safe">Otvaraj samo sigurne konekcije</string>
     <string name="title_advanced_http_redirect">Omogući preusmjeravanje konekcije</string>
     <string name="title_advanced_bouncy_castle">Koristi pružaoca sigurnog priključka od Bouncy Castle-a (JSSE)</string>
+    <string name="title_advanced_local_network">Dozvole lokalne mreže</string>
     <string name="title_advanced_manage_connectivity">Upravljanje konekcijama</string>
     <string name="title_advanced_caption_general">Općenito</string>
     <string name="title_advanced_caption_navigation">Navigacija</string>
@@ -1340,6 +1341,7 @@
     <string name="title_quick_actions_snooze">Odgodi</string>
     <string name="title_quick_actions_clear">Deselekcija označenog nakon izvršene radnje</string>
     <string name="title_trash">Otpad</string>
+    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Izbriši konverzaciju</string>
     <string name="title_trash_selection">Premjesti označeno u otpad</string>
     <string name="title_copy">Kopiraj &#8230;</string>
     <string name="title_copy_to">Kopiraj u &#8230;</string>

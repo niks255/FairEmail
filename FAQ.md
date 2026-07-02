@@ -3590,28 +3590,41 @@ So, try to disable all VPN based apps or allow this address.
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq88)
 
-The preferred way to set up a Yahoo account is by using the quick setup wizard,
-which will use OAuth instead of a password and is therefore safer (and easier as well).
+A Yahoo account can only be configured using the quick setup wizard (=OAuth).
+Yahoo no longer allows users to log in using just an (app) password to access email.
 
-To authorize a Yahoo/AT&T, AOL, or Sky account you need to use an app password instead of your normal account password.
-For instructions about how to create an app password, please see here:
+~~The preferred way to set up a Yahoo account is by using the quick setup wizard,~~
+~~which will use OAuth instead of a password and is therefore safer (and easier as well).~~
 
-* [for Yahoo/AT&T](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)
-* [for AOL](https://help.aol.com/articles/Create-and-manage-app-password) ~~**Important**: app password generation is broken, [frustrating many people](https://aol.uservoice.com/forums/912886-aol-mail/suggestions/45235399-i-wanted-to-generate-a-third-party-app-password-bu) because this means you can use the AOL app and the browser only.~~
-* [for Sky](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (under *Other email apps*)
+~~To authorize a Yahoo/AT&T, AOL, or Sky account you need to use an app password instead of your normal account password.~~
+~~For instructions about how to create an app password, please see here:~~
+
+* ~~[for Yahoo/AT&T](https://help.yahoo.com/kb/generate-third-party-passwords-sln15241.html)~~
+* ~~[for AOL](https://help.aol.com/articles/Create-and-manage-app-password)~~ ~~**Important**: app password generation is broken, [frustrating many people](https://aol.uservoice.com/forums/912886-aol-mail/suggestions/45235399-i-wanted-to-generate-a-third-party-app-password-bu) because this means you can use the AOL app and the browser only.~~
+* ~~[for Sky](https://www.sky.com/help/articles/getting-started-with-sky-yahoo-mail) (under *Other email apps*)~~
 
 Please see [this FAQ](#faq111) about OAuth support.
 
-Note that Yahoo, AOL, and Sky do not support standard push messages.
-The Yahoo email app uses a proprietary, undocumented protocol for push messages.
+~~Note that Yahoo, AOL, and Sky do not support standard push messages.~~
+~~The Yahoo email app uses a proprietary, undocumented protocol for push messages.~~
 
-Push messages require [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE) and the Yahoo email server does not report IDLE as capability:
+~~Push messages require [IMAP IDLE](https://en.wikipedia.org/wiki/IMAP_IDLE) and the Yahoo email server does not report IDLE as capability:~~
 
 ```
 Y1 CAPABILITY
 * CAPABILITY IMAP4rev1 ID MOVE NAMESPACE XYMHIGHESTMODSEQ UIDPLUS LITERAL+ CHILDREN X-MSG-EXT UNSELECT OBJECTID
 Y1 OK CAPABILITY completed
 ```
+
+Retrieving new email when there are **more than 10,000 messages** in the inbox does not work properly.
+This is due to a limitation of the Yahoo mail server that is unique to Yahoo.
+In this case, changing the IMAP server address may help.
+
+Please see [this Yahoo help article](https://help.yahoo.com/kb/download-email-yahoo-mail-third-party-sln28681.html) for details.
+
+In short:
+
+Navigation menu (left side menu) ⟶ "Settings" ⟶ "Manual setup and account options" ⟶ "Accounts" ⟶ tap the account ⟶ tap "Advanced"  ⟶ change the host name to *export.imap.mail.yahoo.com*
 
 <br />
 
@@ -4703,6 +4716,7 @@ The confusing Microsoft specific server error *User is authenticated but not con
 
 **Consumer Outlook/Hotmail/Live account**
 
+* A VPN is being used. Try turning off the VPN.
 * IMAP is disabled, which is the default for new Outlook accounts now
 
 To fix this:
@@ -4717,6 +4731,7 @@ To fix this:
 
 **Corporate, education, etc. account**
 
+* A VPN is being used. Try turning off the VPN.
 * External access is administratively disabled, please see [this article](https://docs.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/client-access-rules/client-access-rules) about how an administrator can enable it again
 * Access by third-party apps is administratively disabled or allowed for specific apps only
 * IMAP is administratively disabled, please see [this article](https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/pop3-and-imap4/enable-or-disable-pop3-or-imap4-access) about how an administrator can enable it again
@@ -4911,25 +4926,24 @@ To solve this, long press the folder(s) in the folder list and select *Delete lo
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq147)
 
-You likely came here because you are using a third party build of FairEmail.
+You likely came here because you are using a third-party build of FairEmail.
 
-There is **only support** on the latest Play store version, the latest GitHub release and
-the F-Droid build, but **only if** the version number of the F-Droid build is the same as the version number of the latest GitHub release.
+There is **only support** for the latest Play Store version and the latest GitHub release because those are the releases that can be built and released at any time.
 
 F-Droid builds irregularly, which can be problematic if there is an important update.
-Therefore you are advised to switch to the GitHub release.
+Therefore, you are advised to switch to the GitHub release.
 F-Droid isn't as secure as you might think anyway, [see here](https://privsec.dev/posts/android/f-droid-security-issues/).
 
 Note that developers have no control over F-Droid builds and the F-Droid infrastructure (apps, forums, etc.).
 
-OAuth access is available only for Play Store and Github releases
+OAuth access is available only for Play Store and GitHub releases
 because email providers permitted the use of OAuth for these releases only.
-The responsible for a release, for the F-Droid build this is the F-Droid organization, needs to ask for OAuth permissions,
+The responsible for a release, for the F-Droid build, this is the F-Droid organization, needs to ask for OAuth permissions,
 which mostly involves signing a contract with binding terms and conditions,
 often with the clause that the use of OAuth is exclusive.
 
 Note that you'll need to uninstall the F-Droid build first before you can install a GitHub release
-because Android refuses to install ("*App was not installed*") the same app with a different signature for security reasons.
+because Android refuses to install ("*App was not installed*", etc.) the same app with a different signature for security reasons.
 
 At the start of 2024, the Play Store app started to update all apps, including apps not installed via the Play Store.
 Since the F-Droid build is signed by the F-Droid organization, which basically means the F-Droid build is another app, updating the F-Droid build will fail.
@@ -4938,16 +4952,16 @@ Unfortunately, there is no way to resolve this.
 Note that the GitHub version will automatically check for updates.
 When desired, this can be turned off in the miscellaneous settings.
 
-Please [see here](https://github.com/M66B/FairEmail/blob/master/README.md#downloads) for all download option
+Please [see here](https://github.com/M66B/FairEmail/blob/master/README.md#downloads) for all download options
 and [see here](#faq173) for the differences between the different release types.
 
 If you have a problem with the F-Droid build, please check if there is a newer GitHub version first.
 
 You can see the source of the app in *About* of the navigation menu (left side menu),
-either *Play store*, *GitHub*, *F-Droid*, or *?* (for example in the case of a custom build).
+either *Play Store*, *GitHub*, *F-Droid*, or *?* (for example, in the case of a custom build).
 
 [IzzyOnDroid](https://apt.izzysoft.de/fdroid/) hosts the GitHub release of the app.
-[Aurora Store](https://f-droid.org/packages/com.aurora.store/) hosts the Play store version of the app,
+[Aurora Store](https://f-droid.org/packages/com.aurora.store/) hosts the Play Store version of the app,
 even though the Aurora Store app was downloaded from F-Droid.
 
 Please [see here](https://forum.f-droid.org/t/help-wanted-how-to-create-a-reproducible-build-fairemail/8860) why reproducible F-Droid builds are not an option.

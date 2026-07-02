@@ -1358,6 +1358,7 @@
     <string name="title_quick_actions_snooze">Адкласці</string>
     <string name="title_quick_actions_clear">Ачысціць выбар пасля выканання дзеяння</string>
     <string name="title_trash">Выдаленыя</string>
+    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Выдаліць размову</string>
     <string name="title_trash_selection">Выдаліць выбранае</string>
     <string name="title_copy">Капіраваць &#8230;</string>
     <string name="title_copy_to">Капіраваць у &#8230;</string>

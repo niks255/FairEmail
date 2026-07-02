@@ -189,8 +189,7 @@ public class ApplicationEx extends Application
                 if (!crash_reports && Log.isOwnFault(ex)) {
                     Log.e(ex);
 
-                    if (BuildConfig.BETA_RELEASE ||
-                            !Helper.isPlayStoreInstall())
+                    if (Helper.hasValidFingerprint(ApplicationEx.this))
                         DebugHelper.writeCrashLog(ApplicationEx.this, ex);
 
                     if (prev != null)
