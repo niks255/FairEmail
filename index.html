@@ -228,6 +228,9 @@
 <li>✔ <del>Search for settings</del></li>
 <li>❌ <del>POP3 folders</del></li>
 <li>✔ <del>Bottom action bar</del></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc8689">SMTP Require TLS Option</a></li>
+<li><a href="https://datatracker.ietf.org/doc/draft-ietf-mailmaint-unobtrusive-signatures/">Unobtrusive End-to-End Email Signatures</a></li>
+<li><a href="https://github.com/thunderbird/thunderbird-accounts/issues/1124">OAuth for Thundermail</a></li>
 </ul>
 <p>Anything on this list is in random order and <em>might</em> be added in the near future.</p>
 <p><br /></p>
@@ -332,7 +335,7 @@
 <li><a href="#faq96">(96) Where can I find the IMAP and SMTP settings?</a></li>
 <li><a href="#faq97">(97) What is ‘cleanup’?</a></li>
 <li><a href="#faq98">(98) Why can I still pick contacts after revoking contacts permissions?</a></li>
-<li><a href="#faq99">(99) Can you add a rich text or markdown editor?</a></li>
+<li><a href="#faq99">(99) What should I know about Markdown?</a></li>
 <li><a href="#faq100">(100) How can I synchronize Gmail categories?</a></li>
 <li><a href="#faq101">(101) What does the blue/orange dot at the bottom of the conversations mean?</a></li>
 <li><a href="#faq102">(102) How can I enable auto rotation of images?</a></li>
@@ -443,6 +446,7 @@
 <li><a href="#faq207">(207) What does ‘Authentication failed’ mean?</a></li>
 <li><a href="#faq208">(208) What does ‘about:blank#blocked’ mean when I click on a link?</a></li>
 <li><a href="#faq209">(209) Why is using a VPN often problematic?</a></li>
+<li><a href="#faq210">(210) Why is local network permission needed?</a></li>
 </ul>
 <p><a href="#get-support">I have another question.</a></p>
 <p><a name="faq1"></a> <strong>(1) Which permissions are needed and why?</strong></p>
@@ -647,11 +651,11 @@ or by installing the GitHub version of the app (as an update) and enabling insec
 <p>The “<em>Gmail (Android)</em>” quick setup wizard won’t work if the Android account manager doesn’t work or doesn’t support Google accounts, which is typically the case if the account selection is being <em>canceled</em> right away.</p>
 <p>If you don’t want to use or can’t use OAuth or an on-device Google account, for example on recent Huawei devices, you can <del>either enable access for “less secure apps” and use your account password (not advised) or</del> enable two factor authentication and use an app specific password. To use a password, you can use the quick setup wizard and select <em>Other provider</em>.</p>
 <p><strong>Important</strong>: sometimes Google issues this alert:</p>
-<p><em>[ALERT] Please log in via your web browser: https://support.google.com/mail/accounts/answer/78754 (Failure)</em></p>
-<p>This Google security check is triggered more often with <em>less secure apps</em> enabled, even less with an app password, and hardly ever when using an on-device account (OAuth). You might see the error <em>OAUTH2 asked for more</em>, which basically says the connection is temporarily blocked, until you confirm it is you.</p>
+<p><em>[ALERT] Please log in via your web browser</em></p>
+<p><del>This Google security check is triggered more often with <em>less secure apps</em> enabled, even less with an app password, and hardly ever when using an on-device account (OAuth).</del> You might see the error <em>OAUTH2 asked for more</em>, which basically says the connection is temporarily blocked, until you confirm it is you.</p>
 <p>Note that an app specific password is required when two factor authentication is enabled. After enabling two factor authentication there will be this error message:</p>
 <p><em>[ALERT] Application-specific password required: https://support.google.com/mail/accounts/answer/185833 (Failure)</em></p>
-<p>The error message “<em>Authentication failed - Invalid credentials</em>” or <em>Token refresh required</em> means that the Android account manager was not able to refresh the access token, or that getting an access token was not allowed, for example when the account is a <a href="https://support.google.com/families/answer/7101025">Family Link</a> account, in which case you can use the Gmail app only. A common cause for this problem is using a VPN, a firewall app or an ad blocker which blocks internet access for the Android account manager. Please make sure permissions were granted to the app via setup step 2. You can try to work around this issue by using the quick setup wizard <em>Gmail (Oauth)</em> or by using an app password.</p>
+<p>The error message “<em>Authentication failed - Invalid credentials</em>” or <em>Token refresh required</em> means that the Android account manager was not able to refresh the access token, or that getting an access token was not allowed, for example when the account is a <a href="https://support.google.com/families/answer/7101025">Family Link</a> account or any other delegated account, in which case you can use the Gmail app only. A common cause for this problem is using a VPN, a firewall app or an ad blocker which blocks internet access for the Android account manager. Please make sure permissions were granted to the app via setup step 2. You can try to work around this issue by using the quick setup wizard <em>Gmail (Oauth)</em> or by using an app password.</p>
 <p><em>[ALERT] IMAP access is not allowed for this account.</em></p>
 <p>This means that it is a <a href="https://families.google.com/familylink/">Google Family Link</a> account for a child under the age of 13. Please see <a href="https://www.reddit.com/r/ios/comments/x0dklz/i_give_up_adding_google_email_account_to_my/">here</a> for a solution.</p>
 <p><br /></p>
@@ -707,7 +711,13 @@ or by installing the GitHub version of the app (as an update) and enabling insec
 <li>“<em><span class="citation" data-cites="extra">@extra</span></em>” will result in the email address “<em>test@extra.example.org</em>”</li>
 <li>“<em>Some name, username</em>” will result in the email address “<em>Some name, &lt;username@example.org&gt;</em>” (since version 1.2032)</li>
 </ul>
-<p>You can configure a default CC, BCC and/or reply-to address in the advanced identity settings.</p>
+<p>You can configure a default CC, BCC and/or reply-to address in the advanced identity settings. Since version 1.2326 you can use the following placeholders in these default addressess:</p>
+<ul>
+<li><code>$from$</code>: the full ‘from’ address</li>
+<li><code>$user$</code>: the username of the ‘from’ address</li>
+<li><code>$domain$</code>: the domain name of the ‘from’ address</li>
+<li><code>$extra$</code>: the extra as explained above</li>
+</ul>
 <p>FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.</p>
 <p>See <a href="#faq33">this FAQ</a> on editing the username of email addresses.</p>
 <p><br /></p>
@@ -749,6 +759,7 @@ or by installing the GitHub version of the app (as an update) and enabling insec
 <p><br /></p>
 <p><em>PGP</em></p>
 <p>You’ll need to install and configure <a href="https://f-droid.org/en/packages/org.sufficientlysecure.keychain/">OpenKeychain</a> first. FairEmail was tested with OpenKeychain version 5.4. Later versions will most likely be compatible, but earlier versions might not be.</p>
+<p><a href="https://github.com/norsehorse-dev/PGPonyAndroid">PGPony for Android</a> is reported to work too. You can select the PGP provider on the encryption settings tab page.</p>
 <p><strong>Important</strong>: the OpenKeychain app is known to (silently) crash when the calling app (FairEmail) is not authorized yet and is getting an existing public key. You can workaround this by trying to send a signed/encrypted message to a sender with an unknown public key.</p>
 <p><strong>Important</strong>: if the OpenKeychain app cannot find a key (anymore), you might need to reset a previously selected key. This can be done by long pressing an identity in the list of identities (Settings, tap Manual setup, tap Identities).</p>
 <p><strong>Important</strong>: to let apps like FairEmail reliably connect to the OpenKeychain service to encrypt/decrypt messages, it might be necessary to disable battery optimizations for the OpenKeychain app.</p>
@@ -1305,7 +1316,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p>FairEmail will by default synchronize the folder list on each connection. Since folders are mostly not created, renamed and deleted very often, you can save some network and battery usage by disabling this in the receive settings tab page.</p>
 <p>FairEmail will by default check if old messages were deleted from the server on each connection. If you don’t mind that old messages that were deleted from the server are still visible in FairEmail, you can save some network and battery usage by disabling this in the receive settings tab page.</p>
 <p>Some providers don’t follow the IMAP standard and <a href="https://datatracker.ietf.org/doc/html/rfc3501#section-5.4">don’t keep connections open</a> long enough, forcing FairEmail to reconnect often, causing extra battery usage. You can inspect the <em>Log</em> via the main navigation menu to check if there are frequent reconnects (connection closed/reset, read/write error/timeout, etc.). You can work around this by lowering the keep-alive interval in the advanced account settings to for example 9 or 15 minutes. Note that battery optimizations need to be disabled in setup step 3 to reliably keep connections alive.</p>
-<p>Some providers send every two minutes something like ‘<em>Still here</em>’ resulting in network traffic and your device to wake up and causing unnecessary extra battery usage. You can inspect the <em>Log</em> via the main navigation menu to check if your provider is doing this. If your provider is using <a href="https://www.dovecot.org/">Dovecot</a> as IMAP server, you could ask your provider to change the <a href="https://wiki.dovecot.org/Timeouts">imap_idle_notify_interval</a> setting to a higher value or better yet, to disable this. If your provider is not able or willing to change/disable this, you should consider switching to periodically instead of continuous synchronization. You can change this in the receive settings tab page.</p>
+<p>Some providers send every two minutes something like ‘<em>Still here</em>’ resulting in network traffic and your device to wake up and causing unnecessary extra battery usage. You can inspect the <em>Log</em> via the main navigation menu to check if your provider is doing this. If your provider is using <a href="https://www.dovecot.org/">Dovecot</a> as IMAP server, you could ask your provider to change the <a href="https://doc.dovecot.org/2.3/admin_manual/timeouts/">imap_idle_notify_interval</a> setting to a higher value or better yet, to disable this. If your provider is not able or willing to change/disable this, you should consider switching to periodically instead of continuous synchronization. You can change this in the receive settings tab page.</p>
 <p>If you got the message, <em>This provider does not support push messages</em> while configuring an account, consider switching to a modern provider which supports push messages (IMAP IDLE) to reduce battery usage.</p>
 <p>If your device has an <a href="https://en.wikipedia.org/wiki/AMOLED">AMOLED</a> screen, you can save battery usage while viewing messages by switching to the black theme.</p>
 <p>If auto optimize in the receive settings tab page is enabled, an account will automatically be switched to periodically checking for new messages when the email server:</p>
@@ -1437,7 +1448,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p><a name="faq56"></a> <strong>(56) Can you add support for JMAP?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq56">Google Translate</a></p>
 <p>There are almost no providers offering the <a href="https://jmap.io/">JMAP</a> protocol, so it is not worth a lot of effort to add support for this to FairEmail.</p>
-<p>Moreover, the only available <a href="https://github.com/iNPUTmice/jmap">Java JMAP library</a> seems not to be maintained anymore.</p>
+<p>Moreover, the only available <a href="https://codeberg.org/iNPUTmice/jmap">Java JMAP library</a> seems not to be maintained anymore.</p>
 <p><br /></p>
 <p><a name="faq57"></a> <strong>(57) Can I use HTML in signatures?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq57">Google Translate</a></p>
@@ -1659,6 +1670,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 </ul>
 <p>Example conditions:</p>
 <p><code>header("X-Mailer") contains "Open-Xchange" &amp;&amp; from matches ".*service@.*" &amp;&amp; Is("seen")</code></p>
+<p><code>!subject contains "Test" &amp;&amp; !(subject contains "Example")</code></p>
 <p><code>!onBlocklist() &amp;&amp; hasMx() &amp;&amp; attachments() &gt; 0</code></p>
 <p><code>(received + 7*24*60*60*1000) &lt; DT_DATE_TO_EPOCH(DT_NOW())</code></p>
 <p><code>AI("Is the message below a scam? Answer in English with just yes or no.") contains "yes"</code></p>
@@ -1705,9 +1717,9 @@ $user:to$ (since version 1.2289)
 $extra:to$ (since version 1.2289)
 $domain:to$ (since version 1.2289)
 $group$ (since version 1.2030)</code></pre>
-<p><span class="math inline"><em>u</em><em>s</em><em>e</em><em>r</em></span> is the user name of the ‘from’ email address, and <span class="math inline"><em>d</em><em>o</em><em>m</em><em>a</em><em>i</em><em>n</em></span> is the domain name of the ‘from’ email address: <em>user@domain</em>.</p>
-<p><span class="math inline"><em>e</em><em>x</em><em>t</em><em>r</em><em>a</em></span> is the part after the plus sign if the username: <em>user+extra@example.org</em>. The ‘to’ user, extra and domain placeholders apply to the ‘to’ email address and the other placeholders apply to ‘from’ email address.</p>
-<p><span class="math inline"><em>g</em><em>r</em><em>o</em><em>u</em><em>p</em></span> will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only. Note that the Android contact provider isn’t very fast, so using this placeholder can slow down fetching messages.</p>
+<p><code>$user$</code> is the user name of the ‘from’ email address, and <span class="math inline"><em>d</em><em>o</em><em>m</em><em>a</em><em>i</em><em>n</em></span> is the domain name of the ‘from’ email address: <em>user@domain</em>.</p>
+<p><code>$extra$</code> is the part after the plus sign if the username: <em>user+extra@example.org</em>. The ‘to’ user, extra and domain placeholders apply to the ‘to’ email address and the other placeholders apply to ‘from’ email address.</p>
+<p><code>$group$</code> will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only. Note that the Android contact provider isn’t very fast, so using this placeholder can slow down fetching messages.</p>
 <p><br /></p>
 <p>Since version 1.2132 it is possible to use the following placeholders in keywords:</p>
 <pre><code>$day$
@@ -1751,12 +1763,12 @@ $$encrypted$ (since version 1.1981)
 $$aligned$ (since version 1.2049)</code></pre>
 <p>Note that <em>regex</em> should be disabled and that there should be no white space.</p>
 <p>Please be aware that a difference in the <em>from</em> and <em>reply-to</em> domain, and no or multi <em>from</em> addresses isn’t a good indication of spam.</p>
-<p>Since the app sets the keyword <em><span class="math inline"><em>F</em><em>i</em><em>l</em><em>t</em><em>e</em><em>r</em><em>e</em><em>d</em></span></em> after the rules have been executed for a message, you can create a rule to prevent the rules from being executed again (which is sometimes desirable):</p>
+<p>Since the app sets the keyword <code>$Filtered$</code> after the rules have been executed for a message, you can create a rule to prevent the rules from being executed again (which is sometimes desirable):</p>
 <ul>
 <li>Name: anything you like</li>
 <li>Order: lower than all other rules, for example 0</li>
 <li>Stop processing rules after executing this rule: enabled</li>
-<li>Header contains: <em>$<span class="math inline"><em>F</em><em>i</em><em>l</em><em>t</em><em>e</em><em>r</em><em>e</em><em>d</em></span></em> (no spaces)</li>
+<li>Header contains: <code>$$Filtered$</code> (no spaces)</li>
 <li>Action: No action</li>
 </ul>
 <p>Note that not all email servers support IMAP keywords.</p>
@@ -2047,10 +2059,12 @@ Y1 OK CAPABILITY completed</code></pre>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq98">Google Translate</a></p>
 <p>After revoking contacts permissions Android does not allow FairEmail access to your contacts anymore. However, picking contacts is delegated to and done by Android and not by FairEmail, so this will still be possible without contacts permissions.</p>
 <p><br /></p>
-<p><a name="faq99"></a> <strong>(99) Can you add a rich text or markdown editor?</strong></p>
+<p><a name="faq99"></a> <strong>(99) What should I know about Markdown?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq99">Google Translate</a></p>
-<p>FairEmail provides common text formatting (bold, italic, underline, text size and color) via a toolbar that appears after selecting some text.</p>
-<p>A <a href="https://en.wikipedia.org/wiki/Formatted_text">Rich text</a> or <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> editor would not be used by many people on a small mobile device and, more important, Android doesn’t support a rich text editor and most rich text editor open source projects are abandoned. See <a href="https://forum.xda-developers.com/showpost.php?p=79061829&amp;postcount=4919">here</a> for some more details about this.</p>
+<p>FairEmail provides common text formatting (bold, italic, underline, text size and color, etc.) via a toolbar that appears after selecting some text.</p>
+<p>Alternatively, you can use <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a>. You can enable Markdown support via the three-dot overflow menu at the top right of the message editor.</p>
+<p>Please be aware that <strong>normal styling will be ignored</strong> when using Markdown, or, in other words, you can mix.</p>
+<p>Markdown is an experimental feature.</p>
 <p><br /></p>
 <p><a name="faq100"></a> <strong>(100) How can I synchronize Gmail categories?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq100">Google Translate</a></p>
@@ -2157,7 +2171,7 @@ category:promotions</code></pre>
 <ul>
 <li><a href="https://restoreprivacy.com/secure-email/">Restore privacy</a></li>
 <li><a href="https://www.privacyguides.org/en/email/">Privacy Guides</a></li>
-<li><a href="https://www.privacytools.io/providers/email/">Privacy Tools</a></li>
+<li><a href="https://privacytools.io/privacy-email">Privacy Tools</a></li>
 </ul>
 <p><strong>Important</strong>: Some providers, like ProtonMail and Tutanota, use proprietary email protocols, which make it impossible to use third party email apps. Please see <a href="#faq129">this FAQ</a> for more information.</p>
 <p>Using your own (custom) domain name, which is supported by most email providers, will make it easier to switch to another email provider.</p>
@@ -2298,7 +2312,7 @@ $NotDisplayed</code></pre>
 <p>The subject of a received message can be edited, also on the email server, via the horizontal three-dots button just above the message text near the left side of the screen.</p>
 <p><br /></p>
 <p><em>Markdown (1.2061+)</em></p>
-<p>Composing messages using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> can be enabled via the three-dots overflow menu of the message editor.</p>
+<p>Composing messages using <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a> can be enabled via the three-dots overflow menu of the message editor. Please see <a href="#faq99">this FAQ</a>.</p>
 <p><br /></p>
 <p><em>Fast forward to (1.2226+)</em></p>
 <p>Show (fast) <em>Forward to</em> in the answer menu, with addresses recently used for forwarding messages (if any). You can show the answer menu by tapping on the answer button at the bottom right of an opened/expanded message.</p>
@@ -2335,13 +2349,15 @@ $NotDisplayed</code></pre>
 <p><br /></p>
 <p><a name="faq129"></a> <strong>(129) Are ProtonMail, Tutanota, etc supported?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq129">Google Translate</a></p>
-<p><strong>ProtonMail</strong> uses a proprietary email protocol and <a href="https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/">does not directly support IMAP</a>, so you cannot use FairEmail or any other Android email client to access ProtonMail. Unfortunately, Proton has no plans to add <a href="https://github.com/ProtonMail/proton-bridge/issues/427">a mail bridge for Android</a>.</p>
-<p><strong>Tutanota</strong> uses a proprietary email protocol and <a href="https://tutanota.com/faq/#imap">does not support IMAP</a>, so you cannot use FairEmail or any other email client to access Tutanota.</p>
+<p><strong>ProtonMail</strong> uses a proprietary email protocol and <a href="https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/">does not directly support IMAP</a>, so you cannot use FairEmail or any other Android email client to access ProtonMail. Unfortunately, Proton has no plans to add a mail bridge for Android.</p>
+<p><strong>Tutanota</strong> uses a proprietary email protocol and <a href="https://tuta.com/support#imap">does not support IMAP</a>, so you cannot use FairEmail or any other email client to access Tutanota.</p>
 <p><strong>Cyberfear</strong> does not support IMAP, so you’ll need to manually configure a POP3 account.</p>
-<p><strong>Skiff</strong> uses a proprietary email protocol and <a href="https://www.skiff.com/blog/tutanota-alternatives-comparison">does not support IMAP</a> so you cannot use FairEmail or any other email client to access Skiff.</p>
+<p><strong>Skiff</strong> uses a proprietary email protocol and <a href="https://www.skiff.com/">does not support IMAP</a> so you cannot use FairEmail or any other email client to access Skiff.</p>
+<p>Update: Skiff was shut down after the Notion acquisition (2024).</p>
 <p><strong>Tildamail</strong> uses a proprietary email protocol and does not support IMAP, so you cannot use FairEmail or any other email client to access Tildamail.</p>
 <p><strong>Criptext</strong> uses a proprietary email protocol and <a href="https://www.reddit.com/r/privacy/comments/chs82k/comment/ewrxxcn/">does not directly support IMAP</a>, so you cannot use FairEmail or any other email email client to access Criptext.</p>
 <p><strong>OnMail</strong> uses a proprietary email protocol and <a href="https://support.onmail.com/hc/en-us/articles/360048879012-How-do-I-connect-my-OnMail-address-to-a-third-party-email-app-">does not support IMAP</a>, so you cannot use FairEmail or any other email client to access OnMail, except for one (but please read the privacy policy carefully).</p>
+<p>Update: OnMail is gone.</p>
 <p><br /></p>
 <p><a name="faq130"></a> <strong>(130) What does message error … mean?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq130">Google Translate</a></p>
@@ -2418,9 +2434,12 @@ $NotDisplayed</code></pre>
 <p><strong>Consumer Outlook/Hotmail/Live account</strong></p>
 <ul>
 <li>A VPN is being used. Try turning off the VPN.</li>
+<li>The Outlook account is registered in another country than the current country.</li>
+<li>The same account is configured in multiple email clients, also on other devices.</li>
+<li>Multiple Outlook accounts are being used at the same time.</li>
 <li>IMAP is disabled, which is the default for new Outlook accounts now</li>
 </ul>
-<p>To fix this:</p>
+<p>To fix the latter:</p>
 <ul>
 <li>Go to the <a href="https://outlook.live.com/">Outlook website</a></li>
 <li>Tap on the settings wheel at the top right</li>
@@ -3146,7 +3165,8 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p><br></p>
 <p><a name="faq201"></a> <strong>(201) What is certificate transparency?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq201">Google Translate</a></p>
-<p><strong>Unfortunately, the Certificate Transparency library isn’t maintained anymore, and therefore Certificate Transparency has been disabled in version 1.2320.</strong></p>
+<p><strong>Since version 1.2326 Certificate Transparency <a href="https://developer.android.com/privacy-and-security/security-config#CertificateTransparencySummary">as provided by Android 16 and later</a> is always enabled in non Play Store builds</strong></p>
+<p><strong>Unfortunately, the Certificate Transparency library isn’t maintained anymore, and therefore Certificate Transparency has been disabled in version 1.2320 for Android 15 and before and for Play Store builds.</strong></p>
 <p>Please see <a href="https://certificate.transparency.dev/howctworks/">this article</a> about what certificate transparency is. Alternatively, see <a href="https://en.wikipedia.org/wiki/Certificate_Transparency">this Wikipedia article</a>.</p>
 <p>When certificate transparency is enabled in the connection-settings tab page of the app, the <a href="https://github.com/GoogleChrome/CertificateTransparency/blob/master/ct_policy.md">Chrome Certificate Transparency Policy</a> will be applied. The CT log will be downloaded from <a href="https://www.gstatic.com/ct/log_list/v3/all_logs_list.json">https://www.gstatic.com/</a>.</p>
 <p>FairEmail uses <a href="https://github.com/appmattus/certificatetransparency">this library</a> to implement certificate transparency via a custom trust manager.</p>
@@ -3241,6 +3261,20 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p><a name="faq209"></a> <strong>(209) Why is using a VPN often problematic?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq209">Google Translate</a></p>
 <p>When you use a VPN, you share one network address with many people and not all those people will always behave nicely. Email servers often automatically block network addresses (IP addresses) when abuse is detected, for example when someone tries to send spam messages. The result is that logins are blocked for everyone using the same network address and the email server issues an error message such as “<em>Authentication failed</em>”. This is also why the app warns against using a VPN.</p>
+<p><br></p>
+<p><a name="faq210"></a> <strong>(210) Why is local network permission needed?</strong></p>
+<p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq210">Google Translate</a></p>
+<p>Since Android 17, <a href="https://developer.android.com/privacy-and-security/local-network-permission">local network permission</a> is required for local network access (LAN access):</p>
+<ul>
+<li>10.0.0.0/8</li>
+<li>172.16.0.0/12</li>
+<li>192.168.0.0/16</li>
+<li>fd00::/8</li>
+</ul>
+<p>This permission can be granted via a button on the connection settings page, or inline via the account/identity settings screen after entering a local network address.</p>
+<p>Very few people will need local network access, and to avoid questions regarding a new permission, this permission is available only in the <a href="https://github.com/M66B/FairEmail/releases">GitHub version</a>.</p>
+<p>If the app navigated to this FAQ after you clicked the button to grant local network permission, then the GitHub version is not (or is no longer) installed. If you are using the Play Store version of the app, you can install the GitHub version as an update.</p>
+<p>Added in version 1.2325.</p>
 <p><br></p>
 <h2>
 <a name="get-support"></a>Get support

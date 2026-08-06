@@ -33,6 +33,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -310,10 +311,13 @@ public class FragmentIdentity extends FragmentBase {
                         spProvider.setTag(0);
                         spProvider.setSelection(0);
                         setProvider((EmailProvider) spProvider.getItemAtPosition(0));
-                        if (account.host == null || account.host.startsWith("imap"))
+                        if (account.host == null || account.host.startsWith("imap")) {
                             etHost.setText(null);
-                        else
+                            checkLan(null);
+                        } else {
                             etHost.setText(account.host);
+                            checkLan(account.host);
+                        }
                         grpAdvanced.setVisibility(View.VISIBLE);
                     }
 
@@ -460,6 +464,23 @@ public class FragmentIdentity extends FragmentBase {
             @Override
             public void onClick(View v) {
                 onAutoConfig();
+            }
+        });
+
+        etHost.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkLan(s == null ? null : s.toString());
             }
         });
 
@@ -691,6 +712,7 @@ public class FragmentIdentity extends FragmentBase {
 
     private void setProvider(EmailProvider provider) {
         etHost.setText(provider.smtp.host);
+        checkLan(provider.smtp.host);
         etPort.setText(provider.smtp.port == 0 ? null : Integer.toString(provider.smtp.port));
         rgEncryption.check(provider.smtp.starttls ? R.id.radio_starttls : R.id.radio_ssl);
         cbUseIp.setChecked(provider.useip);
@@ -730,6 +752,7 @@ public class FragmentIdentity extends FragmentBase {
             @Override
             protected void onExecuted(Bundle args, EmailProvider provider) {
                 etHost.setText(provider.smtp.host);
+                checkLan(provider.smtp.host);
                 etPort.setText(Integer.toString(provider.smtp.port));
                 rgEncryption.check(provider.smtp.starttls ? R.id.radio_starttls : R.id.radio_ssl);
                 cbUseIp.setChecked(provider.useip);
@@ -921,7 +944,7 @@ public class FragmentIdentity extends FragmentBase {
                 if (synchronize && TextUtils.isEmpty(password) && !insecure && certificate == null && !should)
                     throw new IllegalArgumentException(context.getString(R.string.title_no_password));
 
-                if (!TextUtils.isEmpty(replyto) && !should) {
+                if (!TextUtils.isEmpty(replyto) && !MessageHelper.hasPlaceholder(replyto) && !should) {
                     try {
                         InternetAddress[] addresses = InternetAddress.parse(replyto);
                         if (addresses.length != 1)
@@ -932,7 +955,7 @@ public class FragmentIdentity extends FragmentBase {
                     }
                 }
 
-                if (!TextUtils.isEmpty(cc) && !should)
+                if (!TextUtils.isEmpty(cc) && !MessageHelper.hasPlaceholder(cc) && !should)
                     try {
                         for (InternetAddress address : InternetAddress.parse(cc))
                             address.validate();
@@ -940,7 +963,7 @@ public class FragmentIdentity extends FragmentBase {
                         throw new IllegalArgumentException(context.getString(R.string.title_email_invalid, cc));
                     }
 
-                if (!TextUtils.isEmpty(bcc) && !should)
+                if (!TextUtils.isEmpty(bcc) && !MessageHelper.hasPlaceholder(bcc) && !should)
                     try {
                         for (InternetAddress address : InternetAddress.parse(bcc))
                             address.validate();
@@ -1353,6 +1376,7 @@ public class FragmentIdentity extends FragmentBase {
 
                     cbDnsSec.setChecked(identity == null ? false : identity.dnssec);
                     etHost.setText(identity == null ? null : identity.host);
+                    checkLan(identity == null ? null : identity.host);
 
                     if (identity != null && identity.encryption == EmailService.ENCRYPTION_STARTTLS)
                         rgEncryption.check(R.id.radio_starttls);
@@ -1622,6 +1646,12 @@ public class FragmentIdentity extends FragmentBase {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Editable e = etHost.getText();
+        checkLan(e == null ? null : e.toString());
+    }
+
     private void onDelete() {
         Bundle args = new Bundle();
         args.putLong("id", id);
@@ -1682,6 +1712,63 @@ public class FragmentIdentity extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "identity:signature");
+    }
+
+    private Snackbar lanSnackbar = null;
+
+    private void checkLan(String host) {
+        Bundle args = new Bundle();
+        args.putString("host", host);
+
+        new SimpleTask<Boolean>() {
+            @Override
+            protected Boolean onExecute(Context context, Bundle args) throws Throwable {
+                String host = args.getString("host");
+                return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN &&
+                        ConnectionHelper.isLocalAddress(host, false) &&
+                        !Helper.hasPermission(context, Manifest.permission.ACCESS_LOCAL_NETWORK));
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Boolean data) {
+                boolean lan17 = Boolean.TRUE.equals(data);
+                if (lan17 && lanSnackbar == null && view != null) {
+                    lanSnackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_lan_required, Snackbar.LENGTH_INDEFINITE));
+                    Helper.setSnackbarLines(lanSnackbar, 2);
+                    lanSnackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            lanSnackbar.dismiss();
+                            if (BuildConfig.PLAY_STORE_RELEASE)
+                                Helper.viewFAQ(v.getContext(), 210);
+                            else
+                                requestPermissions(new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK}, REQUEST_PERMISSIONS);
+                        }
+                    });
+                    lanSnackbar.addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onShown(Snackbar sb) {
+                            if (view != null)
+                                view.requestApplyInsets();
+                        }
+
+                        @Override
+                        public void onDismissed(Snackbar transientBottomBar, int event) {
+                            if (view != null)
+                                view.requestApplyInsets();
+                        }
+                    });
+                    lanSnackbar.show();
+                } else if (!lan17 && lanSnackbar != null) {
+                    lanSnackbar.dismiss();
+                    lanSnackbar = null;
+                }
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ignored) {
+            }
+        }.execute(this, args, "checklan");
     }
 
     private void onPickUri(Intent intent) {

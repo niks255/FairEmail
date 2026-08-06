@@ -1303,6 +1303,7 @@
     <string name="title_imap" translatable="false">IMAP</string>
     <string name="title_pop3" translatable="false">POP3</string>
     <string name="title_smtp" translatable="false">SMTP</string>
+    <string name="title_lan_required">Local network permissions required</string>
     <string name="title_aliases">Aliases</string>
     <string name="title_provider">Provider</string>
     <string name="title_custom">Custom</string>
@@ -1320,6 +1321,7 @@
     <string name="title_notify_remark">You can enable this for account specific notifications</string>
     <string name="title_port">Port number</string>
     <string name="title_user">User name</string>
+    <string name="title_user_hint">Usually the primary email address</string>
     <string name="title_password">Password</string>
     <string name="title_password_storage">How are passwords stored?</string>
     <string name="title_case_sensitive">Usernames and passwords are usually case sensitive</string>
@@ -1488,6 +1490,7 @@
     <string name="title_show_flagged">Show starred message count</string>
     <string name="title_subscribed_only">Subscribed only</string>
     <string name="title_sort_unread_atop">Sort unread on top</string>
+    <string name="title_sort_sync">Sort on synchronized</string>
     <string name="title_search_folder">Search for folder</string>
     <string name="title_apply_to_all">Apply to all</string>
     <string name="title_edit_account_name">Edit account name</string>

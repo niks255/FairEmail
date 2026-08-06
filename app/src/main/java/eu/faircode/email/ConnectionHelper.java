@@ -30,6 +30,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
@@ -56,7 +57,6 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateParsingException;
@@ -632,6 +632,45 @@ public class ConnectionHelper {
         }
     }
 
+    private static boolean isCarrierGradeNat(InetAddress addr) {
+        if (!(addr instanceof Inet4Address))
+            return false;
+        byte[] b = addr.getAddress();
+        return (b[0] & 0xFF) == 100 && (b[1] & 0xC0) == 0x40; // 100.64.0.0/10
+    }
+
+    private static boolean isUniqueLocalAddress(InetAddress addr) {
+        if (!(addr instanceof Inet6Address))
+            return false;
+        byte[] b = addr.getAddress();
+        return (b[0] & 0xFE) == 0xFC; // fc00::/7
+    }
+
+    static boolean isLocalAddress(String host, boolean unwrap) {
+        if (TextUtils.isEmpty(host))
+            return false;
+        try {
+            InetAddress addr = InetAddress.getByName(host);
+            if (unwrap)
+                addr = unwrapEmbeddedV4(addr);
+            return (addr.isLoopbackAddress() ||
+                    addr.isSiteLocalAddress() ||
+                    addr.isLinkLocalAddress() ||
+                    //isCarrierGradeNat(addr) ||
+                    isUniqueLocalAddress(addr));
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
+    }
+
+    static boolean isNumericAddress(String host) {
+        // IPv4-mapped IPv6 can be 45 characters
+        if (host == null || host.length() > 64)
+            return false;
+        return ConnectionHelper.jni_is_numeric_address(host);
+    }
+
     static InetAddress from6to4(InetAddress addr) {
         // https://en.wikipedia.org/wiki/6to4
         if (addr instanceof Inet6Address) {
@@ -646,23 +685,46 @@ public class ConnectionHelper {
         return addr;
     }
 
-    static boolean isNumericAddress(String host) {
-        // IPv4-mapped IPv6 can be 45 characters
-        if (host == null || host.length() > 64)
-            return false;
-        return ConnectionHelper.jni_is_numeric_address(host);
+    private static final byte[] MAPPED_V4_PREFIX = {
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte) 0xFF, (byte) 0xFF
+    };
+
+    static InetAddress fromMappedV4(InetAddress addr) {
+        if (addr instanceof Inet6Address) {
+            byte[] octets = ((Inet6Address) addr).getAddress();
+            if (Arrays.equals(Arrays.copyOfRange(octets, 0, 12), MAPPED_V4_PREFIX))
+                try {
+                    return Inet4Address.getByAddress(Arrays.copyOfRange(octets, 12, 16));
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
+        }
+        return addr;
     }
 
-    static boolean isLocalAddress(String host) {
-        try {
-            InetAddress addr = ConnectionHelper.from6to4(InetAddress.getByName(host));
-            return (addr.isLoopbackAddress() ||
-                    addr.isSiteLocalAddress() ||
-                    addr.isLinkLocalAddress());
-        } catch (UnknownHostException ex) {
-            Log.e(ex);
-            return false;
+    private static final byte[] NAT64_PREFIX = {
+            0x00, 0x64, (byte) 0xFF, (byte) 0x9B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    static InetAddress fromNat64(InetAddress addr) {
+        if (addr instanceof Inet6Address) {
+            byte[] octets = ((Inet6Address) addr).getAddress();
+            if (Arrays.equals(Arrays.copyOfRange(octets, 0, 12), NAT64_PREFIX))
+                try {
+                    return Inet4Address.getByAddress(Arrays.copyOfRange(octets, 12, 16));
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                }
         }
+        return addr;
+    }
+
+    static InetAddress unwrapEmbeddedV4(InetAddress addr) {
+        addr = from6to4(addr);
+        if (addr instanceof Inet4Address) return addr;
+        addr = fromMappedV4(addr);
+        if (addr instanceof Inet4Address) return addr;
+        return fromNat64(addr);
     }
 
     static boolean inSubnet(final String ip, final String net, final int prefix) {

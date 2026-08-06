@@ -15,7 +15,8 @@
     <string name="app_updated">Ostatnia aktualizacja: %1$s</string>
     <string name="app_download">Pobrano z: %1$s</string>
     <string name="app_error">Większość komunikatów o błędach ma przyczyny zewnętrzne (sieć, serwer itp.) lub wynika z nieprawidłowej, często niestandardowej konfiguracji. Negatywna recenzja nie rozwiązuje takich problemów. Skorzystanie z pomocy technicznej jest prawie zawsze skuteczniejsze.</string>
-    <string name="app_motd">        Z Androidem 14/15 beta, powiadomienia \'Aplikacja nie odpowiada\' występują sporadycznie.
+    <string name="app_motd">
+        Z Androidem 14/15 beta, powiadomienia \'Aplikacja nie odpowiada\' występują sporadycznie.
         Google pracuje nad poprawką.
         Proszę nie winić aplikacji za problem, który jest problemem systemu Android!
     </string>
@@ -108,7 +109,8 @@
     </plurals>
     <string name="title_ask_spam_who">Zgłosić wiadomość od %1$s jako spam?</string>
     <string name="title_junk_hint">Twój dostawca poczty elektronicznej jest odpowiedzialny za filtrowanie spamu. Aplikacja pocztowa nie posiada wszystkich danych niezbędnych do niezawodnego wykonywania tej funkcji.</string>
-    <string name="title_junk_pop_hint">        Wiadomości od zablokowanych nadawców nie zostaną pobrane.
+    <string name="title_junk_pop_hint">
+        Wiadomości od zablokowanych nadawców nie zostaną pobrane.
         Jeśli opcja \"Zostaw wiadomości na serwerze\" nie jest włączona, te wiadomości zostaną trwale utracone!
     </string>
     <string name="title_block">Zablokuj %1$s</string>
@@ -231,7 +233,8 @@
     <string name="title_setup_office_auth">Błąd \"AUTHENTICATE failed\" może być spowodowany wyłączeniem protokołu IMAP/SMTP przez administratora systemu</string>
     <string name="title_setup_office_auth_5_7_3">Wypróbuj kreatora szybkiej konfiguracji od „innego dostawcy”.</string>
     <string name="title_setup_office_auth_5_7_139">Wypróbuj kreator szybkiej konfiguracji „Outlook/Hotmail/Live”.</string>
-    <string name="title_setup_office_not_connected">        Błąd „Użytkownik jest uwierzytelniony, ale nie jest połączony” oznacza najczęściej, że protokół IMAP jest wyłączony.
+    <string name="title_setup_office_not_connected">
+        Błąd „Użytkownik jest uwierzytelniony, ale nie jest połączony” oznacza najczęściej, że protokół IMAP jest wyłączony.
         W przypadku konsumenckiego konta Outlook należy przejść do witryny Outlook, dotknąć kółka ustawień w prawym górnym rogu, wybrać „Poczta”, wybrać „Przekazywanie i IMAP”, a w sekcji „POP i IMAP” włączyć „Zezwalaj urządzeniom i aplikacjom na korzystanie z IMAP”.
         W przypadku konta firmowego, edukacyjnego itp. należy skontaktować się z administratorem systemu serwera poczty e-mail.
     </string>
@@ -373,12 +376,14 @@
     <string name="title_advanced_hint_title">Ustawienia zaawansowane</string>
     <string name="title_advanced_hint_message">        Przechodzisz do bardziej zaawansowanych opcji.         Wszystkie opcje mają powszechnie używane wartości standardowe, których nie trzeba zmieniać, chyba że masz inne preferencje.
     </string>
-    <string name="title_advanced_hint_configure">Nie musisz być tutaj, aby skonfigurować konto. W tym celu skorzystaj z przycisku kreatora szybkiej konfiguracji.
+    <string name="title_advanced_hint_configure">
+Nie musisz być tutaj, aby skonfigurować konto. W tym celu skorzystaj z przycisku kreatora szybkiej konfiguracji.
         Kreator szybkiej konfiguracji działa prawie zawsze, ale jeśli tak się nie stanie, możesz skorzystać z klasycznej konfiguracji ręcznej, dostępnej nieco poniżej przycisku kreatora.
     </string>
     <string name="title_advanced_hint_remark">Opcje są podzielone na kategorie według zakładek, podzielone na sekcje, uporządkowane według wyglądu lub użycia i można je przeszukiwać.
     </string>
-    <string name="title_advanced_hint_options">        Nie będziesz potrzebować większości opcji, ponieważ niektóre z nich są dość specyficzne.
+    <string name="title_advanced_hint_options">
+        Nie będziesz potrzebować większości opcji, ponieważ niektóre z nich są dość specyficzne.
         Nie zostawiaj złej recenzji tylko z powodu ilości opcji lub niezrozumienia działania ich wszystkich od razu.
         Są użytkownicy, którzy korzystają ze wszystkich opcji i być może Ty również użyjesz ich w przyszłości.
     </string>
@@ -782,7 +787,8 @@
     <string name="title_advanced_mnemonic_hint">Każda otrzymana wiadomość e-mail z poniższymi słowami w temacie, automatycznie i natychmiast usunie dane aplikacji</string>
     <string name="title_advanced_clear_all">Usuń dane aplikacji</string>
     <string name="title_advanced_clear_all_remark">Dane aplikacji zostaną nieodwracalnie usunięte!</string>
-    <string name="title_advanced_default_encryption">        Domyślna metoda szyfrowania (PGP lub S/MIME) będzie przechowywana dla każdej tożsamości po wysłaniu podpisanej lub zaszyfrowanej wiadomości.
+    <string name="title_advanced_default_encryption">
+        Domyślna metoda szyfrowania (PGP lub S/MIME) będzie przechowywana dla każdej tożsamości po wysłaniu podpisanej lub zaszyfrowanej wiadomości.
         Metoda szyfrowania może być wybrana przed wysłaniem w oknie dialogowym opcji wysyłania (przytrzymując przycisk wyślij).
     </string>
     <string name="title_advanced_sign_default">Domyślnie podpisuj</string>
@@ -948,7 +954,8 @@
     <string name="title_advanced_inline_hint">Obrazy wstawione są obrazami zawartymi w wiadomości</string>
     <string name="compressed">Nie zostanie wyświetlona zawartość plików skompresowanych (%1$s), z więcej niż %2$s plikami lub z plikami większymi niż %3$s</string>
     <string name="title_advanced_parse_classes_hint">Spowoduje to poprawniejsze wyświetlanie wiadomości, ale z możliwym opóźnieniem</string>
-    <string name="title_advanced_default_folder_hint">        Android może poprosić o pozwolenie na dostęp do wybranego folderu, nawet jeśli aplikacja tego nie potrzebuje.
+    <string name="title_advanced_default_folder_hint">
+        Android może poprosić o pozwolenie na dostęp do wybranego folderu, nawet jeśli aplikacja tego nie potrzebuje.
         Możesz anulować okno dialogowe wyboru, aby przywrócić domyślny folder (zazwyczaj folder \"Pobrane\").
     </string>
     <string name="title_advanced_restore_on_launch_hint">Przywrócenie ostatniego stanu aplikacji, jeśli to możliwe, po ponownym uruchomieniu za pomocą ikony programu uruchamiającego</string>
@@ -1046,6 +1053,7 @@
     <string name="title_account_gmail">W celu zapewnienia niezawodnej synchronizacji konta Gmail, należy w miarę możliwości używać kreatora szybkiej konfiguracji Gmaila</string>
     <string name="title_domain">Nazwa domeny</string>
     <string name="title_autoconfig">Pobierz ustawienia</string>
+    <string name="title_lan_required">Wymagane uprawnienia do sieci lokalnej</string>
     <string name="title_aliases">Aliasy</string>
     <string name="title_provider">Dostawca</string>
     <string name="title_custom">Własne</string>
@@ -1061,6 +1069,7 @@
     <string name="title_notify_remark">Można włączyć tę funkcję dla specyficznych powiadomień danego konta</string>
     <string name="title_port">Numer portu</string>
     <string name="title_user">Nazwa użytkownika</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">Zazwyczaj główny adres e-mail</string>
     <string name="title_password">Hasło</string>
     <string name="title_password_storage">Jak przechowywane są hasła?</string>
     <string name="title_case_sensitive">W nazwach użytkowników i hasłach rozróżniane są małe i wielkie litery</string>
@@ -1083,7 +1092,8 @@
     <string name="title_leave_on_device_hint">Gdy wiadomości zostaną usunięte z serwera, wiadomości pozostają na urządzeniu</string>
     <string name="title_max_messages">Maksymalna liczba wiadomości do pobrania (puste dla wszystkich)</string>
     <string name="title_max_messages_keep">To jest maksymalna liczba wiadomości, które będą przechowywane na urządzeniu</string>
-    <string name="title_max_messages_remark">        Wpisz liczbę dodatnią, aby pobrać wiadomości na końcu (najczęściej spotykane)
+    <string name="title_max_messages_remark">
+        Wpisz liczbę dodatnią, aby pobrać wiadomości na końcu (najczęściej spotykane)
         i liczbę ujemną, aby pobrać wiadomości na początku (najmniej powszechne)
     </string>
     <string name="title_keep_poll_interval">Interwał sprawdzania (minuty)</string>
@@ -1147,7 +1157,8 @@
     <string name="title_service_port">Zweryfikuj dokładnie numer portu</string>
     <string name="title_service_protocol">Upewnij się w kwestii protokołu (SSL/TLS lub STARTTLS)</string>
     <string name="title_service_error10">To konto musi zostać ponownie uwierzytelnione, można to wykonać za pomocą kreatora szybkich ustawień</string>
-    <string name="title_certificate_error">        Ze względu na zasady Sklepu Google Play, nie jest już możliwe wspieranie niezabezpieczonych połączeń z serwerami e-mail z problemami z certyfikatami dla wersji FairEmail dystrybuowanej w Sklepie Play.
+    <string name="title_certificate_error">
+        Ze względu na zasady Sklepu Google Play, nie jest już możliwe wspieranie niezabezpieczonych połączeń z serwerami e-mail z problemami z certyfikatami dla wersji FairEmail dystrybuowanej w Sklepie Play.
         W związku z tym problem ten może zostać rozwiązany wyłącznie przez dostawcę poczty e-mail - powyższe informacje o błędzie mogą pomóc w jego rozwiązaniu.
     </string>
     <string name="title_advanced_browse">Przeglądaj wiadomości na serwerze</string>
@@ -1156,7 +1167,8 @@
     <string name="title_synchronize_subfolders">Podfoldery</string>
     <string name="title_synchronize_more">Pobierz więcej wiadomości</string>
     <string name="title_synchronize_more_hint">Spowoduje to jednorazowe pobranie starszych wiadomości, więc nie spowoduje większego zużycia baterii w codziennym użytkowaniu</string>
-    <string name="title_synchronize_more_hint2">        Wiadomości będą pobierane tak szybko, jak serwer poczty e-mail może je dostarczyć i przechowywane tak szybko, jak urządzenie może je przechowywać oraz indeksować.
+    <string name="title_synchronize_more_hint2">
+        Wiadomości będą pobierane tak szybko, jak serwer poczty e-mail może je dostarczyć i przechowywane tak szybko, jak urządzenie może je przechowywać oraz indeksować.
         Czynnikiem ograniczającym jest zwykle szybkość wewnętrznej pamięci urządzenia.
     </string>
     <string name="title_synchronize_more_hint3">Należy pamiętać, że przechowywanie dużej liczby wiadomości (10 tysięcy lub więcej) na Twoim urządzeniu może powodować opóźnienia, ponieważ wewnętrzna pamięć masowa nie jest nieskończenie szybka.</string>
@@ -1352,7 +1364,7 @@
     <string name="title_quick_actions_snooze">Odłóż</string>
     <string name="title_quick_actions_clear">Wyczyść zaznaczenie po akcji</string>
     <string name="title_trash">Kosz</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Usuń rozmowę</string>
+    <string name="title_trash_conversation">Usuń rozmowę</string>
     <string name="title_trash_selection">Wybór kosza</string>
     <string name="title_copy">Kopiuj &#8230;</string>
     <string name="title_copy_to">Kopiuj do &#8230;</string>
@@ -1377,7 +1389,8 @@
     <string name="title_report_spam">Traktuj jako spam</string>
     <string name="title_delete_permanently">Usuń trwale</string>
     <string name="title_delete_attachments">Usuń załączniki</string>
-    <string name="title_delete_attachments_remark">        Aby usunąć załączniki, nowa wiadomość musi zostać dodana i poprzednia wiadomość musi zostać usunięta.
+    <string name="title_delete_attachments_remark">
+        Aby usunąć załączniki, nowa wiadomość musi zostać dodana i poprzednia wiadomość musi zostać usunięta.
         Ponieważ to może stanowić kłopot, stara wiadomość zostanie przeniesiona do kosza.
     </string>
     <string name="title_snooze">Odłóż &#8230;</string>
@@ -1459,7 +1472,8 @@
     <string name="title_third_party">Używasz wersji od innych firm</string>
     <string name="title_expand_warning">Rozwinięcie tej wiadomości spowoduje pobranie %1$s</string>
     <string name="title_download_message">Pobieranie &#8230;</string>
-    <string name="title_reformatted">Jest to bezpieczny, sformatowany widok wiadomości.
+    <string name="title_reformatted">
+Jest to bezpieczny, sformatowany widok wiadomości.
         Możesz dotknąć ikony &#x26F6;, aby wyświetlić mniej bezpieczną oryginalną wiadomość i ukryć tę wiadomość.
         Ponowne formatowanie wiadomości zajmuje trochę czasu, w zależności od rozmiaru wiadomości i szybkości urządzenia.
         Czasami konieczne jest wyświetlenie oryginalnej wiadomości, aby zobaczyć kody QR.
@@ -1764,7 +1778,8 @@
     <string name="title_edit_signature_remark">Chociaż Android nie może wyświetlić całego kodu HTML, zostanie on wysłany tak, jak jest</string>
     <string name="title_edit_signature_text">Tekst podpisu</string>
     <string name="title_edit_signature_image">Wstaw obraz</string>
-    <string name="title_edit_signature_image_hint">        Podczas wysyłania wiadomości obraz jest kopiowany do wiadomości z wybranej lokalizacji.
+    <string name="title_edit_signature_image_hint">
+        Podczas wysyłania wiadomości obraz jest kopiowany do wiadomości z wybranej lokalizacji.
         Nie usuwaj więc pliku z obrazem!
     
     </string>
@@ -2031,7 +2046,8 @@
     <string name="title_hint_message_actions">Przesuń w lewo, aby wyrzucić do kosza; Przesuń w prawo, aby zarchiwizować (jeśli dostępne); Działania przeciągnięcia można skonfigurować w ustawieniach konta</string>
     <string name="title_hint_outbox">Możesz przesunąć w lewo lub w prawo, aby anulować wysyłanie</string>
     <string name="title_hint_message_selection">Naciśnij długo wiadomość, aby rozpocząć wybieranie wielu wiadomości; Przytrzymaj i przeciągnij w górę lub w dół, aby wybrać więcej wiadomości</string>
-    <string name="title_hint_message_junk">        Klient poczty elektronicznej zasadniczo wyświetla wiadomości na serwerze poczty elektronicznej.
+    <string name="title_hint_message_junk">
+        Klient poczty elektronicznej zasadniczo wyświetla wiadomości na serwerze poczty elektronicznej.
         Serwer pocztowy jest odpowiedzialny za filtrowanie spamu, a nie klient poczty.
         Jeśli otrzymujesz dużo spamu, skontaktuj się ze swoim dostawcą poczty i nie obwiniaj aplikacji!
     </string>
@@ -2044,7 +2060,8 @@
     <string name="title_hint_junk">Filtrowanie spamu powinno być wykonywane przez serwer poczty e-mail i nie może być wykonywane niezawodnie na urządzeniu o ograniczonych możliwościach i zasilanym z baterii.</string>
     <string name="title_hint_junk_learn">Przesyłając wiadomości do i z folderu spam, serwer e-mail \"uczy się\" czym jest spam</string>
     <string name="title_hint_contact_actions">Przytrzymaj, aby uzyskać więcej opcji</string>
-    <string name="title_hint_eml">        To jest podsumowanie zawartości nieprzetworzonego pliku wiadomości.
+    <string name="title_hint_eml">
+        To jest podsumowanie zawartości nieprzetworzonego pliku wiadomości.
         Możesz użyć prawego dolnego przycisku, aby zapisać wiadomość w skrzynce odbiorczej i wyświetlić całą zawartość.
     </string>
     <string name="title_open_link">Otwórz link</string>

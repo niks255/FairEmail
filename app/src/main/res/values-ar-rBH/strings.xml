@@ -14,7 +14,8 @@
     <string name="app_cake_required">الحد الأدنى لمساحة التخزين المطلوبة: %1$s</string>
     <string name="app_updated">آخر تحديث: %1$s</string>
     <string name="app_download">نُزّل من: %1$s</string>
-    <string name="app_motd">        مع أندرويد 14/15 beta، \"التطبيق لا يستجيب\" الإشعارات تحدث أحيانا.
+    <string name="app_motd">
+        مع أندرويد 14/15 beta، \"التطبيق لا يستجيب\" الإشعارات تحدث أحيانا.
     حوجل يعمل جوجل على إصلاح.
         من فضلك لا تلوم التطبيق على  مشكلة الأندرويد هذه!
     </string>
@@ -57,14 +58,16 @@
     </plurals>
     <string name="title_ask_spam_who">جعل الرسالة من %1$s كرسالة غير مرغوب فيها؟</string>
     <string name="title_junk_hint">مزود البريد الإلكتروني الخاص بك مسؤول عن تصفية البريد غير المرغوب فيه. تطبيق البريد الإلكتروني لا يحتوي على جميع البيانات المطلوبة للقيام بذلك بشكل موثوق.</string>
-    <string name="title_junk_pop_hint">        لن يتم تنزيل الرسائل الواردة من المرسلين المحظورين.
+    <string name="title_junk_pop_hint">
+        لن يتم تنزيل الرسائل الواردة من المرسلين المحظورين.
         إذا لم يتم تمكين \"ترك الرسائل على الخادم\"، فستفقد هذه الرسائل نهائيا!
     </string>
     <string name="title_block">حظر %1$s</string>
     <string name="title_block_sender">حظر المرسل</string>
     <string name="title_block_sender_domain">حظر دومين \'%1$s\'</string>
     <string name="title_block_sender_remark">الحظر يعني الانتقال تلقائيا إلى ملف الرسائل غير المرغوب فيها</string>
-    <string name="title_block_sender_hint">        حظر المرسل هو ميزة مجانية.
+    <string name="title_block_sender_hint">
+        حظر المرسل هو ميزة مجانية.
         حظر دومين المرسل باستخدام قواعد الفلتر، هي ميزة احترافية.
     </string>
     <string name="title_blocked_senders">المرسلون المحظورون</string>
@@ -211,7 +214,8 @@
     <string name="title_setup_close">اغلق الإعدادات</string>
     <string name="title_setup_export">تصدير الإعدادات</string>
     <string name="title_setup_import">استيراد الإعدادات</string>
-    <string name="title_setup_export_remark">        ملف الإعدادات مشفر بكلمة مرور لأنه يحتوي على جميع الإعدادات ومعلومات الحساب.
+    <string name="title_setup_export_remark">
+        ملف الإعدادات مشفر بكلمة مرور لأنه يحتوي على جميع الإعدادات ومعلومات الحساب.
         كلمة المرور مطلوبة لاستيراد الإعدادات مرة أخرى، لذا يرجى عدم نسيانها!
     </string>
     <string name="title_setup_export_do">سيحتوي ملف التصدير على جميع الإعدادات والبيانات، ولكن لا توجد رسائل ولا صور مشار إليها في التوقيعات</string>
@@ -274,7 +278,8 @@
     <string name="title_check_gmail_oauth">سوف تستمر حسابات جيميل الخاصة بك في العمل بعد 30 مايو 2022</string>
     <string name="title_check_gmail_password">بعض حسابات الجيميل الخاصة بك قد تتوقف عن العمل بعد 30 مايو 2022</string>
     <string name="title_advanced_hint_title">خيارات أكثر تقدماً</string>
-    <string name="title_advanced_hint_message">        أنت تنتقل إلى الخيارات الأكثر تقدماً.
+    <string name="title_advanced_hint_message">
+        أنت تنتقل إلى الخيارات الأكثر تقدماً.
         جميع الخيارات تستخدم القيم القياسية الشائعة، التي لا تحتاج إلى تغييرها إلا إذا كان لديك تفضيلات مختلفة.
     </string>
     <string name="title_advanced_hint_remark">        يتم تصنيف الخيارات حسب علامة التبويب، مقسمة إلى أقسام، منظمة حسب المظهر أو الاستخدام، وقابلة للبحث.

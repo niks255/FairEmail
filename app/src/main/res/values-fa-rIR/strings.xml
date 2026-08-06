@@ -15,7 +15,8 @@
     <string name="app_updated">آخرین به روز رسانی: %1$s</string>
     <string name="app_download">در حال دانلود از %1$s</string>
     <string name="app_error">بیشتر پیام‌های خطا دلایل خارجی (شبکه، سرور و غیره) دارند یا ناشی از پیکربندی نادرست و اغلب غیر استاندارد هستند. نوشتن نظری منفی چنین مشکلاتی را حل نمی‌کند. درخواست پشتیبانی تقریباً همیشه مؤثرتر است.</string>
-    <string name="app_motd">        در اندروید ۱۴/۱۵ بتا، گهگاه اعلان‌های «برنامه پاسخ نمی‌دهد» رخ می‌دهد.
+    <string name="app_motd">
+        در اندروید ۱۴/۱۵ بتا، گهگاه اعلان‌های «برنامه پاسخ نمی‌دهد» رخ می‌دهد.
         گوگل در حال کار برای حل آن است.
         لطفا برنامه را به خاطر این مشکل اندروید سرزنش نکنید!
     </string>
@@ -179,7 +180,8 @@
     <string name="title_setup_gmail_password">می‌خواهم به جای حسابی روی دستگاه، به یک حساب با رمز عبور اجازه بدهم</string>
     <string name="title_setup_office_auth">خطای \'AUTHENTICATE failed\' می‌تواند به‌دلیل غیرفعال بودن IMAP/SMTP به‌ دست مدیر سیستم باشد</string>
     <string name="title_setup_office_auth_5_7_139">لطفا از راهنمای سریع نصب \'آوت‌لوک/هات‌میل/لایو\' استفاده کنید.</string>
-    <string name="title_setup_office_not_connected">        خطای \'User is authenticated but not connected\' غالبا به معنای غیرفعال بودن IMAP می‌باشد.
+    <string name="title_setup_office_not_connected">
+        خطای \'User is authenticated but not connected\' غالبا به معنای غیرفعال بودن IMAP می‌باشد.
         در صورت استفاده از حساب آوت‌لوک شخصی، لطفا به وبسایت آوت‌لوک رفته، روی چرخ‌دنده تنظیمات در بالا سمت راست ضربه بزنید، \'Mail\' و سپس \'Forwarding and IMAP\' را انتخاب کنید و در بخش \'POP and IMAP\' گزینه \'Let devices and apps use IMAP\' را فعال کنید.
         در صورت استفاده از حساب شرکتی، آموزشی، و غیره لطفا با مدیر سیستم سرور ایمیل تماس بگیرید.
     </string>
@@ -243,7 +245,8 @@
     <string name="title_setup_close">تنظیمات را ببند</string>
     <string name="title_setup_export">ذخیره تنظیمات</string>
     <string name="title_setup_import">وارد کردن تنظیمات</string>
-    <string name="title_setup_export_remark">        از آنجایی که فایل تنظیمات دربرگیرنده همه تنظیمات و اطلاعات حساب است، با رمز عبور رمزگذاری شده است.
+    <string name="title_setup_export_remark">
+        از آنجایی که فایل تنظیمات دربرگیرنده همه تنظیمات و اطلاعات حساب است، با رمز عبور رمزگذاری شده است.
         به رمز عبور برای وارد کردن دوباره تنظیمات نیاز است، برای همین در حفظ آن کوشا باشید!
     </string>
     <string name="title_setup_backup">چگونه از پیام‌ها پشتیبان بگیریم؟</string>
@@ -309,10 +312,12 @@
     <string name="title_advanced_hint_title">گزینه‌های پیشرفته بیشتر</string>
     <string name="title_advanced_hint_message">        You are navigating to the more advanced options.        All options have commonly used standard values, which you do not need to change unless you have a different preference.
     </string>
-    <string name="title_advanced_hint_configure">        شما برای تنظیمات حساب‌تان نیازی به حضور در اینجا ندارید. لطفا از دکمه تنظیمات سریع برای این منظور استفاده کنید.
+    <string name="title_advanced_hint_configure">
+        شما برای تنظیمات حساب‌تان نیازی به حضور در اینجا ندارید. لطفا از دکمه تنظیمات سریع برای این منظور استفاده کنید.
         بخش تنظیمات سریع حساب تقریبا همواره پاسخگوی نیازتان خواهد بود اما اگر نبود، می‌توانید اندکی از دکمه تنظیمات دستی کلاسیک در پایین استفاده کنید.
     </string>
-    <string name="title_advanced_hint_options">        شما به بیشتر گزینه‌ها نیاز نخواهید داشت و از آنجایی که برخی از گزینه‌ها کاملا خاص هستند،
+    <string name="title_advanced_hint_options">
+        شما به بیشتر گزینه‌ها نیاز نخواهید داشت و از آنجایی که برخی از گزینه‌ها کاملا خاص هستند،
         اگر عملکرد همه گزینه‌ها بلافاصله مشخص نباشد قابل درک است.
         لطفاً فقط به دلیل تعداد گزینه‌ها یا برای اینکه همه گزینه‌ها را فورا متوجه نشده‌اید، نظر بدی نگذارید.
         همه گزینه‌ها برای بیش از چند نفر مفید هستند، اما شاید برای شما (هنوز) مفید نباشند.
@@ -735,6 +740,7 @@
     <string name="title_account_move">به‌طور پیش‌فرض انتقال بده به</string>
     <string name="title_domain">نام دامنه</string>
     <string name="title_autoconfig">دریافت تنظیمات</string>
+    <string name="title_lan_required">نیازمند اجازه دسترسی به شبکه محلی</string>
     <string name="title_aliases">نام‌های مستعار</string>
     <string name="title_provider">فراهم کننده</string>
     <string name="title_custom">سفارشی</string>
@@ -748,6 +754,7 @@
     <string name="title_notify_remark">می‌توانید این را برای نوتیفیکیشن‌های خاص حساب فعال کنید</string>
     <string name="title_port">شماره پورت</string>
     <string name="title_user">نام کاربری</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">معمولا نشانی ایمیل اصلی</string>
     <string name="title_password">گذرواژه</string>
     <string name="title_case_sensitive">نام‌های کاربری و گذرواژه‌ها در بیشتر موارد به بزرگ و کوچک بودن حروف حساسند</string>
     <string name="title_login_before_send">دریافت پیش از ارسال</string>
@@ -795,7 +802,8 @@
     <string name="title_review">بازبینی</string>
     <string name="title_service_vpn">شاید علت آن VPN مورد استفاده باشد</string>
     <string name="title_service_port">لطفا شماره درگاه را دوباره بررسی کنید</string>
-    <string name="title_certificate_error">        به دلیل سیاست‌های استور گوگل، امکان پشتیبانی از اتصالات ناامن به سرورهای ایمیل با سرتیفیکیت‌های مشکل‌دار برای نسخه‌ای از فیرایمیل که روی پلی‌استور قرار گرفته دیگر وجود ندارد.
+    <string name="title_certificate_error">
+        به دلیل سیاست‌های استور گوگل، امکان پشتیبانی از اتصالات ناامن به سرورهای ایمیل با سرتیفیکیت‌های مشکل‌دار برای نسخه‌ای از فیرایمیل که روی پلی‌استور قرار گرفته دیگر وجود ندارد.
         برای همین، این مشکل تنها توسط ارائه‌دهنده ایمیل شما می‌تواند برطرف شود - اطلاعات مندرج در بالا ممکن است به رفع این مشکل کمک کند.
     </string>
     <string name="title_advanced_browse">مرور پیام‌های روی سرور</string>
@@ -934,7 +942,7 @@
     <string name="title_quick_actions_high">با اهمیت</string>
     <string name="title_quick_actions_snooze">تعویق</string>
     <string name="title_trash">سطل آشغال</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">انتقال مکالمه به سطل آشغال</string>
+    <string name="title_trash_conversation">انتقال مکالمه به سطل آشغال</string>
     <string name="title_trash_selection">انتخاب سطل آشغال</string>
     <string name="title_copy">کپی &#8230;</string>
     <string name="title_copy_to">کپی به &#8230;</string>
@@ -956,7 +964,8 @@
     <string name="title_report_spam">برخورد به‌عنوان هرزنامه</string>
     <string name="title_delete_permanently">حذف برای همیشه</string>
     <string name="title_delete_attachments">حذف پیوست</string>
-    <string name="title_delete_attachments_remark">جهت حذف پیوست‌ها، پیغام جدیدی باید اضافه و پیغام قبلی باید پاک شود.        از آنجایی که این ممکن است انجام نشود، پیغام قبلی به سطل زباله منتقل خواهد شد.
+    <string name="title_delete_attachments_remark">
+جهت حذف پیوست‌ها، پیغام جدیدی باید اضافه و پیغام قبلی باید پاک شود.        از آنجایی که این ممکن است انجام نشود، پیغام قبلی به سطل زباله منتقل خواهد شد.
     </string>
     <string name="title_snooze">چرت زدن &#8230;</string>
     <string name="title_archive">بایگانی</string>
@@ -1010,7 +1019,8 @@
     <string name="title_third_party">شما در حال استفاده از نسخه شخص ثالث هستید</string>
     <string name="title_expand_warning">گسترش این پیام باعث بارگیری %1$s خواهد شد</string>
     <string name="title_download_message">درحال بارگیری &#8230;</string>
-    <string name="title_reformatted">        این پیام به صورت دوباره قالب‌بندی شده و امن در حال نمایش است.
+    <string name="title_reformatted">
+        این پیام به صورت دوباره قالب‌بندی شده و امن در حال نمایش است.
         برای مشاهده پیام اصلی کمتر ایمن و پنهان کردن این پیغام می‌توانید روی آیکون &#x26F6; ضربه بزنید.
         قالب‌بندی مجدد پیام‌ها بسته به اندازه پیام و سرعت دستگاه شما مدتی طول می‌کشد.
         گاهی برای دیده شدن کدهای QR باید پیام به صورت اصلی آن نمایش داده شود.
@@ -1421,7 +1431,8 @@
     <string name="title_hint_important">مهم</string>
     <string name="title_hint_sync">دریافت پیامها می تواند زمانی بسته به سرعت سرویس دهنده، اتصال به اینترنت، دستگاه و تعداد پیام‌ها طول بکشد. هنگام دریافت پیامها ممکن است عملکرد برنامه کند شود.</string>
     <string name="title_hint_contact_actions">لمس طولانی برای گزینه‌ها</string>
-    <string name="title_hint_eml">        این خلاصه‌ای از محتویات یک فایل پیام خام است.
+    <string name="title_hint_eml">
+        این خلاصه‌ای از محتویات یک فایل پیام خام است.
         می‌توانید از دکمه پایین سمت راست برای ذخیره پیام در صندوق ورودی استفاده کنید تا همه محتوا را مشاهده کنید.
     </string>
     <string name="title_open_link">بازکردن لینک</string>

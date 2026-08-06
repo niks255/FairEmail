@@ -76,13 +76,15 @@
     </plurals>
     <string name="title_ask_spam_who">Behandle melding fra %1$s som spam?</string>
     <string name="title_junk_hint">Din e-postleverandør er ansvarlig for filtrering av nettsøppel. En e-postapp har ikke alle dataene som trengs for å gjøre dette pålitelig.</string>
-    <string name="title_junk_pop_hint">Meldinger fra blokkerte sendere vil ikke bli lastet ned.
+    <string name="title_junk_pop_hint">
+Meldinger fra blokkerte sendere vil ikke bli lastet ned.
         Om \"Forlat meldinger på server\" ikke er aktivert, vil disse meldingene bli permanent tapt!
     </string>
     <string name="title_block">Blokkere %1$s</string>
     <string name="title_block_sender">Blokker avsender</string>
     <string name="title_block_sender_domain">Blokker domene %1$s</string>
-    <string name="title_block_sender_hint">Blokkerer en sender er en gratis egenskap.
+    <string name="title_block_sender_hint">
+Blokkerer en sender er en gratis egenskap.
         Blokkering av en senderdomene bruker filterregler, som er en pro-egenskap.
     </string>
     <string name="title_blocked_senders">Blokkerte sendere</string>

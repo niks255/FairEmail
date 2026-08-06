@@ -14,7 +14,8 @@
     <string name="app_cake_required">Minimálne požadovaný úložný priestor: %1$s</string>
     <string name="app_updated">Posledná aktualizácia: %1$s</string>
     <string name="app_download">Stiahnuté z: %1$s</string>
-    <string name="app_motd">        V systéme Android 14/15 beta sa zriedkavo zobrazuje upozornenie \'Aplikácia neodpovedá\'.
+    <string name="app_motd">
+        V systéme Android 14/15 beta sa zriedkavo zobrazuje upozornenie \'Aplikácia neodpovedá\'.
         Na oprave pracujú v spoločnosti Google.
         Prosím neobviňujte aplikáciu FairEmail za tento nedostatok systému Android!
     </string>
@@ -107,7 +108,8 @@
     </plurals>
     <string name="title_ask_spam_who">Považovať správy od %1$s za nevyžiadané?</string>
     <string name="title_junk_hint">Váš emailový poskytovateľ je zodpovedný za filtrovanie spamu a nežiadúcich správ. Emailová aplikácia nemá dosť informácií, aby mohla spoľahlivo vykonávať túto činnosť sama.</string>
-    <string name="title_junk_pop_hint">        Správy od zablokovaných odosielateľov nebudú prevzaté.
+    <string name="title_junk_pop_hint">
+        Správy od zablokovaných odosielateľov nebudú prevzaté.
         Ak nie je zaškrtnuté \"Ponechať správy na serveri\", tieto správy budú natrvalo stratené!
     </string>
     <string name="title_block">Zablokovať %1$s</string>
@@ -426,7 +428,8 @@
     <string name="title_advanced_send_nav_color">Použiť farbu identity pre dolný panel akcií</string>
     <string name="title_advanced_send_reminders">Zobrazovať pripomienky</string>
     <string name="title_advanced_send_delayed">Zdržať odosielané správy</string>
-    <string name="title_advanced_send_undo">zobrazovať zrušenie odoslania správy</string>
+    <string name="title_advanced_send_undo">zobrazovať zrušenie odoslania správy
+</string>
     <string name="title_advanced_send_top">Tlačidlo Odoslať zobrazovať na vrchu</string>
     <string name="title_advanced_attach_new">Vytvorenie nového návrhu správy pre zdieľané adresy a súbory</string>
     <string name="title_advanced_answer_caption">Nastavenia tlačidla Odpovedať</string>
@@ -755,7 +758,8 @@
     <string name="title_advanced_mnemonic_hint">Každá prijatá správa s nasledujúcimi slovami v texte predmetu spôsobí okamžité automatické vymazanie údajov aplikácie</string>
     <string name="title_advanced_clear_all">Vymazať údaje aplikácie</string>
     <string name="title_advanced_clear_all_remark">Údaje aplikácie budú vymazané bez možnosti obnovenia!</string>
-    <string name="title_advanced_default_encryption">        Predvolená metóda šifrovania (PGP alebo S/MIME) bude po odoslaní prvej podpísanej alebo šifrovanej správy uložená pre každú totožnosť zvlášť.
+    <string name="title_advanced_default_encryption">
+        Predvolená metóda šifrovania (PGP alebo S/MIME) bude po odoslaní prvej podpísanej alebo šifrovanej správy uložená pre každú totožnosť zvlášť.
         Tesne pred odoslaním správy je potom možné zmeniť metódu šifrovania v dialógu Možnosti odoslania (dlhé stlačenie tlačidla Odoslať).    </string>
     <string name="title_advanced_sign_default">Predvolene podpisovať správy</string>
     <string name="title_advanced_encrypt_auto">Automatické šifrovanie, keď sú k dispozícii kľúče všetkých príjemcov</string>
@@ -910,7 +914,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_advanced_inline_hint">Zakomponované obrázky sú obrázky, ktoré sú súčasťou správy</string>
     <string name="compressed">Obsah komprimovaných súborov (%1$s) S viac než %2$s súbormi alebo so súbormi väčšími než %3$s nebude zobrazený</string>
     <string name="title_advanced_parse_classes_hint">Zobrazí správy s vyššou presnosťou, no s určitým oneskorením</string>
-    <string name="title_advanced_default_folder_hint">Systém Android môže požiadať o povolenie prístupu k vybranému priečinku, aj keď ho aplikácia nepotrebuje.
+    <string name="title_advanced_default_folder_hint">
+Systém Android môže požiadať o povolenie prístupu k vybranému priečinku, aj keď ho aplikácia nepotrebuje.
         Dialógové okno výberu môžete zrušiť a obnoviť predvolený priečinok (zvyčajne priečinok \"Prevziať\").
     </string>
     <string name="title_advanced_autoexpand_hint">Automaticky otvoriť správu ak konverzácia obsahuje len jednu</string>
@@ -1042,7 +1047,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_leave_on_device_hint">Keď sa správy odstránia zo servera, správy zostanú uložené v zariadení</string>
     <string name="title_max_messages">Maximálny počet správ na prevzatie (nechajte prázdne pre všetky)</string>
     <string name="title_max_messages_keep">Maximálny počet správ, ktoré sa budú uchovávať v zariadení</string>
-    <string name="title_max_messages_remark">        Zadajte kladné číslo pre sťahovanie správ na konci (najbežnejšie)
+    <string name="title_max_messages_remark">
+        Zadajte kladné číslo pre sťahovanie správ na konci (najbežnejšie)
         a záporné číslo na stiahnutie správ na začiatku (málo bežné)
     </string>
     <string name="title_keep_poll_interval">Interval zisťovania (v minútach)</string>
@@ -1106,7 +1112,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_service_port">Prosím, dva krát skontrolujte nastavený port</string>
     <string name="title_service_protocol">Prosím, dva krát skontrolujte nastavený protokol (SSL/TLS alebo STARTTLS)</string>
     <string name="title_service_error10">Tento účet je potrebné znova overiť pomocou sprievodcu rýchlym nastavením</string>
-    <string name="title_certificate_error">        Vzhľadom na zásady obchodu Play spoločnosti Google už nie je možné podporovať nezabezpečené pripojenia k e-mailovým serverom s neplatnými certifikátmi alebo certifikátmi nepodpísanými dôveryhodnou certifikačnou autoritou vo verzii aplikácie FairEmail distribuovanú v obchode Play.
+    <string name="title_certificate_error">
+        Vzhľadom na zásady obchodu Play spoločnosti Google už nie je možné podporovať nezabezpečené pripojenia k e-mailovým serverom s neplatnými certifikátmi alebo certifikátmi nepodpísanými dôveryhodnou certifikačnou autoritou vo verzii aplikácie FairEmail distribuovanú v obchode Play.
         Tento problém preto môže vyriešiť iba váš poskytovateľ e-mailových služieb - vyššie uvedené informácie o chybe mu môžu pomôcť pri hľadaní riešenia.
     </string>
     <string name="title_advanced_browse">Prehliadať správy na serveri</string>
@@ -1115,7 +1122,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_synchronize_subfolders">Podpriečinky</string>
     <string name="title_synchronize_more">Prevziať viac správ</string>
     <string name="title_synchronize_more_hint">Týmto prevezmete staršie správy v jedinom kroku, čím sa nezvýši celková spotreba batérie pri každodennom používaní</string>
-    <string name="title_synchronize_more_hint2">        Správy budú prevzaté tak rýchlo, ako rýchlo bude fungovať preberanie z poštového servera a uložené a zaindexované budú tak rýchlo, ako to umožní úložisko zariadenia.
+    <string name="title_synchronize_more_hint2">
+        Správy budú prevzaté tak rýchlo, ako rýchlo bude fungovať preberanie z poštového servera a uložené a zaindexované budú tak rýchlo, ako to umožní úložisko zariadenia.
         Limitujúci faktor je zvyčajne rýchlosť interného úložiska v zariadení.
     </string>
     <string name="title_synchronize_more_hint3">Prosím, majte na pamäti, že uchovávanie veľkého množstva správ v zariadení (viac než 10000) môže spôsobovať ťažkopádne správanie alebo zdržanie, pretože interné úložisko nie je nekonečne rýchle.</string>
@@ -1330,7 +1338,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_report_spam">Označiť ako spam</string>
     <string name="title_delete_permanently">Odstrániť natrvalo</string>
     <string name="title_delete_attachments">Odstrániť prílohy</string>
-    <string name="title_delete_attachments_remark">        Pre zmazanie príloh pridajte novú správu a starú odstráňte.
+    <string name="title_delete_attachments_remark">
+        Pre zmazanie príloh pridajte novú správu a starú odstráňte.
         Keďže sa to nemusí podariť, stará správa sa presunie do koša.
     </string>
     <string name="title_snooze">Odložiť &#8230;</string>
@@ -1710,7 +1719,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_edit_signature_remark">Napriek tomu, že Android nedokáže zobraziť všetok obsah HTML, takýto obsah bude odoslaný bez zmeny</string>
     <string name="title_edit_signature_text">Text podpisu</string>
     <string name="title_edit_signature_image">Vložiť obrázok</string>
-    <string name="title_edit_signature_image_hint">        Obrázok je z vybratého umiestnenia priložený k správe až pri odoslaní.
+    <string name="title_edit_signature_image_hint">
+        Obrázok je z vybratého umiestnenia priložený k správe až pri odoslaní.
         Dovtedy prosím nezmašte tento obrázok!
     </string>
     <string name="title_answer_define_name">Názov</string>
@@ -1970,7 +1980,8 @@ Nastavenie vždy toto kompenzuje neustálym sledovaním zmien.</string>
     <string name="title_hint_support">Ak máte otázky alebo chcete nahlásiť problémy, pomoc získate cez ponuku Podpora</string>
     <string name="title_hint_message_actions">Potiahnutím vľavo premiestnite do koša. Potiahnutím vpravo archivujete (ak je to možné). Tieto akcie je možné zmeniť v nastaveniach účtu</string>
     <string name="title_hint_message_selection">Pridržaním správy začnete viac násobný výber, držte a posúvajte hore alebo dolu, a vyberiete viac správ</string>
-    <string name="title_hint_message_junk">        E-mailový klient zobrazuje správy na e-mailovom serveri.
+    <string name="title_hint_message_junk">
+        E-mailový klient zobrazuje správy na e-mailovom serveri.
         Za filtrovanie spamu je zodpovedný e-mailový server, nie e-mailový klient.
         Ak dostávate veľa spamu, obráťte sa na poskytovateľa e-mailovej služby a neviňte z toho aplikáciu!
     </string>

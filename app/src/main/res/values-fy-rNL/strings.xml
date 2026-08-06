@@ -15,7 +15,8 @@
     <string name="app_updated">Lêst bywurke: %1$s</string>
     <string name="app_download">Download fan: %1$s</string>
     <string name="app_error">De measte flatermeldingen hawwe eksterne oarsaken (netwurk, server, ensfh.) of wurde feroarsake troch in net krekte, faak net-standert konfiguraasje. In slimme beoardieling lost soksoarte problemen net op. Stipe oanfreegje is hast altyd effektiver.</string>
-    <string name="app_motd">        Under Android 14/15 beta, kin somtiden de melding ‘App reageert niet’ ferskine.
+    <string name="app_motd">
+        Under Android 14/15 beta, kin somtiden de melding ‘App reageert niet’ ferskine.
         Google wurket oan in oplossing.
         Jou asjebleaft net de skuld oan de app foar dit Android-probleem!
     </string>
@@ -86,7 +87,8 @@
     </plurals>
     <string name="title_ask_spam_who">Berjocht fan %1$s as spam behannelje?</string>
     <string name="title_junk_hint">Jo e-mailprovider is ferantwurdlik foar it filterjen fan spam. In e-mailapp hat net alle gegevens om dit betrouber te dwaan.</string>
-    <string name="title_junk_pop_hint">Berjochten fan blokkearre ôfstjoerders wurde net download.
+    <string name="title_junk_pop_hint">
+Berjochten fan blokkearre ôfstjoerders wurde net download.
         As ‘Berjochten op de server stean litte’ net ynskeakele is, gean dizze berjochten permanint ferlern!    </string>
     <string name="title_block">%1$s blokkearje</string>
     <string name="title_block_sender">Ofstjoerder blokkearje</string>
@@ -201,7 +203,8 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_setup_office_auth">De flater ‘AUTENTIKAASJE is mislearre’ kin feroarsake wurde troch dat IMAP/SMTP troch de systeembehearder útskeakele is</string>
     <string name="title_setup_office_auth_5_7_3">Probearje de ‘Oare provider’-assistint.</string>
     <string name="title_setup_office_auth_5_7_139">Probearje de ‘Outlook/Hotmail/Live’-ynstelassistint.</string>
-    <string name="title_setup_office_not_connected">De flatermelding ‘User is authenticated but not connected’ betsjut meastentiids dat IMAP útskeakele is.
+    <string name="title_setup_office_not_connected">
+De flatermelding ‘User is authenticated but not connected’ betsjut meastentiids dat IMAP útskeakele is.
         Gean yn it gefal fan in Outlook-account foar konsuminten nei de Outlook-website, tik op it ynstellingentsjil rjochts boppe, selektearje ‘Mail’, selektearje ‘Forwarding en IMAP’ en yn de seksje ‘POP en IMAP’ skeakelje ‘Laat apparaten en apps IMAP gebruiken’ yn.
         Nim yn it gefal fan in bedriuws-, ûnderwiis-, ensfh. account kontakt op mei de systeembehearder fan de mailserver.    </string>
     <string name="title_setup_oauth_rationale">Autorisearje tagong ta jo %1$s-account</string>
@@ -340,15 +343,18 @@ It blokkearjen fan in ôfstjoerderdomein makket gebrûk fan filterregels, wat in
     <string name="title_check_outlook_oauth">Jo Outlook-accounts sille nei 16 septmber 2024 wurkje bliuwe</string>
     <string name="title_check_outlook_password">Guon fan jo Outlook-/Hotmail-/Live-accounts sille nei 16 septimber 2024 net mear wurkje</string>
     <string name="title_advanced_hint_title">Mear avansearre opsjes</string>
-    <string name="title_advanced_hint_message">        Jo navigearje nei de mear avansearre opsjes.
+    <string name="title_advanced_hint_message">
+        Jo navigearje nei de mear avansearre opsjes.
         Alle opsjes hawwe faak standertwearden brûkt dy’t wizige wurde kinne as jo in oare foarkar hawwe.
     </string>
-    <string name="title_advanced_hint_configure">        Jo hoege hjir net te wêzen om in account te konfigurearjen. Brûk dêrfoar de wizard-/assistintknop.
+    <string name="title_advanced_hint_configure">
+        Jo hoege hjir net te wêzen om in account te konfigurearjen. Brûk dêrfoar de wizard-/assistintknop.
         De wizard/assistent wurket hast altyd, mar as it net wurket, brûk dan de klassike, hânmjittige ynstellingen krekt ûnder de wizardknop.
     </string>
     <string name="title_advanced_hint_remark">        De opsjes binne kategorisearre op ljepblêd, ferdield yn seksjes, organisearre op uterlik of gebrûk en trochsykber.
     </string>
-    <string name="title_advanced_hint_options">Jo sille de measte opsjes net nedich hawwe en omdat guon opsjes frij spesifyk binne, is it begryplik as de wurking fan net alle opsjes net daliks dúdlik is. Lit gjin minne beoardieling foar allinnich it oantal opsjes of foar it net begripen fan alle opsjes efter.
+    <string name="title_advanced_hint_options">
+Jo sille de measte opsjes net nedich hawwe en omdat guon opsjes frij spesifyk binne, is it begryplik as de wurking fan net alle opsjes net daliks dúdlik is. Lit gjin minne beoardieling foar allinnich it oantal opsjes of foar it net begripen fan alle opsjes efter.
         Alle opsjes binne nuttich foar mear as in pear minsken, mar miskien (noch) net foar jo.
     </string>
     <string name="title_advanced_hint_setup">Jo kinne in account konfigurearje troch op de wizardknop op it haadkonfiguraasjeskerm te tikken.</string>
@@ -753,7 +759,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_advanced_mnemonic_hint">Elk e-mailberjocht ûntfongen mei de ûndersteande wurden yn de ûnderwerprigel sil automatysk en daliks de app-gegevens fuortsmite</string>
     <string name="title_advanced_clear_all">Smyt de app-gegevens fuort</string>
     <string name="title_advanced_clear_all_remark">De app-gegevens wurde ûnomkearber fuortsmiten!</string>
-    <string name="title_advanced_default_encryption">De standert fersiferingsmetoade (PGP of S/MIME) wurdt per identiteit bewarre nei it ferstjoeren fan in ûndertekene of fersifere berjocht.
+    <string name="title_advanced_default_encryption">
+De standert fersiferingsmetoade (PGP of S/MIME) wurdt per identiteit bewarre nei it ferstjoeren fan in ûndertekene of fersifere berjocht.
          De fersiferingsmetoade kin foar ferstjoering selektearre wurde yn it dialoochfinster mei ferstjoeropsjes (hâld de knop Fertsjoere lang yndrukt).    </string>
     <string name="title_advanced_sign_default">Standert ûndertekenje</string>
     <string name="title_advanced_encrypt_default">Standert ûndertekenje en fersiferje</string>
@@ -917,7 +924,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_advanced_inline_hint">Inline ôfbyldingen binne ôfbyldingen opnommen yn it berjocht</string>
     <string name="compressed">De ynhâld fan komprimearre bestannen (%1$s) mei mear as %2$s bestannen of mei bestannen grutter as %3$s, sil net toand wurde</string>
     <string name="title_advanced_parse_classes_hint">Dit sil berjochten krekter werjaan, mar mooglik mei in fertraging</string>
-    <string name="title_advanced_default_folder_hint">        Android kin tastimming freegje foar tagong ta de selektearre map, ek al hat de app dit net nedich.
+    <string name="title_advanced_default_folder_hint">
+        Android kin tastimming freegje foar tagong ta de selektearre map, ek al hat de app dit net nedich.
         Jo kinne it seleksjefinster annulearje om de standert map te werstellen (meastentiids de map ‘Download’).
     </string>
     <string name="title_advanced_restore_on_launch_hint">Werstel wannear mooglik de lêste app-status wannear’t opnij opstart fia it launcher-piktogram</string>
@@ -1015,6 +1023,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_account_gmail">Foar betroubere syngronisaasje fan in Gmail-account, moat de wizard foar flugge ynstelling fan Gmail as mooglik brûkt wurde</string>
     <string name="title_domain">Domeinnamme</string>
     <string name="title_autoconfig">Ynstellingen ophelje</string>
+    <string name="title_lan_required">Tagong ta lokaal netwurk fereaske</string>
     <string name="title_aliases">Aliassen</string>
     <string name="title_provider">Provider</string>
     <string name="title_custom">Oanpast</string>
@@ -1030,6 +1039,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_notify_remark">Jo kinne dit ynskeakelje foar accountspesifike meldingen</string>
     <string name="title_port">Poartenûmer</string>
     <string name="title_user">Brûkersnamme</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">Meastentiids it primêre e-mailadres</string>
     <string name="title_password">Wachtwurd</string>
     <string name="title_password_storage">Hoe wurde wachtwurden bewarre?</string>
     <string name="title_case_sensitive">Brûkersnammen en wachtwurden binne meastal haadlettergefoelich</string>
@@ -1052,7 +1062,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_leave_on_device_hint">Wannear’t berjochten fan de server fuortsmiten wurde, bliuwe de berjochten op it apparaat</string>
     <string name="title_max_messages">Maksimaal oantal te downloaden berjochten (leech foar alles)</string>
     <string name="title_max_messages_keep">Dit is it maksimale tal berjochten dat op it apparaat bewarre wurde sil</string>
-    <string name="title_max_messages_remark">        Fier in posityf getal yn om berjochten oan it ein te downloaden (meast gebrûklik)
+    <string name="title_max_messages_remark">
+        Fier in posityf getal yn om berjochten oan it ein te downloaden (meast gebrûklik)
         en in negatyf getal om berjochten te downloaden oan it begjin (minst gebrûklik)
     </string>
     <string name="title_keep_poll_interval">Pollynterfal (minuten)</string>
@@ -1116,7 +1127,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_service_port">Kontrolearje it poartenûmer</string>
     <string name="title_service_protocol">Kontrolearje it protokol (SSL/TLS of STARTTLS)</string>
     <string name="title_service_error10">Dizze account moat opnij ferifiearre wurde, wat dien wurde kin fia de flugge ynstallaasjewizard</string>
-    <string name="title_certificate_error">As gefolch fan it Play Store-belied fan Google, is it net langer mooglik om net-feilige ferbiningen mei e-mailservers mei sertifikaatproblemen te stypjen foar de ferzje fan FairEmail dyt yn de Play Store \'utjûn wurdt.
+    <string name="title_certificate_error">
+As gefolch fan it Play Store-belied fan Google, is it net langer mooglik om net-feilige ferbiningen mei e-mailservers mei sertifikaatproblemen te stypjen foar de ferzje fan FairEmail dyt yn de Play Store \'utjûn wurdt.
         Dêrom kin dit probleem allinnich oplost wurde troch jo e-mailprovider - de boppe steande flaterynformaasje kin harren helpe dit probleem op te lossen.    </string>
     <string name="title_advanced_browse">Blêdzje troch berjochten op de server</string>
     <string name="title_advanced_expand_read">Markearje berjochten by útklappen as lêzen</string>
@@ -1124,7 +1136,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_synchronize_subfolders">Submappen</string>
     <string name="title_synchronize_more">Mear berjochten ophelje</string>
     <string name="title_synchronize_more_hint">Dit sil resultearje yn in inkelde download fan âldere berjochten, dus it sil net resultearje yn mear batterijgebrûk foar deistich gebrûk</string>
-    <string name="title_synchronize_more_hint2">Berjochten wurde ophelle sa gau as de e-mailserver se ôfleverje kin en bewarje sa gau as it apparaat se bewarje en yndeksearje kin.
+    <string name="title_synchronize_more_hint2">
+Berjochten wurde ophelle sa gau as de e-mailserver se ôfleverje kin en bewarje sa gau as it apparaat se bewarje en yndeksearje kin.
         De beheinende faktor is meastentiids de snelheid fan de ynterne ûnthâldromte fan it apparaat.    </string>
     <string name="title_synchronize_more_hint3">Hâld der rekkening mei dat it bewarjen fan in protte berjochten (tsientûzen of mear) op jo apparaat fertragingen feroarsaakje kin, omdat de ynterne ûnthâldromte net ûneinich fluch is.</string>
     <string name="title_synchronize_enabled">Syngronisearje</string>
@@ -1319,7 +1332,7 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_quick_actions_snooze">Slommerje</string>
     <string name="title_quick_actions_clear">Seleksje nei aksje wiskje</string>
     <string name="title_trash">Jiskefet</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Petear fuortsmite</string>
+    <string name="title_trash_conversation">Petear fuortsmite</string>
     <string name="title_trash_selection">Seleksje fuortsmite</string>
     <string name="title_copy">Kopiearje&#8230;</string>
     <string name="title_copy_to">Kopiearje nei&#8230;</string>
@@ -1344,7 +1357,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_report_spam">Behannelje as net-winske</string>
     <string name="title_delete_permanently">Permanint fuortsmite</string>
     <string name="title_delete_attachments">Bylagen fuortsmite</string>
-    <string name="title_delete_attachments_remark">        Om bylagen fuort te smiten, moat in nij berjocht tafoege wurde en moat it âlde berjocht fuortsmiten wurde.
+    <string name="title_delete_attachments_remark">
+        Om bylagen fuort te smiten, moat in nij berjocht tafoege wurde en moat it âlde berjocht fuortsmiten wurde.
         Omdat dit misleearre kin, wurdt it âlde berjocht ferpleatst nei it jiskefet.
     </string>
     <string name="title_snooze">Slommerje&#8230;</string>
@@ -1426,7 +1440,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_third_party">Jo brûke in ferzje fan in tredde partij</string>
     <string name="title_expand_warning">It útwreidzjen fan dit berjocht sil %1$s downloade</string>
     <string name="title_download_message">Downloade&#8230;</string>
-    <string name="title_reformatted">        Dit is de feilige opnij foarme berjochtewerjefte.
+    <string name="title_reformatted">
+        Dit is de feilige opnij foarme berjochtewerjefte.
         Jo kinne op it &#x26F6;-piktogram tikke om it orizjinele berjocht te besjen en dit berjocht te ferstopjen.
         Berjochten opnij opmeitsje nimt wat tiid, ôfhinklik fan de grutte fan it berjocht en de snelheid fan jo apparaat.
         Somtiden moat it orizjinele berjocht besjoen wurde om QR-koaden te sjen.
@@ -1633,7 +1648,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_signature_store">Bewarje</string>
     <string name="title_search">Sykje</string>
     <string name="title_search_for_hint">Tekst ynfiere</string>
-    <string name="title_search_hint">        Sykje sil earst sjen nei berjochten dy’t op jo apparaat bewarre binne.
+    <string name="title_search_hint">
+        Sykje sil earst sjen nei berjochten dy’t op jo apparaat bewarre binne.
         Om ek op de server te sykjen, tikje op de knop ‘Opnij sykje’.
     </string>
     <string name="title_search_hint_fts">Gebrûk fan de sykyndeks: allinnich hiele wurden</string>
@@ -1731,7 +1747,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_edit_signature_remark">Hoewol Android net alle HTML werjaan kin, sil it ferstjoerd wurde, lykas it is</string>
     <string name="title_edit_signature_text">Hantekeningstekst</string>
     <string name="title_edit_signature_image">Ofbylding ynfoegje</string>
-    <string name="title_edit_signature_image_hint">By it ferstjoeren fan in berjocht wurdt de ôfbylding fan de selektearre lokaasje ôf nei it berjocht kopiearre.
+    <string name="title_edit_signature_image_hint">
+By it ferstjoeren fan in berjocht wurdt de ôfbylding fan de selektearre lokaasje ôf nei it berjocht kopiearre.
          Smyt it ôfbyldingsbestân dus net fuort!    </string>
     <string name="title_edit_signature_delete">Hantekening fuortsmite?</string>
     <string name="title_answer_define_name">Namme</string>
@@ -1996,7 +2013,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_hint_message_actions">Fei links nei jiskefet; Fei rjochts nei argyf (as beskikber); De fei-aksjes kinne ynsteld wurde yn de accountynstellingen</string>
     <string name="title_hint_outbox">Jo kinne nei links of rjochts feie om it ferstjoeren te annulearjen</string>
     <string name="title_hint_message_selection">Druk lang op in berjocht om meardere berjochten te selektearjen; Hâld en swipe omheech of omleech om mear berjochten te selektearjen</string>
-    <string name="title_hint_message_junk">        In e-mailclient toant yn prinsipe berjochten op in e-mailserver.
+    <string name="title_hint_message_junk">
+        In e-mailclient toant yn prinsipe berjochten op in e-mailserver.
         In e-mailserver is ferantwurdlik foar it filterjen fan net-winske, net in e-mailclient.
         As jo in protte net-winske ûntfange, nim dan kontakt op mei jo e-mailprovider en jou de app net de skuld!
     </string>
@@ -2009,7 +2027,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_hint_junk">Net-winske-berjochtenfiltering moat dien wurde troch de e-mailserver en kin net betrouber dien wurde op in batterij oandreaun apparaat mei beheinde mooglikheden.</string>
     <string name="title_hint_junk_learn">Troch berjochten te ferpleatsen fan en nei de net-winskemap ‘leart’ de e-mailserver wat net-winske is</string>
     <string name="title_hint_contact_actions">Lang drukke foar opsjes</string>
-    <string name="title_hint_eml">Dit is in gearfetting fan de ynhâld fan in rûch berjochtebestân.
+    <string name="title_hint_eml">
+Dit is in gearfetting fan de ynhâld fan in rûch berjochtebestân.
  Jo kinne de knop rjochtsûnder brûke om it berjocht te bewarjen yn it Postfek YN om alle ynhâld te besjen.    </string>
     <string name="title_open_link">Keppeling iepenje</string>
     <string name="title_image_link">Ofbyldingskeppeling</string>
@@ -2099,7 +2118,8 @@ https://en.wikipedia.org/wiki/ASCII</string>
     <string name="title_pro_purchase">Keapje</string>
     <string name="title_pro_one_time">%1$s (ienmalige oankeap)</string>
     <string name="title_pro_no_play">Play Store is net fûn</string>
-    <string name="title_pro_info">        It ûntwikkeljen fan FairEmail hat letterlik tûzenen oeren duorre en, nettsjinsteande dat, binne de measte funksjes fergees te brûken.        FairEmail nimt jo privacy serieus en lit gjin advertinsjes sjen en brûkt gjin tracking of analytics om jild te fertsjinjen.
+    <string name="title_pro_info">
+        It ûntwikkeljen fan FairEmail hat letterlik tûzenen oeren duorre en, nettsjinsteande dat, binne de measte funksjes fergees te brûken.        FairEmail nimt jo privacy serieus en lit gjin advertinsjes sjen en brûkt gjin tracking of analytics om jild te fertsjinjen.
         Om FairEmail op de lange termyn te behâlden en te stypjen, binne wat gemak en avansearre funksjes net fergees te brûken.
         FairEmail lit in lyts berjocht sjen om jo hjirfan te ûnthâlden, dat sil fuortsmiten wurde as jo de pro-funksjes oanskaffe.
     </string>

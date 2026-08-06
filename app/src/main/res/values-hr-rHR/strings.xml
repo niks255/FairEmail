@@ -82,13 +82,15 @@
     </plurals>
     <string name="title_ask_spam_who">Tretirati poruku od korisnika %1$s kao neželjenu poštu?</string>
     <string name="title_junk_hint">Tvoj pružatelj usluge je odgovoran za filtriranje spam poruka. Klijent e-pošte nema sve potrebne podatke da to radi pouzdano.</string>
-    <string name="title_junk_pop_hint">        Poruke od blokiranih pošiljatelja neće se preuzimati.
+    <string name="title_junk_pop_hint">
+        Poruke od blokiranih pošiljatelja neće se preuzimati.
         Ako \"Ostavi poruke na poslužitelju\" nije omogućeno, ove poruke će biti trajno izgubljene!
     </string>
     <string name="title_block">Blokiraj %1$s</string>
     <string name="title_block_sender">Blokiraj pošiljatelja</string>
     <string name="title_block_sender_domain">Blokiraj domenu \'%1$s\'</string>
-    <string name="title_block_sender_hint">        Blokiranje pošiljatelja je besplatna značajka.
+    <string name="title_block_sender_hint">
+        Blokiranje pošiljatelja je besplatna značajka.
         Blokiranje pošiljateljeve domene koristi pravila filtriranja, što je pro značajka.
     </string>
     <string name="title_blocked_senders">Blokirani pošiljatelji</string>
@@ -223,7 +225,8 @@
     <string name="title_setup_close">Zatvori postavke</string>
     <string name="title_setup_export">Izvezi postavke</string>
     <string name="title_setup_import">Uvezi postavke</string>
-    <string name="title_setup_export_remark">        Budući da datoteka postavki sadrži sve postavke i podatke o računu, šifrirana je lozinkom.
+    <string name="title_setup_export_remark">
+        Budući da datoteka postavki sadrži sve postavke i podatke o računu, šifrirana je lozinkom.
         Za ponovni uvoz postavki potrebna je lozinka, stoga je nemojte zaboraviti!
     </string>
     <string name="title_setup_export_do">Datoteka za izvoz sadržavat će sve postavke i podatke, ali ne i poruke i slike na koje se upućuje u potpisima</string>
@@ -283,10 +286,12 @@
     <string name="title_check_gmail_oauth">Vaš Gmail račun će nastaviti s radom nakon 30. svibnja 2022. godine</string>
     <string name="title_check_gmail_password">Neki od Vaših Gmail računa možda će prestati s radom nakon 30. svibnja 2022. godine</string>
     <string name="title_advanced_hint_title">Naprednije opcije</string>
-    <string name="title_advanced_hint_message">        Prelazite na naprednije opcije.
+    <string name="title_advanced_hint_message">
+        Prelazite na naprednije opcije.
         Sve opcije imaju uobičajeno korištene standardne vrijednosti, koje ne morate mijenjati osim ako nemate drugačije preferencije.
     </string>
-    <string name="title_advanced_hint_remark">        Opcije su kategorizirane po kartici, podijeljene u odjeljke, organizirane prema izgledu ili upotrebi i pretražive.
+    <string name="title_advanced_hint_remark">
+        Opcije su kategorizirane po kartici, podijeljene u odjeljke, organizirane prema izgledu ili upotrebi i pretražive.
     </string>
     <string name="title_advanced_hint_setup">Možete podesiti račun tako da dodirnete dugme čarobnjaka na glavnom zaslonu za konfiguraciju.</string>
     <string name="title_advanced_section_main">Glavno</string>
@@ -587,7 +592,8 @@
     <string name="title_advanced_import_pgp">Uvezi ključ</string>
     <string name="title_advanced_sign_algo">Algoritam potpisa</string>
     <string name="title_advanced_encrypt_algo">Algoritam šifriranja</string>
-    <string name="title_advanced_remark_algo">        Imajte na umu da svi klijenti e-pošte ne podržavaju sve algoritme.
+    <string name="title_advanced_remark_algo">
+        Imajte na umu da svi klijenti e-pošte ne podržavaju sve algoritme.
         Zadani algoritmi SHA256 i AES128 obično su podržani.
     </string>
     <string name="title_advanced_check_certificate">Provjeri javni ključ pri slanju</string>
@@ -595,7 +601,8 @@
     <string name="title_advanced_import_key">Uvezi privatni ključ</string>
     <string name="title_advanced_manage_keys">Upravljaj privatnim ključevima</string>
     <string name="title_advanced_ca">Instalirani CA certifikati</string>
-    <string name="title_advanced_manage_keys_hint">        Ovo će otvoriti Androidove sigurnosne postavke.
+    <string name="title_advanced_manage_keys_hint">
+        Ovo će otvoriti Androidove sigurnosne postavke.
         Ključevi i certifikati mogu se pronaći pod Napredno - Šifriranje i vjerodajnice.
     </string>
     <string name="title_advanced_power_menu">Dodaj radnje u Androidov izbornik napajanja</string>
@@ -844,7 +851,8 @@
     <string name="title_synchronize_subfolders">Podmape</string>
     <string name="title_synchronize_more">Dohvati više poruka</string>
     <string name="title_synchronize_more_hint">Ovo će rezultirati jednim preuzimanjem starijih poruka, tako da neće izazvati veću potrošnju baterije u svakodnevnoj upotrebi</string>
-    <string name="title_synchronize_more_hint2">        Poruke će se dohvatiti brzinom kojom ih poslužitelj e-pošte može dostaviti i pohraniti brzinom kojom ih uređaj može pohraniti i indeksirati.
+    <string name="title_synchronize_more_hint2">
+        Poruke će se dohvatiti brzinom kojom ih poslužitelj e-pošte može dostaviti i pohraniti brzinom kojom ih uređaj može pohraniti i indeksirati.
         Ograničavajući faktor obično je brzina unutarnjeg prostora za pohranu uređaja.
     </string>
     <string name="title_synchronize_more_hint3">Imajte na umu da pohranjivanje velikog broja poruka (deset tisuća ili više) na vašem uređaju može uzrokovati kašnjenja jer interni prostor za pohranu nije beskonačno brz.</string>
@@ -1262,7 +1270,8 @@
     <string name="title_signature_store">Pohraniti</string>
     <string name="title_search">Pretraživanje</string>
     <string name="title_search_for_hint">Unesi tekst</string>
-    <string name="title_search_hint">        U početku se pretraga obavlja na uređaju.
+    <string name="title_search_hint">
+        U početku se pretraga obavlja na uređaju.
         Da biste pretražili i poslužitelj, dodirnite dugme \'traži ponovno\'.
     </string>
     <string name="title_search_index_hint">Pretraživanje putem indeksa pretraživanja je brzo, ali pronalazi samo cijele riječi.</string>
@@ -1346,7 +1355,8 @@
     <string name="title_edit_signature_remark">Iako Android ne može prikazati sav HTML, on će biti poslan kakav jest</string>
     <string name="title_edit_signature_text">Tekst potpisa</string>
     <string name="title_edit_signature_image">Umetni sliku</string>
-    <string name="title_edit_signature_image_hint">        Prilikom slanja poruke, slika se kopira u poruku s odabranog mjesta.
+    <string name="title_edit_signature_image_hint">
+        Prilikom slanja poruke, slika se kopira u poruku s odabranog mjesta.
         Dakle, ne brišite slikovnu datoteku!
     </string>
     <string name="title_answer_define_name">Ime</string>

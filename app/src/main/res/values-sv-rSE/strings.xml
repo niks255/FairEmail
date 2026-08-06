@@ -14,7 +14,8 @@
     <string name="app_cake_required">Minsta nödvändiga lagringsutrymme: %1$s</string>
     <string name="app_updated">Senast uppdaterad: %1$s</string>
     <string name="app_download">Hämtad från: %1$s</string>
-    <string name="app_motd">        Med Android 14/15 beta, visas \"App svarar inte\" meddelanden ibland.
+    <string name="app_motd">
+        Med Android 14/15 beta, visas \"App svarar inte\" meddelanden ibland.
         Google arbetar på en fix.
         Vänligen skyll inte på appen för detta Android-problem!
     </string>
@@ -85,7 +86,8 @@
     </plurals>
     <string name="title_ask_spam_who">Behandla meddelande från %1$s som skräppost?</string>
     <string name="title_junk_hint">Din e-postleverantör ansvarar för att filtrera skräppost. En e-postapp har inte all data som behövs för att göra detta på ett tillförlitligt sätt.</string>
-    <string name="title_junk_pop_hint">        Meddelanden från blockerade avsändare kommer inte att laddas ner.
+    <string name="title_junk_pop_hint">
+        Meddelanden från blockerade avsändare kommer inte att laddas ner.
         Om \"Lämna meddelanden på servern\" inte är aktiverade, kommer dessa meddelanden att försvinna permanent!
     </string>
     <string name="title_block">Blockera %1$s</string>
@@ -200,7 +202,8 @@
     <string name="title_setup_office_auth">Felet \"AUTHENTICATE failed\" kan orsakas av att IMAP/SMTP inaktiveras av systemadministratören</string>
     <string name="title_setup_office_auth_5_7_3">Försök med snabbinstallationsguiden \'Annan leverantör\'.</string>
     <string name="title_setup_office_auth_5_7_139">Försök med snabbinstallationsguiden \'Outlook/Hotmail/Live\'.</string>
-    <string name="title_setup_office_not_connected">        Felet \'Användare är autentiserad men inte ansluten\' betyder oftast att IMAP är inaktiverat.
+    <string name="title_setup_office_not_connected">
+        Felet \'Användare är autentiserad men inte ansluten\' betyder oftast att IMAP är inaktiverat.
         När det gäller ett konsument Outlook-konto, gå till Outlook, tryck på inställningshjulet längst upp till höger, Välj \'Mail\', välj \'Vidarebefordran och IMAP\' och i avsnittet \'POP och IMAP\' aktivera \'Låt enheter och appar använda IMAP\'.
         När det gäller ett företag, utbildning etc. kontakta systemadministratören på e-postservern.
     </string>
@@ -898,7 +901,8 @@
     <string name="title_advanced_inline_hint">Infogade bilder är bilder som ingår i meddelandet</string>
     <string name="compressed">Innehållet i komprimerade filer (%1$s) med mer än %2$s filer eller med filer större än %3$s kommer inte att visas</string>
     <string name="title_advanced_parse_classes_hint">Detta kommer att visa meddelanden mer korrekt, men möjligen med en fördröjning</string>
-    <string name="title_advanced_default_folder_hint">        Android kan be om behörighet att komma åt den valda mappen, även om appen inte behöver det.
+    <string name="title_advanced_default_folder_hint">
+        Android kan be om behörighet att komma åt den valda mappen, även om appen inte behöver det.
         Du kan avbryta urvalsdialogen för att återställa standardmappen (vanligtvis mappen \'Nedladdningar\').
     </string>
     <string name="title_advanced_autoexpand_hint">Öppna automatiskt meddelandet när det bara finns ett meddelande eller bara ett oläst meddelande i en konversation</string>
@@ -1029,7 +1033,8 @@
     <string name="title_leave_on_device_hint">När meddelanden raderas på servern så finns de kvar på enheten</string>
     <string name="title_max_messages">Maximalt antal meddelanden att ladda ner (lämna tomt för alla)</string>
     <string name="title_max_messages_keep">Detta är det maximala antalet meddelanden som kommer att lagras på enheten</string>
-    <string name="title_max_messages_remark">        Ange ett positivt värde för att ladda ner meddelandena i slutet (vanligast)
+    <string name="title_max_messages_remark">
+        Ange ett positivt värde för att ladda ner meddelandena i slutet (vanligast)
         och ett negativt värde för att ladda ner meddelandena i början (minst vanligast)
     </string>
     <string name="title_keep_poll_interval">Avsökningsintervall (minuter)</string>
@@ -1093,7 +1098,8 @@
     <string name="title_service_port">Vänligen dubbelkolla portnumret</string>
     <string name="title_service_protocol">Vänligen dubbelkolla protokollet (SSL/TLS eller STARTTLS)</string>
     <string name="title_service_error10">Detta konto måste autentiseras igen, vilket kan göras via guiden för snabbkonfigurering</string>
-    <string name="title_certificate_error">        På grund av Google Plays policies så är det inte längre möjligt att ha stöd för osäkra anslutningar till e-postservrar med certifikatproblem, för versionen av FairEmail som finns på Google Play.
+    <string name="title_certificate_error">
+        På grund av Google Plays policies så är det inte längre möjligt att ha stöd för osäkra anslutningar till e-postservrar med certifikatproblem, för versionen av FairEmail som finns på Google Play.
         Därför kan det här problemet enbart lösas av din e-postleverantör. Ovanstående information kan vara till hjälp för att lösa problemet.
     </string>
     <string name="title_advanced_browse">Bläddra bland meddelanden på servern</string>
@@ -1102,7 +1108,8 @@
     <string name="title_synchronize_subfolders">Undermappar</string>
     <string name="title_synchronize_more">Hämta fler meddelanden</string>
     <string name="title_synchronize_more_hint">Detta kommer att resultera i en enda nedladdning av äldre meddelanden, så det kommer inte att resultera i mer batterianvändning för dagligt bruk</string>
-    <string name="title_synchronize_more_hint2">        Meddelanden kommer att hämtas så snabbt som e-postservern kan leverera dem och lagras så snabbt som enheten kan lagra och indexera dem.
+    <string name="title_synchronize_more_hint2">
+        Meddelanden kommer att hämtas så snabbt som e-postservern kan leverera dem och lagras så snabbt som enheten kan lagra och indexera dem.
         Den begränsande faktorn är vanligtvis hastigheten på enhetens interna lagringsutrymme.
     </string>
     <string name="title_synchronize_more_hint3">Tänk på att lagring av många meddelanden (10 000 eller fler) på din enhet kan orsaka fördröjningar eftersom det interna lagringsutrymmet inte är särskilt snabbt.</string>
@@ -1320,7 +1327,8 @@
     <string name="title_report_spam">Behandla som skräppost</string>
     <string name="title_delete_permanently">Ta bort permanent</string>
     <string name="title_delete_attachments">Radera bilagor</string>
-    <string name="title_delete_attachments_remark">        För att radera bifogade filer måste ett nytt meddelande läggas till och det gamla meddelandet raderas.
+    <string name="title_delete_attachments_remark">
+        För att radera bifogade filer måste ett nytt meddelande läggas till och det gamla meddelandet raderas.
         Eftersom detta kan misslyckas så flyttas det gamla meddelandet till soptunnan.
     </string>
     <string name="title_snooze">Slumra &#8230;</string>
@@ -1700,7 +1708,8 @@
     <string name="title_edit_signature_remark">Även om Android inte kan visa all HTML, kommer det att skickas som det är</string>
     <string name="title_edit_signature_text">Signatur</string>
     <string name="title_edit_signature_image">Infoga bild</string>
-    <string name="title_edit_signature_image_hint">        När du skickar ett meddelande kopieras bilden till meddelandet från den valda platsen.
+    <string name="title_edit_signature_image_hint">
+        När du skickar ett meddelande kopieras bilden till meddelandet från den valda platsen.
         Ta alltså inte bort bildfilen!
     </string>
     <string name="title_edit_signature_delete">Ta bort signatur?</string>
@@ -1965,7 +1974,8 @@
     <string name="title_hint_message_actions">Dra åt vänster för att kasta; Svep åt höger för att arkivera (om tillgängligt); Svepåtgärderna kan konfigureras i kontoinställningarna</string>
     <string name="title_hint_outbox">Du kan svepa åt vänster eller höger för att avbryta sändningen</string>
     <string name="title_hint_message_selection">Långt tryck på ett meddelande för att börja välja flera meddelanden; håll och svep uppåt eller nedåt för att välja fler meddelanden</string>
-    <string name="title_hint_message_junk">        En e-postklient visar i princip meddelanden på en e-postserver.
+    <string name="title_hint_message_junk">
+        En e-postklient visar i princip meddelanden på en e-postserver.
         En e-postserver är ansvarig för att filtrera skräppost, inte en e-postklient.
         Om du får mycket skräppost, kontakta din e-postleverantör och skyll inte på appen!
     </string>

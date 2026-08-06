@@ -15,7 +15,8 @@
     <string name="app_updated">Dernière mise à jour : %1$s</string>
     <string name="app_download">Téléchargé depuis : %1$s</string>
     <string name="app_error">La plupart des messages d\'erreur ont des causes externes (réseau, serveur, etc.) ou bien sont provoqués par une configuration incorrecte, souvent non standard. Une mauvaise évaluation ne résout pas de tels problèmes. Demander de l\'aide est presque toujours plus efficace.</string>
-    <string name="app_motd">        Avec Android 14/15 beta, des notifications \"L\'application ne répond pas\" peuvent apparaître.
+    <string name="app_motd">
+        Avec Android 14/15 beta, des notifications \"L\'application ne répond pas\" peuvent apparaître.
         Google travaille sur une correction.
         Veuillez ne pas blâmer l\'application à cause de ce problème lié à Android !
     </string>
@@ -86,14 +87,16 @@
     </plurals>
     <string name="title_ask_spam_who">Traiter le message de %1$s comme indésirable?</string>
     <string name="title_junk_hint">Votre fournisseur de messagerie est responsable du filtrage du pourriel. Une application de messagerie n\'a pas toutes les données pour le faire de manière fiable.</string>
-    <string name="title_junk_pop_hint">        Les messages des expéditeurs bloqués ne seront pas téléchargés.
+    <string name="title_junk_pop_hint">
+        Les messages des expéditeurs bloqués ne seront pas téléchargés.
         Si l\'option \"Laisser les messages sur le serveur\" n\'est pas activée, ces messages seront définitivement perdus!
     </string>
     <string name="title_block">Bloquer %1$s</string>
     <string name="title_block_sender">Bloquer l\'expéditeur</string>
     <string name="title_block_sender_domain">Bloquer le domaine \'%1$s\'</string>
     <string name="title_block_sender_remark">Bloquer signifie déplacer automatiquement vers le dossier « Indésirables »</string>
-    <string name="title_block_sender_hint">        Bloquer un expéditeur est une fonctionnalité gratuite.
+    <string name="title_block_sender_hint">
+        Bloquer un expéditeur est une fonctionnalité gratuite.
         Bloquer un domaine expéditeur utilise une règle de filtrage qui est une fonctionnalité Pro.
     </string>
     <string name="title_blocked_senders">Expéditeurs bloqués</string>
@@ -203,7 +206,8 @@
     <string name="title_setup_office_auth">L’erreur \'AUTHENTICATE failed\' peut être due à la désactivation d’IMAP/SMTP par l’administrateur système</string>
     <string name="title_setup_office_auth_5_7_3">Veuillez essayer l\'assistant de configuration rapide « Autre fournisseur ».</string>
     <string name="title_setup_office_auth_5_7_139">Veuillez essayer l\'assistant d\'installation rapide \"Outlook/Hotmail/Live\".</string>
-    <string name="title_setup_office_not_connected">        L\'erreur \"User is authenticated but not connected\" signifie la plupart du temps que IMAP est désactivé.
+    <string name="title_setup_office_not_connected">
+        L\'erreur \"User is authenticated but not connected\" signifie la plupart du temps que IMAP est désactivé.
         Dans le cas d\'un compte individuel Outlook, veuillez aller sur le site web Outlook, cliquez sur l\'icône des paramètres en haut à droite, sélectionnez \"Courrier\", puis \"Transfert et IMAP\" et dans la section \"POP et IMAP\", activez \"Autoriser les appareils et les applications à utiliser IMAP\".
         Dans le cas d\'un compte entreprise, éducation, etc., veuillez contacter l\'administrateur système du serveur de messagerie.
     </string>
@@ -276,7 +280,8 @@
     <string name="title_setup_close">Fermer les paramètres</string>
     <string name="title_setup_export">Exporter les paramètres</string>
     <string name="title_setup_import">Importer les paramètres</string>
-    <string name="title_setup_export_remark">        Étant donné que le fichier de paramètres contient tous les réglages et informations des comptes, il est chiffré avec un mot de passe.
+    <string name="title_setup_export_remark">
+        Étant donné que le fichier de paramètres contient tous les réglages et informations des comptes, il est chiffré avec un mot de passe.
         Le mot de passe est requis pour importer à nouveau les paramètres, veuillez ne pas l\'oublier !
     </string>
     <string name="title_setup_export_do">Le fichier d\'exportation contiendra tous les paramètres et données mais pas de messages ni d\'images référencées dans les signatures</string>
@@ -343,15 +348,19 @@
     <string name="title_check_outlook_oauth">Vos comptes Outlook continueront de fonctionner après le 16 septembre 2024</string>
     <string name="title_check_outlook_password">Certains de vos comptes Outlook/Hotmail/Live cesseront de fonctionner après le 16 septembre 2024</string>
     <string name="title_advanced_hint_title">Paramètres avancés</string>
-    <string name="title_advanced_hint_message">        Vous parcourez les paramètres avancés.
+    <string name="title_advanced_hint_message">
+        Vous parcourez les paramètres avancés.
         Toutes les options ont des valeurs par défaut couramment utilisées que vous n\'avez pas besoin de modifier sauf si vous avez une préférence différente.
     </string>
-    <string name="title_advanced_hint_configure">        Il n\'est pas nécessaire de passer par cette procédure pour configurer un compte. Utilisez de préférence l\'assistant de configuration rapide pour cela.
+    <string name="title_advanced_hint_configure">
+        Il n\'est pas nécessaire de passer par cette procédure pour configurer un compte. Utilisez de préférence l\'assistant de configuration rapide pour cela.
         L\'assistant de configuration rapide fonctionne la plupart du temps, mais si ce n\'est pas le cas, vous pouvez utiliser la configuration classique manuelle située en dessous du bouton de l\'assistant.
     </string>
-    <string name="title_advanced_hint_remark">        Les options sont rangées par catégories dans des onglets divisés en sections, elles sont organisées selon l\'apparence ou l\'usage et peuvent être recherchées.
+    <string name="title_advanced_hint_remark">
+        Les options sont rangées par catégories dans des onglets divisés en sections, elles sont organisées selon l\'apparence ou l\'usage et peuvent être recherchées.
     </string>
-    <string name="title_advanced_hint_options">        Vous n\'aurez pas besoin de la plupart des options car certaines sont assez spécifiques,
+    <string name="title_advanced_hint_options">
+        Vous n\'aurez pas besoin de la plupart des options car certaines sont assez spécifiques,
         il est compréhensible que le fonctionnement de toutes les options ne soit pas immédiatement clair.
         Veuillez ne pas donner une mauvaise évaluation simplement à cause du nombre d\'options ou bien à cause d\'une incompréhension rapide de toutes les options.
         Toutes les options sont utiles pour peu de personnes et peut-être pas (encore) pour vous.
@@ -424,7 +433,7 @@
     <string name="title_advanced_answer_caption">Paramètres du bouton de réponse</string>
     <string name="title_advanced_answer_default">Un appui court sur le bouton de réponse va:</string>
     <string name="title_advanced_answer_action">Un appui long sur le bouton de réponse va:</string>
-    <string name="title_advanced_answer_hint">Les actions du bouton de réponse peuvent également être configurées dans l\'onglet Envoi des paramètres</string>
+    <string name="title_advanced_answer_hint">Les actions du bouton de réponse peuvent également être configurées dans les paramètres, onglet « Envoi »</string>
     <string name="title_advanced_answer_warning">Toutes les actions ne sont pas possibles sans un menu de sélection!</string>
     <string name="title_advanced_send_pending">Afficher l\'icône discrète d\'envoi différé</string>
     <string name="title_advanced_save_revisions">Enregistrer les modifications de brouillons pour pouvoir annuler et rétablir</string>
@@ -756,7 +765,8 @@
     <string name="title_advanced_mnemonic_hint">Tout courriel reçu contenant les mots ci-dessous dans l\'objet supprimera automatiquement et immédiatement toutes les données de l\'application sur cet appareil</string>
     <string name="title_advanced_clear_all">Supprimer les données de l\'application</string>
     <string name="title_advanced_clear_all_remark">Les données de l\'application seront définitivement supprimées!</string>
-    <string name="title_advanced_default_encryption">        La méthode de chiffrement par défaut (PGP ou S/MIME) sera stockée pour chaque identité après avoir envoyé un message signé ou chiffré.
+    <string name="title_advanced_default_encryption">
+        La méthode de chiffrement par défaut (PGP ou S/MIME) sera stockée pour chaque identité après avoir envoyé un message signé ou chiffré.
         La méthode de chiffrement peut être sélectionnée avant l\'envoi dans la boîte de dialogue des options d\'envoi (appui long sur le bouton d\'envoi).
     </string>
     <string name="title_advanced_sign_default">Signer par défaut</string>
@@ -773,7 +783,8 @@
     <string name="title_advanced_import_pgp">Importer une clé</string>
     <string name="title_advanced_sign_algo">Algorithme de signature</string>
     <string name="title_advanced_encrypt_algo">Algorithme de chiffrement</string>
-    <string name="title_advanced_remark_algo">        Veuillez noter que tous les clients de messagerie ne prennent pas en charge tous les algorithmes.
+    <string name="title_advanced_remark_algo">
+        Veuillez noter que tous les clients de messagerie ne prennent pas en charge tous les algorithmes.
         Les algorithmes par défaut SHA256 et AES128 sont couramment pris en charge.
     </string>
     <string name="title_advanced_check_certificate">Vérifier la clé publique lors de l\'envoi</string>
@@ -782,7 +793,8 @@
     <string name="title_advanced_import_key">Importer une clé privée</string>
     <string name="title_advanced_manage_keys">Gérer les clés privées</string>
     <string name="title_advanced_ca">Certificats AC installés</string>
-    <string name="title_advanced_manage_keys_hint">        Ceci ouvrira les paramètres de sécurité d\'Android.
+    <string name="title_advanced_manage_keys_hint">
+        Ceci ouvrira les paramètres de sécurité d\'Android.
         Les clés et les certificats peuvent généralement être trouvés sous Avancé - Chiffrement et identifiants.
     </string>
     <string name="title_advanced_power_menu">Ajouter des actions au menu alimentation d\'Android</string>
@@ -923,7 +935,8 @@
     <string name="title_advanced_inline_hint">Les images incluses dans le message font partie intégrante du message</string>
     <string name="compressed">Le contenu des fichiers compressés (%1$s) avec plus de %2$s fichiers ou avec des fichiers de taille supérieure à %3$s ne sera pas affiché</string>
     <string name="title_advanced_parse_classes_hint">L’affichage des messages sera plus fidèle mais pourra être retardé</string>
-    <string name="title_advanced_default_folder_hint">        Android peut demander l\'autorisation d\'accès au dossier sélectionné, même si l\'application n\'en a pas besoin.
+    <string name="title_advanced_default_folder_hint">
+        Android peut demander l\'autorisation d\'accès au dossier sélectionné, même si l\'application n\'en a pas besoin.
         Vous pouvez annuler la boîte de dialogue de sélection pour revenir au dossier par défaut (habituellement le dossier \'Téléchargement\' ou \'Download\').
     </string>
     <string name="title_advanced_restore_on_launch_hint">Si possible, restaurer le dernier état de l\'application au redémarrage via l\'icône du lanceur</string>
@@ -1021,6 +1034,7 @@
     <string name="title_account_gmail">Pour une synchronisation fiable d\'un compte Gmail, l\'assistant de configuration rapide de Gmail doit être utilisé dans la mesure du possible</string>
     <string name="title_domain">Nom de domaine</string>
     <string name="title_autoconfig">Obtenir les paramètres</string>
+    <string name="title_lan_required">Autorisations d\'accès au réseau local requises</string>
     <string name="title_aliases">Alias</string>
     <string name="title_provider">Fournisseur</string>
     <string name="title_custom">Personnalisé</string>
@@ -1036,6 +1050,7 @@
     <string name="title_notify_remark">Vous pouvez activer ceci pour avoir des notifications spécifiques par compte</string>
     <string name="title_port">Numéro de port</string>
     <string name="title_user">Nom d’utilisateur</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">En général, l\'adresse e-mail principale</string>
     <string name="title_password">Mot de passe</string>
     <string name="title_password_storage">Comment les mots de passe sont-ils stockés?</string>
     <string name="title_case_sensitive">Les noms d\'utilisateur et les mots de passe sont généralement sensibles à la casse</string>
@@ -1058,7 +1073,8 @@
     <string name="title_leave_on_device_hint">Lorsque des messages sont supprimés du serveur, ils restent sur l\'appareil</string>
     <string name="title_max_messages">Nombre maximum de messages à télécharger (laisser vide pour tous)</string>
     <string name="title_max_messages_keep">Ceci est le nombre maximum de messages qui seront conservés sur l\'appareil</string>
-    <string name="title_max_messages_remark">        Saisir un nombre positif pour télécharger les messages à la fin (le plus commun)
+    <string name="title_max_messages_remark">
+        Saisir un nombre positif pour télécharger les messages à la fin (le plus commun)
         et un nombre négatif pour télécharger les messages au début (le moins commun)
     </string>
     <string name="title_keep_poll_interval">Intervalle de synchronisation (minutes)</string>
@@ -1122,7 +1138,8 @@
     <string name="title_service_port">Veuillez vérifier le numéro de port</string>
     <string name="title_service_protocol">Veuillez vérifier le protocole (SSL/TLS ou STARTTLS)</string>
     <string name="title_service_error10">Ce compte doit être de nouveau authentifié, ce qui peut être fait via l\'assistant de configuration rapide</string>
-    <string name="title_certificate_error">        En raison des politiques du Play Store de Google, il n\'est plus possible de prendre en charge les connexions non sécurisées vers des serveurs de messagerie ayant des problèmes de certificat et ce, pour la version de FairEmail distribuée dans le Play Store.
+    <string name="title_certificate_error">
+        En raison des politiques du Play Store de Google, il n\'est plus possible de prendre en charge les connexions non sécurisées vers des serveurs de messagerie ayant des problèmes de certificat et ce, pour la version de FairEmail distribuée dans le Play Store.
         Par conséquent, ce problème ne peut être résolu que par votre fournisseur de messagerie - le message d\'erreur ci-dessus peut les aider à le résoudre.
     </string>
     <string name="title_advanced_browse">Parcourir les messages sur le serveur</string>
@@ -1131,7 +1148,8 @@
     <string name="title_synchronize_subfolders">Sous-dossiers</string>
     <string name="title_synchronize_more">Récupérer plus de messages</string>
     <string name="title_synchronize_more_hint">Ceci se traduira par un seul téléchargement des messages les plus anciens, ce qui n\'entraînera pas une plus grande utilisation de la pile pour une utilisation quotidienne</string>
-    <string name="title_synchronize_more_hint2">        Les messages seront récupérés aussi vite que le serveur de messagerie peut les délivrer et stockés aussi rapidement que l\'appareil peut les stocker.
+    <string name="title_synchronize_more_hint2">
+        Les messages seront récupérés aussi vite que le serveur de messagerie peut les délivrer et stockés aussi rapidement que l\'appareil peut les stocker.
         Le facteur limitant est généralement la vitesse d\'accès à l\'espace de stockage interne de l\'appareil.
     </string>
     <string name="title_synchronize_more_hint3">Veuillez garder à l\'esprit que le stockage de nombreux messages (dix mille ou plus) sur votre appareil peut provoquer des ralentissements parce que l\'espace de stockage interne n\'est pas infiniment rapide.</string>
@@ -1224,7 +1242,8 @@
     <string name="title_auto_delete">Supprimer automatiquement et définitivement les anciens messages</string>
     <string name="title_auto_delete_hint">Les anciens messages sont ceux qui ne sont plus conservés sur l\'appareil</string>
     <string name="title_auto_delete_archive_hint">La suppression depuis le dossier archive n\'est pas toujours autorisée par le serveur de messagerie</string>
-    <string name="title_inbox_root_hint">        Certains fournisseurs exigent que les nouveaux dossiers soient créés dans la boîte de réception.
+    <string name="title_inbox_root_hint">
+        Certains fournisseurs exigent que les nouveaux dossiers soient créés dans la boîte de réception.
         Dans ce cas, vous pouvez appuyer longuement sur la boîte de réception dans la liste des dossiers et sélectionner \'Créer un sous-dossier\'.
     </string>
     <string name="title_folder_name_missing">Nom de dossier manquant</string>
@@ -1328,7 +1347,7 @@
     <string name="title_quick_actions_snooze">Reporter</string>
     <string name="title_quick_actions_clear">Effacer la sélection après l\'action</string>
     <string name="title_trash">Supprimer</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Supprimer la conversation</string>
+    <string name="title_trash_conversation">Supprimer la conversation</string>
     <string name="title_trash_selection">Supprimer la sélection</string>
     <string name="title_copy">Copier&#8230;</string>
     <string name="title_copy_to">Copier vers&#8230;</string>
@@ -1353,7 +1372,8 @@
     <string name="title_report_spam">Traiter comme indésirable</string>
     <string name="title_delete_permanently">Supprimer définitivement</string>
     <string name="title_delete_attachments">Supprimer les pièces jointes</string>
-    <string name="title_delete_attachments_remark">        Pour supprimer les pièces jointes, un nouveau message doit être créé et l\'ancien message doit être supprimé.
+    <string name="title_delete_attachments_remark">
+        Pour supprimer les pièces jointes, un nouveau message doit être créé et l\'ancien message doit être supprimé.
         Si ceci échoue, l\'ancien message sera déplacé vers la corbeille.
     </string>
     <string name="title_snooze">Reporter&#8230;</string>
@@ -1428,7 +1448,8 @@
     <string name="title_ask_reporting">Envoyer des rapports d’erreur?</string>
     <string name="title_reporting_why">Le signalement d’erreurs aidera à améliorer FairEmail</string>
     <string name="title_ask_review">Veuillez évaluer FairEmail</string>
-    <string name="title_ask_review_rationale">        Vous utilisez FairEmail depuis un certain temps.
+    <string name="title_ask_review_rationale">
+        Vous utilisez FairEmail depuis un certain temps.
         Il serait souhaitable que vous évaluiez FairEmail dans le Play Store.
     </string>
     <string name="title_need_help">J\'ai besoin d\'aide</string>
@@ -1436,7 +1457,8 @@
     <string name="title_third_party">Vous utilisez une version tierce</string>
     <string name="title_expand_warning">Développer ce message téléchargera %1$s</string>
     <string name="title_download_message">Téléchargement&#8230;</string>
-    <string name="title_reformatted">        Ceci est la vue de message sûr et reformaté.
+    <string name="title_reformatted">
+        Ceci est la vue de message sûr et reformaté.
         Vous pouvez appuyer sur l\'icône &#x26F6; pour afficher le message original moins sûr et masquer cette bannière.
         Le reformatage des messages prend un certain temps selon la taille du message et la vitesse de votre appareil.
         Parfois, le message original doit être affiché afin de visualiser les QR codes.
@@ -1643,7 +1665,8 @@
     <string name="title_signature_store">Enregistrer</string>
     <string name="title_search">Rechercher</string>
     <string name="title_search_for_hint">Saisir le texte</string>
-    <string name="title_search_hint">        Initialement, la recherche est effectuée sur l\'appareil.
+    <string name="title_search_hint">
+        Initialement, la recherche est effectuée sur l\'appareil.
         Pour rechercher sur le serveur également, appuyez sur le bouton \'Rechercher à nouveau\'.
     </string>
     <string name="title_search_hint_fts">Utilisation de l\'index de recherche : mots entiers uniquement</string>
@@ -1741,7 +1764,8 @@
     <string name="title_edit_signature_remark">Bien qu\'Android ne puisse pas afficher tout le code HTML, il sera envoyé tel quel</string>
     <string name="title_edit_signature_text">Texte de la signature</string>
     <string name="title_edit_signature_image">Insérer une image</string>
-    <string name="title_edit_signature_image_hint">        Lors de l\'envoi d\'un message, l\'image est copiée dans le message à partir de l\'emplacement sélectionné.
+    <string name="title_edit_signature_image_hint">
+        Lors de l\'envoi d\'un message, l\'image est copiée dans le message à partir de l\'emplacement sélectionné.
         Ne supprimez donc pas le fichier image!
     </string>
     <string name="title_edit_signature_delete">Supprimer la signature?</string>
@@ -2007,7 +2031,8 @@
     <string name="title_hint_message_actions">Balayer vers la gauche pour mettre à la corbeille; balayer vers la droite pour archiver (si disponible); les actions de balayage peuvent être configurées dans les paramètres du compte</string>
     <string name="title_hint_outbox">Vous pouvez balayer vers la gauche ou la droite pour annuler l\'envoi</string>
     <string name="title_hint_message_selection">Appuyez longuement sur un message pour activer la sélection multiple; maintenez et faites glisser vers le haut ou vers le bas pour sélectionner davantage de messages</string>
-    <string name="title_hint_message_junk">        Un client de messagerie affiche essentiellement les messages d\'un serveur de messagerie.
+    <string name="title_hint_message_junk">
+        Un client de messagerie affiche essentiellement les messages d\'un serveur de messagerie.
         Un serveur de messagerie est responsable du filtrage du courrier indésirable, contrairement à un client de messagerie.
         Si vous recevez beaucoup de courrier indésirable, veuillez contacter votre fournisseur de messagerie et ne blâmez pas cette application!
     </string>
@@ -2020,7 +2045,8 @@
     <string name="title_hint_junk">Le filtrage du pourriel devrait être fait par le serveur de messagerie et ne peut pas être fait de manière fiable sur un appareil ayant des capacités limitées et alimenté par une pile.</string>
     <string name="title_hint_junk_learn">En déplaçant les messages vers et depuis le dossier des indésirables, le serveur de messagerie \"apprend\" ce qu\'est le courrier indésirable</string>
     <string name="title_hint_contact_actions">Appui long pour les options</string>
-    <string name="title_hint_eml">        Ceci est un extrait du contenu d\'un fichier de message original.
+    <string name="title_hint_eml">
+        Ceci est un extrait du contenu d\'un fichier de message original.
         Vous pouvez utiliser le bouton situé en bas à droite pour enregistrer le message dans la boîte de réception afin de visualiser tout le contenu.
     </string>
     <string name="title_open_link">Ouvrir le lien</string>
@@ -2074,7 +2100,7 @@
     <string name="title_no_ask_again">Ne plus me le demander</string>
     <string name="title_no_ask_for_again">Ne plus demander ceci pour %1$s</string>
     <string name="title_no_show_again">Ne plus afficher ceci</string>
-    <string name="title_undo_privacy">Ceci peut être annulé dans l\'onglet des paramètres de confidentialité</string>
+    <string name="title_undo_privacy">Ceci peut être annulé dans les paramètres, onglet « Confidentialité »</string>
     <string name="title_no_body">Aucun texte de message trouvé</string>
     <string name="title_large_body">Ce message est très volumineux et peut poser des problèmes !</string>
     <string name="title_no_charset">Encodage non pris en charge : %1$s</string>
@@ -2111,7 +2137,8 @@
     <string name="title_pro_purchase">Acheter</string>
     <string name="title_pro_one_time">%1$s (achat unique)</string>
     <string name="title_pro_no_play">Application Play Store introuvable</string>
-    <string name="title_pro_info">        Le développement de FairEmail a pris littéralement des milliers d\'heures et malgré cela, la plupart des fonctionnalités sont libres d\'utilisation.
+    <string name="title_pro_info">
+        Le développement de FairEmail a pris littéralement des milliers d\'heures et malgré cela, la plupart des fonctionnalités sont libres d\'utilisation.
         FairEmail prend votre vie privée au sérieux, n\'affiche pas de publicité et n\'utilise pas le pistage ni l\'analyse d\'audience pour gagner de l\'argent.
         Pour maintenir et soutenir FairEmail à long terme, certaines fonctionnalités pratiques et avancées ne sont pas gratuites à utiliser.
         FairEmail affiche une bannière pour vous le rappeler et qui sera supprimée si vous achetez les fonctionnalités Pro.

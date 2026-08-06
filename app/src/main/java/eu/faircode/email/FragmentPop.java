@@ -224,6 +224,23 @@ public class FragmentPop extends FragmentBase {
         this.colorWarning = Helper.resolveColor(getContext(), R.attr.colorWarning);
         this.textColorSecondary = Helper.resolveColor(getContext(), android.R.attr.textColorSecondary);
 
+        etHost.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkLan(s == null ? null : s.toString());
+            }
+        });
+
         rgEncryption.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int id) {
@@ -938,6 +955,7 @@ public class FragmentPop extends FragmentBase {
 
                     cbDnsSec.setChecked(account == null ? false : account.dnssec);
                     etHost.setText(account == null ? null : account.host);
+                    checkLan(account == null ? null : account.host);
                     etPort.setText(account == null ? null : Long.toString(account.port));
 
                     if (account != null && account.encryption == EmailService.ENCRYPTION_STARTTLS)
@@ -1148,6 +1166,12 @@ public class FragmentPop extends FragmentBase {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Editable e = etHost.getText();
+        checkLan(e == null ? null : e.toString());
+    }
+
     private void onImageSelected(Uri uri) {
         final Context context = getContext();
 
@@ -1204,6 +1228,63 @@ public class FragmentPop extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "account:delete");
+    }
+
+    private Snackbar lanSnackbar = null;
+
+    private void checkLan(String host) {
+        Bundle args = new Bundle();
+        args.putString("host", host);
+
+        new SimpleTask<Boolean>() {
+            @Override
+            protected Boolean onExecute(Context context, Bundle args) throws Throwable {
+                String host = args.getString("host");
+                return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN &&
+                        ConnectionHelper.isLocalAddress(host, false) &&
+                        !Helper.hasPermission(context, Manifest.permission.ACCESS_LOCAL_NETWORK));
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Boolean data) {
+                boolean lan17 = Boolean.TRUE.equals(data);
+                if (lan17 && lanSnackbar == null && view != null) {
+                    lanSnackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_lan_required, Snackbar.LENGTH_INDEFINITE));
+                    Helper.setSnackbarLines(lanSnackbar, 2);
+                    lanSnackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            lanSnackbar.dismiss();
+                            if (BuildConfig.PLAY_STORE_RELEASE)
+                                Helper.viewFAQ(v.getContext(), 210);
+                            else
+                                requestPermissions(new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK}, REQUEST_PERMISSIONS);
+                        }
+                    });
+                    lanSnackbar.addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onShown(Snackbar sb) {
+                            if (view != null)
+                                view.requestApplyInsets();
+                        }
+
+                        @Override
+                        public void onDismissed(Snackbar transientBottomBar, int event) {
+                            if (view != null)
+                                view.requestApplyInsets();
+                        }
+                    });
+                    lanSnackbar.show();
+                } else if (!lan17 && lanSnackbar != null) {
+                    lanSnackbar.dismiss();
+                    lanSnackbar = null;
+                }
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ignored) {
+            }
+        }.execute(this, args, "checklan");
     }
 
     private List<EntityFolder> getSwipeActions(Context context) {

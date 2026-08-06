@@ -153,7 +153,7 @@ public class HtmlEx {
                     if (span instanceof QuoteSpan)
                         out.append("<blockquote style=\"")
                                 .append(eu.faircode.email.HtmlHelper.getQuoteStyle(text, next, end))
-                                .append("\">");
+                                .append("\" type=\"" + HtmlHelper.getQuoteType() + "\">");
                     else if (span instanceof eu.faircode.email.IndentSpan)
                         out.append("<blockquote style=\"")
                                 .append(eu.faircode.email.HtmlHelper.getIndentStyle(text, next, end))

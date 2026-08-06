@@ -335,6 +335,7 @@ public class FragmentAccount extends FragmentBase {
                 adapterView.setTag(position);
 
                 etHost.setText(provider.imap.host);
+                checkLan(provider.imap.host);
                 etPort.setText(provider.imap.host == null ? null : Integer.toString(provider.imap.port));
                 rgEncryption.check(provider.imap.starttls ? R.id.radio_starttls : R.id.radio_ssl);
 
@@ -369,6 +370,23 @@ public class FragmentAccount extends FragmentBase {
             @Override
             public void onClick(View v) {
                 onAutoConfig();
+            }
+        });
+
+        etHost.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkLan(s == null ? null : s.toString());
             }
         });
 
@@ -749,6 +767,7 @@ public class FragmentAccount extends FragmentBase {
             @Override
             protected void onExecuted(Bundle args, EmailProvider provider) {
                 etHost.setText(provider.imap.host);
+                checkLan(provider.imap.host);
                 etPort.setText(Integer.toString(provider.imap.port));
                 rgEncryption.check(provider.imap.starttls ? R.id.radio_starttls : R.id.radio_ssl);
             }
@@ -1749,6 +1768,7 @@ public class FragmentAccount extends FragmentBase {
                             spProvider.setSelection(1);
                         }
                         etHost.setText(account.host);
+                        checkLan(account.host);
                         etPort.setText(Long.toString(account.port));
                     }
 
@@ -2144,6 +2164,69 @@ public class FragmentAccount extends FragmentBase {
                 Log.unexpectedError(getParentFragmentManager(), ex);
             }
         }.execute(this, args, "account:delete");
+    }
+
+    private Snackbar lanSnackbar = null;
+
+    private void checkLan(String host) {
+        Bundle args = new Bundle();
+        args.putString("host", host);
+
+        new SimpleTask<Boolean>() {
+            @Override
+            protected Boolean onExecute(Context context, Bundle args) throws Throwable {
+                String host = args.getString("host");
+                return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN &&
+                        ConnectionHelper.isLocalAddress(host, false) &&
+                        !Helper.hasPermission(context, Manifest.permission.ACCESS_LOCAL_NETWORK));
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Boolean data) {
+                boolean lan17 = Boolean.TRUE.equals(data);
+                if (lan17 && lanSnackbar == null && view != null) {
+                    lanSnackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_lan_required, Snackbar.LENGTH_INDEFINITE));
+                    Helper.setSnackbarLines(lanSnackbar, 2);
+                    lanSnackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            lanSnackbar.dismiss();
+                            if (BuildConfig.PLAY_STORE_RELEASE)
+                                Helper.viewFAQ(v.getContext(), 210);
+                            else
+                                requestPermissions(new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK}, REQUEST_PERMISSIONS);
+                        }
+                    });
+                    lanSnackbar.addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onShown(Snackbar sb) {
+                            if (view != null)
+                                view.requestApplyInsets();
+                        }
+
+                        @Override
+                        public void onDismissed(Snackbar transientBottomBar, int event) {
+                            if (view != null)
+                                view.requestApplyInsets();
+                        }
+                    });
+                    lanSnackbar.show();
+                } else if (!lan17 && lanSnackbar != null) {
+                    lanSnackbar.dismiss();
+                    lanSnackbar = null;
+                }
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ignored) {
+            }
+        }.execute(this, args, "checklan");
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Editable e = etHost.getText();
+        checkLan(e == null ? null : e.toString());
     }
 
     private void setFolders(List<EntityFolder> _folders, EntityAccount account) {

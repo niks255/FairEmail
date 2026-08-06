@@ -15,7 +15,8 @@
     <string name="app_updated">Posljednje ažuriranje: %1$s</string>
     <string name="app_download">Preuzeto sa: %1$s</string>
     <string name="app_error">Najviše poruka o greškama izazivaju vanjski uzroci (mreža, server itd.) ili su uzrokovane netačnim, često nestandardnim podešavanjem. Loša ocjena ne može pomoći u rješavanju takvih problema. Stoga je traženje podrške gotovo uvijek učinkovitije.</string>
-    <string name="app_motd">        U Androidu 14/15 beta, obavještenja \'Aplikacija ne reaguje\' mogu se povremeno javiti.
+    <string name="app_motd">
+        U Androidu 14/15 beta, obavještenja \'Aplikacija ne reaguje\' mogu se povremeno javiti.
         Google radi na ovoj ispravci.
         Nemojte kriviti aplikaciju zbog problema s Androidom!
     </string>
@@ -97,7 +98,8 @@
     </plurals>
     <string name="title_ask_spam_who">Tretirati poruku od %1$s kao spam?</string>
     <string name="title_junk_hint">Vaš e-mail provajder (poslužitelj) je nadležan za filtriranje spam poruka. E-mail aplikacija nema sve potrebne podatke kako bi to obavljala pouzdano.</string>
-    <string name="title_junk_pop_hint">        Poruke od blokiranih pošiljaoca neće se preuzimati.
+    <string name="title_junk_pop_hint">
+        Poruke od blokiranih pošiljaoca neće se preuzimati.
         Ako opcija \"Zadrži poruke na serveru\" nije omogućena, takve poruke će biti trajno izgubljene!
     </string>
     <string name="title_block">Blokiraj %1$s</string>
@@ -217,7 +219,8 @@
     <string name="title_setup_office_auth">Greška \'PROVJERA nije uspjela\' može biti uzrokovana postavkama IMAP/SMTP-a koje je isključio sistemski administrator</string>
     <string name="title_setup_office_auth_5_7_3">Molimo da probate brzi čarobnjak postavki za \'druge provajdere\'.</string>
     <string name="title_setup_office_auth_5_7_139">Molimo da probate brzi čarobnjak za \'Outlook/Hotmail/Live\' račune.</string>
-    <string name="title_setup_office_not_connected">        Greška \'User is authenticated but not connected\' najčešće znači da je IMAP isključen.
+    <string name="title_setup_office_not_connected">
+        Greška \'User is authenticated but not connected\' najčešće znači da je IMAP isključen.
         Ako koristite personalni Outlook račun, posjetite Outlook-ov web sajt, pronađite ikonice za postavke u desnom gornjem dijelu prozora, označite \'Mail\', potom \'Forwarding and IMAP\', i u odjeljku \'POP and IMAP\' uključite opciju \'Let devices and apps use IMAP\'.
         Ako koristite korporativni, edukacijski i druge vrste računa, molimo da kontaktirate administratora sistema e-mail servera.
     </string>
@@ -360,12 +363,14 @@
     <string name="title_advanced_hint_message">        Prebacujete se na više naprednih opcija.
         Sve opcije imaju postavljene uobičajene standardne vrijednosti, koje ne trebate mijenjati osim ako ne preferirate drugačije.
     </string>
-    <string name="title_advanced_hint_configure">        Nema potrebe da ovdje podešavate račun. Molimo da koristite dugme Čarobnjak, za brzo postavljanje računa.
+    <string name="title_advanced_hint_configure">
+        Nema potrebe da ovdje podešavate račun. Molimo da koristite dugme Čarobnjak, za brzo postavljanje računa.
         Čarobnjak za brzo postavljanje gotovo uvijek radi, ali ukoliko ne radi, možete izabrati klasično ručno postavljanje računa, koje se nalazi ispod dugmeta čarobnjaka.
     </string>
     <string name="title_advanced_hint_remark">        Opcije su kategorisane prema kartici (tabu), podijeljene u odjeljke, organizovane prema izgledu ili upotrebi i mogu se pretraživati.
     </string>
-    <string name="title_advanced_hint_options">        Nećete trebati većinu opcija i zbog toga što su neke opcije vrlo specifične,
+    <string name="title_advanced_hint_options">
+        Nećete trebati većinu opcija i zbog toga što su neke opcije vrlo specifične,
         razumljivo je da Vam funkcioniranje svih opcija neće biti sasvim jasno.
         Molimo da ne ostavljate lošu recenziju zbog brojnih opcija ili zbog momentalnog nerazumijevanja svih opcija.
         Sve opcije su korisne nekolicini ljudi, ali možda još (uvijek) nisu za Vas.
@@ -770,7 +775,8 @@
     <string name="title_advanced_mnemonic_hint">Bilo koja e-pošta koja sadrži neku od dolje navedenih riječi u naslovu automatski i odmah će izbrisati podatke aplikacije</string>
     <string name="title_advanced_clear_all">Izbriši podatke aplikacije</string>
     <string name="title_advanced_clear_all_remark">Podaci aplikacije izbrisat će se nepovratno!</string>
-    <string name="title_advanced_default_encryption">        Zadana metoda šifriranja (PGP ili S/MIME) čuvat će se za svaki identitet nakon slanja potpisane ili šifrirane poruke.
+    <string name="title_advanced_default_encryption">
+        Zadana metoda šifriranja (PGP ili S/MIME) čuvat će se za svaki identitet nakon slanja potpisane ili šifrirane poruke.
         Metoda šifriranja može se izabrati prije slanja u dijaloškom okviru opcije za slanje (držite prst dugo na dugme \'pošalji\').
     </string>
     <string name="title_advanced_sign_default">Potpiši po zadanom</string>
@@ -936,7 +942,8 @@
     <string name="title_advanced_inline_hint">Poravnate slike su slike unutar tijela poruke</string>
     <string name="compressed">Sadržaj kompresovanih datoteka (%1$s) sa više od %2$s datoteke(a) ili sa datotekama većim od %3$s neće se prikazivati</string>
     <string name="title_advanced_parse_classes_hint">Ovo će preciznije prikazivati poruke, ali vjerovatno sa kašnjenjem</string>
-    <string name="title_advanced_default_folder_hint">        Android može tražiti dozvole za pristup izabranom folderu, iako to aplikacija ne traži.
+    <string name="title_advanced_default_folder_hint">
+        Android može tražiti dozvole za pristup izabranom folderu, iako to aplikacija ne traži.
         Možete otkazati dijaloški okvir selekcije za vraćanje zadanog foldera (obično je to folder preuzimanja tj. \'Download\' folder).
     </string>
     <string name="title_advanced_restore_on_launch_hint">Po mogućnosti vrati posljednje stanje aplikacije, kada se restartuje putem ikonice u launcher-u</string>
@@ -1071,7 +1078,8 @@
     <string name="title_leave_on_device_hint">Kada se izbrišu poruke sa servera, ostaju poruke na uređaju</string>
     <string name="title_max_messages">Maksimalan broj poruka za preuzimanje (prazno za sve)</string>
     <string name="title_max_messages_keep">Ovo je maksimalan broj poruka koje će se zadržati na uređaju</string>
-    <string name="title_max_messages_remark">        Unesite pozitivan broj za preuzimanje poruka na kraju (najčešće)
+    <string name="title_max_messages_remark">
+        Unesite pozitivan broj za preuzimanje poruka na kraju (najčešće)
         i negativan broj za preuzimanje poruka na početku (najrjeđe)
     </string>
     <string name="title_keep_poll_interval">Interval odaziva (minute)</string>
@@ -1135,7 +1143,8 @@
     <string name="title_service_port">Molimo, ponovo provjerite broj porta</string>
     <string name="title_service_protocol">Molimo, ponovo provjerite protokol (SSL/TLS ili STARTTLS)</string>
     <string name="title_service_error10">Ovaj račun treba ponovnu provjeru autentičnosti, što se može učiniti pomoću čarobnjaka brzih postavki</string>
-    <string name="title_certificate_error">        Zbog politika trgovine Google Play, više se ne mogu podržavati nesigurne konekcije na e-mail servere s problematičnim certifikatima, a to važi za verziju FairEmail-a koja se isporučuje na Play trgovini.
+    <string name="title_certificate_error">
+        Zbog politika trgovine Google Play, više se ne mogu podržavati nesigurne konekcije na e-mail servere s problematičnim certifikatima, a to važi za verziju FairEmail-a koja se isporučuje na Play trgovini.
         Stoga, ovaj problem može riješiti jedino vaš e-mail provajder - informacije o navedenoj grešci mogu pomoći vašem provajderu u rješavanju problema.
     </string>
     <string name="title_advanced_browse">Pretražuj poruke na serveru</string>
@@ -1144,7 +1153,8 @@
     <string name="title_synchronize_subfolders">Podfolderi</string>
     <string name="title_synchronize_more">Dohvati više poruka</string>
     <string name="title_synchronize_more_hint">Ovo će rezultirati u jednostrukom preuzimanju starijih poruka, ali neće uticati na veću potrošnju baterije u svakodnevnom korištenju</string>
-    <string name="title_synchronize_more_hint2">        Poruke će se dohvatati brzinom kojom ih e-mail server dostavlja i spremati brzinom uređaja za skladištenje i indeksiranje.
+    <string name="title_synchronize_more_hint2">
+        Poruke će se dohvatati brzinom kojom ih e-mail server dostavlja i spremati brzinom uređaja za skladištenje i indeksiranje.
         Ograničavajući faktor je obično brzina unutrašnjeg uređaja za skladištenje.
     </string>
     <string name="title_synchronize_more_hint3">Imajte na umu da čuvanje velikog broja poruka (deset hiljada i više) na vašem uređaju može uzrokovati kašnjenja zbog sporijeg rada unutrašnjeg skladišta podataka.</string>
@@ -1341,7 +1351,7 @@
     <string name="title_quick_actions_snooze">Odgodi</string>
     <string name="title_quick_actions_clear">Deselekcija označenog nakon izvršene radnje</string>
     <string name="title_trash">Otpad</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Izbriši konverzaciju</string>
+    <string name="title_trash_conversation">Izbriši konverzaciju</string>
     <string name="title_trash_selection">Premjesti označeno u otpad</string>
     <string name="title_copy">Kopiraj &#8230;</string>
     <string name="title_copy_to">Kopiraj u &#8230;</string>
@@ -1366,7 +1376,8 @@
     <string name="title_report_spam">Tretiraj kao spam</string>
     <string name="title_delete_permanently">Trajno izbriši</string>
     <string name="title_delete_attachments">Izbriši priloge</string>
-    <string name="title_delete_attachments_remark">        Da bi izbrisali priloge, prvo se mora dodati nova poruka, a staru treba izbrisati.
+    <string name="title_delete_attachments_remark">
+        Da bi izbrisali priloge, prvo se mora dodati nova poruka, a staru treba izbrisati.
         Obzirom da ovo možda ne uspije, stara poruka će biti premještena u smeće.
     </string>
     <string name="title_snooze">Odgodi &#8230;</string>
@@ -1449,7 +1460,8 @@
     <string name="title_third_party">Koristiti verziju trežih strana</string>
     <string name="title_expand_warning">Širenjem ove poruke će se preuzeti %1$s</string>
     <string name="title_download_message">Preuzimanje &#8230;</string>
-    <string name="title_reformatted">        Ovo je prikaz sigurno reformatirane poruke.
+    <string name="title_reformatted">
+        Ovo je prikaz sigurno reformatirane poruke.
         Možete dodirnuti &#x26F6; ikonicu za pregled malo nesigurnije originalne poruke i da bi sakrili ovu poruku.
         Reformatiranje poruka traje neko vrijeme, u zavisnosti od veličine poruke i brzine vašeg uređaja.
         Ponekad da bi vidjeli QR kodove, originalna poruka se mora prikazati.
@@ -1754,7 +1766,8 @@
     <string name="title_edit_signature_remark">Iako Android ne može prikazati sav HTML, poslat će se kao takav</string>
     <string name="title_edit_signature_text">Tekst potpisa</string>
     <string name="title_edit_signature_image">Ubaci sliku</string>
-    <string name="title_edit_signature_image_hint">        Pri slanju poruke, slika se kopira u tijelo poruke sa izabrane lokacije.
+    <string name="title_edit_signature_image_hint">
+        Pri slanju poruke, slika se kopira u tijelo poruke sa izabrane lokacije.
         Zbog toga nemojte brisati datoteku slike!
     </string>
     <string name="title_edit_signature_delete">Izbrisati potpis?</string>
@@ -2020,7 +2033,8 @@
     <string name="title_hint_message_actions">Prevucite lijevo za otpad; Prevucite desno za arhiviranje (ukoliko postoji); Radnje prevlačenja mogu se podesiti u postavkama računa</string>
     <string name="title_hint_outbox">Prevlačenjem lijevo ili desno možete otkazati slanje</string>
     <string name="title_hint_message_selection">Dugim dodirom na poruku pokreće se višestruko označavanje poruka; Držite i prevlačite gore ili dolje za označavanje više poruka</string>
-    <string name="title_hint_message_junk">        E-mail klijent prikazuje poruke sa e-mail servera.
+    <string name="title_hint_message_junk">
+        E-mail klijent prikazuje poruke sa e-mail servera.
         E-mail server filtrira spam poruke, a ne klijent.
         Ako primate mnogo spam poruka, molimo da kontaktirate vašeg e-mail provajdera, ne tražite krivca u aplikaciji!
     </string>
@@ -2033,7 +2047,8 @@
     <string name="title_hint_junk">Filtriranje spama trebao bi rješavati e-mail server i ne može se pouzdano odvijati na uređajima koje pogone baterije s ograničenim mogućnostima.</string>
     <string name="title_hint_junk_learn">Premještanjem poruka u i iz spam foldera, e-mail server \'pamti\' šta je spam</string>
     <string name="title_hint_contact_actions">Dugi dodir za opcije</string>
-    <string name="title_hint_eml">        Ovo je sažetak sadržaja raw poruke.
+    <string name="title_hint_eml">
+        Ovo je sažetak sadržaja raw poruke.
         Možete koristiti dugme dolje-desno da sačuvate poruku u inbox i pregledate cijeli sadržaj.
     </string>
     <string name="title_open_link">Otvori link</string>

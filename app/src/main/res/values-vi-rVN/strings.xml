@@ -65,13 +65,15 @@
     </plurals>
     <string name="title_ask_spam_who">Coi thư từ %1$s là thư rác?</string>
     <string name="title_junk_hint">Nhà cung cấp email của bạn có trách nhiệm lọc thư rác. Một ứng dụng email không có tất cả dữ liệu cần thiết để làm việc này một cách đáng tin cậy.</string>
-    <string name="title_junk_pop_hint">        Thư từ người gửi bị chặn sẽ không được tải xuống.
+    <string name="title_junk_pop_hint">
+        Thư từ người gửi bị chặn sẽ không được tải xuống.
         Nếu \"Để lại thư trên máy chủ\" không bật, các thư này sẽ bị mất vĩnh viễn!
     </string>
     <string name="title_block">Chặn %1$s</string>
     <string name="title_block_sender">Chặn người gửi</string>
     <string name="title_block_sender_domain">Chặn miền \'%1$s\'</string>
-    <string name="title_block_sender_hint">        Chặn người gửi là tính năng miễn phí.
+    <string name="title_block_sender_hint">
+        Chặn người gửi là tính năng miễn phí.
         Chặn tên miền người gửi có sử dụng quy tắc lọc, đó là tính năng pro.
     </string>
     <string name="title_blocked_senders">Người gửi bị chặn</string>
@@ -855,7 +857,8 @@
     <string name="title_synchronize_subfolders">Các thư mục con</string>
     <string name="title_synchronize_more">Lấy thêm thư</string>
     <string name="title_synchronize_more_hint">Cái này sẽ dẫn đến một lượt tải xuống các thư cũ hơn, nên nó sẽ không dẫn đến sử dụng pin nhiều hơn khi sử dụng hàng ngày</string>
-    <string name="title_synchronize_more_hint2">        Thư sẽ được lấy với tốc độ bằng với tốc độ máy chủ email có thể gửi thư và được lưu trữ với tốc độ bằng với tốc độ thiết bị có thể lưu trữ và tạo mục lục cho chúng.
+    <string name="title_synchronize_more_hint2">
+        Thư sẽ được lấy với tốc độ bằng với tốc độ máy chủ email có thể gửi thư và được lưu trữ với tốc độ bằng với tốc độ thiết bị có thể lưu trữ và tạo mục lục cho chúng.
         Yếu tố giới hạn thường là tốc độ của không gian bộ nhớ trong của thiết bị.
     </string>
     <string name="title_synchronize_more_hint3">Vui lòng chú ý rằng việc lưu trữ nhiều thư (mười nghìn hoặc nhiều hơn) trên thiết bị có thể gây ra độ trễ bởi vì dung lượng bộ nhớ trong không phải là nhanh vô tận.</string>
@@ -1361,7 +1364,8 @@
     <string name="title_edit_signature_remark">Dù Android không thể hiển thị tất cả HTML, nó sẽ được gửi đi mà không thay đổi</string>
     <string name="title_edit_signature_text">Văn bản chữ ký</string>
     <string name="title_edit_signature_image">Chèn hình ảnh</string>
-    <string name="title_edit_signature_image_hint">        Khi gửi thư, hình ảnh được sao chép vào thư từ vị trí được chọn.
+    <string name="title_edit_signature_image_hint">
+        Khi gửi thư, hình ảnh được sao chép vào thư từ vị trí được chọn.
         Vậy nên đừng xoá tệp hình ảnh!
     </string>
     <string name="title_answer_define_name">Tên</string>

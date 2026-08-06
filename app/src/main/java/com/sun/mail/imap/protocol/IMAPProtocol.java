@@ -56,7 +56,7 @@ import com.sun.mail.imap.Utility;
  */
 
 public class IMAPProtocol extends Protocol {
-    
+
     private boolean connected = false;	// did constructor succeed?
     private boolean rev1 = false;	// REV1 server ?
     private boolean referralException;	// throw exception for IMAP REFERRAL?
@@ -102,7 +102,7 @@ public class IMAPProtocol extends Protocol {
      * @exception	IOException	for I/O errors
      * @exception	ProtocolException	for protocol failures
      */
-    public IMAPProtocol(String name, String host, int port, 
+    public IMAPProtocol(String name, String host, int port,
 			Properties props, boolean isSSL, MailLogger logger)
 			throws IOException, ProtocolException {
 	super(host, port, props, "mail." + name, isSSL, logger);
@@ -481,7 +481,7 @@ public class IMAPProtocol extends Protocol {
 
     /**
      * LOGIN Command.
-     * 
+     *
      * @param  u		the username
      * @param  p		the password
      * @throws ProtocolException as thrown by {@link Protocol#handleResult}.
@@ -557,7 +557,7 @@ public class IMAPProtocol extends Protocol {
 	 * Note that the encoded bytes should be sent "as-is" to the
 	 * server, *not* as literals or quoted-strings.
 	 *
-	 * Also note that unlike the B64 definition in MIME, CRLFs 
+	 * Also note that unlike the B64 definition in MIME, CRLFs
 	 * should *not* be inserted during the encoding process. So, I
 	 * use Integer.MAX_VALUE (0x7fffffff (> 1G)) as the bytesPerLine,
 	 * which should be sufficiently large !
@@ -582,7 +582,7 @@ public class IMAPProtocol extends Protocol {
 			first = false;
 		    } else 	// Send encoded password
 			s = p;
-		    
+
 		    // obtain b64 encoded bytes
 		    b64os.write(s.getBytes(StandardCharsets.UTF_8));
 		    b64os.flush(); 	// complete the encoding
@@ -617,7 +617,7 @@ public class IMAPProtocol extends Protocol {
 	/*
 	 * Dispatch untagged responses.
 	 * NOTE: in our current upper level IMAP classes, we add the
-	 * responseHandler to the Protocol object only *after* the 
+	 * responseHandler to the Protocol object only *after* the
 	 * connection has been authenticated. So, for now, the below
 	 * code really ends up being just a no-op.
 	 */
@@ -806,7 +806,7 @@ public class IMAPProtocol extends Protocol {
 		    } else {
 			s = ntlm.generateType3Msg(r.getRest());
 		    }
- 
+
 		    os.write(s.getBytes(StandardCharsets.UTF_8));
 		    os.write(CRLF); 	// CRLF termination
 		    os.flush(); 	// flush the stream
@@ -1051,7 +1051,7 @@ public class IMAPProtocol extends Protocol {
 
     /**
      * PROXYAUTH Command.
-     * 
+     *
      * @param	u	the PROXYAUTH user name
      * @exception	ProtocolException	for protocol failures
      * @see "Netscape/iPlanet/SunONE Messaging Server extension"
@@ -1077,7 +1077,7 @@ public class IMAPProtocol extends Protocol {
 
     /**
      * UNAUTHENTICATE Command.
-     * 
+     *
      * @exception	ProtocolException	for protocol failures
      * @see "Netscape/iPlanet/SunONE Messaging Server extension"
      * @since	JavaMail 1.5.1
@@ -1108,7 +1108,7 @@ public class IMAPProtocol extends Protocol {
 
     /**
      * STARTTLS Command.
-     * 
+     *
      * @exception	ProtocolException	for protocol failures
      * @see "RFC3501, section 6.2.1"
      */
@@ -1134,7 +1134,7 @@ public class IMAPProtocol extends Protocol {
 
     /**
      * COMPRESS Command.  Only supports DEFLATE.
-     * 
+     *
      * @exception	ProtocolException	for protocol failures
      * @see "RFC 4978"
      */
@@ -1200,7 +1200,7 @@ public class IMAPProtocol extends Protocol {
      */
     public MailboxInfo select(String mbox, ResyncData rd)
 				throws ProtocolException {
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, mbox);
 
 	if (rd != null) {
@@ -1209,7 +1209,7 @@ public class IMAPProtocol extends Protocol {
 		    throw new BadCommandException("CONDSTORE not supported");
 		args.writeArgument(new Argument().writeAtom("CONDSTORE"));
 	    } else {
-		if (!hasCapability("QRESYNC")) 
+		if (!hasCapability("QRESYNC"))
 		    throw new BadCommandException("QRESYNC not supported");
 		args.writeArgument(resyncArgs(rd));
 	    }
@@ -1217,22 +1217,22 @@ public class IMAPProtocol extends Protocol {
 
 	Response[] r = command("SELECT", args);
 
-	// Note that MailboxInfo also removes those responses 
+	// Note that MailboxInfo also removes those responses
 	// it knows about
 	MailboxInfo minfo = new MailboxInfo(r);
-	
+
 	// dispatch any remaining untagged responses
 	notifyResponseHandlers(r);
 
 	Response response = r[r.length-1];
 
-	if (response.isOK()) { // command succesful 
+	if (response.isOK()) { // command succesful
 	    if (response.toString().indexOf("READ-ONLY") != -1)
 		minfo.mode = Folder.READ_ONLY;
 	    else
 		minfo.mode = Folder.READ_WRITE;
-	} 
-	
+	}
+
 	handleResult(response);
 	return minfo;
     }
@@ -1262,7 +1262,7 @@ public class IMAPProtocol extends Protocol {
      */
     public MailboxInfo examine(String mbox, ResyncData rd)
 				throws ProtocolException {
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, mbox);
 
 	if (rd != null) {
@@ -1271,7 +1271,7 @@ public class IMAPProtocol extends Protocol {
 		    throw new BadCommandException("CONDSTORE not supported");
 		args.writeArgument(new Argument().writeAtom("CONDSTORE"));
 	    } else {
-		if (!hasCapability("QRESYNC")) 
+		if (!hasCapability("QRESYNC"))
 		    throw new BadCommandException("QRESYNC not supported");
 		args.writeArgument(resyncArgs(rd));
 	    }
@@ -1316,7 +1316,7 @@ public class IMAPProtocol extends Protocol {
      * @since	JavaMail 1.5.1
      */
     public void enable(String cap) throws ProtocolException {
-	if (!hasCapability("ENABLE")) 
+	if (!hasCapability("ENABLE"))
 	    throw new BadCommandException("ENABLE not supported");
 	Argument args = new Argument();
 	args.writeAtom(cap);
@@ -1352,7 +1352,7 @@ public class IMAPProtocol extends Protocol {
      * @since	JavaMail 1.4.4
      */
     public void unselect() throws ProtocolException {
-	if (!hasCapability("UNSELECT")) 
+	if (!hasCapability("UNSELECT"))
 	    throw new BadCommandException("UNSELECT not supported");
 	simpleCommand("UNSELECT", null);
     }
@@ -1366,14 +1366,14 @@ public class IMAPProtocol extends Protocol {
      * @exception	ProtocolException	for protocol failures
      * @see "RFC2060, section 6.3.10"
      */
-    public Status status(String mbox, String[] items) 
+    public Status status(String mbox, String[] items)
 		throws ProtocolException {
-	if (!isREV1() && !hasCapability("IMAP4SUNVERSION")) 
-	    // STATUS is rev1 only, however the non-rev1 SIMS2.0 
+	if (!isREV1() && !hasCapability("IMAP4SUNVERSION"))
+	    // STATUS is rev1 only, however the non-rev1 SIMS2.0
 	    // does support this.
 	    throw new BadCommandException("STATUS not supported");
 
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, mbox);
 
 	Argument itemArgs = new Argument();
@@ -1390,7 +1390,7 @@ public class IMAPProtocol extends Protocol {
 	Response response = r[r.length-1];
 
 	// Grab all STATUS responses
-	if (response.isOK()) { // command succesful 
+	if (response.isOK()) { // command succesful
 	    for (int i = 0, len = r.length; i < len; i++) {
 		if (!(r[i] instanceof IMAPResponse))
 		    continue;
@@ -1420,7 +1420,7 @@ public class IMAPProtocol extends Protocol {
      * @see "RFC2060, section 6.3.3"
      */
     public void create(String mbox) throws ProtocolException {
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, mbox);
 
 	simpleCommand("CREATE", args);
@@ -1434,7 +1434,7 @@ public class IMAPProtocol extends Protocol {
      * @see "RFC2060, section 6.3.4"
      */
     public void delete(String mbox) throws ProtocolException {
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, mbox);
 
 	simpleCommand("DELETE", args);
@@ -1449,7 +1449,7 @@ public class IMAPProtocol extends Protocol {
      * @see "RFC2060, section 6.3.5"
      */
     public void rename(String o, String n) throws ProtocolException {
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, o);
 	writeMailboxName(args, n);
 
@@ -1464,7 +1464,7 @@ public class IMAPProtocol extends Protocol {
      * @see "RFC2060, section 6.3.6"
      */
     public void subscribe(String mbox) throws ProtocolException {
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, mbox);
 
 	simpleCommand("SUBSCRIBE", args);
@@ -1478,7 +1478,7 @@ public class IMAPProtocol extends Protocol {
      * @see "RFC2060, section 6.3.7"
      */
     public void unsubscribe(String mbox) throws ProtocolException {
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, mbox);
 
 	simpleCommand("UNSUBSCRIBE", args);
@@ -1493,7 +1493,7 @@ public class IMAPProtocol extends Protocol {
      * @exception	ProtocolException	for protocol failures
      * @see "RFC2060, section 6.3.8"
      */
-    public ListInfo[] list(String ref, String pattern) 
+    public ListInfo[] list(String ref, String pattern)
 			throws ProtocolException {
 	return doList("LIST", ref, pattern);
     }
@@ -1507,7 +1507,7 @@ public class IMAPProtocol extends Protocol {
      * @exception	ProtocolException	for protocol failures
      * @see "RFC2060, section 6.3.9"
      */
-    public ListInfo[] lsub(String ref, String pattern) 
+    public ListInfo[] lsub(String ref, String pattern)
 			throws ProtocolException {
 	return doList("LSUB", ref, pattern);
     }
@@ -1525,7 +1525,7 @@ public class IMAPProtocol extends Protocol {
      */
     protected ListInfo[] doList(String cmd, String ref, String pat)
 			throws ProtocolException {
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, ref);
 	writeMailboxName(args, pat);
 
@@ -1534,7 +1534,7 @@ public class IMAPProtocol extends Protocol {
 	ListInfo[] linfo = null;
 	Response response = r[r.length-1];
 
-	if (response.isOK()) { // command succesful 
+	if (response.isOK()) { // command succesful
 	    List<ListInfo> v = new ArrayList<>(1);
 	    for (int i = 0, len = r.length; i < len; i++) {
 		if (!(r[i] instanceof IMAPResponse))
@@ -1550,13 +1550,13 @@ public class IMAPProtocol extends Protocol {
 		linfo = v.toArray(new ListInfo[v.size()]);
 	    }
 	}
-	
+
 	// Dispatch remaining untagged responses
 	notifyResponseHandlers(r);
 	handleResult(response);
 	return linfo;
     }
-		
+
     /**
      * APPEND Command.
      *
@@ -1590,7 +1590,7 @@ public class IMAPProtocol extends Protocol {
 
     public AppendUID appenduid(String mbox, Flags f, Date d,
 			Literal data, boolean uid) throws ProtocolException {
-	Argument args = new Argument();	
+	Argument args = new Argument();
 	writeMailboxName(args, mbox);
 
 	if (f != null) { // set Flags in appended message
@@ -1670,8 +1670,13 @@ public class IMAPProtocol extends Protocol {
      * @see "RFC2060, section 6.4.2"
      */
     public void close() throws ProtocolException {
-	simpleCommand("CLOSE", null);
-    }
+		try {
+			simpleCommand("CLOSE", null);
+		} catch (CommandFailedException ex) {
+			if (ex.getMessage() == null || !ex.getMessage().contains("Mailbox is read-only (opened with EXAMINE)")) // Migadu
+				throw ex;
+		}
+	}
 
     /**
      * EXPUNGE Command.

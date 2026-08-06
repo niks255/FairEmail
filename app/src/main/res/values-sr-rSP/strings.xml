@@ -391,7 +391,8 @@
     <string name="title_advanced_expand_read">Означи поруке прочитаним на проширивање</string>
     <string name="title_synchronize_now">Синхронизуј сада</string>
     <string name="title_synchronize_more">Дохвати још порука</string>
-    <string name="title_synchronize_more_hint2">Поруке ће бити дохваћене онолико брзо колико то сервер може да подржи и биће снимљене онолико брзо колико уређај може да их сними и индексира.
+    <string name="title_synchronize_more_hint2">
+Поруке ће бити дохваћене онолико брзо колико то сервер може да подржи и биће снимљене онолико брзо колико уређај може да их сними и индексира.
 Ограничавајући фактор је обично брзина интерног простора за снимање уређаја.    </string>
     <string name="title_synchronize_enabled">Синхронизуј</string>
     <string name="title_delete_local">Избриши локалне поруке</string>

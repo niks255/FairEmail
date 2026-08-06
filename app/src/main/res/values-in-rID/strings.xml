@@ -15,7 +15,8 @@
     <string name="app_updated">Pembaharuan terakhir: %1$s</string>
     <string name="app_download">Mengunduh dari: %1$s</string>
     <string name="app_error">Sebagian besar pesan kesalahan disebabkan oleh faktor eksternal (jaringan, server, dll.) atau akibat konfigurasi yang salah, seringkali tidak standar. Memberikan ulasan negatif tidak akan menyelesaikan masalah semacam itu. Meminta bantuan dukungan hampir selalu lebih efektif.</string>
-    <string name="app_motd">        Pada Android 14/15 beta, notifikasi \'Aplikasi tidak merespon\' terkadang muncul.
+    <string name="app_motd">
+        Pada Android 14/15 beta, notifikasi \'Aplikasi tidak merespon\' terkadang muncul.
         Google sedang mengupayakan perbaikannya.
         Mohon untuk tidak menyalahkan aplikasi atas masalah Android ini!
     </string>
@@ -76,13 +77,15 @@
     </plurals>
     <string name="title_ask_spam_who">Tandai pesan dari %1$s sebagai spam?</string>
     <string name="title_junk_hint">Penyedia surel Anda bertanggung jawab untuk menyaring spam. Aplikasi surel tidak memiliki semua data yang diperlukan untuk melakukannya dengan andal.</string>
-    <string name="title_junk_pop_hint">       Pesan dari pengirim yang diblokir tidak akan diunduh.
+    <string name="title_junk_pop_hint">
+       Pesan dari pengirim yang diblokir tidak akan diunduh.
        Jika \"Tinggalkan pesan di server\" tidak diaktifkan, pesan-pesan ini akan hilang secara permanen!    </string>
     <string name="title_block">Blokir %1$s</string>
     <string name="title_block_sender">Blokir Pengirim</string>
     <string name="title_block_sender_domain">Blokir domain \'%1$s\'</string>
     <string name="title_block_sender_remark">Memblokir berarti secara otomatis memindahkan ke folder spam</string>
-    <string name="title_block_sender_hint">        Memblokir pengirim adalah fitur gratis.
+    <string name="title_block_sender_hint">
+        Memblokir pengirim adalah fitur gratis.
         Memblokir domain pengirim menggunakan aturan saring, yang merupakan fitur pro.
     </string>
     <string name="title_blocked_senders">Pengirim yang diblokir</string>
@@ -189,7 +192,8 @@
     <string name="title_setup_office_auth">Kesalahan \'AUTHENTICATE Failed\' bisa disebabkan oleh IMAP/SMTP yang dinon-aktifkan oleh administrator sistem.</string>
     <string name="title_setup_office_auth_5_7_3">Silakan coba wizard pengaturan cepat \'Penyedia lain\'.</string>
     <string name="title_setup_office_auth_5_7_139">Silakan coba panduan penyiapan cepat \'Outlook/Hotmail/Live\'.</string>
-    <string name="title_setup_office_not_connected">        Kesalahan \'User is authenticated but not connected\' umumnya berarti IMAP dinonaktifkan.
+    <string name="title_setup_office_not_connected">
+        Kesalahan \'User is authenticated but not connected\' umumnya berarti IMAP dinonaktifkan.
         Untuk akun Outlook konsumen, silakan kunjungi situs web Outlook, ketuk ikon pengaturan di pojok kanan atas, pilih ‘Mail’, pilih ‘Forwarding and IMAP’, dan di bagian ‘POP and IMAP’ aktifkan ‘Izinkan perangkat dan aplikasi menggunakan IMAP’.
         Untuk akun korporat, pendidikan, dll., silakan hubungi administrator sistem server email.
     </string>
@@ -328,11 +332,13 @@ Kata sandi diperlukan untuk mengimpor kembali pengaturan, harap jangan sampai lu
     <string name="title_check_outlook_oauth">Akun Outlook Anda akan terus berfungsi setelah tanggal 16 September 2024</string>
     <string name="title_check_outlook_password">Beberapa akun Outlook/Hotmail/Live Anda akan berhenti berfungsi setelah tanggal 16 September 2024</string>
     <string name="title_advanced_hint_title">Opsi lebih lanjut</string>
-    <string name="title_advanced_hint_message">        Anda menavigasi ke opsi yang lebih canggih.
+    <string name="title_advanced_hint_message">
+        Anda menavigasi ke opsi yang lebih canggih.
         Semua opsi umumnya menggunakan nilai standar, yang tidak perlu Anda ubah kecuali jika Anda memiliki preferensi yang berbeda.
     </string>
     <string name="title_advanced_hint_remark">        Pilihan dikategorikan dengan tab, terbagi dalam beberapa bagian, di organisir oleh tampilan atau penggunaan, dan dapat menggunakan pencarian.    </string>
-    <string name="title_advanced_hint_options">        Anda tidak akan membutuhkan sebagian besar opsi, dan karena beberapa opsi cukup spesifik,
+    <string name="title_advanced_hint_options">
+        Anda tidak akan membutuhkan sebagian besar opsi, dan karena beberapa opsi cukup spesifik,
         wajar jika fungsi dari semua opsi tidak langsung jelas.
         Jangan tinggalkan ulasan buruk hanya karena jumlah opsi atau karena tidak langsung memahami semua opsi.
         Semua opsi berguna bagi lebih dari beberapa orang, tetapi mungkin belum berguna bagi Anda (untuk saat ini).
@@ -735,7 +741,8 @@ Kata sandi diperlukan untuk mengimpor kembali pengaturan, harap jangan sampai lu
 Contextrequest</string>
     <string name="title_advanced_clear_all">Hapus data aplikasi</string>
     <string name="title_advanced_clear_all_remark">Data aplikasi akan dihapus secara permanen!</string>
-    <string name="title_advanced_default_encryption">        Metode enkripsi default (PGP or S/MIME) akan disimpan per identitas setelah mengirim pesan yang ditandatangani atau dienkripsi.
+    <string name="title_advanced_default_encryption">
+        Metode enkripsi default (PGP or S/MIME) akan disimpan per identitas setelah mengirim pesan yang ditandatangani atau dienkripsi.
         Metode enkripsi dapat dipilih sebelum mengirim pada pengaturan kirim di kolom dialog (tekan lama tombol kirim).
     </string>
     <string name="title_advanced_sign_default">Masuk secara bawaan</string>
@@ -899,7 +906,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_advanced_inline_hint">Gambar inline akan menyisipkan gambar dalam pesan</string>
     <string name="compressed">Konten file terkompresi (%1$s) dengan lebih dari %2$s file atau dengan file lebih besar dari %3$s tidak akan ditampilkan</string>
     <string name="title_advanced_parse_classes_hint">Ini akan lebih akurat menampilkan pesan, tapi mungkin dengan penundaan</string>
-    <string name="title_advanced_default_folder_hint">        Android mungkin akan menanyakan untuk perizinan untuk mengakses folder yang dipilih, meskipun aplikasi tidak membutuhkannya.
+    <string name="title_advanced_default_folder_hint">
+        Android mungkin akan menanyakan untuk perizinan untuk mengakses folder yang dipilih, meskipun aplikasi tidak membutuhkannya.
         Anda dapat membatalkan dialog pemilihan untuk mengembalikan folder default (biasanya folder \'Download\').
     </string>
     <string name="title_advanced_restore_on_launch_hint">Pulihkan keadaan aplikasi terakhir jika memungkinkan saat di-restart melalui ikon launcher</string>
@@ -1034,7 +1042,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_leave_on_device_hint">Ketika pesan dihapus dari server, pesan tetap ada di perangkat</string>
     <string name="title_max_messages">Jumlah maksimum pesan untuk diunduh (kosong untuk semua)</string>
     <string name="title_max_messages_keep">Ini adalah jumlah maksimum pesan yang akan disimpan di perangkat</string>
-    <string name="title_max_messages_remark">Masukkan angka positif untuk mengunduh pesan di akhir (paling umum)
+    <string name="title_max_messages_remark">
+Masukkan angka positif untuk mengunduh pesan di akhir (paling umum)
         dan angka negatif untuk mengunduh pesan di awal (paling tidak umum)
     </string>
     <string name="title_keep_poll_interval">Selang waktu pengambilan (menit)</string>
@@ -1098,7 +1107,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_service_port">Harap periksa kembali nomor port</string>
     <string name="title_service_protocol">Harap periksa kembali protokolnya (SSL / TLS atau STARTTLS)</string>
     <string name="title_service_error10">Akun ini perlu diautentikasi lagi, yang dapat dilakukan melalui wisaya penyiapan cepat</string>
-    <string name="title_certificate_error">Karena kebijakan Google Play Store, tidak mungkin lagi mendukung koneksi yang tidak aman ke server email dengan masalah sertifikat untuk versi FairEmail yang didistribusikan di Play Store.
+    <string name="title_certificate_error">
+Karena kebijakan Google Play Store, tidak mungkin lagi mendukung koneksi yang tidak aman ke server email dengan masalah sertifikat untuk versi FairEmail yang didistribusikan di Play Store.
         Oleh karena itu, masalah ini hanya dapat diselesaikan oleh penyedia email Anda - informasi kesalahan di atas dapat membantu mereka menyelesaikan masalah ini.
     </string>
     <string name="title_advanced_browse">Jelajahi pesan di server</string>
@@ -1107,7 +1117,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_synchronize_subfolders">Subfolder</string>
     <string name="title_synchronize_more">Ambil lebih banyak pesan</string>
     <string name="title_synchronize_more_hint">Ini dapat menghasilkan sebuah unduhan pesan terdahulu, jadi tidak akan menghasilkan penggunaan baterai untuk setiap hari</string>
-    <string name="title_synchronize_more_hint2">Pesan akan diambil secepat server email dapat mengirimkannya dan disimpan secepat perangkat dapat menyimpan dan mengindeksnya.
+    <string name="title_synchronize_more_hint2">
+Pesan akan diambil secepat server email dapat mengirimkannya dan disimpan secepat perangkat dapat menyimpan dan mengindeksnya.
         Faktor pembatas biasanya kecepatan ruang penyimpanan internal perangkat.    </string>
     <string name="title_synchronize_more_hint3">Harap diingat bahwa menyimpan banyak pesan (sepuluh ribu atau lebih) di perangkat Anda dapat menyebabkan penundaan karena ruang penyimpanan internal tidak terlalu cepat.</string>
     <string name="title_synchronize_enabled">Mengsinkronisasikan</string>
@@ -1326,7 +1337,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_report_spam">Tandai sebagai spam</string>
     <string name="title_delete_permanently">Hapus permanen</string>
     <string name="title_delete_attachments">Hapus lampiran</string>
-    <string name="title_delete_attachments_remark">Untuk menghapus lampiran, pesan baru harus ditambahkan dan pesan lama harus dihapus.
+    <string name="title_delete_attachments_remark">
+Untuk menghapus lampiran, pesan baru harus ditambahkan dan pesan lama harus dihapus.
         Karena ini mungkin gagal, pesan lama akan dipindahkan ke tempat sampah.
     </string>
     <string name="title_snooze">Tunda &#8230;</string>
@@ -1408,7 +1420,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_third_party">Anda menggunakan versi pihak ketiga</string>
     <string name="title_expand_warning">Memperluas pesan ini akan mengunduh %1$s</string>
     <string name="title_download_message">Mengunduh &#8230;</string>
-    <string name="title_reformatted">        Ini adalah tampilan pesan yang diformat ulang yang aman.
+    <string name="title_reformatted">
+        Ini adalah tampilan pesan yang diformat ulang yang aman.
         Anda dapat mengetuk ikon &#x26F6; untuk melihat pesan asli yang kurang aman dan menyembunyikan pesan ini.
         Memformat ulang pesan memerlukan waktu, tergantung pada ukuran pesan dan kecepatan perangkat Anda.
         Terkadang pesan asli harus dilihat untuk melihat kode QR.
@@ -1615,7 +1628,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_signature_store">Sumber</string>
     <string name="title_search">Pencarian</string>
     <string name="title_search_for_hint">Masukkan teks</string>
-    <string name="title_search_hint">Awalnya, pencarian akan mencari pesan yang ada di perangkat Anda.
+    <string name="title_search_hint">
+Awalnya, pencarian akan mencari pesan yang ada di perangkat Anda.
         Untuk mencari di server juga, ketuk tombol \'cari lagi\'.    </string>
     <string name="title_search_hint_fts">Gunakan indeks pencarian: seluruh kata saja</string>
     <string name="title_search_index_hint">Cari melalui indeks pencarian lebih cepat, tetapi hanya menemukan keseluruhan kata.</string>
@@ -1711,7 +1725,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_edit_signature_remark">Meskipun Android tidak dapat menampilkan seluruh HTML, akan dikirim sebagaimana adanya</string>
     <string name="title_edit_signature_text">Teks tanda tangan</string>
     <string name="title_edit_signature_image">Sisipkan gambar</string>
-    <string name="title_edit_signature_image_hint">Saat mengirim pesan, gambar disalin ke dalam pesan dari lokasi yang dipilih.
+    <string name="title_edit_signature_image_hint">
+Saat mengirim pesan, gambar disalin ke dalam pesan dari lokasi yang dipilih.
         Jadi, jangan hapus file gambar!    </string>
     <string name="title_edit_signature_delete">Hapus tanda tangan?</string>
     <string name="title_answer_define_name">Nama</string>
@@ -1976,7 +1991,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_hint_message_actions">Geser ke kiri untuk membuang; Geser ke kanan untuk mengarsip (jika tersedia); Tindakan saat digeser dapat dikonfigurasi di pengaturan akun</string>
     <string name="title_hint_outbox">Anda dapat menggeser ke kiri atau ke kanan untuk membatalkan pengiriman</string>
     <string name="title_hint_message_selection">Ketuk dan tahan sebuah pesan untuk memilih banyak pesan; tahan dan usap keatas atau kebawah untuk memilih lebih banyak pesan</string>
-    <string name="title_hint_message_junk">Klien email pada dasarnya menampilkan pesan di server email.
+    <string name="title_hint_message_junk">
+Klien email pada dasarnya menampilkan pesan di server email.
         Server email bertanggung jawab untuk memfilter spam, bukan klien email.
         Jika Anda menerima banyak spam, harap hubungi penyedia email Anda dan jangan salahkan aplikasinya!    </string>
     <string name="title_hint_important">Penting</string>
@@ -1988,7 +2004,8 @@ Kunci dan sertifikat umumnya dapat ditemukan di menu Lanjutan - Enkripsi dan kre
     <string name="title_hint_junk">Penyaringan spam harus dilakukan oleh server surel dan tidak dapat dilakukan secara handal pada perangkat berdaya baterai dengan kemampuan yang terbatas.</string>
     <string name="title_hint_junk_learn">Dengan memindahkan pesan ke dan dari folder spam, server surel \"mempelajari\" bagaimana spam itu</string>
     <string name="title_hint_contact_actions">Ketuk dan tahan untuk pilihan</string>
-    <string name="title_hint_eml">        Ini adalah ringkasan isi dari berkas pesan asli.
+    <string name="title_hint_eml">
+        Ini adalah ringkasan isi dari berkas pesan asli.
         Anda dapat menggunakan tombol di pojok kanan bawah untuk menyimpan pesan ke kotak masuk agar dapat melihat seluruh isi pesan.
     </string>
     <string name="title_open_link">Buka tautan</string>

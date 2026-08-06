@@ -836,6 +836,8 @@ abstract class ActivityBase extends AppCompatActivity implements SharedPreferenc
             if (TextUtils.isEmpty(fname))
                 return uri;
 
+            fname = Helper.sanitizeFilename(fname);
+
             File dir = Helper.ensureExists(this, "shared");
             File file = new File(dir, fname);
 

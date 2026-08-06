@@ -15,7 +15,8 @@
     <string name="app_updated">최근 업데이트: %1$s</string>
     <string name="app_download">%1$s에서 다운로드됨</string>
     <string name="app_error">대부분의 오류 메시지는 외부 원인(네트워크, 서버 등) 또는 잘못되거나 비표준적인 구성으로 인해 발생합니다. 부정적인 평가로는 이런 문제를 해결할 수 없습니다. 지원을 요청하는 것은 거의 언제나 더 효과적입니다.</string>
-    <string name="app_motd">        Android 14/15 베타에서, \'앱이 응답하지 않음\' 알림이 때때로 나타납니다.
+    <string name="app_motd">
+        Android 14/15 베타에서, \'앱이 응답하지 않음\' 알림이 때때로 나타납니다.
         구글이 고치고 있습니다.
         Android의 문제로 앱을 비난하지 말아주세요!
     </string>
@@ -75,14 +76,16 @@
     </plurals>
     <string name="title_ask_spam_who">%1$s의 메일을 스팸 처리하시겠습니까?</string>
     <string name="title_junk_hint">이메일 제공업체는 스팸 필터링을 담당합니다. 이메일 앱에는 이를 안정적으로 수행하는데 필요한 데이터를 모두 갖고 있지 않습니다.</string>
-    <string name="title_junk_pop_hint">        차단한 발신자의 메시지는 다운로드되지 않습니다.
+    <string name="title_junk_pop_hint">
+        차단한 발신자의 메시지는 다운로드되지 않습니다.
         \"서버에 메시지 보관\"이 활성화되어 있지 않은 경우, 이러한 메시지는 영구적으로 손실됩니다!
     </string>
     <string name="title_block">%1$s 차단</string>
     <string name="title_block_sender">보낸사람 차단</string>
     <string name="title_block_sender_domain">도메인 \'%1$s\' 차단</string>
     <string name="title_block_sender_remark">차단은 자동으로 스팸함으로 이동함을 의미합니다.</string>
-    <string name="title_block_sender_hint">        발신자를 차단하는 것은 무료 기능입니다.
+    <string name="title_block_sender_hint">
+        발신자를 차단하는 것은 무료 기능입니다.
         발신자 도메인을 차단하는 것은 유료 기능인 필터 규칙을 사용합니다.
     </string>
     <string name="title_blocked_senders">차단된 발신자</string>
@@ -189,7 +192,8 @@
     <string name="title_setup_office_auth">\'인증 실패\' 오류는 시스템 관리자에 의해 IMAP/SMTP가 비활성화된 경우 발생할 수 있습니다.</string>
     <string name="title_setup_office_auth_5_7_3">\'다른 제공업체\'로 빠른 설정 마법사를 시도해보세요.</string>
     <string name="title_setup_office_auth_5_7_139">Outlook/Hotmail/Live 빠른 설치 마법사를 사용해 주십시오．</string>
-    <string name="title_setup_office_not_connected">        \'User is authenticated but not connected\' 오류는 대부분 IMAP을 사용할 수 없음을 의미합니다.
+    <string name="title_setup_office_not_connected">
+        \'User is authenticated but not connected\' 오류는 대부분 IMAP을 사용할 수 없음을 의미합니다.
         개인 Outlook 계정일 경우, Outlook 웹사이트로 이동하여 우측 상단의 설정 버튼을 누르고 \'메일\'을 선택한 후, \'전달 및 IMAP\'을 선택한 다음 \'POP 및 IMAP\' 섹션에서 \'장치 및 앱이 IMAP을 사용하도록 허용\'으로 설정해 주십시오.
         기업 및 교육기관 등에서 사용하는 계정일 경우, 이메일 서버의 시스템 관리자에게 문의하십시오.
     </string>
@@ -262,7 +266,8 @@
     <string name="title_setup_close">설정 닫기</string>
     <string name="title_setup_export">설정 내보내기</string>
     <string name="title_setup_import">설정 불러오기</string>
-    <string name="title_setup_export_remark">        설정 파일은 모든 설정 및 계정 정보를 포함하고 있기 때문에 비밀번호로 암호화됩니다.
+    <string name="title_setup_export_remark">
+        설정 파일은 모든 설정 및 계정 정보를 포함하고 있기 때문에 비밀번호로 암호화됩니다.
         설정을 다시 가져오려면 비밀번호가 필요하니 비밀번호를 잊지 마세요!
     </string>
     <string name="title_setup_export_do">내보내기한 파일에는 모든 설정과 데이터가 포함되지만 서명에 참조되는 메시지와 이미지는 없습니다</string>
@@ -329,12 +334,15 @@
     <string name="title_check_outlook_oauth">Outlook 계정이 2024년 9월 16일 이후에도 계속 작동할 예정입니다</string>
     <string name="title_check_outlook_password">일부 Outlook/Hotmail/Live 계정이 2024년 9월 16일 이후 정지될 수 있습니다</string>
     <string name="title_advanced_hint_title">고급 설정 더보기</string>
-    <string name="title_advanced_hint_message">        고급 옵션으로 이동 중입니다.
+    <string name="title_advanced_hint_message">
+        고급 옵션으로 이동 중입니다.
         모든 옵션에는 일반적으로 사용되는 표준 설이 있으므로 선호하는 설정이 없는 한 변경할 필요가 없습니다.
     </string>
-    <string name="title_advanced_hint_remark">        옵션은 탭으로 분류되고, 섹션으로 나누어져 있으며, 형태나 용도별로 구성되며, 검색 가능합니다.
+    <string name="title_advanced_hint_remark">
+        옵션은 탭으로 분류되고, 섹션으로 나누어져 있으며, 형태나 용도별로 구성되며, 검색 가능합니다.
     </string>
-    <string name="title_advanced_hint_options">        대부분의 옵션이 필요하지 않으며 일부 옵션은 매우 구체적이기 때문에 
+    <string name="title_advanced_hint_options">
+        대부분의 옵션이 필요하지 않으며 일부 옵션은 매우 구체적이기 때문에 
         모든 옵션의 기능이 즉시 명확하지 않더라도 이해할 수 있습니다.
         옵션의 개수만 보거나 모든 옵션을 바로 이해하지 못했다고 해서 나쁜 리뷰를 남기지 마세요.
         모든 옵션이 몇몇 사람에게는 유용할지 모르지만, 여러분에게는 (아직) 유용하지 않을 수도 있습니다.</string>
@@ -737,7 +745,8 @@
     <string name="title_advanced_mnemonic_hint">제목에 아래 단어가 포함된 이메일을 받은 경우 자동으로 이 기기의 모든 앱 데이터를 즉시 삭제합니다</string>
     <string name="title_advanced_clear_all">앱 데이터 삭제</string>
     <string name="title_advanced_clear_all_remark">앱 데이터가 삭제되며 되돌릴 수 없습니다!</string>
-    <string name="title_advanced_default_encryption">        기본 암호화 방식(PGP 또는 S/MIME)은 서명 또는 암호화된 메시지를 전송한 후 사용자 ID별로 저장됩니다.
+    <string name="title_advanced_default_encryption">
+        기본 암호화 방식(PGP 또는 S/MIME)은 서명 또는 암호화된 메시지를 전송한 후 사용자 ID별로 저장됩니다.
         메시지를 보내기 전에 전송 설정 대화 상자에서 암호화 방법을 선택할 수 있습니다(전송 버튼을 길게 누르세요).
     </string>
     <string name="title_advanced_sign_default">자동으로 서명</string>
@@ -754,7 +763,8 @@
     <string name="title_advanced_import_pgp">키 가져오기</string>
     <string name="title_advanced_sign_algo">서명 알고리즘</string>
     <string name="title_advanced_encrypt_algo">암호화 알고리즘</string>
-    <string name="title_advanced_remark_algo">        모든 이메일 클라이언트가 모든 알고리즘을 지원하는 것은 아닙니다.
+    <string name="title_advanced_remark_algo">
+        모든 이메일 클라이언트가 모든 알고리즘을 지원하는 것은 아닙니다.
         기본 알고리즘인 SHA256과 AES128은 공통적으로 지원됩니다.
     </string>
     <string name="title_advanced_check_certificate">전송 시 공개 키 확인</string>
@@ -763,7 +773,8 @@
     <string name="title_advanced_import_key">개인 키 불러오기</string>
     <string name="title_advanced_manage_keys">개인 키 관리</string>
     <string name="title_advanced_ca">설치된 CA 인증서</string>
-    <string name="title_advanced_manage_keys_hint">        안드로이드 보안 설정을 엽니다.
+    <string name="title_advanced_manage_keys_hint">
+        안드로이드 보안 설정을 엽니다.
         개인 키와 인증서는 일반적으로 고급 - 암호화 및 자격 증명 메뉴에 있습니다.
     </string>
     <string name="title_advanced_power_menu">Android 전원 메뉴에 동작 추가</string>
@@ -903,7 +914,8 @@
     <string name="title_advanced_inline_hint">인라인 이미지는 메시지에 포함된 이미지입니다</string>
     <string name="compressed">파일 %2$s개 또는 %3$s 이상이 포함된 압축 파일(%1$s)의 내용은 표시되지 않습니다</string>
     <string name="title_advanced_parse_classes_hint">이렇게 하면 메시지가 더 정확하게 표시되지만 지연이 있을 수 있습니다</string>
-    <string name="title_advanced_default_folder_hint">        안드로이드는 앱이 필요로 하지 않더라도 선택된 폴더에 액세스할 수 있는 권한을 요청할 수 있습니다.
+    <string name="title_advanced_default_folder_hint">
+        안드로이드는 앱이 필요로 하지 않더라도 선택된 폴더에 액세스할 수 있는 권한을 요청할 수 있습니다.
         선택 대화 상자를 취소하여 기본 폴더(일반적으로 \'다운로드\' 폴더)를 복원할 수 있습니다.
     </string>
     <string name="title_advanced_restore_on_launch_hint">런처 아이콘을 통해 재시작할 때 가능한 경우 마지막 앱 상태를 복원합니다</string>
@@ -1035,7 +1047,8 @@
     <string name="title_leave_on_device_hint">서버에서 메시지가 삭제되어도, 메시지는 기기에 남아 있습니다</string>
     <string name="title_max_messages">다운로드할 메시지 최대 개수 (비워둘 경우 모두)</string>
     <string name="title_max_messages_keep">기기에 계속해서 저장할 수 있는 최대 메시지 수입니다</string>
-    <string name="title_max_messages_remark">        양수를 입력하여 메시지 끝 부분을 다운로드합니다 (대부분의 경우)
+    <string name="title_max_messages_remark">
+        양수를 입력하여 메시지 끝 부분을 다운로드합니다 (대부분의 경우)
         음수를 입력하여 메시지 시작 부분을 다운로드합니다 (드문 경우)
     </string>
     <string name="title_keep_poll_interval">여론조사 시간 (분)</string>
@@ -1092,7 +1105,8 @@
     <string name="title_service_port">포트 번호를 다시 확인해주세요</string>
     <string name="title_service_protocol">프로토콜(SSL/TLS 또는 STARTTLS)을 다시 확인해주세요</string>
     <string name="title_service_error10">이 계정은 다시 인증해야 하며, 빠른 설정 마법사를 통해 인증할 수 있습니다</string>
-    <string name="title_certificate_error">        Google의 Play 스토어 정책으로 인해, Play 스토어에 배포되는 FairEmail 버전으로 더 이상 인증서 문제가 있는 불안정한 이메일 서버 연결을 지원할 수 없습니다.
+    <string name="title_certificate_error">
+        Google의 Play 스토어 정책으로 인해, Play 스토어에 배포되는 FairEmail 버전으로 더 이상 인증서 문제가 있는 불안정한 이메일 서버 연결을 지원할 수 없습니다.
         따라서 이 문제는 이메일 제공업체만 해결할 수 있습니다 - 위의 오류 정보는 이 문제를 해결하는 데 도움이 될 수 있습니다.
     </string>
     <string name="title_advanced_browse">서버에서 메시지 찾기</string>
@@ -1101,7 +1115,8 @@
     <string name="title_synchronize_subfolders">하위 폴더</string>
     <string name="title_synchronize_more">더 많은 메시지 가져오기</string>
     <string name="title_synchronize_more_hint">오래된 메시지를 한 번만 다운로드하므로, 일상적인 사용시 배터리 사용량이 늘어나지 않습니다</string>
-    <string name="title_synchronize_more_hint2">        이메일 서버가 메시지를 전달함과 동시에 이를 불러올 수 있으며 가능한 한 빨리 저장 및 분류됩니다.
+    <string name="title_synchronize_more_hint2">
+        이메일 서버가 메시지를 전달함과 동시에 이를 불러올 수 있으며 가능한 한 빨리 저장 및 분류됩니다.
         진행이 느리다면 기기 내부 저장 공간의 속도 문제일 가능성이 높습니다.
     </string>
     <string name="title_synchronize_more_hint3">내부 저장 공간이 무한히 빠르지 않기 때문에 기기에 많은 메시지(만 개 이상)를 저장하면 기기가 느려질 수 있습니다.</string>
@@ -1173,7 +1188,8 @@
     <string name="title_auto_delete">오래된 메시지를 자동으로 영구 삭제</string>
     <string name="title_auto_delete_hint">오래된 메시지란 기기에 더 이상 보관되지 않는 메시지입니다</string>
     <string name="title_auto_delete_archive_hint">메일 서버가 보관 폴더에서의 삭제를 허용하지 않을 수 있습니다</string>
-    <string name="title_inbox_root_hint">        일부 제공업체는 받은메일함 아래에 새 폴더를 만들 것을 요구합니다.
+    <string name="title_inbox_root_hint">
+        일부 제공업체는 받은메일함 아래에 새 폴더를 만들 것을 요구합니다.
         이 경우 폴더 목록에서 받은메일함을 길게 누르고 \'하위 폴더 만들기\'를 선택할 수 있습니다.
     </string>
     <string name="title_folder_name_missing">폴더 이름을 입력해 주세요</string>
@@ -1289,7 +1305,8 @@
     <string name="title_report_spam">스팸으로 처리</string>
     <string name="title_delete_permanently">영구 삭제</string>
     <string name="title_delete_attachments">첨부파일 삭제</string>
-    <string name="title_delete_attachments_remark">        첨부파일을 삭제하려면 새 메시지를 추가하고 기존 메시지를 삭제해야 합니다.
+    <string name="title_delete_attachments_remark">
+        첨부파일을 삭제하려면 새 메시지를 추가하고 기존 메시지를 삭제해야 합니다.
         이 작업은 실패할 수 있으므로, 기존 메시지는 휴지통으로 이동됩니다.
     </string>
     <string name="title_snooze">&#8230; 미루기</string>
@@ -1363,7 +1380,8 @@
     <string name="title_ask_reporting">오류 보고서를 보내시겠습니까?</string>
     <string name="title_reporting_why">오류 보고는 FairEmail 개선에 도움이 될 것입니다</string>
     <string name="title_ask_review">FairEmail을 리뷰해 주세요</string>
-    <string name="title_ask_review_rationale">        한동안 FairEmail을 사용하고 계셨습니다.
+    <string name="title_ask_review_rationale">
+        한동안 FairEmail을 사용하고 계셨습니다.
         Play 스토어에서 FairEmail을 평가해 주시면 감사하겠습니다.
     </string>
     <string name="title_need_help">도움 요청</string>
@@ -1371,7 +1389,8 @@
     <string name="title_third_party">제3자 소프트웨어 버전을 사용하고 있습니다</string>
     <string name="title_expand_warning">이 메시지를 펼치면 %1$s가 다운로드됩니다</string>
     <string name="title_download_message">&#8230; 다운로드 중</string>
-    <string name="title_reformatted">        이것은 안전하게 재구성된 메시지 화면입니다.
+    <string name="title_reformatted">
+        이것은 안전하게 재구성된 메시지 화면입니다.
         &#x26F6; 아이콘을 탭하여 덜 안전한 메시지를 확인하고 이 메시지를 숨길 수 있습니다.
         메시지 재구성은 메시지 크기와 기기 속도에 따라 시간이 소요될 수 있습니다.
         QR 코드를 확인하려면 원본 메시지를 봐야 할 수도 있습니다.
@@ -1571,7 +1590,8 @@
     <string name="title_signature_store">저장</string>
     <string name="title_search">검색</string>
     <string name="title_search_for_hint">입력</string>
-    <string name="title_search_hint">        기본적으로 검색은 기기에서 수행됩니다.
+    <string name="title_search_hint">
+        기본적으로 검색은 기기에서 수행됩니다.
         서버에서도 검색을 수행하려면 \'다시 검색\' 버튼을 누르세요.
     </string>
     <string name="title_search_hint_fts">검색 인덱스 사용 시: 온전한 단어만 사용하세요</string>
@@ -1649,7 +1669,8 @@
     <string name="title_edit_signature_remark">Android가 모든 HTML을 표시할 수는 없지만, 있는 그대로 전송됩니다</string>
     <string name="title_edit_signature_text">서명 문자</string>
     <string name="title_edit_signature_image">사진 삽입</string>
-    <string name="title_edit_signature_image_hint">        메시지를 보낼 때 선택한 위치에서 메시지로 이미지가 복사됩니다.
+    <string name="title_edit_signature_image_hint">
+        메시지를 보낼 때 선택한 위치에서 메시지로 이미지가 복사됩니다.
         그러니 이미지 파일을 지우지 마십시오!
     </string>
     <string name="title_edit_signature_delete">서명을 삭제하시겠습니까?</string>
@@ -1861,7 +1882,8 @@
     <string name="title_hint_vpn">메일 서버는 때때로 VPN 연결을 차단합니다. 이 경우 메일 제공 업체만이 문제를 해결할 수 있습니다.</string>
     <string name="title_hint_dismiss">이 대화 상자를 닫으면 알림이 제거됩니다.</string>
     <string name="title_hint_message_actions">삭제하려면 왼쪽으로 스와이프; 보관하려면 오른쪽으로 스와이프 (가능한 경우); 계정 설정에서 스와이프 작업을 설정할 수 있습니다</string>
-    <string name="title_hint_message_junk">        이메일 클라이언트는 기본적으로 이메일 서버에 메시지를 표시합니다.
+    <string name="title_hint_message_junk">
+        이메일 클라이언트는 기본적으로 이메일 서버에 메시지를 표시합니다.
         스팸 필터링을 담당하는 것은 이메일 클라이언트가 아니라 이메일 서버입니다.
         스팸을 많이 받는다면 이메일 제공업체에 연락하시고 앱을 탓하지 마세요!
     </string>
@@ -1932,7 +1954,8 @@
     <string name="title_pro_purchase">구매</string>
     <string name="title_pro_one_time">%1$s (1회 구매)</string>
     <string name="title_pro_no_play">Play 스토어를 찾을 수 없음</string>
-    <string name="title_pro_info">        FairEmail을 개발하는 데 말 그대로 수천 시간을 들였지만, 그럼에도 대부분의 기능을 무료로 사용하실 수 있습니다.
+    <string name="title_pro_info">
+        FairEmail을 개발하는 데 말 그대로 수천 시간을 들였지만, 그럼에도 대부분의 기능을 무료로 사용하실 수 있습니다.
         FairEmail은 사용자의 개인정보를 중요하게 생각하며 광고를 표시하지 않고, 수익을 위해 사용자를 추적하거나 분석하지 않습니다.
         FairEmail을 장기적으로 유지하기 위하여, 일부 편의성과 고급 기능은 유료로 사용해야 하도록 했습니다.
         FairEmail은 이에 대한 알림을 표시하며, Pro 기능을 구매하면 사라집니다.

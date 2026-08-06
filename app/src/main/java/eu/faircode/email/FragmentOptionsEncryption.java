@@ -439,7 +439,7 @@ public class FragmentOptionsEncryption extends FragmentBase
         });
 
         final Intent security = new Intent(Settings.ACTION_SECURITY_SETTINGS);
-        btnImportKey.setEnabled(security.resolveActivity(pm) != null); // system whitelisted
+        btnManageKeys.setEnabled(security.resolveActivity(pm) != null); // system whitelisted
         btnManageKeys.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

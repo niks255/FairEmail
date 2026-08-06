@@ -23,6 +23,9 @@ import android.text.TextUtils;
 import android.util.Pair;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -74,6 +77,19 @@ public class CharsetHelper {
         // Get extended ASCII characters
         byte[] octets = text.getBytes(StandardCharsets.ISO_8859_1);
         return isUTF8(octets);
+    }
+
+    static boolean isUTF8(File file) {
+        try (FileInputStream fis = new FileInputStream(file)) {
+            ByteArrayOutputStream os = new ByteArrayOutputStream(Math.max(MAX_SAMPLE_SIZE, fis.available()));
+            byte[] buffer = new byte[MAX_SAMPLE_SIZE];
+            for (int len = fis.read(buffer); len != -1; len = fis.read(buffer))
+                os.write(buffer, 0, len);
+            return isUTF8(os.toByteArray());
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
     }
 
     static boolean isUTF8(byte[] octets) {

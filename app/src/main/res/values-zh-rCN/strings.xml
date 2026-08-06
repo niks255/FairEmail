@@ -15,7 +15,8 @@
     <string name="app_updated">上次更新：%1$s</string>
     <string name="app_download">下载自：%1$s</string>
     <string name="app_error">大多数错误消息都是由外部原因（网络、服务器等）或不正确（通常为非标准）的配置引起的。差评并不能解决此类问题。请求支持几乎总是更有效。</string>
-    <string name="app_motd">        在 Android 14/15 beta 中，偶尔会出现“应用程序未响应”通知。
+    <string name="app_motd">
+        在 Android 14/15 beta 中，偶尔会出现“应用程序未响应”通知。
         Google 正在进行修复。
         请不要将这个 Android 问题归咎于本应用！
     </string>
@@ -75,14 +76,16 @@
     </plurals>
     <string name="title_ask_spam_who">将来自 %1$s 的邮件标为垃圾邮件？</string>
     <string name="title_junk_hint">您的电子邮件提供商负责过滤垃圾邮件。电子邮件应用程序没有可靠地执行此操作所需的所有数据。</string>
-    <string name="title_junk_pop_hint">        不会下载来自已屏蔽的发件人的邮件。
+    <string name="title_junk_pop_hint">
+        不会下载来自已屏蔽的发件人的邮件。
         如果未启用“将邮件留在服务器上”选项，这些邮件将永久丢失！
     </string>
     <string name="title_block">屏蔽 %1$s</string>
     <string name="title_block_sender">屏蔽发件人</string>
     <string name="title_block_sender_domain">屏蔽域名 \'%1$s\'</string>
     <string name="title_block_sender_remark">屏蔽意味着自动移至垃圾邮件文件夹</string>
-    <string name="title_block_sender_hint">        屏蔽发件人是一个免费功能。
+    <string name="title_block_sender_hint">
+        屏蔽发件人是一个免费功能。
         屏蔽发件人域使用过滤规则，这是一个高级功能。
     </string>
     <string name="title_blocked_senders">屏蔽的发件人</string>
@@ -189,7 +192,8 @@
     <string name="title_setup_office_auth">“认证失败”的错误可能是由于 IMAP/SMTP 被系统管理员禁用导致的</string>
     <string name="title_setup_office_auth_5_7_3">请尝试\'其他提供商\'快速设置向导。</string>
     <string name="title_setup_office_auth_5_7_139">请尝试“Outlook/Hotmail/Live”快速设置向导。</string>
-    <string name="title_setup_office_not_connected">        错误信息 \'User is authenticated but not connected\' 主要表示禁用了 IMAP。
+    <string name="title_setup_office_not_connected">
+        错误信息 \'User is authenticated but not connected\' 主要表示禁用了 IMAP。
         如果是消费者 Outlook 账户，请前往 Outlook 网站， 点按右上角的设置齿轮，选择 \'邮件\' ，选择 ‘转发和IMAP\'，在 \'POP 和 IMAP\' 部分启用\'让设备和应用启用IMAP\'。
         如果是企业、教育账户，请联系电子邮件服务器的系统管理员。
     </string>
@@ -262,7 +266,8 @@
     <string name="title_setup_close">关闭设置</string>
     <string name="title_setup_export">导出设置</string>
     <string name="title_setup_import">导入设置</string>
-    <string name="title_setup_export_remark">        由于该设置文件包含所有的设置和账户信息，它受到密码加密保护。
+    <string name="title_setup_export_remark">
+        由于该设置文件包含所有的设置和账户信息，它受到密码加密保护。
         导入时将需要密码，所以请不要忘记！
     </string>
     <string name="title_setup_export_do">导出文件将包含所有的设置和数据，但是不含邮件，也不含签名中引用的图像</string>
@@ -329,14 +334,18 @@
     <string name="title_check_outlook_oauth">你的 Outlook 账户在2024 年9月16日之后将继续工作</string>
     <string name="title_check_outlook_password">您的一些Outlook/Hotmail/Live 账户在2024年9月16日后将停止工作</string>
     <string name="title_advanced_hint_title">更多高级选项</string>
-    <string name="title_advanced_hint_message">        您正在前往更多的高级选项        所有选项默认使用常用的标准值，若有特别偏好则可更改。
+    <string name="title_advanced_hint_message">
+        您正在前往更多的高级选项        所有选项默认使用常用的标准值，若有特别偏好则可更改。
     </string>
-    <string name="title_advanced_hint_configure">        无须在此配置账户。 请对此使用快速设置向导。
+    <string name="title_advanced_hint_configure">
+        无须在此配置账户。 请对此使用快速设置向导。
         快速设置向导几乎不会出问题，万一出了问题可以使用经典手动设置（在向导按钮下面一点点)
     </string>
-    <string name="title_advanced_hint_remark">        各个选项按照标签页分类，标签页内又分为多个部分，按外观或用途进行整理，并且可搜索。
+    <string name="title_advanced_hint_remark">
+        各个选项按照标签页分类，标签页内又分为多个部分，按外观或用途进行整理，并且可搜索。
     </string>
-    <string name="title_advanced_hint_options">        大多数选项你都用不到，并且因为一些选项相当有针对性，
+    <string name="title_advanced_hint_options">
+        大多数选项你都用不到，并且因为一些选项相当有针对性，
         所以如果不是所有选项功能的含义都立即清楚也是可以理解的。
         请不要只因为选项太多或不能立刻理解所有选项的意思而给差评。
         每个选项对于一些人都是有用的，只是你(还)用不到。
@@ -741,7 +750,8 @@
     <string name="title_advanced_mnemonic_hint">如果收到任何标题行含有以下文字的电子邮件，应用程序数据将立即被自动删除</string>
     <string name="title_advanced_clear_all">删除应用数据</string>
     <string name="title_advanced_clear_all_remark">应用数据将不可逆转地删除！</string>
-    <string name="title_advanced_default_encryption">        发送带签名或加密的邮件后，将为每个身份存储默认加密方法（PGP 或 S/MIME）
+    <string name="title_advanced_default_encryption">
+        发送带签名或加密的邮件后，将为每个身份存储默认加密方法（PGP 或 S/MIME）
         发送前可以在发送选项对话框中选择加密方式（长按发送按钮）
     </string>
     <string name="title_advanced_sign_default">使用默认签名</string>
@@ -758,7 +768,8 @@
     <string name="title_advanced_import_pgp">导入密钥</string>
     <string name="title_advanced_sign_algo">签名算法</string>
     <string name="title_advanced_encrypt_algo">加密算法</string>
-    <string name="title_advanced_remark_algo">        请注意，并非所有电子邮件客户端都支持所有算法。
+    <string name="title_advanced_remark_algo">
+        请注意，并非所有电子邮件客户端都支持所有算法。
         通常支持默认算法 SHA256 和 AES128。
     </string>
     <string name="title_advanced_check_certificate">发送时检查公钥</string>
@@ -767,7 +778,8 @@
     <string name="title_advanced_import_key">导入私钥</string>
     <string name="title_advanced_manage_keys">管理私钥</string>
     <string name="title_advanced_ca">已安装的 CA 证书</string>
-    <string name="title_advanced_manage_keys_hint">        这将打开Android安全设置页面
+    <string name="title_advanced_manage_keys_hint">
+        这将打开Android安全设置页面
         密钥和证书一般可以在 “高级—加密和凭证” 选项中找到
     </string>
     <string name="title_advanced_power_menu">添加操作到 Android 电源菜单</string>
@@ -908,7 +920,8 @@
     <string name="title_advanced_inline_hint">内联图像是邮件中包含的图像</string>
     <string name="compressed">所含文件超过 %2$s 个或大于 %3$s 的压缩文件 (%1$s) 的内容将不会显示</string>
     <string name="title_advanced_parse_classes_hint">这将更准确地显示邮件，但可能会有延迟</string>
-    <string name="title_advanced_default_folder_hint">        Android 可能请求访问选定文件夹的权限，即使应用程序不需要它。
+    <string name="title_advanced_default_folder_hint">
+        Android 可能请求访问选定文件夹的权限，即使应用程序不需要它。
         您可以取消选择对话框以恢复默认文件夹 (通常是“下载”文件夹)。
     </string>
     <string name="title_advanced_restore_on_launch_hint">通过启动器图标重启时，如果可能恢复上次的应用状态</string>
@@ -1006,6 +1019,7 @@
     <string name="title_account_gmail">为了更可靠地同步Gmail账户，应尽可能使用Gmail快速设置向导</string>
     <string name="title_domain">域名</string>
     <string name="title_autoconfig">获取设置</string>
+    <string name="title_lan_required">需要本地网络权限</string>
     <string name="title_aliases">別名</string>
     <string name="title_provider">服务提供商</string>
     <string name="title_custom">自定义</string>
@@ -1021,6 +1035,7 @@
     <string name="title_notify_remark">你可以为特定于账户的通知启用该选项</string>
     <string name="title_port">端口号</string>
     <string name="title_user">用户名</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">通常是主邮件地址</string>
     <string name="title_password">密码</string>
     <string name="title_password_storage">密码是如何存储的？</string>
     <string name="title_case_sensitive">用户名和密码通常是区分大小写的</string>
@@ -1043,7 +1058,8 @@
     <string name="title_leave_on_device_hint">从服务器中删除邮件时，邮件仍保留在设备上</string>
     <string name="title_max_messages">下载邮件的最大数（留空则下载全部）</string>
     <string name="title_max_messages_keep">此为设备上存储的最大邮件数</string>
-    <string name="title_max_messages_remark">        输入一个正数下载末尾邮件(最常见)
+    <string name="title_max_messages_remark">
+        输入一个正数下载末尾邮件(最常见)
         和一个负数下载开头邮件(最少见)
     </string>
     <string name="title_keep_poll_interval">轮询间隔(分钟)</string>
@@ -1107,7 +1123,8 @@
     <string name="title_service_port">请再次检查端口号</string>
     <string name="title_service_protocol">请仔细检查协议 (SSL/TLS 或 STARTTLS)</string>
     <string name="title_service_error10">此账户需要再次验证，可以通过快速设置向导完成。</string>
-    <string name="title_certificate_error">        由于Google Play商店政策，在Play商店发行的FairEmail版本不再支持连接到有证书问题的电子邮件服务器。 因此，
+    <string name="title_certificate_error">
+        由于Google Play商店政策，在Play商店发行的FairEmail版本不再支持连接到有证书问题的电子邮件服务器。 因此，
         这个问题只能由您的电子邮件提供商解决—— 上述错误信息可能帮助他们解决这个问题。
     </string>
     <string name="title_advanced_browse">浏览服务器上的邮件</string>
@@ -1116,7 +1133,8 @@
     <string name="title_synchronize_subfolders">子文件夹</string>
     <string name="title_synchronize_more">获取更多邮件</string>
     <string name="title_synchronize_more_hint">这将导致单次下载旧邮件，因此不会导致日常使用的电池消耗增加</string>
-    <string name="title_synchronize_more_hint2">        邮件将以电子邮件服务器的传送速度被快速提取，并根据设备存储和索引能力尽快进行存储
+    <string name="title_synchronize_more_hint2">
+        邮件将以电子邮件服务器的传送速度被快速提取，并根据设备存储和索引能力尽快进行存储
         限制因素通常是设备内部存储的读写速度    </string>
     <string name="title_synchronize_more_hint3">请记住，在设备上存储大量邮件（上万甚至更多）可能会导致延迟，因为内部存储空间不是无限快的</string>
     <string name="title_synchronize_enabled">同步</string>
@@ -1310,7 +1328,7 @@
     <string name="title_quick_actions_snooze">打盹</string>
     <string name="title_quick_actions_clear">操作后清除选择</string>
     <string name="title_trash">回收站</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">将对话放入垃圾邮件文件夹</string>
+    <string name="title_trash_conversation">将对话放入垃圾邮件文件夹</string>
     <string name="title_trash_selection">将所选项丢到回收站</string>
     <string name="title_copy">复制 &#8230;</string>
     <string name="title_copy_to">复制到 &#8230;</string>
@@ -1335,7 +1353,8 @@
     <string name="title_report_spam">视为垃圾邮件</string>
     <string name="title_delete_permanently">永久删除</string>
     <string name="title_delete_attachments">删除附件</string>
-    <string name="title_delete_attachments_remark">        要删除附件，必须添加新邮件，且必须删除旧邮件。
+    <string name="title_delete_attachments_remark">
+        要删除附件，必须添加新邮件，且必须删除旧邮件。
         因为这可能失败，旧邮件将被移动到回收站。
     </string>
     <string name="title_snooze">打盹 &#8230;</string>
@@ -1417,7 +1436,8 @@
     <string name="title_third_party">您使用的是第三方版本</string>
     <string name="title_expand_warning">展开此邮件将下载 %1$s</string>
     <string name="title_download_message">&#8230; 下载中</string>
-    <string name="title_reformatted">        这是安全的重新格式化邮件视图。
+    <string name="title_reformatted">
+        这是安全的重新格式化邮件视图。
         您可以轻击&#x26F6;图标以查看不太安全的原始邮件并隐藏此消息。
         根据邮件的大小和设备的速度，重新格式化邮件需要一些时间。
         有时必须查看原始邮件才能看到二维码。
@@ -1722,7 +1742,8 @@
     <string name="title_edit_signature_remark">虽然 Android 不能显示所有的 HTML，但它将按原样发送</string>
     <string name="title_edit_signature_text">签名文本</string>
     <string name="title_edit_signature_image">插入图片</string>
-    <string name="title_edit_signature_image_hint">        发送邮件时，图像从所选位置被复制到邮件中。
+    <string name="title_edit_signature_image_hint">
+        发送邮件时，图像从所选位置被复制到邮件中。
         因此，不要删除图像文件！
     </string>
     <string name="title_edit_signature_delete">删除签名？</string>
@@ -1811,7 +1832,7 @@
     <string name="title_rule_resend">重新发送</string>
     <string name="title_rule_attached">附加原始邮件文件</string>
     <string name="title_rule_cc">回信给邮件抄送地址</string>
-    <string name="title_rule_checks">检查自动发送的邮件、无回复地址等。</string>
+    <string name="title_rule_checks">检查自动发送的邮件、no-reply（无需回复）地址等。</string>
     <string name="title_rule_with_attachments">含附件</string>
     <string name="title_rule_answer_remark">(设置自动回复后)任何会话将仅发送一个回复，以避免回复循环</string>
     <string name="title_rule_name_missing">缺少规则名称</string>
@@ -1912,7 +1933,7 @@
     <string name="title_legend_forwarded">已转发过</string>
     <string name="title_legend_plain_only">仅纯文本</string>
     <string name="title_legend_receipt">已请求回执</string>
-    <string name="title_legend_auto_submitted">已自动发送</string>
+    <string name="title_legend_auto_submitted">自动发送的邮件</string>
     <string name="title_legend_by_list">通过列表发送</string>
     <string name="title_legend_attachment">含附件</string>
     <string name="title_legend_flagged">已被收藏</string>
@@ -1988,7 +2009,8 @@
     <string name="title_hint_message_actions">向左滑移动到回收站；向右滑存档（如果支持） ；可在账户设置中配置滑动操作</string>
     <string name="title_hint_outbox">您可以向左或向右滑动以取消发送</string>
     <string name="title_hint_message_selection">长按进行多选；按住的同时并上下滑动可选择多个邮件</string>
-    <string name="title_hint_message_junk">        电子邮件客户端只是显示电子邮件服务器上的邮件
+    <string name="title_hint_message_junk">
+        电子邮件客户端只是显示电子邮件服务器上的邮件
         电子邮件服务器负责过滤垃圾邮件，而非电子邮件客户端负责
         如果您收到大量垃圾邮件，请联系您的电子邮件提供商，不要让应用程序背锅！
     </string>
@@ -2001,7 +2023,8 @@
     <string name="title_hint_junk">过滤垃圾邮件属于邮件服务器的工作，单凭客户端设备根本无力胜任</string>
     <string name="title_hint_junk_learn">将邮件移入或移出垃圾邮件文件夹会让电子邮件服务器“得知”什么是垃圾邮件</string>
     <string name="title_hint_contact_actions">长按以显示更多选项</string>
-    <string name="title_hint_eml">        这是一个原始消息文件内容的摘要。
+    <string name="title_hint_eml">
+        这是一个原始消息文件内容的摘要。
         您可以使用右下角按钮保存消息到收件箱查看所有内容。
     </string>
     <string name="title_open_link">打开链接</string>

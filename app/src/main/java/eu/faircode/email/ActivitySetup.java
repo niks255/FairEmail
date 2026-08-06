@@ -22,6 +22,8 @@ package eu.faircode.email;
 import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -550,8 +552,24 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
     }
 
     private void handleImportCertificate(Intent data) {
-        Uri uri = data.getData();
-        if (uri != null) {
+        List<Uri> result = new ArrayList<>();
+
+        ClipData clipData = data.getClipData();
+        if (clipData == null) {
+            Uri uri = data.getData();
+            if (uri != null)
+                result.add(uri);
+        } else {
+            ClipDescription description = clipData.getDescription();
+            for (int i = 0; i < clipData.getItemCount(); i++) {
+                ClipData.Item item = clipData.getItemAt(i);
+                Uri uri = item.getUri();
+                if (uri != null)
+                    result.add(uri);
+            }
+        }
+
+        for (Uri uri : result) {
             Bundle args = new Bundle();
             args.putParcelable("uri", uri);
 
@@ -766,6 +784,7 @@ public class ActivitySetup extends ActivityBase implements FragmentManager.OnBac
         open.addCategory(Intent.CATEGORY_OPENABLE);
         open.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         open.setType("*/*");
+        open.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         if (open.resolveActivity(getPackageManager()) == null)  // system whitelisted
             Log.unexpectedError(getSupportFragmentManager(),
                     new IllegalArgumentException(getString(R.string.title_no_saf)), 25);

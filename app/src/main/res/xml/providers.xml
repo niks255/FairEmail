@@ -848,7 +848,8 @@
         domain="mail\\.ru,inbox\\.ru,list\\.ru,bk\\.ru"
         id="mailru"
         link="https://help.mail.ru/mail-help/mailer/popsmtp"
-        maxtls="1.2">
+        maxtls="1.2"
+        raw="true">
         <imap
             host="imap.mail.ru"
             port="993"

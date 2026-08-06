@@ -2184,8 +2184,10 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 String type = intent.getStringExtra("type");
                 boolean ignore = intent.getBooleanExtra("ignore", false);
                 long group = intent.getLongExtra("group", -1L);
+
                 if (ignore)
                     ServiceUI.ignore(this, id, group);
+
                 intent.putExtra("id", id);
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ActivityView.this);
                 boolean notify_open_folder = prefs.getBoolean("notify_open_folder", false);
@@ -2770,7 +2772,7 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
         if (lastSnackbar != null && lastSnackbar.isShown())
             lastSnackbar.dismiss();
 
-        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED))
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
             if (found) {
                 List<Fragment> fragments = getSupportFragmentManager().getFragments();
                 if (fragments.size() > 0) {
@@ -2780,6 +2782,11 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
                 }
             } else
                 getSupportFragmentManager().popBackStack("thread", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            Bundle result = new Bundle();
+            result.putLong("id", intent.getLongExtra("id", -1));
+            getSupportFragmentManager().setFragmentResult("message.selected", result);
+        }
 
         Bundle args = new Bundle();
         args.putLong("account", intent.getLongExtra("account", -1));

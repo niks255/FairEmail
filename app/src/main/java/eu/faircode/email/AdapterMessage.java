@@ -646,6 +646,16 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
                         @Override
                         public void onLongPress(@NonNull MotionEvent event) {
+                            Spannable buffer = (Spannable) tvBody.getText();
+                            int off = Helper.getOffset(tvBody, buffer, event);
+                            URLSpan[] link = buffer.getSpans(off, off, URLSpan.class);
+                            if (link.length > 0) {
+                                ClipboardManager cbm = Helper.getSystemService(context, ClipboardManager.class);
+                                cbm.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.app_name), link[0].getURL()));
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                                    ToastEx.makeText(context, R.string.title_clipboard_copied, Toast.LENGTH_LONG).show();
+                            }
+
                             boolean confirm_links = prefs.getBoolean("confirm_links", true);
                             if (!confirm_links)
                                 onClick(event, true);
@@ -3764,7 +3774,7 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
             properties.setAttachments(message.id, attachments);
 
             boolean hide_attachments = properties.getValue("hide_attachments", message.id, hide_attachments_default);
-            boolean show_inline = properties.getValue("inline", message.id);
+            boolean show_inline = properties.getValue("inline", message.id, prefs.getBoolean("view_show_inline", false));
             boolean svg = prefs.getBoolean("svg", true);
             boolean webp = prefs.getBoolean("webp", true);
 
@@ -4969,6 +4979,10 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             int id = compoundButton.getId();
             if (id == R.id.cbInline) {
+                if (isChecked)
+                    prefs.edit().putBoolean("view_show_inline", true).apply();
+                else
+                    prefs.edit().remove("view_show_inline").apply();
                 onShowInlineAttachments(message, isChecked);
             }
         }
@@ -9025,17 +9039,21 @@ public class AdapterMessage extends RecyclerView.Adapter<AdapterMessage.ViewHold
 
             private void log(String msg, long id) {
                 Log.i(msg + " id=" + id);
-                if (BuildConfig.DEBUG || debug)
-                    parentFragment.getView().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (properties.getValue("expanded", id)) {
-                                Context context = parentFragment.getContext();
-                                if (context != null)
-                                    ToastEx.makeText(context, msg + " id=" + id, Toast.LENGTH_SHORT).show();
+                if (BuildConfig.DEBUG || debug) {
+                    View view = parentFragment.getView();
+                    if (view != null) {
+                        view.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (properties.getValue("expanded", id)) {
+                                    Context context = parentFragment.getContext();
+                                    if (context != null)
+                                        ToastEx.makeText(context, msg + " id=" + id, Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                }
             }
         };
 

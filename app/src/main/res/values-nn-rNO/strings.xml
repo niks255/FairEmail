@@ -76,13 +76,15 @@
     </plurals>
     <string name="title_ask_spam_who">Handsam melding ifrå %1$s som søppelpost?</string>
     <string name="title_junk_hint">Din e-postleverandør er ansvarleg for filtrering av søppelpost. Ein e-postapp har ikkje alle dataa han tarv for å påliteleg gjera dette.</string>
-    <string name="title_junk_pop_hint">        Meldingar ifrå hindra sendarar vert ikkje henta.
+    <string name="title_junk_pop_hint">
+        Meldingar ifrå hindra sendarar vert ikkje henta.
         Om «Lat meldingar vera att på tenar» ikkje er påslegen, vil desse meldingane gå tapt.
     </string>
     <string name="title_block">Hindre %1$s</string>
     <string name="title_block_sender">Hindre sendar</string>
     <string name="title_block_sender_domain">Hindre domene «%1$s»</string>
-    <string name="title_block_sender_hint">Blokkerer en sender er en gratis egenskap.
+    <string name="title_block_sender_hint">
+Blokkerer en sender er en gratis egenskap.
         Blokkering av en senderdomene bruker filterregler, som er en pro-egenskap.
     </string>
     <string name="title_blocked_senders">Hindra sendarar</string>

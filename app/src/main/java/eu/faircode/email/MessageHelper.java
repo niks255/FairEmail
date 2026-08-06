@@ -549,15 +549,15 @@ public class MessageHelper {
                     (message.dsn == null || EntityMessage.DSN_NONE.equals(message.dsn))) {
                 // Add reply to
                 if (identity.replyto != null)
-                    imessage.setReplyTo(convertAddress(InternetAddress.parse(identity.replyto), identity));
+                    imessage.setReplyTo(convertAddress(InternetAddress.parse(replacePlaceholders(identity.replyto, message, identity)), identity));
 
                 // Add extra cc
                 if (identity.cc != null)
-                    addAddress(identity.cc, Message.RecipientType.CC, imessage, identity);
+                    addAddress(replacePlaceholders(identity.cc, message, identity), Message.RecipientType.CC, imessage, identity);
 
                 // Add extra bcc
                 if (identity.bcc != null)
-                    addAddress(identity.bcc, Message.RecipientType.BCC, imessage, identity);
+                    addAddress(replacePlaceholders(identity.bcc, message, identity), Message.RecipientType.BCC, imessage, identity);
             }
 
             // Delivery/read request
@@ -856,6 +856,28 @@ public class MessageHelper {
             name = null;
 
         return new InternetAddress(email, name, StandardCharsets.UTF_8.name());
+    }
+
+    public static boolean hasPlaceholder(String address) {
+        return (!TextUtils.isEmpty(address) &&
+                (address.contains("$from$")) || address.contains("$user$") || address.contains("$domain$") || address.contains("$extra$"));
+    }
+
+    static String replacePlaceholders(String address, EntityMessage message, EntityIdentity identity) throws UnsupportedEncodingException {
+        if (hasPlaceholder(address)) {
+            Address from = getFrom(message, identity);
+            if (from instanceof InternetAddress) {
+                String email = ((InternetAddress) from).getAddress();
+                String user = UriHelper.getEmailUser(email);
+                String domain = UriHelper.getEmailDomain(email);
+                address = address
+                        .replace("$from$", email)
+                        .replace("$user$", user)
+                        .replace("$domain$", domain)
+                        .replace("$extra$", message.extra == null ? "" : message.extra);
+            }
+        }
+        return address;
     }
 
     static String limitReferences(String ref) {
@@ -1473,13 +1495,14 @@ public class MessageHelper {
                     BodyPart attachmentPart = new MimeBodyPart();
 
                     File file = attachment.getFile(context);
+                    boolean isUtf8 = (attachment.type != null && attachment.type.startsWith("text/") && CharsetHelper.isUTF8(file));
 
                     FileDataSource dataSource = new FileDataSource(file);
                     dataSource.setFileTypeMap(new FileTypeMap() {
                         @Override
                         public String getContentType(File file) {
                             // https://tools.ietf.org/html/rfc6047
-                            if ("text/calendar".equals(attachment.type))
+                            if ("text/calendar".equals(attachment.type) || isUtf8)
                                 return attachment.type + "; charset=UTF-8;";
 
                             return attachment.type;
@@ -3390,14 +3413,14 @@ public class MessageHelper {
             if (ip.toLowerCase(Locale.ROOT).startsWith("ipv6:"))
                 ip = ip.substring(5);
             if (ConnectionHelper.isNumericAddress(ip) &&
-                    ConnectionHelper.isLocalAddress(ip))
+                    ConnectionHelper.isLocalAddress(ip, true))
                 return true;
         }
 
         int f = value.indexOf(' ');
         String host = (f < 0 ? value : value.substring(0, f));
         if (ConnectionHelper.isNumericAddress(host)) {
-            if (ConnectionHelper.isLocalAddress(host))
+            if (ConnectionHelper.isLocalAddress(host, true))
                 return true;
         }
 
@@ -3609,7 +3632,9 @@ public class MessageHelper {
                 String email = address.getAddress();
                 String personal = address.getPersonal();
 
-                if (TextUtils.isEmpty(personal) || format == AddressFormat.EMAIL_ONLY)
+                if (format == AddressFormat.EMAIL_ONLY ||
+                        TextUtils.isEmpty(personal) ||
+                        PatternsCompat.AUTOLINK_EMAIL_ADDRESS.matcher(personal).find())
                     formatted.add(TextUtils.isEmpty(email) ? "<>" : email);
                 else {
                     if (compose) {

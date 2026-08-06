@@ -15,7 +15,8 @@
     <string name="app_updated">Poslední aktualizace: %1$s</string>
     <string name="app_download">Staženo z: %1$s</string>
     <string name="app_error">Většina chybových hlášení má vnější příčiny (síť, server atd.) nebo je způsobena nesprávnou, často nestandardní konfigurací. Špatná recenze takové problémy neřeší. Vyžádání podpory je téměř vždy účinnější.</string>
-    <string name="app_motd">        S Androidem 14/15 beta se občas objeví oznámení \"Aplikace neodpovídá\".
+    <string name="app_motd">
+        S Androidem 14/15 beta se občas objeví oznámení \"Aplikace neodpovídá\".
         Google pracuje na opravě.
         Neobviňujte prosím aplikaci z tohoto problému s Androidem!
     </string>
@@ -108,7 +109,8 @@
     </plurals>
     <string name="title_ask_spam_who">Považovat zprávy od %1$s za nevyžádané?</string>
     <string name="title_junk_hint">Za filtrování nevyžádané pošty je zodpovědný poskytovatel e-mailu. E-mailové aplikace nemají k dispozici všechna data, aby to mohly provádět spolehlivě.</string>
-    <string name="title_junk_pop_hint">        Zprávy od blokovaných odesílatelů nebudou staženy.
+    <string name="title_junk_pop_hint">
+        Zprávy od blokovaných odesílatelů nebudou staženy.
         Pokud není povoleno \"Zanechat zprávy na serveru\", budou tyto zprávy trvale ztraceny!
     </string>
     <string name="title_block">Blokovat %1$s</string>
@@ -232,7 +234,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_setup_office_auth">Chyba „AUTHENTICATE failed“ může být způsobena zakázaným IMAP/SMTP správcem systému</string>
     <string name="title_setup_office_auth_5_7_3">Prosím, zkuste průvodce rychlým nastavením \"jiného poskytovatele\".</string>
     <string name="title_setup_office_auth_5_7_139">Prosím, zkuste průvodce rychlým nastavením \'Outlook/Hotmail/Live\'.</string>
-    <string name="title_setup_office_not_connected">        Chyba \"User is authenticated but not connected\" většinou znamená, že je IMAP zakázán.
+    <string name="title_setup_office_not_connected">
+        Chyba \"User is authenticated but not connected\" většinou znamená, že je IMAP zakázán.
         V případě spotřebitelského Outlook účtu přejděte na webovou stránku Outlooku, klepněte na kolečko nastavení v pravém horním rohu, vyberte možnost „Pošta“, vyberte možnost „Přeposílání a IMAP“ a v části „POP a IMAP“ povolte možnost „Povolit zařízením a aplikacím používat IMAP“.
         V případě firemního, vzdělávacího apod. účtu se obraťte na správce systému e-mailového serveru.
     </string>
@@ -376,7 +379,8 @@ v prohlížeči ze všech Google účtů.</string>
     </string>
     <string name="title_advanced_hint_remark">        Možnosti jsou rozděleny podle karty, rozděleny do sekcí, uspořádány podle vzhledu nebo použití a vyhledávatelné.
     </string>
-    <string name="title_advanced_hint_options">        Nebudete potřebovat většinu voleb, a protože některé jsou docela specifické,
+    <string name="title_advanced_hint_options">
+        Nebudete potřebovat většinu voleb, a protože některé jsou docela specifické,
         je pochopitelné, pokud není fungování všech voleb okamžitě jasné.
         Nenechávejte prosím špatnou recenzi jen pro jejich množství nebo pokud je hned všechny nepochopíte.
         Všechny volby jsou užitečné pro více než jen několik lidí, ale možná pro vás (zatím) ne.
@@ -780,7 +784,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_mnemonic_hint">Jakýkoli přijatý e-mail s níže uvedenými slovy v předmětu automaticky a okamžitě odstraní data aplikace</string>
     <string name="title_advanced_clear_all">Odstranit data aplikace</string>
     <string name="title_advanced_clear_all_remark">Data aplikace budou nevratně smazána!</string>
-    <string name="title_advanced_default_encryption">       Výchozí metoda šifrování (PGP nebo S/MIME) se po odeslání podepsané nebo zašifrované zprávy uloží pro každou identitu.
+    <string name="title_advanced_default_encryption">
+       Výchozí metoda šifrování (PGP nebo S/MIME) se po odeslání podepsané nebo zašifrované zprávy uloží pro každou identitu.
         Metodu šifrování lze vybrat před odesláním v dialogovém okně možností odeslání (dlouhým stisknutím tlačítka Odeslat).
     </string>
     <string name="title_advanced_sign_default">Automaticky podepisovat</string>
@@ -946,7 +951,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_advanced_inline_hint">Vložené obrázky jsou obrázky v těle zprávy</string>
     <string name="compressed">Obsah komprimovaných souborů (%1$s) s více než %2$s soubory nebo se soubory většími než %3$s nebudou zobrazeny</string>
     <string name="title_advanced_parse_classes_hint">Zprávy budou zobrazovány přesněji, ale s potencionálním zpožděním</string>
-    <string name="title_advanced_default_folder_hint">        Android může požádat o oprávnění pro přístup k vybrané složce, i když to aplikace nepotřebuje.
+    <string name="title_advanced_default_folder_hint">
+        Android může požádat o oprávnění pro přístup k vybrané složce, i když to aplikace nepotřebuje.
         Můžete zrušit dialog výběru pro obnovení výchozí složky (obvykle složky \'Download\').
     </string>
     <string name="title_advanced_restore_on_launch_hint">Obnovení posledního stavu aplikace, pokud je to možné, při opětovném spuštění pomocí ikony spouštěče</string>
@@ -1081,7 +1087,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_leave_on_device_hint">Když jsou zprávy odstraněny ze serveru, tak zůstanou v zařízení</string>
     <string name="title_max_messages">Maximální počet zpráv ke stažení (prázdné pro všechny)</string>
     <string name="title_max_messages_keep">Toto je maximální počet zpráv, které budou uloženy na zařízení</string>
-    <string name="title_max_messages_remark">        Zadejte kladné číslo ke stažení zpráv na konci (nejvíce běžné)
+    <string name="title_max_messages_remark">
+        Zadejte kladné číslo ke stažení zpráv na konci (nejvíce běžné)
         a záporné číslo ke stažení zpráv na začátku (nejméně běžné)
     </string>
     <string name="title_keep_poll_interval">Interval dotazování (minuty)</string>
@@ -1145,7 +1152,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_service_port">Překontrolujte prosím číslo portu</string>
     <string name="title_service_protocol">Překontrolujte prosím protokol (SSL/TLS nebo STARTTLS)</string>
     <string name="title_service_error10">Tento účet musí být znovu ověřen, což lze provést pomocí průvodce rychlým nastavením</string>
-    <string name="title_certificate_error">        Kvůli pravidlům Obchodu Google Play již není možné podporovat nezabezpečená připojení k e-mailovým serverům s problémy s certifikátem pro verzi FairEmail distribuovanou v Obchodu Play.
+    <string name="title_certificate_error">
+        Kvůli pravidlům Obchodu Google Play již není možné podporovat nezabezpečená připojení k e-mailovým serverům s problémy s certifikátem pro verzi FairEmail distribuovanou v Obchodu Play.
         Proto tento problém může být vyřešen pouze vaším poskytovatelem e-mailu - výše uvedené informace o chybách mu mohou pomoci tento problém vyřešit.
     </string>
     <string name="title_advanced_browse">Procházet zprávy na serveru</string>
@@ -1154,7 +1162,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_synchronize_subfolders">Podsložky</string>
     <string name="title_synchronize_more">Načíst další zprávy</string>
     <string name="title_synchronize_more_hint">Jednorázově stáhne starší zprávy, tedy nezvýší spotřebu baterie při běžném používání</string>
-    <string name="title_synchronize_more_hint2">        Zprávy budou načteny tak rychle, jak je může e-mailový server doručit a uloženy tak rychle, jak je může zařízení uložit a indexovat.
+    <string name="title_synchronize_more_hint2">
+        Zprávy budou načteny tak rychle, jak je může e-mailový server doručit a uloženy tak rychle, jak je může zařízení uložit a indexovat.
         Omezující faktor je obvykle rychlost vnitřního úložného prostoru zařízení.
     </string>
     <string name="title_synchronize_more_hint3">Mějte prosím na paměti, že uložení spousty zpráv (deset tisíc nebo více) na vašem zařízení může způsobit zpoždění, protože vnitřní úložný prostor není nekonečně rychlý.</string>
@@ -1374,7 +1383,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_report_spam">Považovat za nevyžádané</string>
     <string name="title_delete_permanently">Trvale smazat</string>
     <string name="title_delete_attachments">Smazat přílohy</string>
-    <string name="title_delete_attachments_remark">        Pro odstranění příloh, musí být přidána nová zpráva a stará zpráva musí být odstraněna.
+    <string name="title_delete_attachments_remark">
+        Pro odstranění příloh, musí být přidána nová zpráva a stará zpráva musí být odstraněna.
         Vzhledem k tomu, že to může selhat, stará zpráva bude přesunuta do koše.
     </string>
     <string name="title_snooze">Odložit &#8230;</string>
@@ -1456,7 +1466,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_third_party">Používáte verzi třetí strany</string>
     <string name="title_expand_warning">Rozbalení této zprávy stáhne %1$s</string>
     <string name="title_download_message">Stahování &#8230;</string>
-    <string name="title_reformatted">        Toto je bezpečné přeformátované zobrazení zprávy.
+    <string name="title_reformatted">
+        Toto je bezpečné přeformátované zobrazení zprávy.
         Můžete klepnout na ikonu &#x26F6; pro zobrazení méně bezpečné původní zprávy a pro skrytí této zprávy.
         Přeformátování zpráv trvá nějaký čas, v závislosti na velikosti zprávy a rychlosti zařízení.
         Někdy musí být původní zpráva zobrazena pro zobrazení QR kódů.
@@ -1760,7 +1771,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_edit_signature_remark">Přestože Android nemůže zobrazit všechno HTML, bude odeslán jako</string>
     <string name="title_edit_signature_text">Text podpisu</string>
     <string name="title_edit_signature_image">Vložit obrázek</string>
-    <string name="title_edit_signature_image_hint">        Při odesílání zprávy je obrázek zkopírován do zprávy z vybraného umístění.
+    <string name="title_edit_signature_image_hint">
+        Při odesílání zprávy je obrázek zkopírován do zprávy z vybraného umístění.
         Takže neodstraňujte obrázek!
     </string>
     <string name="title_edit_signature_delete">Odstranit podpis?</string>
@@ -2026,7 +2038,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_hint_message_actions">Tažením doleva hodit do koše; Tažením doprava archivovat (je-li k dispozici); Akce tažením lze změnit v nastavení účtu</string>
     <string name="title_hint_outbox">Pro zrušení odesílání můžete táhnout doleva nebo doprava</string>
     <string name="title_hint_message_selection">Dlouhým podržením zprávy zahájíte násobný výběr zpráv; Držte a táhněte nahoru či dolů pro výběr více zpráv</string>
-    <string name="title_hint_message_junk">        Emailový klient v podstatě zobrazuje zprávy na e-mailovém serveru.
+    <string name="title_hint_message_junk">
+        Emailový klient v podstatě zobrazuje zprávy na e-mailovém serveru.
         E-mailový server je zodpovědný za filtrování nevyžádané pošty, nikoli e-mailový klient.
         Pokud obdržíte spoustu nevyžádané pošty, prosím kontaktujte svého poskytovatele e-mailu a neobviňujte aplikaci!
     </string>
@@ -2039,7 +2052,8 @@ v prohlížeči ze všech Google účtů.</string>
     <string name="title_hint_junk">Filtrování nevyžádané pošty by měl zprostředkovávat e-mailový server, neb na baterií napájeném zařízení s omezenými prostředky jej nelze provádět spolehlivě.</string>
     <string name="title_hint_junk_learn">Přesunutím zpráv do a ze složky nevyžádané pošty se e-mailový server \"naučí\", co je spam</string>
     <string name="title_hint_contact_actions">Dlouze podržet pro možnosti</string>
-    <string name="title_hint_eml">        Toto je shrnutí obsahu souboru pro nezpracovanou zprávu.
+    <string name="title_hint_eml">
+        Toto je shrnutí obsahu souboru pro nezpracovanou zprávu.
         Můžete použít tlačítko vpravo nahoře pro uložení zprávy do složky Doručená pošta pro zobrazení celého obsahu.
     </string>
     <string name="title_open_link">Otevřít odkaz</string>

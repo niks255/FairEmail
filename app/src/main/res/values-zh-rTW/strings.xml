@@ -15,7 +15,8 @@
     <string name="app_updated">最近更新於: %1$s</string>
     <string name="app_download">下載自：%1$s</string>
     <string name="app_error">大多數錯誤訊息都是由外部因素（如網絡、伺服器等）引起，或是因為錯誤、通常是非標準的設定所導致。留下負面評價無法解決這類問題，尋求支援幾乎總是更有效。</string>
-    <string name="app_motd">        在 Android 14／15 Beta 中，偶爾會出現「應用程式未回應」通知。
+    <string name="app_motd">
+        在 Android 14／15 Beta 中，偶爾會出現「應用程式未回應」通知。
         Google 正在努力修復。
         請不要將此 Android 問題歸咎於應用程式！
     </string>
@@ -75,14 +76,16 @@
     </plurals>
     <string name="title_ask_spam_who">您要將來自 %1$s 的訊息作垃圾郵件處理嗎？</string>
     <string name="title_junk_hint">您的電子郵件供應商負責篩選垃圾郵件。電子郵件程式並不擁有所有用於可靠地處理此操作的數據。</string>
-    <string name="title_junk_pop_hint">來自被封鎖寄件者的訊息不會被下載。
+    <string name="title_junk_pop_hint">
+來自被封鎖寄件者的訊息不會被下載。
 如果未啟用“將訊息留存在伺服器上”選項，那麼這些訊息將永久丟失！
     </string>
     <string name="title_block">封鎖 %1$s</string>
     <string name="title_block_sender">封鎖寄件者</string>
     <string name="title_block_sender_domain">封鎖域名 \'%1$s\'</string>
     <string name="title_block_sender_remark">封鎖意味著自動移動至垃圾郵件資料夾</string>
-    <string name="title_block_sender_hint">       “ 封鎖寄件”者是一項免費功能。
+    <string name="title_block_sender_hint">
+       “ 封鎖寄件”者是一項免費功能。
         “使用篩選器規則封鎖寄件者網域”則是一項專業版功能。
     </string>
     <string name="title_blocked_senders">已封鎖的寄件者</string>
@@ -189,7 +192,8 @@
     <string name="title_setup_office_auth">「AUTHENTICATE failed」錯誤可能是由於系統管理員停用了 IMAP/SMTP 所導致</string>
     <string name="title_setup_office_auth_5_7_3">請嘗試使用「其他供應商」的快速設定精靈。</string>
     <string name="title_setup_office_auth_5_7_139">請嘗試使用「Outlook/Hotmail/Live」的快速設定精靈。</string>
-    <string name="title_setup_office_not_connected">錯誤「User is authenticated but not connected」通常意味著 IMAP 已被停用。
+    <string name="title_setup_office_not_connected">
+錯誤「User is authenticated but not connected」通常意味著 IMAP 已被停用。
         如果是個人 Outlook 帳戶，請前往 Outlook 網站，點擊右上角的設定齒輪，選擇「郵件」，然後選擇「轉寄與 IMAP」，在「POP 和 IMAP」部分啟用「允許設備和應用程式使用 IMAP」。
         如果是公司、教育等帳戶，請聯繫電子郵件伺服器的系統管理員。    </string>
     <string name="title_setup_oauth_rationale">授權存取您的 %1$s 帳戶</string>
@@ -333,7 +337,8 @@
     </string>
     <string name="title_advanced_hint_remark">        選項以頁籤分類，分為幾個部分，以外觀或用途編組，且可被搜尋。 
     </string>
-    <string name="title_advanced_hint_options">你不需要使用大多數選項，且由於部分選項相當專門，
+    <string name="title_advanced_hint_options">
+你不需要使用大多數選項，且由於部分選項相當專門，
         若一開始不太清楚每個功能的運作方式，也是可以理解的。
         請不要僅因為選項很多或一時之間無法理解全部功能而留下負評。
         所有選項對不少人來說都非常實用，但對你來說也許暫時還用不上。
@@ -737,7 +742,8 @@
     <string name="title_advanced_mnemonic_hint">任何一封電子郵件主旨包含以下文字將立即自動刪除應用程式資料</string>
     <string name="title_advanced_clear_all">刪除應用程式資料</string>
     <string name="title_advanced_clear_all_remark">應用程式資料將永久刪除且無法恢復</string>
-    <string name="title_advanced_default_encryption">預設的加密方法（PGP 或 S/MIME）將在傳送簽署或加密訊息後按身份儲存。
+    <string name="title_advanced_default_encryption">
+預設的加密方法（PGP 或 S/MIME）將在傳送簽署或加密訊息後按身份儲存。
         可以在傳送前於傳送選項對話框中選擇加密方法（長按傳送按鈕）。
     </string>
     <string name="title_advanced_sign_default">預設簽名</string>
@@ -753,7 +759,8 @@
     <string name="title_advanced_import_pgp">匯入金鑰</string>
     <string name="title_advanced_sign_algo">簽名算法</string>
     <string name="title_advanced_encrypt_algo">加密算法</string>
-    <string name="title_advanced_remark_algo">請注意，並非所有電子郵件用戶端都支援所有演算法。
+    <string name="title_advanced_remark_algo">
+請注意，並非所有電子郵件用戶端都支援所有演算法。
 預設的 SHA256 和 AES128 演算法通常被廣泛支援。    </string>
     <string name="title_advanced_check_certificate">傳送時檢查公鑰</string>
     <string name="title_advanced_check_key_usage">檢查傳送時的金鑰使用指示</string>
@@ -761,7 +768,8 @@
     <string name="title_advanced_import_key">匯入私鑰</string>
     <string name="title_advanced_manage_keys">管理私鑰</string>
     <string name="title_advanced_ca">已安裝的 CA 憑證</string>
-    <string name="title_advanced_manage_keys_hint">這將會打開 Android 的安全設定。
+    <string name="title_advanced_manage_keys_hint">
+這將會打開 Android 的安全設定。
 金鑰與憑證通常可以在「進階 - 加密與憑證」中找到。    </string>
     <string name="title_advanced_power_menu">新增控制項至 Android 電源選單</string>
     <string name="title_advanced_send_self">將「寄給自己」新增到 Android 的分享選單</string>
@@ -899,7 +907,8 @@
     <string name="title_advanced_inline_hint">行內圖片是包含於訊息中的圖片</string>
     <string name="compressed">包含超過 %2$s 個檔案或檔案大小超過 %3$s 的壓縮檔案（%1$s）內容將不顯示</string>
     <string name="title_advanced_parse_classes_hint">訊息顯示更精準，但可能會延後</string>
-    <string name="title_advanced_default_folder_hint">Android 可能會要求訪問所選資料夾的權限，儘管應用程式並不需要該權限。
+    <string name="title_advanced_default_folder_hint">
+Android 可能會要求訪問所選資料夾的權限，儘管應用程式並不需要該權限。
 您可以取消選擇對話框以恢復預設資料夾（通常是「下載」資料夾）。    </string>
     <string name="title_advanced_autoexpand_hint">當會話中只有一則訊息或僅一則未讀時自動開啟訊息</string>
     <string name="title_advanced_expandall_hint">當展開多封訊息時，不會顯示回覆按鈕，因為這樣會無法確定回覆的是哪個訊息</string>
@@ -1031,7 +1040,8 @@
     <string name="title_leave_on_device_hint">當訊息從伺服器中刪除時，訊息仍會保留在設備上</string>
     <string name="title_max_messages">欲下載的最大訊息數目 (留白則全部下載)</string>
     <string name="title_max_messages_keep">這是將保留在設備上的訊息最大數量</string>
-    <string name="title_max_messages_remark">輸入正數以下載結尾的訊息（最常見），
+    <string name="title_max_messages_remark">
+輸入正數以下載結尾的訊息（最常見），
 輸入負數以下載開頭的訊息（最少見）    </string>
     <string name="title_keep_poll_interval">輪詢間隔 (分鐘)</string>
     <string name="title_keep_alive_interval">Keep-Alive 間隔時間（分鐘）</string>
@@ -1094,7 +1104,8 @@
     <string name="title_service_port">請仔細檢查埠號</string>
     <string name="title_service_protocol">請仔細檢查所用的加密協定 (SSL/TLS 或 STARTTLS)</string>
     <string name="title_service_error10">此帳戶需要重新進行身份驗證，可以透過快速設定精靈完成</string>
-    <string name="title_certificate_error">由於 Google Play 商店的政策，FairEmail 的 Play 商店版本不再支持連接到具有憑證問題的電子郵件伺服器。
+    <string name="title_certificate_error">
+由於 Google Play 商店的政策，FairEmail 的 Play 商店版本不再支持連接到具有憑證問題的電子郵件伺服器。
 因此，此問題只能由您的電子郵件提供商解決——上方的錯誤信息可能有助於他們解決此問題。    </string>
     <string name="title_advanced_browse">瀏覽伺服器上的訊息</string>
     <string name="title_advanced_expand_read">展開時標示訊息為已讀取</string>
@@ -1102,7 +1113,8 @@
     <string name="title_synchronize_subfolders">子資料夾</string>
     <string name="title_synchronize_more">提取更多訊息</string>
     <string name="title_synchronize_more_hint">舊訊息只會被下載一次，因此這不會導致日常使用時的電量消耗增大</string>
-    <string name="title_synchronize_more_hint2">        訊息的提取速度與電子郵件伺服器遞送的速度一樣快，且其儲存速度與裝置儲存和索引的速度一樣快。
+    <string name="title_synchronize_more_hint2">
+        訊息的提取速度與電子郵件伺服器遞送的速度一樣快，且其儲存速度與裝置儲存和索引的速度一樣快。
         限制因素通常是裝置內部儲存空間的速度。
     </string>
     <string name="title_synchronize_more_hint3">請記住，在設備上存儲大量訊息（例如一萬條或更多）可能會導致延遲，因為內部存儲空間的速度並非無限快。</string>
@@ -1321,7 +1333,8 @@
     <string name="title_report_spam">視為垃圾郵件</string>
     <string name="title_delete_permanently">永久刪除</string>
     <string name="title_delete_attachments">刪除附件</string>
-    <string name="title_delete_attachments_remark">若要刪除附件，必須新增一封新郵件並刪除舊郵件。
+    <string name="title_delete_attachments_remark">
+若要刪除附件，必須新增一封新郵件並刪除舊郵件。
 由於此過程可能失敗，舊郵件將移至垃圾桶。    </string>
     <string name="title_snooze">延後 &#8230;</string>
     <string name="title_archive">封存</string>
@@ -1403,7 +1416,8 @@
     <string name="title_third_party">您正在使用第三方版本</string>
     <string name="title_expand_warning">展開此訊息將會下載 %1$s</string>
     <string name="title_download_message">正在下載 &#8230;</string>
-    <string name="title_reformatted">這是安全的重新格式化訊息檢視。
+    <string name="title_reformatted">
+這是安全的重新格式化訊息檢視。
 您可以點擊 &#x26F6; 圖示檢視不太安全的原始訊息並隱藏此訊息。
 重新格式化訊息需要一些時間，取決於訊息大小和您裝置的速度。
 有時需要查看原始訊息以檢視 QR 碼。    </string>
@@ -1705,7 +1719,8 @@
     <string name="title_edit_signature_remark">雖然 Android 不支援顯示部分 HTML 元素，但此部分將按原樣傳送</string>
     <string name="title_edit_signature_text">簽名文字</string>
     <string name="title_edit_signature_image">插入圖片</string>
-    <string name="title_edit_signature_image_hint">發送訊息時，圖片將從所選位置複製到訊息中。
+    <string name="title_edit_signature_image_hint">
+發送訊息時，圖片將從所選位置複製到訊息中。
 因此，不要刪除圖片檔案！    </string>
     <string name="title_edit_signature_delete">刪除簽名嗎？</string>
     <string name="title_answer_define_name">名稱</string>
@@ -1970,7 +1985,8 @@
     <string name="title_hint_message_actions">向左滑動移入垃圾桶； 向右滑動封存 (如果可用)； 可在帳戶設定中配置滑動動作</string>
     <string name="title_hint_outbox">您可以向左或向右滑動來取消發送</string>
     <string name="title_hint_message_selection">長按一則訊息以開始選擇多則訊息； 按住並向上或向下滑動以選擇更多訊息</string>
-    <string name="title_hint_message_junk">電子郵件用戶端基本上是顯示電子郵件伺服器上的訊息。
+    <string name="title_hint_message_junk">
+電子郵件用戶端基本上是顯示電子郵件伺服器上的訊息。
 電子郵件伺服器負責過濾垃圾郵件，而不是電子郵件用戶端。
 如果你收到大量垃圾郵件，請聯絡你的電子郵件提供商，不要責怪應用程式！    </string>
     <string name="title_hint_important">重要</string>
@@ -1982,7 +1998,8 @@
     <string name="title_hint_junk">垃圾郵件篩選應由電子郵件伺服器執行完成，而在能力有限的由電池所驅動的裝置上執行，產生的結果並不可靠。</string>
     <string name="title_hint_junk_learn">透過將訊息移入或移出垃圾郵件資料夾，電子郵件伺服器會「學習」什麼是垃圾郵件</string>
     <string name="title_hint_contact_actions">長按以獲取選項</string>
-    <string name="title_hint_eml">這是原始訊息檔案內容的摘要。
+    <string name="title_hint_eml">
+這是原始訊息檔案內容的摘要。
         您可以使用右下角的按鈕將訊息保存到收件匣以檢視所有內容。    </string>
     <string name="title_open_link">開啟連結</string>
     <string name="title_image_link">圖片連結</string>
@@ -2071,7 +2088,8 @@
     <string name="title_pro_purchase">購買</string>
     <string name="title_pro_one_time">%1$s (一次購買)</string>
     <string name="title_pro_no_play">未找到 Play Store 程式</string>
-    <string name="title_pro_info">開發 FairEmail 實際上耗費了數千個小時，儘管如此，大多數功能仍可免費使用。
+    <string name="title_pro_info">
+開發 FairEmail 實際上耗費了數千個小時，儘管如此，大多數功能仍可免費使用。
 FairEmail 非常重視你的隱私，不會顯示廣告，也不使用追蹤或分析來賺錢。
 為了長期維護和支援 FairEmail，一些方便與進階的功能不提供免費使用。
 FairEmail 會顯示一則小訊息提醒你這點，購買專業功能後該訊息將會被移除。    </string>

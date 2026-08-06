@@ -33,22 +33,26 @@
     <string name="title_setup_export">Eksportuoti nuostatas</string>
     <string name="title_setup_import">Įkelti nuostatas</string>
     <string name="title_setup_options">Parinktys</string>
-    <string name="title_advanced_hint_message">Einate į sudėtingesnes parinktis.
+    <string name="title_advanced_hint_message">
+Einate į sudėtingesnes parinktis.
         Visų parinkčių numatytosios  reikšmės yra labiausiai visuotinai naudojamos, jų nereikia keisti, nebent pageidaujate kitokių.
     </string>
     <string name="title_advanced_section_backup">Atsarginė kopija</string>
     <string name="title_advanced_caption_general">Bendra</string>
     <string name="title_advanced_notify_action_delete">Trinti</string>
-    <string name="title_advanced_manage_keys_hint">Bus atidarytos Android saugos nuostatos
+    <string name="title_advanced_manage_keys_hint">
+Bus atidarytos Android saugos nuostatos
 Raktai ir sertifikatai paprastai būna Sudėtingesnės parinktys - Šifruotė ir prisijungimo duomenys
     </string>
     <string name="title_advanced_cleanup">Valyti</string>
-    <string name="title_inbox_root_hint">Kai kurie teikėjai reikalauja kad nauji aplankai būtų žemesni už „Gautuosius“.
+    <string name="title_inbox_root_hint">
+Kai kurie teikėjai reikalauja kad nauji aplankai būtų žemesni už „Gautuosius“.
 Tokiu atveju palaikykite paspaudę ant „Gautųjų“ aplanko ir pasirinkite „Naujas poaplankis“.
     </string>
     <string name="title_delete">Ištrinti</string>
     <string name="title_copy_btn">Kopijuoti</string>
-    <string name="title_ask_review_rationale">Jau kuris laikas naudojatės FairEmail programėle.
+    <string name="title_ask_review_rationale">
+Jau kuris laikas naudojatės FairEmail programėle.
 Būsime dėkingi jei įvertintumėte FairEmail programėle PlayStore parduotuvėje.
     </string>
     <string name="title_rule_keyword_add">Pridėti</string>

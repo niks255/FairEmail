@@ -75,7 +75,8 @@
     </plurals>
     <string name="title_ask_spam_who">Jo %1$s erabiltzailearen mezua spamtzat?</string>
     <string name="title_junk_hint">Zure posta-hornitzaileak spam iragazteaz arduratzen da. Posta elektronikoko aplikazio batek ez ditu hori modu fidagarrian egiteko behar dituen datu guztiak.</string>
-    <string name="title_junk_pop_hint">        Blokeatutako igorleen mezuak ez dira deskargatuko.
+    <string name="title_junk_pop_hint">
+        Blokeatutako igorleen mezuak ez dira deskargatuko.
         \"Mantendu mezuak zerbitzarian\" gaituta egon ezean, mezuak betirako galduko dira!
     </string>
     <string name="title_block">Blokeatu %1$s</string>
@@ -211,7 +212,8 @@
     <string name="title_setup_close">Itxi ezarpenak</string>
     <string name="title_setup_export">Esportatu ezarpenak</string>
     <string name="title_setup_import">Inportatu ezarpenak</string>
-    <string name="title_setup_export_remark">  Konfigurazio-fitxategia kontuaren konfigurazio eta informazio guztia jasotzen duenez, pasahitz batekin zifratzen da.
+    <string name="title_setup_export_remark">
+  Konfigurazio-fitxategia kontuaren konfigurazio eta informazio guztia jasotzen duenez, pasahitz batekin zifratzen da.
   Pasahitza beharrezkoa da konfigurazioa berriro inportatzeko; beraz, mesedez, ez ahaztu!    </string>
     <string name="title_setup_export_do">Esportazio-fitxategiak doikuntza eta datu guztiak izango ditu, baina ez dago mezurik, ezta erreferentziazko irudirik ere sinaduretan</string>
     <string name="title_setup_password">Pasahitza</string>
@@ -267,10 +269,12 @@
     <string name="title_setup_reset_images">Erakutsi irudiak</string>
     <string name="title_setup_reset_full">Erakutsi jatorrizko mezuak</string>
     <string name="title_advanced_hint_title">Aukera aurreratu gehiago</string>
-    <string name="title_advanced_hint_message">        Aukera aurreratuetan sartzen ari zara.
+    <string name="title_advanced_hint_message">
+        Aukera aurreratuetan sartzen ari zara.
         Aukera guztiek maiz erabilitako balio estandarrak dituzte, eta zuk bestela nahi ezean ez dago hauek aldatzeko beharrik.
     </string>
-    <string name="title_advanced_hint_remark">Aukerak fitxatan kategorizatuta daude, atalka sakabnatuta, itxura edo erabileraren arabera antolatuta, eta bilatu daitezke.    </string>
+    <string name="title_advanced_hint_remark">
+Aukerak fitxatan kategorizatuta daude, atalka sakabnatuta, itxura edo erabileraren arabera antolatuta, eta bilatu daitezke.    </string>
     <string name="title_advanced_hint_setup">Kontu bat konfiguratu dezakezu Morroia botoia sakatuz konfigurazio pantaila nagusian.</string>
     <string name="title_advanced_section_main">Nagusia</string>
     <string name="title_advanced_section_synchronize">Jaso</string>
@@ -925,7 +929,8 @@
     <string name="title_ask_reporting">Bidali errore txostenak?</string>
     <string name="title_reporting_why">Errore txostenek FairEmail hobetzen laguntzen dute</string>
     <string name="title_ask_review">Baloratu FairEmail mesedez</string>
-    <string name="title_ask_review_rationale">        FairEmail erabiltzen aritu da dembora batez. Eskertuko genizuke FairEmail Play Store-n kalificatzea.
+    <string name="title_ask_review_rationale">
+        FairEmail erabiltzen aritu da dembora batez. Eskertuko genizuke FairEmail Play Store-n kalificatzea.
 
     </string>
     <string name="title_need_help">Laguntza behar dut</string>
@@ -1074,7 +1079,8 @@
     <string name="title_signature_store">Biltegiratu</string>
     <string name="title_search">Bilatu</string>
     <string name="title_search_for_hint">Sartu testua</string>
-    <string name="title_search_hint">Hasiera batean, bilaketa gailuan egiten da, Zerbitzarian ere bilatzeko, sakatu \' bilatu berriro\' botoia.
+    <string name="title_search_hint">
+Hasiera batean, bilaketa gailuan egiten da, Zerbitzarian ere bilatzeko, sakatu \' bilatu berriro\' botoia.
     </string>
     <string name="title_search_index_hint">Bilaketa aurkibidearen bidez bilatzea azkarra da, baina hitz osoak baino ez ditu aurkituko.</string>
     <string name="title_search_text_hint">Mezuetan testua bilatzea, mezu asko daudenean, agian ez dabil zerbitzari guztietan</string>
@@ -1156,7 +1162,8 @@
     <string name="title_edit_signature_remark">Android-ek HTML guztia bistaratu ezin badezake ere, dagoen moduan bidaliko da</string>
     <string name="title_edit_signature_text">Sinaduraren testua</string>
     <string name="title_edit_signature_image">Txertatu irudia</string>
-    <string name="title_edit_signature_image_hint">        Mezu bat bidaltzean, aukeratutako kokalekutik kopiatzen da irudia mezuan. Beraz, ez ezabatu irudi-fitxategia!
+    <string name="title_edit_signature_image_hint">
+        Mezu bat bidaltzean, aukeratutako kokalekutik kopiatzen da irudia mezuan. Beraz, ez ezabatu irudi-fitxategia!
     </string>
     <string name="title_answer_define_name">Izena</string>
     <string name="title_answer_caption">Editatu txantiloia</string>

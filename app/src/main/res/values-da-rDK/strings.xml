@@ -15,7 +15,8 @@
     <string name="app_updated">Senest opdateret: %1$s</string>
     <string name="app_download">Downloadet fra: %1$s</string>
     <string name="app_error">De fleste fejlmeddelelser skyldes eksterne forhold (netværk, server mv.) eller er forårsaget af en forkert, ofte ikke-standard, opsætning. En dårlig bedømmelse løser ikke sådanne problemer. Anmodning om support er næsten altid mere effektivt.</string>
-    <string name="app_motd">        Med Android 14/15 beta forekommer lejlighedsvise \'App svarer ikke\'-notifikationer.
+    <string name="app_motd">
+        Med Android 14/15 beta forekommer lejlighedsvise \'App svarer ikke\'-notifikationer.
         Google arbejder på en rettelse.
         Bebrejd derfor ikke appen for dette Android-problem!
     </string>
@@ -86,7 +87,8 @@
     </plurals>
     <string name="title_ask_spam_who">Håndtér besked fra %1$s som spam?</string>
     <string name="title_junk_hint">Din e-mailudbyder er ansvarlig for spamfiltreringen. En e-mail app har ikke alle de nødvendige data for at kunne gøre dette pålideligt.</string>
-    <string name="title_junk_pop_hint">        Beskeder fra blokerede afsendere downloades ikke.
+    <string name="title_junk_pop_hint">
+        Beskeder fra blokerede afsendere downloades ikke.
         Er \"Efterlad beskeder på serveren\" ikke er aktiveret, vil disse beskeder gå tabt permanent!
     </string>
     <string name="title_block">Blokér %1$s</string>
@@ -203,7 +205,8 @@
     <string name="title_setup_office_auth">Fejlen \'GODKENDELSE mislykkedes\' kan skyldes, at IMAP/SMTP er deaktiveret af systemadministratoren</string>
     <string name="title_setup_office_auth_5_7_3">Prøv guiden \'Anden udbyder\' for hurtig opsætning.</string>
     <string name="title_setup_office_auth_5_7_139">Prøv guiden \'Outlook/Hotmail/Live\' for hurtig opsætning.</string>
-    <string name="title_setup_office_not_connected">        Fejlen \'Bruger er godkendt men ikke tilsluttet\' betyder for det meste, at IMAP er deaktiveret.
+    <string name="title_setup_office_not_connected">
+        Fejlen \'Bruger er godkendt men ikke tilsluttet\' betyder for det meste, at IMAP er deaktiveret.
         I tilfælde af en forbruger Outlook-konto, gå til Outlook-webstedet, tryk på indstillingshjulet øverst til højre, vælg \'Mail\', vælg \'Videresendelse og IMAP\', og aktivér i \'POP og IMAP\'-afsnittet \'Lad enheder og apps bruge IMAP\'.
         I tilfælde af et virksomheds-, uddannelses-konti mv., kontakt e-mailserverens systemadministrator.
     </string>
@@ -346,12 +349,14 @@
     <string name="title_advanced_hint_message">        De mere avancerede indstillinger tilgås nu.
         Alle valgmuligheder har alm. brugte standardværdier, som kun behøver ændring ifm. en evt. anden præference.
     </string>
-    <string name="title_advanced_hint_configure">        Det er ikke nødvendigt at være her for at opsætte en konto. Benyt blot hurtigopsætningsguiden til dette.
+    <string name="title_advanced_hint_configure">
+        Det er ikke nødvendigt at være her for at opsætte en konto. Benyt blot hurtigopsætningsguiden til dette.
         Hurtigopsætningsguiden virker som regel, men gør den ikke, benyt den klassiske manuelle opsætning  nedenfor guide-knappen.
     </string>
     <string name="title_advanced_hint_remark">        Indstillingerne er kategoriseret efter fane, opdelt i afsnit, organiseret efter udseende/brug, og er søgbare.
     </string>
-    <string name="title_advanced_hint_options">        Man behøver ikke de fleste af mulighederne, og da nogle heraf er ret specifikke,
+    <string name="title_advanced_hint_options">
+        Man behøver ikke de fleste af mulighederne, og da nogle heraf er ret specifikke,
         er det er forståeligt, hvis funktionen af alle mulighederne ikke er umiddelbart klar.
         Giv venligt ikke dårlig anmeldelse blot for antallet af muligheder eller for manglende forståelse af dem alle med det samme.
         Alle muligheder er nyttige for flere end et par personer, men måske er man ikke blandt dem (endnu).
@@ -756,7 +761,8 @@
     <string name="title_advanced_mnemonic_hint">Modtagelse af en e-mail indeholdende nedenstående ord i emnefeltet vil øjeblikkeligt udløse sletning alle app-data på denne enhed</string>
     <string name="title_advanced_clear_all">Slet app-data</string>
     <string name="title_advanced_clear_all_remark">Alle app-data slettes irreversibelt!</string>
-    <string name="title_advanced_default_encryption">        Standardkrypteringsmetoden (PGP eller S/MIME) gemmes pr. identitet efter afsendelse af en signeret eller krypteret besked.
+    <string name="title_advanced_default_encryption">
+        Standardkrypteringsmetoden (PGP eller S/MIME) gemmes pr. identitet efter afsendelse af en signeret eller krypteret besked.
         Krypteringsmetoden kan vælges før afsendelse via dialogboksen send (langt tryk på knappen Send).
     </string>
     <string name="title_advanced_sign_default">Signér som standard</string>
@@ -923,7 +929,8 @@
     <string name="title_advanced_inline_hint">Inline-billeder er billeder, som er inkluderet i beskeden</string>
     <string name="compressed">Komprimerede filer (%1$s) indeholdende flere end %2$s filer, eller med filer større end %3$s, vises ikke</string>
     <string name="title_advanced_parse_classes_hint">Dette viser beskeder mere korrekt, men muligvis med en forsinkelse</string>
-    <string name="title_advanced_default_folder_hint">        Android kan bede om adgangstilladelse til den valgte mappe, selvom appen ikke behøver den.
+    <string name="title_advanced_default_folder_hint">
+        Android kan bede om adgangstilladelse til den valgte mappe, selvom appen ikke behøver den.
         Valgdialogen kan annulleres for at gendanne standardmappen (normalt mappen \'Download\').
     </string>
     <string name="title_advanced_restore_on_launch_hint">Gendan om muligt sidste app-tilstand, når genstartet via Launcher-ikonet</string>
@@ -1021,6 +1028,7 @@
     <string name="title_account_gmail">For pålidelig synkronisering af en Gmail-konto bør guiden til hurtig opsætning af Gmail bruges, når muligt</string>
     <string name="title_domain">Domænenavn</string>
     <string name="title_autoconfig">Hent indstillinger</string>
+    <string name="title_lan_required">Lokale netværkstilladelser krævet</string>
     <string name="title_aliases">Aliaser</string>
     <string name="title_provider">Udbyder</string>
     <string name="title_custom">Tilpasset</string>
@@ -1036,6 +1044,7 @@
     <string name="title_notify_remark">Dette kan aktivere for kontospecifikke notifikationer</string>
     <string name="title_port">Portnummer</string>
     <string name="title_user">Brugernavn</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">Normalt den primære e-mailadresse</string>
     <string name="title_password">Adgangskode</string>
     <string name="title_password_storage">Hvordan opbevares adgangskoder?</string>
     <string name="title_case_sensitive">I brugernavne og adgangskoder skelnes normalt mellem minuskler og versaler</string>
@@ -1058,7 +1067,8 @@
     <string name="title_leave_on_device_hint">Når beskeder slettes fra serveren, forbliver meddelelserne på enheden</string>
     <string name="title_max_messages">Maks. antal beskeder at downloade (tomt for samtlige)</string>
     <string name="title_max_messages_keep">Dette er det maksimale antal besked, som gemmes på enheden</string>
-    <string name="title_max_messages_remark">        Angiv et positivt tal for at downloade meddelelserne i slutningen (mest almindeligt)
+    <string name="title_max_messages_remark">
+        Angiv et positivt tal for at downloade meddelelserne i slutningen (mest almindeligt)
         og et negativt tal for at downloade meddelelserne i begyndelsen
     </string>
     <string name="title_keep_poll_interval">Polling-interval (minutter)</string>
@@ -1122,7 +1132,8 @@
     <string name="title_service_port">Dobbelttjek portnummeret</string>
     <string name="title_service_protocol">Dobbelttjek protokollen (SSL/TLS eller STARTTLS)</string>
     <string name="title_service_error10">Denne konto skal godkendes igen, hvilket kan gøres via guiden til hurtig opsætning</string>
-    <string name="title_certificate_error">        Grundet politikker i Google Play Butik, er det ikke længere muligt at understøtte usikre forbindelser til e-mailservere med certifikatproblemer for den i Play Butik distribuerede FairEmail-version.
+    <string name="title_certificate_error">
+        Grundet politikker i Google Play Butik, er det ikke længere muligt at understøtte usikre forbindelser til e-mailservere med certifikatproblemer for den i Play Butik distribuerede FairEmail-version.
         Dette problem kan alene løses af brugerens e-mailudbyder, og ovenstående fejlinformation kan i den forbindelse være en hjælp.
     </string>
     <string name="title_advanced_browse">Gennemse beskeder på serveren</string>
@@ -1131,7 +1142,8 @@
     <string name="title_synchronize_subfolders">Undermapper</string>
     <string name="title_synchronize_more">Hent flere beskeder</string>
     <string name="title_synchronize_more_hint">Dette vil resultere i en enkelt download af ældre beskeder uden større strømforbrug end alm. hverdagsbrug</string>
-    <string name="title_synchronize_more_hint2">        Beskeder hentes så hurtigt, som e-mail-serveren kan levere dem, og gemmes så hurtigt som enheden kan gemme og indeksere dem.
+    <string name="title_synchronize_more_hint2">
+        Beskeder hentes så hurtigt, som e-mail-serveren kan levere dem, og gemmes så hurtigt som enheden kan gemme og indeksere dem.
         Den begrænsende faktor er normalt hastigheden på enhedens interne lagerplads.
     </string>
     <string name="title_synchronize_more_hint3">Husk, at opbevaring af en masse beskeder (ti tusinde eller flere) på enheden kan forårsage forsinkelser, da den interne lagerplads ikke er lynende hurtigt.</string>
@@ -1328,7 +1340,7 @@
     <string name="title_quick_actions_snooze">Udsæt</string>
     <string name="title_quick_actions_clear">Ryd valg efter handling</string>
     <string name="title_trash">Papirkurv</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Skrot samtale</string>
+    <string name="title_trash_conversation">Skrot samtale</string>
     <string name="title_trash_selection">Papirkurvsvalg</string>
     <string name="title_copy">Kopiér &#8230;</string>
     <string name="title_copy_to">Kopiér til &#8230;</string>
@@ -1353,7 +1365,8 @@
     <string name="title_report_spam">Håndtér som spam</string>
     <string name="title_delete_permanently">Slet permanent</string>
     <string name="title_delete_attachments">Slet vedhæftninger</string>
-    <string name="title_delete_attachments_remark">For at slette vedhæftninger, opret en ny besked og slet den gamle.
+    <string name="title_delete_attachments_remark">
+For at slette vedhæftninger, opret en ny besked og slet den gamle.
          Da sletningen kan mislykkes, flyttes den gamle besked til papirkurven.
     </string>
     <string name="title_snooze">Udsæt &#8230;</string>
@@ -1436,7 +1449,8 @@
     <string name="title_third_party">Du benytter en tredjepartsversion</string>
     <string name="title_expand_warning">Udvides denne besked, downloades %1$s</string>
     <string name="title_download_message">Downloader &#8230;</string>
-    <string name="title_reformatted">        Dette er den sikre omformaterede beskedvisning.
+    <string name="title_reformatted">
+        Dette er den sikre omformaterede beskedvisning.
         Tryk på &#x26F6;-ikonet for at se den mindre sikre originalbesked og skjule denne.
         Beskedomformatering kan tage lidt tid afhængigt af beskedstørrelse og enhedens hastighed.
         Nogle gange vil originalbeskeden skulle vises for at kunne se QR-koder.
@@ -1741,7 +1755,8 @@
     <string name="title_edit_signature_remark">Selvom Android ikke kan vise al HTML, sendes den som-om</string>
     <string name="title_edit_signature_text">Signaturtekst</string>
     <string name="title_edit_signature_image">Indsæt billede</string>
-    <string name="title_edit_signature_image_hint">        Ved beskedafsendelse kopieres billedet ind i beskeden fra den valgte placering.
+    <string name="title_edit_signature_image_hint">
+        Ved beskedafsendelse kopieres billedet ind i beskeden fra den valgte placering.
         Slet derfor ikke billedfilen!
     </string>
     <string name="title_edit_signature_delete">Slet signatur?</string>
@@ -2007,7 +2022,8 @@
     <string name="title_hint_message_actions">Stryg til venstre for Papirkurv; Stryg til højre for at arkivere (hvis tilgængeligt); Strygehandlingerne kan opsættes i kontoindstillingerne</string>
     <string name="title_hint_outbox">Afsendelse kan annulleres med et stryg til venstre eller højre</string>
     <string name="title_hint_message_selection">Langt tryk på en besked for at tilgå valg af flere beskeder; Hold og stryg op/ned for at vælge flere beskeder</string>
-    <string name="title_hint_message_junk">        En e-mailklient viser beskeder, som befinder sig på en e-mail-server.
+    <string name="title_hint_message_junk">
+        En e-mailklient viser beskeder, som befinder sig på en e-mail-server.
         E-mailserveren er ansvarlig for spamfiltrering, ikke e-mailklienten.
         Modtages en masse spam, kontakt da e-mailudbyderen (bebrejd ikke appen!).
     </string>
@@ -2020,7 +2036,8 @@
     <string name="title_hint_junk">Spamfiltrering bør udføres på e-mailserveren, da dette ikke ske pålideligt på en batteridrevet enhed med begrænset kapacitet.</string>
     <string name="title_hint_junk_learn">Ved at flytte beskeder til og fra spammappen, \"lærer\" e-mailserveren, hvad spam er</string>
     <string name="title_hint_contact_actions">Langt tryk for valgmuligheder</string>
-    <string name="title_hint_eml">        Dette er en sammenfatning af indholdet i en rå beskedfil.
+    <string name="title_hint_eml">
+        Dette er en sammenfatning af indholdet i en rå beskedfil.
         Knappen nederst til højre kan bruges til at gemme beskeden i indbakken for at se alt indhold.
     </string>
     <string name="title_open_link">Åbn link</string>

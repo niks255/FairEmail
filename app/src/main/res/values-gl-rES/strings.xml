@@ -75,7 +75,8 @@
     </plurals>
     <string name="title_ask_spam_who">Tratar mensaxes de %1$s coma spam?</string>
     <string name="title_junk_hint">O seu provedor de email é o responsable de filtrar o spam. Unha aplicación de email non ten todos os datos para facelo de modo fiable.</string>
-    <string name="title_junk_pop_hint">        Non se descargarán as mensaxes de remitentes bloqueados.
+    <string name="title_junk_pop_hint">
+        Non se descargarán as mensaxes de remitentes bloqueados.
         Se non está activado \"Deixar as mensaxes no servidor\", esas mensaxes vanse perder permanentemente!
     </string>
     <string name="title_block">Bloquear %1$s</string>
@@ -293,7 +294,8 @@
     <string name="title_advanced_hint_title">Máis opcións avanzadas</string>
     <string name="title_advanced_hint_message">        Vostede está navegando cara as opcións máis avanzadas.        Todas as opcións teñen valores comúns, que non precisan ser cambiadas de non ser que  vostede teña una preferencia diferente.
     </string>
-    <string name="title_advanced_hint_remark">        As opcións están categorizadas por lapelas, divididas en seccións, organizadas por aparencia ou uso, e pódense buscar. </string>
+    <string name="title_advanced_hint_remark">
+        As opcións están categorizadas por lapelas, divididas en seccións, organizadas por aparencia ou uso, e pódense buscar. </string>
     <string name="title_advanced_hint_setup">Pódese configurar unha conta tocando no botón do asistente na pantalla principal de configuración.</string>
     <string name="title_advanced_section_main">Principal</string>
     <string name="title_advanced_section_synchronize">Recibir</string>
@@ -845,7 +847,7 @@
     <string name="title_pop_warning">Si unha conta POP3 non soporta o comando UIDL, o uso de datos podería ser alto. Axuste a frecuencia de sincronización tendo isto en conta.</string>
     <string name="title_pop_folders">O protocolo POP3 non permite crear cartafoles</string>
     <string name="title_oauth_support">Non se soporta OAuth</string>
-    <string name="title_review">Revisar </string>
+    <string name="title_review">Revisar 	</string>
     <string name="title_hint_accounts">Unha pulsación prolongada nunha conta mostra opcións, como desactivalas ou borralas</string>
     <string name="title_hint_alias">Prema durante un tempo unha identidade para amosar opcións como copiar para crear alias de identidades</string>
     <string name="title_service_auth">O servidor de correo dixo: \'%1$s\'</string>
@@ -859,7 +861,8 @@
     <string name="title_synchronize_subfolders">Subcartafoles</string>
     <string name="title_synchronize_more">Obter máis mensaxes</string>
     <string name="title_synchronize_more_hint">Isto fará unha única descarga de mensaxes vellas, polo que non gastará máis batería para o uso diario</string>
-    <string name="title_synchronize_more_hint2">        As mensaxes serán recollidas tan rápido como o servidor poida entregalas e almacenadas tan rápido como o dispositivo poida gardalas e procesalas.
+    <string name="title_synchronize_more_hint2">
+        As mensaxes serán recollidas tan rápido como o servidor poida entregalas e almacenadas tan rápido como o dispositivo poida gardalas e procesalas.
         O factor máis restritivo soe ser a velocidade do almacenamento interno do dispositivo.
     </string>
     <string name="title_synchronize_enabled">Sincronizar</string>
@@ -1358,7 +1361,8 @@
     <string name="title_edit_signature_remark">Aínda que Android non poida amosar todo o HTML, se enviará tal e como sexa</string>
     <string name="title_edit_signature_text">Texto da sinatura</string>
     <string name="title_edit_signature_image">Inserir unha imaxe</string>
-    <string name="title_edit_signature_image_hint">        Cando se envía unha mensaxe, a imaxe se copia nela desde a localización seleccionada.
+    <string name="title_edit_signature_image_hint">
+        Cando se envía unha mensaxe, a imaxe se copia nela desde a localización seleccionada.
         Por iso non debe borrar o ficheiro da imaxe!
     </string>
     <string name="title_answer_define_name">Nome</string>

@@ -2341,7 +2341,7 @@ public class HtmlHelper {
                     if (tlevel > level)
                         sb.append("<blockquote style=\"")
                                 .append(getQuoteStyle(line, 0, line.length()))
-                                .append("\">");
+                                .append("\" type=\"" + HtmlHelper.getQuoteType() + "\">");
 
                     line = line.substring(1); // >
 
@@ -2756,6 +2756,13 @@ public class HtmlHelper {
             Log.e(new Throwable("getQuoteStyle " + start + "..." + end, ex));
         }
         return "border-" + dir + ":3px solid #ccc; padding-" + dir + ":10px;margin:0;";
+    }
+
+    static String getQuoteType() {
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=882181#c1
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=183219#c50
+        // https://github.com/mozilla-firefox/firefox/blob/aaf0207c409c5f6479cc92bc1bf407a453d63cdc/editor/libeditor/HTMLEditUtils.cpp#L804
+        return "cite"; // Non standard
     }
 
     static String getIndentStyle(CharSequence quoted, int start, int end) {

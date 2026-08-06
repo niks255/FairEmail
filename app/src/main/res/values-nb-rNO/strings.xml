@@ -14,7 +14,8 @@
     <string name="app_cake_required">Min. lagringsplass som kreves: %1$s</string>
     <string name="app_updated">Siste oppdatering: %1$s</string>
     <string name="app_download">Lastet ned fra: %1$s</string>
-    <string name="app_motd">        Med Android 14/15 beta dukker «Appen svarer ikke»-varsler opp av og til.
+    <string name="app_motd">
+        Med Android 14/15 beta dukker «Appen svarer ikke»-varsler opp av og til.
         Google jobber med en løsning.
         Vennligst ikke skyld på appen for denne Android-feilen!
     </string>
@@ -73,14 +74,16 @@
     </plurals>
     <string name="title_ask_spam_who">Behandle melding fra %1$s som søppelpost?</string>
     <string name="title_junk_hint">Epost-leverandøren din er ansvarlig for filtrering av søppelpost. En epost-app har ikke tilgang til all dataen som kreves for å gjøre dette på en god måte.</string>
-    <string name="title_junk_pop_hint">        Meldinger fra blokkerte avsendere vil ikke lastes ned.
+    <string name="title_junk_pop_hint">
+        Meldinger fra blokkerte avsendere vil ikke lastes ned.
         Om «Behold meldinger på tjeneren» ikke er valgt, vil disse meldingene forsvinne permanent!
     </string>
     <string name="title_block">Blokker %1$s</string>
     <string name="title_block_sender">Blokker avsender</string>
     <string name="title_block_sender_domain">Blokker domene «%1$s»</string>
     <string name="title_block_sender_remark">Blokkering betyr automatisk flytting til søppelpost-mappen</string>
-    <string name="title_block_sender_hint">        Blokkering av avsender er en gratisfunksjon.
+    <string name="title_block_sender_hint">
+        Blokkering av avsender er en gratisfunksjon.
         Blokkering av avsenderdomene bruker filterregler, som er en betalingsfunksjon.
     </string>
     <string name="title_blocked_senders">Blokkerte avsendere</string>

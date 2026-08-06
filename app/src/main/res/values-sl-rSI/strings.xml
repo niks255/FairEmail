@@ -96,13 +96,15 @@
     </plurals>
     <string name="title_ask_spam_who">Obravnavaj sporočilo od %1$s kot vsiljeno?</string>
     <string name="title_junk_hint">Za filtriranje vsiljenih sporočil je odgovoren vaš e-poštni ponudnik.  E-poštni program nima vseh podatkov, ki so zahtevani za zanesljivo filtrrianje.</string>
-    <string name="title_junk_pop_hint">        Sporočila od blokiranih pošiljateljev ne bodo prejeta.
+    <string name="title_junk_pop_hint">
+        Sporočila od blokiranih pošiljateljev ne bodo prejeta.
         Če \"Pusti poročila na strežniku\" ni omogočeno, bodo ta sporočila trajno izgubljena!
     </string>
     <string name="title_block">Blokiraj %1$s</string>
     <string name="title_block_sender">Blokiraj pošiljatelja</string>
     <string name="title_block_sender_domain">Blokiraj domeno \'%1$s\'</string>
-    <string name="title_block_sender_hint">        Blokiranje pošiljatelja je brezplačna značilnost.
+    <string name="title_block_sender_hint">
+        Blokiranje pošiljatelja je brezplačna značilnost.
         Blokiranje domene pošiljatelja uporablja pravila filtriranja, ki je značilnot Pro.
     </string>
     <string name="title_blocked_senders">Blokirani pošiljatelji</string>
@@ -265,7 +267,8 @@
     <string name="title_setup_close">Zapri nastavitve</string>
     <string name="title_setup_export">Izvozi nastavitve</string>
     <string name="title_setup_import">Uvozi nastavitve</string>
-    <string name="title_setup_export_remark">        Ker datoteka z nastavitvami vsebuje vse nastavitve in podatke o računu, se ta šifrira z geslom.
+    <string name="title_setup_export_remark">
+        Ker datoteka z nastavitvami vsebuje vse nastavitve in podatke o računu, se ta šifrira z geslom.
         Za uvoz nastavitev je ponovno treba vnesti geslo, zato ga ne izgubite!
     </string>
     <string name="title_setup_export_do">Izvozna datoteka vsebuje vse nastavitve in podatke, vendar nobenega sporočila ali slike za podpis.</string>
@@ -331,7 +334,8 @@
     <string name="title_advanced_hint_title">Več naprednih nastavitev</string>
     <string name="title_advanced_hint_message">        You are navigating to the more advanced options.        All options have commonly used standard values, which you do not need to change unless you have a different preference.
     </string>
-    <string name="title_advanced_hint_remark">        Možnosti so razvrščene po zavihkih, razdeljene v odseke, organizirane po videzu ali uporabi in lahko jih iščete.
+    <string name="title_advanced_hint_remark">
+        Možnosti so razvrščene po zavihkih, razdeljene v odseke, organizirane po videzu ali uporabi in lahko jih iščete.
     </string>
     <string name="title_advanced_hint_setup">Račun lahko nastavite z dotikom gumba za čarovnika na zaslonu za glavne nastavitve.</string>
     <string name="title_advanced_section_main">Glavno</string>
@@ -666,7 +670,8 @@
     <string name="title_advanced_import_pgp">Uvozi ključ</string>
     <string name="title_advanced_sign_algo">Algoritem podpisa</string>
     <string name="title_advanced_encrypt_algo">Šifrirni algoritem</string>
-    <string name="title_advanced_remark_algo">        Upoštevajte, da vsi e-poštni programi ne podpirajo vseh algoritmov.
+    <string name="title_advanced_remark_algo">
+        Upoštevajte, da vsi e-poštni programi ne podpirajo vseh algoritmov.
         Privzeta algoritma SHA256 in AES128 sta pogosto podprta.
     </string>
     <string name="title_advanced_check_certificate">Preveri javni ključ ob pošiljanju</string>
@@ -770,7 +775,8 @@
     <string name="title_advanced_inline_hint">Slike v besedilu so vključene v sporočilo.</string>
     <string name="compressed">Vsebina stisnjenih datotek (%1$s) z več kot %2$s-imi datotekami ali z datotekami, večjimi kot %3$s ne bo prikazana.</string>
     <string name="title_advanced_parse_classes_hint">To bo natančneje prikazalo sporočila, vendar morda z zakasnitvijo.</string>
-    <string name="title_advanced_default_folder_hint">        Android vas bo morda vprašal za dovoljenje za dostop do izbrane mape čeprav ga program ne potrebuje.
+    <string name="title_advanced_default_folder_hint">
+        Android vas bo morda vprašal za dovoljenje za dostop do izbrane mape čeprav ga program ne potrebuje.
         Pogovorno okno za izbiro lahko prekličete, da obnovite privzeto mapo (običanjo je to mapa \'Prenosi\').
     </string>
     <string name="title_advanced_autoexpand_hint">Samodejno odpri sporočilo, ko je v pogovoru samo eno sporočilo ali eno neprebrano sporočilo.</string>
@@ -949,7 +955,8 @@
     <string name="title_synchronize_subfolders">Podmape</string>
     <string name="title_synchronize_more">Pridobi več sporočil</string>
     <string name="title_synchronize_more_hint">To bo enkrat prejelo stara sporočila, tako da se vsakodnevna poraba energije ne bo povečala.</string>
-    <string name="title_synchronize_more_hint2">        Sporočila bodo pridobljena, kakor hitro jih lahko e-poštni strežnik dostavi in shranjena, kakor hitro jih lahko naprava shrani in za njih sestavi kazalo.
+    <string name="title_synchronize_more_hint2">
+        Sporočila bodo pridobljena, kakor hitro jih lahko e-poštni strežnik dostavi in shranjena, kakor hitro jih lahko naprava shrani in za njih sestavi kazalo.
         Omejitveni dejavnik je običajno hitrost notranjega prostora za shranjevanje.
     </string>
     <string name="title_synchronize_more_hint3">Upoštevajte, da lahko shranjevanje velikega števila sporočil (deset tisoč ali več) na napravi povzroči zakasnitve, ker notranji prostor za shranjevanje ni neskončno hiter.</string>
@@ -1401,7 +1408,8 @@
     <string name="title_signature_store">Shramba</string>
     <string name="title_search">Išči</string>
     <string name="title_search_for_hint">Vnesite besedilo</string>
-    <string name="title_search_hint">        Na začetku se iskanje opravi na napravi.
+    <string name="title_search_hint">
+        Na začetku se iskanje opravi na napravi.
         Za iskanje na strežniku se znova dotaknite gumba \'Išči znova\'.
     </string>
     <string name="title_search_index_hint">Iskanje preko iskalnega kazala je hitro, vendar najde samo cele besede.</string>
@@ -1487,7 +1495,8 @@
     <string name="title_edit_signature_remark">Čeprav Android ne more prikazati vsega HTML-a, bo podpis poslan tak kot je.</string>
     <string name="title_edit_signature_text">Besedilo podpisa</string>
     <string name="title_edit_signature_image">Vstavi sliko</string>
-    <string name="title_edit_signature_image_hint">        Med pošiljanjem sporočila se slika kopira v sporočilo z izbranega mesta..
+    <string name="title_edit_signature_image_hint">
+        Med pošiljanjem sporočila se slika kopira v sporočilo z izbranega mesta..
         Ne izbrišite datoteke slike!
     </string>
     <string name="title_answer_define_name">Ime</string>
@@ -1804,7 +1813,8 @@
     <string name="title_pro_purchase">Kupi</string>
     <string name="title_pro_one_time">%1$s (enkratni nakup)</string>
     <string name="title_pro_no_play">Trgovine Play ni bilo mogoče najti.</string>
-    <string name="title_pro_info">        Razvoj FairMaila je trajal na tisoče ur, poleg tega pa je večina značilnosti še vedno brezplačnih.
+    <string name="title_pro_info">
+        Razvoj FairMaila je trajal na tisoče ur, poleg tega pa je večina značilnosti še vedno brezplačnih.
         FairEmail resno jemlje vašo zasebnost, ne dovoli oglasov in vam ne sledi ali uporablja analitike, da si prisluži denar.
         Za vzdrževanje in podporo FairMaila na dolgi rok nekatere priročne in napredne značilnosti niso brezplačne.
         FairEmail za ta namen prikazuje majhno sporočilo, ki se bo odstranilo, če kupite značilnosti Pro.

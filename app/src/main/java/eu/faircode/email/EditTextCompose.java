@@ -409,7 +409,8 @@ public class EditTextCompose extends FixedEditText {
                         h = "<div>" + HtmlHelper.formatPlainText(t.toString(), false) + "</div>";
                     }
                     String style = HtmlHelper.getQuoteStyle("", 0, 0);
-                    String html = "<blockquote style=\"" + style + "\">" + h + "</blockquote>";
+                    String type = HtmlHelper.getQuoteType();
+                    String html = "<blockquote style=\"" + style + "\" type=\"" + type + "\">" + h + "</blockquote>";
 
                     Helper.getUIExecutor().submit(new RunnableEx("pasteq") {
                         @Override

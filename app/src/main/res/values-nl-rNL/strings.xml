@@ -15,7 +15,8 @@
     <string name="app_updated">Laatst bijgewerkt: %1$s</string>
     <string name="app_download">Gedownload van: %1$s</string>
     <string name="app_error">De meeste foutmeldingen hebben externe oorzaken (netwerk, server, enz.) of worden veroorzaakt door een onjuiste, vaak niet-standaard configuratie. Een slechte beoordeling lost dergelijke problemen niet op. Ondersteuning aanvragen is bijna altijd effectiever.</string>
-    <string name="app_motd">        Onder Android 14/15 beta, kan soms de melding ‘App reageert niet’ verschijnen.
+    <string name="app_motd">
+        Onder Android 14/15 beta, kan soms de melding ‘App reageert niet’ verschijnen.
         Google werkt aan een oplossing.
         Geef FairEmail alstublieft niet de schuld voor dit Android probleem!
     </string>
@@ -86,7 +87,8 @@
     </plurals>
     <string name="title_ask_spam_who">Behandel bericht van %1$s als spam?</string>
     <string name="title_junk_hint">Uw e-mailprovider is verantwoordelijk voor het filteren van spam. Een e-mail-app beschikt niet over alle gegevens die nodig zijn om dit betrouwbaar te doen.</string>
-    <string name="title_junk_pop_hint">        Berichten van geblokkeerde afzenders worden niet gedownload.
+    <string name="title_junk_pop_hint">
+        Berichten van geblokkeerde afzenders worden niet gedownload.
         Als \"Laat berichten achter op de server\" niet is ingeschakeld, gaan deze berichten definitief verloren!
     </string>
     <string name="title_block">Blokkeer %1$s</string>
@@ -202,7 +204,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_setup_office_auth">De fout \'AUTHENTICATE failed\' kan worden veroorzaakt doordat IMAP/SMTP door de systeemadministrator is uitgeschakeld</string>
     <string name="title_setup_office_auth_5_7_3">Probeer a. u. b. de \'Andere provider\' wizard.</string>
     <string name="title_setup_office_auth_5_7_139">Probeer a. u. b. de \'Outlook/Hotmail/Live\' wizard.</string>
-    <string name="title_setup_office_not_connected">De foutmelding \'User is authenticated but not connected\' betekent meestal dat IMAP is uitgeschakeld.
+    <string name="title_setup_office_not_connected">
+De foutmelding \'User is authenticated but not connected\' betekent meestal dat IMAP is uitgeschakeld.
         Ga in het geval van een Outlook-account voor consumenten naar de Outlook-website, tik op het instellingenwiel rechtsboven, selecteer \'Mail\', selecteer \'Forwarding en IMAP\' en in de sectie \'POP en IMAP\' schakel \'Laat apparaten en apps IMAP gebruiken\' in.
         Neem in het geval van een bedrijfs-, onderwijs-, enz. account contact op met de systeembeheerder van de mailserver.    </string>
     <string name="title_setup_oauth_rationale">Autoriseer toegang tot uw %1$s account</string>
@@ -343,12 +346,14 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_hint_title">Meer geavanceerde opties</string>
     <string name="title_advanced_hint_message">        U navigeert naar de meer geavanceerde opties.        Alle opties hebben vaak gebruikte standaardwaarden die je niet hoeft te wijzigen tenzij je een andere voorkeur hebt.
     </string>
-    <string name="title_advanced_hint_configure">        Je hoeft hier niet te zijn om een account te configureren. Gebruik daarvoor de wizard-/assistentknop.
+    <string name="title_advanced_hint_configure">
+        Je hoeft hier niet te zijn om een account te configureren. Gebruik daarvoor de wizard-/assistentknop.
         De wizard/assistent werkt bijna altijd, maar als het niet werkt, gebruik dan de klassieke, handmatige instellingen net onder de wizardknop.
     </string>
     <string name="title_advanced_hint_remark">        De opties zijn gecategoriseerd op tabblad, verdeeld in secties, georganiseerd op uiterlijk of gebruik en doorzoekbaar.
     </string>
-    <string name="title_advanced_hint_options">U zult de meeste opties niet nodig hebben en aangezien sommige opties vrij specifiek zijn, is het begrijpelijk als de werking van niet alle opties niet gelijk duidelijk is. Laat a. u. b. geen slechte beoordeling voor alleen het aantal opties of voor het niet begrijpen van alle opties achter.
+    <string name="title_advanced_hint_options">
+U zult de meeste opties niet nodig hebben en aangezien sommige opties vrij specifiek zijn, is het begrijpelijk als de werking van niet alle opties niet gelijk duidelijk is. Laat a. u. b. geen slechte beoordeling voor alleen het aantal opties of voor het niet begrijpen van alle opties achter.
         Alle opties zijn nuttig voor meer dan een paar mensen, maar misschien (nog) niet voor u.
     </string>
     <string name="title_advanced_hint_setup">Je kunt een account configureren door op de wizard knop op het hoofdconfiguratiescherm te tikken.</string>
@@ -751,7 +756,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_mnemonic_hint">Elke e-mail ontvangen met de onderstaande woorden in de onderwerpregel zal automatisch en onmiddellijk de app gegevens verwijderen</string>
     <string name="title_advanced_clear_all">Verwijder de app-gegevens</string>
     <string name="title_advanced_clear_all_remark">De app-gegevens worden onomkeerbaar verwijderd!</string>
-    <string name="title_advanced_default_encryption">De standaard versleutelingsmethode (PGP of S/MIME) wordt per identiteit opgeslagen na het verzenden van een ondertekend of versleuteld bericht.
+    <string name="title_advanced_default_encryption">
+De standaard versleutelingsmethode (PGP of S/MIME) wordt per identiteit opgeslagen na het verzenden van een ondertekend of versleuteld bericht.
          De versleutelingsmethode kan voor verzending worden geselecteerd in het dialoogvenster met verzendopties (houd de knop Verzenden lang ingedrukt).    </string>
     <string name="title_advanced_sign_default">Standaard ondertekenen</string>
     <string name="title_advanced_encrypt_default">Standaard ondertekenen en versleutelen</string>
@@ -916,7 +922,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_advanced_inline_hint">Inline afbeeldingen zijn afbeeldingen opgenomen in het bericht</string>
     <string name="compressed">De inhoud van gecomprimeerde bestanden (%1$s) met meer dan %2$s bestanden of met bestanden groter dan %3$s zal niet getoond worden</string>
     <string name="title_advanced_parse_classes_hint">Dit zal nauwkeuriger berichten weergeven, maar mogelijk met een vertraging</string>
-    <string name="title_advanced_default_folder_hint">        Android kan toestemming vragen voor toegang tot de geselecteerde map, ook al heeft de app dit niet nodig.
+    <string name="title_advanced_default_folder_hint">
+        Android kan toestemming vragen voor toegang tot de geselecteerde map, ook al heeft de app dit niet nodig.
         U kunt het selectievenster annuleren om de standaard map te herstellen (meestal de \'Download\' map).
     </string>
     <string name="title_advanced_restore_on_launch_hint">Herstel indien mogelijk de laatste app-status wanneer opnieuw opgestart via het launcher-pictogram</string>
@@ -1014,6 +1021,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_account_gmail">Voor een betrouwbare synchronisatie van een Gmail-account moet waar mogelijk de wizard voor snelle installatie van Gmail worden gebruikt</string>
     <string name="title_domain">Domeinnaam</string>
     <string name="title_autoconfig">Instellingen ophalen</string>
+    <string name="title_lan_required">Toegang tot lokaal netwerk vereist</string>
     <string name="title_aliases">Aliassen</string>
     <string name="title_provider">Provider</string>
     <string name="title_custom">Aangepast</string>
@@ -1029,6 +1037,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_notify_remark">U kunt dit inschakelen voor account specifieke meldingen</string>
     <string name="title_port">Poortnummer</string>
     <string name="title_user">Gebruikersnaam</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">Meestal het primaire mailadres</string>
     <string name="title_password">Wachtwoord</string>
     <string name="title_password_storage">Hoe worden wachtwoorden bewaard?</string>
     <string name="title_case_sensitive">Gebruikersnamen en wachtwoorden zijn meestal hoofdlettergevoelig</string>
@@ -1051,7 +1060,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_leave_on_device_hint">Wanneer berichten van de server worden verwijderd, blijven de berichten op het apparaat</string>
     <string name="title_max_messages">Maximum aantal berichten om te downloaden (leeg voor allen)</string>
     <string name="title_max_messages_keep">Dit is het maximale aantal berichten dat op het apparaat zal worden bewaard</string>
-    <string name="title_max_messages_remark">        Voer een positief getal in om berichten aan het einde te downloaden (meest gebruikelijk)
+    <string name="title_max_messages_remark">
+        Voer een positief getal in om berichten aan het einde te downloaden (meest gebruikelijk)
         en een negatief getal om berichten te downloaden aan het begin (minst gebruikelijk)
     </string>
     <string name="title_keep_poll_interval">Poll interval (minuten)</string>
@@ -1115,7 +1125,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_service_port">Controleer het poortnummer a.u.b.</string>
     <string name="title_service_protocol">Controleer a.u.b. het protocol (SSL/TLS of STARTTLS)</string>
     <string name="title_service_error10">Dit account moet opnieuw geverifieerd worden, wat gedaan kan worden via de snelle installatiewizard</string>
-    <string name="title_certificate_error">Als gevolg van het Play Store-beleid van Google is het niet langer mogelijk om onveilige verbindingen met mailservers met certificaat problemen te ondersteunen voor de versie van FairEmail die in de Play Store wordt gedistribueerd.
+    <string name="title_certificate_error">
+Als gevolg van het Play Store-beleid van Google is het niet langer mogelijk om onveilige verbindingen met mailservers met certificaat problemen te ondersteunen voor de versie van FairEmail die in de Play Store wordt gedistribueerd.
         Daarom kan dit probleem alleen worden opgelost door uw mailprovider - de bovenstaande foutinformatie kan hen helpen dit probleem op te lossen.    </string>
     <string name="title_advanced_browse">Blader door berichten op de server</string>
     <string name="title_advanced_expand_read">Markeer berichten gelezen bij uitvouwen</string>
@@ -1123,7 +1134,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_synchronize_subfolders">Submappen</string>
     <string name="title_synchronize_more">Haal meer berichten op</string>
     <string name="title_synchronize_more_hint">Dit zal resulteren in een enkele download van oudere berichten, dus het zal niet resulteren in meer batterijgebruik voor dagelijks gebruik</string>
-    <string name="title_synchronize_more_hint2">Berichten worden opgehaald zo snel als de mailserver ze kan afleveren en opgeslagen zo snel als het apparaat ze kan opslaan en indexeren.
+    <string name="title_synchronize_more_hint2">
+Berichten worden opgehaald zo snel als de mailserver ze kan afleveren en opgeslagen zo snel als het apparaat ze kan opslaan en indexeren.
         De beperkende factor is meestal de snelheid van de interne opslagruimte van het apparaat.    </string>
     <string name="title_synchronize_more_hint3">Houd er rekening mee dat het opslaan van veel berichten (tienduizend of meer) op je apparaat vertragingen kan veroorzaken, omdat de interne opslagruimte niet oneindig snel is.</string>
     <string name="title_synchronize_enabled">Synchroniseren</string>
@@ -1319,7 +1331,7 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_quick_actions_snooze">Sluimeren</string>
     <string name="title_quick_actions_clear">Selectie wissen na actie</string>
     <string name="title_trash">Prullenbak</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Gesprek verwijderen</string>
+    <string name="title_trash_conversation">Gesprek verwijderen</string>
     <string name="title_trash_selection">Verwijder selectie</string>
     <string name="title_copy">Kopieer &#8230;</string>
     <string name="title_copy_to">Kopieer naar &#8230;</string>
@@ -1424,7 +1436,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_third_party">U gebruikt een versie van een derde partij</string>
     <string name="title_expand_warning">Uitvouwen van dit bericht zal %1$s downloaden</string>
     <string name="title_download_message">Downloaden &#8230;</string>
-    <string name="title_reformatted">        Dit is de veilige opnieuw opgemaakte berichtweergave.
+    <string name="title_reformatted">
+        Dit is de veilige opnieuw opgemaakte berichtweergave.
         U kunt op het &#x26F6; pictogram tikken om het minder veilige originele bericht te bekijken en dit bericht te verbergen.
         Het opnieuw opmaken van berichten kost enige tijd, afhankelijk van de grootte van het bericht en de snelheid van uw apparaat.
         Soms moet het originele bericht worden bekeken om QR-codes te zien.
@@ -1727,7 +1740,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_edit_signature_remark">Hoewel Android niet alle HTML kan weergeven, zal het worden verzonden zoals het is</string>
     <string name="title_edit_signature_text">Tekst handtekening</string>
     <string name="title_edit_signature_image">Afbeelding invoegen</string>
-    <string name="title_edit_signature_image_hint">Bij het verzenden van een bericht wordt de afbeelding vanaf de geselecteerde locatie naar het bericht gekopieerd.
+    <string name="title_edit_signature_image_hint">
+Bij het verzenden van een bericht wordt de afbeelding vanaf de geselecteerde locatie naar het bericht gekopieerd.
          Verwijder het afbeeldingsbestand dus niet!    </string>
     <string name="title_edit_signature_delete">Handtekening verwijderen?</string>
     <string name="title_answer_define_name">Naam</string>
@@ -1992,7 +2006,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_hint_message_actions">Veeg naar links om weg te gooien; Veeg naar rechts om te archiveren (indien beschikbaar); De veegacties kunnen worden geconfigureerd in de accountinstellingen</string>
     <string name="title_hint_outbox">U kunt naar links of rechts vegen om het verzenden te annuleren</string>
     <string name="title_hint_message_selection">Druk lang op een bericht om meerdere berichten te selecteren; Hou vast en veeg omhoog of omlaag om meer berichten te selecteren</string>
-    <string name="title_hint_message_junk">        Een mailclient toont in principe berichten op een mailserver.
+    <string name="title_hint_message_junk">
+        Een mailclient toont in principe berichten op een mailserver.
         Een mailserver is verantwoordelijk voor het filteren van spam, niet een mailclient.
         Als u veel spam ontvangt, neem dan a.u.b. contact op met uw mailprovider en geef de app niet de schuld!
     </string>
@@ -2005,7 +2020,8 @@ Het blokkeren van een afzenderdomein maakt gebruik van filterregels, wat een pro
     <string name="title_hint_junk">Spamfiltering zou door de e-mailserver gedaan moeten worden en kan niet op een apparaat met beperkte mogelijkheden betrouwbaar gedaan worden.</string>
     <string name="title_hint_junk_learn">Door berichten te verplaatsen van en naar de spam-map \"leert\" de e-mailserver wat spam is</string>
     <string name="title_hint_contact_actions">Druk lang voor opties</string>
-    <string name="title_hint_eml">Dit is een samenvatting van de inhoud van een ruw berichtenbestand.
+    <string name="title_hint_eml">
+Dit is een samenvatting van de inhoud van een ruw berichtenbestand.
  U kunt de knop rechtsonder gebruiken om het bericht op te slaan in het postvak IN om alle inhoud te bekijken.    </string>
     <string name="title_open_link">Koppeling openen</string>
     <string name="title_image_link">Afbeeldingskoppeling</string>

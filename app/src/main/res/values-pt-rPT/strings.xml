@@ -15,7 +15,8 @@
     <string name="app_updated">Última atualização: %1$s</string>
     <string name="app_download">Descarregada via: %1$s</string>
     <string name="app_error">A maioria das mensagens de erro tem causas externas (rede, servidor, etc.) ou é causada por uma configuração incorreta, muitas vezes fora do padrão. Uma avaliação negativa não resolve estes problemas. Solicitar apoio é quase sempre mais eficaz.</string>
-    <string name="app_motd">        Com o Android 14/15 beta, notificações de \'App not responding\' ocorrem ocasionalmente.
+    <string name="app_motd">
+        Com o Android 14/15 beta, notificações de \'App not responding\' ocorrem ocasionalmente.
         A Google está trabalhando numa correção.
         Por favor, não culpe a aplicação por este problema do Android!
     </string>
@@ -86,7 +87,8 @@
     </plurals>
     <string name="title_ask_spam_who">Definir a mensagem de %1$s como indesejada?</string>
     <string name="title_junk_hint">O seu fornecedor de correio electrónico é responsável por filtrar o ‘spam’. Uma aplicação de correio eletrónico não possui toda a informação necessária para o fazer de forma confiável.</string>
-    <string name="title_junk_pop_hint">        Mensagens de remetentes bloqueados não serão transferidas.
+    <string name="title_junk_pop_hint">
+        Mensagens de remetentes bloqueados não serão transferidas.
         Se \"Deixar as mensagens no servidor\" não estiver activado, essas mensagens serão perdidas permanentemente!
     </string>
     <string name="title_block">Bloquear %1$s</string>
@@ -203,7 +205,8 @@
     <string name="title_setup_office_auth">O erro \'AUTHENTICATE failed\' pode ser causado pelo protocolo IMAP/SMTP ter sido desactivado pelo administrador do sistema</string>
     <string name="title_setup_office_auth_5_7_3">Tente o assistente de configuração rápida de \'Outro fornecedor\'.</string>
     <string name="title_setup_office_auth_5_7_139">Por favor, tente o assistente de configuração rápida \'Outlook/Hotmail/Live\'.</string>
-    <string name="title_setup_office_not_connected">O erro \'User is authenticated but not connected\' significa principalmente que o IMAP está desativado.
+    <string name="title_setup_office_not_connected">
+O erro \'User is authenticated but not connected\' significa principalmente que o IMAP está desativado.
         No caso de uma conta particular Outlook, por favor vá ao site do Outlook, clique no ícone das configurações no canto superior direito, selecionar \'Email\', depois selecionar \'Encaminhamento e IMAP\', na secção \'POP e IMAP\' ativar \'Permitir que dispositivos e apps utilizem IMAP\'.
         No caso de uma conta empresarial, estudante, etc, por favor, contactar o administrador de sistema do servidor de email.    </string>
     <string name="title_setup_oauth_rationale">Autorizar o acesso à sua conta %1$s</string>
@@ -277,7 +280,8 @@
     <string name="title_setup_close">Fechar configurações</string>
     <string name="title_setup_export">Exportar definições</string>
     <string name="title_setup_import">Importar definições</string>
-    <string name="title_setup_export_remark">        Como o ficheiro das definições contém todas as configurações e informações das contas, é encriptado com uma palavra-passe.
+    <string name="title_setup_export_remark">
+        Como o ficheiro das definições contém todas as configurações e informações das contas, é encriptado com uma palavra-passe.
         Esta palavra-passe é necessária para importar novamente as definições, por isso, não a esqueça!
     </string>
     <string name="title_setup_export_do">O ficheiro de exportação conterá todas as configurações e dados, mas nenhuma mensagem ou imagem referenciada nas assinaturas</string>
@@ -346,12 +350,14 @@
     <string name="title_advanced_hint_title">Mais opções avançadas</string>
     <string name="title_advanced_hint_message">Está a navegar para as opções mais avançadas.        Todas as opções têm valores padrão geralmente utilizados que podem ser alterados se tiver uma preferência diferente.
     </string>
-    <string name="title_advanced_hint_configure">Não precisa de estar aqui para configurar uma conta. Utilize o botão do assistente de configuração rápida para isso.
+    <string name="title_advanced_hint_configure">
+Não precisa de estar aqui para configurar uma conta. Utilize o botão do assistente de configuração rápida para isso.
 O assistente de configuração rápida funciona quase sempre, mas se não funcionar, pode utilizar a configuração manual clássica, um pouco abaixo do botão do assistente.
     </string>
     <string name="title_advanced_hint_remark">        As opções são categorizadas por separador, divididas em secções, organizadas por aspeto ou uso, e pesquisáveis.
     </string>
-    <string name="title_advanced_hint_options">Não precisará da maioria das opções e, como algumas opções são bastante específicas, 
+    <string name="title_advanced_hint_options">
+Não precisará da maioria das opções e, como algumas opções são bastante específicas, 
      é compreensível se o funcionamento de todas as opções não seja imediatamente claro.
          Por favor, não deixe uma crítica negativa apenas pelo número de opções ou por não compreender todas as opções de imediato.
          Todas as opções são úteis para mais do que algumas pessoas, mas talvez não para si (ainda).    </string>
@@ -755,7 +761,8 @@ O assistente de configuração rápida funciona quase sempre, mas se não funcio
     <string name="title_advanced_mnemonic_hint">A recepção de qualquer correio electrónico com as palavras abaixo indicadas no assunto irá, de forma automática e imediata, eliminar todos os dados da aplicação</string>
     <string name="title_advanced_clear_all">Eliminar os dados da aplicação</string>
     <string name="title_advanced_clear_all_remark">Os dados da aplicação serão definitivamente eliminados!</string>
-    <string name="title_advanced_default_encryption">        O método de encriptação por defeito (PGP ou S/MIME) vai ser guardado por identidade depois de enviar um email assinado ou encriptado.
+    <string name="title_advanced_default_encryption">
+        O método de encriptação por defeito (PGP ou S/MIME) vai ser guardado por identidade depois de enviar um email assinado ou encriptado.
         O tipo de encriptação pode ser selecionado antes do envio na caixa de diálogo das opções de envio (pressão longa no botão de enviar).
     </string>
     <string name="title_advanced_sign_default">Assinar por padrão</string>
@@ -781,7 +788,8 @@ O assistente de configuração rápida funciona quase sempre, mas se não funcio
     <string name="title_advanced_import_key">Importar chave privada</string>
     <string name="title_advanced_manage_keys">Gerir chaves privadas</string>
     <string name="title_advanced_ca">Certificados CA instalados</string>
-    <string name="title_advanced_manage_keys_hint">        Isto abrirá as configurações de segurança do Android.
+    <string name="title_advanced_manage_keys_hint">
+        Isto abrirá as configurações de segurança do Android.
         As chaves e os certificados geralmente podem ser encontrados em Dados biométricos e segurança > Outras definições de segurança.
     </string>
     <string name="title_advanced_power_menu">Adicionar às acções disponíveis no menu de encerramento</string>
@@ -921,7 +929,8 @@ O assistente de configuração rápida funciona quase sempre, mas se não funcio
     <string name="title_advanced_inline_hint">Imagens embutidas estão incluídas na mensagem</string>
     <string name="compressed">O conteúdo dos ficheiros comprimidos (%1$s) com mais de %2$s ficheiros ou com ficheiros maiores do que %3$s não será mostrado</string>
     <string name="title_advanced_parse_classes_hint">Mostrará as mensagens com maior precisão, mas com um possível atraso</string>
-    <string name="title_advanced_default_folder_hint">        O dispositivo Android pode solicitar permissão para aceder à pasta selecionada, mesmo que a aplicação não precise dela.
+    <string name="title_advanced_default_folder_hint">
+        O dispositivo Android pode solicitar permissão para aceder à pasta selecionada, mesmo que a aplicação não precise dela.
         Pode cancelar o diálogo de seleção para restaurar a pasta padrão (geralmente a pasta \"Transferir\").
     </string>
     <string name="title_advanced_restore_on_launch_hint">Restaurar o último estado da aplicação, se possível, quando reiniciado através do ícone do iniciador</string>
@@ -1019,6 +1028,7 @@ O assistente de configuração rápida funciona quase sempre, mas se não funcio
     <string name="title_account_gmail">Para sincronização fiável de uma conta do Gmail, o assistente de configuração rápida do Gmail deve ser usado sempre que possível</string>
     <string name="title_domain">Nome do domínio</string>
     <string name="title_autoconfig">Obter configurações</string>
+    <string name="title_lan_required">Permissões de rede local necessárias</string>
     <string name="title_aliases">Pseudónimos</string>
     <string name="title_provider">Fornecedor</string>
     <string name="title_custom">Personalizado</string>
@@ -1034,6 +1044,7 @@ O assistente de configuração rápida funciona quase sempre, mas se não funcio
     <string name="title_notify_remark">Pode activar isto para ter notificações de uma conta em específico</string>
     <string name="title_port">Número da porta</string>
     <string name="title_user">Nome de utilizador</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">Geralmente, o endereço de e-mail principal</string>
     <string name="title_password">Palavra-passe</string>
     <string name="title_password_storage">Como são armazenadas as palavras-passe?</string>
     <string name="title_case_sensitive">Nomes de utilizador e palavras-passe habitualmente diferenciam maiúsculas de minúsculas</string>
@@ -1056,7 +1067,8 @@ O assistente de configuração rápida funciona quase sempre, mas se não funcio
     <string name="title_leave_on_device_hint">Quando mensagens são apagadas do servidor, as mensagens permanecem no dispositivo</string>
     <string name="title_max_messages">Número máximo de mensagens a serem transferidas (espaço em branco para todas)</string>
     <string name="title_max_messages_keep">Este é o número máximo de mensagens que serão mantidas no dispositivo</string>
-    <string name="title_max_messages_remark">        Insira um número positivo para baixar as mensagens no final (mais comum)
+    <string name="title_max_messages_remark">
+        Insira um número positivo para baixar as mensagens no final (mais comum)
         e um número negativo para baixar as mensagens no início (menos comum)
     </string>
     <string name="title_keep_poll_interval">Intervalo de verificação (em minutos)</string>
@@ -1120,7 +1132,8 @@ O assistente de configuração rápida funciona quase sempre, mas se não funcio
     <string name="title_service_port">Por favor, verifique o número da porta</string>
     <string name="title_service_protocol">Por favor, verifique o protocolo (SSL/TLS ou STARTTLS)</string>
     <string name="title_service_error10">Esta conta precisa de ser autenticada novamente, o que pode ser feito através do assistente de configuração rápida</string>
-    <string name="title_certificate_error">Devido às políticas da Play Store, não é mais possível suportar ligações inseguras a servidores de e-mail com problemas nos certificados para a versão do FairEmail distribuída na Play Store.
+    <string name="title_certificate_error">
+Devido às políticas da Play Store, não é mais possível suportar ligações inseguras a servidores de e-mail com problemas nos certificados para a versão do FairEmail distribuída na Play Store.
 Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a informação de erro, acima, pode ajudá-los a resolver o problema.
     </string>
     <string name="title_advanced_browse">Procurar mensagens no servidor</string>
@@ -1129,7 +1142,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_synchronize_subfolders">Subpastas</string>
     <string name="title_synchronize_more">Obter mais mensagens</string>
     <string name="title_synchronize_more_hint">Trata-se de uma transferência isolada de antigas mensagens, ou seja, não irá provocar uma utilização mais elevada de bateria no dia-a-dia</string>
-    <string name="title_synchronize_more_hint2">        As mensagens serão obtidas tão rapidamente quanto o servidor de correio electrónico possa entregá-las e armazenadas tão rapidamente quanto o dispositivo possa armazená-las.
+    <string name="title_synchronize_more_hint2">
+        As mensagens serão obtidas tão rapidamente quanto o servidor de correio electrónico possa entregá-las e armazenadas tão rapidamente quanto o dispositivo possa armazená-las.
         Habitualmente a limitação advém da velocidade do espaço de armazenamento interno do dispositivo.
     </string>
     <string name="title_synchronize_more_hint3">Por favor, tenha em consideração que armazenar várias mensagens (dez mil ou mais) no seu dispositivo pode causar atrasos devido ao espaço de armazenamento interno não ser perpetuamente rápido.</string>
@@ -1222,7 +1236,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_auto_delete">Eliminar mensagens antigas permanentemente de forma automática</string>
     <string name="title_auto_delete_hint">Mensagens antigas são as mensagens que deixam de estar guardadas no dispositivo</string>
     <string name="title_auto_delete_archive_hint">A exclusão da pasta de arquivos nem sempre é permitida pelo servidor de email</string>
-    <string name="title_inbox_root_hint">        Alguns fornecedores solicitam que as novas pastas sejam criadas sob a caixa de entrada.
+    <string name="title_inbox_root_hint">
+        Alguns fornecedores solicitam que as novas pastas sejam criadas sob a caixa de entrada.
         Nesse caso, pode premir sem soltar a caixa de entrada na lista de pastas e seleccionar \'Criar uma subpasta\'.
     </string>
     <string name="title_folder_name_missing">Nome da pasta em falta</string>
@@ -1326,7 +1341,7 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_quick_actions_snooze">Adiar</string>
     <string name="title_quick_actions_clear">Limpar seleção após ação</string>
     <string name="title_trash">Lixo</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Conversas na reciclagem</string>
+    <string name="title_trash_conversation">Conversas na reciclagem</string>
     <string name="title_trash_selection">Seleção de reciclagem</string>
     <string name="title_copy">Copiar &#8230;</string>
     <string name="title_copy_to">Copiar para &#8230;</string>
@@ -1351,7 +1366,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_report_spam">Tratar como spam</string>
     <string name="title_delete_permanently">Eliminar permanentemente</string>
     <string name="title_delete_attachments">Apagar anexos</string>
-    <string name="title_delete_attachments_remark">        Para apagar anexos, uma nova mensagem tem de ser adicionada e a mensagem antiga tem de ser apagada.
+    <string name="title_delete_attachments_remark">
+        Para apagar anexos, uma nova mensagem tem de ser adicionada e a mensagem antiga tem de ser apagada.
         Como isso pode falhar, a mensagem antiga será movida para o lixo.
     </string>
     <string name="title_snooze">Adiar &#8230;</string>
@@ -1426,7 +1442,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_ask_reporting">Enviar relatórios de erro?</string>
     <string name="title_reporting_why">A comunicação de erros ajudará a melhorar o FairEmail</string>
     <string name="title_ask_review">Por favor, avalie o FairEmail</string>
-    <string name="title_ask_review_rationale">        Está a utilizar o FairEmail há algum tempo.
+    <string name="title_ask_review_rationale">
+        Está a utilizar o FairEmail há algum tempo.
         Gostaríamos que avaliasse o FairEmail na Play Store.
     </string>
     <string name="title_need_help">Preciso de ajuda</string>
@@ -1434,7 +1451,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_third_party">Está a usar uma versão de proveniência externa</string>
     <string name="title_expand_warning">Expandir esta mensagem fará a transferência de %1$s</string>
     <string name="title_download_message">A transferir &#8230;</string>
-    <string name="title_reformatted">        Esta é a visualização segura de mensagem reformatada.
+    <string name="title_reformatted">
+        Esta é a visualização segura de mensagem reformatada.
         Pode tocar no ícone &#x26F6; para ver a mensagem original menos segura e ocultar esta mensagem.
         A reformatação de mensagens leva algum tempo, dependendo do tamanho da mensagem e da velocidade do seu dispositivo.
         Às vezes a mensagem original deve ser visualizada para ver códigos QR.
@@ -1641,7 +1659,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_signature_store">Guardar</string>
     <string name="title_search">Pesquisar</string>
     <string name="title_search_for_hint">Introduzir texto</string>
-    <string name="title_search_hint">        Inicialmente, a procura é efetuada no dispositivo.
+    <string name="title_search_hint">
+        Inicialmente, a procura é efetuada no dispositivo.
         Para procurar também no servidor, clique no botão \'procurar novamente\'.
     </string>
     <string name="title_search_hint_fts">Ao usar o índice de pesquisa: apenas palavras inteiras</string>
@@ -1739,7 +1758,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_edit_signature_remark">Embora o Android não consiga mostrar todo o conteúdo HTML, a mensagem será enviada em HTML</string>
     <string name="title_edit_signature_text">Texto da assinatura</string>
     <string name="title_edit_signature_image">Inserir imagem</string>
-    <string name="title_edit_signature_image_hint">        Quando enviar uma mensagem, a imagem é copiada para a mensagem a partir do local seleccionado.
+    <string name="title_edit_signature_image_hint">
+        Quando enviar uma mensagem, a imagem é copiada para a mensagem a partir do local seleccionado.
         Por isso, não elimine o ficheiro da imagem!
     </string>
     <string name="title_edit_signature_delete">Apagar assinatura?</string>
@@ -2005,7 +2025,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_hint_message_actions">Deslize para a esquerda para o lixo; Deslize para a direita para o arquivo (se disponível); As acções de deslizar pode ser configuradas nas definições de conta</string>
     <string name="title_hint_outbox">Deslize para a esquerda ou direita para cancelar o envio</string>
     <string name="title_hint_message_selection">Seleccione mensagens ao tocar prolongadamente numa mensagem; Para seleccionar várias mensagens de seguida, toque sem soltar numa mensagem e deslize para cima ou para baixo</string>
-    <string name="title_hint_message_junk">        Um cliente de e-mail simplesmente, apresenta mensagens de um servidor de e-mail.
+    <string name="title_hint_message_junk">
+        Um cliente de e-mail simplesmente, apresenta mensagens de um servidor de e-mail.
         Um servidor de e-mail é responsável por filtrar spam, não o cliente de e-mail.
         Se receber muito spam, entre em contato com o seu fornecedor de e-mail e não responsabilize a aplicação!
     </string>
@@ -2018,7 +2039,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_hint_junk">A filtragem de spam deve ser feita pelo servidor de correio electrónico e não pode ser feita de forma confiável num dispositivo ligado a uma bateria e com recursos limitados.</string>
     <string name="title_hint_junk_learn">Ao mover as mensagens para e a partir da pasta de spam, o servidor de correio electrónico \"aprende\" o que é spam</string>
     <string name="title_hint_contact_actions">Pressione longo para opções</string>
-    <string name="title_hint_eml">Este é um resumo do conteúdo de um ficheiro de mensagem em bruto.
+    <string name="title_hint_eml">
+Este é um resumo do conteúdo de um ficheiro de mensagem em bruto.
         Pode utilizar o botão inferior direito para guardar a mensagem na caixa de entrada e visualizar todo o conteúdo.
     </string>
     <string name="title_open_link">Abrir ligação</string>
@@ -2109,7 +2131,8 @@ Portanto, este problema só pode ser resolvido pelo seu provedor de e-mail - a i
     <string name="title_pro_purchase">Comprar</string>
     <string name="title_pro_one_time">%1$s (compra única)</string>
     <string name="title_pro_no_play">A aplicação Play Store não foi encontrada</string>
-    <string name="title_pro_info">        O desenvolvimento de FairEmail ocupou, literalmente, milhares de horas. No entanto, a maioria das funcionalidades é gratuita.
+    <string name="title_pro_info">
+        O desenvolvimento de FairEmail ocupou, literalmente, milhares de horas. No entanto, a maioria das funcionalidades é gratuita.
         O FairEmail leva a sério a sua privacidade e não mostra publicidade nem colecta dados para estatística ou monitorização para ganhar dinheiro com isso.
         Para manter e suportar o FairEmail a longo prazo, algumas funcionalidades avançadas e de personalização não são gratuitas.
         O FairEmail mostra uma pequena mensagem a recorda-lo disto, que será removida caso adquira as funcionalidades pro.

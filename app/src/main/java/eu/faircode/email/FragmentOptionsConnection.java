@@ -513,13 +513,16 @@ public class FragmentOptionsConnection extends FragmentBase implements SharedPre
             }
         });
 
-        btnLocalNetwork.setVisibility(BuildConfig.PLAY_STORE_RELEASE || Build.VERSION.SDK_INT < Build.VERSION_CODES.CINNAMON_BUN
+        btnLocalNetwork.setVisibility(Build.VERSION.SDK_INT < Build.VERSION_CODES.CINNAMON_BUN
                 ? View.GONE : View.VISIBLE);
         btnLocalNetwork.setEnabled(!Helper.hasPermission(getContext(), Manifest.permission.ACCESS_LOCAL_NETWORK));
         btnLocalNetwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK}, REQUEST_PERMISSIONS);
+                if (BuildConfig.PLAY_STORE_RELEASE)
+                    Helper.viewFAQ(v.getContext(), 210);
+                else
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK}, REQUEST_PERMISSIONS);
             }
         });
 

@@ -15,7 +15,8 @@
     <string name="app_updated">最終更新: %1$s</string>
     <string name="app_download">ダウンロード元: %1$s</string>
     <string name="app_error">ほとんどのエラーメッセージは、外的要因 (ネットワーク、サーバー) または非標準などの誤った設定によるものです。低評価のレビューをつけてもこのような問題は解決しません。まずはサポートに問い合わせてみてください。</string>
-    <string name="app_motd">        Android 14/15 beta では「アプリが応答しません」という通知がときどき表示されます。
+    <string name="app_motd">
+        Android 14/15 beta では「アプリが応答しません」という通知がときどき表示されます。
         Google が修正に取り組んでいます。
         Android 側の問題のため、アプリを非難しないでください！
     </string>
@@ -75,14 +76,16 @@
     </plurals>
     <string name="title_ask_spam_who">%1$s からのメッセージを迷惑メールとして扱いますか？</string>
     <string name="title_junk_hint">迷惑メールフィルタリングはメールプロバイダーが行うべきものです。メールクライアントは正しく迷惑メールを区別するために必要な情報を取得できません。</string>
-    <string name="title_junk_pop_hint">        ブロックした差出人からのメッセージはダウンロードされません。
+    <string name="title_junk_pop_hint">
+        ブロックした差出人からのメッセージはダウンロードされません。
         「サーバーにメッセージを残す」が有効になっていない場合、これらのメッセージは永久に失われます！
     </string>
     <string name="title_block">%1$s をブロック</string>
     <string name="title_block_sender">差出人をブロック</string>
     <string name="title_block_sender_domain">ドメイン \'%1$s\' をブロック</string>
     <string name="title_block_sender_remark">ブロックすると、自動で迷惑メールフォルダーに移動します</string>
-    <string name="title_block_sender_hint">        差出人のブロックは無料の機能です。
+    <string name="title_block_sender_hint">
+        差出人のブロックは無料の機能です。
         差出人のドメインをブロックするにはフィルタールールを使用します。これはプロの機能です。
     </string>
     <string name="title_blocked_senders">ブロックした差出人</string>
@@ -189,7 +192,8 @@
     <string name="title_setup_office_auth">「AUTHENTICATE failed」というエラーは、システム管理者によって IMAP/SMTP が無効にされていることが原因である可能性があります</string>
     <string name="title_setup_office_auth_5_7_3">クイック セットアップ ウィザードの「その他のプロバイダー」をお試しください。</string>
     <string name="title_setup_office_auth_5_7_139">「Outlook/Hotmail/Live」のセットアップウィザードをお試しください。</string>
-    <string name="title_setup_office_not_connected">        エラー「User is authenticated but not connected」が表示される場合、ほとんどは IMAP が無効になっています。
+    <string name="title_setup_office_not_connected">
+        エラー「User is authenticated but not connected」が表示される場合、ほとんどは IMAP が無効になっています。
         個人向け Outlook アカウントでは、Outlook のウェブサイトの右上の設定から [メール] > [転送と IMAP] > [POP と IMAP] で「デバイスやアプリで IMAP の使用する」を有効にしてください。
         法人向けアカウントの場合は、メールサーバーのシステム管理者に確認してください。
     </string>
@@ -262,7 +266,8 @@
     <string name="title_setup_close">設定を閉じる</string>
     <string name="title_setup_export">設定をエクスポートする</string>
     <string name="title_setup_import">設定をインポートする</string>
-    <string name="title_setup_export_remark">        設定ファイルにはすべての設定とアカウント情報が保存され、パスワードで暗号化されます。
+    <string name="title_setup_export_remark">
+        設定ファイルにはすべての設定とアカウント情報が保存され、パスワードで暗号化されます。
         設定をインポートするにはパスワードが必要です。パスワードは絶対に忘れないでください！
     </string>
     <string name="title_setup_export_do">エクスポートファイルにはすべての設定とデータが含まれますが、署名で参照されるメッセージや画像は含まれません</string>
@@ -329,15 +334,19 @@
     <string name="title_check_outlook_oauth">あなたの Outlook アカウントは 2024 年 9 月 16 日以降も引き続き利用できます</string>
     <string name="title_check_outlook_password">一部の Outlook/Hotmail/Live アカウントは、2024 年 9 月 16 日以降に停止します。</string>
     <string name="title_advanced_hint_title">詳細設定</string>
-    <string name="title_advanced_hint_message">        詳細設定に移動しています。
+    <string name="title_advanced_hint_message">
+        詳細設定に移動しています。
         初期状態では特に変更しなくてもアプリを使用できる一般的な設定になっています。
     </string>
-    <string name="title_advanced_hint_configure">        アカウントの設定を行うために、わざわざこの画面にいる必要はありません。「クイックセットアップウィザード」ボタンを使用してください。
+    <string name="title_advanced_hint_configure">
+        アカウントの設定を行うために、わざわざこの画面にいる必要はありません。「クイックセットアップウィザード」ボタンを使用してください。
         ほとんどの場合、このウィザードで問題なく設定できますが、うまくいかない場合は、ウィザードボタンの少し下にある「手動セットアップ」をご利用ください。
     </string>
-    <string name="title_advanced_hint_remark">        設定は、外観や操作などのカテゴリーごとにタブに分類され、さらにセクションに分けられています。検索もできます。
+    <string name="title_advanced_hint_remark">
+        設定は、外観や操作などのカテゴリーごとにタブに分類され、さらにセクションに分けられています。検索もできます。
     </string>
-    <string name="title_advanced_hint_options">        あなたにはほとんどのオプションは必要ではなく、いくつかはあまりに特殊すぎると感じるかもしれません。
+    <string name="title_advanced_hint_options">
+        あなたにはほとんどのオプションは必要ではなく、いくつかはあまりに特殊すぎると感じるかもしれません。
         それぞれのオプションがどのように機能するか、すぐにはわからないことは理解できます。
         しかし、オプションの数を見ただけでや、わからないオプションがあるという理由で低評価のレビューを残すのはお控えください。
         すべてのオプションは (まだあなたの役には立たなくても) 誰かにとって役立つものです。
@@ -741,7 +750,8 @@
     <string name="title_advanced_mnemonic_hint">件名に以下の単語を含むメールを受信すると、自動でアプリのデータを削除します</string>
     <string name="title_advanced_clear_all">アプリのデータを削除</string>
     <string name="title_advanced_clear_all_remark">削除したアプリのデータは元に戻せません！</string>
-    <string name="title_advanced_default_encryption">        デフォルトの暗号化方法 (PGP または S/MIME) はデジタル署名や暗号化されたメッセージの送信後にユーザー ID ごとに保存されます。
+    <string name="title_advanced_default_encryption">
+        デフォルトの暗号化方法 (PGP または S/MIME) はデジタル署名や暗号化されたメッセージの送信後にユーザー ID ごとに保存されます。
         暗号化方法は、(送信ボタンを長押しすると表示される) 送信ダイアログボックスで送信前に選択できます。
     </string>
     <string name="title_advanced_sign_default">デフォルトでデジタル署名する</string>
@@ -907,7 +917,8 @@
     <string name="title_advanced_inline_hint">インライン画像はメッセージに含まれる画像のことです</string>
     <string name="compressed">%2$s 件以上のファイルまたは %3$s 以上を含むときは、圧縮ファイル (%1$s) の内容は表示されません</string>
     <string name="title_advanced_parse_classes_hint">メッセージをより正確に表示しますが、遅延が発生する場合があります</string>
-    <string name="title_advanced_default_folder_hint">        Android が選択されたフォルダーへのアクセス権限について、アプリが必要としていないのに確認する場合があります。
+    <string name="title_advanced_default_folder_hint">
+        Android が選択されたフォルダーへのアクセス権限について、アプリが必要としていないのに確認する場合があります。
         選択ダイアログをキャンセルしてデフォルトのフォルダー (ほとんどは 「Download フォルダー」) を復元できます。
     </string>
     <string name="title_advanced_restore_on_launch_hint">ランチャーアイコンからアプリを再起動したとき、直前の状態へ復元を試みます</string>
@@ -1042,7 +1053,8 @@
     <string name="title_leave_on_device_hint">メッセージがサーバーから削除されても、メッセージは端末に残ります</string>
     <string name="title_max_messages">ダウンロードするメッセージ件数の上限 (空白にするとすべてダウンロードします)</string>
     <string name="title_max_messages_keep">これは、端末に保存されるメッセージ件数の上限です</string>
-    <string name="title_max_messages_remark">        正の数を入力すると、最後からメッセージをダウンロードします (推奨)
+    <string name="title_max_messages_remark">
+        正の数を入力すると、最後からメッセージをダウンロードします (推奨)
         負の数を入力すると、最初からメッセージをダウンロードします (一般的でない)
     </string>
     <string name="title_keep_poll_interval">ポーリング間隔 (分)</string>
@@ -1106,7 +1118,8 @@
     <string name="title_service_port">ポート番号をもう一度確認してください</string>
     <string name="title_service_protocol">プロトコル (SSL/TLS または STARTLS) をもう一度確認してください</string>
     <string name="title_service_error10">このアカウントをクイック設定ウィザードからもう一度認証してください</string>
-    <string name="title_certificate_error">        Google の Play ストアポリシーにより、Play ストア版の FairEmail では、証明書に問題があるメールサーバーとの安全でない接続ができなくなりました。
+    <string name="title_certificate_error">
+        Google の Play ストアポリシーにより、Play ストア版の FairEmail では、証明書に問題があるメールサーバーとの安全でない接続ができなくなりました。
         この問題を解決できるのは、あなたがお使いのメールプロバイダーのみです。上のエラー情報は、プロバイダーの問題解決に役立つかもしれません。
     </string>
     <string name="title_advanced_browse">サーバー上のメッセージを閲覧する</string>
@@ -1115,7 +1128,8 @@
     <string name="title_synchronize_subfolders">サブフォルダー</string>
     <string name="title_synchronize_more">さらにメッセージを取得</string>
     <string name="title_synchronize_more_hint">これにより、古いメッセージが 1 度だけダウンロードされます。日常的に使用されるバッテリー使用量が増加することはありません</string>
-    <string name="title_synchronize_more_hint2">        メッセージはメールサーバーの配信と同時にフェッチされ、端末に可及的速やかに保存・インデックスされます。
+    <string name="title_synchronize_more_hint2">
+        メッセージはメールサーバーの配信と同時にフェッチされ、端末に可及的速やかに保存・インデックスされます。
         端末の内部ストレージの速度はしばしば制約となります。
     </string>
     <string name="title_synchronize_more_hint3">多くのメッセージ (1 万通以上) を端末に保存すると、内部ストレージ容量の制約により遅延を引き起こす可能性がありますのでご注意ください。</string>
@@ -1336,7 +1350,8 @@
     <string name="title_report_spam">迷惑メールとして扱う</string>
     <string name="title_delete_permanently">完全に削除</string>
     <string name="title_delete_attachments">添付ファイルを削除</string>
-    <string name="title_delete_attachments_remark">        添付ファイルを削除すると、新規にメッセージが追加されて、古いメッセージが削除されます。
+    <string name="title_delete_attachments_remark">
+        添付ファイルを削除すると、新規にメッセージが追加されて、古いメッセージが削除されます。
         失敗すると、古いメッセージはごみ箱に移動されます。
     </string>
     <string name="title_snooze">スヌーズ&#8230;</string>
@@ -1419,7 +1434,8 @@
     <string name="title_third_party">サードパーティー版を使用しています</string>
     <string name="title_expand_warning">このメッセージを展開すると、%1$s がダウンロードされます</string>
     <string name="title_download_message">ダウンロードしています&#8230;</string>
-    <string name="title_reformatted">        これは、安全のために再フォーマットされたメッセージ表示です。
+    <string name="title_reformatted">
+        これは、安全のために再フォーマットされたメッセージ表示です。
         &#x26F6; アイコンをタップすると、安全性の低い元のメッセージを表示でき、このメッセージは非表示になります。
         メッセージの再フォーマットには、メッセージのサイズや端末の処理速度に応じて時間がかかります。
         QR コードを表示するときなど、元のメッセージを表示する必要がある場合もあります。
@@ -1626,7 +1642,8 @@
     <string name="title_signature_store">保存</string>
     <string name="title_search">検索</string>
     <string name="title_search_for_hint">テキストを入力</string>
-    <string name="title_search_hint">       はじめに、お使いの端末に保存されているメッセージを検索します。
+    <string name="title_search_hint">
+       はじめに、お使いの端末に保存されているメッセージを検索します。
         サーバーも検索するには「もう一度検索」ボタンをタップします
     </string>
     <string name="title_search_hint_fts">検索インデックスを使用: 単語全体のみ検索</string>
@@ -1723,7 +1740,8 @@
     <string name="title_edit_signature_remark">Android はすべての HTML を表示することはできませんが、そのまま送信されます</string>
     <string name="title_edit_signature_text">署名テキスト</string>
     <string name="title_edit_signature_image">画像を挿入</string>
-    <string name="title_edit_signature_image_hint">        毎回メッセージを送信するときに、画像を選択した時点の保存場所からコピーします。
+    <string name="title_edit_signature_image_hint">
+        毎回メッセージを送信するときに、画像を選択した時点の保存場所からコピーします。
         画像ファイルは削除しないでください！
     </string>
     <string name="title_edit_signature_delete">署名を削除しますか？</string>
@@ -1989,7 +2007,8 @@
     <string name="title_hint_message_actions">左にスワイプしてごみ箱に移動し、右にスワイプしてアーカイブ (利用可能な場合) します。スワイプ操作はアカウント設定で変更できます</string>
     <string name="title_hint_outbox">左右どちらかにスワイプすると、送信をキャンセルします</string>
     <string name="title_hint_message_selection">メッセージを長押しして、複数のメッセージを選択します。そのまま上または下にスワイプすると、まとめてメッセージを選択できます</string>
-    <string name="title_hint_message_junk">        メールクライアントは、基本的にメールサーバーにあるメッセージをそのまま表示しています。
+    <string name="title_hint_message_junk">
+        メールクライアントは、基本的にメールサーバーにあるメッセージをそのまま表示しています。
         メールクライアントではなく、メールサーバーが迷惑メールをフィルターする責任を負っています。
         もし迷惑メールの量が多い場合はアプリを非難するのではなく、あなたのメールプロバイダーに連絡してください。
     </string>
@@ -2002,7 +2021,8 @@
     <string name="title_hint_junk">迷惑メールフィルタリングはメールサーバーで実行すべきもので、機能に制限があるバッテリー駆動のモバイル端末では十分に実行できません。</string>
     <string name="title_hint_junk_learn">迷惑メールフォルダーにメッセージを移動することで、メールサーバーは何が迷惑メールかを学習します</string>
     <string name="title_hint_contact_actions">長押ししてオプションへ</string>
-    <string name="title_hint_eml">        これは元のメッセージファイルの内容の要約です。
+    <string name="title_hint_eml">
+        これは元のメッセージファイルの内容の要約です。
         右下のボタンからメッセージを受信トレイに保存すると、すべてのコンテンツを表示できます。
     </string>
     <string name="title_open_link">リンクを開く</string>

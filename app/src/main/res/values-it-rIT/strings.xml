@@ -15,7 +15,8 @@
     <string name="app_updated">Ultimo aggiornamento: %1$s</string>
     <string name="app_download">Scaricata da: %1$s</string>
     <string name="app_error">La maggior parte dei messaggi di errore hanno cause esterne (rete, server, ecc.) o sono causati da una configurazione non corretta, spesso non standard. Una cattiva recensione non risolve tali problemi. Richiedere il supporto è quasi sempre più efficace.</string>
-    <string name="app_motd">        Con Android 14/15 beta può capitare di vedere la notifica «L\'app non risponde».
+    <string name="app_motd">
+        Con Android 14/15 beta può capitare di vedere la notifica «L\'app non risponde».
         Google sta lavorando su una correzione.
         Non è responsabilità dell\'app questo problema Android!
     </string>
@@ -86,14 +87,16 @@
     </plurals>
     <string name="title_ask_spam_who">Trattare il messaggio da %1$s come spam?</string>
     <string name="title_junk_hint">Il provider della propria email è responsabile del filtraggio dello spam. Un\'app per le email non ha a disposizione tutti i dati necessari per farlo in modo affidabile.</string>
-    <string name="title_junk_pop_hint">        I messaggi dei mittenti bloccati non saranno scaricati.
+    <string name="title_junk_pop_hint">
+        I messaggi dei mittenti bloccati non saranno scaricati.
         Se l\'opzione «Lascia i messaggi sul server» non è abilitata, questi messaggi saranno persi definitivamente!
     </string>
     <string name="title_block">Blocca %1$s</string>
     <string name="title_block_sender">Blocca il mittente</string>
     <string name="title_block_sender_domain">Blocca il dominio «%1$s»</string>
     <string name="title_block_sender_remark">Bloccare significa spostare automaticamente nella cartella di spam</string>
-    <string name="title_block_sender_hint">        Il blocco di un mittente è una funzionalità gratuita.
+    <string name="title_block_sender_hint">
+        Il blocco di un mittente è una funzionalità gratuita.
         Il blocco del dominio di un mittente usa le regole del filtro, una funzionalità pro.
     </string>
     <string name="title_blocked_senders">Mittenti bloccati</string>
@@ -276,7 +279,8 @@
     <string name="title_setup_close">Chiudi le impostazioni</string>
     <string name="title_setup_export">Esporta le impostazioni</string>
     <string name="title_setup_import">Importa le impostazioni</string>
-    <string name="title_setup_export_remark">        Poiché il file delle impostazioni contiene tutte le impostazioni e informazioni dell\'account, esso è cifrato con una password.
+    <string name="title_setup_export_remark">
+        Poiché il file delle impostazioni contiene tutte le impostazioni e informazioni dell\'account, esso è cifrato con una password.
         La password è necessaria per importare nuovamente le impostazioni, per cui non va dimenticata!
     </string>
     <string name="title_setup_export_do">Il file d\'esportazione conterrà tutte le impostazioni e i dati, ma nessun messaggio e nessun\'immagine riferita nelle firme</string>
@@ -343,15 +347,19 @@
     <string name="title_check_outlook_oauth">I propri account Outlook continueranno a funzionare dopo il 16 settembre 2024</string>
     <string name="title_check_outlook_password">Alcuni dei propri account Outlook, Hotmail, Live smetteranno di funzionare dopo il 16 settembre 2024</string>
     <string name="title_advanced_hint_title">Opzioni più avanzate</string>
-    <string name="title_advanced_hint_message">        Stai entrando nelle opzioni più avanzate.
+    <string name="title_advanced_hint_message">
+        Stai entrando nelle opzioni più avanzate.
         Tutte le opzioni hanno valori standard di uso comune, che non vanno modificate a meno che si non abbia una preferenza differente.
     </string>
-    <string name="title_advanced_hint_configure">        Non è necessario passare da questa pagina per configurare un account. Usare il pulsante della procedura guidata per una configurazione rapida.
+    <string name="title_advanced_hint_configure">
+        Non è necessario passare da questa pagina per configurare un account. Usare il pulsante della procedura guidata per una configurazione rapida.
         La procedura guidata rapida funziona quasi sempre ma, in caso contrario, si può usare la configurazione manuale classica, disponibile poco sotto il pulsante della procedura guidata.
     </string>
-    <string name="title_advanced_hint_remark">        Le opzioni sono categorizzate dalla scheda, divise in sezioni, organizzate per aspetto o uso e ricercabili.
+    <string name="title_advanced_hint_remark">
+        Le opzioni sono categorizzate dalla scheda, divise in sezioni, organizzate per aspetto o uso e ricercabili.
     </string>
-    <string name="title_advanced_hint_options">        La maggior parte delle opzioni non sono necessarie. Poiché alcune sono abbastanza specifiche,
+    <string name="title_advanced_hint_options">
+        La maggior parte delle opzioni non sono necessarie. Poiché alcune sono abbastanza specifiche,
         è comprensibile se il loro funzionamento non sia immediatamente chiaro.
         Si prega di non lasciare una brutta recensione per il gran numero di opzioni o per non averle comprese tutte.
         Tutte le opzioni sono utili solo per poche persone, e forse non per te (o non ancora).
@@ -756,7 +764,8 @@
     <string name="title_advanced_mnemonic_hint">Qualsiasi email ricevuta con le seguenti parole nella riga dell\'oggetto eliminerà automaticamente e immediatamente i dati dell\'app</string>
     <string name="title_advanced_clear_all">Elimina i dati dell\'app</string>
     <string name="title_advanced_clear_all_remark">I dati dell\'app saranno eliminati irreversibilmente!</string>
-    <string name="title_advanced_default_encryption">        Il metodo crittografico predefinito (PGP o S/MIME) sarà memorizzato per identità, dopo l\'invio di un messaggio firmato o crittografato.
+    <string name="title_advanced_default_encryption">
+        Il metodo crittografico predefinito (PGP o S/MIME) sarà memorizzato per identità, dopo l\'invio di un messaggio firmato o crittografato.
         Il metodo crittografico è selezionabile prima dell\'invio nella casella delle opzioni di invio (pressione prolungata del pulsante di invio).
     </string>
     <string name="title_advanced_sign_default">Firma sempre</string>
@@ -773,7 +782,8 @@
     <string name="title_advanced_import_pgp">Importa la chiave</string>
     <string name="title_advanced_sign_algo">Algoritmo di firma</string>
     <string name="title_advanced_encrypt_algo">Algoritmo di cifratura</string>
-    <string name="title_advanced_remark_algo">        Si tenga presente che non tutti i client email supportano tutti gli algoritmi.
+    <string name="title_advanced_remark_algo">
+        Si tenga presente che non tutti i client email supportano tutti gli algoritmi.
         Gli algoritmi predefiniti SHA256 e AES128 sono comunemente supportati.
     </string>
     <string name="title_advanced_check_certificate">Controlla la chiave pubblica durante l\'invio</string>
@@ -782,7 +792,8 @@
     <string name="title_advanced_import_key">Importa la chiave privata</string>
     <string name="title_advanced_manage_keys">Gestione delle chiavi private</string>
     <string name="title_advanced_ca">Certificati CA installati</string>
-    <string name="title_advanced_manage_keys_hint">        Verranno aperte le impostazioni di sicurezza di Android.
+    <string name="title_advanced_manage_keys_hint">
+        Verranno aperte le impostazioni di sicurezza di Android.
         Le chiavi e i certificati si possono generalmente trovare in Avanzate - Crittografia e credenziali.
     </string>
     <string name="title_advanced_power_menu">Aggiungi azioni al menù di spegnimento Android</string>
@@ -923,7 +934,8 @@
     <string name="title_advanced_inline_hint">Le immagini in linea sono immagini incluse nel messaggio</string>
     <string name="compressed">I contenuti dei file compressi (%1$s) con oltre %2$s file o con file più grandi di %3$s non saranno mostrati</string>
     <string name="title_advanced_parse_classes_hint">I messaggi saranno mostrato in modo più accurato, ma probabilmente con un ritardo</string>
-    <string name="title_advanced_default_folder_hint">        Android potrebbe richiedere l\'autorizzazione ad accedere alla cartella selezionata, anche se l\'app non la necessita.
+    <string name="title_advanced_default_folder_hint">
+        Android potrebbe richiedere l\'autorizzazione ad accedere alla cartella selezionata, anche se l\'app non la necessita.
         Puoi annullare la finestra di selezione per ripristinare la cartella predefinita (solitamente la cartella \'Download\').
     </string>
     <string name="title_advanced_restore_on_launch_hint">Se possibile, riapri l\'app sull\'ultima schermata usata quando viene riavviata dall\'icona del launcher.</string>
@@ -1021,6 +1033,7 @@
     <string name="title_account_gmail">Per un\'affidabile sincronizzazione di un account di Gmail, la procedura guidata di configurazione rapida di Gmail dovrebbe esser usata quando possibile</string>
     <string name="title_domain">Nome del dominio</string>
     <string name="title_autoconfig">Scarica impostazioni</string>
+    <string name="title_lan_required">Autorizzazioni di rete locale richieste</string>
     <string name="title_aliases">Alias</string>
     <string name="title_provider">Provider</string>
     <string name="title_custom">Personalizzato</string>
@@ -1036,6 +1049,7 @@
     <string name="title_notify_remark">Puoi abilitarlo per le notifiche specifiche dell\'account</string>
     <string name="title_port">Numero di porta</string>
     <string name="title_user">Nome utente</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">Di solito l\'email principale</string>
     <string name="title_password">Password</string>
     <string name="title_password_storage">Come sono memorizzate le password?</string>
     <string name="title_case_sensitive">Nomi utente e password sono solitamente sensibili alle maiuscole</string>
@@ -1058,7 +1072,8 @@
     <string name="title_leave_on_device_hint">Quando si eliminano i messaggi dal server, questi rimangono sul dispositivo</string>
     <string name="title_max_messages">Numero massimo di messaggi da scaricare (vuoto per tutti)</string>
     <string name="title_max_messages_keep">Questo è il numero massimo di messaggi che verranno mantenuti sul dispositivo</string>
-    <string name="title_max_messages_remark">        Inserisci un numero positivo per scaricare i messaggi al termine (più comune)
+    <string name="title_max_messages_remark">
+        Inserisci un numero positivo per scaricare i messaggi al termine (più comune)
         e un numero negativo per scaricarli all\'inizio (meno comune)
     </string>
     <string name="title_keep_poll_interval">Intervallo di controllo (minuti)</string>
@@ -1122,7 +1137,8 @@
     <string name="title_service_port">Ricontrollare il numero della porta</string>
     <string name="title_service_protocol">Verificare il protocollo (SSL/TLS o STARTTLS)</string>
     <string name="title_service_error10">Questo account necessita di essere nuovamente autenticato, tramite la procedura guidata di configurazione rapida</string>
-    <string name="title_certificate_error">        A causa delle politiche del Play Store di Googlee, non è più possibile supportare le connessioni non sicure ai server email con problemi di certificato per la versione di FairEmail distribuita sul Play Store.
+    <string name="title_certificate_error">
+        A causa delle politiche del Play Store di Googlee, non è più possibile supportare le connessioni non sicure ai server email con problemi di certificato per la versione di FairEmail distribuita sul Play Store.
         Dunque, questo problema è risolvibile soltanto dal fornitore della tua email; l\'informazione precedente sull\'errore potrebbe aiutarlo a risolverlo.
     </string>
     <string name="title_advanced_browse">Sfoglia i messaggi sul server</string>
@@ -1131,7 +1147,8 @@
     <string name="title_synchronize_subfolders">Sottocartelle</string>
     <string name="title_synchronize_more">Recupera altri messaggi</string>
     <string name="title_synchronize_more_hint">Sarà eseguito un solo download dei messaggi più vecchi, che quindi non comporterà un maggiore consumo della batteria per l\'uso quotidiano</string>
-    <string name="title_synchronize_more_hint2">        I messaggi saranno recuperati alla velocità con cui il server email può consegnarli e memorizzati alla velocità con cui il dispositivo può memorizzarli e indicizzarli.
+    <string name="title_synchronize_more_hint2">
+        I messaggi saranno recuperati alla velocità con cui il server email può consegnarli e memorizzati alla velocità con cui il dispositivo può memorizzarli e indicizzarli.
         Il fattore limitante è di solito la velocità del sistema di archiviazione interno del dispositivo.
     </string>
     <string name="title_synchronize_more_hint3">Si tenga presente che memorizzare molti messaggi (diecimila o più) sul proprio dispositivo, può causare ritardi, poiché lo spazio di archiviazione interno non è infinitamente veloce.</string>
@@ -1224,7 +1241,8 @@
     <string name="title_auto_delete">Elimina definitivamente i vecchi messaggi in modo automatico</string>
     <string name="title_auto_delete_hint">I vecchi messaggi sono messaggi non più conservati sul dispositivo</string>
     <string name="title_auto_delete_archive_hint">L\'eliminazione dalla cartella d\'archivio non è sempre consentita dal server email</string>
-    <string name="title_inbox_root_hint">        Alcuni provider richiedono la crezione di nuove cartelle sotto la posta in entrata.
+    <string name="title_inbox_root_hint">
+        Alcuni provider richiedono la crezione di nuove cartelle sotto la posta in entrata.
         In questo caso, puoi tener premuta la casella di posta in entrata nell\'elenco delle cartelle e selezionare \'Crea sottocartella\".
     </string>
     <string name="title_folder_name_missing">Nome della cartella mancante</string>
@@ -1328,7 +1346,7 @@
     <string name="title_quick_actions_snooze">Posticipa</string>
     <string name="title_quick_actions_clear">Annulla la selezione dopo un\'azione</string>
     <string name="title_trash">Cestino</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Cestina la conversazione</string>
+    <string name="title_trash_conversation">Cestina la conversazione</string>
     <string name="title_trash_selection">Cestina la selezione</string>
     <string name="title_copy">Copia&#8230;</string>
     <string name="title_copy_to">Copia in&#8230;</string>
@@ -1353,7 +1371,8 @@
     <string name="title_report_spam">Tratta come spam</string>
     <string name="title_delete_permanently">Elimina definitivamente</string>
     <string name="title_delete_attachments">Elimina allegati</string>
-    <string name="title_delete_attachments_remark">        Per eliminare gli allegati, un nuovo messaggio dev\'essere aggiunto e, quello precedente, dev\'essere eliminato.
+    <string name="title_delete_attachments_remark">
+        Per eliminare gli allegati, un nuovo messaggio dev\'essere aggiunto e, quello precedente, dev\'essere eliminato.
         Poiché ciò potrebbe non funzionare, il vecchio messaggio sarà spostato nel cestino.
     </string>
     <string name="title_snooze">Posticipa &#8230;</string>
@@ -1428,7 +1447,8 @@
     <string name="title_ask_reporting">Inviare segnalazioni d\'errore?</string>
     <string name="title_reporting_why">La segnalazione degli errori aiuterà a migliorare FairEmail</string>
     <string name="title_ask_review">Scrivi una recensione su FairEmail</string>
-    <string name="title_ask_review_rationale">        Usi FairEmail da un po\'.
+    <string name="title_ask_review_rationale">
+        Usi FairEmail da un po\'.
         Sarebbe apprezzato se potessi valutare FairEmail nel Play Store.
     </string>
     <string name="title_need_help">Ho bisogno d\'aiuto</string>
@@ -1436,7 +1456,8 @@
     <string name="title_third_party">Si sta usando una versione di terze parti</string>
     <string name="title_expand_warning">Espandere questo messaggio scaricherà %1$s</string>
     <string name="title_download_message">Scaricamento&#8230;</string>
-    <string name="title_reformatted">        Questa è la visualizzazione sicura del messaggio riformattato.
+    <string name="title_reformatted">
+        Questa è la visualizzazione sicura del messaggio riformattato.
         Puoi toccare l\'icona &#x26F6; per visualizzare il messaggio originale meno sicuro e nascondere questo messaggio.
         La riformattazione dei messaggi richiede un po\' di tempo, in base alla dimensione del messaggio e alla velocità del tuo dispositivo.
         A volte il messaggio originale deve essere visualizzato per vedere i codici QR.
@@ -1643,7 +1664,8 @@
     <string name="title_signature_store">Memorizza</string>
     <string name="title_search">Cerca</string>
     <string name="title_search_for_hint">Inserisci testo</string>
-    <string name="title_search_hint">        In un primo momento la ricerca è eseguita sul dispositivo.
+    <string name="title_search_hint">
+        In un primo momento la ricerca è eseguita sul dispositivo.
         Per cercare anche nel server, toccare il pulsante «Cerca ancora».
     </string>
     <string name="title_search_hint_fts">Usare l\'indice di ricerca: solo parole intere</string>
@@ -1741,7 +1763,8 @@
     <string name="title_edit_signature_remark">Sebbene Android non possa mostrare tutto l\'HTML, sarà inviata così com\'è</string>
     <string name="title_edit_signature_text">Testo della firma</string>
     <string name="title_edit_signature_image">Inserisci immagine</string>
-    <string name="title_edit_signature_image_hint">        Quando si invia un messaggio, l\'immagine viene copiata nel messaggio dalla posizione selezionata.
+    <string name="title_edit_signature_image_hint">
+        Quando si invia un messaggio, l\'immagine viene copiata nel messaggio dalla posizione selezionata.
         Quindi, non eliminare il file immagine!
     </string>
     <string name="title_edit_signature_delete">Eliminare la firma?</string>
@@ -2007,7 +2030,8 @@
     <string name="title_hint_message_actions">Scorrere a sinistra per cestinare. Scorrere a destra per archiviare (se disponibile). Le azioni di scorrimento sono configurabili nelle impostazioni dell\'account</string>
     <string name="title_hint_outbox">Si può scorrere a sinistra o a destra per annullare l\'invio</string>
     <string name="title_hint_message_selection">Tenere premuto un messaggio per iniziare a selezionare più messaggi. Tenere premuto e scorrere in su o in giù per selezionare più messaggi</string>
-    <string name="title_hint_message_junk">        Un client email, essenzialmente, mostra i messaggi su un server email.
+    <string name="title_hint_message_junk">
+        Un client email, essenzialmente, mostra i messaggi su un server email.
         Un server email è responsabile del filtraggio dello spam, non un client email.
         Se si riceve molto spam, contattare il proprio fornitore email e non darne la responsabilità all\'app!
     </string>
@@ -2020,7 +2044,8 @@
     <string name="title_hint_junk">Il filtraggio antispam dovrebbe esser fatto dal server email e non può esser fatto affidabilmente su un dispositivo alimentato da batteria con capacità limitate.</string>
     <string name="title_hint_junk_learn">Quando si spostano i messaggi verso la cartella di spam e viceversa, il server email \"apprende\" come riconoscerlo meglio</string>
     <string name="title_hint_contact_actions">Tenere premuto per vedere le opzioni</string>
-    <string name="title_hint_eml">        Questo è un riassunto del contenuto di un file di messaggio grezzo.
+    <string name="title_hint_eml">
+        Questo è un riassunto del contenuto di un file di messaggio grezzo.
         Puoi utilizzare il pulsante in basso a destra per salvare il messaggio nella casella di posta e visualizzare i contenuti completi.
     </string>
     <string name="title_open_link">Apri link</string>
@@ -2111,7 +2136,8 @@
     <string name="title_pro_purchase">Acquista</string>
     <string name="title_pro_one_time">%1$s (acquisto una tantum)</string>
     <string name="title_pro_no_play">Play Store non trovato</string>
-    <string name="title_pro_info">        Lo sviluppo di FairEmail ha letteralmente richiesto migliaia di ore e, nonostante ciò, gran parte delle funzionalità sono gratuite.
+    <string name="title_pro_info">
+        Lo sviluppo di FairEmail ha letteralmente richiesto migliaia di ore e, nonostante ciò, gran parte delle funzionalità sono gratuite.
         FairEmail prende seriamente la tua privacy e non mostra annunci, né usa monitoraggi o statistiche per ricevere denaro.
         Per mantenere e supportare FairEmail a lungo termine, alcune funzionalità di convenienza e avanzate non sono gratuite.
         FairEmail mostra un piccolo messaggio per ricordartene, che sarà rimosso se acquisti le funzionalità pro.

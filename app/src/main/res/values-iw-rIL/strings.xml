@@ -15,7 +15,8 @@
     <string name="app_updated">עדכון אחרון: %1$s</string>
     <string name="app_download">מקור ההורדה: %1$s</string>
     <string name="app_error">רוב הודעות השגיאה נובעות ממקורות חיצוניים (רשת, שרת וכו׳) או מהגדרות שגויות ומיוחדות. ביקורת שלילית לא עוזרת לפתור בעיות כאלה. בקשת תמיכה כמעט תמיד יעילה יותר.</string>
-    <string name="app_motd">        עם הבטא של Android 14/15, עולות לפעמים הודעות ‚היישומון לא מגיב’.
+    <string name="app_motd">
+        עם הבטא של Android 14/15, עולות לפעמים הודעות ‚היישומון לא מגיב’.
         Google עובדים על תיקון.
         אנחנו לא אשמים בתקלה הזאת מצד Android!
     </string>
@@ -108,7 +109,8 @@
     </plurals>
     <string name="title_ask_spam_who">להתייחס להודעה מאת %1$s כספאם?</string>
     <string name="title_junk_hint">ספק הדוא״ל שלך אמון על סינון הספאם. ליישומון דוא״ל אין את כל הנתונים הנחוצים לעשות זאת בצורה מהימנה.</string>
-    <string name="title_junk_pop_hint">        הודעות ממוענים חסומים לא תימשכנה.
+    <string name="title_junk_pop_hint">
+        הודעות ממוענים חסומים לא תימשכנה.
         אם האפשרות „להשאיר הודעות על השרת” אינה פעילה, ההודעות הללו תאבדנה לנצח!
     </string>
     <string name="title_block">חסימת %1$s</string>
@@ -231,7 +233,8 @@
     <string name="title_setup_office_auth">השגיאה ‚AUTHENTICATE נכשל’ עלולה להיגרם עקב IMAP/SMTP שהושבתו על ידי הנהלת המערכת</string>
     <string name="title_setup_office_auth_5_7_3">נא לנסות את אשף ההקמה המהירה עבור ‚ספק אחר’.</string>
     <string name="title_setup_office_auth_5_7_139">נא לנסות את אשף ההקמה המהירה עבור ‚Outlook/Hotmail/Live’.</string>
-    <string name="title_setup_office_not_connected">        משמעות השגיאה ‚User is authenticated but not connected’ היא בדרך כלל שה־IMAP מושבת.
+    <string name="title_setup_office_not_connected">
+        משמעות השגיאה ‚User is authenticated but not connected’ היא בדרך כלל שה־IMAP מושבת.
         אם זה חשבון לקוח ב־Outlook נא לגשת לאתר של Outlook לגעת בגלגל ההגדרות משמאל למעלה, לבחור ב‚דוא״ל’, ואז ב־‚העברה ו־IMAP’, בסעיף ‚POP ו־IMAP’ להפעיל את ‚לאפשר למכשירים וליישומים להשתמש ב־IMAP’.
         אם זה חלק מחשבון תאגידי, חינוכי ועוד, נא ליצור קשר עם הנהלת מערכת שרת הדוא״ל.
     </string>
@@ -374,12 +377,14 @@
     <string name="title_advanced_hint_message">        בחרת לנווט אל האפשרויות המתקדמות יותר.
         כל האפשרויות מוגדרות לפי ערכים מקובלים, שאין צורך לשנות אותם אלא אם כן יש לך העדפות שונות.
     </string>
-    <string name="title_advanced_hint_configure">        לא צריך להיכנס לכאן כדי להגדיר חשבון. נא להשתמש בכפתור אשף ההגדרות המהירות לשם כך.
+    <string name="title_advanced_hint_configure">
+        לא צריך להיכנס לכאן כדי להגדיר חשבון. נא להשתמש בכפתור אשף ההגדרות המהירות לשם כך.
         אשף ההגדרות המהירות עובד כמעט תמיד, אבל אם לא, אפשר להשתמש בהגדרות הידניות הקלסיות קצת מתחת לכפתור האשף
     </string>
     <string name="title_advanced_hint_remark">        האפשרויות מסודרות בקטגוריות לפי לשונית, בחלוקה לסעיפים ובסידור לפי הופעה או שימוש כולל אפשרות לחיפוש.
     </string>
-    <string name="title_advanced_hint_options">        רוב האפשרויות אינן נחוצות ומאחר שחלק מהאפשרויות הן מאוד נקודתיות, 
+    <string name="title_advanced_hint_options">
+        רוב האפשרויות אינן נחוצות ומאחר שחלק מהאפשרויות הן מאוד נקודתיות, 
         מובן מאליו אם התפקוד של חלק מהאפשרויות אינו ברור מספיק. 
         נא לא להגיש ביקורת שלילית רק עקב מגוון האפשרויות או עקב אי בהירות סביב כל האפשרויות באופן מיידי.
         כל האפשרויות נחוצות לכמות נכבדת של משתמשים אבל כנראה שלא לך (עדיין).
@@ -784,7 +789,8 @@
     <string name="title_advanced_mnemonic_hint">כל הודעה שהתקבלה עם המילים שלהלן כחלק מהנושא ימחקו את נתוני היישומון אוטומטית ומיידית</string>
     <string name="title_advanced_clear_all">מחיקת נתוני היישומון</string>
     <string name="title_advanced_clear_all_remark">נתוני היישומון יימחקו ללא אפשרות לשחזור!</string>
-    <string name="title_advanced_default_encryption">        שיטת ההצפנה כברירת מחדל (PGP או S/MIME) תאוחסן עבור כל זהות בנפרד לאחר שליחת הודעה חתומה או מוצפנת.
+    <string name="title_advanced_default_encryption">
+        שיטת ההצפנה כברירת מחדל (PGP או S/MIME) תאוחסן עבור כל זהות בנפרד לאחר שליחת הודעה חתומה או מוצפנת.
         אפשר לבחור את שיטת ההצפנה בטרם השליחה בחלונית אפשרויות השליחה (לחיצה ארוכה על כפתור השליחה).
     </string>
     <string name="title_advanced_sign_default">חתימה כברירת מחדל</string>
@@ -801,7 +807,8 @@
     <string name="title_advanced_import_pgp">ייבוא מפתח</string>
     <string name="title_advanced_sign_algo">אלגוריתם חתימה</string>
     <string name="title_advanced_encrypt_algo">אלגוריתם הצפנה</string>
-    <string name="title_advanced_remark_algo">        נא לשים לב שלא כל לקוחות הדוא״ל תומכים בכל האלגוריתמים.
+    <string name="title_advanced_remark_algo">
+        נא לשים לב שלא כל לקוחות הדוא״ל תומכים בכל האלגוריתמים.
         האלגוריתמים כברירת המחדל SHA256 ו־AES128 בדרך כלל נתמכים.
     </string>
     <string name="title_advanced_check_certificate">לבדוק את המפתח הציבורי עם השליחה</string>
@@ -950,7 +957,8 @@
     <string name="title_advanced_inline_hint">תמונות מובנות הן תמונות שכלולות בהודעה</string>
     <string name="compressed">תוכן קבצים דחוסים (%1$s) עם למעלה מ־%2$s קבצים או עם קבצים שגודלם עולה על %3$s לא יוצגו</string>
     <string name="title_advanced_parse_classes_hint">זה יציג הודעות בצורה יותר מדויקת אך כנראה עם עיכוב מסוים</string>
-    <string name="title_advanced_default_folder_hint">        Android עשוי לבקש הרשאה לגשת לתיקייה הנבחרת, למרות שהיישומון לא זקוק לזה.
+    <string name="title_advanced_default_folder_hint">
+        Android עשוי לבקש הרשאה לגשת לתיקייה הנבחרת, למרות שהיישומון לא זקוק לזה.
         אפשר לבטל את חלונית הבחירה כדי להחזיר את תיקיית ברירת המחדל (בדרך כלל זאת תיקיית ה‚הורדות’).
     </string>
     <string name="title_advanced_restore_on_launch_hint">לשחזר את מצב היישומון האחרון דרך סמל המשגר</string>
@@ -1085,7 +1093,8 @@
     <string name="title_leave_on_device_hint">כשהודעות נמחקות מהשרת, ההודעות תישארנה במכשיר</string>
     <string name="title_max_messages">מספר ההודעות המרבי להורדה (ריק בשביל כולן)</string>
     <string name="title_max_messages_keep">זה מספר ההודעות המרבי שיישמר במכשיר</string>
-    <string name="title_max_messages_remark">        נא למלא מספר חיובי כדי להוריד את ההודעות בסוף (יותר נפוץ)
+    <string name="title_max_messages_remark">
+        נא למלא מספר חיובי כדי להוריד את ההודעות בסוף (יותר נפוץ)
         ומספר שלילי כדי להוריד את ההודעות בהתחלה (פחות נפוץ)
     </string>
     <string name="title_keep_poll_interval">משך תשאול (דקות)</string>
@@ -1149,7 +1158,8 @@
     <string name="title_service_port">נא לבדוק היטב את מספר הפתחה</string>
     <string name="title_service_protocol">נא לבדוק את הפרוטוקול היטב (SSL/TLS או STARTTLS)</string>
     <string name="title_service_error10">יש לאמת את החשבון הזה שוב, ניתן לעשות זאת דרך אשף ההגדרות המהירות</string>
-    <string name="title_certificate_error">        עקב מדיניות חנות Google Play אי אפשר לתמוך עוד בחיבורים לא מאובטחים לשרתי דוא״ל עם בעיות באישור בגרסה של FairEmail שמופצת דרך חנות Play.
+    <string name="title_certificate_error">
+        עקב מדיניות חנות Google Play אי אפשר לתמוך עוד בחיבורים לא מאובטחים לשרתי דוא״ל עם בעיות באישור בגרסה של FairEmail שמופצת דרך חנות Play.
         לכן, אפשר לפתור את התקלה הזאת רק מול ספק הדוא״ל שלך - פרטי התקלה שלהלן עשויים לסייע להם לפתור את התקלה הזאת.
     </string>
     <string name="title_advanced_browse">עיון בהודעות שבשרת</string>
@@ -1158,7 +1168,8 @@
     <string name="title_synchronize_subfolders">תת־תיקיות</string>
     <string name="title_synchronize_more">משיכת הודעות נוספות</string>
     <string name="title_synchronize_more_hint">יגרום להורדה בודדת של הודעות ישנות יותר, כדי לא להגדיל את צריכת הסוללה בשימוש יומיומי</string>
-    <string name="title_synchronize_more_hint2">        ההודעות תאוחזרנה במהירות בה שרת הדוא״ל יכול להעביר אותן ותאוחסנה במהירות בו המכשיר יכול לאחסן ולסדר אותן.
+    <string name="title_synchronize_more_hint2">
+        ההודעות תאוחזרנה במהירות בה שרת הדוא״ל יכול להעביר אותן ותאוחסנה במהירות בו המכשיר יכול לאחסן ולסדר אותן.
         הגורם המגביל הוא בדרך כלל מהירות האחסון הפנימי של המכשיר.
     </string>
     <string name="title_synchronize_more_hint3">נא לשים לב שאחסון הודעות רבות (עשרת אלפים ומעלה) במכשיר שלך עלול לגרום לעיכובים כיוון ששטח האחסון הפנימי אינו מהיר באופן בלתי מוגבל.</string>
@@ -1355,7 +1366,7 @@
     <string name="title_quick_actions_snooze">השהיה</string>
     <string name="title_quick_actions_clear">פינוי הבחירה לאחר פעולה</string>
     <string name="title_trash">אשפה</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">השלכת הדיון לאשפה</string>
+    <string name="title_trash_conversation">השלכת הדיון לאשפה</string>
     <string name="title_trash_selection">העברת הבחירה לאשפה</string>
     <string name="title_copy">העתקה&#8230;</string>
     <string name="title_copy_to">העתקה אל&#8230;</string>
@@ -1380,7 +1391,8 @@
     <string name="title_report_spam">התנהגות כספאם</string>
     <string name="title_delete_permanently">מחיקה לצמיתות</string>
     <string name="title_delete_attachments">מחיקת קבצים מצורפים</string>
-    <string name="title_delete_attachments_remark">        כדי למחוק קבצים מצורף, יש להוסיף הודעה חדשה ולמחוק את ההודעה הישנה.
+    <string name="title_delete_attachments_remark">
+        כדי למחוק קבצים מצורף, יש להוסיף הודעה חדשה ולמחוק את ההודעה הישנה.
         מאחר שזה עשוי להיכשל, ההודעה הישנה תועבר לאשפה.
     </string>
     <string name="title_snooze">השהיה&#8230;</string>
@@ -1463,7 +1475,8 @@
     <string name="title_third_party">הגרסה שלך היא גרסת צד־שלישי</string>
     <string name="title_expand_warning">הרחבת ההודעה הזאת תוריד %1$s</string>
     <string name="title_download_message">הורדה&#8230;</string>
-    <string name="title_reformatted">        זאת תצוגת ההודעה שעוצבה מחדש באופן בטוח.
+    <string name="title_reformatted">
+        זאת תצוגת ההודעה שעוצבה מחדש באופן בטוח.
         אפשר לגעת בסמל &#x26F6; כדי לצפות בהודעה המקורית שהיא פחות בטוחה ולהסתיר את ההודעה הזאת.
         עיצוב הודעה מחדש אורך זמן מה, בהתאם לגודל ההודעה ומהירות המכשיר שלך.
         לפעמים יש לצפות בהודעה המקורית כדי לראות קודים של QR.
@@ -1768,7 +1781,8 @@
     <string name="title_edit_signature_remark">למרות ש־Android לא יכול להציג HTML לגמרי, זה יישלח כמו שזה</string>
     <string name="title_edit_signature_text">טקסט חתימה</string>
     <string name="title_edit_signature_image">הוספת תמונה</string>
-    <string name="title_edit_signature_image_hint">        בעת שליחת הודעה, התמונה מועתקת להודעה מהמיקום הנבחר.
+    <string name="title_edit_signature_image_hint">
+        בעת שליחת הודעה, התמונה מועתקת להודעה מהמיקום הנבחר.
         לכן, אין למחוק את קובץ התמונה!
     </string>
     <string name="title_edit_signature_delete">למחוק חתימה?</string>
@@ -2034,7 +2048,8 @@
     <string name="title_hint_message_actions">החלקה שמאלה לאשפה, החלקה ימינה לארעיון (אם זמין), ניתן להגדיר את פעולות ההחלקה בהגדרות החשבון</string>
     <string name="title_hint_outbox">אפשר להחליק שמאלה או ימינה כדי לבטל את השליחה</string>
     <string name="title_hint_message_selection">לחיצה ארוכה על הודעה מתחילה בחירה במגוון הודעות, יש להחזיק ולהחליק כלפי מעלה או מטה כדי לבחור הודעות נוספות</string>
-    <string name="title_hint_message_junk">        לקוח דוא״ל, בגדול, מציג הודעות משרת דוא״ל.
+    <string name="title_hint_message_junk">
+        לקוח דוא״ל, בגדול, מציג הודעות משרת דוא״ל.
         שרת דוא״ל אחראי על מיגור דואר זבל, לא לקוח הדוא״ל.
         אם יוצא לך לקבל המון דואר זבל, נא ליצור קשר עם ספק הדוא״ל שלך, אין טעם להאשים את היישומון!
     </string>
@@ -2047,7 +2062,8 @@
     <string name="title_hint_junk">סינון הספאם צריך להתבצע מצד שרת הדוא״ל ולא ניתן לבצע אותו על מכשיר שמופעל על סוללה עם יכולות מוגבלות.</string>
     <string name="title_hint_junk_learn">העברת הודעות אל תיקיית הספאם וממנה, „מלמדת” את שרת הדוא״ל מה זה ספאם</string>
     <string name="title_hint_contact_actions">לחיצה ארוכה לאפשרויות</string>
-    <string name="title_hint_eml">        זה תקציר התוכן של קובץ הודעה גולמי.
+    <string name="title_hint_eml">
+        זה תקציר התוכן של קובץ הודעה גולמי.
         אפשר להשתמש בכפתור שמשמאל למטה כדי לשמור הודעות לדואר הנכנס כדי לצפות בכל התוכן.
     </string>
     <string name="title_open_link">פתיחת קישור</string>
@@ -2138,7 +2154,8 @@
     <string name="title_pro_purchase">רכישה</string>
     <string name="title_pro_one_time">%1$s (רכישה חד־פעמית)</string>
     <string name="title_pro_no_play">חנות Play לא נמצאה</string>
-    <string name="title_pro_info">פיתוח FairEmail דרש אלפי שעות עבודה ולמרות זאת, רוב היכולות חופשיות לשימוש.
+    <string name="title_pro_info">
+פיתוח FairEmail דרש אלפי שעות עבודה ולמרות זאת, רוב היכולות חופשיות לשימוש.
         FairEmail מתייחס לפרטיות שלך במלוא הרצינות ולא מציג פרסומות או משתמש במעקב או ניתוח התנהגות כדי להרוויח כסף.
         כדי לתחזק ולתמוך ב־FairEmail בטווח הארוך, חלק מהיכולות הנוחות והמתקדמות אינן חופשיות לשימוש.
         FairEmail מציג הודעה קטנה כדי להזכיר לך על כך, היא תוסר עם רכישת יכולות המקצוענים.

@@ -124,7 +124,7 @@ public class ViewModelMessages extends ViewModel {
                             .setPageSize(LOCAL_PAGE_SIZE)
                             .setMaxSize(MAX_CACHED_ITEMS)
                             .build();
-                    if ("sender_name".equals(args.sort1))
+                    if ("sender_name".equals(args.sort1) && DB.hasJson())
                         pager = db.message().pagedUnifiedJson(
                                 args.type,
                                 args.category,
@@ -168,7 +168,7 @@ public class ViewModelMessages extends ViewModel {
                             .setPrefetchDistance(REMOTE_PAGE_SIZE)
                             .setMaxSize(MAX_CACHED_ITEMS)
                             .build();
-                    if ("sender_name".equals(args.sort1))
+                    if ("sender_name".equals(args.sort1) && DB.hasJson())
                         pager = db.message().pagedFolderJson(
                                 args.folder, args.threading,
                                 args.sort1, args.sort2, args.ascending,

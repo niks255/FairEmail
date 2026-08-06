@@ -30,6 +30,35 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### Next version (Work in progress)
 
+### 1.2327 2026-07-31
+
+* Fixed all reported bugs
+* Collapsed inline attachments in the message editor
+* Small improvements and minor bug fixes
+* Updated build tools
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2326 2026-07-21
+
+* Added helpers to grant [local network permission](https://m66b.github.io/FairEmail/#faq210)
+* Added [type="cite"](https://bugzilla.mozilla.org/show_bug.cgi?id=183219#c50) to blockquotes
+* Added placeholders to reply-to, and default CC and BCC addresses, see [the FAQ](https://m66b.github.io/FairEmail/#faq9)
+* Enabled [Certificate Transparency](https://en.wikipedia.org/wiki/Certificate_Transparency) for non Play Store builds
+* Fixed character set for sending text files in some cases
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [S/MIME root certificates](https://wiki.mozilla.org/CA/Included_Certificates)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2325 2026-07-04
+
+* Fixed a [security issue](https://github.com/M66B/FairEmail/security/advisories/GHSA-w92m-2v27-mvg9)
+* Added workaround for Migadu IMAP server bug
+* Allowed batch importing of S/MIME public keys
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
 ### 1.2324 2026-06-30
 
 * Fixed regression in reformatted message view

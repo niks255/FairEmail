@@ -3257,7 +3257,7 @@ public class FragmentMessages extends FragmentBase
             else if (EntityMessage.SWIPE_ACTION_HIDE.equals(action))
                 icon = (message.ui_snoozed == null ? R.drawable.twotone_visibility_off_24 :
                         (message.ui_snoozed == Long.MAX_VALUE
-                                ? R.drawable.twotone_visibility_24 : R.drawable.twotone_timer_off_24));
+                         ? R.drawable.twotone_visibility_24 : R.drawable.twotone_timer_off_24));
             else if (EntityMessage.SWIPE_ACTION_MOVE.equals(action))
                 icon = R.drawable.twotone_folder_24;
             else if (EntityMessage.SWIPE_ACTION_TTS.equals(action))
@@ -5905,7 +5905,8 @@ public class FragmentMessages extends FragmentBase
                         if (!checkFingerprint())
                             if (!checkGmail())
                                 if (!checkOutlook())
-                                    ;
+                                    if (!checkLan())
+                                        ;
 
         prefs.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(prefs, "notifications_reminder");
@@ -6401,6 +6402,68 @@ public class FragmentMessages extends FragmentBase
             }
         }.execute(this, new Bundle(), "outlook:check");
 
+        return false;
+    }
+
+    private boolean checkLan() {
+        new SimpleTask<Boolean>() {
+            @Override
+            protected Boolean onExecute(Context context, Bundle args) throws Throwable {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.CINNAMON_BUN)
+                    return false;
+                if (Helper.hasPermission(context, Manifest.permission.ACCESS_LOCAL_NETWORK))
+                    return false;
+
+                DB db = DB.getInstance(context);
+                List<EntityAccount> accounts = db.account().getSynchronizingAccounts(null);
+                if (accounts != null)
+                    for (EntityAccount account : accounts)
+                        try {
+                            if (ConnectionHelper.isLocalAddress(account.host, false))
+                                return true;
+
+                            List<EntityIdentity> identities = db.identity().getSynchronizingIdentities(account.id);
+                            if (identities != null)
+                                for (EntityIdentity identity : identities)
+                                    try {
+                                        if (ConnectionHelper.isLocalAddress(identity.host, false))
+                                            return true;
+                                    } catch (Throwable ignored) {
+                                    }
+                        } catch (Throwable ignored) {
+                        }
+
+                return false;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Boolean lan) {
+                if (!Boolean.TRUE.equals(lan))
+                    return;
+
+                final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_lan_required, Snackbar.LENGTH_INDEFINITE));
+                Helper.setSnackbarLines(snackbar, 5);
+                snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                        if (BuildConfig.PLAY_STORE_RELEASE)
+                            Helper.viewFAQ(v.getContext(), 210);
+                        else
+                            v.getContext().startActivity(new Intent(v.getContext(), ActivitySetup.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                    .putExtra("tab", "connection"));
+                    }
+                });
+                snackbar.show();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.unexpectedError(getParentFragmentManager(), ex);
+            }
+        }.execute(this, new Bundle(), "checklan");
+
         return true;
     }
 
@@ -6478,6 +6541,8 @@ public class FragmentMessages extends FragmentBase
             int padding = prefs.getInt("view_padding", compact || !cards ? 0 : 1);
             boolean quick_filter = prefs.getBoolean("quick_filter", false);
             boolean all_read_asked = prefs.getBoolean("all_read_asked", false);
+
+            boolean selection = (getSelection().length > 0);
 
             boolean folder =
                     (viewType == AdapterMessage.ViewType.UNIFIED ||
@@ -6620,7 +6685,7 @@ public class FragmentMessages extends FragmentBase
             menu.findItem(R.id.menu_select_all).setVisible(folder);
             menu.findItem(R.id.menu_select_found).setVisible(viewType == AdapterMessage.ViewType.SEARCH);
             menu.findItem(R.id.menu_mark_all_read)
-                    .setVisible(folder)
+                    .setVisible(folder && !selection)
                     .setShowAsAction(all_read_asked ? MenuItem.SHOW_AS_ACTION_NEVER : MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
             menu.findItem(R.id.menu_view_thread).setVisible(viewType == AdapterMessage.ViewType.THREAD && !threading);

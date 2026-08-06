@@ -14,7 +14,8 @@
     <string name="app_cake_required">Tallennustilaa vaaditaan: %1$s</string>
     <string name="app_updated">Päivitetty viimeksi: %1$s</string>
     <string name="app_download">Ladattu palvelusta: %1$s</string>
-    <string name="app_motd">        Android 14/15-betaversioissa esiintyy satunnaisesti \'Sovellus ei vastaa\'-ilmoituksia.
+    <string name="app_motd">
+        Android 14/15-betaversioissa esiintyy satunnaisesti \'Sovellus ei vastaa\'-ilmoituksia.
         Google tekee parhaillaan korjausta.
         Älä syytä sovellusta tästä Androidin ongelmasta!
     </string>
@@ -85,7 +86,8 @@
     </plurals>
     <string name="title_ask_spam_who">Käsittele viesti lähettäjältä %1$s roskapostina?</string>
     <string name="title_junk_hint">Palveluntarjoaja vastaa roskapostin suodatuksesta. Sähköpostisovelluksella ei ole kaikkea tarvittavaa dataa luotettavaan suodatukseen.</string>
-    <string name="title_junk_pop_hint">Viestejä estetyiltä lähettäjiltä ei ladata.
+    <string name="title_junk_pop_hint">
+Viestejä estetyiltä lähettäjiltä ei ladata.
         Nämä viestit menetetään lopullisesti, jos \"Jätä viestit palvelimelle\" ei ole käytössä!
     </string>
     <string name="title_block">Estä %1$s</string>
@@ -340,7 +342,8 @@
     </string>
     <string name="title_advanced_hint_remark">        Asetukset on luokiteltu välilehdille, jaettu osiin, järjestetty ulkoasun tai käytön mukaan, ja ne ovat haettavissa.
     </string>
-    <string name="title_advanced_hint_options">        Et tarvitse suurinta osaa vaihtoehdoista ja koska jotkin vaihtoehdot ovat varsin erityisiä,
+    <string name="title_advanced_hint_options">
+        Et tarvitse suurinta osaa vaihtoehdoista ja koska jotkin vaihtoehdot ovat varsin erityisiä,
         on ymmärrettävää jos kaikkien vaihtoehtojen toiminta ei ole heti selvää.
         Älä jätä huonoa arvostelua vain valintojen määrän tai sen vuoksi, että et ymmärrä kaikkia valintoja heti.
         Kaikki vaihtoehdot ovat hyödyllisiä useammalle kuin muutamalle ihmiselle, mutta ehkä ei sinulle (vielä).
@@ -740,7 +743,8 @@
     <string name="title_advanced_mnemonic_hint">Vastaanotettu sähköpostiviesti, jossa on alla olevat sanat otsikkorivillä, poistaa välittömästi sovelluksen tiedot</string>
     <string name="title_advanced_clear_all">Poista sovelluksen tiedot</string>
     <string name="title_advanced_clear_all_remark">Sovelluksen tiedot poistetaan. Tätä ei voi perua!</string>
-    <string name="title_advanced_default_encryption">        Oletusarvoinen salausmenetelmä (PGP tai S/MIME) tallennetaan identiteettikohtaisesti allekirjoitetun tai salatun viestin lähettämisen jälkeen.
+    <string name="title_advanced_default_encryption">
+        Oletusarvoinen salausmenetelmä (PGP tai S/MIME) tallennetaan identiteettikohtaisesti allekirjoitetun tai salatun viestin lähettämisen jälkeen.
         Salausmenetelmä voidaan valita ennen lähettämistä painamalla pitkään lähetä-painiketta.
     </string>
     <string name="title_advanced_sign_default">Allekirjoita oletuksena</string>
@@ -765,7 +769,8 @@
     <string name="title_advanced_import_key">Tuo yksityinen avain</string>
     <string name="title_advanced_manage_keys">Hallinnoi yksityisiä avaimia</string>
     <string name="title_advanced_ca">Asennetut CA-varmenteet</string>
-    <string name="title_advanced_manage_keys_hint">Tämä avaa Androidin turvallisuusasetukset.        Avaimet ja varmenteet löytyvät yleensä edistyneistä asetuksista kohdasta Salaus ja kirjautumistiedot.    </string>
+    <string name="title_advanced_manage_keys_hint">
+Tämä avaa Androidin turvallisuusasetukset.        Avaimet ja varmenteet löytyvät yleensä edistyneistä asetuksista kohdasta Salaus ja kirjautumistiedot.    </string>
     <string name="title_advanced_power_menu">Lisää toimintoja Androidin virrankatkaisuvalikkoon</string>
     <string name="title_advanced_send_self">Lisää \'lähetä itselle\' Androidin jakamisvalikkoon</string>
     <string name="title_advanced_external_search">Lisää \'FairEmail-haku\' Androidin tekstivalintavalikkoon</string>
@@ -902,7 +907,8 @@
     <string name="title_advanced_inline_hint">Tekstiin upotetut kuvat ovat viestin tekstin joukossa olevat kuvat</string>
     <string name="compressed">Pakattujen tiedostojen (%1$s) sisältöä yli %2$s tiedostolla tai suuremmilla tiedostoilla kuin %3$s ei näytetä</string>
     <string name="title_advanced_parse_classes_hint">Tämä näyttää viestit tarkemmin, mutta saattaa aiheuttaa viiveen</string>
-    <string name="title_advanced_default_folder_hint">        Android voi pyytää lupaa käyttää valittua kansiota, vaikka sovellus ei tarvitse sitä.
+    <string name="title_advanced_default_folder_hint">
+        Android voi pyytää lupaa käyttää valittua kansiota, vaikka sovellus ei tarvitse sitä.
         Voit sulkea valintaikkunan palauttaaksesi oletuskansion (yleensä \'Lataukset\'-kansio).
     </string>
     <string name="title_advanced_autoexpand_hint">Avaa viesti automaattisesti, kun keskustelussa on vain yksi viesti tai vain yksi on lukematon</string>
@@ -1035,7 +1041,8 @@
     <string name="title_leave_on_device_hint">Viestien poistaminen palvelimelta ei poista niitä laitteesta</string>
     <string name="title_max_messages">Ladattavien viestien maksimimäärä (tyhjä lataa kaikki)</string>
     <string name="title_max_messages_keep">Tämä on laitteessa säilytettävien viestien maksimimäärä</string>
-    <string name="title_max_messages_remark">        Anna positiivinen numero, että viestit ladataan lopusta aloittaen (yleisin tapa)
+    <string name="title_max_messages_remark">
+        Anna positiivinen numero, että viestit ladataan lopusta aloittaen (yleisin tapa)
         ja negatiivinen numero, että viestit ladataan alusta
     </string>
     <string name="title_keep_poll_interval">Kyselyn aikaväli (minuuttia)</string>
@@ -1099,7 +1106,8 @@
     <string name="title_service_port">Tarkista porttinumero uudelleen</string>
     <string name="title_service_protocol">Tarkista uudelleen protokolla (SSL/TLS tai STARTTLS)</string>
     <string name="title_service_error10">Tälle tilille pitää tunnistautua uudestaan, minkä voi tehdä asetusvelholla</string>
-    <string name="title_certificate_error">        Googlen Play Storen käytäntöjen vuoksi sen kautta jaellun FairEmail-version ei ole enää mahdollista tukea turvattomia yhteyksiä sähköpostipalvelimille, joilla on sertifikaattiongelmia.
+    <string name="title_certificate_error">
+        Googlen Play Storen käytäntöjen vuoksi sen kautta jaellun FairEmail-version ei ole enää mahdollista tukea turvattomia yhteyksiä sähköpostipalvelimille, joilla on sertifikaattiongelmia.
         Ongelma voidaan ratkaista vain sähköpostipalvelun tarjoajan toimesta - edellä mainitut virhetiedot voivat auttaa heitä ratkaisemaan tämän ongelman.
     </string>
     <string name="title_advanced_browse">Selaa palvelimella olevia viestejä</string>
@@ -1108,7 +1116,8 @@
     <string name="title_synchronize_subfolders">Alikansiot</string>
     <string name="title_synchronize_more">Hae lisää viestejä</string>
     <string name="title_synchronize_more_hint">Tämä lataa lisää vanhoja viestejä laitteeseen ja päivittäisessä käytössä aiheuttaa lisää akun käyttöä</string>
-    <string name="title_synchronize_more_hint2">        Viestit haetaan niin nopeasti kuin sähköpostipalvelin voi ne toimittaa ja tallennetaan sekä indeksoidaan niin nopeasti kuin laite pystyy.
+    <string name="title_synchronize_more_hint2">
+        Viestit haetaan niin nopeasti kuin sähköpostipalvelin voi ne toimittaa ja tallennetaan sekä indeksoidaan niin nopeasti kuin laite pystyy.
         Rajoittava tekijä on yleensä laitteen sisäisen tallennustilan nopeus.
     </string>
     <string name="title_synchronize_more_hint3">Suuren viestimäärän (10 000 tai enemmän) tallentaminen laitteeseesi voi aiheuttaa hitautta sisäinen tallennustilan rajallisen nopeuden takia.</string>
@@ -1327,7 +1336,8 @@
     <string name="title_report_spam">Käsittele roskapostina</string>
     <string name="title_delete_permanently">Poista pysyvästi</string>
     <string name="title_delete_attachments">Poista liitteet</string>
-    <string name="title_delete_attachments_remark">Uusi viesti pitää lisätä ja vanha poistaa, jotta liitteet voidaan poistaa.
+    <string name="title_delete_attachments_remark">
+Uusi viesti pitää lisätä ja vanha poistaa, jotta liitteet voidaan poistaa.
 Tämä voi epäonnistua, minkä takia vanha viesti siirretään roskakoriin talteen.    </string>
     <string name="title_snooze">Torkuta &#8230;</string>
     <string name="title_archive">Arkistoi</string>
@@ -1407,7 +1417,8 @@ Tämä voi epäonnistua, minkä takia vanha viesti siirretään roskakoriin talt
     <string name="title_third_party">Käytät kolmannen osapuolen versiota</string>
     <string name="title_expand_warning">Tämän viestin laajentaminen lataa %1$s</string>
     <string name="title_download_message">Ladataan &#8230;</string>
-    <string name="title_reformatted">        Tämä on turvallinen, uudelleenmuotoillun viestin näkymä.
+    <string name="title_reformatted">
+        Tämä on turvallinen, uudelleenmuotoillun viestin näkymä.
         Näet alkuperäisen, vähemmän turvallisen viestin napauttamalla &#x26F6;.
         Viestien uudelleenmuotoilu kestää jonkin aikaa riippuen viestin koosta ja laitteesi nopeudesta.
         Joskus alkuperäinen viesti pitää avata, jotta QR-koodit näkyvät.
@@ -1706,7 +1717,8 @@ Tämä voi epäonnistua, minkä takia vanha viesti siirretään roskakoriin talt
     <string name="title_edit_signature_remark">Vaikka Android ei voi näyttää kaikkea HTML:ää, se lähetetään sellaisena kuin se on</string>
     <string name="title_edit_signature_text">Allekirjoituksen teksti</string>
     <string name="title_edit_signature_image">Lisää kuva</string>
-    <string name="title_edit_signature_image_hint">        Kun viesti lähetetään, kuva kopioidaan valitusta sijainnista viestiin.
+    <string name="title_edit_signature_image_hint">
+        Kun viesti lähetetään, kuva kopioidaan valitusta sijainnista viestiin.
         Älä siis poista kuvatiedostoa!
     </string>
     <string name="title_answer_define_name">Nimi</string>
@@ -1967,7 +1979,8 @@ Tämä voi epäonnistua, minkä takia vanha viesti siirretään roskakoriin talt
     <string name="title_hint_message_actions">Pyyhkäisy vasemmalle siirtää roskakoriin; Pyyhkäisy oikealle arkistoi (kun mahdollista); Pyyhkäisytoimintoja voi muokata tilin asetuksissa</string>
     <string name="title_hint_outbox">Voit pyyhkäistä vasemmalle tai oikealle, jotta lähettäminen perutaan</string>
     <string name="title_hint_message_selection">Aloita useamman viestin valinta painamalla viestiä pitkään; Valitse useampi pitkään painamalla ja pyyhkäisemällä ylös tai alas</string>
-    <string name="title_hint_message_junk">        Sähköpostisovelluksen tarkoitus on näyttää viestit sähköpostipalvelimella.
+    <string name="title_hint_message_junk">
+        Sähköpostisovelluksen tarkoitus on näyttää viestit sähköpostipalvelimella.
         Sähköpostipalvelin on vastuussa roskapostien suodatuksesta, ei sähköpostiohjelma.
         Jos saat paljon roskapostia, ota yhteyttä sähköpostipalveluntarjoajaasi äläkä syytä sovellusta!
     </string>

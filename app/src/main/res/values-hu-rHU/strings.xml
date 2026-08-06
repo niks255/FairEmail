@@ -15,7 +15,8 @@
     <string name="app_updated">Utoljára frissítve: %1$s</string>
     <string name="app_download">Letöltve innen: %1$s</string>
     <string name="app_error">A legtöbb hibaüzenetnek külső oka van (hálózat, kiszolgáló, stb.), vagy helytelen, gyakran nem szabványos beállítás okozza. Egy rossz értékelés nem oldja meg ezeket a problémákat. Támogatás kérése szinte mindig hatékonyabb.</string>
-    <string name="app_motd">        Az Android 14/15 béta esetén \'Alkalmazás nem válaszol\' hibaüzenet előfordulhat.
+    <string name="app_motd">
+        Az Android 14/15 béta esetén \'Alkalmazás nem válaszol\' hibaüzenet előfordulhat.
         A Google már dolgozik a javításon.
         Kérem, ne az alkalmazást okolja az Android hiba miatt!
     </string>
@@ -86,13 +87,15 @@
     </plurals>
     <string name="title_ask_spam_who">Megjelöli az üzenetet %1$s-től spam-ként?</string>
     <string name="title_junk_hint">A levélszemét szűréséért az email szolgáltatója a felelős. Egy email kliens nem rendelkezik a szükséges adatokkal, hogy ezt megfelelően el tudja végezni.</string>
-    <string name="title_junk_pop_hint">        A letiltott feladók üzeneteit nem töltjük le.
+    <string name="title_junk_pop_hint">
+        A letiltott feladók üzeneteit nem töltjük le.
         Ezek az üzenetek végleg elvesznek, ha az \"Üzenetek megőrzése a kiszolgálón\" nincs engedélyezve!    </string>
     <string name="title_block">%1$s tiltása</string>
     <string name="title_block_sender">Feladó tiltása</string>
     <string name="title_block_sender_domain">\'%1$s\' domain letiltása</string>
     <string name="title_block_sender_remark">A tiltással egyben levélszemétbe is helyezi.</string>
-    <string name="title_block_sender_hint">        Egy küldő letiltása ingyenes funkció.
+    <string name="title_block_sender_hint">
+        Egy küldő letiltása ingyenes funkció.
         Egy küldő domain letiltása szűrőszabályokat használ, ami pro funkció.
     </string>
     <string name="title_blocked_senders">Tiltott küldők</string>
@@ -202,7 +205,8 @@
     <string name="title_setup_office_auth">Az \'AUTHENTICATE failed\' hibának oka lehet hogy a rendszeradminisztrátor kikapcsolta az IMAP/SMTP-t</string>
     <string name="title_setup_office_auth_5_7_3">Kérem próbálja meg az \"Egyéb szolgáltató\" gyorsbeállítás varázslót.</string>
     <string name="title_setup_office_auth_5_7_139">Kérem, próbálja meg az \"Outlook/Hotmail/Live\" gyorsbeállítás varázslót.</string>
-    <string name="title_setup_office_not_connected">        A  \'User is authenticated but not connected\' többnyire azt jelenti, hogy az IMAP ki van kapcsolva.
+    <string name="title_setup_office_not_connected">
+        A  \'User is authenticated but not connected\' többnyire azt jelenti, hogy az IMAP ki van kapcsolva.
         Magánszemélyként használt Outlook fiók esetén, nyissa meg az Outlook weboldalt, kattintson a Beállításokra a jobb felső sarokban, válassza a \"Levelezés\", majd a \"Továbbítás és IMAP\" menüpontot, és a \"POP és IMAP\" résznél kattintson az \"Engedélyezze az eszközök és alkalmazások számára az IMAP használatát\" pontra.
        Vállalati, oktatási, stb. fiók esetén, kérem a levelezőszerver rendszergazdájával vegye fel a kapcsolatot.    </string>
     <string name="title_setup_oauth_rationale">Engedélyezze a hozzáférést a %1$s fiókjához</string>
@@ -343,11 +347,13 @@
     <string name="title_advanced_hint_title">További haladó opciók</string>
     <string name="title_advanced_hint_message">        A haladó beállításokhoz navigálsz.        Minden opciónak van gyakran használt alapértéke, amit nem kell változtatnod, kivéve, ha más opciókat preferálsz.
     </string>
-    <string name="title_advanced_hint_configure">        A fiók konfigurálásához nem szükséges itt bármit beállítani. Kerem, ehhez a gyorsbeállítás varázsló gombot használja.
+    <string name="title_advanced_hint_configure">
+        A fiók konfigurálásához nem szükséges itt bármit beállítani. Kerem, ehhez a gyorsbeállítás varázsló gombot használja.
         A gyorsbeállítás varázsló szinte mindig működik, de ha mégsem, akkor használhatja a hagyományos kézi beállítást, kicsivel a varázsló gombja alatt.    </string>
     <string name="title_advanced_hint_remark">        Az opciók fülekre vannak osztva, és azok tovább szekciókra, kinézet szerint rendezve, és mind kereshető.
     </string>
-    <string name="title_advanced_hint_options">        A legtöbb beállításra nem lesz szüksége, és mivel egyes beállítások elég specifikusak,
+    <string name="title_advanced_hint_options">
+        A legtöbb beállításra nem lesz szüksége, és mivel egyes beállítások elég specifikusak,
         így teljesen érthető, ha az összes beállítás működése nen világos azonnal.
         Kérem, ne adjon rossz értékelést csupán a beállítások mennyisége miatt, vagy mert nem világos egyből minden beállítás.
         A számtalan beállítás hasznos jó pár embernek, ha talán önnek (még) nem is.    </string>
@@ -751,7 +757,8 @@
     <string name="title_advanced_mnemonic_hint">A tárgyban az alábbi szavakat tartalmazó bármely email automatikusan és azonnal törli az alkalmazás adatait</string>
     <string name="title_advanced_clear_all">Alkalmazásadatok törlése</string>
     <string name="title_advanced_clear_all_remark">Az alkalmazásadatok visszavonhatatlanul törölve lesznek!</string>
-    <string name="title_advanced_default_encryption">        Az alapértelmezett titkosítást (PGP vagy S/MIME) identitásonként tároljuk, ha egyszer már aláírt, vagy titkosított egy üzenetet.
+    <string name="title_advanced_default_encryption">
+        Az alapértelmezett titkosítást (PGP vagy S/MIME) identitásonként tároljuk, ha egyszer már aláírt, vagy titkosított egy üzenetet.
         A titkosítási mód küldés előtt kiválasztható a küldési beállítások párbeszédablakban (hosszan nyomva a küldés gombot).
     </string>
     <string name="title_advanced_sign_default">Aláírás alapértelmezés szerint</string>
@@ -768,7 +775,8 @@
     <string name="title_advanced_import_pgp">Kulcs importálása</string>
     <string name="title_advanced_sign_algo">Aláírás algoritmus</string>
     <string name="title_advanced_encrypt_algo">Titkosítási algoritmus</string>
-    <string name="title_advanced_remark_algo">        Vegye figyelembe, hogy nem minden email kliens támogat minden algoritmust.
+    <string name="title_advanced_remark_algo">
+        Vegye figyelembe, hogy nem minden email kliens támogat minden algoritmust.
         Az legtöbbet használt alap algoritmus az SHA256 és AES128.
     </string>
     <string name="title_advanced_check_certificate">Nyilvános kulcs ellenőrzése küldéskor</string>
@@ -1014,6 +1022,7 @@
     <string name="title_account_gmail">Egy Gmail fiók megbízható szinkronizálásához mindig a Gmail gyors beállítót ajánlott használni, amikor lehetséges</string>
     <string name="title_domain">Domain név</string>
     <string name="title_autoconfig">Beállítások lekérése</string>
+    <string name="title_lan_required">Helyi hálózati hozzáférés szükséges</string>
     <string name="title_aliases">Álnevek</string>
     <string name="title_provider">Szolgáltató</string>
     <string name="title_custom">Egyéni</string>
@@ -1029,6 +1038,7 @@
     <string name="title_notify_remark">Engedélyezheti a fiókonkénti egyedi értesítéseket</string>
     <string name="title_port">Port szám</string>
     <string name="title_user">Felhasználónév</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">Általában az elsődleges email cím</string>
     <string name="title_password">Jelszó</string>
     <string name="title_password_storage">Hogyan vannak tárolva a jelszavak?</string>
     <string name="title_case_sensitive">Felhasználónevek és jelszók általában kis- és nagybetű érzékenyek</string>
@@ -1051,7 +1061,8 @@
     <string name="title_leave_on_device_hint">A kiszolgálón végzett üzenettörlés esetén, az üzenet az eszközön megmarad</string>
     <string name="title_max_messages">Letöltendő üzenetek maximális száma (összes ha üres)</string>
     <string name="title_max_messages_keep">A készüléken tárolt üzenetek maximális száma</string>
-    <string name="title_max_messages_remark">        Adjon meg egy pozitív számot az üzenetek letöltéséhez a végétől (leggyakoribb)
+    <string name="title_max_messages_remark">
+        Adjon meg egy pozitív számot az üzenetek letöltéséhez a végétől (leggyakoribb)
         vagy egy negítvat, hogy az elejétől (kevésbé gyakori)
     </string>
     <string name="title_keep_poll_interval">Újrapróbálkozási intervallum (perc)</string>
@@ -1115,7 +1126,8 @@
     <string name="title_service_port">Kérlek duplán ellenőrizd a portszámot</string>
     <string name="title_service_protocol">Kérlek ellenőrizd mégegyszer a protokolt (SSL/TLS vagy STARTTLS)</string>
     <string name="title_service_error10">Újra be kell jelentkeznie ebbe a fiókba, mely megtehető a Gyorsbeállítás varázslóval</string>
-    <string name="title_certificate_error">        A Google Play Áruház irányelvei alapján, a Play Áruházban közzétett Fairemail verzió nem támogathatja a tanúsítvány-problémák miatt nem-biztonságos kapcsolatot az email kiszolgálókkal.
+    <string name="title_certificate_error">
+        A Google Play Áruház irányelvei alapján, a Play Áruházban közzétett Fairemail verzió nem támogathatja a tanúsítvány-problémák miatt nem-biztonságos kapcsolatot az email kiszolgálókkal.
         Így ezt a problémát csak az ön email szolgáltatója tudja orvosolni - a fenti információ segíthet nekik a megoldásban.    </string>
     <string name="title_advanced_browse">Üzenetek böngészése a szerveren</string>
     <string name="title_advanced_expand_read">Üzenetek megjelölése olvasottként kibontáskor</string>
@@ -1123,7 +1135,8 @@
     <string name="title_synchronize_subfolders">Almappák</string>
     <string name="title_synchronize_more">Több üzenet betöltése</string>
     <string name="title_synchronize_more_hint">Ez a régi üzenetek egységes letöltését fogja eredményezni, így nem jelent további akkumulátor használatot a hétköznapokban</string>
-    <string name="title_synchronize_more_hint2">        Az üzenetek olyan hamar érkeznek, amilyen gyorsan az email szerver küldi, és olyan hamar mentve amilyen gyorsan az eszköz le tudja menteni.
+    <string name="title_synchronize_more_hint2">
+        Az üzenetek olyan hamar érkeznek, amilyen gyorsan az email szerver küldi, és olyan hamar mentve amilyen gyorsan az eszköz le tudja menteni.
         A gyenge láncszem általában az eszköz háttértára.
     </string>
     <string name="title_synchronize_more_hint3">Kérem, vegye figyelemben, hogy sok üzenet (tízezer vagy több) tárolása a készüléken lassulást okozhat, mert a belső tárhely sebessége is véges.</string>
@@ -1319,7 +1332,7 @@
     <string name="title_quick_actions_snooze">Szundi</string>
     <string name="title_quick_actions_clear">Kijelölés megszüntetése a művelet után</string>
     <string name="title_trash">Kuka</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Beszélgetés törlése</string>
+    <string name="title_trash_conversation">Beszélgetés törlése</string>
     <string name="title_trash_selection">Kijelöltek törlése</string>
     <string name="title_copy">Másolás &#8230;</string>
     <string name="title_copy_to">Másolás ide &#8230;</string>
@@ -1344,7 +1357,8 @@
     <string name="title_report_spam">Megjelölés spamként</string>
     <string name="title_delete_permanently">Végleges törlés</string>
     <string name="title_delete_attachments">Mellékletek törlése</string>
-    <string name="title_delete_attachments_remark">        A melléklet törléséhez az üzenetet törölni kell és egy újat hozzáadni melléklet nélkül.
+    <string name="title_delete_attachments_remark">
+        A melléklet törléséhez az üzenetet törölni kell és egy újat hozzáadni melléklet nélkül.
         Mivel ebbe hiba csúszhat, ezért a régi üzenetet inkább a kukába helyezzük.    </string>
     <string name="title_snooze">Halasztás &#8230;</string>
     <string name="title_archive">Archiválás</string>
@@ -1425,7 +1439,8 @@
     <string name="title_third_party">Egy harmadik fél verzióját használod</string>
     <string name="title_expand_warning">Az üzenet kibontása %1$s letöltéssel jár</string>
     <string name="title_download_message">Letöltés &#8230;</string>
-    <string name="title_reformatted">        Ez a biztonságos átfomázott üzenet nézet.
+    <string name="title_reformatted">
+        Ez a biztonságos átfomázott üzenet nézet.
         A &#x26F6; ikonra koppintva tekintheti meg a kevésbé biztonságos eredeti üzenetet, és rejtheti el ezt az üzenetet.
         Az üzenetek átfomázása némi időbe telik, az üzenet méretétől és az eszköze teljesítményétől függően.
        Néha az eredeti üzenetet kell megtekinteni a QR kódok megjelenítéséhez.
@@ -1632,7 +1647,8 @@
     <string name="title_signature_store">Áruház</string>
     <string name="title_search">Keresés</string>
     <string name="title_search_for_hint">Írjon be szöveget</string>
-    <string name="title_search_hint">        Kezdetben még a keresés a készüléken fog történni.
+    <string name="title_search_hint">
+        Kezdetben még a keresés a készüléken fog történni.
         Ha a szerveren is akar keresni, nyomjon a \'keresés újra\' gombra.
     </string>
     <string name="title_search_hint_fts">A keresési index használatánál: csak egész szavak</string>
@@ -1730,7 +1746,8 @@
     <string name="title_edit_signature_remark">Habár az Android nem tudja a HTML-t megjeleníteni, elküldésre kerül ahogy van</string>
     <string name="title_edit_signature_text">Aláírás szövege</string>
     <string name="title_edit_signature_image">Kép beillesztése</string>
-    <string name="title_edit_signature_image_hint">        Üzenet küldésekor a képet beemeljük az üzenetbe a kijelölt helyről.
+    <string name="title_edit_signature_image_hint">
+        Üzenet küldésekor a képet beemeljük az üzenetbe a kijelölt helyről.
         Úgyhogy, ne törölje le a kép fájlt!
     </string>
     <string name="title_edit_signature_delete">Aláírás törlése?</string>
@@ -1996,7 +2013,8 @@
     <string name="title_hint_message_actions">Törlés balra csúsztatásra; Archiválás jobbra csúsztatásra (ha elérhető); A csúsztatáshoz tartozó műveletek módosíthatóak a fiók beállításai között</string>
     <string name="title_hint_outbox">Csúsztasson jobbra vagy balra a küldés elvetéséhez</string>
     <string name="title_hint_message_selection">Tarts hosszan egy üzenetet több üzenet kiválasztásának elkezdéséhez; Tartsd és görgess fel vagy le több üzenet kiválasztásához</string>
-    <string name="title_hint_message_junk">        Az email kliens feladata alapvetően a kiszolgálón lévő üzenetek megjelenítése.
+    <string name="title_hint_message_junk">
+        Az email kliens feladata alapvetően a kiszolgálón lévő üzenetek megjelenítése.
         A kiszolgáló feladata a levélszemét szűrése, nem a kliensé.
         Ha sok szemetet kap, vegye fel a kapcsolatot az email szolgáltatóval, és ne az alkalmazást hibáztassa!
     </string>
@@ -2009,7 +2027,8 @@
     <string name="title_hint_junk">A spam szűrés a levelező szervereken futó erőforrás igényes feladat. Képtelenség hatékonyan kivitelezni egy akkumlátorról üzemelő eszközön.</string>
     <string name="title_hint_junk_learn">Az üzenetek a levélszemét mappából való ki és be helyezésével az email szerver \"megtanulja\" mi számít szemétnek</string>
     <string name="title_hint_contact_actions">Nyomja hosszan a további opciókért</string>
-    <string name="title_hint_eml">        Ez egy nyers üzenetfájl tartalmi összefoglalója.
+    <string name="title_hint_eml">
+        Ez egy nyers üzenetfájl tartalmi összefoglalója.
         A jobb alsó gombbal lementheti az üzenetet a beérkező üzenetek közé a teljes tartalom megtekintéséhez.
     </string>
     <string name="title_open_link">Link megnyitása</string>

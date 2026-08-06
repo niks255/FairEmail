@@ -15,7 +15,8 @@
     <string name="app_updated">Останнє оновлення: %1$s</string>
     <string name="app_download">Завантажено з: %1$s</string>
     <string name="app_error">Більшість повідомлень про помилки мають зовнішні причини (мережа, сервер і т. д.) або спричинені некоректною, часто нестандартною, конфігурацією. Негативний відгук не розв\'язує такі проблеми. Звернення в службу підтримки майже завжди є більш ефективним.</string>
-    <string name="app_motd">        В Android 14/15 (бета-версії) іноді з\'являються сповіщення \"Додаток не відповідає\".
+    <string name="app_motd">
+        В Android 14/15 (бета-версії) іноді з\'являються сповіщення \"Додаток не відповідає\".
         Google працює над виправленням.
         Будь ласка, не звинувачуйте застосунок у цій проблемі Android!
     </string>
@@ -108,14 +109,16 @@
     </plurals>
     <string name="title_ask_spam_who">Вважати повідомлення від %1$s спамом?</string>
     <string name="title_junk_hint">Ваш постачальник послуг електронної пошти відповідає за фільтрацію спаму. Програма електронної пошти не має всіх даних, необхідних для надійного виконання цієї роботи.</string>
-    <string name="title_junk_pop_hint">        Повідомлення від заблокованих відправників не завантажуватимуться.
+    <string name="title_junk_pop_hint">
+        Повідомлення від заблокованих відправників не завантажуватимуться.
         Якщо «Залишати повідомлення на сервері» не ввімкнено, ці повідомлення будуть втрачені назавжди!
     </string>
     <string name="title_block">Заблокувати %1$s</string>
     <string name="title_block_sender">Блокувати відправника</string>
     <string name="title_block_sender_domain">Заблокувати домен «%1$s»</string>
     <string name="title_block_sender_remark">Блокування означає автоматичне переміщення до теки зі спамом</string>
-    <string name="title_block_sender_hint">        Блокування відправника — безплатна функція.
+    <string name="title_block_sender_hint">
+        Блокування відправника — безплатна функція.
         Блокування домену відправника використовує правила фільтрів, які є функцією професійної версії.
     </string>
     <string name="title_blocked_senders">Заблоковані відправники</string>
@@ -232,7 +235,8 @@
     <string name="title_setup_office_auth">Помилка \'Автентифікація не вдалася\' викликана помилкою IMAP/SMTP можливо вимкненою системним адміністратором</string>
     <string name="title_setup_office_auth_5_7_3">Будь ласка, спробуйте загальний майстер швидкого налаштування, обравши пункт «Інші постачальники».</string>
     <string name="title_setup_office_auth_5_7_139">Будь ласка, спробуйте майстер швидкого налаштування «Outlook/Hotmail/Live».</string>
-    <string name="title_setup_office_not_connected">Помилка «User is authenticated but not connected» здебільшого означає, що IMAP вимкнено.
+    <string name="title_setup_office_not_connected">
+Помилка «User is authenticated but not connected» здебільшого означає, що IMAP вимкнено.
         Якщо ви користуєтеся особистим обліковим записом Outlook, перейдіть на веб-сайт Outlook, натисніть на колесо налаштувань у верхньому правому куті, виберіть «Пошта», потім виберіть «Пересилання та IMAP» і в розділі «POP та IMAP» увімкніть опцію «Дозволити пристроям і програмам використовувати IMAP».
         У разі корпоративного, освітнього тощо облікового запису зверніться до системного адміністратора поштового сервера.
     </string>
@@ -305,7 +309,8 @@
     <string name="title_setup_close">Закрити налаштування</string>
     <string name="title_setup_export">Експортувати налаштування</string>
     <string name="title_setup_import">Імпортувати налаштування</string>
-    <string name="title_setup_export_remark">        Оскільки файл налаштувань містить усі налаштування та інформацію про обліковий запис, він зашифрований паролем.
+    <string name="title_setup_export_remark">
+        Оскільки файл налаштувань містить усі налаштування та інформацію про обліковий запис, він зашифрований паролем.
          Для повторного імпортування налаштувань необхідно ввести пароль, тому не забудьте його!
     </string>
     <string name="title_setup_export_do">Файл експорту міститиме всі налаштування і дані, але не повідомлення і не зображення, що містяться в підписах</string>
@@ -374,12 +379,15 @@
     <string name="title_advanced_hint_title">Розширенні налаштування</string>
     <string name="title_advanced_hint_message">        Ви переходите до більш розширених параметрів.        Всі параметри мають загальновизнані стандартні значення, які не треба змінювати, якщо ви не маєте інших уподобань.
     </string>
-    <string name="title_advanced_hint_configure">        Для налаштування облікового запису не обов\'язково бути присутнім тут. Для цього скористайтеся кнопкою «Майстер налаштування».
+    <string name="title_advanced_hint_configure">
+        Для налаштування облікового запису не обов\'язково бути присутнім тут. Для цього скористайтеся кнопкою «Майстер налаштування».
         Майстер швидкого налаштування працює майже завжди, але якщо це не вдається, ви можете скористатися класичним ручним налаштуванням, яке знаходиться трохи нижче кнопки майстра.
     </string>
-    <string name="title_advanced_hint_remark">       Параметри класифіковані за вкладками, розділені на секції, організовані за зовнішнім виглядом або за використанням, та доступні для пошуку.
+    <string name="title_advanced_hint_remark">
+       Параметри класифіковані за вкладками, розділені на секції, організовані за зовнішнім виглядом або за використанням, та доступні для пошуку.
     </string>
-    <string name="title_advanced_hint_options">        Більшість опцій Вам не знадобляться, а оскільки деякі з них досить специфічні,
+    <string name="title_advanced_hint_options">
+        Більшість опцій Вам не знадобляться, а оскільки деякі з них досить специфічні,
         цілком зрозуміло, якщо функціонування не всіх опцій буде не одразу зрозумілим.
         Будь ласка, не залишайте поганий відгук лише за кількість опцій або за те, що Ви не зрозуміли всі опції одразу.
         Всі опції корисні для багатьох людей, але, можливо, не для вас (поки що).
@@ -784,7 +792,8 @@
     <string name="title_advanced_mnemonic_hint">Видалити дані застосунку</string>
     <string name="title_advanced_clear_all">Видалити дані застосунку</string>
     <string name="title_advanced_clear_all_remark">Дані застосунку будуть видалені назавжди!</string>
-    <string name="title_advanced_default_encryption">        Метод шифрування за замовчуванням (PGP або S/MIME) буде збережено для кожного профілю після надсилання підписаного або зашифрованого повідомлення.
+    <string name="title_advanced_default_encryption">
+        Метод шифрування за замовчуванням (PGP або S/MIME) буде збережено для кожного профілю після надсилання підписаного або зашифрованого повідомлення.
          Метод шифрування можна вибрати перед надсиланням у діалоговому вікні параметрів надсилання (натисніть і утримуйте кнопку «Надіслати»).
     </string>
     <string name="title_advanced_sign_default">Підписувати за замовчуванням</string>
@@ -801,7 +810,8 @@
     <string name="title_advanced_import_pgp">Імпортувати ключ</string>
     <string name="title_advanced_sign_algo">Алгоритм підпису</string>
     <string name="title_advanced_encrypt_algo">Алгоритм шифрування</string>
-    <string name="title_advanced_remark_algo">        Майте на увазі, що не всі поштові клієнти підтримують всі алгоритми.
+    <string name="title_advanced_remark_algo">
+        Майте на увазі, що не всі поштові клієнти підтримують всі алгоритми.
         Типові алгоритми SHA256 і AES128 зазвичай підтримуються.
     </string>
     <string name="title_advanced_check_certificate">Перевіряти відкритий ключ при відправленні</string>
@@ -949,7 +959,8 @@
     <string name="title_advanced_inline_hint">Вбудованими є зображення, включені в повідомлення</string>
     <string name="compressed">Вміст стиснутих файлів (%1$s) із кількістю файлів, більшою за %2$s, або з файлами, більшими за %3$s, не буде показаний</string>
     <string name="title_advanced_parse_classes_hint">Це буде більш точно показувати повідомлення, але, можливо, з затримкою</string>
-    <string name="title_advanced_default_folder_hint">        Android може попросити дозвіл на доступ до вибраної теки, навіть якщо застосунку це не потрібно.
+    <string name="title_advanced_default_folder_hint">
+        Android може попросити дозвіл на доступ до вибраної теки, навіть якщо застосунку це не потрібно.
         Ви можете скасувати діалогове вікно вибору для відновлення стандартної теки (зазвичай, теки «Завантаження»).
     </string>
     <string name="title_advanced_restore_on_launch_hint">Відновлювати останній стан, якщо це можливо, після перезапуску через іконку лаунчера</string>
@@ -1047,6 +1058,7 @@
     <string name="title_account_gmail">Для надійної синхронізації облікового запису Gmail, слід використовувати за можливості швидке налаштування</string>
     <string name="title_domain">Доменне ім\'я</string>
     <string name="title_autoconfig">Отримати параметри</string>
+    <string name="title_lan_required">Потрібні дозволи на доступ до локальної мережі</string>
     <string name="title_aliases">Псевдоніми</string>
     <string name="title_provider">Постачальник</string>
     <string name="title_custom">Власний</string>
@@ -1084,7 +1096,8 @@
     <string name="title_leave_on_device_hint">Коли повідомлення видаляються із сервера, повідомлення залишаються на пристрої</string>
     <string name="title_max_messages">Максимальна кількість повідомлень для завантаження (якщо порожньо то всі)</string>
     <string name="title_max_messages_keep">Це максимальна кількість повідомлень, які будуть зберігатися на пристрої</string>
-    <string name="title_max_messages_remark">Задайте додатнє число для завантаження останніх повідомлень (використовується зазвичай)
+    <string name="title_max_messages_remark">
+Задайте додатнє число для завантаження останніх повідомлень (використовується зазвичай)
         або від\'ємне для завантаженя перших повідомлень (використовується рідко)
     </string>
     <string name="title_keep_poll_interval">Інтервал опитування (хвилини)</string>
@@ -1148,7 +1161,8 @@
     <string name="title_service_port">Будь ласка, перевірте номер порту</string>
     <string name="title_service_protocol">Будь ласка, перевірте протокол (SSL/TLS або STARTTLS)</string>
     <string name="title_service_error10">Цей обліковий запис знову має бути автентифікований, що можна зробити за допомогою майстра швидкого налаштування</string>
-    <string name="title_certificate_error">        Через політику Google Play Store у версії FairEmail, що розповсюджується серез Play Store, більше неможливо підтримувати незахищені з’єднання з серверами електронної пошти, що мають проблеми з сертифікатими.
+    <string name="title_certificate_error">
+        Через політику Google Play Store у версії FairEmail, що розповсюджується серез Play Store, більше неможливо підтримувати незахищені з’єднання з серверами електронної пошти, що мають проблеми з сертифікатими.
          Тому цю проблему може вирішити лише ваш постачальник послуг електронної пошти — наведена вище інформація про помилку може допомогти йому вирішити цю проблему.
     </string>
     <string name="title_advanced_browse">Переглядати повідомлення на сервері</string>
@@ -1157,7 +1171,8 @@
     <string name="title_synchronize_subfolders">Підтеки</string>
     <string name="title_synchronize_more">Отримати більше повідомлень</string>
     <string name="title_synchronize_more_hint">Це призведе до одноразового завантаження старіших повідомлень, тому це не призведе до щоденного більшого використання батареї</string>
-    <string name="title_synchronize_more_hint2">         Повідомлення будуть отримані так швидко, як сервер електронної пошти зможе доставити їх, і вони будуть збережені так швидко, як пристрій зможе їх зберегти та проіндексувати.
+    <string name="title_synchronize_more_hint2">
+         Повідомлення будуть отримані так швидко, як сервер електронної пошти зможе доставити їх, і вони будуть збережені так швидко, як пристрій зможе їх зберегти та проіндексувати.
         Обмежувальним фактором, як правило, є швидкість внутрішнього сховища пристрою.
     </string>
     <string name="title_synchronize_more_hint3">Будь ласка, майте на увазі, що зберігання численних повідомлень на пристрої (десять тисяч і більше) може викликати затримки, тому що внутрішній накопичувач не є нескінченно швидким.</string>
@@ -1250,7 +1265,8 @@
     <string name="title_auto_delete">Автоматично видаляти старі повідомлення назавжди</string>
     <string name="title_auto_delete_hint">Старі повідомлення - це повідомлення, які більше не зберігаються на пристрої</string>
     <string name="title_auto_delete_archive_hint">Видалення з теки архіву не завжди дозволяється сервером електронної пошти</string>
-    <string name="title_inbox_root_hint">        Деякі постачальники вимагають створення нових тек нижче рівня вхідної теки.
+    <string name="title_inbox_root_hint">
+        Деякі постачальники вимагають створення нових тек нижче рівня вхідної теки.
         В цьому разі, ви можете довго натиснути на теку «Вхідні» у списку тек і вибрати «Створити підтеку».
     </string>
     <string name="title_folder_name_missing">Відсутнє ім\'я теки</string>
@@ -1354,7 +1370,7 @@
     <string name="title_quick_actions_snooze">Відкласти</string>
     <string name="title_quick_actions_clear">Очистити вибір після дії</string>
     <string name="title_trash">В кошик</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Видалити розмову</string>
+    <string name="title_trash_conversation">Видалити розмову</string>
     <string name="title_trash_selection">Видалити вибране</string>
     <string name="title_copy">Копіювати &#8230;</string>
     <string name="title_copy_to">Копіювати до &#8230;</string>
@@ -1379,7 +1395,8 @@
     <string name="title_report_spam">Вважати спамом</string>
     <string name="title_delete_permanently">Видалити назавжди</string>
     <string name="title_delete_attachments">Видалити вкладені файли</string>
-    <string name="title_delete_attachments_remark">        Щоб видалити вкладення, необхідно додати нове повідомлення, і старе повідомлення має бути видалене.
+    <string name="title_delete_attachments_remark">
+        Щоб видалити вкладення, необхідно додати нове повідомлення, і старе повідомлення має бути видалене.
         Оскільки ця операція може бути невдалою, старе повідомлення буде переміщено в кошик.
     </string>
     <string name="title_snooze">Відкласти &#8230;</string>
@@ -1461,7 +1478,8 @@
     <string name="title_third_party">Ви використовуєте версію програми від сторонніх розробників</string>
     <string name="title_expand_warning">Розкриття цього повідомлення завантажить %1$s</string>
     <string name="title_download_message">Завантаження &#8230;</string>
-    <string name="title_reformatted">        Це безпечний вид переформатованого повідомлення.
+    <string name="title_reformatted">
+        Це безпечний вид переформатованого повідомлення.
         Ви можете натиснути на значок &#x26F6;, щоб переглянути менш безпечне оригінальне повідомлення та приховати це повідомлення.
         Переформатування повідомлень займає деякий час, в залежності від розміру повідомлення і швидкості Вашого пристрою.
         Іноді, щоб побачити QR-коди, необхідно переглянути оригінальне повідомлення.
@@ -1668,7 +1686,8 @@
     <string name="title_signature_store">Збереження</string>
     <string name="title_search">Пошук</string>
     <string name="title_search_for_hint">Введіть текст</string>
-    <string name="title_search_hint">        Спочатку пошук виконується на пристрої.
+    <string name="title_search_hint">
+        Спочатку пошук виконується на пристрої.
         Для пошуку також і на сервері, натисніть кнопку «Шукати на сервері».
     </string>
     <string name="title_search_hint_fts">При використанні пошукового індексу: лише за цілими словами</string>
@@ -1766,7 +1785,8 @@
     <string name="title_edit_signature_remark">Хоча Android не може показати весь HTML, він буде відправлений таким як є</string>
     <string name="title_edit_signature_text">Текст підпису</string>
     <string name="title_edit_signature_image">Вставити зображ.</string>
-    <string name="title_edit_signature_image_hint">        При надсиланні повідомлення зображення копіюється в повідомлення з вибраного розташування.
+    <string name="title_edit_signature_image_hint">
+        При надсиланні повідомлення зображення копіюється в повідомлення з вибраного розташування.
         Отже, не видаляйте файл зображення!
     </string>
     <string name="title_edit_signature_delete">Видалити підпис?</string>
@@ -2032,7 +2052,8 @@
     <string name="title_hint_message_actions">Проведіть ліворуч для переміщення в кошик; проведіть праворуч щоб архівувати (якщо доступно); ці дії можна налаштувати в налаштуваннях облікового запису</string>
     <string name="title_hint_outbox">Ви можете провести вліво або вправо, щоб скасувати надсилання</string>
     <string name="title_hint_message_selection">Довго натисніть на повідомлення, щоб почати вибирати кілька повідомлень; Натиснувши потягніть вгору або вниз, щоб обрати більше повідомлень</string>
-    <string name="title_hint_message_junk">Поштовий клієнт лише показує повідомлення, які наявні на поштовому сервері.
+    <string name="title_hint_message_junk">
+Поштовий клієнт лише показує повідомлення, які наявні на поштовому сервері.
 За фільтрацію спаму відповідає саме сервер, а не клієнт.
 Якщо ви отримуєте багато спаму, зверніться до служби підтримки вашого поштового сервісу і не звинувачуйте застосунок!
     </string>
@@ -2045,7 +2066,8 @@
     <string name="title_hint_junk">Фільтрування на спам потрібно робити за допомогою сервера електронної пошти і не можна надійно робити це на пристрої з обмеженими можливостями.</string>
     <string name="title_hint_junk_learn">Переміщення повідомлення до та з теки спаму дозволяє навчити сервер електронної пошти що є спам, а що ні</string>
     <string name="title_hint_contact_actions">Довге натискання для параметрів</string>
-    <string name="title_hint_eml">        Це короткий опис вмісту raw-файлу повідомлення.
+    <string name="title_hint_eml">
+        Це короткий опис вмісту raw-файлу повідомлення.
         Ви можете скористатися правою нижньою кнопкою, щоб зберегти повідомлення у вхідну теку і переглянути весь вміст.
     </string>
     <string name="title_open_link">Відкрити посилання</string>
@@ -2136,7 +2158,8 @@
     <string name="title_pro_purchase">Придбати</string>
     <string name="title_pro_one_time">%1$s (одноразове придбання)</string>
     <string name="title_pro_no_play">Play Store не знайдено</string>
-    <string name="title_pro_info">        Розробка FairEmail зайняла тисячі годин і незважаючи на це, більшість функцій можуть використовуватися безплатно.
+    <string name="title_pro_info">
+        Розробка FairEmail зайняла тисячі годин і незважаючи на це, більшість функцій можуть використовуватися безплатно.
         FairEmail серйозно ставиться до Вашої конфіденційності та не показує рекламу й не використовує відстеження або аналітику, щоб заробити гроші.
         Щоб зберегти і підтримати FairEmail в довгостроковій перспективі, деякі зручності та розширені функції небезплатні.
         FairEmail показує маленьке повідомлення, щоб нагадати Вам про це. Воно буде вилучено, якщо ви купите Pro-функції.

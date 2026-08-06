@@ -15,7 +15,8 @@
     <string name="app_updated">Последнее обновление: %1$s</string>
     <string name="app_download">Загружено из: %1$s</string>
     <string name="app_error">Большинство сообщений об ошибках имеют внешние причины (сеть, сервер и т.д.) или вызваны неправильной, часто нестандартной конфигурацией. Плохой отзыв не решает такие проблемы. Обращение в службу поддержки почти всегда более эффективно.</string>
-    <string name="app_motd">        На Android 14/15 beta иногда появляется уведомление \"Приложение не отвечает\".
+    <string name="app_motd">
+        На Android 14/15 beta иногда появляется уведомление \"Приложение не отвечает\".
         Google работает над исправлением данной ошибки.
         Пожалуйста, не вините приложение из-за проблемы в Android!
     </string>
@@ -108,7 +109,8 @@
     </plurals>
     <string name="title_ask_spam_who">Считать сообщение от %1$s спамом?</string>
     <string name="title_junk_hint">За фильтрацию спама отвечает ваш почтовый провайдер. Приложение электронной почты не имеет достаточно данных, чтобы надёжно исполнять данную функцию.</string>
-    <string name="title_junk_pop_hint">        Сообщения от заблокированных отправителей загружаться не будут.
+    <string name="title_junk_pop_hint">
+        Сообщения от заблокированных отправителей загружаться не будут.
         Если функция \"Оставлять сообщения на сервере\" отключена, такие сообщения будут потеряны безвозвратно!
     </string>
     <string name="title_block">Блокировать %1$s</string>
@@ -231,7 +233,8 @@
     <string name="title_setup_office_auth">Ошибка \"AUTHENTICATE failed\" может быть вызвана отключением IMAP/SMTP системным администратором</string>
     <string name="title_setup_office_auth_5_7_3">Попробуйте воспользоваться мастером быстрой настройки \"Другой провайдер\".</string>
     <string name="title_setup_office_auth_5_7_139">Попробуйте воспользоваться мастером быстрой настройки \"Outlook/Hotmail/Live\".</string>
-    <string name="title_setup_office_not_connected">        Ошибка \"User is authenticated but not connected\" обычно означает, что IMAP отключён.
+    <string name="title_setup_office_not_connected">
+        Ошибка \"User is authenticated but not connected\" обычно означает, что IMAP отключён.
         Если у вас пользовательская учётная запись Outlook, перейдите на сайт Outlook, нажмите на значок настроек в правом верхнем углу, выберите \"Почта\", затем \"Переадресация и IMAP\" и в разделе \"POP и IMAP\" включите \"Разрешить устройствам и приложениям использовать IMAP\".
         Если у вас корпоративная или учебная учётная запись и т.п., свяжитесь с системным администратором сервера электронной почты.
     </string>
@@ -373,12 +376,14 @@
     <string name="title_advanced_hint_title">Настройки для опытных</string>
     <string name="title_advanced_hint_message">        Вы переходите к настройкам для опытных пользователей.
         Все параметры обычно имеют стандартные значения, которые можно изменить, если у вас есть другие предпочтения.    </string>
-    <string name="title_advanced_hint_configure">        Необязательно настраивать учётную запись здесь. Лучше воспользуйтесь для этого кнопкой мастера быстрой настройки.
+    <string name="title_advanced_hint_configure">
+        Необязательно настраивать учётную запись здесь. Лучше воспользуйтесь для этого кнопкой мастера быстрой настройки.
         Мастер быстрой настройки работает почти всегда, но если это не так, можно воспользоваться классической ручной настройкой, расположенной чуть ниже кнопки мастера.
     </string>
     <string name="title_advanced_hint_remark">        Параметры сгруппированы по вкладкам, поделены на разделы, организованы по внешнему виду или использованию и доступны через поиск.
     </string>
-    <string name="title_advanced_hint_options">        Большинство функций вам не понадобятся, а некоторые из них довольно специфичны,
+    <string name="title_advanced_hint_options">
+        Большинство функций вам не понадобятся, а некоторые из них довольно специфичны,
         поэтому возможно, что функционирование всех вариантов будет понятно не сразу.
         Пожалуйста, не оставляйте плохой отзыв только из-за обилия имеющихся функций или из-за того, что вы не сразу поняли все варианты их действия.
         Все имеющиеся функции полезны многим людям, но, возможно, (пока) не вам.
@@ -783,7 +788,8 @@
     <string name="title_advanced_mnemonic_hint">Любое сообщение, полученное со следующими словами в строке темы, автоматически удалит данные приложения</string>
     <string name="title_advanced_clear_all">Удаление данных приложения</string>
     <string name="title_advanced_clear_all_remark">Данные приложения будут безвозвратно удалены!</string>
-    <string name="title_advanced_default_encryption">        Метод шифрования по умолчанию (PGP или S/MIME) будет сохранён для каждого идентификатора после отправки подписанного или зашифрованного сообщения.
+    <string name="title_advanced_default_encryption">
+        Метод шифрования по умолчанию (PGP или S/MIME) будет сохранён для каждого идентификатора после отправки подписанного или зашифрованного сообщения.
         Можно выбрать метод шифрования непосредственно перед отправкой в диалоговом окне \"Параметры отправки\", вызываемом долгим нажатием кнопки \"Отправить\".
     </string>
     <string name="title_advanced_sign_default">Подписывать по умолчанию</string>
@@ -950,7 +956,8 @@
     <string name="title_advanced_inline_hint">Встроенные изображения – это изображения, включённые в сообщение</string>
     <string name="compressed">Содержимое сжатых файлов (%1$s) с более чем %2$s файлами или файлами размером более %3$s не будет показано</string>
     <string name="title_advanced_parse_classes_hint">Позволит более точно отображать сообщения, но, возможно, с задержкой</string>
-    <string name="title_advanced_default_folder_hint">        Android может запросить разрешение на доступ к выбранной папке, даже если приложению это не нужно.
+    <string name="title_advanced_default_folder_hint">
+        Android может запросить разрешение на доступ к выбранной папке, даже если приложению это не нужно.
         Вы можете отменить выбор, чтобы восстановить папку по умолчанию (обычно это папка \"Download\").
     </string>
     <string name="title_advanced_restore_on_launch_hint">По возможности восстанавливать последнее состояние приложения при перезапуске с помощью значка на рабочем столе</string>
@@ -1048,6 +1055,7 @@
     <string name="title_account_gmail">Для надёжной синхронизации учётной записи Gmail следует по возможности использовать мастер быстрой настройки</string>
     <string name="title_domain">Имя домена</string>
     <string name="title_autoconfig">Получить параметры</string>
+    <string name="title_lan_required">Требуется доступ к локальной сети</string>
     <string name="title_aliases">Псевдонимы</string>
     <string name="title_provider">Провайдер</string>
     <string name="title_custom">Пользовательское</string>
@@ -1063,6 +1071,7 @@
     <string name="title_notify_remark">Вы можете включить это для уведомлений конкретной учётной записи</string>
     <string name="title_port">Номер порта</string>
     <string name="title_user">Имя пользователя</string>
+    <string name="title_user_hint" comment="title_user_hint Hint text for account/identity username field. Please keep it short!">Обычно основной адрес электронной почты</string>
     <string name="title_password">Пароль</string>
     <string name="title_password_storage">Как хранятся пароли?</string>
     <string name="title_case_sensitive">Имена пользователей и пароли обычно чувствительны к регистру</string>
@@ -1085,7 +1094,8 @@
     <string name="title_leave_on_device_hint">Когда сообщения удаляются с сервера, они остаются на устройстве</string>
     <string name="title_max_messages">Максимальное количество загружаемых сообщений (пусто для всех)</string>
     <string name="title_max_messages_keep">Максимальное количество сообщений, которые будут храниться на устройстве</string>
-    <string name="title_max_messages_remark">        Введите положительное число для загрузки сообщений в конце (более распространённое)
+    <string name="title_max_messages_remark">
+        Введите положительное число для загрузки сообщений в конце (более распространённое)
         или отрицательное число для загрузки сообщений в начале (менее распространённое)
     </string>
     <string name="title_keep_poll_interval">Интервал опроса (мин.)</string>
@@ -1149,7 +1159,8 @@
     <string name="title_service_port">Пожалуйста, дважды проверьте номер порта</string>
     <string name="title_service_protocol">Пожалуйста, дважды проверьте протокол (SSL/TLS или STARTTLS)</string>
     <string name="title_service_error10">Эта учётная запись должна быть повторно аутентифицирована, что можно сделать с помощью мастер быстрой настройки</string>
-    <string name="title_certificate_error">        В соответствии с правилами Google Play Store, поддержка небезопасных подключений к почтовым серверам с проблемами сертификатов для версии FairEmail, распространяемой через Play Store, более невозможна.
+    <string name="title_certificate_error">
+        В соответствии с правилами Google Play Store, поддержка небезопасных подключений к почтовым серверам с проблемами сертификатов для версии FairEmail, распространяемой через Play Store, более невозможна.
         Данную проблему может решить только провайдер электронной почты — приведённая выше информация об ошибке может помочь ему с разрешением возникшей ситуации.
     </string>
     <string name="title_advanced_browse">Просмотр сообщений на сервере</string>
@@ -1158,7 +1169,8 @@
     <string name="title_synchronize_subfolders">Подпапки</string>
     <string name="title_synchronize_more">Получить больше сообщений</string>
     <string name="title_synchronize_more_hint">Это вызовет одноразовую загрузку старых сообщений, поэтому не приведёт к большему потреблению заряда батареи на постоянной основе</string>
-    <string name="title_synchronize_more_hint2">        Сообщения будут загружены настолько быстро, насколько сервер электронной почты сможет отдать их и сохраняться настолько быстро, насколько устройство сможет сохранить и индексировать их.
+    <string name="title_synchronize_more_hint2">
+        Сообщения будут загружены настолько быстро, насколько сервер электронной почты сможет отдать их и сохраняться настолько быстро, насколько устройство сможет сохранить и индексировать их.
         Ограничивающим фактором обычно является скорость внутреннего хранилища устройства.
     </string>
     <string name="title_synchronize_more_hint3">Помните, что хранение большого количества сообщений (десять тысяч и более) на своём устройстве может привести к задержкам, поскольку внутреннее хранилище не является бесконечно быстрым.</string>
@@ -1355,7 +1367,7 @@
     <string name="title_quick_actions_snooze">Отложить</string>
     <string name="title_quick_actions_clear">Очистить выбор после действия</string>
     <string name="title_trash">Корзина</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Удалить диалог</string>
+    <string name="title_trash_conversation">Удалить диалог</string>
     <string name="title_trash_selection">Удалить выбранное</string>
     <string name="title_copy">Копировать&#8230;</string>
     <string name="title_copy_to">Копировать в&#8230;</string>
@@ -1380,7 +1392,8 @@
     <string name="title_report_spam">Считать спамом</string>
     <string name="title_delete_permanently">Удалить окончательно</string>
     <string name="title_delete_attachments">Удалить вложения</string>
-    <string name="title_delete_attachments_remark">        Для удаления вложения необходимо создать новое сообщение, а старое удалить.
+    <string name="title_delete_attachments_remark">
+        Для удаления вложения необходимо создать новое сообщение, а старое удалить.
         Так как эта операция может завершиться неудачно, старое сообщение будет перемещено в корзину.
     </string>
     <string name="title_snooze">Отложить&#8230;</string>
@@ -1768,7 +1781,8 @@
     <string name="title_edit_signature_remark">Хотя Android не может отобразить весь HTML, он будет отправлен как есть</string>
     <string name="title_edit_signature_text">Текст подписи</string>
     <string name="title_edit_signature_image">Вставить изображение</string>
-    <string name="title_edit_signature_image_hint">        При отправке сообщения изображение копируется в него из указанного расположения.
+    <string name="title_edit_signature_image_hint">
+        При отправке сообщения изображение копируется в него из указанного расположения.
         Поэтому не удаляйте файл изображения!
     </string>
     <string name="title_edit_signature_delete">Удалить подпись?</string>
@@ -2034,7 +2048,8 @@
     <string name="title_hint_message_actions">Смахните влево, чтобы поместить в корзину; смахните вправо, чтобы поместить в архив (если имеется); действия жестов можно изменить в настройках учётной записи.</string>
     <string name="title_hint_outbox">Можно провести влево или вправо, чтобы отменить отправку</string>
     <string name="title_hint_message_selection">Длительное нажатие на сообщение начинает выбор нескольких сообщений; удерживайте нажатие и смахните вверх или вниз, чтобы выбрать больше сообщений.</string>
-    <string name="title_hint_message_junk">        Клиент электронной почты просто отображает сообщения, находящиеся на почтовом сервере.
+    <string name="title_hint_message_junk">
+        Клиент электронной почты просто отображает сообщения, находящиеся на почтовом сервере.
         За фильтрацию спама отвечает почтовый сервер, а не клиент.
         Если вы получаете много спама, обратитесь к своему провайдеру электронной почты и не вините приложение!
     </string>
@@ -2047,7 +2062,8 @@
     <string name="title_hint_junk">Фильтрация спама должна выполняться почтовым сервером и не может быть надёжно выполнена на устройстве с ограниченными возможностями и питанием от батареи.</string>
     <string name="title_hint_junk_learn">Перемещая сообщения в/из папки \"Спам\", сервер электронной почты \"изучает\", что такое спам</string>
     <string name="title_hint_contact_actions">Длительное нажатие откроет другие действия.</string>
-    <string name="title_hint_eml">        Это сводка содержимого файла исходного сообщения.
+    <string name="title_hint_eml">
+        Это сводка содержимого файла исходного сообщения.
         Можно использовать кнопку в правом нижнем углу, чтобы сохранить сообщение в папке \"Входящие\" для просмотра всего содержимого.
     </string>
     <string name="title_open_link">Открыть ссылку</string>

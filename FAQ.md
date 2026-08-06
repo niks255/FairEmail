@@ -239,6 +239,9 @@ Most apps store their data in the cloud instead of on the device, which is why t
 * &#x2714; ~~Search for settings~~
 * &#x274C; ~~POP3 folders~~
 * &#x2714; ~~Bottom action bar~~
+* [SMTP Require TLS Option](https://datatracker.ietf.org/doc/html/rfc8689)
+* [Unobtrusive End-to-End Email Signatures](https://datatracker.ietf.org/doc/draft-ietf-mailmaint-unobtrusive-signatures/)
+* [OAuth for Thundermail](https://github.com/thunderbird/thunderbird-accounts/issues/1124)
 
 Anything on this list is in random order and *might* be added in the near future.
 
@@ -344,7 +347,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(96) Where can I find the IMAP and SMTP settings?](#faq96)
 * [(97) What is 'cleanup'?](#faq97)
 * [(98) Why can I still pick contacts after revoking contacts permissions?](#faq98)
-* [(99) Can you add a rich text or markdown editor?](#faq99)
+* [(99) What should I know about Markdown?](#faq99)
 * [(100) How can I synchronize Gmail categories?](#faq100)
 * [(101) What does the blue/orange dot at the bottom of the conversations mean?](#faq101)
 * [(102) How can I enable auto rotation of images?](#faq102)
@@ -455,6 +458,7 @@ Anything on this list is in random order and *might* be added in the near future
 * [(207) What does 'Authentication failed' mean?](#faq207)
 * [(208) What does 'about:blank#blocked' mean when I click on a link?](#faq208)
 * [(209) Why is using a VPN often problematic?](#faq209)
+* [(210) Why is local network permission needed?](#faq210)
 
 [I have another question.](#get-support)
 
@@ -769,9 +773,9 @@ To use a password, you can use the quick setup wizard and select *Other provider
 
 **Important**: sometimes Google issues this alert:
 
-*[ALERT] Please log in via your web browser: https://support.google.com/mail/accounts/answer/78754 (Failure)*
+*[ALERT] Please log in via your web browser*
 
-This Google security check is triggered more often with *less secure apps* enabled, even less with an app password, and hardly ever when using an on-device account (OAuth).
+~~This Google security check is triggered more often with *less secure apps* enabled, even less with an app password, and hardly ever when using an on-device account (OAuth).~~
 You might see the error *OAUTH2 asked for more*, which basically says the connection is temporarily blocked, until you confirm it is you.
 
 Note that an app specific password is required when two factor authentication is enabled.
@@ -781,7 +785,7 @@ After enabling two factor authentication there will be this error message:
 
 The error message "*Authentication failed - Invalid credentials*" or *Token refresh required* means that the Android account manager was not able to refresh the access token,
 or that getting an access token was not allowed,
-for example when the account is a [Family Link](https://support.google.com/families/answer/7101025) account, in which case you can use the Gmail app only.
+for example when the account is a [Family Link](https://support.google.com/families/answer/7101025) account or any other delegated account, in which case you can use the Gmail app only.
 A common cause for this problem is using a VPN, a firewall app or an ad blocker which blocks internet access for the Android account manager.
 Please make sure permissions were granted to the app via setup step 2.
 You can try to work around this issue by using the quick setup wizard *Gmail (Oauth)* or by using an app password.
@@ -927,6 +931,12 @@ if your provider allows this. Considering the email address test@example.org you
 * "*Some name, username*" will result in the email address "*Some name, &lt;username@example.org&gt;*" (since version 1.2032)
 
 You can configure a default CC, BCC and/or reply-to address in the advanced identity settings.
+Since version 1.2326 you can use the following placeholders in these default addressess:
+
+* `$from$`: the full 'from' address
+* `$user$`: the username of the 'from' address
+* `$domain$`: the domain name of the 'from' address
+* `$extra$`: the extra as explained above
 
 FairEmail will automatically update the passwords of related identities when you update the password of the associated account or a related identity.
 
@@ -1021,6 +1031,8 @@ If you want to undo decryption, you can tap on the "close" padlock icon.
 
 You'll need to install and configure [OpenKeychain](https://f-droid.org/en/packages/org.sufficientlysecure.keychain/) first.
 FairEmail was tested with OpenKeychain version 5.4. Later versions will most likely be compatible, but earlier versions might not be.
+
+[PGPony for Android](https://github.com/norsehorse-dev/PGPonyAndroid) is reported to work too. You can select the PGP provider on the encryption settings tab page.
 
 **Important**: the OpenKeychain app is known to (silently) crash when the calling app (FairEmail) is not authorized yet and is getting an existing public key.
 You can workaround this by trying to send a signed/encrypted message to a sender with an unknown public key.
@@ -2283,7 +2295,7 @@ Note that battery optimizations need to be disabled in setup step 3 to reliably 
 Some providers send every two minutes something like '*Still here*' resulting in network traffic and your device to wake up and causing unnecessary extra battery usage.
 You can inspect the *Log* via the main navigation menu to check if your provider is doing this.
 If your provider is using [Dovecot](https://www.dovecot.org/) as IMAP server,
-you could ask your provider to change the [imap_idle_notify_interval](https://wiki.dovecot.org/Timeouts) setting to a higher value or better yet, to disable this.
+you could ask your provider to change the [imap_idle_notify_interval](https://doc.dovecot.org/2.3/admin_manual/timeouts/) setting to a higher value or better yet, to disable this.
 If your provider is not able or willing to change/disable this, you should consider switching to periodically instead of continuous synchronization.
 You can change this in the receive settings tab page.
 
@@ -2605,7 +2617,7 @@ Then use the three dot action button to execute the desired action.
 There are almost no providers offering the [JMAP](https://jmap.io/) protocol,
 so it is not worth a lot of effort to add support for this to FairEmail.
 
-Moreover, the only available [Java JMAP library](https://github.com/iNPUTmice/jmap) seems not to be maintained anymore.
+Moreover, the only available [Java JMAP library](https://codeberg.org/iNPUTmice/jmap) seems not to be maintained anymore.
 
 <br />
 
@@ -3030,6 +3042,8 @@ Example conditions:
 
 ```header("X-Mailer") contains "Open-Xchange" && from matches ".*service@.*" && Is("seen")```
 
+```!subject contains "Test" && !(subject contains "Example")```
+
 ```!onBlocklist() && hasMx() && attachments() > 0```
 
 ```(received + 7*24*60*60*1000) < DT_DATE_TO_EPOCH(DT_NOW())```
@@ -3097,13 +3111,13 @@ $domain:to$ (since version 1.2289)
 $group$ (since version 1.2030)
 ```
 
-$user$ is the user name of the 'from' email address,
+`$user$` is the user name of the 'from' email address,
 and $domain$ is the domain name of the 'from' email address: *user@domain*.
 
-$extra$ is the part after the plus sign if the username: *user+extra@example.org*.
+`$extra$` is the part after the plus sign if the username: *user+extra@example.org*.
 The 'to' user, extra and domain placeholders apply to the 'to' email address and the other placeholders apply to 'from' email address.
 
-$group$ will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only.
+`$group$` will be replaced with the contact group name of the sender, provided that the related contact is assigned to one contact group only.
 Note that the Android contact provider isn't very fast, so using this placeholder can slow down fetching messages.
 
 <br />
@@ -3172,13 +3186,13 @@ Note that *regex* should be disabled and that there should be no white space.
 
 Please be aware that a difference in the *from* and *reply-to* domain, and no or multi *from* addresses isn't a good indication of spam.
 
-Since the app sets the keyword *$Filtered$* after the rules have been executed for a message,
+Since the app sets the keyword `$Filtered$` after the rules have been executed for a message,
 you can create a rule to prevent the rules from being executed again (which is sometimes desirable):
 
 * Name: anything you like
 * Order: lower than all other rules, for example 0
 * Stop processing rules after executing this rule: enabled
-* Header contains: *$$Filtered$* (no spaces)
+* Header contains: `$$Filtered$` (no spaces)
 * Action: No action
 
 Note that not all email servers support IMAP keywords.
@@ -3851,16 +3865,18 @@ However, picking contacts is delegated to and done by Android and not by FairEma
 <br />
 
 <a name="faq99"></a>
-**(99) Can you add a rich text or markdown editor?**
+**(99) What should I know about Markdown?**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq99)
 
-FairEmail provides common text formatting (bold, italic, underline, text size and color) via a toolbar that appears after selecting some text.
+FairEmail provides common text formatting (bold, italic, underline, text size and color, etc.) via a toolbar that appears after selecting some text.
 
-A [Rich text](https://en.wikipedia.org/wiki/Formatted_text) or [Markdown](https://en.wikipedia.org/wiki/Markdown) editor
-would not be used by many people on a small mobile device and, more important,
-Android doesn't support a rich text editor and most rich text editor open source projects are abandoned.
-See [here](https://forum.xda-developers.com/showpost.php?p=79061829&postcount=4919) for some more details about this.
+Alternatively, you can use [Markdown](https://en.wikipedia.org/wiki/Markdown).
+You can enable Markdown support via the three-dot overflow menu at the top right of the message editor.
+
+Please be aware that **normal styling will be ignored** when using Markdown, or, in other words, you can mix.
+
+Markdown is an experimental feature.
 
 <br />
 
@@ -4110,7 +4126,7 @@ Please see these websites for lists of privacy oriented email providers with adv
 
 * [Restore privacy](https://restoreprivacy.com/secure-email/)
 * [Privacy Guides](https://www.privacyguides.org/en/email/)
-* [Privacy Tools](https://www.privacytools.io/providers/email/)
+* [Privacy Tools](https://privacytools.io/privacy-email)
 
 **Important**: Some providers, like ProtonMail and Tutanota, use proprietary email protocols, which make it impossible to use third party email apps.
 Please see [this FAQ](#faq129) for more information.
@@ -4419,6 +4435,7 @@ The subject of a received message can be edited, also on the email server, via t
 *Markdown (1.2061+)*
 
 Composing messages using [Markdown](https://en.wikipedia.org/wiki/Markdown) can be enabled via the three-dots overflow menu of the message editor.
+Please see [this FAQ](#faq99).
 
 <br />
 
@@ -4508,17 +4525,19 @@ You can reset asked questions via the three dots overflow menu in the miscellane
 **ProtonMail** uses a proprietary email protocol
 and [does not directly support IMAP](https://protonmail.com/support/knowledge-base/imap-smtp-and-pop3-setup/),
 so you cannot use FairEmail or any other Android email client to access ProtonMail.
-Unfortunately, Proton has no plans to add [a mail bridge for Android](https://github.com/ProtonMail/proton-bridge/issues/427).
+Unfortunately, Proton has no plans to add a mail bridge for Android.
 
 **Tutanota** uses a proprietary email protocol
-and [does not support IMAP](https://tutanota.com/faq/#imap),
+and [does not support IMAP](https://tuta.com/support#imap),
 so you cannot use FairEmail or any other email client to access Tutanota.
 
 **Cyberfear** does not support IMAP, so you'll need to manually configure a POP3 account.
 
 **Skiff** uses a proprietary email protocol
-and [does not support IMAP](https://www.skiff.com/blog/tutanota-alternatives-comparison)
+and [does not support IMAP](https://www.skiff.com/)
 so you cannot use FairEmail or any other email client to access Skiff.
+
+Update: Skiff was shut down after the Notion acquisition (2024).
 
 **Tildamail** uses a proprietary email protocol and does not support IMAP,
 so you cannot use FairEmail or any other email client to access Tildamail.
@@ -4530,6 +4549,8 @@ so you cannot use FairEmail or any other email email client to access Criptext.
 **OnMail** uses a proprietary email protocol
 and [does not support IMAP](https://support.onmail.com/hc/en-us/articles/360048879012-How-do-I-connect-my-OnMail-address-to-a-third-party-email-app-),
 so you cannot use FairEmail or any other email client to access OnMail, except for one (but please read the privacy policy carefully).
+
+Update: OnMail is gone.
 
 <br />
 
@@ -4717,9 +4738,12 @@ The confusing Microsoft specific server error *User is authenticated but not con
 **Consumer Outlook/Hotmail/Live account**
 
 * A VPN is being used. Try turning off the VPN.
+* The Outlook account is registered in another country than the current country.
+* The same account is configured in multiple email clients, also on other devices.
+* Multiple Outlook accounts are being used at the same time.
 * IMAP is disabled, which is the default for new Outlook accounts now
 
-To fix this:
+To fix the latter:
 
 * Go to the [Outlook website](https://outlook.live.com/)
 * Tap on the settings wheel at the top right
@@ -6298,7 +6322,9 @@ visible as a short delay between tapping on a link and the link confirmation dia
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq201)
 
-**Unfortunately, the Certificate Transparency library isn't maintained anymore, and therefore Certificate Transparency has been disabled in version 1.2320.**
+**Since version 1.2326 Certificate Transparency [as provided by Android 16 and later](https://developer.android.com/privacy-and-security/security-config#CertificateTransparencySummary) is always enabled in non Play Store builds**
+
+**Unfortunately, the Certificate Transparency library isn't maintained anymore, and therefore Certificate Transparency has been disabled in version 1.2320 for Android 15 and before and for Play Store builds.**
 
 Please see [this article](https://certificate.transparency.dev/howctworks/) about what certificate transparency is.
 Alternatively, see [this Wikipedia article](https://en.wikipedia.org/wiki/Certificate_Transparency).
@@ -6500,6 +6526,30 @@ The result is that logins are blocked for everyone using the same network addres
 This is also why the app warns against using a VPN.
 
 <br>
+
+<a name="faq210"></a>
+**(210) Why is local network permission needed?**
+
+&#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq210)
+
+Since Android 17, [local network permission](https://developer.android.com/privacy-and-security/local-network-permission) is required for local network access (LAN access):
+
+* 10.0.0.0/8
+* 172.16.0.0/12
+* 192.168.0.0/16
+* fd00::/8
+
+This permission can be granted via a button on the connection settings page, or inline via the account/identity settings screen after entering a local network address.
+
+Very few people will need local network access, and to avoid questions regarding a new permission, this permission is available only in the [GitHub version](https://github.com/M66B/FairEmail/releases).
+
+If the app navigated to this FAQ after you clicked the button to grant local network permission, then the GitHub version is not (or is no longer) installed.
+If you are using the Play Store version of the app, you can install the GitHub version as an update.
+
+Added in version 1.2325.
+
+<br>
+
 
 <h2><a name="get-support"></a>Get support</h2>
 

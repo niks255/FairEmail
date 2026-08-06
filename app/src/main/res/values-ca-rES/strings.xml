@@ -74,14 +74,16 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     </plurals>
     <string name="title_ask_spam_who">Voleu tractar el missatge de %1$s com a correu brossa?</string>
     <string name="title_junk_hint">El seu proveïdor de correu electrònic és el responsable de filtrar el correu brossa. Una aplicació de correu electrònic no té totes les dades necessàries per fer això de manera confiable.</string>
-    <string name="title_junk_pop_hint">        No es baixaran els missatges dels remitents bloquejats.
+    <string name="title_junk_pop_hint">
+        No es baixaran els missatges dels remitents bloquejats.
         Si \"Deixa els missatges al servidor\" no està activat, els missatges es perdran per a sempre!
     </string>
     <string name="title_block">Bloqueja %1$s</string>
     <string name="title_block_sender">Bloqueja remitent</string>
     <string name="title_block_sender_domain">Bloca el domini \'%1$s\'</string>
     <string name="title_block_sender_remark">El bloqueig significa traslladar automàticament a la carpeta de correu brossa</string>
-    <string name="title_block_sender_hint">        Bloquejar un remitent és una funció gratuïta.
+    <string name="title_block_sender_hint">
+        Bloquejar un remitent és una funció gratuïta.
         Bloquejar un domini de remitent fa servir normes de filtre, que és una funció pro.
     </string>
     <string name="title_blocked_senders">Remitents bloquejats</string>
@@ -230,7 +232,8 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="title_setup_close">Tancar preferències</string>
     <string name="title_setup_export">Exporta la configuració</string>
     <string name="title_setup_import">Importa una configuració</string>
-    <string name="title_setup_export_remark">        Com que l\'arxiu de configuració conté tota la configuració i informació dels comptes, està encriptat amb una contrasenya.
+    <string name="title_setup_export_remark">
+        Com que l\'arxiu de configuració conté tota la configuració i informació dels comptes, està encriptat amb una contrasenya.
         Cal tenir la contrasenya per a tornar a importar la configuració, així que no la perdis!
     </string>
     <string name="title_setup_export_do">El fitxer exportat contindrà tota la configuració i dades, però no els missatges i imatges que facin referència a signatures</string>
@@ -295,10 +298,12 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="title_check_gmail_oauth">Els teus comptes de Gmail continuaran funcionant després del 30 de maig de 2022</string>
     <string name="title_check_gmail_password">Algunes de les teves comptes de Gmail poden deixar de funcionar després del 30 de maig del 2022</string>
     <string name="title_advanced_hint_title">Més opcions avançades</string>
-    <string name="title_advanced_hint_message">Esteu navegant a les opcions més avançades.
+    <string name="title_advanced_hint_message">
+Esteu navegant a les opcions més avançades.
         Totes les opcions utilitzen habitualment valors estàndard que es poden canviar si teniu una preferència diferent.
     </string>
-    <string name="title_advanced_hint_remark">Les opcions estan categoritzades per pestanya, dividides en seccions, organitzades per aspecte o ús, i són cercables.
+    <string name="title_advanced_hint_remark">
+Les opcions estan categoritzades per pestanya, dividides en seccions, organitzades per aspecte o ús, i són cercables.
     </string>
     <string name="title_advanced_hint_setup">Pots configurar un compte punxant el botó d\'assistent en la pantalla principal de configuració.</string>
     <string name="title_advanced_section_main">Principal</string>
@@ -732,7 +737,8 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="title_synchronize_subfolders">Subcarpetes</string>
     <string name="title_synchronize_more">Obtenir més missatges</string>
     <string name="title_synchronize_more_hint">Això resultarà en una sola descàrrega de missatges antics, i per això no suposarà en un ús major de bateria per un ús diari</string>
-    <string name="title_synchronize_more_hint2">        Els missatges s\'obtindran tan de pressa com el servidor de correu pugui entregar-los i emmagatzemats tan de pressa com el dispositiu pugui guardar-los i indexar-los.
+    <string name="title_synchronize_more_hint2">
+        Els missatges s\'obtindran tan de pressa com el servidor de correu pugui entregar-los i emmagatzemats tan de pressa com el dispositiu pugui guardar-los i indexar-los.
         El factor limitant acostuma a ser la velocitat de l\'emmagatzematge intern del dispositiu.
     </string>
     <string name="title_synchronize_more_hint3">Si us plau, tingueu en compte que emmagatzemar molts missatges (deu-mil o més) al vostre dispositiu pot causar aturades, ja que l\'emmagatzematge intern no és infinitament ràpid.</string>
@@ -1316,7 +1322,8 @@ Ambdues opcions es poden desactivar si es desitja.</string>
     <string name="title_pro_feature">Això es una característica Pro</string>
     <string name="title_pro_list">Llista de característiques Pro</string>
     <string name="title_pro_purchase">Comprar</string>
-    <string name="title_pro_info">        Desenvolupar FairEmail ha necessitat literalment milers d\'hores i, malgrat això, la majoria de característiques són gratuïtes.
+    <string name="title_pro_info">
+        Desenvolupar FairEmail ha necessitat literalment milers d\'hores i, malgrat això, la majoria de característiques són gratuïtes.
         FairEmail es pren la teva privacitat seriosament i no mostra anuncis o us rastreja o analitza per aconseguir diners.
         Per mantenir i suportar FairEmail a llarg termini, algunes característiques avançades i més còmodes no són gratuïtes.
         FairEmail mostra un petit missatge per recordar-vos-ho i desapareixerà si compreu les característiques Pro.

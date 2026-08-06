@@ -167,7 +167,7 @@ for more information.
 
 ## Compatibility
 
-FairEmail requires at least Android 5 Lollipop.
+FairEmail requires at least Android 6 Marshmallow.
 
 FairEmail is supported on smartphones and tablets only, and for example not on TVs and E Ink devices.
 
@@ -195,6 +195,7 @@ Please see [here](https://m66b.github.io/FairEmail/) for a list of often asked q
 
 Contributions to this document and the frequently asked questions
 are preferred in the form of [pull requests](https://help.github.com/articles/creating-a-pull-request/).
+Due to abuse, [prior contact](https://contact.faircode.eu/) is required for pull requests.
 
 *Translations*
 

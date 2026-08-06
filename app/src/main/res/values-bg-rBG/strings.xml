@@ -14,7 +14,8 @@
     <string name="app_cake_required">Изисквано минимум място за хранилището: %1$s</string>
     <string name="app_updated">Последно обновено: %1$s</string>
     <string name="app_download">Изтеглено от: %1$s</string>
-    <string name="app_motd">        С бета версия на Android №14/15 понякога се появяват известия „Приложението не отговаря“.
+    <string name="app_motd">
+        С бета версия на Android №14/15 понякога се появяват известия „Приложението не отговаря“.
         Google работи по оправянето на проблема.
         Моля, не винете приложението за този проблем в Android!
     </string>
@@ -85,14 +86,16 @@
     </plurals>
     <string name="title_ask_spam_who">Третирате ли съобщението от %1$s като спам?</string>
     <string name="title_junk_hint">Вашият доставчик на имейл е отговорен за прецеждането на спама. Приложението за имейл няма всичките данни, които трябват, за да направи това надеждно.</string>
-    <string name="title_junk_pop_hint">        Съобщения от блокирани податели няма да се изтеглят.
+    <string name="title_junk_pop_hint">
+        Съобщения от блокирани податели няма да се изтеглят.
         Ако е включена функцията \"Оставяне съобщения на сървъра\", то тези съобщения ще се загубят безвъзвратно!
     </string>
     <string name="title_block">Блокиране на %1$s</string>
     <string name="title_block_sender">Блокиране на подателя</string>
     <string name="title_block_sender_domain">Блокиране на домейна \'%1$s\'</string>
     <string name="title_block_sender_remark">Блокирането значи автоматично преместване в папка спам</string>
-    <string name="title_block_sender_hint">        Блокиране на подателя е безплатна функция.
+    <string name="title_block_sender_hint">
+        Блокиране на подателя е безплатна функция.
         Блокирането на домейна на подателя употребява прецеждащи правила, което е функция на професионална версия.
     </string>
     <string name="title_blocked_senders">Блокирани податели</string>
@@ -200,7 +203,8 @@
     <string name="title_setup_office_auth">Грешката „УДОСТОВЕРЯВАНЕТО неуспешно“ може да се причини от изключването на IMAP/SMTP от системния администратор</string>
     <string name="title_setup_office_auth_5_7_3">Опитайте вълшебника за бърза настройка „Друг доставчик“.</string>
     <string name="title_setup_office_auth_5_7_139">Опитайте вълшебника за бърза настройка на „Outlook/Hotmail/Live“.</string>
-    <string name="title_setup_office_not_connected">        Грешката \'User is authenticated but not connected\' основно значи, че IMAP е изключен.
+    <string name="title_setup_office_not_connected">
+        Грешката \'User is authenticated but not connected\' основно значи, че IMAP е изключен.
         В случай на клиентски акаунт в Outlook, отидете на уебсайта на Outlook, чукнете горе вдясно на настройки, изберете \'Mail\', изберете \'Препращане и IMAP\', и в частта \'POP и IMAP\' включете \'Нека устройствата и приложенията използват IMAP\'.
         В случай на корпоративен, образователен и др. акаунт, свържете се със системния администратор на сървъра на е-поща.
     </string>
@@ -273,7 +277,8 @@
     <string name="title_setup_close">Затваряне на настройките</string>
     <string name="title_setup_export">Изнасяне на настройките</string>
     <string name="title_setup_import">Внасяне на настройки</string>
-    <string name="title_setup_export_remark">        Откак файлът с настройки съдържа всички настройки и сведения за акаунта, то се криптира с парола.
+    <string name="title_setup_export_remark">
+        Откак файлът с настройки съдържа всички настройки и сведения за акаунта, то се криптира с парола.
         Паролата се изисква при повторен внос на настройките, затова не я забравяйте!
     </string>
     <string name="title_setup_export_do">Файлът за износ ще съдържа всички настройки и данни, но без съобщения и без образи в подписите</string>
@@ -342,7 +347,8 @@
     <string name="title_advanced_hint_title">Още разширени възможности</string>
     <string name="title_advanced_hint_message">        You are navigating to the more advanced options.        All options have commonly used standard values, which you do not need to change unless you have a different preference.
     </string>
-    <string name="title_advanced_hint_remark">        Възможностите са категоризирани по раздел, разделени на секции, организирани по външен вид или употреба, а и търсаеми.
+    <string name="title_advanced_hint_remark">
+        Възможностите са категоризирани по раздел, разделени на секции, организирани по външен вид или употреба, а и търсаеми.
     </string>
     <string name="title_advanced_hint_setup">Може да настроите акаунта, чуквайки на бутона вълшебник на главния екран за конфигуриране.</string>
     <string name="title_advanced_section_main">Главно</string>
@@ -741,7 +747,8 @@
     <string name="title_advanced_mnemonic_hint">Всяко получено е-писмо с долните думи в реда на темата автоматично и незабавно ще изтрие данните на приложението</string>
     <string name="title_advanced_clear_all">Изтриване на данните на приложението</string>
     <string name="title_advanced_clear_all_remark">Данните на приложението ще се изтрият безвъзвратно!</string>
-    <string name="title_advanced_default_encryption">        Подразбиращият се кодиращ начин (PGP или S/MIME) ще се съхрани за всяка самоличност след изпращането на подписано или криптирано съобщение.
+    <string name="title_advanced_default_encryption">
+        Подразбиращият се кодиращ начин (PGP или S/MIME) ще се съхрани за всяка самоличност след изпращането на подписано или криптирано съобщение.
         Криптиращият начин може да е избран преди изпращането в диалоговия прозорец с опции за изпращане, натискайки дълго копчето за изпращане.
     </string>
     <string name="title_advanced_sign_default">Подписване по подразбиране</string>
@@ -757,7 +764,8 @@
     <string name="title_advanced_import_pgp">Ключ за внасяне</string>
     <string name="title_advanced_sign_algo">Алгоритъм на подписа</string>
     <string name="title_advanced_encrypt_algo">Алгоритъм на криптирането</string>
-    <string name="title_advanced_remark_algo">        Имайте предвид, че не всички имейл клиенти поддържат всички алгоритми.
+    <string name="title_advanced_remark_algo">
+        Имайте предвид, че не всички имейл клиенти поддържат всички алгоритми.
         Алгоритмите по подразбиране (SHA-256 и AES-128) обикновено се поддържат.
     </string>
     <string name="title_advanced_check_certificate">Проверете публичния ключ при изпращане</string>
@@ -766,7 +774,8 @@
     <string name="title_advanced_import_key">Импортиране на частен ключ</string>
     <string name="title_advanced_manage_keys">Управление на частни ключове</string>
     <string name="title_advanced_ca">Инсталирани удостоверения на сертифициращ орган</string>
-    <string name="title_advanced_manage_keys_hint">        Това ще отвори настройки за сигурност на Android.
+    <string name="title_advanced_manage_keys_hint">
+        Това ще отвори настройки за сигурност на Android.
         Ключовете и удостоверенията обикновено може да се намерят под Разширени - Криптиране и идентификационни данни.
     </string>
     <string name="title_advanced_power_menu">Добавяне на действия към менюто за захранване на Android</string>
@@ -905,7 +914,8 @@
     <string name="title_advanced_inline_hint">Вградените изображения са изображения, включени в съобщението</string>
     <string name="compressed">Съдържанието на сбитите файлове (%1$s), с повече от %2$s файла, или с файлове, по-големи от %3$s, няма да бъде показано</string>
     <string name="title_advanced_parse_classes_hint">Това ще показва по-точно съобщенията, но със закъснение</string>
-    <string name="title_advanced_default_folder_hint">        Android може да иска позволение за достъп до избраната папка, дори ако не е потребно на приложението.
+    <string name="title_advanced_default_folder_hint">
+        Android може да иска позволение за достъп до избраната папка, дори ако не е потребно на приложението.
         Може да отмените диалоговия прозорец за избор, за да въстановите подразбиращата се папка (обикновено е папка „Download“).
     </string>
     <string name="title_advanced_autoexpand_hint">Автоматично отваряне на съобщение, когато има само едно съобщение или само едно непрочетено съобщение в разговор</string>
@@ -1038,7 +1048,8 @@
     <string name="title_leave_on_device_hint">Когато съобщенията са изтрити от сървъра, съобщенията ще останат на устройството</string>
     <string name="title_max_messages">Максимален брой съобщения за изтегляне (празно за всички)</string>
     <string name="title_max_messages_keep">Това е най-големият възможен брой съобщения, които ще се съхраняват в устройството</string>
-    <string name="title_max_messages_remark">        Въведете положително число за изтегляне на съобщенията в края (най-често)
+    <string name="title_max_messages_remark">
+        Въведете положително число за изтегляне на съобщенията в края (най-често)
         или отрицателно число за изтегляне на съобщенията в началото (най-малко често)
     </string>
     <string name="title_keep_poll_interval">Промеждутък за анкетиране (минути)</string>
@@ -1102,7 +1113,8 @@
     <string name="title_service_port">Проверете два пъти номера на порта</string>
     <string name="title_service_protocol">Двойно проверете протокола (SSL/TLS или STARTTLS)</string>
     <string name="title_service_error10">Този акаунт трябва пак да се удостовери, което може да се извърши чрез бърза настройка на вълшебника</string>
-    <string name="title_certificate_error">        Поради политиката на Play Store на Google у версията на FairEmail, разпространяваща се през Play Store, вече не е може да се поддържат несигурни връзки към имейл сървъри с проблемно удостоверение.
+    <string name="title_certificate_error">
+        Поради политиката на Play Store на Google у версията на FairEmail, разпространяваща се през Play Store, вече не е може да се поддържат несигурни връзки към имейл сървъри с проблемно удостоверение.
         Проблемът може да се реши само от доставчика на имейла ви - горните сведения за грешка може да ви помогнат да разрешите този проблем.
     </string>
     <string name="title_advanced_browse">Търсене на съобщения на сървъра</string>
@@ -1111,7 +1123,8 @@
     <string name="title_synchronize_subfolders">Подпапки</string>
     <string name="title_synchronize_more">Извличане на още съобщения</string>
     <string name="title_synchronize_more_hint">Това ще доведе до едно изтегляне на стари съобщения, така то няма да доведе до още използване на батерията за ежедневна употреба</string>
-    <string name="title_synchronize_more_hint2">        Съобщенията ще се извлекат толкова бързо, колкото сървърът на имейла може да ги достави и съхрани толкова бързо, колкото устройството може да ги съхрани и индексира.
+    <string name="title_synchronize_more_hint2">
+        Съобщенията ще се извлекат толкова бързо, колкото сървърът на имейла може да ги достави и съхрани толкова бързо, колкото устройството може да ги съхрани и индексира.
         Ограничаващ фактор обикновено се явява бързината на мястото на вътрешното хранилище на устройството.
     </string>
     <string name="title_synchronize_more_hint3">Имайте предвид, че съхраняването на много съобщения (десет хиляди и нагоре) на устройството ви може да причини забавяне, защото вътрешното място за съхранение не е безкрайно бързо.</string>
@@ -1330,7 +1343,8 @@
     <string name="title_report_spam">Третиране като спам</string>
     <string name="title_delete_permanently">Изтрийте за постоянно</string>
     <string name="title_delete_attachments">Изтриване на прикаченото</string>
-    <string name="title_delete_attachments_remark">        За да изтриете прикачвания, първо трябва да добавите ново съобщение, а старото трябва да се изтрие.
+    <string name="title_delete_attachments_remark">
+        За да изтриете прикачвания, първо трябва да добавите ново съобщение, а старото трябва да се изтрие.
         Тъй като това може да не успее, старото съобщение ще се премести в кошчето.
     </string>
     <string name="title_snooze">Дрямка &#8230;</string>
@@ -1412,7 +1426,8 @@
     <string name="title_third_party">Използвате версия на трета страна</string>
     <string name="title_expand_warning">Рзширеното съобщение ще се изтегли %1$s</string>
     <string name="title_download_message">Изтегляне &#8230;</string>
-    <string name="title_reformatted">        Това е безопасен преформатиран изглед на съобщение.
+    <string name="title_reformatted">
+        Това е безопасен преформатиран изглед на съобщение.
         Може да чукнете на иконата &#x26F6; за преглед на по-малко безопасно първообразно съобщение и да го скриете.
         Преформатираните съобщения отнемат някакво време в зависимост от големината на съобщението и бързината на устройството.
         Понякога трябва да погледнете първообразното съобщение, за да видете QR-кода.
@@ -1618,7 +1633,8 @@
     <string name="title_signature_store">Хранилище</string>
     <string name="title_search">Търсене</string>
     <string name="title_search_for_hint">Въведете текст</string>
-    <string name="title_search_hint">        Първоначално търсенето се извършва на устройството.
+    <string name="title_search_hint">
+        Първоначално търсенето се извършва на устройството.
         За да търсите и в сървъра, то чукнете на копчето „търсене отново“.
     </string>
     <string name="title_search_hint_fts">Употреба на индекса за търсене: само цели думи</string>
@@ -1715,7 +1731,8 @@
     <string name="title_edit_signature_remark">Въпреки че Android не може да покаже целия код HTML, той ще се изпрати както е</string>
     <string name="title_edit_signature_text">Текст на подписа</string>
     <string name="title_edit_signature_image">Вмъкни изображение</string>
-    <string name="title_edit_signature_image_hint">        Изпращайки съобщение, образът се копира в него от избраното местоположение.
+    <string name="title_edit_signature_image_hint">
+        Изпращайки съобщение, образът се копира в него от избраното местоположение.
         Затова не трийте файлът с образа!
     </string>
     <string name="title_edit_signature_delete">Изтривате ли подписа?</string>
@@ -1981,7 +1998,8 @@
     <string name="title_hint_message_actions">Прелистване наляво за изхвърляне в кошчето; Прелистване надясно за архивирне (ако е налично); Действията по прелистване може да се конфигурират в настройките на акаунта</string>
     <string name="title_hint_outbox">Може да прелистите наляво или надясно, за да отмените изпращане</string>
     <string name="title_hint_message_selection">Натиснете и задръжте по дълго върху съобщението, за да започнете да избирате няколко съобщения; Задръжте и прекарайте пръст нагоре или надолу, за да изберете няколко съобщения</string>
-    <string name="title_hint_message_junk">        Клиентът за имейл просто показва съобщения, които са на сървъра на имейла.
+    <string name="title_hint_message_junk">
+        Клиентът за имейл просто показва съобщения, които са на сървъра на имейла.
         За прецеждането на спама отговаря сървъра на имейла, а не клиента.
         Ако получавате много спам, то се обърнете към своя доставчик на имейл и не вините приложението!
     </string>
@@ -1994,7 +2012,8 @@
     <string name="title_hint_junk">Прецеждането на спама би трябвало да се върши от сървъра на имейла и не може да се извърши надеждно на захранвано от батерии устройство с ограничени възможности.</string>
     <string name="title_hint_junk_learn">Премествайки съобщения от и до папка спам, сървърът се \"учи\" какво е спам</string>
     <string name="title_hint_contact_actions">Натиснете продължително за повече опции</string>
-    <string name="title_hint_eml">        Това е обобщение на файла с необработено съобщение.
+    <string name="title_hint_eml">
+        Това е обобщение на файла с необработено съобщение.
         Може да употребявате бутона долу вдясно, за да запазите съобщението във входящи за преглед на цялото съдържание.
     </string>
     <string name="title_open_link">Отваряне не връзката</string>
@@ -2084,7 +2103,8 @@
     <string name="title_pro_purchase">Купувам</string>
     <string name="title_pro_one_time">%1$s (еднократна покупка)</string>
     <string name="title_pro_no_play">Приложението Play Store не е намерено</string>
-    <string name="title_pro_info">        Разработката на FairEmail отне буквално хиляди часове и, въпреки това, повечето от функциите са безплатни за употреба.
+    <string name="title_pro_info">
+        Разработката на FairEmail отне буквално хиляди часове и, въпреки това, повечето от функциите са безплатни за употреба.
         FairEmail се отнася сериозно с поверителността ви и не показва реклами и не използва проследяване или анализи, за да печели пари.
         За да поддържате и подкрепяте FairEmail в дългосрочен план, някои удобства и разширени функции не са свободни за употреба.
         FairEmail показва малко съобщение, което да ви напомня за това, което ще бъде премахнато, ако закупите професионалните функции.

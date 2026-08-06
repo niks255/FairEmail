@@ -15,7 +15,8 @@
     <string name="app_updated">Viimati uuendatud: %1$s</string>
     <string name="app_download">Laaditud kohast: %1$s</string>
     <string name="app_error">Enamike vigade põhjused on välised (võrk, server, jne) või on põhjustatud ebakorrektse, tihti mittestandardse, häälestuse poolt. Negatiivne arvustus ei lahenda selliseid probleeme. Toe taotlemine on peaaegu alati efektiivsem.</string>
-    <string name="app_motd">        Android 14/15 beetaga juhtuvad vahel teated \'Äpp ei vasta\'.
+    <string name="app_motd">
+        Android 14/15 beetaga juhtuvad vahel teated \'Äpp ei vasta\'.
         Google töötab paranduse kallal.
         Palun ära süüdista äppi selle Androidi probleemi pärast!
     </string>
@@ -86,14 +87,16 @@
     </plurals>
     <string name="title_ask_spam_who">Käsitle %1$s sõnumeid spämmina?</string>
     <string name="title_junk_hint">Sinu e-postiteenuse pakkuja vastutab spämmi filtreerimise eest. E-postiäpil pole kogu vajalikku infot, et seda usaldusväärselt teha.</string>
-    <string name="title_junk_pop_hint">        Blokeeritud saatjate sõnumeid ei laadita.
+    <string name="title_junk_pop_hint">
+        Blokeeritud saatjate sõnumeid ei laadita.
         Kui valik \"Jäta sõnumid serverisse\" pole sisse lülitatud, on need sõnumid jäädavalt kadunud!
     </string>
     <string name="title_block">Blokeeri %1$s</string>
     <string name="title_block_sender">Blokeeri saatja</string>
     <string name="title_block_sender_domain">Blokeeri domeen \"%1$s\"</string>
     <string name="title_block_sender_remark">Blokeerimine tähendab automaatset spämmi kausta viimist</string>
-    <string name="title_block_sender_hint">        Saatja blokeerimine on tasuta oskus
+    <string name="title_block_sender_hint">
+        Saatja blokeerimine on tasuta oskus
         Saatja domeeni blokeerimine kasutab filterreegleid, mis on pro-oskus.
     </string>
     <string name="title_blocked_senders">Blokeeritud saatjad</string>
@@ -203,7 +206,8 @@
     <string name="title_setup_office_auth">Vea \"AUTHENTICATE failed\" põhjuseks võib olla, et IMAP/SMTP on süsteemi administraatori poolt keelatud</string>
     <string name="title_setup_office_auth_5_7_3">Palun proovi kiirseadistamise võlurit \"Muu teenusepakkuja\".</string>
     <string name="title_setup_office_auth_5_7_139">Palun proovi \"Outlooki/Hotmaili/Live\" kiirseadistamise abilist.</string>
-    <string name="title_setup_office_not_connected">        Viga \'User is authenticated but not connected\' tähendab enamasti, et IMAP on välja lülitatud.
+    <string name="title_setup_office_not_connected">
+        Viga \'User is authenticated but not connected\' tähendab enamasti, et IMAP on välja lülitatud.
         Kui tegu on tavakasutaja Outlooki kontoga, mine palun Outlooki veebilehele, toksa paremal üleval oleval seadete rattal, vali \'Mail\', vali \'Forwarding and IMAP\', ja sektsioonis \'POP and IMAP\' luba \'Let devices and apps use IMAP\' (luba seadmetel ja rakendustel kasutavad IMAPi).
         Kui tegu on ettevõtte, kooli vms kontoga, võta palun ühendust meiliserveri süsteemiadministraatoriga.
     </string>
@@ -276,7 +280,8 @@
     <string name="title_setup_close">Sulge seaded</string>
     <string name="title_setup_export">Ekspordi seaded</string>
     <string name="title_setup_import">Impordi seaded</string>
-    <string name="title_setup_export_remark">        Kuna seadete failis on kõik seaded ja konto info, on see krüpteeritud parooliga.
+    <string name="title_setup_export_remark">
+        Kuna seadete failis on kõik seaded ja konto info, on see krüpteeritud parooliga.
         Seadete uuesti importimiseks on seda parooli jälle vaja, nii palun ära unusta seda!
     </string>
     <string name="title_setup_export_do">Ekspordifail sisaldab kõiki seadeid ja andmeid, kuid ei sisalda sõnumeid ega allkirjades viidatud pilte</string>
@@ -343,16 +348,20 @@
     <string name="title_check_outlook_oauth">Sinu Outlooki kontod jätkavad toimimist peale 16. septembrit 2024</string>
     <string name="title_check_outlook_password">Mõned su Outlooki/Hotmaili/Live kontodest lõpetavad toimimise peale 16. septembrit 2024</string>
     <string name="title_advanced_hint_title">Veel täpsemaid valikuid</string>
-    <string name="title_advanced_hint_message">        Liigud edasijõudnute valikute juurde.
+    <string name="title_advanced_hint_message">
+        Liigud edasijõudnute valikute juurde.
         Kõigil valikutel on tavaliselt kasutatavad vaikeväärtused, mida ei ole vaja muuta, kui sul ei ole teistsuguseid eelistusi.
     </string>
-    <string name="title_advanced_hint_configure">        
+    <string name="title_advanced_hint_configure">
+        
 Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistamise abilise nuppu.
         Kiirseadistamise abiline töötab peaaegu alati. Kuid kui see ei tööta, siis saad kasutada klassikalist käsitsi häälestamist, mis asub abilise nupust veidi allpool.
     </string>
-    <string name="title_advanced_hint_remark">        Valikud on rühmitatud vahekaartide kaupa, jaotatud jaotistesse, organiseeritud välimuse või kasutuse järgi ja otsitavad.
+    <string name="title_advanced_hint_remark">
+        Valikud on rühmitatud vahekaartide kaupa, jaotatud jaotistesse, organiseeritud välimuse või kasutuse järgi ja otsitavad.
     </string>
-    <string name="title_advanced_hint_options">        Sa ei vaja suuremat osa seadetest ja kuna mõned seaded on väga spetsiifilised, on arusaadav, et kõikide seadete toimimine pole koheselt selge. 
+    <string name="title_advanced_hint_options">
+        Sa ei vaja suuremat osa seadetest ja kuna mõned seaded on väga spetsiifilised, on arusaadav, et kõikide seadete toimimine pole koheselt selge. 
         Palun ära jäta halba arvustust vaid paljude seadete pärast või seepärast, et sa ei mõista koheselt kõikide seadete tähendust
         Kõik seaded on kasulikud rohkem kui mõne inimese jaoks, kuid ehk mitte sinu jaoks (veel).
     </string>
@@ -756,7 +765,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_advanced_mnemonic_hint">Mistahes saabunud e-kiri, mille teemareal on allpool olevad sõnad, kustutab koheselt ja automaatselt rakenduse andmed</string>
     <string name="title_advanced_clear_all">Kustuta äpi andmed</string>
     <string name="title_advanced_clear_all_remark">Äpi andmed kustutatakse taastamatult!</string>
-    <string name="title_advanced_default_encryption">        Pärast allkirjastatud või krüpteeritud sõnumi saatmist salvestatakse identiteedi kohta vaikimisi krüpteerimismeetod (PGP või S/MIME).
+    <string name="title_advanced_default_encryption">
+        Pärast allkirjastatud või krüpteeritud sõnumi saatmist salvestatakse identiteedi kohta vaikimisi krüpteerimismeetod (PGP või S/MIME).
         Krüpteerimismeetodi saab valida enne saatmist saatmisvalikute dialoogiboksis (vajutage pikalt nuppu saatmine).
     </string>
     <string name="title_advanced_sign_default">Allkirjasta vaikimisi</string>
@@ -773,7 +783,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_advanced_import_pgp">Impordi võti</string>
     <string name="title_advanced_sign_algo">Allkirja algoritm</string>
     <string name="title_advanced_encrypt_algo">Krüpteerimisalgoritm</string>
-    <string name="title_advanced_remark_algo">        Pane tähele, et kõik e-posti kliendid ei toeta kõiki algoritme.
+    <string name="title_advanced_remark_algo">
+        Pane tähele, et kõik e-posti kliendid ei toeta kõiki algoritme.
         Vaikealgoritmid SHA256 ja AES128 on üldiselt toetatud.
     </string>
     <string name="title_advanced_check_certificate">Kontrolli saatmisel avalikku võtit</string>
@@ -782,7 +793,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_advanced_import_key">Privaatvõtme importimine</string>
     <string name="title_advanced_manage_keys">Halda privaatvõtmeid</string>
     <string name="title_advanced_ca">Paigaldatud CA sertifikaadid</string>
-    <string name="title_advanced_manage_keys_hint">        See avab Androidi turvaseaded
+    <string name="title_advanced_manage_keys_hint">
+        See avab Androidi turvaseaded
         Keys and certificates can generally be found under Advanced - Encryption and credentials.
     </string>
     <string name="title_advanced_power_menu">Lisa tegevusi Androidi toitemenüüsse</string>
@@ -922,7 +934,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_advanced_inline_hint">Tekstisisesed pildid on pildid, mis asuvad sõnumi tekstis</string>
     <string name="compressed">Tihendatud failide (%1$s), milles on faile rohkem kui %2$s või mille maht on suurem kui %3$s, sisu ei näidata</string>
     <string name="title_advanced_parse_classes_hint">See näitab sõnumeid korrektsemalt, kuid tõenäoliselt viivitusega</string>
-    <string name="title_advanced_default_folder_hint">        Android võib küsida luba valitud kaustale ligi pääsemiseks, kuigi äpp ei vaja seda.
+    <string name="title_advanced_default_folder_hint">
+        Android võib küsida luba valitud kaustale ligi pääsemiseks, kuigi äpp ei vaja seda.
         Saad tühistada valimisdialoogi, et vaikekaust taastada (harilikult allalaadimiste kaust).
     </string>
     <string name="title_advanced_restore_on_launch_hint">Kui võimalik taasta äpi eelmine olek, kui taaskäivitatakse avakuva ikooni kaudu</string>
@@ -1057,7 +1070,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_leave_on_device_hint">Kui sõnumid kustutatakse serverist, jäävad sõnumid seadmesse alles</string>
     <string name="title_max_messages">Allalaaditavate sõnumite maksimumarv (tühi kõigi jaoks)</string>
     <string name="title_max_messages_keep">See on seadmes hoitavate sõnumite maksimumarv</string>
-    <string name="title_max_messages_remark">        Sisesta positiivne arv, et sõnumeid lõpus alla laadida (kõige tavalisem).
+    <string name="title_max_messages_remark">
+        Sisesta positiivne arv, et sõnumeid lõpus alla laadida (kõige tavalisem).
         ja negatiivne arv, et sõnumid alguses alla laadida (kõige vähem levinud)
     </string>
     <string name="title_keep_poll_interval">Tõmbamise intervall (minutites)</string>
@@ -1121,7 +1135,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_service_port">Palun kontrolli uuesti pordi numbrit</string>
     <string name="title_service_protocol">Palun kontrolli uuesti protokolli (SSL/TLS või STARTTLS)</string>
     <string name="title_service_error10">Seda kontot tuleb uuesti autentida. Seda saab teha kiirseadistamise võluri abil</string>
-    <string name="title_certificate_error">        Google\'i Play poe reeglite tõttu pole enam võimalik toetada Play poe kaudu levitatava FairEmaili versiooni puhul sertifikaadiprobleemidega ebaturvalisi ühendusi e-posti serveritega.
+    <string name="title_certificate_error">
+        Google\'i Play poe reeglite tõttu pole enam võimalik toetada Play poe kaudu levitatava FairEmaili versiooni puhul sertifikaadiprobleemidega ebaturvalisi ühendusi e-posti serveritega.
         Seetõttu saab selle probleemi lahendada ainult sinu e-posti teenusepakkuja - ülaltoodud veateave võib aidata neil seda probleemi lahendada.
     </string>
     <string name="title_advanced_browse">Lehitse sõnumeid serveris</string>
@@ -1130,7 +1145,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_synchronize_subfolders">Alamkaustad</string>
     <string name="title_synchronize_more">Hangi rohkem sõnumeid</string>
     <string name="title_synchronize_more_hint">Tulemuseks on vanemate sõnumite ühekordne allalaadimine, nii et see ei põhjusta igapäevases kasutuses suuremat akukasutust</string>
-    <string name="title_synchronize_more_hint2">        Sõnumeid hangitakse nii kiiresti, kui meiliserver suudab neid saata, ja talletatakse nii kiiresti, kui seade suudab sõnumeid talletada ja indekseerida
+    <string name="title_synchronize_more_hint2">
+        Sõnumeid hangitakse nii kiiresti, kui meiliserver suudab neid saata, ja talletatakse nii kiiresti, kui seade suudab sõnumeid talletada ja indekseerida
         The limiting factor is usually the speed of the device\'s internal storage space.
     </string>
     <string name="title_synchronize_more_hint3">Pea meeles, et suure hulga sõnumite (kümme tuhat või rohkem) salvestamine seadmesse võib põhjustada viivitusi, sest sisemine salvestusruum ei ole lõpmatult kiire.</string>
@@ -1223,7 +1239,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_auto_delete">Kustuta vanad sõnumid automaatselt jäädavalt</string>
     <string name="title_auto_delete_hint">Vanad sõnumid on sõnumid, mida enam seadmes ei hoita</string>
     <string name="title_auto_delete_archive_hint">Kõik meiliserverid ei luba alati arhiivikaustast kustutada</string>
-    <string name="title_inbox_root_hint">        Mõned teenusepakkujad nõuavad sisendkausta alla uute kaustade loomist.
+    <string name="title_inbox_root_hint">
+        Mõned teenusepakkujad nõuavad sisendkausta alla uute kaustade loomist.
         Sellisel juhul saad kaustade loetelus pikalt vajutada sisendkastil ning valida \"Loo alamkaust\".
     </string>
     <string name="title_folder_name_missing">Kausta nimi puudub</string>
@@ -1327,7 +1344,7 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_quick_actions_snooze">Tukasta</string>
     <string name="title_quick_actions_clear">Peale tegevust eemalda valik</string>
     <string name="title_trash">Prügi</string>
-    <string name="title_trash_conversation" comment="title_trash_conversation&#10;Title for an accessibility action to move a conversation to the trash messages folder.&#10;It could be translated as &quot;Remove conversation&quot;.">Vestlus prügiks</string>
+    <string name="title_trash_conversation">Vestlus prügiks</string>
     <string name="title_trash_selection">Kustuta valik</string>
     <string name="title_copy">Kopeeri &#8230;</string>
     <string name="title_copy_to">Kopeeri kohta &#8230;</string>
@@ -1352,7 +1369,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_report_spam">Käsitle spämmina</string>
     <string name="title_delete_permanently">Kustuta jäädavalt</string>
     <string name="title_delete_attachments">Kustuta manused</string>
-    <string name="title_delete_attachments_remark">        Manuste kustutamiseks tuleb uus sõnum lisada ja vana kustutada.
+    <string name="title_delete_attachments_remark">
+        Manuste kustutamiseks tuleb uus sõnum lisada ja vana kustutada.
         Kuna see võib nurjuda, viiakse vana kiri prügisse.
     </string>
     <string name="title_snooze">Tukasta &#8230;</string>
@@ -1427,7 +1445,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_ask_reporting">Saata vearaporteid?</string>
     <string name="title_reporting_why">Vigadest teatamine aitab muuta FairEmaili paremaks</string>
     <string name="title_ask_review">Palun hinda FairEmaili</string>
-    <string name="title_ask_review_rationale">        Oled FairEmaili kasutanud juba mõnda aega.
+    <string name="title_ask_review_rationale">
+        Oled FairEmaili kasutanud juba mõnda aega.
         Oleksime tänulikud, kui saaksid FairEmaili Play Store\'is hinnata.
     </string>
     <string name="title_need_help">Ma vajan abi</string>
@@ -1435,7 +1454,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_third_party">Kasutad kolmanda osapoole versiooni</string>
     <string name="title_expand_warning">Selle sõnumi laiendamine laadib alla %1$s</string>
     <string name="title_download_message">Allalaadimine &#8230;</string>
-    <string name="title_reformatted">        See on turvaline ümbervormindatud sõnumi vaade.
+    <string name="title_reformatted">
+        See on turvaline ümbervormindatud sõnumi vaade.
         Võid toksata &#x26F6; ikoonil, et vaadata vähemturvalist originaalsõnumit ja see teade peita 
         Sõnumi ümbervormindamne võtab veidi aega sõltuvalt sõnumi suurusest ja seadme kiirusest
         Mõnikord tuleb vaadata sõnumit originaalkujul, et näha QR-koodi.
@@ -1642,7 +1662,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_signature_store">Talletamine</string>
     <string name="title_search">Otsi</string>
     <string name="title_search_for_hint">Sisesta tekst</string>
-    <string name="title_search_hint">        Esimesena toimub otsing seadmes.
+    <string name="title_search_hint">
+        Esimesena toimub otsing seadmes.
         Selleks et otsida ka serveris, toksa nuppu \"Otsi uuesti\".
     </string>
     <string name="title_search_hint_fts">Otsimisindeksi kasutamisel: ainult täissõnad</string>
@@ -1740,7 +1761,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_edit_signature_remark">Kuigi Android ei suuda näidata kogu HTMLi, saadetakse see nagu see on</string>
     <string name="title_edit_signature_text">Allkirja tekst</string>
     <string name="title_edit_signature_image">Lisa pilt</string>
-    <string name="title_edit_signature_image_hint">        Sõnumi saatmisel kopeeritakse valitud kohast pilt sõnumisse.
+    <string name="title_edit_signature_image_hint">
+        Sõnumi saatmisel kopeeritakse valitud kohast pilt sõnumisse.
         So, don\'t delete the image file!
     </string>
     <string name="title_edit_signature_delete">Kustutada allkiri?</string>
@@ -2006,7 +2028,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_hint_message_actions">Prügisse viimiseks pühi vasakule, arhiivimiseks (kui saadaval) pühi paremale. Pühkimistegevusi saab häälestada konto seadetes</string>
     <string name="title_hint_outbox">Saad saatmise tühistamiseks pühkida vasakule või paremale</string>
     <string name="title_hint_message_selection">Vajuta pikalt sõnumil, et alustada mitme sõnumi valimist. Hoia ja pühi üles või alla, et valida rohkem sõnumeid</string>
-    <string name="title_hint_message_junk">        E-postiklient sisuliselt näitab meiliserveris olevaid kirju.
+    <string name="title_hint_message_junk">
+        E-postiklient sisuliselt näitab meiliserveris olevaid kirju.
         Meiliserver vastutab rämpsposti filtreerimise eest, mitte e-postiklient.
         Kui saad väga palju spämmi, palun võta ühendust oma teenusepakkujaga ja ära süüdista äppi!
     </string>
@@ -2019,7 +2042,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_hint_junk">Spämmi filtreerimine peaks toimuma meiliserveris ja seda ei saa usaldusväärselt teha piiratud võimalustega akutoitel töötava seadme abil.</string>
     <string name="title_hint_junk_learn">Liigutades sõnumeid spämmi kausta ja sealt välja, õpib meiliserver, mis spämm on</string>
     <string name="title_hint_contact_actions">Valikute jaoks vajuta pikalt</string>
-    <string name="title_hint_eml">        See on kokkuvõte toorsõnumi faili sisust
+    <string name="title_hint_eml">
+        See on kokkuvõte toorsõnumi faili sisust
         Kogu sisu vaatamiseks saad kasutada parempoolset alumist nuppu, et sõnum ostkasti salvestada.
     </string>
     <string name="title_open_link">Ava link</string>
@@ -2110,7 +2134,8 @@ Sa ei pea olema siin, et kontot häälestada. Palun kasuta selleks kiirseadistam
     <string name="title_pro_purchase">Osta</string>
     <string name="title_pro_one_time">%1$s (ühekordne ost)</string>
     <string name="title_pro_no_play">Ei leidnud Play poodi</string>
-    <string name="title_pro_info">        FairEmaili arendamiseks kulus sõna otseses mõttes tuhandeid tunde ja sellest hoolimata on enamik funktsioone tasuta kasutatav.
+    <string name="title_pro_info">
+        FairEmaili arendamiseks kulus sõna otseses mõttes tuhandeid tunde ja sellest hoolimata on enamik funktsioone tasuta kasutatav.
         FairEmail võtab privaatsust tõsiselt ning ei näita reklaame ega kasuta raha teenimiseks jälgimist ega analüütikat.
         Et FairEmaili pikaajaliselt säilitada ja toetada, ei ole mõned mugavus- ja täiustatud funktsioonid tasuta kasutatavad.
         FairEmail näitab selle meeldetuletamiseks väikest teadet, mis eemaldatakse, kui ostad pro-funktsioonid.
