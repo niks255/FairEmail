@@ -177,6 +177,7 @@ import org.jsoup.select.Elements;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.w3c.dom.css.CSSStyleSheet;
+import org.w3c.dom.stylesheets.MediaList;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -3587,7 +3588,7 @@ public class FragmentCompose extends FragmentBase {
                     if (cursor != null && cursor.getCount() == 0)
                         throw new SecurityException("Could not retrieve selected contact");
 
-                    if (cursor != null && cursor.moveToFirst()) {
+                    if (cursor != null && cursor.moveToFirst() && cursor.getColumnCount() > 0) {
                         int colEmail = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
                         int colName = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
                         if (colEmail >= 0 && colName >= 0) {
@@ -6371,10 +6372,11 @@ public class FragmentCompose extends FragmentBase {
 
                             // Apply styles
                             List<CSSStyleSheet> sheets = HtmlHelper.parseStyles(d.head().select("style"));
+                            Map<MediaList, Boolean> cache = new HashMap<>();
                             for (Element element : e.select("*")) {
                                 String tag = element.tagName();
                                 String clazz = element.attr("class");
-                                String style = HtmlHelper.processStyles(context, tag, clazz, null, sheets);
+                                String style = HtmlHelper.processStyles(context, tag, clazz, null, sheets, cache);
                                 style = HtmlHelper.mergeStyles(style, element.attr("style"));
                                 if (!TextUtils.isEmpty(style))
                                     element.attr("style", style);

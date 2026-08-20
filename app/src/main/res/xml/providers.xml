@@ -2545,4 +2545,28 @@
             port="465"
             starttls="false" />
     </provider>
+    <provider
+        name="Thundermail"
+        appPassword="true"
+        domain="thundermail\\.com,tb\\.pro"
+        id="thundermail">
+        <imap
+            host="mail.thundermail.com"
+            port="993"
+            starttls="false" />
+        <smtp
+            host="mail.thundermail.com"
+            port="465"
+            starttls="false" />
+        <oauth
+            askAccount="true"
+            authorizationEndpoint="https://auth.tb.pro/realms/tbpro/protocol/openid-connect/auth"
+            clientId="ext-fairemail"
+            clientSecret=""
+            enabled="true"
+            privacy="https://tb.pro/privacy/"
+            redirectUri="https://oauth.faircode.eu/"
+            scopes="openid,profile,email,offline_access"
+            tokenEndpoint="https://auth.tb.pro/realms/tbpro/protocol/openid-connect/token" />
+    </provider>
 </providers>

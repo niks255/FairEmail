@@ -3,7 +3,7 @@
     <string name="app_search">FairEmail meklēšana</string>
     <string name="app_send_self">Nosūtīt sev</string>
     <string name="app_changelog">Izmaiņu žurnāls</string>
-    <string name="app_welcome">FairEmail — atvērtā pirmkoda e-pasta lietotne, kas koncentrējas uz konfidencialitāti un drošību. Šī iemesla dēļ dažas funkcijas var darboties savādāk, nekā esiet pieraduši.</string>
+    <string name="app_welcome">FairEmail — atvērtā pirmkoda e-pasta lietotne, kas ir vērsta uz privātumu un drošību. Šī iemesla dēļ dažas iespējas var darboties citādāk nekā pierasts.</string>
     <string name="app_limitations">Piemēram, ziņojumi pēc noklusējuma tiek pārveidoti, lai noņemtu nedrošus elementus un uzlabotu lasāmību. Bet, lai atvērtu saites, ir nepieciešams apstiprināt drošības dēļ. Abas iespējas var atspējot, ja ir tāda vēlme.</string>
     <string name="app_unsupported">Nepilnības tieši šīs ierīces Android versijā rada avārijas</string>
     <string name="app_data_loss">Visi dati var tikt zaudēti</string>
@@ -14,6 +14,7 @@
     <string name="app_cake_required">Mazākā nepieciešamā krātuves vieta: %1$s</string>
     <string name="app_updated">Atjaunināta: %1$s</string>
     <string name="app_download">Lejupielādēta no: %1$s</string>
+    <string name="app_error">Vairumam kļūdu ziņojumu ir ārēji cēloņi (tīkls, serveris utt.) vai ir radušies no nepareizas, bieži vien neparastas konfigurācijas. Slikta atsauksme šādas nebūšanas neatrisina. Atbalsta lūgšana gandrīz vienmēr ir daudz iedarbīgāka.</string>
     <string name="app_motd">
         Ar Android 14/15 beta laiku pa laikam parādās paziņojumi \"Lietotne neatbild\".
         Google darbojas pie labojuma.
@@ -136,6 +137,7 @@
     <string name="title_notification_sending">Nosūta ziņojumus</string>
     <string name="title_notification_waiting">Gaida atbilstošu savienojumu</string>
     <string name="title_notification_idle">Dīkstāvē</string>
+    <string name="title_notification_failed">Konta “%1$s” kļūme</string>
     <string name="title_notification_alert">Servera brīdinājums: \"%1$s\"</string>
     <string name="title_notification_sending_left">Atlikušie mēģinājumi: %1$d</string>
     <string name="title_notification_sending_retry">Nosūtīšana tiks mēģināta atkārtoti pēc savienojuma ar internetu izmaiņām vai pavelkot uz leju izsūtnē</string>
@@ -152,9 +154,9 @@
     <string name="menu_translate">Palīdzēt tulkot</string>
     <string name="menu_issue">Ziņot par nepilnību</string>
     <string name="menu_attribution">Citu projektu nopelni - izmantotās bibliotēkas</string>
-    <string name="menu_privacy">Konfidencialitāte</string>
+    <string name="menu_privacy">Privātums</string>
     <string name="menu_about">Par</string>
-    <string name="menu_pro">Lietpratēju funkcionalitāte</string>
+    <string name="menu_pro">Lietpratēju iespējas</string>
     <string name="menu_rate">Novērtēt šo lietotni</string>
     <string name="title_welcome">Laipni lūdzam</string>
     <string name="title_eula">Galalietotāja licences līgums</string>
@@ -163,10 +165,10 @@
     <string name="title_agree">Es piekrītu</string>
     <string name="title_disagree">Es nepiekrītu</string>
     <string name="title_version">Versija %1$s</string>
-    <string name="title_privacy_policy">Konfidencialitātes politika</string>
+    <string name="title_privacy_policy">Privātuma pamatnostādnes</string>
     <string name="title_list_accounts">Konti</string>
     <string name="title_list_identities">Identitātes</string>
-    <string name="title_edit_account">Rediģēt kontu</string>
+    <string name="title_edit_account">Labot kontu</string>
     <string name="title_edit_identity">Labot identitāti</string>
     <string name="title_new_folder">Jauna mape</string>
     <string name="title_edit_folder">Labot mapi</string>
@@ -176,10 +178,13 @@
     <string name="title_setup_quick">Ātrā iestatīšana</string>
     <string name="title_setup_intro">Konta iestatīšanai ir tikai trīs soļi, un tad var sūtīt un saņemt e-pastu</string>
     <string name="title_setup_simple">Nav nepieciešams mainīt citus iestatījumus</string>
-    <string name="title_setup_issue">FairEmail tika izstrādāta, lai palīdzētu aizsargāt lietotāju konfidencialitāti, un tā burtiski atspoguļo tūkstošiem darba stundu tā izstrādē. Ja ir kādi sarežģījumi, lūgums vispirms sazināties ar mani, pirms atstājiet sliktu atsauksmi. Būšu priecīgs palīdzēt.</string>
+    <string name="title_setup_issue">FairEmail tika izstrādāta, lai palīdzētu aizsargāt lietotāju privātumu, un tā atspoguļo burtiski tūkstošiem stundu ilgu darbu. Ja ir jebākdi sarežģījumi, lūgums vispirms sazināties ar mani, pirms tiek atstāta slikta atsauksme. Būšu priecīgs palīdzēt.</string>
     <string name="title_setup_analytics">FairEmail nerāda reklāmas un neizseko vai neapkopo lietotāju uzvedību.</string>
-    <string name="title_setup_quick_accounts">Pievienot vai rediģēt kontus</string>
+    <string name="title_setup_quick_accounts">Pievienot vai izmainīt kontus</string>
     <string name="title_setup_quick_support">Daži nodrošinātāji apgrūtina konta pievienošanu. Lūgums par to nevainot FairEmail, bet tā vietā vaicāt pēc atbalsta.</string>
+    <string name="title_setup_quick_patience">Lūgums būt pacietīgiem&#8230;</string>
+    <string name="title_setup_quick_imap">IMAP serveris ziņojumu saņemšanai</string>
+    <string name="title_setup_quick_smtp">SMTP serveris ziņojumu nosūtīšanai</string>
     <string name="title_setup_quick_certificates">Servera sertifikāti</string>
     <string name="title_setup_wizard">Vednis</string>
     <string name="title_setup_wizard_intro">Vairumā gadījumu vedni izmanto, lai pievienotu kontu. Servera adreses var ievadīt vai mainīt pašrocīgi, izmantojot pašrocīgo iestatīšanu</string>
@@ -203,7 +208,7 @@
     <string name="title_setup_oauth_authorize">Pilnvarot</string>
     <string name="title_setup_select_account">Atlasīt kontu</string>
     <string name="title_setup_instructions">Iestatīšanas norādes</string>
-    <string name="title_setup_no_settings_hint">Mēģiniet pašrocīgi iestatīt kontu, izmantojot e-pasta pakalpojumu sniedzēja sniegtos iestatījumus</string>
+    <string name="title_setup_no_settings_hint">Mēģinātt pašrocīgi iestatīt kontu ar e-pasta pakalpojumu sniedzēja sniegtajiem iestatījumiem</string>
     <string name="title_setup_no_inbox">Iesūtne netika atrasta</string>
     <string name="title_setup_quick_success">Konts tika sekmīgi pievienots</string>
     <string name="title_setup_quick_configure">Mainīt nosaukumu, krāsu, vilkšanas žestu darbības utt.</string>
@@ -215,10 +220,18 @@
     <string name="title_setup_free">Vai lietotni var izmantot bez maksas?</string>
     <string name="title_setup_permissions">Piešķirt atļaujas</string>
     <string name="title_setup_permissions_explanation">Ir nepieciešamas kontaktpersonu atļaujas, lai uzmeklētu kontaktpersonu informāciju un ieteiktu kontaktpersonas</string>
+    <string name="title_setup_permissions_notify">Lai parādītu paziņojumusp ar jauniem ziņojumiem (izvēles)</string>
+    <string name="title_setup_permissions_notify_explanation">Paziņojumu atļaujas ir nepieciešamas, lai stāvokļa joslā parādītu paziņojumus par jauniem ziņojumiem</string>
     <string name="title_setup_permission_import_contacts">Kā es varu ievietot kontaktpersonas?</string>
     <string name="title_setup_import_graph_contact">Outlook kontaktpersonas</string>
     <string name="title_setup_import_graph_new">Jaunas kontaktpersonas: %1$s</string>
+    <string name="title_setup_doze">Atspējot akumulatora optimizēšanu</string>
     <string name="title_setup_doze_explanation">Lietotnei vajadzētu būt atspējotai akumulatora optimizēšanai, lai fonā nodrošinātu uzticamu ziņojumu nosūtīšanu un saņemšanu</string>
+    <string name="title_setup_doze_hint">Lai arī tas var izklausīties pretrunīgi, akumulatora optimizēšanas izslēgšana šai lietotnei nodrošinās mazāku akumulatora lietojumu</string>
+    <string name="title_setup_doze_why">Kādēļ akumulatora optimizēšanai vajadzētu būt atspējotai?</string>
+    <string name="title_setup_doze_battery">Liels akumulatora patēriņš?</string>
+    <string name="title_setup_alarm_12">Lietotne nedarbosies pienācīgi</string>
+    <string name="title_setup_fg_15">Lietotni nevarēs automātiski palaist</string>
     <string name="title_setup_data">Datu taupītājs ir iespējots</string>
     <string name="title_setup_inbox">Doties uz iesūtni</string>
     <string name="title_setup_go">Doties</string>
@@ -228,6 +241,7 @@
     <string name="title_setup_error">Kļūda</string>
     <string name="title_setup_manual_setup">Pašrocīga iestatīšana</string>
     <string name="title_setup_pop">Lietot POP3 (nav ieteicams)</string>
+    <string name="title_setup_configuring">Konfigurē kontu&#8230;</string>
     <string name="title_setup_delete_account_hint">Konti tiks noņemti tikai lietotnē</string>
     <string name="title_setup_close">Aizvērt iestatījumus</string>
     <string name="title_setup_export">Izgūt iestatījumus</string>
@@ -244,7 +258,7 @@
     <string name="title_setup_password_different">Paroles nesakrīt</string>
     <string name="title_setup_password_invalid">Nepareiza parole vai bojāta iestatījumu datne</string>
     <string name="title_setup_import_accounts">Ievietot kontus un identitātes</string>
-    <string name="title_setup_import_delete">Vispirms izdzēst esošos kontus</string>
+    <string name="title_setup_import_delete">Vispirms jāizdzēš esošie konti</string>
     <string name="title_setup_import_rules">Ievietot atlasīšanas kārtulas</string>
     <string name="title_setup_import_contacts">Ievietot vietējās kontaktperonas</string>
     <string name="title_setup_import_answers">Ievietot atbilžu sagataves</string>
@@ -297,9 +311,9 @@
     <string name="title_advanced_schedule_workdays">Darba dienās</string>
     <string name="title_advanced_schedule_weekend">Brīvdienās</string>
     <string name="title_advanced_no_date">Ziņojumi bez datuma</string>
-    <string name="title_advanced_unseen">Visi nelasītie ziņojumi</string>
+    <string name="title_advanced_unseen">Visi neizlasītie ziņojumi</string>
     <string name="title_advanced_flagged">Visi ar zvaigzni atzīmētie ziņojumi</string>
-    <string name="title_advanced_delete_unseen">Izdzēst vecus nelasītos ziņojumus</string>
+    <string name="title_advanced_delete_unseen">Izdzēst vecus neizlasītos ziņojumus</string>
     <string name="title_advanced_kept_removed">Pārbaudīt, vai vecie ziņojumi tika noņemti no servera</string>
     <string name="title_advanced_subject_threading">Grupēt ziņojumus pēc sūtītāja un temata</string>
     <string name="title_advanced_sync_folders">Vienādot mapju sarakstu</string>
@@ -350,9 +364,16 @@
     <string name="title_advanced_hide_toolbar">Paslēpt augšējo rīkjoslu, kad lasa, ritina, ziņojumus</string>
     <string name="title_advanced_nav_last_sync">Rādīt pēdējo sinhronizācijas datumu un laiku navigācijas izvēlnē</string>
     <string name="title_advanced_nav_message_count">Pārvietošanās izvēlnē rādīt vietēji glabāto ziņojumu skaitu</string>
+    <string name="title_advanced_nav_unseen">Pārvietošanās izvēlnē rādīt neizlasīto ziņojumu skaitu</string>
     <string name="title_advanced_nav_unseen_drafts">Pārvietošanās izvēlnē rādīt neizlasīto melnrakstu skaitu</string>
+    <string name="title_advanced_nav_pinned_count">“Piesprausts” pārvietošanās izvēlnē rādīt neizlasīto ziņojumu skaitu</string>
+    <string name="title_advanced_show_unexposed">Rādīt zvaigzni kontiem/mapēm, kuros ir jaunsaņemti neizlasīti ziņojumi</string>
+    <string name="title_advanced_cards_shadow">Izmantot ēnu neizlasītiem ziņojumiem, kad tiek izmantots kartīšu izkārtojums</string>
+    <string name="title_advanced_cards_shadow_border">Rādīt apmali</string>
+    <string name="title_advanced_tabular_unread_bg">Izmantot pelēku fona krāsu neizlasītiem ziņojumiem, kad tiek izmantotas tabulas izkārtojums</string>
     <string name="title_advanced_threading">Sarakstes pavedieni</string>
     <string name="title_advanced_threading_unread">Sarakstēs rādīt neizlasīto ziņojumu skaitu</string>
+    <string name="title_advanced_highlight_unread">Izcelt nelasītos ziņojumus</string>
     <string name="title_advanced_account_color_size">Krāsu joslas platums</string>
     <string name="title_advanced_ddg">Rādīt DuckDuckGo ikonas</string>
     <string name="title_advanced_distinguish_contacts">Pasvītrot sūtītāju, kad tas ir zināms kā vietēja \"kam\" kontaktpersona</string>
@@ -360,19 +381,21 @@
     <string name="title_advanced_subject_italic">Rādīt ziņojuma tematu slīprakstā</string>
     <string name="title_advanced_highlight_subject">Izcelt ziņojuma tematu</string>
     <string name="title_advanced_font_size_subject">Temata teksta fonta lielums</string>
-    <string name="title_advanced_subject_ellipsize">Ja nepieciešams, saīsiniet ziņojuma tematu</string>
+    <string name="title_advanced_subject_ellipsize">Ja nepieciešams, jāsaīsina ziņojuma temats</string>
     <string name="title_advanced_pdf_preview">Rādīt PDF sīktēlus</string>
     <string name="title_advanced_video_preview">Rādīt video sīktēlus</string>
     <string name="title_advanced_button_extra">Rādīt papildu pogas zem ziņojuma</string>
     <string name="title_advanced_actionbar_swap">Apmainīt vietām pārvietošanas uz atkritni un arhivēšanas pogu</string>
     <string name="title_advanced_sync_on_launch">Vienādot pēc palaišanas</string>
-    <string name="title_advanced_double_back">Divkāršs \"atpakaļ\", lai izietu</string>
+    <string name="title_advanced_double_back">Divkāršs “atpakaļ”, lai izietu</string>
     <string name="title_advanced_pull_all">Vienādot visas mapes</string>
+    <string name="title_advanced_double_tap">Divkāršs piesitiens, lai atzīmētu ziņojumu kā izlasītu/nelasītu</string>
     <string name="title_advanced_swipenav">Pavilkt pa kreisi/labi, lai pārietu uz nākamo/iepriekšējo sarunu</string>
     <string name="title_advanced_swipe_close">Pavilkt uz leju, lai aizvērtu sarunu</string>
     <string name="title_advanced_swipe_move">Pavilkt uz augšu, lai pārvietotu sarunu</string>
     <string name="title_advanced_autoclose_send">Automātiski aizvērt sarakstes pēc ziņojumu nosūtīšanas</string>
-    <string name="title_advanced_collapse_marked">Sakļaut ziņojumus, kas pašrocīgi atzīmēti kā izlasīti vai nelasīti</string>
+    <string name="title_advanced_autoclose_unread">Aizvērt sarakstes pēc ziņojumu atzīmēšanas kā neizlasītus</string>
+    <string name="title_advanced_collapse_marked">Sakļaut ziņojumus, kas pašrocīgi atzīmēti kā izlasīti vai neizlasīti</string>
     <string name="title_advanced_autounstar">Automātiski noņemt zvaigznes no ziņojumiem to pārvietošanas laikā</string>
     <string name="title_advanced_reset_importance">Atiestatīt svarīgumu pēc ziņojumu pārvietošanas</string>
     <string name="title_advanced_star_unsnoozed">Automātiski noņemt zvaizni ziņojumu pēc iesnaudināšanas atcelšanas</string>
@@ -405,7 +428,7 @@
     <string name="title_advanced_pin">PIN kods</string>
     <string name="title_advanced_biometrics_timeout">Cik ilgi gaidīt pirms aizslēgt lietotni</string>
     <string name="title_advanced_autolock">Aizslēgt, kad ekrāns izslēdzas</string>
-    <string name="title_advanced_autolock_nav">Aizslēgt, kad iziet no lietotnes, nav priekšplānā</string>
+    <string name="title_advanced_autolock_nav">Aizslēgt pēc iziešanas no lietotnes</string>
     <string name="title_advanced_disconnect_auto_update">Automātiski atjaunināt sarakstus reizi nedēļā</string>
     <string name="title_advanced_clear_all_hint">Tas no ierīces izdzēsīs visus lietotnes datus, tostarp iestatītos e-pasta kontus, ziņojumus, iestatījumus un jebkādus savāktos datus.</string>
     <string name="title_advanced_mnemonic">Izdzēst datus attālināti</string>
@@ -427,6 +450,8 @@
     <string name="title_advanced_manage_keys">Pārvaldīt privātās atslēgas</string>
     <string name="title_advanced_ca">Uzstādītie CA sertifikāti</string>
     <string name="title_advanced_shortcuts">Rādīt bieži izmantotas kontaktpersonas Androdi kopīgošanas izvēlnē</string>
+    <string name="title_advanced_ical_email">Glabāt dalībnieku e-pasta adresi</string>
+    <string name="title_advanced_fts">Veidot meklēšanas indeksu</string>
     <string name="title_advanced_fts_indexed">Indeksēti %1$d no %2$d ziņojumiem (%3$s)</string>
     <string name="title_advanced_haptic_feedback">Sajūtu atgriezeniskā saite svarīgām darbībām</string>
     <string name="title_advanced_language">Valoda</string>
@@ -444,6 +469,7 @@
     <string name="title_advanced_poll_hint">Jaunu ziņojumu pārbaudīšana ik pēc noteikta laika katru reizi salīdzinās vietējos un attālos ziņojumus, kas ir resursietilpīga darbība, kas var beigties ar akumulatora papildu lietojumu, it īpaši, ja ir daudz ziņojumu. Saņemšana vienmēr šo novērsīs ar nepārtrauktu sekošanu izmaiņām.</string>
     <string name="title_advanced_quick_sync_hint">Tas samazina datu patēriņu, bet var tikt palaisti garām jauni ziņojumi, ja e-pasta serveris neievēro standartus</string>
     <string name="title_advanced_data_usage">Tas var izraisīt milzīgu datu patēriņu.</string>
+    <string name="title_advanced_deleted_unseen">Kad atspējots, neizlasītie ziņojumi vienmēr tiek paturēti ierīcē</string>
     <string name="title_advanced_sync_kept_hint">Tas pārsūtīs papildu datus un patērēs papildu akumulatora jaudu, it īpaši, ja ierīcē tiek glabāts liels ziņojumu daudzums</string>
     <string name="title_advanced_subject_threading_hint">Tikai pēdējo %1$d stundu laikā saņemtos ziņojumus</string>
     <string name="title_advanced_sync_folders_hint">Šī atspējošana kaut cik samazināš datu un akumulatora lietotjumu, bet atspējos arī mapju saraksta atjaunināšanu</string>
@@ -462,13 +488,15 @@
     <string name="title_advanced_tcp_keep_alive_hint">Šī iespējošana dažās ierīcēs var radīt sarežģījumus ar savienojumu un palielināt akumulatora lietojumu</string>
     <string name="title_advanced_validate_hint">Tas var beigties ar ziņojumu nevienādošanu, piemēram, kad izmanto VPN, bet arī citos gadījumos</string>
     <string name="title_advanced_ssl_harden_hint">Šī iespējošana atspējos vājus SSL protokolus un šifrus, kas var novest pie savienojuma sarežgījumiem</string>
+    <string name="title_advanced_layout_hint">Pārslēgšanos uz ciešāku izkārtojumu un ziņojuma teksta izmēra mainīšanu var veikt ziņojuma skata augsējās darbību joslas izvēlnē</string>
     <string name="title_advanced_startup_hint">Ilgi jāpiespiež jebkura mape mapju sarakstā, lai pievienotu vai noņemtu to no apvienoto mapju saraksta</string>
     <string name="title_advanced_free">Šis mākoņpakalpojums ir bezmaksas</string>
     <string name="title_advanced_free_tier">Šim mākoņpakalpojumam ir bezmaksas pakalpojuma plāns</string>
     <string name="title_advanced_paid_service">Šis mākoņpakalpojums ir maksas pakalpojums</string>
-    <string name="title_advanced_privacy_risk">Pastāv konfidencialitātes pārkāpuma risks</string>
+    <string name="title_advanced_privacy_risk">Pastāv privātuma pārkāpuma risks</string>
     <string name="title_advanced_preview_issue">Ritināšana var būt lēna nepilnības dažās Android versijās dēļ, kad rindu skaits ir lielāks par vienu</string>
     <string name="title_advanced_restore_on_launch_hint">Ja iespējams, atjaunot pēdējo lietotnes stāvokli, palaižot pa jaunu lietotni, izmantojot sākuma ekrāna ikonu</string>
+    <string name="title_advanced_autoexpand_hint">Automātiski atvērt ziņojumu, kad sarakstē ir tikai viens vai viens neizlasīts ziņojums</string>
     <string name="title_advanced_autoclose_hint">Automātiski aizvērt sarakstes, kad visi ziņojumi ir arhivēti, nosūtīti vai pārvietoti uz atkritni</string>
     <string name="title_advanced_bcc_hint">Adrese netiks rādīta, bet tiks pievienota nosūtot</string>
     <string name="title_advanced_envelope_from_hint">Šī adrese tiks izmantota SMTP MAIL FROM</string>
@@ -489,6 +517,7 @@
     <string name="title_advanced_swipe_actions">Iestatīt vilkšanas žestus</string>
     <string name="title_advanced_swipe_actions_hint">Tas iestatīs pa kreisi un labi vilkšanas žestu darbības visiem IMAP kontiem</string>
     <string name="title_advanced_swipe_sensitivity">Pa kreisi/pa labi vilkšanas žesta jutīgums</string>
+    <string name="title_select">Atlasīt&#8230;</string>
     <string name="title_identity_name">Tavs vārds</string>
     <string name="title_identity_email">Tava e-pasta adrese</string>
     <string name="title_identity_receive_first_hint">Šīs iespējas ieslēgšana ir nepieciešama reti, vēl jo vairāk - palielināsies datu lietojums.</string>
@@ -513,22 +542,24 @@
     <string name="title_self_identity">Noņemt e-pasta adresi, kad atbild</string>
     <string name="title_keep_alive_noop">Laiku pa laikam palaist no jauna IMAP IDLE</string>
     <string name="title_check">Pārbaudīt</string>
+    <string name="title_trust">Uzticēties servera sertifikātam ar pirkstu nospiedumu %1$s</string>
     <string name="title_no_junk_folder">Šim kontam nav iestatīta mēstuļu mape</string>
     <string name="title_no_composable">E-pasta ziņojumu nosūtīšanai ir nepieciešama konfigurēta identitāte, un konta iestatījumos ir jāatlasa melnrakstu mape</string>
-    <string name="title_no_standard">Šis nodrošinātājs izmanto īpašniecisku protokolu, tādēļ nav iespējams izmanto trešo pušu e-pasta klientus</string>
+    <string name="title_no_standard">Šis pakalpojuma sniedzējs izmanto īpašniecisku protokolu, tādējādi nav iespējams izmanto trešo pušu e-pasta klientus</string>
     <string name="title_reply_domain">Sūtītājs (%1$s) un atbildes domēns (%2$s) atšķiras</string>
     <string name="title_drafts_select">E-pasta ziņojumu nosūtīšanai konta iestatījumos ir nepieciešams atlastīt melnrakstu mapi</string>
     <string name="title_delete_account">Izdzēst kontu</string>
     <string name="title_account_delete">Vai neatgriezeniski izdzēst šo kontu?</string>
     <string name="title_identity_delete">Vai neatgriezeniski izdzēst šo identitāti?</string>
-    <string name="title_edit_html">Rediģēt kā HTML</string>
+    <string name="title_edit_html">Labot kā HTML</string>
     <string name="title_check_html">Pārbaudīt HTML</string>
     <string name="title_import_file">Ievietot datni</string>
     <string name="title_last_connected">Pēdējais savienojums: %1$s</string>
     <string name="title_storage_quota">Servera krātuves lietojums: %1$s/%2$s</string>
-    <string name="title_pop_support">POP3 protokols atbalsta tikai lejupielādēt un izdzēst ziņojumus no iesūtnes. Nav iespējams atzīmēt ziņojumus kā izlasītus, ziņot par mēstulēm, pārvietot ziņojumus utt.. Apsveriet IMAP protokola izmantošanu, kad vien iespējams.</string>
+    <string name="title_pop_support">POP3 protokols var tikai lejupielādēt un izdzēst ziņojumus no iesūtnes. Nav iespējams atzīmēt ziņojumus kā izlasītus, ziņot par mēstulēm, pārvietot ziņojumus utt.. Kad vien iespējams, jāapsver IMAP protokola izmantošana.</string>
     <string name="title_pop_warning">Ja POP3 serveris neatbalsta UIDL komandu, varētu būt liels datu patēriņš, tādēļ zemāk attiecīgi jāpielāgo vaicājumu biežums.</string>
     <string name="title_hint_accounts">Ilgi jāpiespiež uz konta, lai attēlotu iespējas, piemēram, lai atspējotu vai izdzēstu kontu</string>
+    <string name="title_service_vpn">Tas varētu būt tādēļ, ka tiek izmantots VPN</string>
     <string name="title_service_token">VPN, ugunsmūris, reklāmu aizturētājs var aizturēt Android kontu pārvaldnieku, neļaujot tam iegūt piekļuves pilnvaru</string>
     <string name="title_synchronize_now">Vienādot tagad</string>
     <string name="title_synchronize_subfolders">Apakšmapes</string>
@@ -540,11 +571,14 @@
     <string name="title_synchronize_more_hint3">Lūgums paturēt prātā, ka liela daudzuma (desmit tūkstoši vai vairāk) ziņojumu glabāšana ierīcē var izraisīt aizkaves, jo iekšējās krātuves vieta nav bezgalīgi ātra.</string>
     <string name="title_synchronize_enabled">Vienādot</string>
     <string name="title_delete_local">Izdzēst vietējos ziņojumus</string>
+    <string name="title_delete_browsed">Izdzēst pārskatītos/meklētos ziņojumus</string>
     <string name="title_expunge">Izdzēst</string>
     <string name="title_empty_trash">Iztukšot atkritni</string>
     <string name="title_empty_spam">Iztukšot mēstules mapi</string>
     <string name="title_edit_color">Labot krāsu</string>
     <string name="title_edit_properties">Labot īpašības</string>
+    <string name="title_edit_rules">Labot kārtulas</string>
+    <string name="title_execute_rules">Izpildīt kārtulas</string>
     <string name="title_export_messages">Izgūt ziņojumus</string>
     <string name="title_import_messages">Ievietot ziņojumus</string>
     <string name="title_delete_contact">Izdzēst kontaktpersonu?</string>
@@ -571,8 +605,12 @@
     <string name="title_hint_operations">Darbību izdzēšana var beigties ar pazūdošiem ziņojumiem un vienādošanas sarežgījumiem</string>
     <string name="title_op_title_add">Augšupielādē ziņojumu</string>
     <string name="title_folder_name">Mapes nosaukums</string>
+    <string name="title_show_folders">Rādīt slēptās mapes</string>
     <string name="title_show_flagged">Rādīt ar zvaigni atzīmēto ziņojumu skaitu</string>
-    <string name="title_sort_unread_atop">Kārtot nelasītos ziņojumus augšā</string>
+    <string name="title_sort_unread_atop">Kārtot neizlasītos ziņojumus augšā</string>
+    <string name="title_sort_sync" comment="title_sort_sync Title for menu item in the overflow menu of the folder list to enable/disable sorting folders on whether they are synchronized or not. Please keep it short!">Kārtot pēc vienādošanas</string>
+    <string name="title_search_folder">Meklēt mapi</string>
+    <string name="title_apply_to_all">Pielietot visam</string>
     <string name="title_edit_account_name">Labot konta nosaukumu</string>
     <string name="title_edit_account_color">Labot konta krāsu</string>
     <string name="title_hide_folder">Paslēpt mapi</string>
@@ -584,12 +622,15 @@
     <string name="title_unified_inbox_add">Pievienot apvienotajai iesūtnei</string>
     <string name="title_unified_inbox_delete">Izdzēst no apvienotās iesūtnes</string>
     <string name="title_synchronize_folder">Vienādot (saņemt ziņojumus)</string>
-    <string name="title_count_unread">Pievienot kontam nelasīto ziņojumu skaitu</string>
+    <string name="title_count_unread">Pievienot kontam neizlasīto ziņojumu skaitu</string>
+    <string name="title_notify_folder">Paziņot par jauniem ziņojumiem</string>
     <string name="title_auto_classify_target">Automātiski pārvietot šķirotos ziņojumus uz šo mapi</string>
     <string name="title_sync_days_remark">Šīs vērtības palielināšana palielināš akumulatora un datu lietojumu</string>
     <string name="title_keep_days_remark">Veci ziņojumi tiks noņemti no ierīces, bet ne no servera</string>
+    <string name="title_poll_system">Pielietot visām</string>
     <string name="title_auto_trash">Automātiski pārvietot vecos ziņojumus uz atkritni</string>
     <string name="title_auto_delete">Automātiski neatgriezeniski izdzēst vecus ziņojumus</string>
+    <string name="title_auto_delete_hint">Veci ziņojumi ir ziņojumi, kas ierīcē vairs netiek turēti</string>
     <string name="title_auto_delete_archive_hint">E-pasta serveri ne vienmēr ļauj izdzēšanu no arhīva mapes</string>
     <string name="title_folder_delete">Vai neatgriezeniski izdzēst šo mapi un jebkuru tajā esošo ziņojumu?</string>
     <string name="title_months">mēnešus</string>
@@ -605,15 +646,17 @@
     <string name="title_folders_unified">Apvienotās iesūtnes mapes</string>
     <string name="title_folder_local_drafts">Vietējie melnraksti</string>
     <string name="title_no_folders">Nav mapju</string>
+    <string name="title_no_messages">Nav ziņojumu</string>
     <string name="title_duplicate_in">Pavairot ziņojumu %1$s</string>
     <string name="title_trashed_from">Atkritnē esošs ziņojums no %1$s</string>
     <string name="title_seen">Atzīmēt kā izlasītu</string>
-    <string name="title_unseen">Atzīmēt kā nelasītu</string>
+    <string name="title_unseen">Atzīmēt kā neizlasītu</string>
     <string name="title_seen_unseen">Atzīmēt kā izlasītu/nelasītu</string>
     <string name="title_toggle_seen">Pārslēgt izlasīšanu</string>
     <string name="title_hide">Paslēpt</string>
     <string name="title_unhide">Parādīt</string>
     <string name="title_flag">Pievienot zvaigzni</string>
+    <string name="title_flag_color">Krāsaina zvaigzne&#8230;</string>
     <string name="title_unflag">Noņemt zvaizgni</string>
     <string name="title_set_importance">Iestatīt svarīgumu</string>
     <string name="title_importance_low">Zems</string>
@@ -621,14 +664,26 @@
     <string name="title_importance_high">Augsts</string>
     <string name="title_important">Svarīgs</string>
     <string name="title_unimportant">Nesvarīgs</string>
+    <string name="title_search_in_text">Meklēt tekstā&#8230;</string>
     <string name="title_resend">Nosūtīt atkārtoti</string>
+    <string name="title_fetching_headers">Lejupielādē ziņojuma galvenes&#8230;</string>
     <string name="title_edit_notes">Labot vietējās piezīmes</string>
     <string name="title_edit_notes_remark">Vietējās piezīmes netiek glabātas pasta serverī, tādējādi tās ir pieejamas tikai šajā ierīcē esošajā lietotnē</string>
+    <string name="title_create_rule">Izveidot kārtulu&#8230;</string>
+    <string name="title_event">Pievienot kalendāram</string>
+    <string name="title_pin">Pievienot īsceļu</string>
+    <string name="title_print">Drukāt</string>
     <string name="title_print_header">Drukāt galveni</string>
+    <string name="title_print_images">Drukāt attēlus</string>
+    <string name="title_print_images_remark">Attēlu lejupielādēšana var aizņemt kādu laiku</string>
     <string name="title_print_block_quotes">Drukāt citātu rindas</string>
     <string name="title_raw_send_thread">@string/title_legend_thread</string>
+    <string name="title_manage_keywords">Pārvaldīt atslēgvārdus</string>
+    <string name="title_manage_keywords_pop">Ar POP3 atslēgvārdus nevar glabāt e-pasta serverī.</string>
     <string name="title_save_file">Saglabāt datni</string>
     <string name="title_button_search_similar">Meklēt līdzīgus ziņojumus</string>
+    <string name="title_button_search_text">Meklēt ziņojumu tekstā</string>
+    <string name="title_configure_buttons">Konfigurēt pogas&#8230;</string>
     <string name="title_quick_actions_low">Zems svarīgums</string>
     <string name="title_quick_actions_normal">Parasts svarīgums</string>
     <string name="title_quick_actions_high">Augsts svarīgums</string>
@@ -636,24 +691,27 @@
     <string name="title_trash">Pārvietot uz atkritni</string>
     <string name="title_trash_conversation">Pārvietot saraksti uz atkritni</string>
     <string name="title_trash_selection">Pārvietot uz atkritni atlasīto</string>
-    <string name="title_copy_to">Kopēt uz &#8230;</string>
+    <string name="title_copy">Kopēt&#8230;</string>
+    <string name="title_copy_to">Kopēt uz&#8230;</string>
     <string name="title_delete">Izdzēst</string>
     <string name="title_delete_all">Izdzēst visu</string>
     <string name="title_spam">Mēstule</string>
     <string name="title_move">Pārvietot</string>
     <string name="title_copy_btn">Kopēt</string>
     <string name="title_keywords_btn">Atslēgvārdi</string>
+    <string name="title_message_rule">Izveidot kārtulu</string>
     <string name="title_no_junk">Nav mēstule</string>
-    <string name="title_edit_subject">Rediģēt tematu &#8230;</string>
-    <string name="title_move_to">Pārvietot uz &#8230;</string>
+    <string name="title_edit_subject">Labot tematu&#8230;</string>
+    <string name="title_move_to">Pārvietot uz&#8230;</string>
     <string name="title_move_to_folder">Pārvietot uz &#8230;</string>
-    <string name="title_move_to_account">Pārvietot uz %1$s &#8230;</string>
+    <string name="title_move_to_account">Pārvietot uz %1$s&#8230;</string>
     <string name="title_delete_permanently">@string/title_rule_delete</string>
     <string name="title_delete_attachments">Izdzēst pielikumus</string>
     <string name="title_delete_attachments_remark">
         Lai izdzēstu pielikumus, ir jāizveido jauns ziņojums, un vecais ir jāizdzēš.
         Tā kā tas var neizdoties, vecais ziņojums tiks pārvietots uz atkritni.
     </string>
+    <string name="title_snooze">Atlikt&#8230;</string>
     <string name="title_archive">Arhivēt</string>
     <string name="title_reply">Atbildēt</string>
     <string name="title_reply_to_sender">Atbildēt sūtītājam</string>
@@ -662,9 +720,12 @@
     <string name="title_move_undo">Pārvieto uz %1$s (%2$d)</string>
     <string name="title_on_blocklist">Mēstuļu aizturēšanas sarakstā</string>
     <string name="title_receipt_subject">Izlasīšanas apliecinājums: %1$s</string>
+    <string name="title_no_viewer_search">Meklēt lietotni</string>
     <string name="title_no_saf">Krātuves piekļuves satvars nav pieejams</string>
+    <string name="title_no_connection">Savienojas ar vienu vai vairākiem kontiem&#8230;</string>
     <string name="title_no_folder">Mape nepastāv</string>
-    <string name="title_complex_search">Atlasīt mapi izvērstajai meklēšanai</string>
+    <string name="title_no_search">Meklēšana serverī šim kontam nav pieejama</string>
+    <string name="title_complex_search">Atlasīt mapi izvērstai meklēšanai</string>
     <string name="title_unused_inline">Meizmantotie iekļautie attēli nosūtīšanas laikā tiks noņemti</string>
     <string name="title_accross_remark">Ziņojumi, kas pārvietoti starp kontiem, tiks lejupielādēti atkārtoti, novedot pie papildu datu lietojuma</string>
     <string name="title_attachment_saved">Pielikums saglabāts</string>
@@ -676,7 +737,7 @@
     <string name="title_ask_delete_attachments">Noņemt visus pielikumus?</string>
     <string name="title_ask_show_images_always">Rādīt attēlus pēc noklusējuma</string>
     <string name="title_ask_delete_local">Izdzēst vietējos ziņojumus? Ziņojumi joprojām būs attālajā serverī.</string>
-    <string name="title_download_message">Lejupielādē &#8230;</string>
+    <string name="title_download_message">Lejupielādē&#8230;</string>
     <string name="title_compose">Sastādīt</string>
     <string name="title_submitter">Nosūtīja:</string>
     <string name="title_from">No:</string>
@@ -691,9 +752,10 @@
     <string name="title_subject">Temats:</string>
     <string name="title_body_hint">Tavs ziņojums</string>
     <string name="title_save">Saglabāt</string>
-    <string name="title_sending">Sūta &#8230;</string>
+    <string name="title_sending">Sūta&#8230;</string>
     <string name="title_sending_to">Sūta %1$s</string>
     <string name="title_send_via">Nosūtīt ar</string>
+    <string name="title_send_at">Nosūtīt&#8230;</string>
     <string name="title_send_auto_archive">Arhivēt ziņojumu, uz kuru ir atbildēts</string>
     <string name="title_no_server">\"%1$s\" netika atrasts neviens serveris</string>
     <string name="title_style_list">Saraksts</string>
@@ -715,7 +777,12 @@
     <string name="title_media_toolbar">Multivides rīkjosla</string>
     <string name="title_manage_android_contacts">Pārvaldīt Android kontaktpersonas</string>
     <string name="title_manage_local_contacts">Pārvaldīt vietējās kontaktperonas</string>
-    <string name="title_edit_plain_text">Rediģēt kā vienkāršu tekstu</string>
+    <string name="title_translate_configure">Konfigurēt&#8230;</string>
+    <string name="title_translating">Tulko: %1$s&#8230;</string>
+    <string name="title_suggestions_check">Pārbauda&#8230;</string>
+    <string name="title_edit_plain_text">Labot kā vienkāršu tekstu</string>
+    <string name="title_send_dsn">Stāvokļa atskaite</string>
+    <string name="title_vt_analyzing">VirusTotal izpēta datni, tas var aizņemt kādu laiku&#8230;</string>
     <string name="title_noreply_reminder">Sūta uz \"no-reply\" adresi</string>
     <string name="title_external_reminder">Sūta uz ārēju adresi</string>
     <string name="title_subject_reminder">Temats tukšs</string>
@@ -731,22 +798,55 @@
     <string name="title_signature_algorithm">Algoritms</string>
     <string name="title_signature_public_key">Publiskā atslēga</string>
     <string name="title_signature_subject">Temats</string>
+    <string name="title_search">Meklēt</string>
+    <string name="title_search_for_hint">Ievadīt tekstu</string>
+    <string name="title_search_hint">
+Sākotnēji meklēšana tiek veikta ierīcē.
+        Lai meklētu arī serverī, jāpiesit pogai “Meklēt vēlreiz”
+    </string>
+    <string name="title_search_hint_fts">Izmantojot meklēšanas indeksu: tikai veseli vārdi</string>
+    <string name="title_search_index_hint">Meklēšana meklēšanas indeksā ir ātra, bet atrod tikai veselus vārdus.</string>
+    <string name="title_search_text_hint">Teksta meklēšana ziņojumos, kad to ir liels daudzums, atsevišķos serveros var nedarboties</string>
+    <string name="title_search_text_unsupported">\'%s\' nozīmē, ka pasta serveris nenodrošina meklēšanu ziņojumu tekstā</string>
+    <string name="title_search_size_hint">Ziņojumu meklēšana pēc izmēra, kad to ir liels daudzums, atsevišķos serveros var nedarboties</string>
+    <string name="title_search_more">Vairāk iespēju</string>
+    <string name="title_search_use_index">Izmantot meklēšanas indeksu</string>
+    <string name="title_search_in_senders">Sūtītājos (no)</string>
+    <string name="title_search_in_recipients">Saņēmējos (kam, CC)</string>
     <string name="title_search_in_subject">Tematā</string>
+    <string name="title_search_in_keywords">Atslēgvārdos (ja nodrošināts)</string>
+    <string name="title_search_in_message">Ziņojumu tekstā</string>
     <string name="title_search_in_notes">Vietējās piezīmēs</string>
-    <string name="title_search_with_unseen">Nelasīti</string>
+    <string name="title_search_in_filenames">Datņu nosaukumos (tikai ierīcē)</string>
+    <string name="title_search_with">Ierobežot meklēšanu</string>
+    <string name="title_search_with_unseen">Neizlasīti</string>
     <string name="title_search_with_flagged">Ar zvaigzni</string>
-    <string name="title_search_in_trash">Atrodas atkritnē</string>
-    <string name="title_search_in_junk">Mēstules mapē</string>
-    <string name="title_search_flag_unseen">nelasīti</string>
+    <string name="title_search_with_hidden">Paslēpti (tikai ierīcē)</string>
+    <string name="title_search_with_importance">Svarīgums (tikai ierīcē)</string>
+    <string name="title_search_with_encrypted">Šifrēti (tikai ierīcē)</string>
+    <string name="title_search_with_attachments">Ar pielikumiem (tikai ierīcē)</string>
+    <string name="title_search_with_size">Ziņojuma izmērs lielāks par</string>
+    <string name="title_search_in_trash">Atkritnē</string>
+    <string name="title_search_in_junk">Mēstulēs</string>
+    <string name="title_search_with_range">Datumu apgabals</string>
+    <string name="title_search_with_before">Pirms</string>
+    <string name="title_search_with_after">Pēc</string>
+    <string name="title_search_device_first">Vispirms meklēt ierīcē</string>
+    <string name="title_search_flag_unseen">neizlasīti</string>
     <string name="title_search_flag_flagged">ar zvaigzni</string>
+    <string name="title_search_device">Meklēt ierīcē</string>
+    <string name="title_search_server">Meklēt serverī</string>
+    <string name="title_search_server_wait">Gaida serveri</string>
+    <string name="title_search_in">Meklēt</string>
+    <string name="title_search_sender">Meklēt sūtītāju</string>
     <string name="title_search_delete">Vai tiešām dzēst saglabāto meklēšanas vaicājumu?</string>
     <string name="title_save_search_order">Secība</string>
     <string name="title_sort_on">Kārtot pēc</string>
     <string name="title_sort_on_time">Laika</string>
-    <string name="title_sort_on_unread">Nelasītie</string>
+    <string name="title_sort_on_unread">Neizlasītie</string>
     <string name="title_sort_on_starred">Ar zvaigzni</string>
-    <string name="title_sort_on_unread_starred">Nelasīti, ar zvaigzni</string>
-    <string name="title_sort_on_starred_unread">Ar zvaigzni, nelasīti</string>
+    <string name="title_sort_on_unread_starred">Neizlasīti, ar zvaigzni</string>
+    <string name="title_sort_on_starred_unread">Ar zvaigzni, neizlasīti</string>
     <string name="title_sort_on_priority">Svarīguma</string>
     <string name="title_sort_on_sender">Sūtītāja</string>
     <string name="title_sort_on_sender_name">Sūtītāja vārda</string>
@@ -757,14 +857,16 @@
     <string name="title_sort_on_name">Nosaukuma</string>
     <string name="title_sort_on_order">Secības</string>
     <string name="title_filter_seen">Izlasīti</string>
-    <string name="title_filter_unseen">Nelasītie</string>
+    <string name="title_filter_unseen">Neizlasītie</string>
     <string name="title_filter_flagged">Ar zvaigzni</string>
     <string name="title_filter_unflagged">Bez zvaigznes</string>
     <string name="title_filter_trash">Atkritnē</string>
+    <string name="title_compact">Ciešs skats</string>
     <string name="title_mark_all_read">Atzīmēt visus kā izlasītus</string>
     <string name="title_view_thread">Apskatīt saraksti</string>
+    <string name="title_force_sync">Uzspiesta vienādošana</string>
     <string name="title_pwned_remark">Tas pārbaudīs paroli bez tās nosūtīšanas (izmantojot k-anonimizāciju), bet ne e-pasta adresi.</string>
-    <string name="title_edit_signature">Rediģēt parakstu</string>
+    <string name="title_edit_signature">Labot parakstu</string>
     <string name="title_edit_signature_text">Paraksta teksts</string>
     <string name="title_edit_signature_image_hint">        Kad ziņojums tiek nosūtīts, attēls tiek ievietots ziņojumā no atlasītās atrašanās vietas.
         Tādēļ attēla datni nevajadzētu izdzēst.
@@ -772,7 +874,7 @@
     <string name="title_edit_signature_delete">Vai tiešām vēlaties dzēst parakstu?</string>
     <string name="title_answer_hide">Paslēpt izvēlnēs</string>
     <string name="title_answer_placeholder_lastname">Sūtītāja uzvārds</string>
-    <string name="title_rule_unseen">Atzīmēt kā nelasītu</string>
+    <string name="title_rule_unseen">Atzīmēt kā neizlasītu</string>
     <string name="title_rule_hide">Slēpt</string>
     <string name="title_rule_importance">Iestatīt svarīgumu</string>
     <string name="title_rule_keyword_add">@string/title_add</string>
@@ -781,10 +883,13 @@
     <string name="title_rule_move">Pārvietot</string>
     <string name="title_rule_delete">Neatgriezeniski izdzēst</string>
     <string name="title_rule_subject">Temats satur</string>
+    <string name="title_rule_folder_create">Izveidot apakšmapi</string>
     <string name="title_rule_thread">Visi ziņojumi tajā pašā sarunā un mapē</string>
     <string name="title_rule_resend">Nosūtīt atkārtoti</string>
     <string name="title_rule_notes_missing">Trūkst vietējo piezīmju</string>
+    <string name="title_rule_edit_group">Labot kopu&#8230;</string>
     <string name="title_rule_check">@string/title_check</string>
+    <string name="title_rule_no_matches">Nav atbilstošu ziņojumu</string>
     <string name="title_rule_tts_data">Uzstādīt balss datus</string>
     <string name="title_rule_tts_from">No</string>
     <string name="title_rule_tts_subject">Temats</string>
@@ -800,6 +905,7 @@
     <string name="title_legend_archive">Arhīvs</string>
     <string name="title_legend_trash">Atkritne</string>
     <string name="title_legend_junk">@string/title_folder_junk</string>
+    <string name="title_legend_notify">Paziņot par jauniem ziņojumiem</string>
     <string name="title_legend_thread">Sarakste</string>
     <string name="title_legend_bookmark">Pēdējā atvērtā sarakste</string>
     <string name="title_legend_importance">Ir svarīgs</string>
@@ -808,6 +914,7 @@
     <string name="title_legend_encrypted">Šifrēts</string>
     <string name="title_legend_browsed">Tiek pārlūkots vai meklēts</string>
     <string name="title_legend_contacts">Pārvaldīt kontaktpersonas</string>
+    <string name="title_legend_search">Meklēt sūtītāju</string>
     <string name="title_legend_hide">Slēpt saturu</string>
     <string name="title_legend_link">@string/title_style_link</string>
     <string name="title_legend_show_junk">Uzskata par mēstuli</string>
@@ -820,18 +927,21 @@
     <string name="title_legend_a">Arhivēt</string>
     <string name="title_legend_c">Sastādīt</string>
     <string name="title_legend_d">Pārvietot uz atkritni (izdzēst)</string>
+    <string name="title_hint_vpn_active">Tiek izmantots VPN</string>
+    <string name="title_hint_notifications">Nav paziņojumu atļauju</string>
     <string name="title_hint_notifications_remark">Paziņojumu atļaujas ir nepieciešamas arī (konta) brīdinājumiem. Iestatījumos var izslēgt paziņojumus par jauniem ziņojumiem.</string>
+    <string name="title_hint_battery_optimizations">Akumulatora optimizēšana joprojām ir iespējota</string>
     <string name="title_hint_data_saver">Ja ir iespējots datu taupītājs, lietotne nevarēs sinhronizēt fonā, un var atgadīties savienojuma kļūdas.</string>
     <string name="title_hint_vpn">E-pasta serveri daržeriez liedz savienojumus caur VPN. Ja tas notiek, to var atrisināt tikai e-pasta pakalpojuma sniedzējs.</string>
     <string name="title_hint_dismiss">Šo dialoglodziņu var noraidīt, lai noņemtu paziņojumu.</string>
     <string name="title_hint_support">Ja ir kādi jautājumi vai sarežģījumi, lūgums izmantot atbalsta izvēlni, lai iegūtu palīdzību</string>
     <string name="title_hint_message_actions">Pavilkt pa kreisi, lai pārvietotu uz atkritni; pavilkt pa labi, lai arhivētu (ja pieejams); pavilkšanas darbības var norādīt konta iestatījumos</string>
     <string name="title_hint_outbox">Var pavilkt pa labi vai kreisi, lai atceltu nosūtīšanu</string>
-    <string name="title_hint_message_selection">Ilga piespiest uz ziņojuma, lai uzsāktu vairāku ziņojumu atlasīšanu; turēt un pavilkt uz augšu vai leju, lai atlasītu vairāk ziņojumu</string>
+    <string name="title_hint_message_selection">Ilga piespiešana uz ziņojuma, lai uzsāktu vairāku ziņojumu atlasīšanu; turēt un pavilkt uz augšu vai leju, lai atlasītu vairāk ziņojumu</string>
     <string name="title_hint_message_junk">
-        E-pasta klients būtībā parāda ziņojumus, kas atrodas e-pasta serverī.
+        E-pasta klients būtībā attēlo e-pasta serverī esošus ziņojumus.
         E-pasta serveris ir atbildīgs par mēstuļu aizturēšanu, nevis e-pasta klients.
-        Ja saņemiet daudz mēstuļu, lūdzu, sazinieties ar savu e-pasta pakalpojumu sniedzēju un nevainojiet lietotni!
+        Ja tiek saņemts daudz mēstuļu, lūgums sazināties ar savu e-pasta pakalpojuma sniedzēju un nevainot lietotni.
     </string>
     <string name="title_hint_important">Svarīgs</string>
     <string name="title_hint_sync_note">Pēc noklusējuma ne visi ziņojumi tiks lejupielādēti, lai ierobežotu krātuves vietas, akumulatora un datu lietojumu. To var mainīt ar ilgu piespiešanu uz mapes sarakstā un \"Iegūt vairāk ziņojumu\" atlasīšanu.</string>
@@ -850,25 +960,28 @@
     <string name="title_no_ask_again">Turpmāk vairs nevaicāt</string>
     <string name="title_no_ask_for_again">Turpmāk vairs nevaicāt par %1$s</string>
     <string name="title_large_body">Šis ziņojums ir ļoti liels un var radīt sarežģījumus.</string>
-    <string name="title_more_overflow">Vēl &#8230;</string>
+    <string name="title_snooze_doze">Lūgums atspējot akumulatora optimizēšana galvenā iestatījumu ekrāna 3. solī</string>
+    <string name="title_more_overflow">Vēl&#8230;</string>
     <string name="title_today_at">Šodien %1$s</string>
     <string name="title_tomorrow_at">Rīt %1$s</string>
     <string name="title_next_week">Nākamnedēļ šajā pašā laikā</string>
     <string name="title_after">Pēc %1$s</string>
     <string name="title_minutes">Minūtes</string>
+    <string name="title_loading">Ielādē&#8230;</string>
     <string name="title_conversation_actions">Darbības</string>
     <string name="title_conversation_action_reply">Atbildēt ar: \"%1$s\"</string>
     <string name="title_conversation_action_copy">Ievietot starpliktuvē: \"%1$s\"</string>
     <string name="title_pro_info">
-        FairEmail izstrāde burtiski ir aizņēmusi tūkstošiem stundu, un, neraugoties uz to, lielākā daļa funkciju ir pieejamas bez maksas.
-        FairEmail nopietni ņem vērā konfidencialitāti un nerāda reklāmas, un neizmanto izsekošanu vai analītiku, lai nopelnītu.
-        Lai uzturētu un atbalstītu FairEmail ilgtermiņā, dažas ērtības un papildu funkcijas ir pieejamas tikai par maksu.
-        FairEmail atgādina par to, rādot neliela izmēra ziņojumu, kas tiks noņemts, ja iegādāsieties lietpratēju funkcionalitāti.
+        FairEmail izstrāde ir aizņēmusi burtiski tūkstošiem stundu, un, neraugoties uz to, lielākā daļa iespēju ir izmantojamas bez maksas.
+        FairEmail nopietni ņem vērā privātumu un nerāda reklāmas, un neizmanto izsekošanu vai analītiku, lai nopelnītu.
+        Lai uzturētu un atbalstītu FairEmail ilgtermiņā, dažas ērtības un papildu iespējas ir pieejamas par maksu.
+        FairEmail rāda nelielu ziņojumu, lai par to atgādinātu, kas tiks noņemts, ja tiks iegādātas lietpratēju iespējas.
     </string>
     <string name="title_pro_google">FairEmail uzsāk pirkumu Play Store, bet Google pilnībā pārvalda visu pirkuma gaitu, tādēļ lūgums nevainot lietotni jebkādu sarežģījumu gadījumā.</string>
     <string name="title_pro_hide">Slēpt nelielu ziņojumu uz %1$d nedēļām</string>
-    <string name="title_pro_activated">Visas Pro funkcijas ir aktivizētas</string>
-    <string name="title_pro_valid">Visas Pro funkcijas aktivizētas</string>
+    <string name="title_pro_activated">Visas lietpratēju iespējas ir aktivētas</string>
+    <string name="title_pro_valid">Visas lietpratēju iespējas aktivētas</string>
+    <string name="title_pro_support">FairEmail ir nepieciešama palīdzība. Piesist, lai iegādātos lietpratēju iespējas, lai tādējādi nodrošinātu projekta virzību, vai izslēgtu šo ziņojumu.</string>
     <string name="title_log">Žurnāls</string>
     <string name="title_rules_export">Izgūt kārtulas</string>
     <string name="title_rules_import">Ievietot kārtulas</string>
@@ -884,10 +997,10 @@
     <string name="title_debug_info_question">Lūgums izmantot informācijas pogu, ja ir tikai kāds jautājums</string>
     <string name="title_widget_folder">Mape</string>
     <string name="title_widget_folder_unified">Apvienotās iesūtnes mapes</string>
-    <string name="title_widget_unseen">Tikai nelasītie ziņojumi</string>
-    <string name="title_widget_show_unseen">Rādīt kā nelasītu</string>
+    <string name="title_widget_unseen">Tikai neizlasītie ziņojumi</string>
+    <string name="title_widget_show_unseen">Rādīt kā neizlasītu</string>
     <string name="title_widget_flagged">Tikai ar zvaigzni atzīmētie ziņojumi</string>
-    <string name="title_widget_count_top">Augšā rādīt nelasīto ziņojumu skaitu</string>
+    <string name="title_widget_count_top">Augšā rādīt neizlasīto ziņojumu skaitu</string>
     <string name="title_widget_subject_lines">Maksimālais temata rindu skaits</string>
     <string name="title_widget_compose">Rādīt jauna ziņojuma sastādīšanas pogu</string>
     <string name="title_compat_dark">Google noņēma tumšo izskatu Android versijām, kas ir vecākas par 10</string>
@@ -899,13 +1012,14 @@
         <item quantity="other">%1$d ziņojumi</item>
     </plurals>
     <string name="title_accessibility_folders">Mapes</string>
+    <string name="title_accessibility_searches">Meklējumi</string>
     <string name="title_accessibility_seen">Izlasīts</string>
-    <string name="title_accessibility_unseen">Nelasīts</string>
+    <string name="title_accessibility_unseen">Neizlasīts</string>
     <string name="title_accessibility_flagged">Ar zvaigzni</string>
     <string name="title_accessibility_unflagged">Bez zvaigznes</string>
     <string name="title_accessibility_forwarded">Pārsūtīts</string>
-    <string name="title_accessibility_filter_out_seen">Pārslēgt izlasīto ziņojumu atlasītāju</string>
-    <string name="title_accessibility_filter_out_unflagged">Pārslēgt ar zvaigzni atzīmēto ziņojumu atlasītāju</string>
+    <string name="title_accessibility_filter_out_seen">Pārslēgt izlasīto ziņojumu atsijātāju</string>
+    <string name="title_accessibility_filter_out_unflagged">Pārslēgt ar zvaigzni atzīmēto ziņojumu atsijātāju</string>
     <string name="title_accessibility_hide_addresses">Slēpt adreses</string>
     <string-array name="sendDelayedNames">
         <item>@string/title_no</item>
