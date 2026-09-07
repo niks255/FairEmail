@@ -3272,7 +3272,7 @@ class Core {
         } while (count > 0);
     }
 
-    private static void onRule(Context context, JSONArray jargs, EntityMessage message) throws JSONException, MessagingException, IOException {
+    private static void onRule(Context context, JSONArray jargs, EntityMessage message) throws Throwable {
         // Deferred rule (download headers, body, etc)
         DB db = DB.getInstance(context);
 
@@ -5131,7 +5131,10 @@ class Core {
                         }
                 }
             } finally {
-                db.message().setMessageNotifying(message.id, 0);
+                if (message.notifying == EntityMessage.NOTIFYING_RULE_PENDING)
+                    message.notifying = EntityMessage.NOTIFYING_IGNORE;
+                else
+                    db.message().setMessageNotifying(message.id, 0);
             }
 
             reportNewMessage(context, account, folder, message);

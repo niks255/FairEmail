@@ -60,7 +60,7 @@ public class OpenAI {
     static final String CONTENT_TEXT = "text";
     static final String CONTENT_IMAGE = "image_url";
 
-    private static final int TIMEOUT = 45; // seconds
+    private static final int TIMEOUT = 20; // seconds
     private static final int SCALE2PIXELS = 1440; // medium
 
     static boolean isAvailable(Context context) {
@@ -116,6 +116,9 @@ public class OpenAI {
     }
 
     static Message[] completeChat(Context context, String model, Message[] messages, Float temperature, int n) throws JSONException, IOException {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int max_tokens = prefs.getInt("openai_max_tokens", 0);
+
         // https://platform.openai.com/docs/guides/chat/introduction
         // https://platform.openai.com/docs/api-reference/chat/create
         JSONArray jmessages = new JSONArray();
@@ -146,6 +149,8 @@ public class OpenAI {
 
         JSONObject jquestion = new JSONObject();
         jquestion.put("model", model);
+        if (max_tokens > 0)
+            jquestion.put("max_tokens", max_tokens);
         jquestion.put("messages", jmessages);
         if (temperature != null)
             jquestion.put("temperature", temperature);
@@ -162,6 +167,17 @@ public class OpenAI {
         }
 
         return choices;
+    }
+
+    static List<String> getModelList(Context context) throws JSONException, IOException {
+        JSONObject jresponse = call(context, "GET", "models", null);
+        List<String> models = new ArrayList<>();
+        JSONArray data = jresponse.getJSONArray("data");
+        for (int i = 0; i < data.length(); i++) {
+            JSONObject item = data.getJSONObject(i);
+            models.add(item.getString("id"));
+        }
+        return models;
     }
 
     private static String getUri(Context context) {

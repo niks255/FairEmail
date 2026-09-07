@@ -37,13 +37,11 @@
     <plurals name="page_conversation">
         <item quantity="one">דיון</item>
         <item quantity="two">דיונים</item>
-        <item quantity="many">דיונים</item>
         <item quantity="other">דיונים</item>
     </plurals>
     <plurals name="page_message">
         <item quantity="one">הודעה</item>
         <item quantity="two">הודעות</item>
-        <item quantity="many">הודעות</item>
         <item quantity="other">הודעות</item>
     </plurals>
     <string name="page_folders">תיקיות</string>
@@ -56,55 +54,46 @@
     <plurals name="title_notification_synchronizing">
         <item quantity="one">חשבון במעקב</item>
         <item quantity="two">%1$d חשבונות במעקב</item>
-        <item quantity="many">%1$d חשבונות במעקב</item>
         <item quantity="other">%1$d חשבונות במעקב</item>
     </plurals>
     <plurals name="title_notification_operations">
         <item quantity="one">פעולה ממתינה</item>
         <item quantity="two">%1$d פעולות ממתינות</item>
-        <item quantity="many">%1$d פעולות ממתינות</item>
         <item quantity="other">%1$d פעולות ממתינות</item>
     </plurals>
     <plurals name="title_notification_unseen">
         <item quantity="one">הודעה חדשה</item>
         <item quantity="two">%1$d הודעות חדשות</item>
-        <item quantity="many">%1$d הודעות חדשות</item>
         <item quantity="other">%1$d הודעות חדשות</item>
     </plurals>
     <plurals name="title_notification_unsent">
         <item quantity="one">הודעה ממתינה לשליחה</item>
         <item quantity="two">%1$d הודעות ממתינות לשליחה</item>
-        <item quantity="many">%1$d הודעות ממתינות לשליחה</item>
         <item quantity="other">%1$d הודעות ממתינות לשליחה</item>
     </plurals>
     <plurals name="title_tile_unseen">
         <item quantity="one">חדשה</item>
         <item quantity="two">%1$d חדשות</item>
-        <item quantity="many">%1$d חדשות</item>
         <item quantity="other">%1$d חדשות</item>
     </plurals>
     <plurals name="title_moving_messages">
         <item quantity="one">להעביר הודעה?</item>
         <item quantity="two">להעביר %1$d הודעות?</item>
-        <item quantity="many">להעביר %1$d הודעות?</item>
         <item quantity="other">להעביר %1$d הודעות?</item>
     </plurals>
     <plurals name="title_deleting_messages">
         <item quantity="one">למחוק את ההודעה לצמיתות?</item>
         <item quantity="two">למחוק %1$d הודעות לצמיתות?</item>
-        <item quantity="many">למחוק %1$d הודעות לצמיתות?</item>
         <item quantity="other">למחוק %1$d הודעות לצמיתות?</item>
     </plurals>
     <plurals name="title_attachments">
         <item quantity="one">קובץ מצורף</item>
         <item quantity="two">%1$d קבצים מצורפים</item>
-        <item quantity="many">%1$d קבצים מצורפים</item>
         <item quantity="other">%1$d קבצים מצורפים</item>
     </plurals>
     <plurals name="title_ask_spam">
         <item quantity="one">להתייחס אל ההודעה כספאם?</item>
         <item quantity="two">האם לסמן %1$d הודעות כדואר זבל?</item>
-        <item quantity="many">להתייחס אל %1$d ההודעות כספאם?</item>
         <item quantity="other">להתייחס אל %1$d ההודעות כספאם?</item>
     </plurals>
     <string name="title_ask_spam_who">להתייחס להודעה מאת %1$s כספאם?</string>
@@ -127,19 +116,16 @@
     <plurals name="title_ask_block_sender">
         <item quantity="one">לחסום את מוען ההודעה?</item>
         <item quantity="two">לחסום את מוען %1$s ההודעות?</item>
-        <item quantity="many">לחסום את מוען %1$s ההודעות?</item>
         <item quantity="other">לחסום את מוען %1$s ההודעות?</item>
     </plurals>
     <plurals name="title_hours">
         <item quantity="one">שעה</item>
         <item quantity="two">שעתיים</item>
-        <item quantity="many">%1$s שעות</item>
         <item quantity="other">%1$s שעות</item>
     </plurals>
     <plurals name="title_days">
         <item quantity="one">יום</item>
         <item quantity="two">יומיים</item>
-        <item quantity="many">%1$s ימים</item>
         <item quantity="other">%1$s ימים</item>
     </plurals>
     <string name="title_junk_filter">להשתמש במסנן ספאם מקומי</string>
@@ -227,6 +213,7 @@
     <string name="title_setup_gmail_login">אם נכנסת לחשבון ב־Chrome אפשר להוסיף חשבון חדש רק דרך Android. אפשר להימנע מזה על ידי יציאה מהחשבון ב־Chrome דרך הגדרות הסנכרון של Chrome.</string>
     <string name="title_setup_gmail_max">אם מופיעה הודעת השגיאה „נכנסת לכמות המרבית של חשבונות”, יש להוציא את הדפדפן מכל חשבונות Google.</string>
     <string name="title_setup_outlook_hint">אם זאת כתובת כינוי, עדיף להשתמש באשף Office 365.</string>
+    <string name="title_setup_outlook_passkey_hint">Microsoft עלולים לבקש ממך להגדיר מפתח גישה. זה פחות נגיש במכשירים ניידים, לכם כדאי לדלג או לבטל את שלב הרשות הזה.</string>
     <string name="title_setup_outlook_modern">עקב שינויים במדיניות האבטחה של Microsoft, החל מ־16 בספטמבר, 2024, רק אשף Outlook/Hotmail/Live יפעל.</string>
     <string name="title_setup_gmail_on_device">מדוע עלי לבחור בחשבון שכבר מחובר במכשיר?</string>
     <string name="title_setup_gmail_password">ארצה לאמת חשבון עם סיסמה במקום חשבון פנימי במכשיר</string>
@@ -373,6 +360,7 @@
     <string name="title_check_gmail_password">חלק מחשבונות ה־Gmail שלך כנראה יפסיקו לעבוד אחרי 30 במאי 2022</string>
     <string name="title_check_outlook_oauth">חשבונות ה־Outlook שלך ימשיכו לעבוד גם אחרי 16 בספטמבר 2024</string>
     <string name="title_check_outlook_password">חלק מחשבונות ה־Outlook/Hotmail/Live שלך יפסיקו לעבוד אחרי 16 בספטמבר 2024</string>
+    <string name="title_check_gmx">יש לעדכן את חשבון ה־GMX שלך כדי להגדיר לו סיסמת יישום לפני 24 בספטמבר, 2026.</string>
     <string name="title_advanced_hint_title">אפשרויות יותר מתקדמות</string>
     <string name="title_advanced_hint_message">        בחרת לנווט אל האפשרויות המתקדמות יותר.
         כל האפשרויות מוגדרות לפי ערכים מקובלים, שאין צורך לשנות אותם אלא אם כן יש לך העדפות שונות.
@@ -851,6 +839,7 @@
     <string name="title_advanced_send">שילוב מול ‚Send’</string>
     <string name="title_advanced_openai">שילוב מול OpenAI (ChatGPT)</string>
     <string name="title_advanced_openai_model">דגם</string>
+    <string name="title_advanced_openai_max_tokens">כמות אסימונים מרבית (להשאיר ריק כדי לא להגביל)</string>
     <string name="title_advanced_openai_temperature">טמפרטורה: %1$s</string>
     <string name="title_advanced_openai_moderation">ניהול תוכן</string>
     <string name="title_advanced_gemini">שילוב מול Gemini</string>
@@ -1233,7 +1222,7 @@
     <string name="title_show_flagged">הצגת מונה הודעות עם כוכב</string>
     <string name="title_subscribed_only">עם רישום בלבד</string>
     <string name="title_sort_unread_atop">מיון אלו שלא נקראו בהתחלה</string>
-    <string name="title_sort_sync" comment="title_sort_sync Title for menu item in the overflow menu of the folder list to enable/disable sorting folders on whether they are synchronized or not. Please keep it short!">סידור לפי סנכרון</string>
+    <string name="title_sort_sync">סידור לפי סנכרון</string>
     <string name="title_search_folder">חיפוש אחר תיקייה</string>
     <string name="title_apply_to_all">החלה על הכול</string>
     <string name="title_edit_account_name">עריכת שם חשבון</string>
@@ -1656,9 +1645,9 @@
     <string name="title_charset_auto">אוטומטי</string>
     <string name="title_alternative_text">טעינת טקסט פשוט</string>
     <string name="title_alternative_html">טעינת HTML</string>
-    <string name="title_no_openpgp">OpenKeychain לא נמצא</string>
+    <string name="title_no_openpgp">ספק OpenPGP לא נמצא</string>
     <string name="title_no_openpgp_remark">יש להגדיר הצפנת PGP מקצה לקצה תחילה</string>
-    <string name="title_user_interaction">מועבר ל־OpenKeychain</string>
+    <string name="title_user_interaction">מועבר לספק ה־OpenPGP</string>
     <string name="title_padlock">המנעול משמש לפענוח ההודעה</string>
     <string name="title_signed_data">אימות החתימה כדי להציג את טקסט ההודעה</string>
     <string name="title_not_encrypted">ההודעה אינה חתומה או מוצפנת</string>
@@ -2041,6 +2030,7 @@
     <string name="title_hint_folder_sync">כדי להגביל שימוש בסוללה וברשת לא כל התיקיות ולא כל ההודעות יסונכרנו כברירת מחדל</string>
     <string name="title_hint_airplane">מצב טיסה מופעל</string>
     <string name="title_hint_vpn_active">VPN פעיל</string>
+    <string name="title_hint_vpn_settings">רשימת VPN</string>
     <string name="title_hint_notifications">אין הרשאות להתראות</string>
     <string name="title_hint_notifications_remark">נדרשות הרשאות גם להתראות (חשבון). אפשר לכבות התראות על הודעות חדשות בהגדרות.</string>
     <string name="title_hint_battery_optimizations">מיטובי סוללה עדיין פעילים</string>
@@ -2242,7 +2232,6 @@
     <plurals name="title_accessibility_messages">
         <item quantity="one">הודעה</item>
         <item quantity="two">%1$d הודעות</item>
-        <item quantity="many">%1$d הודעות</item>
         <item quantity="other">%1$d הודעות</item>
     </plurals>
     <string name="title_accessibility_accounts">חשבונות</string>

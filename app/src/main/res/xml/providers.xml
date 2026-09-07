@@ -627,7 +627,7 @@
     </provider>
     <provider
         name="web.de"
-        documentation="Ist &lt;a href=&quot;https://hilfe.web.de/email/einstellungen/pop3-imap-einschalten.html&quot;&gt;IMAP aktiviert&lt;/a&gt;? Die Zwei-Faktor-Authentifizierung erfordert &lt;a href=&quot;https://web.de/email/sicherheit/zwei-faktor-authentifizierung/&quot;&gt;ein Anwendungsspezifische Passwort&lt;/a&gt;!"
+        documentation="Ist &lt;a href=&quot;https://hilfe.web.de/email/einstellungen/pop3-imap-einschalten.html&quot;&gt;IMAP aktiviert&lt;/a&gt;? Die Zwei-Faktor-Authentifizierung erfordert &lt;a href=&quot;https://hilfe.web.de/sicherheit/2fa/anwendungsspezifisches-passwort.html&quot;&gt;ein Anwendungsspezifische Passwort&lt;/a&gt;!"
         domain="web\\.de"
         keepalive="12"
         link="https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html"
@@ -2410,9 +2410,10 @@
             starttls="false" />
     </provider>
     <provider
-        name="Reagan.com"
+        name="Rackspace"
         domain="reagan\\.com"
-        link="https://www.reagan.com/support-outlook-express">
+        link="https://www.reagan.com/support-outlook-express"
+        txt=".*include\:emailsrvr\.com.*">
         <imap
             host="secure.emailsrvr.com"
             port="993"

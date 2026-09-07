@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_login">Si Chrome ha iniciado sesión en una cuenta, sólo se puede añadir una nueva cuenta a través de Android. Esto se puede evitar desconectando Chrome a través de los ajustes de sincronización de Chrome.</string>
     <string name="title_setup_gmail_max">En el caso del mensaje de error \"Has iniciado sesión con el número máximo de cuentas\", tú necesitas cerrar sesión en el navegador de todas las cuentas de Google.</string>
     <string name="title_setup_outlook_hint">En el caso de una dirección alias, probablemente debería utilizar el asistente de Office 365.</string>
+    <string name="title_setup_outlook_passkey_hint">Microsoft puede pedirle que configure una llave de acceso. Esto es menos sencillo en un dispositivo móvil, así que considere omitir o cancelar este paso opcional.</string>
     <string name="title_setup_outlook_modern">Debido a cambios en las políticas de seguridad de Microsoft, a partir del 16 de septiembre de 2024 sólo funcionará el asistente Outlook/Hotmail/Live.</string>
     <string name="title_setup_gmail_on_device">¿Por qué necesito seleccionar una cuenta del dispositivo?</string>
     <string name="title_setup_gmail_password">Quiero autorizar una cuenta con una contraseña en lugar de una cuenta en el dispositivo</string>
@@ -345,6 +346,7 @@
     <string name="title_check_gmail_password">Algunas de sus cuentas de Gmail podrían dejar de funcionar después del 30 de Mayo de 2022</string>
     <string name="title_check_outlook_oauth">Tus cuentas de Outlook continuarán funcionando después del 16 de septiembre de 2024</string>
     <string name="title_check_outlook_password">Algunas de sus cuentas de Outlook/Hotmail/Live dejarán de funcionar después del 16 de septiembre de 2024</string>
+    <string name="title_check_gmx">Debe actualizar su cuenta GMX con una contraseña de aplicación antes del 24 de septiembre de 2026.</string>
     <string name="title_advanced_hint_title">Opciones más avanzadas</string>
     <string name="title_advanced_hint_message">        Está navegando a las opciones más avanzadas.        Todas las opciones tienen por defecto valores estándar, que no necesitan ser modificados a menos que así lo prefiera.
     </string>
@@ -820,6 +822,7 @@
     <string name="title_advanced_send">Integración con \'Enviar\'</string>
     <string name="title_advanced_openai">Integración con OpenAI (ChatGPT)</string>
     <string name="title_advanced_openai_model">Modelo</string>
+    <string name="title_advanced_openai_max_tokens">Tokens máximos (dejar en blanco para ilimitado)</string>
     <string name="title_advanced_openai_temperature">Temperatura: %1$s</string>
     <string name="title_advanced_openai_moderation">Moderación de contenido</string>
     <string name="title_advanced_gemini">Integración con Gemini</string>
@@ -1203,7 +1206,7 @@
     <string name="title_show_flagged">Mostrar cantidad de mensajes destacados</string>
     <string name="title_subscribed_only">Sólo suscritas</string>
     <string name="title_sort_unread_atop">Mostrar no leídos arriba</string>
-    <string name="title_sort_sync" comment="title_sort_sync Title for menu item in the overflow menu of the folder list to enable/disable sorting folders on whether they are synchronized or not. Please keep it short!">Ordenar según sincronización</string>
+    <string name="title_sort_sync">Ordenar según sincronización</string>
     <string name="title_search_folder">Buscar carpeta</string>
     <string name="title_apply_to_all">Aplicar a todos</string>
     <string name="title_edit_account_name">Editar el nombre de la cuenta</string>
@@ -1624,9 +1627,9 @@
     <string name="title_charset_auto">Automático</string>
     <string name="title_alternative_text">Cargar texto plano</string>
     <string name="title_alternative_html">Cargar HTML</string>
-    <string name="title_no_openpgp">OpenKeychain no encontrado</string>
+    <string name="title_no_openpgp">Proveedor OpenPGP no encontrado</string>
     <string name="title_no_openpgp_remark">El cifrado PGP de extremo a extremo debe configurarse primero</string>
-    <string name="title_user_interaction">Transfiriendo a OpenKeychain</string>
+    <string name="title_user_interaction">Transfiriendo al proveedor OpenPGP</string>
     <string name="title_padlock">Use el candado para descifrar el mensaje</string>
     <string name="title_signed_data">Verificar la firma para mostrar el texto del mensaje</string>
     <string name="title_not_encrypted">El mensaje no está firmado ni cifrado</string>
@@ -2008,6 +2011,7 @@
     <string name="title_hint_folder_sync">Para limitar el uso de batería y redes, no todas las carpetas y mensajes serán sincronizados por defecto</string>
     <string name="title_hint_airplane">El modo avión está activado</string>
     <string name="title_hint_vpn_active">VPN activa</string>
+    <string name="title_hint_vpn_settings">Lista de VPN</string>
     <string name="title_hint_notifications">Sin permisos de notificación</string>
     <string name="title_hint_notifications_remark">Los permisos de notificación también son necesarios para las alertas (de cuenta). Las notificaciones de nuevos mensajes pueden desactivarse en la configuración.</string>
     <string name="title_hint_battery_optimizations">Optimizaciones de uso de batería habilitadas</string>

@@ -19,6 +19,8 @@ package eu.faircode.email;
     Copyright 2018-2026 by Marcel Bokhorst (M66B)
 */
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.cardview.widget.CardView;
 import androidx.preference.PreferenceManager;
@@ -80,6 +83,8 @@ public class FragmentOptionsIntegrations extends FragmentBase implements SharedP
     private EditText etOpenAi;
     private TextInputLayout tilOpenAi;
     private EditText etOpenAiModel;
+    private ImageButton ibOpenAiModel;
+    private EditText etOpenAiMaxTokens;
     private SwitchCompat swOpenMultiModal;
     private TextView tvOpenAiTemperature;
     private SeekBar sbOpenAiTemperature;
@@ -110,7 +115,7 @@ public class FragmentOptionsIntegrations extends FragmentBase implements SharedP
             "deepl_enabled",
             "vt_enabled",
             "send_enabled", "send_host", "send_dlimit", "send_tlimit",
-            "openai_enabled", "openai_uri", "openai_model", "openai_multimodal", "openai_temperature", "openai_summarize", "openai_answer", "openai_system",
+            "openai_enabled", "openai_uri", "openai_model", "openai_max_tokens", "openai_multimodal", "openai_temperature", "openai_summarize", "openai_answer", "openai_system",
             "gemini_enabled", "gemini_uri", "gemini_model", "gemini_temperature", "gemini_summarize", "gemini_answer"
     ));
 
@@ -156,6 +161,8 @@ public class FragmentOptionsIntegrations extends FragmentBase implements SharedP
         etOpenAi = view.findViewById(R.id.etOpenAi);
         tilOpenAi = view.findViewById(R.id.tilOpenAi);
         etOpenAiModel = view.findViewById(R.id.etOpenAiModel);
+        ibOpenAiModel = view.findViewById(R.id.ibOpenAiModel);
+        etOpenAiMaxTokens = view.findViewById(R.id.etOpenAiMaxTokens);
         swOpenMultiModal = view.findViewById(R.id.swOpenMultiModal);
         tvOpenAiTemperature = view.findViewById(R.id.tvOpenAiTemperature);
         sbOpenAiTemperature = view.findViewById(R.id.sbOpenAiTemperature);
@@ -427,6 +434,8 @@ public class FragmentOptionsIntegrations extends FragmentBase implements SharedP
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
                 prefs.edit().putBoolean("openai_enabled", checked).apply();
                 etOpenAiModel.setEnabled(checked);
+                ibOpenAiModel.setEnabled(checked);
+                etOpenAiMaxTokens.setEnabled(checked);
                 swOpenMultiModal.setEnabled(checked);
                 sbOpenAiTemperature.setEnabled(checked);
                 etOpenAiSummarize.setEnabled(checked);
@@ -507,6 +516,82 @@ public class FragmentOptionsIntegrations extends FragmentBase implements SharedP
                     prefs.edit().remove("openai_model").apply();
                 else
                     prefs.edit().putString("openai_model", model).apply();
+            }
+        });
+
+        ibOpenAiModel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SimpleTask<List<String>>() {
+                    @Override
+                    protected void onPreExecute(Bundle args) {
+                        ibOpenAiModel.setEnabled(false);
+                    }
+
+                    @Override
+                    protected void onPostExecute(Bundle args) {
+                        ibOpenAiModel.setEnabled(true);
+                    }
+
+                    @Override
+                    protected List<String> onExecute(Context context, Bundle args) throws Throwable {
+                        return AI.getModelList(context);
+                    }
+
+                    @Override
+                    protected void onExecuted(Bundle args, List<String> data) {
+                        String current = prefs.getString("openai_model", null);
+
+                        CharSequence[] models = new CharSequence[data.size()];
+                        int selected = -1;
+                        for (int i = 0; i < data.size(); i++) {
+                            String model = data.get(i);
+                            models[i] = model;
+                            if (current != null && current.equals(model))
+                                selected = i;
+                        }
+
+                        new AlertDialog.Builder(v.getContext())
+                                .setIcon(R.drawable.twotone_search_24)
+                                .setTitle(R.string.title_advanced_openai_model)
+                                .setSingleChoiceItems(models, selected, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String model = models[which].toString();
+                                        etOpenAiModel.setText(model);
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, null)
+                                .show();
+                    }
+
+                    @Override
+                    protected void onException(Bundle args, Throwable ex) {
+                        Log.unexpectedError(FragmentOptionsIntegrations.this, ex);
+                    }
+                }.execute(FragmentOptionsIntegrations.this, new Bundle(), "ai:models");
+            }
+        });
+
+        etOpenAiMaxTokens.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Integer max_tokens = Helper.parseInt(s.toString().trim());
+                if (max_tokens == null)
+                    prefs.edit().remove("openai_max_tokens").apply();
+                else
+                    prefs.edit().putInt("openai_max_tokens", max_tokens).apply();
             }
         });
 
@@ -766,7 +851,10 @@ public class FragmentOptionsIntegrations extends FragmentBase implements SharedP
         cardVirusTotal.setVisibility(BuildConfig.PLAY_STORE_RELEASE ? View.GONE : View.VISIBLE);
         cardSend.setVisibility(BuildConfig.PLAY_STORE_RELEASE ? View.GONE : View.VISIBLE);
         cardOpenAi.setVisibility(TextUtils.isEmpty(BuildConfig.OPENAI_ENDPOINT) ? View.GONE : View.VISIBLE);
-        cardGemini.setVisibility(TextUtils.isEmpty(BuildConfig.GEMINI_ENDPOINT) ? View.GONE : View.VISIBLE);
+        String gemini_apikey = prefs.getString("gemini_apikey", null);
+        cardGemini.setVisibility(TextUtils.isEmpty(BuildConfig.GEMINI_ENDPOINT)
+                || TextUtils.isEmpty(gemini_apikey)
+                ? View.GONE : View.VISIBLE);
 
         PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
 
@@ -792,6 +880,7 @@ public class FragmentOptionsIntegrations extends FragmentBase implements SharedP
                 "openai_uri".equals(key) ||
                 "openai_apikey".equals(key) ||
                 "openai_model".equals(key) ||
+                "openai_max_tokens".equals(key) ||
                 "openai_summarize".equals(key) ||
                 "openai_answer".equals(key) ||
                 "openai_system".equals(key) ||
@@ -863,6 +952,9 @@ public class FragmentOptionsIntegrations extends FragmentBase implements SharedP
             tilOpenAi.getEditText().setText(prefs.getString("openai_apikey", null));
             etOpenAiModel.setText(prefs.getString("openai_model", null));
             etOpenAiModel.setEnabled(swOpenAi.isChecked());
+
+            int max_tokens = prefs.getInt("openai_max_tokens", 0);
+            etOpenAiMaxTokens.setText(max_tokens > 0 ? Integer.toString(max_tokens) : "");
 
             swOpenMultiModal.setChecked(prefs.getBoolean("openai_multimodal", false));
             swOpenMultiModal.setEnabled(swOpenAi.isChecked());

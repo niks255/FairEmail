@@ -68,7 +68,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
-import android.os.OperationCanceledException;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
@@ -153,29 +152,45 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1SequenceParser;
+import org.bouncycastle.asn1.ASN1StreamParser;
 import org.bouncycastle.asn1.cms.Attribute;
 import org.bouncycastle.asn1.cms.AttributeTable;
 import org.bouncycastle.asn1.cms.CMSAttributes;
+import org.bouncycastle.asn1.cms.CMSObjectIdentifiers;
+import org.bouncycastle.asn1.cms.ContentInfoParser;
 import org.bouncycastle.asn1.cms.Time;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cms.CMSAuthEnvelopedDataParser;
 import org.bouncycastle.cms.CMSEnvelopedDataParser;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.CMSProcessableFile;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSTypedData;
+import org.bouncycastle.cms.KeyAgreeRecipientInformation;
+import org.bouncycastle.cms.KeyTransRecipientInformation;
 import org.bouncycastle.cms.PKIXRecipientId;
+import org.bouncycastle.cms.Recipient;
+import org.bouncycastle.cms.RecipientId;
 import org.bouncycastle.cms.RecipientInformation;
+import org.bouncycastle.cms.RecipientInformationStore;
 import org.bouncycastle.cms.SignerId;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.SignerInformationStore;
 import org.bouncycastle.cms.SignerInformationVerifier;
 import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder;
+import org.bouncycastle.cms.jcajce.JceKeyAgreeAuthEnvelopedRecipient;
+import org.bouncycastle.cms.jcajce.JceKeyAgreeEnvelopedRecipient;
+import org.bouncycastle.cms.jcajce.JceKeyAgreeRecipientId;
+import org.bouncycastle.cms.jcajce.JceKeyTransAuthEnvelopedRecipient;
 import org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient;
-import org.bouncycastle.cms.jcajce.JceKeyTransRecipient;
+import org.bouncycastle.cms.jcajce.JceKeyTransRecipientId;
 import org.bouncycastle.operator.DefaultAlgorithmNameFinder;
 import org.bouncycastle.util.Store;
 import org.json.JSONException;
@@ -224,6 +239,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -519,7 +535,7 @@ public class FragmentMessages extends FragmentBase
         threading = (prefs.getBoolean("threading", true) ||
                 args.getBoolean("force_threading"));
         swipenav = prefs.getBoolean("swipenav", true);
-        spacing = Helper.dp2pixels(getContext(), prefs.getInt("spacing", 1) * 12);
+        spacing = (cards ? Helper.dp2pixels(getContext(), prefs.getInt("spacing", 1) * 12) : 0);
         seekbar = prefs.getBoolean("seekbar", false);
         move_thread_all = prefs.getBoolean("move_thread_all", false);
         move_thread_sent = (move_thread_all || prefs.getBoolean("move_thread_sent", false));
@@ -5903,10 +5919,11 @@ public class FragmentMessages extends FragmentBase
                 if (!checkReporting())
                     if (!checkReview())
                         if (!checkFingerprint())
-                            if (!checkGmail())
-                                if (!checkOutlook())
-                                    if (!checkLan())
-                                        ;
+                            if (true || !checkGmail())
+                                if (true || !checkOutlook())
+                                    if (!checkGMX())
+                                        if (!checkLan())
+                                            ;
 
         prefs.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(prefs, "notifications_reminder");
@@ -6072,6 +6089,8 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkRedmiNote() {
+        Log.i("Check Redmi");
+
         if (!Helper.isRedmiNote())
             return false;
 
@@ -6095,6 +6114,8 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkDoze() {
+        Log.i("Check doze");
+
         if (viewType != AdapterMessage.ViewType.UNIFIED)
             return false;
 
@@ -6127,6 +6148,8 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkReporting() {
+        Log.i("Check reporting");
+
         if (viewType != AdapterMessage.ViewType.UNIFIED || true)
             return false;
 
@@ -6155,6 +6178,8 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkReview() {
+        Log.i("Check review");
+
         if (viewType != AdapterMessage.ViewType.UNIFIED)
             return false;
 
@@ -6202,6 +6227,8 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkFingerprint() {
+        Log.i("Check fingerprint");
+
         if (Helper.hasValidFingerprint(getContext()))
             return false;
 
@@ -6230,6 +6257,8 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkGmail() {
+        Log.i("Check Gmail");
+
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.getBoolean("gmail_checked", false))
@@ -6315,6 +6344,8 @@ public class FragmentMessages extends FragmentBase
     }
 
     private boolean checkOutlook() {
+        Log.i("Check Outlook");
+
         final Context context = getContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         long outlook_last_checked = prefs.getLong("outlook_last_checked", 0);
@@ -6402,13 +6433,92 @@ public class FragmentMessages extends FragmentBase
             }
         }.execute(this, new Bundle(), "outlook:check");
 
-        return false;
+        return true;
+    }
+
+    private boolean checkGMX() {
+        Log.i("Check GMX");
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean gmx_checked = prefs.getBoolean("gmx_checked", false);
+        if (gmx_checked)
+            return false;
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.DAY_OF_MONTH, 24);
+        cal.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        cal.set(Calendar.YEAR, 2026);
+        cal.add(Calendar.MONTH, 1); // One month more
+        long at = cal.getTimeInMillis();
+
+        long now = new Date().getTime();
+        if (at < now)
+            return false;
+
+        new SimpleTask<List<EntityAccount>>() {
+            @Override
+            protected List<EntityAccount> onExecute(Context context, Bundle args) throws Throwable {
+                DB db = DB.getInstance(context);
+                return db.account().getSynchronizingAccounts(null);
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, List<EntityAccount> accounts) {
+                boolean has = false;
+                if (accounts != null)
+                    for (EntityAccount account : accounts)
+                        if (account.isGMX()) {
+                            has = true;
+                            break;
+                        }
+
+                if (!has) {
+                    prefs.edit().putBoolean("gmx_checked", true).apply();
+                    return;
+                }
+
+                final Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_check_gmx, Snackbar.LENGTH_INDEFINITE));
+                Helper.setSnackbarLines(snackbar, 5);
+                snackbar.setAction(R.string.title_info, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                        prefs.edit().putBoolean("gmx_checked", true).apply();
+                        Uri uri = Uri.parse(Helper.SUPPORT_URI).buildUpon().appendQueryParameter("tag", "GMX").build();
+                        Helper.view(v.getContext(), uri, true);
+                    }
+                });
+                snackbar.addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        prefs.edit().putBoolean("gmx_checked", true).apply();
+                    }
+                });
+                snackbar.show();
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.e(ex);
+            }
+        }.execute(this, new Bundle(), "gmx:check");
+
+        return true;
     }
 
     private boolean checkLan() {
+        Log.i("Check LAN");
+
         new SimpleTask<Boolean>() {
             @Override
             protected Boolean onExecute(Context context, Bundle args) throws Throwable {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                if (prefs.getBoolean("lan_dismissed", false))
+                    return false;
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.CINNAMON_BUN)
                     return false;
                 if (Helper.hasPermission(context, Manifest.permission.ACCESS_LOCAL_NETWORK))
@@ -6455,6 +6565,14 @@ public class FragmentMessages extends FragmentBase
                                     .putExtra("tab", "connection"));
                     }
                 });
+                if (BuildConfig.PLAY_STORE_RELEASE)
+                    snackbar.addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onDismissed(Snackbar sb, int event) {
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sb.getContext());
+                            prefs.edit().putBoolean("lan_dismissed", true).apply();
+                        }
+                    });
                 snackbar.show();
             }
 
@@ -9974,11 +10092,11 @@ public class FragmentMessages extends FragmentBase
                             // https://tools.ietf.org/html/rfc4880#section-6.2
                             String html = Helper.readText(file);
                             String body = HtmlHelper.fromHtml(html, context).toString();
-                            int begin = body.indexOf(Helper.PGP_BEGIN_MESSAGE);
-                            int end = body.indexOf(Helper.PGP_END_MESSAGE);
+                            int begin = body.indexOf(PgpHelper.PGP_BEGIN_MESSAGE);
+                            int end = body.indexOf(PgpHelper.PGP_END_MESSAGE);
                             if (begin >= 0 && begin < end) {
                                 String[] lines = body
-                                        .substring(begin, end + Helper.PGP_END_MESSAGE.length())
+                                        .substring(begin, end + PgpHelper.PGP_END_MESSAGE.length())
                                         .split("\\r?\\n");
 
                                 List<String> disarmored = new ArrayList<>();
@@ -10269,13 +10387,10 @@ public class FragmentMessages extends FragmentBase
                 if (auto)
                     return;
 
-                if (ex instanceof IllegalArgumentException) {
-                    Log.i(ex);
-                    Helper.setSnackbarOptions(
-                                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG))
-                            .show();
-                } else if (ex instanceof OperationCanceledException) {
-                    Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, R.string.title_no_openpgp, Snackbar.LENGTH_INDEFINITE));
+                if (!PgpHelper.isOpenKeychainInstalled(getContext())) {
+                    String text = getString(R.string.title_no_openpgp);
+                    text += "\n" + Log.formatThrowable(ex, false);
+                    Snackbar snackbar = Helper.setSnackbarOptions(Snackbar.make(view, text, Snackbar.LENGTH_INDEFINITE));
                     snackbar.setAction(R.string.title_fix, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -10283,7 +10398,13 @@ public class FragmentMessages extends FragmentBase
                             Helper.viewFAQ(v.getContext(), 12);
                         }
                     });
+                    Helper.setSnackbarLines(snackbar, 7);
                     snackbar.show();
+                } else if (ex instanceof IllegalArgumentException) {
+                    Log.i(ex);
+                    Helper.setSnackbarOptions(
+                                    Snackbar.make(view, ex.getMessage(), Snackbar.LENGTH_LONG))
+                            .show();
                 } else
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
@@ -10466,11 +10587,23 @@ public class FragmentMessages extends FragmentBase
                                                     boolean found = false;
                                                     String issuer = (c.getIssuerDN() == null ? "" : c.getIssuerDN().getName());
                                                     EntityCertificate record = EntityCertificate.from(c, true, issuer);
-                                                    for (EntityCertificate ec : ecs)
-                                                        if (ec.fingerprint.equals(record.fingerprint)) {
-                                                            found = true;
-                                                            break;
-                                                        }
+
+                                                    Enumeration<String> aliases = ks.aliases();
+                                                    while (aliases.hasMoreElements()) {
+                                                        Certificate certificate = ks.getCertificate(aliases.nextElement());
+                                                        if (certificate instanceof X509Certificate)
+                                                            if (EntityCertificate.sameCaKey(c, (X509Certificate) certificate)) {
+                                                                found = true;
+                                                                break;
+                                                            }
+                                                    }
+
+                                                    if (!found)
+                                                        for (EntityCertificate ec : ecs)
+                                                            if (ec.fingerprint.equals(record.fingerprint)) {
+                                                                found = true;
+                                                                break;
+                                                            }
 
                                                     if (!found) {
                                                         Log.i("Storing certificate subject=" + record.subject);
@@ -10589,22 +10722,48 @@ public class FragmentMessages extends FragmentBase
                     if (input == null)
                         throw new IllegalArgumentException("Encrypted message missing");
 
+                    // Do not trust only the smime-type MIME parameter: it is a hint and
+                    // is not retained in EntityAttachment.type. Detect the actual CMS
+                    // content type from the ContentInfo OID.
+                    ASN1ObjectIdentifier contentType = getCmsContentType(input);
+                    boolean envelopedData = CMSObjectIdentifiers.envelopedData.equals(contentType);
+                    boolean authEnveloped = CMSObjectIdentifiers.authEnvelopedData.equals(contentType);
+
+                    if (!envelopedData && !authEnveloped)
+                        throw new CMSException("Unsupported encrypted CMS content type: " + contentType);
+
                     int count = -1;
                     boolean decoded = false;
                     Throwable last = null;
                     while (!decoded)
                         try (FileInputStream fis = new FileInputStream(input)) {
-                            // Create parser
-                            CMSEnvelopedDataParser envelopedData = new CMSEnvelopedDataParser(fis);
+                            // AuthEnvelopedData uses an AEAD-capable parser and recipient.
+                            RecipientInformationStore recipientStore;
+                            AlgorithmIdentifier contentAlgorithm;
+                            String contentAlgorithmOid;
+                            String parserClass;
+
+                            if (authEnveloped) {
+                                CMSAuthEnvelopedDataParser parser = new CMSAuthEnvelopedDataParser(fis);
+                                recipientStore = parser.getRecipientInfos();
+                                contentAlgorithm = parser.getEncryptionAlgOID();
+                                contentAlgorithmOid = parser.getEncAlgOID();
+                                parserClass = parser.getClass().getName();
+                            } else {
+                                CMSEnvelopedDataParser parser = new CMSEnvelopedDataParser(fis);
+                                recipientStore = parser.getRecipientInfos();
+                                contentAlgorithm = parser.getContentEncryptionAlgorithm();
+                                contentAlgorithmOid = parser.getEncryptionAlgOID();
+                                parserClass = parser.getClass().getName();
+                            }
 
                             // Get recipient info
-                            JceKeyTransRecipient recipient = new JceKeyTransEnvelopedRecipient(privkey);
-                            Collection<RecipientInformation> recipients = envelopedData.getRecipientInfos().getRecipients(); // KeyTransRecipientInformation
+                            Collection<RecipientInformation> recipients =
+                                    recipientStore.getRecipients(); // KeyTrans, KeyAgree, or another recipient type
 
                             EntityLog.log(context, "s/mime private key" +
                                     " algo=" + privkey.getAlgorithm() +
-                                    " serial=" + chain[0].getSerialNumber() +
-                                    " class=" + recipient.getClass());
+                                    " serial=" + chain[0].getSerialNumber());
                             for (RecipientInformation recipientInfo : recipients) {
                                 String algo;
                                 try {
@@ -10614,12 +10773,16 @@ public class FragmentMessages extends FragmentBase
                                     Log.e(ex);
                                     algo = recipientInfo.getKeyEncryptionAlgOID();
                                 }
-                                String serial;
+                                String serial = null;
                                 try {
-                                    PKIXRecipientId recipientId = (PKIXRecipientId) recipientInfo.getRID();
-                                    serial = recipientId.getSerialNumber().toString();
+                                    RecipientId rid = recipientInfo.getRID();
+                                    if (rid instanceof PKIXRecipientId) {
+                                        BigInteger value = ((PKIXRecipientId) rid).getSerialNumber();
+                                        if (value != null)
+                                            serial = value.toString();
+                                    }
                                 } catch (Throwable ex) {
-                                    serial = null;
+                                    Log.e(ex);
                                 }
                                 EntityLog.log(context, "s/mime recipient" +
                                         " algo=" + algo +
@@ -10630,39 +10793,36 @@ public class FragmentMessages extends FragmentBase
                             String malgo;
                             try {
                                 DefaultAlgorithmNameFinder af = new DefaultAlgorithmNameFinder();
-                                malgo = af.getAlgorithmName(envelopedData.getContentEncryptionAlgorithm());
+                                malgo = af.getAlgorithmName(contentAlgorithm);
                             } catch (Throwable ex) {
                                 Log.e(ex);
-                                malgo = envelopedData.getEncryptionAlgOID();
+                                malgo = contentAlgorithmOid;
                             }
                             EntityLog.log(context, "s/mime message" +
+                                    " type=" + contentType +
                                     " algo=" + malgo +
-                                    " class=" + envelopedData.getClass());
+                                    " class=" + parserClass);
 
                             // Find recipient
                             if (count < 0) {
-                                BigInteger serialno = chain[0].getSerialNumber();
-                                for (RecipientInformation recipientInfo : recipients) {
-                                    // KeyTransRecipientId or KeyAgreeRecipientId
-                                    PKIXRecipientId recipientId = (PKIXRecipientId) recipientInfo.getRID();
-                                    if (serialno != null && serialno.equals(recipientId.getSerialNumber())) {
-                                        try {
-                                            InputStream is = recipientInfo.getContentStream(recipient).getContentStream();
+                                RecipientInformation recipientInfo = recipientStore.get(new JceKeyTransRecipientId(chain[0]));
+                                if (recipientInfo == null)
+                                    recipientInfo = recipientStore.get(new JceKeyAgreeRecipientId(chain[0]));
+                                if (recipientInfo != null) {
+                                    try {
+                                        Recipient recipient = createRecipient(recipientInfo, authEnveloped, privkey);
+                                        try (InputStream is = recipientInfo.getContentStream(recipient).getContentStream()) {
                                             decodeMessage(context, is, message, args);
-                                            decoded = true;
-                                            Log.i("Encryption algo=" + malgo);
-                                            args.putString("algo", malgo);
-                                        } catch (CMSException ex) {
-                                            Log.w(ex);
-                                            last = ex;
-                                        } catch (Throwable ex) {
-                                            // java.lang.ClassCastException: org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient cannot be cast to org.bouncycastle.cms.KeyAgreeRecipient
-                                            //    at org.bouncycastle.cms.KeyAgreeRecipientInformation.getRecipientOperator(Unknown Source:1)
-                                            //    at org.bouncycastle.cms.RecipientInformation.getContentStream(Unknown Source:0)
-                                            Log.e(ex);
-                                            last = ex;
                                         }
-                                        break; // only one try
+                                        decoded = true;
+                                        Log.i("Encryption algo=" + malgo);
+                                        args.putString("algo", malgo);
+                                    } catch (CMSException ex) {
+                                        Log.w(ex);
+                                        last = ex;
+                                    } catch (Throwable ex) {
+                                        Log.e(ex);
+                                        last = ex;
                                     }
                                 }
                             } else {
@@ -10670,17 +10830,15 @@ public class FragmentMessages extends FragmentBase
                                 if (count < list.size()) {
                                     RecipientInformation recipientInfo = list.get(count);
                                     try {
-                                        InputStream is = recipientInfo.getContentStream(recipient).getContentStream();
-                                        decodeMessage(context, is, message, args);
+                                        Recipient recipient = createRecipient(recipientInfo, authEnveloped, privkey);
+                                        try (InputStream is = recipientInfo.getContentStream(recipient).getContentStream()) {
+                                            decodeMessage(context, is, message, args);
+                                        }
                                         decoded = true;
-                                        break;
                                     } catch (CMSException ex) {
                                         Log.w(ex);
                                         last = ex;
                                     } catch (Throwable ex) {
-                                        // java.lang.ClassCastException: org.bouncycastle.cms.jcajce.JceKeyTransEnvelopedRecipient cannot be cast to org.bouncycastle.cms.KeyAgreeRecipient
-                                        //    at org.bouncycastle.cms.KeyAgreeRecipientInformation.getRecipientOperator(Unknown Source:1)
-                                        //    at org.bouncycastle.cms.RecipientInformation.getContentStream(Unknown Source:0)
                                         Log.e(ex);
                                         last = ex;
                                     }
@@ -10924,6 +11082,30 @@ public class FragmentMessages extends FragmentBase
                     Log.unexpectedError(getParentFragmentManager(), ex);
             }
 
+            private ASN1ObjectIdentifier getCmsContentType(File file) throws IOException, CMSException {
+                try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
+                    ASN1Encodable object = new ASN1StreamParser(is).readObject();
+                    if (!(object instanceof ASN1SequenceParser))
+                        throw new CMSException("Invalid CMS ContentInfo");
+                    ContentInfoParser contentInfo = new ContentInfoParser((ASN1SequenceParser) object);
+                    return contentInfo.getContentType();
+                }
+            }
+
+            private static Recipient createRecipient(RecipientInformation info, boolean authEnveloped, PrivateKey privateKey) throws CMSException {
+                if (info instanceof KeyTransRecipientInformation)
+                    return (authEnveloped
+                            ? new JceKeyTransAuthEnvelopedRecipient(privateKey)
+                            : new JceKeyTransEnvelopedRecipient(privateKey));
+
+                if (info instanceof KeyAgreeRecipientInformation)
+                    return (authEnveloped
+                            ? new JceKeyAgreeAuthEnvelopedRecipient(privateKey)
+                            : new JceKeyAgreeEnvelopedRecipient(privateKey));
+
+                throw new CMSException("Unsupported recipient type: " + info.getClass().getName());
+            }
+
             private void decodeMessage(Context context, InputStream is, EntityMessage message, Bundle args) throws MessagingException, IOException {
                 int type = args.getInt("type");
                 String alias = args.getString("alias");
@@ -10936,6 +11118,11 @@ public class FragmentMessages extends FragmentBase
                 MessageHelper helper = new MessageHelper(imessage, context);
                 MessageHelper.MessageParts parts = helper.getMessageParts();
                 String protect_subject = parts.getProtectedSubject();
+
+                // Ensure stream is read to the end to check AEAD tag
+                byte[] buffer = new byte[Helper.BUFFER_SIZE];
+                while (is.read(buffer) != -1)
+                    ;
 
                 // Write decrypted body
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

@@ -2956,7 +2956,7 @@ public class MessageHelper {
             Address[] from = getAddressHeader("From");
             if (from != null && from.length == 1) {
                 String email = ((InternetAddress) from[0]).getAddress();
-                if (email != null && email.endsWith(".mozmail.com"))
+                if (email != null && (email.endsWith(".mozmail.com") || email.endsWith("@mozmail.com")))
                     sender = getAddressHeader("Resent-From");
             }
         }
@@ -3269,8 +3269,8 @@ public class MessageHelper {
 
         // (qmail nnn invoked by uid nnn); 1 Jan 2022 00:00:00 -0000
         // Postfix: by <host name> (<name>, from userid nnn)
-        if (header.matches(".*\\(qmail \\d+ invoked by uid \\d+\\).*") ||
-                header.matches(".*\\(nullmailer pid \\d+ invoked by uid \\d+\\).*") ||
+        if (header.matches(".*\\(qmail .* invoked .*\\).*") ||
+                header.matches(".*\\(nullmailer .* invoked .*\\).*") ||
                 header.matches(".*\\(.*, from userid \\d+\\).*")) {
             Log.i("--- phrase");
             return true;
@@ -3632,9 +3632,7 @@ public class MessageHelper {
                 String email = address.getAddress();
                 String personal = address.getPersonal();
 
-                if (format == AddressFormat.EMAIL_ONLY ||
-                        TextUtils.isEmpty(personal) ||
-                        PatternsCompat.AUTOLINK_EMAIL_ADDRESS.matcher(personal).find())
+                if (TextUtils.isEmpty(personal) || format == AddressFormat.EMAIL_ONLY)
                     formatted.add(TextUtils.isEmpty(email) ? "<>" : email);
                 else {
                     if (compose) {
@@ -5271,6 +5269,10 @@ public class MessageHelper {
                     ContentType ct = new ContentType(part.getContentType());
                     String smimeType = ct.getParameter("smime-type");
                     if ("enveloped-data".equalsIgnoreCase(smimeType)) {
+                        getMessageParts(null, part, parts, EntityAttachment.SMIME_MESSAGE);
+                        return parts;
+                    } else if ("authEnveloped-data".equalsIgnoreCase(smimeType) ||
+                            "auth-enveloped-data".equalsIgnoreCase(smimeType)) {
                         getMessageParts(null, part, parts, EntityAttachment.SMIME_MESSAGE);
                         return parts;
                     } else if ("signed-data".equalsIgnoreCase(smimeType)) {

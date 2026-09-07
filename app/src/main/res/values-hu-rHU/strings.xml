@@ -199,6 +199,7 @@
     <string name="title_setup_gmail_login">Ha be van jelentkezve a Chrome-ban, akkor új fiókot csak az Androidban adhat hozzá. Mindez elkerülhető, ha a Chrome szinkronizálási beállításainál kijelentkezik.</string>
     <string name="title_setup_gmail_max">A \"Bejelentkezések száma elérte a maximumot\" hibaüzenet esetén a böngészőben jelentkezzen ki az összes Google fiókból.</string>
     <string name="title_setup_outlook_hint">Alias cím esetén valószínűleg az Office 365 varázslóját érdemes használni.</string>
+    <string name="title_setup_outlook_passkey_hint">A Microsoft azonosítókulcs létrehozását kérheti öntől. Mivel ez nem egyszerű mobil eszközön, fontolja meg ezen opcionális lépés kihagyását, elvetését.</string>
     <string name="title_setup_outlook_modern">A Microsoft biztonsági eljárásainak változása miatt 2024 szeptember 16-tól csak az Outlook/Hotmail/Live varázslók fognak működni.</string>
     <string name="title_setup_gmail_on_device">Miért kell egy fiókot kiválasztanom az eszközön?</string>
     <string name="title_setup_gmail_password">Jelszóval védett fiókot hozok létre az eszköz fiókjával történő összekapcsolás helyett</string>
@@ -344,6 +345,7 @@
     <string name="title_check_gmail_password">Előfordulhat, hogy némely Gmail fiókja nem fog működni 2022. május 30-a után</string>
     <string name="title_check_outlook_oauth">Outlook fiókjai 2024. szeptember 16-a után is működni fognak</string>
     <string name="title_check_outlook_password">Egyes Outlook/Hotmail/Live fiókjai nem fognak működni 2024. szeptember 16. után</string>
+    <string name="title_check_gmx">Frissítenie kell GMX fiókját, applikáció jelszót beállítva, 2026 szeptember 24-e előtt.</string>
     <string name="title_advanced_hint_title">További haladó opciók</string>
     <string name="title_advanced_hint_message">        A haladó beállításokhoz navigálsz.        Minden opciónak van gyakran használt alapértéke, amit nem kell változtatnod, kivéve, ha más opciókat preferálsz.
     </string>
@@ -818,6 +820,7 @@
     <string name="title_advanced_send">\"Send\" integráció</string>
     <string name="title_advanced_openai">Az OpenAI (ChatGPT) integrációja</string>
     <string name="title_advanced_openai_model">Modell</string>
+    <string name="title_advanced_openai_max_tokens">Tokenek maximális száma (üresen hagyva korlátlan)</string>
     <string name="title_advanced_openai_temperature">Hőmérséklet: %1$s</string>
     <string name="title_advanced_openai_moderation">Tartalom moderálása</string>
     <string name="title_advanced_gemini">Gemini integráció</string>
@@ -1198,7 +1201,7 @@
     <string name="title_show_flagged">Csillagozott üzenet számláló mutatása</string>
     <string name="title_subscribed_only">Csak feliratkozott</string>
     <string name="title_sort_unread_atop">Olvasatlan előre rendezése</string>
-    <string name="title_sort_sync" comment="title_sort_sync Title for menu item in the overflow menu of the folder list to enable/disable sorting folders on whether they are synchronized or not. Please keep it short!">Rendezés szinkronizálás szerint</string>
+    <string name="title_sort_sync">Rendezés szinkronizálás szerint</string>
     <string name="title_search_folder">Keresés könyvtárra</string>
     <string name="title_apply_to_all">Alkalmazás mindre</string>
     <string name="title_edit_account_name">Fióknév módosítása</string>
@@ -1618,9 +1621,9 @@
     <string name="title_charset_auto">Automatikus</string>
     <string name="title_alternative_text">Egyszerű szöveg betöltése</string>
     <string name="title_alternative_html">HTML betöltése</string>
-    <string name="title_no_openpgp">OpenKeychain nem található</string>
+    <string name="title_no_openpgp">OpenPGP szolgáltató nem található</string>
     <string name="title_no_openpgp_remark">A PGP végpontok közti titkosítást először be kell állítani</string>
-    <string name="title_user_interaction">Átvitel az OpenKeychain-re</string>
+    <string name="title_user_interaction">Átküldés az OpenPGP szolgáltatóhoz</string>
     <string name="title_padlock">A lakat érintésével titkosítja az üzenetet</string>
     <string name="title_signed_data">Hitelesítse az aláírást az üzenetszöveg megjelenítéséhez</string>
     <string name="title_not_encrypted">Az üzenet nincs aláírva vagy titkosítva</string>
@@ -2004,6 +2007,7 @@
     <string name="title_hint_folder_sync">Az akkumulátor- és hálózathasználat limitálása érdekében nem minden mappa és üzenet lesz szinkronizálva alapértelmezésként</string>
     <string name="title_hint_airplane">Repülő üzemmód bekapcsolva</string>
     <string name="title_hint_vpn_active">VPN aktív</string>
+    <string name="title_hint_vpn_settings">VPN lista</string>
     <string name="title_hint_notifications">Nincs értesítési engedély</string>
     <string name="title_hint_notifications_remark">Az értesítések engedélyezése szükséges a (fiók) riasztásokhoz is. Az új üzenet értesítések kikapcsolhatók a beállításokban.</string>
     <string name="title_hint_battery_optimizations">Az akku-optimalizáció még mindig be van kapcsolva</string>

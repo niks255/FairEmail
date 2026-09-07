@@ -97,6 +97,7 @@ public class EntityMessage implements Serializable {
     static final String TABLE_NAME = "message";
 
     static final int NOTIFYING_IGNORE = -2;
+    static final int NOTIFYING_RULE_PENDING = -3;
 
     static final Integer ENCRYPT_NONE = 0;
     static final Integer PGP_SIGNENCRYPT = 1;
@@ -466,6 +467,7 @@ public class EntityMessage implements Serializable {
                 "addymail.com".equals(domain) || // AnonAddy
                 "addy.io".equals(domain) || // AnonAddy
                 "addy.to".equals(domain) || // AnonAddy
+                "mozmail.com".equals(domain) ||
                 domain.endsWith(".mozmail.com");
     }
 

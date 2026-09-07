@@ -218,25 +218,28 @@ public class EntityRule {
 
     static int run(Context context, List<EntityRule> rules,
                    EntityMessage message, boolean browsed, List<Header> headers, String html)
-            throws JSONException, MessagingException, IOException {
+            throws Throwable {
         int applied = 0;
 
         List<String> stopped = new ArrayList<>();
-        for (EntityRule rule : rules) {
-            if (rule.group != null && stopped.contains(rule.group))
-                continue;
-            if (rule.matches(context, message, headers, html)) {
-                if (rule.execute(context, message, browsed, html))
-                    applied++;
-                if (rule.stop)
-                    if (rule.group == null)
-                        break;
-                    else {
-                        if (!stopped.contains(rule.group))
-                            stopped.add(rule.group);
-                    }
+        for (EntityRule rule : rules)
+            try {
+                if (rule.group != null && stopped.contains(rule.group))
+                    continue;
+                if (rule.matches(context, message, headers, html)) {
+                    if (rule.execute(context, message, browsed, html))
+                        applied++;
+                    if (rule.stop)
+                        if (rule.group == null)
+                            break;
+                        else {
+                            if (!stopped.contains(rule.group))
+                                stopped.add(rule.group);
+                        }
+                }
+            } catch (Throwable ex) {
+                throw new Throwable("Rule '" + rule.name + "'", ex);
             }
-        }
 
         return applied;
     }
@@ -712,6 +715,29 @@ public class EntityRule {
                 message = "Invalid expression";
             throw new IllegalArgumentException(message, ex);
         }
+
+        JSONObject jcondition = new JSONObject(condition);
+
+        JSONObject jsender = jcondition.optJSONObject("sender");
+        JSONObject jrecipient = jcondition.optJSONObject("recipient");
+        JSONObject jsubject = jcondition.optJSONObject("subject");
+        JSONObject jheader = jcondition.optJSONObject("header");
+        JSONObject jbody = jcondition.optJSONObject("body");
+
+        if (jsender != null && jsender.optBoolean("regex"))
+            Pattern.compile(jsender.optString("value"));
+
+        if (jrecipient != null && jrecipient.optBoolean("regex"))
+            Pattern.compile(jrecipient.optString("value"));
+
+        if (jsubject != null && jsubject.optBoolean("regex"))
+            Pattern.compile(jsubject.optString("value"));
+
+        if (jheader != null && jheader.optBoolean("regex"))
+            Pattern.compile(jheader.optString("value"));
+
+        if (jbody != null && jbody.optBoolean("regex"))
+            Pattern.compile(jbody.optString("value"));
 
         JSONObject jargs = new JSONObject(action);
         int type = jargs.getInt("type");
@@ -1290,6 +1316,8 @@ public class EntityRule {
     }
 
     private boolean onActionAutomation(Context context, EntityMessage message, JSONObject jargs, String html) {
+        Intent automation;
+
         InternetAddress iaddr =
                 (message.from == null || message.from.length == 0
                         ? null : ((InternetAddress) message.from[0]));
@@ -1298,16 +1326,36 @@ public class EntityRule {
         DateFormat DTF = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         DTF.setTimeZone(java.util.TimeZone.getTimeZone("Zulu"));
 
+        if (html == null && message.content) {
+            File file = message.getFile(context);
+            try {
+                html = Helper.readText(file);
+            } catch (IOException ex) {
+                Log.e(ex);
+            }
+        }
+
         String text = HtmlHelper.getFullText(context, html);
         String preview = HtmlHelper.getPreview(text);
 
-        Intent automation = new Intent(ACTION_AUTOMATION);
-        automation.putExtra(EXTRA_RULE, name);
-        automation.putExtra(EXTRA_RECEIVED, DTF.format(message.received));
-        automation.putExtra(EXTRA_SENDER, iaddr == null ? null : iaddr.getAddress());
-        automation.putExtra(EXTRA_NAME, iaddr == null ? null : iaddr.getPersonal());
-        automation.putExtra(EXTRA_SUBJECT, message.subject);
-        automation.putExtra(EXTRA_PREVIEW, preview);
+        boolean gb = jargs.optBoolean("gadgetbridge");
+        if (gb) {
+            // https://gadgetbridge.org/internals/automations/intents/#send-a-custom-notification
+            automation = new Intent("nodomain.freeyourgadget.gadgetbridge.command.DEBUG_SEND_NOTIFICATION");
+            automation.putExtra("type", "GENERIC_EMAIL");
+            automation.putExtra("sender", iaddr == null ? null : MessageHelper.formatAddresses(new InternetAddress[]{iaddr}));
+            automation.putExtra("subject", message.subject);
+            automation.putExtra("body", TextUtils.isEmpty(preview) ? "-" : preview);
+            //automation.setPackage("nodomain.freeyourgadget.gadgetbridge");
+        } else {
+            automation = new Intent(ACTION_AUTOMATION);
+            automation.putExtra(EXTRA_RULE, name);
+            automation.putExtra(EXTRA_RECEIVED, DTF.format(message.received));
+            automation.putExtra(EXTRA_SENDER, iaddr == null ? null : iaddr.getAddress());
+            automation.putExtra(EXTRA_NAME, iaddr == null ? null : iaddr.getPersonal());
+            automation.putExtra(EXTRA_SUBJECT, message.subject);
+            automation.putExtra(EXTRA_PREVIEW, preview);
+        }
 
         List<String> extras = Log.getExtras(automation.getExtras());
         EntityLog.log(context, EntityLog.Type.Rules, message,
@@ -1645,14 +1693,18 @@ public class EntityRule {
             return false;
 
         if (!this.async && this.id != null) {
+            message.notifying = EntityMessage.NOTIFYING_RULE_PENDING;
             EntityOperation.queue(context, message, EntityOperation.RULE, this.id, browsed);
             return true;
         }
 
         try {
             Spanned summary = AI.getSummaryText(context, message, -1L, null);
-            if (summary != null)
-                message.preview = summary.toString().trim();
+            if (summary != null) {
+                String preview = summary.toString().trim();
+                if (!TextUtils.isEmpty(preview))
+                    message.preview = preview;
+            }
         } catch (Throwable ex) {
             message.error = Log.formatThrowable(ex);
             db.message().setMessageError(message.id, message.error);

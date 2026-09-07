@@ -30,6 +30,36 @@ For support you can use [the contact form](https://contact.faircode.eu/?product=
 
 ### Next version (Work in progress)
 
+### 1.2333 2026-09-01
+
+* Added support for S/MIME [auth-enveloped-data](https://www.rfc-editor.org/info/rfc5083/)
+* Added three new operators to [expression conditions](https://m66b.github.io/FairEmail/#expression_conditions)
+* Updated gradle to version 9.7.1
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2332 2026-08-24
+
+* Fixed reformatted view for Android 6
+* Small improvements and minor bug fixes
+* Updated [translations](https://crowdin.com/project/open-source-email)
+
+### 1.2331 2026-08-22
+
+* Improved support for [PGPony](https://github.com/norsehorse-dev/PGPonyAndroid) as an alternative to [OpenKeychain](https://github.com/open-keychain/open-keychain)
+* Small improvements and minor bug fixes
+* Updated [Public Suffix List](https://github.com/publicsuffix/list)
+
+### 1.2330 2026-08-20
+
+* Added message language to [expression conditions](https://m66b.github.io/FairEmail/#expression_conditions)
+* Updated [Jsoup](https://jsoup.org/news/) to version 1.23.1
+* Updated [EvalEx](https://github.com/ezylang/EvalEx/releases) to version 3.7.0
+* Updated [BouncyCastle](https://www.bouncycastle.org/news/) to version 1.85
+* Updated [ez-vcard](https://github.com/mangstadt/ez-vcard) to version 0.12.2
+* Updated [MiniDNS](https://github.com/MiniDNS/minidns) to version 1.1.1
+* Updated [JsonPath](https://github.com/json-path/JsonPath) to version 3.0.0
+
 ### 1.2329 2026-08-17
 
 * Performance improvements reformatted message view

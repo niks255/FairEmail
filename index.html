@@ -99,7 +99,7 @@
 <li>Posteo: note that there is <a href="https://posteo.de/en/help/how-does-the-posteo-spam-filter-work">no spam folder</a> (<a href="https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter">German</a>)</li>
 <li>Posteo: if you want to synchronize contacts, please <a href="https://posteo.de/en/help/how-do-i-set-up-synchronisation-of-contacts-with-an-android-address-book">see here</a></li>
 <li>Web.de: please check if <a href="https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html">IMAP is enabled</a></li>
-<li>Web.de: with two factor authentication you must use <a href="https://web.de/email/sicherheit/zwei-faktor-authentifizierung/">an app password</a></li>
+<li>Web.de: with two factor authentication you must use <a href="https://hilfe.web.de/sicherheit/2fa/anwendungsspezifisches-passwort.html">an app password</a></li>
 <li>Web.de: if you are missing the spam messages folder, you should enable spam filtering via the website of web.de again</li>
 <li>GMX: please check if <a href="https://support.gmx.com/pop-imap/toggle.html">IMAP is enabled</a> (<a href="https://hilfe.gmx.net/pop-imap/einschalten.html">German</a>). Reportedly, you need to do this on a desktop computer.</li>
 <li>GMX: with two-factor authentication, and sometimes in other cases as well, for example when traveling or using a VPN, you must use <a href="https://support.gmx.com/security/2fa/application-specific-passwords.html">an app password</a> (<a href="https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html">German</a>). Not that enabling two-factor authentication does not automatically enable IMAP.</li>
@@ -562,7 +562,7 @@ Therefore, this issue can only be resolved by your email provider,
 or by installing the GitHub version of the app (as an update) and enabling insecure connections in the account/identity settings.** -->
 <p><em>… Untrusted … not in certificate …</em><br /> <em>… Untrusted … Unacceptable certificate …</em><br /> <em>… Invalid security certificate (Can’t verify identity of server) …</em><br /> <em>… Chain validation failed … timestamp check failed … Certificate expired at …</em><br /></p>
 <p>This can be caused by using an incorrect host name, so first double-check the host name in the advanced identity/account settings (tap <em>Manual setup and account options</em>). Please see the documentation of the email provider about the right host name. Sometimes the right host name is in the error message.</p>
-<p>Another possible cause is <a href="https://github.com/appmattus/certificatetransparency">Certificate transparency</a> failing, so try disabling it in the connection settings tab page.</p>
+<p><del>Another possible cause is <a href="https://github.com/appmattus/certificatetransparency">Certificate transparency</a> failing, so try disabling it in the connection settings tab page.</del></p>
 <p>You should try to fix this by contacting your provider or by getting a valid security certificate because invalid security certificates are insecure and allow <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">man-in-the-middle attacks</a>. If money is an obstacle, you can get free security certificates from <a href="https://letsencrypt.org">Let’s Encrypt</a>.</p>
 <p>The quick, but unsafe solution (not advised), is to enable <em>Insecure connections</em> in the advanced identity settings (navigation menu, tap <em>Settings</em>, tap <em>Manual setup</em>, tap <em>Identities</em>, tap the identity, tap <em>Advanced</em>).</p>
 <p>Alternatively, you can accept the fingerprint of invalid server certificates like this:</p>
@@ -574,7 +574,7 @@ or by installing the GitHub version of the app (as an update) and enabling insec
 <li>Tick the checkbox below the error message and save again</li>
 </ol>
 <p>This will “pin” the server certificate to prevent man-in-the-middle attacks.</p>
-<p>Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure, see also <a href="https://developer.android.com/training/articles/security-ssl">here</a>.</p>
+<p>Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure, see also <a href="https://developer.android.com/training/articles/security-ssl">here</a>. In such cases, you can install the required root/intermediate certificates, for example, the often used <a href="https://letsencrypt.org/ca/certificates/">Let’s encrypt root certificates</a>.</p>
 <p><br /></p>
 <p><em>Trust anchor for certification path not found</em></p>
 <p><em>… java.security.cert.CertPathValidatorException: Trust anchor for certification path not found …</em> means that the default Android trust manager was not able to verify the server certificate chain.</p>
@@ -758,7 +758,8 @@ or by installing the GitHub version of the app (as an update) and enabling insec
 <p>The to be encrypted message text/attachments and the decrypted message text/attachments are stored locally only and will never be added to the remote server. If you want to undo decryption, you can tap on the “close” padlock icon.</p>
 <p><br /></p>
 <p><em>PGP</em></p>
-<p>You’ll need to install and configure <a href="https://f-droid.org/en/packages/org.sufficientlysecure.keychain/">OpenKeychain</a> first. FairEmail was tested with OpenKeychain version 5.4. Later versions will most likely be compatible, but earlier versions might not be.</p>
+<p>You’ll need to install and configure <a href="https://f-droid.org/en/packages/org.sufficientlysecure.keychain/">OpenKeychain</a> or <a href="https://github.com/norsehorse-dev/PGPonyAndroid">PGPony</a> first. FairEmail was tested with OpenKeychain version 5.4 and PGPony 4.1.1. Later versions will most likely be compatible, but earlier versions might not be.</p>
+<p><strong>Note</strong> that you need to select the correct OpenPGP provider on the encryption settings tab page.</p>
 <p><a href="https://github.com/norsehorse-dev/PGPonyAndroid">PGPony for Android</a> is reported to work too. You can select the PGP provider on the encryption settings tab page.</p>
 <p><strong>Important</strong>: the OpenKeychain app is known to (silently) crash when the calling app (FairEmail) is not authorized yet and is getting an existing public key. You can workaround this by trying to send a signed/encrypted message to a sender with an unknown public key.</p>
 <p><strong>Important</strong>: if the OpenKeychain app cannot find a key (anymore), you might need to reset a previously selected key. This can be done by long pressing an identity in the list of identities (Settings, tap Manual setup, tap Identities).</p>
@@ -824,7 +825,7 @@ openssl pkcs12 -export -legacy -in certbag.pem &gt;legacy.p12</code></pre>
 <pre><code>openssl pkcs12 -export -in certificatechain.crt -inkey private.key -out certificate.pfx</code></pre>
 <p>Please see <a href="https://support.google.com/pixelphone/answer/2844832?hl=en">here</a> how you can import certificates into the Android key store.</p>
 <p>The use of expired keys, inline encrypted/signed messages and hardware security tokens is not supported.</p>
-<p>If you are looking for a free (test) S/MIME certificate, see <a href="http://kb.mozillazine.org/Getting_an_SMIME_certificate">here</a> for the options. Please be sure to <a href="https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219">read this first</a> if you want to request an S/MIME Actalis certificate.</p>
+<p>If you want a free S/MIME certificate, <a href="https://acme.castle.cloud/">see here</a></p>
 <p>Posteo offers cheap certificates, <a href="https://posteo.de/blog/neu-bei-posteo-smime-zertifikate-erstellen-und-sofort-nutzen">see here</a> (German).</p>
 <p>How to extract a public key from a S/MIME certificate:</p>
 <pre><code>openssl pkcs12 -in filename.pfx/p12 -clcerts -nokeys -out cert.pem</code></pre>
@@ -832,9 +833,9 @@ openssl pkcs12 -export -legacy -in certbag.pem &gt;legacy.p12</code></pre>
 <pre><code>openssl smime -verify &lt;xxx.eml</code></pre>
 <p>You can decode S/MIME signatures, etc, <a href="https://lapo.it/asn1js/">here</a>.</p>
 <p><br /></p>
-<p><em>Planck Security</em> (formerly: <em>pretty Easy privacy</em> or p≡p)</p>
-<p>There is still no approved standard for p≡p and not many people are using it.</p>
-<p>However, FairEmail can send and receive PGP encrypted messages, which are compatible with p≡p. Also, FairEmail understands incoming p≡p messages since version 1.1519, so the encrypted subject will be shown and the embedded message text will be shown more nicely.</p>
+<p><del><em>Planck Security</em> (formerly: <em>pretty Easy privacy</em> or p≡p)</del></p>
+<p><del>There is still no approved standard for p≡p and not many people are using it.</del></p>
+<p><del>However, FairEmail can send and receive PGP encrypted messages, which are compatible with p≡p.</del> <del>Also, FairEmail understands incoming p≡p messages since version 1.1519,</del> <del>so the encrypted subject will be shown and the embedded message text will be shown more nicely.</del></p>
 <p><br /></p>
 <p>S/MIME sign/encrypt is a pro feature, but all other PGP and S/MIME operations are free to use.</p>
 <p><br /></p>
@@ -1633,7 +1634,7 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <pre><code>.*@.*\.xyz&gt;</code></pre>
 <p>Note that a regular expression supports an <em>or</em> operator, so if you want to match multiple senders, you can do this:</p>
 <pre><code>.*alice@example\.org.*|.*bob@example\.org.*|.*carol@example\.org.*</code></pre>
-<p>Note that <a href="https://developer.android.com/reference/java/util/regex/Pattern#DOTALL">dot all mode</a> is enabled to be able to match <a href="https://tools.ietf.org/html/rfc2822#section-3.2.3">unfolded headers</a>.</p>
+<p>Note that <a href="https://developer.android.com/reference/java/util/regex/Pattern#DOTALL">dot all mode</a> is enabled to be able to match <a href="https://datatracker.ietf.org/doc/html/rfc5322#section-3.2.2">unfolded headers</a>.</p>
 <p><br /></p>
 <p><a name="expression_conditions"></a> <strong>Expressions</strong></p>
 <p>Since version 1.2174 it is possible to use expression conditions like:</p>
@@ -1654,10 +1655,13 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <ul>
 <li><em>contains</em> (string/array of strings contains substring)</li>
 <li><em>matches</em> (string/array of strings matches regex)</li>
+<li><em>startswith</em> / <em>endswith</em> (string/array of strings starting or ending with a string; since version 1.2233)</li>
+<li><em>jpath</em> (string/array of JSON strings matching the <a href="https://github.com/json-path/jsonpath">specified path</a>; since version 1.2233)</li>
 </ul>
 <p>The following extra functions are available:</p>
 <ul>
 <li><em>header(“name”)</em> (returns an array of header values for the named header)</li>
+<li><em>message(“language”)</em> returns the two letter <a href="https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes">ISO language code</a> of a message; note that it cannot always be determined and that it can be incorrect (since version 1.2330)</li>
 <li><em>blocklist()</em> (version 1.2176-1.2178; deprecated, use <em>onBlocklist()</em> instead)</li>
 <li><em>onBlocklist()</em> (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2179)</li>
 <li><em>hasMx()</em> (returns a boolean indicating if the from/reply-to address has an associated MX record; since version 1.2179)</li>
@@ -1674,6 +1678,9 @@ X-Google-Original-From: Somebody &lt;somebody+extra@example.org&gt;</code></pre>
 <p><code>!onBlocklist() &amp;&amp; hasMx() &amp;&amp; attachments() &gt; 0</code></p>
 <p><code>(received + 7*24*60*60*1000) &lt; DT_DATE_TO_EPOCH(DT_NOW())</code></p>
 <p><code>AI("Is the message below a scam? Answer in English with just yes or no.") contains "yes"</code></p>
+<p><code>COALESCE(message("language")) == "en"</code></p>
+<p>Note that <em>message(“name”)</em> returns an array. COALESCE returns the first value of an array, so it can be compared with a string value.</p>
+<p>Note that detecting the message text language needs to be enabled on the behavior settings tab page, and that changing this option doesn’t affect the language detection of already received messages.</p>
 <p><br></p>
 <p><strong>Actions</strong></p>
 <p>You can select one of these actions to apply to matching messages:</p>
@@ -2302,7 +2309,7 @@ $Displayed
 $NotDisplayed</code></pre>
 <ul>
 <li>Delivered: action = <em>delivered</em>, <em>relayed</em>, or <em>expanded</em>, <a href="https://datatracker.ietf.org/doc/html/rfc3464#section-2.3.3">see here</a></li>
-<li>Displayed: disposition = <em>displayed</em>, <a href="https://datatracker.ietf.org/doc/html/rfc3798#section-3.2.6">see here</a></li>
+<li>Displayed: disposition = <em>displayed</em>, <a href="https://datatracker.ietf.org/doc/html/rfc8098#section-3.2.6.1">see here</a></li>
 </ul>
 <p>It is probably a good idea to enable <em>Show keywords in message header</em> in the display settings.</p>
 <p>Note that the email server needs to support IMAP flags (keywords) for this feature.</p>
@@ -3082,14 +3089,19 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p>It is possible to use <strong>DeepInfra</strong> too (since version 1.2132).</p>
 <ul>
 <li>Create an account on the <a href="https://deepinfra.com/">DeepInfra website</a> and deploy a model, for example, <em>meta-llama/Llama-2-13b-chat-hf</em></li>
-<li>In the integration settings enter the URI https://api.deepinfra.com/v1/openai, an API key and the model name</li>
+<li>On the integration settings enter the URI https://api.deepinfra.com/v1/openai, an API key and the model name</li>
 </ul>
 <p>You can also use <strong>Mistral</strong>:</p>
 <ul>
 <li>Create an account <a href="https://console.mistral.ai">via here</a></li>
-<li>In the integration settings enter the URI https://api.mistral.ai/v1/, an API key and the model name</li>
+<li>On the integration settings enter the URI https://api.mistral.ai/v1/, an API key and the model name</li>
 </ul>
-<p><br></p>
+<p>You can also use <strong>OpenRouter</strong>:</p>
+<ul>
+<li>Create an account <a href="https://openrouter.ai/">via here</a></li>
+<li>On the integration settings enter the URI https://openrouter.ai/api/v1, an API key and a model name</li>
+<li>Enter a maximum number of tokens; suggested value: 2000 (since version 1.2333)</li>
+</ul>
 <p><br></p>
 <p>If you are looking for Google Gemini support, please see <a href="#faq204">this FAQ</a>.</p>
 <p>This feature is experimental and requires version 1.2053 or later for the GitHub version and version 1.2182 or later for the Play Store version.</p>
@@ -3208,6 +3220,10 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <p><br></p>
 <p><a name="faq204"></a> <strong>(204) How do I use Gemini?</strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq204">Google Translate</a></p>
+<p><strong>From version 1.2333 you should use the OpenAI integration with this URI: https://generativelanguage.googleapis.com/v1beta/openai/</strong></p>
+<p>The instructions below are basically still valid, though.</p>
+<p>An existing configuration will automatically be migrated.</p>
+<p><br></p>
 <p>Gemini can only be used if configured and enabled.</p>
 <p><strong>Note that using Gemini is not free (anymore) !</strong></p>
 <p><br></p>

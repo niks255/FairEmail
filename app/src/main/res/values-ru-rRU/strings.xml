@@ -227,6 +227,7 @@
     <string name="title_setup_gmail_login">Если в Chrome выполнен вход в учётную запись, новую учётную запись можно добавить только через Android. Этого можно избежать, выйдя из учётной записи в Chrome через его настройки синхронизации.</string>
     <string name="title_setup_gmail_max">В случае появления сообщения об ошибке \"Вы вошли в максимальное количество учётных записей\", необходимр выйти в браузере из всех учётных записей Google.</string>
     <string name="title_setup_outlook_hint">При использовании псевдонима адреса следует воспользоваться мастером Office 365.</string>
+    <string name="title_setup_outlook_passkey_hint">Microsoft может предложить настроить ключ доступа. На мобильном устройстве это сделать сложнее, поэтому рекомендуется пропустить или отменить данный необязательный шаг.</string>
     <string name="title_setup_outlook_modern">Из-за изменений в политике безопасности Microsoft с 16 сентября 2024 года будет работать только мастер Outlook/Hotmail/Live.</string>
     <string name="title_setup_gmail_on_device">Зачем выбирать учётную запись на устройстве?</string>
     <string name="title_setup_gmail_password">Я хочу авторизовать учётную запись паролем вместо учётной записи на устройстве</string>
@@ -373,6 +374,7 @@
     <string name="title_check_gmail_password">Некоторые из ваших учётных записей Gmail могут перестать работать после 30 мая 2022 года</string>
     <string name="title_check_outlook_oauth">Ваши учётные записи Outlook будут работать после 16 сентября 2024 года</string>
     <string name="title_check_outlook_password">Некоторые из ваших учётных записей Outlook/Hotmail/Live перестанут работать после 16 сентября 2024 года</string>
+    <string name="title_check_gmx">Необходимо добавить пароль приложения в аккаунт GMX до 24 сентября 2026 года.</string>
     <string name="title_advanced_hint_title">Настройки для опытных</string>
     <string name="title_advanced_hint_message">        Вы переходите к настройкам для опытных пользователей.
         Все параметры обычно имеют стандартные значения, которые можно изменить, если у вас есть другие предпочтения.    </string>
@@ -849,6 +851,7 @@
     <string name="title_advanced_send">Интеграция с Send</string>
     <string name="title_advanced_openai">Интеграция с OpenAI (ChatGPT)</string>
     <string name="title_advanced_openai_model">Модель</string>
+    <string name="title_advanced_openai_max_tokens">Максимальное количество токенов (пусто — без ограничения)</string>
     <string name="title_advanced_openai_temperature">Температура: %1$s</string>
     <string name="title_advanced_openai_moderation">Модерация содержания</string>
     <string name="title_advanced_gemini">Интеграция с Gemini</string>
@@ -1232,7 +1235,7 @@
     <string name="title_show_flagged">Показывать количество избранных сообщений</string>
     <string name="title_subscribed_only">Только подписки</string>
     <string name="title_sort_unread_atop">Непрочитанные вверху</string>
-    <string name="title_sort_sync" comment="title_sort_sync Title for menu item in the overflow menu of the folder list to enable/disable sorting folders on whether they are synchronized or not. Please keep it short!">Сортировать по синхронизации</string>
+    <string name="title_sort_sync">Сортировать по синхронизации</string>
     <string name="title_search_folder">Поиск в названии папки</string>
     <string name="title_apply_to_all">Применить ко всем</string>
     <string name="title_edit_account_name">Изменить название учётной записи</string>
@@ -1654,9 +1657,9 @@
     <string name="title_charset_auto">Автовыбор</string>
     <string name="title_alternative_text">Загрузить простой текст</string>
     <string name="title_alternative_html">Загрузить HTML</string>
-    <string name="title_no_openpgp">OpenKeychain не найдено</string>
+    <string name="title_no_openpgp">Провайдер OpenPGP не найден</string>
     <string name="title_no_openpgp_remark">Сначала нужно настроить сквозное шифрование PGP</string>
-    <string name="title_user_interaction">Перенос в OpenKeychain</string>
+    <string name="title_user_interaction">Переход на провайдера OpenPGP</string>
     <string name="title_padlock">Используйте замок для расшифровки сообщения</string>
     <string name="title_signed_data">Проверить подпись, чтобы показать текст сообщения</string>
     <string name="title_not_encrypted">Сообщение не подписано и не зашифровано</string>
@@ -2039,6 +2042,7 @@
     <string name="title_hint_folder_sync">Для экономии заряда батареи и трафика по умолчанию синхронизируются не все папки и сообщения.</string>
     <string name="title_hint_airplane">Режим полета включён</string>
     <string name="title_hint_vpn_active">Включён VPN</string>
+    <string name="title_hint_vpn_settings">Список VPN</string>
     <string name="title_hint_notifications">Отсутствует разрешение на отображение уведомлений</string>
     <string name="title_hint_notifications_remark">Разрешения на уведомления также необходимы для предупреждений (учётной записи). Уведомления о новых сообщениях можно отключить в настройках.</string>
     <string name="title_hint_battery_optimizations">Оптимизация энергопотребления всё ещё включена</string>

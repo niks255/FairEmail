@@ -37,6 +37,7 @@ import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.ParseException;
 import com.ezylang.evalex.parser.Token;
+import com.jayway.jsonpath.JsonPath;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import javax.mail.Address;
@@ -108,7 +110,7 @@ public class ExpressionHelper {
         }
 
         HeaderFunction fHeader = new HeaderFunction(headers);
-        MessageFunction fMessage = new MessageFunction(message);
+        MessageFunction fMessage = new MessageFunction(context, message, doc);
         BlocklistFunction fBlocklist = new BlocklistFunction(context, message, headers);
         MxFunction fMx = new MxFunction(context, message);
         AttachmentsFunction fAttachments = new AttachmentsFunction(context, message);
@@ -120,6 +122,9 @@ public class ExpressionHelper {
 
         ContainsOperator oContains = new ContainsOperator(false);
         ContainsOperator oMatches = new ContainsOperator(true);
+        StartsWithOperator oStartsWith = new StartsWithOperator(false);
+        StartsWithOperator oEndsWith = new StartsWithOperator(true);
+        JPathOperator oJPath = new JPathOperator();
 
         ExpressionConfiguration configuration = ExpressionConfiguration.defaultConfiguration();
 
@@ -137,6 +142,9 @@ public class ExpressionHelper {
 
         configuration.getOperatorDictionary().addOperator("Contains", oContains);
         configuration.getOperatorDictionary().addOperator("Matches", oMatches);
+        configuration.getOperatorDictionary().addOperator("StartsWith", oStartsWith);
+        configuration.getOperatorDictionary().addOperator("EndsWith", oEndsWith);
+        configuration.getOperatorDictionary().addOperator("JPath", oJPath);
 
         Expression expression = new Expression(eval, configuration)
                 .with("received", message == null ? null : message.received)
@@ -189,7 +197,7 @@ public class ExpressionHelper {
                 Token token = node.getToken();
                 Log.i("EXPR token=" + token.getType() + ":" + token.getValue());
                 if (token.getType() == Token.TokenType.FUNCTION &&
-                        "AI".equalsIgnoreCase(token.getValue())) {
+                        ("AI".equalsIgnoreCase(token.getValue()) || "message".equalsIgnoreCase(token.getValue()))) {
                     Log.i("EXPR needs body");
                     return true;
                 }
@@ -232,10 +240,14 @@ public class ExpressionHelper {
 
     @FunctionParameter(name = "value")
     public static class MessageFunction extends AbstractFunction {
+        private Context context;
         private final EntityMessage message;
+        private final Document doc;
 
-        MessageFunction(EntityMessage message) {
+        MessageFunction(Context context, EntityMessage message, Document doc) {
+            this.context = context;
             this.message = message;
+            this.doc = doc;
         }
 
         @Override
@@ -246,20 +258,32 @@ public class ExpressionHelper {
             try {
                 if (parameterValues.length == 1) {
                     String name = parameterValues[0].getStringValue();
-                    if (name != null && message != null) {
-                        Field field = message.getClass().getField(name);
-                        field.setAccessible(true);
-                        Object value = field.get(message);
-                        if (value != null)
-                            result.add(value);
+                    if ("language".equalsIgnoreCase(name)) {
+                        String language;
+                        if (message.language == null)
+                            language = (doc == null ? null : HtmlHelper.getLanguage(context, message.subject, doc.text()));
+                        else
+                            language = message.language;
+                        Log.i("EXPR language=" + language);
+                        if (language != null)
+                            result.add(language);
+                    } else {
+                        if (name != null && message != null) {
+                            Field field = message.getClass().getField(name);
+                            field.setAccessible(true);
+                            Object value = field.get(message);
+                            if (value != null)
+                                result.add(value);
+                        }
                     }
                 }
             } catch (Throwable ex) {
                 Log.e("EXPR", ex);
             }
 
-            Log.i("EXPR message(" + parameterValues[0] + ")=" + TextUtils.join(", ", result));
-            return EvaluationValue.of(result, ExpressionConfiguration.defaultConfiguration());
+            EvaluationValue val = EvaluationValue.of(result, ExpressionConfiguration.defaultConfiguration());
+            Log.i("EXPR message(" + parameterValues[0] + ")=" + TextUtils.join(", ", result) + " val=" + val);
+            return val;
         }
     }
 
@@ -480,7 +504,7 @@ public class ExpressionHelper {
                 if (doc != null && parameterValues.length == 1) {
                     String prompt = parameterValues[0].getStringValue();
                     if (!TextUtils.isEmpty(prompt)) {
-                        result = AI.completeChat(context, -1L, true, doc.text(), null, prompt).toString();
+                        result = AI.completeChat(context, -1L, false, doc.text(), null, prompt).toString();
                         EntityLog.log(context, EntityLog.Type.Rules, message, "AI result=" + result);
                     }
                 }
@@ -542,7 +566,7 @@ public class ExpressionHelper {
             try {
                 if (operands.length == 2) {
                     List<EvaluationValue> array;
-                    if (operands[1].getDataType() == EvaluationValue.DataType.ARRAY)
+                    if (operands[0].getDataType() == EvaluationValue.DataType.ARRAY)
                         array = operands[0].getArrayValue();
                     else
                         array = Arrays.asList(operands[0]);
@@ -567,6 +591,94 @@ public class ExpressionHelper {
 
             Log.i("EXPR " + operands[0] + (regex ? " MATCHES " : " CONTAINS ") + operands[1] +
                     " regex=" + regex + " result=" + result);
+
+            return expression.convertValue(result);
+        }
+    }
+
+    @InfixOperator(precedence = OPERATOR_PRECEDENCE_COMPARISON)
+    public static class StartsWithOperator extends AbstractOperator {
+        private final boolean end;
+
+        StartsWithOperator(boolean end) {
+            this.end = end;
+        }
+
+        @Override
+        public EvaluationValue evaluate(
+                Expression expression, Token operatorToken, EvaluationValue... operands) {
+            boolean result = false;
+
+            try {
+                if (operands.length == 2) {
+                    List<EvaluationValue> array;
+                    if (operands[0].getDataType() == EvaluationValue.DataType.ARRAY)
+                        array = operands[0].getArrayValue();
+                    else
+                        array = Arrays.asList(operands[0]);
+
+                    String condition = operands[1].getStringValue();
+                    if (!TextUtils.isEmpty(condition))
+                        condition = condition.toLowerCase(Locale.ROOT);
+
+                    if (array != null && !array.isEmpty() && !TextUtils.isEmpty(condition))
+                        for (EvaluationValue item : array) {
+                            String value = item.getStringValue();
+                            if (!TextUtils.isEmpty(value)) {
+                                value = value.toLowerCase(Locale.ROOT);
+                                if (this.end ? value.endsWith(condition) : value.startsWith(condition)) {
+                                    result = true;
+                                    break;
+                                }
+                            }
+                        }
+                }
+            } catch (Throwable ex) {
+                Log.e("EXPR", ex);
+            }
+
+            Log.i("EXPR " + operands[0] + (end ? " ENDSWITH " : " STARTSWITH ") + operands[1] +
+                    " end=" + this.end + " result=" + result);
+
+            return expression.convertValue(result);
+        }
+    }
+
+    @InfixOperator(precedence = OPERATOR_PRECEDENCE_COMPARISON)
+    public static class JPathOperator extends AbstractOperator {
+        JPathOperator() {
+        }
+
+        @Override
+        public EvaluationValue evaluate(
+                Expression expression, Token operatorToken, EvaluationValue... operands) {
+            String result = null;
+
+            try {
+                if (operands.length == 2) {
+                    List<EvaluationValue> array;
+                    if (operands[0].getDataType() == EvaluationValue.DataType.ARRAY)
+                        array = operands[0].getArrayValue();
+                    else
+                        array = Arrays.asList(operands[0]);
+
+                    String path = operands[1].getStringValue();
+
+                    if (array != null && !array.isEmpty() && !TextUtils.isEmpty(path))
+                        for (EvaluationValue item : array) {
+                            String value = item.getStringValue();
+                            if (!TextUtils.isEmpty(value)) {
+                                result = JsonPath.read(value, path);
+                                break;
+                            }
+                        }
+                }
+            } catch (Throwable ex) {
+                Log.e("EXPR", ex);
+            }
+
+            Log.i("EXPR " + operands[0] + "JSONPATH" + operands[1] +
+                    " result=" + result);
 
             return expression.convertValue(result);
         }

@@ -75,7 +75,7 @@ For authorizing:
 * Posteo: note that there is [no spam folder](https://posteo.de/en/help/how-does-the-posteo-spam-filter-work) ([German](https://posteo.de/hilfe/wie-funktioniert-der-posteo-spamfilter))
 * Posteo: if you want to synchronize contacts, please [see here](https://posteo.de/en/help/how-do-i-set-up-synchronisation-of-contacts-with-an-android-address-book)
 * Web.de: please check if [IMAP is enabled](https://hilfe.web.de/pop-imap/imap/imap-serverdaten.html)
-* Web.de: with two factor authentication you must use [an app password](https://web.de/email/sicherheit/zwei-faktor-authentifizierung/)
+* Web.de: with two factor authentication you must use [an app password](https://hilfe.web.de/sicherheit/2fa/anwendungsspezifisches-passwort.html)
 * Web.de: if you are missing the spam messages folder, you should enable spam filtering via the website of web.de again
 * GMX: please check if [IMAP is enabled](https://support.gmx.com/pop-imap/toggle.html) ([German](https://hilfe.gmx.net/pop-imap/einschalten.html)). Reportedly, you need to do this on a desktop computer.
 * GMX: with two-factor authentication, and sometimes in other cases as well, for example when traveling or using a VPN, you must use [an app password](https://support.gmx.com/security/2fa/application-specific-passwords.html) ([German](https://hilfe.gmx.net/sicherheit/2fa/anwendungsspezifisches-passwort.html)). Not that enabling two-factor authentication does not automatically enable IMAP.
@@ -627,7 +627,7 @@ This can be caused by using an incorrect host name, so first double-check the ho
 Please see the documentation of the email provider about the right host name.
 Sometimes the right host name is in the error message.
 
-Another possible cause is [Certificate transparency](https://github.com/appmattus/certificatetransparency) failing, so try disabling it in the connection settings tab page.
+~~Another possible cause is [Certificate transparency](https://github.com/appmattus/certificatetransparency) failing, so try disabling it in the connection settings tab page.~~
 
 You should try to fix this by contacting your provider or by getting a valid security certificate
 because invalid security certificates are insecure and allow [man-in-the-middle attacks](https://en.wikipedia.org/wiki/Man-in-the-middle_attack).
@@ -648,6 +648,7 @@ This will "pin" the server certificate to prevent man-in-the-middle attacks.
 
 Note that older Android versions might not recognize newer certification authorities like Let’s Encrypt causing connections to be considered insecure,
 see also [here](https://developer.android.com/training/articles/security-ssl).
+In such cases, you can install the required root/intermediate certificates, for example, the often used [Let's encrypt root certificates](https://letsencrypt.org/ca/certificates/).
 
 <br />
 
@@ -1029,8 +1030,10 @@ If you want to undo decryption, you can tap on the "close" padlock icon.
 
 *PGP*
 
-You'll need to install and configure [OpenKeychain](https://f-droid.org/en/packages/org.sufficientlysecure.keychain/) first.
-FairEmail was tested with OpenKeychain version 5.4. Later versions will most likely be compatible, but earlier versions might not be.
+You'll need to install and configure [OpenKeychain](https://f-droid.org/en/packages/org.sufficientlysecure.keychain/) or [PGPony](https://github.com/norsehorse-dev/PGPonyAndroid) first.
+FairEmail was tested with OpenKeychain version 5.4 and PGPony 4.1.1. Later versions will most likely be compatible, but earlier versions might not be.
+
+**Note** that you need to select the correct OpenPGP provider on the encryption settings tab page.
 
 [PGPony for Android](https://github.com/norsehorse-dev/PGPonyAndroid) is reported to work too. You can select the PGP provider on the encryption settings tab page.
 
@@ -1183,9 +1186,7 @@ Please see [here](https://support.google.com/pixelphone/answer/2844832?hl=en) ho
 
 The use of expired keys, inline encrypted/signed messages and hardware security tokens is not supported.
 
-If you are looking for a free (test) S/MIME certificate, see [here](http://kb.mozillazine.org/Getting_an_SMIME_certificate) for the options.
-Please be sure to [read this first](https://davidroessli.com/logs/2019/09/free-smime-certificates-in-2019/#update20191219)
-if you want to request an S/MIME Actalis certificate.
+If you want a free S/MIME certificate, [see here](https://acme.castle.cloud/)
 
 Posteo offers cheap certificates, [see here](https://posteo.de/blog/neu-bei-posteo-smime-zertifikate-erstellen-und-sofort-nutzen) (German).
 
@@ -1205,13 +1206,13 @@ You can decode S/MIME signatures, etc, [here](https://lapo.it/asn1js/).
 
 <br />
 
-*Planck Security* (formerly: *pretty Easy privacy* or p≡p)
+~~*Planck Security* (formerly: *pretty Easy privacy* or p≡p)~~
 
-There is still no approved standard for p≡p and not many people are using it.
+~~There is still no approved standard for p≡p and not many people are using it.~~
 
-However, FairEmail can send and receive PGP encrypted messages, which are compatible with p≡p.
-Also, FairEmail understands incoming p≡p messages since version 1.1519,
-so the encrypted subject will be shown and the embedded message text will be shown more nicely.
+~~However, FairEmail can send and receive PGP encrypted messages, which are compatible with p≡p.~~
+~~Also, FairEmail understands incoming p≡p messages since version 1.1519,~~
+~~so the encrypted subject will be shown and the embedded message text will be shown more nicely.~~
 
 <br />
 
@@ -2992,7 +2993,7 @@ Note that a regular expression supports an *or* operator, so if you want to matc
 ```
 
 Note that [dot all mode](https://developer.android.com/reference/java/util/regex/Pattern#DOTALL) is enabled
-to be able to match [unfolded headers](https://tools.ietf.org/html/rfc2822#section-3.2.3).
+to be able to match [unfolded headers](https://datatracker.ietf.org/doc/html/rfc5322#section-3.2.2).
 
 <br />
 
@@ -3024,10 +3025,13 @@ The following extra operators are available:
 
 * *contains* (string/array of strings contains substring)
 * *matches* (string/array of strings matches regex)
+* *startswith* / *endswith* (string/array of strings starting or ending with a string; since version 1.2233)
+* *jpath* (string/array of JSON strings matching the [specified path](https://github.com/json-path/jsonpath); since version 1.2233)
 
 The following extra functions are available:
 
 * *header("name")* (returns an array of header values for the named header)
+* *message("language")* returns the two letter [ISO language code](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) of a message; note that it cannot always be determined and that it can be incorrect (since version 1.2330)
 * *blocklist()* (version 1.2176-1.2178; deprecated, use *onBlocklist()* instead)
 * *onBlocklist()* (returns a boolean indicating if the sender/server is on a DNS blocklist; since version 1.2179)
 * *hasMx()* (returns a boolean indicating if the from/reply-to address has an associated MX record; since version 1.2179)
@@ -3049,6 +3053,13 @@ Example conditions:
 ```(received + 7*24*60*60*1000) < DT_DATE_TO_EPOCH(DT_NOW())```
 
 ```AI("Is the message below a scam? Answer in English with just yes or no.") contains "yes"```
+
+```COALESCE(message("language")) == "en"```
+
+Note that *message("name")* returns an array. COALESCE returns the first value of an array, so it can be compared with a string value.
+
+Note that detecting the message text language needs to be enabled on the behavior settings tab page,
+and that changing this option doesn't affect the language detection of already received messages.
 
 <br>
 
@@ -4414,7 +4425,7 @@ $NotDisplayed
 ```
 
 * Delivered: action = *delivered*, *relayed*, or *expanded*, [see here](https://datatracker.ietf.org/doc/html/rfc3464#section-2.3.3)
-* Displayed: disposition = *displayed*, [see here](https://datatracker.ietf.org/doc/html/rfc3798#section-3.2.6)
+* Displayed: disposition = *displayed*, [see here](https://datatracker.ietf.org/doc/html/rfc8098#section-3.2.6.1)
 
 It is probably a good idea to enable *Show keywords in message header* in the display settings.
 
@@ -6124,14 +6135,18 @@ FairEmail does not use third-party libraries to avoid being tracked when OpenAI 
 It is possible to use **DeepInfra** too (since version 1.2132).
 
 * Create an account on the [DeepInfra website](https://deepinfra.com/) and deploy a model, for example, *meta-llama/Llama-2-13b-chat-hf*
-* In the integration settings enter the URI https://api.deepinfra.com/v1/openai, an API key and the model name
+* On the integration settings enter the URI https://api.deepinfra.com/v1/openai, an API key and the model name
 
 You can also use **Mistral**:
 
 * Create an account [via here](https://console.mistral.ai)
-* In the integration settings enter the URI https://api.mistral.ai/v1/, an API key and the model name
+* On the integration settings enter the URI https://api.mistral.ai/v1/, an API key and the model name
 
-<br>
+You can also use **OpenRouter**:
+
+* Create an account [via here](https://openrouter.ai/)
+* On the integration settings enter the URI https://openrouter.ai/api/v1, an API key and a model name
+* Enter a maximum number of tokens; suggested value: 2000 (since version 1.2333)
 
 <br>
 
@@ -6411,6 +6426,14 @@ Basically, an outgoing message is either in the draft messages folder, the outbo
 **(204) How do I use Gemini?**
 
 &#x1F30E; [Google Translate](https://translate.google.com/translate?sl=en&u=https%3A%2F%2Fm66b.github.io%2FFairEmail%2F%23faq204)
+
+**From version 1.2333 you should use the OpenAI integration with this URI: https://generativelanguage.googleapis.com/v1beta/openai/**
+
+The instructions below are basically still valid, though.
+
+An existing configuration will automatically be migrated.
+
+<br>
 
 Gemini can only be used if configured and enabled.
 
