@@ -7017,9 +7017,41 @@ public class FragmentMessages extends FragmentBase
         args.putLong("folder", folder);
         args.putString("type", type);
 
-        FragmentDialogSearch fragment = new FragmentDialogSearch();
-        fragment.setArguments(args);
-        fragment.show(getParentFragmentManager(), "search");
+        new SimpleTask<Void>() {
+            @Override
+            protected Void onExecute(Context context, Bundle args) throws Throwable {
+                if (args.getLong("account", -1L) < 0 &&
+                        args.getLong("folder", -1L) < 0 &&
+                        args.getString("type") == null) {
+                    DB db = DB.getInstance(context);
+                    List<EntityAccount> accounts = db.account().getSynchronizingAccounts(EntityAccount.TYPE_IMAP);
+                    if (accounts != null && accounts.size() == 1) {
+                        EntityAccount account = accounts.get(0);
+                        EntityFolder folder = db.folder().getFolderByType(account.id,
+                                account.isGmail() ? EntityFolder.ARCHIVE : EntityFolder.INBOX);
+                        if (folder != null) {
+                            args.putLong("account", account.id);
+                            args.putLong("folder", folder.id);
+                            args.putString("type", folder.type);
+                        }
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            protected void onExecuted(Bundle args, Void data) {
+                FragmentDialogSearch fragment = new FragmentDialogSearch();
+                fragment.setArguments(args);
+                fragment.show(getParentFragmentManager(), "search");
+            }
+
+            @Override
+            protected void onException(Bundle args, Throwable ex) {
+                Log.e(ex);
+                onExecuted(args, null);
+            }
+        }.execute(this, args, "single.search");
     }
 
     private void onMenuSaveSearch() {
@@ -10300,8 +10332,9 @@ public class FragmentMessages extends FragmentBase
                                     args.putString("sigresult", context.getString(R.string.title_signature_none));
                             } else if (sresult == RESULT_VALID_KEY_CONFIRMED || sresult == RESULT_VALID_KEY_UNCONFIRMED) {
                                 List<String> users = sigResult.getConfirmedUserIds();
+                                Log.i("PGP signature users=" + (users == null ? null : TextUtils.join(", ", users)));
                                 String text;
-                                if (users.size() > 0)
+                                if (users != null && users.size() > 0)
                                     text = context.getString(sresult == RESULT_VALID_KEY_UNCONFIRMED
                                                     ? R.string.title_signature_unconfirmed_from
                                                     : R.string.title_signature_valid_from,

@@ -29,6 +29,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -36,6 +37,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.Spanned;
 import android.text.TextDirectionHeuristics;
 import android.text.TextUtils;
@@ -43,6 +45,8 @@ import android.text.TextWatcher;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.view.DragEvent;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -71,6 +75,8 @@ public class EditTextMultiAutoComplete extends AppCompatMultiAutoCompleteTextVie
     private boolean dark;
     private int colorAccent;
     private Tokenizer tokenizer;
+    private float dragDownX;
+    private float dragDownY;
     private Map<String, Integer> encryption = new ConcurrentHashMap<>();
 
     private static int[] icons = new int[]{
@@ -99,6 +105,39 @@ public class EditTextMultiAutoComplete extends AppCompatMultiAutoCompleteTextVie
 
         tokenizer = new CommaTokenizer();
         setTokenizer(tokenizer);
+
+        setOnDragListener(new OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                try {
+                    if (!(event.getLocalState() instanceof DragState))
+                        return false;
+
+                    switch (event.getAction()) {
+                        case DragEvent.ACTION_DRAG_STARTED:
+                            return (event.getClipDescription() != null &&
+                                    event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN));
+
+                        case DragEvent.ACTION_DRAG_ENTERED:
+                        case DragEvent.ACTION_DRAG_LOCATION:
+                            return true;
+
+                        case DragEvent.ACTION_DROP:
+                            return dropClip((DragState) event.getLocalState(), event.getX(), event.getY());
+
+                        case DragEvent.ACTION_DRAG_EXITED:
+                        case DragEvent.ACTION_DRAG_ENDED:
+                            return true;
+
+                        default:
+                            return false;
+                    }
+                } catch (Throwable ex) {
+                    Log.e(ex);
+                    return false;
+                }
+            }
+        });
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
         dark = Helper.isDarkTheme(context);
@@ -195,12 +234,134 @@ public class EditTextMultiAutoComplete extends AppCompatMultiAutoCompleteTextVie
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         try {
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    dragDownX = event.getX();
+                    dragDownY = event.getY();
+                    break;
+
+                case MotionEvent.ACTION_UP:
+                    boolean result = super.onTouchEvent(event);
+
+                    ClipImageSpan span = getClipImageSpan(event.getX(), event.getY());
+                    if (span != null) {
+                        Editable edit = getText();
+                        if (edit != null) {
+                            int start = edit.getSpanStart(span);
+                            int end = edit.getSpanEnd(span);
+                            if (start >= 0 && end > start)
+                                setSelection(start);
+                        }
+                    }
+
+                    dragDownX = 0;
+                    dragDownY = 0;
+                    return result;
+
+                case MotionEvent.ACTION_CANCEL:
+                    dragDownX = 0;
+                    dragDownY = 0;
+                    break;
+            }
             return super.onTouchEvent(event);
         } catch (Throwable ex) {
             Log.w(ex);
             return true;
         }
     }
+
+    @Nullable
+    private ClipImageSpan getClipImageSpan(float x, float y) {
+        Editable edit = getText();
+        Layout layout = getLayout();
+        if (edit == null || layout == null || layout.getLineCount() == 0)
+            return null;
+
+        int line = layout.getLineForVertical((int) (y - getTotalPaddingTop() + getScrollY()));
+        line = Math.max(0, Math.min(line, layout.getLineCount() - 1));
+
+        float horizontal = x - getTotalPaddingLeft() + getScrollX();
+        ClipImageSpan[] spans = edit.getSpans(0, edit.length(), ClipImageSpan.class);
+
+        for (ClipImageSpan span : spans) {
+            int start = edit.getSpanStart(span);
+            int end = edit.getSpanEnd(span);
+
+            if (start < 0 || end <= start)
+                continue;
+
+            if (layout.getLineForOffset(start) != line)
+                continue;
+
+            float startX = layout.getPrimaryHorizontal(start);
+            Drawable drawable = span.getDrawable();
+            if (drawable == null)
+                continue;
+
+            float width = drawable.getBounds().width();
+            if (width <= 0)
+                width = drawable.getIntrinsicWidth();
+
+            float left;
+            float right;
+            if (layout.getParagraphDirection(line) == Layout.DIR_RIGHT_TO_LEFT) {
+                left = startX - width;
+                right = startX;
+            } else {
+                left = startX;
+                right = startX + width;
+            }
+
+            if (horizontal >= left && horizontal <= right)
+                return span;
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean performLongClick() {
+        try {
+            Editable edit = getText();
+            Layout layout = getLayout();
+            if (edit == null || layout == null)
+                return super.performLongClick();
+
+            int line = layout.getLineForVertical((int) (dragDownY - getTotalPaddingTop() + getScrollY()));
+            float x = dragDownX - getTotalPaddingLeft() + getScrollX();
+            int offset = layout.getOffsetForHorizontal(line, x);
+
+            ClipImageSpan[] spans = edit.getSpans(offset, offset, ClipImageSpan.class);
+            if (spans.length != 1)
+                return super.performLongClick();
+
+            ClipImageSpan span = spans[0];
+
+            int start = edit.getSpanStart(span);
+            int end = edit.getSpanEnd(span);
+
+            if (start < 0 || end <= start)
+                return super.performLongClick();
+
+            Helper.performHapticFeedback(this, HapticFeedbackConstants.CONFIRM);
+
+            int tokenEnd = getTokenEnd(edit, end);
+            String text = edit.subSequence(start, tokenEnd).toString();
+            DragState state = new DragState(this, span, start, end, tokenEnd, text);
+            ClipData data = ClipData.newPlainText("FairEmail recipient", text);
+            View.DragShadowBuilder shadow = new ChipDragShadowBuilder(span);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                return startDragAndDrop(data, shadow, state, View.DRAG_FLAG_OPAQUE);
+            else {
+                startDrag(data, shadow, state, 0);
+                return true;
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return false;
+        }
+    }
+
 
     @Override
     protected void replaceText(CharSequence text) {
@@ -424,6 +585,103 @@ public class EditTextMultiAutoComplete extends AppCompatMultiAutoCompleteTextVie
         return Math.max(start, selStart) <= Math.min(end, selEnd);
     }
 
+    private boolean dropClip(DragState state, float x, float y) {
+        try {
+            Editable edit = getText();
+            Layout layout = getLayout();
+            if (edit == null || layout == null)
+                return true;
+
+            int target = getDropOffset(layout, x, y);
+            if (target < 0)
+                return true;
+
+            target = resolveDropBoundary(edit, target, state.span);
+
+            int sourceStart = state.start;
+            int sourceEnd = state.tokenEnd;
+
+            if (sourceStart > state.source.length() || sourceEnd > state.source.length())
+                return true;
+
+            if (this == state.source && target >= sourceStart && target <= sourceEnd)
+                return true;
+
+            try {
+                Editable source = state.source.getText();
+                source.removeSpan(state.span);
+                source.delete(sourceStart, sourceEnd);
+                if (this != state.source) {
+                    state.source.invalidate();
+                    state.source.post(state.source.update);
+                }
+                if (this == state.source && target > sourceEnd)
+                    target -= sourceEnd - sourceStart;
+
+                target = Math.max(0, Math.min(target, edit.length()));
+                target = resolveDropBoundary(edit, target, null);
+            } finally {
+                String text = state.text;
+                int insertLength = text.length();
+                int spanLength = state.end - state.start;
+                edit.insert(target, text);
+                edit.setSpan(state.span, target, target + spanLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                setSelection(target + insertLength);
+            }
+
+            invalidate();
+            post(update);
+
+            return true;
+        } catch (Throwable ex) {
+            Log.e(ex);
+            return true;
+        }
+    }
+
+    private static int getTokenEnd(Editable edit, int end) {
+        int tokenEnd = end;
+        while (tokenEnd < edit.length() && edit.charAt(tokenEnd) == ' ')
+            tokenEnd++;
+        return tokenEnd;
+    }
+
+    private int getDropOffset(Layout layout, float x, float y) {
+        int line = layout.getLineForVertical((int) (y - getTotalPaddingTop() + getScrollY()));
+        line = Math.max(0, Math.min(line, layout.getLineCount() - 1));
+        float horizontal = x - getTotalPaddingLeft() + getScrollX();
+        horizontal = Math.max(layout.getLineLeft(line), Math.min(horizontal, layout.getLineRight(line)));
+        return layout.getOffsetForHorizontal(line, horizontal);
+    }
+
+    private int resolveDropBoundary(Editable edit, int target, @Nullable ClipImageSpan ignore) {
+        target = Math.max(0, Math.min(target, edit.length()));
+        ClipImageSpan[] spans = edit.getSpans(0, edit.length(), ClipImageSpan.class);
+        for (ClipImageSpan span : spans) {
+            if (span == ignore)
+                continue;
+
+            int start = edit.getSpanStart(span);
+            int end = edit.getSpanEnd(span);
+            if (start < 0 || end <= start)
+                continue;
+
+            int tokenEnd = getTokenEnd(edit, end);
+            if (target > start && target < tokenEnd) {
+                int middle = start + (tokenEnd - start) / 2;
+                return (target < middle ? start : tokenEnd);
+            }
+
+            if (target == start)
+                return start;
+
+            if (target == end || target == tokenEnd)
+                return tokenEnd;
+        }
+
+        return target;
+    }
+
     private static class ClipImageSpan extends ImageSpan {
         private boolean update;
 
@@ -437,6 +695,49 @@ public class EditTextMultiAutoComplete extends AppCompatMultiAutoCompleteTextVie
 
         boolean needsUpdate() {
             return update;
+        }
+    }
+
+    private static class DragState {
+        final EditTextMultiAutoComplete source;
+        final ClipImageSpan span;
+        final int start;
+        final int end;
+        final int tokenEnd;
+        final String text;
+
+        DragState(EditTextMultiAutoComplete source, ClipImageSpan span, int start, int end, int tokenEnd, String text) {
+            this.source = source;
+            this.span = span;
+            this.start = start;
+            this.end = end;
+            this.tokenEnd = tokenEnd;
+            this.text = text;
+        }
+    }
+
+    private static class ChipDragShadowBuilder extends View.DragShadowBuilder {
+        private final Drawable drawable;
+
+        ChipDragShadowBuilder(ClipImageSpan span) {
+            super();
+            drawable = span.getDrawable();
+            if (drawable != null)
+                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        }
+
+        @Override
+        public void onProvideShadowMetrics(Point outShadowSize, Point outShadowTouchPoint) {
+            int width = Math.max(1, drawable.getBounds().width());
+            int height = Math.max(1, drawable.getBounds().height());
+            outShadowSize.set(width, height);
+            outShadowTouchPoint.set(width / 2, height / 2);
+        }
+
+        @Override
+        public void onDrawShadow(Canvas canvas) {
+            if (drawable != null)
+                drawable.draw(canvas);
         }
     }
 }

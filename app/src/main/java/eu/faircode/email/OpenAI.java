@@ -60,7 +60,7 @@ public class OpenAI {
     static final String CONTENT_TEXT = "text";
     static final String CONTENT_IMAGE = "image_url";
 
-    private static final int TIMEOUT = 20; // seconds
+    private static final int TIMEOUT = 40; // seconds
     private static final int SCALE2PIXELS = 1440; // medium
 
     static boolean isAvailable(Context context) {
@@ -149,8 +149,10 @@ public class OpenAI {
 
         JSONObject jquestion = new JSONObject();
         jquestion.put("model", model);
-        if (max_tokens > 0)
-            jquestion.put("max_tokens", max_tokens);
+        if (max_tokens > 0) {
+            //jquestion.put("max_tokens", max_tokens);
+            jquestion.put("max_completion_tokens", max_tokens);
+        }
         jquestion.put("messages", jmessages);
         if (temperature != null)
             jquestion.put("temperature", temperature);

@@ -37,7 +37,9 @@ import com.ezylang.evalex.operators.InfixOperator;
 import com.ezylang.evalex.parser.ASTNode;
 import com.ezylang.evalex.parser.ParseException;
 import com.ezylang.evalex.parser.Token;
+import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,7 +65,7 @@ import javax.mail.internet.InternetHeaders;
 
 public class ExpressionHelper {
     private static final List<String> EXPR_VARIABLES = Collections.unmodifiableList(Arrays.asList(
-            "received", "to", "from", "subject", "text", "hasAttachments"
+            "received", "return_path", "via", "submitter", "from", "to", "cc", "bcc", "subject", "replyto", "text", "hasAttachments"
     ));
 
     static void check(Expression expression) throws ParseException {
@@ -85,15 +87,50 @@ public class ExpressionHelper {
             return null;
         String eval = jcondition.getString("expression");
 
-        List<String> to = new ArrayList<>();
-        if (message != null && message.to != null)
-            for (Address a : message.to)
-                to.add(MessageHelper.formatAddresses(new Address[]{a}));
+        List<String> return_path = new ArrayList<>();
+        if (message != null && message.return_path != null)
+            for (Address a : message.return_path)
+                return_path.add(MessageHelper.formatAddresses(new Address[]{a}));
+
+        List<String> via = new ArrayList<>();
+        if (message != null && message.identity != null) try {
+            DB db = DB.getInstance(context);
+            EntityIdentity identity = db.identity().getIdentity(message.identity);
+            if (identity != null)
+                via.add(MessageHelper.formatAddresses(new Address[]{new InternetAddress(identity.email, identity.name)}));
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+
+        List<String> submitter = new ArrayList<>();
+        if (message != null && message.submitter != null)
+            for (Address a : message.submitter)
+                submitter.add(MessageHelper.formatAddresses(new Address[]{a}));
 
         List<String> from = new ArrayList<>();
         if (message != null && message.from != null)
             for (Address a : message.from)
                 from.add(MessageHelper.formatAddresses(new Address[]{a}));
+
+        List<String> to = new ArrayList<>();
+        if (message != null && message.to != null)
+            for (Address a : message.to)
+                to.add(MessageHelper.formatAddresses(new Address[]{a}));
+
+        List<String> cc = new ArrayList<>();
+        if (message != null && message.cc != null)
+            for (Address a : message.cc)
+                cc.add(MessageHelper.formatAddresses(new Address[]{a}));
+
+        List<String> bcc = new ArrayList<>();
+        if (message != null && message.bcc != null)
+            for (Address a : message.bcc)
+                bcc.add(MessageHelper.formatAddresses(new Address[]{a}));
+
+        List<String> replyto = new ArrayList<>();
+        if (message != null && message.reply != null)
+            for (Address a : message.reply)
+                replyto.add(MessageHelper.formatAddresses(new Address[]{a}));
 
         if (html == null && message != null && message.content)
             try {
@@ -148,8 +185,14 @@ public class ExpressionHelper {
 
         Expression expression = new Expression(eval, configuration)
                 .with("received", message == null ? null : message.received)
-                .with("to", to)
+                .with("return_path", return_path)
+                .with("via", via)
+                .with("submitter", submitter)
                 .with("from", from)
+                .with("to", to)
+                .with("cc", cc)
+                .with("bcc", bcc)
+                .with("replyto", replyto)
                 .with("subject", message == null ? null : message.subject)
                 .with("text", doc == null ? null : doc.text());
 
@@ -652,7 +695,7 @@ public class ExpressionHelper {
         @Override
         public EvaluationValue evaluate(
                 Expression expression, Token operatorToken, EvaluationValue... operands) {
-            String result = null;
+            List<String> result = null;
 
             try {
                 if (operands.length == 2) {
@@ -664,11 +707,15 @@ public class ExpressionHelper {
 
                     String path = operands[1].getStringValue();
 
+                    Configuration jconfig = Configuration.defaultConfiguration()
+                            .addOptions(Option.ALWAYS_RETURN_LIST);
                     if (array != null && !array.isEmpty() && !TextUtils.isEmpty(path))
                         for (EvaluationValue item : array) {
                             String value = item.getStringValue();
                             if (!TextUtils.isEmpty(value)) {
-                                result = JsonPath.read(value, path);
+                                result = JsonPath.using(jconfig)
+                                        .parse(value)
+                                        .read(path);
                                 break;
                             }
                         }
