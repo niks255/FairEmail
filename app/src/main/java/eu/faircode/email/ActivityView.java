@@ -2262,6 +2262,10 @@ public class ActivityView extends ActivityBilling implements FragmentManager.OnB
 
             intent.removeExtra(Intent.EXTRA_PROCESS_TEXT);
         }
+
+        String error = intent.getStringExtra("error");
+        if (!TextUtils.isEmpty(error))
+            ToastEx.makeText(this, error, Toast.LENGTH_LONG).show();
     }
 
     private void onMenuFolders(long account) {

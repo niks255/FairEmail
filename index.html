@@ -953,7 +953,7 @@ keyword:&lt;keyword&gt;</code></pre>
 </blockquote>
 <p><br /></p>
 <p>An Outlook / Live / Hotmail account can be set up via the quick setup wizard and selecting “<em>Outlook/Office 365 (OAuth)</em>”.</p>
-<p>To use third-party email apps for consumer Outlook accounts, IMAP must be enabled. For this, please go to the Outlook website, tap on the settings wheel at the top right, select ‘Mail’, select ‘Forwarding and IMAP’, and in the section ‘POP and IMAP’ enable ‘Let devices and apps use IMAP’.</p>
+<p>To use third-party email apps for consumer Outlook accounts, IMAP must be enabled. For this, please go to the Outlook website with a browser, switch to desktop mode (mostly via the three-dot overflow menu of the browser), tap on the settings wheel at the top right, select ‘Mail’, select ‘Forwarding and IMAP’, and in the section ‘POP and IMAP’ enable ‘Let devices and apps use IMAP’.</p>
 <p><strong>Important</strong>: a personal and a business account can have the same email address, but have different mailboxes (folders). So, please make sure you select the right option.</p>
 <p>Microsoft said “<em>We have turned off SMTP AUTH for millions of tenants not using it</em>”, which can result in this error message:</p>
 <pre><code>535 5.7.139 Authentication unsuccessful, SmtpClientAuthentication is disabled for the Tenant.
@@ -1998,7 +1998,6 @@ Y1 OK CAPABILITY completed</code></pre>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fgithub.com%2FM66B%2FFairEmail%2Fblob%2Fmaster%2FFAQ.md%23faq90">Google Translate</a></p>
 <p>FairEmail will automatically link not linked web links (http and https) and not linked email addresses (mailto) for your convenience. However, texts and links are not easily distinguished, especially not with lots of <a href="https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains">top level domains</a> being words. This is why texts with dots are sometimes incorrectly recognized as links, which is better than not recognizing some links.</p>
 <p>Links for the tel, geo, rtsp and xmpp protocols will be recognized too, but links for less usual or less safe protocols like telnet and ftp will not be recognized. The regex to recognize links is already <em>very</em> complex and adding more protocols will make it only slower and possibly cause errors.</p>
-<p>Note that original messages are shown exactly as they are, which means also that links are not automatically added.</p>
 <p><br /></p>
 <p><a name="faq91"></a> <strong><del>(91) Can you add periodical synchronization to save battery power?</del></strong></p>
 <p>🌎 <a href="https://translate.google.com/translate?sl=en&amp;u=https%3A%2F%2Fgithub.com%2FM66B%2FFairEmail%2Fblob%2Fmaster%2FFAQ.md%23faq91">Google Translate</a></p>
@@ -3302,7 +3301,7 @@ adb install /path/to/FairEmail-xxx.apk</code></pre>
 <li>fd00::/8</li>
 </ul>
 <p>This permission can be granted via a button on the connection settings page, or inline via the account/identity settings screen after entering a local network address.</p>
-<p>Very few people will need local network access, and to avoid questions regarding a new permission, this permission is available only in the <a href="https://github.com/M66B/FairEmail/releases">GitHub version</a>.</p>
+<p>Very few people will need local network access, and to avoid questions regarding a new permission called “<em>Nearby devices</em>” by Google (!), this permission is available only in the <a href="https://github.com/M66B/FairEmail/releases">GitHub version</a>.</p>
 <p>If the app navigated to this FAQ after you clicked the button to grant local network permission, then the GitHub version is not (or is no longer) installed. If you are using the Play Store version of the app, you can install the GitHub version as an update.</p>
 <p>Added in version 1.2325.</p>
 <p><br></p>

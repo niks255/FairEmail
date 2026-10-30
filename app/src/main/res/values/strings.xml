@@ -1379,6 +1379,7 @@
     <string name="title_no_inbox">Inbox not found</string>
     <string name="title_no_drafts">No drafts folder</string>
     <string name="title_no_junk_folder">There is no spam folder selected for this account</string>
+    <string name="title_no_message">Message not found</string>
     <string name="title_default_composable">The default email address is determined by the primary identity of the primary account</string>
     <string name="title_no_composable">Sending emails requires an identity to be configured, and a drafts folder to be selected in the account settings</string>
     <string name="title_no_standard">This provider uses a proprietary email protocol and therefore it is not possible to use third party email clients</string>
@@ -2137,6 +2138,7 @@
     <string name="title_rule_local_only" translatable="false">Local notification only</string>
     <string name="title_rule_snooze">Snooze</string>
     <string name="title_rule_flag">Add star</string>
+    <string name="title_rule_unflag">Remove star</string>
     <string name="title_rule_importance">Set importance</string>
     <string name="title_rule_keyword">Keyword</string>
     <string name="title_rule_keyword_add">Add</string>

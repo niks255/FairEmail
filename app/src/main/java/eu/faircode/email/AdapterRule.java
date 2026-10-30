@@ -232,7 +232,10 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                 String to = null;
                 boolean resend = false;
                 int type = jaction.getInt("type");
-                if (type == EntityRule.TYPE_SNOOZE) {
+                if (type == EntityRule.TYPE_FLAG) {
+                    boolean unflag = jaction.optBoolean("unflag", false);
+                    setAction(unflag ? R.string.title_rule_unflag : getAction(type), null);
+                } else if (type == EntityRule.TYPE_SNOOZE) {
                     int duration = jaction.optInt("duration", 0);
                     setAction(getAction(type), Integer.toString(duration));
                 } else if (type == EntityRule.TYPE_IMPORTANCE) {
@@ -367,6 +370,7 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_move_to_folder, 5, R.string.title_move_to_folder);
                 popupMenu.getMenu().add(Menu.NONE, R.string.title_copy, 6, R.string.title_copy);
             }
+            popupMenu.getMenu().add(Menu.NONE, R.string.title_delete, 7, R.string.title_delete);
 
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
@@ -389,6 +393,9 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                         return true;
                     } else if (itemId == R.string.title_copy) {
                         onActionCopy();
+                        return true;
+                    } else if (itemId == R.string.title_delete) {
+                        onActionDelete();
                         return true;
                     }
                     return false;
@@ -562,6 +569,18 @@ public class AdapterRule extends RecyclerView.Adapter<AdapterRule.ViewHolder> {
                     fragment.setArguments(args);
                     fragment.setTargetFragment(parentFragment, FragmentRules.REQUEST_RULE_COPY_ACCOUNT);
                     fragment.show(parentFragment.getParentFragmentManager(), "rule:copy:account");
+                }
+
+                private void onActionDelete() {
+                    Bundle args = new Bundle();
+                    args.putLong("id", rule.id);
+                    args.putString("question", context.getString(R.string.title_ask_delete_rule));
+                    args.putBoolean("warning", true);
+
+                    FragmentDialogAsk fragment = new FragmentDialogAsk();
+                    fragment.setArguments(args);
+                    fragment.setTargetFragment(parentFragment, FragmentRules.REQUEST_DELETE);
+                    fragment.show(parentFragment.getParentFragmentManager(), "rule:delete");
                 }
             });
 
