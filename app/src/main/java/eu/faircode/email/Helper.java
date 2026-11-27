@@ -348,9 +348,10 @@ public class Helper {
                     if (runnable instanceof PriorityRunnable)
                         return new PriorityFuture<T>(task,
                                 ((PriorityRunnable) runnable).getPriority(),
-                                ((PriorityRunnable) runnable).getOrder());
+                                ((PriorityRunnable) runnable).getOrder(),
+                                ((PriorityRunnable) runnable).getGroup());
                     else
-                        return new PriorityFuture<>(task, 0, sequenceId.getAndIncrement());
+                        return new PriorityFuture<>(task, 0, sequenceId.getAndIncrement(), null);
                 }
             };
         else
@@ -388,15 +389,17 @@ public class Helper {
         }
     }
 
-    private static class PriorityFuture<T> implements RunnableFuture<T> {
+    static class PriorityFuture<T> implements RunnableFuture<T> {
         private int priority;
         private long order;
+        private Long group; // Null when the task has no group
         private RunnableFuture<T> wrapped;
 
-        PriorityFuture(RunnableFuture<T> wrapped, int priority, long order) {
+        PriorityFuture(RunnableFuture<T> wrapped, int priority, long order, Long group) {
             this.wrapped = wrapped;
             this.priority = priority;
             this.order = order;
+            this.group = group;
         }
 
         public int getPriority() {
@@ -405,6 +408,10 @@ public class Helper {
 
         public long getOrder() {
             return this.order;
+        }
+
+        public boolean isGroup(long group) {
+            return (this.group != null && this.group == group);
         }
 
         @Override
@@ -3168,6 +3175,13 @@ public class Helper {
         } catch (IOException ex) {
             Log.e(ex);
         }
+    }
+
+    static File getDataDir(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            return new File(context.getApplicationInfo().dataDir);
+        else
+            return context.getDataDir();
     }
 
     static long getAvailableStorageSpace() {

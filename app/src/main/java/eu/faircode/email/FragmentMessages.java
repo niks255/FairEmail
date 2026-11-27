@@ -194,6 +194,10 @@ import org.bouncycastle.cms.jcajce.JceKeyTransRecipientId;
 import org.bouncycastle.operator.DefaultAlgorithmNameFinder;
 import org.bouncycastle.util.Store;
 import org.json.JSONException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
 import org.openintents.openpgp.AutocryptPeerUpdate;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.OpenPgpSignatureResult;
@@ -6554,14 +6558,14 @@ public class FragmentMessages extends FragmentBase
                 if (accounts != null)
                     for (EntityAccount account : accounts)
                         try {
-                            if (ConnectionHelper.isLocalAddress(account.host, false))
+                            if (ConnectionHelper.isLocalAddress(context, account.host, false))
                                 return true;
 
                             List<EntityIdentity> identities = db.identity().getSynchronizingIdentities(account.id);
                             if (identities != null)
                                 for (EntityIdentity identity : identities)
                                     try {
-                                        if (ConnectionHelper.isLocalAddress(identity.host, false))
+                                        if (ConnectionHelper.isLocalAddress(context, identity.host, false))
                                             return true;
                                     } catch (Throwable ignored) {
                                     }
@@ -7042,41 +7046,9 @@ public class FragmentMessages extends FragmentBase
         args.putLong("folder", folder);
         args.putString("type", type);
 
-        new SimpleTask<Void>() {
-            @Override
-            protected Void onExecute(Context context, Bundle args) throws Throwable {
-                if (args.getLong("account", -1L) < 0 &&
-                        args.getLong("folder", -1L) < 0 &&
-                        args.getString("type") == null) {
-                    DB db = DB.getInstance(context);
-                    List<EntityAccount> accounts = db.account().getSynchronizingAccounts(EntityAccount.TYPE_IMAP);
-                    if (accounts != null && accounts.size() == 1) {
-                        EntityAccount account = accounts.get(0);
-                        EntityFolder folder = db.folder().getFolderByType(account.id,
-                                account.isGmail() ? EntityFolder.ARCHIVE : EntityFolder.INBOX);
-                        if (folder != null) {
-                            args.putLong("account", account.id);
-                            args.putLong("folder", folder.id);
-                            args.putString("type", folder.type);
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onExecuted(Bundle args, Void data) {
-                FragmentDialogSearch fragment = new FragmentDialogSearch();
-                fragment.setArguments(args);
-                fragment.show(getParentFragmentManager(), "search");
-            }
-
-            @Override
-            protected void onException(Bundle args, Throwable ex) {
-                Log.e(ex);
-                onExecuted(args, null);
-            }
-        }.execute(this, args, "single.search");
+        FragmentDialogSearch fragment = new FragmentDialogSearch();
+        fragment.setArguments(args);
+        fragment.show(getParentFragmentManager(), "search");
     }
 
     private void onMenuSaveSearch() {
@@ -10148,20 +10120,34 @@ public class FragmentMessages extends FragmentBase
                         if (file.exists()) {
                             // https://tools.ietf.org/html/rfc4880#section-6.2
                             String html = Helper.readText(file);
-                            String body = HtmlHelper.fromHtml(html, context).toString();
+                            Document doc = JsoupEx.parse(html);
+                            for (Element br : doc.select("br"))
+                                br.replaceWith(new TextNode("\n"));
+                            for (Element block : doc.select("div, p"))
+                                block.after(new TextNode("\n"));
+                            String body = doc.body().wholeText();
+
                             int begin = body.indexOf(PgpHelper.PGP_BEGIN_MESSAGE);
                             int end = body.indexOf(PgpHelper.PGP_END_MESSAGE);
                             if (begin >= 0 && begin < end) {
                                 String[] lines = body
                                         .substring(begin, end + PgpHelper.PGP_END_MESSAGE.length())
-                                        .split("\\r?\\n");
+                                        .replace("\r\n", "\n")
+                                        .replace('\r', '\n')
+                                        .split("\n");
 
                                 List<String> disarmored = new ArrayList<>();
                                 for (String line : lines)
-                                    if (!TextUtils.isEmpty(line) && !line.contains(": "))
+                                    if (!line.replace('\u00a0', ' ').trim().isEmpty() && !line.contains(": "))
                                         disarmored.add(line);
 
-                                String pgpMessage = TextUtils.join("\n\r", disarmored);
+                                disarmored.add(1, "");
+
+                                if (BuildConfig.DEBUG)
+                                    for (String line : disarmored)
+                                        Log.i("PGP " + line);
+
+                                String pgpMessage = TextUtils.join("\n", disarmored);
 
                                 inline = true;
                                 Log.i("PGP inline");

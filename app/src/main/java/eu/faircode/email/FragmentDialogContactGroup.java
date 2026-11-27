@@ -49,6 +49,8 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import java.text.NumberFormat;
 
 public class FragmentDialogContactGroup extends FragmentDialogBase {
+    private Spinner spGroup;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class FragmentDialogContactGroup extends FragmentDialogBase {
         final Context context = getContext();
         View dview = LayoutInflater.from(context).inflate(R.layout.dialog_contact_group, null);
         final ImageButton ibInfo = dview.findViewById(R.id.ibInfo);
-        final Spinner spGroup = dview.findViewById(R.id.spGroup);
+        spGroup = dview.findViewById(R.id.spGroup);
         final Spinner spTarget = dview.findViewById(R.id.spTarget);
         final Spinner spType = dview.findViewById(R.id.spType);
         final TextView tvNoPermission = dview.findViewById(R.id.tvNoPermission);
@@ -190,5 +192,19 @@ public class FragmentDialogContactGroup extends FragmentDialogBase {
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        try {
+            if (spGroup != null) {
+                SimpleCursorAdapter adapter = (SimpleCursorAdapter) spGroup.getAdapter();
+                if (adapter != null)
+                    adapter.changeCursor(null);
+            }
+        } catch (Throwable ex) {
+            Log.e(ex);
+        }
+        super.onDismiss(dialog);
     }
 }

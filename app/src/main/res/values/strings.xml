@@ -663,6 +663,7 @@
     <string name="title_advanced_distinguish_contacts">Underline the sender when the sender is known as local \'to\' contact</string>
     <string name="title_advanced_show_recipients">Show recipients in message header</string>
     <string name="title_advanced_reverse_addresses">Show recipient for sent messages</string>
+    <string name="title_advanced_reverse_always">In all folders</string>
     <string name="title_advanced_font_size_sender">Text size sender</string>
     <string name="title_advanced_sender_ellipsize">If needed, shorten the sender</string>
 
@@ -963,6 +964,7 @@
     <string name="title_advanced_cleanup">Cleanup</string>
     <string name="title_advanced_last_cleanup">Last cleanup: %1$s</string>
     <string name="title_advanced_google_backup">Use Android\'s data backup</string>
+    <string name="title_advanced_google_backup_remark">Backups are only performed if the device is protected with a lock screen</string>
     <string name="title_advanced_app">App settings</string>
     <string name="title_advanced_more">More options</string>
     <string name="title_advanced_main_log">Main logging</string>
@@ -1249,6 +1251,8 @@
     <string name="title_advanced_edit_name">Edit name</string>
     <string name="title_advanced_create_alias">Create alias</string>
     <string name="title_advanced_create_alias_remark">In many cases, an alias address must first be verified via the website of the mail provider</string>
+    <string name="title_advanced_import_aliases">Import aliases</string>
+    <string name="title_advanced_import_aliases_new">New aliases: %1$s</string>
 
     <string name="title_create_folder">Create folder</string>
     <string name="title_create_folder_name">Folder name</string>

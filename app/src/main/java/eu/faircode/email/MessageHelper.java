@@ -198,6 +198,7 @@ public class MessageHelper {
 
     private static final int MAX_HEADER_LENGTH = 998;
     private static final int MAX_MESSAGE_SIZE = 10 * 1024 * 1024; // bytes
+    private static final int MAX_MESSAGE_DEPTH = 32; // multipart nesting
     private static final int MAX_KEYWORDS = 32;
     private static final int MAX_LABELS = 32;
     private static final long ATTACHMENT_PROGRESS_UPDATE = 1500L; // milliseconds
@@ -415,13 +416,13 @@ public class MessageHelper {
             imessage.addHeader("Sensitivity", "Company-Confidential");
 
         // References
-        if (message.references != null)
+        if (!TextUtils.isEmpty(message.references))
             imessage.addHeader("References", limitReferences(message.references));
 
-        if (message.inreplyto != null)
+        if (!TextUtils.isEmpty(message.inreplyto))
             imessage.addHeader("In-Reply-To", message.inreplyto);
 
-        if (message.wasforwardedfrom != null && !forward_new)
+        if (!TextUtils.isEmpty(message.wasforwardedfrom) && !forward_new)
             imessage.addHeader("X-Forwarded-Message-Id", message.wasforwardedfrom);
 
         imessage.addHeader(HEADER_CORRELATION_ID, message.msgid);
@@ -1389,7 +1390,7 @@ public class MessageHelper {
         String htmlContent = document.html();
         String htmlContentType = "text/html; charset=" + Charset.defaultCharset().name();
 
-        String plainContent = HtmlHelper.getText(context, document.html());
+        String plainContent = HtmlHelper.getText(context, document.html(), message.isPlainOnly());
         String plainContentType = "text/plain; charset=" + Charset.defaultCharset().name();
 
         if (format_flowed) {
@@ -2956,8 +2957,13 @@ public class MessageHelper {
             Address[] from = getAddressHeader("From");
             if (from != null && from.length == 1) {
                 String email = ((InternetAddress) from[0]).getAddress();
-                if (email != null && (email.endsWith(".mozmail.com") || email.endsWith("@mozmail.com")))
+                if (email != null &&
+                        (email.endsWith("@relay.firefox.com") ||
+                                email.endsWith(".mozmail.com") || email.endsWith("@mozmail.com"))) {
                     sender = getAddressHeader("Resent-From");
+                    if (sender == null || sender.length == 0)
+                        sender = new Address[]{new InternetAddress("relay@firefox.com")};
+                }
             }
         }
         return sender;
@@ -3413,14 +3419,14 @@ public class MessageHelper {
             if (ip.toLowerCase(Locale.ROOT).startsWith("ipv6:"))
                 ip = ip.substring(5);
             if (ConnectionHelper.isNumericAddress(ip) &&
-                    ConnectionHelper.isLocalAddress(ip, true))
+                    ConnectionHelper.isLocalAddress(null, ip, true))
                 return true;
         }
 
         int f = value.indexOf(' ');
         String host = (f < 0 ? value : value.substring(0, f));
         if (ConnectionHelper.isNumericAddress(host)) {
-            if (ConnectionHelper.isLocalAddress(host, true))
+            if (ConnectionHelper.isLocalAddress(null, host, true))
                 return true;
         }
 
@@ -3916,6 +3922,7 @@ public class MessageHelper {
     }
 
     class MessageParts {
+        private int depth = 0;
         private String protected_subject;
         private List<PartHolder> text = new ArrayList<>();
         private List<PartHolder> extra = new ArrayList<>();
@@ -5378,45 +5385,52 @@ public class MessageHelper {
                 Log.e(ex);
             }
 
-            if (isMimeType(part, "multipart/*")) {
-                Multipart multipart;
-                Object content = part.getContent(); // Should always be Multipart
+            if (isMimeType(part, "multipart/*"))
+                try {
+                    parts.depth++;
+                    if (parts.depth < MAX_MESSAGE_DEPTH) {
+                        Multipart multipart;
+                        Object content = part.getContent(); // Should always be Multipart
 
-                if (content instanceof String)
-                    content = tryParseMultipart((String) content, part.getContentType());
-                else if (content instanceof com.sun.mail.imap.IMAPInputStream)
-                    content = tryParseMultipart((com.sun.mail.imap.IMAPInputStream) content, part.getContentType());
+                        if (content instanceof String)
+                            content = tryParseMultipart((String) content, part.getContentType());
+                        else if (content instanceof com.sun.mail.imap.IMAPInputStream)
+                            content = tryParseMultipart((com.sun.mail.imap.IMAPInputStream) content, part.getContentType());
 
-                if (content instanceof Multipart) {
-                    multipart = (Multipart) content;
-                    int count = multipart.getCount();
-                    for (int i = 0; i < count; i++)
-                        try {
-                            BodyPart child = multipart.getBodyPart(i);
-                            getMessageParts(part, child, parts, encrypt);
-                        } catch (ParseException ex) {
-                            // Nested body: try to continue
-                            // ParseException: In parameter list boundary="...">, expected parameter name, got ";"
-                            Log.w(ex);
-                            parts.warnings.add(Log.formatThrowable(ex, false));
+                        if (content instanceof Multipart) {
+                            multipart = (Multipart) content;
+                            int count = multipart.getCount();
+                            for (int i = 0; i < count; i++)
+                                try {
+                                    BodyPart child = multipart.getBodyPart(i);
+                                    getMessageParts(part, child, parts, encrypt);
+                                } catch (ParseException ex) {
+                                    // Nested body: try to continue
+                                    // ParseException: In parameter list boundary="...">, expected parameter name, got ";"
+                                    Log.w(ex);
+                                    parts.warnings.add(Log.formatThrowable(ex, false));
+                                }
+
+                            if (multipart instanceof MimeMultipart &&
+                                    Boolean.parseBoolean(System.getProperty("fairemail.preamble"))) {
+                                String preamble = ((MimeMultipart) multipart).getPreamble();
+                                if (!TextUtils.isEmpty(preamble)) {
+                                    ContentType plain = new ContentType("text/plain; preamble=\"true\"");
+                                    parts.extra.add(new PartHolder(part, plain));
+                                }
+                            }
+
+                            return;
+                        } else {
+                            String msg = "Expected multipart/* got " + content.getClass().getName();
+                            Log.e(msg);
+                            parts.warnings.add(msg);
                         }
-
-                    if (multipart instanceof MimeMultipart &&
-                            Boolean.parseBoolean(System.getProperty("fairemail.preamble"))) {
-                        String preamble = ((MimeMultipart) multipart).getPreamble();
-                        if (!TextUtils.isEmpty(preamble)) {
-                            ContentType plain = new ContentType("text/plain; preamble=\"true\"");
-                            parts.extra.add(new PartHolder(part, plain));
-                        }
-                    }
-
-                    return;
-                } else {
-                    String msg = "Expected multipart/* got " + content.getClass().getName();
-                    Log.e(msg);
-                    parts.warnings.add(msg);
+                    } else
+                        parts.warnings.add("Multipart nesting too deep depth=" + parts.depth);
+                } finally {
+                    parts.depth--;
                 }
-            }
 
             // https://www.iana.org/assignments/cont-disp/cont-disp.xhtml
             String disposition;

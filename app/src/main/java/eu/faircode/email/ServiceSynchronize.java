@@ -2157,7 +2157,7 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                                                 " (selected (MessageNew (uid) MessageExpunge FlagChange))" +
                                                 " (subscribed (MessageNew MessageExpunge FlagChange))");
 
-                                        Response[] responses = protocol.command("NOTIFY", arg);
+                                        Response[] responses = Core.sendCommand(protocol, "NOTIFY", arg);
 
                                         if (responses.length == 0)
                                             throw new ProtocolException("No response");
@@ -2740,10 +2740,13 @@ public class ServiceSynchronize extends ServiceBase implements SharedPreferences
                     // Stop executing operations
                     Log.i(account.name + " stop executing operations");
                     state.nextSerial();
-                    for (Runnable task : ((ThreadPoolExecutor) executor).getQueue().toArray(new Runnable[0]))
-                        if (task instanceof Helper.PriorityRunnable &&
-                                ((Helper.PriorityRunnable) task).getGroup() == group)
-                            ((ThreadPoolExecutor) executor).remove(task);
+                    try {
+                        for (Runnable task : ((ThreadPoolExecutor) executor).getQueue().toArray(new Runnable[0]))
+                            if (task instanceof Helper.PriorityFuture && ((Helper.PriorityFuture) task).isGroup(group))
+                                ((ThreadPoolExecutor) executor).remove(task);
+                    } catch (Throwable ex) {
+                        Log.e(ex);
+                    }
 
                     // Close store
                     try {

@@ -157,7 +157,7 @@ Related questions:
 * Search suggestions causes the keyboard losing focus on Android 12L.
 * ~~[A bug](https://techcommunity.microsoft.com/t5/outlook/outlook-office-365-imap-idle-is-broken/m-p/3616242) in the Outlook IMAP server causes delayed new message notifications.~~
 * Updating the Material You colors sometimes require restarting the app / the device, which is caused by [a bug](https://issuetracker.google.com/issues/386671298) in the Android WebView.
-* MiniDNS doesn't [yet](https://github.com/MiniDNS/minidns/issues/140) follow CNAMEs when looking up TLSA records.
+* ~~MiniDNS doesn't [yet](https://github.com/MiniDNS/minidns/issues/140) follow CNAMEs when looking up TLSA records.~~
 
 <a name="redmi"></a>
 <a name="realme"></a>
@@ -6589,6 +6589,10 @@ This permission can be granted via a button on the connection settings page, or 
 
 Very few people will need local network access, and to avoid questions regarding a new permission called "*Nearby devices*" by Google (!),
 this permission is available only in the [GitHub version](https://github.com/M66B/FairEmail/releases).
+You can install the GitHub version as an update over the Play Store version of the app, and all settings, accounts, and data will be untouched.
+
+October 29, 2026: As expected, Google is [requiring a justification](https://support.google.com/googleplay/android-developer/answer/18100766) for the local network access permission,
+which practically means that this will be denied for most apps and that most developers will be forced to remove the permission from their app.
 
 If the app navigated to this FAQ after you clicked the button to grant local network permission, then the GitHub version is not (or is no longer) installed.
 If you are using the Play Store version of the app, you can install the GitHub version as an update.
